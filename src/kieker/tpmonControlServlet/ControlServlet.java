@@ -86,8 +86,8 @@ public class ControlServlet extends HttpServlet {
         try {
             long time = TpmonController.getTime();
             out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + time + "<br>");
-            out.println("<br> Host:\"" + hostname + "\"<br>");
-            out.println("<br> Vmname:\"" + TpmonController.getVmname() + "\"<br>");
+            out.println("Host:\"" + hostname + "\"<br>");
+            out.println("Vmname:\"" + TpmonController.getVmname() + "\"<br>");
         } catch (Exception e) {
         }
 
@@ -219,6 +219,12 @@ public class ControlServlet extends HttpServlet {
         bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + TpmonController.getVmname() + "\"/>");
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
         bu.append(" Create 12 fake entries into the log (operation kieker.tpmonControlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
+		bu.append(" java.vm.name = "+System.getProperty("java.vm.name")+" <br>");
+		try {
+		String youngGC  = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
+		String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
+		bu.append(" Garbage collectors : "+youngGC+" , "+tenureGC+"<br>");
+		} catch(Exception e){} // nothing we can do
         out.println(bu.toString());
 
         printFooter(out);
