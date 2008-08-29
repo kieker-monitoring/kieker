@@ -10,7 +10,7 @@
     
     <target name="init-version">
         <tstamp/>
-        <property name="tpmon.version" value="0.81"/>        
+        <property name="tpmon.version" value="0.9"/>        
         <property name="dist.tpmon.ltw"   value="KiekerTpmonLTW-${tpmon.version}.jar"/>
         <property name="dist.tpmon.ctw"   value="KiekerTpmonCTW-${tpmon.version}.jar"/>
         <property name="dist.tpmon.ctrl" value="KiekerTpmonCtrl-${tpmon.version}.jar"/>
