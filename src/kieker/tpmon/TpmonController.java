@@ -73,8 +73,9 @@ import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
 
 public class TpmonController {
 
-    private static TpmonController ctrlInst = new TpmonController();
+    private static TpmonController ctrlInst = null;
     private static final Log log = LogFactory.getLog(TpmonController.class);
+    
     private IMonitoringDataWriter monitoringDataWriter = null;
     private String vmname = "unknown";
 
@@ -113,6 +114,7 @@ public class TpmonController {
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
     public static TpmonController getInstance() {
+        if (TpmonController.ctrlInst == null) TpmonController.ctrlInst = new TpmonController();
         return TpmonController.ctrlInst;
     }
 
