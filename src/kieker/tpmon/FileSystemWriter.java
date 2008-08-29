@@ -55,19 +55,23 @@ import java.io.PrintWriter;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public class FileSystemWriter {
+public class FileSystemWriter extends AbstractMonitoringDataWriter{
     // configuration parameters
-    private static final int maxEntriesInFile = 22000;
+    private final int maxEntriesInFile = 22000;
     // internal variables
-    private static String filename = "";
-    private static boolean filenameInitialized = false;
-    private static int entriesInCurrentFileCounter = 0;
-    private static PrintWriter pos = null;
-
+    private String filenamePrefix = "";
+    private boolean filenameInitialized = false;
+    private int entriesInCurrentFileCounter = 0;
+    private PrintWriter pos = null;
+    
+    public FileSystemWriter(String filenamePrefix){
+        this.filenamePrefix = filenamePrefix;
+    }
+    
     /**
      * Determines and sets a new Filename
      */
-    private static void prepareFile() {
+    private void prepareFile() {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
                 try {
@@ -77,12 +81,11 @@ public class FileSystemWriter {
             }
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
+
             int time = (int) (System.currentTimeMillis() - 1177404043379L);
             int random = (int) (Math.random() * 100d);
-            filename = new String(TpmonController.filenamePrefix + "/tpmon-" + time + "-" + random + ".dat");
-            if (TpmonController.debug) {
-                System.out.println("Tpmon: " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
-            }
+            String filename = this.filenamePrefix + time + "-" + random + ".dat";
+            
             FileOutputStream fos;
             try {
                 fos = new FileOutputStream(filename);
@@ -97,12 +100,12 @@ public class FileSystemWriter {
         }
     }
 
-    public static synchronized boolean insertMonitoringDataNow(String opname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        writeDataNow(TpmonController.getExperimentId() + ";" + opname + ";" + sessionID + ";" + requestID + ";" + tin + ";" + tout + ";" + TpmonController.getVmname()+";"+executionOrderIndex+";"+executionStackSize);
+    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+        this.writeDataNow(experimentId + ";" + opname + ";" + sessionID + ";" + requestID + ";" + tin + ";" + tout + ";" + vmName +";"+executionOrderIndex+";"+executionStackSize);
         return true;
     }
 
-    private synchronized static void writeDataNow(String data) {
+    private synchronized void writeDataNow(String data) {
         prepareFile();
         pos.println(data);
         pos.flush();

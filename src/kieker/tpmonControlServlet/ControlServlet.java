@@ -70,6 +70,8 @@ public class ControlServlet extends HttpServlet {
             initialize();
         }
 
+        TpmonController ctrlInst = TpmonController.getInstance();
+        
         int experimentID = 0;
         boolean connectorError = false;
 
@@ -84,10 +86,10 @@ public class ControlServlet extends HttpServlet {
         printHeader(out);
         out.println("<h2>TpmonControlServlet</h2>");
         try {
-            long time = TpmonController.getTime();
+            long time = ctrlInst.getTime();
             out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + time + "<br>");
             out.println("Host:\"" + hostname + "\"<br>");
-            out.println("Vmname:\"" + TpmonController.getVmname() + "\"<br>");
+            out.println("Vmname:\"" + ctrlInst.getVmname() + "\"<br>");
         } catch (Exception e) {
         }
 
@@ -96,20 +98,15 @@ public class ControlServlet extends HttpServlet {
             action = new String("");
         }
 
-        if (!TpmonController.init()) {
-            dumpError(out, "Initializing Dbconnector failed. See log for details");
-            connectorError = true;
-        }
-
         /*
          * action = setDebug
          */
         if (!connectorError) {
             if (action.equals("setDebug")) {
                 if (request.getParameter("debug") != null && request.getParameter("debug").equals("on")) {
-                    TpmonController.debug = true;
+                    ctrlInst.setDebug(true);
                 } else if (request.getParameter("debug") != null && request.getParameter("debug").equals("off")) {
-                    TpmonController.debug = false;
+                    ctrlInst.setDebug(false);
                 } else {
                     dumpError(out, "Invalid or missing value for parameter 'debug'");
                 }
@@ -122,7 +119,7 @@ public class ControlServlet extends HttpServlet {
                     try {
                         experimentID = Integer.parseInt(expimentIdString);
                         if (experimentID >= 0) {
-                            TpmonController.setExperimentId(experimentID);
+                            ctrlInst.setExperimentId(experimentID);
                         }
 
                     } catch (NumberFormatException ne) {
@@ -133,29 +130,29 @@ public class ControlServlet extends HttpServlet {
             } else if (action.equals("setVmname")) {
                 String vmname = request.getParameter("vmname");
                 if (vmname != null) {
-                    TpmonController.setVmname(vmname);
+                    ctrlInst.setVmname(vmname);
                 }
             /*
              * action = incExperimentId
              */
             } else if (action.equals("incExperimentId")) {
-                experimentID = TpmonController.incExperimentId();
+                experimentID = ctrlInst.incExperimentId();
             /*
              * action = enable
              */
             } else if (action.equals("enable")) {
-                TpmonController.enableMonitoring();
+                ctrlInst.enableMonitoring();
             /*
              * action = disable
              */
             } else if (action.equals("disable")) {
-                TpmonController.disableMonitoring();
+                ctrlInst.disableMonitoring();
             /*
              * invalid action
              */
             } else if (action.equals("insertTestData")) {
                 for (int i = 0; i < 12; i++) {
-                    TpmonController.insertMonitoringDataNow("kieker.tpmonControlServlet.TpmonControlServlet","TpmonControlServlet.processRequest(HttpServletRequest,HttpServletResponse)", request.getSession().getId(), TpmonController.getTraceId(Thread.currentThread().getId()), TpmonController.getTime(), TpmonController.getTime(), i, i);
+                    ctrlInst.insertMonitoringDataNow("kieker.tpmonControlServlet.TpmonControlServlet","TpmonControlServlet.processRequest(HttpServletRequest,HttpServletResponse)", request.getSession().getId(), ctrlInst.getTraceId(Thread.currentThread().getId()), ctrlInst.getTime(), ctrlInst.getTime(), i, i);
                 }
             /*
              * action = disable
@@ -174,7 +171,7 @@ public class ControlServlet extends HttpServlet {
                 ")  </h3>");
         String dbconnectorInfo = "";
         try {
-            dbconnectorInfo = TpmonController.getConnectorInfo();
+            dbconnectorInfo = ctrlInst.getConnectorInfo();
         } catch (Exception e) {
             out.println(e.getMessage());
         }
@@ -211,12 +208,12 @@ public class ControlServlet extends HttpServlet {
         bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
         bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");
         bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">");
-        bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"" + TpmonController.getExperimentId() + "\"/>");
+        bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"" + ctrlInst.getExperimentId() + "\"/>");
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
         bu.append("</FORM> <br><br>");
         bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
         bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
-        bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + TpmonController.getVmname() + "\"/>");
+        bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ctrlInst.getVmname() + "\"/>");
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
         bu.append(" Create 12 fake entries into the log (operation kieker.tpmonControlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
 		bu.append(" java.vm.name = "+System.getProperty("java.vm.name")+" <br>");

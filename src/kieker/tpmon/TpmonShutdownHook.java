@@ -58,6 +58,7 @@ public class TpmonShutdownHook extends Thread{
     }
     
     @TpmonInternal 
+    @Override
     public void run(){ // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
         try {
             // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called

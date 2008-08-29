@@ -3,75 +3,76 @@ package kieker.tpmon.asyncFsWriter;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.aspects.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.InsertData;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author matthias
  */
-public class AsyncFsWriterProducer {
-      //configuration parameter
-      final static int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
+public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
+
+    private static final Log log = LogFactory.getLog(AsyncFsWriterProducer.class);
+    //configuration parameter
+    final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
+    //internal variables
+    private Vector<AsyncFsWriterWorker> workers = new Vector<AsyncFsWriterWorker>();
+    private BlockingQueue<InsertData> blockingQueue = null;
+
+    private String filenamePrefix = "";
     
-      //internal variables
-      private static Vector<AsyncFsWriterWorker> workers= new Vector<AsyncFsWriterWorker>();
-      private static BlockingQueue<InsertData> blockingQueue  = null;
-      private static boolean init = false;
-      
-      @TpmonInternal
-      public static synchronized boolean init() {
-            if (!init) {
-                blockingQueue = new ArrayBlockingQueue<InsertData>(8000);
-                for (int i=0 ; i < numberOfFsWriters; i++) {
-                        AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue);
-                        workers.add(dbw);
-                        new Thread(dbw).start();       
-                        TpmonController.registerWorker(dbw);
-                    }
-                init = true;
-                System.out.println(">Kieker-Tpmon: ("+numberOfFsWriters+" threads) will write to the file system");   
-            }            
-            return init;
+    public AsyncFsWriterProducer(String filenamePrefix){
+        this.filenamePrefix = filenamePrefix;
+        this.init();
+    }
+
+    @TpmonInternal
+    public void init() {
+        blockingQueue = new ArrayBlockingQueue<InsertData>(8000);
+        for (int i = 0; i < numberOfFsWriters; i++) {
+            AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue);
+            workers.add(dbw);
+            new Thread(dbw).start();
+            //TODO: we need to improve this!
+            TpmonController.getInstance().registerWorker(dbw);
         }
-        
-         /**
+        log.info(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
+    }
+
+    /**
      * Use this method to insert data into the database.
      */
     @TpmonInternal
-    public static boolean insertMonitoringDataNow(String opname, String traceid, long tin, long tout,int executionOrderIndex, int executionStackSize) {
-        return insertMonitoringDataNow(opname,"nosession",traceid,tin,tout,executionOrderIndex,executionStackSize);
+    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
     }
-    
+
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      *
      */
     @TpmonInternal
-    public static boolean insertMonitoringDataNow(String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-       if (TpmonController.debug)  System.out.println(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
-        
-        if (init == false) {
-            init();
-                            
-            if (init ==false) {
-                System.out.println(">Kieker-Tpmon: Error: Theres something wrong with the file system writer of tpmon!"+
-                        "- It could not be initialized");
-                return false;
-            }
+    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+        if (this.isDebug()) {
+            log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }
-       
-        try {                      
-            InsertData id = new InsertData(opname,  sessionid,  traceid,  tin,  tout, executionOrderIndex, executionStackSize);            
+
+        try {
+            InsertData id = new InsertData(experimentId, vmName, opname, sessionid, traceid, tin, tout, executionOrderIndex, executionStackSize);
             blockingQueue.put(id);
-            //System.out.println(""+blockingQueue.size());
-            
+        //System.out.println(""+blockingQueue.size());
+
         } catch (InterruptedException ex) {
-            System.out.println(">Kieker-Tpmon: "+System.currentTimeMillis()+" insertMonitoringData() failed: Exception: " + ex.getMessage());
+            log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex.getMessage());
             return false;
         }
+
         return true;
-    }        
+    }
 }

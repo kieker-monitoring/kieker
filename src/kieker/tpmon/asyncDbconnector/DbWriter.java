@@ -14,13 +14,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-import kieker.tpmon.TpmonController;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author matthias
  */
 public class DbWriter  implements Runnable, Worker{
+    private static final Log log = LogFactory.getLog(DbWriter.class);
     
     private static final long pollingIntervallInMillisecs = 400L;
     
@@ -37,7 +40,7 @@ public class DbWriter  implements Runnable, Worker{
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
-        if (TpmonController.debug)  System.out.println("New Tpmon - DbWriter thread created");
+        log.info("New Tpmon - DbWriter thread created");
     }
         
     synchronized void changeStatement(String statementtext){
@@ -53,7 +56,7 @@ public class DbWriter  implements Runnable, Worker{
     }           
     
     public void run() {
-        if (TpmonController.debug) System.out.println("Dbwriter thread running");
+        log.info("Dbwriter thread running");
         try {            
             while(!finished) { 
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS); 
@@ -66,7 +69,7 @@ public class DbWriter  implements Runnable, Worker{
                     }
                 }
             }
-            if (TpmonController.debug) System.out.println("Dbwriter finished");
+            log.info("Dbwriter finished");
         } catch (InterruptedException ex) {
             System.out.println("ERROR: "+ex.getMessage());
         }
@@ -78,7 +81,7 @@ public class DbWriter  implements Runnable, Worker{
      * writes next item into database
      */
     private void  consume(Object traceidObject) {
-        if (TpmonController.debug) System.out.println("DbWriter "+this+" Consuming "+traceidObject);
+        //if (TpmonController.debug) System.out.println("DbWriter "+this+" Consuming "+traceidObject);
         try {
             if (statementChanged || psInsertMonitoringData == null) {                
                 psInsertMonitoringData = conn.prepareStatement(nextStatementText);
@@ -98,7 +101,7 @@ public class DbWriter  implements Runnable, Worker{
             
             
         } catch (SQLException ex) {
-            System.out.println("Tpmon DbWriter Error during database statement preparation: "+ex.getMessage());
+            log.error("Tpmon DbWriter Error during database statement preparation: ", ex);
             ex.printStackTrace();
         }
     }

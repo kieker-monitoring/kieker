@@ -37,6 +37,8 @@ package kieker.tpmon;
  * @author Matthias Rohr, Andre van Hoorn, Nils Sommer
  * 
  * History: 
+ * 2008/08/29: Controller now singleton class
+ *             Many (performance) improvements to synchronization
  * 2008/08/06: Using tpmon.properties instead of dbconnector.properties and support
  *             of using java.io.tmpdir as file system storage directory. The storage
  *             directory may be set via the properties file, or (higher priority)
@@ -60,6 +62,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import kieker.tpmon.aspects.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
 import kieker.tpmon.asyncDbconnector.Worker;
@@ -67,69 +73,86 @@ import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
 
 public class TpmonController {
 
-    private static String vmname = "unknown";
+    private static TpmonController ctrlInst = new TpmonController();
+    private static final Log log = LogFactory.getLog(TpmonController.class);
+    private IMonitoringDataWriter monitoringDataWriter = null;
+    private String vmname = "unknown";
 
-    static {
-        try {
-            vmname = java.net.InetAddress.getLocalHost().getHostName();
-        } catch (Exception ex) {
-        } // nothing to do -- vmname will be "unknown" 
-    }
     // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
-    public static String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
-    public static String dbTableName = "turbomon10";
-    public static String buildDate = "unknown (at least 2008-08-08)";
-    public static boolean debug = false;
-    public static boolean storeInDatabase = false;
-    public static String filenamePrefix = ""; // e.g. path "/tmp"   
-    public static boolean storeInJavaIoTmpdir = true;
-    public static String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
+    private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
+    private String dbTableName = "turbomon10";
+    private String buildDate = "unknown (at least 2008-08-08)";
+    private boolean debug = false;
+    public boolean storeInDatabase = false;
+    public String filenamePrefix = ""; // e.g. path "/tmp"   
+
+    public String getFilenamePrefix() {
+        return filenamePrefix;
+    }
+    public boolean storeInJavaIoTmpdir = true;
+    public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
-    public static boolean setInitialExperimentIdBasedOnLastId = false;
+    private boolean setInitialExperimentIdBasedOnLastId = false;
 
     // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     // values might be not written to the database in case of an system.exit(0)!
-    private static boolean asyncDbconnector = false;
-    private static boolean asyncFsWriter = true;
+    private boolean asyncDbconnector = false;
+    private boolean asyncFsWriter = true;
 
     // Encoding method and component names stores just placeholders for the component and method names.
     // The place holders are usually much smaller and storage therefore much faster and requires less space.
-    private static boolean encodeMethodNames = false;
+    private boolean encodeMethodNames = false;
     // trace sampling:
     // if activated, approximately every n-th (traceSampleingFrequency) trace will be made persistend 
     // this allows to save the overhead and space for storing data.
     // WARNING: Trace sampling should not be used if a session-based evaluation is targeted!
     //          For this, a sessionid based sampleing is required (not implemented yet)
-    private static boolean traceSampleing = false;
-    private static int traceSampleingFrequency = 2;
-    private static boolean initialized = false;
-    private static TpmonShutdownHook shutdownhook = null;
+    private boolean traceSampleing = false;
+    private int traceSampleingFrequency = 2;
+    private TpmonShutdownHook shutdownhook = null;
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
-    @TpmonInternal()
-    public static synchronized boolean init() {
-        if (initialized) {
-            return true;
-        }
+    public static TpmonController getInstance() {
+        return TpmonController.ctrlInst;
+    }
 
-        System.out.println(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:" + Thread.currentThread().getId());
-        System.out.println(">Kieker-Tpmon: Virtual Machine start time " + ManagementFactory.getRuntimeMXBean().getStartTime());
+    public TpmonController() {
+        log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:" +
+                Thread.currentThread().getId());
+        log.info(">Kieker-Tpmon: Virtual Machine start time " +
+                ManagementFactory.getRuntimeMXBean().getStartTime());
 
-        // Add the shutdown hook to close Worker threads (for database or filesystem) when system.exit is called
-        if (shutdownhook == null) {
-            shutdownhook = new TpmonShutdownHook();
-            Runtime.getRuntime().addShutdownHook(shutdownhook);
-        }
+        try {
+            vmname = java.net.InetAddress.getLocalHost().getHostName();
+        } catch (Exception ex) {
+        } // nothing to do -- vmname will be "unknown" 
 
+        this.shutdownhook = new TpmonShutdownHook();
+        Runtime.getRuntime().addShutdownHook(shutdownhook);
+
+        //TODO: this would be the place to load the alternative properties file
         loadPropertiesFile();
-        if (storeInDatabase) {
-            initialized = Dbconnector.init();
-            System.out.printf(">Kieker-Tpmon: Initialization completed. Storing monitoring data in the database. \n");
+
+        if (this.storeInDatabase) {
+            if (asyncDbconnector) {
+                this.monitoringDataWriter = new AsyncDbconnector(dbConnectionAddress, dbTableName,
+                        setInitialExperimentIdBasedOnLastId);
+            } else {
+                this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
+                        setInitialExperimentIdBasedOnLastId);
+            }
+            log.info(">Kieker-Tpmon: Initialization completed. Storing " +
+                    "monitoring data in the database.");
         } else {
-            initialized = true;
-            System.out.printf(">Kieker-Tpmon: Initialization completed. Storing monitoring data in the folder %s. \n", filenamePrefix);
+            String filenameBase = new String(this.filenamePrefix + "/tpmon-");
+            if (asyncFsWriter) {
+                this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
+            }else{
+                this.monitoringDataWriter = new FileSystemWriter(filenameBase);
+            }
+            log.info(">Kieker-Tpmon: Initialization completed. Storing " +
+                    "monitoring data in the folder %s. \n" + filenamePrefix);
         }
-        return initialized;
     }
 
     /**
@@ -143,8 +166,8 @@ public class TpmonController {
      * 
      * @return
      */
-    public static String getVmname() {
-        return vmname;
+    public String getVmname() {
+        return this.vmname;
     }
 
     /**
@@ -161,9 +184,10 @@ public class TpmonController {
      * 
      * @param newVmname
      */
-    public static void setVmname(String newVmname) {
-        System.out.println(">Kieker-Tpmon: The VM has the NEW name " + newVmname + " Thread:" + Thread.currentThread().getId());
-        vmname = newVmname;
+    public void setVmname(String newVmname) {
+        log.info(">Kieker-Tpmon: The VM has the NEW name " + newVmname +
+                " Thread:" + Thread.currentThread().getId());
+        this.vmname = newVmname;
     }
 
     /**
@@ -171,61 +195,57 @@ public class TpmonController {
      * @param newWorker
      */
     @TpmonInternal()
-    public static void registerWorker(Worker newWorker) {
-        shutdownhook.registerWorker(newWorker);
+    public void registerWorker(Worker newWorker) {
+        this.shutdownhook.registerWorker(newWorker);
     }
-    private static long lastUniqueIdTime = 0;
-    private static int secondaryCounter = 0;
-    public static long initializationTime = System.currentTimeMillis();
-    public static long numberOfInserts = 0;
-    public static Date startDate = new Date(initializationTime);
-    private static boolean monitoringEnabled = true;
+    private long lastUniqueIdTime = 0;
+    private int secondaryCounter = 0;
+    //TODO: why are these guys public?
+    public long initializationTime = System.currentTimeMillis();
+    public AtomicLong numberOfInserts = new AtomicLong(0);
+    public Date startDate = new Date(initializationTime);
+    private boolean monitoringEnabled = true;
 
     @TpmonInternal()
-    public static boolean isDebug() {
+    public boolean isDebug() {
         return debug;
     }
 
     @TpmonInternal()
-    public static boolean isInitialized() {
-        return initialized;
-    }
-
-    @TpmonInternal()
-    public static boolean isStoreInDatabase() {
+    public boolean isStoreInDatabase() {
         return storeInDatabase;
     }
 
     @TpmonInternal()
-    public static boolean isMonitoringEnabled() {
+    public boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
-    static final int STANDARDEXPERIMENTID = 0;
-    static int experimentId = STANDARDEXPERIMENTID;
+    private final int STANDARDEXPERIMENTID = 0;
+    // we do not use AtomicInteger since we only rarely 
+    // set the value (common case -- getting -- faster now).
+    // instead, we decided to provide an "expensive" increment method.
+    private int experimentId = STANDARDEXPERIMENTID;
 
     @TpmonInternal()
-    public static int getExperimentId() {
-        return experimentId;
+    public int getExperimentId() {
+        return this.experimentId;
     }
 
     @TpmonInternal()
-    public static int incExperimentId() {
-        return experimentId++;
+    public synchronized int incExperimentId() {
+        return this.experimentId++;
+    }
+
+    @TpmonInternal()
+    public void setExperimentId(int newExperimentID) {
+        this.experimentId = newExperimentID;
     }
 
     /**
-     * The initial value for the experimentID is STANDARDEXPERIMENTID = 0;  
+     * Enables monitoring.
      */
     @TpmonInternal()
-    public static void setExperimentId(int newExperimentID) {
-        experimentId = newExperimentID;
-    }
-
-    /**
-     * Enabled logging
-     */
-    @TpmonInternal()
-    public static void enableMonitoring() {
+    public void enableMonitoring() {
         monitoringEnabled = true;
     }
 
@@ -233,35 +253,35 @@ public class TpmonController {
      * Disables to store monitoring data
      */
     @TpmonInternal()
-    public static void disableMonitoring() {
+    public void disableMonitoring() {
         monitoringEnabled = false;
     }
 
     @TpmonInternal()
-    public static boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout) {
-        return insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, -1, -1);
+    public boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout) {
+        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, -1, -1);
     }
 
     @TpmonInternal()
-    public static boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        return insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, executionOrderIndex, executionStackSize);
+    public boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, executionOrderIndex, executionStackSize);
     }
 
     @TpmonInternal()
-    public static boolean insertMonitoringDataNow(String component, String methodSig, String sessionID, String requestID, long tin, long tout) {
-        return insertMonitoringDataNow(component, methodSig, sessionID, requestID, tin, tout, -1, -1);
+    public boolean insertMonitoringDataNow(String component, String methodSig, String sessionID, String requestID, long tin, long tout) {
+        return this.insertMonitoringDataNow(component, methodSig, sessionID, requestID, tin, tout, -1, -1);
     }
     // only used if encodeMethodNames == true
-    private static HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
+    private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
     // lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
     // each monitoring point after that
     // (The following might produce in very very few cases a colision in a large DISTRIBUTED system with a large number
     // of instrumented methods. For save usage in a critical distributed system, where the monitoring data is extremely critical,
     // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)    
-    private static int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
+    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
 
     @TpmonInternal()
-    public static synchronized boolean insertMonitoringDataNow(String componentname, String methodSig, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+    public boolean insertMonitoringDataNow(String componentname, String methodSig, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
 
         if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
             if (!(requestID.hashCode() % traceSampleingFrequency == 0)) {
@@ -269,15 +289,11 @@ public class TpmonController {
             }
         }
 
-        if (!initialized) {
-            init();
-        }
-
         if (!monitoringEnabled) {
             return false;
         }
-        //System.out.println("ComponentName "+componentname);
-        //System.out.println("Methodname "+methodname);
+        //log.info("ComponentName "+componentname);
+        //log.info("Methodname "+methodname);
 
         // methodname: A.a(), componentname: de.comp.A
         // therefore componentname+methodname = de.comp.AA.a()
@@ -304,7 +320,7 @@ public class TpmonController {
 //                String combinedName = componentname + methodname;
 //                String encodedName = methodNameEncoder.get(combinedName);
 //                if (encodedName == null) { // Method unknown
-//                    //           System.out.println("Kieker-Tpmon: First time logging of "+component+" and "+methodname);                
+//                    //           log.info("Kieker-Tpmon: First time logging of "+component+" and "+methodname);                
 //                    lastEncodedMethodName++; // remember we are synchronized here :)
 //                    encodedName = new String("E-" + lastEncodedMethodName); // the method names in java are not allowed to have "-" in it
 //                    methodNameEncoder.put(combinedName, encodedName);
@@ -321,28 +337,10 @@ public class TpmonController {
 
 //        newMethodname = methodname;
 
-        String opname = componentname + "." + methodSig;
-
-
         //TODO: Encapsulation into an interface of all those writers and polymorphy might make the two evaluations of the boolean unneccesary
-        numberOfInserts++;
-        if (storeInDatabase) {
-            if (!asyncDbconnector) {
-                return Dbconnector.insertMonitoringDataNow(opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
-            } else {
-                return AsyncDbconnector.insertMonitoringDataNow(opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
-            }
-
-        } else {
-            if (!asyncFsWriter) {
-                //System.out.println("Using normal filewriter");
-                return FileSystemWriter.insertMonitoringDataNow(opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
-            } else {
-                //System.out.println("Using Async filewriter");
-                return AsyncFsWriterProducer.insertMonitoringDataNow(opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
-            }
-
-        }
+        numberOfInserts.incrementAndGet();
+        String opname = componentname + "." + methodSig;
+        return this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId, this.vmname, opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
     }
 
     /**
@@ -359,27 +357,11 @@ public class TpmonController {
      *       
      * 
      */
-    private static void storeEncodedName(String component, String newMethodname, String encodedName) {
-        // System.out.println("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
+    private void storeEncodedName(String component, String newMethodname, String encodedName) {
+        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
         String opname = component + newMethodname;
-        numberOfInserts++;
-        if (storeInDatabase) {
-
-            if (!asyncDbconnector) {
-                Dbconnector.insertMonitoringDataNow(opname, encodedName, "", -5, -5, -5, -5);
-            } else {
-                AsyncDbconnector.insertMonitoringDataNow(opname, encodedName, "", -5, -5, -5, -5);
-            }
-
-        } else {
-            if (!asyncFsWriter) {
-                //System.out.println("Using normal filewriter");
-                FileSystemWriter.insertMonitoringDataNow(opname, encodedName, "", -5, -5, -5, -5);
-            } else {
-                //System.out.println("Using Async filewriter");
-                AsyncFsWriterProducer.insertMonitoringDataNow(opname, encodedName, "", -5, -5, -5, -5);
-            }
-        }
+        numberOfInserts.incrementAndGet();
+        this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId,  this.vmname, opname, encodedName, "", -5, -5, -5, -5);
     }
 
     /**
@@ -387,7 +369,7 @@ public class TpmonController {
      * @param methodname
      * @return methodname without a double componentname
      */
-    private static String formatMethodName(String methodname) {
+    private String formatMethodName(String methodname) {
         // methodname: A.a(), componentname: de.comp.A
         // therefore componentname+methodname = de.comp.AA.a()
         // The "A" is double, this is not nice
@@ -412,8 +394,8 @@ public class TpmonController {
             return new String("" + methodname.subSequence(indexBeginOfMethodname, methodname.length())).replaceAll(" ", "");
         }
     }
-    static long seed = 0;
-    static double d3 = 0.3d;
+    private long seed = 0;
+    private double d3 = 0.3d;
     /**
      * This method is used by the aspects to get the time stamps. It uses nano seconds as precision.    
      * The method is synchronized in order to reduce the risk of identical time stamps. 
@@ -421,10 +403,10 @@ public class TpmonController {
      * In contrast to System.nanoTime(), it gives the nano seconds between the current time and midnight, January 1, 1970 UTC.
      * (The value returned by System.nanoTime() only represents nanoseconds since *some* fixed but arbitrary time.)
      */
-    static long offsetA = System.currentTimeMillis() * 1000000 - System.nanoTime();
+    private long offsetA = System.currentTimeMillis() * 1000000 - System.nanoTime();
 
     @TpmonInternal()
-    public synchronized static long getTime() {
+    public long getTime() {
         return System.nanoTime() + offsetA;
     }
 
@@ -442,7 +424,7 @@ public class TpmonController {
      *
      * */
     @TpmonInternal()
-    public static synchronized String getUniqueIdentifierForThread(long threadId) {
+    public synchronized String getUniqueIdentifierForThread(long threadId) {
         long currentTime = System.currentTimeMillis();
         String uniqueIdentifier;
         if (currentTime != lastUniqueIdTime) {
@@ -457,8 +439,8 @@ public class TpmonController {
     }
 
     @TpmonInternal()
-    public static void shutdown() {
-        System.out.println("Tpmon: shutting down");
+    public void shutdown() {
+        log.info("Tpmon: shutting down");
     }
 
     /**    
@@ -468,10 +450,10 @@ public class TpmonController {
      * If it fails, it uses hard-coded standard values.    
      */
     @TpmonInternal()
-    private static void loadPropertiesFile() {
+    private void loadPropertiesFile() {
         String configurationFile = "META-INF/tpmon.properties";
         if (debug) {
-            System.out.println("Tpmon: Loading properties from tpmonLTW.jar/" + configurationFile);
+            log.info("Tpmon: Loading properties from tpmonLTW.jar/" + configurationFile);
         }
         InputStream stream = Dbconnector.class.getClassLoader().getResourceAsStream(configurationFile);
         Properties prop = new Properties();
@@ -621,7 +603,7 @@ public class TpmonController {
         if (asyncFsWriterProperty != null && asyncFsWriterProperty.length() != 0) {
             if (asyncFsWriterProperty.toLowerCase().equals("true") || asyncFsWriterProperty.toLowerCase().equals("false")) {
                 asyncFsWriter = asyncFsWriterProperty.toLowerCase().equals("true");
-            //  System.out.println("Async fs writer activated");
+            //  log.info("Async fs writer activated");
             } else {
                 formatAndOutputError("Bad value for asyncFsWriter parameter (" + asyncFsWriterProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + asyncFsWriter, true, false);
@@ -630,34 +612,34 @@ public class TpmonController {
             formatAndOutputError("Could not find asyncFsWriter parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + asyncFsWriter, true, false);
         }
-        // System.out.println("Async fs writer = "+asyncFsWriter);
+        // log.info("Async fs writer = "+asyncFsWriter);
 
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
                 monitoringEnabled = monitoringEnabledProperty.toLowerCase().equals("true");
-            //  System.out.println("monitoringEnabled true");
+            //  log.info("monitoringEnabled true");
             } else {
                 formatAndOutputError("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + monitoringEnabled, true, false);
-            //    System.out.println("monitoringEnabled bad value");
+            //    log.info("monitoringEnabled bad value");
             }
         } else {
             formatAndOutputError("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + monitoringEnabled, true, false);
-        //  System.out.println("monitoringEnabled missing param");
+        //  log.info("monitoringEnabled missing param");
         }
-        //System.out.println("monitoringEnabled "+monitoringEnabled);
+        //log.info("monitoringEnabled "+monitoringEnabled);
         if (monitoringEnabled == false) {
-            System.out.println(">Kieker-Tpmon: Notice, monitoring is deactived (monitoringEnables=false in dbconnector.properties within tpmonLTW.jar)");
+            log.info(">Kieker-Tpmon: Notice, monitoring is deactived (monitoringEnables=false in dbconnector.properties within tpmonLTW.jar)");
         }
         if (debug) {
-            System.out.println(getConnectorInfo());
+            log.info(getConnectorInfo());
         }
     }
 
     @TpmonInternal()
-    public static void formatAndOutputError(String errorMessage, boolean onlyWarning, boolean reportTime) {
+    public void formatAndOutputError(String errorMessage, boolean onlyWarning, boolean reportTime) {
         StringBuffer errorReport = new StringBuffer(">Kieker-Tpmon:  ");
         if (onlyWarning) {
             errorReport.append("Warning ");
@@ -668,11 +650,11 @@ public class TpmonController {
             errorReport.append(getDateString());
         }
         errorReport.append(" :" + errorMessage);
-        System.out.println("" + errorReport);
+        log.info("" + errorReport);
     }
 
     @TpmonInternal()
-    public static String getConnectorInfo() {
+    public String getConnectorInfo() {
         //only show the password if debug is on
         String dbConnectionAddress2 = dbConnectionAddress;
         if (!debug) {
@@ -685,12 +667,12 @@ public class TpmonController {
         if (storeInDatabase) {
             return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", buildDate :" + buildDate + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
         } else {
-            return new String("Storage mode : Tpmon stores in the filesystem, Version :" + TpmonController.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
+            return new String("Storage mode : Tpmon stores in the filesystem, Version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
         }
     }
 
     @TpmonInternal()
-    public static String getDateString() {
+    public String getDateString() {
         return java.util.Calendar.getInstance().getTime().toString();
     }
     // only used by the *Remote* aspect or the spring aspectj aspect. The other aspects have own 
@@ -706,8 +688,8 @@ public class TpmonController {
      * @return
      */
     @TpmonInternal()
-    public static String getTraceId(Long threadid) {
-        //System.out.println("TpmonController: getTraceId("+threadid+") ="+requestThreadMatcher.get(threadid));
+    public String getTraceId(Long threadid) {
+        //log.info("TpmonController: getTraceId("+threadid+") ="+requestThreadMatcher.get(threadid));
         return requestThreadMatcher.get(threadid);
     }
 //    /**
@@ -718,7 +700,7 @@ public class TpmonController {
 //     * @return
 //     */    
 //    private static void setTraceId(Long threadid, String traceid) {
-//        //System.out.println("TpmonController: setTraceId("+threadid+","+threadid+")");
+//        //log.info("TpmonController: setTraceId("+threadid+","+threadid+")");
 //        requestThreadMatcher.put(threadid, traceid);
 //    }
     /**
@@ -726,8 +708,8 @@ public class TpmonController {
      * executionOrderIndexMatcher Contains for each traceid the last execution-order-identifier that was given to the execution
      * executionStackSizeMatcher contains for each traceid the next stack size to be logged
      */
-    public static Map<String, Integer> executionOrderIndexMatcher = Collections.synchronizedMap(new HashMap<String, Integer>());
-    public static Map<String, Integer> executionStackSizeMatcher = Collections.synchronizedMap(new HashMap<String, Integer>());
+    public Map<String, Integer> executionOrderIndexMatcher = Collections.synchronizedMap(new HashMap<String, Integer>());
+    public Map<String, Integer> executionStackSizeMatcher = Collections.synchronizedMap(new HashMap<String, Integer>());
 
     /**
      * Use a RemoteCallMetaData object to transport tracing data together 
@@ -738,24 +720,24 @@ public class TpmonController {
      * @return
      */
     @TpmonInternal()
-    public static RemoteCallMetaData getRemoteCallMetaData() {
+    public RemoteCallMetaData getRemoteCallMetaData() {
         Long threadid = Thread.currentThread().getId();
         String traceid = requestThreadMatcher.get(threadid);
         if (traceid == null) {
-            System.out.println("Tpmon: warning traceid was null");
+            log.info("Tpmon: warning traceid was null");
             traceid = getUniqueIdentifierForThread(threadid);
             requestThreadMatcher.put(threadid, traceid);
         }
 
         Integer eoi = executionOrderIndexMatcher.get(traceid);
         if (eoi == null) {
-            System.out.println("Tpmon: warning eoi == null");
+            log.info("Tpmon: warning eoi == null");
             eoi = 0;
             executionOrderIndexMatcher.put(traceid, eoi);
         }
         Integer ess = executionStackSizeMatcher.get(traceid);
         if (ess == null) {
-            System.out.println("Tpmon: warning ess == null");
+            log.info("Tpmon: warning ess == null");
             ess = 0;
             executionStackSizeMatcher.put(traceid, ess);
         }
@@ -766,11 +748,11 @@ public class TpmonController {
      * Used by the spring aspect to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
      */
-    public static synchronized void registerSessionIdentifier(String sessionid, long threadid) {
+    public synchronized void registerSessionIdentifier(String sessionid, long threadid) {
         sessionThreadMatcher.put(threadid, sessionid);
     }
 
-    public static String getSessionIdentifier(long threadid) {
+    public String getSessionIdentifier(long threadid) {
         String sessionid = sessionThreadMatcher.get(threadid);
         if (sessionid == null) {
             return "unknown";
@@ -784,11 +766,11 @@ public class TpmonController {
      * @param threadid
      */
     @TpmonInternal()
-    public static void registerRemoteCallMetaData(RemoteCallMetaData rcmd) {
+    public void registerRemoteCallMetaData(RemoteCallMetaData rcmd) {
 
         Long threadid = Thread.currentThread().getId();
         if (rcmd == null) {
-            System.out.println("Tpmon: RCMD == null");
+            log.info("Tpmon: RCMD == null");
             String traceid = getUniqueIdentifierForThread(threadid);
             requestThreadMatcher.put(threadid, traceid);
             executionOrderIndexMatcher.put(traceid, 0);
@@ -808,19 +790,19 @@ public class TpmonController {
      * @param eoi
      */
     @TpmonInternal()
-    public static void registerEoiReceivedFromRemoteContext(int eoi) {
+    public void registerEoiReceivedFromRemoteContext(int eoi) {
         String traceid = requestThreadMatcher.get(Thread.currentThread().getId());
         executionOrderIndexMatcher.put(traceid, eoi);
     }
 
     @TpmonInternal()
-    public static int getEoi() {
+    public int getEoi() {
         String traceid = requestThreadMatcher.get(Thread.currentThread().getId());
         return executionOrderIndexMatcher.get(traceid);
     }
 
     @TpmonInternal()
-    public static int getEoi(String traceid) {
+    public int getEoi(String traceid) {
         if (traceid == null) {
             return -2;
         }
@@ -832,7 +814,12 @@ public class TpmonController {
     }
 
     @TpmonInternal()
-    public static String getVersion() {
+    public String getVersion() {
         return TpmonVersion.getVERSION();
+    }
+    
+    @TpmonInternal()
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

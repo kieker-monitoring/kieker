@@ -47,6 +47,7 @@ public class KiekerTpmonMonitoringAspect {
     
     @Around("monitoredMethod()")
     public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+        TpmonController ctrlInst = TpmonController.getInstance();
         
          String methodname = thisJoinPoint.getSignature().getName();
         // e.g. "getBook"
@@ -74,11 +75,11 @@ public class KiekerTpmonMonitoringAspect {
         String traceid = uniqueThreadIds.get(threadid);
         boolean isEntryPoint = false;
         if (traceid == null) { // its a new trace AND this is an entry point!            
-            traceid = TpmonController.getUniqueIdentifierForThread(threadid);
+            traceid = ctrlInst.getUniqueIdentifierForThread(threadid);
             uniqueThreadIds.put(threadid, traceid);
             isEntryPoint = true;            
         }            
-        long tin = TpmonController.getTime(); // startint stopwatch    
+        long tin = ctrlInst.getTime(); // startint stopwatch    
 
         Object retVal;
         try {
@@ -88,7 +89,7 @@ public class KiekerTpmonMonitoringAspect {
             throw e; // exceptions are forwarded
         }
         finally {
-            long tout = TpmonController.getTime();
+            long tout = ctrlInst.getTime();
             //checking whether this is an entry point in the trace
             if (isEntryPoint) {
                 // it is an entry point -> threadid needs to be invalidated
@@ -98,9 +99,9 @@ public class KiekerTpmonMonitoringAspect {
             // here we can collect the sessionid, which may for instance be registered before by
             // a explicity call registerSessionIdentifier(String sessionid, long threadid) from a method
             // that knowns the request object (e.g. a servlet or a spring MVC controller).
-            String sessionid = TpmonController.getSessionIdentifier(threadid); 
+            String sessionid = ctrlInst.getSessionIdentifier(threadid); 
             //TpmonController.insertMonitoringDataNow(componentName, opname, traceid, tin, tout);               
-            TpmonController.insertMonitoringDataNow(componentName, opname, sessionid, traceid,tin, tout);
+            ctrlInst.insertMonitoringDataNow(componentName, opname, sessionid, traceid,tin, tout);
         }
         // returning the result of the intercepted method call
         return retVal;

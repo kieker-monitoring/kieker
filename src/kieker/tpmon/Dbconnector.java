@@ -50,15 +50,26 @@ package kieker.tpmon;
  */
 import java.sql.*;
 
-public class Dbconnector {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-    private static Connection conn = null;
-    private static PreparedStatement psInsertMonitoringData;
-    private static boolean init = false;
-    private static int experimentId = TpmonController.getExperimentId();
-    private static String vmname = TpmonController.getVmname();
+public class Dbconnector extends AbstractMonitoringDataWriter {
 
-    private Dbconnector() {
+    private static final Log log = LogFactory.getLog(Dbconnector.class);
+    private Connection conn = null;
+    private PreparedStatement psInsertMonitoringData;
+    private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
+    private String dbTableName = "turbomon10";
+    private boolean setInitialExperimentIdBasedOnLastId = false;
+    // only used if setInitialExperimentIdBasedOnLastId==true
+    private int experimentId = -1;
+
+    public Dbconnector(String dbConnectionAddress, String dbTableName,
+            boolean setInitialExperimentIdBasedOnLastId) {
+        this.dbConnectionAddress = dbConnectionAddress;
+        this.dbTableName = dbTableName;
+        this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
+        this.init();
     }
 
     /**
@@ -67,41 +78,41 @@ public class Dbconnector {
      * in dbconnector.properties.
      *
      */
-    public static synchronized boolean init() {
-        if (!init) {
-            if (TpmonController.debug) {
-                System.out.println("Tpmon dbconnector init");
-            }
-            try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
-            } catch (Exception ex) {
-                TpmonController.formatAndOutputError("MySQL driver registration failed. Perhaps the mysql-connector-....jar missing? Exception: " + ex.getMessage(), false, false);
-                ex.printStackTrace();
-                return false;
-            }
+    public boolean init() {
+        if (this.isDebug()) {
+            System.out.println("Tpmon dbconnector init");
+        }
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception ex) {
+            log.error("MySQL driver registration failed. Perhaps the mysql-connector-....jar missing?", ex);
+            ex.printStackTrace();
+            return false;
+        }
 
-            try {
-                conn = DriverManager.getConnection(TpmonController.dbConnectionAddress);
-                System.out.println("Tpmon: Connected to database at " + TpmonController.getDateString());
-                init = true;
+        try {
+            conn = DriverManager.getConnection(this.dbConnectionAddress);
+            log.info("Tpmon: Connected to database");
 
-                if (TpmonController.setInitialExperimentIdBasedOnLastId) {
-                    // set initial experiment id based on last id (increased by 1)
-                    Statement stm = conn.createStatement();
-                    ResultSet res = stm.executeQuery("SELECT max(experimentID) FROM " + TpmonController.dbTableName);
-                    if (res.next()) {
-                        experimentId = res.getInt(1) + 1;
-                    }
-                    TpmonController.setExperimentId(experimentId);
-                    System.out.println("Tpmon: Setting initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
+            if (this.setInitialExperimentIdBasedOnLastId) {
+                // set initial experiment id based on last id (increased by 1)
+                Statement stm = conn.createStatement();
+                ResultSet res = stm.executeQuery("SELECT max(experimentID) FROM " + this.dbTableName);
+                if (res.next()) {
+                    this.experimentId = res.getInt(1) + 1;
                 }
-
-            } catch (SQLException ex) {
-                System.out.println("Tpmon: SQLException: " + ex.getMessage());
-                System.out.println("Tpmon: SQLState: " + ex.getSQLState());
-                System.out.println("Tpmon: VendorError: " + ex.getErrorCode());
-                return false;
+                // this.experimentId keeps the old value else
+                log.info("Tpmon: Setting initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
             }
+
+            psInsertMonitoringData = conn.prepareStatement("INSERT INTO " + dbTableName +
+                    " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
+                    "VALUES (?,?,?,?,?,?,?,?,?)");
+        } catch (SQLException ex) {
+            log.error("Tpmon: SQLException: " + ex.getMessage());
+            log.error("Tpmon: SQLState: " + ex.getSQLState());
+            log.error("Tpmon: VendorError: " + ex.getErrorCode());
+            return false;
         }
         return true;
     }
@@ -111,44 +122,18 @@ public class Dbconnector {
      * file system. The storage mode is configured in the file
      * dbconnector.properties.
      */
-    static boolean insertMonitoringDataNow(String componentname, String methodname, String traceid, long tin, long tout,int executionOrderIndex, int executionStackSize) {
-        return insertMonitoringDataNow(componentname, methodname, "nosession", traceid, tin, tout,executionOrderIndex, executionStackSize);
-    }
-
-    /**
-     * This method to store monitoring data into the database or
-     * file system. The storage mode is configured in the file
-     * dbconnector.properties.
-     */
-    static synchronized boolean insertMonitoringDataNow(String componentname, String methodname, String sessionid, String traceid, long tin, long tout,int executionOrderIndex, int executionStackSize) {
-
-        if (Dbconnector.init == false) {
-            init();
-            if (init == false) {
-                System.out.println("Tpmon: Error: Theres something wrong with the database connection of tpmon!" +
-                        "- Database Connection Could Not Be Initiated");
-                return false;
-            }
-        }
-
-
+    public synchronized boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
         try {
-            // INSERT INTO `newSchema` ( `experimentid` , `operation` , `traceid` , `tin` , `tout` ) VALUES ( '0', '1231', '1231', '12312', '1221233' );
-            if (psInsertMonitoringData == null || experimentId != TpmonController.getExperimentId() || !vmname.equals(TpmonController.getVmname())) { // Vmname and ExperimentId may be changed
-                experimentId = TpmonController.getExperimentId();
-                vmname = TpmonController.getVmname();
-                psInsertMonitoringData = conn.prepareStatement("INSERT INTO " + TpmonController.dbTableName +
-                        " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
-                        "VALUES (" + experimentId + ",?,?,?,?,?," + vmname + ",?,?)");
-            }
-
-            psInsertMonitoringData.setString(1, componentname + methodname);
-            psInsertMonitoringData.setString(2, sessionid);
-            psInsertMonitoringData.setString(3, traceid);
-            psInsertMonitoringData.setLong(4, tin);
-            psInsertMonitoringData.setLong(5, tout);
-            psInsertMonitoringData.setLong(6, executionOrderIndex);
-            psInsertMonitoringData.setLong(7, executionStackSize);
+            psInsertMonitoringData.setInt(1, 
+                    (this.setInitialExperimentIdBasedOnLastId&&this.experimentId>=0)?this.experimentId:experimentId);
+            psInsertMonitoringData.setString(2, opname);
+            psInsertMonitoringData.setString(3, sessionid);
+            psInsertMonitoringData.setString(4, traceid);
+            psInsertMonitoringData.setLong(5, tin);
+            psInsertMonitoringData.setLong(6, tout);
+            psInsertMonitoringData.setString(7, vmName);
+            psInsertMonitoringData.setLong(8, executionOrderIndex);
+            psInsertMonitoringData.setLong(9, executionStackSize);
             psInsertMonitoringData.execute();
         } catch (SQLException ex) {
             System.out.println("Tpmon Error: " + System.currentTimeMillis() + " insertMonitoringData() failed: SQLException: " + ex.getMessage());
@@ -157,6 +142,7 @@ public class Dbconnector {
             try {
                 psInsertMonitoringData.clearParameters();
             } catch (Exception ex) {
+                log.error(ex);
             }
         }
         return true;

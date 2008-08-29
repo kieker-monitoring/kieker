@@ -17,6 +17,8 @@ package kieker.tpmon.asyncDbconnector;
 public class InsertData {
     //public String componentname;
     //public String methodname;
+    public int experimentId;
+    public String vmName;
     public String opname;
     public String sessionid;
     public String traceid;
@@ -25,7 +27,9 @@ public class InsertData {
     public int executionOrderIndex;
     public int executionStackSize;
     
-    public InsertData(String inopname, String insessionid, String intraceid, long intin, long intout, int inexecutionOrderIndex, int inexecutionStackSize) {
+    public InsertData(int experimentId, String vmName, String inopname, String insessionid, String intraceid, long intin, long intout, int inexecutionOrderIndex, int inexecutionStackSize) {
+        this.experimentId = experimentId;
+        this.vmName = vmName;
         this.tin = intin;
         this.tout = intout;
         this.traceid = intraceid;
