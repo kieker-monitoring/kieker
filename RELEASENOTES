@@ -1,0 +1,7 @@
+Introduction:
+
+This document summarizes changes made in all releases starting with 0.90
+
+
+* 0.90
+- Improved (in terms of performans) concurrency in TpmonController
