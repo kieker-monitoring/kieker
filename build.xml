@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Kieker" default="build-all" basedir="." >
+    
+    <property file="tpmon.properties"/>
+    
+    <!-- Properties that should never be changed by the user: -->
+    <!-- Names of the tpmon runtime libraries that will be created 
+		 by the build process: -->
+    <property name="dist.tpmon.controlServlet" value="tpmon-control-servlet.war"/>
+    
+    <target name="init-version">
+        <tstamp/>
+        <property name="tpmon.version" value="0.81"/>        
+        <property name="dist.tpmon.ltw"   value="KiekerTpmonLTW-${tpmon.version}.jar"/>
+        <property name="dist.tpmon.ctw"   value="KiekerTpmonCTW-${tpmon.version}.jar"/>
+        <property name="dist.tpmon.ctrl" value="KiekerTpmonCtrl-${tpmon.version}.jar"/>
+        <property name="dist.tpan"        value="KiekerTpan-${tpmon.version}.jar"/>       
+		<property name="dist.tpmon.controlServlet" value="tpmon-control-servlet-0.8.1.war"/>
+    </target>
+    
+    <target name="update-version" unless="version.noupdate"
+            depends="init-version">
+        <echo>Updating version string</echo>
+        <replaceregexp file="src/kieker/tpmon/TpmonVersion.java"
+                       match="VERSION = &quot;.*?&quot;"
+                       replace="VERSION = &quot;${tpmon.version}-${DSTAMP}&quot;"/>
+    </target>
+    
+    <target name="build-all" depends="clean,init">
+        <!--<antcall target="build-tpmon-ctw"/>-->
+        <!--<antcall target="build-tpmon-ltw"/>-->
+        <antcall target="build-tpmon-ctrl"/>
+        <antcall target="build-tpmon-control-servlet"/> 
+    </target>
+    
+    <property file="build.properties"/>
+    
+    <target name="init" depends="update-version">
+        <fail message="Critical error: ./tpmon.properties is missing! Create it based on ./tpmon.properties.example">
+            <condition><not><available file="tpmon.properties"/></not></condition>
+        </fail>
+        <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
+        <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
+        <copy file="tpmon.properties" todir="src/kieker/tpmon/META-INF/"/>        
+        <fail message="Critical error: AspectJ library not found in ${aspectjtoolsjar}. Check your aspejctjtoolsjar property in the file tpmon.properties.">
+            <condition><not>
+                    <available file="${aspectjtoolsjar}"/>
+            </not></condition>
+        </fail>
+        <!-- <echo message="${basedir}" /> -->
+        <mkdir dir="build"/>
+        <mkdir dir="build/META-INF"/>
+        <mkdir dir="dist"/>
+        <mkdir dir="build-tests"/>
+        <mkdir dir="build-tpmonControlServlet"/>
+    </target>
+    
+    <target name="build-tpmon-ltw" depends="init"> 
+        <delete dir="build"/>
+        <mkdir dir="build"/>
+        <echo message="The iajc compiler is used to prepare load time weaving (LTW) by creating a .jar file. LTW is configured by the aop.xml in src/kieker/tpmon/META-INF. The database connection is specified in dbconnector.properties in src/kieker/tpmon/META-INF."/>
+        <fail message="src/kieker/tpmon/META-INF/aop.xml is missing! create it from src/kieker/tpmon/META-INF/aop.xml.example">
+            <condition><not><available file="src/kieker/tpmon/META-INF/aop.xml"/></not></condition>
+        </fail>
+        <iajc destDir="build" 
+              source="1.5"
+              verbose="off"
+              srcdir="src"
+              debug="true"
+              excludes="kieker/tests/**">
+            <classpath>
+                <pathelement path="${servletapijar}"/>
+                <pathelement path="${aspectjrtjar}"/>
+            </classpath>
+        </iajc>
+        <copy todir="build/META-INF">
+            <fileset dir="src/kieker/tpmon/META-INF"/>
+        </copy>        
+        <jar destfile="dist/${dist.tpmon.ltw}">			
+            <fileset dir="build"/>
+            <fileset dir="src"/>
+        </jar>
+    </target>
+    
+    <target name="build-tpmon-ctw" depends="init"> 
+        <delete dir="build"/>
+        <mkdir dir="build"/>
+        <echo message="Creating the compile-time-weaving library of tpmon (${dist.tpmon.ctw}). This library can be used in two ways: 1) for compile time instrumentation 2) via the tpmon API - if you want to invoke tpmon manually. This library cannot be used for load-time-weaving with the javaagent property!"/>
+        <javac destDir="build" 
+               source="1.5"
+               verbose="off"
+               srcdir="src"
+               debug="true"
+               excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/aspects/**">
+            <classpath>
+                <pathelement path="${servletapijar}"/>                
+            </classpath>
+        </javac>        
+        <copy file="src/kieker/tpmon/META-INF/tpmon.properties" todir="build/META-INF"/>
+        <jar destfile="dist/${dist.tpmon.ctw}" basedir="build"/>
+    </target>
+    
+    <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
+    <target name="build-tpmon-ctrl" depends="init">         
+        <delete dir="build"/>
+        <mkdir dir="build"/>
+        <antcall target="init"/>            
+        <echo message="Creating the library of tpmon (${dist.tpmon.ctrl}) that is supposed for direct invocations - it doesn't contain the AOP instrumentation mechanisms."/>
+        <!-- TODO: aop.xml and aspects should be excluded from the jar file -->		
+        <javac destDir="build" 
+               source="1.5"
+               srcdir="src"
+               debug="true"
+               excludes="kieker/tests/**,kieker/tpmonControlServlet/**,kieker/tpmon/aspects/**,">
+            <classpath>
+                <pathelement path="${servletapijar}"/>
+                <pathelement path="${aspectjrtjar}"/>
+            </classpath>
+        </javac>
+        <copy todir="build/META-INF">
+            <fileset dir="src/kieker/tpmon/META-INF"/>
+        </copy>	
+        <copy todir="build">
+            <fileset dir="src"/>
+        </copy>	
+        <delete dir="build/kieker/tests"/>
+        <delete dir="build/kieker/tpmon/aspects"/>
+        <delete dir="build/kieker/tpmonControlServlet"/>
+        <jar destfile="dist/${dist.tpmon.ctrl}">			
+            <fileset dir="build"/>                    
+        </jar>
+    </target>
+    
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+        <delete dir="build-tests"/>
+        <delete dir="build-tpmonControlServlet"/>
+        <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
+    </target>
+    
+    <target name="run-test-storage" depends="build-tpmon-ctrl">
+        <echo>
+            This is a small test for the part of Tpmon that
+            stores monitoring data. Tpmon's monitoring API 
+            is manually invoked to collect monitoring data. 
+            Therefore, the instrumentation and logic in the
+            monitoring points (the aspects) of Tpmon is not
+            used. 
+            
+            The main purpose of this test is to isolate configuration and 
+            installation problems and to get Tpmon running.
+            
+            If in tpmon.properties file system storage (store in database = 
+            false) is selected, a new file (tpmon*.dat) with monitoring data
+            should be created in the folder specified in tpmon.properties
+            (default: /tmp).
+        </echo>
+        
+        <javac source="1.5" 
+               destDir="build-tests" 
+               classpath="${aspectjrtjar}:dist/${dist.tpmon.ctrl}:${mysqldriver}"  
+               srcdir="src"
+               debug="true"
+               includes="kieker/tests/storageOnly/**"/>
+        <java 
+            dir="build-tests" 
+            fork="true"
+            classname="kieker.tests.storageOnly.StorageOnly"
+            classpath="dist/${dist.tpmon.ctrl}:.:${mysqldriver}:build-tests">
+            <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
+            <!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
+            <!-- <jvmarg value="-Xloggc:details.out"/> -->
+            <!-- <jvmarg value="-verbosegc"/> -->
+        </java>
+    </target>
+    
+    <target name="compile-tests-loadTimeWeaving" depends="build-all">
+        <javac source="1.5" 
+               destDir="build-tests" 
+               classpath="${aspectjrtjar}:dist/${dist.tpmon.ltw}:${servletapijar}:${mysqldriver}"  
+               srcdir="src"
+               includes="kieker/tests/loadTimeWeaving/**"/>
+    </target>
+    
+    <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation" 
+            depends="compile-tests-loadTimeWeaving">        
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
+              classpath="{aspectjrtjar}:dist/${dist.tpmon.ltw}:${servletapijar}:build-tests:.:${mysqldriver}">
+            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
+        </java>
+    </target>
+    
+    
+    <target name="run-tests-loadTimeWeaving-executionOrderTest" 
+            depends="compile-tests-loadTimeWeaving">        
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
+              classpath="{aspectjrtjar}:dist/${dist.tpmon.ltw}:${servletapijar}:build-tests:.:${mysqldriver}">
+            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
+        </java>
+    </target>  
+    
+    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-all">
+        <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
+              todir="src/kieker/tests/compileTimeWeaving/bookstore"/>        
+        <iajc  destdir="build-tests" source="1.5" verbose="true"
+               classpath="${aspectjrtjar}:dist/${dist.tpmon.ctw}:${servletapijar}:${mysqldriver}">
+            <sourceroots>
+                <pathelement location="src/kieker/tests/compileTimeWeaving"/>
+            </sourceroots>
+        </iajc>	
+    </target>
+    
+    <target name="run-tests-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstore">        
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
+              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}">                
+        </java>
+    </target>
+    
+    <target name="build-tpmon-control-servlet" depends="init"> 
+        <delete dir="build"/>
+        <mkdir dir="build"/>
+        <javac source="1.5" 
+               destDir="build-tpmonControlServlet" 
+               classpath="dist/${dist.tpmon.ctw}:${servletapijar}:.:"
+               srcdir="src"
+               debug="true"
+               includes="kieker/tpmonControlServlet/**"/>
+        <war destfile="dist/${dist.tpmon.controlServlet}" webxml="src/kieker/tpmonControlServlet/WEB-INF/web.xml">
+            <classes dir="build-tpmonControlServlet">
+                <exclude name="*/tpmon/**"/>
+            </classes>
+            <zipfileset dir="src/kieker/tpmonControlServlet/images" prefix="images"/>
+        </war>
+    </target>
+</project>
