@@ -22,35 +22,36 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
     Object around(): probeClassMethod() {
 		           
     /* prior to the execution of the instrumented method */
+        TpmonController ctrlInst = TpmonController.getInstance();
         boolean isEntryPoint = false;		
 	Long threadId = Thread.currentThread().getId();
 	String currentRequestId;	
-        Object requestIdObject = TpmonController.requestThreadMatcher.get(threadId);
+        Object requestIdObject = ctrlInst.requestThreadMatcher.get(threadId);
         int executionOrderIndex = 0; /* this is executionOrderIndex-th execution in this trace */
         int executionStackSize = 0; /* this is the hight in the dynamic call tree of this execution */
 	if(requestIdObject == null) {  /* its an entry point since the threadId is not registered */            
-            currentRequestId = TpmonController.getUniqueIdentifierForThread(threadId);
-            TpmonController.requestThreadMatcher.put(threadId,currentRequestId);
-            TpmonController.executionOrderIndexMatcher.put(currentRequestId,0);
-            TpmonController.executionStackSizeMatcher.put(currentRequestId,1);
+            currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
+            ctrlInst.requestThreadMatcher.put(threadId,currentRequestId);
+            ctrlInst.executionOrderIndexMatcher.put(currentRequestId,0);
+            ctrlInst.executionStackSizeMatcher.put(currentRequestId,1);
             isEntryPoint = true;
 	} else {
             currentRequestId = (String)requestIdObject;
-            Object executionOrderIndexObject = TpmonController.executionOrderIndexMatcher.get(currentRequestId);
+            Object executionOrderIndexObject = ctrlInst.executionOrderIndexMatcher.get(currentRequestId);
             if (executionOrderIndexObject == null) 
                 throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionOrderIndexMatcher not synced");
             executionOrderIndex = (Integer)executionOrderIndexObject;
             executionOrderIndex++;
-            TpmonController.executionOrderIndexMatcher.put(currentRequestId,executionOrderIndex);
+            ctrlInst.executionOrderIndexMatcher.put(currentRequestId,executionOrderIndex);
 
-            Object executionStackSizeObject = TpmonController.executionStackSizeMatcher.get(currentRequestId);
+            Object executionStackSizeObject = ctrlInst.executionStackSizeMatcher.get(currentRequestId);
             if (executionStackSizeObject == null) 
                 throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionStackSizeMatcher not synced");
             executionStackSize = (Integer)executionStackSizeObject;
-            TpmonController.executionStackSizeMatcher.put(currentRequestId,executionStackSize + 1);
+            ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize + 1);
         }				
         
-	long startTime = TpmonController.getTime();
+	long startTime = ctrlInst.getTime();
         
       //  System.out.println("Pre "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
 	
@@ -61,20 +62,20 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
        
     /* after the execution of the instrumented method */					
 	if (isEntryPoint) { // remove it to distinguish the next usage of the threadid            
-            TpmonController.requestThreadMatcher.remove(threadId);
-            TpmonController.executionOrderIndexMatcher.remove(currentRequestId);
-            TpmonController.executionStackSizeMatcher.remove(currentRequestId);
+            ctrlInst.requestThreadMatcher.remove(threadId);
+            ctrlInst.executionOrderIndexMatcher.remove(currentRequestId);
+            ctrlInst.executionStackSizeMatcher.remove(currentRequestId);
         } else {
-            TpmonController.executionStackSizeMatcher.put(currentRequestId,executionStackSize); // one less ...
+            ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize); // one less ...
         }
         
 	// componentName = z.B. com.test.Main
         String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();				
         String methodName = thisJoinPoint.getSignature().toLongString();
-        if (TpmonController.debug)  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-        long endTime = TpmonController.getTime();
-        TpmonController.insertMonitoringDataNow(componentName, methodName, "null", currentRequestId, startTime, endTime, executionOrderIndex, executionStackSize);
-        if (TpmonController.debug) System.out.println(""+componentName+","+currentRequestId+","+startTime);
+        if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
+        long endTime = ctrlInst.getTime();
+        ctrlInst.insertMonitoringDataNow(componentName, methodName, "null", currentRequestId, startTime, endTime, executionOrderIndex, executionStackSize);
+        if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentRequestId+","+startTime);
         
         // System.out.println("Log "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
 	return toreturn;

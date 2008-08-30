@@ -12,9 +12,7 @@ package kieker.tpmon.aspects.springAspectJ;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import kieker.tpmon.*;
 
 import org.aspectj.lang.ProceedingJoinPoint;

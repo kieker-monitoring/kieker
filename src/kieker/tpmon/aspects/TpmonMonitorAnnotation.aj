@@ -25,12 +25,13 @@ public aspect TpmonMonitorAnnotation {
 	  */
 	Object around(): probeClassMethod() {
 		
+                TpmonController ctrlInst = TpmonController.getInstance();
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {
-			if (TpmonController.debug) System.out.println("tpmonLTW: Monitoring a static method (method of a class)");
+			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a static method (method of a class)");
 		} else {
-			if (TpmonController.debug) System.out.println("tpmonLTW: Monitoring a object method (method of a object, non-static)");
+			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a object method (method of a object, non-static)");
 		}
 		*/
 
@@ -41,13 +42,13 @@ public aspect TpmonMonitorAnnotation {
 			String currentSessionId;
 			Object sessionIdObject = sessionThreadMatcher.get(threadId);
 			if (sessionIdObject == null) { /* then its an entry point since the threadId is not registered */
-				currentSessionId = TpmonController.getUniqueIdentifierForThread(threadId);
+				currentSessionId = ctrlInst.getUniqueIdentifierForThread(threadId);
 				sessionThreadMatcher.put(threadId,currentSessionId);
 				isEntryPoint = true;
 			} 
 		}
 
-		long startTime = TpmonController.getTime();
+		long startTime = ctrlInst.getTime();
 
         Object toreturn=proceed();
         
@@ -77,10 +78,10 @@ public aspect TpmonMonitorAnnotation {
 			String methodName = thisJoinPoint.getSignature().toLongString();
                         // System.out.println("kiek ii"+thisJoinPoint.getSignature().toLongString());
 
-                        if (TpmonController.debug)  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);                        
-			long endTime = TpmonController.getTime();
-                        TpmonController.insertMonitoringDataNow(componentName, methodName, currentSessionId, startTime, endTime);
-			if (TpmonController.debug) System.out.println(""+componentName+","+currentSessionId+","+startTime);
+                        if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);                        
+			long endTime = ctrlInst.getTime();
+                        ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, startTime, endTime);
+			if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
 		}	
 		return toreturn;
 	}

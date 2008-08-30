@@ -18,6 +18,8 @@ public aspect TpmonMonitorAnnotationServlet {
  	HashMap sessionThreadMatcher = new HashMap();
 	HashMap requestThreadMatcher = new HashMap();
 
+        TpmonController ctrlInst = TpmonController.getInstance();
+
 	pointcut servletCommand(HttpServletRequest request, HttpServletResponse response): execution(* *.do*(..)) && args(request,response);
 
 	pointcut toplevelServletCommand(HttpServletRequest request, HttpServletResponse response): servletCommand(request,response) && !cflowbelow(servletCommand(HttpServletRequest,HttpServletResponse));
@@ -31,7 +33,7 @@ public aspect TpmonMonitorAnnotationServlet {
 			Long threadId = Thread.currentThread().getId();
 			sessionThreadMatcher.put(threadId,sessionId);
 			requestThreadMatcher.put(threadId,requestId);
-			if (TpmonController.debug) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
+			if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
 		}
 
 		Object toReturn = proceed(request,response);
@@ -66,9 +68,9 @@ public aspect TpmonMonitorAnnotationServlet {
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {
-			if (TpmonController.debug) System.out.println("tpmonLTW: Monitoring a static method (method of a class)");
+			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a static method (method of a class)");
 		} else {
-			if (TpmonController.debug) System.out.println("tpmonLTW: Monitoring a object method (method of a object, non-static)");
+			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a object method (method of a object, non-static)");
 		}
 		*/
 
@@ -85,14 +87,14 @@ public aspect TpmonMonitorAnnotationServlet {
 			} 
 			Object requestIdObject = requestThreadMatcher.get(threadId);
 			if(requestIdObject == null) {
-				currentRequestId = TpmonController.getUniqueIdentifierForThread(threadId);
+				currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
 				requestThreadMatcher.put(threadId,currentRequestId);
 			}
 		}
 
 
 		//long startTime = System.currentTimeMillis();
-		long startTime = TpmonController.getTime();
+		long startTime = ctrlInst.getTime();
 
 		// isEntryPoint and starttime might be overwritten because they are not thread-save
 		// However, it could be a large restriction to span a synchronized around the proceed() 
@@ -131,12 +133,12 @@ public aspect TpmonMonitorAnnotationServlet {
 			String methodName = thisJoinPoint.getSignature().toLongString();
 
 
-	       	if (TpmonController.debug)  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-			long endTime = TpmonController.getTime();
-			//String traceid=TpmonController.getUniqueIdentifierForThread(threadId);
+	       	if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
+			long endTime = ctrlInst.getTime();
+			//String traceid=ctrlInst.getUniqueIdentifierForThread(threadId);
 		
-        		TpmonController.insertMonitoringDataNow(componentName, methodName, currentSessionId, currentRequestId, startTime, endTime);
-			if (TpmonController.debug) System.out.println(""+componentName+","+currentSessionId+","+startTime);
+        		ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, currentRequestId, startTime, endTime);
+			if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
 		}
 		
 		return toreturn;

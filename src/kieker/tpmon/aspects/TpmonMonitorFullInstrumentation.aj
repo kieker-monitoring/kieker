@@ -15,7 +15,7 @@ public aspect TpmonMonitorFullInstrumentation {
 		 
  	HashMap sessionThreadMatcher = new HashMap();
 
-
+        TpmonController ctrlInst = TpmonController.getInstance();
 	
 // execution(* *.*(..)) 
 // Add here the list of methods to monitor:
@@ -35,9 +35,9 @@ public aspect TpmonMonitorFullInstrumentation {
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {
-			if (TpmonController.debug) System.out.println("tpmonLTW: Monitoring a static method (method of a class)");
+			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a static method (method of a class)");
 		} else {
-			if (TpmonController.debug) System.out.println("tpmonLTW: Monitoring a object method (method of a object, non-static)");
+			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a object method (method of a object, non-static)");
 		}
 		*/
 
@@ -48,7 +48,7 @@ public aspect TpmonMonitorFullInstrumentation {
 			String currentSessionId;
 			Object sessionIdObject = sessionThreadMatcher.get(threadId);
 			if (sessionIdObject == null) { /* then its an entry point since the threadId is not registered */
-				currentSessionId = TpmonController.getUniqueIdentifierForThread(threadId);
+				currentSessionId = ctrlInst.getUniqueIdentifierForThread(threadId);
 				sessionThreadMatcher.put(threadId,currentSessionId);
 				isEntryPoint = true;
 			} 
@@ -56,7 +56,7 @@ public aspect TpmonMonitorFullInstrumentation {
 
 
 		//long startTime = System.currentTimeMillis();
-		long startTime = TpmonController.getTime();
+		long startTime = ctrlInst.getTime();
 
 
 		// isEntryPoint and starttime might be overwritten because they are not thread-save
@@ -91,11 +91,11 @@ public aspect TpmonMonitorFullInstrumentation {
 
 
 
-        	if (TpmonController.debug)  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-			long endTime = TpmonController.getTime();
+        	if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
+			long endTime = ctrlInst.getTime();
 
-        	TpmonController.insertMonitoringDataNow(componentName, methodName, currentSessionId, startTime, endTime);
-			if (TpmonController.debug) System.out.println(""+componentName+","+currentSessionId+","+startTime);
+        	ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, startTime, endTime);
+			if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
 		}
 		
 		return toreturn;
