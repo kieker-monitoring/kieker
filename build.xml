@@ -96,6 +96,8 @@
                excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/aspects/**">
             <classpath>
                 <pathelement path="${servletapijar}"/>                
+                <pathelement path="${commonsloggingjar}"/>
+                <pathelement path="${log4jjar}"/>
             </classpath>
         </javac>        
         <copy file="src/kieker/tpmon/META-INF/tpmon.properties" todir="build/META-INF"/>

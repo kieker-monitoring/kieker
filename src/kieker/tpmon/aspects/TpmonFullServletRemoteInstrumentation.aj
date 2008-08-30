@@ -20,9 +20,10 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 
 	Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
 
+        TpmonController ctrlInst = TpmonController.getInstance();
+
 	//make the sessionId accessable for all advices in the same thread
 	synchronized(this){
-        TpmonController ctrlInst = TpmonController.getInstance();
 	String requestId = ""+(new Random()).nextLong();
 	String sessionId = request.getSession(true).getId();
 	Long threadId = Thread.currentThread().getId();
