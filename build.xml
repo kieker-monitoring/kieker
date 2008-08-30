@@ -71,7 +71,8 @@
             <classpath>
                 <pathelement path="${servletapijar}"/>
                 <pathelement path="${aspectjrtjar}"/>
-                <pathelement path="${loggingjar}"/>
+                <pathelement path="${commonsloggingjar}"/>
+                <pathelement path="${log4jjar}"/>
             </classpath>
         </iajc>
         <copy todir="build/META-INF">
@@ -116,7 +117,8 @@
             <classpath>
                 <pathelement path="${servletapijar}"/>
                 <pathelement path="${aspectjrtjar}"/>
-                <pathelement path="${loggingjar}"/>
+                <pathelement path="${commonsloggingjar}"/>
+                <pathelement path="${log4jjar}"/>
             </classpath>
         </javac>
         <copy todir="build/META-INF">
@@ -230,7 +232,7 @@
         <mkdir dir="build"/>
         <javac source="1.5" 
                destDir="build-tpmonControlServlet" 
-               classpath="dist/${dist.tpmon.ctw}:${servletapijar}:${loggingjar}:.:"
+               classpath="dist/${dist.tpmon.ctw}:${servletapijar}:${commonsloggingjar}:${log4jjar}:.:"
                srcdir="src"
                debug="true"
                includes="kieker/tpmonControlServlet/**"/>

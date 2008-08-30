@@ -51,13 +51,13 @@ public class StorageOnly {
         try {
             System.out.println("Starting test by adding 10000 monitoring events");
             for (int i = 0; i < 10000; i++) {
-                TpmonController.insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i,i);
+                TpmonController.getInstance().insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i,i);
             }
             System.out.println("Sleeping for 8 seconds");
             Thread.sleep(8000);
             System.out.println("10000 more monitoring points");
             for (int i = 0; i < 10000; i++) {
-                TpmonController.insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i+10000,i);
+                TpmonController.getInstance().insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i+10000,i);
             }
             System.out.println("Calling system.exit(0)");
             System.exit(0);

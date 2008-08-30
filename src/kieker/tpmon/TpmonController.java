@@ -82,7 +82,7 @@ public class TpmonController {
     // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
-    private String buildDate = "unknown (at least 2008-08-08)";
+    //private String buildDate = "unknown (at least 2008-08-08)";
     private boolean debug = false;
     public boolean storeInDatabase = false;
     public String filenamePrefix = ""; // e.g. path "/tmp"   
@@ -123,6 +123,8 @@ public class TpmonController {
                 Thread.currentThread().getId());
         log.info(">Kieker-Tpmon: Virtual Machine start time " +
                 ManagementFactory.getRuntimeMXBean().getStartTime());
+        
+
 
         try {
             vmname = java.net.InetAddress.getLocalHost().getHostName();
@@ -153,7 +155,7 @@ public class TpmonController {
                 this.monitoringDataWriter = new FileSystemWriter(filenameBase);
             }
             log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                    "monitoring data in the folder %s. \n" + filenamePrefix);
+                    "monitoring data in the folder " + filenamePrefix);
         }
     }
 
@@ -535,14 +537,15 @@ public class TpmonController {
                     ". Using default value " + dbTableName + ".", true, false);
         }
 
+        // ANDRE: buildDate obsolete due to "self-speaking" version name
         // load property "buildDate"
-        String buildDateProperty = prop.getProperty("buildDate");
-        if (buildDateProperty != null && buildDate.length() != 0) {
-            buildDate = buildDateProperty;
-        } else {
-            formatAndOutputError("No buildData parameter found in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + buildDate + ".", true, false);
-        }
+        //String buildDateProperty = prop.getProperty("buildDate");
+        //if (buildDateProperty != null && buildDate.length() != 0) {
+        //    buildDate = buildDateProperty;
+        //} else {
+        //    formatAndOutputError("No buildData parameter found in tpmonLTW.jar/" + configurationFile +
+        //            ". Using default value " + buildDate + ".", true, false);
+        //}
 
         // load property "debug"
         String debugProperty = prop.getProperty("debug");
@@ -667,7 +670,8 @@ public class TpmonController {
         }
 
         if (storeInDatabase) {
-            return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", buildDate :" + buildDate + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
+            return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", version :" + this.getVersion()
+                    + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
         } else {
             return new String("Storage mode : Tpmon stores in the filesystem, Version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
         }

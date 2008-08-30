@@ -68,4 +68,5 @@ aspectjtoolsjar=external-libs/aspectjtools.jar
 aspectjrtjar=external-libs/aspectjrt.jar
 aspectjweaverjar=external-libs/aspectjweaver.jar
 servletapijar=external-libs/servlet-api.jar
+loggingjar=external-libs/commons-logging-1.1.1.jar
 mysqldriver=external-libs/mysql-connector-java-5.1.5-bin.jar
