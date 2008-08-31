@@ -27,6 +27,7 @@ public aspect TpmonMonitorAnnotationServlet {
 		Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
 
 		//make the sessionId accessable for all advices in the same thread
+                //TODO: why is this synchronized??
 		synchronized(this){
 			String requestId = ""+(new Random()).nextLong();
 			String sessionId = request.getSession(true).getId();

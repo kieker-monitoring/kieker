@@ -37,6 +37,7 @@ public aspect TpmonMonitorAnnotation {
 
 		boolean isEntryPoint = false;
 
+                //TODO: why is this synchronized??
 		synchronized(this) {
 			Long threadId = Thread.currentThread().getId();
 			String currentSessionId;
@@ -51,7 +52,8 @@ public aspect TpmonMonitorAnnotation {
 		long startTime = ctrlInst.getTime();
 
         Object toreturn=proceed();
-        
+
+                //TODO: why is this synchronized?? Including all the String-Gehampel??       
 		synchronized(this) {
 			Long threadId = Thread.currentThread().getId();
 			String currentSessionId = "Error";

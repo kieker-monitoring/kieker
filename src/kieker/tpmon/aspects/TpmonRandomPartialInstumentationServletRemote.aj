@@ -72,6 +72,8 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
 
 		boolean isEntryPoint = false;
 
+                TpmonController ctrlInst = TpmonController.getInstance();       
+
 		synchronized(this) {
 			Long threadId = Thread.currentThread().getId();
 			String currentSessionId,currentRequestId;
