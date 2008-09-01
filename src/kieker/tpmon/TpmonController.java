@@ -124,18 +124,16 @@ public class TpmonController {
 
     public TpmonController() {
         
-        
-        log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:" +
-                Thread.currentThread().getId());
-        System.out.println("VMNAME:"+vmname);
-        log.info(">Kieker-Tpmon: Virtual Machine start time " +
-                ManagementFactory.getRuntimeMXBean().getStartTime());
-
-   
         try {
             vmname = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception ex) {
-        } // nothing to do -- vmname will be "unknown" 
+        } // nothing to do -- vmname will be "unknown"
+
+        log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:" +
+                Thread.currentThread().getId());
+        //System.out.println("VMNAME:"+vmname);
+        log.info(">Kieker-Tpmon: Virtual Machine start time " +
+                ManagementFactory.getRuntimeMXBean().getStartTime());
 
         this.shutdownhook = new TpmonShutdownHook();
         Runtime.getRuntime().addShutdownHook(shutdownhook);
@@ -160,7 +158,7 @@ public class TpmonController {
                     "monitoring data in the database.");            
             
         } else {
-            String filenameBase = new String(this.filenamePrefix + "/tpmon-");
+            String filenameBase = new String(filenamePrefix + "/tpmon-");            
             if (asyncFsWriter) {
                 System.out.println("Producer: blame Andre");
                 AsyncFsWriterProducer producer = new AsyncFsWriterProducer(filenameBase);
@@ -173,6 +171,8 @@ public class TpmonController {
                 this.monitoringDataWriter = new FileSystemWriter(filenameBase);
             }
             log.info(">Kieker-Tpmon: Initialization completed. Storing " +
+                    "monitoring data in the folder " + filenamePrefix);
+            System.out.println(">Kieker-Tpmon: Initialization completed. Storing " +
                     "monitoring data in the folder " + filenamePrefix);
         }
     }
@@ -311,7 +311,7 @@ public class TpmonController {
 
     @TpmonInternal()
     public boolean insertMonitoringDataNow(String componentname, String methodSig, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        System.out.println("insertMonitoringDataNow");
+        //System.out.println("insertMonitoringDataNow");
         if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
             if (!(requestID.hashCode() % traceSampleingFrequency == 0)) {
                 return true;
@@ -482,7 +482,7 @@ public class TpmonController {
     private void loadPropertiesFile() {
         String configurationFile = "META-INF/tpmon.properties";
         if (debug) {
-            log.info("Tpmon: Loading properties from tpmonLTW.jar/" + configurationFile);
+            log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
         }
         InputStream stream = Dbconnector.class.getClassLoader().getResourceAsStream(configurationFile);
         Properties prop = new Properties();
@@ -492,7 +492,7 @@ public class TpmonController {
         try {
             prop.load(stream);
         } catch (Exception ex) {
-            formatAndOutputError("Could not open tpmonLTW.jar/" + configurationFile +
+            formatAndOutputError("Could not open tpmon library : " + configurationFile +
                     ". Using default value " + dbConnectionAddress + ". Message :" + ex.getMessage(), true, false);
         }
 
@@ -547,7 +547,7 @@ public class TpmonController {
         }
 
 
-
+      
 
 
 

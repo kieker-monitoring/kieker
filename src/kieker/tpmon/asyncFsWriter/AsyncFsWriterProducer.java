@@ -4,7 +4,6 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
-import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.InsertData;
 
@@ -31,7 +30,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
     private BlockingQueue<InsertData> blockingQueue = null;
 
-    private String filenamePrefix = "";
+    private String filenamePrefix = null;
     
     public AsyncFsWriterProducer(String filenamePrefix){
         this.filenamePrefix = filenamePrefix;
@@ -42,12 +41,11 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     public void init() {
         blockingQueue = new ArrayBlockingQueue<InsertData>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue);
+            AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue, filenamePrefix);                        
+            new Thread(dbw).start();                       
             workers.add(dbw);
-            new Thread(dbw).start();
-            //TODO: we need to improve this!
-            //TpmonController.getInstance().registerWorker(dbw);
         }
+        //System.out.println(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
         log.info(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
     }
 
@@ -82,4 +80,10 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
         return true;
     }
+    
+    @TpmonInternal()
+    public String getFilenamePrefix() {
+        return filenamePrefix;
+    }
+    
 }

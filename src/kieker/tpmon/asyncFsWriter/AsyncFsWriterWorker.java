@@ -32,7 +32,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     private static final long pollingIntervallInMillisecs = 400L;
     // internal variables
     private BlockingQueue writeQueue = null;
-    private String filenamePrefix = "";
+    private String filenamePrefix = null;
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
@@ -50,16 +50,16 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     boolean statementChanged = true;
     String nextStatementText;
 
-    public AsyncFsWriterWorker(BlockingQueue writeQueue) {
-
+    public AsyncFsWriterWorker(BlockingQueue writeQueue, String filenamePrefix) {
+        this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
-
         log.info("New Tpmon - FsWriter thread created ");
     }
 
     @TpmonInternal
     public void run() {
         log.info("FsWriter thread running");
+        System.out.println("FsWriter thread running");
         try {
             while (!finished) {
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
@@ -116,6 +116,8 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
             int time = (int) (System.currentTimeMillis() - 1177404043379L);
             int random = (int) (Math.random() * 100d);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
+            //System.out.println("this.filenamePrefix:"+this.filenamePrefix);
+            //System.out.println(""+filename);
 
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             FileOutputStream fos;
@@ -141,9 +143,9 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     }
 
     @TpmonInternal
-    private void writeDataNow(String data) {
+    private void writeDataNow(String data) {        
         prepareFile();
-        pos.println(data);
+        pos.println(data);        
         pos.flush();
     }
 
