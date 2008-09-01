@@ -3,9 +3,12 @@ package kieker.tpmon.aspects;
 import kieker.tpmon.*;
 import kieker.tpmon.asyncDbconnector.*;
 import java.util.HashMap;
+import kieker.tpmon.annotations.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.util.Random;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author matthias
@@ -15,8 +18,8 @@ import java.util.Random;
  * An around advice adds performance measuring code and registers mbeans for measuring points.
  */
 public aspect TpmonMonitorAnnotationServlet {	
- 	HashMap sessionThreadMatcher = new HashMap();
-	HashMap requestThreadMatcher = new HashMap();
+ 	Map<Long,String> sessionThreadMatcher = new ConcurrentHashMap<Long,String>();
+	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
 
         TpmonController ctrlInst = TpmonController.getInstance();
 
@@ -27,25 +30,21 @@ public aspect TpmonMonitorAnnotationServlet {
 		Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
 
 		//make the sessionId accessable for all advices in the same thread
-                //TODO: why is this synchronized??
-		synchronized(this){
-			String requestId = ""+(new Random()).nextLong();
-			String sessionId = request.getSession(true).getId();
-			Long threadId = Thread.currentThread().getId();
-			sessionThreadMatcher.put(threadId,sessionId);
-			requestThreadMatcher.put(threadId,requestId);
-			if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
-		}
+                
+                String requestId = ""+(new Random()).nextLong();
+		String sessionId = request.getSession(true).getId();
+                Long threadId = Thread.currentThread().getId();
+		sessionThreadMatcher.put(threadId,sessionId);
+                requestThreadMatcher.put(threadId,requestId);					
+               
+                if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
 
 		Object toReturn = proceed(request,response);
 	
-		//empty the sessionId 
-		synchronized(this){
-			Long threadId = Thread.currentThread().getId();
-			sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
-			requestThreadMatcher.remove(threadId);
-		}
 
+                //empty the sessionId
+                sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
+                requestThreadMatcher.remove(threadId);		
 		return toReturn;
 	}
 
@@ -64,8 +63,7 @@ public aspect TpmonMonitorAnnotationServlet {
 	  *
 	  *
 	  */
-	Object around(): probeClassMethodAndStrutsEntryPoint() {
-		
+	Object around(): probeClassMethodAndStrutsEntryPoint() {		
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {
@@ -76,72 +74,58 @@ public aspect TpmonMonitorAnnotationServlet {
 		*/
 
 		boolean isEntryPoint = false;
+		String currentSessionId,currentRequestId;
+                Long threadId = Thread.currentThread().getId();
 
-		synchronized(this) {
-			Long threadId = Thread.currentThread().getId();
-			String currentSessionId,currentRequestId;
-			Object sessionIdObject = sessionThreadMatcher.get(threadId);
-			if (sessionIdObject == null) { /* then its an entry point since the threadId is not registered */
-				currentSessionId = "null";
-				sessionThreadMatcher.put(threadId,currentSessionId);
-				isEntryPoint = true;
-			} 
-			Object requestIdObject = requestThreadMatcher.get(threadId);
-			if(requestIdObject == null) {
-				currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
-				requestThreadMatcher.put(threadId,currentRequestId);
-			}
+                currentSessionId = sessionThreadMatcher.get(threadId);
+                if (currentSessionId == null) { /* then its an entry point since the threadId is not registered */
+                    currentSessionId = "unknown";
+                    sessionThreadMatcher.put(threadId,currentSessionId);
+                    isEntryPoint = true;
 		}
 
-
-		//long startTime = System.currentTimeMillis();
+                currentRequestId = requestThreadMatcher.get(threadId);
+		if(currentRequestId == null) {
+                    currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
+                    requestThreadMatcher.put(threadId,currentRequestId);
+		}		
+		
 		long startTime = ctrlInst.getTime();
-
-		// isEntryPoint and starttime might be overwritten because they are not thread-save
-		// However, it could be a large restriction to span a synchronized around the proceed() 
-		/* execution of the instrumented method: */
+	
+	/* execution of the instrumented method: */
         Object toreturn=proceed();
-        
-		synchronized(this) {
-			Long threadId = Thread.currentThread().getId();
-			String currentSessionId = "Error";
-			String currentRequestId = "bar";
-			Object sessionIdObject, requestIdObject;
-			if (isEntryPoint) {
-				sessionIdObject = sessionThreadMatcher.remove(threadId);
-				requestIdObject = requestThreadMatcher.remove(threadId);
-			}
-			else {
-				sessionIdObject = sessionThreadMatcher.get(threadId);
-				requestIdObject = requestThreadMatcher.get(threadId);
-			}
 
-			if (sessionIdObject == null) { /* hmm there should be something! */
-				currentSessionId = "traceIdError!";
-			} else {
-				try {
-				currentSessionId = (String)sessionIdObject;
-				currentRequestId = (String)requestIdObject;
-				} catch(Exception ex){}
-			}
+                long endTime = ctrlInst.getTime();
 
-			// componentName = z.B. com.test.Main
-		 	String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+                String methodname = thisJoinPoint.getSignature().getName();
+                // e.g. "getBook"
+                // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
+                String paramList = thisJoinPoint.getSignature().toLongString();
+                int paranthIndex = paramList.lastIndexOf('(');
+                paramList = paramList.substring(paranthIndex);
+                // paramList is now e.g.,  "()"
+                String opname = methodname + paramList;
+                // e.g., "getBook()"
+                //System.out.println("opname:"+opname);
+                String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+                // e.g., kieker.tests.springTest.Book
+                //System.out.println("componentName:"+componentName);
+
+//                // componentName = z.B. com.test.Main
+//		String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+//                // methodeName = Main.main(..)
+//		// String methodName = thisJoinPoint.getSignature().toShortString();
+//		// methodName = Main.getBook(boolean)
+//		String methodName = thisJoinPoint.getSignature().toLongString();
+
 		
-			// methodeName = Main.main(..)
-			// String methodName = thisJoinPoint.getSignature().toShortString();
-			// methodName = Main.getBook(boolean)
-			String methodName = thisJoinPoint.getSignature().toLongString();
-
-
-	       	if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-			long endTime = ctrlInst.getTime();
-			//String traceid=ctrlInst.getUniqueIdentifierForThread(threadId);
-		
-        		ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, currentRequestId, startTime, endTime);
-			if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
+		if (isEntryPoint) {                            
+                   sessionThreadMatcher.remove(threadId);
+                   requestThreadMatcher.remove(threadId);                            
 		}
-		
+
+       		ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
+                if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
 		return toreturn;
 	}
 }

@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
-import kieker.tpmon.aspects.TpmonInternal;
+import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.InsertData;
 import kieker.tpmon.asyncDbconnector.Worker;
 

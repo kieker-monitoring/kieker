@@ -1,5 +1,6 @@
 package kieker.tests.compileTimeWeaving.bookstore;
 
+import kieker.tpmon.annotations.TpmonMonitoringProbe;
 import kieker.tpmon.aspects.*;
 
 /**

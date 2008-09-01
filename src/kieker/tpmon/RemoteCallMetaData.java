@@ -6,7 +6,7 @@
 package kieker.tpmon;
 
 import java.io.Serializable;
-import kieker.tpmon.aspects.TpmonInternal;
+import kieker.tpmon.annotations.TpmonInternal;
 
 /**
  * This data has to be transported with the request data if a remote call is made.

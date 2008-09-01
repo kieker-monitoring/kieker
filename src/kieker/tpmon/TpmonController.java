@@ -66,7 +66,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import kieker.tpmon.aspects.TpmonInternal;
+import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
 import kieker.tpmon.asyncDbconnector.Worker;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;

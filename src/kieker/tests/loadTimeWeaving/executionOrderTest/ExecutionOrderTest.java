@@ -1,7 +1,6 @@
 package kieker.tests.loadTimeWeaving.executionOrderTest;
 
-import kieker.tpmon.aspects.*;
-import java.util.Vector;
+import kieker.tpmon.annotations.TpmonMonitoringProbe;
 
 /**
  *  kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest.java

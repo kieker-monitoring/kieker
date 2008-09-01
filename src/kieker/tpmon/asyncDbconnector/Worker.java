@@ -5,7 +5,7 @@
 
 package kieker.tpmon.asyncDbconnector;
 
-import kieker.tpmon.aspects.TpmonInternal;
+import kieker.tpmon.annotations.TpmonInternal;
 
 /**
  *

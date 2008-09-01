@@ -5,7 +5,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.TpmonController;
-import kieker.tpmon.aspects.TpmonInternal;
+import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.InsertData;
 
 import org.apache.commons.logging.Log;

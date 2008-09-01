@@ -1,6 +1,7 @@
 
 package kieker.tpmon.aspects;
 
+import kieker.tpmon.annotations.TpmonInternal;
 import java.util.HashMap;
 import java.util.Random;
 

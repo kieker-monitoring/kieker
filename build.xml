@@ -165,15 +165,16 @@
         
         <javac source="1.5" 
                destDir="build-tests" 
-               classpath="${aspectjrtjar}:dist/${dist.tpmon.ctrl}:${mysqldriver}"  
+			   classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"
                srcdir="src"
                debug="true"
                includes="kieker/tests/storageOnly/**"/>
         <java 
             dir="build-tests" 
             fork="true"
-            classname="kieker.tests.storageOnly.StorageOnly"
-            classpath="dist/${dist.tpmon.ctrl}:.:${mysqldriver}:build-tests">
+			classname="kieker.tests.storageOnly.StorageOnly"
+			classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}">
+
             <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
             <!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
             <!-- <jvmarg value="-Xloggc:details.out"/> -->
@@ -181,10 +182,10 @@
         </java>
     </target>
     
-    <target name="compile-tests-loadTimeWeaving" depends="build-all">
+    <target name="compile-tests-loadTimeWeaving" depends="build-all,build-tpmon-ltw">
         <javac source="1.5" 
                destDir="build-tests" 
-               classpath="${aspectjrtjar}:dist/${dist.tpmon.ltw}:${servletapijar}:${mysqldriver}"  
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"
                srcdir="src"
                includes="kieker/tests/loadTimeWeaving/**"/>
     </target>
@@ -192,9 +193,9 @@
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation" 
             depends="compile-tests-loadTimeWeaving">        
         <java dir="."
-              fork="true"
+              fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
-              classpath="{aspectjrtjar}:dist/${dist.tpmon.ltw}:${servletapijar}:build-tests:.:${mysqldriver}">
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ltw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
         </java>
     </target>
@@ -205,12 +206,14 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
-              classpath="{aspectjrtjar}:dist/${dist.tpmon.ltw}:${servletapijar}:build-tests:.:${mysqldriver}">
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ltw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
+            <!-- <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/> -->
+            <!-- <jvmarg value="-Daj.weaving.verbose=true"/> -->
         </java>
     </target>  
     
-    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-all">
+    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-all,build-tpmon-ctw">
         <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
               todir="src/kieker/tests/compileTimeWeaving/bookstore"/>        
         <iajc  destdir="build-tests" source="1.5" verbose="true"
@@ -225,8 +228,7 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
-              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}">                
-        </java>
+              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"/>
     </target>
     
     <target name="build-tpmon-control-servlet" depends="init"> 

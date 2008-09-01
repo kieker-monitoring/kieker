@@ -3,6 +3,7 @@ package kieker.tpmon.aspects;
 import kieker.tpmon.*;
 import kieker.tpmon.asyncDbconnector.*;
 import javax.servlet.*;
+import kieker.tpmon.annotations.*;
 import javax.servlet.http.*;
 import java.util.HashMap;
 

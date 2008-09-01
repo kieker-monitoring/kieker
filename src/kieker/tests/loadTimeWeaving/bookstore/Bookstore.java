@@ -1,5 +1,6 @@
 package kieker.tests.loadTimeWeaving.bookstore;
 
+import kieker.tpmon.annotations.TpmonMonitoringProbe;
 import kieker.tpmon.aspects.*;
 import java.util.Vector;
 

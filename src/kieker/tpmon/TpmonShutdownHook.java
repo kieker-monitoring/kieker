@@ -3,7 +3,7 @@ package kieker.tpmon;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.tpmon.aspects.TpmonInternal;
+import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.Worker;
 
 /**

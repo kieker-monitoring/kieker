@@ -1,7 +1,7 @@
-package kieker.tpmon.aspects;
+package kieker.tpmon.annotations;
 
 /**
- * kieker.tpmon.aspects.TpmonInternal.java
+ * kieker.tpmon.aspects.TpmonMonitoringProbe.java
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -19,21 +19,14 @@ package kieker.tpmon.aspects;
  * limitations under the License.
  * ==================================================
  *
- * This annotation marks methods that shouldn't be monitored, mainly
- * because they are part of tpmon. Even if in the aop.xml a class is
- * within the scope of the aspectjweaver, it won't be monitored during 
- * runtime if annotated with @TpmonInternal(). 
- * 
- * This annotation also deactivates monitoring for methods that would
- * be monitored by the full instrumentation mode. 
- * 
- * @author Matthias Rohr
+ * @author Matthias Rohr, Thilo Focke
  *
  * History:
  * 2008/01/14: Refactoring for the first release of
  *             Kieker and publication under an open source licence
- * 2007/12/12: Initial
+ * 2007/03/05: New Prototype 
  */
+
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -42,6 +35,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface TpmonInternal {
+public @interface TpmonMonitoringProbe {
 	// String context();
 }
+
