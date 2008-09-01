@@ -3,17 +3,18 @@ package kieker.tpmon.aspects;
 import kieker.tpmon.*;
 import kieker.tpmon.asyncDbconnector.*;
 import kieker.tpmon.annotations.*;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author matthias
+ * @author matthias, andre
  * Based on parts of Thilo Focke's Monitoring Framework
  *
  * The Performance monitor aspect identifies all methods that have an MonitoringProbe annotation.
  * An around advice adds performance measuring code and registers mbeans for measuring points.
  */
 public aspect TpmonMonitorAnnotation {	
- 	HashMap sessionThreadMatcher = new HashMap();
+ 	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
 
 	pointcut probeClassMethod(): execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* TpmonController.*(..)) 
 	&& !execution(* FileSystemWriter.*(..));
@@ -37,55 +38,39 @@ public aspect TpmonMonitorAnnotation {
 		*/
 
 		boolean isEntryPoint = false;
-
-                //TODO: why is this synchronized??
-		synchronized(this) {
-			Long threadId = Thread.currentThread().getId();
-			String currentSessionId;
-			Object sessionIdObject = sessionThreadMatcher.get(threadId);
-			if (sessionIdObject == null) { /* then its an entry point since the threadId is not registered */
-				currentSessionId = ctrlInst.getUniqueIdentifierForThread(threadId);
-				sessionThreadMatcher.put(threadId,currentSessionId);
-				isEntryPoint = true;
-			} 
-		}
-
+        	Long threadId = Thread.currentThread().getId();
+                String currentRequestId  = requestThreadMatcher.get(threadId);
+                    if (currentRequestId == null) { /* then its an entry point since the threadId is not registered */
+                    currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
+                    requestThreadMatcher.put(threadId,currentRequestId);
+                    isEntryPoint = true;
+		} 
+		
 		long startTime = ctrlInst.getTime();
 
         Object toreturn=proceed();
 
-                //TODO: why is this synchronized?? Including all the String-Gehampel??       
-		synchronized(this) {
-			Long threadId = Thread.currentThread().getId();
-			String currentSessionId = "Error";
-			Object sessionIdObject;
-			if (isEntryPoint)
-				sessionIdObject = sessionThreadMatcher.remove(threadId);
-			else 
-				sessionIdObject = sessionThreadMatcher.get(threadId);
-
-			if (sessionIdObject == null) { /* hmm there should be something! */
-				currentSessionId = "traceIdError!";
-			} else {
-				try {
-				currentSessionId = (String)sessionIdObject;
-				} catch(Exception ex){}
-			}
-
-			// componentName = z.B. com.test.Main
-		 	String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
-		
-			// methodeName = Main.main(..)
-			// String methodName = thisJoinPoint.getSignature().toShortString();
-			// methodeName = Main.getBook(boolean)
-			String methodName = thisJoinPoint.getSignature().toLongString();
-                        // System.out.println("kiek ii"+thisJoinPoint.getSignature().toLongString());
-
-                        if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);                        
-			long endTime = ctrlInst.getTime();
-                        ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, startTime, endTime);
-			if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
-		}	
+                long endTime = ctrlInst.getTime();
+	
+		if (isEntryPoint)
+                    requestThreadMatcher.remove(threadId);
+	
+                String methodname = thisJoinPoint.getSignature().getName();
+                // e.g. "getBook"
+                // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
+                String paramList = thisJoinPoint.getSignature().toLongString();
+                int paranthIndex = paramList.lastIndexOf('(');
+                paramList = paramList.substring(paranthIndex);
+                // paramList is now e.g.,  "()"
+                String opname = methodname + paramList;
+                // e.g., "getBook()"
+                //System.out.println("opname:"+opname);
+                String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+                // e.g., kieker.tests.springTest.Book
+                //System.out.println("componentName:"+componentName);	
+                	
+                ctrlInst.insertMonitoringDataNow(componentName, opname, currentRequestId, startTime, endTime);
+                if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
 		return toreturn;
 	}
 }

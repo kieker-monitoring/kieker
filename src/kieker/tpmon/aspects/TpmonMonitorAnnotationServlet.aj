@@ -1,13 +1,12 @@
 package kieker.tpmon.aspects;
 
 import kieker.tpmon.*;
-import kieker.tpmon.asyncDbconnector.*;
-import java.util.HashMap;
 import kieker.tpmon.annotations.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.util.Random;
 import java.util.Map;
+import kieker.tpmon.asyncDbconnector.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -111,12 +110,6 @@ public aspect TpmonMonitorAnnotationServlet {
                 // e.g., kieker.tests.springTest.Book
                 //System.out.println("componentName:"+componentName);
 
-//                // componentName = z.B. com.test.Main
-//		String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
-//                // methodeName = Main.main(..)
-//		// String methodName = thisJoinPoint.getSignature().toShortString();
-//		// methodName = Main.getBook(boolean)
-//		String methodName = thisJoinPoint.getSignature().toLongString();
 
 		
 		if (isEntryPoint) {                            

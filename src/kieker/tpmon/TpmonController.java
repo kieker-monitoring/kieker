@@ -36,7 +36,8 @@ package kieker.tpmon;
  * 
  * @author Matthias Rohr, Andre van Hoorn, Nils Sommer
  * 
- * History: 
+ * History:
+ * 2008/09/01: Removed a lot "synchronized" from the Aspects
  * 2008/08/29: Controller now singleton class
  *             Many (performance) improvements to synchronization
  * 2008/08/06: Using tpmon.properties instead of dbconnector.properties and support
