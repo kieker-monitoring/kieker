@@ -8,6 +8,7 @@ import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.InsertData;
 
+import kieker.tpmon.asyncDbconnector.Worker;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -21,7 +22,13 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     //configuration parameter
     final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
-    private Vector<AsyncFsWriterWorker> workers = new Vector<AsyncFsWriterWorker>();
+    private Vector<Worker> workers = new Vector<Worker>();
+
+    @TpmonInternal
+    public Vector<Worker> getWorkers() {
+        return workers;
+    }
+
     private BlockingQueue<InsertData> blockingQueue = null;
 
     private String filenamePrefix = "";
@@ -39,7 +46,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
             workers.add(dbw);
             new Thread(dbw).start();
             //TODO: we need to improve this!
-            TpmonController.getInstance().registerWorker(dbw);
+            //TpmonController.getInstance().registerWorker(dbw);
         }
         log.info(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
     }

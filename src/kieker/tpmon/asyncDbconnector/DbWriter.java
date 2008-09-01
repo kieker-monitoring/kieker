@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -43,6 +44,7 @@ public class DbWriter  implements Runnable, Worker{
         log.info("New Tpmon - DbWriter thread created");
     }
         
+     @TpmonInternal()
     synchronized void changeStatement(String statementtext){
         nextStatementText = statementtext;
         statementChanged = true;
@@ -51,10 +53,12 @@ public class DbWriter  implements Runnable, Worker{
     /**
      * May be called more often than required... but that doens't harm
      */
+     @TpmonInternal()
     public void initShutdown() {
         DbWriter.shutdown = true;
     }           
     
+      @TpmonInternal()
     public void run() {
         log.info("Dbwriter thread running");
         try {            
@@ -80,6 +84,7 @@ public class DbWriter  implements Runnable, Worker{
     /**
      * writes next item into database
      */
+       @TpmonInternal()
     private void  consume(Object traceidObject) {
         //if (TpmonController.debug) System.out.println("DbWriter "+this+" Consuming "+traceidObject);
         try {
@@ -106,7 +111,7 @@ public class DbWriter  implements Runnable, Worker{
         }
     }
     
-    
+     @TpmonInternal()
     public boolean isFinished() {
         return finished;
     }

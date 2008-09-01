@@ -63,6 +63,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,8 +74,7 @@ import kieker.tpmon.asyncDbconnector.Worker;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
 
 public class TpmonController {
-
-    private static TpmonController ctrlInst = null;
+ 
     private static final Log log = LogFactory.getLog(TpmonController.class);
     
     private IMonitoringDataWriter monitoringDataWriter = null;
@@ -87,10 +87,7 @@ public class TpmonController {
     private boolean debug = false;
     public boolean storeInDatabase = false;
     public String filenamePrefix = ""; // e.g. path "/tmp"   
-
-    public String getFilenamePrefix() {
-        return filenamePrefix;
-    }
+   
     public boolean storeInJavaIoTmpdir = true;
     public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
@@ -114,19 +111,27 @@ public class TpmonController {
     private TpmonShutdownHook shutdownhook = null;
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
-    public static TpmonController getInstance() {
-        if (TpmonController.ctrlInst == null) TpmonController.ctrlInst = new TpmonController();
+    private static TpmonController ctrlInst = null;    
+    
+    
+    public synchronized static TpmonController getInstance() {
+        if (ctrlInst == null) {
+            ctrlInst = new TpmonController();
+            System.out.println("Finished getInstnace");
+        }
         return TpmonController.ctrlInst;
     }
 
     public TpmonController() {
+        
+        
         log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:" +
                 Thread.currentThread().getId());
+        System.out.println("VMNAME:"+vmname);
         log.info(">Kieker-Tpmon: Virtual Machine start time " +
                 ManagementFactory.getRuntimeMXBean().getStartTime());
-        
 
-
+   
         try {
             vmname = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception ex) {
@@ -140,24 +145,42 @@ public class TpmonController {
 
         if (this.storeInDatabase) {
             if (asyncDbconnector) {
-                this.monitoringDataWriter = new AsyncDbconnector(dbConnectionAddress, dbTableName,
+                AsyncDbconnector producer = new AsyncDbconnector(dbConnectionAddress, dbTableName,
                         setInitialExperimentIdBasedOnLastId);
+                Vector<Worker> worker = producer.getWorkers();
+                for(Worker w: worker) {
+                    this.registerWorker(w);
+                }
+                this.monitoringDataWriter = producer;                
             } else {
                 this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             }
             log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                    "monitoring data in the database.");
+                    "monitoring data in the database.");            
+            
         } else {
             String filenameBase = new String(this.filenamePrefix + "/tpmon-");
             if (asyncFsWriter) {
-                this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
+                System.out.println("Producer: blame Andre");
+                AsyncFsWriterProducer producer = new AsyncFsWriterProducer(filenameBase);
+                Vector<Worker> worker = producer.getWorkers();
+                for(Worker w: worker) {
+                    this.registerWorker(w);
+                }
+                this.monitoringDataWriter = producer;
             }else{
                 this.monitoringDataWriter = new FileSystemWriter(filenameBase);
             }
             log.info(">Kieker-Tpmon: Initialization completed. Storing " +
                     "monitoring data in the folder " + filenamePrefix);
         }
+    }
+    
+    
+    @TpmonInternal()
+    public String getFilenamePrefix() {
+        return filenamePrefix;
     }
 
     /**
@@ -203,6 +226,7 @@ public class TpmonController {
     public void registerWorker(Worker newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
+    
     private long lastUniqueIdTime = 0;
     private int secondaryCounter = 0;
     //TODO: why are these guys public?
@@ -287,7 +311,7 @@ public class TpmonController {
 
     @TpmonInternal()
     public boolean insertMonitoringDataNow(String componentname, String methodSig, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-
+        System.out.println("insertMonitoringDataNow");
         if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
             if (!(requestID.hashCode() % traceSampleingFrequency == 0)) {
                 return true;

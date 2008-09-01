@@ -37,17 +37,18 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
-import kieker.tpmon.TpmonController;
 
+
+import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
-    static private Connection conn = null;
-    static private boolean init = false;
-    static private BlockingQueue blockingQueue;
+    private Connection conn = null;
+    private boolean init = false;
+    private BlockingQueue blockingQueue;
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
     private boolean setInitialExperimentIdBasedOnLastId = false;
@@ -60,15 +61,23 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         this.dbTableName = dbTableName;
         this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
         this.init();
-
     }
-    static Vector<DbWriter> writers = new Vector<DbWriter>();
+    
+    private Vector<Worker> workers = new Vector<Worker>();
+
+    @TpmonInternal()
+    public Vector<Worker> getWorkers() {
+        return workers;
+    }
+
+
 
     /**
      *
      * Returns false if an error occurs. Errors are printed to stdout (e.g., App-server logfiles), even if debug = false.
      *
      */
+     @TpmonInternal()
     public boolean init() {
         if (this.isDebug()) {
             log.info("Tpmon asyncDbconnector init");
@@ -94,10 +103,10 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                     "VALUES (" + experimentId + ",?,?,?,?,?,?,?,?)";
             for (int i = 0; i < numberOfConnections; i++) {
                 DbWriter dbw = new DbWriter(DriverManager.getConnection(this.dbConnectionAddress), blockingQueue, preparedQuery);
-                writers.add(dbw);
+                workers.add(dbw);
                 new Thread(dbw).start();
                 //TODO: Fix this (there shouldn't be a dependency to the TpmonCtrl)
-                TpmonController.getInstance().registerWorker(dbw);
+                //TpmonController.getInstance().registerWorker(dbw);
             }
             log.info("Tpmon (" + numberOfConnections + " threads) connected to database");
             init = true;
@@ -125,6 +134,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     /**
      * Use this method to insert data into the database.
      */
+      @TpmonInternal()
     public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
         return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
     }
@@ -134,6 +144,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      *
      */
+       @TpmonInternal()
     public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
         if (this.isDebug()) {
             System.out.println("Async.insertMonitoringDataNow");
@@ -161,7 +172,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                 String preparedQuery = "INSERT INTO " + TpmonController.dbTableName +
                         " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
                         "VALUES (" + experimentId + ",?,?,?,?,?," + vmname + ",?,?)";
-                for (DbWriter wr : writers) {
+                for (DbWriter wr : workers) {
                     wr.changeStatement(preparedQuery);
                 }
             }*/

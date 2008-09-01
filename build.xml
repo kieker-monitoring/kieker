@@ -145,7 +145,7 @@
         <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
     </target>
     
-    <target name="run-test-storage" depends="build-tpmon-ctrl">
+    <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
         <echo>
             This is a small test for the part of Tpmon that
             stores monitoring data. Tpmon's monitoring API 
@@ -191,7 +191,7 @@
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation" 
-            depends="compile-tests-loadTimeWeaving">        
+            depends="clean,compile-tests-loadTimeWeaving">        
         <java dir="."
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
@@ -202,7 +202,7 @@
     
     
     <target name="run-tests-loadTimeWeaving-executionOrderTest" 
-            depends="compile-tests-loadTimeWeaving">        
+            depends="clean,compile-tests-loadTimeWeaving">        
         <java dir="."
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
@@ -224,7 +224,7 @@
         </iajc>	
     </target>
     
-    <target name="run-tests-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstore">        
+    <target name="run-tests-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstore">        
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
