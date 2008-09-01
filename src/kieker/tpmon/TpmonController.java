@@ -113,7 +113,7 @@ public class TpmonController {
     //private static final boolean methodNamesCeWe = true;
     private static TpmonController ctrlInst = null;    
     
-    
+    @TpmonInternal()
     public synchronized static TpmonController getInstance() {
         if (ctrlInst == null) {
             ctrlInst = new TpmonController();
@@ -194,6 +194,7 @@ public class TpmonController {
      * 
      * @return
      */
+    @TpmonInternal()
     public String getVmname() {
         return this.vmname;
     }
@@ -212,6 +213,7 @@ public class TpmonController {
      * 
      * @param newVmname
      */
+    @TpmonInternal()
     public void setVmname(String newVmname) {
         log.info(">Kieker-Tpmon: The VM has the NEW name " + newVmname +
                 " Thread:" + Thread.currentThread().getId());
@@ -779,10 +781,12 @@ public class TpmonController {
      * Used by the spring aspect to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
      */
-    public synchronized void registerSessionIdentifier(String sessionid, long threadid) {
+    @TpmonInternal()
+    public void registerSessionIdentifier(String sessionid, long threadid) {
         sessionThreadMatcher.put(threadid, sessionid);
     }
 
+    @TpmonInternal()
     public String getSessionIdentifier(long threadid) {
         String sessionid = sessionThreadMatcher.get(threadid);
         if (sessionid == null) {
