@@ -2,37 +2,36 @@ package kieker.tpmon.aspects;
 
 import kieker.tpmon.*;
 import kieker.tpmon.asyncDbconnector.*;
-import javax.servlet.*;
 import kieker.tpmon.annotations.*;
-import javax.servlet.http.*;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
 
 /**
+ * @author matthias, andre
+ * Based on parts of Thilo Focke's Monitoring Framework
+ *
  * The Performance monitor aspect identifies all methods that have an MonitoringProbe annotation.
  * An around advice adds performance measuring code and registers mbeans for measuring points.
+ *
+ * History:
+ * 2008/09/01: Removed a lot "synchronized" from the Aspects
  */
-public aspect TpmonMonitorFullInstrumentation {
+public aspect TpmonMonitorFullInstrumentation {	
+ 	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
 
-		 
- 	HashMap sessionThreadMatcher = new HashMap();
+	pointcut probeClassMethod(): execution(* *.*(..)) && !execution(@TpmonInternal * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* TpmonController.*(..))
+	&& !execution(* FileSystemWriter.*(..));
 
-        TpmonController ctrlInst = TpmonController.getInstance();
-	
-// execution(* *.*(..)) 
-// Add here the list of methods to monitor:
-	pointcut probeClassMethod(): execution(* *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* FileSystemWriter.*(..)) && !execution(* TpmonController.*(..)) && !execution(@TpmonInternal * *.*(..));
-        
 	/**
-	  * Aspect Advice for class-methods (static) and object methods (non-static) to collect 
+	  * Aspect Advice for class-methods (static) and object methods (non-static) to collect
 	  * response times. The response time is send to tpmon.TpmonController (a static class).
 	  * Set debug = on for verbose debugging messages send to the command line.
 	  *
-	  * @todo: It's not thread safe yet, therefore this monitoring instrumentation might connect traces
-	  * that are not connected.
-	  * 
 	  */
 	Object around(): probeClassMethod() {
-		
+
+                TpmonController ctrlInst = TpmonController.getInstance();
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {
@@ -43,64 +42,39 @@ public aspect TpmonMonitorFullInstrumentation {
 		*/
 
 		boolean isEntryPoint = false;
-
-		synchronized(this) {
-			Long threadId = Thread.currentThread().getId();
-			String currentSessionId;
-			Object sessionIdObject = sessionThreadMatcher.get(threadId);
-			if (sessionIdObject == null) { /* then its an entry point since the threadId is not registered */
-				currentSessionId = ctrlInst.getUniqueIdentifierForThread(threadId);
-				sessionThreadMatcher.put(threadId,currentSessionId);
-				isEntryPoint = true;
-			} 
+        	Long threadId = Thread.currentThread().getId();
+                String currentRequestId  = requestThreadMatcher.get(threadId);
+                    if (currentRequestId == null) { /* then its an entry point since the threadId is not registered */
+                    currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
+                    requestThreadMatcher.put(threadId,currentRequestId);
+                    isEntryPoint = true;
 		}
 
-
-		//long startTime = System.currentTimeMillis();
 		long startTime = ctrlInst.getTime();
 
-
-		// isEntryPoint and starttime might be overwritten because they are not thread-save
-		// However, it could be a large restriction to span a synchronized around the proceed() 
-		/* execution of the instrumented method: */
         Object toreturn=proceed();
-        
-		synchronized(this) {
-			Long threadId = Thread.currentThread().getId();
-			String currentSessionId = "Error";
-			Object sessionIdObject;
-			if (isEntryPoint)
-				sessionIdObject = sessionThreadMatcher.remove(threadId);
-			else 
-				sessionIdObject = sessionThreadMatcher.get(threadId);
 
-			if (sessionIdObject == null) { /* hmm there should be something! */
-				currentSessionId = "traceIdError!";
-			} else {
-				try {
-				currentSessionId = (String)sessionIdObject;
-				} catch(Exception ex){}
-			}
+                long endTime = ctrlInst.getTime();
 
-			// componentName = z.B. com.test.Main
-		 	String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
-		
-			// methodName = Main.main(..)
-			// String methodName = thisJoinPoint.getSignature().toShortString();
-			// methodName = Main.getBook(boolean)
-			String methodName = thisJoinPoint.getSignature().toLongString();
+		if (isEntryPoint)
+                    requestThreadMatcher.remove(threadId);
 
+                String methodname = thisJoinPoint.getSignature().getName();
+                // e.g. "getBook"
+                // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
+                String paramList = thisJoinPoint.getSignature().toLongString();
+                int paranthIndex = paramList.lastIndexOf('(');
+                paramList = paramList.substring(paranthIndex);
+                // paramList is now e.g.,  "()"
+                String opname = methodname + paramList;
+                // e.g., "getBook()"
+                //System.out.println("opname:"+opname);
+                String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+                // e.g., kieker.tests.springTest.Book
+                //System.out.println("componentName:"+componentName);
 
-
-        	if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-			long endTime = ctrlInst.getTime();
-
-        	ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, startTime, endTime);
-			if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
-		}
-		
+                ctrlInst.insertMonitoringDataNow(componentName, opname, currentRequestId, startTime, endTime);
+                if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
 		return toreturn;
-
 	}
-
 }

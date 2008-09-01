@@ -18,7 +18,7 @@ import java.util.Random;
  * History:
  * 2008/09/01: Removed a lot "synchronized" from the Aspects
  */
-public aspect TpmonMonitorAnnotationServlet {
+public aspect TpmonMonitorFullInstServlet {
  	Map<Long,String> sessionThreadMatcher = new ConcurrentHashMap<Long,String>();
 	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
 
