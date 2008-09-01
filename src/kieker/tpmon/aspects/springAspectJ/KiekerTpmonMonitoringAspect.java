@@ -35,7 +35,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class KiekerTpmonMonitoringAspect {
     
-
+    private static final TpmonController ctrlInst = TpmonController.getInstance();
   
      @Pointcut("execution(* *.*(..)) && !execution(* kieker.tpmon.aspects.springAspectJ.KiekerTpmonMonitoringAspect.*(..)) && !execution(* org.aspectj..*(..)) && !execution(* java..*(..)) && !execution(* sun..*(..)) && !execution(* kieker.tpmon..*(..)) && !execution(* org.apache..*(..)) && !execution(* javax..*(..))")
      public void monitoredMethod(){ }
@@ -44,9 +44,7 @@ public class KiekerTpmonMonitoringAspect {
     public static Map<Long,String> uniqueThreadIds = Collections.synchronizedMap(new HashMap<Long,String>());
     
     @Around("monitoredMethod()")
-    public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
-        TpmonController ctrlInst = TpmonController.getInstance();
-        
+    public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {        
          String methodname = thisJoinPoint.getSignature().getName();
         // e.g. "getBook"
         
