@@ -5,6 +5,7 @@ import kieker.tpmon.asyncDbconnector.*;
 import kieker.tpmon.annotations.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
 
 /**
  * @author matthias, andre
@@ -12,6 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * The Performance monitor aspect identifies all methods that have an MonitoringProbe annotation.
  * An around advice adds performance measuring code and registers mbeans for measuring points.
+ *
+ * History:
+ * 2008/09/01: Removed a lot "synchronized" from the Aspects
  */
 public aspect TpmonMonitorAnnotation {	
  	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();

@@ -2,12 +2,12 @@ package kieker.tpmon.aspects;
 
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.*;
+import kieker.tpmon.asyncDbconnector.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.util.Random;
 import java.util.Map;
-import kieker.tpmon.asyncDbconnector.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
 
 /**
  * @author matthias
@@ -15,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * The Performance monitor aspect identifies all methods that have an MonitoringProbe annotation.
  * An around advice adds performance measuring code and registers mbeans for measuring points.
+ * History:
+ * 2008/09/01: Removed a lot "synchronized" from the Aspects
  */
 public aspect TpmonMonitorAnnotationServlet {	
  	Map<Long,String> sessionThreadMatcher = new ConcurrentHashMap<Long,String>();
@@ -26,33 +28,31 @@ public aspect TpmonMonitorAnnotationServlet {
 
 	pointcut toplevelServletCommand(HttpServletRequest request, HttpServletResponse response): servletCommand(request,response) && !cflowbelow(servletCommand(HttpServletRequest,HttpServletResponse));
 
-		Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
-
-		//make the sessionId accessable for all advices in the same thread
-                
-                String requestId = ""+(new Random()).nextLong();
-		String sessionId = request.getSession(true).getId();
-                Long threadId = Thread.currentThread().getId();
-		sessionThreadMatcher.put(threadId,sessionId);
-                requestThreadMatcher.put(threadId,requestId);					
+            Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
+            //make the sessionId accessable for all advices in the same thread
+              
+            String requestId = ""+(new Random()).nextLong();
+            String sessionId = request.getSession(true).getId();
+            Long threadId = Thread.currentThread().getId();
+            sessionThreadMatcher.put(threadId,sessionId);
+            requestThreadMatcher.put(threadId,requestId);					
                
-                if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
+            if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
 
-		Object toReturn = proceed(request,response);
+            Object toReturn = proceed(request,response);
 	
-
-                //empty the sessionId
-                sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
-                requestThreadMatcher.remove(threadId);		
-		return toReturn;
+            //empty the sessionId
+            sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
+            requestThreadMatcher.remove(threadId);		
+            return toReturn;
 	}
 
 	pointcut probeClassMethod(): (execution(@TpmonMonitoringProbe * *.*(..)) || execution(* *.doGet(..)) || execution(* *.doPost(..))) && !execution(* Dbconnector.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* TpmonController.*(..)) 
 	&& !execution(* FileSystemWriter.*(..)) && !execution(@TpmonInternal * *.*(..));
 
 	/**
-     * If we have a servlet entry method, we only want the outer one.
-     */
+         * If we have a servlet entry method, we only want the outer one.
+         */
 	pointcut probeClassMethodAndStrutsEntryPoint(): probeClassMethod() && ( !(execution(* *.doGet(..)) || execution(* *.doPost(..))) || !cflowbelow(probeClassMethod()));
 
 	/**
@@ -109,8 +109,6 @@ public aspect TpmonMonitorAnnotationServlet {
                 String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
                 // e.g., kieker.tests.springTest.Book
                 //System.out.println("componentName:"+componentName);
-
-
 		
 		if (isEntryPoint) {                            
                    sessionThreadMatcher.remove(threadId);
