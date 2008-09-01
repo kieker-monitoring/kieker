@@ -19,6 +19,7 @@ import java.util.Random;
  */
 public aspect TpmonMonitorAnnotation {	
  	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
+        TpmonController ctrlInst = TpmonController.getInstance();
 
 	pointcut probeClassMethod(): execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* TpmonController.*(..)) 
 	&& !execution(* FileSystemWriter.*(..));
@@ -30,8 +31,6 @@ public aspect TpmonMonitorAnnotation {
 	  *	  
 	  */
 	Object around(): probeClassMethod() {
-		
-                TpmonController ctrlInst = TpmonController.getInstance();
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {

@@ -13,6 +13,8 @@ import java.util.Random;
  */
 public aspect TpmonAnnotationRemoteInstrumentation  {		  	
 
+    TpmonController ctrlInst = TpmonController.getInstance();
+
     pointcut probeClassMethod(): execution(@TpmonMonitoringProbe * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* FileSystemWriter.*(..)) && !execution(* TpmonController.*(..)) && !execution(@TpmonInternal * *.*(..));
         
     /**
@@ -23,7 +25,6 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
     Object around(): probeClassMethod() {
 		           
     /* prior to the execution of the instrumented method */
-        TpmonController ctrlInst = TpmonController.getInstance();
         boolean isEntryPoint = false;		
 	Long threadId = Thread.currentThread().getId();
 	String currentRequestId;	
