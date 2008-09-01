@@ -1,7 +1,6 @@
 package kieker.tpmonControlServlet;
 
 import java.io.*;
-import java.net.*;
 import java.util.StringTokenizer;
 import kieker.tpmon.*;
 import javax.servlet.*;

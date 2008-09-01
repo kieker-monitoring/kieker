@@ -74,21 +74,18 @@ public aspect TpmonMonitorFullInstServlet {
 
 		boolean isEntryPoint = false;
 		String currentSessionId,currentRequestId;
-                Long threadId = Thread.currentThread().getId();
-
-                currentSessionId = sessionThreadMatcher.get(threadId);
-                if (currentSessionId == null) { /* then its an entry point since the threadId is not registered */
-                    currentSessionId = "unknown";
-                    sessionThreadMatcher.put(threadId,currentSessionId);
-                    isEntryPoint = true;
+		Long threadId = Thread.currentThread().getId();
+		currentSessionId = sessionThreadMatcher.get(threadId);
+		if (currentSessionId == null) { /* then its an entry point since the threadId is not registered */
+			currentSessionId = "unknown";
+			sessionThreadMatcher.put(threadId,currentSessionId);
+			isEntryPoint = true;
 		}
-
-                currentRequestId = requestThreadMatcher.get(threadId);
+		currentRequestId = requestThreadMatcher.get(threadId);
 		if(currentRequestId == null) {
                     currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
                     requestThreadMatcher.put(threadId,currentRequestId);
 		}
-
 		long startTime = ctrlInst.getTime();
 
 	/* execution of the instrumented method: */
@@ -115,8 +112,8 @@ public aspect TpmonMonitorFullInstServlet {
                    requestThreadMatcher.remove(threadId);
 		}
 
-       		ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
-                if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
+		ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
+        if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
 		return toreturn;
 	}
 }
