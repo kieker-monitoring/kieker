@@ -25,67 +25,70 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
     Object around(): probeClassMethod() {
 		           
     /* prior to the execution of the instrumented method */
+
         boolean isEntryPoint = false;		
 	Long threadId = Thread.currentThread().getId();
-	String currentRequestId;	
-        Object requestIdObject = ctrlInst.requestThreadMatcher.get(threadId);
+	String currentRequestId = ctrlInst.requestThreadMatcher.get(threadId);
         int executionOrderIndex = 0; /* this is executionOrderIndex-th execution in this trace */
         int executionStackSize = 0; /* this is the hight in the dynamic call tree of this execution */
-	if(requestIdObject == null) {  /* its an entry point since the threadId is not registered */            
+	if(currentRequestId == null) {  /* its an entry point since the threadId is not registered */
             currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
             ctrlInst.requestThreadMatcher.put(threadId,currentRequestId);
             ctrlInst.executionOrderIndexMatcher.put(currentRequestId,0);
             ctrlInst.executionStackSizeMatcher.put(currentRequestId,1);
             isEntryPoint = true;
-	} else {
-            currentRequestId = (String)requestIdObject;
-            Object executionOrderIndexObject = ctrlInst.executionOrderIndexMatcher.get(currentRequestId);
+	} else {            
+            Integer executionOrderIndexObject = ctrlInst.executionOrderIndexMatcher.get(currentRequestId);
             if (executionOrderIndexObject == null) 
                 throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionOrderIndexMatcher not synced");
-            executionOrderIndex = (Integer)executionOrderIndexObject;
+            executionOrderIndex = executionOrderIndexObject.intValue();
             executionOrderIndex++;
             ctrlInst.executionOrderIndexMatcher.put(currentRequestId,executionOrderIndex);
 
-            Object executionStackSizeObject = ctrlInst.executionStackSizeMatcher.get(currentRequestId);
+            Integer executionStackSizeObject = ctrlInst.executionStackSizeMatcher.get(currentRequestId);
             if (executionStackSizeObject == null) 
                 throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionStackSizeMatcher not synced");
-            executionStackSize = (Integer)executionStackSizeObject;
+            executionStackSize = executionStackSizeObject.intValue();
             ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize + 1);
-        }				
-        
+        }
+		        
 	long startTime = ctrlInst.getTime();
         
-      //  System.out.println("Pre "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
-	
+    if (ctrlInst.isDebug()) System.out.println("Pre "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
     /* execution of the instrumented method: */
-    Object toReturn;
-        try {
-            // executing the intercepted method call
-            toReturn = proceed();
-        } catch (Exception e) {
-            throw e; // exceptions are forwarded
+
+Object toreturn=proceed();
+    if (ctrlInst.isDebug()) System.out.println("Post "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
+
+         long endTime = ctrlInst.getTime();
+
+        /* after the execution of the instrumented method */
+	if (isEntryPoint) { // remove it to distinguish the next usage of the threadid            
+            ctrlInst.requestThreadMatcher.remove(threadId);
+            ctrlInst.executionOrderIndexMatcher.remove(currentRequestId);
+            ctrlInst.executionStackSizeMatcher.remove(currentRequestId);
+        } else {
+            ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize); // one less ...
+
         }
-        finally {
-            //  System.out.println("Post "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
-            /* after the execution of the instrumented method */					
-            if (isEntryPoint) { // remove it to distinguish the next usage of the threadid            
-                ctrlInst.requestThreadMatcher.remove(threadId);
-                ctrlInst.executionOrderIndexMatcher.remove(currentRequestId);
-                ctrlInst.executionStackSizeMatcher.remove(currentRequestId);
-            } else {
-                ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize); // one less ...
-            }
-        
-            // componentName = z.B. com.test.Main
-            String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();				
-            String methodName = thisJoinPoint.getSignature().toLongString();
-            if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-            long endTime = ctrlInst.getTime();
-            ctrlInst.insertMonitoringDataNow(componentName, methodName, "null", currentRequestId, startTime, endTime, executionOrderIndex, executionStackSize);
-            if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentRequestId+","+startTime);
-        
-            // System.out.println("Log "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
-        }
+
+
+        String methodname = thisJoinPoint.getSignature().getName();
+        // e.g. "getBook"
+        // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
+        String paramList = thisJoinPoint.getSignature().toLongString();
+        int paranthIndex = paramList.lastIndexOf('(');
+        paramList = paramList.substring(paranthIndex);
+        // paramList is now e.g.,  "()"
+        String opname = methodname + paramList;
+        // e.g., "getBook()"
+        //System.out.println("opname:"+opname);
+        String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+        // e.g., kieker.tests.springTest.Book
+        //System.out.println("componentName:"+componentName);
+       
+        ctrlInst.insertMonitoringDataNow(componentName, opname, "none", currentRequestId, startTime, endTime, executionOrderIndex, executionStackSize);
+        if (ctrlInst.isDebug()) System.out.println("Log "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
 	return toreturn;
     }
 }

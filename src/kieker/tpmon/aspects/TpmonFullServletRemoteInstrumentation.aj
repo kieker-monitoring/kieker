@@ -13,7 +13,6 @@ import java.util.Random;
  * An around advice adds performance measuring code and registers mbeans for measuring points.
  */
 public aspect TpmonFullServletRemoteInstrumentation  {
-		  
         TpmonController ctrlInst = TpmonController.getInstance();
 
 	pointcut servletCommand(HttpServletRequest request, HttpServletResponse response): execution(* *.do*(..)) && args(request,response);
@@ -22,31 +21,26 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 
 	Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {       
 
-            //make the sessionId accessable for all advices in the same thread
-            synchronized(this){
-                String requestId = ""+(new Random()).nextLong();
-                String sessionId = request.getSession(true).getId();
-                Long threadId = Thread.currentThread().getId();
-                ctrlInst.sessionThreadMatcher.put(threadId,sessionId);
-                ctrlInst.requestThreadMatcher.put(threadId,requestId);
-                if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
-            }
 
-            Object toReturn;
-            try {
-                // executing the intercepted method call
-                toReturn = proceed(request,response);
-            } catch (Exception e) {
-                throw e; // exceptions are forwarded
-            }
-            finally {
-                //empty the sessionId 
-                synchronized(this){
-                    Long threadId = Thread.currentThread().getId();
-                    ctrlInst.sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
-                    ctrlInst.requestThreadMatcher.remove(threadId);
-                }
-            }
+            String requestId = ""+(new Random()).nextLong();
+            String sessionId = request.getSession(true).getId();
+            Long threadId = Thread.currentThread().getId();
+
+
+
+            //make the sessionId accessable for all advices in the same thread
+            ctrlInst.sessionThreadMatcher.put(threadId,sessionId);
+            ctrlInst.requestThreadMatcher.put(threadId,requestId);
+
+            if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
+
+            Object toReturn = proceed(request,response);
+
+            //empty the sessionId
+            ctrlInst.sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
+            ctrlInst.requestThreadMatcher.remove(threadId);
+
+
             return toReturn;
 	}
 
@@ -57,8 +51,6 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 	  * response times. The response time is send to tpmon.TpmonController (a static class).
 	  * Set debug = on for verbose debugging messages send to the command line.
 	  *
-	  * @todo: It's not (?) thread safe yet, therefore this monitoring instrumentation might connect traces
-	  * that are not connected.
 	  * 
 	  */
 	Object around(): probeClassMethod() {
@@ -73,29 +65,25 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 		}
 		*/
 
-		boolean isEntryPoint = false;     
-
-		synchronized(this) {
-			Long threadId = Thread.currentThread().getId();
-			String currentSessionId,currentRequestId;
-			Object sessionIdObject = ctrlInst.sessionThreadMatcher.get(threadId);
-			if (sessionIdObject == null) { /* then its an entry point since the threadId is not registered */
+		boolean isEntryPoint = false;                
+                Long threadId = Thread.currentThread().getId();
+                String currentSessionId,currentRequestId;
+                currentSessionId = ctrlInst.sessionThreadMatcher.get(threadId);
+                if (currentSessionId == null) { /* then its an entry point since the threadId is not registered */
 				currentSessionId = "null";
 				ctrlInst.sessionThreadMatcher.put(threadId,currentSessionId);
 				isEntryPoint = true;
-			} 
-			Object requestIdObject = ctrlInst.requestThreadMatcher.get(threadId);
-			if(requestIdObject == null) {
-				currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
-                                ctrlInst.requestThreadMatcher.put(threadId,currentRequestId);
-			}
-		}		
-		long startTime = ctrlInst.getTime();
+                }
+			
+		currentRequestId = ctrlInst.requestThreadMatcher.get(threadId);
+		if(currentRequestId == null) {
+                    currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
+                    ctrlInst.requestThreadMatcher.put(threadId,currentRequestId);
+		}
+				
+                long startTime = ctrlInst.getTime();
 
-
-		// isEntryPoint and starttime might be overwritten because they are not thread-save
-		// However, it could be a large restriction to span a synchronized around the proceed() 
-		/* execution of the instrumented method: */
+	/* execution of the instrumented method: */
 
                 Object toReturn;
                 try {
@@ -106,48 +94,32 @@ public aspect TpmonFullServletRemoteInstrumentation  {
                 }
                 finally {
                     toreturn=proceed();
+
+                long endTime = ctrlInst.getTime();
         
-                    synchronized(this) {
-                        Long threadId = Thread.currentThread().getId();
-                        String currentSessionId = "Error";
-                        String currentRequestId = "bar";
-                        Object sessionIdObject, requestIdObject;
-                        if (isEntryPoint) { // its removed to have it clean for the next usage of the threadid
-                            sessionIdObject = ctrlInst.sessionThreadMatcher.remove(threadId);
-                            requestIdObject = ctrlInst.requestThreadMatcher.remove(threadId);
-			}
-			else {
-                            sessionIdObject = ctrlInst.sessionThreadMatcher.get(threadId);
-                            requestIdObject = ctrlInst.requestThreadMatcher.get(threadId);
-			}
+		if (isEntryPoint) { // its removed to have it clean for the next usage of the threadid
+                    ctrlInst.sessionThreadMatcher.remove(threadId);
+                    ctrlInst.requestThreadMatcher.remove(threadId);
+		}
 
-                        if (sessionIdObject == null) { // should never happen
-                            //System.out.println("Kieker.tpmon -- Error: No sessionidobject ");         	
-                            currentSessionId = "sessionIdError";
-                        }
+                String methodname = thisJoinPoint.getSignature().getName();
+                // e.g. "getBook"
+                // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
+                String paramList = thisJoinPoint.getSignature().toLongString();
+                int paranthIndex = paramList.lastIndexOf('(');
+                paramList = paramList.substring(paranthIndex);
+                // paramList is now e.g.,  "()"
+                String opname = methodname + paramList;
+                // e.g., "getBook()"
+                //System.out.println("opname:"+opname);
+                String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+                // e.g., kieker.tests.springTest.Book
+                //System.out.println("componentName:"+componentName);
 
-                        if (requestIdObject == null) { // should never happen
-                            //System.out.println("Kieker.tpmon -- Error: No requestidobject ");         	
-                            currentSessionId = "requestIdError";
-                        }
 
-                        if (! (sessionIdObject == null || requestIdObject == null) ) {
-                        	try {
-                                    currentSessionId = (String)sessionIdObject;
-                                    currentRequestId = (String)requestIdObject;
-				} catch(Exception ex){}
-			}
-
-			// componentName = z.B. com.test.Main
-                        String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();				
-                        String methodName = thisJoinPoint.getSignature().toLongString();
-                        if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-                        long endTime = ctrlInst.getTime();
-                        //String traceid=ctrlInst.getUniqueIdentifierForThread(threadId);
-                        ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, currentRequestId, startTime, endTime);
-                        if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
-                    }
-		}	
-		return toreturn;
+                ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
+                if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" opname:"+opname+" at:"+startTime);
+                if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);			
+	return toreturn;
 	}
 }

@@ -64,6 +64,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -710,8 +711,8 @@ public class TpmonController {
     }
     // only used by the *Remote* aspect or the spring aspectj aspect. The other aspects have own 
     // more protected HashMaps.
-    public static Map<Long, String> sessionThreadMatcher = Collections.synchronizedMap(new HashMap<Long, String>());
-    public static Map<Long, String> requestThreadMatcher = Collections.synchronizedMap(new HashMap<Long, String>());
+    public Map<Long, String> sessionThreadMatcher = new ConcurrentHashMap<Long,String>();
+    public Map<Long, String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
 
     /**
      * This method and setTraceId are only to support

@@ -11,9 +11,29 @@ import java.util.Random;
 /**
  * This aspect is to instrument all methods that have an TpmonMonitoringProbe annotation.
  */
-public aspect TpmonAnnotationRemoteInstrumentation  {		  	
+public aspect TpmonAnnotationRemoteInstrumentationServlet  {		  	
 
     TpmonController ctrlInst = TpmonController.getInstance();
+
+    pointcut servletCommand(HttpServletRequest request, HttpServletResponse response): execution(* *.do*(..)) && args(request,response);
+
+    pointcut toplevelServletCommand(HttpServletRequest request, HttpServletResponse response): servletCommand(request,response) && !cflowbelow(servletCommand(HttpServletRequest,HttpServletResponse));
+
+    Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
+            //make the sessionId accessable for all advices in the same thread                          
+            String sessionId = request.getSession(true).getId();
+            Long threadId = Thread.currentThread().getId();            
+            ctrlInst.sessionThreadMatcher.put(threadId,sessionId);					
+               
+            if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
+
+        Object toReturn = proceed(request,response);
+	
+            //empty the sessionId
+            ctrlInst.sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */            
+            return toReturn;
+    }
+
 
     pointcut probeClassMethod(): execution(@TpmonMonitoringProbe * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* FileSystemWriter.*(..)) && !execution(* TpmonController.*(..)) && !execution(@TpmonInternal * *.*(..));
         
@@ -37,18 +57,18 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
             ctrlInst.executionOrderIndexMatcher.put(currentRequestId,0);
             ctrlInst.executionStackSizeMatcher.put(currentRequestId,1);
             isEntryPoint = true;
-	} else {            
-            Object executionOrderIndexObject = ctrlInst.executionOrderIndexMatcher.get(currentRequestId);
-            if (executionOrderIndexObject == null) 
+	} else {
+            Integer executionOrderIndexObject = ctrlInst.executionOrderIndexMatcher.get(currentRequestId);
+            if (executionOrderIndexObject == null)
                 throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionOrderIndexMatcher not synced");
-            executionOrderIndex = (Integer)executionOrderIndexObject;
+            executionOrderIndex = executionOrderIndexObject.intValue();
             executionOrderIndex++;
             ctrlInst.executionOrderIndexMatcher.put(currentRequestId,executionOrderIndex);
 
-            Object executionStackSizeObject = ctrlInst.executionStackSizeMatcher.get(currentRequestId);
+            Integer executionStackSizeObject = ctrlInst.executionStackSizeMatcher.get(currentRequestId);
             if (executionStackSizeObject == null) 
                 throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionStackSizeMatcher not synced");
-            executionStackSize = (Integer)executionStackSizeObject;
+            executionStackSize = executionStackSizeObject.intValue();
             ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize + 1);
         }
 
