@@ -55,6 +55,7 @@ package kieker.tpmon;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Collections;
@@ -75,9 +76,8 @@ import kieker.tpmon.asyncDbconnector.Worker;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
 
 public class TpmonController {
- 
+
     private static final Log log = LogFactory.getLog(TpmonController.class);
-    
     private IMonitoringDataWriter monitoringDataWriter = null;
     private String vmname = "unknown";
 
@@ -88,7 +88,6 @@ public class TpmonController {
     private boolean debug = false;
     public boolean storeInDatabase = false;
     public String filenamePrefix = ""; // e.g. path "/tmp"   
-   
     public boolean storeInJavaIoTmpdir = true;
     public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
@@ -112,8 +111,8 @@ public class TpmonController {
     private TpmonShutdownHook shutdownhook = null;
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
-    private static TpmonController ctrlInst = null;    
-    
+    private static TpmonController ctrlInst = null;
+
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
         if (ctrlInst == null) {
@@ -124,7 +123,6 @@ public class TpmonController {
     }
 
     public TpmonController() {
-        
         try {
             vmname = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception ex) {
@@ -146,27 +144,27 @@ public class TpmonController {
                 AsyncDbconnector producer = new AsyncDbconnector(dbConnectionAddress, dbTableName,
                         setInitialExperimentIdBasedOnLastId);
                 Vector<Worker> worker = producer.getWorkers();
-                for(Worker w: worker) {
+                for (Worker w : worker) {
                     this.registerWorker(w);
                 }
-                this.monitoringDataWriter = producer;                
+                this.monitoringDataWriter = producer;
             } else {
                 this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             }
             log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                    "monitoring data in the database.");            
-            
+                    "monitoring data in the database.");
+
         } else {
-            String filenameBase = new String(filenamePrefix + "/tpmon-");            
+            String filenameBase = new String(filenamePrefix + "/tpmon-");
             if (asyncFsWriter) {
                 AsyncFsWriterProducer producer = new AsyncFsWriterProducer(filenameBase);
                 Vector<Worker> worker = producer.getWorkers();
-                for(Worker w: worker) {
+                for (Worker w : worker) {
                     this.registerWorker(w);
                 }
                 this.monitoringDataWriter = producer;
-            }else{
+            } else {
                 this.monitoringDataWriter = new FileSystemWriter(filenameBase);
             }
             log.info(">Kieker-Tpmon: Initialization completed. Storing " +
@@ -175,8 +173,7 @@ public class TpmonController {
                     "monitoring data in the folder " + filenamePrefix);
         }
     }
-    
-    
+
     @TpmonInternal()
     public String getFilenamePrefix() {
         return filenamePrefix;
@@ -227,7 +224,6 @@ public class TpmonController {
     public void registerWorker(Worker newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
-    
     private long lastUniqueIdTime = 0;
     private int secondaryCounter = 0;
     //TODO: why are these guys public?
@@ -391,7 +387,7 @@ public class TpmonController {
         // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
         String opname = component + newMethodname;
         numberOfInserts.incrementAndGet();
-        this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId,  this.vmname, opname, encodedName, "", -5, -5, -5, -5);
+        this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId, this.vmname, opname, encodedName, "", -5, -5, -5, -5);
     }
 
     /**
@@ -482,25 +478,24 @@ public class TpmonController {
     @TpmonInternal()
     private void loadPropertiesFile() {
         String configurationFile = "META-INF/tpmon.properties";
-        if (System.getProperty("tpmon.configuration") != null) { // we use the present virtual machine parameter value
-            configurationFile = System.getProperty("tpmon.configuration");
-            log.info("Tpmon: Loading properties JVM-specified path" + configurationFile);
-            System.out.println("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
-        } else {
-            log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
-            log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
-            System.out.println("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
-            System.out.println("You can specify an alternative properties file using the property 'tpmon.configuration'");            
-        }
-        InputStream stream = TpmonController.class.getClassLoader().getResourceAsStream(configurationFile);
         Properties prop = new Properties();
 
         try {
-            prop.load(stream);
+            if (System.getProperty("tpmon.configuration") != null) { // we use the present virtual machine parameter value
+                configurationFile = System.getProperty("tpmon.configuration");
+                prop.load(new FileInputStream(configurationFile));
+                log.info("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
+                System.out.println("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
+            } else {
+                log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
+                log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                System.out.println("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
+                System.out.println("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                prop.load(TpmonController.class.getClassLoader().getResourceAsStream(configurationFile));
+            }
         } catch (Exception ex) {
-            System.out.println("ERRRRRRRRRRRROHR");
             log.error("Error loading tpmon.configuration", ex);
-            formatAndOutputError("Could not open tpmon library : " + configurationFile +
+            formatAndOutputError("Could not open tpmon properties : " + configurationFile +
                     ". Using default value " + dbConnectionAddress + ". Message :" + ex.getMessage(), true, false);
         }
 
@@ -555,7 +550,7 @@ public class TpmonController {
         }
 
 
-      
+
 
 
 
@@ -703,8 +698,7 @@ public class TpmonController {
         }
 
         if (storeInDatabase) {
-            return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", version :" + this.getVersion()
-                    + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
+            return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", version :" + this.getVersion() + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
         } else {
             return new String("Storage mode : Tpmon stores in the filesystem, Version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
         }
@@ -716,8 +710,8 @@ public class TpmonController {
     }
     // only used by the *Remote* aspect or the spring aspectj aspect. The other aspects have own 
     // more protected HashMaps.
-    public Map<Long, String> sessionThreadMatcher = new ConcurrentHashMap<Long,String>();
-    public Map<Long, String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
+    public Map<Long, String> sessionThreadMatcher = new ConcurrentHashMap<Long, String>();
+    public Map<Long, String> requestThreadMatcher = new ConcurrentHashMap<Long, String>();
 
     /**
      * This method and setTraceId are only to support
@@ -858,7 +852,7 @@ public class TpmonController {
     public String getVersion() {
         return TpmonVersion.getVERSION();
     }
-    
+
     @TpmonInternal()
     public void setDebug(boolean debug) {
         this.debug = debug;

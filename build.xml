@@ -126,6 +126,8 @@
         <copy todir="build/META-INF">
             <fileset dir="src/kieker/tpmon/META-INF"/>
         </copy>	
+        <!-- log4.properties is only found if in root. Maybe add META-INF to classpath -->
+        <copy file="src/kieker/tpmon/META-INF/log4j.properties" todir="build/"/>
         <copy todir="build">
             <fileset dir="src"/>
         </copy>	
@@ -174,7 +176,8 @@
             fork="true"
 			classname="kieker.tests.storageOnly.StorageOnly"
 			classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}">
-            <jvmarg value="-Dtpmon.configuration=/tmp/bla"/> 
+            <!--<jvmarg value="-Dtpmon.configuration=/tmp/tpmon.properties"/>-->
+            <!--<jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/>-->
             <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
             <!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
             <!-- <jvmarg value="-Xloggc:details.out"/> -->
