@@ -13,7 +13,7 @@ import java.util.Random;
  * An around advice adds performance measuring code and registers mbeans for measuring points.
  */
 public aspect TpmonFullServletRemoteInstrumentation  {
-        TpmonController ctrlInst = TpmonController.getInstance();
+        private final static  TpmonController ctrlInst = TpmonController.getInstance();
 
 	pointcut servletCommand(HttpServletRequest request, HttpServletResponse response): execution(* *.do*(..)) && args(request,response);
 

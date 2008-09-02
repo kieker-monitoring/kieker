@@ -117,7 +117,7 @@ public class TpmonController {
     public synchronized static TpmonController getInstance() {
         if (ctrlInst == null) {
             ctrlInst = new TpmonController();
-            System.out.println("Finished getInstnace");
+            //System.out.println("Finished getInstnace");
         }
         return TpmonController.ctrlInst;
     }
@@ -169,8 +169,7 @@ public class TpmonController {
             }
             log.info(">Kieker-Tpmon: Initialization completed. Storing " +
                     "monitoring data in the folder " + filenamePrefix);
-            System.out.println(">Kieker-Tpmon: Initialization completed. Storing " +
-                    "monitoring data in the folder " + filenamePrefix);
+            //System.out.println(">Kieker-Tpmon: Initialization completed. Storing monitoring data in the folder " + filenamePrefix);
         }
     }
 
@@ -485,12 +484,12 @@ public class TpmonController {
                 configurationFile = System.getProperty("tpmon.configuration");
                 prop.load(new FileInputStream(configurationFile));
                 log.info("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
-                System.out.println("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
+                //System.out.println("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
             } else {
                 log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
                 log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
-                System.out.println("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
-                System.out.println("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                //System.out.println("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
+                //System.out.println("You can specify an alternative properties file using the property 'tpmon.configuration'");
                 prop.load(TpmonController.class.getClassLoader().getResourceAsStream(configurationFile));
             }
         } catch (Exception ex) {

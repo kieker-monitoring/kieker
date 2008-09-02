@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public aspect TpmonAnnotationRemoteInstrumentation  {		  	
 
-    TpmonController ctrlInst = TpmonController.getInstance();
+    private final static TpmonController ctrlInst = TpmonController.getInstance();
 
     pointcut probeClassMethod(): execution(@TpmonMonitoringProbe * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* FileSystemWriter.*(..)) && !execution(* TpmonController.*(..)) && !execution(@TpmonInternal * *.*(..));
         

@@ -59,7 +59,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     @TpmonInternal
     public void run() {
         log.info("FsWriter thread running");
-        System.out.println("FsWriter thread running");
+        //System.out.println("FsWriter thread running");
         try {
             while (!finished) {
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
@@ -129,7 +129,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
                 pos = new PrintWriter(dos);
                 pos.flush();
             } catch (FileNotFoundException ex) {
-                System.out.println(">Kieker-Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
+                log.fatal(">Kieker-Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
                 ex.printStackTrace();
             }
 

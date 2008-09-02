@@ -22,7 +22,7 @@ public aspect TpmonMonitorFullInstServlet {
  	Map<Long,String> sessionThreadMatcher = new ConcurrentHashMap<Long,String>();
 	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
 
-        TpmonController ctrlInst = TpmonController.getInstance();
+        private final static TpmonController ctrlInst = TpmonController.getInstance();
 
 	pointcut servletCommand(HttpServletRequest request, HttpServletResponse response): execution(* *.do*(..)) && args(request,response);
 

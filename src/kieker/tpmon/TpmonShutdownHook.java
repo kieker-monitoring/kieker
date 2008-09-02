@@ -6,6 +6,9 @@ import java.util.logging.Logger;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.Worker;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * kieker.tpmon.TpmonShutdownHook
  * 
@@ -42,6 +45,8 @@ import kieker.tpmon.asyncDbconnector.Worker;
  * 2007/12/16: Initial Prototype
  */
 public class TpmonShutdownHook extends Thread{
+    private static final Log log = LogFactory.getLog(TpmonShutdownHook.class);
+    
     public TpmonShutdownHook() {    
     }
         
@@ -62,13 +67,13 @@ public class TpmonShutdownHook extends Thread{
     public void run(){ // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
         try {
             // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
-            System.out.println("Tpmon: TpmonShutdownHook notifies all workers to initiate shutdown");
+            log.info("Tpmon: TpmonShutdownHook notifies all workers to initiate shutdown");
             initateShutdownForAllWorkers();            
             while(!allWorkersFinished()) {
                 Thread.sleep(500);
-                System.out.println("Tpmon: Shutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
+                log.info("Tpmon: Shutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
             }           
-            System.out.println("Tpmon: TpmonShutdownHook can terminate since all workers are finished");
+            log.info("Tpmon: TpmonShutdownHook can terminate since all workers are finished");
         } catch (InterruptedException ex) {
             Logger.getLogger(TpmonShutdownHook.class.getName()).log(Level.SEVERE, null, ex);
         }

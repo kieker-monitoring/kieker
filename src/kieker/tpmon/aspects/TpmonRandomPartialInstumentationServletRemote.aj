@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public aspect TpmonRandomPartialInstumentationServletRemote  {
 
-        TpmonController ctrlInst = TpmonController.getInstance();		  
+        private final static TpmonController ctrlInst = TpmonController.getInstance();		  
 
 	pointcut servletCommand(HttpServletRequest request, HttpServletResponse response): execution(* *.do*(..)) && args(request,response);
 

@@ -19,7 +19,7 @@ import java.util.Random;
  */
 public aspect TpmonMonitorAnnotation {	
  	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
-        TpmonController ctrlInst = TpmonController.getInstance();
+        private final static TpmonController ctrlInst = TpmonController.getInstance();
 
 	pointcut probeClassMethod(): execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* TpmonController.*(..)) 
 	&& !execution(* FileSystemWriter.*(..));
