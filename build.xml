@@ -73,6 +73,8 @@
                 <pathelement path="${aspectjrtjar}"/>
                 <pathelement path="${commonsloggingjar}"/>
                 <pathelement path="${log4jjar}"/>
+                <pathelement path="${springjar}"/>
+                <pathelement path="${springwebjar}"/>
             </classpath>
         </iajc>
         <copy todir="build/META-INF">
@@ -98,6 +100,8 @@
                 <pathelement path="${servletapijar}"/>                
                 <pathelement path="${commonsloggingjar}"/>
                 <pathelement path="${log4jjar}"/>
+                <pathelement path="${springjar}"/>
+                <pathelement path="${springwebjar}"/>
             </classpath>
         </javac>        
         <copy file="src/kieker/tpmon/META-INF/tpmon.properties" todir="build/META-INF"/>
@@ -121,6 +125,8 @@
                 <pathelement path="${aspectjrtjar}"/>
                 <pathelement path="${commonsloggingjar}"/>
                 <pathelement path="${log4jjar}"/>
+                <pathelement path="${springjar}"/>
+                <pathelement path="${springwebjar}"/>
             </classpath>
         </javac>
         <copy todir="build/META-INF">
@@ -172,7 +178,7 @@
         
         <javac source="1.5" 
                destDir="build-tests" 
-			   classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"
+			   classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:${springjar}:${springwebjar}"
                srcdir="src"
                debug="true"
                includes="kieker/tests/storageOnly/**"/>
@@ -193,7 +199,7 @@
     <target name="compile-tests-loadTimeWeaving" depends="build-all,build-tpmon-ltw">
         <javac source="1.5" 
                destDir="build-tests" 
-              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:${springjar}:${springwebjar}"
                srcdir="src"
                includes="kieker/tests/loadTimeWeaving/**"/>
 	 <copy file="src/kieker/tests/log4j.properties"
@@ -205,7 +211,7 @@
         <java dir="."
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
-              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ltw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ltw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:${springjar}:${springwebjar}">
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
         </java>
     </target>
@@ -216,7 +222,7 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
-              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ltw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ltw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:${springjar}:${springwebjar}">
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <!-- <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/> -->
             <!-- <jvmarg value="-Daj.weaving.verbose=true"/> -->
@@ -248,7 +254,7 @@
         <mkdir dir="build"/>
         <javac source="1.5" 
                destDir="build-tpmonControlServlet" 
-               classpath="dist/${dist.tpmon.ctw}:${servletapijar}:${commonsloggingjar}:${log4jjar}:.:"
+               classpath="dist/${dist.tpmon.ctw}:${servletapijar}:${commonsloggingjar}:${log4jjar}:.:${springjar}:${springwebjar}"
                srcdir="src"
                debug="true"
                includes="kieker/tpmonControlServlet/**"/>
