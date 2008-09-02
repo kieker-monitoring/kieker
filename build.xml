@@ -126,8 +126,13 @@
         <copy todir="build/META-INF">
             <fileset dir="src/kieker/tpmon/META-INF"/>
         </copy>	
-        <!-- log4.properties is only found if in root. Maybe add META-INF to classpath -->
-        <copy file="src/kieker/tpmon/META-INF/log4j.properties" todir="build/"/>
+        <!-- log4j.properties is only found if in root. Maybe add
+	  META-INF to classpath -->   
+        <!-- We don't want log4j.properties to be included in tpmon
+	     since the application should decide about logging levels etc.
+	  <copy file="src/kieker/tpmon/META-INF/log4j.properties"
+	      todir="build/"/>
+        -->
         <copy todir="build">
             <fileset dir="src"/>
         </copy>	
@@ -191,6 +196,8 @@
               classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"
                srcdir="src"
                includes="kieker/tests/loadTimeWeaving/**"/>
+	 <copy file="src/kieker/tests/log4j.properties"
+	      todir="build-tests/"/>
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation" 
@@ -218,7 +225,9 @@
     
     <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-all,build-tpmon-ctw">
         <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
-              todir="src/kieker/tests/compileTimeWeaving/bookstore"/>        
+              todir="src/kieker/tests/compileTimeWeaving/bookstore"/>      
+	 <copy file="src/kieker/tests/log4j.properties"
+	      todir="build-tests/"/>  
         <iajc  destdir="build-tests" source="1.5" verbose="true"
                classpath="${aspectjrtjar}:dist/${dist.tpmon.ctw}:${servletapijar}:${mysqldriver}">
             <sourceroots>
