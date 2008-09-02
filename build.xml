@@ -132,13 +132,6 @@
         <copy todir="build/META-INF">
             <fileset dir="src/kieker/tpmon/META-INF"/>
         </copy>	
-        <!-- log4j.properties is only found if in root. Maybe add
-	  META-INF to classpath -->   
-        <!-- We don't want log4j.properties to be included in tpmon
-	     since the application should decide about logging levels etc.
-	  <copy file="src/kieker/tpmon/META-INF/log4j.properties"
-	      todir="build/"/>
-        -->
         <copy todir="build">
             <fileset dir="src"/>
         </copy>	
@@ -182,6 +175,8 @@
                srcdir="src"
                debug="true"
                includes="kieker/tests/storageOnly/**"/>
+	 <copy file="src/kieker/tests/log4j.properties"
+	      todir="build-tests/"/>
         <java 
             dir="build-tests" 
             fork="true"
