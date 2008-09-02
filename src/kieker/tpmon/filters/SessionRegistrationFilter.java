@@ -17,7 +17,7 @@ public class SessionRegistrationFilter implements Filter {
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();
 
-    public void init(FilterConfig arg0) throws ServletException { }
+    public void init(FilterConfig config) throws ServletException { }
 
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
