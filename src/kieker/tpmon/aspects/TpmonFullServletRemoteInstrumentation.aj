@@ -53,7 +53,7 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 	  *
 	  * 
 	  */
-	Object around(): probeClassMethod() {
+	Object around(): probeClassMethod() throws Throwable {
 		           
 
 		/*

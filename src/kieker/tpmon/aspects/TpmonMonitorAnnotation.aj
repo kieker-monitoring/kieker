@@ -30,7 +30,7 @@ public aspect TpmonMonitorAnnotation {
 	  * Set debug = on for verbose debugging messages send to the command line.
 	  *	  
 	  */
-	Object around(): probeClassMethod() {
+	Object around(): probeClassMethod()  {
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {
@@ -54,9 +54,9 @@ public aspect TpmonMonitorAnnotation {
                 Object toReturn;
                 try {
                     // executing the intercepted method call
-                    toReturn = proceed(request,response);
+                    toReturn = proceed();
                 } catch (Exception e) {
-                    throw e; // exceptions are forwarded
+                    rethrow e; // exceptions are forwarded
                 }
                 finally {
                     long endTime = ctrlInst.getTime();
