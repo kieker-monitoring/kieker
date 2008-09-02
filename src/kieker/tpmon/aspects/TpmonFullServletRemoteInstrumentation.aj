@@ -53,7 +53,7 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 	  *
 	  * 
 	  */
-	Object around(): probeClassMethod() throws Throwable {
+	Object around(): probeClassMethod() {
 		           
 
 		/*
@@ -85,16 +85,16 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 
 	/* execution of the instrumented method: */
 
-                Object toReturn;
+                Object toReturn = null;
                 try {
                     // executing the intercepted method call
-                    toReturn = proceed(request,response);
+                    toReturn = proceed();
                 } catch (Exception e) {
-                    throw e; // exceptions are forwarded
+                    //TODO: don't know how but exceptions need to be rethrown!
+                    //throw e; // doesn't work!
+                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
                 }
                 finally {
-                    toreturn=proceed();
-
                 long endTime = ctrlInst.getTime();
         
 		if (isEntryPoint) { // its removed to have it clean for the next usage of the threadid
@@ -120,6 +120,7 @@ public aspect TpmonFullServletRemoteInstrumentation  {
                 ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
                 if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" opname:"+opname+" at:"+startTime);
                 if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);			
-	return toreturn;
+                }
+	return toReturn;
 	}
 }

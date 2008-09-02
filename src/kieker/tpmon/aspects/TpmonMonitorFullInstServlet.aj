@@ -39,12 +39,14 @@ public aspect TpmonMonitorFullInstServlet {
 
             if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
 
-            Object toReturn;
+            Object toReturn = null;
             try {
                  // executing the intercepted method call
                  toReturn = proceed(request,response);
             } catch (Exception e) {
-                 throw e; // exceptions are forwarded
+                    //TODO: don't know how but exceptions need to be rethrown!
+                    //throw e; // doesn't work!
+                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
             }
             finally {	
                 //empty the sessionId
@@ -96,12 +98,14 @@ public aspect TpmonMonitorFullInstServlet {
 		long startTime = ctrlInst.getTime();
 
         	/* execution of the instrumented method: */
-                Object toReturn;
+                Object toReturn = null;
                 try {
                     // executing the intercepted method call
                     toReturn = proceed();
                 } catch (Exception e) {
-                    throw e; // exceptions are forwarded
+                    //TODO: don't know how but exceptions need to be rethrown!
+                    //throw e; // doesn't work!
+                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
                 }
                 finally {
                     long endTime = ctrlInst.getTime();
@@ -128,6 +132,6 @@ public aspect TpmonMonitorFullInstServlet {
                     ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
                     if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
                 }
-		return toreturn;
+		return toReturn;
 	}
 }

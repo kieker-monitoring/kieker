@@ -32,12 +32,14 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
 	if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
 	}
 
-        Object toReturn;
+        Object toReturn = null;
             try {
                  // executing the intercepted method call
                 toReturn = proceed(request,response);
             } catch (Exception e) {
-                throw e; // exceptions are forwarded
+                    //TODO: don't know how but exceptions need to be rethrown!
+                    //throw e; // doesn't work!
+                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
             }
             finally {	
                 //empty the sessionId 
@@ -99,12 +101,14 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
 		// isEntryPoint and starttime might be overwritten because they are not thread-save
 		// However, it could be a large restriction to span a synchronized around the proceed() 
     		/* execution of the instrumented method: */
-               Object toReturn;
+               Object toReturn = null;
                try {
                 // executing the intercepted method call
                     toReturn = proceed();
                } catch (Exception e) {
-                    throw e; // exceptions are forwarded
+                    //TODO: don't know how but exceptions need to be rethrown!
+                    //throw e; // doesn't work!
+                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
                }
                finally {	
                     synchronized(this) {
@@ -148,6 +152,6 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
                         if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
                     }
 		}	
-		return toreturn;
+		return toReturn;
 	}
 }
