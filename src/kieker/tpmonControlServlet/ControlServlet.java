@@ -151,7 +151,7 @@ public class ControlServlet extends HttpServlet {
              */
             } else if (action.equals("insertTestData")) {
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.insertMonitoringDataNow("kieker.tpmonControlServlet.TpmonControlServlet","TpmonControlServlet.processRequest(HttpServletRequest,HttpServletResponse)", request.getSession().getId(), ctrlInst.getTraceId(Thread.currentThread().getId()), ctrlInst.getTime(), ctrlInst.getTime(), i, i);
+                    ctrlInst.insertMonitoringDataNow("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", request.getSession().getId(), ctrlInst.getTraceId(Thread.currentThread().getId()), ctrlInst.getTime(), ctrlInst.getTime(), i, i);
                 }
             /*
              * action = disable
