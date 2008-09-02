@@ -40,19 +40,19 @@ public aspect TpmonMonitorFullInstServlet {
             if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
 
             Object toReturn = null;
-            try {
+            //try {
                  // executing the intercepted method call
                  toReturn = proceed(request,response);
-            } catch (Exception e) {
+            //} catch (Exception e) {
                     //TODO: don't know how but exceptions need to be rethrown!
                     //throw e; // doesn't work!
-                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
-            }
-            finally {	
+            //        System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
+            //}
+            //finally {	
                 //empty the sessionId
                 sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
                 requestThreadMatcher.remove(threadId);
-            }
+            //}
             return toReturn;
 	}
 
@@ -99,15 +99,15 @@ public aspect TpmonMonitorFullInstServlet {
 
         	/* execution of the instrumented method: */
                 Object toReturn = null;
-                try {
+                //try {
                     // executing the intercepted method call
                     toReturn = proceed();
-                } catch (Exception e) {
+                //} catch (Exception e) {
                     //TODO: don't know how but exceptions need to be rethrown!
                     //throw e; // doesn't work!
-                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
-                }
-                finally {
+                //    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
+                //}
+                //finally {
                     long endTime = ctrlInst.getTime();
 
                     String methodname = thisJoinPoint.getSignature().getName();
@@ -131,7 +131,7 @@ public aspect TpmonMonitorFullInstServlet {
 
                     ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
                     if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
-                }
+                //}
 		return toReturn;
 	}
 }

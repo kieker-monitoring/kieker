@@ -33,22 +33,22 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
 	}
 
         Object toReturn = null;
-            try {
+            //try {
                  // executing the intercepted method call
                 toReturn = proceed(request,response);
-            } catch (Exception e) {
+            //} catch (Exception e) {
                     //TODO: don't know how but exceptions need to be rethrown!
                     //throw e; // doesn't work!
-                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
-            }
-            finally {	
+            //        System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
+            //}
+            //finally {	
                 //empty the sessionId 
                 synchronized(this){
                     Long threadId = Thread.currentThread().getId();
                     ctrlInst.sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
                     ctrlInst.requestThreadMatcher.remove(threadId);
                 }
-            }
+            //}
 	return toReturn;
 	}
 
@@ -102,15 +102,15 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
 		// However, it could be a large restriction to span a synchronized around the proceed() 
     		/* execution of the instrumented method: */
                Object toReturn = null;
-               try {
+               //try {
                 // executing the intercepted method call
                     toReturn = proceed();
-               } catch (Exception e) {
+               //} catch (Exception e) {
                     //TODO: don't know how but exceptions need to be rethrown!
                     //throw e; // doesn't work!
-                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
-               }
-               finally {	
+               //     System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
+               //}
+               //finally {	
                     synchronized(this) {
                         Long threadId = Thread.currentThread().getId();
                         String currentSessionId = "Error";
@@ -151,7 +151,7 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
                         ctrlInst.insertMonitoringDataNow(componentName, methodName, currentSessionId, currentRequestId, startTime, endTime);
                         if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentSessionId+","+startTime);
                     }
-		}	
+		//}	
 		return toReturn;
 	}
 }

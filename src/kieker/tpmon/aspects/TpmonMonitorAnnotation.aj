@@ -52,15 +52,15 @@ public aspect TpmonMonitorAnnotation {
 		long startTime = ctrlInst.getTime();
 
                 Object toReturn = null;
-                try {
+                //try {
                     // executing the intercepted method call
                     toReturn = proceed();
-                } catch (Exception e) {
+                //} catch (Exception e) {
                     //TODO: don't know how but exceptions need to be rethrown!
                     //throw e; // doesn't work!
-                    System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
-                }
-                finally {
+                    //System.out.println("tpmon ERROR: Catched exception in aspect but cannot rethrow!" + e);
+                //}
+                //finally {
                     long endTime = ctrlInst.getTime();
 	
                     if (isEntryPoint)
@@ -82,7 +82,7 @@ public aspect TpmonMonitorAnnotation {
                     
                     ctrlInst.insertMonitoringDataNow(componentName, opname, currentRequestId, startTime, endTime);
                     if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
-                }
+                //}
             	return toReturn;
 	}
 }
