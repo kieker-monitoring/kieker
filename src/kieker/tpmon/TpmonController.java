@@ -139,7 +139,6 @@ public class TpmonController {
         this.shutdownhook = new TpmonShutdownHook();
         Runtime.getRuntime().addShutdownHook(shutdownhook);
 
-        //TODO: this would be the place to load the alternative properties file
         loadPropertiesFile();
 
         if (this.storeInDatabase) {
@@ -161,7 +160,6 @@ public class TpmonController {
         } else {
             String filenameBase = new String(filenamePrefix + "/tpmon-");            
             if (asyncFsWriter) {
-                System.out.println("Producer: blame Andre");
                 AsyncFsWriterProducer producer = new AsyncFsWriterProducer(filenameBase);
                 Vector<Worker> worker = producer.getWorkers();
                 for(Worker w: worker) {
@@ -484,17 +482,24 @@ public class TpmonController {
     @TpmonInternal()
     private void loadPropertiesFile() {
         String configurationFile = "META-INF/tpmon.properties";
-        if (debug) {
+        if (System.getProperty("tpmon.configuration") != null) { // we use the present virtual machine parameter value
+            configurationFile = System.getProperty("tpmon.configuration");
+            log.info("Tpmon: Loading properties JVM-specified path" + configurationFile);
+            System.out.println("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
+        } else {
             log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
+            log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
+            System.out.println("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
+            System.out.println("You can specify an alternative properties file using the property 'tpmon.configuration'");            
         }
-        InputStream stream = Dbconnector.class.getClassLoader().getResourceAsStream(configurationFile);
+        InputStream stream = TpmonController.class.getClassLoader().getResourceAsStream(configurationFile);
         Properties prop = new Properties();
-
-
 
         try {
             prop.load(stream);
         } catch (Exception ex) {
+            System.out.println("ERRRRRRRRRRRROHR");
+            log.error("Error loading tpmon.configuration", ex);
             formatAndOutputError("Could not open tpmon library : " + configurationFile +
                     ". Using default value " + dbConnectionAddress + ". Message :" + ex.getMessage(), true, false);
         }
@@ -683,7 +688,7 @@ public class TpmonController {
             errorReport.append(getDateString());
         }
         errorReport.append(" :" + errorMessage);
-        log.info("" + errorReport);
+        log.error("" + errorReport);
     }
 
     @TpmonInternal()
