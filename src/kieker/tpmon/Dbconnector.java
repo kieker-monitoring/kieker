@@ -80,7 +80,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
      */
     public boolean init() {
         if (this.isDebug()) {
-            System.out.println("Tpmon dbconnector init");
+            log.debug("Tpmon dbconnector init");
         }
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -136,7 +136,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             psInsertMonitoringData.setLong(9, executionStackSize);
             psInsertMonitoringData.execute();
         } catch (SQLException ex) {
-            System.out.println("Tpmon Error: " + System.currentTimeMillis() + " insertMonitoringData() failed: SQLException: " + ex.getMessage());
+            log.error("Tpmon Error: " + System.currentTimeMillis() + " insertMonitoringData() failed: SQLException: " + ex.getMessage());
             return false;
         } finally {
             try {

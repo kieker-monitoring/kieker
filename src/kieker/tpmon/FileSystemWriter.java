@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * kieker.tpmon.FileSystemWriter
  * 
@@ -56,6 +59,7 @@ import java.io.PrintWriter;
  * 2006/12/20: Initial Prototype
  */
 public class FileSystemWriter extends AbstractMonitoringDataWriter{
+    private static final Log log = LogFactory.getLog(FileSystemWriter.class);
     // configuration parameters
     private final int maxEntriesInFile = 22000;
     // internal variables
@@ -94,7 +98,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter{
                 pos = new PrintWriter(dos);
                 pos.flush();
             } catch (FileNotFoundException ex) {
-                System.out.println("Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
+                log.error("Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
                 ex.printStackTrace();
             }
         }

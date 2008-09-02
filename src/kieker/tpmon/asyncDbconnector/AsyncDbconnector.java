@@ -47,7 +47,6 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
-    private boolean init = false;
     private BlockingQueue blockingQueue;
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
@@ -109,7 +108,6 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                 //TpmonController.getInstance().registerWorker(dbw);
             }
             log.info("Tpmon (" + numberOfConnections + " threads) connected to database");
-            init = true;
 
 
             if (this.setInitialExperimentIdBasedOnLastId) {
@@ -119,13 +117,13 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                 if (res.next()) {
                     this.experimentId = res.getInt(1) + 1;
                 }
-                System.out.println(" set initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
+                log.info(" set initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
             }
 
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            log.error("SQLException: " + ex.getMessage());
+            log.error("SQLState: " + ex.getSQLState());
+            log.error("VendorError: " + ex.getErrorCode());
             return false;
         }
         return true;
@@ -147,18 +145,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
        @TpmonInternal()
     public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
         if (this.isDebug()) {
-            System.out.println("Async.insertMonitoringDataNow");
-        }
-
-        if (init == false) {
-            init();
-
-
-            if (init == false) {
-                System.out.println("Error: Theres something wrong with the database connection of tpmon!" +
-                        "- Database Connection Could Not Be Initiated");
-                return false;
-            }
+            log.debug("Async.insertMonitoringDataNow");
         }
 
         try {

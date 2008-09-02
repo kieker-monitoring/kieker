@@ -75,7 +75,7 @@ public class DbWriter  implements Runnable, Worker{
             }
             log.info("Dbwriter finished");
         } catch (InterruptedException ex) {
-            System.out.println("ERROR: "+ex.getMessage());
+            log.error("ERROR: "+ex.getMessage());
         }
     }
     
