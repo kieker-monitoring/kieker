@@ -1,5 +1,16 @@
 /* 
+ * Servlet filter used to register session ids within 
+ * the TpmonController.
+ * It can be integrated into the web.xml as follows:
  * 
+ * <filter>
+ * <filter-name>sessionRegistrationFilter</filter-name>
+ * <filter-class>kieker.tpmon.filters.SessionRegistrationFilter</filter-class>
+ * </filter>
+ * <filter-mapping>
+ * <filter-name>sessionRegistrationFilter</filter-name>
+ * <url-pattern>/*</url-pattern>
+ * </filter-mapping>
  */
 package kieker.tpmon.filters;
 
