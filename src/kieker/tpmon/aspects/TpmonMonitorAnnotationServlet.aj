@@ -39,11 +39,18 @@ public aspect TpmonMonitorAnnotationServlet {
                
             if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
 
-            Object toReturn = proceed(request,response);
-	
-            //empty the sessionId
-            sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
-            requestThreadMatcher.remove(threadId);		
+            Object toReturn;
+            try {
+                // executing the intercepted method call
+                toReturn = proceed(request,response);
+            } catch (Exception e) {
+                throw e; // exceptions are forwarded
+            }
+            finally {	
+                //empty the sessionId
+                sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
+                requestThreadMatcher.remove(threadId);		
+            }
             return toReturn;
 	}
 
@@ -91,32 +98,39 @@ public aspect TpmonMonitorAnnotationServlet {
 		
 		long startTime = ctrlInst.getTime();
 	
-	/* execution of the instrumented method: */
-        Object toreturn=proceed();
+                /* execution of the instrumented method: */
+                Object toReturn;
+                try {
+                    // executing the intercepted method call
+                    toReturn = proceed();
+                } catch (Exception e) {
+                    throw e; // exceptions are forwarded
+                }
+                finally {	
+                    long endTime = ctrlInst.getTime();
 
-                long endTime = ctrlInst.getTime();
-
-                String methodname = thisJoinPoint.getSignature().getName();
-                // e.g. "getBook"
-                // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
-                String paramList = thisJoinPoint.getSignature().toLongString();
-                int paranthIndex = paramList.lastIndexOf('(');
-                paramList = paramList.substring(paranthIndex);
-                // paramList is now e.g.,  "()"
-                String opname = methodname + paramList;
-                // e.g., "getBook()"
-                //System.out.println("opname:"+opname);
-                String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
-                // e.g., kieker.tests.springTest.Book
-                //System.out.println("componentName:"+componentName);
+                    String methodname = thisJoinPoint.getSignature().getName();
+                    // e.g. "getBook"
+                    // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
+                    String paramList = thisJoinPoint.getSignature().toLongString();
+                    int paranthIndex = paramList.lastIndexOf('(');
+                    paramList = paramList.substring(paranthIndex);
+                    // paramList is now e.g.,  "()"
+                    String opname = methodname + paramList;
+                    // e.g., "getBook()"
+                    //System.out.println("opname:"+opname);
+                    String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+                    // e.g., kieker.tests.springTest.Book
+                    //System.out.println("componentName:"+componentName);
 		
-		if (isEntryPoint) {                            
-                   sessionThreadMatcher.remove(threadId);
-                   requestThreadMatcher.remove(threadId);                            
-		}
+                    if (isEntryPoint) {                            
+                        sessionThreadMatcher.remove(threadId);
+                        requestThreadMatcher.remove(threadId);                            
+                    }
 
-       		ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
-                if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
+                    ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
+                    if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
+                }
 		return toreturn;
 	}
 }

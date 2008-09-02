@@ -58,28 +58,34 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
       //  System.out.println("Pre "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
 	
     /* execution of the instrumented method: */
-        Object toreturn=proceed();
-
-      //  System.out.println("Post "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
-       
-    /* after the execution of the instrumented method */					
-	if (isEntryPoint) { // remove it to distinguish the next usage of the threadid            
-            ctrlInst.requestThreadMatcher.remove(threadId);
-            ctrlInst.executionOrderIndexMatcher.remove(currentRequestId);
-            ctrlInst.executionStackSizeMatcher.remove(currentRequestId);
-        } else {
-            ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize); // one less ...
+    Object toReturn;
+        try {
+            // executing the intercepted method call
+            toReturn = proceed();
+        } catch (Exception e) {
+            throw e; // exceptions are forwarded
         }
+        finally {
+            //  System.out.println("Post "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
+            /* after the execution of the instrumented method */					
+            if (isEntryPoint) { // remove it to distinguish the next usage of the threadid            
+                ctrlInst.requestThreadMatcher.remove(threadId);
+                ctrlInst.executionOrderIndexMatcher.remove(currentRequestId);
+                ctrlInst.executionStackSizeMatcher.remove(currentRequestId);
+            } else {
+                ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize); // one less ...
+            }
         
-	// componentName = z.B. com.test.Main
-        String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();				
-        String methodName = thisJoinPoint.getSignature().toLongString();
-        if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
-        long endTime = ctrlInst.getTime();
-        ctrlInst.insertMonitoringDataNow(componentName, methodName, "null", currentRequestId, startTime, endTime, executionOrderIndex, executionStackSize);
-        if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentRequestId+","+startTime);
+            // componentName = z.B. com.test.Main
+            String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();				
+            String methodName = thisJoinPoint.getSignature().toLongString();
+            if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+methodName+" at:"+startTime);        	
+            long endTime = ctrlInst.getTime();
+            ctrlInst.insertMonitoringDataNow(componentName, methodName, "null", currentRequestId, startTime, endTime, executionOrderIndex, executionStackSize);
+            if (ctrlInst.isDebug()) System.out.println(""+componentName+","+currentRequestId+","+startTime);
         
-        // System.out.println("Log "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
+            // System.out.println("Log "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
+        }
 	return toreturn;
     }
 }

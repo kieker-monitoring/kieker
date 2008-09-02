@@ -51,29 +51,36 @@ public aspect TpmonMonitorFullInstrumentation {
 
 		long startTime = ctrlInst.getTime();
 
-        Object toreturn=proceed();
+                Object toReturn;
+                try {
+                     // executing the intercepted method call
+                     toReturn = proceed();
+                } catch (Exception e) {
+                     throw e; // exceptions are forwarded
+                }
+                finally {
+                    long endTime = ctrlInst.getTime();
 
-                long endTime = ctrlInst.getTime();
+                    if (isEntryPoint)
+                        requestThreadMatcher.remove(threadId);
 
-		if (isEntryPoint)
-                    requestThreadMatcher.remove(threadId);
+                    String methodname = thisJoinPoint.getSignature().getName();
+                    // e.g. "getBook"
+                    // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
+                    String paramList = thisJoinPoint.getSignature().toLongString();
+                    int paranthIndex = paramList.lastIndexOf('(');
+                    paramList = paramList.substring(paranthIndex);
+                    // paramList is now e.g.,  "()"
+                    String opname = methodname + paramList;
+                    // e.g., "getBook()"
+                    //System.out.println("opname:"+opname);
+                    String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+                    // e.g., kieker.tests.springTest.Book
+                    //System.out.println("componentName:"+componentName);
 
-                String methodname = thisJoinPoint.getSignature().getName();
-                // e.g. "getBook"
-                // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
-                String paramList = thisJoinPoint.getSignature().toLongString();
-                int paranthIndex = paramList.lastIndexOf('(');
-                paramList = paramList.substring(paranthIndex);
-                // paramList is now e.g.,  "()"
-                String opname = methodname + paramList;
-                // e.g., "getBook()"
-                //System.out.println("opname:"+opname);
-                String componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
-                // e.g., kieker.tests.springTest.Book
-                //System.out.println("componentName:"+componentName);
-
-                ctrlInst.insertMonitoringDataNow(componentName, opname, currentRequestId, startTime, endTime);
-                if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
-		return toreturn;
+                    ctrlInst.insertMonitoringDataNow(componentName, opname, currentRequestId, startTime, endTime);
+                    if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
+                }
+                return toreturn;
 	}
 }
