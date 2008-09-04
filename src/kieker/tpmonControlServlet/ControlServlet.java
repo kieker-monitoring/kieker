@@ -28,6 +28,10 @@ import javax.servlet.http.*;
  * @author Matthias Rohr, Andre van Hoorn
  *
  * History:
+ * 2008/09/04: Displays Tpmon's global insert count
+ * 2008/09/02: Now it shows java.vm.name. Is Client JVM used on your server ? :)
+ *             Additionally, it shows the garbage collectors in use.
+ * 2008/09/01: Added some features to create dummy monitoring events
  * 2008/05/29: Changed vmid to vmname (defaults to hostname) -- 
  *             the tpmon-control-servlet can change the vmname during runtime
  * 2008/01/14: Refactoring for the first release of
@@ -215,6 +219,7 @@ public class ControlServlet extends HttpServlet {
         bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ctrlInst.getVmname() + "\"/>");
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
         bu.append(" Create 12 fake entries into the log (operation kieker.tpmonControlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
+        bu.append(" Tpmon monitoring events since last execution environment restart = "+ctrlInst.getInstance().getNumberOfInserts()+" <br>");
 		bu.append(" java.vm.name = "+System.getProperty("java.vm.name")+" <br>");
 		try {
 		String youngGC  = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();

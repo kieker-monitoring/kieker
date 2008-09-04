@@ -56,7 +56,6 @@ package kieker.tpmon;
  * 2006/12/20: Initial Prototype
  */
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Collections;
 import java.util.Date;
@@ -233,6 +232,17 @@ public class TpmonController {
     public boolean isDebug() {
         return debug;
     }
+
+    /**
+     * Shows how many inserts have been performed since last restart of the execution
+     * environment.
+     * @return
+     */
+    public long getNumberOfInserts() {
+        return numberOfInserts.longValue();
+    }
+
+
 
     @TpmonInternal()
     public boolean isStoreInDatabase() {
