@@ -70,10 +70,10 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
         try {
             InsertData id = new InsertData(experimentId, vmName, opname, sessionid, traceid, tin, tout, executionOrderIndex, executionStackSize);
-            blockingQueue.put(id);
+            blockingQueue.add(id); // tries to add immediately!
         //System.out.println(""+blockingQueue.size());
 
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex.getMessage());
             return false;
         }

@@ -171,10 +171,10 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             }*/
 
             InsertData id = new InsertData(experimentId, vmName, opname, sessionid, traceid, tin, tout, executionOrderIndex, executionStackSize);
-            blockingQueue.put(id);
+            blockingQueue.add(id); // tries to add immediately!
         //System.out.println("Queue is "+blockingQueue.size());
 
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             log.error("" + System.currentTimeMillis() + " insertMonitoringData() failed: SQLException: ", ex);
             return false;
         }
