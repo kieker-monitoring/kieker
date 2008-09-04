@@ -28,7 +28,11 @@ public aspect TpmonMonitorFullInstServlet {
 
 	pointcut toplevelServletCommand(HttpServletRequest request, HttpServletResponse response): servletCommand(request,response) && !cflowbelow(servletCommand(HttpServletRequest,HttpServletResponse));
 
-            Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
+        Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
+             if (!ctrlInst.isMonitoringEnabled()){
+                return proceed(request, response);
+            }
+
             //make the sessionId accessable for all advices in the same thread
 
             String requestId = ""+(new Random()).nextLong();
@@ -72,6 +76,10 @@ public aspect TpmonMonitorFullInstServlet {
 	  *
 	  */
 	Object around(): probeClassMethodAndStrutsEntryPoint() {
+                 if (!ctrlInst.isMonitoringEnabled()){
+                    return proceed();
+                }
+
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {

@@ -11,8 +11,10 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
+import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.InsertData;
 import kieker.tpmon.asyncDbconnector.Worker;
@@ -74,15 +76,21 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
                 }
             }
             log.info("FsWriter finished");
-        } catch (InterruptedException ex) {
-            log.error(ex);
+        } catch (Exception ex) {
+            // e.g. Interrupted Exception or IOException
+            log.error("FS Writer will halt", ex);
+        } finally{
+            this.finished = true;
         }
     }
 
     @TpmonInternal
-    private void consume(Object traceidObject) {
+    private void consume(Object traceidObject) throws Exception {
         //if (TpmonController.debug) System.out.println("FsWriter "+this+" Consuming "+traceidObject);
 //        try {
+        // TODO: We should check whether this is necessary. 
+        // This should only cover an initial action which can be 
+        // moved before the while loop in run()
         if (pos == null || filenameInitialized == false) {
             prepareFile();
         }
@@ -101,14 +109,10 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
      * Determines and sets a new Filename
      */
     @TpmonInternal
-    private void prepareFile() {
+    private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
-                //dos.flush();
-                try {
-                    pos.close();
-                } catch (Exception ex) {
-                }
+                pos.close();
             }
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
@@ -130,22 +134,33 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
                 pos.flush();
             } catch (FileNotFoundException ex) {
                 log.fatal(">Kieker-Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
-                ex.printStackTrace();
+                // TODO: this error should be signalled to the controller
+                // e.g. using a listener (do not add a reference to TpmonController!)
+                // TODO: This is a dirty hack!
+                // What we need is a listener interface!
+                log.error("Will disable monitoring!");
+                TpmonController.getInstance().disableMonitoring();
+                throw ex;
             }
 
         }
     }
 
+    // TODO: Is this method ever called??
+//    @TpmonInternal
+//    public boolean insertMonitoringDataNow(int experimentId, String vmName, String componentname, String methodname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex) {
+//        try {
+//            writeDataNow(experimentId + "," + componentname + methodname + "," + sessionID + "," + requestID + "," + tin + "," + tout + "," + vmName + "," + executionOrderIndex + "," + id.executionStackSize);
+//        } catch (IOException ex) {
+//            log.error("Failed to write data", ex);
+//            return false;
+//        }
+//        return true;
+//    }
     @TpmonInternal
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String componentname, String methodname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex) {
-        writeDataNow(experimentId + "," + componentname + methodname + "," + sessionID + "," + requestID + "," + tin + "," + tout + "," + vmName + "," + executionOrderIndex + "," + id.executionStackSize);
-        return true;
-    }
-
-    @TpmonInternal
-    private void writeDataNow(String data) {        
-        prepareFile();
-        pos.println(data);        
+    private void writeDataNow(String data) throws IOException {
+        prepareFile(); // may throw FileNotFoundException
+        pos.println(data);
         pos.flush();
     }
 

@@ -31,16 +31,20 @@ import org.aspectj.lang.annotation.Pointcut;
  */
 @Aspect
 public class KiekerTpmonMonitoringAspect {
+
     private static final TpmonController ctrlInst = TpmonController.getInstance();
+
     @Pointcut("execution(* *.*(..)) && !execution(* kieker.tpmon.aspects.springAspectJ.KiekerTpmonMonitoringAspect.*(..)) && !execution(* org.aspectj..*(..)) && !execution(* java..*(..)) && !execution(* sun..*(..)) && !execution(* kieker.tpmon..*(..)) && !execution(* org.apache..*(..)) && !execution(* javax..*(..))")
     public void monitoredMethod() {
     }
     // this hashmap stores the unique thread identifiers (for all monitoring points)    
-    public static Map<Long, String> uniqueThreadIds = new ConcurrentHashMap<Long, String>();    
-    
-    @Around("monitoredMethod()")
+    public static Map<Long, String> uniqueThreadIds = new ConcurrentHashMap<Long, String>();
 
-    public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {        
+    @Around("monitoredMethod()")
+    public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+        if (!ctrlInst.isMonitoringEnabled()) {
+            return thisJoinPoint.proceed();
+        }
 
         String methodname = thisJoinPoint.getSignature().getName();
         // e.g. "getBook"

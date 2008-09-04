@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.apache.commons.logging.Log;
@@ -75,13 +76,10 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter{
     /**
      * Determines and sets a new Filename
      */
-    private void prepareFile() {
+    private void prepareFile() throws FileNotFoundException{
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
-                try {
                     pos.close();
-                } catch (Exception ex) {
-                }
             }
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
@@ -98,19 +96,24 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter{
                 pos = new PrintWriter(dos);
                 pos.flush();
             } catch (FileNotFoundException ex) {
-                log.error("Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
-                ex.printStackTrace();
+                log.error("Tpmon: Error creating the file: " + filename + " \n ", ex);
+                throw ex;
             }
         }
     }
 
     public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        this.writeDataNow(experimentId + ";" + opname + ";" + sessionID + ";" + requestID + ";" + tin + ";" + tout + ";" + vmName +";"+executionOrderIndex+";"+executionStackSize);
+        try{
+            this.writeDataNow(experimentId + ";" + opname + ";" + sessionID + ";" + requestID + ";" + tin + ";" + tout + ";" + vmName +";"+executionOrderIndex+";"+executionStackSize);   
+        }catch (IOException ex){
+            log.error("Failed to write data", ex);            
+            return false;
+        }
         return true;
     }
 
-    private synchronized void writeDataNow(String data) {
-        prepareFile();
+    private synchronized void writeDataNow(String data) throws IOException {
+        prepareFile(); // may throw FileNotFoundException
         pos.println(data);
         pos.flush();
     }

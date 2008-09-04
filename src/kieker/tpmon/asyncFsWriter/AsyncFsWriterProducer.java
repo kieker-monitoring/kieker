@@ -77,7 +77,6 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex.getMessage());
             return false;
         }
-
         return true;
     }
     

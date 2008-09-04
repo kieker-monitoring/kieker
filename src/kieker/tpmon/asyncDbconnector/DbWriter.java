@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,7 +66,7 @@ public class DbWriter  implements Runnable, Worker{
             while(!finished) { 
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS); 
                 if (data != null) {
-                    consume(data); 
+                    consume(data); // throws SQLException
                 } else {
                     // timeout ... 
                     if (shutdown && writeQueue.isEmpty()) {
@@ -74,18 +75,23 @@ public class DbWriter  implements Runnable, Worker{
                 }
             }
             log.info("Dbwriter finished");
-        } catch (InterruptedException ex) {
-            log.error("ERROR: "+ex.getMessage());
+        } catch (Exception ex) {
+            // e.g. Interrupted Exception or SQLException
+            log.error("DB Writer will halt "+ex.getMessage());
+            // TODO: This is a dirty hack!
+            // What we need is a listener interface!
+            log.error("Will disable monitoring!");
+            TpmonController.getInstance().disableMonitoring();
+        } finally{
+            this.finished = true;
         }
     }
-    
-    
-    
+       
     /**
      * writes next item into database
      */
        @TpmonInternal()
-    private void  consume(Object traceidObject) {
+    private void  consume(Object traceidObject) throws SQLException{
         //if (TpmonController.debug) System.out.println("DbWriter "+this+" Consuming "+traceidObject);
         try {
             if (statementChanged || psInsertMonitoringData == null) {                
@@ -107,7 +113,7 @@ public class DbWriter  implements Runnable, Worker{
             
         } catch (SQLException ex) {
             log.error("Tpmon DbWriter Error during database statement preparation: ", ex);
-            ex.printStackTrace();
+            throw ex;
         }
     }
     

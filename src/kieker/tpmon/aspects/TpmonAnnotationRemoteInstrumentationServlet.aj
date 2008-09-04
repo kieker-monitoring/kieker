@@ -20,6 +20,10 @@ public aspect TpmonAnnotationRemoteInstrumentationServlet  {
     pointcut toplevelServletCommand(HttpServletRequest request, HttpServletResponse response): servletCommand(request,response) && !cflowbelow(servletCommand(HttpServletRequest,HttpServletResponse));
 
     Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
+         if (!ctrlInst.isMonitoringEnabled()){
+            return proceed(request, response);
+        }
+
             //make the sessionId accessable for all advices in the same thread                          
             String sessionId = request.getSession(true).getId();
             Long threadId = Thread.currentThread().getId();            
@@ -43,6 +47,9 @@ public aspect TpmonAnnotationRemoteInstrumentationServlet  {
      * Set debug = on for verbose debugging messages send to the command line.	 
      */
     Object around(): probeClassMethod() {
+         if (!ctrlInst.isMonitoringEnabled()){
+            return proceed();
+        }
 		           
     /* prior to the execution of the instrumented method */
         

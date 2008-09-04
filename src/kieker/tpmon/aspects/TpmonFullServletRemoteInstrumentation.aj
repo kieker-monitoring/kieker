@@ -20,7 +20,9 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 	pointcut toplevelServletCommand(HttpServletRequest request, HttpServletResponse response): servletCommand(request,response) && !cflowbelow(servletCommand(HttpServletRequest,HttpServletResponse));
 
 	Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {       
-
+             if (!ctrlInst.isMonitoringEnabled()){
+                return proceed(request, response);
+            }
 
             String requestId = ""+(new Random()).nextLong();
             String sessionId = request.getSession(true).getId();
@@ -54,7 +56,9 @@ public aspect TpmonFullServletRemoteInstrumentation  {
 	  * 
 	  */
 	Object around(): probeClassMethod() {
-		           
+                 if (!ctrlInst.isMonitoringEnabled()){
+                    return proceed();
+                }
 
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");

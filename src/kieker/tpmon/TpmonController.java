@@ -269,7 +269,8 @@ public class TpmonController {
      */
     @TpmonInternal()
     public void enableMonitoring() {
-        monitoringEnabled = true;
+        log.info("Enabling monitoring");
+        this.monitoringEnabled = true;
     }
 
     /**
@@ -277,7 +278,8 @@ public class TpmonController {
      */
     @TpmonInternal()
     public void disableMonitoring() {
-        monitoringEnabled = false;
+        log.info("Disabling monitoring");
+        this.monitoringEnabled = false;
     }
 
     @TpmonInternal()
@@ -311,7 +313,7 @@ public class TpmonController {
             }
         }
 
-        if (!monitoringEnabled) {
+        if (!this.monitoringEnabled) {
             return false;
         }
         //log.info("ComponentName "+componentname);
@@ -362,7 +364,14 @@ public class TpmonController {
         //TODO: Encapsulation into an interface of all those writers and polymorphy might make the two evaluations of the boolean unneccesary
         numberOfInserts.incrementAndGet();
         String opname = componentname + "." + methodSig;
-        return this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId, this.vmname, opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
+        if (!this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId,
+                this.vmname, opname, sessionID, requestID, tin, tout,
+                executionOrderIndex, executionStackSize)) {
+            log.fatal("Error writing the monitoring data. Will disable monitoring!");
+            this.monitoringEnabled = false;
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -776,7 +785,9 @@ public class TpmonController {
      */
     @TpmonInternal()
     public void registerSessionIdentifier(String sessionid, long threadid) {
-        sessionThreadMatcher.put(threadid, sessionid);
+        if (this.monitoringEnabled) {
+            sessionThreadMatcher.put(threadid, sessionid);
+        }
     }
 
     @TpmonInternal()

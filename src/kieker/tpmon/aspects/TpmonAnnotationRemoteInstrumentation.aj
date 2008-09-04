@@ -23,6 +23,9 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
      * Set debug = on for verbose debugging messages send to the command line.	 
      */
     Object around(): probeClassMethod() {
+        if (!ctrlInst.isMonitoringEnabled()){
+            return proceed();
+        }
 		           
     /* prior to the execution of the instrumented method */
 

@@ -39,6 +39,7 @@ import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
 
 
+import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -124,18 +125,23 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             log.error("SQLException: " + ex.getMessage());
             log.error("SQLState: " + ex.getSQLState());
             log.error("VendorError: " + ex.getErrorCode());
+          // TODO: This is a dirty hack!
+            // What we need is a listener interface!
+            log.error("Will disable monitoring!");
+            TpmonController.getInstance().disableMonitoring();
             return false;
         }
         return true;
     }
 
-    /**
-     * Use this method to insert data into the database.
-     */
-      @TpmonInternal()
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
-    }
+//    /**
+//     * TODO: Is this method ever used??
+//     * Use this method to insert data into the database.
+//     */
+//      @TpmonInternal()
+//    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+//        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
+//    }
 
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
@@ -151,7 +157,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         try {
             // INSERT INTO `newSchema` ( `experimentid` , `operation` , `traceid` , `tin` , `tout` ) VALUES ( '0', '1231', '1231', '12312', '1221233' );
             /*
-             * ANDRE: I disabled this for the moment since we don't seem to use the db anyhow
+             * BY ANDRE: I disabled this for the moment since we don't seem to use the db anyhow
              * 
             if (experimentId != TpmonController.getExperimentId() || !vmname.equals(TpmonController.getVmname())) { // ExperimentId and vmname may be changed
                 experimentId = TpmonController.getExperimentId();

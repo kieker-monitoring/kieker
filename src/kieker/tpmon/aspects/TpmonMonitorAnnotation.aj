@@ -31,6 +31,10 @@ public aspect TpmonMonitorAnnotation {
 	  *	  
 	  */
 	Object around(): probeClassMethod()  {
+                 if (!ctrlInst.isMonitoringEnabled()){
+                    return proceed();
+                }
+
 		/*
 		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
 		if (isJoinpointAtStaticMethod) {

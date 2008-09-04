@@ -21,6 +21,9 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
 	pointcut toplevelServletCommand(HttpServletRequest request, HttpServletResponse response): servletCommand(request,response) && !cflowbelow(servletCommand(HttpServletRequest,HttpServletResponse));
 
 	Object around(HttpServletRequest request, HttpServletResponse response): toplevelServletCommand(request,response) {
+         if (!ctrlInst.isMonitoringEnabled()){
+            return proceed(request, response);
+        }
 
 	//make the sessionId accessable for all advices in the same thread
 	synchronized(this){
@@ -64,6 +67,10 @@ public aspect TpmonRandomPartialInstumentationServletRemote  {
 	  * 
 	  */
 	Object around(): probeClassMethod() {
+                 if (!ctrlInst.isMonitoringEnabled()){
+                    return proceed();
+                }
+
                 if(!TpmonRandomInstrumentationController.isMonitored(thisJoinPoint.getSignature().toLongString())) {
                     return proceed();
                 }
