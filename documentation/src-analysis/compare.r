@@ -18,7 +18,7 @@ accesslog.read = function (fn) {
 	accesslog_raw
 }
 
-data.noinstr=accesslog.read("acceslog-noInstr.csv")
+data.noinstr=accesslog.read("acceslog-noInstr.csv-pathids")
 #data.instr081=accesslog.read("acceslog-tpmon081.csv")
 #data.instr090=accesslog.read("acceslog-tpmon090.csv")
 
@@ -27,7 +27,9 @@ data.noinstr=accesslog.read("acceslog-noInstr.csv")
 ## hopefully R is smart and sorts alphabetically
 
 ## TODO: divide into two plots
-data.noinstr.1 = ?select
+data.noinstr.1 = subset(data.noinstr, pathid<=6)
+data.noinstr.2 = subset(data.noinstr, pathid>6)
+rm(data.noinstr)
 
 ## Normalize scales
 
@@ -38,9 +40,15 @@ accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
 	detach(accesslog)
 }
 
+par(mfrow=c(2,1))
+
 xscale=1:18 # 1:(n.requesttypes*n.accesslogs)
 plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n") #xaxt="n"
-accesslog.boxplot(data.noinstr, col="gray", at=seq(from=1, length.out=12, by=3), xaxt="n")
-accesslog.boxplot(data.noinstr, col="blue", at=seq(from=2, length.out=12, by=3))
-accesslog.boxplot(data.noinstr, col="red", at=seq(from=3, length.out=12, by=3), xaxt="n")
-# 
+accesslog.boxplot(data.noinstr.1, col="gray", at=seq(from=1, length.out=6, by=3), xaxt="n")
+accesslog.boxplot(data.noinstr.1, col="blue", at=seq(from=2, length.out=6, by=3))
+accesslog.boxplot(data.noinstr.1, col="red", at=seq(from=3, length.out=6, by=3), xaxt="n")
+
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n") #xaxt="n"
+accesslog.boxplot(data.noinstr.2, col="gray", at=seq(from=1, length.out=6, by=3), xaxt="n")
+accesslog.boxplot(data.noinstr.2, col="blue", at=seq(from=2, length.out=6, by=3))
+accesslog.boxplot(data.noinstr.2, col="red", at=seq(from=3, length.out=6, by=3), xaxt="n")
