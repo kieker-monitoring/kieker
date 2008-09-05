@@ -451,32 +451,24 @@ public class TpmonController {
         return System.nanoTime() + offsetA;
     }
 
-    /**
-     * Returns a unique string based on the current system
-     * time (in milli seconds), threadId, and a counter. 
-     * The string follows the pattern "currentTime-threadId-counter". 
-     * The counter indicates the nummer of former requests within the same milli
-     * second (it is usually 0). 
-     * 
-     * The string will be only unique for this java virtual
-     * machine instance! 
+    private AtomicLong lastThreadId = new AtomicLong(0);
+
+    /**     
+     * Returns each time a String containing a long value
+     * that is increamented each time the method is used.
      *
-     * The method is thread-save.
+     * The first trace after application start will get a
+     * threadid of 1.
+     *
+     * Note, in the future (version 0.95), the return type
+     * will be changed to long.
+     *
+     * (The method is thread save)
      *
      * */
     @TpmonInternal()
-    public synchronized String getUniqueIdentifierForThread(long threadId) {
-        long currentTime = System.currentTimeMillis();
-        String uniqueIdentifier;
-        if (currentTime != lastUniqueIdTime) {
-            uniqueIdentifier = new String(currentTime + "-" + threadId + "-0");
-            secondaryCounter = 0;
-            lastUniqueIdTime = currentTime;
-        } else {
-            secondaryCounter++;
-            uniqueIdentifier = new String(currentTime + "-" + threadId + "-" + secondaryCounter);
-        }
-        return uniqueIdentifier;
+    public String getUniqueIdentifierForThread(long threadId) {
+        return Long.toString(lastThreadId.incrementAndGet());
     }
 
     @TpmonInternal()
