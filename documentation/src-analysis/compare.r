@@ -2,6 +2,21 @@
 n.requesttypes=12
 n.accesslogs=3
 
+##
+fn.noinstr="20080828-174456-tpmon081-accesslog-main_filtered.csv-pathids"
+fn.instr081="20080902-225445-tpmon090-accesslog-main_filtered.csv-pathids"
+fn.instr090="20080903-061257-tpmon090-accesslog-main_filtered.csv-pathids"
+
+##
+label.noinstr="No instrumentation"
+label.instr081="Tpmon v.0.81"
+label.instr090="Tpmon v.0.90"
+
+col.noinstr="gray"
+col.instr081="blue"
+col.instr090="red"
+
+
 ## read data files
 accesslog.read = function (fn) {
 	accesslog_raw <- read.table (file=fn, header=TRUE, sep=' ', quote='"\'', dec='.',  na.strings = "NA", nrows = -1, skip =  0, row.names = NULL, fill = FALSE, strip.white = FALSE, blank.lines.skip = TRUE, comment.char="#",stringsAsFactors=FALSE)
@@ -18,9 +33,9 @@ accesslog.read = function (fn) {
 	accesslog_raw
 }
 
-data.noinstr=accesslog.read("acceslog-noInstr.csv-pathids")
-#data.instr081=accesslog.read("acceslog-tpmon081.csv")
-#data.instr090=accesslog.read("acceslog-tpmon090.csv")
+data.noinstr=accesslog.read(fn.noinstr)
+data.instr081=accesslog.read(fn.instr081)
+data.instr090=accesslog.read(fn.instr090)
 
 ## TODO: make sure, that request types have the same order
 ## maybe the easiest is to do this with a bash script using sed
@@ -30,6 +45,14 @@ data.noinstr=accesslog.read("acceslog-noInstr.csv-pathids")
 data.noinstr.1 = subset(data.noinstr, pathid<=6)
 data.noinstr.2 = subset(data.noinstr, pathid>6)
 rm(data.noinstr)
+data.instr081.1 = subset(data.instr081, pathid<=6)
+data.instr081.2 = subset(data.instr081, pathid>6)
+rm(data.instr081)
+data.instr090.1 = subset(data.instr090, pathid<=6)
+data.instr090.2 = subset(data.instr090, pathid>6)
+rm(data.instr090)
+
+
 
 ## Normalize scales
 
@@ -41,14 +64,20 @@ accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
 }
 
 par(mfrow=c(2,1))
+title="Response time comparison between different Tpmon version"
 
 xscale=1:18 # 1:(n.requesttypes*n.accesslogs)
-plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n") #xaxt="n"
-accesslog.boxplot(data.noinstr.1, col="gray", at=seq(from=1, length.out=6, by=3), xaxt="n")
-accesslog.boxplot(data.noinstr.1, col="blue", at=seq(from=2, length.out=6, by=3))
-accesslog.boxplot(data.noinstr.1, col="red", at=seq(from=3, length.out=6, by=3), xaxt="n")
+## TODO: scale
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,100), xaxt="n", main=title) #xaxt="n"
+accesslog.boxplot(data.noinstr.1, col=col.noinstr, at=seq(from=1, length.out=6, by=3), xaxt="n")
+accesslog.boxplot(data.instr081.1, col=col.instr081, at=seq(from=2, length.out=6, by=3))
+accesslog.boxplot(data.instr090.1, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
+mtext("Request type", side=1, line=2)
+legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090))
 
-plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n") #xaxt="n"
-accesslog.boxplot(data.noinstr.2, col="gray", at=seq(from=1, length.out=6, by=3), xaxt="n")
-accesslog.boxplot(data.noinstr.2, col="blue", at=seq(from=2, length.out=6, by=3))
-accesslog.boxplot(data.noinstr.2, col="red", at=seq(from=3, length.out=6, by=3), xaxt="n")
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,100), xaxt="n", main=title) #xaxt="n"
+accesslog.boxplot(data.noinstr.2, col=col.noinstr, at=seq(from=1, length.out=6, by=3), xaxt="n")
+accesslog.boxplot(data.instr081.2, col=col.instr081, at=seq(from=2, length.out=6, by=3))
+accesslog.boxplot(data.instr090.2, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
+mtext("Request type", side=1, line=2)
+legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090))
