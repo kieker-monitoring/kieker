@@ -33,7 +33,7 @@ accesslog.read = function (fn) {
 	accesslog_raw["exp_min"]=accesslog_raw[["time_min"]]-startMin
 	accesslog_raw
 }
-?ave
+
 data.noinstr=accesslog.read(fn.noinstr)
 data.instr081=accesslog.read(fn.instr081)
 data.instr090=accesslog.read(fn.instr090)
@@ -66,20 +66,25 @@ accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
 }
 
 par(mfrow=c(2,1)) # xpd=T, mar=par()$mar+c(0,0,0,4)
-title="Response time comparison between different Tpmon version"
+title="Response time comparison between different Tpmon versions"
 
 xscale=1:18 # 1:(n.requesttypes*n.accesslogs)
 ## TODO: scale
-plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n", main=title) #xaxt="n"
+pdf("results.pdf", width=12, height=6, paper="special")
+
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,17), xaxt="n", main=title) #xaxt="n"
 accesslog.boxplot(data.noinstr.1, col=col.noinstr, at=seq(from=1, length.out=6, by=3), xaxt="n")
 accesslog.boxplot(data.instr081.1, col=col.instr081, at=seq(from=2, length.out=6, by=3))
 accesslog.boxplot(data.instr090.1, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
 mtext("Request type", side=1, line=2)
 legend("top", legend=c(label.noinstr,label.instr081,label.instr090, "mean"), pch=c(22,22,22,18), pt.bg=c(col.noinstr,col.instr081,col.instr090,"black"), pt.cex=2, ncol=4, bg="white")
 
-plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n", main=title) #xaxt="n"
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,15), xaxt="n", main=title) #xaxt="n"
 accesslog.boxplot(data.noinstr.2, col=col.noinstr, at=seq(from=1, length.out=6, by=3), xaxt="n")
 accesslog.boxplot(data.instr081.2, col=col.instr081, at=seq(from=2, length.out=6, by=3))
 accesslog.boxplot(data.instr090.2, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
 mtext("Request type", side=1, line=2)
 legend("top", legend=c(label.noinstr,label.instr081,label.instr090, "mean"), pch=c(22,22,22,18), pt.bg=c(col.noinstr,col.instr081,col.instr090,"black"), pt.cex=2, ncol=4, bg="white")
+
+dev.off()
+
