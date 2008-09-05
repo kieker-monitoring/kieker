@@ -1,0 +1,7 @@
+
+For 0.95:
+- Adapt Aspects to @-Aspect Style (improved maintainability)
+- Change type of threadid to  String
+
+For 0.975:
+- Continious monitoring via JMS
