@@ -3,9 +3,10 @@ n.requesttypes=12
 n.accesslogs=3
 
 ##
-fn.noinstr="20080828-174456-tpmon081-accesslog-main_filtered.csv-pathids"
-fn.instr081="20080902-225445-tpmon090-accesslog-main_filtered.csv-pathids"
+fn.noinstr="20080904-183447-noinstr-accesslog-main_filtered.csv-pathids"
+fn.instr081="20080828-174456-tpmon081-accesslog-main_filtered.csv-pathids"
 fn.instr090="20080903-061257-tpmon090-accesslog-main_filtered.csv-pathids"
+# 20080902-225445-tpmon090-accesslog-main_filtered.csv-pathids
 
 ##
 label.noinstr="No instrumentation"
@@ -32,7 +33,7 @@ accesslog.read = function (fn) {
 	accesslog_raw["exp_min"]=accesslog_raw[["time_min"]]-startMin
 	accesslog_raw
 }
-
+?ave
 data.noinstr=accesslog.read(fn.noinstr)
 data.instr081=accesslog.read(fn.instr081)
 data.instr090=accesslog.read(fn.instr090)
@@ -52,14 +53,14 @@ data.instr090.1 = subset(data.instr090, pathid<=6)
 data.instr090.2 = subset(data.instr090, pathid>6)
 rm(data.instr090)
 
-
-
 ## Normalize scales
 
 ## box plots
 accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
 	attach(accesslog)
 	bp=boxplot(duration_ms~path, at=at, add=TRUE, col=col, xaxt=xaxt)
+	means=aggregate.data.frame(duration_ms, list(path=pathid), mean)[["x"]]
+        points(at, means,pch=18,cex=2)
 	detach(accesslog)
 }
 
@@ -73,11 +74,11 @@ accesslog.boxplot(data.noinstr.1, col=col.noinstr, at=seq(from=1, length.out=6, 
 accesslog.boxplot(data.instr081.1, col=col.instr081, at=seq(from=2, length.out=6, by=3))
 accesslog.boxplot(data.instr090.1, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
 mtext("Request type", side=1, line=2)
-legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090), ncol=3, bg="white")
+legend("top", legend=c(label.noinstr,label.instr081,label.instr090, "mean"), pch=c(22,22,22,18), pt.bg=c(col.noinstr,col.instr081,col.instr090,"black"), pt.cex=2, ncol=4, bg="white")
 
 plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n", main=title) #xaxt="n"
 accesslog.boxplot(data.noinstr.2, col=col.noinstr, at=seq(from=1, length.out=6, by=3), xaxt="n")
 accesslog.boxplot(data.instr081.2, col=col.instr081, at=seq(from=2, length.out=6, by=3))
 accesslog.boxplot(data.instr090.2, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
 mtext("Request type", side=1, line=2)
-legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090), ncol=3, bg="white")
+legend("top", legend=c(label.noinstr,label.instr081,label.instr090, "mean"), pch=c(22,22,22,18), pt.bg=c(col.noinstr,col.instr081,col.instr090,"black"), pt.cex=2, ncol=4, bg="white")
