@@ -40,6 +40,8 @@ import javax.servlet.http.*;
  */
 public class ControlServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 689701318L;
+
     protected void dumpError(PrintWriter out, String msg) {
         out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
     }
@@ -219,7 +221,7 @@ public class ControlServlet extends HttpServlet {
         bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ctrlInst.getVmname() + "\"/>");
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
         bu.append(" Create 12 fake entries into the log (operation kieker.tpmonControlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
-        bu.append(" Tpmon monitoring events since last execution environment restart = "+ctrlInst.getInstance().getNumberOfInserts()+" <br>");
+        bu.append(" Tpmon monitoring events since last execution environment restart = "+ctrlInst.getNumberOfInserts()+" <br>");
 		bu.append(" java.vm.name = "+System.getProperty("java.vm.name")+" <br>");
 		try {
 		String youngGC  = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();

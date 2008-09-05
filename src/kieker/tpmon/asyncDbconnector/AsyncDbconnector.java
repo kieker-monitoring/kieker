@@ -48,7 +48,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
-    private BlockingQueue blockingQueue;
+    private BlockingQueue<InsertData> blockingQueue;
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
     private boolean setInitialExperimentIdBasedOnLastId = false;
@@ -94,7 +94,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
             int numberOfConnections = 4;
 
-            blockingQueue = new ArrayBlockingQueue<String>(8000);
+            blockingQueue = new ArrayBlockingQueue<InsertData>(8000);
 
 //                DbWriter dbw = new DbWriter(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  

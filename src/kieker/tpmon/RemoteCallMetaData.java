@@ -14,6 +14,9 @@ import kieker.tpmon.annotations.TpmonInternal;
  * @author matthias
  */
 public class RemoteCallMetaData implements Serializable{
+
+    private static final long serialVersionUID = 512771634L;    // random number
+
     private int ess;
     private int eoi;
     private String traceid;
