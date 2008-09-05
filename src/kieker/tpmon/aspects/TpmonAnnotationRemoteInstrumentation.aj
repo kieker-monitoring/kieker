@@ -43,14 +43,14 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
 	} else {            
             Integer executionOrderIndexObject = ctrlInst.executionOrderIndexMatcher.get(currentRequestId);
             if (executionOrderIndexObject == null) 
-                throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionOrderIndexMatcher not synced");
+                System.out.println("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionOrderIndexMatcher not synced");
             executionOrderIndex = executionOrderIndexObject.intValue();
             executionOrderIndex++;
             ctrlInst.executionOrderIndexMatcher.put(currentRequestId,executionOrderIndex);
 
             Integer executionStackSizeObject = ctrlInst.executionStackSizeMatcher.get(currentRequestId);
             if (executionStackSizeObject == null) 
-                throw new RuntimeException("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionStackSizeMatcher not synced");
+                System.out.println("TpmonAnnotationRemoteInstrumentation.aj Critical Error: executionStackSizeMatcher not synced");
             executionStackSize = executionStackSizeObject.intValue();
             ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize + 1);
         }
@@ -63,7 +63,7 @@ public aspect TpmonAnnotationRemoteInstrumentation  {
 Object toreturn=proceed();
     if (ctrlInst.isDebug()) System.out.println("Post "+thisJoinPoint.getSignature().toShortString()+" eoi:"+executionOrderIndex+" ess:"+executionStackSize);
 
-         long endTime = ctrlInst.getTime();
+        long endTime = ctrlInst.getTime();
 
         /* after the execution of the instrumented method */
 	if (isEntryPoint) { // remove it to distinguish the next usage of the threadid            
@@ -72,9 +72,7 @@ Object toreturn=proceed();
             ctrlInst.executionStackSizeMatcher.remove(currentRequestId);
         } else {
             ctrlInst.executionStackSizeMatcher.put(currentRequestId,executionStackSize); // one less ...
-
         }
-
 
         String methodname = thisJoinPoint.getSignature().getName();
         // e.g. "getBook"

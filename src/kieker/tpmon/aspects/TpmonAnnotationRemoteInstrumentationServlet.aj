@@ -81,9 +81,7 @@ public aspect TpmonAnnotationRemoteInstrumentationServlet  {
 
         String currentSessionId = ctrlInst.sessionThreadMatcher.get(threadId);
         if (currentSessionId == null) { /* then its an entry point since the threadId is not registered */
-            currentSessionId = "unknown";
-            ctrlInst.sessionThreadMatcher.put(threadId,currentSessionId);
-            isEntryPoint = true;
+            currentSessionId = "unknwn"; // do not put this in sessionThreadMatcher
         }
 			
         
