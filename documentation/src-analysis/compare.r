@@ -3,7 +3,7 @@ n.requesttypes=12
 n.accesslogs=3
 
 ##
-fn.noinstr="20080904-183447-noinstr-accesslog-main_filtered.csv-pathids"
+fn.noinstr="20080905-132521-noinstr-accesslog-main_filtered.csv-pathids"
 fn.instr081="20080828-174456-tpmon081-accesslog-main_filtered.csv-pathids"
 fn.instr090="20080903-061257-tpmon090-accesslog-main_filtered.csv-pathids"
 # 20080902-225445-tpmon090-accesslog-main_filtered.csv-pathids
@@ -54,6 +54,7 @@ data.instr090.2 = subset(data.instr090, pathid>6)
 rm(data.instr090)
 
 ## Normalize scales
+
 
 ## box plots
 accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
