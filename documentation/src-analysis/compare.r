@@ -63,21 +63,21 @@ accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
 	detach(accesslog)
 }
 
-par(mfrow=c(2,1))
+par(mfrow=c(2,1)) # xpd=T, mar=par()$mar+c(0,0,0,4)
 title="Response time comparison between different Tpmon version"
 
 xscale=1:18 # 1:(n.requesttypes*n.accesslogs)
 ## TODO: scale
-plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,100), xaxt="n", main=title) #xaxt="n"
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n", main=title) #xaxt="n"
 accesslog.boxplot(data.noinstr.1, col=col.noinstr, at=seq(from=1, length.out=6, by=3), xaxt="n")
 accesslog.boxplot(data.instr081.1, col=col.instr081, at=seq(from=2, length.out=6, by=3))
 accesslog.boxplot(data.instr090.1, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
 mtext("Request type", side=1, line=2)
-legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090))
+legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090), ncol=3, bg="white")
 
-plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,100), xaxt="n", main=title) #xaxt="n"
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,50), xaxt="n", main=title) #xaxt="n"
 accesslog.boxplot(data.noinstr.2, col=col.noinstr, at=seq(from=1, length.out=6, by=3), xaxt="n")
 accesslog.boxplot(data.instr081.2, col=col.instr081, at=seq(from=2, length.out=6, by=3))
 accesslog.boxplot(data.instr090.2, col=col.instr090, at=seq(from=3, length.out=6, by=3), xaxt="n")
 mtext("Request type", side=1, line=2)
-legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090))
+legend("top", legend=c(label.noinstr,label.instr081,label.instr090), fill=c(col.noinstr,col.instr081,col.instr090), ncol=3, bg="white")
