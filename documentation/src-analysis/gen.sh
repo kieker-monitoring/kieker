@@ -1,10 +1,12 @@
 #!/bin/bash
 
 accesslogs="\
-    20080905-132521-noinstr-accesslog-main_filtered.csv \
+    20080905-185203-noinstr-accesslog-main_filtered.csv \
     20080828-174456-tpmon081-accesslog-main_filtered.csv \
     20080903-061257-tpmon090-accesslog-main_filtered.csv"
 
+## additional data:
+#     20080905-132521-noinstr-accesslog-main_filtered.csv \
 #    20080902-225445-tpmon090-accesslog-main_filtered.csv \
     
 
