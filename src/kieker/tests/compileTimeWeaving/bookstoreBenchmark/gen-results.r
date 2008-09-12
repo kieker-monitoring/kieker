@@ -22,25 +22,41 @@ data.ref=accesslog.read(fn.ref)
 data.cur=accesslog.read(fn.cur)
 
 ## box plots
-accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
+accesslog.boxplot = function (accesslog, col=NULL, xaxt=NULL,
+add=FALSE, at=NULL){
 	attach(accesslog)
+        print(unique(opname))
         resp_ms=resp_ns/(1000*1000)
-	bp=boxplot(resp_ms~opname, at=at, add=TRUE, col=col, xaxt=xaxt)
-	means=aggregate.data.frame(resp_ms, list(path=opname), mean)[["x"]]
-        print(means)
-        points(at, means,pch=18,cex=2)
+	bp=boxplot(resp_ms~opname, add=add, col=col, xaxt=xaxt, at=at)
+        #print(means)
+        points(at, mean(resp_ms),pch=18,cex=2)
 	detach(accesslog)
 }
 
-title="Tpmon benchmark results"
-
-xscale=1:9 # 1:(n.requesttypes*n.accesslogs)
+xscale=1:3 # 1:(n.requesttypes*n.accesslogs)
 pdf("tmp/benchmark-results.pdf", width=12, height=6, paper="special")
+title="Tpmon benchmark results"
+par(mfrow=c(1,3))
 
-plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,17), xaxt="n", main=title) #xaxt="n"
-accesslog.boxplot(data.ref, col=col.ref, at=seq(from=1, length.out=3, by=3), xaxt="n")
-accesslog.boxplot(data.cur, col=col.cur, at=seq(from=2, length.out=3, by=3))
-mtext("Request type", side=1, line=2)
-legend("topleft", legend=c(label.ref,label.cur, "mean"), pch=c(22,22,22,18), pt.bg=c(col.ref,col.cur,"black"), pt.cex=2, ncol=3, bg="white")
+curop="Bookstore.searchBook()"
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,0.25), xaxt="n", main=curop) #xaxt="n"
+accesslog.boxplot(subset(data.ref,opname==curop), col=col.ref, add=TRUE, at=1.5)
+accesslog.boxplot(subset(data.cur,opname==curop), col=col.cur, add=TRUE, at=2.5)
+mtext("Tpmon version", side=1, line=2)
+legend("topleft", legend=c("mean"), pch=c(18), pt.bg=c("black"), pt.cex=2, ncol=1, bg="white")
+
+curop="Catalog.getBook(boolean)"
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,0.01), xaxt="n", main=curop) #xaxt="n"
+accesslog.boxplot(subset(data.ref,opname==curop), col=col.ref, add=TRUE, at=1.5)
+accesslog.boxplot(subset(data.cur,opname==curop), col=col.cur, add=TRUE, at=2.5)
+mtext("Tpmon version", side=1, line=2)
+legend("topleft", legend=c("mean"), pch=c(18), pt.bg=c("black"), pt.cex=2, ncol=1, bg="white")
+
+curop="CRM.getOffers()"
+plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,0.08), xaxt="n", main=curop) #xaxt="n"
+accesslog.boxplot(subset(data.ref,opname==curop), col=col.ref, add=TRUE, at=1.5)
+accesslog.boxplot(subset(data.cur,opname==curop), col=col.cur, add=TRUE, at=2.5)
+mtext("Tpmon version", side=1, line=2)
+legend("topleft", legend=c("mean"), pch=c(18), pt.bg=c("black"), pt.cex=2, ncol=1, bg="white")
 dev.off()
 

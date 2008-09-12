@@ -38,7 +38,7 @@ import java.util.Vector;
 
 public class Bookstore extends Thread{
     static int numberOfRequests = 20000;
-    static int interRequestTime = 2;
+    static int interRequestTime = 1;
 
     /**
      *
@@ -61,7 +61,7 @@ public class Bookstore extends Thread{
 	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
 	
 	for (int i = 0; i < numberOfRequests; i++) {
-    		if (i % 100 == 0) System.out.println("Bookstore.main: Starting request "+i);
+	        //if (i % 100 == 0) System.out.println("Bookstore.main: Starting request "+i);
 		Bookstore newBookstore = new Bookstore();
 		bookstoreScenarios.add(newBookstore);
 		newBookstore.start();

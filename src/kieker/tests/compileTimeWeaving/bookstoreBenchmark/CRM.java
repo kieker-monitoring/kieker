@@ -42,6 +42,6 @@ public class CRM {
      */
     @TpmonMonitoringProbe()
     public static void getOffers(){
-	Catalog.getBook(true);
+	Catalog.getBook(false);
     }
 }
