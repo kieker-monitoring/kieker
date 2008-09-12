@@ -40,13 +40,14 @@ public class Catalog {
     
     @TpmonMonitoringProbe()
     public static void getBook(boolean complexQuery){
+        complexQuery=false; // modified for benchmark
     	if (complexQuery) {
 		//System.out.println("  complex query");
 		Bookstore.waitabit(8);
 	}
 	else 	{			
 		//System.out.println("  simple query"); 
-		Bookstore.waitabit(2);	
+		Bookstore.waitabit(0);	
 	}
 
     }
