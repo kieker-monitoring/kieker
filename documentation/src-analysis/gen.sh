@@ -1,18 +1,16 @@
 #!/bin/bash
 
-accesslogs="\
-    20080905-185203-noinstr-accesslog-main_filtered.csv \
-    20080828-174456-tpmon081-accesslog-main_filtered.csv \
-    20080903-061257-tpmon090-accesslog-main_filtered.csv"
+# This script inserts an additional column 'pathid' to the 
+# accesslog file. The 'pathid' is a unique identifier for
+# the request URL. It is used in the R analysis script.
 
-## additional data:
-#     20080905-132521-noinstr-accesslog-main_filtered.csv \
-#    20080902-225445-tpmon090-accesslog-main_filtered.csv \
+postfix="-accesslog-main_filtered.csv"
     
-
+# Extract all paths from one file.
 reqnames=$(grep -v "\"path\"" 20080828-174456-tpmon081-accesslog-main_filtered.csv | awk  '{ print  $5 }' | sort | uniq | tr "\n" " ")
 
-for fn in ${accesslogs}; do
+# Insert column 'pathid' in all files.
+for fn in *${postfix}; do
     echo "== Converting File '${fn}'"
     sedstr="cat ${fn} | sed s/'\"path\"'/'\"path\" \"pathid\"'/g"
     i=1

@@ -53,6 +53,7 @@
         <mkdir dir="dist"/>
         <mkdir dir="build-tests"/>
         <mkdir dir="build-tpmonControlServlet"/>
+        <mkdir dir="tmp"/>
     </target>
     
     <target name="build-tpmon-ltw" depends="init"> 
@@ -145,6 +146,7 @@
     
     <target name="clean">
         <delete dir="build"/>
+        <delete dir="tmp"/>
         <delete dir="dist"/>
         <delete dir="build-tests"/>
         <delete dir="build-tpmonControlServlet"/>
@@ -258,14 +260,21 @@
               classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"/>
     </target>
     
-    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">        
-        <java dir="."
+    <!--clean,compile-tests-compileTimeWeaving-bookstoreBenchmark-->
+    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="">        
+        <!--<java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"
               classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
               <jvmarg value="-server"/>
-              </java>
-              
+              <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
+	      <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
+              </java>-->
+	      <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
+	      <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
+        	failonerror="true" />
+		<exec command="bash -c &quot;R --vanilla &lt; ./src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/gen-results.r&quot;"/>
+		<exec command="kpdf tmp/benchmark-results.pdf" spawn="true" />
     </target>
     
     <target name="build-tpmon-control-servlet" depends="init"> 

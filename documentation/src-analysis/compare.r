@@ -2,11 +2,12 @@
 n.requesttypes=12
 n.accesslogs=3
 
-##
+## in total we have (the next) 5 files, but do only display 3 at once
 fn.noinstr="20080905-132521-noinstr-accesslog-main_filtered.csv-pathids"
+#fn.noinstr="20080905-185203-noinstr-accesslog-main_filtered.csv-pathids"
 fn.instr081="20080828-174456-tpmon081-accesslog-main_filtered.csv-pathids"
-fn.instr090="20080903-061257-tpmon090-accesslog-main_filtered.csv-pathids"
-# 20080902-225445-tpmon090-accesslog-main_filtered.csv-pathids
+#fn.instr090="20080906-190135-tpmon090-accesslog-main_filtered.csv-pathids"
+fn.instr090="20080907-015205-tpmon090-accesslog-main_filtered.csv-pathids"
 
 ##
 label.noinstr="No instrumentation"
@@ -53,9 +54,6 @@ data.instr090.1 = subset(data.instr090, pathid<=6)
 data.instr090.2 = subset(data.instr090, pathid>6)
 rm(data.instr090)
 
-## Normalize scales
-
-
 ## box plots
 accesslog.boxplot = function (accesslog, at=NULL, col=NULL, xaxt=NULL){
 	attach(accesslog)
@@ -69,7 +67,6 @@ par(mfrow=c(2,1)) # xpd=T, mar=par()$mar+c(0,0,0,4)
 title="Response time comparison between different Tpmon versions"
 
 xscale=1:18 # 1:(n.requesttypes*n.accesslogs)
-## TODO: scale
 pdf("results.pdf", width=12, height=6, paper="special")
 
 plot(xscale, xscale,type="n", xlab="", ylab="Response time (ms)", ylim=c(0,17), xaxt="n", main=title) #xaxt="n"
