@@ -48,6 +48,7 @@
             </not></condition>
         </fail>
         <!-- <echo message="${basedir}" /> -->
+        <mkdir dir="tmp"/>
         <mkdir dir="build"/>
         <mkdir dir="build/META-INF"/>
         <mkdir dir="dist"/>
@@ -91,7 +92,7 @@
                verbose="off"
                srcdir="src"
                debug="true"
-               excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/aspects/**">
+               excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/aspects/springAspectJ//**"><!--,kieker/tpmon/aspects/**-->
             <classpath>
                 <pathelement path="${servletapijar}"/>                
             </classpath>
@@ -132,6 +133,7 @@
     </target>
     
     <target name="clean">
+        <delete dir="tmp"/>
         <delete dir="build"/>
         <delete dir="dist"/>
         <delete dir="build-tests"/>
@@ -204,7 +206,17 @@
         </java>
     </target>  
     
-    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-all">
+    <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="clean,build-tpmon-ctw">
+        <iajc  destdir="build-tests" source="1.5" verbose="true"
+               classpath="${aspectjrtjar}:dist/${dist.tpmon.ctw}:${servletapijar}:${mysqldriver}">
+            <sourceroots>
+                <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>
+            </sourceroots>
+        </iajc>	
+    </target>
+
+
+    <target name="compile-tests-compileTimeWeaving-bookstore" depends="clean,build-tpmon-ctw">
         <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
               todir="src/kieker/tests/compileTimeWeaving/bookstore"/>        
         <iajc  destdir="build-tests" source="1.5" verbose="true"
@@ -214,14 +226,29 @@
             </sourceroots>
         </iajc>	
     </target>
+
+    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">        
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"
+              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
+              <jvmarg value="-server"/>
+              <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
+	      <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
+              </java>
+	      <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
+	      <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
+        	failonerror="true" />
+    </target>
     
     <target name="run-tests-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstore">        
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
-              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}">                
-        </java>
+              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"/>
     </target>
+
+
     
     <target name="build-tpmon-control-servlet" depends="init"> 
         <delete dir="build"/>
