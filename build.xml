@@ -260,16 +260,15 @@
               classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"/>
     </target>
     
-    <!--clean,compile-tests-compileTimeWeaving-bookstoreBenchmark-->
-    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="">        
-        <!--<java dir="."
+    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">        
+        <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"
               classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
               <jvmarg value="-server"/>
               <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
 	      <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
-              </java>-->
+              </java>
 	      <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
 	      <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
         	failonerror="true" />
