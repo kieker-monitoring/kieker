@@ -52,7 +52,7 @@ tpmon.storeInJavaIoTmpdir=true
 tpmon.customStoragePath=/tmp/
  
 # 1.3.2 FS storage mode (less outliers):
-asyncFsWriter=false
+asyncFsWriter=true
 
 
 # 2. Tpmon build properties (no changes required)
