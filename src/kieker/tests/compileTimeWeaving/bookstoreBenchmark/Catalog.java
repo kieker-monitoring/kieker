@@ -1,7 +1,6 @@
-package kieker.tests.compileTimeWeaving.bookstore;
+package kieker.tests.compileTimeWeaving.bookstoreBenchmark;
 
 import kieker.tpmon.annotations.TpmonMonitoringProbe;
-import kieker.tpmon.aspects.*;
 
 /**
  * kieker.tests.compileTimeWeaving.bookstore.Catalog.java
@@ -43,7 +42,7 @@ public class Catalog {
     public static void getBook(boolean complexQuery){
     	if (complexQuery) {
 		//System.out.println("  complex query");
-		Bookstore.waitabit(20);
+		Bookstore.waitabit(8);
 	}
 	else 	{			
 		//System.out.println("  simple query"); 

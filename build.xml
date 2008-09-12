@@ -149,6 +149,7 @@
         <delete dir="build-tests"/>
         <delete dir="build-tpmonControlServlet"/>
         <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
+        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/TpmonAnnotationRemoteInstrumentation.aj"/>
     </target>
     
     <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
@@ -237,11 +238,34 @@
         </iajc>	
     </target>
     
+    <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
+        <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
+              todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>      
+	 <copy file="src/kieker/tests/log4j.properties"
+	      todir="build-tests/"/>  
+        <iajc  destdir="build-tests" source="1.5" verbose="true"
+               classpath="${aspectjrtjar}:dist/${dist.tpmon.ctw}:${servletapijar}:${mysqldriver}">
+            <sourceroots>
+                <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>
+            </sourceroots>
+        </iajc>	
+    </target>
+    
     <target name="run-tests-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstore">        
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
               classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"/>
+    </target>
+    
+    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">        
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"
+              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
+              <jvmarg value="-server"/>
+              </java>
+              
     </target>
     
     <target name="build-tpmon-control-servlet" depends="init"> 

@@ -1,7 +1,6 @@
-package kieker.tests.compileTimeWeaving.bookstore;
+package kieker.tests.compileTimeWeaving.bookstoreBenchmark;
 
 import kieker.tpmon.annotations.TpmonMonitoringProbe;
-import kieker.tpmon.aspects.*;
 import java.util.Vector;
 
 /**
@@ -38,8 +37,8 @@ import java.util.Vector;
  */
 
 public class Bookstore extends Thread{
-    static int numberOfRequests = 100;
-    static int interRequestTime = 5;
+    static int numberOfRequests = 20000;
+    static int interRequestTime = 2;
 
     /**
      *
@@ -58,22 +57,29 @@ public class Bookstore extends Thread{
      */
     @TpmonMonitoringProbe()
     public static void main(String[] args) {
-	
+	long startTime = System.nanoTime();
 	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
 	
 	for (int i = 0; i < numberOfRequests; i++) {
-    		System.out.println("Bookstore.main: Starting request "+i);
+    		if (i % 100 == 0) System.out.println("Bookstore.main: Starting request "+i);
 		Bookstore newBookstore = new Bookstore();
 		bookstoreScenarios.add(newBookstore);
 		newBookstore.start();
 		Bookstore.waitabit(interRequestTime);
 	}
+        
+        long responseTime = System.nanoTime() - startTime;
+        System.out.printf("Benchmark duration in millisecs:%3f\n",(double)(responseTime/(1000*1000)));
+        System.out.printf("Throughput (request/sec):%.2f\n",(double)(numberOfRequests/(responseTime/(1000*1000*1000))));
+        System.out.printf("Monitoring events / sec:%.2f\n",(double)(4*(numberOfRequests/(responseTime/(1000*1000*1000)))));
+        
+        
     	System.out.println("Bookstore.main: Finished with starting all requests.");
-    	System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-		waitabit(5000);
+    	System.out.println("Bookstore.main: Waiting 3 secs before calling system.exit");
+		waitabit(3000);
 		System.exit(0);
     }
-
+    
     public void run() {
     	Bookstore.searchBook();
     }
