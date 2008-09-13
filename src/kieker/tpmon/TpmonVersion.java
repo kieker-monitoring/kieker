@@ -18,6 +18,7 @@ public class TpmonVersion {
 	 */
 	private static final String VERSION = "0.9-20080913";
 
+
 	static final String COPYRIGHT = "Copyright (c) 2006-2008 Matthias Rohr and the Kieker Project";
 
         /**

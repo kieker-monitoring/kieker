@@ -9,12 +9,14 @@
 
 package kieker.tpmon.asyncDbconnector;
 
+import java.io.Serializable;
+
 /**
  *
  * @author matthias
  */
 
-public class InsertData {
+public class InsertData implements Serializable{
     //public String componentname;
     //public String methodname;
     public int experimentId;
@@ -37,7 +39,7 @@ public class InsertData {
         this.opname = inopname;        
         this.executionOrderIndex = inexecutionOrderIndex;
         this.executionStackSize = inexecutionStackSize;
-    }
+    }        
 }
 
 
