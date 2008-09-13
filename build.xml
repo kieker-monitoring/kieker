@@ -236,9 +236,10 @@
               <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
 	      <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
               </java>
-	      <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
-	      <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
+	      <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-081.dat&quot;" failonerror="true"/>
+	      <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-081.dat&quot;"
         	failonerror="true" />
+	       <copy file="tmp/benchmark-tpmon-081.dat" todir="../../trunk/src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>	
     </target>
     
     <target name="run-tests-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstore">        
