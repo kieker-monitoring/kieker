@@ -48,6 +48,7 @@
             </not></condition>
         </fail>
         <!-- <echo message="${basedir}" /> -->
+        <mkdir dir="tmp"/>
         <mkdir dir="build"/>
         <mkdir dir="build/META-INF"/>
         <mkdir dir="dist"/>
@@ -144,6 +145,7 @@
     </target>
     
     <target name="clean">
+        <delete dir="tmp"/>
         <delete dir="build"/>
         <delete dir="dist"/>
         <delete dir="build-tests"/>
@@ -236,6 +238,19 @@
             </sourceroots>
         </iajc>	
     </target>
+
+    <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
+        <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
+              todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>      
+	 <copy file="src/kieker/tests/log4j.properties"
+	      todir="build-tests/"/>  
+        <iajc  destdir="build-tests" source="1.5" verbose="true"
+               classpath="${aspectjrtjar}:dist/${dist.tpmon.ctw}:${servletapijar}:${mysqldriver}">
+            <sourceroots>
+                <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>
+            </sourceroots>
+        </iajc>	
+    </target>
     
     <target name="run-tests-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstore">        
         <java dir="."
@@ -244,6 +259,20 @@
               classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}"/>
     </target>
     
+    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">        
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"
+              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
+              <jvmarg value="-server"/>
+              <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
+	      <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
+              </java>
+	      <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
+	      <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-090.dat&quot;"failonerror="true" />
+    	      <copy file="tmp/benchmark-tpmon-090.dat" todir="../../trunk/src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>	
+    </target>
+
     <target name="build-tpmon-control-servlet" depends="init"> 
         <delete dir="build"/>
         <mkdir dir="build"/>
