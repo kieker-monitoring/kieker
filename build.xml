@@ -150,7 +150,9 @@
         <delete dir="dist"/>
         <delete dir="build-tests"/>
         <delete dir="build-tpmonControlServlet"/>
-        <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
+        <delete
+        file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
+        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/TpmonAnnotationRemoteInstrumentation.aj"/>
     </target>
     
     <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
@@ -267,10 +269,10 @@
               <jvmarg value="-server"/>
               <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
 	      <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
-              </java>
-	      <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
-	      <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-090.dat&quot;"failonerror="true" />
-    	      <copy file="tmp/benchmark-tpmon-090.dat" todir="../../trunk/src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>	
+          </java>
+	  <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-090.dat&quot;" failonerror="true"/>
+	  <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-090.dat&quot;" failonerror="true" />
+    	  <copy file="tmp/benchmark-tpmon-090.dat" todir="../../trunk/src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>	
     </target>
 
     <target name="build-tpmon-control-servlet" depends="init"> 
