@@ -6,7 +6,7 @@
 n.requesttypes=3
 n.accesslogs=3
 
-ops=c("Bookstore.searchBook()","Bookstore.searchBook()","CRM.getOffers()")
+ops=c("Bookstore.searchBook()","Catalog.getBook(boolean)","CRM.getOffers()")
 
 ## Compare reference results (fn.ref) with current results (fn.cur)
 fn.081="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/benchmark-tpmon-081.dat"
