@@ -128,6 +128,11 @@
                 <pathelement path="${log4jjar}"/>
                 <pathelement path="${springjar}"/>
                 <pathelement path="${springwebjar}"/>
+                <pathelement path="${jndijar}"/>
+                <pathelement path="${openjmsjar}"/>
+                <pathelement path="${commonspooljar}"/>
+                <pathelement path="${concurrentjar}"/>       
+                <pathelement path="${jmsjar}"/>
             </classpath>
         </javac>
         <copy todir="build/META-INF">
@@ -174,7 +179,7 @@
         
         <javac source="1.5" 
                destDir="build-tests" 
-			   classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:${springjar}:${springwebjar}"
+			   classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:${springjar}:${springwebjar}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}"
                srcdir="src"
                debug="true"
                includes="kieker/tests/storageOnly/**"/>
@@ -184,7 +189,7 @@
             dir="build-tests" 
             fork="true"
 			classname="kieker.tests.storageOnly.StorageOnly"
-			classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}">
+			classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}:${openjmsnetjar}:${spicejndikitjar}">
             <!--<jvmarg value="-Dtpmon.configuration=/tmp/tpmon.properties"/>-->
             <!--<jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/>-->
             <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
@@ -281,7 +286,8 @@
         <mkdir dir="build"/>
         <javac source="1.5" 
                destDir="build-tpmonControlServlet" 
-               classpath="dist/${dist.tpmon.ctw}:${servletapijar}:${commonsloggingjar}:${log4jjar}:.:${springjar}:${springwebjar}"
+               
+               classpath="dist/${dist.tpmon.ctw}:${servletapijar}:${commonsloggingjar}:${log4jjar}:.:${springjar}:${springwebjar}:${commonsloggingjar}:${springjar}:${springwebjar}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}"
                srcdir="src"
                debug="true"
                includes="kieker/tpmonControlServlet/**"/>
