@@ -75,11 +75,11 @@ public class AsyncJmsWorker implements Runnable, Worker {
             ObjectMessage messageObject = session.createObjectMessage(insertData);           
             //TextMessage message = session.createTextMessage("Hello World!");
             sender.send(messageObject);                        
-            System.out.println("sended execution "+insertData.opname+" "+insertData.tin);
+            //System.out.println("sended execution "+insertData.opname+" "+insertData.tin);
             
-            Object so = messageObject.getObject();
-            InsertData id2 = (InsertData) so;
-            System.out.println("id2 "+id2.opname);
+//            Object so = messageObject.getObject();
+//            InsertData id2 = (InsertData) so;
+//            System.out.println("id2 "+id2.opname);
             
         } catch (JMSException ex) {
             log.error(Level.SEVERE, ex);

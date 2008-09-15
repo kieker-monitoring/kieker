@@ -103,7 +103,12 @@
                 <pathelement path="${log4jjar}"/>
                 <pathelement path="${springjar}"/>
                 <pathelement path="${springwebjar}"/>
-            </classpath>
+				<pathelement path="${jndijar}"/>
+				<pathelement path="${openjmsjar}"/>
+				<pathelement path="${commonspooljar}"/>
+				<pathelement path="${concurrentjar}"/>       
+                <pathelement path="${jmsjar}"/>
+			</classpath>
         </javac>        
         <copy file="src/kieker/tpmon/META-INF/tpmon.properties" todir="build/META-INF"/>
         <jar destfile="dist/${dist.tpmon.ctw}" basedir="build"/>
@@ -249,8 +254,8 @@
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>      
 	 <copy file="src/kieker/tests/log4j.properties"
 	      todir="build-tests/"/>  
-        <iajc  destdir="build-tests" source="1.5" verbose="true"
-               classpath="${aspectjrtjar}:dist/${dist.tpmon.ctw}:${servletapijar}:${mysqldriver}">
+        <iajc  destdir="build-tests" source="1.5" verbose="true"               
+			classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}:${openjmsnetjar}:${spicejndikitjar}">
             <sourceroots>
                 <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>
             </sourceroots>
@@ -267,8 +272,8 @@
     <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">        
         <java dir="."
               fork="true"
-              classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"
-              classpath="{aspectjrtjar}:${aspejctjtoolsjar}:${aspectjlibjar}:${aspectjweaverjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}">
+              classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"              
+			  classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}:${openjmsnetjar}:${spicejndikitjar}">
               <jvmarg value="-server"/>
               <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
 	      <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
