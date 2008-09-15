@@ -86,8 +86,6 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
 
     @TpmonInternal
     private void consume(Object traceidObject) throws Exception {
-        //if (TpmonController.debug) System.out.println("FsWriter "+this+" Consuming "+traceidObject);
-//        try {
         // TODO: We should check whether this is necessary. 
         // This should only cover an initial action which can be 
         // moved before the while loop in run()
@@ -97,12 +95,6 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
 
         id = (InsertData) traceidObject;
         writeDataNow(id.experimentId + ";" + id.opname + ";" + id.sessionid + ";" + id.traceid + ";" + id.tin + ";" + id.tout + ";" + id.vmName + ";" + id.executionOrderIndex + ";" + id.executionStackSize);
-
-//            
-//        } catch (Exception ex) {
-//            System.out.println("Tpmon FsWriter Erro: "+ex.getMessage());
-//            ex.printStackTrace();
-//        }
     }
 
     /**

@@ -22,15 +22,14 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
     private Vector<Worker> workers = new Vector<Worker>();
-
+    private BlockingQueue<InsertData> blockingQueue = null;
+    private String filenamePrefix = null;
+    
     @TpmonInternal
     public Vector<Worker> getWorkers() {
         return workers;
     }
 
-    private BlockingQueue<InsertData> blockingQueue = null;
-
-    private String filenamePrefix = null;
     
     public AsyncFsWriterProducer(String filenamePrefix){
         this.filenamePrefix = filenamePrefix;
@@ -49,12 +48,13 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         log.info(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
     }
 
+    private final String NOSESSIONID = "nosession";
     /**
      * Use this method to insert data into the database.
      */
     @TpmonInternal
     public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
+        return this.insertMonitoringDataNow(experimentId, vmName, opname, NOSESSIONID, traceid, tin, tout, executionOrderIndex, executionStackSize);
     }
 
     /**
