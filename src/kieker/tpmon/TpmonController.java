@@ -705,6 +705,7 @@ public class TpmonController {
         String jmsProviderUrlProperty = prop.getProperty("jmsProviderUrl");
         if (jmsProviderUrlProperty != null && jmsProviderUrlProperty.length() != 0) {
             jmsProviderUrl = jmsProviderUrlProperty;
+            System.out.println("Using jmsProviderURL" + jmsProviderUrl);
         } else {
             if (sendMonitoringDataToJMSserver){
                 formatAndOutputError("No jmsProviderUrl  parameter found in tpmonLTW.jar/" + configurationFile +
