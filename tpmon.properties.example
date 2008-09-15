@@ -8,6 +8,10 @@ buildDate=2008-08-06
 # 1.1 General tpmon properties 
 # 1.1.1 Store monitoring data in a remote database or in the file system?
 storeInDatabase=false
+#jmsProviderUrl=tcp://localhost:3035/
+#jmsProviderUrl=tcp://pc-rohr.informatik.uni-oldenburg.de:3035//
+#sendMonitoringDataToJMSserver=false
+
 
 # 1.1.2 Run tpmon in debug mode
 # In debug mode, tpmon is very verbose during runtime (default: false)
