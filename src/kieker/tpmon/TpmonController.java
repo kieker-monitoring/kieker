@@ -85,7 +85,7 @@ public class TpmonController {
     //private String buildDate = "unknown (at least 2008-08-08)";
     private boolean debug = false;
     public boolean storeInDatabase = false;
-    public boolean sendMonitoringDataToJMSserver = true;
+    public boolean sendMonitoringDataToJMSserver = false;
     public String filenamePrefix = ""; // e.g. path "/tmp"   
     public boolean storeInJavaIoTmpdir = true;
     public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
