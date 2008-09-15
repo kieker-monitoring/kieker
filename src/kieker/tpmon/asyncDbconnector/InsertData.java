@@ -29,6 +29,8 @@ public class InsertData implements Serializable{
     public int executionOrderIndex;
     public int executionStackSize;
     
+    static final long serialVersionUID = 117L;
+    
     public InsertData(int experimentId, String vmName, String inopname, String insessionid, String intraceid, long intin, long intout, int inexecutionOrderIndex, int inexecutionStackSize) {
         this.experimentId = experimentId;
         this.vmName = vmName;
