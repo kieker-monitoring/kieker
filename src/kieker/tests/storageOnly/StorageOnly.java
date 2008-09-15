@@ -46,20 +46,25 @@ import kieker.tpmon.annotations.TpmonInternal;
  */
 
 public class StorageOnly { 
+    public static final int numberOfEvents = 1000;
+    public static TpmonController ctrl = TpmonController.getInstance();
+    
     @TpmonInternal   
     public static void main(String args[]) {
         try {
-            System.out.println("Starting test by adding 10000 monitoring events");
-            for (int i = 0; i < 10000; i++) {
-                TpmonController.getInstance().insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i,i);
+            System.out.printf("Starting test by adding %d monitoring events\n",numberOfEvents);
+            for (int i = 0; i < numberOfEvents; i++) {
+                ctrl.insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i,i);
             }
             System.out.println("Sleeping for 8 seconds");
             Thread.sleep(8000);
-            System.out.println("10000 more monitoring points");
-            for (int i = 0; i < 10000; i++) {
-                TpmonController.getInstance().insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i+10000,i);
+            System.out.printf("%d more monitoring points\n",numberOfEvents);
+            for (int i = 0; i < numberOfEvents; i++) {
+                ctrl.insertMonitoringDataNow(i%2 + "component", i%4 + "method", "sessionid", "requestid", 123123L, 123124L,i+10000,i);
             }
             System.out.println("Calling system.exit(0)");
+            System.out.println("Sleeping for 60 seconds");
+            Thread.sleep(10000);
             System.exit(0);
         } catch (InterruptedException ex) {
             System.out.println("Exception:"+ex);
