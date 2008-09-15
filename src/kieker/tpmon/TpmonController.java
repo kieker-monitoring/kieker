@@ -73,31 +73,27 @@ import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
 import kieker.tpmon.asyncDbconnector.Worker;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
+import kieker.tpmon.asyncJmsWriter.AsyncJmsProducer;
 
 public class TpmonController {
 
     private static final Log log = LogFactory.getLog(TpmonController.class);
     private IMonitoringDataWriter monitoringDataWriter = null;
-    private String vmname = "unknown";
-
-    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
+    private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
     //private String buildDate = "unknown (at least 2008-08-08)";
     private boolean debug = false;
     public boolean storeInDatabase = false;
+    public boolean sendMonitoringDataToJMSserver = true;
     public String filenamePrefix = ""; // e.g. path "/tmp"   
     public boolean storeInJavaIoTmpdir = true;
     public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
-    private boolean setInitialExperimentIdBasedOnLastId = false;
-
-    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
+    private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     // values might be not written to the database in case of an system.exit(0)!
     private boolean asyncDbconnector = false;
-    private boolean asyncFsWriter = true;
-
-    // Encoding method and component names stores just placeholders for the component and method names.
+    private boolean asyncFsWriter = true;    // Encoding method and component names stores just placeholders for the component and method names.
     // The place holders are usually much smaller and storage therefore much faster and requires less space.
     private boolean encodeMethodNames = false;
     // trace sampling:
@@ -110,7 +106,12 @@ public class TpmonController {
     private TpmonShutdownHook shutdownhook = null;
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
-    private static TpmonController ctrlInst = null;
+    private static TpmonController ctrlInst = null;    // default properties for JMS publisher
+    private String jmsProviderUrl = "tcp://localhost:3035/"; // url of the jndi service that knows the JMS connector factory; default for openjms 0.7.7
+    private String jmsTopic = "topic1"; // JMS topic for publish/subscribe pattern
+    private String jmsContextFactoryType = "org.exolab.jms.jndi.InitialContextFactory"; // default setting for openjms 0.7.7
+    private String jmsFactoryLookupName = "ConnectionFactory"; // default setting for openjms 0.7.7
+    private long jmsMessageTimeToLive = 10000; // time messages should live in jms server in millisecs
 
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
@@ -137,36 +138,50 @@ public class TpmonController {
 
         loadPropertiesFile();
 
-        if (this.storeInDatabase) {
-            if (asyncDbconnector) {
-                AsyncDbconnector producer = new AsyncDbconnector(dbConnectionAddress, dbTableName,
-                        setInitialExperimentIdBasedOnLastId);
+        if (this.sendMonitoringDataToJMSserver) {
+            System.out.println("USING JMS (experimental)");
+            if (jmsTopic == null || jmsTopic.length() == 0) {
+                monitoringEnabled = false;
+                log.error(">Kieker-Tpmon: Disabling monitoring because jmsTopic is invalid :\""+jmsTopic+"\"");
+            } else {
+                AsyncJmsProducer producer = new AsyncJmsProducer(jmsContextFactoryType, jmsProviderUrl, jmsFactoryLookupName, jmsTopic, jmsMessageTimeToLive);
+                this.monitoringDataWriter = producer;
                 Vector<Worker> worker = producer.getWorkers();
                 for (Worker w : worker) {
                     this.registerWorker(w);
                 }
-                this.monitoringDataWriter = producer;
-            } else {
-                this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
-                        setInitialExperimentIdBasedOnLastId);
             }
-            log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                    "monitoring data in the database.");
-
         } else {
-            String filenameBase = new String(filenamePrefix + "/tpmon-");
-            if (asyncFsWriter) {
-                AsyncFsWriterProducer producer = new AsyncFsWriterProducer(filenameBase);
-                Vector<Worker> worker = producer.getWorkers();
-                for (Worker w : worker) {
-                    this.registerWorker(w);
+            if (this.storeInDatabase) {
+                if (asyncDbconnector) {
+                    AsyncDbconnector producer = new AsyncDbconnector(dbConnectionAddress, dbTableName,
+                            setInitialExperimentIdBasedOnLastId);
+                    Vector<Worker> worker = producer.getWorkers();
+                    for (Worker w : worker) {
+                        this.registerWorker(w);
+                    }
+                    this.monitoringDataWriter = producer;
+                } else {
+                    this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
+                            setInitialExperimentIdBasedOnLastId);
                 }
-                this.monitoringDataWriter = producer;
+                log.info(">Kieker-Tpmon: Initialization completed. Storing " +
+                        "monitoring data in the database.");
             } else {
-                this.monitoringDataWriter = new FileSystemWriter(filenameBase);
+                String filenameBase = new String(filenamePrefix + "/tpmon-");
+                if (asyncFsWriter) {
+                    AsyncFsWriterProducer producer = new AsyncFsWriterProducer(filenameBase);
+                    Vector<Worker> worker = producer.getWorkers();
+                    for (Worker w : worker) {
+                        this.registerWorker(w);
+                    }
+                    this.monitoringDataWriter = producer;
+                } else {
+                    this.monitoringDataWriter = new FileSystemWriter(filenameBase);
+                }
+                log.info(">Kieker-Tpmon: Initialization completed. Storing " +
+                        "monitoring data in the folder " + filenamePrefix);
             }
-            log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                    "monitoring data in the folder " + filenamePrefix);
         }
     }
 
@@ -242,11 +257,14 @@ public class TpmonController {
         return numberOfInserts.longValue();
     }
 
-
-
     @TpmonInternal()
     public boolean isStoreInDatabase() {
         return storeInDatabase;
+    }
+
+    @TpmonInternal()
+    public boolean isStoreInJMS() {
+        return sendMonitoringDataToJMSserver;
     }
 
     @TpmonInternal()
@@ -345,9 +363,6 @@ public class TpmonController {
         // A methodname looks like this *.*(*
         // the "(" is only once in a methodname
 
-
-//        if (!methodNamesCeWe) {
-
         // Encoding method and component names stores just placeholders for the component and method names.
         // The place holders are usually much smaller and storage therefore much faster and requires less space.
 //            if (encodeMethodNames) {
@@ -371,7 +386,7 @@ public class TpmonController {
 
 //        newMethodname = methodname;
 
-        //TODO: Encapsulation into an interface of all those writers and polymorphy might make the two evaluations of the boolean unneccesary
+    
         numberOfInserts.incrementAndGet();
         String opname = componentname + "." + methodSig;
         if (!this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId,
@@ -450,7 +465,6 @@ public class TpmonController {
     public long getTime() {
         return System.nanoTime() + offsetA;
     }
-
     private AtomicLong lastThreadId = new AtomicLong(0);
 
     /**     
@@ -701,10 +715,14 @@ public class TpmonController {
             }
         }
 
-        if (storeInDatabase) {
-            return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", version :" + this.getVersion() + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
+        if (sendMonitoringDataToJMSserver) {
+            return new String("Storage mode : Tpmon sends data to the JMS server: jndi url :" + this.jmsProviderUrl + ", topic :" + this.jmsTopic + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
         } else {
-            return new String("Storage mode : Tpmon stores in the filesystem, Version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
+            if (storeInDatabase) {
+                return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", version :" + this.getVersion() + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
+            } else {
+                return new String("Storage mode : Tpmon stores in the filesystem, Version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
+            }
         }
     }
 
