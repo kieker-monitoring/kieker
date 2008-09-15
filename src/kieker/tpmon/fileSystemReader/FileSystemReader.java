@@ -146,6 +146,7 @@ public class FileSystemReader {
     private StringTokenizer st; 
     
     
+    int degradableSleepTime = 0;
     private void processInputFile(File input) throws IOException
     {
         System.out.println("< Loading " + input.getAbsolutePath());
@@ -187,7 +188,16 @@ public class FileSystemReader {
                         methodName = name.substring(pos+1);
                     }
                     ctrl.setExperimentId(expId);
-                    ctrl.insertMonitoringDataNow(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess);
+                    
+                    if (degradableSleepTime > 0) Thread.sleep(degradableSleepTime*5);
+                    
+                    while (!ctrl.insertMonitoringDataNow(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess)) {
+                        Thread.sleep(500);
+                        ctrl.enableMonitoring();                        
+                        degradableSleepTime += 50;
+                    }
+                    if (degradableSleepTime > 0) degradableSleepTime--;
+                    
                 }
                 
                 catch (Exception e)

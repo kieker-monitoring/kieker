@@ -22,7 +22,7 @@ import java.util.concurrent.BlockingQueue;
 public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
     private static final Log log = LogFactory.getLog(AsyncJmsProducer.class);        
     private Vector<Worker> workers = new Vector<Worker>();
-    private final int numberOfJmsWriters = 1; // number of jms connections -- usually one (on every node)        
+    private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
     private BlockingQueue<InsertData> blockingQueue = null;    
     
     private String contextFactoryType; // type of the jms factory implementation, e.g.
@@ -53,10 +53,11 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
 
         try {
             InsertData id = new InsertData(experimentId, vmName, opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
-            blockingQueue.add(id); // tries to add immediately!
-        //System.out.println(""+blockingQueue.size());
-
-        } catch (Exception ex) {
+               
+            blockingQueue.add(id); // tries to add immediately! -- this is for production systems            
+            
+            //int currentQueueSize = blockingQueue.size();
+        } catch (Exception ex) {            
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception: " + ex.getMessage());
             return false;
         }

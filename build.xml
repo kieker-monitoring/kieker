@@ -210,8 +210,7 @@
               classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:${springjar}:${springwebjar}"
                srcdir="src"
                includes="kieker/tests/loadTimeWeaving/**"/>
-	 <copy file="src/kieker/tests/log4j.properties"
-	      todir="build-tests/"/>
+	 <copy file="src/kieker/tests/log4j.properties" todir="build-tests/"/>
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation" 
@@ -305,11 +304,13 @@
     
     
      <target name="run-reader" depends="build-all">        
+	    <copy file="src/kieker/tests/log4j.properties" todir="build/"/>
         <java dir="."
               fork="true"
               classname="kieker.tpmon.fileSystemReader.FileSystemReader"
-              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}:${openjmsnetjar}:${spicejndikitjar}">                                 
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}:${openjmsnetjar}:${spicejndikitjar}">                                 
                <jvmarg value="-DinputDir=${inputDir}"/>                    
         </java>                  
+	    <delete file="build/log4j.properties"/>
     </target> 
 </project>

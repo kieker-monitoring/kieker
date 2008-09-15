@@ -110,7 +110,7 @@ public class TpmonController {
     
     public boolean sendMonitoringDataToJMSserver = false;
     private String jmsProviderUrl = "tcp://localhost:3035/"; // url of the jndi service that knows the JMS connector factory; default for openjms 0.7.7
-    private String jmsTopic = "topic1"; // JMS topic for publish/subscribe pattern
+    private String jmsTopic = "queue1"; // JMS topic for publish/subscribe pattern
     private String jmsContextFactoryType = "org.exolab.jms.jndi.InitialContextFactory"; // default setting for openjms 0.7.7
     private String jmsFactoryLookupName = "ConnectionFactory"; // default setting for openjms 0.7.7
     private long jmsMessageTimeToLive = 10000; // time messages should live in jms server in millisecs
@@ -391,6 +391,7 @@ public class TpmonController {
     
         numberOfInserts.incrementAndGet();
         String opname = componentname + "." + methodSig;
+        // now it fails fast, it disables monitoring when a queue once is full
         if (!this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId,
                 this.vmname, opname, sessionID, requestID, tin, tout,
                 executionOrderIndex, executionStackSize)) {
