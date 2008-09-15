@@ -7,7 +7,6 @@ buildDate=2008-08-06
 
 # 1.1 General tpmon properties 
 # 1.1.1 Store monitoring data in a remote database or in the file system?
-sendMonitoringDataToJMSserver=false
 storeInDatabase=false
 
 # 1.1.2 Run tpmon in debug mode
@@ -75,3 +74,8 @@ springjar=external-libs/spring.jar
 springwebjar=external-libs/spring-web.jar
 log4jjar=external-libs/log4j-1.2.15.jar
 mysqldriver=external-libs/mysql-connector-java-5.1.5-bin.jar
+jmsjar=external-libs/jms-1.1.jar
+jndijar=external-libs/jndi-1.2.1.jar
+openjmsjar=external-libs/openjms-0.7.7-beta-1.jar
+commonspooljar=external-libs/commons-pool-1.2.jar
+concurrentjar=external-libs/concurrent-1.3.4.jar
