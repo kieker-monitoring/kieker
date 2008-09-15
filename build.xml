@@ -244,7 +244,6 @@
             </sourceroots>
         </iajc>	
     </target>
-    
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
         <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>      
