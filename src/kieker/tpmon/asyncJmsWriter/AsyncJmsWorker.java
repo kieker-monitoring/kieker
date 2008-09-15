@@ -119,6 +119,13 @@ public class AsyncJmsWorker implements Runnable, Worker {
 
     @TpmonInternal
     public boolean isFinished() {
+        if (finished) {
+            try {
+            sender.close();
+            session.close();
+            connection.close();
+            } catch (Exception e) {}
+        }
         return finished;
     }
 

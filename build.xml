@@ -302,4 +302,14 @@
             <zipfileset dir="src/kieker/tpmonControlServlet/images" prefix="images"/>
         </war>
     </target>
+    
+    
+     <target name="run-reader" depends="build-all">        
+        <java dir="."
+              fork="true"
+              classname="kieker.tpmon.fileSystemReader.FileSystemReader"
+              classpath="${aspectjrtjar}:${aspejctjtoolsjar}:${servletapijar}:build-tests:.:dist/${dist.tpmon.ctw}:${mysqldriver}:${log4jjar}:${commonsloggingjar}:dist/${dist.tpmon.ctrl}:${jmsjar}:${jndijar}:${openjmsjar}:${commonspooljar}:${concurrentjar}:${openjmsnetjar}:${spicejndikitjar}">                                 
+               <jvmarg value="-DinputDir=${inputDir}"/>                    
+        </java>                  
+    </target> 
 </project>
