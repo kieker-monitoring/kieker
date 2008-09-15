@@ -701,6 +701,18 @@ public class TpmonController {
         }
         
         
+        // load property "jmsProviderUrl"
+        String jmsProviderUrlProperty = prop.getProperty("jmsProviderUrl");
+        if (jmsProviderUrlProperty != null && jmsProviderUrlProperty.length() != 0) {
+            jmsProviderUrl = jmsProviderUrlProperty;
+        } else {
+            if (sendMonitoringDataToJMSserver){
+                formatAndOutputError("No jmsProviderUrl  parameter found in tpmonLTW.jar/" + configurationFile +
+                    ". Using default value " + jmsProviderUrl + ".", true, false);
+            }
+            
+        }
+        
         //log.info("monitoringEnabled "+monitoringEnabled);
         if (monitoringEnabled == false) {
             log.info(">Kieker-Tpmon: Notice, monitoring is deactived (monitoringEnables=false in dbconnector.properties within tpmonLTW.jar)");
