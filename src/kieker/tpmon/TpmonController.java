@@ -85,7 +85,7 @@ public class TpmonController {
     //private String buildDate = "unknown (at least 2008-08-08)";
     private boolean debug = false;
     public boolean storeInDatabase = false;
-    public boolean sendMonitoringDataToJMSserver = false;
+    
     public String filenamePrefix = ""; // e.g. path "/tmp"   
     public boolean storeInJavaIoTmpdir = true;
     public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
@@ -107,6 +107,8 @@ public class TpmonController {
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
     private static TpmonController ctrlInst = null;    // default properties for JMS publisher
+    
+    public boolean sendMonitoringDataToJMSserver = false;
     private String jmsProviderUrl = "tcp://localhost:3035/"; // url of the jndi service that knows the JMS connector factory; default for openjms 0.7.7
     private String jmsTopic = "topic1"; // JMS topic for publish/subscribe pattern
     private String jmsContextFactoryType = "org.exolab.jms.jndi.InitialContextFactory"; // default setting for openjms 0.7.7
@@ -680,6 +682,25 @@ public class TpmonController {
                     ". Using default value " + monitoringEnabled, true, false);
         //  log.info("monitoringEnabled missing param");
         }
+        
+        
+        String useJMSproperty = prop.getProperty("sendMonitoringDataToJMSserver");
+        if (useJMSproperty != null && useJMSproperty.length() != 0) {
+            if (useJMSproperty.toLowerCase().equals("true") || useJMSproperty.toLowerCase().equals("false")) {
+                sendMonitoringDataToJMSserver = useJMSproperty.toLowerCase().equals("true");
+            //  log.info("monitoringEnabled true");
+            } else {
+                formatAndOutputError("Bad value for sendMonitoringDataToJMSserver parameter (" + useJMSproperty + ") in tpmonLTW.jar/" + configurationFile +
+                        ". Using default value " + sendMonitoringDataToJMSserver, true, false);
+            //    log.info("monitoringEnabled bad value");
+            }
+        } else {
+            //formatAndOutputError("Could not find sendMonitoringDataToJMSserver parameter in tpmonLTW.jar/" + configurationFile +
+            //        ". Using default value " + sendMonitoringDataToJMSserver, true, false);
+        //  log.info("monitoringEnabled missing param");
+        }
+        
+        
         //log.info("monitoringEnabled "+monitoringEnabled);
         if (monitoringEnabled == false) {
             log.info(">Kieker-Tpmon: Notice, monitoring is deactived (monitoringEnables=false in dbconnector.properties within tpmonLTW.jar)");
