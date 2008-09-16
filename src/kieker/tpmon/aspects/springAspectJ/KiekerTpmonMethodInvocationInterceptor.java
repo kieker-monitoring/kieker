@@ -4,10 +4,6 @@
  */
 package kieker.tpmon.aspects.springAspectJ;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.*;
 
@@ -16,21 +12,23 @@ import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * TpmonMethodInvocationInterceptor is ... 
+ * 
+ * @author Marco Luebcke
  */
 public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor {
 
-    public static Map<Long, String> uniqueThreadIds = Collections.synchronizedMap(new HashMap<Long, String>());
-    private static final TpmonController ctrlInst = TpmonController.getInstance();
+    private static ThreadLocal<String> traceId = new ThreadLocal<String>();
+    private static final TpmonController tpmonController = TpmonController.getInstance();
 
     /* (non-Javadoc)
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
      */
     @TpmonInternal()
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        if (!ctrlInst.isMonitoringEnabled()) {
+        if (traceId.get() == null || !tpmonController.isMonitoringEnabled()) {
             return invocation.proceed();
         }
-
+        
         StringBuilder sb = new StringBuilder("").append(invocation.getMethod().getName());
         sb.append("(");
         boolean first = true;
@@ -47,38 +45,33 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
 
         String componentName = invocation.getThis().getClass().getName();
 
-        long threadid = Thread.currentThread().getId();
-        String traceid = uniqueThreadIds.get(threadid);
-        boolean isEntryPoint = false;
-        if (traceid == null) { // its a new trace AND this is an entry point!            
-            traceid = ctrlInst.getUniqueIdentifierForThread(threadid);
-            uniqueThreadIds.put(threadid, traceid);
-            isEntryPoint = true;
-        }
-        long tin = ctrlInst.getTime(); // startint stopwatch    
-
+        long tin = tpmonController.getTime(); // startint stopwatch
         Object retVal;
         try {
             // executing the intercepted method call
             retVal = invocation.proceed();
-
         } finally {
-            long tout = ctrlInst.getTime();
-            //checking whether this is an entry point in the trace
-            if (isEntryPoint) {
-                // it is an entry point -> threadid needs to be invalidated
-                uniqueThreadIds.remove(threadid);
-            // therefore, the thread may be reused by the next trace (an issue of thread pools)
-            }
+            long tout = tpmonController.getTime();
             // here we can collect the sessionid, which may for instance be registered before by
             // a explicity call registerSessionIdentifier(String sessionid, long threadid) from a method
             // that knowns the request object (e.g. a servlet or a spring MVC controller).
-            String sessionid = ctrlInst.getSessionIdentifier(threadid);
-            //TpmonController.insertMonitoringDataNow(componentName, opname, traceid, tin, tout);               
-            ctrlInst.insertMonitoringDataNow(componentName, opname, sessionid, traceid, tin, tout);
+            String sessionid = tpmonController.getSessionIdentifier(Thread.currentThread().getId());
+            // TpmonController.insertMonitoringDataNow(componentName, opname, traceid, tin, tout);
+            tpmonController.insertMonitoringDataNow(componentName, opname, sessionid, this.traceId.get(), tin, tout);
         }
         // returning the result of the intercepted method call
         return retVal;
+    }
 
+    public static String getTraceId() {
+        return traceId.get();
+    }
+
+    public static void setTraceId(String aTraceId) {
+        traceId.set(aTraceId);
+    }
+
+    public static void unsetTraceId() {
+        traceId.remove();
     }
 }
