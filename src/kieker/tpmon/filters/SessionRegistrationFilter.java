@@ -47,6 +47,7 @@ public class SessionRegistrationFilter implements Filter {
      void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
+            // TODO: Move ThreadLocal<String> traceid to the TpmonController
             KiekerTpmonMethodInvocationInterceptor.setTraceId(ctrlInst.getUniqueIdentifierForThread(Thread.currentThread().getId()));
             ctrlInst.registerSessionIdentifier(((HttpServletRequest) request).getSession().getId(),
                     Thread.currentThread().getId());

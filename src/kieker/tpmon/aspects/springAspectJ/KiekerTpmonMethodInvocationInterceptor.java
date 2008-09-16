@@ -17,6 +17,7 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor {
 
+    // TODO: Move ThreadLocal<String> traceid to the TpmonController
     private static ThreadLocal<String> traceId = new ThreadLocal<String>();
     private static final TpmonController tpmonController = TpmonController.getInstance();
 
