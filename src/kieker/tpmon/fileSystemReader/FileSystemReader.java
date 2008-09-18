@@ -193,7 +193,7 @@ public class FileSystemReader {
                     
                     while (!ctrl.insertMonitoringDataNow(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess)) {
                         Thread.sleep(500);
-                        ctrl.enableMonitoring();                        
+                        ctrl.enableMonitoring();
                         degradableSleepTime += 50;
                     }
                     if (degradableSleepTime > 0) degradableSleepTime--;
