@@ -138,6 +138,7 @@
                 <pathelement path="${commonspooljar}"/>
                 <pathelement path="${concurrentjar}"/>       
                 <pathelement path="${jmsjar}"/>
+                <pathelement path="${cxfjars}"/>
             </classpath>
         </javac>
         <copy todir="build/META-INF">
