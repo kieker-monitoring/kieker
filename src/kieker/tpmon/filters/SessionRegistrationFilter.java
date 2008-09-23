@@ -20,7 +20,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import kieker.tpmon.TpmonController;
-import kieker.tpmon.aspects.springAspectJ.KiekerTpmonMethodInvocationInterceptor;
 
 /**
  * Register session id of incoming request
@@ -48,15 +47,16 @@ public class SessionRegistrationFilter implements Filter {
             FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
             // TODO: Move ThreadLocal<String> traceid to the TpmonController
-            KiekerTpmonMethodInvocationInterceptor.setTraceId(ctrlInst.getUniqueIdentifierForThread(Thread.currentThread().getId()));
-            ctrlInst.registerSessionIdentifier(((HttpServletRequest) request).getSession().getId(),
-                    Thread.currentThread().getId());
+            ctrlInst.getAndStoreUniqueThreadLocalTraceId();
+            ctrlInst.storeThreadLocalSessionIdentifier(((HttpServletRequest) request).getSession().getId());
         }
         try {
             chain.doFilter(request, response);
             // TODO: Move ThreadLocal<String> traceid to the TpmonController
-            KiekerTpmonMethodInvocationInterceptor.unsetTraceId();
-        } finally { }
+        } finally { 
+            ctrlInst.unsetThreadLocalTraceId();
+            ctrlInst.unsetThreadLocalSessionId();
+        }
     }
 
     public void destroy() {

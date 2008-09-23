@@ -16,9 +16,6 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author Marco Luebcke
  */
 public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor {
-
-    // TODO: Move ThreadLocal<String> traceid to the TpmonController
-    private static ThreadLocal<String> traceId = new ThreadLocal<String>();
     private static final TpmonController tpmonController = TpmonController.getInstance();
 
     /* (non-Javadoc)
@@ -26,7 +23,9 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
      */
     @TpmonInternal()
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        if (traceId.get() == null || !tpmonController.isMonitoringEnabled()) {
+        long traceId = tpmonController.recallThreadLocalTraceId();
+        // Only go on if a traceId has been registered before
+        if (traceId == -1 || !tpmonController.isMonitoringEnabled()) {
             return invocation.proceed();
         }
         
@@ -58,21 +57,9 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
             // that knowns the request object (e.g. a servlet or a spring MVC controller).
             String sessionid = tpmonController.getSessionIdentifier(Thread.currentThread().getId());
             // TpmonController.insertMonitoringDataNow(componentName, opname, traceid, tin, tout);
-            tpmonController.insertMonitoringDataNow(componentName, opname, sessionid, this.traceId.get(), tin, tout);
+            tpmonController.insertMonitoringDataNow(componentName, opname, sessionid, traceId, tin, tout);
         }
         // returning the result of the intercepted method call
         return retVal;
-    }
-
-    public static String getTraceId() {
-        return traceId.get();
-    }
-
-    public static void setTraceId(String aTraceId) {
-        traceId.set(aTraceId);
-    }
-
-    public static void unsetTraceId() {
-        traceId.remove();
     }
 }

@@ -17,7 +17,7 @@ public class TpmonVersion {
 	 * version, even if it is not re-compiled during the build.
 	 */
 
-	private static final String VERSION = "0.91-20080923";
+	private static final String VERSION = "0.91-20080924";
 
 
 
