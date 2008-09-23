@@ -38,7 +38,7 @@ public class FileSystemReader {
 //       }
         
        String inputDir = System.getProperty("inputDir");
-       if (inputDir == null || inputDir.length()==0){
+       if (inputDir == null || inputDir.length()==0 || inputDir.equals("${inputDir}")){
            System.out.println("FileSystemReader>  No input dir found!");
            System.out.println("FileSystemReader>  Provide an input dir as system property.");
            System.out.println("FileSystemReader>  Example to read all tpmon-* files from /tmp:\n" +

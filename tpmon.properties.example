@@ -72,15 +72,4 @@ aspectjtoolsjar=external-libs/aspectjtools.jar
 aspectjrtjar=external-libs/aspectjrt.jar
 aspectjweaverjar=external-libs/aspectjweaver.jar
 aspectjlibjar=external-libs/aspectjlib.jar
-servletapijar=external-libs/servlet-api.jar
-commonsloggingjar=external-libs/commons-logging-1.1.1.jar
-springjar=external-libs/spring.jar
-springwebjar=external-libs/spring-web.jar
-log4jjar=external-libs/log4j-1.2.15.jar
-mysqldriver=external-libs/mysql-connector-java-5.1.5-bin.jar
-jmsjar=external-libs/jms-1.1.jar
-jndijar=external-libs/jndi-1.2.1.jar
-openjmsjar=external-libs/openjms-0.7.7-beta-1.jar
-commonspooljar=external-libs/commons-pool-1.2.jar
-concurrentjar=external-libs/concurrent-1.3.4.jar
-cxfjars=external-libs/cxf-api-2.1.2.jar:external-libs/cxf-common-utilities-2.1.2.jar:external-libs/cxf-rt-bindings-soap-2.1.2.jar:external-libs/cxf-rt-core-2.1.2.jar
+# all other files in the external-libs folder are automatically used

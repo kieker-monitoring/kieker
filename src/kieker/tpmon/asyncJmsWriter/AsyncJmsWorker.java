@@ -46,7 +46,7 @@ public class AsyncJmsWorker implements Runnable, Worker {
         this.writeQueue = writeQueue;
         
         try {        
-            Hashtable properties = new Hashtable();    
+            Hashtable<String,String> properties = new Hashtable<String,String>();    
             properties.put(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
             properties.put(Context.PROVIDER_URL, providerUrl);
      
