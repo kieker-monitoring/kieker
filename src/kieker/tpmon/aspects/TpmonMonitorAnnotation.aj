@@ -1,11 +1,8 @@
 package kieker.tpmon.aspects;
 
-import kieker.tpmon.*;
 import kieker.tpmon.asyncDbconnector.*;
+import kieker.tpmon.*;
 import kieker.tpmon.annotations.*;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Random;
 
 /**
  * @author matthias, andre
@@ -15,10 +12,10 @@ import java.util.Random;
  * An around advice adds performance measuring code and registers mbeans for measuring points.
  *
  * History:
+ * 2008/09/24: Changed to new ThreadLocal interface of the controller
  * 2008/09/01: Removed a lot "synchronized" from the Aspects
  */
 public aspect TpmonMonitorAnnotation {	
- 	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
         private final static TpmonController ctrlInst = TpmonController.getInstance();
 
 	pointcut probeClassMethod(): execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..)) && !execution(* Dbconnector.*(..)) && !execution(* DbWriter.*(..)) && !execution(* AsyncDbconnector.*(..)) && !execution(* TpmonController.*(..)) 
@@ -35,23 +32,12 @@ public aspect TpmonMonitorAnnotation {
                     return proceed();
                 }
 
-		/*
-		boolean isJoinpointAtStaticMethod = thisJoinPoint.getSignature().toLongString().toLowerCase().contains("static");
-		if (isJoinpointAtStaticMethod) {
-			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a static method (method of a class)");
-		} else {
-			if (ctrlInst.isDebug()) System.out.println("tpmonLTW: Monitoring a object method (method of a object, non-static)");
-		}
-		*/
-
 		boolean isEntryPoint = false;
-        	Long threadId = Thread.currentThread().getId();
-                String currentRequestId  = requestThreadMatcher.get(threadId);
-                    if (currentRequestId == null) { /* then its an entry point since the threadId is not registered */
-                    currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
-                    requestThreadMatcher.put(threadId,currentRequestId);
+                long traceId = ctrlInst.recallThreadLocalTraceId();
+                if (traceId == -1) { // then its an entry point since the traceId is not registered
+                    traceId = ctrlInst.getAndStoreUniqueThreadLocalTraceId();
                     isEntryPoint = true;
-		} 
+		}
 		
 		long startTime = ctrlInst.getTime();
 
@@ -68,7 +54,7 @@ public aspect TpmonMonitorAnnotation {
                     long endTime = ctrlInst.getTime();
 	
                     if (isEntryPoint)
-                        requestThreadMatcher.remove(threadId);
+                        ctrlInst.unsetThreadLocalTraceId();
 	
                     String methodname = thisJoinPoint.getSignature().getName();
                     // e.g. "getBook"
@@ -84,7 +70,7 @@ public aspect TpmonMonitorAnnotation {
                     // e.g., kieker.tests.springTest.Book
                     //System.out.println("componentName:"+componentName);	
                     
-                    ctrlInst.insertMonitoringDataNow(componentName, opname, currentRequestId, startTime, endTime);
+                    ctrlInst.insertMonitoringDataNow(componentName, opname, traceId, startTime, endTime);
                     if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
                 //}
             	return toReturn;

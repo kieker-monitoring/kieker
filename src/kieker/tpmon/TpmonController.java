@@ -317,6 +317,12 @@ public class TpmonController {
     }
 
     @TpmonInternal()
+    public boolean insertMonitoringDataNow(String component, String methodSig, long requestID, long tin, long tout) {
+        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, -1, -1);
+    }
+
+    
+    @TpmonInternal()
     public boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
         return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, executionOrderIndex, executionStackSize);
     }
@@ -542,9 +548,13 @@ public class TpmonController {
      */
     @TpmonInternal()
     public long recallThreadLocalTraceId() {
+        //log.info("Recalling traceId");
         Long traceIdObj = this.traceId.get();
-        if(traceIdObj == null)
+        if(traceIdObj == null){
+            //log.info("traceId == null");
             return -1;        
+        }
+        //log.info("traceId =" + traceIdObj);
         return traceIdObj;
     }
     
@@ -565,21 +575,19 @@ public class TpmonController {
      * the method unsetThreadLocalSessionId()!
      */
     @TpmonInternal()
-    public void storeThreadLocalSessionIdentifier(String sessionId) {
+    public void storeThreadLocalSessionId(String sessionId) {
         this.sessionId.set(sessionId);
     }
     
     /**
      * This method returns the thread-local traceid previously
      * registered using the method registerTraceId(traceId).
+     * 
+     * @return the sessionid. null if no session registered.
      */
     @TpmonInternal()
-    public String recallThreadLocalSessionIdentifier() {
-        String id = this.sessionId.get();
-        if (id == null) {
-            return "unknown";
-        }
-        return id;
+    public String recallThreadLocalSessionId() {
+        return this.sessionId.get();
     }
 
     /**

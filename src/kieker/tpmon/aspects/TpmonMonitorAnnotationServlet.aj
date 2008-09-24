@@ -5,9 +5,6 @@ import kieker.tpmon.annotations.*;
 import kieker.tpmon.asyncDbconnector.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Random;
 
 /**
  * @author matthias
@@ -19,9 +16,6 @@ import java.util.Random;
  * 2008/09/01: Removed a lot "synchronized" from the Aspects
  */
 public aspect TpmonMonitorAnnotationServlet {	
- 	Map<Long,String> sessionThreadMatcher = new ConcurrentHashMap<Long,String>();
-	Map<Long,String> requestThreadMatcher = new ConcurrentHashMap<Long,String>();
-
         private final static TpmonController ctrlInst = TpmonController.getInstance();
 
 	pointcut servletCommand(HttpServletRequest request, HttpServletResponse response): execution(* *.do*(..)) && args(request,response);
@@ -32,16 +26,12 @@ public aspect TpmonMonitorAnnotationServlet {
              if (!ctrlInst.isMonitoringEnabled()){
                 return proceed(request, response);
             }
-            
-            //make the sessionId accessable for all advices in the same thread
-              
-            String requestId = ""+(new Random()).nextLong();
+
+            long traceId = ctrlInst.getAndStoreUniqueThreadLocalTraceId();
             String sessionId = request.getSession(true).getId();
-            Long threadId = Thread.currentThread().getId();
-            sessionThreadMatcher.put(threadId,sessionId);
-            requestThreadMatcher.put(threadId,requestId);					
+            ctrlInst.storeThreadLocalSessionId(sessionId);
                
-            if (ctrlInst.isDebug()) System.out.println("Execution of Servlet threadId:"+threadId+" sessionId:"+sessionId);
+            if (ctrlInst.isDebug()) System.out.println("Execution of Servlet traceId:"+traceId+" sessionId:"+sessionId);
 
             Object toReturn = null;
             //try {
@@ -54,8 +44,8 @@ public aspect TpmonMonitorAnnotationServlet {
             //}
             //finally {	
                 //empty the sessionId
-                sessionThreadMatcher.remove(threadId); /* closedRequest should never be in the monitoring databased */
-                requestThreadMatcher.remove(threadId);		
+            ctrlInst.unsetThreadLocalTraceId();
+            ctrlInst.unsetThreadLocalSessionId();
             //}
             return toReturn;
 	}
@@ -90,21 +80,18 @@ public aspect TpmonMonitorAnnotationServlet {
 		*/
 
 		boolean isEntryPoint = false;
-		String currentSessionId,currentRequestId;
-                Long threadId = Thread.currentThread().getId();
+                long traceId = ctrlInst.recallThreadLocalTraceId();
+                String sessionId = ctrlInst.recallThreadLocalSessionId();
 
-                currentSessionId = sessionThreadMatcher.get(threadId);
-                if (currentSessionId == null) { /* then its an entry point since the threadId is not registered */
-                    currentSessionId = "unknown";
-                    sessionThreadMatcher.put(threadId,currentSessionId);
+                if (traceId == -1) { // then its an entry point since the traceId is not registered
+                    traceId = ctrlInst.getAndStoreUniqueThreadLocalTraceId();
                     isEntryPoint = true;
 		}
-
-                currentRequestId = requestThreadMatcher.get(threadId);
-		if(currentRequestId == null) {
-                    currentRequestId = ctrlInst.getUniqueIdentifierForThread(threadId);
-                    requestThreadMatcher.put(threadId,currentRequestId);
-		}		
+		
+                if (sessionId == null) { 
+                    sessionId = "unknown";
+                    ctrlInst.storeThreadLocalSessionId(sessionId);
+		}
 		
 		long startTime = ctrlInst.getTime();
 	
@@ -136,11 +123,11 @@ public aspect TpmonMonitorAnnotationServlet {
                     //System.out.println("componentName:"+componentName);
 		
                     if (isEntryPoint) {                            
-                        sessionThreadMatcher.remove(threadId);
-                        requestThreadMatcher.remove(threadId);                            
+                        ctrlInst.unsetThreadLocalTraceId();
+                        ctrlInst.unsetThreadLocalSessionId();
                     }
 
-                    ctrlInst.insertMonitoringDataNow(componentName, opname, currentSessionId, currentRequestId, startTime, endTime);
+                    ctrlInst.insertMonitoringDataNow(componentName, opname, sessionId, traceId, startTime, endTime);
                     if (ctrlInst.isDebug())  System.out.println("tpmonLTW: component:"+componentName+" method:"+opname+" at:"+startTime);
                 //}
 		return toReturn;

@@ -48,7 +48,7 @@ public class SessionRegistrationFilter implements Filter {
         if (request instanceof HttpServletRequest) {
             // TODO: Move ThreadLocal<String> traceid to the TpmonController
             ctrlInst.getAndStoreUniqueThreadLocalTraceId();
-            ctrlInst.storeThreadLocalSessionIdentifier(((HttpServletRequest) request).getSession().getId());
+            ctrlInst.storeThreadLocalSessionId(((HttpServletRequest) request).getSession().getId());
         }
         try {
             chain.doFilter(request, response);

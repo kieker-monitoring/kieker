@@ -156,9 +156,13 @@ public class ControlServlet extends HttpServlet {
              * invalid action
              */
             } else if (action.equals("insertTestData")) {
+                ctrlInst.storeThreadLocalSessionId(request.getSession(true).getId());
+                ctrlInst.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.insertMonitoringDataNow("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", request.getSession().getId(), ctrlInst.getTraceId(Thread.currentThread().getId()), ctrlInst.getTime(), ctrlInst.getTime(), i, i);
+                    ctrlInst.insertMonitoringDataNow("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", ctrlInst.recallThreadLocalSessionId(), ctrlInst.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i);
                 }
+                ctrlInst.unsetThreadLocalTraceId();
+                ctrlInst.unsetThreadLocalSessionId();
             /*
              * action = disable
              */

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Kieker" default="build-all" basedir="." >
     <property file="tpmon.properties"/>
+
+    <property name="KiekerTpmonTestAspect" value="TpmonMonitorAnnotationServlet.aj"/>
     
     <!-- definition of the different classpathes for compilation, normal execution,
          load-time weaving tests, compile-time weaving tests -->
@@ -46,7 +48,7 @@
         <property name="dist.tpmon.ctw"   value="KiekerTpmonCTW-${tpmon.version}.jar"/>
         <property name="dist.tpmon.ctrl" value="KiekerTpmonCtrl-${tpmon.version}.jar"/>
         <property name="dist.tpan"        value="KiekerTpan-${tpmon.version}.jar"/>
-        <property name="dist.tpmon.controlServlet" value="tpmon-control-servlet-0.8.1.war"/>
+        <property name="dist.tpmon.controlServlet" value="tpmon-control-servlet-${tpmon.version}.war"/>
     </target>
     <target name="update-version" unless="version.noupdate"
             depends="init-version">
@@ -166,7 +168,7 @@
         <delete dir="build-tests"/>
         <delete dir="build-tpmonControlServlet"/>
         <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
-        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/TpmonAnnotationRemoteInstrumentation.aj"/>
+        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/*.aj"/>
     </target>
     <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
         <echo>
@@ -247,7 +249,7 @@
         </iajc>
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
-        <copy file="src/kieker/tpmon/aspects/TpmonMonitorAnnotation.aj" 
+        <copy file="src/kieker/tpmon/aspects/${KiekerTpmonTestAspect}" 
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="build-tests/"/>

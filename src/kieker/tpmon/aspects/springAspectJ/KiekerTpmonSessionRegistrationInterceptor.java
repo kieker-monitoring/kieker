@@ -17,7 +17,7 @@ public class KiekerTpmonSessionRegistrationInterceptor implements WebRequestInte
 
     public void preHandle(WebRequest request) throws Exception {
         TpmonController.getInstance().getAndStoreUniqueThreadLocalTraceId();
-        TpmonController.getInstance().storeThreadLocalSessionIdentifier(request.getSessionId());
+        TpmonController.getInstance().storeThreadLocalSessionId(request.getSessionId());
     }
 
     public void postHandle(WebRequest request, ModelMap map) throws Exception {
