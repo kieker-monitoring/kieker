@@ -2,7 +2,10 @@
 <project name="Kieker" default="build-all" basedir="." >
     <property file="tpmon.properties"/>
 
-    <property name="KiekerTpmonTestAspect" value="TpmonMonitorAnnotationServlet.aj"/>
+    <property name="KiekerTpmonTestAspect"
+              value="KiekerTpmonMonitoringAnnotation.java"/>
+    <!--<property name="KiekerTpmonTestAspect"
+              value="TpmonMonitorAnnotationServlet.aj"/>-->
     
     <!-- definition of the different classpathes for compilation, normal execution,
          load-time weaving tests, compile-time weaving tests -->
@@ -169,6 +172,7 @@
         <delete dir="build-tpmonControlServlet"/>
         <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
         <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/*.aj"/>
+        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/KiekerTpmonMonitoring*.java"/>
     </target>
     <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
         <echo>
