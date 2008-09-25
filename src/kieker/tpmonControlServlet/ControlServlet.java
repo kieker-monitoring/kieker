@@ -248,11 +248,25 @@ public class ControlServlet extends HttpServlet {
 		bu.append(" Garbage collectors : "+youngGC+" , "+tenureGC+"<br>");
 		} catch(Exception e){} // nothing we can do
         out.println(bu.toString());
+        
+        bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");      
+        bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"switchFaultInjection\">");
+        bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"activate\" VALUE=\"true\">");
+        bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"location\" value=\"somewhere\"/>");
+        bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
+        bu.append("</FORM> <br><br>");
+        
+        
         out.println(FaultInjectionRegistry.showAllFaultInjectionSwitch());
 
         printFooter(out);
         out.println("</body>");
+        
+            
         out.println("</html>");
+        
+        
+        
 
         out.close();
     }
