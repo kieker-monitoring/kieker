@@ -153,7 +153,7 @@ public class ControlServlet extends HttpServlet {
             } else if (action.equals("disable")) {
                 ctrlInst.disableMonitoring();
             /*
-             * invalid action
+             * action = ...
              */
             } else if (action.equals("insertTestData")) {
                 ctrlInst.storeThreadLocalSessionId(request.getSession(true).getId());
@@ -164,7 +164,27 @@ public class ControlServlet extends HttpServlet {
                 ctrlInst.unsetThreadLocalTraceId();
                 ctrlInst.unsetThreadLocalSessionId();
             /*
-             * action = disable
+             * action = switchFaultInjection
+             */
+            } else if (action.equalsIgnoreCase("switchFaultInjection")) {
+                String activate = request.getParameter("activate");
+                boolean enable = false;
+                if (activate != null && activate.equalsIgnoreCase("true")) {
+                    enable = true;
+                }
+                String location = request.getParameter("location");
+                if (location != null) {
+                    if (location.equalsIgnoreCase("AccountSqlMapDao")) {
+                        com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultActivated = enable;
+                        com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultIntensity = 3;     // observed 3.2~3.3
+                    }
+                    else if (location.equalsIgnoreCase("ItemSqlMapDao")) {
+                        com.ibatis.jpetstore.persistence.sqlmapdao.ItemSqlMapDao.faultActivated = enable;
+                        com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultIntensity = 6;     // observed 3.8~9.0
+                    }
+                }
+            /*
+             * invalid action
              */
             } else if (!(action.length() == 0)) {
                 dumpError(out, "Invalid action: '" + action + "'");
