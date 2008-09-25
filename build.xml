@@ -93,6 +93,7 @@
         <mkdir dir="build-tpmonControlServlet"/>
         <mkdir dir="tmp"/>
     </target>
+
     <target name="build-tpmon-ltw" depends="init">
         <delete dir="build"/>
         <mkdir dir="build"/>
@@ -171,8 +172,8 @@
         <delete dir="build-tests"/>
         <delete dir="build-tpmonControlServlet"/>
         <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonAnnotationRemoteInstrumentation.aj"/>
-        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/*.aj"/>
-        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/KiekerTpmonMonitoring*.java"/>
+        <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
+        <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
     </target>
     <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
         <echo>
@@ -253,8 +254,11 @@
         </iajc>
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
+        <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
+        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoring.java" 
+              todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tpmon/aspects/${KiekerTpmonTestAspect}" 
-              todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>
+              todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="build-tests/"/>
         <iajc  destdir="build-tests" source="1.5" verbose="true"               
