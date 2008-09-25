@@ -27,6 +27,7 @@ public class FaultInjectionRegistry {
         return mySwitch;
     }    
     
+    // kieker.tpmon.showAllFaultInjectionSwitch()
     public static String showAllFaultInjectionSwitch() {
         StringBuffer sb = new StringBuffer();
         sb.append("<br/><h3>FaultInjectionRegistry content:</h3><br/>");
@@ -40,6 +41,7 @@ public class FaultInjectionRegistry {
         return sb.toString();
     } 
             
+    // kieker.tpmon.FaultInjectionRegistry.setSwitch("Moin",true);
     public static void setSwitch(String switchname, boolean status) {
         AtomicBoolean mySwitch = getSwitch(switchname);
         mySwitch.set(status);        

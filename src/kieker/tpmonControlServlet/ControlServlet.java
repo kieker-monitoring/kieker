@@ -176,14 +176,7 @@ public class ControlServlet extends HttpServlet {
                 }
                 String location = request.getParameter("location");
                 if (location != null) {
-                    if (location.equalsIgnoreCase("AccountSqlMapDao")) {
-                        com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultActivated = enable;
-                        com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultIntensity = 3;     // observed 3.2~3.3
-                    }
-                    else if (location.equalsIgnoreCase("ItemSqlMapDao")) {
-                        com.ibatis.jpetstore.persistence.sqlmapdao.ItemSqlMapDao.faultActivated = enable;
-                        com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultIntensity = 6;     // observed 3.8~9.0
-                    }
+                    FaultInjectionRegistry.setSwitch(request.getParameter("location"), enable);                    
                 }
             /*
              * invalid action
