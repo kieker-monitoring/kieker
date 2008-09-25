@@ -255,6 +255,7 @@ public class ControlServlet extends HttpServlet {
 		bu.append(" Garbage collectors : "+youngGC+" , "+tenureGC+"<br>");
 		} catch(Exception e){} // nothing we can do
         out.println(bu.toString());
+        out.println(FaultInjectionRegistry.showAllFaultInjectionSwitch());
 
         printFooter(out);
         out.println("</body>");

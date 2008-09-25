@@ -16,7 +16,7 @@ public class TpmonVersion {
 	 * JMeterUtils This ensures that JMeterUtils always gets the correct
 	 * version, even if it is not re-compiled during the build.
 	 */
-	private static final String VERSION = "0.91-20080925";
+	private static final String VERSION = "0.91-20080925"; // also shows branch ... see below
 
 	static final String COPYRIGHT = "Copyright (c) 2006-2008 Matthias Rohr and the Kieker Project";
 
@@ -34,6 +34,6 @@ public class TpmonVersion {
          * @return the version String.
          */
 	public static final String getVERSION() {
-		return VERSION;
+		return VERSION+"-jpetstore-sysml-branch";
 	}
 }
