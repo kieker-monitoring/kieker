@@ -247,7 +247,7 @@ public class ControlServlet extends HttpServlet {
 		String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
 		bu.append(" Garbage collectors : "+youngGC+" , "+tenureGC+"<br>");
 		} catch(Exception e){} // nothing we can do
-        out.println(bu.toString());
+        
         
         bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");      
         bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"switchFaultInjection\">");
@@ -256,6 +256,7 @@ public class ControlServlet extends HttpServlet {
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
         bu.append("</FORM> <br><br>");
         
+        out.println(bu.toString());
         
         out.println(FaultInjectionRegistry.showAllFaultInjectionSwitch());
 
