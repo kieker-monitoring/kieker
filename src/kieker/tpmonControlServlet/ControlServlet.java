@@ -252,14 +252,14 @@ public class ControlServlet extends HttpServlet {
         bu.append("<h3> Activate a fault injection point </h3> <FORM ACTION=\"index\" METHOD=\"GET\"> ");      
         bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"switchFaultInjection\">");
         bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"activate\" VALUE=\"true\">");
-        bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"location\" value=\"somewhere\"/>");
-        bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
+        bu.append(" Location: <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"location\" value=\"somewhere\"/>");
+        bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"Activate\"> ");
         bu.append("</FORM> ");
         bu.append("<h3> Deactivate a fault injection point </h3> <FORM ACTION=\"index\" METHOD=\"GET\"> ");      
         bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"switchFaultInjection\">");
         bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"activate\" VALUE=\"false\">");
-        bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"location\" value=\"somewhere\"/>");
-        bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
+        bu.append(" Location: <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"location\" value=\"somewhere\"/>");
+        bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"Deactivate\"> ");
         bu.append("</FORM>");
         
         
