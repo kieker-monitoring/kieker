@@ -40,5 +40,8 @@ public class FaultInjectionRegistry {
         return sb.toString();
     } 
             
-    
+    public static boolean setSwitch(String switchname, boolean status) {
+        faultInjectionActiveSwitches.get(switchname).getAndSet(status);
+        return true;
+    }
 }
