@@ -8,6 +8,10 @@ buildDate=2008-08-06
 # 1.1 General tpmon properties 
 # 1.1.1 Store monitoring data in a remote database or in the file system?
 storeInDatabase=false
+#jmsProviderUrl=tcp://localhost:3035/
+#jmsProviderUrl=tcp://pc-rohr.informatik.uni-oldenburg.de:3035//
+#sendMonitoringDataToJMSserver=false
+
 
 # 1.1.2 Run tpmon in debug mode
 # In debug mode, tpmon is very verbose during runtime (default: false)
@@ -68,9 +72,4 @@ aspectjtoolsjar=external-libs/aspectjtools.jar
 aspectjrtjar=external-libs/aspectjrt.jar
 aspectjweaverjar=external-libs/aspectjweaver.jar
 aspectjlibjar=external-libs/aspectjlib.jar
-servletapijar=external-libs/servlet-api.jar
-commonsloggingjar=external-libs/commons-logging-1.1.1.jar
-springjar=external-libs/spring.jar
-springwebjar=external-libs/spring-web.jar
-log4jjar=external-libs/log4j-1.2.15.jar
-mysqldriver=external-libs/mysql-connector-java-5.1.5-bin.jar
+# all other files in the external-libs folder are automatically used
