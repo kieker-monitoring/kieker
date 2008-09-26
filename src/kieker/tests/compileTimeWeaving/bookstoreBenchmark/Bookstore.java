@@ -2,6 +2,10 @@ package kieker.tests.compileTimeWeaving.bookstoreBenchmark;
 
 import kieker.tpmon.annotations.TpmonMonitoringProbe;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * kieker.tests.compileTimeWeaving.bookstore.Bookstore.java
@@ -80,12 +84,18 @@ public class Bookstore extends Thread{
 		System.exit(0);
     }
     
+    public void doProcess(HttpServletRequest request, HttpServletResponse response){
+        Bookstore.searchBook();        
+    }
+    
     public void run() {
-    	Bookstore.searchBook();
+        this.doProcess(null, null);
     }
 
+    public static AtomicInteger reqs = new AtomicInteger(0);
+    
     @TpmonMonitoringProbe()
-    public static void searchBook() {
+    public static void searchBook() {       
 	Catalog.getBook(false);	
 	CRM.getOffers();
     }

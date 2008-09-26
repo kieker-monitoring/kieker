@@ -5,6 +5,7 @@ package kieker.tpmon.aspects;
 
 import kieker.tpmon.ExecutionData;
 import kieker.tpmon.*;
+import kieker.tpmon.annotations.*;
 import kieker.tpmon.asyncDbconnector.*;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,18 +18,12 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Andre
  */
 @Aspect
-public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitoring {
-   
-    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) " +
-    "&& !execution(@TpmonInternal * *.*(..)) " +
-    "&& !execution(* Dbconnector.*(..)) " +
-    "&& !execution(* DbWriter.*(..)) " +
-    "&& !execution(* AsyncDbconnector.*(..)) " +
-    "&& !execution(* TpmonController.*(..)) " +
-    "&& !execution(* FileSystemWriter.*(..))")
+public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitoring { 
+
+    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) ")
     public void monitoredMethod() {
     }
-
+   
     @Around("monitoredMethod()")
     public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
@@ -43,7 +38,7 @@ public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitori
         } finally {
             /* not that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
-             * execpetion! */
+             * exception! */
             ctrlInst.insertMonitoringDataNow(execData.componentName, 
                     execData.opname, execData.traceId, 
                     execData.tin, execData.tout);

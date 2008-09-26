@@ -589,13 +589,89 @@ public class TpmonController {
     public String recallThreadLocalSessionId() {
         return this.sessionId.get();
     }
+    
+   private ThreadLocal<Integer> eoi = new ThreadLocal<Integer>();
+    
+    /**
+     * Used by the spring aspect to explicitly register a sessionid that is to be collected within
+     * a servlet method (that knows the request object).
+     * The thread is responsible for invalidating the stored traceId using 
+     * the method unsetThreadLocalSessionId()!
+     */
+    @TpmonInternal()
+    public void storeThreadLocalEOI(int eoi) {
+        this.eoi.set(eoi);
+    }
+    
+    @TpmonInternal()
+    public void incrementThreadLocalEOI() {
+        this.eoi.set(this.eoi.get().intValue()+1);
+    }
+    
+    @TpmonInternal()
+    public void decrementThreadLocalEOI() {
+        this.eoi.set(this.eoi.get().intValue()-1);
+    }
+    
+    /**
+     * This method returns the thread-local traceid previously
+     * registered using the method registerTraceId(traceId).
+     * 
+     * @return the sessionid. null if no session registered.
+     */
+    @TpmonInternal()
+    public int recallThreadLocalEOI() {
+        return this.eoi.get();
+    }
 
     /**
      * This method unsets a previously registered traceid. 
      */
     @TpmonInternal()
-    public void unsetThreadLocalSessionId() {
-        this.sessionId.remove();
+    public void unsetThreadLocalEOI() {
+        this.eoi.remove();
+    }
+    
+   private ThreadLocal<Integer> ess = new ThreadLocal<Integer>();
+    
+    /**
+     * Used by the spring aspect to explicitly register a sessionid that is to be collected within
+     * a servlet method (that knows the request object).
+     * The thread is responsible for invalidating the stored traceId using 
+     * the method unsetThreadLocalSessionId()!
+     */
+    @TpmonInternal()
+    public void storeThreadLocalESS(int ess) {
+        this.ess.set(ess);
+    }
+    
+    @TpmonInternal()
+    public void incrementThreadLocalESS() {
+        this.ess.set(this.ess.get().intValue()+1);
+    }
+    
+    @TpmonInternal()
+    public void decrementThreadLocalESS() {
+        this.ess.set(this.ess.get().intValue()-1);
+    }
+    
+    /**
+     * This method returns the thread-local traceid previously
+     * registered using the method registerTraceId(traceId).
+     * 
+     * @return the sessionid. null if no session registered.
+     */
+    @TpmonInternal()
+    public int recallThreadLocalESS() {
+        return this.ess.get();
+    }
+
+    /**
+     * This method unsets a previously registered traceid. 
+     */
+    @TpmonInternal()
+    public void unsetThreadLocalESS() {
+        this.ess.remove();
     }
     
     @TpmonInternal()

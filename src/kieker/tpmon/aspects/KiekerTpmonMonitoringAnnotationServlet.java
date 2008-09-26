@@ -5,9 +5,12 @@
 
 package kieker.tpmon.aspects;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import kieker.tpmon.ExecutionData;
+import kieker.tpmon.annotations.*;
+import kieker.tpmon.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,21 +28,28 @@ public class KiekerTpmonMonitoringAnnotationServlet extends AbstractKiekerTpmonM
     public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
     }
 
+    public static AtomicInteger reqs = new AtomicInteger(0);
     @Around("monitoredServletEntry(HttpServletRequest, HttpServletResponse)")
     public Object doEntryProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        return thisJoinPoint.proceed();
+        
+        HttpServletRequest req = (HttpServletRequest)thisJoinPoint.getArgs()[0];
+        String sessionId = (req!=null)?req.getSession(true).getId():null;
+        Object retVal = null;
+        ctrlInst.storeThreadLocalSessionId("Sess"+sessionId);
+        try{
+            retVal = thisJoinPoint.proceed(); // does pass the args!
+        } catch (Exception exc){
+            throw exc;
+        } finally {
+            ctrlInst.unsetThreadLocalSessionId();
+        }
+        return retVal;
     }
    
-   @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) " +
-    "&& !execution(@TpmonInternal * *.*(..)) " +
-    "&& !execution(* Dbconnector.*(..)) " +
-    "&& !execution(* DbWriter.*(..)) " +
-    "&& !execution(* AsyncDbconnector.*(..)) " +
-    "&& !execution(* TpmonController.*(..)) " +
-    "&& !execution(* FileSystemWriter.*(..))")
+    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) ")
     public void monitoredMethod() {
     }
       
