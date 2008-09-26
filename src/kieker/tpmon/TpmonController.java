@@ -590,6 +590,14 @@ public class TpmonController {
         return this.sessionId.get();
     }
     
+   /**
+     * This method unsets a previously registered sessionid. 
+     */
+    @TpmonInternal()
+    public void unsetThreadLocalSessionId() {
+        this.sessionId.remove();
+    }
+    
    private ThreadLocal<Integer> eoi = new ThreadLocal<Integer>();
     
     /**
