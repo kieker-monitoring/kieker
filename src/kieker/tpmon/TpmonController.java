@@ -326,6 +326,11 @@ public class TpmonController {
     public boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
         return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, executionOrderIndex, executionStackSize);
     }
+    
+    @TpmonInternal()
+    public boolean insertMonitoringDataNow(String component, String methodSig, long requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, executionOrderIndex, executionStackSize);
+    }
 
     @TpmonInternal()
     public boolean insertMonitoringDataNow(String component, String methodSig, String sessionID, long requestID, long tin, long tout) {
@@ -611,14 +616,15 @@ public class TpmonController {
         this.eoi.set(eoi);
     }
     
+    /** 
+     * Since this method accesses a ThreadLocal variable,
+     *  it is not (necessary to be) thread-safe.
+     */
     @TpmonInternal()
-    public void incrementThreadLocalEOI() {
-        this.eoi.set(this.eoi.get().intValue()+1);
-    }
-    
-    @TpmonInternal()
-    public void decrementThreadLocalEOI() {
-        this.eoi.set(this.eoi.get().intValue()-1);
+    public int incrementAndRecallThreadLocalEOI() {
+        int newEoi = this.eoi.get().intValue()+1;
+        this.eoi.set(newEoi);
+        return newEoi;
     }
     
     /**
@@ -653,14 +659,15 @@ public class TpmonController {
         this.ess.set(ess);
     }
     
+   /** 
+     * Since this method accesses a ThreadLocal variable,
+     *  it is not (necessary to be) thread-safe.
+     */
     @TpmonInternal()
-    public void incrementThreadLocalESS() {
-        this.ess.set(this.ess.get().intValue()+1);
-    }
-    
-    @TpmonInternal()
-    public void decrementThreadLocalESS() {
-        this.ess.set(this.ess.get().intValue()-1);
+    public int recallAndIncrementThreadLocalESS() {
+        int curEss = this.ess.get().intValue(); 
+        this.ess.set(curEss +1);
+        return curEss;
     }
     
     /**

@@ -18,7 +18,7 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Andre
  */
 @Aspect
-public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitoring { 
+public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMonitoring { 
 
     @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) ")
     public void monitoredMethod() {
@@ -30,7 +30,16 @@ public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitori
             return thisJoinPoint.proceed();
         }
 
-        ExecutionData execData = this.initExecutionData(thisJoinPoint);
+        ExecutionData execData = this.initExecutionData(thisJoinPoint);        
+        int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
+        int ess = 0; /* this is the height in the dynamic call tree of this execution */
+        if (execData.isEntryPoint){
+            ctrlInst.storeThreadLocalEOI(0);
+            ctrlInst.storeThreadLocalESS(1);
+        } else {
+            eoi = ctrlInst.incrementAndRecallThreadLocalEOI();
+            ess = ctrlInst.recallAndIncrementThreadLocalESS();
+        }
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){
@@ -41,7 +50,14 @@ public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitori
              * exception! */
             ctrlInst.insertMonitoringDataNow(execData.componentName, 
                     execData.opname, execData.traceId, 
-                    execData.tin, execData.tout);
+                    execData.tin, execData.tout,
+                    eoi, ess);
+            if (execData.isEntryPoint){
+                ctrlInst.unsetThreadLocalEOI();
+                ctrlInst.unsetThreadLocalESS();
+            } else {
+                ctrlInst.storeThreadLocalESS(ess);
+            }
         }
         return execData.retVal;
     }

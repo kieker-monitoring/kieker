@@ -59,14 +59,14 @@ public class KiekerTpmonMonitoringAnnotationServlet extends AbstractKiekerTpmonM
             return thisJoinPoint.proceed();
         }
         
-        ExecutionData execData = new ExecutionData();
+        ExecutionData execData = this.initExecutionData(thisJoinPoint);
         String sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
         try{
-            execData = this.proceedAndMeasure(thisJoinPoint, execData);
+            this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){
             throw e; // exceptions are forwarded          
         } finally {
-            /* not that proceedAndMeasure(...) even sets the variable name
+            /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * execpetion! */
             ctrlInst.insertMonitoringDataNow(execData.componentName, 
