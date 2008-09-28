@@ -3,7 +3,7 @@
     <property file="tpmon.properties"/>
 
     <property name="KiekerTpmonTestAspect"
-              value="KiekerTpmonMonitoringAnnotationServlet.java"/>
+              value="KiekerTpmonMonitoringAnnotationRemoteServlet.java"/>
     <!--<property name="KiekerTpmonTestAspect"
               value="TpmonMonitorAnnotationServlet.aj"/>-->
     
@@ -256,6 +256,8 @@
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoring.java" 
+              todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
+        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoringServlet.java" 
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tpmon/aspects/${KiekerTpmonTestAspect}" 
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
