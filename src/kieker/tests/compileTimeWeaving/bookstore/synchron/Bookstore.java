@@ -44,7 +44,7 @@ import java.util.Vector;
  */
 
 public class Bookstore extends Thread{
-    static int numberOfRequests = 100;
+    static int numberOfRequests = 5000;
     static int interRequestTime = 5;
 
     /**
