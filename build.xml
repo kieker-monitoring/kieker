@@ -278,6 +278,24 @@
            <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
         </java>
     </target>
+    <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="clean,compile-tests-compileTimeWeaving-bookstore">
+        <echo message="Using Bookstore variant with synchronized Catalog.getBooks (its slower)."/>
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.compileTimeWeaving.bookstore.synchron.Bookstore"
+              classpathref="run.ctwtests.classpath">
+           <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
+        </java>
+    </target>
+    <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-bookstore">
+      
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample.Starter"
+              classpathref="run.ctwtests.classpath">
+           <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
+        </java>
+    </target>
     <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">
         <java dir="."
               fork="true"
