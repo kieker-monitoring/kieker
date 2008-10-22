@@ -36,15 +36,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class Starter extends Thread{
-    static int numberOfRequests = 1000;
+    static int numberOfRequests = 30000;
     static int interRequestTime = 5;
-    static int defaultSleeptimeMs = 10;
+    static int defaultSleeptimeMs = 5;
 
     /**
      *
      */
     @TpmonMonitoringProbe()
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 	
 	Vector<Starter> oneRun = new Vector<Starter>();
 	
@@ -53,11 +53,12 @@ public class Starter extends Thread{
 		Starter newBookstore = new Starter();
 		oneRun.add(newBookstore);
 		newBookstore.start();
-		Starter.waitabit(interRequestTime);
+		//Starter.waitabit(interRequestTime);
+                Thread.sleep(interRequestTime);
 	}
     	System.out.println("Bookstore.main: Finished with starting all requests.");
     	System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-		waitabit(5000);
+		Thread.sleep(5000);
 		System.exit(0);
     }
 
@@ -68,13 +69,12 @@ public class Starter extends Thread{
     private static void workabit() {
         int a = (int)(Math.random() * 5d);
         int b = 0;
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < (1000*500); i++) {
             a = a + (b/4) + (i/1000);
         }
         if (a % 1000 == 0 ) { // extremely rare event ...  
             ab.set(true);
-        }
-        
+        }        
     }
 
     public void run() {
