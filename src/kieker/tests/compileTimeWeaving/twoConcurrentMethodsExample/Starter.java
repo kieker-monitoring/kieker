@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class Starter extends Thread{
-    static int numberOfRequests = 30000;
+    static int numberOfRequests = 2000;
     static int interRequestTime = 5;
     static int defaultSleeptimeMs = 5;
 
@@ -66,10 +66,10 @@ public class Starter extends Thread{
     static AtomicBoolean ab = new AtomicBoolean(true);
     
     @TpmonMonitoringProbe()
-    private static void workabit() {
+    private void workabit() {
         int a = (int)(Math.random() * 5d);
         int b = 0;
-        for (int i = 0; i < (1000*500); i++) {
+        for (int i = 0; i < (1000*500*10); i++) {
             a = a + (b/4) + (i/1000);
         }
         if (a % 1000 == 0 ) { // extremely rare event ...  
@@ -77,12 +77,13 @@ public class Starter extends Thread{
         }        
     }
 
+    @Override
     public void run() {
-    	Starter.a();
+    	a();
     }
 
     @TpmonMonitoringProbe()
-    public static void a() {
+    public void a() {
         waitabit(defaultSleeptimeMs);
         workabit();
     }
@@ -91,7 +92,7 @@ public class Starter extends Thread{
      * Only encapsulates Thread.sleep()
      */
     @TpmonMonitoringProbe()
-    public static void waitabit(long waittime) {
+    public void waitabit(long waittime) {
     	if (waittime > 0) {
 		try{
 		Thread.sleep(waittime);
