@@ -42,7 +42,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
 				String sessionId = getStringContentFromHeader(hdr);
 				if(sessionId!=null) {
 					LOG.info("registering session identifier "+sessionId);
-					TpmonController.getInstance().registerSessionIdentifier(sessionId, Thread.currentThread().getId());
+					TpmonController.getInstance().storeThreadLocalSessionId(sessionId);
 				}
 			} else {
 				LOG.info("no tpmon session identifier header found!");

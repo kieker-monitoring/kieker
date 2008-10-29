@@ -540,7 +540,7 @@ public class TpmonController {
      * the method unsetThreadLocalTraceId()!
      */
     @TpmonInternal()
-    public void storeThreadLocalTraceId(long traceId) {
+    private void storeThreadLocalTraceId(long traceId) {
         this.traceId.set(traceId);
     }
     

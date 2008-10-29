@@ -1,6 +1,7 @@
 package kieker.tpmon.cxf;
 
 
+import kieker.tpmon.TpmonController;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
 import org.apache.cxf.headers.Header;
@@ -27,7 +28,7 @@ public class TpmonSessionIdentifierOutInterceptor extends
 	public void handleMessage(SoapMessage msg) throws Fault {
 		Document d = DOMUtils.createDocument();
 		Element e = d.createElementNS(SessionIdentifierConstants.NAMESPACE_URI, SessionIdentifierConstants.QUALIFIED_NAME);
-		e.setTextContent("testing123"); //TODO read sessionId from ThreadLocal Variable
+		e.setTextContent(TpmonController.getInstance().recallThreadLocalSessionId()); 
 		Header hdr = new Header(SessionIdentifierConstants.SESSION_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
 	}
