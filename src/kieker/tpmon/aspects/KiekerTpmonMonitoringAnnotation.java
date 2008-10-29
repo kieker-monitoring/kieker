@@ -3,7 +3,6 @@
  */
 package kieker.tpmon.aspects;
 
-import kieker.tpmon.ExecutionData;
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.*;
 import kieker.tpmon.asyncDbconnector.*;
