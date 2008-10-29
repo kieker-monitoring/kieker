@@ -17,7 +17,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitoring { 
 
-    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) ")
+    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
    

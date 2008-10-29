@@ -5,6 +5,7 @@ package kieker.tpmon.aspects;
 
 import kieker.tpmon.ExecutionData;
 import kieker.tpmon.*;
+import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.*;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,6 +20,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
 
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     
+    @TpmonInternal()
     public ExecutionData initExecutionData(ProceedingJoinPoint thisJoinPoint){
         ExecutionData execData = new ExecutionData();
        // e.g. "getBook" 
@@ -40,6 +42,10 @@ public abstract class AbstractKiekerTpmonMonitoring {
         return execData;
     }
     
+    @TpmonInternal()
+    public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable;
+    
+    @TpmonInternal()
     public void proceedAndMeasure(ProceedingJoinPoint thisJoinPoint, 
             ExecutionData execData) throws Throwable{       
         execData.tin = ctrlInst.getTime(); // startint stopwatch    

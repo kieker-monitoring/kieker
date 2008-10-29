@@ -4,7 +4,6 @@ import kieker.tpmon.annotations.TpmonMonitoringProbe;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 /**

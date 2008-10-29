@@ -18,9 +18,9 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Andre
  */
 @Aspect
-public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMonitoring { 
+public class KiekerTpmonMonitoringFull extends AbstractKiekerTpmonMonitoring { 
 
-    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..))")
+    @Pointcut("execution(* *.*(..)) && !execution(@TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
    
@@ -30,16 +30,7 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
             return thisJoinPoint.proceed();
         }
 
-        ExecutionData execData = this.initExecutionData(thisJoinPoint);        
-        int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
-        int ess = 0; /* this is the height in the dynamic call tree of this execution */
-        if (execData.isEntryPoint){
-            ctrlInst.storeThreadLocalEOI(0);
-            ctrlInst.storeThreadLocalESS(1);
-        } else {
-            eoi = ctrlInst.incrementAndRecallThreadLocalEOI();
-            ess = ctrlInst.recallAndIncrementThreadLocalESS();
-        }
+        ExecutionData execData = this.initExecutionData(thisJoinPoint);
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){
@@ -50,14 +41,7 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
              * exception! */
             ctrlInst.insertMonitoringDataNow(execData.componentName, 
                     execData.opname, execData.traceId, 
-                    execData.tin, execData.tout,
-                    eoi, ess);
-            if (execData.isEntryPoint){
-                ctrlInst.unsetThreadLocalEOI();
-                ctrlInst.unsetThreadLocalESS();
-            } else {
-                ctrlInst.storeThreadLocalESS(ess);
-            }
+                    execData.tin, execData.tout);
         }
         return execData.retVal;
     }

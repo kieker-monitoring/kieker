@@ -3,7 +3,7 @@
     <property file="tpmon.properties"/>
 
     <property name="KiekerTpmonTestAspect"
-              value="KiekerTpmonMonitoringAnnotationRemoteServlet.java"/>
+              value="KiekerTpmonMonitoringFullServlet.java"/>
     <!--<property name="KiekerTpmonTestAspect"
               value="TpmonMonitorAnnotationServlet.aj"/>-->
     

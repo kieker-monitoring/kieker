@@ -6,6 +6,7 @@
 package kieker.tpmon.aspects;
 
 import javax.servlet.http.HttpServletRequest;
+import kieker.tpmon.annotations.TpmonInternal;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
@@ -16,6 +17,7 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractKiekerTpmonMonitoringServlet extends AbstractKiekerTpmonMonitoring {
 
+    @TpmonInternal()
    public Object doServletEntryProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
