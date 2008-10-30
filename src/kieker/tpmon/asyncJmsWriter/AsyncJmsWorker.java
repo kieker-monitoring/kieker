@@ -5,13 +5,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javax.jms.*;
+import javax.lang.model.type.ExecutableType;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import javax.naming.NamingException;
+import kieker.tpmon.ExecutionData;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.InsertData;
 import kieker.tpmon.asyncDbconnector.Worker;
 
 /**
@@ -35,7 +36,7 @@ public class AsyncJmsWorker implements Runnable, Worker {
     private static final Log log = LogFactory.getLog(AsyncJmsWorker.class);
     private static final long pollingIntervallInMillisecs = 400L;    
     private BlockingQueue writeQueue = null;    
-    private InsertData id = null;
+    private ExecutableType execData = null;
     private boolean finished = false;
     private static boolean shutdown = false;
     
@@ -70,9 +71,9 @@ public class AsyncJmsWorker implements Runnable, Worker {
     }
     
     @TpmonInternal
-    private void publish(InsertData insertData) {
+    private void publish(ExecutionData execData) {
         try {           
-            ObjectMessage messageObject = session.createObjectMessage(insertData);           
+            ObjectMessage messageObject = session.createObjectMessage(execData);           
             //TextMessage message = session.createTextMessage("Hello World!");
             sender.send(messageObject);                        
             //System.out.println("sended execution "+insertData.opname+" "+insertData.tin);
@@ -88,7 +89,7 @@ public class AsyncJmsWorker implements Runnable, Worker {
 
     @TpmonInternal
     private void consume(Object traceidObject) throws Exception {
-        publish((InsertData)traceidObject);        
+        publish((ExecutionData)traceidObject);        
     }
     
     @TpmonInternal

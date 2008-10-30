@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import kieker.tpmon.ExecutionData;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
@@ -99,15 +100,15 @@ public class DbWriter  implements Runnable, Worker{
                 statementChanged = false;
             }
             
-            InsertData id = (InsertData) traceidObject;
+            ExecutionData execData = (ExecutionData) traceidObject;
             
-            psInsertMonitoringData.setString(1,id.opname);
-            psInsertMonitoringData.setString(2,id.sessionid);
-            psInsertMonitoringData.setString(3,id.traceid);
-            psInsertMonitoringData.setLong(4,id.tin);
-            psInsertMonitoringData.setLong(5,id.tout);
-            psInsertMonitoringData.setLong(6,id.executionOrderIndex);
-            psInsertMonitoringData.setLong(7,id.executionStackSize);
+            psInsertMonitoringData.setString(1, execData.componentName+"."+execData.opname);
+            psInsertMonitoringData.setString(2, execData.sessionId);
+            psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));
+            psInsertMonitoringData.setLong(4, execData.tin);
+            psInsertMonitoringData.setLong(5, execData.tout);
+            psInsertMonitoringData.setLong(6, execData.eoi);
+            psInsertMonitoringData.setLong(7, execData.ess);
             psInsertMonitoringData.execute();
             
             

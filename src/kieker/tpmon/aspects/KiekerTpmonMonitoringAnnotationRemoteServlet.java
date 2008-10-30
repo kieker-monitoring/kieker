@@ -61,10 +61,10 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            ctrlInst.insertMonitoringDataNow(execData.componentName, 
-                    execData.opname, sessionId, execData.traceId, 
-                    execData.tin, execData.tout,
-                    eoi, ess);
+            execData.sessionId = sessionId;
+            execData.eoi = eoi;
+            execData.ess = ess;
+            ctrlInst.insertMonitoringDataNow(execData);
             if (execData.isEntryPoint){
                 // Since we didn't register the sessionId we won't unset it!
                 ctrlInst.unsetThreadLocalEOI();

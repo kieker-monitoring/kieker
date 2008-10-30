@@ -48,10 +48,9 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            ctrlInst.insertMonitoringDataNow(execData.componentName, 
-                    execData.opname, execData.traceId, 
-                    execData.tin, execData.tout,
-                    eoi, ess);
+            execData.eoi = eoi;
+            execData.ess = ess;
+            ctrlInst.insertMonitoringDataNow(execData);
             if (execData.isEntryPoint){
                 ctrlInst.unsetThreadLocalEOI();
                 ctrlInst.unsetThreadLocalESS();

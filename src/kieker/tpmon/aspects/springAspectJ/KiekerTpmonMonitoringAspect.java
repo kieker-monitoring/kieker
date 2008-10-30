@@ -87,7 +87,7 @@ public class KiekerTpmonMonitoringAspect {
             // therefore, the thread may be reused by the next trace (an issue of thread pools)
             }
             //TpmonController.insertMonitoringDataNow(componentName, opname, traceid, tin, tout);               
-            ctrlInst.insertMonitoringDataNow(componentName, opname, sessionId, traceId, tin, tout);
+            ctrlInst.insertMonitoringDataNow(ExecutionData.getInstance(componentName, opname, sessionId, traceId, tin, tout));
         }
         // returning the result of the intercepted method call
         return retVal;

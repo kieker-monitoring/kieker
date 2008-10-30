@@ -52,9 +52,8 @@ public class KiekerTpmonMonitoringFullServlet extends AbstractKiekerTpmonMonitor
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * execpetion! */
-            ctrlInst.insertMonitoringDataNow(execData.componentName, 
-                    execData.opname, sessionId, execData.traceId, 
-                    execData.tin, execData.tout);
+            execData.sessionId = sessionId;
+            ctrlInst.insertMonitoringDataNow(execData);
             // Since we didn't register the sessionId we won't unset it!
         }
         return execData.retVal;

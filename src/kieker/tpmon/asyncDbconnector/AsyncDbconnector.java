@@ -39,6 +39,7 @@ import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
 
 
+import kieker.tpmon.ExecutionData;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
@@ -48,7 +49,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
-    private BlockingQueue<InsertData> blockingQueue;
+    private BlockingQueue<ExecutionData> blockingQueue;
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
     private boolean setInitialExperimentIdBasedOnLastId = false;
@@ -94,7 +95,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
             int numberOfConnections = 4;
 
-            blockingQueue = new ArrayBlockingQueue<InsertData>(8000);
+            blockingQueue = new ArrayBlockingQueue<ExecutionData>(8000);
 
 //                DbWriter dbw = new DbWriter(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
@@ -149,7 +150,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
      *
      */
        @TpmonInternal()
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+    public boolean insertMonitoringDataNow(ExecutionData execData) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }
@@ -170,8 +171,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                 }
             }*/
 
-            InsertData id = new InsertData(experimentId, vmName, opname, sessionid, traceid, tin, tout, executionOrderIndex, executionStackSize);
-            blockingQueue.add(id); // tries to add immediately!
+            blockingQueue.add(execData); // tries to add immediately!
         //System.out.println("Queue is "+blockingQueue.size());
 
         } catch (Exception ex) {

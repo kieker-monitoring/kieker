@@ -14,9 +14,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
+import kieker.tpmon.ExecutionData;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.InsertData;
 import kieker.tpmon.asyncDbconnector.Worker;
 
 import org.apache.commons.logging.Log;
@@ -38,7 +38,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-    private InsertData id = null;
+    private ExecutionData execData = null;
     private boolean finished = false;
     private static boolean shutdown = false;
 
@@ -93,8 +93,8 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
             prepareFile();
         }
 
-        id = (InsertData) traceidObject;
-        writeDataNow(id.experimentId + ";" + id.opname + ";" + id.sessionid + ";" + id.traceid + ";" + id.tin + ";" + id.tout + ";" + id.vmName + ";" + id.executionOrderIndex + ";" + id.executionStackSize);
+        execData = (ExecutionData) traceidObject;
+        writeDataNow(execData);
     }
 
     /**
@@ -138,21 +138,17 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         }
     }
 
-    // TODO: Is this method ever called??
-//    @TpmonInternal
-//    public boolean insertMonitoringDataNow(int experimentId, String vmName, String componentname, String methodname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex) {
-//        try {
-//            writeDataNow(experimentId + "," + componentname + methodname + "," + sessionID + "," + requestID + "," + tin + "," + tout + "," + vmName + "," + executionOrderIndex + "," + id.executionStackSize);
-//        } catch (IOException ex) {
-//            log.error("Failed to write data", ex);
-//            return false;
-//        }
-//        return true;
-//    }
+    /**
+     * Note that it's not necessary to synchronize this method since 
+     * a file is written at most by one thread.
+     * 
+     * @param data
+     * @throws java.io.IOException
+     */
     @TpmonInternal
-    private void writeDataNow(String data) throws IOException {
+    private void writeDataNow(ExecutionData execData) throws IOException {
         prepareFile(); // may throw FileNotFoundException
-        pos.println(data);
+        pos.println(execData.toKiekerCSVRecord());
         pos.flush();
     }
 

@@ -10,6 +10,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
+import kieker.tpmon.ExecutionData;
+import kieker.tpmon.annotations.*;
+
+
 /**
  *
  * @author Andre
@@ -36,9 +40,7 @@ public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitori
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            ctrlInst.insertMonitoringDataNow(execData.componentName, 
-                    execData.opname, execData.traceId, 
-                    execData.tin, execData.tout);
+            ctrlInst.insertMonitoringDataNow(execData);
         }
         return execData.retVal;
     }

@@ -22,16 +22,17 @@ public abstract class AbstractKiekerTpmonMonitoring {
     
     @TpmonInternal()
     public ExecutionData initExecutionData(ProceedingJoinPoint thisJoinPoint){
-        ExecutionData execData = new ExecutionData();
        // e.g. "getBook" 
         String methodname = thisJoinPoint.getSignature().getName();
         // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
         String paramList = thisJoinPoint.getSignature().toLongString();
         int paranthIndex = paramList.lastIndexOf('(');
-        paramList = paramList.substring(paranthIndex);
-        // paramList is now e.g.,  "()"
-        execData.opname = methodname + paramList;
-        execData.componentName = thisJoinPoint.getSignature().getDeclaringTypeName();
+        paramList = paramList.substring(paranthIndex); // paramList is now e.g.,  "()"
+
+        ExecutionData execData = ExecutionData.getInstance(
+                thisJoinPoint.getSignature().getDeclaringTypeName() /* component */, 
+                methodname + paramList /* operation */, 
+                ctrlInst.recallThreadLocalTraceId() /* traceId, -1 if entry point*/);
         
         execData.isEntryPoint = false;
         execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point

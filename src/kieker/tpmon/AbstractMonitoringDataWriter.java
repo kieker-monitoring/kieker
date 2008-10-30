@@ -9,7 +9,7 @@ public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWri
     private boolean debugEnabled;
 
     @TpmonInternal()
-    public abstract boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize);
+    public abstract boolean insertMonitoringDataNow(ExecutionData execData);
 
     @TpmonInternal()
     public void setDebug(boolean debug) {

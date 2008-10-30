@@ -7,13 +7,13 @@ package kieker.tpmon.asyncJmsWriter;
 
 import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.InsertData;
 import kieker.tpmon.asyncDbconnector.Worker;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import kieker.tpmon.ExecutionData;
 
 /**
  *
@@ -23,7 +23,7 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
     private static final Log log = LogFactory.getLog(AsyncJmsProducer.class);        
     private Vector<Worker> workers = new Vector<Worker>();
     private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
-    private BlockingQueue<InsertData> blockingQueue = null;    
+    private BlockingQueue<ExecutionData> blockingQueue = null;    
     
     private String contextFactoryType; // type of the jms factory implementation, e.g.
     private String providerUrl; 
@@ -37,25 +37,15 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
     public Vector<Worker> getWorkers() {
         return workers;
     }
-    /**
-     * Use this method to insert data into the database.
-     */
+     
     @TpmonInternal
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        return this.insertMonitoringDataNow(experimentId, vmName, opname, NOSESSIONID, traceid, tin, tout, executionOrderIndex, executionStackSize);
-    }
-    
-    @TpmonInternal
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+    public boolean insertMonitoringDataNow(ExecutionData execData) {
          if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncJmsProducer.insertMonitoringDataNow");
         }
 
-        try {
-            InsertData id = new InsertData(experimentId, vmName, opname, sessionID, requestID, tin, tout, executionOrderIndex, executionStackSize);
-               
-            blockingQueue.add(id); // tries to add immediately! -- this is for production systems            
-            
+        try {              
+            blockingQueue.add(execData); // tries to add immediately! -- this is for production systems            
             //int currentQueueSize = blockingQueue.size();
         } catch (Exception ex) {            
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception: " + ex.getMessage());
@@ -83,7 +73,7 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
     
     @TpmonInternal
     public void init() {
-        blockingQueue = new ArrayBlockingQueue<InsertData>(8000);
+        blockingQueue = new ArrayBlockingQueue<ExecutionData>(8000);
         for (int i = 0; i < numberOfJmsWriters; i++) {
             AsyncJmsWorker dbw = new AsyncJmsWorker(blockingQueue, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);                       
             new Thread(dbw).start();                       

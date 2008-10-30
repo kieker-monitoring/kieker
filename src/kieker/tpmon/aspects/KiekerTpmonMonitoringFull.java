@@ -39,9 +39,7 @@ public class KiekerTpmonMonitoringFull extends AbstractKiekerTpmonMonitoring {
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            ctrlInst.insertMonitoringDataNow(execData.componentName, 
-                    execData.opname, execData.traceId, 
-                    execData.tin, execData.tout);
+            ctrlInst.insertMonitoringDataNow(execData);
         }
         return execData.retVal;
     }

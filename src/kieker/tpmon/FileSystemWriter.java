@@ -59,7 +59,8 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public class FileSystemWriter extends AbstractMonitoringDataWriter{
+public class FileSystemWriter extends AbstractMonitoringDataWriter {
+
     private static final Log log = LogFactory.getLog(FileSystemWriter.class);
     // configuration parameters
     private final int maxEntriesInFile = 22000;
@@ -68,18 +69,18 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter{
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-    
-    public FileSystemWriter(String filenamePrefix){
+
+    public FileSystemWriter(String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
     }
-    
+
     /**
      * Determines and sets a new Filename
      */
-    private void prepareFile() throws FileNotFoundException{
+    private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
-                    pos.close();
+                pos.close();
             }
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
@@ -87,7 +88,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter{
             int time = (int) (System.currentTimeMillis() - 1177404043379L);
             int random = (int) (Math.random() * 100d);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
-            
+
             FileOutputStream fos;
             try {
                 fos = new FileOutputStream(filename);
@@ -102,19 +103,15 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter{
         }
     }
 
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        try{
-            this.writeDataNow(experimentId + ";" + opname + ";" + sessionID + ";" + requestID + ";" + tin + ";" + tout + ";" + vmName +";"+executionOrderIndex+";"+executionStackSize);   
-        }catch (IOException ex){
-            log.error("Failed to write data", ex);            
+    public synchronized boolean insertMonitoringDataNow(ExecutionData execData) {
+        try {
+            prepareFile(); // may throw FileNotFoundException
+            pos.println(execData.toKiekerCSVRecord());
+            pos.flush();
+        } catch (IOException ex) {
+            log.error("Failed to write data", ex);
             return false;
         }
         return true;
-    }
-
-    private synchronized void writeDataNow(String data) throws IOException {
-        prepareFile(); // may throw FileNotFoundException
-        pos.println(data);
-        pos.flush();
     }
 }

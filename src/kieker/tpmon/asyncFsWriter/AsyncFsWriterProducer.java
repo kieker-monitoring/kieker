@@ -4,8 +4,8 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
+import kieker.tpmon.ExecutionData;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.InsertData;
 
 import kieker.tpmon.asyncDbconnector.Worker;
 import org.apache.commons.logging.Log;
@@ -22,7 +22,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
     private Vector<Worker> workers = new Vector<Worker>();
-    private BlockingQueue<InsertData> blockingQueue = null;
+    private BlockingQueue<ExecutionData> blockingQueue = null;
     private String filenamePrefix = null;
     
     @TpmonInternal
@@ -38,7 +38,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
     @TpmonInternal
     public void init() {
-        blockingQueue = new ArrayBlockingQueue<InsertData>(8000);
+        blockingQueue = new ArrayBlockingQueue<ExecutionData>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
             AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue, filenamePrefix);                        
             new Thread(dbw).start();                       
@@ -48,29 +48,19 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         log.info(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
     }
 
-    private final String NOSESSIONID = "nosession";
-    /**
-     * Use this method to insert data into the database.
-     */
-    @TpmonInternal
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        return this.insertMonitoringDataNow(experimentId, vmName, opname, NOSESSIONID, traceid, tin, tout, executionOrderIndex, executionStackSize);
-    }
-
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      *
      */
     @TpmonInternal
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+    public boolean insertMonitoringDataNow(ExecutionData execData) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }
 
         try {
-            InsertData id = new InsertData(experimentId, vmName, opname, sessionid, traceid, tin, tout, executionOrderIndex, executionStackSize);
-            blockingQueue.add(id); // tries to add immediately!
+            blockingQueue.add(execData); // tries to add immediately!
         //System.out.println(""+blockingQueue.size());
 
         } catch (Exception ex) {

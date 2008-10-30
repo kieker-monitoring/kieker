@@ -75,7 +75,8 @@ import kieker.tpmon.asyncDbconnector.Worker;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
 import kieker.tpmon.asyncJmsWriter.AsyncJmsProducer;
 
-public class TpmonController {   
+public class TpmonController {
+
     private static final Log log = LogFactory.getLog(TpmonController.class);
     private IMonitoringDataWriter monitoringDataWriter = null;
     private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
@@ -84,7 +85,6 @@ public class TpmonController {
     //private String buildDate = "unknown (at least 2008-08-08)";
     private boolean debug = false;
     public boolean storeInDatabase = false;
-    
     public String filenamePrefix = ""; // e.g. path "/tmp"   
     public boolean storeInJavaIoTmpdir = true;
     public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
@@ -106,14 +106,13 @@ public class TpmonController {
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
     private static TpmonController ctrlInst = null;    // default properties for JMS publisher
-    
     public boolean sendMonitoringDataToJMSserver = false;
     private String jmsProviderUrl = "tcp://localhost:3035/"; // url of the jndi service that knows the JMS connector factory; default for openjms 0.7.7
     private String jmsTopic = "queue1"; // JMS topic for publish/subscribe pattern
     private String jmsContextFactoryType = "org.exolab.jms.jndi.InitialContextFactory"; // default setting for openjms 0.7.7
     private String jmsFactoryLookupName = "ConnectionFactory"; // default setting for openjms 0.7.7
     private long jmsMessageTimeToLive = 10000; // time messages should live in jms server in millisecs
-    
+
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
         if (ctrlInst == null) {
@@ -143,7 +142,7 @@ public class TpmonController {
             System.out.println("USING JMS (experimental)");
             if (jmsTopic == null || jmsTopic.length() == 0) {
                 monitoringEnabled = false;
-                log.error(">Kieker-Tpmon: Disabling monitoring because jmsTopic is invalid :\""+jmsTopic+"\"");
+                log.error(">Kieker-Tpmon: Disabling monitoring because jmsTopic is invalid :\"" + jmsTopic + "\"");
             } else {
                 AsyncJmsProducer producer = new AsyncJmsProducer(jmsContextFactoryType, jmsProviderUrl, jmsFactoryLookupName, jmsTopic, jmsMessageTimeToLive);
                 this.monitoringDataWriter = producer;
@@ -310,37 +309,6 @@ public class TpmonController {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
     }
-
-    @TpmonInternal()
-    public boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout) {
-        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, -1, -1);
-    }
-
-    @TpmonInternal()
-    public boolean insertMonitoringDataNow(String component, String methodSig, long requestID, long tin, long tout) {
-        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, -1, -1);
-    }
-
-    
-    @TpmonInternal()
-    public boolean insertMonitoringDataNow(String component, String methodSig, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, executionOrderIndex, executionStackSize);
-    }
-    
-    @TpmonInternal()
-    public boolean insertMonitoringDataNow(String component, String methodSig, long requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        return this.insertMonitoringDataNow(component, methodSig, "nosession", requestID, tin, tout, executionOrderIndex, executionStackSize);
-    }
-
-    @TpmonInternal()
-    public boolean insertMonitoringDataNow(String component, String methodSig, String sessionID, long requestID, long tin, long tout) {
-        return this.insertMonitoringDataNow(component, methodSig, sessionID, Long.toString(requestID), tin, tout, -1, -1);
-    }
-    
-    @TpmonInternal()
-    public boolean insertMonitoringDataNow(String component, String methodSig, String sessionID, String requestID, long tin, long tout) {
-        return this.insertMonitoringDataNow(component, methodSig, sessionID, requestID, tin, tout, -1, -1);
-    }
     // only used if encodeMethodNames == true
     private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
     // lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
@@ -351,17 +319,12 @@ public class TpmonController {
     private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(String componentname, String methodSig, String sessionID, long requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
-        if (!this.monitoringEnabled) {
-            return false;
-        }
-        return this.insertMonitoringDataNow(componentname, methodSig, sessionID, Long.toString(requestID), tin, tout, executionOrderIndex, executionStackSize);
-    }
+    public boolean insertMonitoringDataNow(ExecutionData execData) {
+        execData.experimentId = this.experimentId;
+        execData.vmName = this.vmname;
 
-    @TpmonInternal()
-    public boolean insertMonitoringDataNow(String componentname, String methodSig, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize) {
         if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
-            if (!(requestID.hashCode() % traceSampleingFrequency == 0)) {
+            if (!(execData.traceId % traceSampleingFrequency == 0)) {
                 return true;
             }
         }
@@ -411,13 +374,10 @@ public class TpmonController {
 
 //        newMethodname = methodname;
 
-    
+
         numberOfInserts.incrementAndGet();
-        String opname = componentname + "." + methodSig;
         // now it fails fast, it disables monitoring when a queue once is full
-        if (!this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId,
-                this.vmname, opname, sessionID, requestID, tin, tout,
-                executionOrderIndex, executionStackSize)) {
+        if (!this.monitoringDataWriter.insertMonitoringDataNow(execData)) {
             log.fatal("Error writing the monitoring data. Will disable monitoring!");
             this.monitoringEnabled = false;
             return false;
@@ -435,7 +395,7 @@ public class TpmonController {
      * the *operation* field will be the full component.methodname.
      * 
      * Therefore, 
-     * grep ",-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
+     * grep "-5,-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
      *       
      * 
      */
@@ -443,7 +403,16 @@ public class TpmonController {
         // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
         String opname = component + newMethodname;
         numberOfInserts.incrementAndGet();
-        this.monitoringDataWriter.insertMonitoringDataNow(this.experimentId, this.vmname, opname, encodedName, "", -5, -5, -5, -5);
+        ExecutionData execData = ExecutionData.getInstance();
+        execData.componentName = opname;
+        execData.opname = encodedName;
+        execData.traceId = -5;
+        execData.tin = -5;
+        execData.tout = -5;
+        execData.eoi = -5;
+        execData.ess = -5;
+        // NOTE: experimentId and vmname will be set inside insertMonitoringDataNow(.)
+        this.monitoringDataWriter.insertMonitoringDataNow(execData);
     }
 
     /**
@@ -510,17 +479,8 @@ public class TpmonController {
     public String getUniqueIdentifierForThread(long threadId) {
         return Long.toString(lastThreadId.incrementAndGet());
     }
-
     private ThreadLocal<Long> traceId = new ThreadLocal<Long>();
-    
-    /**
-     * This method returns a globally unique traceId.
-     */
-    @TpmonInternal()
-    public long getUniqueTraceId() {
-        return lastThreadId.incrementAndGet();
-    }
-    
+
     /**
      * This method returns a thread-local traceid which is globally
      * unique and stored it local for the thread.
@@ -529,11 +489,11 @@ public class TpmonController {
      */
     @TpmonInternal()
     public long getAndStoreUniqueThreadLocalTraceId() {
-        long id = this.getUniqueTraceId();
+        long id = lastThreadId.incrementAndGet();
         this.storeThreadLocalTraceId(id);
         return id;
     }
-    
+
     /**
      * This method stores a thread-local traceId.
      * The thread is responsible for invalidating the stored traceId using 
@@ -543,7 +503,7 @@ public class TpmonController {
     private void storeThreadLocalTraceId(long traceId) {
         this.traceId.set(traceId);
     }
-    
+
     /**
      * This method returns the thread-local traceid previously
      * registered using the method registerTraceId(traceId).
@@ -555,14 +515,14 @@ public class TpmonController {
     public long recallThreadLocalTraceId() {
         //log.info("Recalling traceId");
         Long traceIdObj = this.traceId.get();
-        if(traceIdObj == null){
+        if (traceIdObj == null) {
             //log.info("traceId == null");
-            return -1;        
+            return -1;
         }
         //log.info("traceId =" + traceIdObj);
         return traceIdObj;
     }
-    
+
     /**
      * This method unsets a previously registered traceid. 
      */
@@ -570,9 +530,8 @@ public class TpmonController {
     public void unsetThreadLocalTraceId() {
         this.traceId.remove();
     }
-
     private ThreadLocal<String> sessionId = new ThreadLocal<String>();
-    
+
     /**
      * Used by the spring aspect to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
@@ -583,7 +542,7 @@ public class TpmonController {
     public void storeThreadLocalSessionId(String sessionId) {
         this.sessionId.set(sessionId);
     }
-    
+
     /**
      * This method returns the thread-local traceid previously
      * registered using the method registerTraceId(traceId).
@@ -594,17 +553,16 @@ public class TpmonController {
     public String recallThreadLocalSessionId() {
         return this.sessionId.get();
     }
-    
-   /**
+
+    /**
      * This method unsets a previously registered sessionid. 
      */
     @TpmonInternal()
     public void unsetThreadLocalSessionId() {
         this.sessionId.remove();
     }
-    
-   private ThreadLocal<Integer> eoi = new ThreadLocal<Integer>();
-    
+    private ThreadLocal<Integer> eoi = new ThreadLocal<Integer>();
+
     /**
      * Used by the spring aspect to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
@@ -615,18 +573,18 @@ public class TpmonController {
     public void storeThreadLocalEOI(int eoi) {
         this.eoi.set(eoi);
     }
-    
+
     /** 
      * Since this method accesses a ThreadLocal variable,
      *  it is not (necessary to be) thread-safe.
      */
     @TpmonInternal()
     public int incrementAndRecallThreadLocalEOI() {
-        int newEoi = this.eoi.get().intValue()+1;
+        int newEoi = this.eoi.get().intValue() + 1;
         this.eoi.set(newEoi);
         return newEoi;
     }
-    
+
     /**
      * This method returns the thread-local traceid previously
      * registered using the method registerTraceId(traceId).
@@ -645,9 +603,8 @@ public class TpmonController {
     public void unsetThreadLocalEOI() {
         this.eoi.remove();
     }
-    
-   private ThreadLocal<Integer> ess = new ThreadLocal<Integer>();
-    
+    private ThreadLocal<Integer> ess = new ThreadLocal<Integer>();
+
     /**
      * Used by the spring aspect to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
@@ -658,18 +615,18 @@ public class TpmonController {
     public void storeThreadLocalESS(int ess) {
         this.ess.set(ess);
     }
-    
-   /** 
+
+    /** 
      * Since this method accesses a ThreadLocal variable,
      *  it is not (necessary to be) thread-safe.
      */
     @TpmonInternal()
     public int recallAndIncrementThreadLocalESS() {
-        int curEss = this.ess.get().intValue(); 
-        this.ess.set(curEss +1);
+        int curEss = this.ess.get().intValue();
+        this.ess.set(curEss + 1);
         return curEss;
     }
-    
+
     /**
      * This method returns the thread-local traceid previously
      * registered using the method registerTraceId(traceId).
@@ -688,7 +645,7 @@ public class TpmonController {
     public void unsetThreadLocalESS() {
         this.ess.remove();
     }
-    
+
     @TpmonInternal()
     public void shutdown() {
         log.info("Tpmon: shutting down");
@@ -884,8 +841,8 @@ public class TpmonController {
                     ". Using default value " + monitoringEnabled, true, false);
         //  log.info("monitoringEnabled missing param");
         }
-        
-        
+
+
         String useJMSproperty = prop.getProperty("sendMonitoringDataToJMSserver");
         if (useJMSproperty != null && useJMSproperty.length() != 0) {
             if (useJMSproperty.toLowerCase().equals("true") || useJMSproperty.toLowerCase().equals("false")) {
@@ -897,25 +854,25 @@ public class TpmonController {
             //    log.info("monitoringEnabled bad value");
             }
         } else {
-            //formatAndOutputError("Could not find sendMonitoringDataToJMSserver parameter in tpmonLTW.jar/" + configurationFile +
-            //        ". Using default value " + sendMonitoringDataToJMSserver, true, false);
+        //formatAndOutputError("Could not find sendMonitoringDataToJMSserver parameter in tpmonLTW.jar/" + configurationFile +
+        //        ". Using default value " + sendMonitoringDataToJMSserver, true, false);
         //  log.info("monitoringEnabled missing param");
         }
-        
-        
+
+
         // load property "jmsProviderUrl"
         String jmsProviderUrlProperty = prop.getProperty("jmsProviderUrl");
         if (jmsProviderUrlProperty != null && jmsProviderUrlProperty.length() != 0) {
             jmsProviderUrl = jmsProviderUrlProperty;
             System.out.println("Using jmsProviderURL" + jmsProviderUrl);
         } else {
-            if (sendMonitoringDataToJMSserver){
+            if (sendMonitoringDataToJMSserver) {
                 formatAndOutputError("No jmsProviderUrl  parameter found in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + jmsProviderUrl + ".", true, false);
+                        ". Using default value " + jmsProviderUrl + ".", true, false);
             }
-            
+
         }
-        
+
         //log.info("monitoringEnabled "+monitoringEnabled);
         if (monitoringEnabled == false) {
             log.info(">Kieker-Tpmon: Notice, monitoring is deactived (monitoringEnables=false in dbconnector.properties within tpmonLTW.jar)");

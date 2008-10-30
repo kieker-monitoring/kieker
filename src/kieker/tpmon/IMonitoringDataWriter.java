@@ -13,7 +13,7 @@ import kieker.tpmon.annotations.TpmonInternal;
 public interface IMonitoringDataWriter {
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionID, String requestID, long tin, long tout, int executionOrderIndex, int executionStackSize);
+    public boolean insertMonitoringDataNow(ExecutionData execData);
 
     @TpmonInternal()
     public void setDebug(boolean debug);

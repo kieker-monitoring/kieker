@@ -22,6 +22,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class KiekerTpmonMonitoringAnnotationServlet extends AbstractKiekerTpmonMonitoringServlet {
     
+
    @Pointcut("execution(* *.do*(..)) " +
    "&& args(request,response) ")
     public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
@@ -52,9 +53,8 @@ public class KiekerTpmonMonitoringAnnotationServlet extends AbstractKiekerTpmonM
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * execpetion! */
-            ctrlInst.insertMonitoringDataNow(execData.componentName, 
-                    execData.opname, sessionId, execData.traceId, 
-                    execData.tin, execData.tout);
+            execData.sessionId = sessionId;
+            ctrlInst.insertMonitoringDataNow(execData);
             // Since we didn't register the sessionId we won't unset it!
         }
         return execData.retVal;

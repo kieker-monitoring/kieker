@@ -3,9 +3,7 @@
     <property file="tpmon.properties"/>
 
     <property name="KiekerTpmonTestAspect"
-              value="KiekerTpmonMonitoringAnnotation.java"/>
-    <!--<property name="KiekerTpmonTestAspect"
-              value="TpmonMonitorAnnotationServlet.aj"/>-->
+              value="KiekerTpmonMonitoringFull.java"/>
     
     <!-- definition of the different classpathes for compilation, normal execution,
          load-time weaving tests, compile-time weaving tests -->

@@ -2,6 +2,8 @@ package kieker.tpmon.fileSystemReader;
 
 import java.io.*;
 import java.util.*;
+import javax.lang.model.type.ExecutableType;
+import kieker.tpmon.ExecutionData;
 import kieker.tpmon.TpmonController;
 
 /**
@@ -154,7 +156,8 @@ public class FileSystemReader {
         BufferedReader in = null;        
         try
         {   in = new BufferedReader(new FileReader(input));            
-            String line, name, traceId;            
+            String line, name;
+            long traceId;            
             long tin, tout;
             int expId, eoi, ess;
             String vmname;
@@ -168,7 +171,7 @@ public class FileSystemReader {
                     expId = Integer.parseInt(st.nextToken());
                     name = st.nextToken();
                     sessionid = st.nextToken();
-                    traceId = st.nextToken();
+                    traceId = Long.getLong(st.nextToken());
                     tin = Long.parseLong(st.nextToken());
                     tout = Long.parseLong(st.nextToken());                    
                     vmname = st.nextToken();                    
@@ -191,7 +194,7 @@ public class FileSystemReader {
                     
                     if (degradableSleepTime > 0) Thread.sleep(degradableSleepTime*5);
                     
-                    while (!ctrl.insertMonitoringDataNow(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess)) {
+                    while (!ctrl.insertMonitoringDataNow(ExecutionData.getInstance(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess))) {
                         Thread.sleep(500);
                         ctrl.enableMonitoring();
                         degradableSleepTime += 50;

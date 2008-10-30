@@ -4,6 +4,8 @@
  */
 package kieker.tpmon.aspects.springAspectJ;
 
+import javax.lang.model.element.ExecutableElement;
+import kieker.tpmon.ExecutionData;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.*;
 
@@ -57,7 +59,7 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
             // that knowns the request object (e.g. a servlet or a spring MVC controller).
             String sessionid = tpmonController.getSessionIdentifier(Thread.currentThread().getId());
             // TpmonController.insertMonitoringDataNow(componentName, opname, traceid, tin, tout);
-            tpmonController.insertMonitoringDataNow(componentName, opname, sessionid, traceId, tin, tout);
+            tpmonController.insertMonitoringDataNow(ExecutionData.getInstance(componentName, opname, sessionid, traceId, tin, tout));
         }
         // returning the result of the intercepted method call
         return retVal;

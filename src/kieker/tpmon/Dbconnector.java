@@ -122,18 +122,18 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
      * file system. The storage mode is configured in the file
      * dbconnector.properties.
      */
-    public synchronized boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String sessionid, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
+    public synchronized boolean insertMonitoringDataNow(ExecutionData execData) {
         try {
             psInsertMonitoringData.setInt(1, 
                     (this.setInitialExperimentIdBasedOnLastId&&this.experimentId>=0)?this.experimentId:experimentId);
-            psInsertMonitoringData.setString(2, opname);
-            psInsertMonitoringData.setString(3, sessionid);
-            psInsertMonitoringData.setString(4, traceid);
-            psInsertMonitoringData.setLong(5, tin);
-            psInsertMonitoringData.setLong(6, tout);
-            psInsertMonitoringData.setString(7, vmName);
-            psInsertMonitoringData.setLong(8, executionOrderIndex);
-            psInsertMonitoringData.setLong(9, executionStackSize);
+            psInsertMonitoringData.setString(2, execData.componentName+"."+execData.opname);
+            psInsertMonitoringData.setString(3, execData.sessionId);
+            psInsertMonitoringData.setString(4, String.valueOf(execData.traceId));
+            psInsertMonitoringData.setLong(5, execData.tin);
+            psInsertMonitoringData.setLong(6, execData.tout);
+            psInsertMonitoringData.setString(7, execData.vmName);
+            psInsertMonitoringData.setLong(8, execData.eoi);
+            psInsertMonitoringData.setLong(9, execData.ess);
             psInsertMonitoringData.execute();
         } catch (SQLException ex) {
             log.error("Tpmon Error: " + System.currentTimeMillis() + " insertMonitoringData() failed: SQLException: " + ex.getMessage());
