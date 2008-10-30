@@ -103,7 +103,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         }
     }
 
-    public synchronized boolean insertMonitoringDataNow(ExecutionData execData) {
+    public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         try {
             prepareFile(); // may throw FileNotFoundException
             pos.println(execData.toKiekerCSVRecord());

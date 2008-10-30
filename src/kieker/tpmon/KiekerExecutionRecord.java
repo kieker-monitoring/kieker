@@ -11,7 +11,7 @@ import kieker.tpmon.annotations.TpmonInternal;
  *
  * @author avanhoorn
  */
-public class ExecutionData implements Serializable {
+public class KiekerExecutionRecord implements Serializable {
 
     public int experimentId = -1;
     public String vmName = null;
@@ -32,13 +32,13 @@ public class ExecutionData implements Serializable {
      * Constructor private such that instances are only created by calling 
      * the static method getInstance().
      * The reason is that we might eventually introduce an object pool in 
-     * order to avoid the frequent creation of ExecutionData objects.
+     * order to avoid the frequent creation of KiekerExecutionRecord objects.
      */
-    private ExecutionData() {
+    private KiekerExecutionRecord() {
     }
 
     /**
-     * Returns in instance of ExecutionData. 
+     * Returns in instance of KiekerExecutionRecord. 
      * The member variables are initialized that way that only actually
      * used variables must be updated.
      * Do not set unused member variables to dummy values such as -1 etc.!
@@ -46,15 +46,15 @@ public class ExecutionData implements Serializable {
      * @return
      */
     @TpmonInternal()
-    public static ExecutionData getInstance() {
-        return new ExecutionData();
+    public static KiekerExecutionRecord getInstance() {
+        return new KiekerExecutionRecord();
     }
 
     @TpmonInternal()
-    public static ExecutionData getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String methodName,
             long traceId) {
-        ExecutionData execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = methodName;
         execData.traceId = traceId;
@@ -62,11 +62,11 @@ public class ExecutionData implements Serializable {
     }
 
     @TpmonInternal()
-    public static ExecutionData getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout) {
-        ExecutionData execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
@@ -77,11 +77,11 @@ public class ExecutionData implements Serializable {
     }
     
     @TpmonInternal()
-   public static ExecutionData getInstance(
+   public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
             long traceId,
             long tin, long tout) {
-        ExecutionData execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.traceId = traceId;
@@ -91,12 +91,12 @@ public class ExecutionData implements Serializable {
     }
     
     @TpmonInternal()
-    public static ExecutionData getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout,
             int eoi, int ess) {
-        ExecutionData execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;

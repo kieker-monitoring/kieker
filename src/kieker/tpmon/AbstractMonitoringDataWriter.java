@@ -9,7 +9,7 @@ public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWri
     private boolean debugEnabled;
 
     @TpmonInternal()
-    public abstract boolean insertMonitoringDataNow(ExecutionData execData);
+    public abstract boolean insertMonitoringDataNow(KiekerExecutionRecord execData);
 
     @TpmonInternal()
     public void setDebug(boolean debug) {

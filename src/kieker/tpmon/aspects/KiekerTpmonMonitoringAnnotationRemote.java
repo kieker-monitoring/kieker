@@ -3,7 +3,7 @@
  */
 package kieker.tpmon.aspects;
 
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.*;
 import kieker.tpmon.asyncDbconnector.*;
@@ -30,7 +30,7 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
             return thisJoinPoint.proceed();
         }
 
-        ExecutionData execData = this.initExecutionData(thisJoinPoint);        
+        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);        
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */
         if (execData.isEntryPoint){

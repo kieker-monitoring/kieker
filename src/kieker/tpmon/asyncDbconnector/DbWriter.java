@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
@@ -100,7 +100,7 @@ public class DbWriter  implements Runnable, Worker{
                 statementChanged = false;
             }
             
-            ExecutionData execData = (ExecutionData) traceidObject;
+            KiekerExecutionRecord execData = (KiekerExecutionRecord) traceidObject;
             
             psInsertMonitoringData.setString(1, execData.componentName+"."+execData.opname);
             psInsertMonitoringData.setString(2, execData.sessionId);

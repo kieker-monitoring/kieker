@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.Worker;
@@ -38,7 +38,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-    private ExecutionData execData = null;
+    private KiekerExecutionRecord execData = null;
     private boolean finished = false;
     private static boolean shutdown = false;
 
@@ -93,7 +93,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
             prepareFile();
         }
 
-        execData = (ExecutionData) traceidObject;
+        execData = (KiekerExecutionRecord) traceidObject;
         writeDataNow(execData);
     }
 
@@ -146,7 +146,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
      * @throws java.io.IOException
      */
     @TpmonInternal
-    private void writeDataNow(ExecutionData execData) throws IOException {
+    private void writeDataNow(KiekerExecutionRecord execData) throws IOException {
         prepareFile(); // may throw FileNotFoundException
         pos.println(execData.toKiekerCSVRecord());
         pos.flush();

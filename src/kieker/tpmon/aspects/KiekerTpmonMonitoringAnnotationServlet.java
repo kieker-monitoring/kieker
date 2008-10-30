@@ -7,7 +7,7 @@ package kieker.tpmon.aspects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.annotations.*;
 import kieker.tpmon.*;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -43,7 +43,7 @@ public class KiekerTpmonMonitoringAnnotationServlet extends AbstractKiekerTpmonM
             return thisJoinPoint.proceed();
         }
         
-        ExecutionData execData = this.initExecutionData(thisJoinPoint);
+        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
         String sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);

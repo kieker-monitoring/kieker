@@ -11,7 +11,7 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import javax.naming.NamingException;
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.Worker;
 
@@ -71,7 +71,7 @@ public class AsyncJmsWorker implements Runnable, Worker {
     }
     
     @TpmonInternal
-    private void publish(ExecutionData execData) {
+    private void publish(KiekerExecutionRecord execData) {
         try {           
             ObjectMessage messageObject = session.createObjectMessage(execData);           
             //TextMessage message = session.createTextMessage("Hello World!");
@@ -89,7 +89,7 @@ public class AsyncJmsWorker implements Runnable, Worker {
 
     @TpmonInternal
     private void consume(Object traceidObject) throws Exception {
-        publish((ExecutionData)traceidObject);        
+        publish((KiekerExecutionRecord)traceidObject);        
     }
     
     @TpmonInternal

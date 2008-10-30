@@ -122,7 +122,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
      * file system. The storage mode is configured in the file
      * dbconnector.properties.
      */
-    public synchronized boolean insertMonitoringDataNow(ExecutionData execData) {
+    public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         try {
             psInsertMonitoringData.setInt(1, 
                     (this.setInitialExperimentIdBasedOnLastId&&this.experimentId>=0)?this.experimentId:experimentId);

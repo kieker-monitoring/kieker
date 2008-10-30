@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 
 /**
  *
@@ -23,7 +23,7 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
     private static final Log log = LogFactory.getLog(AsyncJmsProducer.class);        
     private Vector<Worker> workers = new Vector<Worker>();
     private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
-    private BlockingQueue<ExecutionData> blockingQueue = null;    
+    private BlockingQueue<KiekerExecutionRecord> blockingQueue = null;    
     
     private String contextFactoryType; // type of the jms factory implementation, e.g.
     private String providerUrl; 
@@ -39,7 +39,7 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
     }
      
     @TpmonInternal
-    public boolean insertMonitoringDataNow(ExecutionData execData) {
+    public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
          if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncJmsProducer.insertMonitoringDataNow");
         }
@@ -73,7 +73,7 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
     
     @TpmonInternal
     public void init() {
-        blockingQueue = new ArrayBlockingQueue<ExecutionData>(8000);
+        blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
         for (int i = 0; i < numberOfJmsWriters; i++) {
             AsyncJmsWorker dbw = new AsyncJmsWorker(blockingQueue, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);                       
             new Thread(dbw).start();                       

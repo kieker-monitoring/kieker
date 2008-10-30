@@ -319,7 +319,7 @@ public class TpmonController {
     private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(ExecutionData execData) {
+    public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         execData.experimentId = this.experimentId;
         execData.vmName = this.vmname;
 
@@ -403,7 +403,7 @@ public class TpmonController {
         // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
         String opname = component + newMethodname;
         numberOfInserts.incrementAndGet();
-        ExecutionData execData = ExecutionData.getInstance();
+        KiekerExecutionRecord execData = KiekerExecutionRecord.getInstance();
         execData.componentName = opname;
         execData.opname = encodedName;
         execData.traceId = -5;

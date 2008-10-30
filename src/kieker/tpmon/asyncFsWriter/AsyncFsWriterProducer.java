@@ -4,7 +4,7 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.annotations.TpmonInternal;
 
 import kieker.tpmon.asyncDbconnector.Worker;
@@ -22,7 +22,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
     private Vector<Worker> workers = new Vector<Worker>();
-    private BlockingQueue<ExecutionData> blockingQueue = null;
+    private BlockingQueue<KiekerExecutionRecord> blockingQueue = null;
     private String filenamePrefix = null;
     
     @TpmonInternal
@@ -38,7 +38,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
     @TpmonInternal
     public void init() {
-        blockingQueue = new ArrayBlockingQueue<ExecutionData>(8000);
+        blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
             AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue, filenamePrefix);                        
             new Thread(dbw).start();                       
@@ -54,7 +54,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
      *
      */
     @TpmonInternal
-    public boolean insertMonitoringDataNow(ExecutionData execData) {
+    public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }

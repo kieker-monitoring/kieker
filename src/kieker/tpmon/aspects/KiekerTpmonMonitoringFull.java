@@ -3,7 +3,7 @@
  */
 package kieker.tpmon.aspects;
 
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.*;
 import kieker.tpmon.asyncDbconnector.*;
@@ -30,7 +30,7 @@ public class KiekerTpmonMonitoringFull extends AbstractKiekerTpmonMonitoring {
             return thisJoinPoint.proceed();
         }
 
-        ExecutionData execData = this.initExecutionData(thisJoinPoint);
+        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){

@@ -3,7 +3,7 @@ package kieker.tpmon.fileSystemReader;
 import java.io.*;
 import java.util.*;
 import javax.lang.model.type.ExecutableType;
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 
 /**
@@ -194,7 +194,7 @@ public class FileSystemReader {
                     
                     if (degradableSleepTime > 0) Thread.sleep(degradableSleepTime*5);
                     
-                    while (!ctrl.insertMonitoringDataNow(ExecutionData.getInstance(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess))) {
+                    while (!ctrl.insertMonitoringDataNow(KiekerExecutionRecord.getInstance(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess))) {
                         Thread.sleep(500);
                         ctrl.enableMonitoring();
                         degradableSleepTime += 50;

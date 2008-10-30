@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.annotations.*;
 
 
@@ -31,7 +31,7 @@ public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitori
             return thisJoinPoint.proceed();
         }
 
-        ExecutionData execData = this.initExecutionData(thisJoinPoint);
+        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){

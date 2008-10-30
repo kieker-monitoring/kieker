@@ -5,7 +5,7 @@ package kieker.tpmon.aspects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.tpmon.ExecutionData;
+import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.*;
 import kieker.tpmon.asyncDbconnector.*;
@@ -42,7 +42,7 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
             return thisJoinPoint.proceed();
         }
 
-        ExecutionData execData = this.initExecutionData(thisJoinPoint);        
+        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);        
         String sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */
