@@ -72,7 +72,7 @@ import org.apache.commons.logging.LogFactory;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
-import kieker.tpmon.asyncJmsWriter.AsyncJmsProducer;
+
 
 public class TpmonController {
 
@@ -85,19 +85,16 @@ public class TpmonController {
     private String monitoringDataWriterInitString = null;
     private IMonitoringDataWriter monitoringDataWriter = null;
     private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
-    private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
+    private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
     private String dbTableName = "turbomon10";
     //private String buildDate = "unknown (at least 2008-08-08)";
     private boolean debug = false;
-    private boolean storeInDatabase = false;
     private String filenamePrefix = ""; // e.g. path "/tmp"   
     private boolean storeInJavaIoTmpdir = true;
     private String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
     private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     // values might be not written to the database in case of an system.exit(0)!
-    private boolean asyncDbconnector = false;
-    private boolean asyncFsWriter = true;    // Encoding method and component names stores just placeholders for the component and method names.
     // The place holders are usually much smaller and storage therefore much faster and requires less space.
     private boolean encodeMethodNames = false;
     // trace sampling:
@@ -111,12 +108,6 @@ public class TpmonController {
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
     private static TpmonController ctrlInst = null;    // default properties for JMS publisher
-    private boolean sendMonitoringDataToJMSserver = false;
-    private String jmsProviderUrl = "tcp://localhost:3035/"; // url of the jndi service that knows the JMS connector factory; default for openjms 0.7.7
-    private String jmsTopic = "queue1"; // JMS topic for publish/subscribe pattern
-    private String jmsContextFactoryType = "org.exolab.jms.jndi.InitialContextFactory"; // default setting for openjms 0.7.7
-    private String jmsFactoryLookupName = "ConnectionFactory"; // default setting for openjms 0.7.7
-    private long jmsMessageTimeToLive = 10000; // time messages should live in jms server in millisecs
 
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
@@ -186,8 +177,7 @@ public class TpmonController {
                     this.registerWorker(w);
                 }
             }
-            log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                    "monitoring data using class " + this.monitoringDataWriter.getClass().getCanonicalName());
+            log.info(">Kieker-Tpmon: Initialization completed.\n Connector Info: " + this.getConnectorInfo());
         } catch (Exception exc) {
             monitoringEnabled = false;
             log.error(">Kieker-Tpmon: Disabling monitoring", exc);
@@ -264,16 +254,6 @@ public class TpmonController {
      */
     public long getNumberOfInserts() {
         return numberOfInserts.longValue();
-    }
-
-    @TpmonInternal()
-    public boolean isStoreInDatabase() {
-        return storeInDatabase;
-    }
-
-    @TpmonInternal()
-    public boolean isStoreInJMS() {
-        return sendMonitoringDataToJMSserver;
     }
 
     @TpmonInternal()
@@ -748,13 +728,6 @@ public class TpmonController {
 
         }
 
-
-
-
-
-
-
-
         // load property "dbTableNameProperty"
         String dbTableNameProperty = prop.getProperty("dbTableName");
         if (dbTableNameProperty != null && dbTableNameProperty.length() != 0) {
@@ -764,17 +737,7 @@ public class TpmonController {
                     ". Using default value " + dbTableName + ".", true, false);
         }
 
-// ANDRE: buildDate obsolete due to "self-speaking" version name
-// load property "buildDate"
-//String buildDateProperty = prop.getProperty("buildDate");
-//if (buildDateProperty != null && buildDate.length() != 0) {
-//    buildDate = buildDateProperty;
-//} else {
-//    formatAndOutputError("No buildData parameter found in tpmonLTW.jar/" + configurationFile +
-//            ". Using default value " + buildDate + ".", true, false);
-//}
-
-// load property "debug"
+        // load property "debug"
         String debugProperty = prop.getProperty("debug");
         if (debugProperty != null && debugProperty.length() != 0) {
             if (debugProperty.toLowerCase().equals("true") || debugProperty.toLowerCase().equals("false")) {
@@ -789,22 +752,7 @@ public class TpmonController {
                     ". Using default value " + debug, true, false);
         }
 
-// load property "storeInDatabase"
-        String storeInDatabaseProperty = prop.getProperty("storeInDatabase");
-        if (storeInDatabaseProperty != null && storeInDatabaseProperty.length() != 0) {
-            if (storeInDatabaseProperty.toLowerCase().equals("true") || storeInDatabaseProperty.toLowerCase().equals("false")) {
-                storeInDatabase = storeInDatabaseProperty.toLowerCase().equals("true");
-            } else {
-                formatAndOutputError("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + debug, true, false);
-            }
-
-        } else {
-            formatAndOutputError("Could not find storeInDatabase parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + storeInDatabase, true, false);
-        }
-
-// load property "setInitialExperimentIdBasedOnLastId"
+        // load property "setInitialExperimentIdBasedOnLastId"
         String setInitialExperimentIdBasedOnLastIdProperty = prop.getProperty("setInitialExperimentIdBasedOnLastId");
         if (setInitialExperimentIdBasedOnLastIdProperty != null && setInitialExperimentIdBasedOnLastIdProperty.length() != 0) {
             if (setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true") || setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("false")) {
@@ -819,37 +767,6 @@ public class TpmonController {
                     ". Using default value " + setInitialExperimentIdBasedOnLastId, true, false);
         }
 
-// load property "asyncDbconnector"
-        String asyncDbconnectorProperty = prop.getProperty("useAsyncDbconnector");
-        if (asyncDbconnectorProperty != null && asyncDbconnectorProperty.length() != 0) {
-            if (asyncDbconnectorProperty.toLowerCase().equals("true") || asyncDbconnectorProperty.toLowerCase().equals("false")) {
-                asyncDbconnector = asyncDbconnectorProperty.toLowerCase().equals("true");
-            } else {
-                formatAndOutputError("Bad value for useAsyncDbconnector parameter (" + asyncDbconnectorProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + asyncDbconnector, true, false);
-            }
-
-        } else {
-            formatAndOutputError("Could not find useAsyncDbconnector parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + asyncDbconnector, true, false);
-        }
-
-// load property "asyncFsWriter"
-        String asyncFsWriterProperty = prop.getProperty("asyncFsWriter");
-        if (asyncFsWriterProperty != null && asyncFsWriterProperty.length() != 0) {
-            if (asyncFsWriterProperty.toLowerCase().equals("true") || asyncFsWriterProperty.toLowerCase().equals("false")) {
-                asyncFsWriter = asyncFsWriterProperty.toLowerCase().equals("true");
-            //  log.info("Async fs writer activated");
-            } else {
-                formatAndOutputError("Bad value for asyncFsWriter parameter (" + asyncFsWriterProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + asyncFsWriter, true, false);
-            }
-
-        } else {
-            formatAndOutputError("Could not find asyncFsWriter parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + asyncFsWriter, true, false);
-        }
-// log.info("Async fs writer = "+asyncFsWriter);
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
@@ -865,37 +782,6 @@ public class TpmonController {
             formatAndOutputError("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + monitoringEnabled, true, false);
         //  log.info("monitoringEnabled missing param");
-        }
-
-        String useJMSproperty = prop.getProperty("sendMonitoringDataToJMSserver");
-        if (useJMSproperty != null && useJMSproperty.length() != 0) {
-            if (useJMSproperty.toLowerCase().equals("true") || useJMSproperty.toLowerCase().equals("false")) {
-                sendMonitoringDataToJMSserver = useJMSproperty.toLowerCase().equals("true");
-            //  log.info("monitoringEnabled true");
-            } else {
-                formatAndOutputError("Bad value for sendMonitoringDataToJMSserver parameter (" + useJMSproperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + sendMonitoringDataToJMSserver, true, false);
-            //    log.info("monitoringEnabled bad value");
-            }
-
-        } else {
-        //formatAndOutputError("Could not find sendMonitoringDataToJMSserver parameter in tpmonLTW.jar/" + configurationFile +
-        //        ". Using default value " + sendMonitoringDataToJMSserver, true, false);
-        //  log.info("monitoringEnabled missing param");
-        }
-
-
-        // load property "jmsProviderUrl"
-        String jmsProviderUrlProperty = prop.getProperty("jmsProviderUrl");
-        if (jmsProviderUrlProperty != null && jmsProviderUrlProperty.length() != 0) {
-            jmsProviderUrl = jmsProviderUrlProperty;
-            System.out.println("Using jmsProviderURL" + jmsProviderUrl);
-        } else {
-            if (sendMonitoringDataToJMSserver) {
-                formatAndOutputError("No jmsProviderUrl  parameter found in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + jmsProviderUrl + ".", true, false);
-            }
-
         }
 
         //log.info("monitoringEnabled "+monitoringEnabled);
@@ -928,27 +814,15 @@ public class TpmonController {
 
     @TpmonInternal()
     public String getConnectorInfo() {
-        //only show the password if debug is on
-        String dbConnectionAddress2 = dbConnectionAddress;
-        if (!debug) {
-            if (dbConnectionAddress.toLowerCase().contains("password")) {
-                int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
-                dbConnectionAddress2 =
-                        new String(dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN");
-            }
-
-        }
-
-        if (sendMonitoringDataToJMSserver) {
-            return new String("Storage mode : Tpmon sends data to the JMS server: jndi url :" + this.jmsProviderUrl + ", topic :" + this.jmsTopic + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
-        } else {
-            if (storeInDatabase) {
-                return new String("Storage mode : Tpmon stores in the database: dbConnectionAddress :" + dbConnectionAddress2 + ", version :" + this.getVersion() + ", dbTableName :" + dbTableName + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
-            } else {
-                return new String("Storage mode : Tpmon stores in the filesystem, Version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
-            }
-
-        }
+        StringBuilder strB = new StringBuilder();
+        
+        strB.append("monitoringDataWriter : " + this.monitoringDataWriter.getClass().getCanonicalName());
+        strB.append(",");
+        strB.append(" monitoringDataWriter config : (below), " + this.monitoringDataWriter.getInfoString());
+        strB.append(",");
+        strB.append(" version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
+        
+        return strB.toString();
     }
 
     @TpmonInternal()

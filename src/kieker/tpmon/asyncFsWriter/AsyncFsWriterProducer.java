@@ -87,4 +87,9 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     public String getFilenamePrefix() {
         return filenamePrefix;
     }
+    
+  @TpmonInternal()
+    public String getInfoString() {
+        return new String ("filenamePrefix :" + filenamePrefix);
+    }
 }

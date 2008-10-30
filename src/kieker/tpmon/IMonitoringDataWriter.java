@@ -31,4 +31,7 @@ public interface IMonitoringDataWriter {
 
     @TpmonInternal()
     public boolean isDebug();
+
+        @TpmonInternal()
+    public String getInfoString();
 }

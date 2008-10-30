@@ -48,20 +48,19 @@ import org.apache.commons.logging.LogFactory;
 
 public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
-   private final static String defaultConstructionErrorMsg = 
+    private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_ASYNCDB +
-                " and the file system specific configuration properties.";
-    
-   public AsyncDbconnector() {
+            " and the file system specific configuration properties.";
+
+    public AsyncDbconnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
-   }
-   
+    }
+
     @TpmonInternal
-   public boolean init(String initString) {
+    public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
-   }
-    
+    }
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
     private BlockingQueue<KiekerExecutionRecord> blockingQueue;
@@ -189,6 +188,27 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             return false;
         }
         return true;
+    }
+
+    @TpmonInternal()
+    public String getInfoString() {
+        StringBuilder strB = new StringBuilder();
+
+        //only show the password if debug is on
+        String dbConnectionAddress2 = dbConnectionAddress;
+        if (!this.isDebug()) {
+            if (dbConnectionAddress.toLowerCase().contains("password")) {
+                int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
+                dbConnectionAddress2 =
+                        new String(dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN");
+            }
+
+        }
+        strB.append("dbConnectionAddress : " + dbConnectionAddress2);
+        strB.append(", dbTableName : " + dbTableName);
+        strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);
+
+        return strB.toString();
     }
 }
 

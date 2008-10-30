@@ -137,4 +137,9 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     public Vector<Worker> getWorkers() {
         return null;
     }
+    
+   @TpmonInternal()
+    public String getInfoString() {
+        return new String ("filenamePrefix :" + filenamePrefix);
+    }
 }
