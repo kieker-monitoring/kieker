@@ -7,7 +7,7 @@ import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.annotations.TpmonInternal;
 
-import kieker.tpmon.asyncDbconnector.Worker;
+import kieker.tpmon.Worker;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

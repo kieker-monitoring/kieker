@@ -4,6 +4,7 @@
  */
 package kieker.tpmon;
 
+import java.util.Vector;
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**
@@ -15,6 +16,9 @@ public interface IMonitoringDataWriter {
     @TpmonInternal()
     public boolean insertMonitoringDataNow(KiekerExecutionRecord execData);
 
+    @TpmonInternal()    
+    public Vector<Worker> getWorkers();
+    
     @TpmonInternal()
     public void setDebug(boolean debug);
 

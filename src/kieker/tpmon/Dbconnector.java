@@ -50,6 +50,7 @@ package kieker.tpmon;
  */
 import java.sql.*;
 
+import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -146,5 +147,9 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             }
         }
         return true;
+    }
+
+    public Vector<Worker> getWorkers() {
+        return null;
     }
 }

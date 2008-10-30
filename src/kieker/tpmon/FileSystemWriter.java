@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -113,5 +114,9 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             return false;
         }
         return true;
+    }
+
+    public Vector<Worker> getWorkers() {
+        return null;
     }
 }

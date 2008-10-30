@@ -4,7 +4,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.Worker;
+import kieker.tpmon.Worker;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

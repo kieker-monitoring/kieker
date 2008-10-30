@@ -32,6 +32,7 @@
  */
 package kieker.tpmon.asyncDbconnector;
 
+import kieker.tpmon.Worker;
 import java.sql.*;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;

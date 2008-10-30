@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.Worker;
+import kieker.tpmon.Worker;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

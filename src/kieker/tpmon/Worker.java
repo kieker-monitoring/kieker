@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package kieker.tpmon.asyncDbconnector;
+package kieker.tpmon;
 
 import kieker.tpmon.annotations.TpmonInternal;
 

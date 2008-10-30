@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.naming.NamingException;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.Worker;
+import kieker.tpmon.Worker;
 
 /**
  * The writer moves monitoring data via messaging to a JMS server. This uses the

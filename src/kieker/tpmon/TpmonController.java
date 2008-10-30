@@ -71,7 +71,7 @@ import org.apache.commons.logging.LogFactory;
 
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
-import kieker.tpmon.asyncDbconnector.Worker;
+import kieker.tpmon.Worker;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
 import kieker.tpmon.asyncJmsWriter.AsyncJmsProducer;
 
