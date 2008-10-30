@@ -5,6 +5,8 @@
 
 package kieker.tpmon.asyncJmsWriter;
 
+import java.util.HashMap;
+import java.util.StringTokenizer;
 import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.Worker;
@@ -54,25 +56,45 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
         return true;
     }
     
-    /**
-     * 
-     * @param contextFactoryType -- type of the jms factory implementation, e.g. "org.exolab.jms.jndi.InitialContextFactory" for openjms 0.7.7
-     * @param providerUrl -- url of the jndi provider that knows the jms service
-     * @param factoryLookupName -- service name for the jms connection factory
-     * @param topic -- topic at the jms server which is used in the publisher/subscribe communication
-     * @param messageTimeToLive -- time that a jms message will kepts be alive at the jms server before it is automatically deleted
-     */
-    public AsyncJmsProducer(String contextFactoryType, String providerUrl, String factoryLookupName, String topic, long messageTimeToLive) {        
-        this.contextFactoryType = contextFactoryType;
-        this.providerUrl = providerUrl;
-        this.factoryLookupName = factoryLookupName;
-        this.topic = topic;
-        this.messageTimeToLive = messageTimeToLive;
-        this.init();
-    }        
+//    /**
+//     * 
+//     * @param contextFactoryType -- type of the jms factory implementation, e.g. "org.exolab.jms.jndi.InitialContextFactory" for openjms 0.7.7
+//     * @param providerUrl -- url of the jndi provider that knows the jms service
+//     * @param factoryLookupName -- service name for the jms connection factory
+//     * @param topic -- topic at the jms server which is used in the publisher/subscribe communication
+//     * @param messageTimeToLive -- time that a jms message will kepts be alive at the jms server before it is automatically deleted
+//     */
+//    public AsyncJmsProducer(String contextFactoryType, String providerUrl, String factoryLookupName, String topic, long messageTimeToLive) {        
+//        this.contextFactoryType = contextFactoryType;
+//        this.providerUrl = providerUrl;
+//        this.factoryLookupName = factoryLookupName;
+//        this.topic = topic;
+//        this.messageTimeToLive = messageTimeToLive;
+//        this.init();
+//    }        
     
+    /**
+     * Init String. Expect key=value pairs separated by |.
+     * 
+     * Example initString (meaning of keys explained below):
+     * jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000
+     * 
+     * jmsContextFactoryType -- type of the jms factory implementation, e.g. "org.exolab.jms.jndi.InitialContextFactory" for openjms 0.7.7
+     * jmsProviderUrl -- url of the jndi provider that knows the jms service
+     * jmsFactoryLookupName -- service name for the jms connection factory
+     * jmsTopic -- topic at the jms server which is used in the publisher/subscribe communication
+     * jmsMessageTimeToLive -- time that a jms message will kepts be alive at the jms server before it is automatically deleted
+     * 
+     * @param initString
+     * @return true on success. false on error.
+     */
     @TpmonInternal
-    public void init() {
+    public boolean init(String initString) {
+        if (!this.initVarsFromInitString(initString)){
+            log.error("init failed");
+            return false;
+        }
+        
         blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
         for (int i = 0; i < numberOfJmsWriters; i++) {
             AsyncJmsWorker dbw = new AsyncJmsWorker(blockingQueue, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);                       
@@ -81,6 +103,34 @@ public class AsyncJmsProducer  extends AbstractMonitoringDataWriter {
         }
         //System.out.println(">Kieker-numberOfJmsWriters: (" + numberOfFsWriters + " threads) will write to the file system");
         log.info(">Kieker-Tpmon: (" + numberOfJmsWriters + " threads) will send to the JMS server topic");
+        return true;
     }
+
+    @TpmonInternal
+    private boolean initVarsFromInitString(String initString){
+        HashMap<String,String> map = new HashMap<String, String>();
+        StringTokenizer keyValListTokens = new StringTokenizer(initString, "|");
+        while (keyValListTokens.hasMoreTokens()){
+            String curKeyValToken = keyValListTokens.nextToken().trim();
+            StringTokenizer keyValTokens = new StringTokenizer(curKeyValToken, "=");
+            if (keyValTokens.countTokens()!=2){
+               log.error("Expected key=value pair, found " + curKeyValToken);     
+               return false;
+            }
+            String key = keyValTokens.nextToken().trim();
+            String val = keyValTokens.nextToken().trim();
+            log.info("Found key/value pair: " + key + "=" + val);
+            map.put(key, val);
+        }
+        
+        this.contextFactoryType = map.get("jmsContextFactoryType");
+        this.providerUrl = map.get("jmsProviderUrl");
+        this.factoryLookupName = map.get("jmsFactoryLookupName");
+        this.topic = map.get("jmsTopic");
+        this.messageTimeToLive = Long.valueOf(map.get("jmsMessageTimeToLive"));
+        
+        return true;
+    }
+
 
 }

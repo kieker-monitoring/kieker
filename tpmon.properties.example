@@ -8,10 +8,6 @@ buildDate=2008-08-06
 # 1.1 General tpmon properties 
 # 1.1.1 Store monitoring data in a remote database or in the file system?
 storeInDatabase=false
-#jmsProviderUrl=tcp://localhost:3035/
-#jmsProviderUrl=tcp://pc-rohr.informatik.uni-oldenburg.de:3035//
-#sendMonitoringDataToJMSserver=false
-
 
 # 1.1.2 Run tpmon in debug mode
 # In debug mode, tpmon is very verbose during runtime (default: false)
@@ -20,6 +16,21 @@ debug=false
 # 1.1.3 Should monitoring be enabled after startup 
 # (you may want to turn it on later (e.g., using the control-servlet))
 monitoringEnabled=true
+
+# 1.1.4 Selection of the Monitoring Data Writer to use
+# The value can be either one of the following constants or a full-qualified 
+# classname of a class (implementing kieker.tpmon.IMonitoringDataWriter) loaded
+# dynamically during runtime (must be in the runtime classpath). Classes loaded by 
+# the classname are constructed by calling the default constructor followed by a
+# called to the method init(String monitoringDataWriterInitString) with the 
+# value of the below-listed property monitoringDataWriterInitString.
+# Existing constants are:
+# -  SyncFS (Synchronous File System Writer as configured under Section 1.3 below)
+# - AsyncFS (Asynchronous File System Writer as configured under Section 1.3 below)
+# -  SyncDB (Synchronous Database Writer as configured under Section 1.3 below)
+# - AsyncDB (Asynchronous Database Writer as configured under Section 1.3 below)
+monitoringDataWriter=AsyncFS
+monitoringDataWriterInitString=
 
 # 1.2 database configuration
 # (only required when storeInDatabase=true)

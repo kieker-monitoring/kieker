@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.Vector;
+import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -71,6 +72,20 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
 
+    private final static String defaultConstructionErrorMsg = 
+            "Do not select this writer using the full-qualified classname. " +
+            "Use the the constant " + TpmonController.WRITER_SYNCFS +
+                " and the file system specific configuration properties.";
+    
+    public FileSystemWriter() {
+        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+    }
+    
+    @TpmonInternal
+    public boolean init(String initString) {
+        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+    }
+    
     public FileSystemWriter(String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
     }
@@ -78,6 +93,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     /**
      * Determines and sets a new Filename
      */
+    @TpmonInternal
     private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
@@ -89,7 +105,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             int time = (int) (System.currentTimeMillis() - 1177404043379L);
             int random = (int) (Math.random() * 100d);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
-
+            log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             FileOutputStream fos;
             try {
                 fos = new FileOutputStream(filename);
@@ -104,6 +120,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         }
     }
 
+    @TpmonInternal
     public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         try {
             prepareFile(); // may throw FileNotFoundException
@@ -116,6 +133,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         return true;
     }
 
+    @TpmonInternal
     public Vector<Worker> getWorkers() {
         return null;
     }

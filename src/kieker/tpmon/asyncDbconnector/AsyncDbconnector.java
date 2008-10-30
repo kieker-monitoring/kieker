@@ -48,6 +48,20 @@ import org.apache.commons.logging.LogFactory;
 
 public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
+   private final static String defaultConstructionErrorMsg = 
+            "Do not select this writer using the full-qualified classname. " +
+            "Use the the constant " + TpmonController.WRITER_ASYNCDB +
+                " and the file system specific configuration properties.";
+    
+   public AsyncDbconnector() {
+        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+   }
+   
+    @TpmonInternal
+   public boolean init(String initString) {
+        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+   }
+    
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
     private BlockingQueue<KiekerExecutionRecord> blockingQueue;
@@ -64,7 +78,6 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
         this.init();
     }
-    
     private Vector<Worker> workers = new Vector<Worker>();
 
     @TpmonInternal()
@@ -72,14 +85,12 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         return workers;
     }
 
-
-
     /**
      *
      * Returns false if an error occurs. Errors are printed to stdout (e.g., App-server logfiles), even if debug = false.
      *
      */
-     @TpmonInternal()
+    @TpmonInternal()
     public boolean init() {
         if (this.isDebug()) {
             log.info("Tpmon asyncDbconnector init");
@@ -107,8 +118,8 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                 DbWriter dbw = new DbWriter(DriverManager.getConnection(this.dbConnectionAddress), blockingQueue, preparedQuery);
                 workers.add(dbw);
                 new Thread(dbw).start();
-                //TODO: Fix this (there shouldn't be a dependency to the TpmonCtrl)
-                //TpmonController.getInstance().registerWorker(dbw);
+            //TODO: Fix this (there shouldn't be a dependency to the TpmonCtrl)
+            //TpmonController.getInstance().registerWorker(dbw);
             }
             log.info("Tpmon (" + numberOfConnections + " threads) connected to database");
 
@@ -127,10 +138,9 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             log.error("SQLException: " + ex.getMessage());
             log.error("SQLState: " + ex.getSQLState());
             log.error("VendorError: " + ex.getErrorCode());
-          // TODO: This is a dirty hack!
+            // TODO: This is a dirty hack!
             // What we need is a listener interface!
-            log.error("Will disable monitoring!");
-            TpmonController.getInstance().disableMonitoring();
+            //log.error("Will disable monitoring!");
             return false;
         }
         return true;
@@ -144,13 +154,12 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 //    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
 //        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
 //    }
-
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      *
      */
-       @TpmonInternal()
+    @TpmonInternal()
     public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
@@ -162,14 +171,14 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
              * BY ANDRE: I disabled this for the moment since we don't seem to use the db anyhow
              * 
             if (experimentId != TpmonController.getExperimentId() || !vmname.equals(TpmonController.getVmname())) { // ExperimentId and vmname may be changed
-                experimentId = TpmonController.getExperimentId();
-                vmname = TpmonController.getVmname();
-                String preparedQuery = "INSERT INTO " + TpmonController.dbTableName +
-                        " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
-                        "VALUES (" + experimentId + ",?,?,?,?,?," + vmname + ",?,?)";
-                for (DbWriter wr : workers) {
-                    wr.changeStatement(preparedQuery);
-                }
+            experimentId = TpmonController.getExperimentId();
+            vmname = TpmonController.getVmname();
+            String preparedQuery = "INSERT INTO " + TpmonController.dbTableName +
+            " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
+            "VALUES (" + experimentId + ",?,?,?,?,?," + vmname + ",?,?)";
+            for (DbWriter wr : workers) {
+            wr.changeStatement(preparedQuery);
+            }
             }*/
 
             blockingQueue.add(execData); // tries to add immediately!

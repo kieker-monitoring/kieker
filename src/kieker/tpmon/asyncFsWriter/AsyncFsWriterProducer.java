@@ -5,6 +5,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.KiekerExecutionRecord;
+import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 
 import kieker.tpmon.Worker;
@@ -24,14 +25,26 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     private Vector<Worker> workers = new Vector<Worker>();
     private BlockingQueue<KiekerExecutionRecord> blockingQueue = null;
     private String filenamePrefix = null;
-    
+    private final static String defaultConstructionErrorMsg =
+            "Do not select this writer using the full-qualified classname. " +
+            "Use the the constant " + TpmonController.WRITER_ASYNCFS +
+            " and the file system specific configuration properties.";
+
+    public AsyncFsWriterProducer() {
+        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+    }
+
+    @TpmonInternal
+    public boolean init(String initString) {
+        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+    }
+
     @TpmonInternal
     public Vector<Worker> getWorkers() {
         return workers;
     }
 
-    
-    public AsyncFsWriterProducer(String filenamePrefix){
+    public AsyncFsWriterProducer(String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
         this.init();
     }
@@ -40,8 +53,8 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     public void init() {
         blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue, filenamePrefix);                        
-            new Thread(dbw).start();                       
+            AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue, filenamePrefix);
+            new Thread(dbw).start();
             workers.add(dbw);
         }
         //System.out.println(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
@@ -64,15 +77,14 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         //System.out.println(""+blockingQueue.size());
 
         } catch (Exception ex) {
-            log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex.getMessage());
+            log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex);
             return false;
         }
         return true;
     }
-    
+
     @TpmonInternal()
     public String getFilenamePrefix() {
         return filenamePrefix;
     }
-    
 }

@@ -71,23 +71,28 @@ import org.apache.commons.logging.LogFactory;
 
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
-import kieker.tpmon.Worker;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
 import kieker.tpmon.asyncJmsWriter.AsyncJmsProducer;
 
 public class TpmonController {
 
     private static final Log log = LogFactory.getLog(TpmonController.class);
+    public final static String WRITER_SYNCDB = "SyncDB";
+    public final static String WRITER_ASYNCDB = "AsyncDB";
+    public final static String WRITER_SYNCFS = "SyncFS";
+    public final static String WRITER_ASYNCFS = "AsyncFS";
+    private String monitoringDataWriterClassname = null;
+    private String monitoringDataWriterInitString = null;
     private IMonitoringDataWriter monitoringDataWriter = null;
     private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
     //private String buildDate = "unknown (at least 2008-08-08)";
     private boolean debug = false;
-    public boolean storeInDatabase = false;
-    public String filenamePrefix = ""; // e.g. path "/tmp"   
-    public boolean storeInJavaIoTmpdir = true;
-    public String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
+    private boolean storeInDatabase = false;
+    private String filenamePrefix = ""; // e.g. path "/tmp"   
+    private boolean storeInJavaIoTmpdir = true;
+    private String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
     private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     // values might be not written to the database in case of an system.exit(0)!
@@ -106,7 +111,7 @@ public class TpmonController {
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
     private static TpmonController ctrlInst = null;    // default properties for JMS publisher
-    public boolean sendMonitoringDataToJMSserver = false;
+    private boolean sendMonitoringDataToJMSserver = false;
     private String jmsProviderUrl = "tcp://localhost:3035/"; // url of the jndi service that knows the JMS connector factory; default for openjms 0.7.7
     private String jmsTopic = "queue1"; // JMS topic for publish/subscribe pattern
     private String jmsContextFactoryType = "org.exolab.jms.jndi.InitialContextFactory"; // default setting for openjms 0.7.7
@@ -138,50 +143,54 @@ public class TpmonController {
 
         loadPropertiesFile();
 
-        if (this.sendMonitoringDataToJMSserver) {
-            System.out.println("USING JMS (experimental)");
-            if (jmsTopic == null || jmsTopic.length() == 0) {
-                monitoringEnabled = false;
-                log.error(">Kieker-Tpmon: Disabling monitoring because jmsTopic is invalid :\"" + jmsTopic + "\"");
+        /* We will now determine and load the monitoring Writer to use */
+        try {
+//            // TODO: the first branch must be removed!
+//            if (this.sendMonitoringDataToJMSserver) {
+//                System.out.println("USING JMS (experimental)");
+//                if (jmsTopic == null || jmsTopic.length() == 0) {
+//                    monitoringEnabled = false;
+//                    log.error(">Kieker-Tpmon: Disabling monitoring because jmsTopic is invalid :\"" + jmsTopic + "\"");
+//                } else {
+//                    AsyncJmsProducer producer = new AsyncJmsProducer(jmsContextFactoryType, jmsProviderUrl, jmsFactoryLookupName, jmsTopic, jmsMessageTimeToLive);
+//                    this.monitoringDataWriter = producer;
+//                    Vector<Worker> worker = producer.getWorkers();
+//                    for (Worker w : worker) {
+//                        this.registerWorker(w);
+//                    }
+//                }
+//            } else 
+                if (this.monitoringDataWriterClassname == null || this.monitoringDataWriterClassname.length() == 0) {
+                throw new Exception("Property monitoringDataWriter not set");
+            } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
+                String filenameBase = new String(filenamePrefix + "/tpmon-");
+                this.monitoringDataWriter = new FileSystemWriter(filenameBase);
+            } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
+                String filenameBase = new String(filenamePrefix + "/tpmon-");
+                this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
+            } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
+                this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
+                        setInitialExperimentIdBasedOnLastId);
+            } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCDB)) {
+                this.monitoringDataWriter = new AsyncDbconnector(
+                        dbConnectionAddress, dbTableName,
+                        setInitialExperimentIdBasedOnLastId);
             } else {
-                AsyncJmsProducer producer = new AsyncJmsProducer(jmsContextFactoryType, jmsProviderUrl, jmsFactoryLookupName, jmsTopic, jmsMessageTimeToLive);
-                this.monitoringDataWriter = producer;
-                Vector<Worker> worker = producer.getWorkers();
+                /* try to load the class by name */
+                this.monitoringDataWriter = (IMonitoringDataWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
+                this.monitoringDataWriter.init(monitoringDataWriterInitString);
+            }
+            Vector<Worker> worker = this.monitoringDataWriter.getWorkers(); // may be null
+            if (worker != null) {
                 for (Worker w : worker) {
                     this.registerWorker(w);
                 }
             }
-        } else {
-            if (this.storeInDatabase) {
-                if (asyncDbconnector) {
-                    AsyncDbconnector producer = new AsyncDbconnector(dbConnectionAddress, dbTableName,
-                            setInitialExperimentIdBasedOnLastId);
-                    Vector<Worker> worker = producer.getWorkers();
-                    for (Worker w : worker) {
-                        this.registerWorker(w);
-                    }
-                    this.monitoringDataWriter = producer;
-                } else {
-                    this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
-                            setInitialExperimentIdBasedOnLastId);
-                }
-                log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                        "monitoring data in the database.");
-            } else {
-                String filenameBase = new String(filenamePrefix + "/tpmon-");
-                if (asyncFsWriter) {
-                    AsyncFsWriterProducer producer = new AsyncFsWriterProducer(filenameBase);
-                    Vector<Worker> worker = producer.getWorkers();
-                    for (Worker w : worker) {
-                        this.registerWorker(w);
-                    }
-                    this.monitoringDataWriter = producer;
-                } else {
-                    this.monitoringDataWriter = new FileSystemWriter(filenameBase);
-                }
-                log.info(">Kieker-Tpmon: Initialization completed. Storing " +
-                        "monitoring data in the folder " + filenamePrefix);
-            }
+            log.info(">Kieker-Tpmon: Initialization completed. Storing " +
+                    "monitoring data using class " + this.monitoringDataWriter.getClass().getCanonicalName());
+        } catch (Exception exc) {
+            monitoringEnabled = false;
+            log.error(">Kieker-Tpmon: Disabling monitoring", exc);
         }
     }
 
@@ -309,7 +318,7 @@ public class TpmonController {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
     }
-    // only used if encodeMethodNames == true
+// only used if encodeMethodNames == true
     private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
     // lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
     // each monitoring point after that
@@ -327,32 +336,33 @@ public class TpmonController {
             if (!(execData.traceId % traceSampleingFrequency == 0)) {
                 return true;
             }
+
         }
 
         if (!this.monitoringEnabled) {
             return false;
         }
-        //log.info("ComponentName "+componentname);
-        //log.info("Methodname "+methodname);
+//log.info("ComponentName "+componentname);
+//log.info("Methodname "+methodname);
 
-        // methodname: A.a(), componentname: de.comp.A
-        // therefore componentname+methodname = de.comp.AA.a()
-        // The "A" is double, this is not nice
+// methodname: A.a(), componentname: de.comp.A
+// therefore componentname+methodname = de.comp.AA.a()
+// The "A" is double, this is not nice
 
-        //Example:
-        //ComponentName ts5.de.store.Catalog
-        //MethodName ts5.de.store.dataModel.Book ts5.de.store.Catalog.getBook(boolean, java.lang.String)
+//Example:
+//ComponentName ts5.de.store.Catalog
+//MethodName ts5.de.store.dataModel.Book ts5.de.store.Catalog.getBook(boolean, java.lang.String)
 
-        //int whereToCut = methodname.lastIndexOf(".");
-        //int doublePointPosition = methodname.lastIndexOf("..");        
-        //if (doublePointPosition != -1) whereToCut = methodname.lastIndexOf(".",doublePointPosition-1);
-        //String newMethodname = ""+methodname.subSequence(whereToCut,methodname.length());
+//int whereToCut = methodname.lastIndexOf(".");
+//int doublePointPosition = methodname.lastIndexOf("..");        
+//if (doublePointPosition != -1) whereToCut = methodname.lastIndexOf(".",doublePointPosition-1);
+//String newMethodname = ""+methodname.subSequence(whereToCut,methodname.length());
 
-        // A methodname looks like this *.*(*
-        // the "(" is only once in a methodname
+// A methodname looks like this *.*(*
+// the "(" is only once in a methodname
 
-        // Encoding method and component names stores just placeholders for the component and method names.
-        // The place holders are usually much smaller and storage therefore much faster and requires less space.
+// Encoding method and component names stores just placeholders for the component and method names.
+// The place holders are usually much smaller and storage therefore much faster and requires less space.
 //            if (encodeMethodNames) {
 //                String combinedName = componentname + methodname;
 //                String encodedName = methodNameEncoder.get(combinedName);
@@ -373,8 +383,6 @@ public class TpmonController {
 //        }
 
 //        newMethodname = methodname;
-
-
         numberOfInserts.incrementAndGet();
         // now it fails fast, it disables monitoring when a queue once is full
         if (!this.monitoringDataWriter.insertMonitoringDataNow(execData)) {
@@ -382,6 +390,7 @@ public class TpmonController {
             this.monitoringEnabled = false;
             return false;
         }
+
         return true;
     }
 
@@ -444,6 +453,7 @@ public class TpmonController {
         } else {
             return new String("" + methodname.subSequence(indexBeginOfMethodname, methodname.length())).replaceAll(" ", "");
         }
+
     }
     private long seed = 0;
     private double d3 = 0.3d;
@@ -476,7 +486,8 @@ public class TpmonController {
      *
      * */
     @TpmonInternal()
-    public String getUniqueIdentifierForThread(long threadId) {
+    public String getUniqueIdentifierForThread(
+            long threadId) {
         return Long.toString(lastThreadId.incrementAndGet());
     }
     private ThreadLocal<Long> traceId = new ThreadLocal<Long>();
@@ -519,7 +530,7 @@ public class TpmonController {
             //log.info("traceId == null");
             return -1;
         }
-        //log.info("traceId =" + traceIdObj);
+//log.info("traceId =" + traceIdObj);
         return traceIdObj;
     }
 
@@ -678,6 +689,9 @@ public class TpmonController {
                     ". Using default value " + dbConnectionAddress + ". Message :" + ex.getMessage(), true, false);
         }
 
+        // load property monitoringDataWriter
+        monitoringDataWriterClassname = prop.getProperty("monitoringDataWriter");
+        monitoringDataWriterInitString = prop.getProperty("monitoringDataWriterInitString");
 
         // load property "dbConnectionAddress"
         String dbConnectionAddressProperty = prop.getProperty("dbConnectionAddress");
@@ -689,16 +703,17 @@ public class TpmonController {
         }
 
 
-        // the filenamePrefix (folder where tpmon stores its data) 
-        // for monitoring data depends on the properties tpmon.storeInJavaIoTmpdir 
-        // and tpmon.customStoragePath         
-        // these both parameters may be provided (with higher priority) as java command line parameters as well (example in the properties file)
+// the filenamePrefix (folder where tpmon stores its data) 
+// for monitoring data depends on the properties tpmon.storeInJavaIoTmpdir 
+// and tpmon.customStoragePath         
+// these both parameters may be provided (with higher priority) as java command line parameters as well (example in the properties file)
         String storeInJavaIoTmpdirProperty;
         if (System.getProperty("tpmon.storeInJavaIoTmpdir") != null) { // we use the present virtual machine parameter value
             storeInJavaIoTmpdirProperty = System.getProperty("tpmon.storeInJavaIoTmpdir");
         } else { // we use the parameter in the properties file
             storeInJavaIoTmpdirProperty = prop.getProperty("tpmon.storeInJavaIoTmpdir");
         }
+
         if (storeInJavaIoTmpdirProperty != null && storeInJavaIoTmpdirProperty.length() != 0) {
             if (storeInJavaIoTmpdirProperty.toLowerCase().equals("true") || storeInJavaIoTmpdirProperty.toLowerCase().equals("false")) {
                 storeInJavaIoTmpdir = storeInJavaIoTmpdirProperty.toLowerCase().equals("true");
@@ -706,10 +721,12 @@ public class TpmonController {
                 formatAndOutputError("Bad value for tpmon.storeInJavaIoTmpdir (or provided via command line) parameter (" + storeInJavaIoTmpdirProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + storeInJavaIoTmpdir, true, false);
             }
+
         } else {
             formatAndOutputError("No tpmon.storeInJavaIoTmpdir parameter found in tpmonLTW.jar/" + configurationFile +
                     " (or provided via command line). Using default value '" + storeInJavaIoTmpdir + "'.", true, false);
         }
+
         if (storeInJavaIoTmpdir) {
             filenamePrefix = System.getProperty("java.io.tmpdir");
         } else { // only now we consider tpmon.customStoragePath
@@ -719,13 +736,16 @@ public class TpmonController {
             } else { // we use the parameter in the properties file
                 customStoragePathProperty = prop.getProperty("tpmon.customStoragePath");
             }
+
             if (customStoragePathProperty != null && customStoragePathProperty.length() != 0) {
                 filenamePrefix = customStoragePathProperty;
             } else {
                 formatAndOutputError("No tpmon.customStoragePath parameter found in tpmonLTW.jar/" + configurationFile +
                         " (or provided via command line). Using default value '" + customStoragePath + "'.", true, false);
-                filenamePrefix = customStoragePath;
+                filenamePrefix =
+                        customStoragePath;
             }
+
         }
 
 
@@ -744,17 +764,17 @@ public class TpmonController {
                     ". Using default value " + dbTableName + ".", true, false);
         }
 
-        // ANDRE: buildDate obsolete due to "self-speaking" version name
-        // load property "buildDate"
-        //String buildDateProperty = prop.getProperty("buildDate");
-        //if (buildDateProperty != null && buildDate.length() != 0) {
-        //    buildDate = buildDateProperty;
-        //} else {
-        //    formatAndOutputError("No buildData parameter found in tpmonLTW.jar/" + configurationFile +
-        //            ". Using default value " + buildDate + ".", true, false);
-        //}
+// ANDRE: buildDate obsolete due to "self-speaking" version name
+// load property "buildDate"
+//String buildDateProperty = prop.getProperty("buildDate");
+//if (buildDateProperty != null && buildDate.length() != 0) {
+//    buildDate = buildDateProperty;
+//} else {
+//    formatAndOutputError("No buildData parameter found in tpmonLTW.jar/" + configurationFile +
+//            ". Using default value " + buildDate + ".", true, false);
+//}
 
-        // load property "debug"
+// load property "debug"
         String debugProperty = prop.getProperty("debug");
         if (debugProperty != null && debugProperty.length() != 0) {
             if (debugProperty.toLowerCase().equals("true") || debugProperty.toLowerCase().equals("false")) {
@@ -763,12 +783,13 @@ public class TpmonController {
                 formatAndOutputError("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + debug, true, false);
             }
+
         } else {
             formatAndOutputError("Could not find debug parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + debug, true, false);
         }
 
-        // load property "storeInDatabase"
+// load property "storeInDatabase"
         String storeInDatabaseProperty = prop.getProperty("storeInDatabase");
         if (storeInDatabaseProperty != null && storeInDatabaseProperty.length() != 0) {
             if (storeInDatabaseProperty.toLowerCase().equals("true") || storeInDatabaseProperty.toLowerCase().equals("false")) {
@@ -777,12 +798,13 @@ public class TpmonController {
                 formatAndOutputError("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + debug, true, false);
             }
+
         } else {
             formatAndOutputError("Could not find storeInDatabase parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + storeInDatabase, true, false);
         }
 
-        // load property "setInitialExperimentIdBasedOnLastId"
+// load property "setInitialExperimentIdBasedOnLastId"
         String setInitialExperimentIdBasedOnLastIdProperty = prop.getProperty("setInitialExperimentIdBasedOnLastId");
         if (setInitialExperimentIdBasedOnLastIdProperty != null && setInitialExperimentIdBasedOnLastIdProperty.length() != 0) {
             if (setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true") || setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("false")) {
@@ -791,12 +813,13 @@ public class TpmonController {
                 formatAndOutputError("Bad value for setInitialExperimentIdBasedOnLastId parameter (" + setInitialExperimentIdBasedOnLastIdProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + setInitialExperimentIdBasedOnLastId, true, false);
             }
+
         } else {
             formatAndOutputError("Could not find setInitialExperimentIdBasedOnLastId parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + setInitialExperimentIdBasedOnLastId, true, false);
         }
 
-        // load property "asyncDbconnector"
+// load property "asyncDbconnector"
         String asyncDbconnectorProperty = prop.getProperty("useAsyncDbconnector");
         if (asyncDbconnectorProperty != null && asyncDbconnectorProperty.length() != 0) {
             if (asyncDbconnectorProperty.toLowerCase().equals("true") || asyncDbconnectorProperty.toLowerCase().equals("false")) {
@@ -805,12 +828,13 @@ public class TpmonController {
                 formatAndOutputError("Bad value for useAsyncDbconnector parameter (" + asyncDbconnectorProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + asyncDbconnector, true, false);
             }
+
         } else {
             formatAndOutputError("Could not find useAsyncDbconnector parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + asyncDbconnector, true, false);
         }
 
-        // load property "asyncFsWriter"
+// load property "asyncFsWriter"
         String asyncFsWriterProperty = prop.getProperty("asyncFsWriter");
         if (asyncFsWriterProperty != null && asyncFsWriterProperty.length() != 0) {
             if (asyncFsWriterProperty.toLowerCase().equals("true") || asyncFsWriterProperty.toLowerCase().equals("false")) {
@@ -820,12 +844,12 @@ public class TpmonController {
                 formatAndOutputError("Bad value for asyncFsWriter parameter (" + asyncFsWriterProperty + ") in tpmonLTW.jar/" + configurationFile +
                         ". Using default value " + asyncFsWriter, true, false);
             }
+
         } else {
             formatAndOutputError("Could not find asyncFsWriter parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + asyncFsWriter, true, false);
         }
-        // log.info("Async fs writer = "+asyncFsWriter);
-
+// log.info("Async fs writer = "+asyncFsWriter);
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
@@ -836,12 +860,12 @@ public class TpmonController {
                         ". Using default value " + monitoringEnabled, true, false);
             //    log.info("monitoringEnabled bad value");
             }
+
         } else {
             formatAndOutputError("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + monitoringEnabled, true, false);
         //  log.info("monitoringEnabled missing param");
         }
-
 
         String useJMSproperty = prop.getProperty("sendMonitoringDataToJMSserver");
         if (useJMSproperty != null && useJMSproperty.length() != 0) {
@@ -853,6 +877,7 @@ public class TpmonController {
                         ". Using default value " + sendMonitoringDataToJMSserver, true, false);
             //    log.info("monitoringEnabled bad value");
             }
+
         } else {
         //formatAndOutputError("Could not find sendMonitoringDataToJMSserver parameter in tpmonLTW.jar/" + configurationFile +
         //        ". Using default value " + sendMonitoringDataToJMSserver, true, false);
@@ -877,9 +902,11 @@ public class TpmonController {
         if (monitoringEnabled == false) {
             log.info(">Kieker-Tpmon: Notice, monitoring is deactived (monitoringEnables=false in dbconnector.properties within tpmonLTW.jar)");
         }
+
         if (debug) {
             log.info(getConnectorInfo());
         }
+
     }
 
     @TpmonInternal()
@@ -890,9 +917,11 @@ public class TpmonController {
         } else {
             errorReport.append("Error   ");
         }
+
         if (reportTime) {
             errorReport.append(getDateString());
         }
+
         errorReport.append(" :" + errorMessage);
         log.error("" + errorReport);
     }
@@ -904,8 +933,10 @@ public class TpmonController {
         if (!debug) {
             if (dbConnectionAddress.toLowerCase().contains("password")) {
                 int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
-                dbConnectionAddress2 = new String(dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN");
+                dbConnectionAddress2 =
+                        new String(dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN");
             }
+
         }
 
         if (sendMonitoringDataToJMSserver) {
@@ -916,6 +947,7 @@ public class TpmonController {
             } else {
                 return new String("Storage mode : Tpmon stores in the filesystem, Version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", Monitoring data directory:" + filenamePrefix);
             }
+
         }
     }
 
@@ -923,9 +955,9 @@ public class TpmonController {
     public String getDateString() {
         return java.util.Calendar.getInstance().getTime().toString();
     }
-    // only used by the *Remote* aspect or the spring aspectj aspect. The other aspects have own 
-    // more protected HashMaps.
-    // TODO: use ThreadLocal also for these remote
+// only used by the *Remote* aspect or the spring aspectj aspect. The other aspects have own 
+// more protected HashMaps.
+// TODO: use ThreadLocal also for these remote
     public Map<Long, String> sessionThreadMatcher = new ConcurrentHashMap<Long, String>();
     public Map<Long, String> requestThreadMatcher = new ConcurrentHashMap<Long, String>();
 
@@ -937,7 +969,8 @@ public class TpmonController {
      * @return
      */
     @TpmonInternal()
-    public String getTraceId(Long threadid) {
+    public String getTraceId(
+            Long threadid) {
         //log.info("TpmonController: getTraceId("+threadid+") ="+requestThreadMatcher.get(threadid));
         return requestThreadMatcher.get(threadid);
     }
@@ -974,22 +1007,27 @@ public class TpmonController {
         String traceid = requestThreadMatcher.get(threadid);
         if (traceid == null) {
             log.info("Tpmon: warning traceid was null");
-            traceid = getUniqueIdentifierForThread(threadid);
+            traceid =
+                    getUniqueIdentifierForThread(threadid);
             requestThreadMatcher.put(threadid, traceid);
         }
 
         Integer eoi = executionOrderIndexMatcher.get(traceid);
         if (eoi == null) {
             log.info("Tpmon: warning eoi == null");
-            eoi = 0;
+            eoi =
+                    0;
             executionOrderIndexMatcher.put(traceid, eoi);
         }
+
         Integer ess = executionStackSizeMatcher.get(traceid);
         if (ess == null) {
             log.info("Tpmon: warning ess == null");
-            ess = 0;
+            ess =
+                    0;
             executionStackSizeMatcher.put(traceid, ess);
         }
+
         return new RemoteCallMetaData(traceid, eoi, ess);
     }
 
@@ -1004,6 +1042,7 @@ public class TpmonController {
         if (this.monitoringEnabled) {
             sessionThreadMatcher.put(threadid, sessionid);
         }
+
     }
 
     /**
@@ -1011,11 +1050,13 @@ public class TpmonController {
      *       the ThreadLocal sessionId
      */
     @TpmonInternal()
-    public String getSessionIdentifier(long threadid) {
+    public String getSessionIdentifier(
+            long threadid) {
         String sessionid = sessionThreadMatcher.get(threadid);
         if (sessionid == null) {
             return "unknown";
         }
+
         return sessionid;
     }
 
@@ -1065,10 +1106,12 @@ public class TpmonController {
         if (traceid == null) {
             return -2;
         }
+
         Integer eoi = executionOrderIndexMatcher.get(traceid);
         if (eoi == null) {
             return -3;
         }
+
         return eoi;
     }
 

@@ -109,10 +109,10 @@ public class AsyncJmsWorker implements Runnable, Worker {
                     }
                 }
             }
-            log.info("FsWriter finished");
+            log.info("JMS writer finished");
         } catch (Exception ex) {
             // e.g. Interrupted Exception or IOException
-            log.error("FS Writer will halt", ex);
+            log.error("JMX writer will halt", ex);
         } finally{
             this.finished = true;
         }

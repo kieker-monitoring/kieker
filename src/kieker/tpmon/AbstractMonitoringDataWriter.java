@@ -7,7 +7,7 @@ import kieker.tpmon.annotations.TpmonInternal;
 public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWriter {
 
     private boolean debugEnabled;
-
+    
     @TpmonInternal()
     public abstract boolean insertMonitoringDataNow(KiekerExecutionRecord execData);
 
