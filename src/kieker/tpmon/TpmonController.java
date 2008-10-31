@@ -57,14 +57,11 @@ package kieker.tpmon;
  */
 import java.io.FileInputStream;
 import java.lang.management.ManagementFactory;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,7 +69,6 @@ import org.apache.commons.logging.LogFactory;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
 import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
-
 
 public class TpmonController {
 
@@ -107,7 +103,7 @@ public class TpmonController {
     private TpmonShutdownHook shutdownhook = null;
     //TODO: to be removed and reengineered
     //private static final boolean methodNamesCeWe = true;
-    private static TpmonController ctrlInst = null;    // default properties for JMS publisher
+    private static TpmonController ctrlInst = null;
 
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
@@ -136,22 +132,7 @@ public class TpmonController {
 
         /* We will now determine and load the monitoring Writer to use */
         try {
-//            // TODO: the first branch must be removed!
-//            if (this.sendMonitoringDataToJMSserver) {
-//                System.out.println("USING JMS (experimental)");
-//                if (jmsTopic == null || jmsTopic.length() == 0) {
-//                    monitoringEnabled = false;
-//                    log.error(">Kieker-Tpmon: Disabling monitoring because jmsTopic is invalid :\"" + jmsTopic + "\"");
-//                } else {
-//                    AsyncJmsProducer producer = new AsyncJmsProducer(jmsContextFactoryType, jmsProviderUrl, jmsFactoryLookupName, jmsTopic, jmsMessageTimeToLive);
-//                    this.monitoringDataWriter = producer;
-//                    Vector<Worker> worker = producer.getWorkers();
-//                    for (Worker w : worker) {
-//                        this.registerWorker(w);
-//                    }
-//                }
-//            } else 
-                if (this.monitoringDataWriterClassname == null || this.monitoringDataWriterClassname.length() == 0) {
+            if (this.monitoringDataWriterClassname == null || this.monitoringDataWriterClassname.length() == 0) {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
                 String filenameBase = new String(filenamePrefix + "/tpmon-");
@@ -182,11 +163,6 @@ public class TpmonController {
             monitoringEnabled = false;
             log.error(">Kieker-Tpmon: Disabling monitoring", exc);
         }
-    }
-
-    @TpmonInternal()
-    public String getFilenamePrefix() {
-        return filenamePrefix;
     }
 
     /**
@@ -312,15 +288,15 @@ public class TpmonController {
         execData.experimentId = this.experimentId;
         execData.vmName = this.vmname;
 
+        if (!this.monitoringEnabled) {
+            return false;
+        }
+
         if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
             if (!(execData.traceId % traceSampleingFrequency == 0)) {
                 return true;
             }
 
-        }
-
-        if (!this.monitoringEnabled) {
-            return false;
         }
 //log.info("ComponentName "+componentname);
 //log.info("Methodname "+methodname);
@@ -452,65 +428,47 @@ public class TpmonController {
     }
     private AtomicLong lastThreadId = new AtomicLong(0);
 
-    /**     
-     * Returns each time a String containing a long value
-     * that is increamented each time the method is used.
-     *
-     * The first trace after application start will get a
-     * threadid of 1.
-     *
-     * Note, in the future (version 0.95), the return type
-     * will be changed to long.
-     *
-     * (The method is thread save)
-     *
-     * */
-    @TpmonInternal()
-    public String getUniqueIdentifierForThread(
-            long threadId) {
-        return Long.toString(lastThreadId.incrementAndGet());
-    }
-    private ThreadLocal<Long> traceId = new ThreadLocal<Long>();
+    private ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
 
     /**
      * This method returns a thread-local traceid which is globally
      * unique and stored it local for the thread.
-     * The thread is responsible for invalidating the stored traceId using 
+     * The thread is responsible for invalidating the stored curTraceId using 
      * the method unsetThreadLocalTraceId()!
      */
     @TpmonInternal()
     public long getAndStoreUniqueThreadLocalTraceId() {
         long id = lastThreadId.incrementAndGet();
-        this.storeThreadLocalTraceId(id);
+        this.threadLocalTraceId.set(id);
         return id;
     }
 
     /**
-     * This method stores a thread-local traceId.
-     * The thread is responsible for invalidating the stored traceId using 
+     * This method stores a thread-local curTraceId.
+     * The thread is responsible for invalidating the stored curTraceId using 
      * the method unsetThreadLocalTraceId()!
      */
     @TpmonInternal()
-    private void storeThreadLocalTraceId(long traceId) {
-        this.traceId.set(traceId);
+    public void storeThreadLocalTraceId(long traceId) {
+        this.threadLocalTraceId.set(traceId);
     }
 
     /**
      * This method returns the thread-local traceid previously
-     * registered using the method registerTraceId(traceId).
+     * registered using the method registerTraceId(curTraceId).
      * 
-     * @return the traceid. -1 if no traceId has been registered
+     * @return the traceid. -1 if no curTraceId has been registered
      *         for this thread.
      */
     @TpmonInternal()
     public long recallThreadLocalTraceId() {
-        //log.info("Recalling traceId");
-        Long traceIdObj = this.traceId.get();
+        //log.info("Recalling curTraceId");
+        Long traceIdObj = this.threadLocalTraceId.get();
         if (traceIdObj == null) {
-            //log.info("traceId == null");
+            //log.info("curTraceId == null");
             return -1;
         }
-//log.info("traceId =" + traceIdObj);
+//log.info("curTraceId =" + traceIdObj);
         return traceIdObj;
     }
 
@@ -519,30 +477,30 @@ public class TpmonController {
      */
     @TpmonInternal()
     public void unsetThreadLocalTraceId() {
-        this.traceId.remove();
+        this.threadLocalTraceId.remove();
     }
-    private ThreadLocal<String> sessionId = new ThreadLocal<String>();
+    private ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
 
     /**
      * Used by the spring aspect to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
-     * The thread is responsible for invalidating the stored traceId using 
+     * The thread is responsible for invalidating the stored curTraceId using 
      * the method unsetThreadLocalSessionId()!
      */
     @TpmonInternal()
     public void storeThreadLocalSessionId(String sessionId) {
-        this.sessionId.set(sessionId);
+        this.threadLocalSessionId.set(sessionId);
     }
 
     /**
      * This method returns the thread-local traceid previously
-     * registered using the method registerTraceId(traceId).
+     * registered using the method registerTraceId(curTraceId).
      * 
      * @return the sessionid. null if no session registered.
      */
     @TpmonInternal()
     public String recallThreadLocalSessionId() {
-        return this.sessionId.get();
+        return this.threadLocalSessionId.get();
     }
 
     /**
@@ -550,19 +508,18 @@ public class TpmonController {
      */
     @TpmonInternal()
     public void unsetThreadLocalSessionId() {
-        this.sessionId.remove();
+        this.threadLocalSessionId.remove();
     }
-    private ThreadLocal<Integer> eoi = new ThreadLocal<Integer>();
+    private ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
 
     /**
-     * Used by the spring aspect to explicitly register a sessionid that is to be collected within
-     * a servlet method (that knows the request object).
-     * The thread is responsible for invalidating the stored traceId using 
-     * the method unsetThreadLocalSessionId()!
+     * Used by the spring aspect to explicitly register an curEoi.
+     * The thread is responsible for invalidating the stored curTraceId using 
+     * the method unsetThreadLocalEOI()!
      */
     @TpmonInternal()
     public void storeThreadLocalEOI(int eoi) {
-        this.eoi.set(eoi);
+        this.threadLocalEoi.set(eoi);
     }
 
     /** 
@@ -571,20 +528,24 @@ public class TpmonController {
      */
     @TpmonInternal()
     public int incrementAndRecallThreadLocalEOI() {
-        int newEoi = this.eoi.get().intValue() + 1;
-        this.eoi.set(newEoi);
+        int newEoi = this.threadLocalEoi.get().intValue() + 1;
+        this.threadLocalEoi.set(newEoi);
         return newEoi;
     }
 
     /**
-     * This method returns the thread-local traceid previously
-     * registered using the method registerTraceId(traceId).
+     * This method returns the thread-local curEoi previously
+     * registered using the method registerTraceId(curTraceId).
      * 
-     * @return the sessionid. null if no session registered.
+     * @return the sessionid. -1 if no curEoi registered.
      */
     @TpmonInternal()
     public int recallThreadLocalEOI() {
-        return this.eoi.get();
+        Integer curEoi = this.threadLocalEoi.get();
+        if (curEoi == null) {
+            return -1;
+        }
+        return curEoi;
     }
 
     /**
@@ -592,19 +553,19 @@ public class TpmonController {
      */
     @TpmonInternal()
     public void unsetThreadLocalEOI() {
-        this.eoi.remove();
+        this.threadLocalEoi.remove();
     }
-    private ThreadLocal<Integer> ess = new ThreadLocal<Integer>();
+    private ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
     /**
      * Used by the spring aspect to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
-     * The thread is responsible for invalidating the stored traceId using 
+     * The thread is responsible for invalidating the stored curTraceId using 
      * the method unsetThreadLocalSessionId()!
      */
     @TpmonInternal()
     public void storeThreadLocalESS(int ess) {
-        this.ess.set(ess);
+        this.threadLocalEss.set(ess);
     }
 
     /** 
@@ -613,28 +574,32 @@ public class TpmonController {
      */
     @TpmonInternal()
     public int recallAndIncrementThreadLocalESS() {
-        int curEss = this.ess.get().intValue();
-        this.ess.set(curEss + 1);
+        int curEss = this.threadLocalEss.get();
+        this.threadLocalEss.set(curEss + 1);
         return curEss;
     }
 
     /**
-     * This method returns the thread-local traceid previously
-     * registered using the method registerTraceId(traceId).
+     * This method returns the thread-local curEss previously
+     * registered using the method registerTraceId(curTraceId).
      * 
-     * @return the sessionid. null if no session registered.
+     * @return the sessionid. -1 if no curEss registered.
      */
     @TpmonInternal()
     public int recallThreadLocalESS() {
-        return this.ess.get();
+        Integer ess = this.threadLocalEss.get();
+        if (ess == null) {
+            return -1;
+        }
+        return ess;
     }
 
     /**
-     * This method unsets a previously registered traceid. 
+     * This method unsets a previously registered curEss. 
      */
     @TpmonInternal()
     public void unsetThreadLocalESS() {
-        this.ess.remove();
+        this.threadLocalEss.remove();
     }
 
     @TpmonInternal()
@@ -795,6 +760,13 @@ public class TpmonController {
 
     }
 
+    /**
+     * TODO: this strange method should be removed (my (Andre) opinion)!
+     * 
+     * @param errorMessage
+     * @param onlyWarning
+     * @param reportTime
+     */
     @TpmonInternal()
     public void formatAndOutputError(String errorMessage, boolean onlyWarning, boolean reportTime) {
         StringBuffer errorReport = new StringBuffer(">Kieker-Tpmon:  ");
@@ -815,13 +787,13 @@ public class TpmonController {
     @TpmonInternal()
     public String getConnectorInfo() {
         StringBuilder strB = new StringBuilder();
-        
+
         strB.append("monitoringDataWriter : " + this.monitoringDataWriter.getClass().getCanonicalName());
         strB.append(",");
         strB.append(" monitoringDataWriter config : (below), " + this.monitoringDataWriter.getInfoString());
         strB.append(",");
         strB.append(" version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
-        
+
         return strB.toString();
     }
 
@@ -829,43 +801,6 @@ public class TpmonController {
     public String getDateString() {
         return java.util.Calendar.getInstance().getTime().toString();
     }
-// only used by the *Remote* aspect or the spring aspectj aspect. The other aspects have own 
-// more protected HashMaps.
-// TODO: use ThreadLocal also for these remote
-    public Map<Long, String> sessionThreadMatcher = new ConcurrentHashMap<Long, String>();
-    public Map<Long, String> requestThreadMatcher = new ConcurrentHashMap<Long, String>();
-
-    /**
-     * This method and setTraceId are only to support
-     * traceing over remote connections (experimental prototype 
-     * -- works but is dirty, since it is not encapsulated into aspects jet)...
-     * @param threadid
-     * @return
-     */
-    @TpmonInternal()
-    public String getTraceId(
-            Long threadid) {
-        //log.info("TpmonController: getTraceId("+threadid+") ="+requestThreadMatcher.get(threadid));
-        return requestThreadMatcher.get(threadid);
-    }
-//    /**
-//     * This method and setTraceId are only used by to support
-//     * traceing over remote connections (experimental prototype 
-//     * -- works but is dirty, since it is not encapsulated into aspects jet)...
-//     * @param threadid
-//     * @return
-//     */    
-//    private static void setTraceId(Long threadid, String traceid) {
-//        //log.info("TpmonController: setTraceId("+threadid+","+threadid+")");
-//        requestThreadMatcher.put(threadid, traceid);
-//    }
-    /**
-     * Only to enable remote tracing 
-     * executionOrderIndexMatcher Contains for each traceid the last execution-order-identifier that was given to the execution
-     * executionStackSizeMatcher contains for each traceid the next stack size to be logged
-     */
-    public Map<String, Integer> executionOrderIndexMatcher = Collections.synchronizedMap(new HashMap<String, Integer>());
-    public Map<String, Integer> executionStackSizeMatcher = Collections.synchronizedMap(new HashMap<String, Integer>());
 
     /**
      * Use a RemoteCallMetaData object to transport tracing data together 
@@ -877,116 +812,46 @@ public class TpmonController {
      */
     @TpmonInternal()
     public RemoteCallMetaData getRemoteCallMetaData() {
-        Long threadid = Thread.currentThread().getId();
-        String traceid = requestThreadMatcher.get(threadid);
-        if (traceid == null) {
+        long curTraceId = this.recallThreadLocalTraceId();
+        if (curTraceId == -1) { // no curTraceId was registered
             log.info("Tpmon: warning traceid was null");
-            traceid =
-                    getUniqueIdentifierForThread(threadid);
-            requestThreadMatcher.put(threadid, traceid);
+            curTraceId = this.getAndStoreUniqueThreadLocalTraceId();
         }
 
-        Integer eoi = executionOrderIndexMatcher.get(traceid);
-        if (eoi == null) {
-            log.info("Tpmon: warning eoi == null");
-            eoi =
-                    0;
-            executionOrderIndexMatcher.put(traceid, eoi);
+        int curEoi = this.recallThreadLocalEOI();
+        if (curEoi == -1) {
+            log.info("Tpmon: warning eoi == -1");
+            curEoi = 0;
+            this.storeThreadLocalEOI(0);
         }
 
-        Integer ess = executionStackSizeMatcher.get(traceid);
-        if (ess == null) {
-            log.info("Tpmon: warning ess == null");
-            ess =
-                    0;
-            executionStackSizeMatcher.put(traceid, ess);
+        int curEss = this.recallThreadLocalESS();
+        if (curEss == -1) {
+            log.info("Tpmon: warning ess == -1");
+            curEss = 0;
+            this.storeThreadLocalESS(0);
         }
 
-        return new RemoteCallMetaData(traceid, eoi, ess);
+        return new RemoteCallMetaData(curTraceId, curEoi, curEss);
     }
 
     /**
-     * Used by the spring aspect to explicitly register a sessionid that is to be collected within
-     * a servlet method (that knows the request object).
-     * TODO: This method should be removed as soon as we stick to 
-     *       the ThreadLocal sessionId
-     */
-    @TpmonInternal()
-    public void registerSessionIdentifier(String sessionid, long threadid) {
-        if (this.monitoringEnabled) {
-            sessionThreadMatcher.put(threadid, sessionid);
-        }
-
-    }
-
-    /**
-     * TODO: This method should be removed as soon as we stick to 
-     *       the ThreadLocal sessionId
-     */
-    @TpmonInternal()
-    public String getSessionIdentifier(
-            long threadid) {
-        String sessionid = sessionThreadMatcher.get(threadid);
-        if (sessionid == null) {
-            return "unknown";
-        }
-
-        return sessionid;
-    }
-
-    /**
-     * This method has to be called to register a incomming remote call
+     * This method has to be called to register an incomming remote call
      * @param rcmd
      * @param threadid
      */
     @TpmonInternal()
     public void registerRemoteCallMetaData(RemoteCallMetaData rcmd) {
-
-        Long threadid = Thread.currentThread().getId();
         if (rcmd == null) {
             log.info("Tpmon: RCMD == null");
-            String traceid = getUniqueIdentifierForThread(threadid);
-            requestThreadMatcher.put(threadid, traceid);
-            executionOrderIndexMatcher.put(traceid, 0);
-            executionStackSizeMatcher.put(traceid, 0);
+            this.getAndStoreUniqueThreadLocalTraceId();
+            this.storeThreadLocalEOI(0);
+            this.storeThreadLocalESS(0);
         } else {
-            String traceid = rcmd.getTraceid();
-            requestThreadMatcher.put(threadid, traceid);
-            executionOrderIndexMatcher.put(traceid, rcmd.getEoi());
-            executionStackSizeMatcher.put(traceid, rcmd.getEss());
+            this.storeThreadLocalTraceId(rcmd.traceid);
+            this.storeThreadLocalEOI(rcmd.eoi);
+            this.storeThreadLocalESS(rcmd.ess);
         }
-
-    }
-
-    /**
-     * After a remote call comes back via an return, the new executionOrderIndex
-     * must be registered in the caller deplopyment context using this method.
-     * @param eoi
-     */
-    @TpmonInternal()
-    public void registerEoiReceivedFromRemoteContext(int eoi) {
-        String traceid = requestThreadMatcher.get(Thread.currentThread().getId());
-        executionOrderIndexMatcher.put(traceid, eoi);
-    }
-
-    @TpmonInternal()
-    public int getEoi() {
-        String traceid = requestThreadMatcher.get(Thread.currentThread().getId());
-        return executionOrderIndexMatcher.get(traceid);
-    }
-
-    @TpmonInternal()
-    public int getEoi(String traceid) {
-        if (traceid == null) {
-            return -2;
-        }
-
-        Integer eoi = executionOrderIndexMatcher.get(traceid);
-        if (eoi == null) {
-            return -3;
-        }
-
-        return eoi;
     }
 
     @TpmonInternal()

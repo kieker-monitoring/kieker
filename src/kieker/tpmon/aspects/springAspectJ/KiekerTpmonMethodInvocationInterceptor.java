@@ -57,7 +57,7 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
             // here we can collect the sessionid, which may for instance be registered before by
             // a explicity call registerSessionIdentifier(String sessionid, long threadid) from a method
             // that knowns the request object (e.g. a servlet or a spring MVC controller).
-            String sessionid = tpmonController.getSessionIdentifier(Thread.currentThread().getId());
+            String sessionid = tpmonController.recallThreadLocalSessionId();
             // TpmonController.insertMonitoringDataNow(componentName, opname, traceid, tin, tout);
             tpmonController.insertMonitoringDataNow(KiekerExecutionRecord.getInstance(componentName, opname, sessionid, traceId, tin, tout));
         }

@@ -17,31 +17,16 @@ public class RemoteCallMetaData implements Serializable{
 
     private static final long serialVersionUID = 512771634L;    // random number
 
-    private int ess;
-    private int eoi;
-    private String traceid;
+    public int ess;
+    public int eoi;
+    public long traceid;
 
-    public RemoteCallMetaData( String traceid, int eoi, int ess) {
+    public RemoteCallMetaData(long traceid, int eoi, int ess) {
         this.ess = ess;
         this.eoi = eoi;
         this.traceid = traceid;
     }
    
-    @TpmonInternal()
-    public int getEoi() {
-        return eoi;
-    }
-
-    @TpmonInternal()
-    public int getEss() {
-        return ess;
-    }
-
-    @TpmonInternal()
-    public String getTraceid() {
-        return traceid;
-    }
-         
     @TpmonInternal()
     public void printinfo(){
         System.out.println("RemoteCallMetaData: "+traceid+" "+eoi+" "+ess);
