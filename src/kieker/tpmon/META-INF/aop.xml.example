@@ -51,16 +51,13 @@
 
 <aspects>        
      <!-- here you usually want to use only ONE aspect. -->
-     <!-- Put the other in a comment -->
-     <!-- <aspect name="kieker.tpmon.aspects.TpmonFullServletRemoteInstrumentation"/> -->
-     <!--   <aspect name="kieker.tpmon.aspects.TpmonMonitorFullInstrumentation"/>  -->
-     <!--   <aspect name="kieker.tpmon.aspects.TpmonMonitorFullInstServlet"/>  -->
-     <!--   <aspect name="kieker.tpmon.aspects.TpmonMonitorAnnotation"/> -->
-     <aspect name="kieker.tpmon.aspects.TpmonMonitorAnnotationServlet"/>
+     <!-- Put the remaining in a comment -->
+     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotation"/>-->
+     <aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationServlet"/>
+     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringFull"/>-->
+     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringFullServlet"/>-->
 
-     <!--   2008-08: new @Aspect aspect which may also operate in combination with spring's AOP -->
-     <!--   <aspect name="kieker.tpmon.aspects.springAspectJ.KiekerTpmonMonitoringAspect"/> -->
-	 <!-- experimental aspects -->
+     <!-- experimental aspects -->
      <!--   <aspect name="kieker.tpmon.aspects.TpmonFullServletRemoteInstrumentation"/>-->
      <!--   <aspect name="kieker.tpmon.aspects.TpmonRandomPartialInstumentationServletRemote"/>-->
 </aspects>
