@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker" default="build-all" basedir="." >
+<project name="Kieker" default="build-all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
     <property file="tpmon.properties"/>
 
     <property name="KiekerTpmonTestAspect"
@@ -57,6 +57,9 @@
         <replaceregexp file="src/kieker/tpmon/TpmonVersion.java"
                        match="VERSION = &quot;.*?&quot;"
                        replace="VERSION = &quot;${tpmon.version}-${DSTAMP}&quot;"/>
+        <replaceregexp file="pom_ant_kieker.xml"
+                       match="&lt;version&gt;.*?&lt;/version&gt;"
+                       replace="&lt;version&gt;${tpmon.version}-${DSTAMP}&lt;/version&gt;"/>
     </target>
     <target name="build-all" depends="clean,init">
         <!--<antcall target="build-tpmon-ctw"/>-->
@@ -336,5 +339,22 @@
             <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
         </java>
         <delete file="build-tests/log4j.properties"/>
+    </target>
+    <target name="mvn-init">
+        <xmlproperty file="pom.xml" prefix="pom.xml" />
+        <path id="maven-ant-tasks.classpath" path="external-libs/maven-ant-tasks-2.0.9.jar" />
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" 
+            classpathref="maven-ant-tasks.classpath" />
+    </target>
+    <!--This target will place the tpmonctrl jar file in a maven repository alongside with its 
+        corresponding pom.xml file.
+        For real usage change the repository url to some repository of your choice.
+        To test deployment localy use something like file://localhost/xxx -->  
+    <target name="mvn-deploy" depends="build-tpmon-ctrl, mvn-init">
+        <artifact:pom id="maven.project" file="pom_ant_kieker.xml" />
+        <artifact:deploy file="dist/${dist.tpmon.ctrl}">
+            <remoteRepository url="file://localhost/maven/deploy/test"/>
+            <pom refid="maven.project"/>
+        </artifact:deploy>
     </target>
 </project>
