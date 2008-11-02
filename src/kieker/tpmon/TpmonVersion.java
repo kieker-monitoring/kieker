@@ -16,7 +16,7 @@ public class TpmonVersion {
 	 * JMeterUtils This ensures that JMeterUtils always gets the correct
 	 * version, even if it is not re-compiled during the build.
 	 */
-	private static final String VERSION = "0.91-20081101";
+	private static final String VERSION = "0.91-20081102";
 
 
 
