@@ -15,14 +15,16 @@ import org.springframework.web.context.request.WebRequestInterceptor;
  */
 public class KiekerTpmonSessionRegistrationInterceptor implements WebRequestInterceptor {
 
+    private static final TpmonController ctrlInst = TpmonController.getInstance();
+    
     public void preHandle(WebRequest request) throws Exception {
-        TpmonController.getInstance().getAndStoreUniqueThreadLocalTraceId();
-        TpmonController.getInstance().storeThreadLocalSessionId(request.getSessionId());
+        ctrlInst.getAndStoreUniqueThreadLocalTraceId();
+        ctrlInst.storeThreadLocalSessionId(request.getSessionId());
     }
 
     public void postHandle(WebRequest request, ModelMap map) throws Exception {
-        TpmonController.getInstance().unsetThreadLocalTraceId();
-        TpmonController.getInstance().unsetThreadLocalSessionId();
+        ctrlInst.unsetThreadLocalTraceId();
+        ctrlInst.unsetThreadLocalSessionId();
     }
 
     public void afterCompletion(WebRequest request, Exception map) throws Exception {
