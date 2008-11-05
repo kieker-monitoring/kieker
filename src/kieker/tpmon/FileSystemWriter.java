@@ -73,7 +73,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     private PrintWriter pos = null;
 
     private final static String defaultConstructionErrorMsg = 
-            "Do not select this writer using the full-qualified classname. " +
+            "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCFS +
                 " and the file system specific configuration properties.";
     
@@ -106,9 +106,8 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             int random = (int) (Math.random() * 100d);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
-            FileOutputStream fos;
             try {
-                fos = new FileOutputStream(filename);
+                FileOutputStream fos = new FileOutputStream(filename);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
                 DataOutputStream dos = new DataOutputStream(bos);
                 pos = new PrintWriter(dos);

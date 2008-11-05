@@ -66,7 +66,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
     private final static String defaultConstructionErrorMsg =
-            "Do not select this writer using the full-qualified classname. " +
+            "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCDB +
             " and the file system specific configuration properties.";
 
@@ -134,7 +134,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
     }
 
     /**
-     * This method to store monitoring data into the database or
+     * This method is used to store monitoring data into the database or
      * file system. The storage mode is configured in the file
      * dbconnector.properties.
      */
@@ -180,8 +180,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
         if (!this.isDebug()) {
             if (dbConnectionAddress.toLowerCase().contains("password")) {
                 int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
-                dbConnectionAddress2 =
-                        new String(dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN");
+                dbConnectionAddress2 = dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
             }
 
         }
