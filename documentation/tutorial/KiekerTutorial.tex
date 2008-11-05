@@ -1,53 +1,17 @@
 \documentclass[a4paper,12pt]{scrartcl}
-\usepackage{hyperref}
-\newcommand{\goodgap}{\hspace{\subfigtopskip}\hspace{\subfigbottomskip}}
-\usepackage{times}
-\usepackage[latin1]{inputenc}
-\usepackage{graphicx}
-\usepackage{subfigure}
-\usepackage{natbib}
-\usepackage{listings}
-\listfiles \lstloadlanguages{java} 
-\lstset{language=java,
-  showspaces=false,
-  escapeinside={/*@}{@*/},
-  showstringspaces=false,
-  numbers=left,
-  numberstyle=\tiny,
-  numbersep=5pt,
-  breaklines=true,
-  breakautoindent=true,
-  float=hbp,
-  basicstyle=\ttfamily\small,
-  columns=flexible,
-  tabsize=2,
-  extendedchars=true,
-  frame=trbl
-}
 
-\newcommand{\todobox}[1]{\marginpar{\footnotesize \textbf{ TODO:  #1 }}}
-\newcommand{\structurebox}[1]{%
-	\par\noindent%
-        \begin{center}
-        \doublebox{\parbox{.8\columnwidth}{\texttt{Structure guide:} #1}}%
-        \end{center}
-}
+\input{usepackagesKieker.tex}
 
-\newcommand{\tpmon}{\textit{Tpmon}}
-\newcommand{\tpan}{\textit{Tpan}}
-\newcommand{\kieker}{\textit{Kieker}}
-\newcommand{\tpmonltw}{\textit{tpmonltw.jar}}
-\newcommand{\aspectjweaverjar}{\textit{aspectjweaver.jar}}
-\newcommand{\kiekerurl}{\small\url{http://sourceforge.net/projects/kieker/}\normalsize}
-
-
-\title{Tutorial for \kieker : Monitoring and Visualization of Software Behavior \\ \small \vspace{3mm} DocumentURL: \href{http://www.matthias-rohr.com/kieker/KiekerTutorial.pdf}{http://www.matthias-rohr.com/kieker/KiekerTutorial.pdf}}
+\title{Tutorial for \kieker : Monitoring and Visualization of Software Behavior \\ \small \vspace{3mm} DocumentURL: \kiekertutorialurl}
 \author{The Kieker project \\ Matthias Rohr, Andr\'{e} van Hoorn, Nina Marwede}
 
 \begin{document}
 \maketitle
 \tableofcontents
 \section{Overview}
+
+\todobox{
+ Die alten Properies zum Einschalten von asynchr. FS bzw. DB sind weg!}
 
 Kieker is a framework for monitoring the runtime behavior of Java software applications. It can be used for plain Java applications, or for Java Web-applications running in application servers. The resulting monitoring data can be converted to architectural models. 
 
@@ -88,8 +52,8 @@ Kieker focuses on monitoring method (or service) calls. Therefore, it can be cal
 
 Four steps are required to instrument a Java software application with \tpmon:
 \begin{enumerate}
-\item Download of \tpmon\ from \kiekerurl
-\item Configuration of \tpmon\  (e.g., storage in file system or in a database)
+\item Download of \tpmon\ from \kiekerurl{}
+\item Configuration of \tpmon{}  (e.g., storage in file system or in a database)
 \item Specification of monitoring points 
 \item Integration of monitoring code: Adaptation of the build- or startup-scripts of the application to be monitored; 
 \end{enumerate}
@@ -304,6 +268,26 @@ set KIEKERHOME=c:\sourceforge\kieker
 \end{itemize}
 
 \subsection{\tpmon's configuration file \texttt{tpmon.properties}}\label{sec.tpmon.properties}
+
+\todobox{
+ Der MonitoringWriter lässt sich nun über ein Property einschalten:
+    monitoringDataWriter=SyncFS|AsyncFS|SyncDB|AsyncDB
+    (natürlich nur eine dieser Konstanten)
+    Über dieses Property lassen sich nun auch Writer per Namen laden,
+    z.B.
+monitoringDataWriter=src.kieker.tpmon.extra.asyncJmsWriter.AsyncJmsProducer
+    Diese Writer lassen sich über die Property
+    monitoringDataWriterInitString konfiguieren. Im JMS-Beispiel:
+    monitoringDataWriterInitString =
+jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 |
+jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory |
+jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000
+}
+
+\todobox{
+ Die alten Properies zum Einschalten von asynchr. FS bzw. DB sind weg!}
+
+
 
 The configuration file \texttt{tpmon.properties} specifies \tpmon's runtime behavior (database or file system 
 storage) and the path to required libraries for the build process. In the following, we explain properties (default settings are underlined):
@@ -650,7 +634,7 @@ The storage test should be successful before other \tpmon\ tests are executed. P
 \item The database does not accept connections form your host. In case of MySQL, ensure that
 you can connect to the database using the command line command ``\texttt{mysql}''.
 \item There is no table for storing the monitoring data in the database -- create it with the SQL statement in the file
-\texttt{table-for-monitoring.sql}.
+\texttt{table-for-monitoring.sql}. 
 \item The file \texttt{\$KIEKERHOME/dist/KiekerTpmonCTW.jar} is outdated -- rebuild it with ``\texttt{ant build-tpmon-ctw}''.
 \end{itemize}
 \end{itemize}
