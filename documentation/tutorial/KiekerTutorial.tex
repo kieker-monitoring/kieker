@@ -94,15 +94,46 @@ Four steps are required to instrument a Java software application with \tpmon:
 \item Integration of monitoring code: Adaptation of the build- or startup-scripts of the application to be monitored; 
 \end{enumerate}
 
-Aft
+A quick tutorial for instrumenting software with \tpmon{} is provided in Section~\ref{sec.tpmon.tutorial}.
+
+\subsubsection{Manual instrumentation}
+Plain manual usage (manual instrumentation) of the \tpmon framework possible. However, one of \tpmon's major features is that it uses automatic integration mechanisms that are more more maintainable than manual instrumentation. Just for demonstration purposes, a manual usage of the \tpmon-framework is shown in Listing~\ref{manualInstrumentation} while a much less intrusive and more maintainable solution is provided by Listing~\ref{placingAnnotation} in Section~\ref{sec.tpmon.tutorial} ad-hoc instrumentation consists of taking two timestamps (Line 8 and 12) and invocation of the data management mechanisms (Line 13).
+
+\begin{lstlisting}[caption={\footnotesize\texttt{src/kieker/tests/helloWorld/manualInstrumentation/HelloWorld.java}},label={manualInstrumentation}]
+package kieker.tests.helloWorld.manualInstrumentation;
+import kieker.tpmon.TpmonController;
+public class HelloWorld {
+    public static void main(String args[]) {
+        System.out.println("Hello");
+        
+        /* recording of the start time of doSomething */
+        long startTime = System.nanoTime();
+        
+        doSomething();
+        
+        long endTime = System.nanoTime();
+        TpmonController.getInstance().insertMonitoringDataNow("kieker.tests.helloWorld.manualInstrumentation.HelloWorld", "doSomething()", "request1", startTime, endTime);
+                
+        /* System.exit() called to initiate shutdown of 
+         * the monitoring logic running in seperate threads */
+        System.exit(0);
+    }
+
+    static void doSomething() {
+        System.out.println("doing something");
+        /* .. some application logic does something meaningful ..*/        
+    }
+}
+\end{lstlisting}
 
 \subsection{Analysis and Visualization using \tpan}
-
-(The manual for \tpan\ has to be written)
+A research prototype of \tpan\ is available on demand\footnote{Email to: rohr(a-t)informatik.uni-oldenburg.de, van.hoorn(a-t)informatik.uni-oldenburg.de.}. A step-wise release of \tpan{} is planed for Q1 2009.
 
 \subsection{Document Structure}
 
-Sections~\ref{sec.tpmon.tutorial} and \ref{sec.tpan.tutorial} contain small tutorials for \tpmon\ and \tpan. Complete description of \tpmon\ and \tpan\ are in Sections~\ref{sec.tpmon} and \ref{sec.tpan}. %Section~\ref{} presents some empirical results that characterize the monitoring overhead of \tpmon.
+Section~\ref{sec.tpmon.tutorial} contains a small tutorial for \tpmon while the manual \tpmon\ is in Section~\ref{sec.tpmon}.% and \ref{sec.tpan}. %Section~\ref{} presents some empirical results that characterize the monitoring overhead of \tpmon.
+
+\todobox{Matthias is here}
 
 \section{\tpmon\ Quick Start Guide -- Hello World}\label{sec.tpmon.tutorial}
 In the following, the steps to instrument a Java program with \tpmon\ are briefly explained and demonstrated in the context of a Hello World example. Kieker's alternative monitoring and instrumentation modes are explained in Section~\ref{sec.tpmon}.
@@ -157,6 +188,7 @@ This produces three new files \texttt{\$KIEKERHOME}/\texttt{dist}/\texttt{Kieker
 \subsection{Specification of monitoring points}\label{sec.tutorial.annotation}
 Next, create the following program \texttt{HelloWorld.java} and save it into any folder:
 \begin{lstlisting}[caption={\texttt{HelloWorld.java}},label={lst1}]
+
 public class HelloWorld {	
 	public static void main (String args[]) {
 		System.out.println("Hello");
@@ -171,6 +203,7 @@ public class HelloWorld {
 In this example, we use Java Annotations to specify the Java methods to be monitored by \tpmon\ directly in the source code. The two Java methods \texttt{main} and \texttt{doSomething} are instrumented, which requires three additional lines in \texttt{HelloWorld.java} as shown in Listing~\ref{placingAnnotation}. The Java Annotations in Line~3 and 9 trigger the aspect-oriented programming tool AspectJ to integrate monitoring logic into the application. The \texttt{import} in Line~1 is required to specify the Annotation.
 
 \begin{lstlisting}[caption={Lines 1, 3 and 9 are added to instrument this simple ``Hello World'' Java program.},label={placingAnnotation}]
+package kieker.tests.helloWorld;
 import kieker.tpmon.aspects.*;
 public class HelloWorld {
 	@TpmonMonitoringProbe()
@@ -641,15 +674,15 @@ The \textit{console} command-line tool, which is part of Sun's JDK, allows to di
  % snapshot4.png: 900x750 pixel, 72dpi, 31.75x26.46 cm, bb=0 0 900 750
  \caption{Problem diagnosis using \textit{jconsole}: A \tpmon\ library has to be within the classpath (except an application server is used that itself loads additional libraries). For load-time instrumentation, the \aspectjweaverjar\ has to be used as javaagent (see VM arguments).}\label{jconsole}
 \end{figure}
-
-
-\section{\tpan\ quick start guide -- Hello world}\label{sec.tpan.tutorial}
-
-...
-
-\section{\tpan: Kieker's Analysis and Visualization Component}\label{sec.tpan}
-
-... 
+% 
+% 
+% \section{\tpan\ quick start guide -- Hello world}\label{sec.tpan.tutorial}
+% 
+% ...
+% 
+% \section{\tpan: Kieker's Analysis and Visualization Component}\label{sec.tpan}
+% 
+% ... 
 
 
 % 

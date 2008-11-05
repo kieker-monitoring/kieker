@@ -110,7 +110,7 @@ public class TpmonController {
         if (ctrlInst == null) {
             ctrlInst = new TpmonController();
         }
-        return TpmonController.ctrlInst;
+        return TpmonController.ctrlInst;               
     }
 
     public TpmonController() {
