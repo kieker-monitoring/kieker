@@ -61,7 +61,7 @@ Four steps are required to instrument a Java software application with \tpmon:
 A quick tutorial for instrumenting software with \tpmon{} is provided in Section~\ref{sec.tpmon.tutorial}.
 
 \subsubsection{Manual instrumentation}
-Plain manual usage (manual instrumentation) of the \tpmon framework possible. However, one of \tpmon's major features is that it uses automatic integration mechanisms that are more more maintainable than manual instrumentation. Just for demonstration purposes, a manual usage of the \tpmon-framework is shown in Listing~\ref{manualInstrumentation} while a much less intrusive and more maintainable solution is provided by Listing~\ref{placingAnnotation} in Section~\ref{sec.tpmon.tutorial} ad-hoc instrumentation consists of taking two timestamps (Line 8 and 12) and invocation of the data management mechanisms (Line 13).
+In the following, we demonstrate manual usage (manual instrumentation) for monitoring using \tpmon{}. It has to be mentioned, that manual instrumentation is not using one of \tpmon's major features - the automatic monitoring code integration mechanism. However, for demonstration purposes, a manual usage of the \tpmon-framework is shown in Listing~\ref{manualInstrumentation}. The suggested, less intrusive, and more maintainable solution is presented in Listing~\ref{placingAnnotation} of Section~\ref{sec.tpmon.tutorial}. The manual  instrumentation consists of recording two timestamps (Line 8 and 12) and an invocation of \tpmon{}'s data management mechanism (Line 13). On executing the program, a monitoring observation will be stored by default in the file system.
 
 \begin{lstlisting}[caption={\footnotesize\texttt{src/kieker/tests/helloWorld/manualInstrumentation/HelloWorld.java}},label={manualInstrumentation}]
 package kieker.tests.helloWorld.manualInstrumentation;
@@ -97,15 +97,15 @@ A research prototype of \tpan\ is available on demand\footnote{Email to: rohr(a-
 
 Section~\ref{sec.tpmon.tutorial} contains a small tutorial for \tpmon while the manual \tpmon\ is in Section~\ref{sec.tpmon}.% and \ref{sec.tpan}. %Section~\ref{} presents some empirical results that characterize the monitoring overhead of \tpmon.
 
-\todobox{Matthias is here}
+
 
 \section{\tpmon\ Quick Start Guide -- Hello World}\label{sec.tpmon.tutorial}
-In the following, the steps to instrument a Java program with \tpmon\ are briefly explained and demonstrated in the context of a Hello World example. Kieker's alternative monitoring and instrumentation modes are explained in Section~\ref{sec.tpmon}.
+In the following, the steps to instrument a Java program with \tpmon\ are briefly explained and demonstrated in the context of a Hello World example. Kieker's alternative monitoring and instrumentation modes are explained in detail in Section~\ref{sec.tpmon}.
 
 \
 
-\tpmon's essential \textbf{system requirements} are that at least Sun's Java SE 5 (JDK) (Version number $\geq$ 1.5.0) and Apache Ant\footnote{Available at \url{http://ant.apache.org/}} 1.7 are installed. \tpmon\ has been tested with Linux, Solaris, FreeBSD and Windows.
-
+\tpmon's essential \textbf{system requirements} are that at least Sun's Java SE 5 (JDK) (Version number $\geq$ 1.5.0) and Apache Ant\footnote{Available at \url{http://ant.apache.org/}} 1.7 are installed. \tpmon\ has been tested on Linux, Solaris, FreeBSD and Windows.
+\todobox{Matthias is here}
 \subsection{Downloading Kieker}
 Download the latest Kieker release from \kiekerurl \ and decompress it into a folder of your choice. This folder is denoted \texttt{\$KIEKERHOME} in the remainder of this document. You may set it as environment variable\footnote{The error message ``Error opening zip file or JAR manifest missing : /external-libs/aspectjweaver.jar'' means that you used this environment variable without having it set correctly.}, so that you can directly execute the commands shown in this Section.
 \begin{itemize}
