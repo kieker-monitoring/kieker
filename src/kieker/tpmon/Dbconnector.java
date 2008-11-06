@@ -1,5 +1,11 @@
 package kieker.tpmon;
 
+import java.sql.*;
+import java.util.Vector;
+import kieker.tpmon.annotations.TpmonInternal;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * kieker.tpmon.Dbconnector.java
  *
@@ -48,20 +54,13 @@ package kieker.tpmon;
  * 2006/12/20: Initial Prototype
  *
  */
-import java.sql.*;
-
-import java.util.Vector;
-import kieker.tpmon.annotations.TpmonInternal;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class Dbconnector extends AbstractMonitoringDataWriter {
 
     private static final Log log = LogFactory.getLog(Dbconnector.class);
     private Connection conn = null;
     private PreparedStatement psInsertMonitoringData;
-    private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
-    private String dbTableName = "turbomon10";
+    private String dbConnectionAddress;
+    private String dbTableName;
     private boolean setInitialExperimentIdBasedOnLastId = false;
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
@@ -89,9 +88,6 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
 
     /**
      * Returns false if an error occurs.
-     * Errors are printed to stdout, even if debug=false
-     * in dbconnector.properties.
-     *
      */
     @TpmonInternal
     private boolean init() {
@@ -102,7 +98,6 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
             log.error("MySQL driver registration failed. Perhaps the mysql-connector-....jar missing?", ex);
-            ex.printStackTrace();
             return false;
         }
 
@@ -142,7 +137,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
     public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         try {
             psInsertMonitoringData.setInt(1,
-                    (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : experimentId);
+                    (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : execData.experimentId);
             psInsertMonitoringData.setString(2, execData.componentName + "." + execData.opname);
             psInsertMonitoringData.setString(3, execData.sessionId);
             psInsertMonitoringData.setString(4, String.valueOf(execData.traceId));
@@ -182,12 +177,13 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
                 int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
                 dbConnectionAddress2 = dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
             }
-
         }
         strB.append("dbConnectionAddress : " + dbConnectionAddress2);
         strB.append(", dbTableName : " + dbTableName);
         strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);
-
+        if(this.setInitialExperimentIdBasedOnLastId && this.experimentId>=0){
+            strB.append(", ACTUAL EXPERIMENT_ID : " + this.experimentId);
+        }
         return strB.toString();
     }
 }

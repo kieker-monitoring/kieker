@@ -1,7 +1,19 @@
 package kieker.tpmon;
 
+import java.io.FileInputStream;
+import java.lang.management.ManagementFactory;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.Vector;
+import java.util.concurrent.atomic.AtomicLong;
+import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
+import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
- * kieker.tpmon.FileSystemWriter
+ * kieker.tpmon.TpmonController
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
@@ -55,21 +67,6 @@ package kieker.tpmon;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-import java.io.FileInputStream;
-import java.lang.management.ManagementFactory;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Properties;
-
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicLong;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
-import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
-
 public class TpmonController {
 
     private static final Log log = LogFactory.getLog(TpmonController.class);
@@ -92,7 +89,7 @@ public class TpmonController {
     private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     // values might be not written to the database in case of an system.exit(0)!
     // The place holders are usually much smaller and storage therefore much faster and requires less space.
-    private boolean encodeMethodNames = false;
+    //private boolean encodeMethodNames = false;
     // trace sampling:
     // if activated, approximately every n-th (traceSampleingFrequency) trace will be made persistend 
     // this allows to save the overhead and space for storing data.
@@ -121,11 +118,10 @@ public class TpmonController {
 
         log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:" +
                 Thread.currentThread().getId());
-        //System.out.println("VMNAME:"+vmname);
         log.info(">Kieker-Tpmon: Virtual Machine start time " +
                 ManagementFactory.getRuntimeMXBean().getStartTime());
 
-        this.shutdownhook = new TpmonShutdownHook();
+        shutdownhook = new TpmonShutdownHook();
         Runtime.getRuntime().addShutdownHook(shutdownhook);
 
         loadPropertiesFile();
@@ -173,8 +169,6 @@ public class TpmonController {
      * When you want to distinguish multiple Virtual Machines on one host,
      * you have to set the vmname manually (e.g., via the tpmon-control-servlet, 
      * or by directly implementing a call to TpmonController.setVmname(...).
-     * 
-     * @return
      */
     @TpmonInternal()
     public String getVmname() {
@@ -182,7 +176,6 @@ public class TpmonController {
     }
 
     /**
-     * 
      * Allows to set an own vmname, a field in the monitoring data to distinguish
      * multiple hosts / vms in a system. This method is for instance used by
      * the tpmon control servlet. 
@@ -210,12 +203,13 @@ public class TpmonController {
     public void registerWorker(Worker newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
-    private long lastUniqueIdTime = 0;
-    private int secondaryCounter = 0;
-    //TODO: why are these guys public?
-    public long initializationTime = System.currentTimeMillis();
-    public AtomicLong numberOfInserts = new AtomicLong(0);
-    public Date startDate = new Date(initializationTime);
+    
+    //private long lastUniqueIdTime = 0;
+    //private int secondaryCounter = 0;
+    //TODO: why are these guys public?  -- made private by Nina, and then commented out
+    // private long initializationTime = System.currentTimeMillis();
+    private AtomicLong numberOfInserts = new AtomicLong(0);
+    // private Date startDate = new Date(initializationTime);
     private boolean monitoringEnabled = true;
 
     @TpmonInternal()
@@ -226,8 +220,8 @@ public class TpmonController {
     /**
      * Shows how many inserts have been performed since last restart of the execution
      * environment.
-     * @return
      */
+    @TpmonInternal()
     public long getNumberOfInserts() {
         return numberOfInserts.longValue();
     }
@@ -236,6 +230,7 @@ public class TpmonController {
     public boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
+    
     private final int STANDARDEXPERIMENTID = 0;
     // we do not use AtomicInteger since we only rarely 
     // set the value (common case -- getting -- faster now).
@@ -274,6 +269,7 @@ public class TpmonController {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
     }
+    
 // only used if encodeMethodNames == true
     private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
     // lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
@@ -296,7 +292,6 @@ public class TpmonController {
             if (!(execData.traceId % traceSampleingFrequency == 0)) {
                 return true;
             }
-
         }
 //log.info("ComponentName "+componentname);
 //log.info("Methodname "+methodname);
@@ -361,9 +356,8 @@ public class TpmonController {
      * 
      * Therefore, 
      * grep "-5,-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
-     *       
-     * 
      */
+    @TpmonInternal()
     private void storeEncodedName(String component, String newMethodname, String encodedName) {
         // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
         String opname = component + newMethodname;
@@ -385,6 +379,7 @@ public class TpmonController {
      * @param methodname
      * @return methodname without a double componentname
      */
+    @TpmonInternal()
     private String formatMethodName(String methodname) {
         // methodname: A.a(), componentname: de.comp.A
         // therefore componentname+methodname = de.comp.AA.a()
@@ -407,12 +402,14 @@ public class TpmonController {
         if (indexBeginOfMethodname == -1) {
             return methodname;
         } else {
-            return new String("" + methodname.subSequence(indexBeginOfMethodname, methodname.length())).replaceAll(" ", "");
+            return methodname.substring(indexBeginOfMethodname, methodname.length()).replaceAll(" ", "");
         }
 
     }
-    private long seed = 0;
-    private double d3 = 0.3d;
+    
+    //private long seed = 0;
+    //private double d3 = 0.3d;
+    
     /**
      * This method is used by the aspects to get the time stamps. It uses nano seconds as precision.    
      * The method is synchronized in order to reduce the risk of identical time stamps. 
@@ -426,6 +423,7 @@ public class TpmonController {
     public long getTime() {
         return System.nanoTime() + offsetA;
     }
+    
     private AtomicLong lastThreadId = new AtomicLong(0);
 
     private ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
@@ -479,6 +477,7 @@ public class TpmonController {
     public void unsetThreadLocalTraceId() {
         this.threadLocalTraceId.remove();
     }
+    
     private ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
 
     /**
@@ -510,6 +509,7 @@ public class TpmonController {
     public void unsetThreadLocalSessionId() {
         this.threadLocalSessionId.remove();
     }
+    
     private ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
 
     /**
@@ -524,7 +524,7 @@ public class TpmonController {
 
     /** 
      * Since this method accesses a ThreadLocal variable,
-     *  it is not (necessary to be) thread-safe.
+     * it is not (necessary to be) thread-safe.
      */
     @TpmonInternal()
     public int incrementAndRecallThreadLocalEOI() {
@@ -555,6 +555,7 @@ public class TpmonController {
     public void unsetThreadLocalEOI() {
         this.threadLocalEoi.remove();
     }
+    
     private ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
     /**
@@ -646,7 +647,6 @@ public class TpmonController {
             formatAndOutputError("No dbConnectionAddress parameter found in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + dbConnectionAddress + ".", true, false);
         }
-
 
 // the filenamePrefix (folder where tpmon stores its data) 
 // for monitoring data depends on the properties tpmon.storeInJavaIoTmpdir 
@@ -757,7 +757,6 @@ public class TpmonController {
         if (debug) {
             log.info(getConnectorInfo());
         }
-
     }
 
     /**
@@ -775,13 +774,11 @@ public class TpmonController {
         } else {
             errorReport.append("Error   ");
         }
-
         if (reportTime) {
             errorReport.append(getDateString());
         }
-
-        errorReport.append(" :" + errorMessage);
-        log.error("" + errorReport);
+        errorReport.append(" : " + errorMessage);
+        log.error(errorReport.toString());
     }
 
     @TpmonInternal()
@@ -808,7 +805,6 @@ public class TpmonController {
      * distributed systems.
      * 
      * @param threadid
-     * @return
      */
     @TpmonInternal()
     public RemoteCallMetaData getRemoteCallMetaData() {

@@ -1,20 +1,35 @@
-/*
- * This class is used to return multiple results to the
- * calling function of a proceed call.
- */
 package kieker.tpmon;
 
 import java.io.Serializable;
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**
+ * kieker.tpmon.KiekerExecutionRecord
+ * 
+ * ==================LICENCE=========================
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
  *
- * @author avanhoorn
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ * @author Andre van Hoorn
  */
 public class KiekerExecutionRecord implements Serializable {
 
-    public int experimentId = -1;
-    public String vmName = null;
+    private static final long serialVersionUID = 117L;
+    
+    int experimentId = -1;
+    String vmName = null;
     public String componentName = null;
     public String opname = null;
     public String sessionId = null;
@@ -26,8 +41,6 @@ public class KiekerExecutionRecord implements Serializable {
     public boolean isEntryPoint = false;
     public Object retVal = null;
 
-    static final long serialVersionUID = 117L;
-    
     /**
      * Constructor private such that instances are only created by calling 
      * the static method getInstance().
@@ -42,8 +55,6 @@ public class KiekerExecutionRecord implements Serializable {
      * The member variables are initialized that way that only actually
      * used variables must be updated.
      * Do not set unused member variables to dummy values such as -1 etc.!
-     * 
-     * @return
      */
     @TpmonInternal()
     public static KiekerExecutionRecord getInstance() {
@@ -77,7 +88,7 @@ public class KiekerExecutionRecord implements Serializable {
     }
     
     @TpmonInternal()
-   public static KiekerExecutionRecord getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
             long traceId,
             long tin, long tout) {

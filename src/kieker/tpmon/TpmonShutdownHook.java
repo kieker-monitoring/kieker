@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.Worker;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,7 +43,8 @@ import org.apache.commons.logging.LogFactory;
  *             Kieker and publication under an open source licence
  * 2007/12/16: Initial Prototype
  */
-public class TpmonShutdownHook extends Thread{
+public class TpmonShutdownHook extends Thread {
+
     private static final Log log = LogFactory.getLog(TpmonShutdownHook.class);
     
     public TpmonShutdownHook() {    
@@ -62,8 +62,7 @@ public class TpmonShutdownHook extends Thread{
         workers.add(newWorker);
     }
     
-    @TpmonInternal 
-    @Override
+    @TpmonInternal
     public void run(){ // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
         try {
             // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called

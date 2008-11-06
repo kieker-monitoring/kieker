@@ -1,4 +1,5 @@
 package kieker.tpmon;
+
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**
@@ -20,7 +21,7 @@ import kieker.tpmon.annotations.TpmonInternal;
  * limitations under the License.
  * ==================================================
  *
- * @author voorn
+ * @author Andre van Hoorn
  */
 public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWriter {
 
