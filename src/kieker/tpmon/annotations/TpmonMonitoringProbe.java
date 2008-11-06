@@ -1,7 +1,12 @@
 package kieker.tpmon.annotations;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * kieker.tpmon.aspects.TpmonMonitoringProbe.java
+ * kieker.tpmon.annotations.TpmonMonitoringProbe
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -27,15 +32,8 @@ package kieker.tpmon.annotations;
  * 2007/03/05: New Prototype 
  */
 
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface TpmonMonitoringProbe {
 	// String context();
 }
-

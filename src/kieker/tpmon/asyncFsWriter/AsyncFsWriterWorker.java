@@ -116,11 +116,9 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
             //System.out.println(""+filename);
 
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
-            FileOutputStream fos;
             try {
-                fos = new FileOutputStream(filename);
+                FileOutputStream fos = new FileOutputStream(filename);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
-
                 DataOutputStream dos = new DataOutputStream(bos);
                 pos = new PrintWriter(dos);
                 pos.flush();

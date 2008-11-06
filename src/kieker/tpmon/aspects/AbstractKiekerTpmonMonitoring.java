@@ -1,19 +1,32 @@
-/*
- *
- */
 package kieker.tpmon.aspects;
 
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.asyncDbconnector.*;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
 /**
+ * kieker.tpmon.aspects.AbstractKiekerTpmonMonitoring
  *
- * @author Andre
+ * ==================LICENCE=========================
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ * @author Andre van Hoorn
  */
 @Aspect
 public abstract class AbstractKiekerTpmonMonitoring {
@@ -21,7 +34,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     
     @TpmonInternal()
-    public KiekerExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint){
+    public KiekerExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {
        // e.g. "getBook" 
         String methodname = thisJoinPoint.getSignature().getName();
         // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
@@ -48,7 +61,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
     
     @TpmonInternal()
     public void proceedAndMeasure(ProceedingJoinPoint thisJoinPoint, 
-            KiekerExecutionRecord execData) throws Throwable{       
+            KiekerExecutionRecord execData) throws Throwable {       
         execData.tin = ctrlInst.getTime(); // startint stopwatch    
         try {
             execData.retVal = thisJoinPoint.proceed();

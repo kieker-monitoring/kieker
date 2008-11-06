@@ -1,7 +1,12 @@
 package kieker.tpmon.annotations;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * kieker.tpmon.aspects.TpmonInternal.java
+ * kieker.tpmon.annotations.TpmonInternal
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -34,11 +39,6 @@ package kieker.tpmon.annotations;
  *             Kieker and publication under an open source licence
  * 2007/12/12: Initial
  */
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
