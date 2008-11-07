@@ -1,26 +1,41 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package kieker.tpmon.aspects.springAspectJ;
 
-import javax.lang.model.element.ExecutableElement;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.*;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * TpmonMethodInvocationInterceptor is ... 
+ * kieker.tpmon.aspects.springAspectJ.KiekerTpmonMethodInvocationInterceptor
+ *
+ * ==================LICENCE=========================
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ * This annotation marks methods that are exit points for remote calls
+ * that go to an other virtual machine. The annotation tries to ensure
+ * that the trace id is propergated to an other instance of tpmon in
+ * the other virtual machine.
  * 
  * @author Marco Luebcke
  */
 public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor {
     private static final TpmonController tpmonController = TpmonController.getInstance();
 
-    /* (non-Javadoc)
+    /**
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
      */
     @TpmonInternal()
@@ -31,7 +46,7 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
             return invocation.proceed();
         }
         
-        StringBuilder sb = new StringBuilder("").append(invocation.getMethod().getName());
+        StringBuilder sb = new StringBuilder().append(invocation.getMethod().getName());
         sb.append("(");
         boolean first = true;
         for (Class<?> clazz : invocation.getMethod().getParameterTypes()) {

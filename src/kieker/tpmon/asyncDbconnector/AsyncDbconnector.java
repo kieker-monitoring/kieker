@@ -1,8 +1,37 @@
+package kieker.tpmon.asyncDbconnector;
+
+import java.sql.*;
+import java.util.Vector;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import kieker.tpmon.AbstractMonitoringDataWriter;
+import kieker.tpmon.KiekerExecutionRecord;
+import kieker.tpmon.TpmonController;
+import kieker.tpmon.Worker;
+import kieker.tpmon.annotations.TpmonInternal;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
- * tpmon.Dbconnector.java
+ * kieker.tpmon.asyncDbconnector.Dbconnector
  *
+ * ==================LICENCE=========================
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ * 
  * Stores monitoring data into a database.
- *
  *
  * Warning !
  * This class is an academic prototype and not intended
@@ -12,7 +41,6 @@
  * so that they may be used by multiple threads at the same time. We have tested this in various
  * applications, in combination with the standard mysql-Jconnector database driver.
  *
- *
  * Our experience shows that it is not a major bottleneck if not too many
  * measurement points are used (e.g., 30/second). However, there are much
  * performance tuning possible in this class. For instance, performance
@@ -21,31 +49,13 @@
  * prepared statements. Alternatively, it could be tuned by collecting
  * multiple database commands before sending it to the database.
  *
- *
  * @author Matthias Rohr
  *
  * History (Build) (change the String BUILD when this file is changed):
  * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
  *             which may be changed during runtime
  * 2007/07/30: Initial Prototype
- *
  */
-package kieker.tpmon.asyncDbconnector;
-
-import kieker.tpmon.Worker;
-import java.sql.*;
-import java.util.Vector;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.AbstractMonitoringDataWriter;
-
-
-import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.TpmonController;
-import kieker.tpmon.annotations.TpmonInternal;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
     private final static String defaultConstructionErrorMsg =
@@ -61,11 +71,12 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
+    
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
     private BlockingQueue<KiekerExecutionRecord> blockingQueue;
-    private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
-    private String dbTableName = "turbomon10";
+    private String dbConnectionAddress; // = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
+    private String dbTableName; // = "turbomon10";
     private boolean setInitialExperimentIdBasedOnLastId = false;
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
@@ -85,9 +96,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     }
 
     /**
-     *
      * Returns false if an error occurs. Errors are printed to stdout (e.g., App-server logfiles), even if debug = false.
-     *
      */
     @TpmonInternal()
     public boolean init() {
@@ -100,12 +109,9 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             log.error("MySQL driver registration failed. Perhaps the mysql-connector-....jar missing? Exception: ", ex);
             return false;
         }
-
         try {
             conn = DriverManager.getConnection(this.dbConnectionAddress);
-
             int numberOfConnections = 4;
-
             blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
 
 //                DbWriter dbw = new DbWriter(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
@@ -122,7 +128,6 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             }
             log.info("Tpmon (" + numberOfConnections + " threads) connected to database");
 
-
             if (this.setInitialExperimentIdBasedOnLastId) {
                 // set initial experiment id based on last id (increased by 1)
                 Statement stm = conn.createStatement();
@@ -132,7 +137,6 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                 }
                 log.info(" set initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
             }
-
         } catch (SQLException ex) {
             log.error("SQLException: " + ex.getMessage());
             log.error("SQLState: " + ex.getSQLState());
@@ -149,21 +153,20 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 //     * TODO: Is this method ever used??
 //     * Use this method to insert data into the database.
 //     */
-//      @TpmonInternal()
+//    @TpmonInternal()
 //    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
 //        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
 //    }
+
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      * It uses several dbconnections in parallel using the consumer, producer pattern.
-     *
      */
     @TpmonInternal()
     public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }
-
         try {
             // INSERT INTO `newSchema` ( `experimentid` , `operation` , `traceid` , `tin` , `tout` ) VALUES ( '0', '1231', '1231', '12312', '1221233' );
             /*
@@ -211,5 +214,3 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         return strB.toString();
     }
 }
-
-

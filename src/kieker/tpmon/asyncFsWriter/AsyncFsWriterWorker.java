@@ -1,9 +1,3 @@
-/*
- * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
- *             which may be changed during runtime
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package kieker.tpmon.asyncFsWriter;
 
 import java.util.concurrent.BlockingQueue;
@@ -18,13 +12,33 @@ import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.Worker;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * kieker.tpmon.asyncFsWriter.AsyncFsWriterWorker
  *
- * @author matthias
+ * ==================LICENCE=========================
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ * 
+ * @author Matthias Rohr
+ * 
+ * History:
+ * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
+ *             which may be changed during runtime
  */
 public class AsyncFsWriterWorker implements Runnable, Worker {
 
@@ -43,12 +57,13 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     private static boolean shutdown = false;
 
     /**
-     * It is okay that is may be called multiple times for the same class
+     * It is okay that it may be called multiple times for the same class
      */
     @TpmonInternal
     public synchronized void initShutdown() {
         AsyncFsWriterWorker.shutdown = true;
     }
+    
     boolean statementChanged = true;
     String nextStatementText;
 
@@ -61,7 +76,6 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     @TpmonInternal
     public void run() {
         log.info("FsWriter thread running");
-        //System.out.println("FsWriter thread running");
         try {
             while (!finished) {
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
@@ -92,7 +106,6 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         if (pos == null || filenameInitialized == false) {
             prepareFile();
         }
-
         execData = (KiekerExecutionRecord) traceidObject;
         writeDataNow(execData);
     }
@@ -109,11 +122,9 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
 
-            int time = (int) (System.currentTimeMillis() - 1177404043379L);
+            int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
             int random = (int) (Math.random() * 100d);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
-            //System.out.println("this.filenamePrefix:"+this.filenamePrefix);
-            //System.out.println(""+filename);
 
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
@@ -132,7 +143,6 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
                 TpmonController.getInstance().disableMonitoring();
                 throw ex;
             }
-
         }
     }
 
@@ -155,4 +165,3 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         return finished;
     }
 }
-

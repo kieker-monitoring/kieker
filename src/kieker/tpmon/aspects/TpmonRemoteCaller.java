@@ -1,7 +1,12 @@
 package kieker.tpmon.aspects;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * kieker.tpmon.aspects.TpmonRemoteCaller.java
+ * kieker.tpmon.aspects.TpmonRemoteCaller
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -24,18 +29,11 @@ package kieker.tpmon.aspects;
  * that the trace id is propergated to an other instance of tpmon in
  * the other virtual machine.
  * 
- * 
  * @author Matthias Rohr
  *
  * History:
  * 2008/03/06: Initial
  */
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface TpmonRemoteCaller {

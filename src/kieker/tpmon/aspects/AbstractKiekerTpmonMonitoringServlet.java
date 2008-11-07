@@ -2,6 +2,7 @@ package kieker.tpmon.aspects;
 
 import javax.servlet.http.HttpServletRequest;
 import kieker.tpmon.annotations.TpmonInternal;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
@@ -34,7 +35,6 @@ public abstract class AbstractKiekerTpmonMonitoringServlet extends AbstractKieke
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        
         HttpServletRequest req = (HttpServletRequest)thisJoinPoint.getArgs()[0];
         String sessionId = (req!=null) ? req.getSession(true).getId() : null;
         Object retVal = null;

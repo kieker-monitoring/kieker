@@ -1,31 +1,42 @@
-/*
- * Experimental Aspect for the Spring frameworks @AspectJ Style 
- * for Aspect Oriented Programming (AOP)
- * 
- * Current limitations: 
- *  - no session ids are stored
- *  - no tracing in distributed system 
- * 
- */
 package kieker.tpmon.aspects.springAspectJ;
 
 import kieker.tpmon.*;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
+ * kieker.tpmon.aspects.springAspectJ.KiekerTpmonMonitoringAspect
+ *
+ * ==================LICENCE=========================
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ * 
  * New Aspect written in the newer @Aspect style, which can be edited and managed in 
  * IDEs without extensions for the traditional .aj aspectj files (those had keywords
  * such as pointcut etc, which are now annotations). This kind of aspects are close
  * to the spring frameworks variant of AspectJ.
  * 
- * Todo: Monitoring in distributed systems isn't implemented for this
- * Aspect.
+ * Current limitations: 
+ *  - no session ids are stored
+ *  - no tracing in distributed system 
  * 
- * @author matthias
+ * Todo: Monitoring in distributed systems isn't implemented for this Aspect.
+ * 
+ * @author Matthias Rohr
  */
 @Aspect
 public class KiekerTpmonMonitoringAspect {
@@ -50,7 +61,6 @@ public class KiekerTpmonMonitoringAspect {
         int paranthIndex = paramList.lastIndexOf('(');
         paramList = paramList.substring(paranthIndex);
         // paramList is now e.g.,  "()"
-
 
         String opname = methodname + paramList;
         // e.g., "getBook()"
