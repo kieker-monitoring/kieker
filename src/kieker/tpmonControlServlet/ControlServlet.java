@@ -7,7 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 /**
- * kieker.tpmonControlServlet.ControlServlet.java;
+ * kieker.tpmonControlServlet.ControlServlet
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -53,6 +53,7 @@ public class ControlServlet extends HttpServlet {
     private void printFooter(PrintWriter out) {
         out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" bgcolor=\"#00478e\" border=\"0\" cellpadding=\"2\"  frame=\"void\"> <tr><td align=\"left\"><td color=\"#ffffff\" style=\"font-size:80%\" valign=\"top\" width=\"70\">	 <br>	Powered by:<br>	<a href=\"http://sourceforge.net\"><img src=\"http://sflogo.sourceforge.net/sflogo.php?group_id=212691&amp;type=4\" width=\"125\" height=\"37\" border=\"0\" alt=\"SourceForge.net Logo\" /></a><br></td><td style=\"font-size:80%\" align=\"right\">	SourceForge, and SourceForge.net are registered trademarks of <br> SourceForge, Inc. in the United States and other countries.</td></tr></table>");
     }
+    
     static String hostname = "unknown";
     private static boolean initialized = false;
 
@@ -65,7 +66,8 @@ public class ControlServlet extends HttpServlet {
         initialized = true;
     }
 
-    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      */
@@ -248,21 +250,20 @@ public class ControlServlet extends HttpServlet {
         bu.append(" Tpmon monitoring events since last execution environment restart = "+ctrlInst.getNumberOfInserts()+" <br>");
 		bu.append(" java.vm.name = "+System.getProperty("java.vm.name")+" <br>");
 		try {
-		String youngGC  = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
-		String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
-		bu.append(" Garbage collectors : "+youngGC+" , "+tenureGC+"<br>");
+            String youngGC  = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
+            String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
+            bu.append(" Garbage collectors : "+youngGC+" , "+tenureGC+"<br>");
 		} catch(Exception e){} // nothing we can do
         out.println(bu.toString());
-
         printFooter(out);
         out.println("</body>");
         out.println("</html>");
-
         out.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** Handles the HTTP <code>GET</code> method.
+    /**
+     * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
      * @param response servlet response
      */
@@ -275,7 +276,8 @@ public class ControlServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** Handles the HTTP <code>POST</code> method.
+    /**
+     * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
      */
@@ -288,7 +290,8 @@ public class ControlServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** Returns a short description of the servlet.
+    /**
+     * Returns a short description of the servlet.
      */
     @Override
     public String getServletInfo() {
