@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
@@ -64,8 +65,8 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         AsyncFsWriterWorker.shutdown = true;
     }
     
-    boolean statementChanged = true;
-    String nextStatementText;
+//    private boolean statementChanged = true;
+//    private String nextStatementText;
 
     public AsyncFsWriterWorker(BlockingQueue writeQueue, String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
@@ -123,7 +124,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
             entriesInCurrentFileCounter = 0;
 
             int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
-            int random = (int) (Math.random() * 100d);
+            int random = (new Random()).nextInt(100);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
 
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);

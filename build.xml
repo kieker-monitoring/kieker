@@ -133,6 +133,7 @@
                debug="true"
                excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/aspects/**"
                classpathref="dev.classpath">
+            <compilerarg value="-Xlint:all"/>
         </javac>
         <copy file="src/kieker/tpmon/META-INF/tpmon.properties" todir="build/META-INF"/>
         <jar destfile="dist/${dist.tpmon.ctw}" basedir="build"/>
@@ -151,7 +152,7 @@
                debug="true"               
                excludes="kieker/tests/**,kieker/tpmonControlServlet/**,kieker/tpmon/aspects/**,"
                classpathref="dev.classpath">
-           <!-- <compilerarg value="-Xlint:all"/> -->
+            <compilerarg value="-Xlint:all"/>
         </javac>
         <copy todir="build/META-INF">
             <fileset dir="src/kieker/tpmon/META-INF"/>

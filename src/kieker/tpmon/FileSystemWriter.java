@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 import java.util.Vector;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
@@ -64,7 +65,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
     private static final Log log = LogFactory.getLog(FileSystemWriter.class);
     // configuration parameters
-    private final int maxEntriesInFile = 22000;
+    private static final int maxEntriesInFile = 22000;
     // internal variables
     private String filenamePrefix = "";
     private boolean filenameInitialized = false;
@@ -102,7 +103,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             entriesInCurrentFileCounter = 0;
 
             int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from ??
-            int random = (int) (Math.random() * 100d);
+            int random = (new Random()).nextInt(100);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
@@ -138,6 +139,6 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     
    @TpmonInternal()
     public String getInfoString() {
-        return new String ("filenamePrefix :" + filenamePrefix);
+        return "filenamePrefix :" + filenamePrefix;
     }
 }

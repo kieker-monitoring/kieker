@@ -36,7 +36,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
     private static final Log log = LogFactory.getLog(AsyncFsWriterProducer.class);
     //configuration parameter
-    final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
+    private static final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
     private Vector<Worker> workers = new Vector<Worker>();
     private BlockingQueue<KiekerExecutionRecord> blockingQueue = null;
@@ -106,6 +106,6 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     
   @TpmonInternal()
     public String getInfoString() {
-        return new String ("filenamePrefix :" + filenamePrefix);
+        return "filenamePrefix :" + filenamePrefix;
     }
 }

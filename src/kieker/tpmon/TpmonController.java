@@ -1,6 +1,7 @@
 package kieker.tpmon;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Properties;
@@ -131,10 +132,10 @@ public class TpmonController {
             if (this.monitoringDataWriterClassname == null || this.monitoringDataWriterClassname.length() == 0) {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
-                String filenameBase = new String(filenamePrefix + "/tpmon-");
+                String filenameBase = filenamePrefix + "/tpmon-";
                 this.monitoringDataWriter = new FileSystemWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
-                String filenameBase = new String(filenamePrefix + "/tpmon-");
+                String filenameBase = filenamePrefix + "/tpmon-";
                 this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
                 this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
@@ -231,7 +232,7 @@ public class TpmonController {
         return monitoringEnabled;
     }
     
-    private final int STANDARDEXPERIMENTID = 0;
+    private static final int STANDARDEXPERIMENTID = 0;
     // we do not use AtomicInteger since we only rarely 
     // set the value (common case -- getting -- faster now).
     // instead, we decided to provide an "expensive" increment method.
@@ -271,13 +272,13 @@ public class TpmonController {
     }
     
 // only used if encodeMethodNames == true
-    private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
+//    private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
     // lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
     // each monitoring point after that
     // (The following might produce in very very few cases a colision in a large DISTRIBUTED system with a large number
     // of instrumented methods. For save usage in a critical distributed system, where the monitoring data is extremely critical,
     // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)    
-    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
+//    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
 
     @TpmonInternal()
     public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
@@ -617,22 +618,28 @@ public class TpmonController {
     @TpmonInternal()
     private void loadPropertiesFile() {
         String configurationFile = "META-INF/tpmon.properties";
+        InputStream is = null;
         Properties prop = new Properties();
 
         try {
             if (System.getProperty("tpmon.configuration") != null) { // we use the present virtual machine parameter value
-                configurationFile = System.getProperty("tpmon.configuration");
-                prop.load(new FileInputStream(configurationFile));
                 log.info("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
+                configurationFile = System.getProperty("tpmon.configuration");
+                is = new FileInputStream(configurationFile);
             } else {
                 log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
                 log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
-                prop.load(TpmonController.class.getClassLoader().getResourceAsStream(configurationFile));
+                is = TpmonController.class.getClassLoader().getResourceAsStream(configurationFile);
             }
+            prop.load(is);
         } catch (Exception ex) {
             log.error("Error loading tpmon.configuration", ex);
             formatAndOutputError("Could not open tpmon properties : " + configurationFile +
                     ". Using default value " + dbConnectionAddress + ". Message :" + ex.getMessage(), true, false);
+        } finally {
+            try {
+               is.close();
+            } catch (Exception ex) { /* nothing we can do */ }
         }
 
         // load property monitoringDataWriter

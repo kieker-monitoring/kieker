@@ -92,17 +92,13 @@ public class ControlServlet extends HttpServlet {
         out.println("<body>");
         printHeader(out);
         out.println("<h2>TpmonControlServlet</h2>");
-        try {
-            long time = ctrlInst.getTime();
-            out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + time + "<br>");
-            out.println("Host:\"" + hostname + "\"<br>");
-            out.println("Vmname:\"" + ctrlInst.getVmname() + "\"<br>");
-        } catch (Exception e) {
-        }
+        out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ctrlInst.getTime() + "<br>");
+        out.println("Host:\"" + hostname + "\"<br>");
+        out.println("Vmname:\"" + ctrlInst.getVmname() + "\"<br>");
 
         String action = request.getParameter("action");
         if (action == null) {
-            action = new String("");
+            action = "";
         }
 
         /*

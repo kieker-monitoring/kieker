@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.asyncDbconnector.Dbconnector
+ * kieker.tpmon.asyncDbconnector.AsyncDbconnector
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -203,9 +203,8 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             if (dbConnectionAddress.toLowerCase().contains("password")) {
                 int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
                 dbConnectionAddress2 =
-                        new String(dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN");
+                        dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
             }
-
         }
         strB.append("dbConnectionAddress : " + dbConnectionAddress2);
         strB.append(", dbTableName : " + dbTableName);
