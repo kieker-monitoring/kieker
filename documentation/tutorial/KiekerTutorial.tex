@@ -105,9 +105,9 @@ In the following, the steps to instrument a Java program with \tpmon\ are briefl
 \
 
 \tpmon's essential \textbf{system requirements} are that at least Sun's Java SE 5 (JDK) (Version number $\geq$ 1.5.0) and Apache Ant\footnote{Available at \url{http://ant.apache.org/}} 1.7 are installed. \tpmon\ has been tested on Linux, Solaris, FreeBSD and Windows.
-\todobox{Matthias is here}
+
 \subsection{Downloading Kieker}
-Download the latest Kieker release from \kiekerurl \ and decompress it into a folder of your choice. This folder is denoted \texttt{\$KIEKERHOME} in the remainder of this document. You may set it as environment variable\footnote{The error message ``Error opening zip file or JAR manifest missing : /external-libs/aspectjweaver.jar'' means that you used this environment variable without having it set correctly.}, so that you can directly execute the commands shown in this Section.
+The first step is to download the latest Kieker release from \kiekerurl{} and to decompress it into a folder of your choice. This folder is denoted \texttt{\$KIEKERHOME} in the remainder of this document. You may set it as environment variable\footnote{The error message ``Error opening zip file or JAR manifest missing : /external-libs/aspectjweaver.jar'' means that you used this environment variable without having it set correctly.}, so that you can directly execute the commands shown in this Section.
 \begin{itemize}
  \item Linux/Unix: e.g., % KIEKERHOME=/home/matthias/projekte/kieker/sourceforge/kieker/
 \begin{lstlisting}[caption={}] 
@@ -120,12 +120,12 @@ set KIEKERHOME=c:\sourceforge\kieker
 \end{itemize}
 
 \subsection{Configuration of \tpmon}
-The configuration file \texttt{\$KIEKERHOME}$\backslash$\texttt{tpmon.properties} specifies properties such as the folder for storing monitoring data, consisting of files (tpmon-[..].data). There are two ways to configure the data storage directory: 
+The major configuration file for the monitoring is \texttt{\$KIEKERHOME}$\backslash$\texttt{tpmon.properties}. It specifies properties such as the folder for storing monitoring data and allows to select different storage modes (e.g., database or file system). The \texttt{tpmon.properties} must be created from \texttt{tpmon.properties.example}, if it doesn't exist. There are two ways to configure the data storage directory: 
 \begin{enumerate}
-\item (Default) Store into the system's default temporary folder (java.io.tmpdir). For UNIX systems this is often \texttt{/tmp} and on Microsoft Windows systems it is typically some folder like \verb=C:\\Docum...\USER...\Temp=. Be aware that the temporary folders may be deleted each time automatically by the operation system, e.g., after system restart.
+\item (Default) Store into the system's default temporary folder (java.io.tmpdir). For UNIX systems this is often \texttt{/tmp} and on Microsoft Windows systems it is typically some folder like \verb=C:\\Docum...\USER...\Temp=. Be aware that the temporary folders may be deleted each time automatically by the operation system, e.g., after system restart. If the monitoring is used in an application server, \textit{java.io.tmpdir} might be defined differently. 
 \item Store monitoring data into an explicitly specified folder.
 \end{enumerate}
-These modes can be configured via the \texttt{tpmon.properties} file. Additionally, it is possible to overwrite the properties file settings via the Java command line parameters \footnotesize \texttt{java -Dtpmon.storeInJavaIoTmpdir=false -Dtpmon.customStoragePath=/var/log/}. \normalsize
+These modes can be configured via the \texttt{tpmon.properties} file via the properties \textit{tpmon.storeInJavaIoTmpdir} and \textit{tpmon.customStoragePath}. Additionally, it is possible to overwrite these and several other properties file settings via the Java command line parameters \footnotesize \texttt{java -Dtpmon.storeInJavaIoTmpdir=false -Dtpmon.customStoragePath=/var/log/}. \normalsize
 
 An example for the settings in the \texttt{tpmon.properties} file are given in the following listing:
 \begin{lstlisting}[caption={Linux/Unix: Specification of the monitoring data storage location}]
@@ -141,18 +141,17 @@ tpmon.customStoragePath=/tmp/
 
 The other settings do require changes for this example. The default settings are that \tpmon\ stores monitoring data in the file system using an asynchronous file system writer into the system's default temporary folder.
 
-\
+\subsection{Building the \tpmon{} library}
 
-\tpmon\ has to be recompiled to activate any changes in the properties file:
+\tpmon\ has to be recompiled to activate any changes in the properties file and to create the monitoring library\footnote{\texttt{KiekerTpmonCtrl-VERSION.jar}} required during runtime:
 \begin{lstlisting}[]
 ant build-all
 \end{lstlisting}
-This produces three new files \texttt{\$KIEKERHOME}/\texttt{dist}/\texttt{KiekerTpmonCTW.jar} for compile-time instrumentation, \texttt{\$KIEKERHOME}/\texttt{dist}/\texttt{KiekerTpmonLTW.jar} for load-time instrumentation, and the stand alone library \texttt{\$KIEKERHOME}/\texttt{dist}/\texttt{KiekerTpmonCtrl.jar} that can be used by other instrumentation frameworks to organize tracing and data storage.
+This produces three new files \texttt{\$KIEKERHOME}/\texttt{dist}/\texttt{KiekerTpmonCTW-0.VERSION.jar} for compile-time instrumentation, \texttt{KiekerTpmonLTW-VERSION.jar} for load-time instrumentation, and the stand alone library \texttt{KiekerTpmonCtrl-VERSION.jar} that can be used by other instrumentation frameworks to organize tracing and data storage, e.g., within an application server.
 
 \subsection{Specification of monitoring points}\label{sec.tutorial.annotation}
-Next, create the following program \texttt{HelloWorld.java} and save it into any folder:
+Next, the following program \texttt{HelloWorld.java} will be instrumented. The source code can be found in the folder \textit{src/kieker/tests/helloWorld}.
 \begin{lstlisting}[caption={\texttt{HelloWorld.java}},label={lst1}]
-
 public class HelloWorld {	
 	public static void main (String args[]) {
 		System.out.println("Hello");
@@ -164,11 +163,10 @@ public class HelloWorld {
 }
 \end{lstlisting}
 
-In this example, we use Java Annotations to specify the Java methods to be monitored by \tpmon\ directly in the source code. The two Java methods \texttt{main} and \texttt{doSomething} are instrumented, which requires three additional lines in \texttt{HelloWorld.java} as shown in Listing~\ref{placingAnnotation}. The Java Annotations in Line~3 and 9 trigger the aspect-oriented programming tool AspectJ to integrate monitoring logic into the application. The \texttt{import} in Line~1 is required to specify the Annotation.
+In this example, Java Annotations are used to specify the Java methods to be monitored. In Listing~\ref{placingAnnotation} it is illustrated how to instrument the two Java methods \texttt{main} and \texttt{doSomething} by the Java Annotations in Line~3 and 9. These annotations trigger the aspect-oriented programming tool AspectJ to integrate monitoring logic into the application during runtime or during compile time. The \texttt{import} in Line~1 is required to define the Annotation.
 
 \begin{lstlisting}[caption={Lines 1, 3 and 9 are added to instrument this simple ``Hello World'' Java program.},label={placingAnnotation}]
-package kieker.tests.helloWorld;
-import kieker.tpmon.aspects.*;
+import kieker.tpmon.annotations.TpmonMonitoringProbe;
 public class HelloWorld {
 	@TpmonMonitoringProbe()
 	public static void main (String args[]) {
@@ -184,12 +182,13 @@ public class HelloWorld {
 \end{lstlisting}
 
 \subsection{Integrating Monitoring Code}
-\tpmon\ supports the integration of monitoring logic at the time of compilation (of the application to be monitored) or at runtime (= class load-time). In this example, we will use the load-time integration of monitoring code into the application to be monitored. This requires the execution of the following two commands:
+\tpmon\ supports the integration of monitoring logic at the time of compilation (of the application to be monitored) or during runtime (= at class load-time). In this example, load-time integration of monitoring code into the application to be monitored will be used. This requires the execution of the following two commands:
 
 \begin{lstlisting}[caption={Compilation and execution with AspectJ's Java agent.},label={javaHelloWorld}]
-javac -cp $KIEKERHOME/dist/KiekerTpmonLTW.jar HelloWorld.java
+javac -cp $KIEKERHOME/dist/KiekerTpmonCtrl-0.91.jar HelloWorld.java
 java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver.jar -cp $KIEKERHOME/dist/KiekerTpmonLTW.jar:.:  HelloWorld
 \end{lstlisting}
+If the first command does not compile, the \tpmon{} library is not found\footnote{Error message: cannot find symbol @TpmonMonitoringProbe} in the classpath or the import statement contains a typo. 
 
 \
 
