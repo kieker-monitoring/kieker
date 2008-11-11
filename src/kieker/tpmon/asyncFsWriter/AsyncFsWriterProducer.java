@@ -50,12 +50,12 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public Vector<Worker> getWorkers() {
         return workers;
     }
@@ -65,7 +65,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         this.init();
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public void init() {
         blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
@@ -82,7 +82,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      *
      */
-    @TpmonInternal
+    @TpmonInternal()
     public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
@@ -90,8 +90,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
         try {
             blockingQueue.add(execData); // tries to add immediately!
-        //System.out.println(""+blockingQueue.size());
-
+            //System.out.println(""+blockingQueue.size());
         } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex);
             return false;
@@ -104,7 +103,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         return filenamePrefix;
     }
     
-  @TpmonInternal()
+    @TpmonInternal()
     public String getInfoString() {
         return "filenamePrefix :" + filenamePrefix;
     }

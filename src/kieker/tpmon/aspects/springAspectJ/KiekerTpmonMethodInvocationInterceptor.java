@@ -2,7 +2,7 @@ package kieker.tpmon.aspects.springAspectJ;
 
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
-import kieker.tpmon.annotations.*;
+import kieker.tpmon.annotations.TpmonInternal;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 

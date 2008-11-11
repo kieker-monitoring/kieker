@@ -1,12 +1,7 @@
 package kieker.tpmon.asyncFsWriter;
 
 import java.util.concurrent.BlockingQueue;
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import kieker.tpmon.KiekerExecutionRecord;
@@ -60,7 +55,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     /**
      * It is okay that it may be called multiple times for the same class
      */
-    @TpmonInternal
+    @TpmonInternal()
     public synchronized void initShutdown() {
         AsyncFsWriterWorker.shutdown = true;
     }
@@ -74,7 +69,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         log.info("New Tpmon - FsWriter thread created ");
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public void run() {
         log.info("FsWriter thread running");
         try {
@@ -99,7 +94,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         }
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     private void consume(Object traceidObject) throws Exception {
         // TODO: We should check whether this is necessary. 
         // This should only cover an initial action which can be 
@@ -114,7 +109,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     /**
      * Determines and sets a new Filename
      */
-    @TpmonInternal
+    @TpmonInternal()
     private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
@@ -150,18 +145,16 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
     /**
      * Note that it's not necessary to synchronize this method since 
      * a file is written at most by one thread.
-     * 
-     * @param data
      * @throws java.io.IOException
      */
-    @TpmonInternal
+    @TpmonInternal()
     private void writeDataNow(KiekerExecutionRecord execData) throws IOException {
         prepareFile(); // may throw FileNotFoundException
         pos.println(execData.toKiekerCSVRecord());
         pos.flush();
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public boolean isFinished() {
         return finished;
     }

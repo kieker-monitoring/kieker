@@ -30,13 +30,13 @@ public interface Worker {
     * IsFinished == true means that the worker does not have additional jobs in it's queue 
     * and won't accept new jobs.
     */
-   @TpmonInternal
+    @TpmonInternal()
    public boolean isFinished();
        
    /**
     * Notifies the worker that the system shutdown process is initiated and that it should finish soon.
     * After a while, isFinished should result in true, if system can halt.
     */
-   @TpmonInternal
+    @TpmonInternal()
    public void initShutdown();
 }

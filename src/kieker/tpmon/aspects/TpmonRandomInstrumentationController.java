@@ -40,7 +40,7 @@ public class TpmonRandomInstrumentationController {
     private static Random randomGen = new Random();
     private static double probabilityToInstrument = randomGen.nextDouble(); 
     
-    @TpmonInternal
+    @TpmonInternal()
     public static synchronized Boolean isMonitored(String signature) {        
         Boolean hashedObject = monitoredOperations.get(signature);
         if (hashedObject != null) {
@@ -54,5 +54,4 @@ public class TpmonRandomInstrumentationController {
             return false;
         }
     }
-
 }

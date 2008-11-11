@@ -40,7 +40,7 @@ import org.w3c.dom.Element;
  */
 public class TpmonSessionIdentifierOutInterceptor extends SoapHeaderOutFilterInterceptor {
 
-	@TpmonInternal
+	@TpmonInternal()
 	public void handleMessage(SoapMessage msg) throws Fault {
 		Document d = DOMUtils.createDocument();
 		Element e = d.createElementNS(SessionIdentifierConstants.NAMESPACE_URI, SessionIdentifierConstants.QUALIFIED_NAME);

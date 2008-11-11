@@ -1,10 +1,14 @@
 package kieker.tpmonControlServlet;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.StringTokenizer;
-import kieker.tpmon.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import kieker.tpmon.KiekerExecutionRecord;
+import kieker.tpmon.TpmonController;
 
 /**
  * kieker.tpmonControlServlet.ControlServlet
@@ -60,8 +64,7 @@ public class ControlServlet extends HttpServlet {
     public static void initialize() {
         try {
             hostname = java.net.InetAddress.getLocalHost().getHostName();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignore */ }
         System.out.println("TpmonControlServlet initializes.");
         initialized = true;
     }
@@ -249,7 +252,7 @@ public class ControlServlet extends HttpServlet {
             String youngGC  = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
             String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
             bu.append(" Garbage collectors : "+youngGC+" , "+tenureGC+"<br>");
-		} catch(Exception e){} // nothing we can do
+		} catch(Exception e){ /* nothing we can do */ }
         out.println(bu.toString());
         printFooter(out);
         out.println("</body>");

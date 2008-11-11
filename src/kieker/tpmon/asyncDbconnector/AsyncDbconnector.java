@@ -67,7 +67,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -130,7 +130,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
             if (this.setInitialExperimentIdBasedOnLastId) {
                 // set initial experiment id based on last id (increased by 1)
-                Statement stm = conn.createStatement();
+                Statement stm = conn.createStatement();     // TODO: FindBugs says this method may fail to close the database resource
                 ResultSet res = stm.executeQuery("SELECT max(experimentID) FROM " + this.dbTableName);
                 if (res.next()) {
                     this.experimentId = res.getInt(1) + 1;

@@ -1,5 +1,7 @@
 package kieker.tpmon;
 
+import kieker.tpmon.annotations.TpmonInternal;
+
 /**
  * kieker.tpmon.TpmonVersion
  * 
@@ -22,7 +24,7 @@ package kieker.tpmon;
  * This class provides the method getVersion which returns the version number 
  * set during build (String replacement task within build.xml).
  *
- * @author Andr&eacute; van Hoorn
+ * @author Andre van Hoorn
  */
 public class TpmonVersion {
 
@@ -51,6 +53,7 @@ public class TpmonVersion {
      *
      * @return the version String.
      */
+    @TpmonInternal()
 	public static final String getVERSION() {
 		return VERSION;
 	}

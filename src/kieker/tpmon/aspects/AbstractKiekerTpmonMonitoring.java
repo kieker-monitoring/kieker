@@ -1,10 +1,8 @@
 package kieker.tpmon.aspects;
 
-import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.*;
-
+//import kieker.tpmon.asyncDbconnector.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 

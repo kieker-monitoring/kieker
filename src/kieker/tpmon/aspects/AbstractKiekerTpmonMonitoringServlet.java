@@ -2,7 +2,6 @@ package kieker.tpmon.aspects;
 
 import javax.servlet.http.HttpServletRequest;
 import kieker.tpmon.annotations.TpmonInternal;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 

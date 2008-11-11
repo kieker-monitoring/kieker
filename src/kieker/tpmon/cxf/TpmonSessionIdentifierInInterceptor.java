@@ -43,7 +43,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 	private static final Logger LOG = LogUtils.getL7dLogger(TpmonSessionIdentifierInInterceptor.class);
 
-    @TpmonInternal
+    @TpmonInternal()
 	public void handleMessage(Message msg) throws Fault {
 		if (msg instanceof SoapMessage) {
 			SoapMessage soapMsg = (SoapMessage) msg;
@@ -66,7 +66,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
 		}
 	}
 
-    @TpmonInternal
+    @TpmonInternal()
 	private String getStringContentFromHeader(Header hdr) {
 		if (hdr.getObject() instanceof Element) {
 			Element e = (Element) hdr.getObject();

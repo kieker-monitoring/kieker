@@ -439,7 +439,6 @@ public class TpmonController {
         long id = lastThreadId.incrementAndGet();
         this.threadLocalTraceId.set(id);
         return id;
-        ,
     }
 
     /**

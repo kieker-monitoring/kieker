@@ -1,6 +1,7 @@
 package kieker.tpmon.aspects.springAspectJ;
 
 import kieker.tpmon.TpmonController;
+import kieker.tpmon.annotations.TpmonInternal;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
@@ -30,16 +31,19 @@ public class KiekerTpmonSessionRegistrationInterceptor implements WebRequestInte
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     
+    @TpmonInternal()
     public void preHandle(WebRequest request) throws Exception {
         ctrlInst.getAndStoreUniqueThreadLocalTraceId();
         ctrlInst.storeThreadLocalSessionId(request.getSessionId());
     }
 
+    @TpmonInternal()
     public void postHandle(WebRequest request, ModelMap map) throws Exception {
         ctrlInst.unsetThreadLocalTraceId();
         ctrlInst.unsetThreadLocalSessionId();
     }
 
+    @TpmonInternal()
     public void afterCompletion(WebRequest request, Exception map) throws Exception {
     }
 }

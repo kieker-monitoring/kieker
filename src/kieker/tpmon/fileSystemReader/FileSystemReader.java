@@ -1,13 +1,10 @@
 package kieker.tpmon.fileSystemReader;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.StringTokenizer;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
+import kieker.tpmon.annotations.TpmonInternal;
 
 /**
  * kieker.tpmon.fileSystemReader.FileSystemReader
@@ -46,6 +43,7 @@ public class FileSystemReader {
     private TpmonController ctrl = null;
     private File inputDir = null;
 
+    @TpmonInternal()
     public static void main(String[] args) {
         
 //       Properties props = System.getProperties();
@@ -81,6 +79,7 @@ public class FileSystemReader {
         System.exit(0);
     }
     
+    @TpmonInternal()
     public boolean setCtrl(TpmonController ctrl) {
         this.ctrl = ctrl;
         return (ctrl != null);
@@ -89,11 +88,13 @@ public class FileSystemReader {
     /**
      * @return the singleton instance of this class
      */
+    @TpmonInternal()
     public static synchronized FileSystemReader instance() {
         if (instance == null) instance = new FileSystemReader();
         return instance;
     }
     
+    @TpmonInternal()
     public void openAndRegisterData() {
         if (inputDir == null) {
             throw new IllegalStateException("call setInputDir first");
@@ -136,6 +137,7 @@ public class FileSystemReader {
      * Configures the input directory that will be processed by
      * the next call to {@link #openAndRegisterData()}
      */
+    @TpmonInternal()
     public void setInputDir(File inputDir) {
         if (inputDir == null )
             throw new IllegalArgumentException("inputDir null");
@@ -150,6 +152,7 @@ public class FileSystemReader {
     
     int degradableSleepTime = 0;
 
+    @TpmonInternal()
     private void processInputFile(File input) throws IOException {
         System.out.println("< Loading " + input.getAbsolutePath());
         

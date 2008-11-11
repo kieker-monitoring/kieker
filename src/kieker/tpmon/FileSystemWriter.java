@@ -1,11 +1,6 @@
 package kieker.tpmon;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Random;
 import java.util.Vector;
 import kieker.tpmon.annotations.TpmonInternal;
@@ -81,7 +76,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
     
-    @TpmonInternal
+    @TpmonInternal()
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -93,7 +88,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     /**
      * Determines and sets a new Filename
      */
-    @TpmonInternal
+    @TpmonInternal()
     private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
@@ -119,7 +114,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         }
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         try {
             prepareFile(); // may throw FileNotFoundException
@@ -132,7 +127,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         return true;
     }
 
-    @TpmonInternal
+    @TpmonInternal()
     public Vector<Worker> getWorkers() {
         return null;
     }
