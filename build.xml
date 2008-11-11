@@ -62,8 +62,8 @@
                        replace="&lt;version&gt;${tpmon.version}-${DSTAMP}&lt;/version&gt;"/>
     </target>
     <target name="build-all" depends="clean,init">
-        <!--<antcall target="build-tpmon-ctw"/>-->
-        <!--<antcall target="build-tpmon-ltw"/>-->
+		<antcall target="build-tpmon-ctw"/>
+        <antcall target="build-tpmon-ltw"/>
         <antcall target="build-tpmon-ctrl"/>
         <antcall target="build-tpmon-control-servlet"/>
     </target>
