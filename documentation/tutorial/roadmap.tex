@@ -6,7 +6,7 @@
 
 \title{\kieker -- Roadmap}
  \date{\today \\ \kiekerurl{roadmap.pdf}}
- \author{Matthias Rohr, Andr\'{e} van Hoorn}
+ \author{Matthias Rohr, Andr\'{e} van Hoorn, Nina S. Marwede}
 
 
 
@@ -19,21 +19,21 @@ for the monitoring and visualization of Java applications. It's major target are
 
 \
 
-\noindent \large{\textbf{Current and past releases overview:}} 
+\noindent \large{\textbf{Current and past releases overview:}}
 \begin{center}%\vspace{-3mm}
- \begin{tabular}{|l|l|p{8cm}|} \hline 
-\textbf{Version number} & \textbf{Intended date} & \textbf{Major feature} \\ \hline 
+ \begin{tabular}{|l|l|p{8cm}|} \hline
+\textbf{Version number} & \textbf{Intended date} & \textbf{Major feature} \\ \hline
 0.92 & 11/2008 & Completely reengineered and redocumented (tutorial) release. Aspects are now in @Aspect-style and use ThreadLocal. Performance was also improved. Support for monitoring in the spring framework was extended.\\ \hline
-0.2 & 01/2008 & Improved dependability \\ \hline 
-0.1 & 11/2007 & Initial release with basic comand line functionality \\ \hline 
+0.2 & 01/2008 & Improved dependability \\ \hline
+0.1 & 11/2007 & Initial release with basic comand line functionality \\ \hline
 \end{tabular}
 \end{center}
 
-\noindent \large{\textbf{Future releases:}} 
+\noindent \large{\textbf{Future releases:}}
 \begin{center}%\vspace{-3mm}
- \begin{tabular}{|l|l|p{8cm}|} \hline 
-\textbf{Version number} & \textbf{Intended date} & \textbf{Major feature} \\ \hline 
-0.98 & 01/2009 & \\ \hline
+ \begin{tabular}{|l|l|p{8cm}|} \hline
+\textbf{Version number} & \textbf{Intended date} & \textbf{Major feature} \\ \hline
+0.98 & 01/2009 & Database writer tests; usability improvements; graphical user interface; server-side runtime model; support for cloud computing.\\ \hline
 \end{tabular}
 \end{center}
 
@@ -44,16 +44,16 @@ for the monitoring and visualization of Java applications. It's major target are
 \subsection{Release 0.92}
 \begin{enumerate}
 \item The data type of threadid was changed to long. This heavily reduces the amount of memory and computation required for post-processing.
-\item From now on, Tpmon uses  @Aspect-style for the aspects (cross-cutting code) instead of the old-style 
-    .aj AspectJ files. The advantage of the @Aspect-style is that the aspect files can be directly handeled by Java IDEs and Compilers. 
+\item From now on, Tpmon uses  @Aspect-style for the aspects (cross-cutting code) instead of the old-style
+    .aj AspectJ files. The advantage of the @Aspect-style is that the aspect files can be directly handeled by Java IDEs and Compilers.
 \item The data structure KiekerExecutionRecord now is used all the way from the measurement point, through the controller to the selected monitoring data writer and queues of writers that use producer-consumer pattern. This avoids type-casting and improves consistency through the architecture.
 \item  A new property allows the user to select the monitoring writer: \\
     \verb.monitoringDataWriter=SyncFS|AsyncFS|SyncDB|AsyncDB. \\
-The value of this property can be either one of the constants shown below or a full-qualified 
+The value of this property can be either one of the constants shown below or a full-qualified
 classname of a class (implementing kieker.tpmon.IMonitoringDataWriter) loaded
-dynamically during runtime (must be in the runtime classpath). Classes loaded by 
+dynamically during runtime (must be in the runtime classpath). Classes loaded by
 the classname are constructed by calling the default constructor followed by a
-called to the method init(String monitoringDataWriterInitString) with the 
+called to the method init(String monitoringDataWriterInitString) with the
 value of the below-listed property monitoringDataWriterInitString.
 
 Existing constants are:
@@ -63,7 +63,7 @@ Existing constants are:
 \item SyncDB (Synchronous Database Writer)
 \item AsyncDB (Asynchronous Database Writer)
 \end{itemize}
-The old properties to activate asynchr. FS and DB respectively are removed. Switiching to 
+The old properties to activate asynchr. FS and DB respectively are removed. Switiching to
 \tpmon{} 0.92 requires to replace old tpmon.properties wit a new one based on tpmon.properties.examples of 0.92.
 
 \item The experimental JMS Writer prototype is not anymore part of the sourceforge distribution of \tpmon{}.
@@ -75,7 +75,7 @@ The old properties to activate asynchr. FS and DB respectively are removed. Swit
 
 
 \subsection{Release 0.2 - "Improved Dependability for Tpmon" 01/2008}
-\begin{enumerate} 
+\begin{enumerate}
 %  \item Visualization
 \item Input
 \begin{enumerate}
@@ -112,19 +112,19 @@ The old properties to activate asynchr. FS and DB respectively are removed. Swit
 \item Output (Code generation for external tools)
 \begin{enumerate}
  \item Storing visualization code in /tmp (or other path configured)
-\item Showing in console command to create image file from visualization code  
+\item Showing in console command to create image file from visualization code
 \end{enumerate}
 \item Input
 \begin{enumerate}
 \item Synchronous access to Tpmon database (schema 0.7+)
-\item Access traces by experimentid, traceid, tin, operation, sessionid 
+\item Access traces by experimentid, traceid, tin, operation, sessionid
 \end{enumerate}
 \item Quality
 \begin{enumerate}
  \item Complete basic JavaDoc
 \item Testing
 \begin{enumerate}
- \item Datainput 
+ \item Datainput
 \item Several unit tests for the core of Tpan (creation of message traces and Execution Traces)
 \item One unit test for each plugin
 \item One end2end unit test testing the 4 core plugins and dataimport

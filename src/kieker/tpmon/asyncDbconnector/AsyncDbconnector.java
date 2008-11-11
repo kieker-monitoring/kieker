@@ -75,8 +75,8 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
     private BlockingQueue<KiekerExecutionRecord> blockingQueue;
-    private String dbConnectionAddress; // = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
-    private String dbTableName; // = "turbomon10";
+    private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
+    private String dbTableName = "turbomon10";
     private boolean setInitialExperimentIdBasedOnLastId = false;
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;

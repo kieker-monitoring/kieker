@@ -2,6 +2,8 @@ package kieker.tpmon;
 
 import java.io.Serializable;
 import kieker.tpmon.annotations.TpmonInternal;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * kieker.tpmon.RemoteCallMetaData
@@ -27,6 +29,7 @@ import kieker.tpmon.annotations.TpmonInternal;
 public class RemoteCallMetaData implements Serializable {
 
     private static final long serialVersionUID = 512771634L;    // random number
+    private static final Log log = LogFactory.getLog(RemoteCallMetaData.class);
 
     int ess;
     int eoi;
@@ -40,6 +43,6 @@ public class RemoteCallMetaData implements Serializable {
    
     @TpmonInternal()
     public void printinfo(){
-        System.out.println("RemoteCallMetaData: "+traceid+" "+eoi+" "+ess);
+        log.info("RemoteCallMetaData: "+traceid+" "+eoi+" "+ess);
     }
 }

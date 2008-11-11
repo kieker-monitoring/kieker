@@ -139,7 +139,7 @@ public class ControlServlet extends HttpServlet {
              * action = incExperimentId
              */
             } else if (action.equals("incExperimentId")) {
-                experimentID = ctrlInst.incExperimentId();
+                ctrlInst.incExperimentId();
             /*
              * action = enable
              */

@@ -3,7 +3,6 @@ package kieker.tpmon;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
@@ -440,6 +439,7 @@ public class TpmonController {
         long id = lastThreadId.incrementAndGet();
         this.threadLocalTraceId.set(id);
         return id;
+        ,
     }
 
     /**

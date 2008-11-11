@@ -1,8 +1,3 @@
 
-For 0.95:
-- Adapt Aspects to @-Aspect Style (improved maintainability)
-- Change type of threadid to  String (@matthias: to String?)
-- Use ThreadLocal for tracedId and sessionId in TpmonController
+The roadmap can be found in documentation/tutorial/roadmap.pdf .
 
-For 0.975:
-- Continious monitoring via JMS
