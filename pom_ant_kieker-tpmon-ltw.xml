@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.sf.kieker</groupId>
+  <artifactId>tpmon-ltw</artifactId>
+  <name>Kieker Tpmon Controller</name>
+  <version>0.91-20081117</version>
+  <url>http://kieker.sf.net</url>  
+  <packaging>jar</packaging>
+  
+  <!-- TODO add dependencies -->
+  <dependencies>
+  	<dependency>
+  		<groupId>org.apache.cxf</groupId>
+  		<artifactId>cxf-rt-bindings-soap</artifactId>
+  		<version>2.1.3</version>
+  		<optional>true</optional>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.cxf</groupId>
+  		<artifactId>cxf-rt-databinding-aegis</artifactId>
+  		<version>2.1.3</version>
+  		<optional>true</optional>
+  	</dependency>
+  </dependencies>
+</project>
