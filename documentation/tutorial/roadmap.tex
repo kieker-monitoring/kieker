@@ -23,7 +23,7 @@ for the monitoring and visualization of Java applications. It's major target are
 \begin{center}%\vspace{-3mm}
  \begin{tabular}{|l|l|p{8cm}|} \hline
 \textbf{Version number} & \textbf{Intended date} & \textbf{Major feature} \\ \hline
-0.92 & 11/2008 & Completely reengineered and redocumented (tutorial) release. Aspects are now in @Aspect-style and use ThreadLocal. Performance was also improved. Support for monitoring in the spring framework was extended.\\ \hline
+0.91 & 11/2008 & Completely reengineered and redocumented (tutorial) release. Aspects are now in @Aspect-style and use ThreadLocal. Performance was also improved. Support for monitoring in the spring framework was extended.\\ \hline
 0.2 & 01/2008 & Improved dependability \\ \hline
 0.1 & 11/2007 & Initial release with basic comand line functionality \\ \hline
 \end{tabular}
@@ -41,7 +41,7 @@ for the monitoring and visualization of Java applications. It's major target are
 
 \section{Changes in current release}
 
-\subsection{Release 0.92}
+\subsection{Release 0.91}
 \begin{enumerate}
 \item The data type of threadid was changed to long. This heavily reduces the amount of memory and computation required for post-processing.
 \item From now on, Tpmon uses  @Aspect-style for the aspects (cross-cutting code) instead of the old-style
@@ -64,7 +64,7 @@ Existing constants are:
 \item AsyncDB (Asynchronous Database Writer)
 \end{itemize}
 The old properties to activate asynchr. FS and DB respectively are removed. Switiching to
-\tpmon{} 0.92 requires to replace old tpmon.properties wit a new one based on tpmon.properties.examples of 0.92.
+\tpmon{} 0.91 requires to replace old tpmon.properties wit a new one based on tpmon.properties.examples of 0.91.
 
 \item The experimental JMS Writer prototype is not anymore part of the sourceforge distribution of \tpmon{}.
 \end{enumerate}
