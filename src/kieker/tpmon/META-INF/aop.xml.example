@@ -25,7 +25,9 @@
 	<!-- <weaver options="-verbose"/> -->
 	<weaver options="">
 	
-        <!-- <include within="*"/> -->
+	<!-- this following include enables the HelloWorld tutorial, but
+	     isn't restrictive enough for production systems -->
+    <include within="*"/> 
 
 	<!-- uncomment following to instrument sun jpetstore -->
 	<!-- <include within="com.sun.j2ee.blueprints..*"/> -->
@@ -52,8 +54,8 @@
 <aspects>        
      <!-- here you usually want to use only ONE aspect. -->
      <!-- Put the remaining in a comment -->
-     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotation"/>-->
-     <aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationServlet"/>
+     <aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotation"/>
+     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationServlet"/>-->
      <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringFull"/>-->
      <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringFullServlet"/>-->
 
