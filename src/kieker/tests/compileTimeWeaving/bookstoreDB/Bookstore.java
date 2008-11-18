@@ -1,5 +1,8 @@
 package kieker.tests.compileTimeWeaving.bookstoreDB;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import kieker.tpmon.annotations.TpmonMonitoringProbe;
 import kieker.tpmon.aspects.*;
 import java.util.Vector;
@@ -75,6 +78,8 @@ public class Bookstore extends Thread {
         System.exit(0);
     }
 
+    private static String strCreateAddressTable;
+    
     private static boolean createTables(Connection dbConnection) {
         boolean bCreatedTables = false;
         Statement statement = null;
