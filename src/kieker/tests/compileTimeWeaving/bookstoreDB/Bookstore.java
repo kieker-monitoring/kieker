@@ -63,7 +63,7 @@ public class Bookstore extends Thread {
     @TpmonMonitoringProbe()
     public static void main(String[] args) {
         Connection dbConnection = null;
-        System.setProperty("derby.system.home", "/home/voorn/svn_work/sw_kieker/trunk/tmp/");
+       System.setProperty("derby.system.home", "d");
 
         String strUrl = "jdbc:derby:DBNAME;user=DBUSER;password=DBPASS;create=true";
 
