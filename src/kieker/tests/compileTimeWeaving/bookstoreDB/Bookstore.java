@@ -1,6 +1,7 @@
 package kieker.tests.compileTimeWeaving.bookstoreDB;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import kieker.tpmon.annotations.TpmonMonitoringProbe;
@@ -61,7 +62,17 @@ public class Bookstore extends Thread {
      */
     @TpmonMonitoringProbe()
     public static void main(String[] args) {
+        Connection dbConnection = null;
+       System.setProperty("derby.system.home", "/home/voorn/svn_work/sw_kieker/trunk/tmp/");
 
+        String strUrl = "jdbc:derby:DBNAME;user=DBUSER;password=DBPASS;create=true";
+
+        try {
+            dbConnection = DriverManager.getConnection(strUrl);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        createTables(dbConnection);
 
         Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
 
@@ -77,9 +88,22 @@ public class Bookstore extends Thread {
         waitabit(5000);
         System.exit(0);
     }
+    private static String strCreateAddressTable =
+            "CREATE TABLE tpmondata(" +
+            "`autoid` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY ," +
+            "`experimentid` SMALLINT NOT NULL DEFAULT '0'," +
+            "`operation` VARCHAR( 160 ) NOT NULL ," +
+            "`sessionid` VARCHAR( 34 ) NOT NULL ," +
+            "`traceid` VARCHAR( 34 ) NOT NULL ," +
+            "`tin` BIGINT( 19 ) UNSIGNED NOT NULL ," +
+            "`tout` BIGINT( 19 ) UNSIGNED NOT NULL ," +
+            "`vmname` VARCHAR( 40 ) NOT NULL DEFAULT ''," +
+            "`executionOrderIndex` INT( 10 ) NOT NULL DEFAULT '-1'," +
+            "`executionStackSize` INT( 10 ) NOT NULL DEFAULT '-1'," +
+            "INDEX (operation(16)), INDEX (traceid), INDEX (tin)" +
+            ") ENGINE = MYISAM;" +
+            "";
 
-    private static String strCreateAddressTable;
-    
     private static boolean createTables(Connection dbConnection) {
         boolean bCreatedTables = false;
         Statement statement = null;
