@@ -163,17 +163,18 @@ public class HelloWorld {
 }
 \end{lstlisting}
 
-In this example, Java Annotations are used to specify the Java methods to be monitored. In Listing~\ref{placingAnnotation} it is illustrated how to instrument the two Java methods \texttt{main} and \texttt{doSomething} by the Java Annotations in Line~3 and 9. These annotations trigger the aspect-oriented programming tool AspectJ to integrate monitoring logic into the application during runtime or during compile time. The \texttt{import} in Line~1 is required to define the Annotation.
+In this example, Java Annotations are used to specify the Java methods to be monitored. In Listing~\ref{placingAnnotation} it is illustrated how to instrument the Java method \texttt{main} and \texttt{doSomething} by the Java Annotation in Line~10. These annotations trigger the aspect-oriented programming tool AspectJ to integrate monitoring logic into the application during runtime or during compile time. The \texttt{import} in Line~1 is required to define the Annotation.
 
-\begin{lstlisting}[caption={Lines 1, 3 and 9 are added to instrument this simple ``Hello World'' Java program.},label={placingAnnotation}]
+\begin{lstlisting}[caption={Lines 1 and 10 are added to instrument this simple ``Hello World'' Java program.},label={placingAnnotation}]
 import kieker.tpmon.annotations.TpmonMonitoringProbe;
 public class HelloWorld {
-	@TpmonMonitoringProbe()
-	public static void main (String args[]) {
+	public static void main (String args[]) throws Exception{
 		System.out.println("Hello");
 		doSomething();
+		Thread.sleep(1000);
+		System.exit(0);
 	}
-
+	
 	@TpmonMonitoringProbe()
 	public static void doSomething(){
 		System.out.println("doing something");
@@ -181,57 +182,78 @@ public class HelloWorld {
 }
 \end{lstlisting}
 
+The \texttt{Thread.sleep} is only called within this example to ensure that all textual informations by the tpmon will be shown, before this VM terminates. The \texttt{System.exit} needs to be explicitly called when the (default) asynchronous file system writer is used. If a call to System.exit is not desired, the tpmon.properties file should be configured to use the synchronous file system writer, which produces slightly less precise monitoring data (rare outliers might occur because of flushs of Java's buffered file writers).
+
 \subsection{Integrating Monitoring Code}
 \tpmon\ supports the integration of monitoring logic at the time of compilation (of the application to be monitored) or during runtime (= at class load-time). In this example, load-time integration of monitoring code into the application to be monitored will be used. This requires the execution of the following two commands:
 
 \begin{lstlisting}[caption={Compilation and execution with AspectJ's Java agent.},label={javaHelloWorld}]
 javac -cp $KIEKERHOME/dist/KiekerTpmonCtrl-0.91.jar HelloWorld.java
-java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver.jar -cp $KIEKERHOME/dist/KiekerTpmonLTW.jar:.:  HelloWorld
+java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver.jar -cp $KIEKERHOME/dist/KiekerTpmonLTW-0.91.jar:.:$KIEKERHOME/external-libs/commons-logging-1.1.1.jar  HelloWorld
 \end{lstlisting}
 If the first command does not compile, the \tpmon{} library is not found\footnote{Error message: cannot find symbol @TpmonMonitoringProbe} in the classpath or the import statement contains a typo.
 
-\todobox{Matthias is here}
+The error message \texttt{java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory} indicates that commons-logging-1.1.1.jar is not in the classpath. This library is used for logging text messages, instead of just printing them to the command line.
+
 \
 
 Listing~\ref{javaHelloWorld} should result in output like shown in Listing~\ref{OutputHelloWorld}.
 \begin{lstlisting}[caption={Compilation and execution with AspectJ's Java agent.},label={OutputHelloWorld}]
 Hello
+Nov 18, 2008 12:27:53 PM kieker.tpmon.TpmonController <init>
+INFO: >Kieker-Tpmon: The VM has the name pc-rohr.informatik.uni-oldenburg.de Thread:1
+Nov 18, 2008 12:27:53 PM kieker.tpmon.TpmonController <init>
+INFO: >Kieker-Tpmon: Virtual Machine start time 1227011272207
+Nov 18, 2008 12:27:53 PM kieker.tpmon.TpmonController loadPropertiesFile
+INFO: Tpmon: Loading properties from tpmon library jar/META-INF/tpmon.properties
+Nov 18, 2008 12:27:53 PM kieker.tpmon.TpmonController loadPropertiesFile
+INFO: You can specify an alternative properties file using the property 'tpmon.configuration'
+Nov 18, 2008 12:27:53 PM kieker.tpmon.TpmonController formatAndOutputError
+SEVERE: >Kieker-Tpmon:  Warning  : No dbDriverClassname parameter found in tpmonLTW.jar/META-INF/tpmon.properties. Using default value com.mysql.jdbc.Driver.
+Nov 18, 2008 12:27:53 PM kieker.tpmon.asyncFsWriter.AsyncFsWriterWorker <init>
+INFO: New Tpmon - FsWriter thread created 
+Nov 18, 2008 12:27:53 PM kieker.tpmon.asyncFsWriter.AsyncFsWriterWorker run
+INFO: FsWriter thread running
+Nov 18, 2008 12:27:53 PM kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer init
+INFO: >Kieker-Tpmon: (1 threads) will write to the file system
+Nov 18, 2008 12:27:53 PM kieker.tpmon.TpmonController <init>
+INFO: >Kieker-Tpmon: Initialization completed.
+ Connector Info: monitoringDataWriter : kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer, monitoringDataWriter config : (below), filenamePrefix :/tmp/tpmon-, version :0.91-20081118, debug :false, enabled :true, experimentID :0, vmname :pc-rohr.informatik.uni-oldenburg.de
 doing something
- The vmid is 9069ca78e7450a28:5996e72a:119c2f563bd:-7fff hashcode -1024138306
- Virtual Machine start time 1210156670849
-Tpmon: TpmonShutdownHook notifies all workers to initiate shutdown
-Tpmon: TpmonShutdownHook can terminate since all workers are finished
+Nov 18, 2008 12:27:53 PM kieker.tpmon.asyncFsWriter.AsyncFsWriterWorker prepareFile
+INFO: ** Tue Nov 18 12:27:53 GMT 2008 new filename: /tmp/tpmon--1932377638-28.dat
 \end{lstlisting}
-Lines~1 and 2 are produced by the \texttt{println}s of \texttt{HelloWorld}. The other lines are \tpmon\ status information.
+The last line indicates that the monitoring file is named \texttt{/tmp/tpmon--1932377638-28.dat}. If all other lines, except this one is missing, then increase the sleep time in the example or just look into the monitoring data folder here \texttt{/tmp/} for files starting with \texttt{tpmon-}.
 
 \
 
-Note, the command \texttt{java  HelloWorld} does not fail if  \tpmon\ is not in the classpath. Weaving and integration of monitoring logic is only performed if both the AspectJ javaagent is loaded into the Java VM \textit{and} the \tpmon\ load-time library is in the classpath.
+Note, the command \texttt{java  HelloWorld} does not fail if  \tpmon\ is not in the classpath. Weaving and integration of monitoring logic is only performed if both the AspectJ javaagent is loaded into the Java VM \textit{and} the \tpmon\ load-time library is in the classpath. Obviously, \texttt{java  HelloWorld} does not produce monitoring data.
 
 \paragraph{More verbose output}
 Additional verbose output, such as on which Java files are woven, is produced for:
 \begin{lstlisting}[caption={Verbose execution with AspectJ's Java agent.},label={lst2}]
-java -Daj.weaving.verbose=true -Dorg.aspectj.weaver.showWeaveInfo=true -javaagent:$KIEKERHOME/external-libs/aspectjweaver.jar -cp $KIEKERHOME/dist/KiekerTpmonLTW.jar:.:  HelloWorld
+java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver.jar -Daj.weaving.verbose=true -Dorg.aspectj.weaver.showWeaveInfo=true  -cp $KIEKERHOME/dist/KiekerTpmonLTW-0.91.jar:.:$KIEKERHOME/external-libs/commons-logging-1.1.1.jar  HelloWorld
 
-info AspectJ Weaver Version 1.5.2a built on Friday Aug 18, 2006 at 18:40:31 GMT
-info register classloader sun.misc.Launcher$AppClassLoader@32582734
-info using configuration file:/home/matthias/projekte/kieker/sourceforge/kieker/dist/KiekerTpmonLTW.jar!/META-INF/aop.xml
-info register aspect kieker.tpmon.aspects.TpmonMonitorAnnotation
-info weaving 'HelloWorld'
+[AppClassLoader@1f12c4e] info AspectJ Weaver Version DEVELOPMENT built on Tuesday Jul 29, 2008 at 23:59:26 GMT
+[AppClassLoader@1f12c4e] info register classloader sun.misc.Launcher$AppClassLoader@1f12c4e
+[AppClassLoader@1f12c4e] info using configuration file:/home/matthias/svns/public/sw_kieker/trunk/dist/KiekerTpmonLTW-0.91.jar!/META-INF/aop.xml
+[AppClassLoader@1f12c4e] info register aspect kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotation
+[AppClassLoader@1f12c4e] weaveinfo Join point 'method-execution(void HelloWorld.doSomething())' in Type 'HelloWorld' (HelloWorld.java:12) advised by around advice from 'kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotation' (KiekerTpmonMonitoringAnnotation.java)
 ...
 \end{lstlisting}
-Line~7 provides the important status information that \tpmon's monitoring code is woven into HelloWorld.
+Line~7 states that \tpmon's monitoring code is woven into HelloWorld.
 
 
 
 \paragraph{Monitoring data}
 The monitoring data for Listing~\ref{javaHelloWorld} is written to a file which is named \texttt{/tmp/tpmon--*-*.dat}, where $*$ represents some number. It should contain two lines like:
 \begin{lstlisting}[caption={Example monitoring data},label={OutputHelloWorld2}]
-0;HelloWorld.doSomething();nosession;1210156671935-1-0; 1210156671935804069;1210156671940322555;-1024138307;-1;-1
-0;HelloWorld.main(java.lang.String[]);nosession;1210156671935-1-0; 1210156671935203951;1210156671948286691;-1024138307;-1;-1
+0;HelloWorld.doSomething();null;1;1227011855260241503;1227011855260367357;pc-rohr.informatik.uni-oldenburg.de;-1;-1
 \end{lstlisting}
 
 Columns~5 and 6 are start timestamps and end timestamps for executions of operations. The timestamps are provided in nanoseconds since 1.1.1970. The monitoring data file is a CSV file. Instead of commas, it uses semi-colons as separators, because commas can be part of operation names (e.g., \texttt{sum(int a,int b)}). A detailed description of the monitoring data format can be found in Section~\ref{sec.monitoring.data.format}.
+
+\todobox{Matthias is here}
 
 \section{\textit{Tpmon}: Instrumenting and Monitoring Java Applications}\label{sec.tpmon}
 
