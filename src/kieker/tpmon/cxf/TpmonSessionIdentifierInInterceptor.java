@@ -40,39 +40,55 @@ import org.w3c.dom.Element;
  * @author Dennis Kieselhorst
  */
 public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
-	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
-	private static final Logger LOG = LogUtils.getL7dLogger(TpmonSessionIdentifierInInterceptor.class);
+    // the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
+    private static final Logger LOG = LogUtils.getL7dLogger(TpmonSessionIdentifierInInterceptor.class);
 
     @TpmonInternal()
-	public void handleMessage(Message msg) throws Fault {
-		if (msg instanceof SoapMessage) {
-			SoapMessage soapMsg = (SoapMessage) msg;
-			if(LOG.isLoggable(Level.FINE)) {
-				for(Header hdr : soapMsg.getHeaders()) {
-					LOG.fine("found header: "+hdr.getName()+" "+hdr.getObject()+", string content="+getStringContentFromHeader(hdr));
-					LOG.finer("type "+hdr.getObject().getClass());
-				}
-			}
-			Header hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
-			if (hdr!=null) {
-				String sessionId = getStringContentFromHeader(hdr);
-				if(sessionId!=null) {
-					LOG.info("registering session identifier "+sessionId);
-					TpmonController.getInstance().storeThreadLocalSessionId(sessionId);
-				}
-			} else {
-				LOG.info("no tpmon session identifier header found!");
-			}
-		}
-	}
+    public void handleMessage(Message msg) throws Fault {
+        if (msg instanceof SoapMessage) {
+            SoapMessage soapMsg = (SoapMessage) msg;
+            if (LOG.isLoggable(Level.FINE)) {
+                for (Header hdr : soapMsg.getHeaders()) {
+                    LOG.fine("found header: " + hdr.getName() + " " + hdr.getObject() + ", string content=" + getStringContentFromHeader(hdr));
+                    LOG.finer("type " + hdr.getObject().getClass());
+                }
+            }
+            /* Extract and register sessionId from SOAP header */
+            Header hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
+            if (hdr != null) {
+                String sessionId = getStringContentFromHeader(hdr);
+                if (sessionId != null) {
+                    LOG.info("registering session identifier " + sessionId);
+                    TpmonController.getInstance().storeThreadLocalSessionId(sessionId);
+                }
+            } else {
+                LOG.info("no tpmon session identifier header found!");
+            }
+            /* Extract and register traceId from SOAP header */
+            hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
+            if (hdr != null) {
+                String traceIdStr = getStringContentFromHeader(hdr);
+                if (traceIdStr != null) {
+                    try {
+                        long traceId = Long.getLong(traceIdStr);
+                        LOG.info("registering trace identifier " + traceId);
+                        TpmonController.getInstance().storeThreadLocalTraceId(traceId);
+                    } catch (Exception exc) {
+                        LOG.warning(exc.getMessage());
+                    }
+                }
+            } else {
+                LOG.info("no tpmon trace identifier header found!");
+            }
+        }
+    }
 
     @TpmonInternal()
-	private String getStringContentFromHeader(Header hdr) {
-		if (hdr.getObject() instanceof Element) {
-			Element e = (Element) hdr.getObject();
-			return DOMUtils.getContent(e);
-		}
-		return null;
-	}
-
+    private String getStringContentFromHeader(Header hdr) {
+        if (hdr.getObject() instanceof Element) {
+            Element e = (Element) hdr.getObject();
+            return DOMUtils.getContent(e);
+        }
+        return null;
+    }
 }
