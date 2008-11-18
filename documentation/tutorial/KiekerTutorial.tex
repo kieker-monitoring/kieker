@@ -318,14 +318,17 @@ Here it is specified whether \tpmon{} stores the data in a remote database or in
 In debug mode, \tpmon{} is very verbose during runtime.
 \item [1.1.3] \texttt{monitoringEnabled=[\underline{true}$|$false]} \\
 Should monitoring be enabled right after the application start? You can also use the tpmon-control-servlet to activate monitoring later.
-\item [1.2.1] \texttt{dbconnectionAddress=} \\
-Specifies the database connection parameter for the initialization of the database connection. Example:
+\item [1.2.1.1] \texttt{dbDriverClassname} \\
+Specifies the classname of a database driver to be loaded.\\ Example:
+{\small\texttt{com.mysql.jdbc.Driver}}
+\item [1.2.1.2] \texttt{dbconnectionAddress=} \\
+Specifies the database connection parameter for the initialization of the database connection.\\ Example:
 \small
 \texttt{jdbc:mysql://HOST/DATABASENAME?user=USER\&password=PASS}
 \normalsize
-\item [1.2.2] \texttt{dbTableName=\underline{turbomon9}} \\
+\item [1.2.2] \texttt{dbTableName=\underline{tpmondata}} \\
 Name of the database table. The SQL statement for creating a suitable database table in MySQL can be found in file \small \texttt{table-for-monitoring.sql}\normalsize.
-\item [1.2.3] \texttt{setInitialExperimentIdBasedOnLastId=[true$|$\underline{false}]} \\
+\item [1.2.3] \texttt{setInitialExperimentIdBasedOnLastId=[\underline{true}$|$false]} \\
 Should \tpmon{} look into the database for the last experiment identifier and use a new one increased by one?
 \item [1.2.3] \texttt{useAsyncDbconnector=[\underline{true}$|$false]} \\
 If true, \tpmon{} uses a connection pool for storing data into the database. This is more efficient, and the communication with the database runs in separate threads so that the application under monitoring has not to wait each time a monitoring observation has to be stored.
