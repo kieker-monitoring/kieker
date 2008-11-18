@@ -106,7 +106,11 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             log.info("Tpmon asyncDbconnector init");
         }
         try {
-            Class.forName(this.dbDriverClassname).newInstance();
+            if (this.dbDriverClassname != null && this.dbDriverClassname.length() != 0) {
+                // NOTE: It's absolutely ok to have no class loaded at this point!
+                //       For example Java 6 and higher have an embedded DB driver
+                Class.forName(this.dbDriverClassname).newInstance();
+            }
         } catch (Exception ex) {
             log.error("DB driver registration failed. Perhaps the driver jar missing? Exception: ", ex);
             return false;
@@ -118,6 +122,16 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
 //                DbWriter dbw = new DbWriter(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
+            if (this.setInitialExperimentIdBasedOnLastId) {
+                // set initial experiment id based on last id (increased by 1)
+                Statement stm = conn.createStatement();     // TODO: FindBugs says this method may fail to close the database resource
+                ResultSet res = stm.executeQuery("SELECT max(experimentID) FROM " + this.dbTableName);
+                if (res.next()) {
+                    this.experimentId = res.getInt(1) + 1;
+                }
+                log.info(" set initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
+            }
+            
             String preparedQuery = "INSERT INTO " + this.dbTableName +
                     " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
                     "VALUES (" + experimentId + ",?,?,?,?,?,?,?,?)";
@@ -129,16 +143,6 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             //TpmonController.getInstance().registerWorker(dbw);
             }
             log.info("Tpmon (" + numberOfConnections + " threads) connected to database");
-
-            if (this.setInitialExperimentIdBasedOnLastId) {
-                // set initial experiment id based on last id (increased by 1)
-                Statement stm = conn.createStatement();     // TODO: FindBugs says this method may fail to close the database resource
-                ResultSet res = stm.executeQuery("SELECT max(experimentID) FROM " + this.dbTableName);
-                if (res.next()) {
-                    this.experimentId = res.getInt(1) + 1;
-                }
-                log.info(" set initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
-            }
         } catch (SQLException ex) {
             log.error("SQLException: " + ex.getMessage());
             log.error("SQLState: " + ex.getSQLState());
@@ -209,7 +213,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             }
         }
         strB.append("dbDriverClassname :" + dbDriverClassname);
-        strB.append("dbConnectionAddress : " + dbConnectionAddress2);
+        strB.append(", dbConnectionAddress : " + dbConnectionAddress2);
         strB.append(", dbTableName : " + dbTableName);
         strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);
 

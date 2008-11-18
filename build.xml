@@ -172,13 +172,12 @@
     </target>
     <target name="clean">
         <delete dir="build"/>
-        <delete dir="tmp"/>
+<!--        <delete dir="tmp"/>-->
         <delete dir="dist"/>
         <delete dir="build-tests"/>
         <delete dir="build-tpmonControlServlet"/>        
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreDB/aspects/"/>
         <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/TpmonMonitorAnnotation.aj"/>
         <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonMonitorAnnotation.aj"/>
     </target>
@@ -267,22 +266,15 @@
             </sourceroots>
         </iajc>
     </target>
-    <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-all,build-tpmon-ctw">  
-        <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreDB/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoring.java" 
-              todir="src/kieker/tests/compileTimeWeaving/bookstoreDB/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoringServlet.java" 
-              todir="src/kieker/tests/compileTimeWeaving/bookstoreDB/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/${KiekerTpmonTestAspect}" 
-              todir="src/kieker/tests/compileTimeWeaving/bookstoreDB/aspects/"/>        
-        <copy file="src/kieker/tests/log4j.properties"
-	      todir="build-tests/"/>
-        <iajc destdir="build-tests" source="1.5" verbose="true"
-              classpathref="run.ctwtests.classpath">
-            <sourceroots>
-                <pathelement location="src/kieker/tests/compileTimeWeaving"/>
-            </sourceroots>
-        </iajc>
+    <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-all,build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore">  
+        <javac destDir="build-tests" 
+               source="1.5"
+               verbose="off"
+               srcdir="src/kieker/tests/util/"
+               debug="true"
+               classpathref="dev.classpath">
+            <compilerarg value="-Xlint:all"/>
+	</javac>    
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
@@ -310,11 +302,23 @@
         </java>
     </target>
     <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="clean,compile-tests-compileTimeWeaving-bookstoreDB">
+<!--        <java dir="."
+              fork="true"
+              classpathref="run.ctwtests.classpath"
+              classname="kieker.tests.util.JavaDBInitializer">
+           <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
+           <jvmarg value="-Dtpmon.dbDriverClassname="/>
+           <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
+           <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
+	</java>-->
         <java dir="."
               fork="true"
-              classname="kieker.tests.compileTimeWeaving.bookstore.BookstoreDB"
+              classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
               classpathref="run.ctwtests.classpath">
            <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
+           <jvmarg value="-Dtpmon.dbDriverClassname="/>
+           <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
+           <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
         </java>
     </target>
     <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="clean,compile-tests-compileTimeWeaving-bookstore">

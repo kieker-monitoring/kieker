@@ -97,7 +97,11 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             log.debug("Tpmon dbconnector init");
         }
         try {
-            Class.forName(this.dbDriverClassname).newInstance();
+            if (this.dbDriverClassname != null && this.dbDriverClassname.length() != 0) {
+                // NOTE: It's absolutely ok to have no class loaded at this point!
+                //       For example Java 6 and higher have an embedded DB driver
+                Class.forName(this.dbDriverClassname).newInstance();
+            }
         } catch (Exception ex) {
             log.error("DB driver registration failed. Perhaps the driver jar missing?", ex);
             return false;
@@ -109,13 +113,13 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
 
             if (this.setInitialExperimentIdBasedOnLastId) {
                 // set initial experiment id based on last id (increased by 1)
+                log.info("Tpmon: Setting initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
                 Statement stm = conn.createStatement();     // TODO: FindBugs says this method may fail to close the database resource
-                ResultSet res = stm.executeQuery("SELECT max(experimentID) FROM " + this.dbTableName);
-                if (res.next()) {
+                ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + this.dbTableName);
+                if (res.next()) { 
                     this.experimentId = res.getInt(1) + 1;
                 }
-                // this.experimentId keeps the old value else
-                log.info("Tpmon: Setting initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
+            // this.experimentId keeps the old value else
             }
 
             psInsertMonitoringData = conn.prepareStatement("INSERT INTO " + dbTableName +
@@ -181,10 +185,10 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             }
         }
         strB.append("dbDriverClassname :" + dbDriverClassname);
-        strB.append("dbConnectionAddress : " + dbConnectionAddress2);
+        strB.append(", dbConnectionAddress : " + dbConnectionAddress2);
         strB.append(", dbTableName : " + dbTableName);
         strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);
-        if(this.setInitialExperimentIdBasedOnLastId && this.experimentId>=0){
+        if (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) {
             strB.append(", ACTUAL EXPERIMENT_ID : " + this.experimentId);
         }
         return strB.toString();

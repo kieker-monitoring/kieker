@@ -21,44 +21,68 @@ package kieker.tests.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
  * @author Andre van Hoorn
  */
 public class JavaDBInitializer {
+    private static final Log log = LogFactory.getLog(JavaDBInitializer.class);
+    
+    private static String dbDriverClassname = "";
+    private static String dbConnectionAddress = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS";
+    private static String dbTableName = "APP.tpmondata";
+    
+    // TODO: needs to be read from file
+    private static String strCreateAddressTable =
+            "CREATE table APP.tpmondata (" +
+            "autoid      INTEGER NOT NULL " +
+            "   PRIMARY KEY GENERATED ALWAYS AS IDENTITY " +
+            "   (START WITH 0, INCREMENT BY 1)," +
+            "experimentid SMALLINT NOT NULL DEFAULT 0," +
+            "operation VARCHAR(160) NOT NULL," +
+            "sessionid VARCHAR(34)," +
+            "traceid VARCHAR(34) NOT NULL," +
+            "tin BIGINT NOT NULL," +
+            "tout BIGINT NOT NULL," +
+            "vmname VARCHAR(40) NOT NULL DEFAULT ''," +
+            "executionOrderIndex SMALLINT NOT NULL DEFAULT -1," +
+            "executionStackSize SMALLINT NOT NULL DEFAULT -1" +
+//            "INDEX (operation(16)), INDEX (traceid), INDEX (tin)" +
+            ")";
 
     public static void main(String[] args) {
-        Connection dbConnection = null;
-        System.setProperty("derby.system.home", "/home/voorn/svn_work/sw_kieker/trunk/tmp/");
-
-        String strUrl = "jdbc:derby:DBNAME;user=DBUSER;password=DBPASS;create=true";
-
-        try {
-            dbConnection = DriverManager.getConnection(strUrl);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        if (!readProperties()){
+            log.error("readProperties returned false.");
+            System.exit(1);
         }
-        createTables(dbConnection);
+        
+        Connection dbConnection = null;
+        try {
+            dbConnection = DriverManager.getConnection(dbConnectionAddress+";create=true");
+            createTables(dbConnection);
+            dbConnection.close();            
+        } catch (SQLException ex) {
+            log.error(ex);
+            System.exit(1);
+        }
     }
-    private static String strCreateAddressTable =
-            "CREATE TABLE tpmondata(" +
-            "`autoid` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY ," +
-            "`experimentid` SMALLINT NOT NULL DEFAULT '0'," +
-            "`operation` VARCHAR( 160 ) NOT NULL ," +
-            "`sessionid` VARCHAR( 34 ) NOT NULL ," +
-            "`traceid` VARCHAR( 34 ) NOT NULL ," +
-            "`tin` BIGINT( 19 ) UNSIGNED NOT NULL ," +
-            "`tout` BIGINT( 19 ) UNSIGNED NOT NULL ," +
-            "`vmname` VARCHAR( 40 ) NOT NULL DEFAULT ''," +
-            "`executionOrderIndex` INT( 10 ) NOT NULL DEFAULT '-1'," +
-            "`executionStackSize` INT( 10 ) NOT NULL DEFAULT '-1'," +
-            "INDEX (operation(16)), INDEX (traceid), INDEX (tin)" +
-            ") ENGINE = MYISAM;" +
-            "";
 
+    private static boolean readProperties(){
+       dbConnectionAddress = System.getProperty("tpmon.dbConnectionAddress");
+       dbDriverClassname = System.getProperty("tpmon.dbDriverClassname");
+       dbTableName = System.getProperty("tpmon.dbTableName");
+       return dbConnectionAddress != null && dbDriverClassname != null 
+               && dbTableName != null;
+    }
+    
     private static boolean createTables(Connection dbConnection) {
         boolean bCreatedTables = false;
         Statement statement = null;
@@ -66,6 +90,17 @@ public class JavaDBInitializer {
             statement = dbConnection.createStatement();
             statement.execute(strCreateAddressTable);
             bCreatedTables = true;
+            
+            // TODO: remove:
+//            statement = dbConnection.createStatement();
+//            statement.execute("INSERT INTO APP.tpmondata (experimentid) VALUES (5)");
+//            statement.execute("INSERT INTO APP.tpmondata (experimentid) VALUES (7)");
+//            
+//                statement = dbConnection.createStatement();     // TODO: FindBugs says this method may fail to close the database resource
+//                ResultSet res = statement.executeQuery("SELECT max(experimentid) FROM APP.tpmondata");
+//                if (res.next()) {
+//                    System.out.println(res.getInt(1));
+//                }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

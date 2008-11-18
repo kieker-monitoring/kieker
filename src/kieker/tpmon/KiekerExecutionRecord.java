@@ -28,8 +28,8 @@ public class KiekerExecutionRecord implements Serializable {
 
     private static final long serialVersionUID = 117L;
     
-    int experimentId = -1;
-    String vmName = null;
+    public int experimentId = -1;
+    public String vmName = null;
     public String componentName = null;
     public String opname = null;
     public String sessionId = null;

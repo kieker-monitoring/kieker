@@ -107,14 +107,14 @@ public class DbWriter implements Runnable, Worker {
             }
 
             KiekerExecutionRecord execData = (KiekerExecutionRecord) traceidObject;
-
             psInsertMonitoringData.setString(1, execData.componentName + "." + execData.opname);
             psInsertMonitoringData.setString(2, execData.sessionId);
             psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));
             psInsertMonitoringData.setLong(4, execData.tin);
             psInsertMonitoringData.setLong(5, execData.tout);
-            psInsertMonitoringData.setLong(6, execData.eoi);
-            psInsertMonitoringData.setLong(7, execData.ess);
+            psInsertMonitoringData.setString(6, execData.vmName);
+            psInsertMonitoringData.setLong(7, execData.eoi);
+            psInsertMonitoringData.setLong(8, execData.ess);
             psInsertMonitoringData.execute();
 
         } catch (SQLException ex) {

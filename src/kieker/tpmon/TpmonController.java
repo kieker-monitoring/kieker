@@ -108,7 +108,7 @@ public class TpmonController {
         if (ctrlInst == null) {
             ctrlInst = new TpmonController();
         }
-        return TpmonController.ctrlInst;               
+        return TpmonController.ctrlInst;
     }
 
     public TpmonController() {
@@ -139,12 +139,12 @@ public class TpmonController {
                 this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
                 this.monitoringDataWriter = new Dbconnector(
-                        dbDriverClassname, dbConnectionAddress, 
+                        dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCDB)) {
                 this.monitoringDataWriter = new AsyncDbconnector(
-                        dbDriverClassname, dbConnectionAddress, 
+                        dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             } else {
@@ -210,7 +210,6 @@ public class TpmonController {
     public void registerWorker(Worker newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
-    
     //private long lastUniqueIdTime = 0;
     //private int secondaryCounter = 0;
     //TODO: why are these guys public?  -- made private by Nina, and then commented out
@@ -237,7 +236,6 @@ public class TpmonController {
     public boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
-    
     private static final int STANDARDEXPERIMENTID = 0;
     // we do not use AtomicInteger since we only rarely 
     // set the value (common case -- getting -- faster now).
@@ -276,7 +274,7 @@ public class TpmonController {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
     }
-    
+
 // only used if encodeMethodNames == true
 //    private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
     // lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
@@ -285,7 +283,6 @@ public class TpmonController {
     // of instrumented methods. For save usage in a critical distributed system, where the monitoring data is extremely critical,
     // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)    
 //    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
-
     @TpmonInternal()
     public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
         execData.experimentId = this.experimentId;
@@ -413,10 +410,8 @@ public class TpmonController {
         }
 
     }
-    
     //private long seed = 0;
     //private double d3 = 0.3d;
-    
     /**
      * This method is used by the aspects to get the time stamps. It uses nano seconds as precision.    
      * The method is synchronized in order to reduce the risk of identical time stamps. 
@@ -430,9 +425,7 @@ public class TpmonController {
     public long getTime() {
         return System.nanoTime() + offsetA;
     }
-    
     private AtomicLong lastThreadId = new AtomicLong(0);
-
     private ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
 
     /**
@@ -484,7 +477,6 @@ public class TpmonController {
     public void unsetThreadLocalTraceId() {
         this.threadLocalTraceId.remove();
     }
-    
     private ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
 
     /**
@@ -516,7 +508,6 @@ public class TpmonController {
     public void unsetThreadLocalSessionId() {
         this.threadLocalSessionId.remove();
     }
-    
     private ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
 
     /**
@@ -562,7 +553,6 @@ public class TpmonController {
     public void unsetThreadLocalEOI() {
         this.threadLocalEoi.remove();
     }
-    
     private ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
     /**
@@ -644,7 +634,7 @@ public class TpmonController {
                     ". Using default value " + dbConnectionAddress + ". Message :" + ex.getMessage(), true, false);
         } finally {
             try {
-               is.close();
+                is.close();
             } catch (Exception ex) { /* nothing we can do */ }
         }
 
@@ -652,16 +642,26 @@ public class TpmonController {
         monitoringDataWriterClassname = prop.getProperty("monitoringDataWriter");
         monitoringDataWriterInitString = prop.getProperty("monitoringDataWriterInitString");
 
-        String dbDriverClassnameProperty = prop.getProperty("dbDriverClassname");
+        String dbDriverClassnameProperty;
+        if (System.getProperty("tpmon.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
+            dbDriverClassnameProperty = System.getProperty("tpmon.dbDriverClassname");
+        } else { // we use the parameter in the properties file
+            dbDriverClassnameProperty = prop.getProperty("dbDriverClassname");
+        }
         if (dbDriverClassnameProperty != null && dbDriverClassnameProperty.length() != 0) {
             dbDriverClassname = dbDriverClassnameProperty;
         } else {
-            formatAndOutputError("No dbDriverClassname parameter found in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + dbDriverClassname + ".", true, false);
-        }        
-        
+            log.info("No dbDriverClassname parameter found in tpmonLTW.jar/" + configurationFile +
+                    ". Using default value " + dbDriverClassname + ".");
+        }
+
         // load property "dbConnectionAddress"
-        String dbConnectionAddressProperty = prop.getProperty("dbConnectionAddress");
+        String dbConnectionAddressProperty;
+        if (System.getProperty("tpmon.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
+            dbConnectionAddressProperty = System.getProperty("tpmon.dbConnectionAddress");
+        } else { // we use the parameter in the properties file
+            dbConnectionAddressProperty = prop.getProperty("dbConnectionAddress");
+        }
         if (dbConnectionAddressProperty != null && dbConnectionAddressProperty.length() != 0) {
             dbConnectionAddress = dbConnectionAddressProperty;
         } else {
@@ -715,7 +715,12 @@ public class TpmonController {
         }
 
         // load property "dbTableNameProperty"
-        String dbTableNameProperty = prop.getProperty("dbTableName");
+        String dbTableNameProperty;
+        if (System.getProperty("tpmon.dbTableName") != null) { // we use the present virtual machine parameter value
+            dbTableNameProperty = System.getProperty("tpmon.dbTableName");
+        } else { // we use the parameter in the properties file
+            dbTableNameProperty = prop.getProperty("dbTableName");
+        }
         if (dbTableNameProperty != null && dbTableNameProperty.length() != 0) {
             dbTableName = dbTableNameProperty;
         } else {
