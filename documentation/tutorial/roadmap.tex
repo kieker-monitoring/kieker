@@ -9,7 +9,6 @@
  \author{Matthias Rohr, Andr\'{e} van Hoorn, Nina S. Marwede}
 
 
-
 \begin{document}
 \maketitle
 %\tableofcontents
@@ -23,9 +22,9 @@ for the monitoring and visualization of Java applications. It's major target are
 \begin{center}%\vspace{-3mm}
  \begin{tabular}{|l|l|p{8cm}|} \hline
 \textbf{Version number} & \textbf{Intended date} & \textbf{Major feature} \\ \hline
-0.91 & 11/2008 & Completely reengineered and redocumented (tutorial) release. Aspects are now in @Aspect-style and use ThreadLocal. Performance was also improved. Support for monitoring in the spring framework was extended.\\ \hline
+0.91 & 11/2008 & Completely re-engineered and re-documented (tutorial) release. Aspects are now in @Aspect-style and use ThreadLocal. Performance was also improved. Support for monitoring in the spring framework was extended.\\ \hline
 0.2 & 01/2008 & Improved dependability \\ \hline
-0.1 & 11/2007 & Initial release with basic comand line functionality \\ \hline
+0.1 & 11/2007 & Initial release with basic command line functionality \\ \hline
 \end{tabular}
 \end{center}
 
@@ -38,14 +37,13 @@ for the monitoring and visualization of Java applications. It's major target are
 \end{center}
 
 
-
 \section{Changes in current release}
 
 \subsection{Release 0.91}
 \begin{enumerate}
 \item The data type of threadid was changed to long. This heavily reduces the amount of memory and computation required for post-processing.
 \item From now on, Tpmon uses  @Aspect-style for the aspects (cross-cutting code) instead of the old-style
-    .aj AspectJ files. The advantage of the @Aspect-style is that the aspect files can be directly handeled by Java IDEs and Compilers.
+    .aj AspectJ files. The advantage of the @Aspect-style is that the aspect files can be directly handled by Java IDEs and Compilers.
 \item The data structure KiekerExecutionRecord now is used all the way from the measurement point, through the controller to the selected monitoring data writer and queues of writers that use producer-consumer pattern. This avoids type-casting and improves consistency through the architecture.
 \item  A new property allows the user to select the monitoring writer: \\
     \verb.monitoringDataWriter=SyncFS|AsyncFS|SyncDB|AsyncDB. \\
@@ -63,16 +61,14 @@ Existing constants are:
 \item SyncDB (Synchronous Database Writer)
 \item AsyncDB (Asynchronous Database Writer)
 \end{itemize}
-The old properties to activate asynchr. FS and DB respectively are removed. Switiching to
+The old properties to activate asynchr. FS and DB respectively are removed. Switching to
 \tpmon{} 0.91 requires to replace old tpmon.properties wit a new one based on tpmon.properties.examples of 0.91.
 
-\item The experimental JMS Writer prototype is not anymore part of the sourceforge distribution of \tpmon{}.
+\item The experimental JMS Writer prototype is not anymore part of the SourceForge distribution of \tpmon{}.
 \end{enumerate}
 
 
-
 \section{Changes in old releases}
-
 
 \subsection{Release 0.2 - "Improved Dependability for Tpmon" 01/2008}
 \begin{enumerate}
@@ -90,7 +86,6 @@ The old properties to activate asynchr. FS and DB respectively are removed. Swit
 % \item User documetation
 % \item Developer Documentation
 \end{enumerate}
-
 
 \subsection{Release 0.1 -- ``Initial release'' 11/2007}
 % \begin{enumerate}
@@ -132,7 +127,7 @@ The old properties to activate asynchr. FS and DB respectively are removed. Swit
 \item Handle fault scenario "no database driver"
 \item Handle fault scenario "database username or password wrong?"
 \end{enumerate}
-\item User documetation
+\item User documentation
 \begin{enumerate}
  \item Tutorial Tpmon
 \item Tutorial Tpan
