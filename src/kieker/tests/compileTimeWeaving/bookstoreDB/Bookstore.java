@@ -36,8 +36,8 @@ import java.util.Vector;
  * 2007-04-18: Initial version
  *
  */
+public class Bookstore extends Thread {
 
-public class Bookstore extends Thread{
     static int numberOfRequests = 100;
     static int interRequestTime = 5;
 
@@ -58,41 +58,56 @@ public class Bookstore extends Thread{
      */
     @TpmonMonitoringProbe()
     public static void main(String[] args) {
-        
-	
-	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
-	
-	for (int i = 0; i < numberOfRequests; i++) {
-    		System.out.println("Bookstore.main: Starting request "+i);
-		Bookstore newBookstore = new Bookstore();
-		bookstoreScenarios.add(newBookstore);
-		newBookstore.start();
-		Bookstore.waitabit(interRequestTime);
-	}
-    	System.out.println("Bookstore.main: Finished with starting all requests.");
-    	System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-		waitabit(5000);
-		System.exit(0);
+
+
+        Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+
+        for (int i = 0; i < numberOfRequests; i++) {
+            System.out.println("Bookstore.main: Starting request " + i);
+            Bookstore newBookstore = new Bookstore();
+            bookstoreScenarios.add(newBookstore);
+            newBookstore.start();
+            Bookstore.waitabit(interRequestTime);
+        }
+        System.out.println("Bookstore.main: Finished with starting all requests.");
+        System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
+        waitabit(5000);
+        System.exit(0);
+    }
+
+    private static boolean createTables(Connection dbConnection) {
+        boolean bCreatedTables = false;
+        Statement statement = null;
+        try {
+            statement = dbConnection.createStatement();
+            statement.execute(strCreateAddressTable);
+            bCreatedTables = true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return bCreatedTables;
     }
 
     public void run() {
-    	Bookstore.searchBook();
+        Bookstore.searchBook();
     }
 
     @TpmonMonitoringProbe()
     public static void searchBook() {
-	Catalog.getBook(false);	
-	CRM.getOffers();
+        Catalog.getBook(false);
+        CRM.getOffers();
     }
-   
+
     /**
      * Only encapsulates Thread.sleep()
      */
     public static void waitabit(long waittime) {
-    	if (waittime > 0) {
-		try{
-		Thread.sleep(waittime);
-		} catch(Exception e) {}
-	}
+        if (waittime > 0) {
+            try {
+                Thread.sleep(waittime);
+            } catch (Exception e) {
+            }
+        }
     }
 } 
