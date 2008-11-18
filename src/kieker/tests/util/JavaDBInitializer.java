@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package kieker.tests.javaDB;
+package kieker.tests.util;
 
 /**
  *
