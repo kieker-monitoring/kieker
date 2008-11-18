@@ -58,6 +58,7 @@ public class Bookstore extends Thread{
      */
     @TpmonMonitoringProbe()
     public static void main(String[] args) {
+        
 	
 	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
 	
