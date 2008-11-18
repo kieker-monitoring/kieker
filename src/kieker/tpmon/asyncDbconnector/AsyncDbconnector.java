@@ -75,14 +75,16 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
     private BlockingQueue<KiekerExecutionRecord> blockingQueue;
+    private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
     private boolean setInitialExperimentIdBasedOnLastId = false;
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
 
-    public AsyncDbconnector(String dbConnectionAddress, String dbTableName,
+    public AsyncDbconnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId) {
+        this.dbDriverClassname = dbDriverClassname;
         this.dbConnectionAddress = dbConnectionAddress;
         this.dbTableName = dbTableName;
         this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
@@ -104,9 +106,9 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             log.info("Tpmon asyncDbconnector init");
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName(this.dbDriverClassname).newInstance();
         } catch (Exception ex) {
-            log.error("MySQL driver registration failed. Perhaps the mysql-connector-....jar missing? Exception: ", ex);
+            log.error("DB driver registration failed. Perhaps the driver jar missing? Exception: ", ex);
             return false;
         }
         try {
@@ -206,6 +208,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                         dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
             }
         }
+        strB.append("dbDriverClassname :" + dbDriverClassname);
         strB.append("dbConnectionAddress : " + dbConnectionAddress2);
         strB.append(", dbTableName : " + dbTableName);
         strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);

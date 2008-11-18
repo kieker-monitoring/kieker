@@ -78,6 +78,7 @@ public class TpmonController {
     private String monitoringDataWriterInitString = null;
     private IMonitoringDataWriter monitoringDataWriter = null;
     private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
+    private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
     private String dbTableName = "turbomon10";
     //private String buildDate = "unknown (at least 2008-08-08)";
@@ -137,11 +138,14 @@ public class TpmonController {
                 String filenameBase = filenamePrefix + "/tpmon-";
                 this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
-                this.monitoringDataWriter = new Dbconnector(dbConnectionAddress, dbTableName,
+                this.monitoringDataWriter = new Dbconnector(
+                        dbDriverClassname, dbConnectionAddress, 
+                        dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCDB)) {
                 this.monitoringDataWriter = new AsyncDbconnector(
-                        dbConnectionAddress, dbTableName,
+                        dbDriverClassname, dbConnectionAddress, 
+                        dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             } else {
                 /* try to load the class by name */
@@ -154,6 +158,9 @@ public class TpmonController {
                     this.registerWorker(w);
                 }
             }
+            // TODO: we should add a getter to all writers like isInitialized.
+            //       right now, the following even appears in case init failed.
+            //       Or can we simply throw an exception from within the constructors
             log.info(">Kieker-Tpmon: Initialization completed.\n Connector Info: " + this.getConnectorInfo());
         } catch (Exception exc) {
             monitoringEnabled = false;
@@ -645,6 +652,14 @@ public class TpmonController {
         monitoringDataWriterClassname = prop.getProperty("monitoringDataWriter");
         monitoringDataWriterInitString = prop.getProperty("monitoringDataWriterInitString");
 
+        String dbDriverClassnameProperty = prop.getProperty("dbDriverClassname");
+        if (dbDriverClassnameProperty != null && dbDriverClassnameProperty.length() != 0) {
+            dbDriverClassname = dbDriverClassnameProperty;
+        } else {
+            formatAndOutputError("No dbDriverClassname parameter found in tpmonLTW.jar/" + configurationFile +
+                    ". Using default value " + dbDriverClassname + ".", true, false);
+        }        
+        
         // load property "dbConnectionAddress"
         String dbConnectionAddressProperty = prop.getProperty("dbConnectionAddress");
         if (dbConnectionAddressProperty != null && dbConnectionAddressProperty.length() != 0) {

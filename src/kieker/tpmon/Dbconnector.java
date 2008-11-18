@@ -59,6 +59,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
     private static final Log log = LogFactory.getLog(Dbconnector.class);
     private Connection conn = null;
     private PreparedStatement psInsertMonitoringData;
+    private String dbDriverClassname;
     private String dbConnectionAddress;
     private String dbTableName;
     private boolean setInitialExperimentIdBasedOnLastId = false;
@@ -78,8 +79,9 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public Dbconnector(String dbConnectionAddress, String dbTableName,
+    public Dbconnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId) {
+        this.dbDriverClassname = dbDriverClassname;
         this.dbConnectionAddress = dbConnectionAddress;
         this.dbTableName = dbTableName;
         this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
@@ -95,9 +97,9 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             log.debug("Tpmon dbconnector init");
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName(this.dbDriverClassname).newInstance();
         } catch (Exception ex) {
-            log.error("MySQL driver registration failed. Perhaps the mysql-connector-....jar missing?", ex);
+            log.error("DB driver registration failed. Perhaps the driver jar missing?", ex);
             return false;
         }
 
@@ -178,6 +180,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
                 dbConnectionAddress2 = dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
             }
         }
+        strB.append("dbDriverClassname :" + dbDriverClassname);
         strB.append("dbConnectionAddress : " + dbConnectionAddress2);
         strB.append(", dbTableName : " + dbTableName);
         strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);
