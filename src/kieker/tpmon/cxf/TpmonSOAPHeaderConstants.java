@@ -3,7 +3,7 @@ package kieker.tpmon.cxf;
 import javax.xml.namespace.QName;
 
 /**
- * kieker.tpmon.cxf.SessionIdentifierConstants
+ * kieker.tpmon.cxf.TpmonSOAPHeaderConstants
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -25,8 +25,10 @@ import javax.xml.namespace.QName;
  * 
  * @author Dennis Kieselhorst
  */
-public interface SessionIdentifierConstants {
+public interface TpmonSOAPHeaderConstants {
     public static final String NAMESPACE_URI = "http://kieker.sf.net";
-    public static final String QUALIFIED_NAME = "sessionIdentifier";
-    public static final QName SESSION_IDENTIFIER_QNAME = new QName(NAMESPACE_URI, QUALIFIED_NAME);
+    public static final String SESSION_QUALIFIED_NAME = "sessionId";
+    public static final String TRACE_QUALIFIED_NAME = "traceId";
+    public static final QName SESSION_IDENTIFIER_QNAME = new QName(NAMESPACE_URI, SESSION_QUALIFIED_NAME);
+    public static final QName TRACE_IDENTIFIER_QNAME = new QName(NAMESPACE_URI, TRACE_QUALIFIED_NAME);
 }

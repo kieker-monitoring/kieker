@@ -43,9 +43,17 @@ public class TpmonSessionIdentifierOutInterceptor extends SoapHeaderOutFilterInt
 	@TpmonInternal()
 	public void handleMessage(SoapMessage msg) throws Fault {
 		Document d = DOMUtils.createDocument();
-		Element e = d.createElementNS(SessionIdentifierConstants.NAMESPACE_URI, SessionIdentifierConstants.QUALIFIED_NAME);
+                Element e;
+                Header hdr;
+                /* Add sessionId to header */
+		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.SESSION_QUALIFIED_NAME);
 		e.setTextContent(TpmonController.getInstance().recallThreadLocalSessionId()); 
-		Header hdr = new Header(SessionIdentifierConstants.SESSION_IDENTIFIER_QNAME, e);
+		hdr = new Header(TpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME, e);
+		msg.getHeaders().add(hdr);
+                /* Add traceId to header */
+		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.TRACE_QUALIFIED_NAME);
+		e.setTextContent(Long.toString(TpmonController.getInstance().recallThreadLocalTraceId())); 
+		hdr = new Header(TpmonSOAPHeaderConstants.TRACE_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
 	}
 

@@ -53,7 +53,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
 					LOG.finer("type "+hdr.getObject().getClass());
 				}
 			}
-			Header hdr = soapMsg.getHeader(SessionIdentifierConstants.SESSION_IDENTIFIER_QNAME);
+			Header hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
 			if (hdr!=null) {
 				String sessionId = getStringContentFromHeader(hdr);
 				if(sessionId!=null) {
