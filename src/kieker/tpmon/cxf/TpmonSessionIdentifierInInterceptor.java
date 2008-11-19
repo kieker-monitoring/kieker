@@ -70,11 +70,11 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
                 String traceIdStr = getStringContentFromHeader(hdr);
                 if (traceIdStr != null) {
                     try {
-                        long traceId = Long.getLong(traceIdStr);
+                        long traceId = Long.parseLong(traceIdStr);
                         LOG.info("registering trace identifier " + traceId);
                         TpmonController.getInstance().storeThreadLocalTraceId(traceId);
                     } catch (Exception exc) {
-                        LOG.warning(exc.getMessage());
+                        LOG.log(Level.WARNING, exc.getMessage(), exc);
                     }
                 }
             } else {
