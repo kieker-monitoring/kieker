@@ -63,16 +63,7 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
             return invocation.proceed();
         }
         
-        StringBuilder sb;
-        if (this.useRuntimeClassname) {
-            /* Use the name of the runtime class */
-            sb = new StringBuilder().append(invocation.getMethod().getName());
-        } else {
-            /* Use the name of the declaring class or the interface */
-            sb = new StringBuilder().append(invocation.getMethod().getDeclaringClass().getName());
-        }
-
-        new StringBuilder().append(invocation.getMethod().getName());
+        StringBuilder sb = new StringBuilder().append(invocation.getMethod().getName());
         sb.append("(");
         boolean first = true;
         for (Class<?> clazz : invocation.getMethod().getParameterTypes()) {
@@ -86,7 +77,14 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
         sb.append(")");
         String opname = sb.toString();
 
-        String componentName = invocation.getThis().getClass().getName();
+        String componentName; 
+        if (this.useRuntimeClassname) {
+        	/* Use the name of the runtime class */
+        	componentName = invocation.getThis().getClass().getName();
+        } else {
+        	/* Use the name of the declaring class or the interface */
+        	componentName = invocation.getMethod().getDeclaringClass().getName();
+        }
 
         long tin = tpmonController.getTime(); // startint stopwatch
         Object retVal;
