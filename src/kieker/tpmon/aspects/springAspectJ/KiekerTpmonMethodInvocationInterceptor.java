@@ -29,11 +29,28 @@ import org.aopalliance.intercept.MethodInvocation;
  * that go to an other virtual machine. The annotation tries to ensure
  * that the trace id is propergated to an other instance of tpmon in
  * the other virtual machine.
+ *
+ * It provides the boolean property useRuntimeClassname to select whether
+ * to use the declaring or the runtime classname of the instrumented methods.
  * 
  * @author Marco Luebcke
  */
 public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor {
     private static final TpmonController tpmonController = TpmonController.getInstance();
+
+    /** Iff true, the name of the runtime class is used,
+        iff false, the name of the declaring class (interface) is used */
+    private boolean useRuntimeClassname = true;
+
+    @TpmonInternal()
+    public boolean getUseRuntimeClassname() {
+        return useRuntimeClassname;
+    }
+
+    @TpmonInternal()
+    public void setUseRuntimeClassname(boolean useRuntimeClassname) {
+        this.useRuntimeClassname = useRuntimeClassname;
+    }
 
     /**
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
@@ -46,7 +63,16 @@ public class KiekerTpmonMethodInvocationInterceptor implements MethodInterceptor
             return invocation.proceed();
         }
         
-        StringBuilder sb = new StringBuilder().append(invocation.getMethod().getName());
+        StringBuilder sb;
+        if (this.useRuntimeClassname) {
+            /* Use the name of the runtime class */
+            sb = new StringBuilder().append(invocation.getMethod().getName());
+        } else {
+            /* Use the name of the declaring class or the interface */
+            sb = new StringBuilder().append(invocation.getMethod().getDeclaringClass().getName());
+        }
+
+        new StringBuilder().append(invocation.getMethod().getName());
         sb.append("(");
         boolean first = true;
         for (Class<?> clazz : invocation.getMethod().getParameterTypes()) {
