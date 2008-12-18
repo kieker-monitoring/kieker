@@ -6,7 +6,7 @@ import javax.servlet.http.*;
 import kieker.tpmon.TpmonController;
 
 /**
- * kieker.tpmon.filters.SessionRegistrationFilter
+ * kieker.tpmon.filters.KiekerTraceRegistrationFilter
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -31,7 +31,7 @@ import kieker.tpmon.TpmonController;
  * 
  * <filter>
  * <filter-name>sessionRegistrationFilter</filter-name>
- * <filter-class>kieker.tpmon.filters.SessionRegistrationFilter</filter-class>
+ * <filter-class>kieker.tpmon.filters.KiekerTraceRegistrationFilter</filter-class>
  * </filter>
  * <filter-mapping>
  * <filter-name>sessionRegistrationFilter</filter-name>
@@ -40,7 +40,7 @@ import kieker.tpmon.TpmonController;
  *
  * @author Marco Luebcke
  */
-public class SessionRegistrationFilter implements Filter {
+public class KiekerTraceRegistrationFilter implements Filter {
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();
 
