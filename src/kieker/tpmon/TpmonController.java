@@ -526,7 +526,12 @@ public class TpmonController {
      */
     @TpmonInternal()
     public int incrementAndRecallThreadLocalEOI() {
-        int newEoi = this.threadLocalEoi.get().intValue() + 1;
+        Integer curEoi = this.threadLocalEoi.get();
+        if (curEoi == null) {
+            log.fatal("eoi has not been registered before");
+            return -1;
+        }
+        int newEoi = curEoi + 1;
         this.threadLocalEoi.set(newEoi);
         return newEoi;
     }
@@ -541,6 +546,7 @@ public class TpmonController {
     public int recallThreadLocalEOI() {
         Integer curEoi = this.threadLocalEoi.get();
         if (curEoi == null) {
+            log.fatal("eoi has not been registered before");
             return -1;
         }
         return curEoi;
@@ -572,7 +578,11 @@ public class TpmonController {
      */
     @TpmonInternal()
     public int recallAndIncrementThreadLocalESS() {
-        int curEss = this.threadLocalEss.get();
+        Integer curEss = this.threadLocalEss.get();
+        if (curEss == null) {
+            log.fatal("ess has not been registered before");
+            return -1;
+        }
         this.threadLocalEss.set(curEss + 1);
         return curEss;
     }
@@ -587,6 +597,7 @@ public class TpmonController {
     public int recallThreadLocalESS() {
         Integer ess = this.threadLocalEss.get();
         if (ess == null) {
+            log.fatal("ess has not been registered before");
             return -1;
         }
         return ess;

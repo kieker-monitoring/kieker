@@ -6,6 +6,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 /**
  * kieker.tpmon.aspects.springAspectJ.KiekerTpmonMethodInvocationInterceptor
  *
@@ -35,9 +36,9 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class KiekerTpmonMethodInvocationInterceptor extends AbstractKiekerTpmonMethodInvocationInterceptor {
+public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKiekerTpmonMethodInvocationInterceptor {
 
-    private static final Log log = LogFactory.getLog(KiekerTpmonMethodInvocationInterceptor.class);
+    private static final Log log = LogFactory.getLog(KiekerTpmonMethodInvocationInterceptorRemote.class);
 
     /**
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
@@ -51,8 +52,18 @@ public class KiekerTpmonMethodInvocationInterceptor extends AbstractKiekerTpmonM
         }
 
         KiekerExecutionRecord execData = this.initExecutionData(invocation);
+        execData.eoi = tpmonController.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
+        execData.ess = tpmonController.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
+
         try {
             this.proceedAndMeasure(invocation, execData);
+            if (execData.eoi== -1 || execData.ess == -1) {
+                log.fatal("eoi and/or ess have invalid values:" +
+                        " eoi == " + execData.eoi +
+                        " ess == " + execData.ess);
+                log.fatal("Disabling Tpmon!");
+                tpmonController.disableMonitoring();
+            }
         } catch (Exception e) {
             throw e; // exceptions are forwarded
         } finally {
@@ -60,6 +71,7 @@ public class KiekerTpmonMethodInvocationInterceptor extends AbstractKiekerTpmonM
              * in case the execution of the joint point resulted in an
              * exception! */
             tpmonController.insertMonitoringDataNow(execData);
+            tpmonController.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;
     }

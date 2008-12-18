@@ -60,15 +60,19 @@ public class SessionRegistrationFilter implements Filter {
         if (request instanceof HttpServletRequest) {
             ctrlInst.getAndStoreUniqueThreadLocalTraceId();
             HttpSession session = ((HttpServletRequest) request).getSession(false);
-            if(session!=null) {
+            if (session != null) {
                 ctrlInst.storeThreadLocalSessionId(session.getId());
             }
+            ctrlInst.storeThreadLocalEOI(0);
+            ctrlInst.storeThreadLocalESS(1);
         }
         try {
             chain.doFilter(request, response);
-        } finally { 
+        } finally {
             ctrlInst.unsetThreadLocalTraceId();
             ctrlInst.unsetThreadLocalSessionId();
+            ctrlInst.unsetThreadLocalEOI();
+            ctrlInst.unsetThreadLocalESS();
         }
     }
 

@@ -7,6 +7,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemote
@@ -32,6 +34,8 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMonitoring { 
 
+    private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
+
     @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
@@ -53,6 +57,13 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
         }
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
+            if (eoi == -1 || ess == -1){
+                log.fatal("eoi and/or ess have invalid values:" +
+                        " eoi == " + eoi +
+                        " ess == " + ess);
+                log.fatal("Disabling Tpmon!");
+                ctrlInst.disableMonitoring();
+            }
         } catch (Exception e){
             throw e; // exceptions are forwarded          
         } finally {

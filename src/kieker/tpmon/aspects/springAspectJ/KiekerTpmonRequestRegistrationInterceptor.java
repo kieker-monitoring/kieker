@@ -7,7 +7,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 
 /**
- * kieker.tpmon.aspects.springAspectJ.KiekerTpmonSessionRegistrationInterceptor
+ * kieker.tpmon.aspects.springAspectJ.KiekerTpmonRequestRegistrationInterceptor
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -27,20 +27,24 @@ import org.springframework.web.context.request.WebRequestInterceptor;
  *
  * @author Andre van Hoorn
  */
-public class KiekerTpmonSessionRegistrationInterceptor implements WebRequestInterceptor {
+public class KiekerTpmonRequestRegistrationInterceptor implements WebRequestInterceptor {
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();
-    
+
     @TpmonInternal()
     public void preHandle(WebRequest request) throws Exception {
         ctrlInst.getAndStoreUniqueThreadLocalTraceId();
         ctrlInst.storeThreadLocalSessionId(request.getSessionId());
+        ctrlInst.storeThreadLocalEOI(0);
+        ctrlInst.storeThreadLocalESS(1);
     }
 
     @TpmonInternal()
     public void postHandle(WebRequest request, ModelMap map) throws Exception {
         ctrlInst.unsetThreadLocalTraceId();
         ctrlInst.unsetThreadLocalSessionId();
+        ctrlInst.unsetThreadLocalEOI();
+        ctrlInst.unsetThreadLocalESS();
     }
 
     @TpmonInternal()

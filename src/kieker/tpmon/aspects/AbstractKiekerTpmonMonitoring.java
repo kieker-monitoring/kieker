@@ -33,7 +33,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     
     @TpmonInternal()
-    public KiekerExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {
+    protected KiekerExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {
        // e.g. "getBook" 
         String methodname = thisJoinPoint.getSignature().getName();
         // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
@@ -47,7 +47,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
                 ctrlInst.recallThreadLocalTraceId() /* traceId, -1 if entry point*/);
         
         execData.isEntryPoint = false;
-        execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point
+        //execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point
         if (execData.traceId == -1) { 
             execData.traceId = ctrlInst.getAndStoreUniqueThreadLocalTraceId();
             execData.isEntryPoint = true;
@@ -59,7 +59,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
     public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable;
     
     @TpmonInternal()
-    public void proceedAndMeasure(ProceedingJoinPoint thisJoinPoint, 
+    protected void proceedAndMeasure(ProceedingJoinPoint thisJoinPoint,
             KiekerExecutionRecord execData) throws Throwable {       
         execData.tin = ctrlInst.getTime(); // startint stopwatch    
         try {

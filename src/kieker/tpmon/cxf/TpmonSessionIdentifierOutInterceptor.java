@@ -55,6 +55,15 @@ public class TpmonSessionIdentifierOutInterceptor extends SoapHeaderOutFilterInt
 		e.setTextContent(Long.toString(TpmonController.getInstance().recallThreadLocalTraceId())); 
 		hdr = new Header(TpmonSOAPHeaderConstants.TRACE_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
+                /* Add eoi to header */
+		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.EOI_QUALIFIED_NAME);
+		e.setTextContent(Integer.toString(TpmonController.getInstance().recallThreadLocalEOI()));
+		hdr = new Header(TpmonSOAPHeaderConstants.EOI_IDENTIFIER_QNAME, e);
+		msg.getHeaders().add(hdr);
+                /* Add ess to header */
+		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.ESS_QUALIFIED_NAME);
+		e.setTextContent(Integer.toString(TpmonController.getInstance().recallThreadLocalESS()));
+		hdr = new Header(TpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME, e);
+		msg.getHeaders().add(hdr);
 	}
-
 }

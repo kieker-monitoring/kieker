@@ -80,6 +80,38 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
             } else {
                 LOG.info("no tpmon trace identifier header found!");
             }
+            /* Extract and register eoi from SOAP header */
+            hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
+            if (hdr != null) {
+                String EOIStr = getStringContentFromHeader(hdr);
+                if (EOIStr != null) {
+                    try {
+                        int eoi = Integer.parseInt(EOIStr);
+                        LOG.info("registering eoi " + eoi);
+                        TpmonController.getInstance().storeThreadLocalEOI(eoi);
+                    } catch (Exception exc) {
+                        LOG.log(Level.WARNING, exc.getMessage(), exc);
+                    }
+                }
+            } else {
+                LOG.info("no tpmon eoi header found!");
+            }
+           /* Extract and register ess from SOAP header */
+            hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME);
+            if (hdr != null) {
+                String ESSStr = getStringContentFromHeader(hdr);
+                if (ESSStr != null) {
+                    try {
+                        int ess = Integer.parseInt(ESSStr);
+                        LOG.info("registering ess " + ess);
+                        TpmonController.getInstance().storeThreadLocalESS(ess);
+                    } catch (Exception exc) {
+                        LOG.log(Level.WARNING, exc.getMessage(), exc);
+                    }
+                }
+            } else {
+                LOG.info("no tpmon ess header found!");
+            }
         }
     }
 
