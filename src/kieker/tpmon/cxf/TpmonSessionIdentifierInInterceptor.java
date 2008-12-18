@@ -83,10 +83,10 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
             /* Extract and register eoi from SOAP header */
             hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
             if (hdr != null) {
-                String EOIStr = getStringContentFromHeader(hdr);
-                if (EOIStr != null) {
+                String eoiStr = getStringContentFromHeader(hdr);
+                if (eoiStr != null) {
                     try {
-                        int eoi = Integer.parseInt(EOIStr);
+                        int eoi = Integer.parseInt(eoiStr);
                         LOG.info("registering eoi " + eoi);
                         TpmonController.getInstance().storeThreadLocalEOI(eoi);
                     } catch (Exception exc) {
@@ -99,10 +99,10 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
            /* Extract and register ess from SOAP header */
             hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME);
             if (hdr != null) {
-                String ESSStr = getStringContentFromHeader(hdr);
-                if (ESSStr != null) {
+                String essStr = getStringContentFromHeader(hdr);
+                if (essStr != null) {
                     try {
-                        int ess = Integer.parseInt(ESSStr);
+                        int ess = Integer.parseInt(essStr);
                         LOG.info("registering ess " + ess);
                         TpmonController.getInstance().storeThreadLocalESS(ess);
                     } catch (Exception exc) {
