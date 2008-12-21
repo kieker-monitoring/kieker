@@ -251,29 +251,27 @@ The monitoring data for Listing~\ref{javaHelloWorld} is written to a file which 
 
 Columns~5 and 6 are start and end timestamps for executions of operations. The timestamps are provided in nanoseconds since 1970-01-01. The monitoring data file is a CSV file. Instead of commas, it uses semi-colons as separators, because commas can be part of operation names (e.g., \texttt{sum(int a,int b)}). A detailed description of the monitoring data format can be found in Section~\ref{sec.monitoring.data.format}.
 
-\todobox{Matthias is here}
-
 \section{\tpmon{}: Instrumenting and Monitoring Java Applications}\label{sec.tpmon}
 
 The small tutorial in Section~\ref{sec.tpmon.tutorial} uses only one of \tpmon{}'s monitoring modes. You have to make the following design decisions when using \tpmon{}:
 \begin{itemize}
  \item When and how should the monitoring logic be integrated?
 \begin{itemize}
- \item \textbf{Compile-time integration} (using compile-time-weaving): In this mode, you the build-scripts or build-commands of your Java program are adjusted, such that the bytecode is already instrumented. During runtime, no aspect-oriented programming features (related to reflection and class loading) are required and only the \tpmon{} library has to be added to the execution classpath.
+ \item \textbf{Compile-time integration} (using compile-time-weaving): In this mode, you the build-scripts or build-commands of your Java program are adjusted, such that the bytecode is already instrumented. During runtime, no aspect-oriented programming features (related to reflection and class loading) are required and only the \tpmon{} library has to be added to the execution classpath. A differnt way of compile time integration is to use the methods of the TpmonController.java directly to store monitoring data, which can be useful in software that runs in environments having own interception mechanisms (e.g., Spring framework).
 \item Class \textbf{load-time integration}: Load-time integration combines monitoring logic with program logic of a class at the time the Java Virtual Machine accesses program class for the first time (during runtime. A advantage of load-time weaving is that no large changes to the build scripts are required (only \tpmon{} might have to be added to the compile-time classpath). It is can also be used to instrument (full instrumentation) programs for that no source code is available. However, the start-scripts for your application, or the configuration files of the middleware that runs your application, have to be extended by adding the AspectJ javaagent that combines monitoring logic and program logic during runtime. Load-time integration may fail in some environments that use special dynamic features such as reflection, customized class-loaders, and particular types of remote communication. For instance, runtime instrumentation fails for Eclipse Plugins\footnote{Other profilers have also problems with profiling Eclipse Plugins}, RMI objects (code base changes are detected and cause exceptions), and for classes and objects that are defined during runtime via reflection, such as it is used for the Hessian Web-service library.
 \end{itemize}
 \item Which Java methods should be monitored?
 \begin{itemize}
-\item \textbf{Full instrumentation}: A full instrumentation of a complete Java package does not require changes of the source code of the program to be monitored. However, instrumenting all methods within a package can impose a too large monitoring overhead.
+\item \textbf{Full instrumentation}: A full instrumentation of a complete Java package does not require changes of the source code of the program to be monitored. However, instrumenting all methods within a package can impose a large monitoring overhead.
 \item \textbf{Partial instrumentation}: Partial instrumentation is done by placing a special Java Annotation in front of every Java method for which instrumentation is desired. The annotations can be used by compile-time integration or load-time integration.
 \end{itemize}
 \item Where should the monitoring data be stored?
 \begin{itemize}
 \item \textbf{File system}: Storing the monitoring data into the file system is the most efficient data storage mode of Kieker*\marginpar{\small \tpmon{} ?}. However, if the files have to be transported regularly to an other host for analysis, it might be better directly store it into a remote database. In particular if continuous monitoring during regular operation is required, it is suggested to transfer the monitoring data just after it has been observed to an other host's database for persistent storage and analysis.
-\item \textbf{Database management system}: Database management systems provide means to efficiently store large amounts of data and provide a powerful query language for data access. \tpmon{} requires a small additional overhead for storing in a remote database system compared to storing in a local file system. The overhead (e.g., 0.1-5 milliseconds in average) is only a problem if precise timing analysis, e.g., for anomaly detection, is required. %However, this overhead does occur anyhow if the monitoring data has to be analyzed on a remote platform.
+\item \textbf{Database management system}: Database management systems provide means to efficiently store large amounts of data and provide a powerful query language for data access. \tpmon{} requires a small additional overhead for storing the monitoring data in a remote database system compared to storing in a local file system. The overhead (e.g., 0.1-5 milliseconds in average) is only a problem if precise timing analysis, e.g., for anomaly detection, is required. Additionally, storing in a remote database requires sufficient network resources, as each monitoring event is directly transfered into the database (to provide the data as soon as possible). %However, this overhead does occur anyhow if the monitoring data has to be analyzed on a remote platform.
 \end{itemize}
 \end{itemize}
-
+\todobox{Matthias is here}
 \subsection{Downloading Kieker}
 The latest Kieker release can be downloaded from \kiekerurl{}. The folder where the uncompressed release is located on your hard disc is denoted \texttt{\$KIEKERHOME} in the remainder of this document. You may set it as environment variable, so that you can directly execute the commands shown in this section
 \begin{itemize}
