@@ -1,8 +1,6 @@
 package kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample;
 
 import kieker.tpmon.annotations.TpmonMonitoringProbe;
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample.Starter
@@ -17,41 +15,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class Starter extends Thread{
-    static int numberOfRequests = 1500;
-    static int interRequestTime = 25;    
-    static int defaultSleeptimeMs = 500; 
-
-    public static void main(String[] args) throws InterruptedException {
-	Vector<Starter> runInstances = new Vector<Starter>();
-	for (int i = 0; i < numberOfRequests; i++) {
-		Starter newBookstore = new Starter();
-		runInstances.add(newBookstore);
-		newBookstore.start();		
-                Thread.sleep(interRequestTime);
+   public static void main(String[] args) throws InterruptedException {
+	for (int i = 0; i < 10000; i++) {
+		new Starter().start();		
+                Thread.sleep(25); // wait between requests
 	}
-    	Thread.sleep(5000);
 	System.exit(0);
     }
-    
-    @Override
+
     public void run() {
-        try {
-            waitabit(defaultSleeptimeMs);
-            workabit();
-        } catch (InterruptedException ex) { }
-    }        
-       
-    @TpmonMonitoringProbe()
-    public void waitabit(long waittime) throws InterruptedException {    			
-		Thread.sleep(waittime);		
+            waitP();
+            work();
     }
-    
-        static AtomicBoolean boolvar = new AtomicBoolean(true);
+
     @TpmonMonitoringProbe()
-    private void workabit() {
-        int a = (int)(Math.random() * 5d);        
-        for (int i=0; i<2500000; i++) { a += i/1000;}        
-        // extremely rare event
-        if (a % 10000 == 0 ) boolvar.set(true);        
+    public void waitP() {
+	try{Thread.sleep(500);} catch (Exception e){}
+    }
+
+    static boolean boolvar = true;
+    @TpmonMonitoringProbe()
+    private void work() {
+        int a = (int)(Math.random() * 5d);
+        for (int i=0; i<2500000; i++) { a += i/1000;}
+        if (a % 10000 == 0 ) boolvar = false;
     }
 } 
