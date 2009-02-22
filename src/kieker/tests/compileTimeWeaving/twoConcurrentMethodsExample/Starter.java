@@ -10,6 +10,7 @@ import kieker.tpmon.annotations.TpmonMonitoringProbe;
  * 
  * @author Matthias Rohr
  * History:
+ * 2009/02/20: Reduced text length
  * 2008/10/20: Initial version
  *
  */
