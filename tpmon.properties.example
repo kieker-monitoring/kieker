@@ -76,7 +76,7 @@ tpmon.javac.debug=false
 
 # 3. External libraries (usually no changes required)
 aspectjtoolsjar=external-libs/aspectjtools-1.6.4.jar
-aspectjrtjar=external-libs/aspectjrt-1.6..jar
-aspectjweaverjar=external-libs/aspectjweaver-1.6..jar
-aspectjlibjar=external-libs/aspectjlib-1.6..jar
+aspectjrtjar=external-libs/aspectjrt-1.6.jar
+aspectjweaverjar=external-libs/aspectjweaver-1.6.jar
+aspectjlibjar=external-libs/aspectjlib-1.6.jar
 # all other files in the external-libs folder are used automatically
