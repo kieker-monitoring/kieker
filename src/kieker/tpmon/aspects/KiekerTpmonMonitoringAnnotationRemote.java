@@ -1,8 +1,7 @@
 package kieker.tpmon.aspects;
 
 import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.annotations.*;      /* DO NOT DELETE THIS EVEN IF SOME DUMB GUI PROPOSES THAT */
-//import kieker.tpmon.asyncDbconnector.*;
+import kieker.tpmon.TpmonVersion;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -36,7 +35,8 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
 
     private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
 
-    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotations.TpmonMonitoringProbe * *.*(..))"+
+              " && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
    

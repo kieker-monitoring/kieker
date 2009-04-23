@@ -3,7 +3,6 @@ package kieker.tpmon.aspects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.annotations.*;      /* DO NOT DELETE THIS EVEN IF SOME DUMB GUI PROPOSES THAT */
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -47,7 +46,8 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
         return super.doServletEntryProfiling(thisJoinPoint);
     }
 
-    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotations.TpmonMonitoringProbe * *.*(..))"+
+              " && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
 

@@ -1,9 +1,6 @@
 package kieker.tpmon.aspects;
 
 import kieker.tpmon.KiekerExecutionRecord;
-//import kieker.tpmon.*;
-import kieker.tpmon.annotations.*;      /* DO NOT DELETE THIS EVEN IF SOME DUMB GUI PROPOSES THAT */
-//import kieker.tpmon.asyncDbconnector.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -33,7 +30,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class KiekerTpmonMonitoringFull extends AbstractKiekerTpmonMonitoring { 
 
-    @Pointcut("execution(* *.*(..)) && !execution(@TpmonInternal * *.*(..))")
+    @Pointcut("execution(* *.*(..)) && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
    

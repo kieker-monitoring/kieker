@@ -1,8 +1,6 @@
 package kieker.tpmon.aspects;
 
-//import kieker.tpmon.*;
 import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.annotations.*;      /* DO NOT DELETE THIS EVEN IF SOME DUMB GUI PROPOSES THAT */
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,7 +30,8 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitoring { 
 
-    @Pointcut("execution(@TpmonMonitoringProbe * *.*(..)) && !execution(@TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotations.TpmonMonitoringProbe * *.*(..))"+
+              " && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
    

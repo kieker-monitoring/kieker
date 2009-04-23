@@ -2,8 +2,11 @@
 <project name="Kieker" default="build-all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
     <property file="tpmon.properties"/>
 
+    <!--<property name="KiekerTpmonTestAspect"
+              value="KiekerTpmonMonitoringFull.java"/>-->
     <property name="KiekerTpmonTestAspect"
               value="KiekerTpmonMonitoringAnnotation.java"/>
+
     
     <!-- definition of the different classpathes for compilation, normal execution,
          load-time weaving tests, compile-time weaving tests -->
@@ -262,7 +265,7 @@
         <iajc destdir="build-tests" source="1.5" verbose="true"
               classpathref="run.ctwtests.classpath">
             <sourceroots>
-                <pathelement location="src/kieker/tests/compileTimeWeaving"/>
+                <pathelement location="src/kieker/tests/compileTimeWeaving/bookstore/"/>
             </sourceroots>
         </iajc>
     </target>
