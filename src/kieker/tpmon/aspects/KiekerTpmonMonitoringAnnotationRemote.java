@@ -1,7 +1,6 @@
 package kieker.tpmon.aspects;
 
 import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.TpmonVersion;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
