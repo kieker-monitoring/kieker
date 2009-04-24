@@ -333,7 +333,7 @@
            <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
         </java>
     </target>
-    <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-bookstore">
+  <!--  <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-bookstore">
       
         <java dir="."
               fork="true"
@@ -341,7 +341,7 @@
               classpathref="run.ctwtests.classpath">
            <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>
         </java>
-    </target>
+    </target> -->
     <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">
         <java dir="."
               fork="true"
