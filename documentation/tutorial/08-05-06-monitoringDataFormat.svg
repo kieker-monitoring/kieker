@@ -43,9 +43,9 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="1024"
-     inkscape:window-height="712"
+     inkscape:window-height="719"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="278"
      showgrid="false" />
   <metadata
      id="metadata32239">
@@ -161,7 +161,7 @@
          sodipodi:role="line"
          id="tspan3407"
          x="372.05698"
-         y="122.85946">vmid</tspan></text>
+         y="122.85946">vmname</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:14.4391222px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"

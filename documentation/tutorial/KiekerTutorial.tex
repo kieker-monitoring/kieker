@@ -10,9 +10,6 @@
 \tableofcontents
 \section{Overview}
 
-\todobox{
- The properties for switching between asynchr. FS and DB have been removed.}
-
 Kieker is a framework for monitoring the runtime behavior of Java software applications. It can be used for plain Java applications, or for Java Web applications running in application servers. The resulting monitoring data can be converted to architectural models.
 
 \
@@ -112,7 +109,7 @@ also provided. \tpmon{} has been tested on Linux, Solaris, FreeBSD, and Windows.
 For weaving monitoring logic as crosscutting concern into your software (during compile or load time), Kieker uses AspectJ (libraries are with Kieker in the repository and in the download archive). The advantage of weaving is that monitoring logic is not mixed with you source code. For Java 6 users, AspectJ 6 is required or wired error messages (Exception in thread "main" java.lang.VerifyError: ... Incompatible argument to function) will appear.
 
 \subsection{Downloading Kieker}
-The first step is to download the latest Kieker release from \kiekerurl{} and to decompress it into a folder of your choice. This folder is denoted \texttt{\$KIEKERHOME} in the remainder of this document. You may set it as an environment variable\footnote{The error message ``Error opening zip file or JAR manifest missing : /external-libs/aspectjweaver.jar'' means that you used this environment variable without having it set correctly.}, so that you can directly execute the commands shown in this Section.
+The first step is to download the latest Kieker release from \kiekerurl{} and to decompress it into a folder of your choice. This folder is denoted \texttt{\$KIEKERHOME} in the remainder of this document. You may set it as an environment variable\footnote{The error message ``Error opening zip file or JAR manifest missing : /external-libs/aspectjweaver-1.6.4.jar'' means that you used this environment variable without having it set correctly.}, so that you can directly execute the commands shown in this Section.
 \begin{itemize}
  \item Linux/Unix: e.g., % KIEKERHOME=/home/matthias/projekte/kieker/sourceforge/kieker/
 \begin{lstlisting}[caption={}]
@@ -194,7 +191,7 @@ The \texttt{Thread.sleep} is only called within this example to ensure that all 
 
 \begin{lstlisting}[caption={Compilation and execution with AspectJ's Java agent.},label={javaHelloWorld}]
 javac -cp $KIEKERHOME/dist/KiekerTpmonCtrl-0.91.jar HelloWorld.java
-java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver.jar -cp $KIEKERHOME/dist/KiekerTpmonLTW-0.91.jar:.:$KIEKERHOME/external-libs/commons-logging-1.1.1.jar  HelloWorld
+java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver-1.6.4.jar -cp $KIEKERHOME/dist/KiekerTpmonLTW-0.91.jar:.:$KIEKERHOME/external-libs/commons-logging-1.1.1.jar  HelloWorld
 \end{lstlisting}
 If the first command does not compile, the \tpmon{} library is not found\footnote{Error message: cannot find symbol @TpmonMonitoringProbe} in the classpath, or the import statement contains a typo.
 
@@ -237,7 +234,7 @@ Note, the command \texttt{java  HelloWorld} does not fail if \tpmon{} is not in 
 \paragraph{More verbose output}
 More verbose output (e.g., which Java files are woven) is produced for:
 \begin{lstlisting}[caption={Verbose execution with AspectJ's Java agent.},label={lst2},language=clean,basicstyle=\ttfamily\footnotesize,keywordstyle=\ttfamily\footnotesize]
-java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver.jar -Daj.weaving.verbose=true -Dorg.aspectj.weaver.showWeaveInfo=true  -cp $KIEKERHOME/dist/KiekerTpmonLTW-0.91.jar:.:$KIEKERHOME/external-libs/commons-logging-1.1.1.jar  HelloWorld
+java  -javaagent:$KIEKERHOME/external-libs/aspectjweaver-1.6.4.jar -Daj.weaving.verbose=true -Dorg.aspectj.weaver.showWeaveInfo=true  -cp $KIEKERHOME/dist/KiekerTpmonLTW-0.91.jar:.:$KIEKERHOME/external-libs/commons-logging-1.1.1.jar  HelloWorld
 
 [AppClassLoader@1f12c4e] info AspectJ Weaver Version DEVELOPMENT built on Tuesday Jul 29, 2008 at 23:59:26 GMT
 [AppClassLoader@1f12c4e] info register classloader sun.misc.Launcher$AppClassLoader@1f12c4e
@@ -290,38 +287,32 @@ set KIEKERHOME=c:\sourceforge\kieker
 \end{lstlisting}
 \end{itemize}
 
-%\todobox{Matthias is here}
+
 \subsection{\tpmon{}'s configuration file \texttt{tpmon.properties}}\label{sec.tpmon.properties}
-
-\todobox{
- Der MonitoringWriter l�sst sich nun �ber ein Property einschalten:
-    monitoringDataWriter=SyncFS|AsyncFS|SyncDB|AsyncDB
-    (nat�rlich nur eine dieser Konstanten)
-    �ber dieses Property lassen sich nun auch Writer per Namen laden,
-    z.B.
-monitoringDataWriter=src.kieker.tpmon.extra.asyncJmsWriter.AsyncJmsProducer
-    Diese Writer lassen sich �ber die Property
-    monitoringDataWriterInitString konfiguieren. Im JMS-Beispiel:
-    monitoringDataWriterInitString =
-jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 |
-jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory |
-jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000
-}
-
-\todobox{
- Die alten Properies zum Einschalten von asynchr. FS bzw. DB sind weg!}
-
 
 The configuration file \texttt{tpmon.properties} specifies \tpmon{}'s runtime behavior (database or file system
 storage) and the path to required libraries for the build process. In the following, we explain properties (default settings are underlined):
 
 \begin{description}
- \item [1.1.1] \texttt{storeInDatabase=[true$|$\underline{false}]} \\
-Here it is specified whether \tpmon{} stores the data in a remote database or in the local file system.
+%  \item [1.1.1] \texttt{storeInDatabase=[true$|$\underline{false}]} \\
+% Here it is specified whether \tpmon{} stores the data in a remote database or in the local file system.
 \item [1.1.2] \texttt{debug=[true$|$\underline{false}]}  \\
 In debug mode, \tpmon{} is very verbose during runtime.
 \item [1.1.3] \texttt{monitoringEnabled=[\underline{true}$|$false]} \\
-Should monitoring be enabled right after the application start? You can also use the tpmon-control-servlet to activate monitoring later.
+Should monitoring be enabled right after the application start? (You can also use the tpmon-control-servlet to activate monitoring later.)
+\item [1.1.4] \texttt{monitoringDataWriter=[SyncFS$|$\underline{AsyncFS}$|$SyncDB$|$AsyncDB]}
+You can chose from several different monitoring writers. The default is a asynchronous file system writer, which is the most performant.
+
+\
+
+Own monitoring data writers can be used as well by an plug-in mechanism. Just provide the full class name of your writer and ensure that its in the 
+classpath during runtime. Configuration and initialization parameters should be provided via the property monitoringDataWriterInitString. E.g., for a JMS monitoring writer (not within the Kieker release yet), it would look like this:\\
+\begin{lstlisting}[caption={}]
+monitoringDataWriter=src.kieker.tpmon.extra.asyncJmsWriter.AsyncJmsProducer
+monitoringDataWriterInitString = jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000
+\end{lstlisting}
+
+
 \item [1.2.1.1] \texttt{dbDriverClassname} \\
 Specifies the classname of a database driver to be loaded.\\ Example:
 {\small\texttt{com.mysql.jdbc.Driver}}
@@ -365,7 +356,8 @@ If true, \texttt{javac} will be called with the debug flag.
 \end{description}
 
 \subsection{Building the \tpmon{} Libraries}
-The \tpmon{} libraries (\texttt{KiekerTpmonLTW.jar} and \texttt{KiekerTpmonCTW.jar}) have to be recompiled each time \texttt{tpmon.properties} or \texttt{aop.xml} is changed. The command for rebuilding \tpmon{} is \texttt{ant build}. If compilation succeeds, Ant returns \texttt{BUILD SUCCESSFUL} and the two libraries are created in the folder \texttt{dist}.
+The \tpmon{} libraries (\texttt{KiekerTpmonLTW.jar} and \texttt{KiekerTpmonCTW.jar}) have to be recompiled each time \texttt{tpmon.properties} or \texttt{aop.xml} is changed. The command for rebuilding \tpmon{} is \texttt{ant build-all}. If compilation succeeds, Ant returns \texttt{BUILD SUCCESSFUL} and the two libraries are created in the folder \texttt{dist}.
+
 
 By default, the \tpmonltw{} will be configured to look for potential monitoring points in all packages except in the Java's own libraries and in some internal Kieker packages. %To monitor your own software application you have to set monitoring points as described in Section~\ref{settingOfMonitoringPoints}.
 
@@ -399,33 +391,40 @@ This variant, i.e. full instrumentation via load-time weaving, can be used if no
 
 \begin{itemize}
  \item Specification of packages to instrument in \texttt{aop.xml}\footnote{Located in \texttt{src/kieker/tpmon/META-INF/}}: Specify in the first part of the \texttt{aop.xml} via \texttt{include} \texttt{exclude} tags which packages should be instrumented. Take a look at  \texttt{aop.xml.example} for examples.
-\item Activating the full-instrumentation aspect in \texttt{aop.xml}: In the last part of the \texttt{aop.xml} uncomment the aspect \texttt{TpmonMonitorFullInstrumentation} and put all other aspects into comments.
+\item Activating the full-instrumentation aspect in \texttt{aop.xml}: In the last part of the \texttt{aop.xml} uncomment the aspect \texttt{KiekerTpmonMonitoringFull} and put all other aspects into comments.
 \end{itemize}
+
+
 
 Full instrumentation via load time weaving can be tested using the ant build target \\ \small \texttt{run-tests-loadTimeWeaving-bookstoreWithoutAnnotation} \normalsize of the \texttt{build.xml} \tpmon{} package. For this test, only the \texttt{aop.xml} needs to be adjusted, as described above.
 
 \paragraph{Partial instrumentation (using Java Annotations)}
 \begin{itemize}
  \item Specification of packages to instrument in \texttt{aop.xml}\footnote{Located in \texttt{src/kieker/tpmon/META-INF/}}: Specify in the first part of the \texttt{aop.xml} via \texttt{include} \texttt{exclude} tags which packages will be scanned for the \texttt{TpmonMonitoringProbe} Java Annotations. Take a look at  \texttt{aop.xml.example} for examples.
-\item Specification of the instrumentation mode \texttt{aop.xml}: In the last part of the \texttt{aop.xml} uncomment the aspect \texttt{TpmonMonitorAnnotation} and put all other aspects into comments.
+\item Specification of the instrumentation mode \texttt{aop.xml}: In the last part of the \texttt{aop.xml} uncomment the aspect \texttt{...KiekerTpmonMonitoringAnnotation} and put all other aspects into comments.
 \item Modify the source code of the program to be instrumented such as in the Listing~\ref{placingAnnotation} of the Section~\ref{sec.tutorial.annotation}. Also add the \texttt{import} as in Line 1 of Listing~\ref{placingAnnotation}.
 \end{itemize}
+
+Partial instrumentation via load time weaving can be tested using the ant build target \\ \small \texttt{run-tests-loadTimeWeaving-executionOrderTest} \normalsize of the \texttt{build.xml} \tpmon{} package. For this test, only the \texttt{aop.xml} needs to be adjusted, as described above.
 
 \subsubsection{Compile-time instrumentation}
 For compile-time instrumentation, it is required install the AspectJ compiler from \url{http://www.eclipse.org/aspectj/}.
 
 \paragraph{Full instrumentation}
 \begin{itemize}
- \item Copy the aspect file \texttt{\small TpmonMonitorFullInstrumentation.aj} into a folder of your program sources.
+ \item Copy the file \texttt{\small AbstractKiekerTpmonMonitoring*.java} and one aspect source file, e.g. for full instrumentation \texttt{\small KiekerTpmonMonitoringFull.java} into a folder of your program sources.
+\item  It may be required to adjust the property \texttt{\small KiekerTpmonTestAspect} in the \texttt{\small build.xml} of tpmon in a comment, depending on which aspect file you copied above. Don't forget to rebuild tpmon, if you had to change the build.xml.
 \item In your application build-scripts, replace the compiler with the AspectJ compiler. Add \texttt{KiekerTpmonCTW.jar} to compilation classpath. An example ant script target for this compilation can be found in \tpmon{}'s \texttt{build.xml} (see target \\ \texttt{compile-tests-compileTimeWeaving-bookstore}).
 \end{itemize}
 
 \paragraph{Partial instrumentation (using Java Annotations)}
 \begin{itemize}
-\item  Copy the aspect file \texttt{\small TpmonMonitorAnnotation.aj} into a folder of your program sources.
+\item  Copy \texttt{\small AbstractKiekerTpmonMonitoring*.java} and the aspect for partial instrumentation, e.g. \texttt{\small KiekerTpmonMonitoringAnnotationRemote.java} into a folder of your program sources. 
+\item It may be required to adjust the property \texttt{\small KiekerTpmonTestAspect} in the \texttt{\small build.xml} of tpmon in a comment, depending on which aspect file you copied above. Don't forget to rebuild tpmon, if you had to change the build.xml.
 \item Modify the source code of the program to be instrumented as shown in Listing~\ref{placingAnnotation} of the Section~\ref{sec.tutorial.annotation}. Also add the \texttt{import} as in Line 1 of Listing~\ref{placingAnnotation}.
 \item In your application build-scripts, replace the compiler with the AspectJ compiler. Add \texttt{KiekerTpmonCTW.jar} to the compilation classpath. An example ant script target for this compilation can be found in \tpmon{}'s \texttt{build.xml} (see target \\ \texttt{compile-tests-compileTimeWeaving-bookstore}).
 \end{itemize}
+
 
 \subsection{Executing the instrumented program}
 The execution scripts and application server startup scripts have to be adjusted to run the instrumented program with monitoring.
@@ -446,12 +445,12 @@ Virtual Machine start time 1210156670849
 Executing load-time instrumented programs requires:
 \begin{itemize}
 \item adding \texttt{KiekerTpmonLTW.jar} to the runtime classpath (maybe also the database driver), and
-\item adding the parameter \texttt{-javaagent:ADJUST/aspectjweaver.jar} to the Java Virtual Machine startup call.
+\item adding the parameter \texttt{-javaagent:ADJUST/aspectjweaver-1.6.4.jar} (you may have to adjust the version number, as well) to the Java Virtual Machine startup call.
 \end{itemize}
 
 To activate monitoring for load-time instrumented programs in the Apache Tomcat servlet container, add the following line to Tomcat's \texttt{catalina.sh} (right at the beginning of the file):
 \begin{lstlisting}[caption={}]
-JAVA_OPTS="-javaagent:ADJUST/aspectjweaver.jar"
+JAVA_OPTS="-javaagent:ADJUST/aspectjweaver-1.6.4.jar"
 \end{lstlisting}
 Windows users have to add "set" in front of this line.
 
@@ -464,25 +463,25 @@ An example for executing a load-time instrumented program can be found in the tu
 \begin{figure}
  \centering
  \includegraphics[width=0.8\columnwidth]{08-05-06-monitoringDataFormat}
- \caption{Database schema for the monitoring data (version 0.9).}
+ \caption{Database schema for the monitoring data (version 0.91).}
  \label{databaseSchema}
 \end{figure}
 
-The \textbf{database schema} of the monitoring data is displayed in the Entity-relationship Diagram (Figure~\ref{databaseSchema}). The data format for \textbf{monitoring data files} only differs to this schema by not containing the first column \texttt{autoid}. Each entry, called monitoring record, contains two timestamps (\texttt{tin} and \texttt{tout}) that denote the start time and end time of an operation execution, and attributes that describe a context of the measurement (\texttt{experimentid}, \texttt{operation}, \texttt{sessionid}, \texttt{traceid}, \texttt{vmid}). The \texttt{operation} attribute names the operation that corresponds to the execution monitored, and \texttt{traceid} is unique for executions of the same trace. %In a Java Web application, one user request (e.g., a single HTTP request) results in one or more traces.
+The \textbf{database schema} of the monitoring data is displayed in the Entity-relationship Diagram (Figure~\ref{databaseSchema}). The data format for \textbf{monitoring data files} only differs to this schema by not containing the first column \texttt{autoid}. Each entry, called monitoring record, contains two timestamps (\texttt{tin} and \texttt{tout}) that denote the start time and end time of an operation execution, and attributes that describe a context of the measurement (\texttt{experimentid}, \texttt{operation}, \texttt{sessionid}, \texttt{traceid}, \texttt{vmname}). The \texttt{operation} attribute names the operation that corresponds to the execution monitored, and \texttt{traceid} is unique for executions of the same trace. %In a Java Web application, one user request (e.g., a single HTTP request) results in one or more traces.
  Java Web application technology provides the concept of sessions (monitored as \texttt{sessionid}) that connect single user requests. %Sessionid If available, ``sessionid'' is in a 1:m relation to ``traceid''.
-The \texttt{vmid} allows to distinguish different Java Virtual Machines. %Response times are the difference between the start and the
+The \texttt{vmname} allows to distinguish different Java Virtual Machines. It will be used automatically when distributed monitoring is used. %Response times are the difference between the start and the
 The \texttt{executionOrderIndex} and \texttt{executionStackSize} are used if \tpmon{} monitors distributed systems. Local clock times are not a reliable source for determining the order of executions (e.g., for creating Sequence Diagrams) in a distributed system.
 
-\begin{lstlisting}[caption={SQL script for preparing the database table},label={OutputHelloWorld3}]
- CREATE TABLE turbomon9 (
+\begin{lstlisting}[caption={SQL script for preparing the database table (mysql optimized)},label={OutputHelloWorld3}]
+CREATE TABLE tpmondata(
 `autoid` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `experimentid` SMALLINT NOT NULL DEFAULT '0',
 `operation` VARCHAR( 160 ) NOT NULL ,
 `sessionid` VARCHAR( 34 ) NOT NULL ,
-`traceid` VARCHAR( 34 ) NULL ,
+`traceid` VARCHAR( 34 ) NOT NULL ,
 `tin` BIGINT( 19 ) UNSIGNED NOT NULL ,
 `tout` BIGINT( 19 ) UNSIGNED NOT NULL ,
-`vmid` INT( 10 ) NOT NULL DEFAULT '-1',
+`vmname` VARCHAR( 40 ) NOT NULL DEFAULT '',
 `executionOrderIndex` INT( 10 ) NOT NULL DEFAULT '-1',
 `executionStackSize` INT( 10 ) NOT NULL DEFAULT '-1',
 INDEX (operation(16)), INDEX (traceid), INDEX (tin)
@@ -490,7 +489,7 @@ INDEX (operation(16)), INDEX (traceid), INDEX (tin)
 \end{lstlisting}
 
 \subsection{Monitoring overhead}
-The monitoring overhead depends on many aspects such as the number of monitoring points, on the workload, and on the monitoring point invocation frequency. Therefore, it is no possible to specify the monitoring overhead in general. Since \tpmon{} is created for continuous operation during regular operation, it is designed to keep the monitoring
+The monitoring overhead depends on many aspects such as the number of monitoring points, on the workload, and on the monitoring point invocation frequency. Therefore, it is no possible to specify the monitoring overhead in general for all systems. Since \tpmon{} is created for continuous operation during regular operation, it is designed to keep the monitoring
 overhead reasonably low.
 
 \tpmon{} is installed in several production system of industry partners to instrument the most important services (about 50 monitoring points to say a number). No significantly noticeable monitoring overhead was reported for these installations. In general, it is our experience that imposing less than 10-20\% overhead on response times is accepted by enterprise system administrators in exchange for monitoring and its benefits.
@@ -578,8 +577,8 @@ addItemToCart & 3.42 & 0.59 & 2.09 & 46.36 \\
 \paragraph{\tpmon{} does not compile -- ``ant build'' fails} There can be several reasons why it fails. First you should ensure that
 \tpmon{}'s basic requirements (at least Java SD 5 (version number 1.5), and Apache Ant 1.7) are satisfied. Possible reasons for compilation failures are
 \begin{itemize}
- \item Your user account might use a Java version older than version number 1.5. Ensure that ``\texttt{java -version}'' reports at least 1.5.*  = version 5.
-\item Apache Ant might use a Java version older than version number 1.5 or an old version of Ant is used. Ensure that ``\texttt{ant -v build}'' starts like this: \begin{lstlisting}[]
+ \item Your user account might use a Java version older than version number 1.5. Ensure that ``\texttt{java -version}'' reports at least 1.5.*  = version 5. It is suggested to use Java 6, since that is the version we now use for testing.
+\item Apache Ant might use a Java version older than version number 1.5 or an old version of Ant is used. Ensure that ``\texttt{ant -v build-all}'' starts like this: \begin{lstlisting}[]
 Apache Ant version 1.7.0 compiled on March 11 2007
 Buildfile: build.xml
 Detected Java version: 1.6 in: /opt/sun-jdk-1.6.0.02/jre
