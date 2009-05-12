@@ -69,12 +69,15 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         log.info("New Tpmon - FsWriter thread created ");
     }
 
+    static boolean passed = false;
+
     @TpmonInternal()
     public void run() {
         log.info("FsWriter thread running");
         try {
             while (!finished) {
                 // TODO: should we replace poll(...) by take()?
+                //       But then
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
                 if (data != null) {
                     consume(data);
