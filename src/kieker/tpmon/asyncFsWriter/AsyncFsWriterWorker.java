@@ -74,6 +74,7 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         log.info("FsWriter thread running");
         try {
             while (!finished) {
+                // TODO: should we replace poll(...) by take()?
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
                 if (data != null) {
                     consume(data);

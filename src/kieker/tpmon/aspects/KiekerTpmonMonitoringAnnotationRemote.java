@@ -48,11 +48,11 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */
         if (execData.isEntryPoint){
-            ctrlInst.storeThreadLocalEOI(0);
-            ctrlInst.storeThreadLocalESS(1);
+            ctrlInst.storeThreadLocalEOI(0); // current execution's eoi is 0
+            ctrlInst.storeThreadLocalESS(1); // *current* execution's ess is 0
         } else {
-            eoi = ctrlInst.incrementAndRecallThreadLocalEOI();
-            ess = ctrlInst.recallAndIncrementThreadLocalESS();
+            eoi = ctrlInst.incrementAndRecallThreadLocalEOI(); // ess > 1
+            ess = ctrlInst.recallAndIncrementThreadLocalESS(); // ess >= 0
         }
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
