@@ -71,6 +71,7 @@ public class DbWriter implements Runnable, Worker {
         log.info("Dbwriter thread running");
         try {
             while (!finished) {
+                // TODO: should we replace poll(...) by take()?
                 Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
                 if (data != null) {
                     consume(data); // throws SQLException

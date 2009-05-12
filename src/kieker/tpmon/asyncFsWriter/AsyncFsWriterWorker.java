@@ -90,6 +90,10 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         } catch (Exception ex) {
             // e.g. Interrupted Exception or IOException
             log.error("FS Writer will halt", ex);
+            // TODO: This is a dirty hack!
+            // What we need is a listener interface!
+            log.error("Will disable monitoring!");
+            TpmonController.getInstance().disableMonitoring();
         } finally{
             this.finished = true;
         }
