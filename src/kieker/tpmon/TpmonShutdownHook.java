@@ -4,7 +4,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kieker.tpmon.annotations.TpmonInternal;
-//import kieker.tpmon.Worker;
+//import kieker.tpmon.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  *
  * This class ensures that virtual machine shutdown (e.g., cause by a
- * System.exit(int)) is delayed untill all monitoring data is written.
+ * System.exit(int)) is delayed until all monitoring data is written.
  * This is important for the asynchronous writers for the files system
  * and database, since these store data with a small delay and data would
  * be lost when System.exit is not delayed.
@@ -50,7 +50,7 @@ public class TpmonShutdownHook extends Thread {
     public TpmonShutdownHook() {    
     }
         
-    private Vector<Worker> workers = new Vector<Worker>();
+    private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     
     /**
      * Registers a worker, so that it is notified when system shutdown is initialted and to 
@@ -58,7 +58,7 @@ public class TpmonShutdownHook extends Thread {
      * @param newWorker
      */
     @TpmonInternal()
-    public void registerWorker(Worker newWorker){
+    public void registerWorker(AbstractWorkerThread newWorker){
         workers.add(newWorker);
     }
     
@@ -80,14 +80,15 @@ public class TpmonShutdownHook extends Thread {
     
     @TpmonInternal()
     public synchronized void initateShutdownForAllWorkers(){
-        for (Worker wrk: workers) {
+        for (AbstractWorkerThread wrk: workers) {
             if (wrk != null) wrk.initShutdown();
         }
+        TpmonController.getInstance().terminateMonitoring();
     }
     
     @TpmonInternal()
     public synchronized boolean allWorkersFinished(){
-        for (Worker wrk: workers) {
+        for (AbstractWorkerThread wrk: workers) {
             if (wrk != null && wrk.isFinished() == false) 
                 return false; // at least one busy worker exists
         }

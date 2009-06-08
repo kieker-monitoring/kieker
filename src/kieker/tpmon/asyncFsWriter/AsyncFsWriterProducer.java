@@ -6,7 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
-import kieker.tpmon.Worker;
+import kieker.tpmon.AbstractWorkerThread;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,7 +38,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     //configuration parameter
     private static final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
-    private Vector<Worker> workers = new Vector<Worker>();
+    private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     private BlockingQueue<KiekerExecutionRecord> blockingQueue = null;
     private String filenamePrefix = null;
     private final static String defaultConstructionErrorMsg =
@@ -56,7 +56,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     }
 
     @TpmonInternal()
-    public Vector<Worker> getWorkers() {
+    public Vector<AbstractWorkerThread> getWorkers() {
         return workers;
     }
 
@@ -69,9 +69,11 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     public void init() {
         blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            AsyncFsWriterWorker dbw = new AsyncFsWriterWorker(blockingQueue, filenamePrefix);
-            new Thread(dbw).start();
+            Thread workerThread;
+            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, filenamePrefix);
+            //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
             workers.add(dbw);
+            dbw.start();
         }
         //System.out.println(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
         log.info(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
@@ -79,8 +81,6 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
-     * It uses several dbconnections in parallel using the consumer, producer pattern.
-     *
      */
     @TpmonInternal()
     public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
@@ -102,7 +102,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     public String getFilenamePrefix() {
         return filenamePrefix;
     }
-    
+
     @TpmonInternal()
     public String getInfoString() {
         return "filenamePrefix :" + filenamePrefix;

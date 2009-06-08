@@ -128,7 +128,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     }
 
     @TpmonInternal()
-    public Vector<Worker> getWorkers() {
+    public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
     

@@ -7,7 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.AbstractMonitoringDataWriter;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
-import kieker.tpmon.Worker;
+import kieker.tpmon.AbstractWorkerThread;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -90,10 +90,10 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
         this.init();
     }
-    private Vector<Worker> workers = new Vector<Worker>();
+    private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
 
     @TpmonInternal()
-    public Vector<Worker> getWorkers() {
+    public Vector<AbstractWorkerThread> getWorkers() {
         return workers;
     }
 
@@ -120,7 +120,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             int numberOfConnections = 4;
             blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
 
-//                DbWriter dbw = new DbWriter(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
+//                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
             if (this.setInitialExperimentIdBasedOnLastId) {
                 // set initial experiment id based on last id (increased by 1)
@@ -136,9 +136,10 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
                     " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
                     "VALUES (" + experimentId + ",?,?,?,?,?,?,?,?)";
             for (int i = 0; i < numberOfConnections; i++) {
-                DbWriter dbw = new DbWriter(DriverManager.getConnection(this.dbConnectionAddress), blockingQueue, preparedQuery);
-                workers.add(dbw);
-                new Thread(dbw).start();
+                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(this.dbConnectionAddress), blockingQueue, preparedQuery);
+                dbw.setDaemon(true);
+                //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
+                dbw.start();
             //TODO: Fix this (there shouldn't be a dependency to the TpmonCtrl)
             //TpmonController.getInstance().registerWorker(dbw);
             }
@@ -184,7 +185,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             String preparedQuery = "INSERT INTO " + TpmonController.dbTableName +
             " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
             "VALUES (" + experimentId + ",?,?,?,?,?," + vmname + ",?,?)";
-            for (DbWriter wr : workers) {
+            for (DbWriterThread wr : workers) {
             wr.changeStatement(preparedQuery);
             }
             }*/

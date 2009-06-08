@@ -103,6 +103,9 @@ public class TpmonController {
     //private static final boolean methodNamesCeWe = true;
     private static TpmonController ctrlInst = null;
 
+    //marks the end of monitoring to the writer threads
+    public static final KiekerExecutionRecord END_OF_MONITORING_MARKER = KiekerExecutionRecord.getInstance();
+
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
         if (ctrlInst == null) {
@@ -152,9 +155,9 @@ public class TpmonController {
                 this.monitoringDataWriter = (IMonitoringDataWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
                 this.monitoringDataWriter.init(monitoringDataWriterInitString);
             }
-            Vector<Worker> worker = this.monitoringDataWriter.getWorkers(); // may be null
+            Vector<AbstractWorkerThread> worker = this.monitoringDataWriter.getWorkers(); // may be null
             if (worker != null) {
-                for (Worker w : worker) {
+                for (AbstractWorkerThread w : worker) {
                     this.registerWorker(w);
                 }
             }
@@ -163,8 +166,8 @@ public class TpmonController {
             //       Or can we simply throw an exception from within the constructors
             log.info(">Kieker-Tpmon: Initialization completed.\n Connector Info: " + this.getConnectorInfo());
         } catch (Exception exc) {
-            monitoringEnabled = false;
             log.error(">Kieker-Tpmon: Disabling monitoring", exc);
+            this.terminateMonitoring();
         }
     }
 
@@ -207,7 +210,7 @@ public class TpmonController {
      * @param newWorker
      */
     @TpmonInternal()
-    public void registerWorker(Worker newWorker) {
+    public void registerWorker(AbstractWorkerThread newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
     //private long lastUniqueIdTime = 0;
@@ -217,6 +220,8 @@ public class TpmonController {
     private AtomicLong numberOfInserts = new AtomicLong(0);
     // private Date startDate = new Date(initializationTime);
     private boolean monitoringEnabled = true;
+    // if monitoring terminated, it is not allowed to enable monitoring afterwards
+    private boolean monitoringPermanentlyTerminated = false;
 
     @TpmonInternal()
     public boolean isDebug() {
@@ -236,6 +241,13 @@ public class TpmonController {
     public boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
+    
+    @TpmonInternal()
+    public boolean isMonitoringPermanentlyTerminated() {
+        return monitoringPermanentlyTerminated;
+    }
+
+
     private static final int STANDARDEXPERIMENTID = 0;
     // we do not use AtomicInteger since we only rarely 
     // set the value (common case -- getting -- faster now).
@@ -263,17 +275,35 @@ public class TpmonController {
     @TpmonInternal()
     public void enableMonitoring() {
         log.info("Enabling monitoring");
-        this.monitoringEnabled = true;
+        if (this.monitoringPermanentlyTerminated) {
+            log.error("Refused to enable monitoring because monitoring was permanently terminated before");
+        } else {
+            this.monitoringEnabled = true;
+        }
     }
 
     /**
-     * Disables to store monitoring data
+     * Disables to store monitoring data.
+     * Monitoring may be enabled again by calling enableMonitoring().
      */
     @TpmonInternal()
     public void disableMonitoring() {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
     }
+
+    /**
+     * Permanently terminates monitoring (e.g., due to a failure).
+     * Subsequent tries to enable monitoring will be refused.
+     */
+    @TpmonInternal()
+    public void terminateMonitoring() {
+        log.info("Permanently terminating monitoring");
+        this.monitoringDataWriter.insertMonitoringDataNow(END_OF_MONITORING_MARKER);
+        this.disableMonitoring();
+        this.monitoringPermanentlyTerminated = true;
+    }
+
 
 // only used if encodeMethodNames == true
 //    private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
@@ -341,8 +371,8 @@ public class TpmonController {
         numberOfInserts.incrementAndGet();
         // now it fails fast, it disables monitoring when a queue once is full
         if (!this.monitoringDataWriter.insertMonitoringDataNow(execData)) {
-            log.fatal("Error writing the monitoring data. Will disable monitoring!");
-            this.monitoringEnabled = false;
+            log.fatal("Error writing the monitoring data. Will terminate monitoring!");
+            this.terminateMonitoring();
             return false;
         }
 
@@ -826,7 +856,7 @@ public class TpmonController {
         strB.append(",");
         strB.append(" monitoringDataWriter config : (below), " + this.monitoringDataWriter.getInfoString());
         strB.append(",");
-        strB.append(" version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
+        strB.append(" version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", terminated :" + isMonitoringPermanentlyTerminated() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
 
         return strB.toString();
     }

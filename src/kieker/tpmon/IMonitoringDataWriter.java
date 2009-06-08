@@ -36,7 +36,7 @@ public interface IMonitoringDataWriter {
      * Returns a vector of workers, or null if none.
      */
     @TpmonInternal()
-    public Vector<Worker> getWorkers();
+    public Vector<AbstractWorkerThread> getWorkers();
 
     @TpmonInternal()
     public void setDebug(boolean debug);

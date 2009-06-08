@@ -168,7 +168,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
     }
 
     @TpmonInternal()
-    public Vector<Worker> getWorkers() {
+    public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
 

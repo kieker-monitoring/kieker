@@ -154,9 +154,15 @@ public class ControlServlet extends HttpServlet {
             } else if (action.equals("disable")) {
                 ctrlInst.disableMonitoring();
             /*
+             * action = terminate
+             */
+            } else if (action.equals("terminate")) {
+                ctrlInst.terminateMonitoring();
+            /*
              * action = ...
              */
-            } else if (action.equals("insertTestData")) {
+            }
+            else if (action.equals("insertTestData")) {
                 ctrlInst.storeThreadLocalSessionId(request.getSession(true).getId());
                 ctrlInst.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
@@ -233,7 +239,7 @@ public class ControlServlet extends HttpServlet {
         }
         StringBuffer bu = new StringBuffer();
         bu.append("<br><h3>Options:</h3>");
-        bu.append(" enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> <br>");
+        bu.append(" enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> / <a href=\"index?action=terminate\"> terminate</a><br>");
         bu.append(" debug: <a href=\"index?action=setDebug&debug=on\"> on </a> / <a href=\"index?action=setDebug&debug=off\"> off </a> <br>");
         bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
         bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");

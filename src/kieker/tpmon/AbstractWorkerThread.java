@@ -3,7 +3,7 @@ package kieker.tpmon;
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**
- * kieker.tpmon.Worker
+ * kieker.tpmon.AbstractWorkerThread
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
@@ -23,7 +23,7 @@ import kieker.tpmon.annotations.TpmonInternal;
  *
  * @author Matthias Rohr
  */
-public interface Worker {   
+public abstract class AbstractWorkerThread extends Thread {
     
    /**
     * initShutdown has to be called before isFinished will result in true.
@@ -31,12 +31,12 @@ public interface Worker {
     * and won't accept new jobs.
     */
     @TpmonInternal()
-   public boolean isFinished();
+   public abstract boolean isFinished();
        
    /**
     * Notifies the worker that the system shutdown process is initiated and that it should finish soon.
     * After a while, isFinished should result in true, if system can halt.
     */
     @TpmonInternal()
-   public void initShutdown();
+   public abstract void initShutdown();
 }

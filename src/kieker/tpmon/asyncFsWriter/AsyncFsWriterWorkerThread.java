@@ -3,16 +3,15 @@ package kieker.tpmon.asyncFsWriter;
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.Worker;
+import kieker.tpmon.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.asyncFsWriter.AsyncFsWriterWorker
+ * kieker.tpmon.asyncFsWriter.AsyncFsWriterWorkerThread
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -36,14 +35,14 @@ import org.apache.commons.logging.LogFactory;
  * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
  *             which may be changed during runtime
  */
-public class AsyncFsWriterWorker implements Runnable, Worker {
+public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
 
-    private static final Log log = LogFactory.getLog(AsyncFsWriterWorker.class);
+    private static final Log log = LogFactory.getLog(AsyncFsWriterWorkerThread.class);
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     private static final long pollingIntervallInMillisecs = 400L;
     // internal variables
-    private BlockingQueue writeQueue = null;
+    private BlockingQueue<KiekerExecutionRecord> writeQueue = null;
     private String filenamePrefix = null;
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
@@ -57,13 +56,13 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
      */
     @TpmonInternal()
     public synchronized void initShutdown() {
-        AsyncFsWriterWorker.shutdown = true;
+        AsyncFsWriterWorkerThread.shutdown = true;
     }
     
 //    private boolean statementChanged = true;
 //    private String nextStatementText;
 
-    public AsyncFsWriterWorker(BlockingQueue writeQueue, String filenamePrefix) {
+    public AsyncFsWriterWorkerThread(BlockingQueue<KiekerExecutionRecord> writeQueue, String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
         log.info("New Tpmon - FsWriter thread created ");
@@ -76,9 +75,14 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
         log.info("FsWriter thread running");
         try {
             while (!finished) {
-                // TODO: should we replace poll(...) by take()?
-                //       But then we need to interrupt the thread!
-                Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
+                Object data = writeQueue.take();
+                if (data == TpmonController.END_OF_MONITORING_MARKER){
+                    log.info("Found END_OF_MONITORING_MARKER. Will terminate");
+                    // need to put the marker back into the queue to notify other threads
+                    writeQueue.add(TpmonController.END_OF_MONITORING_MARKER);
+                    finished = true;
+                    break;
+                }
                 if (data != null) {
                     consume(data);
                 //System.out.println("FSW "+writeQueue.size());
@@ -95,8 +99,8 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
             log.error("FS Writer will halt", ex);
             // TODO: This is a dirty hack!
             // What we need is a listener interface!
-            log.error("Will disable monitoring!");
-            TpmonController.getInstance().disableMonitoring();
+            log.error("Will terminate monitoring!");
+            TpmonController.getInstance().terminateMonitoring();
         } finally{
             this.finished = true;
         }
@@ -143,8 +147,8 @@ public class AsyncFsWriterWorker implements Runnable, Worker {
                 // e.g. using a listener (do not add a reference to TpmonController!)
                 // TODO: This is a dirty hack!
                 // What we need is a listener interface!
-                log.error("Will disable monitoring!");
-                TpmonController.getInstance().disableMonitoring();
+                log.error("Will terminate monitoring!");
+                TpmonController.getInstance().terminateMonitoring();
                 throw ex;
             }
         }

@@ -1,11 +1,10 @@
 package kieker.tpmon.asyncDbconnector;
 
-import kieker.tpmon.Worker;
+import kieker.tpmon.AbstractWorkerThread;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
@@ -13,7 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.asyncDbconnector.DbWriter
+ * kieker.tpmon.asyncDbconnector.DbWriterThread
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -33,9 +32,9 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Matthias Rohr
  */
-public class DbWriter implements Runnable, Worker {
+public class DbWriterThread extends AbstractWorkerThread {
 
-    private static final Log log = LogFactory.getLog(DbWriter.class);
+    private static final Log log = LogFactory.getLog(DbWriterThread.class);
     private static final long pollingIntervallInMillisecs = 400L;
     private Connection conn;
     private BlockingQueue writeQueue;
@@ -45,7 +44,7 @@ public class DbWriter implements Runnable, Worker {
     boolean statementChanged = true;
     String nextStatementText;
 
-    public DbWriter(Connection initializedConnection, BlockingQueue writeQueue, String statementtext) {
+    public DbWriterThread(Connection initializedConnection, BlockingQueue writeQueue, String statementtext) {
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
@@ -63,7 +62,7 @@ public class DbWriter implements Runnable, Worker {
      */
     @TpmonInternal()
     public void initShutdown() {
-        DbWriter.shutdown = true;
+        DbWriterThread.shutdown = true;
     }
 
     @TpmonInternal()
@@ -71,9 +70,14 @@ public class DbWriter implements Runnable, Worker {
         log.info("Dbwriter thread running");
         try {
             while (!finished) {
-                // TODO: should we replace poll(...) by take()?
-                //       But then we need to interrupt the thread!
-                Object data = writeQueue.poll(pollingIntervallInMillisecs, TimeUnit.MILLISECONDS);
+                Object data = writeQueue.take();
+                if (data == TpmonController.END_OF_MONITORING_MARKER){
+                    log.info("Found END_OF_MONITORING_MARKER. Will terminate");
+                    // need to put the marker back into the queue to notify other threads
+                    writeQueue.add(TpmonController.END_OF_MONITORING_MARKER);
+                    finished = true;
+                    break;
+                }
                 if (data != null) {
                     consume(data); // throws SQLException
                 } else {
@@ -89,8 +93,8 @@ public class DbWriter implements Runnable, Worker {
             log.error("DB Writer will halt " + ex.getMessage());
             // TODO: This is a dirty hack!
             // What we need is a listener interface!
-            log.error("Will disable monitoring!");
-            TpmonController.getInstance().disableMonitoring();
+            log.error("Will terminate monitoring!");
+            TpmonController.getInstance().terminateMonitoring();
         } finally {
             this.finished = true;
         }
@@ -101,7 +105,7 @@ public class DbWriter implements Runnable, Worker {
      */
     @TpmonInternal()
     private void consume(Object traceidObject) throws SQLException {
-        //if (TpmonController.debug) System.out.println("DbWriter "+this+" Consuming "+traceidObject);
+        //if (TpmonController.debug) System.out.println("DbWriterThread "+this+" Consuming "+traceidObject);
         try {
             if (statementChanged || psInsertMonitoringData == null) {
                 psInsertMonitoringData = conn.prepareStatement(nextStatementText);

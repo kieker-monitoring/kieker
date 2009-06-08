@@ -60,8 +60,8 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
                 log.fatal("eoi and/or ess have invalid values:" +
                         " eoi == " + eoi +
                         " ess == " + ess);
-                log.fatal("Disabling Tpmon!");
-                ctrlInst.disableMonitoring();
+                log.fatal("Terminating Tpmon!");
+                ctrlInst.terminateMonitoring();
             }
         } catch (Exception e){
             throw e; // exceptions are forwarded          
