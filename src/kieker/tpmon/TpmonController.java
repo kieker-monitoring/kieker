@@ -276,7 +276,7 @@ public class TpmonController {
     public void enableMonitoring() {
         log.info("Enabling monitoring");
         if (this.monitoringPermanentlyTerminated) {
-            log.error("Refused to enable monitoring because monitoring was permanently terminated before");
+            log.error("Refused to enable monitoring because monitoring has been permanently terminated before");
         } else {
             this.monitoringEnabled = true;
         }
