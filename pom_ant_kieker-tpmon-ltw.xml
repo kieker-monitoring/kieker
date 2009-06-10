@@ -5,7 +5,7 @@
   <groupId>net.sf.kieker</groupId>
   <artifactId>tpmon-ltw</artifactId>
   <name>Kieker Tpmon Controller</name>
-  <version>0.95-20090608</version>
+  <version>0.95-20090610</version>
   <url>http://kieker.sf.net</url>  
   <packaging>jar</packaging>
   
