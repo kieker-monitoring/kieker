@@ -74,7 +74,7 @@ public class TpmonShutdownHook extends Thread {
             }           
             log.info("Tpmon: TpmonShutdownHook can terminate since all workers are finished");
         } catch (InterruptedException ex) {
-            Logger.getLogger(TpmonShutdownHook.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Tpmon: Interrupted Exception occured", ex);
         }
     }
     
