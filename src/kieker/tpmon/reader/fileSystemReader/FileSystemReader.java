@@ -2,9 +2,9 @@ package kieker.tpmon.reader.fileSystemReader;
 
 import java.io.*;
 import java.util.StringTokenizer;
-import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 
 /**
  * kieker.tpmon.fileSystemReader.FileSystemReader
