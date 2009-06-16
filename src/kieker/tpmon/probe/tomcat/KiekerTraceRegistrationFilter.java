@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.annotation.TpmonInternal;
 
 /**
  * kieker.tpmon.filters.KiekerTraceRegistrationFilter
@@ -44,6 +45,7 @@ public class KiekerTraceRegistrationFilter implements Filter {
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();
 
+    @TpmonInternal()
     public void init(FilterConfig config) throws ServletException {
         String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
         if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
@@ -55,6 +57,7 @@ public class KiekerTraceRegistrationFilter implements Filter {
         }
     }
 
+    @TpmonInternal()
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
@@ -76,6 +79,7 @@ public class KiekerTraceRegistrationFilter implements Filter {
         }
     }
 
+    @TpmonInternal()
     public void destroy() {
     }
 }

@@ -117,7 +117,7 @@
               verbose="off"
               srcdir="src"
               debug="true"
-              excludes="kieker/tests/**"
+              excludes="kieker/tests/**,kieker/controlServlet/**"
               classpathref="dev.classpath">
         </iajc>
         <copy todir="build/META-INF">
