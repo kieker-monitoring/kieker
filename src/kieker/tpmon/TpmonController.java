@@ -7,8 +7,8 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.asyncDbconnector.AsyncDbconnector;
-import kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer;
+import kieker.tpmon.writer.asyncDbconnector.AsyncDbconnector;
+import kieker.tpmon.writer.asyncFsWriter.AsyncFsWriterProducer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

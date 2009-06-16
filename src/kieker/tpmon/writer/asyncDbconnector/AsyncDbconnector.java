@@ -1,4 +1,4 @@
-package kieker.tpmon.asyncDbconnector;
+package kieker.tpmon.writer.asyncDbconnector;
 
 import java.sql.*;
 import java.util.Vector;

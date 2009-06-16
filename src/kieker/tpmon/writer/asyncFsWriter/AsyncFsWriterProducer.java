@@ -1,4 +1,4 @@
-package kieker.tpmon.asyncFsWriter;
+package kieker.tpmon.writer.asyncFsWriter;
 
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;

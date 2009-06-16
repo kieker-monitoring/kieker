@@ -1,4 +1,4 @@
-package kieker.tpmon.asyncDbconnector;
+package kieker.tpmon.writer.asyncDbconnector;
 
 import kieker.tpmon.AbstractWorkerThread;
 import java.sql.Connection;
