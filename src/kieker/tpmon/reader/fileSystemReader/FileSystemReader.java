@@ -1,4 +1,4 @@
-package kieker.tpmon.fileSystemReader;
+package kieker.tpmon.reader.fileSystemReader;
 
 import java.io.*;
 import java.util.StringTokenizer;
