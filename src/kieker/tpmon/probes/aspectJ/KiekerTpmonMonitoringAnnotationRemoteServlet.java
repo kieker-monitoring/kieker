@@ -1,4 +1,4 @@
-package kieker.tpmon.probes.aop;
+package kieker.tpmon.probes.aspectJ;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,8 +8,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
- * kieker.tpmon.aspects.KiekerTpmonMonitoringFullServlet
+ * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemoteServlet
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -30,8 +33,10 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonMonitoringFullServlet extends AbstractKiekerTpmonMonitoringServlet {
-    
+public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKiekerTpmonMonitoringServlet {
+
+    private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
+
     @Pointcut("execution(* *.do*(..)) && args(request,response) ")
     public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
     }
@@ -41,7 +46,8 @@ public class KiekerTpmonMonitoringFullServlet extends AbstractKiekerTpmonMonitor
         return super.doServletEntryProfiling(thisJoinPoint);
     }
 
-    @Pointcut("execution(* *.*(..)) && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotations.TpmonMonitoringProbe * *.*(..))"+
+              " && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
 
@@ -51,18 +57,27 @@ public class KiekerTpmonMonitoringFullServlet extends AbstractKiekerTpmonMonitor
             return thisJoinPoint.proceed();
         }
         KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
-        String sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
-        try{
+        execData.sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
+        execData.eoi = ctrlInst.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
+        execData.ess = ctrlInst.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
+
+        try {
             this.proceedAndMeasure(thisJoinPoint, execData);
-        } catch (Exception e){
+            if (execData.eoi == -1 || execData.ess == -1) {
+                log.fatal("eoi and/or ess have invalid values:" +
+                        " eoi == " + execData.eoi +
+                        " ess == " + execData.ess);
+                log.fatal("Terminating Tpmon!");
+                ctrlInst.terminateMonitoring();
+            }
+        } catch (Exception e) {
             throw e; // exceptions are forwarded          
         } finally {
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
-             * execpetion! */
-            execData.sessionId = sessionId;
+             * exception! */
             ctrlInst.insertMonitoringDataNow(execData);
-            // Since we didn't register the sessionId we won't unset it!
+            ctrlInst.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;
     }

@@ -1,4 +1,4 @@
-package kieker.tpmon.probes.aop;
+package kieker.tpmon.probes.aspectJ;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;

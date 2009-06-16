@@ -1,4 +1,4 @@
-package kieker.tpmon.probes.aop;
+package kieker.tpmon.probes.aspectJ;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * kieker.tpmon.aspects.TpmonRemoteCaller
+ * kieker.tpmon.aspects.TpmonRemoteCallee
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -24,10 +24,10 @@ import java.lang.annotation.Target;
  * limitations under the License.
  * ==================================================
  *
- * This annotation marks methods that are exit points for remote calls
- * that go to an other virtual machine. The annotation tries to ensure
- * that the trace id is propergated to an other instance of tpmon in
- * the other virtual machine.
+ * This annotation marks methods that are entry points for remote calls
+ * that contain trace id information. The annotation tries to ensure
+ * that the trace id is propergated from an other instance of tpmon in
+ * the caller's virtual machine.
  * 
  * @author Matthias Rohr
  *
@@ -36,6 +36,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface TpmonRemoteCaller {
+public @interface TpmonRemoteCallee {
 	// String context();
 }
