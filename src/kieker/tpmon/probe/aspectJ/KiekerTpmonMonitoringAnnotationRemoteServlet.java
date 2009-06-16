@@ -2,7 +2,7 @@ package kieker.tpmon.probe.aspectJ;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -56,7 +56,7 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+        KiekerExecutionRecord2 execData = this.initExecutionData(thisJoinPoint);
         execData.sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
         execData.eoi = ctrlInst.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
         execData.ess = ctrlInst.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */

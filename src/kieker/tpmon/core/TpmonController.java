@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
 import kieker.tpmon.monitoringRecord.RemoteCallMetaData;
 import kieker.tpmon.*;
 import kieker.tpmon.writer.core.TpmonShutdownHook;
@@ -112,7 +112,7 @@ public class TpmonController {
     private static TpmonController ctrlInst = null;
 
     //marks the end of monitoring to the writer threads
-    public static final KiekerExecutionRecord END_OF_MONITORING_MARKER = KiekerExecutionRecord.getInstance();
+    public static final KiekerExecutionRecord2 END_OF_MONITORING_MARKER = KiekerExecutionRecord2.getInstance();
 
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
@@ -322,7 +322,7 @@ public class TpmonController {
     // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)    
 //    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
+    public boolean insertMonitoringDataNow(KiekerExecutionRecord2 execData) {
         execData.experimentId = this.experimentId;
         execData.vmName = this.vmname;
 
@@ -404,7 +404,7 @@ public class TpmonController {
         // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
         String opname = component + newMethodname;
         numberOfInserts.incrementAndGet();
-        KiekerExecutionRecord execData = KiekerExecutionRecord.getInstance();
+        KiekerExecutionRecord2 execData = KiekerExecutionRecord2.getInstance();
         execData.componentName = opname;
         execData.opname = encodedName;
         execData.traceId = -5;

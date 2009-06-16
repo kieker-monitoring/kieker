@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.filesystemSync;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
 import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
@@ -120,7 +120,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     }
 
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
+    public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord2 execData) {
         try {
             prepareFile(); // may throw FileNotFoundException
             pos.println(execData.toCSVRecord());

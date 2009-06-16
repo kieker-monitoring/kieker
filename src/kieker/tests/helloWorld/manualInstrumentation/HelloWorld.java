@@ -1,5 +1,5 @@
 package kieker.tests.helloWorld.manualInstrumentation;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
 import kieker.tpmon.core.TpmonController;
 
 public class HelloWorld {
@@ -13,7 +13,7 @@ public class HelloWorld {
         doSomething();
         
         long endTime = System.nanoTime();
-        TpmonController.getInstance().insertMonitoringDataNow(KiekerExecutionRecord.getInstance("kieker.component", "method", 1, startTime, endTime));
+        TpmonController.getInstance().insertMonitoringDataNow(KiekerExecutionRecord2.getInstance("kieker.component", "method", 1, startTime, endTime));
                 
         /* System.exit() called to initiate shutdown of 
          * the monitoring logic running in seperate threads */

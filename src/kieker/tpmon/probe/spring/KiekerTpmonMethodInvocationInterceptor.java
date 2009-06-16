@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.spring;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -50,7 +50,7 @@ public class KiekerTpmonMethodInvocationInterceptor extends AbstractKiekerTpmonM
             return invocation.proceed();
         }
 
-        KiekerExecutionRecord execData = this.initExecutionData(invocation);
+        KiekerExecutionRecord2 execData = this.initExecutionData(invocation);
         try {
             this.proceedAndMeasure(invocation, execData);
         } catch (Exception e) {

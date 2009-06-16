@@ -1,5 +1,5 @@
 package kieker.tests.storageOnly;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 
@@ -55,13 +55,13 @@ public class StorageOnly {
         try {
             System.out.printf("Starting test by adding %d monitoring events\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                ctrl.insertMonitoringDataNow(KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i,i));
+                ctrl.insertMonitoringDataNow(KiekerExecutionRecord2.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i,i));
             }
             System.out.println("Sleeping for 8 seconds");
             Thread.sleep(8000);
             System.out.printf("%d more monitoring points\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                ctrl.insertMonitoringDataNow(KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i+10000,i));
+                ctrl.insertMonitoringDataNow(KiekerExecutionRecord2.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i+10000,i));
             }
             System.out.println("Calling system.exit(0)");
             System.out.println("Sleeping for 60 seconds");

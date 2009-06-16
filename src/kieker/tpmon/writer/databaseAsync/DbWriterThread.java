@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.apache.commons.logging.Log;
@@ -36,14 +36,14 @@ public class DbWriterThread extends AbstractWorkerThread {
 
     private static final Log log = LogFactory.getLog(DbWriterThread.class);
     private Connection conn;
-    private BlockingQueue<KiekerExecutionRecord> writeQueue;
+    private BlockingQueue<KiekerExecutionRecord2> writeQueue;
     private PreparedStatement psInsertMonitoringData;
     private static boolean shutdown = false;
     private boolean finished = false;
     boolean statementChanged = true;
     String nextStatementText;
 
-    public DbWriterThread(Connection initializedConnection, BlockingQueue<KiekerExecutionRecord> writeQueue, String statementtext) {
+    public DbWriterThread(Connection initializedConnection, BlockingQueue<KiekerExecutionRecord2> writeQueue, String statementtext) {
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
@@ -111,7 +111,7 @@ public class DbWriterThread extends AbstractWorkerThread {
                 statementChanged = false;
             }
 
-            KiekerExecutionRecord execData = (KiekerExecutionRecord) traceidObject;
+            KiekerExecutionRecord2 execData = (KiekerExecutionRecord2) traceidObject;
             psInsertMonitoringData.setString(1, execData.componentName + "." + execData.opname);
             psInsertMonitoringData.setString(2, execData.sessionId);
             psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));
