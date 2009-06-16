@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.core;
 
-import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import java.util.Vector;
 import kieker.tpmon.annotations.TpmonInternal;
