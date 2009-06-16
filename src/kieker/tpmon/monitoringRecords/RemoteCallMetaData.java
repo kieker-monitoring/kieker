@@ -1,4 +1,4 @@
-package kieker.tpmon.records;
+package kieker.tpmon.monitoringRecords;
 
 import java.io.Serializable;
 import kieker.tpmon.annotations.TpmonInternal;

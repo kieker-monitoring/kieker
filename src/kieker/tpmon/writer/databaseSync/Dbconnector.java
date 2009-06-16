@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.databaseSync;
 
-import kieker.tpmon.records.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
 import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;

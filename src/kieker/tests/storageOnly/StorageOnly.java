@@ -1,5 +1,5 @@
 package kieker.tests.storageOnly;
-import kieker.tpmon.records.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 
