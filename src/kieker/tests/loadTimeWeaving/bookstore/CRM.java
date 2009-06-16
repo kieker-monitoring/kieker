@@ -1,6 +1,6 @@
 package kieker.tests.loadTimeWeaving.bookstore;
 
-import kieker.tpmon.annotations.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonMonitoringProbe;
 import kieker.tpmon.aspects.*;
 
 /**

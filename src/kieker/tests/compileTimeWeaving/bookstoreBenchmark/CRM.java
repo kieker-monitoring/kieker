@@ -1,6 +1,6 @@
 package kieker.tests.compileTimeWeaving.bookstoreBenchmark;
 
-import kieker.tpmon.annotations.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonMonitoringProbe;
 
 /**
  * kieker.tests.compileTimeWeaving.bookstore.CRM.java

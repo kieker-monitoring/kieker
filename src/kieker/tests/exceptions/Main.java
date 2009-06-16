@@ -1,6 +1,6 @@
 package kieker.tests.exceptions;
 
-import kieker.tpmon.annotations.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonMonitoringProbe;
 import kieker.tpmon.aspects.*;
 import java.util.Vector;
 

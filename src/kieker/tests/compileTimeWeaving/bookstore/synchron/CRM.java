@@ -1,5 +1,5 @@
 package kieker.tests.compileTimeWeaving.bookstore.synchron;
-import kieker.tpmon.annotations.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonMonitoringProbe;
 
 /**
  * kieker.tests.compileTimeWeaving.bookstore.CRM.java

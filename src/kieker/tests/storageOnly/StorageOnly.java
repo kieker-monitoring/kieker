@@ -1,7 +1,7 @@
 package kieker.tests.storageOnly;
-import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 
 /**
  *

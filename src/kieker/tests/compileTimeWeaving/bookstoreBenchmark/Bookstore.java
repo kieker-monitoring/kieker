@@ -1,6 +1,6 @@
 package kieker.tests.compileTimeWeaving.bookstoreBenchmark;
 
-import kieker.tpmon.annotations.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonMonitoringProbe;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
