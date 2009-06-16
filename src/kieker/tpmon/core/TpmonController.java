@@ -14,7 +14,7 @@ import java.lang.management.ManagementFactory;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.writer.databaseAsync.AsyncDbconnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsWriterProducer;
 import org.apache.commons.logging.Log;
