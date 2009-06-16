@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 
 /**
@@ -166,7 +166,7 @@ public class ControlServlet extends HttpServlet {
                 ctrlInst.storeThreadLocalSessionId(request.getSession(true).getId());
                 ctrlInst.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.insertMonitoringDataNow(KiekerExecutionRecord2.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", ctrlInst.recallThreadLocalSessionId(), ctrlInst.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i));
+                    ctrlInst.insertMonitoringDataNow(KiekerExecutionRecord.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", ctrlInst.recallThreadLocalSessionId(), ctrlInst.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i));
                 }
                 ctrlInst.unsetThreadLocalTraceId();
                 ctrlInst.unsetThreadLocalSessionId();

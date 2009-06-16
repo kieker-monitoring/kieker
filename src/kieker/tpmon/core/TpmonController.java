@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
+import kieker.tpmon.monitoringRecord.IKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.RemoteCallMetaData;
 import kieker.tpmon.*;
 import kieker.tpmon.writer.core.TpmonShutdownHook;
@@ -15,6 +15,7 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.writer.databaseAsync.AsyncDbconnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsWriterProducer;
 import org.apache.commons.logging.Log;
@@ -112,7 +113,7 @@ public class TpmonController {
     private static TpmonController ctrlInst = null;
 
     //marks the end of monitoring to the writer threads
-    public static final KiekerExecutionRecord2 END_OF_MONITORING_MARKER = KiekerExecutionRecord2.getInstance();
+    public static final IKiekerMonitoringRecord END_OF_MONITORING_MARKER = IKiekerMonitoringRecord.getInstance();
 
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
@@ -249,13 +250,11 @@ public class TpmonController {
     public boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
-    
+
     @TpmonInternal()
     public boolean isMonitoringPermanentlyTerminated() {
         return monitoringPermanentlyTerminated;
     }
-
-
     private static final int STANDARDEXPERIMENTID = 0;
     // we do not use AtomicInteger since we only rarely 
     // set the value (common case -- getting -- faster now).
@@ -322,19 +321,25 @@ public class TpmonController {
     // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)    
 //    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(KiekerExecutionRecord2 execData) {
-        execData.experimentId = this.experimentId;
-        execData.vmName = this.vmname;
+    public boolean insertMonitoringDataNow(IKiekerMonitoringRecord execData) {
+        // Dirty hack! Needs to be cleaned up
+        // Possible solution: record's getInstance() requests experimentId and vnName from Controller
+        if (execData instanceof KiekerExecutionRecord) {
+            KiekerExecutionRecord lexecData = (KiekerExecutionRecord) execData;
+            lexecData.experimentId = this.experimentId;
+            lexecData.vmName = this.vmname;
+        }
 
         if (!this.monitoringEnabled) {
             return false;
         }
 
-        if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
-            if (!(execData.traceId % traceSampleingFrequency == 0)) {
-                return true;
-            }
-        }
+//      Not supported any more
+//        if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
+//            if (!(execData.traceId % traceSampleingFrequency == 0)) {
+//                return true;
+//            }
+//        }
 //log.info("ComponentName "+componentname);
 //log.info("Methodname "+methodname);
 
@@ -399,23 +404,23 @@ public class TpmonController {
      * Therefore, 
      * grep "-5,-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
      */
-    @TpmonInternal()
-    private void storeEncodedName(String component, String newMethodname, String encodedName) {
-        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
-        String opname = component + newMethodname;
-        numberOfInserts.incrementAndGet();
-        KiekerExecutionRecord2 execData = KiekerExecutionRecord2.getInstance();
-        execData.componentName = opname;
-        execData.opname = encodedName;
-        execData.traceId = -5;
-        execData.tin = -5;
-        execData.tout = -5;
-        execData.eoi = -5;
-        execData.ess = -5;
-        // NOTE: experimentId and vmname will be set inside insertMonitoringDataNow(.)
-        this.monitoringDataWriter.insertMonitoringDataNow(execData);
-    }
-
+//   Not supported any more
+//    @TpmonInternal()
+//    private void storeEncodedName(String component, String newMethodname, String encodedName) {
+//        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
+//        String opname = component + newMethodname;
+//        numberOfInserts.incrementAndGet();
+//        IKiekerMonitoringRecord execData = IKiekerMonitoringRecord.getInstance();
+//        execData.componentName = opname;
+//        execData.opname = encodedName;
+//        execData.traceId = -5;
+//        execData.tin = -5;
+//        execData.tout = -5;
+//        execData.eoi = -5;
+//        execData.ess = -5;
+//        // NOTE: experimentId and vmname will be set inside insertMonitoringDataNow(.)
+//        this.monitoringDataWriter.insertMonitoringDataNow(execData);
+//    }
     /**
      * Internal method to convert the method names into a proper format  
      * @param methodname

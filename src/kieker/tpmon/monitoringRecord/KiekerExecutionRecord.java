@@ -1,6 +1,5 @@
 package kieker.tpmon.monitoringRecord;
 
-import java.io.Serializable;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /**
@@ -24,7 +23,7 @@ import kieker.tpmon.annotation.TpmonInternal;
  *
  * @author Andre van Hoorn
  */
-public class KiekerExecutionRecord2 implements IKiekerMonitoringRecord {
+public class KiekerExecutionRecord extends IKiekerMonitoringRecord {
 
     private static final long serialVersionUID = 117L;
     
@@ -45,27 +44,27 @@ public class KiekerExecutionRecord2 implements IKiekerMonitoringRecord {
      * Constructor private such that instances are only created by calling 
      * the static method getInstance().
      * The reason is that we might eventually introduce an object pool in 
-     * order to avoid the frequent creation of KiekerExecutionRecord2 objects.
+     * order to avoid the frequent creation of KiekerExecutionRecord objects.
      */
-    private KiekerExecutionRecord2() {
+    private KiekerExecutionRecord() {
     }
 
     /**
-     * Returns in instance of KiekerExecutionRecord2.
+     * Returns in instance of KiekerExecutionRecord.
      * The member variables are initialized that way that only actually
      * used variables must be updated.
      * Do not set unused member variables to dummy values such as -1 etc.!
      */
     @TpmonInternal()
-    public static KiekerExecutionRecord2 getInstance() {
-        return new KiekerExecutionRecord2();
+    public static KiekerExecutionRecord getInstance() {
+        return new KiekerExecutionRecord();
     }
 
     @TpmonInternal()
-    public static KiekerExecutionRecord2 getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String methodName,
             long traceId) {
-        KiekerExecutionRecord2 execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = methodName;
         execData.traceId = traceId;
@@ -73,11 +72,11 @@ public class KiekerExecutionRecord2 implements IKiekerMonitoringRecord {
     }
 
     @TpmonInternal()
-    public static KiekerExecutionRecord2 getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord2 execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
@@ -88,11 +87,11 @@ public class KiekerExecutionRecord2 implements IKiekerMonitoringRecord {
     }
     
     @TpmonInternal()
-    public static KiekerExecutionRecord2 getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
             long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord2 execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.traceId = traceId;
@@ -102,12 +101,12 @@ public class KiekerExecutionRecord2 implements IKiekerMonitoringRecord {
     }
     
     @TpmonInternal()
-    public static KiekerExecutionRecord2 getInstance(
+    public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout,
             int eoi, int ess) {
-        KiekerExecutionRecord2 execData = getInstance();
+        KiekerExecutionRecord execData = getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;

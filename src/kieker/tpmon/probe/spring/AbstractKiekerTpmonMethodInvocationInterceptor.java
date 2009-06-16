@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.spring;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -58,7 +58,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
     }
 
     @TpmonInternal()
-    protected KiekerExecutionRecord2 initExecutionData(MethodInvocation invocation) {
+    protected KiekerExecutionRecord initExecutionData(MethodInvocation invocation) {
         long traceId = tpmonController.recallThreadLocalTraceId();
 
         StringBuilder sb = new StringBuilder().append(invocation.getMethod().getName());
@@ -84,7 +84,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
             componentName = invocation.getMethod().getDeclaringClass().getName();
         }
 
-        KiekerExecutionRecord2 execData = KiekerExecutionRecord2.getInstance(
+        KiekerExecutionRecord execData = KiekerExecutionRecord.getInstance(
                 componentName /* component */,
                 opname /* operation */,
                 traceId /* -1 if entry point*/);
@@ -110,7 +110,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
 
     @TpmonInternal()
     protected void proceedAndMeasure(MethodInvocation invocation,
-            KiekerExecutionRecord2 execData) throws Throwable {
+            KiekerExecutionRecord execData) throws Throwable {
         execData.tin = tpmonController.getTime();
         try {
             // executing the intercepted method call

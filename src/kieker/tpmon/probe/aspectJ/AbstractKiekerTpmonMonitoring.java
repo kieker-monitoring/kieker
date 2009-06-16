@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.aspectJ;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -34,7 +34,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     
     @TpmonInternal()
-    protected KiekerExecutionRecord2 initExecutionData(ProceedingJoinPoint thisJoinPoint) {
+    protected KiekerExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {
        // e.g. "getBook" 
         String methodname = thisJoinPoint.getSignature().getName();
         // toLongString provides e.g. "public kieker.tests.springTest.Book kieker.tests.springTest.CatalogService.getBook()"
@@ -42,7 +42,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
         int paranthIndex = paramList.lastIndexOf('(');
         paramList = paramList.substring(paranthIndex); // paramList is now e.g.,  "()"
 
-        KiekerExecutionRecord2 execData = KiekerExecutionRecord2.getInstance(
+        KiekerExecutionRecord execData = KiekerExecutionRecord.getInstance(
                 thisJoinPoint.getSignature().getDeclaringTypeName() /* component */, 
                 methodname + paramList /* operation */, 
                 ctrlInst.recallThreadLocalTraceId() /* traceId, -1 if entry point*/);
@@ -61,7 +61,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
     
     @TpmonInternal()
     protected void proceedAndMeasure(ProceedingJoinPoint thisJoinPoint,
-            KiekerExecutionRecord2 execData) throws Throwable {
+            KiekerExecutionRecord execData) throws Throwable {
         execData.tin = ctrlInst.getTime(); // startint stopwatch    
         try {
             execData.retVal = thisJoinPoint.proceed();

@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.core;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
+import kieker.tpmon.monitoringRecord.IKiekerMonitoringRecord;
 import kieker.tpmon.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -29,7 +29,7 @@ import kieker.tpmon.annotation.TpmonInternal;
 public interface IMonitoringDataWriter {
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(KiekerExecutionRecord2 execData);
+    public boolean insertMonitoringDataNow(IKiekerMonitoringRecord execData);
 
     @TpmonInternal()
     public boolean init(String initString);

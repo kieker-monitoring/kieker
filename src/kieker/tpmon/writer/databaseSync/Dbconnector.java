@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.databaseSync;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord2;
+import kieker.tpmon.monitoringRecord.IKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
 import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
@@ -8,6 +8,7 @@ import kieker.tpmon.*;
 import java.sql.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -145,18 +146,21 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
      * dbconnector.properties.
      */
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord2 execData) {
+    public synchronized boolean insertMonitoringDataNow(IKiekerMonitoringRecord execData) {
         try {
+            // connector only supports execution records so far
+            KiekerExecutionRecord execRecord = (KiekerExecutionRecord) execData;
+
             psInsertMonitoringData.setInt(1,
-                    (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : execData.experimentId);
-            psInsertMonitoringData.setString(2, execData.componentName + "." + execData.opname);
-            psInsertMonitoringData.setString(3, execData.sessionId);
-            psInsertMonitoringData.setString(4, String.valueOf(execData.traceId));
-            psInsertMonitoringData.setLong(5, execData.tin);
-            psInsertMonitoringData.setLong(6, execData.tout);
-            psInsertMonitoringData.setString(7, execData.vmName);
-            psInsertMonitoringData.setLong(8, execData.eoi);
-            psInsertMonitoringData.setLong(9, execData.ess);
+                    (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : execRecord.experimentId);
+            psInsertMonitoringData.setString(2, execRecord.componentName + "." + execRecord.opname);
+            psInsertMonitoringData.setString(3, execRecord.sessionId);
+            psInsertMonitoringData.setString(4, String.valueOf(execRecord.traceId));
+            psInsertMonitoringData.setLong(5, execRecord.tin);
+            psInsertMonitoringData.setLong(6, execRecord.tout);
+            psInsertMonitoringData.setString(7, execRecord.vmName);
+            psInsertMonitoringData.setLong(8, execRecord.eoi);
+            psInsertMonitoringData.setLong(9, execRecord.ess);
             psInsertMonitoringData.execute();
         } catch (Exception ex) {
             log.error("Tpmon Error: " + System.currentTimeMillis() + " insertMonitoringData() failed:" + ex.getMessage());
