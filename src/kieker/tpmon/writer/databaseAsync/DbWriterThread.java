@@ -35,16 +35,15 @@ import org.apache.commons.logging.LogFactory;
 public class DbWriterThread extends AbstractWorkerThread {
 
     private static final Log log = LogFactory.getLog(DbWriterThread.class);
-    private static final long pollingIntervallInMillisecs = 400L;
     private Connection conn;
-    private BlockingQueue writeQueue;
+    private BlockingQueue<KiekerExecutionRecord> writeQueue;
     private PreparedStatement psInsertMonitoringData;
     private static boolean shutdown = false;
     private boolean finished = false;
     boolean statementChanged = true;
     String nextStatementText;
 
-    public DbWriterThread(Connection initializedConnection, BlockingQueue writeQueue, String statementtext) {
+    public DbWriterThread(Connection initializedConnection, BlockingQueue<KiekerExecutionRecord> writeQueue, String statementtext) {
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
