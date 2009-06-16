@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.tpmon.monitoringRecord.IKiekerMonitoringRecord;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.RemoteCallMetaData;
 import kieker.tpmon.*;
 import kieker.tpmon.writer.core.TpmonShutdownHook;
@@ -113,7 +113,7 @@ public class TpmonController {
     private static TpmonController ctrlInst = null;
 
     //marks the end of monitoring to the writer threads
-    public static final IKiekerMonitoringRecord END_OF_MONITORING_MARKER = IKiekerMonitoringRecord.getInstance();
+    public static final AbstractKiekerMonitoringRecord END_OF_MONITORING_MARKER = AbstractKiekerMonitoringRecord.getInstance();
 
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {
@@ -321,7 +321,7 @@ public class TpmonController {
     // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)    
 //    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(IKiekerMonitoringRecord execData) {
+    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData) {
         // Dirty hack! Needs to be cleaned up
         // Possible solution: record's getInstance() requests experimentId and vnName from Controller
         if (execData instanceof KiekerExecutionRecord) {
@@ -410,7 +410,7 @@ public class TpmonController {
 //        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
 //        String opname = component + newMethodname;
 //        numberOfInserts.incrementAndGet();
-//        IKiekerMonitoringRecord execData = IKiekerMonitoringRecord.getInstance();
+//        AbstractKiekerMonitoringRecord execData = AbstractKiekerMonitoringRecord.getInstance();
 //        execData.componentName = opname;
 //        execData.opname = encodedName;
 //        execData.traceId = -5;

@@ -3,7 +3,7 @@ package kieker.tpmon.writer.filesystemAsync;
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.util.Random;
-import kieker.tpmon.monitoringRecord.IKiekerMonitoringRecord;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
@@ -41,12 +41,12 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
-    private BlockingQueue<IKiekerMonitoringRecord> writeQueue = null;
+    private BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue = null;
     private String filenamePrefix = null;
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-    private IKiekerMonitoringRecord execData = null;
+    private AbstractKiekerMonitoringRecord execData = null;
     private boolean finished = false;
     private static boolean shutdown = false;
 
@@ -61,7 +61,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
 //    private boolean statementChanged = true;
 //    private String nextStatementText;
 
-    public AsyncFsWriterWorkerThread(BlockingQueue<IKiekerMonitoringRecord> writeQueue, String filenamePrefix) {
+    public AsyncFsWriterWorkerThread(BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue, String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
         log.info("New Tpmon - FsWriter thread created ");
@@ -74,7 +74,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
         log.info("FsWriter thread running");
         try {
             while (!finished) {
-                IKiekerMonitoringRecord data = writeQueue.take();
+                AbstractKiekerMonitoringRecord data = writeQueue.take();
                 if (data == TpmonController.END_OF_MONITORING_MARKER){
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
@@ -113,7 +113,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
         if (pos == null || filenameInitialized == false) {
             prepareFile();
         }
-        execData = (IKiekerMonitoringRecord) traceidObject;
+        execData = (AbstractKiekerMonitoringRecord) traceidObject;
         writeDataNow(execData);
     }
 
@@ -159,7 +159,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
      * @throws java.io.IOException
      */
     @TpmonInternal()
-    private void writeDataNow(IKiekerMonitoringRecord execData) throws IOException {
+    private void writeDataNow(AbstractKiekerMonitoringRecord execData) throws IOException {
         prepareFile(); // may throw FileNotFoundException
         pos.println(execData.toCSVRecord());
         pos.flush();

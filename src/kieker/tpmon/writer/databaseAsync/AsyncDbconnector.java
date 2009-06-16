@@ -5,7 +5,7 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
-import kieker.tpmon.monitoringRecord.IKiekerMonitoringRecord;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -74,7 +74,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
-    private BlockingQueue<IKiekerMonitoringRecord> blockingQueue;
+    private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue;
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
@@ -118,7 +118,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         try {
             conn = DriverManager.getConnection(this.dbConnectionAddress);
             int numberOfConnections = 4;
-            blockingQueue = new ArrayBlockingQueue<IKiekerMonitoringRecord>(8000);
+            blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
 
 //                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
@@ -170,7 +170,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(IKiekerMonitoringRecord execData) {
+    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }

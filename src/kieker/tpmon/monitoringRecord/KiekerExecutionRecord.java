@@ -23,7 +23,7 @@ import kieker.tpmon.annotation.TpmonInternal;
  *
  * @author Andre van Hoorn
  */
-public class KiekerExecutionRecord extends IKiekerMonitoringRecord {
+public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
 
     private static final long serialVersionUID = 117L;
     
@@ -141,7 +141,7 @@ public class KiekerExecutionRecord extends IKiekerMonitoringRecord {
         return strB.toString();
     }
 
-    public IKiekerMonitoringRecord fromCSVRecord(String csvRecord) {
+    public AbstractKiekerMonitoringRecord fromCSVRecord(String csvRecord) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
