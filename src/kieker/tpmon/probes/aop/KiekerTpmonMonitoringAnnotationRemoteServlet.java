@@ -1,15 +1,18 @@
-package kieker.tpmon.aspects;
+package kieker.tpmon.probes.aop;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import kieker.tpmon.KiekerExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemote
+ * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemoteServlet
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -30,54 +33,51 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMonitoring { 
+public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKiekerTpmonMonitoringServlet {
 
     private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
+
+    @Pointcut("execution(* *.do*(..)) && args(request,response) ")
+    public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    @Around("monitoredServletEntry(HttpServletRequest, HttpServletResponse)")
+    public Object doServletEntryProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+        return super.doServletEntryProfiling(thisJoinPoint);
+    }
 
     @Pointcut("execution(@kieker.tpmon.annotations.TpmonMonitoringProbe * *.*(..))"+
               " && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
-   
+
     @Around("monitoredMethod()")
     public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);        
-        int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
-        int ess = 0; /* this is the height in the dynamic call tree of this execution */
-        if (execData.isEntryPoint){
-            ctrlInst.storeThreadLocalEOI(0); // current execution's eoi is 0
-            ctrlInst.storeThreadLocalESS(1); // *current* execution's ess is 0
-        } else {
-            eoi = ctrlInst.incrementAndRecallThreadLocalEOI(); // ess > 1
-            ess = ctrlInst.recallAndIncrementThreadLocalESS(); // ess >= 0
-        }
-        try{
+        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+        execData.sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
+        execData.eoi = ctrlInst.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
+        execData.ess = ctrlInst.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
+
+        try {
             this.proceedAndMeasure(thisJoinPoint, execData);
-            if (eoi == -1 || ess == -1){
+            if (execData.eoi == -1 || execData.ess == -1) {
                 log.fatal("eoi and/or ess have invalid values:" +
-                        " eoi == " + eoi +
-                        " ess == " + ess);
+                        " eoi == " + execData.eoi +
+                        " ess == " + execData.ess);
                 log.fatal("Terminating Tpmon!");
                 ctrlInst.terminateMonitoring();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e; // exceptions are forwarded          
         } finally {
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            execData.eoi = eoi;
-            execData.ess = ess;
             ctrlInst.insertMonitoringDataNow(execData);
-            if (execData.isEntryPoint){
-                ctrlInst.unsetThreadLocalEOI();
-                ctrlInst.unsetThreadLocalESS();
-            } else {
-                ctrlInst.storeThreadLocalESS(ess);
-            }
+            ctrlInst.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;
     }

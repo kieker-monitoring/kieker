@@ -1,13 +1,15 @@
-package kieker.tpmon.aspects;
+package kieker.tpmon.probes.aop;
 
 import kieker.tpmon.KiekerExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotation
+ * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemote
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -28,7 +30,9 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitoring { 
+public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMonitoring { 
+
+    private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
 
     @Pointcut("execution(@kieker.tpmon.annotations.TpmonMonitoringProbe * *.*(..))"+
               " && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
@@ -40,16 +44,40 @@ public class KiekerTpmonMonitoringAnnotation extends AbstractKiekerTpmonMonitori
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);        
+        int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
+        int ess = 0; /* this is the height in the dynamic call tree of this execution */
+        if (execData.isEntryPoint){
+            ctrlInst.storeThreadLocalEOI(0); // current execution's eoi is 0
+            ctrlInst.storeThreadLocalESS(1); // *current* execution's ess is 0
+        } else {
+            eoi = ctrlInst.incrementAndRecallThreadLocalEOI(); // ess > 1
+            ess = ctrlInst.recallAndIncrementThreadLocalESS(); // ess >= 0
+        }
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
+            if (eoi == -1 || ess == -1){
+                log.fatal("eoi and/or ess have invalid values:" +
+                        " eoi == " + eoi +
+                        " ess == " + ess);
+                log.fatal("Terminating Tpmon!");
+                ctrlInst.terminateMonitoring();
+            }
         } catch (Exception e){
             throw e; // exceptions are forwarded          
         } finally {
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
+            execData.eoi = eoi;
+            execData.ess = ess;
             ctrlInst.insertMonitoringDataNow(execData);
+            if (execData.isEntryPoint){
+                ctrlInst.unsetThreadLocalEOI();
+                ctrlInst.unsetThreadLocalESS();
+            } else {
+                ctrlInst.storeThreadLocalESS(ess);
+            }
         }
         return execData.retVal;
     }

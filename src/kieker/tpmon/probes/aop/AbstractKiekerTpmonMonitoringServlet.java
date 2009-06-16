@@ -1,4 +1,4 @@
-package kieker.tpmon.aspects;
+package kieker.tpmon.probes.aop;
 
 import javax.servlet.http.HttpServletRequest;
 import kieker.tpmon.annotations.TpmonInternal;
