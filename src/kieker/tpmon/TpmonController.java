@@ -1,5 +1,10 @@
 package kieker.tpmon;
 
+import kieker.tpmon.writer.TpmonShutdownHook;
+import kieker.tpmon.writer.AbstractWorkerThread;
+import kieker.tpmon.writer.IMonitoringDataWriter;
+import kieker.tpmon.writer.databaseSync.Dbconnector;
+import kieker.tpmon.writer.filesystemSync.FileSystemWriter;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -7,8 +12,8 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotations.TpmonInternal;
-import kieker.tpmon.writer.asyncDatabase.AsyncDbconnector;
-import kieker.tpmon.writer.asyncFsWriter.AsyncFsWriterProducer;
+import kieker.tpmon.writer.databaseAsync.AsyncDbconnector;
+import kieker.tpmon.writer.filesystemAsync.AsyncFsWriterProducer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

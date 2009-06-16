@@ -1,5 +1,8 @@
-package kieker.tpmon;
+package kieker.tpmon.writer.databaseSync;
 
+import kieker.tpmon.writer.AbstractWorkerThread;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
+import kieker.tpmon.*;
 import java.sql.*;
 import java.util.Vector;
 import kieker.tpmon.annotations.TpmonInternal;

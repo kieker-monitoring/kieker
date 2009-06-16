@@ -1,13 +1,14 @@
-package kieker.tpmon;
+package kieker.tpmon.writer;
 
-import java.util.Vector;
+import kieker.tpmon.*;
+import kieker.tpmon.writer.IMonitoringDataWriter;
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**
- * kieker.tpmon.IMonitoringDataWriter
- * 
+ * kieker.tpmon.AbstractMonitoringDataWriter.java
+ *
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,26 +25,20 @@ import kieker.tpmon.annotations.TpmonInternal;
  *
  * @author Andre van Hoorn
  */
-public interface IMonitoringDataWriter {
+public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWriter {
+
+    private boolean debugEnabled;
+    
+    @TpmonInternal()
+    public abstract boolean insertMonitoringDataNow(KiekerExecutionRecord execData);
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(KiekerExecutionRecord execData);
+    public void setDebug(boolean debug) {
+        this.debugEnabled = debug;
+    }
 
     @TpmonInternal()
-    public boolean init(String initString);
-
-    /**
-     * Returns a vector of workers, or null if none.
-     */
-    @TpmonInternal()
-    public Vector<AbstractWorkerThread> getWorkers();
-
-    @TpmonInternal()
-    public void setDebug(boolean debug);
-
-    @TpmonInternal()
-    public boolean isDebug();
-
-    @TpmonInternal()
-    public String getInfoString();
+    public boolean isDebug() {
+        return this.debugEnabled;
+    }
 }

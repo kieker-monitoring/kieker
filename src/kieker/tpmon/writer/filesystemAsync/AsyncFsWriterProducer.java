@@ -1,12 +1,12 @@
-package kieker.tpmon.writer.asyncFsWriter;
+package kieker.tpmon.writer.filesystemAsync;
 
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.KiekerExecutionRecord;
 import kieker.tpmon.TpmonController;
-import kieker.tpmon.AbstractWorkerThread;
+import kieker.tpmon.writer.AbstractWorkerThread;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

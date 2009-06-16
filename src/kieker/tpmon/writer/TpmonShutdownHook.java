@@ -1,8 +1,8 @@
-package kieker.tpmon;
+package kieker.tpmon.writer;
 
+import kieker.tpmon.*;
+import kieker.tpmon.writer.AbstractWorkerThread;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.tpmon.annotations.TpmonInternal;
 //import kieker.tpmon.AbstractWorkerThread;
 import org.apache.commons.logging.Log;

@@ -1,12 +1,12 @@
-package kieker.tpmon;
+package kieker.tpmon.writer;
 
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**
- * kieker.tpmon.AbstractMonitoringDataWriter.java
- *
+ * kieker.tpmon.AbstractWorkerThread
+ * 
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,22 +21,22 @@ import kieker.tpmon.annotations.TpmonInternal;
  * limitations under the License.
  * ==================================================
  *
- * @author Andre van Hoorn
+ * @author Matthias Rohr
  */
-public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWriter {
-
-    private boolean debugEnabled;
+public abstract class AbstractWorkerThread extends Thread {
     
+   /**
+    * initShutdown has to be called before isFinished will result in true.
+    * IsFinished == true means that the worker does not have additional jobs in it's queue 
+    * and won't accept new jobs.
+    */
     @TpmonInternal()
-    public abstract boolean insertMonitoringDataNow(KiekerExecutionRecord execData);
-
+   public abstract boolean isFinished();
+       
+   /**
+    * Notifies the worker that the system shutdown process is initiated and that it should finish soon.
+    * After a while, isFinished should result in true, if system can halt.
+    */
     @TpmonInternal()
-    public void setDebug(boolean debug) {
-        this.debugEnabled = debug;
-    }
-
-    @TpmonInternal()
-    public boolean isDebug() {
-        return this.debugEnabled;
-    }
+   public abstract void initShutdown();
 }
