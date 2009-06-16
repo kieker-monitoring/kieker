@@ -1,4 +1,4 @@
-package kieker.tpmon.cxf;
+package kieker.tpmon.probes.cxf;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

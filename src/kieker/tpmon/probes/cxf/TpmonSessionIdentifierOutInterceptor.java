@@ -1,4 +1,4 @@
-package kieker.tpmon.cxf;
+package kieker.tpmon.probes.cxf;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;

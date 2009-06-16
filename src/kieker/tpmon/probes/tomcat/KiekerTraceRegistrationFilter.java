@@ -1,4 +1,4 @@
-package kieker.tpmon.filters;
+package kieker.tpmon.probes.tomcat;
 
 import java.io.IOException;
 import javax.servlet.*;
