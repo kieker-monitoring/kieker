@@ -3,7 +3,7 @@ package kieker.tpmon.writer.core;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
 import java.util.Vector;
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 //import kieker.tpmon.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

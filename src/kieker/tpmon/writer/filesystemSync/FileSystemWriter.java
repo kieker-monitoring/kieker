@@ -8,7 +8,7 @@ import kieker.tpmon.*;
 import java.io.*;
 import java.util.Random;
 import java.util.Vector;
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

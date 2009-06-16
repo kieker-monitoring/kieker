@@ -3,7 +3,7 @@ package kieker.tpmon.writer.core;
 import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import java.util.Vector;
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 
 /**
  * kieker.tpmon.IMonitoringDataWriter

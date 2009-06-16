@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.core;
 
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 
 /**
  * kieker.tpmon.AbstractWorkerThread
