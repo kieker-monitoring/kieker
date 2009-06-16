@@ -15,6 +15,7 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
 import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import kieker.tpmon.writer.databaseAsync.AsyncDbconnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsWriterProducer;
@@ -113,7 +114,7 @@ public class TpmonController {
     private static TpmonController ctrlInst = null;
 
     //marks the end of monitoring to the writer threads
-    public static final AbstractKiekerMonitoringRecord END_OF_MONITORING_MARKER = AbstractKiekerMonitoringRecord.getInstance();
+    public static final AbstractKiekerMonitoringRecord END_OF_MONITORING_MARKER = new KiekerDummyMonitoringRecord();
 
     @TpmonInternal()
     public synchronized static TpmonController getInstance() {

@@ -14,10 +14,6 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 public abstract class AbstractKiekerMonitoringRecord implements Serializable {
 
-    public static AbstractKiekerMonitoringRecord getInstance() {
-        return new KiekerDummyMonitoringRecord();
-    }
-
     @TpmonInternal()
     public abstract AbstractKiekerMonitoringRecord fromCSVRecord(String csvRecord);
 
