@@ -24,7 +24,7 @@ import kieker.tpmon.annotation.TpmonInternal;
  *
  * @author Andre van Hoorn
  */
-public class KiekerExecutionRecord implements Serializable {
+public class KiekerExecutionRecord implements IKiekerMonitoringRecord {
 
     private static final long serialVersionUID = 117L;
     
@@ -120,10 +120,10 @@ public class KiekerExecutionRecord implements Serializable {
     }
 
     /**
-     * Returns the Kieker CSV record for the object.
+     * Returns a CSV record for the object.
      */
     @TpmonInternal()
-    public String toKiekerCSVRecord() {
+    public String toCSVRecord() {
         StringBuilder strB = new StringBuilder();
         strB.append(this.experimentId); strB.append(';');
         // concatenate opname
@@ -140,5 +140,9 @@ public class KiekerExecutionRecord implements Serializable {
         strB.append(this.eoi); strB.append(';');
         strB.append(this.ess); 
         return strB.toString();
+    }
+
+    public IKiekerMonitoringRecord fromCSVRecord(String csvRecord) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

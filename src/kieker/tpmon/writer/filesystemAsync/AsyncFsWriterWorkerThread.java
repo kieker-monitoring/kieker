@@ -162,7 +162,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
     @TpmonInternal()
     private void writeDataNow(KiekerExecutionRecord execData) throws IOException {
         prepareFile(); // may throw FileNotFoundException
-        pos.println(execData.toKiekerCSVRecord());
+        pos.println(execData.toCSVRecord());
         pos.flush();
     }
 
