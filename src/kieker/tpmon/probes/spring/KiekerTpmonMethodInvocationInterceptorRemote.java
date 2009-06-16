@@ -1,6 +1,6 @@
 package kieker.tpmon.probes.spring;
 
-import kieker.tpmon.KiekerExecutionRecord;
+import kieker.tpmon.records.KiekerExecutionRecord;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;

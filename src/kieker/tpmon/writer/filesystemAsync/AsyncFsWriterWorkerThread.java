@@ -3,7 +3,7 @@ package kieker.tpmon.writer.filesystemAsync;
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.util.Random;
-import kieker.tpmon.KiekerExecutionRecord;
+import kieker.tpmon.records.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import kieker.tpmon.writer.core.AbstractWorkerThread;

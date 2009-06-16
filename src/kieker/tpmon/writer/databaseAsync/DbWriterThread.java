@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.KiekerExecutionRecord;
+import kieker.tpmon.records.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;

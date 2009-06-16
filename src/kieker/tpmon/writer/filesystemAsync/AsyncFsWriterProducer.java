@@ -4,7 +4,7 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
-import kieker.tpmon.KiekerExecutionRecord;
+import kieker.tpmon.records.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
 import kieker.tpmon.annotations.TpmonInternal;

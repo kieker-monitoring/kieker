@@ -1,5 +1,6 @@
 package kieker.tpmon.writer.core;
 
+import kieker.tpmon.records.KiekerExecutionRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.writer.core.IMonitoringDataWriter;
 import kieker.tpmon.annotations.TpmonInternal;
