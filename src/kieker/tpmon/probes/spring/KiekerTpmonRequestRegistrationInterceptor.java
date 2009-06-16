@@ -1,4 +1,4 @@
-package kieker.tpmon.aspects.springAspectJ;
+package kieker.tpmon.probes.spring;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
