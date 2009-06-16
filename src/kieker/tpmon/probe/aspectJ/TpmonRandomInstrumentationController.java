@@ -1,6 +1,6 @@
-package kieker.tpmon.probes.aspectJ;
+package kieker.tpmon.probe.aspectJ;
 
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 import java.util.HashMap;
 import java.util.Random;
 
