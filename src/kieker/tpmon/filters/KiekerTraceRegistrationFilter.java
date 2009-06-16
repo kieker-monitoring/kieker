@@ -3,7 +3,7 @@ package kieker.tpmon.filters;
 import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import kieker.tpmon.TpmonController;
+import kieker.tpmon.core.TpmonController;
 
 /**
  * kieker.tpmon.filters.KiekerTraceRegistrationFilter

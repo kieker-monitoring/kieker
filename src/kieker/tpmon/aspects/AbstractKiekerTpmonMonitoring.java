@@ -1,5 +1,6 @@
 package kieker.tpmon.aspects;
 
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.aspectj.lang.ProceedingJoinPoint;

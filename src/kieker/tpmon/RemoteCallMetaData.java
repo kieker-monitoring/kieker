@@ -31,9 +31,9 @@ public class RemoteCallMetaData implements Serializable {
     private static final long serialVersionUID = 512771634L;    // random number
     private static final Log log = LogFactory.getLog(RemoteCallMetaData.class);
 
-    int ess;
-    int eoi;
-    long traceid;
+    public int ess;
+    public int eoi;
+    public long traceid;
 
     public RemoteCallMetaData(long traceid, int eoi, int ess) {
         this.ess = ess;

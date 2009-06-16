@@ -1,6 +1,6 @@
 package kieker.tpmon.aspects.springAspectJ;
 
-import kieker.tpmon.TpmonController;
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;

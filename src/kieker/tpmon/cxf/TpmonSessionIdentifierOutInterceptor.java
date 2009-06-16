@@ -1,6 +1,6 @@
 package kieker.tpmon.cxf;
 
-import kieker.tpmon.TpmonController;
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;

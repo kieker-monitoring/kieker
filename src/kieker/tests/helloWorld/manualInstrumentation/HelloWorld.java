@@ -1,6 +1,6 @@
 package kieker.tests.helloWorld.manualInstrumentation;
 import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.TpmonController;
+import kieker.tpmon.core.TpmonController;
 
 public class HelloWorld {
 

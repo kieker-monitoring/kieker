@@ -1,8 +1,9 @@
-package kieker.tpmon;
+package kieker.tpmon.core;
 
-import kieker.tpmon.writer.TpmonShutdownHook;
-import kieker.tpmon.writer.AbstractWorkerThread;
-import kieker.tpmon.writer.IMonitoringDataWriter;
+import kieker.tpmon.*;
+import kieker.tpmon.writer.core.TpmonShutdownHook;
+import kieker.tpmon.writer.core.AbstractWorkerThread;
+import kieker.tpmon.writer.core.IMonitoringDataWriter;
 import kieker.tpmon.writer.databaseSync.Dbconnector;
 import kieker.tpmon.writer.filesystemSync.FileSystemWriter;
 import java.io.FileInputStream;

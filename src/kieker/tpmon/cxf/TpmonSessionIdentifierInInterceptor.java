@@ -2,7 +2,7 @@ package kieker.tpmon.cxf;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.tpmon.TpmonController;
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;

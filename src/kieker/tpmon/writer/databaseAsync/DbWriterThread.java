@@ -1,12 +1,12 @@
 package kieker.tpmon.writer.databaseAsync;
 
-import kieker.tpmon.writer.AbstractWorkerThread;
+import kieker.tpmon.writer.core.AbstractWorkerThread;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.TpmonController;
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

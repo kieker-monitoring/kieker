@@ -1,4 +1,4 @@
-package kieker.tpmon.writer;
+package kieker.tpmon.writer.core;
 
 import kieker.tpmon.annotations.TpmonInternal;
 

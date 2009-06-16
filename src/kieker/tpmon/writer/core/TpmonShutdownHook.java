@@ -1,7 +1,7 @@
-package kieker.tpmon.writer;
+package kieker.tpmon.writer.core;
 
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
-import kieker.tpmon.writer.AbstractWorkerThread;
 import java.util.Vector;
 import kieker.tpmon.annotations.TpmonInternal;
 //import kieker.tpmon.AbstractWorkerThread;

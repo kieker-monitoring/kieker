@@ -3,7 +3,7 @@ package kieker.tpmon.reader.fileSystemReader;
 import java.io.*;
 import java.util.StringTokenizer;
 import kieker.tpmon.KiekerExecutionRecord;
-import kieker.tpmon.TpmonController;
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**

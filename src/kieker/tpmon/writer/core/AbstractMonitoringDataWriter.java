@@ -1,7 +1,7 @@
-package kieker.tpmon.writer;
+package kieker.tpmon.writer.core;
 
 import kieker.tpmon.*;
-import kieker.tpmon.writer.IMonitoringDataWriter;
+import kieker.tpmon.writer.core.IMonitoringDataWriter;
 import kieker.tpmon.annotations.TpmonInternal;
 
 /**
