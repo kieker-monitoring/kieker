@@ -1,7 +1,7 @@
 package kieker.tpmon.core;
 
-import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
-import kieker.tpmon.monitoringRecords.RemoteCallMetaData;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.RemoteCallMetaData;
 import kieker.tpmon.*;
 import kieker.tpmon.writer.core.TpmonShutdownHook;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
