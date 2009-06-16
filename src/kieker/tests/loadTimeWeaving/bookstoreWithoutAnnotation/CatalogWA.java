@@ -1,7 +1,5 @@
 package kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation;
 
-import kieker.tpmon.aspects.*;
-
 /**
  * kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.CatalogWA.java
  *
