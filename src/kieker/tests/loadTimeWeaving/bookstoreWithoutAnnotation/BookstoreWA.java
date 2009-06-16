@@ -1,6 +1,5 @@
 package kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation;
 
-import kieker.tpmon.aspects.*;
 import java.util.Vector;
 
 /**

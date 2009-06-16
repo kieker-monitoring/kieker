@@ -1,6 +1,6 @@
-package kieker.tpmon.probes.aspectJ;
+package kieker.tpmon.probe.aspectJ;
 
-import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,8 +34,8 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
 
     private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
 
-    @Pointcut("execution(@kieker.tpmon.annotations.TpmonMonitoringProbe * *.*(..))"+
-              " && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotation.TpmonMonitoringProbe * *.*(..))"+
+              " && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
    

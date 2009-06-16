@@ -57,7 +57,7 @@
     <target name="update-version" unless="version.noupdate"
             depends="init-version">
         <echo>Updating version string</echo>
-        <replaceregexp file="src/kieker/tpmon/TpmonVersion.java"
+        <replaceregexp file="src/kieker/tpmon/core/TpmonVersion.java"
                        match="VERSION = &quot;.*?&quot;"
                        replace="VERSION = &quot;${tpmon.version}-${DSTAMP}&quot;"/>
         <replaceregexp match="&lt;version&gt;.*?&lt;/version&gt;"
@@ -137,7 +137,7 @@
                verbose="off"
                srcdir="src"
                debug="true"
-               excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/aspects/**"
+               excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/probe/**,kieker/controlServlet/**,kieker/tpmon/reader/**"
                classpathref="dev.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
@@ -156,7 +156,7 @@
                source="1.5"
                srcdir="src"
                debug="true"               
-               excludes="kieker/tests/**,kieker/controlServlet/**,kieker/tpmon/aspects/**,"
+               excludes="kieker/tests/**,kieker/controlServlet/**,kieker/tpmon/probe/**,"
                classpathref="dev.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
@@ -167,7 +167,7 @@
             <fileset dir="src"/>
         </copy>
         <delete dir="build/kieker/tests"/>
-        <delete dir="build/kieker/tpmon/aspects"/>
+        <delete dir="build/kieker/tpmon/probe"/>
         <delete dir="build/kieker/controlServlet"/>
         <jar destfile="dist/${dist.tpmon.ctrl}">
             <fileset dir="build"/>
@@ -254,11 +254,11 @@
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-all,build-tpmon-ctw">  
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoring.java" 
+        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoringServlet.java" 
+        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoringServlet.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/${KiekerTpmonTestAspect}" 
+        <copy file="src/kieker/tpmon/probe/aspectJ/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>        
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="build-tests/"/>
@@ -281,11 +281,11 @@
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoring.java" 
+        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/AbstractKiekerTpmonMonitoringServlet.java" 
+        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoringServlet.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/aspects/${KiekerTpmonTestAspect}" 
+        <copy file="src/kieker/tpmon/probe/aspectJ/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="build-tests/"/>
@@ -378,7 +378,7 @@
         <copy file="src/kieker/tests/log4j.properties" todir="build-tests/"/>
         <java dir="."
               fork="true"
-              classname="kieker.tpmon.fileSystemReader.FileSystemReader"
+              classname="kieker.tpmon.reader.fileSystemReader.FileSystemReader"
               classpathref="run.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=build-tests/log4j.properties"/>

@@ -1,8 +1,8 @@
-package kieker.tpmon.probes.aspectJ;
+package kieker.tpmon.probe.aspectJ;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.tpmon.monitoringRecords.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -41,7 +41,7 @@ public class KiekerTpmonMonitoringFullServlet extends AbstractKiekerTpmonMonitor
         return super.doServletEntryProfiling(thisJoinPoint);
     }
 
-    @Pointcut("execution(* *.*(..)) && !execution(@kieker.tpmon.annotations.TpmonInternal * *.*(..))")
+    @Pointcut("execution(* *.*(..)) && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
 
