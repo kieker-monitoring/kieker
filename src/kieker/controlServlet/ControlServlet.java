@@ -1,4 +1,4 @@
-package kieker.tpmonControlServlet;
+package kieker.controlServlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;

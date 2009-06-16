@@ -156,7 +156,7 @@
                source="1.5"
                srcdir="src"
                debug="true"               
-               excludes="kieker/tests/**,kieker/tpmonControlServlet/**,kieker/tpmon/aspects/**,"
+               excludes="kieker/tests/**,kieker/controlServlet/**,kieker/tpmon/aspects/**,"
                classpathref="dev.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
@@ -168,7 +168,7 @@
         </copy>
         <delete dir="build/kieker/tests"/>
         <delete dir="build/kieker/tpmon/aspects"/>
-        <delete dir="build/kieker/tpmonControlServlet"/>
+        <delete dir="build/kieker/controlServlet"/>
         <jar destfile="dist/${dist.tpmon.ctrl}">
             <fileset dir="build"/>
         </jar>
@@ -366,12 +366,12 @@
                classpathref="dev.classpath"
                srcdir="src"
                debug="true"
-               includes="kieker/tpmonControlServlet/**"/>
-        <war destfile="dist/${dist.tpmon.controlServlet}" webxml="src/kieker/tpmonControlServlet/WEB-INF/web.xml">
+               includes="kieker/controlServlet/**"/>
+        <war destfile="dist/${dist.tpmon.controlServlet}" webxml="src/kieker/controlServlet/WEB-INF/web.xml">
             <classes dir="build-tpmonControlServlet">
                 <exclude name="*/tpmon/**"/>
             </classes>
-            <zipfileset dir="src/kieker/tpmonControlServlet/images" prefix="images"/>
+            <zipfileset dir="src/kieker/controlServlet/images" prefix="images"/>
         </war>
     </target>
     <target name="run-reader" depends="build-all">        

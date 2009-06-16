@@ -50,7 +50,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
         if (execData.traceId == -1) { 
             execData.traceId = ctrlInst.getAndStoreUniqueThreadLocalTraceId();
             execData.isEntryPoint = true;
-        }
+        } 
         return execData;
     }
     
