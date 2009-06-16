@@ -1,7 +1,7 @@
 package kieker.tpmon.monitoringRecord;
 
 import java.io.Serializable;
-import kieker.tpmon.annotations.TpmonInternal;
+import kieker.tpmon.annotation.TpmonInternal;
 
 /**
  * kieker.tpmon.KiekerExecutionRecord
