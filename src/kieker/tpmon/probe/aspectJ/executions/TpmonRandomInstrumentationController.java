@@ -1,4 +1,4 @@
-package kieker.tpmon.probe.aspectJ;
+package kieker.tpmon.probe.aspectJ.executions;
 
 import kieker.tpmon.annotation.TpmonInternal;
 import java.util.HashMap;

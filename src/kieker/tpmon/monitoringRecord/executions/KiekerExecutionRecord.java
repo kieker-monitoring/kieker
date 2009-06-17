@@ -1,5 +1,6 @@
-package kieker.tpmon.monitoringRecord;
+package kieker.tpmon.monitoringRecord.executions;
 
+import kieker.tpmon.monitoringRecord.*;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /**

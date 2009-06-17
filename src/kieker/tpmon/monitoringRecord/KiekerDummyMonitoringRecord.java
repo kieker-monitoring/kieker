@@ -13,7 +13,7 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 public class KiekerDummyMonitoringRecord extends AbstractKiekerMonitoringRecord {
 
-    private static final long serialVersionUID = 117L;
+    private static final long serialVersionUID = 1133L;
 
     @TpmonInternal()
     public AbstractKiekerMonitoringRecord fromCSVRecord(String csvRecord) {

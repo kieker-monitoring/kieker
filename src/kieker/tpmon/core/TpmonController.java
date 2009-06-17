@@ -1,7 +1,7 @@
 package kieker.tpmon.core;
 
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.monitoringRecord.RemoteCallMetaData;
+import kieker.tpmon.monitoringRecord.executions.RemoteCallMetaData;
 import kieker.tpmon.*;
 import kieker.tpmon.writer.core.TpmonShutdownHook;
 import kieker.tpmon.writer.core.AbstractWorkerThread;
@@ -16,7 +16,7 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.writer.databaseAsync.AsyncDbconnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsWriterProducer;
 import org.apache.commons.logging.Log;

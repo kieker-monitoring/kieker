@@ -1,6 +1,6 @@
-package kieker.tpmon.probe.aspectJ;
+package kieker.tpmon.probe.aspectJ.executions;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
 import kieker.tpmon.annotation.TpmonInternal;

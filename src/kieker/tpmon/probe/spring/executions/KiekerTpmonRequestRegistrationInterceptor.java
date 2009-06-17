@@ -1,4 +1,4 @@
-package kieker.tpmon.probe.spring;
+package kieker.tpmon.probe.spring.executions;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;

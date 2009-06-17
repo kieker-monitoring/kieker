@@ -8,7 +8,7 @@ import kieker.tpmon.*;
 import java.sql.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
