@@ -22,7 +22,6 @@
     <property name="build.ltw.dir" value="build/ltw/"/>
     <property name="build.controlServlet.dir" value="build/controlServlet/"/>
     <property name="build.tests.dir" value="build/tests/"/>
-    <property name="build.META-INF.dir" value="build/META-INF/"/>
 
     <path id="classpath.libs">
         <pathelement path="${classpath}"/>
@@ -30,6 +29,18 @@
             <include name="**/*.jar"/>
         </fileset>
         <pathelement location="."/>
+    </path>
+    <path id="compile.ltw.classpath"> 
+        <path refid="classpath.libs"/>
+        <fileset dir="dist">
+            <include name="${kieker-common.jarnamebase}*.jar"/>
+        </fileset>
+    </path>
+   <path id="compile.ctw.classpath">
+        <path refid="classpath.libs"/>
+        <fileset dir="dist">
+            <include name="${kieker-common.jarnamebase}*.jar"/>
+        </fileset>
     </path>
     <path id="run.classpath"> <!-- the normal classpath for executing kieker -->
         <path refid="classpath.libs"/>
@@ -109,16 +120,43 @@
             </condition>
         </fail>
         <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.META-INF.dir}"/>
         <mkdir dir="dist"/>
         <mkdir dir="${build.tests.dir}"/>
         <mkdir dir="${build.controlServlet.dir}"/>
         <mkdir dir="tmp"/>
     </target>
 
-    <target name="build-tpmon-ltw" depends="init">
+    <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
+    <target name="build-tpmon-ctrl" depends="init">
+        <delete dir="${build.common.dir}"/>
+        <mkdir dir="${build.common.dir}"/>
+        <echo message="Creating the library of tpmon (${dist.tpmon.ctrl}) that is supposed for direct invocations - it doesn't contain the AOP instrumentation mechanisms."/>
+        <!-- TODO: aop.xml and aspects should be excluded from the jar file -->
+        <javac destDir="${build.common.dir}"
+               source="1.5"
+               srcdir="src"
+               debug="true"
+               classpathref="classpath.libs">
+            <compilerarg value="-Xlint:all"/>
+            <include name="kieker/tpmon/META-INF/**"/>
+            <include name="kieker/tpmon/annotation/**"/>
+            <include name="kieker/tpmon/core/**"/>
+            <include name="kieker/tpmon/monitoringRecord/**"/>
+            <include name="kieker/tpmon/reader/**"/>
+            <include name="kieker/tpmon/writer/**"/>
+        </javac>
+        <copy todir="${build.common.dir}/META-INF">
+            <fileset dir="src/kieker/tpmon/META-INF"/>
+        </copy>
+        <jar destfile="dist/${dist.tpmon.ctrl}">
+            <fileset dir="${build.common.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-tpmon-ltw" depends="init,build-tpmon-ctrl">
         <delete dir="${build.ltw.dir}"/>
         <mkdir dir="${build.ltw.dir}"/>
+        <mkdir dir="${build.ltw.dir}/META-INF/"/>
         <echo message="The iajc compiler is used to prepare load time weaving (LTW) by creating a .jar file. LTW is configured by the aop.xml in src/kieker/tpmon/META-INF. The database connection is specified in dbconnector.properties in src/kieker/tpmon/META-INF."/>
         <fail message="src/kieker/tpmon/META-INF/aop.xml is missing! create it from src/kieker/tpmon/META-INF/aop.xml.example">
             <condition>
@@ -130,11 +168,20 @@
         <iajc destDir="${build.ltw.dir}"
               source="1.5"
               verbose="off"
-              srcdir="src/kieker/tpmon/"
+              srcdir="src/kieker/tpmon/probe/aspectJ"
               debug="true"
-              classpathref="classpath.libs">
+              classpathref="compile.ltw.classpath">
         </iajc>
-        <copy todir="${build.META-INF.dir}">
+        <javac destDir="${build.ltw.dir}"
+               source="1.5"
+               verbose="off"
+               srcdir="src/kieker/tpmon/probe/"
+               debug="true"
+               classpathref="compile.ltw.classpath">
+            <compilerarg value="-Xlint:all"/>
+            <exclude name="kieker/tpmon/probe/aspectJ/**"/>
+        </javac>
+        <copy todir="${build.ltw.dir}/META-INF">
             <fileset dir="src/kieker/tpmon/META-INF"/>
         </copy>
         <jar destfile="dist/${dist.tpmon.ltw}">
@@ -142,67 +189,23 @@
         </jar>
     </target>
     
-    <target name="build-tpmon-ctw" depends="init">
-        <delete dir="build"/>
-        <mkdir dir="build"/>
+    <target name="build-tpmon-ctw" depends="init,build-tpmon-ctrl">
+        <delete dir="${build.ctw.dir}"/>
+        <mkdir  dir="${build.ctw.dir}"/>
         <echo message="Creating the compile-time-weaving library of tpmon (${dist.tpmon.ctw}). This library can be used in two ways: 1) for compile time instrumentation 2) via the tpmon API - if you want to invoke tpmon manually. This library cannot be used for load-time-weaving with the javaagent property!"/>
-        <javac destDir="build"
+        <javac destDir="${build.ctw.dir}"
                source="1.5"
                verbose="off"
-               srcdir="src"
+               srcdir="src/kieker/tpmon/probe/aspectJ/"
                debug="true"
-               classpathref="classpath.libs">
+               classpathref="compile.ctw.classpath">
             <compilerarg value="-Xlint:all"/>
-            <exclude name="kieker/tpmon/reader/**"/>
-            <exclude name="kieker/tpmon/probe/cxf/**"/>
-            <exclude name="kieker/tpmon/probe/spring/**"/>
-            <exclude name="kieker/tpmon/probe/tomcat/**"/>
-            <exclude name="kieker/tests/**"/>
-            <exclude name="kieker/controlServlet/**"/>
         </javac>
-        <copy file="src/kieker/tpmon/META-INF/tpmon.properties" todir="build/META-INF"/>
         <jar destfile="dist/${dist.tpmon.ctw}">
-            <fileset dir="build"/>
-            <fileset dir="src">
-                <exclude name="kieker/tpmon/reader/**"/>
-                <exclude name="kieker/tpmon/probe/cxf/**"/>
-                <exclude name="kieker/tpmon/probe/spring/**"/>
-                <exclude name="kieker/tpmon/probe/tomcat/**"/>
-                <exclude name="kieker/tests/**"/>
-                <exclude name="kieker/controlServlet/**"/>
-                <exclude name="kieker/tpmon/META-INF/**"/>
-            </fileset>
+            <fileset dir="${build.ctw.dir}"/>
         </jar>
     </target>
-    
-    <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
-    <target name="build-tpmon-ctrl" depends="init">
-        <delete dir="build"/>
-        <mkdir dir="build"/>
-        <antcall target="init"/>
-        <echo message="Creating the library of tpmon (${dist.tpmon.ctrl}) that is supposed for direct invocations - it doesn't contain the AOP instrumentation mechanisms."/>
-        <!-- TODO: aop.xml and aspects should be excluded from the jar file -->
-        <javac destDir="build"
-               source="1.5"
-               srcdir="src"
-               debug="true"               
-               excludes="kieker/tests/**,kieker/controlServlet/**,kieker/tpmon/probe/**,"
-               classpathref="classpath.libs">
-            <compilerarg value="-Xlint:all"/>
-        </javac>
-        <copy todir="build/META-INF">
-            <fileset dir="src/kieker/tpmon/META-INF"/>
-        </copy>
-        <copy todir="build">
-            <fileset dir="src"/>
-        </copy>
-        <delete dir="build/kieker/tests"/>
-        <delete dir="build/kieker/tpmon/probe"/>
-        <delete dir="build/kieker/controlServlet"/>
-        <jar destfile="dist/${dist.tpmon.ctrl}">
-            <fileset dir="build"/>
-        </jar>
-    </target>
+
     <target name="clean">
         <delete dir="build"/>
 <!--        <delete dir="tmp"/>-->
