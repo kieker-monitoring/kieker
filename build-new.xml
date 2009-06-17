@@ -351,10 +351,14 @@
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="${build.tests.dir}/"/>
         <iajc  destdir="${build.tests.dir}" source="1.5" verbose="true"
-              classpathref="run.ctwtests.classpath">
+              classpathref="classpath.libs"
+              classpath="dist/${dist.tpmon.ctrl}">
             <sourceroots>
-                <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark"/>
+                <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>
             </sourceroots>
+            <!--<aspectpath>
+                <pathelement location="dist/${dist.tpmon.ctw}"/>
+            </aspectpath>-->
         </iajc>
     </target>
     <target name="run-tests-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstore">
@@ -402,8 +406,12 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.synchron.Bookstore"
-              classpathref="run.ctwtests.classpath">
+              classpathref="classpath.libs">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <classpath>
+                <pathelement location="dist/${dist.tpmon.ctrl}"/>
+                <pathelement path="${build.tests.dir}"/>
+            </classpath>
         </java>
     </target>
   <!--  <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-bookstore">
@@ -419,17 +427,21 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"              
-	      classpathref="run.ctwtests.classpath">
+	      classpathref="classpath.libs">
             <jvmarg value="-server"/>
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
             <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <classpath>
+                <pathelement location="dist/${dist.tpmon.ctrl}"/>
+                <pathelement path="${build.tests.dir}"/>
+            </classpath>
         </java>
         <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
         <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
         	failonerror="true" />
         <exec command="bash -c &quot;R --vanilla &lt; ./src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/gen-results.r&quot;"/>
-        <exec command="kpdf tmp/benchmark-results.pdf" spawn="true" />
+        <exec command="okular tmp/benchmark-results.pdf" spawn="true" />
     </target>
     <target name="build-tpmon-control-servlet" depends="init">
         <delete dir="build"/>
