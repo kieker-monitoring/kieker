@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * kieker.tpmon.annotations.TpmonMonitoringProbe
+ * kieker.tpmon.annotations.TpmonExecutionMonitoringProbe
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -34,6 +34,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface TpmonMonitoringProbe {
+public @interface TpmonExecutionMonitoringProbe {
 	// String context();
 }

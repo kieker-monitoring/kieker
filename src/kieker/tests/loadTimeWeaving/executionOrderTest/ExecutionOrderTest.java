@@ -1,6 +1,6 @@
 package kieker.tests.loadTimeWeaving.executionOrderTest;
 
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  *  kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest.java
@@ -33,7 +33,7 @@ import kieker.tpmon.annotation.TpmonMonitoringProbe;
  */
 
 public class ExecutionOrderTest {
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     private static void a(boolean b) {
         if (b) {   
             a2(b);            
@@ -43,12 +43,12 @@ public class ExecutionOrderTest {
         }
     }
 
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     private static void a2(boolean b) {
         if (b) b();
     }
 
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     private static void b() {
         double d = 12 + ((double)System.currentTimeMillis()/1000d);
         for (int i=0; i < 10000; i++) {
@@ -65,17 +65,17 @@ public class ExecutionOrderTest {
     }
 
 
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
 	public static void d1() {
 		d2();
 	}
 
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
 	public static void d2() {
 		d3();
 	}
 
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
 	public static void d3() {
 		System.out.println("d3()");
 	}

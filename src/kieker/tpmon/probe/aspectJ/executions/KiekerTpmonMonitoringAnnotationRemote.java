@@ -34,7 +34,7 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
 
     private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
 
-    @Pointcut("execution(@kieker.tpmon.annotation.TpmonMonitoringProbe * *.*(..))"+
+    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))"+
               " && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }

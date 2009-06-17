@@ -1,5 +1,5 @@
 package kieker.tests.compileTimeWeaving.bookstore.synchron;
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  * kieker.tests.compileTimeWeaving.bookstore.CRM.java
@@ -44,7 +44,7 @@ public class CRM {
     /**
      * This method will be monitored, since it has an annotation.
      */
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void getOffers(){
 	Catalog.getBook(true);
     }

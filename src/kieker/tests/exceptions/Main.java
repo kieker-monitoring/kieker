@@ -1,6 +1,6 @@
 package kieker.tests.exceptions;
 
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  * kieker.tests.exceptions.Main.java
@@ -57,7 +57,7 @@ public class Main {
 
     }
     
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void helloTpmon(boolean throwException) throws Exception{
         System.out.println("Hello World (look at your monitoring log ...)."+Thread.currentThread().getId()+" ");        
 	if (throwException) {

@@ -1,6 +1,6 @@
 package kieker.tests.compileTimeWeaving.bookstore;
 
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  * kieker.tests.compileTimeWeaving.bookstore.Catalog.java
@@ -38,7 +38,7 @@ import kieker.tpmon.annotation.TpmonMonitoringProbe;
 
 public class Catalog {
     
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void getBook(boolean complexQuery){
     	if (complexQuery) {
 		//System.out.println("  complex query");
