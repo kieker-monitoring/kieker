@@ -41,7 +41,7 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
     public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
     }
 
-    @Around("monitoredServletEntry(HttpServletRequest, HttpServletResponse)")
+    @Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)")
     public Object doServletEntryProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         return super.doServletEntryProfiling(thisJoinPoint);
     }

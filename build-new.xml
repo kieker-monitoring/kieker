@@ -320,10 +320,14 @@
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="${build.tests.dir}/"/>
         <iajc destdir="${build.tests.dir}" source="1.5" verbose="true"
-              classpathref="run.ctwtests.classpath">
+              classpathref="classpath.libs"
+              classpath="dist/${dist.tpmon.ctrl}">
             <sourceroots>
                 <pathelement location="src/kieker/tests/compileTimeWeaving/bookstore/"/>
             </sourceroots>
+            <!--<aspectpath>
+                <pathelement location="dist/${dist.tpmon.ctw}"/>
+            </aspectpath>-->
         </iajc>
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore">
@@ -357,28 +361,40 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
-              classpathref="run.ctwtests.classpath">
+              classpathref="classpath.libs">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <classpath>
+                <pathelement location="dist/${dist.tpmon.ctrl}"/>
+                <pathelement path="${build.tests.dir}"/>
+            </classpath>
         </java>
     </target>
     <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="clean,compile-tests-compileTimeWeaving-bookstoreDB">
-<!--        <java dir="."
-              fork="true"
-              classpathref="run.ctwtests.classpath"
-              classname="kieker.tests.util.JavaDBInitializer">
-           <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
-           <jvmarg value="-Dtpmon.dbDriverClassname="/>
-           <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
-           <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
-	</java>-->
         <java dir="."
               fork="true"
-              classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
-              classpathref="run.ctwtests.classpath">
+              classpathref="classpath.libs"
+              classname="kieker.tests.util.JavaDBInitializer">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dtpmon.dbDriverClassname="/>
             <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
             <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
+            <classpath>
+                <pathelement location="dist/${dist.tpmon.ctrl}"/>
+                <pathelement path="${build.tests.dir}"/>
+            </classpath>
+        </java>
+        <java dir="."
+              fork="true"
+              classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
+              classpathref="classpath.libs">
+            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dtpmon.dbDriverClassname="/>
+            <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
+            <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
+            <classpath>
+                <pathelement location="dist/${dist.tpmon.ctrl}"/>
+                <pathelement path="${build.tests.dir}"/>
+            </classpath>
         </java>
     </target>
     <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="clean,compile-tests-compileTimeWeaving-bookstore">
