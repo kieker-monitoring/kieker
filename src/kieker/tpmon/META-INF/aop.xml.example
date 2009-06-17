@@ -25,9 +25,7 @@
 	<!-- <weaver options="-verbose"/> -->
 	<weaver options="">
 	
-	<!-- this following include enables the HelloWorld tutorial, but
-	     isn't restrictive enough for production systems -->
-    <include within="*"/> 
+        <!-- <include within="*"/> -->
 
 	<!-- uncomment following to instrument sun jpetstore -->
 	<!-- <include within="com.sun.j2ee.blueprints..*"/> -->
@@ -54,13 +52,11 @@
 <aspects>        
      <!-- here you usually want to use only ONE aspect. -->
      <!-- Put the remaining in a comment -->
-     <aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotation"/>
-     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationServlet"/>-->
-     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringFull"/>-->
-     <!--<aspect name="kieker.tpmon.aspects.KiekerTpmonMonitoringFullServlet"/>-->
-
-     <!-- experimental aspects -->
-     <!--   <aspect name="kieker.tpmon.aspects.TpmonFullServletRemoteInstrumentation"/>-->
-     <!--   <aspect name="kieker.tpmon.aspects.TpmonRandomPartialInstumentationServletRemote"/>-->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringAnnotation"/>-->
+     <!--<aspect name="kieker.probe.aspectJ.executions.KiekerTpmonMonitoringAnnotationServlet"/>-->
+     <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringFull"/>
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringFullServlet"/>-->
+     <!--   <aspect name="kieker.tpmon.probe.aspectJ.executions.TpmonFullServletRemoteInstrumentation"/>-->
+     <!--   <aspect name="kieker.tpmon.probe.aspectJ.executions.TpmonRandomPartialInstumentationServletRemote"/>-->
 </aspects>
 </aspectj>
