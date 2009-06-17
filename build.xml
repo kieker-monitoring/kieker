@@ -115,9 +115,8 @@
         <iajc destDir="build" 
               source="1.5"
               verbose="off"
-              srcdir="src"
+              srcdir="src/kieker/tpmon/"
               debug="true"
-              excludes="kieker/tests/**,kieker/controlServlet/**"
               classpathref="dev.classpath">
         </iajc>
         <copy todir="build/META-INF">
@@ -125,7 +124,10 @@
         </copy>
         <jar destfile="dist/${dist.tpmon.ltw}">
             <fileset dir="build"/>
-            <fileset dir="src"/>
+            <fileset dir="src">
+                <exclude name="kieker/tests/**"/>
+                <exclude name="kieker/controlServlet/**"/>
+            </fileset>
         </jar>
     </target>
     <target name="build-tpmon-ctw" depends="init">
@@ -137,12 +139,28 @@
                verbose="off"
                srcdir="src"
                debug="true"
-               excludes="kieker/tests/**,kieker/tpmon/META-INF/**,kieker/tpmon/probe/**,kieker/controlServlet/**,kieker/tpmon/reader/**"
                classpathref="dev.classpath">
             <compilerarg value="-Xlint:all"/>
+            <exclude name="kieker/tpmon/reader/**"/>
+            <exclude name="kieker/tpmon/probe/cxf/**"/>
+            <exclude name="kieker/tpmon/probe/spring/**"/>
+            <exclude name="kieker/tpmon/probe/tomcat/**"/>
+            <exclude name="kieker/tests/**"/>
+            <exclude name="kieker/controlServlet/**"/>
         </javac>
         <copy file="src/kieker/tpmon/META-INF/tpmon.properties" todir="build/META-INF"/>
-        <jar destfile="dist/${dist.tpmon.ctw}" basedir="build"/>
+        <jar destfile="dist/${dist.tpmon.ctw}">
+            <fileset dir="build"/>
+            <fileset dir="src">
+                <exclude name="kieker/tpmon/reader/**"/>
+                <exclude name="kieker/tpmon/probe/cxf/**"/>
+                <exclude name="kieker/tpmon/probe/spring/**"/>
+                <exclude name="kieker/tpmon/probe/tomcat/**"/>
+                <exclude name="kieker/tests/**"/>
+                <exclude name="kieker/controlServlet/**"/>
+                <exclude name="kieker/tpmon/META-INF/**"/>
+            </fileset>
+        </jar>
     </target>
     
     <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
@@ -254,11 +272,11 @@
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-all,build-tpmon-ctw">  
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoring.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoringServlet.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoringServlet.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/${KiekerTpmonTestAspect}"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>        
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="build-tests/"/>
@@ -281,11 +299,11 @@
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-all,build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoring.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/AbstractKiekerTpmonMonitoringServlet.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoringServlet.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/${KiekerTpmonTestAspect}"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="build-tests/"/>

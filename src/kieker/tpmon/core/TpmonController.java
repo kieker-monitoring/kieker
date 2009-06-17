@@ -322,11 +322,11 @@ public class TpmonController {
     // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)    
 //    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData) {
+    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
         // Dirty hack! Needs to be cleaned up
         // Possible solution: record's getInstance() requests experimentId and vnName from Controller
-        if (execData instanceof KiekerExecutionRecord) {
-            KiekerExecutionRecord lexecData = (KiekerExecutionRecord) execData;
+        if (monitoringRecord instanceof KiekerExecutionRecord) {
+            KiekerExecutionRecord lexecData = (KiekerExecutionRecord) monitoringRecord;
             lexecData.experimentId = this.experimentId;
             lexecData.vmName = this.vmname;
         }
@@ -337,7 +337,7 @@ public class TpmonController {
 
 //      Not supported any more
 //        if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
-//            if (!(execData.traceId % traceSampleingFrequency == 0)) {
+//            if (!(monitoringRecord.traceId % traceSampleingFrequency == 0)) {
 //                return true;
 //            }
 //        }
@@ -384,7 +384,7 @@ public class TpmonController {
 //        newMethodname = methodname;
         numberOfInserts.incrementAndGet();
         // now it fails fast, it disables monitoring when a queue once is full
-        if (!this.monitoringDataWriter.insertMonitoringDataNow(execData)) {
+        if (!this.monitoringDataWriter.insertMonitoringDataNow(monitoringRecord)) {
             log.fatal("Error writing the monitoring data. Will terminate monitoring!");
             this.terminateMonitoring();
             return false;
@@ -411,16 +411,16 @@ public class TpmonController {
 //        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
 //        String opname = component + newMethodname;
 //        numberOfInserts.incrementAndGet();
-//        AbstractKiekerMonitoringRecord execData = AbstractKiekerMonitoringRecord.getInstance();
-//        execData.componentName = opname;
-//        execData.opname = encodedName;
-//        execData.traceId = -5;
-//        execData.tin = -5;
-//        execData.tout = -5;
-//        execData.eoi = -5;
-//        execData.ess = -5;
+//        AbstractKiekerMonitoringRecord monitoringRecord = AbstractKiekerMonitoringRecord.getInstance();
+//        monitoringRecord.componentName = opname;
+//        monitoringRecord.opname = encodedName;
+//        monitoringRecord.traceId = -5;
+//        monitoringRecord.tin = -5;
+//        monitoringRecord.tout = -5;
+//        monitoringRecord.eoi = -5;
+//        monitoringRecord.ess = -5;
 //        // NOTE: experimentId and vmname will be set inside insertMonitoringDataNow(.)
-//        this.monitoringDataWriter.insertMonitoringDataNow(execData);
+//        this.monitoringDataWriter.insertMonitoringDataNow(monitoringRecord);
 //    }
     /**
      * Internal method to convert the method names into a proper format  
