@@ -284,7 +284,7 @@
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
-           <classpath>
+            <classpath>
                 <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement location="dist/${dist.tpmon.ltw}"/>
                 <pathelement path="${build.tests.dir}"/>
@@ -297,11 +297,16 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
-              classpathref="run.ltwtests.classpath">
+              classpathref="classpath.libs">
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
-            <!-- <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/> -->
-            <!-- <jvmarg value="-Daj.weaving.verbose=true"/> -->
+            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+            <jvmarg value="-Daj.weaving.verbose=true"/>
+            <classpath>
+                <pathelement location="dist/${dist.tpmon.ctrl}"/>
+                <pathelement location="dist/${dist.tpmon.ltw}"/>
+                <pathelement path="${build.tests.dir}"/>
+            </classpath>
         </java>
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-tpmon-ctw">
