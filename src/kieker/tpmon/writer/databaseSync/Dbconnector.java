@@ -146,10 +146,10 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
      * dbconnector.properties.
      */
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData) {
+    public synchronized boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
         try {
             // connector only supports execution records so far
-            KiekerExecutionRecord execRecord = (KiekerExecutionRecord) execData;
+            KiekerExecutionRecord execRecord = (KiekerExecutionRecord) monitoringRecord;
 
             psInsertMonitoringData.setInt(1,
                     (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : execRecord.experimentId);

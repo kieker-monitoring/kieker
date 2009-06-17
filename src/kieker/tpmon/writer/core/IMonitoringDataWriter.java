@@ -29,7 +29,7 @@ import kieker.tpmon.annotation.TpmonInternal;
 public interface IMonitoringDataWriter {
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData);
+    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord);
 
     @TpmonInternal()
     public boolean init(String initString);

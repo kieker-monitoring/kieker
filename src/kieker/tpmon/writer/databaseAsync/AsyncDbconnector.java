@@ -170,7 +170,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData) {
+    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }
@@ -190,7 +190,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             }
             }*/
 
-            blockingQueue.add(execData); // tries to add immediately!
+            blockingQueue.add(monitoringRecord); // tries to add immediately!
         //System.out.println("Queue is "+blockingQueue.size());
 
         } catch (Exception ex) {

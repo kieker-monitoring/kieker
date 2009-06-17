@@ -83,13 +83,13 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      */
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData) {
+    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }
 
         try {
-            blockingQueue.add(execData); // tries to add immediately!
+            blockingQueue.add(monitoringRecord); // tries to add immediately!
             //System.out.println(""+blockingQueue.size());
         } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex);

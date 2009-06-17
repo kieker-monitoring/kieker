@@ -74,16 +74,16 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
         log.info("FsWriter thread running");
         try {
             while (!finished) {
-                AbstractKiekerMonitoringRecord data = writeQueue.take();
-                if (data == TpmonController.END_OF_MONITORING_MARKER){
+                AbstractKiekerMonitoringRecord monitoringRecord = writeQueue.take();
+                if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER){
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
                     writeQueue.add(TpmonController.END_OF_MONITORING_MARKER);
                     finished = true;
                     break;
                 }
-                if (data != null) {
-                    consume(data);
+                if (monitoringRecord != null) {
+                    consume(monitoringRecord);
                 //System.out.println("FSW "+writeQueue.size());
                 } else {
                     // timeout ... 
@@ -106,15 +106,14 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
     }
 
     @TpmonInternal()
-    private void consume(Object traceidObject) throws Exception {
+    private void consume(AbstractKiekerMonitoringRecord monitoringRecord) throws Exception {
         // TODO: We should check whether this is necessary. 
         // This should only cover an initial action which can be 
         // moved before the while loop in run()
         if (pos == null || filenameInitialized == false) {
             prepareFile();
         }
-        execData = (AbstractKiekerMonitoringRecord) traceidObject;
-        writeDataNow(execData);
+        writeDataNow(monitoringRecord);
     }
 
     /**
@@ -159,9 +158,9 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
      * @throws java.io.IOException
      */
     @TpmonInternal()
-    private void writeDataNow(AbstractKiekerMonitoringRecord execData) throws IOException {
+    private void writeDataNow(AbstractKiekerMonitoringRecord monitoringRecord) throws IOException {
         prepareFile(); // may throw FileNotFoundException
-        pos.println(execData.toCSVRecord());
+        pos.println(monitoringRecord.toCSVRecord());
         pos.flush();
     }
 

@@ -104,15 +104,15 @@ public class DbWriterThread extends AbstractWorkerThread {
      * writes next item into database
      */
     @TpmonInternal()
-    private void consume(AbstractKiekerMonitoringRecord traceidObject) throws SQLException {
-        //if (TpmonController.debug) System.out.println("DbWriterThread "+this+" Consuming "+traceidObject);
+    private void consume(AbstractKiekerMonitoringRecord monitoringRecord) throws SQLException {
+        //if (TpmonController.debug) System.out.println("DbWriterThread "+this+" Consuming "+monitoringRecord);
         try {
             if (statementChanged || psInsertMonitoringData == null) {
                 psInsertMonitoringData = conn.prepareStatement(nextStatementText);
                 statementChanged = false;
             }
 
-            KiekerExecutionRecord execData = (KiekerExecutionRecord) traceidObject;
+            KiekerExecutionRecord execData = (KiekerExecutionRecord) monitoringRecord;
             psInsertMonitoringData.setString(1, execData.componentName + "." + execData.opname);
             psInsertMonitoringData.setString(2, execData.sessionId);
             psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));

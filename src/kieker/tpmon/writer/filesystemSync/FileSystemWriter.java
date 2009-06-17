@@ -120,10 +120,10 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     }
 
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord execData) {
+    public synchronized boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
         try {
             prepareFile(); // may throw FileNotFoundException
-            pos.println(execData.toCSVRecord());
+            pos.println(monitoringRecord.toCSVRecord());
             pos.flush();
         } catch (IOException ex) {
             log.error("Failed to write data", ex);
