@@ -1,27 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Kieker" default="build-all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
     <property file="tpmon.properties"/>
+    <property file="build.properties"/>
 
     <property name="KiekerTpmonTestAspect"
               value="KiekerTpmonMonitoringAnnotationRemote.java"/>
-
-    <property name="kieker.jarnamebase"
-              value="kieker-tpmon"/>
-    <property name="kieker-common.jarnamebase"
-              value="${kieker.jarnamebase}-common"/>
-    <property name="kieker-ltw.jarnamebase"
-              value="${kieker.jarnamebase}-ltw"/>
-    <property name="kieker-ctw.jarnamebase"
-              value="${kieker.jarnamebase}-ctw"/>
-    <property name="kieker-servlet.jarnamebase"
-              value="${kieker.jarnamebase}-control-servlet"/>
-
-    <property name="build.dir" value="build/"/>
-    <property name="build.common.dir" value="build/common/"/>
-    <property name="build.ctw.dir" value="build/ctw/"/>
-    <property name="build.ltw.dir" value="build/ltw/"/>
-    <property name="build.controlServlet.dir" value="build/controlServlet/"/>
-    <property name="build.tests.dir" value="build/tests/"/>
 
     <path id="classpath.libs">
         <pathelement path="${classpath}"/>
@@ -30,61 +13,31 @@
         </fileset>
         <pathelement location="."/>
     </path>
-    <path id="compile.ltw.classpath">
-        <path refid="classpath.libs"/>
-        <fileset dir="dist">
-            <include name="${kieker-common.jarnamebase}*.jar"/>
-        </fileset>
-    </path>
-    <path id="compile.ctw.classpath">
-        <path refid="classpath.libs"/>
-        <fileset dir="dist">
-            <include name="${kieker-common.jarnamebase}*.jar"/>
-        </fileset>
-    </path>
 
-    <path id="run.classpath"> <!-- the normal classpath for executing kieker -->
-        <path refid="classpath.libs"/>
+    <!-- Classpath with Kieker core and external libs  -->
+    <path id="core.classpath">
+      <path refid="classpath.libs"/>
         <fileset dir="dist">
             <include name="${kieker-common.jarnamebase}*.jar"/>
         </fileset>
-    </path>
-    <path id="run.tests.classpath"> <!-- for AspectJ load time weaving tests -->
-        <pathelement path="${run.classpath}"/>
-        <path refid="classpath.libs"/>
-        <fileset dir="dist">
-            <include name="${kieker-ltw.jarnamebase}*.jar"/>
-        </fileset>
-        <pathelement path="${build.tests.dir}"/>
-    </path>
-    <path id="run.ltwtests.classpath"> <!-- for AspectJ load time weaving tests -->
-        <pathelement path="${run.classpath}"/>
-        <path refid="classpath.libs"/>
-        <fileset dir="dist">
-            <include name="${kieker-ltw.jarnamebase}*.jar"/>
-        </fileset>
-        <pathelement path="${build.tests.dir}"/>
-    </path>
-    <path id="run.ctwtests.classpath"> <!-- for AspectJ compile time weaving tests -->
-        <pathelement path="${run.classpath}"/>
-        <path refid="classpath.libs"/>
-        <pathelement location="${build.tests.dir}"/>
-        <fileset dir="dist">
-            <include name="${kieker-ctw.jarnamebase}*.jar"/>
-        </fileset>
-        <pathelement path="${build.tests.dir}"/>
     </path>
     
     <target name="init-version">
         <tstamp/>
         <!-- Names of the tpmon runtime libraries that will be created
-		     by the build process: -->
-        <property name="tpmon.version" value="0.95-introducingMonitoringRecord"/>
-        <property name="dist.tpmon.ltw"  value="${kieker-ltw.jarnamebase}-${tpmon.version}.jar"/>
-        <property name="dist.tpmon.ctw"  value="${kieker-ctw.jarnamebase}-${tpmon.version}.jar"/>
-        <property name="dist.tpmon.ctrl" value="${kieker-common.jarnamebase}-${tpmon.version}.jar"/>
-        <property name="dist.tpan"        value="KiekerTpan-${tpmon.version}.jar"/>
-        <property name="dist.tpmon.controlServlet" value="${kieker-servlet.jarnamebase}-${tpmon.version}.war"/>
+	     by the build process: -->
+        <property name="tpmon.version" 
+                  value="0.95-introducingMonitoringRecord"/>
+        <property name="dist.tpmon.ltw"  
+                  value="${kieker-ltw.jarnamebase}-${tpmon.version}.jar"/>
+        <property name="dist.tpmon.ctw"  
+                  value="${kieker-ctw.jarnamebase}-${tpmon.version}.jar"/>
+        <property name="dist.tpmon.ctrl" 
+                  value="${kieker-common.jarnamebase}-${tpmon.version}.jar"/>
+        <property name="dist.tpan"        
+                  value="KiekerTpan-${tpmon.version}.jar"/>
+        <property name="dist.tpmon.controlServlet" 
+                  value="${kieker-servlet.jarnamebase}-${tpmon.version}.war"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -95,9 +48,9 @@
                        replace="VERSION = &quot;${tpmon.version}-${DSTAMP}&quot;"/>
         <replaceregexp match="&lt;version&gt;.*?&lt;/version&gt;"
                        replace="&lt;version&gt;${tpmon.version}-${DSTAMP}&lt;/version&gt;">
-            <fileset dir=".">
-                <include name="pom_ant_kieker*.xml"/>
-            </fileset>
+        <fileset dir=".">
+          <include name="pom_ant_kieker*.xml"/>
+        </fileset>
         </replaceregexp>
     </target>
 
@@ -107,8 +60,6 @@
         <antcall target="build-tpmon-ctrl"/>
         <antcall target="build-tpmon-control-servlet"/>
     </target>
-
-    <property file="build.properties"/>
 
     <target name="init" depends="update-version">
         <fail message="Critical error: ./tpmon.properties is missing! Create it based on ./tpmon.properties.example">
@@ -176,14 +127,14 @@
               verbose="off"
               srcdir="src/kieker/tpmon/probe/aspectJ"
               debug="true"
-              classpathref="compile.ltw.classpath">
+              classpathref="core.classpath">
         </iajc>
         <javac destDir="${build.ltw.dir}"
                source="1.5"
                verbose="off"
                srcdir="src/kieker/tpmon/probe/"
                debug="true"
-               classpathref="compile.ltw.classpath">
+               classpathref="core.classpath">
             <compilerarg value="-Xlint:all"/>
             <exclude name="kieker/tpmon/probe/aspectJ/**"/>
         </javac>
@@ -204,7 +155,7 @@
                verbose="off"
                srcdir="src/kieker/tpmon/probe/aspectJ/"
                debug="true"
-               classpathref="compile.ctw.classpath">
+               classpathref="core.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
         <jar destfile="dist/${dist.tpmon.ctw}">
@@ -213,14 +164,12 @@
     </target>
 
     <target name="clean">
-        <delete dir="build"/>
-<!--        <delete dir="tmp"/>-->
+	<!-- <delete dir="tmp"/>-->
         <delete dir="${build.dir}"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <delete file="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/TpmonMonitorAnnotation.aj"/>
-        <delete file="src/kieker/tests/compileTimeWeaving/bookstore/TpmonMonitorAnnotation.aj"/>
     </target>
+
     <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
         <echo>
             This is a small test for the part of Tpmon that
@@ -240,8 +189,7 @@
         </echo>
         <javac source="1.5"
                destDir="${build.tests.dir}"
-               classpathref="classpath.libs"
-               classpath="dist/${dist.tpmon.ctrl}"
+               classpathref="core.classpath"
                srcdir="src/kieker/tests/storageOnly/"
                verbose="off"
                debug="true"/>
@@ -250,28 +198,31 @@
         <java
             dir="."
             fork="true"
-            classpathref="classpath.libs"
-	        classname="kieker.tests.storageOnly.StorageOnly">
+            classpathref="core.classpath"
+	    classname="kieker.tests.storageOnly.StorageOnly">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
             <!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
             <!-- <jvmarg value="-Xloggc:details.out"/> -->
             <!-- <jvmarg value="-verbosegc"/> -->
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement path="${build.tests.dir}"/>
             </classpath>
-
         </java>
     </target>
+
+    <path id="run.tests.classpath">
+      <path refid="core.classpath"/>
+      <fileset dir="${build.tests.dir}/"/>
+    </path>
 
     <target name="compile-tests-loadTimeWeaving" depends="build-tpmon-ltw">
         <javac source="1.5"
                destDir="${build.tests.dir}"
-               classpathref="classpath.libs"
-               classpath="dist/${dist.tpmon.ctrl}"
+               classpathref="core.classpath"
                srcdir="src/kieker/tests/loadTimeWeaving/"/>
-        <copy file="src/kieker/tests/log4j.properties" todir="${build.tests.dir}/"/>
+        <copy file="src/kieker/tests/log4j.properties" 
+              todir="${build.tests.dir}/"/>
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation"
@@ -279,15 +230,13 @@
         <java dir="."
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
-              classpathref="classpath.libs">
+              classpathref="run.tests.classpath">
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement location="dist/${dist.tpmon.ltw}"/>
-                <pathelement path="${build.tests.dir}"/>
             </classpath>
         </java>
     </target>
@@ -297,13 +246,12 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
-              classpathref="classpath.libs">
+              classpathref="core.classpath">
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement location="dist/${dist.tpmon.ltw}"/>
                 <pathelement path="${build.tests.dir}"/>
             </classpath>
@@ -320,14 +268,10 @@
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="${build.tests.dir}/"/>
         <iajc destdir="${build.tests.dir}" source="1.5" verbose="true"
-              classpathref="classpath.libs"
-              classpath="dist/${dist.tpmon.ctrl}">
+              classpathref="core.classpath">
             <sourceroots>
                 <pathelement location="src/kieker/tests/compileTimeWeaving/bookstore/"/>
             </sourceroots>
-            <!--<aspectpath>
-                <pathelement location="dist/${dist.tpmon.ctw}"/>
-            </aspectpath>-->
         </iajc>
     </target>
     <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore">
@@ -351,8 +295,7 @@
         <copy file="src/kieker/tests/log4j.properties"
 	      todir="${build.tests.dir}/"/>
         <iajc  destdir="${build.tests.dir}" source="1.5" verbose="true"
-              classpathref="classpath.libs"
-              classpath="dist/${dist.tpmon.ctrl}">
+              classpathref="core.classpath">
             <sourceroots>
                 <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>
             </sourceroots>
@@ -365,10 +308,9 @@
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
-              classpathref="classpath.libs">
+              classpathref="core.classpath">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement path="${build.tests.dir}"/>
             </classpath>
         </java>
@@ -376,14 +318,13 @@
     <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="clean,compile-tests-compileTimeWeaving-bookstoreDB">
         <java dir="."
               fork="true"
-              classpathref="classpath.libs"
+              classpathref="core.classpath"
               classname="kieker.tests.util.JavaDBInitializer">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dtpmon.dbDriverClassname="/>
             <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
             <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement path="${build.tests.dir}"/>
             </classpath>
         </java>
@@ -401,15 +342,15 @@
             </classpath>
         </java>
     </target>
+
     <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="clean,compile-tests-compileTimeWeaving-bookstore">
         <echo message="Using Bookstore variant with synchronized Catalog.getBooks (its slower)."/>
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.synchron.Bookstore"
-              classpathref="classpath.libs">
+              classpathref="core.classpath">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement path="${build.tests.dir}"/>
             </classpath>
         </java>
@@ -423,17 +364,17 @@
            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
     </target> -->
+
     <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"              
-	      classpathref="classpath.libs">
+	      classpathref="core.classpath">
             <jvmarg value="-server"/>
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
             <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ctrl}"/>
                 <pathelement path="${build.tests.dir}"/>
             </classpath>
         </java>
@@ -443,13 +384,14 @@
         <exec command="bash -c &quot;R --vanilla &lt; ./src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/gen-results.r&quot;"/>
         <exec command="okular tmp/benchmark-results.pdf" spawn="true" />
     </target>
+
     <target name="build-tpmon-control-servlet" depends="init">
-        <delete dir="build"/>
-        <mkdir dir="build"/>
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
         <javac source="1.5"
                destDir="build-tpmonControlServlet"                
-               classpathref="classpath.libs"
-               srcdir="src"
+               classpathref="core.classpath"
+               srcdir="src/kieker/controlServlet/"
                debug="true"
                includes="kieker/controlServlet/**"/>
         <war destfile="dist/${dist.tpmon.controlServlet}" webxml="src/kieker/controlServlet/WEB-INF/web.xml">
