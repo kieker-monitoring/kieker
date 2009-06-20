@@ -13,7 +13,7 @@
         <pathelement location="."/>
     </path>
 
-    <!-- Classpath with Kieker core and external libs  -->
+    <!-- Classpath with Kieker Ctrl and external libs  -->
     <path id="core.classpath">
         <path refid="classpath.libs"/>
         <fileset dir="${dist.dir}">
