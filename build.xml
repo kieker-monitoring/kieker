@@ -60,16 +60,17 @@
         <antcall target="build-tpmon-control-servlet"/>
     </target>
 
-    <target name="init-tpmon-properties">
+    <condition property="no.tpmon.properties">
+      <not>
+        <available file="${tpmon.properties}"/>
+      </not>
+    </condition>
+
+    <target name="init-tpmon-properties" if="no.tpmon.properties">
         <!-- if no tpmon.properties, copy example file automatically  -->
-        <fail message="${tpmon.properties} is missing.
-                       Creating default configuration.">
-            <condition>
-                <not>
-                    <available file="${tpmon.properties}"/>
-                </not>
-            </condition>
-        </fail>
+	<echo message="${tpmon.properties} not existing. 
+                       Creating default file."/>
+        <copy file="${tpmon.properties.example}" tofile="${tpmon.properties}"/>
     </target>
 
     <target name="init" depends="update-version,init-tpmon-properties">
@@ -212,15 +213,17 @@
         </java>
     </target>
 
-    <target name="init-aop-xml-ltwtests">
-        <fail message="${aop.xml.ltwtests} is missing.
-                       Creating default configuration.">
-            <condition>
-                <not>
-                    <available file="${aop.xml.ltwtests}"/>
-                </not>
-            </condition>
-        </fail>
+    <condition property="no.aop.xml.ltwtests">
+      <not>
+        <available file="${aop.xml.ltwtests}"/>
+      </not>
+    </condition>
+
+    <target name="init-aop-xml-ltwtests" if="no.aop.xml.ltwtests">
+        <!-- if no aop.xml, copy example file automatically  -->
+	<echo message="${aop.xml.ltwtests} not existing. 
+                       Creating default file."/>
+        <copy file="${aop.xml.example}" tofile="${aop.xml.ltwtests}"/>
     </target>
 
     <target name="compile-tests-loadTimeWeaving" 
