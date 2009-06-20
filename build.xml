@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Kieker" default="build-all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-    <property file="tpmon.properties"/>
     <property file="build.properties"/>
 
     <property name="KiekerTpmonTestAspect"
@@ -8,7 +7,7 @@
 
     <path id="classpath.libs">
         <pathelement path="${classpath}"/>
-        <fileset dir="external-libs">
+        <fileset dir="lib">
             <include name="**/*.jar"/>
         </fileset>
         <pathelement location="."/>
@@ -17,8 +16,8 @@
     <!-- Classpath with Kieker core and external libs  -->
     <path id="core.classpath">
         <path refid="classpath.libs"/>
-        <fileset dir="dist">
-            <include name="${kieker-common.jarnamebase}*.jar"/>
+        <fileset dir="${dist.dir}">
+            <include name="${kieker-ctrl.jarnamebase}*.jar"/>
         </fileset>
     </path>
     
@@ -33,11 +32,11 @@
         <property name="dist.tpmon.ctw"
                   value="${kieker-ctw.jarnamebase}-${tpmon.version}.jar"/>
         <property name="dist.tpmon.ctrl"
-                  value="${kieker-common.jarnamebase}-${tpmon.version}.jar"/>
+                  value="${kieker-ctrl.jarnamebase}-${tpmon.version}.jar"/>
         <property name="dist.tpan"
                   value="KiekerTpan-${tpmon.version}.jar"/>
         <property name="dist.tpmon.controlServlet"
-                  value="${kieker-servlet.jarnamebase}-${tpmon.version}.war"/>
+                  value="${kieker-controlServlet.jarnamebase}-${tpmon.version}.war"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -61,17 +60,24 @@
         <antcall target="build-tpmon-control-servlet"/>
     </target>
 
-    <target name="init" depends="update-version">
-        <fail message="Critical error: ./tpmon.properties is missing! Create it based on ./tpmon.properties.example">
+    <target name="init-tpmon-properties">
+        <!-- if no tpmon.properties, copy example file automatically  -->
+        <fail message="${tpmon.properties} is missing.
+                       Creating default configuration.">
             <condition>
                 <not>
-                    <available file="tpmon.properties"/>
+                    <available file="${tpmon.properties}"/>
                 </not>
             </condition>
         </fail>
+    </target>
+
+    <target name="init" depends="update-version,init-tpmon-properties">
         <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
         <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
-        <fail message="Critical error: AspectJ library not found in ${aspectjtoolsjar}. Check your aspejctjtoolsjar property in the file tpmon.properties.">
+        <fail message="Critical error: AspectJ library not found 
+                       in ${aspectjtoolsjar}. 
+                       Check your build.properties.">
             <condition>
                 <not>
                     <available file="${aspectjtoolsjar}"/>
@@ -79,7 +85,7 @@
             </condition>
         </fail>
         <mkdir dir="${build.dir}"/>
-        <mkdir dir="dist"/>
+        <mkdir dir="${dist.dir}"/>
         <mkdir dir="${build.tests.dir}"/>
         <mkdir dir="${build.controlServlet.dir}"/>
         <mkdir dir="tmp"/>
@@ -87,11 +93,11 @@
 
     <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
     <target name="build-tpmon-ctrl" depends="init">
-        <delete dir="${build.common.dir}"/>
-        <mkdir dir="${build.common.dir}"/>
-        <mkdir dir="${build.common.dir}/META-INF"/>
+        <delete dir="${build.ctrl.dir}"/>
+        <mkdir  dir="${build.ctrl.dir}"/>
+        <mkdir  dir="${build.ctrl.dir}/META-INF"/>
         <echo message="Creating the library of tpmon (${dist.tpmon.ctrl}) that is supposed for direct invocations - it doesn't contain the AOP instrumentation mechanisms."/>
-        <javac destDir="${build.common.dir}"
+        <javac destDir="${build.ctrl.dir}"
                source="1.5"
                srcdir="src"
                debug="true"
@@ -104,9 +110,9 @@
             <include name="kieker/tpmon/reader/**"/>
             <include name="kieker/tpmon/writer/**"/>
         </javac>
-        <copy file="tpmon.properties" todir="${build.common.dir}/META-INF"/>
-        <jar destfile="dist/${dist.tpmon.ctrl}">
-            <fileset dir="${build.common.dir}"/>
+        <copy file="${tpmon.properties}" todir="${build.ctrl.dir}/META-INF"/>
+        <jar destfile="${dist.dir}/${dist.tpmon.ctrl}">
+            <fileset dir="${build.ctrl.dir}"/>
         </jar>
     </target>
 
@@ -114,14 +120,6 @@
         <delete dir="${build.ltw.dir}"/>
         <mkdir dir="${build.ltw.dir}"/>
         <mkdir dir="${build.ltw.dir}/META-INF/"/>
-        <echo message="The iajc compiler is used to prepare load time weaving (LTW) by creating a .jar file. LTW is configured by the aop.xml in src/kieker/tpmon/META-INF. The database connection is specified in dbconnector.properties in src/kieker/tpmon/META-INF."/>
-        <fail message="src/kieker/tpmon/META-INF/aop.xml is missing! create it from src/kieker/tpmon/META-INF/aop.xml.example">
-            <condition>
-                <not>
-                    <available file="src/kieker/tpmon/META-INF/aop.xml"/>
-                </not>
-            </condition>
-        </fail>
         <iajc destDir="${build.ltw.dir}"
               source="1.5"
               verbose="off"
@@ -141,7 +139,7 @@
         <!--<copy todir="${build.ltw.dir}/META-INF">
             <fileset dir="src/kieker/tpmon/META-INF"/>
         </copy>-->
-        <jar destfile="dist/${dist.tpmon.ltw}">
+        <jar destfile="${dist.dir}/${dist.tpmon.ltw}">
             <fileset dir="${build.ltw.dir}"/>
         </jar>
     </target>
@@ -158,13 +156,14 @@
                classpathref="core.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
-        <jar destfile="dist/${dist.tpmon.ctw}">
+        <jar destfile="${dist.dir}/${dist.tpmon.ctw}">
             <fileset dir="${build.ctw.dir}"/>
         </jar>
     </target>
 
     <target name="clean">
 	<!-- <delete dir="tmp"/>-->
+        <delete dir="${dist.dir}"/>
         <delete dir="${build.dir}"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
@@ -213,14 +212,26 @@
         </java>
     </target>
 
-    <target name="compile-tests-loadTimeWeaving" depends="build-tpmon-ltw">
+    <target name="init-aop-xml-ltwtests">
+        <fail message="${aop.xml.ltwtests} is missing.
+                       Creating default configuration.">
+            <condition>
+                <not>
+                    <available file="${aop.xml.ltwtests}"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="compile-tests-loadTimeWeaving" 
+	    depends="build-tpmon-ltw,init-aop-xml-ltwtests">
         <javac source="1.5"
                destDir="${build.tests.dir}"
                classpathref="core.classpath"
                srcdir="src/kieker/tests/loadTimeWeaving/"/>
         <copy file="src/kieker/tests/log4j.properties"
               todir="${build.tests.dir}/"/>
-        <copy file="src/kieker/tpmon/META-INF/aop.xml"
+        <copy file="${aop.xml.ltwtests}"
 	      todir="${build.tests.dir}/META-INF"/>
     </target>
     
@@ -235,7 +246,7 @@
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ltw}"/>
+                <pathelement location="${dist.dir}/${dist.tpmon.ltw}"/>
             </classpath>
         </java>
     </target>
@@ -251,7 +262,7 @@
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
             <classpath>
-                <pathelement location="dist/${dist.tpmon.ltw}"/>
+                <pathelement location="${dist.dir}/${dist.tpmon.ltw}"/>
             </classpath>
         </java>
     </target>
@@ -299,7 +310,7 @@
                 <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>
             </sourceroots>
             <!--<aspectpath>
-                <pathelement location="dist/${dist.tpmon.ctw}"/>
+                <pathelement location="${dist.dir}/${dist.tpmon.ctw}"/>
             </aspectpath>-->
         </iajc>
     </target>
@@ -370,17 +381,17 @@
         <exec command="okular tmp/benchmark-results.pdf" spawn="true" />
     </target>
 
-    <target name="build-tpmon-control-servlet" depends="init">
-        <delete dir="${build.dir}"/>
-        <mkdir dir="${build.dir}"/>
+    <target name="build-tpmon-control-servlet" depends="init,build-tpmon-ctrl">
+        <delete dir="${build.controlServlet.dir}"/>
+        <mkdir dir="${build.controlServlet.dir}"/>
         <javac source="1.5"
-               destDir="build-tpmonControlServlet"                
+               destDir="${build.controlServlet.dir}"                
                classpathref="core.classpath"
                srcdir="src/kieker/controlServlet/"
                debug="true"
                includes="kieker/controlServlet/**"/>
-        <war destfile="dist/${dist.tpmon.controlServlet}" webxml="src/kieker/controlServlet/WEB-INF/web.xml">
-            <classes dir="build-tpmonControlServlet">
+        <war destfile="${dist.dir}/${dist.tpmon.controlServlet}" webxml="src/kieker/controlServlet/WEB-INF/web.xml">
+            <classes dir="${build.controlServlet.dir}">
                 <exclude name="*/tpmon/**"/>
             </classes>
             <zipfileset dir="src/kieker/controlServlet/images" prefix="images"/>
@@ -411,7 +422,7 @@
         To test deployment localy use something like file://localhost/xxx -->  
     <target name="mvn-deploy-ctrl" depends="build-tpmon-ctrl, mvn-init">
         <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ctrl.xml" />
-        <artifact:deploy file="dist/${dist.tpmon.ctrl}">
+        <artifact:deploy file="${dist.dir}/${dist.tpmon.ctrl}">
             <remoteRepository url="file://localhost/maven/deploy/test"/>
             <pom refid="maven.project"/>
         </artifact:deploy>
@@ -419,7 +430,7 @@
     
     <target name="mvn-deploy-ctw" depends="build-tpmon-ctw, mvn-init">
         <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ctw.xml" />
-        <artifact:deploy file="dist/${dist.tpmon.ctw}">
+        <artifact:deploy file="${dist.dir}/${dist.tpmon.ctw}">
             <remoteRepository url="file://localhost/maven/deploy/test"/>
             <pom refid="maven.project"/>
         </artifact:deploy>
@@ -427,7 +438,7 @@
     
     <target name="mvn-deploy-ltw" depends="build-tpmon-ltw, mvn-init">
         <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ltw.xml" />
-        <artifact:deploy file="dist/${dist.tpmon.ltw}">
+        <artifact:deploy file="${dist.dir}/${dist.tpmon.ltw}">
             <remoteRepository url="file://localhost/maven/deploy/test"/>
             <pom refid="maven.project"/>
         </artifact:deploy>

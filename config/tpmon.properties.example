@@ -73,10 +73,3 @@ tpmon.customStoragePath=/tmp/
 
 # 2.1 Use debugging functionality of the jvm (true/false)
 tpmon.javac.debug=false
-
-# 3. External libraries (usually no changes required)
-aspectjtoolsjar=external-libs/aspectjtools-1.6.4.jar
-aspectjrtjar=external-libs/aspectjrt-1.6.4.jar
-aspectjweaverjar=external-libs/aspectjweaver-1.6.4.jar
-aspectjlibjar=external-libs/aspectjlib-1.6.4.jar
-# all other files in the external-libs folder are used automatically
