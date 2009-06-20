@@ -51,7 +51,7 @@ public class KiekerTpmonMonitoringFullServlet extends AbstractKiekerTpmonMonitor
             return thisJoinPoint.proceed();
         }
         KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
-        String sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
+        String sessionId = sessionRegistry.recallThreadLocalSessionId(); // may be null
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){

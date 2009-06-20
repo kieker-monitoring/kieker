@@ -2,6 +2,8 @@ package kieker.tpmon.probe.spring.executions;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.ControlFlowRegistry;
+import kieker.tpmon.core.SessionRegistry;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
@@ -30,21 +32,24 @@ import org.springframework.web.context.request.WebRequestInterceptor;
 public class KiekerTpmonRequestRegistrationInterceptor implements WebRequestInterceptor {
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();
+    protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+    protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+
 
     @TpmonInternal()
     public void preHandle(WebRequest request) throws Exception {
-        ctrlInst.getAndStoreUniqueThreadLocalTraceId();
-        ctrlInst.storeThreadLocalSessionId(request.getSessionId());
-        ctrlInst.storeThreadLocalEOI(0);
-        ctrlInst.storeThreadLocalESS(1);
+        cfRegistry.getAndStoreUniqueThreadLocalTraceId();
+        sessionRegistry.storeThreadLocalSessionId(request.getSessionId());
+        cfRegistry.storeThreadLocalEOI(0);
+        cfRegistry.storeThreadLocalESS(1);
     }
 
     @TpmonInternal()
     public void postHandle(WebRequest request, ModelMap map) throws Exception {
-        ctrlInst.unsetThreadLocalTraceId();
-        ctrlInst.unsetThreadLocalSessionId();
-        ctrlInst.unsetThreadLocalEOI();
-        ctrlInst.unsetThreadLocalESS();
+        cfRegistry.unsetThreadLocalTraceId();
+        sessionRegistry.unsetThreadLocalSessionId();
+        cfRegistry.unsetThreadLocalEOI();
+        cfRegistry.unsetThreadLocalESS();
     }
 
     @TpmonInternal()

@@ -45,15 +45,15 @@ public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKieker
      */
     @TpmonInternal()
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        long traceId = tpmonController.recallThreadLocalTraceId();
+        long traceId = cfRegistry.recallThreadLocalTraceId();
         // Only go on if a traceId has been registered before
         if (traceId == -1 || !tpmonController.isMonitoringEnabled()) {
             return invocation.proceed();
         }
 
         KiekerExecutionRecord execData = this.initExecutionData(invocation);
-        execData.eoi = tpmonController.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
-        execData.ess = tpmonController.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
+        execData.eoi = cfRegistry.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
+        execData.ess = cfRegistry.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
 
         try {
             this.proceedAndMeasure(invocation, execData);
@@ -71,7 +71,7 @@ public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKieker
              * in case the execution of the joint point resulted in an
              * exception! */
             tpmonController.insertMonitoringDataNow(execData);
-            tpmonController.storeThreadLocalESS(execData.ess);
+            cfRegistry.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;
     }

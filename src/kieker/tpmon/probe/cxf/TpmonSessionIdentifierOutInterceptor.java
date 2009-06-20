@@ -2,6 +2,8 @@ package kieker.tpmon.probe.cxf;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.ControlFlowRegistry;
+import kieker.tpmon.core.SessionRegistry;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
 import org.apache.cxf.headers.Header;
@@ -40,6 +42,9 @@ import org.w3c.dom.Element;
  */
 public class TpmonSessionIdentifierOutInterceptor extends SoapHeaderOutFilterInterceptor {
 
+    protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+    protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+
 	@TpmonInternal()
 	public void handleMessage(SoapMessage msg) throws Fault {
 		Document d = DOMUtils.createDocument();
@@ -47,22 +52,22 @@ public class TpmonSessionIdentifierOutInterceptor extends SoapHeaderOutFilterInt
                 Header hdr;
                 /* Add sessionId to header */
 		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.SESSION_QUALIFIED_NAME);
-		e.setTextContent(TpmonController.getInstance().recallThreadLocalSessionId()); 
+		e.setTextContent(sessionRegistry.recallThreadLocalSessionId());
 		hdr = new Header(TpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
                 /* Add traceId to header */
 		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.TRACE_QUALIFIED_NAME);
-		e.setTextContent(Long.toString(TpmonController.getInstance().recallThreadLocalTraceId())); 
+		e.setTextContent(Long.toString(cfRegistry.recallThreadLocalTraceId()));
 		hdr = new Header(TpmonSOAPHeaderConstants.TRACE_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
                 /* Add eoi to header */
 		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.EOI_QUALIFIED_NAME);
-		e.setTextContent(Integer.toString(TpmonController.getInstance().recallThreadLocalEOI()));
+		e.setTextContent(Integer.toString(cfRegistry.recallThreadLocalEOI()));
 		hdr = new Header(TpmonSOAPHeaderConstants.EOI_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
                 /* Add ess to header */
 		e = d.createElementNS(TpmonSOAPHeaderConstants.NAMESPACE_URI, TpmonSOAPHeaderConstants.ESS_QUALIFIED_NAME);
-		e.setTextContent(Integer.toString(TpmonController.getInstance().recallThreadLocalESS()));
+		e.setTextContent(Integer.toString(cfRegistry.recallThreadLocalESS()));
 		hdr = new Header(TpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
 	}

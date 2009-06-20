@@ -3,6 +3,8 @@ package kieker.tpmon.probe.spring.executions;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.ControlFlowRegistry;
+import kieker.tpmon.core.SessionRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
@@ -43,6 +45,10 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
     private static final Log log = LogFactory.getLog(AbstractKiekerTpmonMethodInvocationInterceptor.class);
 
     protected static final TpmonController tpmonController = TpmonController.getInstance();
+    protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+    protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+
+
     /** Iff true, the name of the runtime class is used,
     iff false, the name of the declaring class (interface) is used */
     protected boolean useRuntimeClassname = true;
@@ -59,7 +65,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
 
     @TpmonInternal()
     protected KiekerExecutionRecord initExecutionData(MethodInvocation invocation) {
-        long traceId = tpmonController.recallThreadLocalTraceId();
+        long traceId = cfRegistry.recallThreadLocalTraceId();
 
         StringBuilder sb = new StringBuilder().append(invocation.getMethod().getName());
         sb.append("(");
@@ -91,13 +97,13 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
         execData.isEntryPoint = false;
         //execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point
         if (execData.traceId == -1) {
-            execData.traceId = tpmonController.getAndStoreUniqueThreadLocalTraceId();
+            execData.traceId = cfRegistry.getAndStoreUniqueThreadLocalTraceId();
             execData.isEntryPoint = true;
         }
         // here we can collect the sessionid, which may for instance be registered before by
         // a explicity call registerSessionIdentifier(String sessionid, long threadid) from a method
         // that knowns the request object (e.g. a servlet or a spring MVC controller).
-        execData.sessionId = tpmonController.recallThreadLocalSessionId();
+        execData.sessionId = sessionRegistry.recallThreadLocalSessionId();
 
         return execData;
     }
@@ -120,7 +126,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
         } finally {
             execData.tout = tpmonController.getTime();
             if (execData.isEntryPoint) {
-                tpmonController.unsetThreadLocalTraceId();
+                cfRegistry.unsetThreadLocalTraceId();
             }
         }
     }

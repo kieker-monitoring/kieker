@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import kieker.tpmon.core.ControlFlowRegistry;
+import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 
@@ -45,6 +47,10 @@ import kieker.tpmon.core.TpmonController;
 public class ControlServlet extends HttpServlet {
 
     private static final long serialVersionUID = 689701318L;
+
+    private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+    private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+
 
     protected void dumpError(PrintWriter out, String msg) {
         out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
@@ -163,13 +169,13 @@ public class ControlServlet extends HttpServlet {
              */
             }
             else if (action.equals("insertTestData")) {
-                ctrlInst.storeThreadLocalSessionId(request.getSession(true).getId());
-                ctrlInst.getAndStoreUniqueThreadLocalTraceId();
+                sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
+                cfRegistry.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.insertMonitoringDataNow(KiekerExecutionRecord.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", ctrlInst.recallThreadLocalSessionId(), ctrlInst.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i));
+                    ctrlInst.insertMonitoringDataNow(KiekerExecutionRecord.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i));
                 }
-                ctrlInst.unsetThreadLocalTraceId();
-                ctrlInst.unsetThreadLocalSessionId();
+                cfRegistry.unsetThreadLocalTraceId();
+                sessionRegistry.unsetThreadLocalSessionId();
             /*
              * action = switchFaultInjection
              */

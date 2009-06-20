@@ -44,7 +44,7 @@ public class KiekerTpmonMethodInvocationInterceptor extends AbstractKiekerTpmonM
      */
     @TpmonInternal()
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        long traceId = tpmonController.recallThreadLocalTraceId();
+        long traceId = cfRegistry.recallThreadLocalTraceId();
         // Only go on if a traceId has been registered before
         if (traceId == -1 || !tpmonController.isMonitoringEnabled()) {
             return invocation.proceed();

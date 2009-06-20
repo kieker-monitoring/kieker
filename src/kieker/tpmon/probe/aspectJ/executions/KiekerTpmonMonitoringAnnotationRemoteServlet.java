@@ -57,9 +57,9 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
             return thisJoinPoint.proceed();
         }
         KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
-        execData.sessionId = ctrlInst.recallThreadLocalSessionId(); // may be null
-        execData.eoi = ctrlInst.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
-        execData.ess = ctrlInst.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
+        execData.sessionId = sessionRegistry.recallThreadLocalSessionId(); // may be null
+        execData.eoi = cfRegistry.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
+        execData.ess = cfRegistry.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
 
         try {
             this.proceedAndMeasure(thisJoinPoint, execData);
@@ -77,7 +77,7 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
              * in case the execution of the joint point resulted in an
              * exception! */
             ctrlInst.insertMonitoringDataNow(execData);
-            ctrlInst.storeThreadLocalESS(execData.ess);
+            cfRegistry.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;
     }

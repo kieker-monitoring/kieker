@@ -2,6 +2,7 @@ package kieker.tpmon.probe.aspectJ.executions;
 
 import javax.servlet.http.HttpServletRequest;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.SessionRegistry;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
@@ -29,6 +30,8 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractKiekerTpmonMonitoringServlet extends AbstractKiekerTpmonMonitoring {
 
+    protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+
     @TpmonInternal()
     public Object doServletEntryProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
@@ -37,13 +40,13 @@ public abstract class AbstractKiekerTpmonMonitoringServlet extends AbstractKieke
         HttpServletRequest req = (HttpServletRequest)thisJoinPoint.getArgs()[0];
         String sessionId = (req!=null) ? req.getSession(true).getId() : null;
         Object retVal = null;
-        ctrlInst.storeThreadLocalSessionId(sessionId);
+        sessionRegistry.storeThreadLocalSessionId(sessionId);
         try{
             retVal = thisJoinPoint.proceed(); // does pass the args!
         } catch (Exception exc){
             throw exc;
         } finally {
-            ctrlInst.unsetThreadLocalSessionId();
+            sessionRegistry.unsetThreadLocalSessionId();
         }
         return retVal;
     }

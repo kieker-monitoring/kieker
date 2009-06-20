@@ -4,6 +4,7 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.ControlFlowRegistry;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
@@ -32,6 +33,7 @@ import org.aspectj.lang.annotation.Aspect;
 public abstract class AbstractKiekerTpmonMonitoring {
 
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
+    protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     
     @TpmonInternal()
     protected KiekerExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {
@@ -45,12 +47,12 @@ public abstract class AbstractKiekerTpmonMonitoring {
         KiekerExecutionRecord execData = KiekerExecutionRecord.getInstance(
                 thisJoinPoint.getSignature().getDeclaringTypeName() /* component */, 
                 methodname + paramList /* operation */, 
-                ctrlInst.recallThreadLocalTraceId() /* traceId, -1 if entry point*/);
+                cfRegistry.recallThreadLocalTraceId() /* traceId, -1 if entry point*/);
         
         execData.isEntryPoint = false;
         //execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point
         if (execData.traceId == -1) { 
-            execData.traceId = ctrlInst.getAndStoreUniqueThreadLocalTraceId();
+            execData.traceId = cfRegistry.getAndStoreUniqueThreadLocalTraceId();
             execData.isEntryPoint = true;
         } 
         return execData;
@@ -70,7 +72,7 @@ public abstract class AbstractKiekerTpmonMonitoring {
         } finally {
             execData.tout = ctrlInst.getTime();
             if (execData.isEntryPoint) {
-                ctrlInst.unsetThreadLocalTraceId();
+                cfRegistry.unsetThreadLocalTraceId();
             }
         }
     }
