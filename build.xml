@@ -385,8 +385,8 @@
               classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"              
 	          classpathref="run.tests.classpath">
             <jvmarg value="-server"/>
-            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=false"/>
-            <jvmarg value="-Dtpmon.customStoragePath=tmp/"/>
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
         <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
