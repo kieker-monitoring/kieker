@@ -3,10 +3,10 @@ package kieker.tpmon.writer.filesystemAsync;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -83,7 +83,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      */
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }

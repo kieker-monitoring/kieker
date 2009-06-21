@@ -2,8 +2,8 @@ package kieker.tpmon.writer.filesystemSync;
 
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
-import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.*;
 import java.io.*;
 import java.util.Random;
@@ -71,21 +71,20 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-
-    private final static String defaultConstructionErrorMsg = 
+    private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCFS +
-                " and the file system specific configuration properties.";
-    
+            " and the file system specific configuration properties.";
+
     public FileSystemWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
-    
+
     @TpmonInternal()
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
-    
+
     public FileSystemWriter(String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
     }
@@ -120,10 +119,19 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     }
 
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         try {
+            Vector<String> recordFields = monitoringRecord.toStringVector();
+            final int LAST_FIELD_INDEX = recordFields.size() - 1;
             prepareFile(); // may throw FileNotFoundException
-            pos.println(monitoringRecord.toCSVRecord());
+
+            for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
+                pos.write(recordFields.get(i));
+                if (i < LAST_FIELD_INDEX) {
+                    pos.write(';');
+                }
+            }
+            pos.println();
             pos.flush();
         } catch (IOException ex) {
             log.error("Failed to write data", ex);
@@ -136,8 +144,8 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
-    
-   @TpmonInternal()
+
+    @TpmonInternal()
     public String getInfoString() {
         return "filenamePrefix :" + filenamePrefix;
     }

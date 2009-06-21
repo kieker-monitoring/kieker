@@ -71,7 +71,7 @@ public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMo
              * exception! */
             execData.eoi = eoi;
             execData.ess = ess;
-            ctrlInst.insertMonitoringDataNow(execData);
+            ctrlInst.logMonitoringRecord(execData);
             if (execData.isEntryPoint){
                 cfRegistry.unsetThreadLocalEOI();
                 cfRegistry.unsetThreadLocalESS();

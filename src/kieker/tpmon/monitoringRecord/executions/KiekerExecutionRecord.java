@@ -1,13 +1,15 @@
 package kieker.tpmon.monitoringRecord.executions;
 
+import java.util.Vector;
 import kieker.tpmon.monitoringRecord.*;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.TpmonController;
 
 /**
- * kieker.tpmon.KiekerExecutionRecord2
+ * kieker.tpmon.KiekerExecutionRecord
  * 
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +29,12 @@ import kieker.tpmon.annotation.TpmonInternal;
 public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
 
     private static final long serialVersionUID = 117L;
-    
+
+   /** Used to identify the type of CSV records */
+    private static int typeId = TpmonController.getInstance().registerMonitoringRecordType(KiekerExecutionRecord);
+
+    private static int numRecordFields = 9;
+
     public int experimentId = -1;
     public String vmName = null;
     public String componentName = null;
@@ -51,7 +58,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
     }
 
     /**
-     * Returns in instance of KiekerExecutionRecord.
+     * Returns an instance of KiekerExecutionRecord.
      * The member variables are initialized that way that only actually
      * used variables must be updated.
      * Do not set unused member variables to dummy values such as -1 etc.!
@@ -123,26 +130,46 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
      * Returns a CSV record for the object.
      */
     @TpmonInternal()
-    public String toCSVRecord() {
-        StringBuilder strB = new StringBuilder();
-        strB.append(this.experimentId); strB.append(';');
-        // concatenate opname
-        strB.append(this.componentName); 
-        strB.append('.');
-        strB.append(this.opname);
-        strB.append(';');
-        // end concat opname
-        strB.append(this.sessionId); strB.append(';');
-        strB.append(this.traceId); strB.append(';');
-        strB.append(this.tin); strB.append(';');
-        strB.append(this.tout); strB.append(';');
-        strB.append(this.vmName); strB.append(';');
-        strB.append(this.eoi); strB.append(';');
-        strB.append(this.ess); 
-        return strB.toString();
+    public Vector<String> toStringVector() {
+        Vector<String> vec = new Vector<String>(numRecordFields);
+        vec.insertElementAt(Integer.toString(this.experimentId), 0);
+        vec.insertElementAt(this.componentName+"."+this.opname, 1);
+        vec.insertElementAt((this.sessionId==null)?"NULL":this.sessionId, 2);
+        vec.insertElementAt(Long.toString(this.traceId), 3);
+        vec.insertElementAt(Long.toString(this.tin), 4);
+        vec.insertElementAt(Long.toString(this.tout), 5);
+        vec.insertElementAt(this.vmName, 6);
+        vec.insertElementAt(Integer.toString(this.eoi), 7);
+        vec.insertElementAt(Integer.toString(this.eoi), 8);
+        return vec;
+
+        // TODO: remove this old implementation:
+//        StringBuilder strB = new StringBuilder();
+//        strB.append(this.experimentId); strB.append(';');
+//        // concatenate opname
+//        strB.append(this.componentName);
+//        strB.append('.');
+//        strB.append(this.opname);
+//        strB.append(';');
+//        // end concat opname
+//        strB.append(this.sessionId); strB.append(';');
+//        strB.append(this.traceId); strB.append(';');
+//        strB.append(this.tin); strB.append(';');
+//        strB.append(this.tout); strB.append(';');
+//        strB.append(this.vmName); strB.append(';');
+//        strB.append(this.eoi); strB.append(';');
+//        strB.append(this.ess);
+//        return strB.toString();
     }
 
-    public AbstractKiekerMonitoringRecord fromCSVRecord(String csvRecord) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    @TpmonInternal()
+     public void initFromVector(int recordTypeId, Vector recordVector)
+            throws IllegalArgumentException {
+       throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @TpmonInternal()
+    public int getRecordTypeId() {
+        return typeId;
     }
 }

@@ -2,8 +2,8 @@ package kieker.tpmon.writer.databaseSync;
 
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
-import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.*;
 import java.sql.*;
 import java.util.Vector;
@@ -146,7 +146,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
      * dbconnector.properties.
      */
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         try {
             // connector only supports execution records so far
             KiekerExecutionRecord execRecord = (KiekerExecutionRecord) monitoringRecord;

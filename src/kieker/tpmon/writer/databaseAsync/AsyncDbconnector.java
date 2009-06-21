@@ -4,10 +4,10 @@ import java.sql.*;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -170,7 +170,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }

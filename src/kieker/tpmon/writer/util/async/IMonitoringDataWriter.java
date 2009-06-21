@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.core;
+package kieker.tpmon.writer.util.async;
 
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.*;
@@ -29,7 +29,7 @@ import kieker.tpmon.annotation.TpmonInternal;
 public interface IMonitoringDataWriter {
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord);
+    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
 
     @TpmonInternal()
     public boolean init(String initString);

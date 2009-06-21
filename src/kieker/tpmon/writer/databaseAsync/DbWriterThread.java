@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.databaseAsync;
 
-import kieker.tpmon.writer.core.AbstractWorkerThread;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

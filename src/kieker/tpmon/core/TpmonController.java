@@ -2,10 +2,9 @@ package kieker.tpmon.core;
 
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
-import kieker.tpmon.*;
-import kieker.tpmon.writer.core.TpmonShutdownHook;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
-import kieker.tpmon.writer.core.IMonitoringDataWriter;
+import kieker.tpmon.writer.util.async.TpmonShutdownHook;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
+import kieker.tpmon.writer.util.async.IMonitoringDataWriter;
 import kieker.tpmon.writer.databaseSync.Dbconnector;
 import kieker.tpmon.writer.filesystemSync.FileSystemWriter;
 import java.io.FileInputStream;
@@ -13,6 +12,7 @@ import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
  * kieker.tpmon.TpmonController
  * 
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -291,13 +291,17 @@ public class TpmonController {
     @TpmonInternal()
     public void terminateMonitoring() {
         log.info("Permanently terminating monitoring");
-        this.monitoringDataWriter.insertMonitoringDataNow(END_OF_MONITORING_MARKER);
+        this.monitoringDataWriter.writeMonitoringRecord(END_OF_MONITORING_MARKER);
         this.disableMonitoring();
         this.monitoringPermanentlyTerminated = true;
     }
 
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public boolean logMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+        if (!this.monitoringEnabled) {
+            return false;
+        }
+
         // TODO: Dirty hack! Needs to be cleaned up
         // Possible solution: record's getInstance() requests experimentId and vnName from Controller
         if (monitoringRecord instanceof KiekerExecutionRecord) {
@@ -306,13 +310,9 @@ public class TpmonController {
             lexecData.vmName = this.vmname;
         }
 
-        if (!this.monitoringEnabled) {
-            return false;
-        }
-
         numberOfInserts.incrementAndGet();
         // now it fails fast, it disables monitoring when a queue once is full
-        if (!this.monitoringDataWriter.insertMonitoringDataNow(monitoringRecord)) {
+        if (!this.monitoringDataWriter.writeMonitoringRecord(monitoringRecord)) {
             log.fatal("Error writing the monitoring data. Will terminate monitoring!");
             this.terminateMonitoring();
             return false;
@@ -321,15 +321,14 @@ public class TpmonController {
         return true;
     }
 
+    private static final long offsetA = System.currentTimeMillis() * 1000000 - System.nanoTime();
+
     /**
-     * This method is used by the aspects to get the time stamps. It uses nano seconds as precision.    
-     * The method is synchronized in order to reduce the risk of identical time stamps. 
-     * 
+     * This method can used by the probes to get the time stamps. It uses nano seconds as precision.
+     *
      * In contrast to System.nanoTime(), it gives the nano seconds between the current time and midnight, January 1, 1970 UTC.
      * (The value returned by System.nanoTime() only represents nanoseconds since *some* fixed but arbitrary time.)
      */
-    private long offsetA = System.currentTimeMillis() * 1000000 - System.nanoTime();
-
     @TpmonInternal()
     public long getTime() {
         return System.nanoTime() + offsetA;
@@ -337,7 +336,9 @@ public class TpmonController {
 
     /**    
      * Loads configuration values from the file
-     * tpmonLTW.jar/META-INF/dbconnector.properties.
+     * tpmonLTW.jar/META-INF/dbconnector.properties or another
+     * tpmon configuration file specified by the JVM parameter
+     * tpmon.configuration.
      *
      * If it fails, it uses hard-coded standard values.    
      */
@@ -532,6 +533,16 @@ public class TpmonController {
     @TpmonInternal()
     public void setDebug(boolean debug) {
         this.debug = debug;
+    }
+
+    AtomicInteger nextMonitoringRecordType = new AtomicInteger(1);
+
+    @TpmonInternal()
+    public int registerMonitoringRecordType(Class<AbstractKiekerMonitoringRecord> recordTypeClass){
+        String name = recordTypeClass.getCanonicalName();
+        int id = this.nextMonitoringRecordType.getAndIncrement();
+        System.out.println("#"+id+":"+name);
+        return id;
     }
 }
 

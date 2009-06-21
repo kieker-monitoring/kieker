@@ -76,7 +76,7 @@ public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKieker
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            ctrlInst.insertMonitoringDataNow(execData);
+            ctrlInst.logMonitoringRecord(execData);
             cfRegistry.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;

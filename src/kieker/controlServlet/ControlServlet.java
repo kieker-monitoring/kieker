@@ -16,7 +16,7 @@ import kieker.tpmon.core.TpmonController;
  * kieker.tpmonControlServlet.ControlServlet
  *
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -172,7 +172,7 @@ public class ControlServlet extends HttpServlet {
                 sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
                 cfRegistry.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.insertMonitoringDataNow(KiekerExecutionRecord.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i));
+                    ctrlInst.logMonitoringRecord(KiekerExecutionRecord.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i));
                 }
                 cfRegistry.unsetThreadLocalTraceId();
                 sessionRegistry.unsetThreadLocalSessionId();

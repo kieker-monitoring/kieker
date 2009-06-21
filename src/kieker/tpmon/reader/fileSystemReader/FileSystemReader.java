@@ -199,7 +199,7 @@ public class FileSystemReader {
                     
                     if (degradableSleepTime > 0) Thread.sleep(degradableSleepTime*5);
                     
-                    while (!ctrl.insertMonitoringDataNow(KiekerExecutionRecord.getInstance(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess))) {
+                    while (!ctrl.logMonitoringRecord(KiekerExecutionRecord.getInstance(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess))) {
                         Thread.sleep(500);
                         ctrl.enableMonitoring();
                         degradableSleepTime += 50;

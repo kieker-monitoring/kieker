@@ -3,10 +3,11 @@ package kieker.tpmon.writer.filesystemAsync;
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.util.Random;
+import java.util.Vector;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -159,8 +160,23 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
      */
     @TpmonInternal()
     private void writeDataNow(AbstractKiekerMonitoringRecord monitoringRecord) throws IOException {
+        Vector<String> recordFields = monitoringRecord.toStringVector();
+        final int LAST_FIELD_INDEX = recordFields.size()-1;
         prepareFile(); // may throw FileNotFoundException
-        pos.println(monitoringRecord.toCSVRecord());
+
+        pos.write('$'); pos.write(monitoringRecord.getRecordTypeId());
+        if(LAST_FIELD_INDEX>0) {
+            pos.write(';');
+        }
+
+        for (int i=0;i<=LAST_FIELD_INDEX;i++){
+            String val = recordFields.elementAt(i);
+            pos.write(val);
+            if(i<LAST_FIELD_INDEX){
+                pos.write(';');
+            }
+        }
+        pos.println();
         pos.flush();
     }
 

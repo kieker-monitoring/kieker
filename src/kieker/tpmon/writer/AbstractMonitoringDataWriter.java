@@ -1,5 +1,6 @@
-package kieker.tpmon.writer.core;
+package kieker.tpmon.writer;
 
+import kieker.tpmon.writer.util.async.IMonitoringDataWriter;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -30,7 +31,7 @@ public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWri
     private boolean debugEnabled;
     
     @TpmonInternal()
-    public abstract boolean insertMonitoringDataNow(AbstractKiekerMonitoringRecord monitoringRecord);
+    public abstract boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
 
     @TpmonInternal()
     public void setDebug(boolean debug) {

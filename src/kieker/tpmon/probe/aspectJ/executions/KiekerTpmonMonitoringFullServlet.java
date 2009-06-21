@@ -61,7 +61,7 @@ public class KiekerTpmonMonitoringFullServlet extends AbstractKiekerTpmonMonitor
              * in case the execution of the joint point resulted in an
              * execpetion! */
             execData.sessionId = sessionId;
-            ctrlInst.insertMonitoringDataNow(execData);
+            ctrlInst.logMonitoringRecord(execData);
             // Since we didn't register the sessionId we won't unset it!
         }
         return execData.retVal;

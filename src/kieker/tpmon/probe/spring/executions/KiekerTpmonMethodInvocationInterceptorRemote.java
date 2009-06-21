@@ -70,7 +70,7 @@ public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKieker
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            tpmonController.insertMonitoringDataNow(execData);
+            tpmonController.logMonitoringRecord(execData);
             cfRegistry.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;
