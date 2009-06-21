@@ -237,7 +237,7 @@
         <copy file="src/kieker/tests/log4j.properties"
               todir="${build.tests.dir}/"/>
         <copy file="${aop.xml.ltwtests}"
-	      todir="${build.tests.dir}/META-INF"/>
+	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation"
@@ -246,6 +246,8 @@
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
               classpathref="run.tests.classpath">
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
@@ -262,6 +264,8 @@
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
               classpathref="run.tests.classpath">
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
@@ -325,6 +329,8 @@
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
               classpathref="run.tests.classpath">
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
     </target>
@@ -343,6 +349,8 @@
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
               classpathref="run.tests.classpath">
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
             <jvmarg value="-Dtpmon.dbDriverClassname="/>
             <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
@@ -356,6 +364,8 @@
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.synchron.Bookstore"
               classpathref="run.tests.classpath">
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
     </target>
