@@ -67,7 +67,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
-    private String filenamePrefix = "";
+    private String storagePathBase = "";
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
@@ -85,8 +85,25 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public FileSystemWriter(String filenamePrefix) {
-        this.filenamePrefix = filenamePrefix;
+    public FileSystemWriter(String storagePathBase) {
+       File f = new File(storagePathBase);
+        if (!f.isDirectory()) {
+            log.error(storagePathBase + " is not a directory");
+            log.error("Will abort constructor.");
+            return;
+        }
+
+        // TODO Change to format: yyyymmdd-hhmmss
+        int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
+             this.storagePathBase = storagePathBase + "/tpmon--" + time + "/";
+
+        f = new File(this.storagePathBase);
+        if(!f.mkdir()){
+            log.error("Failed to create directory '"+this.storagePathBase + "'");
+            log.error("Will abort constructor.");
+            return;
+        }
+        log.info("Directory for monitoring data: " + this.storagePathBase);
     }
 
     /**
@@ -103,7 +120,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
             int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from ??
             int random = (new Random()).nextInt(100);
-            String filename = this.filenamePrefix + time + "-" + random + ".dat";
+            String filename = this.storagePathBase + "/" + time + "-" + random + ".dat";
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);
@@ -124,6 +141,11 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             Vector<String> recordFields = monitoringRecord.toStringVector();
             final int LAST_FIELD_INDEX = recordFields.size() - 1;
             prepareFile(); // may throw FileNotFoundException
+
+            pos.write('$'); pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+            if(LAST_FIELD_INDEX>0) {
+                pos.write(';');
+            }
 
             for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
                 pos.write(recordFields.get(i));
@@ -147,7 +169,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
     @TpmonInternal()
     public String getInfoString() {
-        return "filenamePrefix :" + filenamePrefix;
+        return "filenamePrefix :" + storagePathBase;
     }
 
     @TpmonInternal()

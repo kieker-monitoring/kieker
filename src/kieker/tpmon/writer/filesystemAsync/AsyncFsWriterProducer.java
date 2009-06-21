@@ -1,5 +1,7 @@
 package kieker.tpmon.writer.filesystemAsync;
 
+import java.io.File;
+import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -40,7 +42,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     //internal variables
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue = null;
-    private String filenamePrefix = null;
+    private String storagePathBase = null;
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_ASYNCFS +
@@ -60,17 +62,35 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         return workers;
     }
 
-    public AsyncFsWriterProducer(String filenamePrefix) {
-        this.filenamePrefix = filenamePrefix;
+    public AsyncFsWriterProducer(String storagePathBase) {
+        this.storagePathBase = storagePathBase;
         this.init();
     }
 
     @TpmonInternal()
     public void init() {
+        File f = new File(storagePathBase);
+        if (!f.isDirectory()) {
+            log.error(this.storagePathBase + " is not a directory");
+            log.error("Will abort init().");
+            return;
+        }
+
+        // TODO Change to format: yyyymmdd-hhmmss
+        int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
+        String storageDir = this.storagePathBase + "/tpmon--" + time + "/";
+
+        f = new File(storageDir);
+        if(!f.mkdir()){
+            log.error("Failed to create directory '"+this.storagePathBase + "'");
+            log.error("Will abort init().");
+            return;
+        }
+        log.info("Directory for monitoring data: " + storageDir);
+
         blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            Thread workerThread;
-            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, filenamePrefix);
+            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, storageDir);
             //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
             workers.add(dbw);
             dbw.start();
@@ -90,7 +110,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
         try {
             blockingQueue.add(monitoringRecord); // tries to add immediately!
-            //System.out.println(""+blockingQueue.size());
+        //System.out.println(""+blockingQueue.size());
         } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex);
             return false;
@@ -100,17 +120,17 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
     @TpmonInternal()
     public String getFilenamePrefix() {
-        return filenamePrefix;
+        return storagePathBase;
     }
 
     @TpmonInternal()
     public String getInfoString() {
-        return "filenamePrefix :" + filenamePrefix;
+        return "filenamePrefix :" + storagePathBase;
     }
 
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
-        log.info("Registered monitoring record type with id '"+id+"':"+className);
-        throw new UnsupportedOperationException("Not supported yet.");
+        log.info("Registered monitoring record type with id '" + id + "':" + className);
+    //throw new UnsupportedOperationException("Not supported yet.");
     }
 }

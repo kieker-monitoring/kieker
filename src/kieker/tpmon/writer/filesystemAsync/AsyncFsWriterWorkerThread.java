@@ -164,7 +164,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
         final int LAST_FIELD_INDEX = recordFields.size()-1;
         prepareFile(); // may throw FileNotFoundException
 
-        pos.write('$'); pos.write(monitoringRecord.getRecordTypeId());
+        pos.write('$'); pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
         if(LAST_FIELD_INDEX>0) {
             pos.write(';');
         }

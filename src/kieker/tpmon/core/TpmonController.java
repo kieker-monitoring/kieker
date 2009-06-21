@@ -132,10 +132,10 @@ public class TpmonController {
             if (this.monitoringDataWriterClassname == null || this.monitoringDataWriterClassname.length() == 0) {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
-                String filenameBase = filenamePrefix + "/tpmon-";
+                String filenameBase = filenamePrefix;
                 this.monitoringDataWriter = new FileSystemWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
-                String filenameBase = filenamePrefix + "/tpmon-";
+                String filenameBase = filenamePrefix;
                 this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
                 this.monitoringDataWriter = new Dbconnector(
