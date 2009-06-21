@@ -206,6 +206,8 @@
             classpathref="run.tests.classpath"
 	    classname="kieker.tests.storageOnly.StorageOnly">
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
             <!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
             <!-- <jvmarg value="-Xloggc:details.out"/> -->
