@@ -107,10 +107,11 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         log.info("Directory for monitoring data: " + this.storagePathBase);
 
         try {
-            this.mappingFile = new File(storagePathBase + File.separatorChar + "tpmon.map");
+            this.mappingFile = new File(this.storagePathBase + File.separatorChar + "tpmon.map");
             this.mappingFile.createNewFile();
+            log.info("Mapping file name: " + this.mappingFile.getAbsolutePath());
         } catch (Exception exc) {
-            log.error("Failed to create meta data file '" + this.mappingFile.getAbsolutePath() + "'", exc);
+            log.error("Failed to create mapping file '" + this.mappingFile.getAbsolutePath() + "'", exc);
             log.error("Will abort init().");
             return;
         }
@@ -130,7 +131,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
             int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from ??
             int random = (new Random()).nextInt(100);
-            String filename = this.storagePathBase + "/" + time + "-" + random + ".dat";
+            String filename = this.storagePathBase + "/tpmon-" + time + "-" + random + ".dat";
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);

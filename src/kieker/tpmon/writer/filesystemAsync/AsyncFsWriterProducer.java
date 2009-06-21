@@ -94,7 +94,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
             this.mappingFile = new File(storageDir+File.separatorChar+"tpmon.map");
             this.mappingFile.createNewFile();
         }catch(Exception exc){
-            log.error("Failed to create meta data file '"+this.mappingFile.getAbsolutePath() + "'", exc);
+            log.error("Failed to create mapping file '"+this.mappingFile.getAbsolutePath() + "'", exc);
             log.error("Will abort init().");
             return;
         }
