@@ -71,6 +71,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
+    private File mappingFile = null;
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCFS +
@@ -86,7 +87,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     }
 
     public FileSystemWriter(String storagePathBase) {
-       File f = new File(storagePathBase);
+        File f = new File(storagePathBase);
         if (!f.isDirectory()) {
             log.error(storagePathBase + " is not a directory");
             log.error("Will abort constructor.");
@@ -95,15 +96,24 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
         // TODO Change to format: yyyymmdd-hhmmss
         int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
-             this.storagePathBase = storagePathBase + "/tpmon--" + time + "/";
+        this.storagePathBase = storagePathBase + "/tpmon--" + time + "/";
 
         f = new File(this.storagePathBase);
-        if(!f.mkdir()){
-            log.error("Failed to create directory '"+this.storagePathBase + "'");
+        if (!f.mkdir()) {
+            log.error("Failed to create directory '" + this.storagePathBase + "'");
             log.error("Will abort constructor.");
             return;
         }
         log.info("Directory for monitoring data: " + this.storagePathBase);
+
+        try {
+            this.mappingFile = new File(storagePathBase + File.separatorChar + "tpmon.map");
+            this.mappingFile.createNewFile();
+        } catch (Exception exc) {
+            log.error("Failed to create meta data file '" + this.mappingFile.getAbsolutePath() + "'", exc);
+            log.error("Will abort init().");
+            return;
+        }
     }
 
     /**
@@ -142,8 +152,9 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             final int LAST_FIELD_INDEX = recordFields.size() - 1;
             prepareFile(); // may throw FileNotFoundException
 
-            pos.write('$'); pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
-            if(LAST_FIELD_INDEX>0) {
+            pos.write('$');
+            pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+            if (LAST_FIELD_INDEX > 0) {
                 pos.write(';');
             }
 
@@ -174,6 +185,13 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        log.info("Registered monitoring record type with id '" + id + "':" + className);
+        try {
+            PrintWriter pw = new PrintWriter(this.mappingFile);
+            pw.println("$" + id + "=" + className);
+            pw.close();
+        } catch (Exception exc) {
+            log.fatal("Failed to register record type", exc);
+        }
     }
 }

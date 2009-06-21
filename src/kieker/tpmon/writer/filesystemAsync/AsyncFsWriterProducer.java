@@ -1,7 +1,7 @@
 package kieker.tpmon.writer.filesystemAsync;
 
 import java.io.File;
-import java.util.Random;
+import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -43,6 +43,8 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue = null;
     private String storagePathBase = null;
+    private File mappingFile = null;
+
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_ASYNCFS +
@@ -88,9 +90,18 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         }
         log.info("Directory for monitoring data: " + storageDir);
 
+        try{
+            this.mappingFile = new File(storageDir+File.separatorChar+"tpmon.map");
+            this.mappingFile.createNewFile();
+        }catch(Exception exc){
+            log.error("Failed to create meta data file '"+this.mappingFile.getAbsolutePath() + "'", exc);
+            log.error("Will abort init().");
+            return;
+        }
+
         blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, storageDir);
+            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, storageDir+"/tpmon");
             //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
             workers.add(dbw);
             dbw.start();
@@ -131,6 +142,12 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
-    //throw new UnsupportedOperationException("Not supported yet.");
+        try{
+        PrintWriter pw = new PrintWriter(this.mappingFile);
+        pw.println("$"+id+"="+className);
+        pw.close();
+        }catch(Exception exc){
+            log.fatal("Failed to register record type", exc);
+        }
     }
 }
