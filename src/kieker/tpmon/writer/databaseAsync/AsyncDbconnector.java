@@ -220,4 +220,9 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
 
         return strB.toString();
     }
+
+    @TpmonInternal()
+    public void registerMonitoringRecordType(int id, String className) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

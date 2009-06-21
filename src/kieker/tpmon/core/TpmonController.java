@@ -537,11 +537,18 @@ public class TpmonController {
 
     AtomicInteger nextMonitoringRecordType = new AtomicInteger(1);
 
+    /**
+     * Registers monitoring record type and returns its id.
+     *
+     * @param recordTypeClass
+     * @return
+     */
     @TpmonInternal()
-    public int registerMonitoringRecordType(Class<AbstractKiekerMonitoringRecord> recordTypeClass){
+    public int registerMonitoringRecordType(Class recordTypeClass){
         String name = recordTypeClass.getCanonicalName();
         int id = this.nextMonitoringRecordType.getAndIncrement();
-        System.out.println("#"+id+":"+name);
+        log.info("Registering monitoring record type with id '"+id+"':"+name);
+        this.monitoringDataWriter.registerMonitoringRecordType(id, name);
         return id;
     }
 }

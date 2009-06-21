@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
  * kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer
  *
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  * 
- * @author Matthias Rohr
+ * @author Matthias Rohr, Andre van Hoorn
  */
 public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
@@ -106,5 +106,11 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public String getInfoString() {
         return "filenamePrefix :" + filenamePrefix;
+    }
+
+    @TpmonInternal()
+    public void registerMonitoringRecordType(int id, String className) {
+        log.info("Registered monitoring record type with id '"+id+"':"+className);
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

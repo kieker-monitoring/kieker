@@ -31,7 +31,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
     private static final long serialVersionUID = 117L;
 
    /** Used to identify the type of CSV records */
-    private static int typeId = TpmonController.getInstance().registerMonitoringRecordType(KiekerExecutionRecord);
+    private static int typeId = TpmonController.getInstance().registerMonitoringRecordType(KiekerExecutionRecord.class);
 
     private static int numRecordFields = 9;
 

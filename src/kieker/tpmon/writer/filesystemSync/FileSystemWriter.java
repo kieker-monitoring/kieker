@@ -149,4 +149,9 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     public String getInfoString() {
         return "filenamePrefix :" + filenamePrefix;
     }
+
+    @TpmonInternal()
+    public void registerMonitoringRecordType(int id, String className) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

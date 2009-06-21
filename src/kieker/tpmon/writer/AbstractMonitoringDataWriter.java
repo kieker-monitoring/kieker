@@ -33,6 +33,8 @@ public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWri
     @TpmonInternal()
     public abstract boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
 
+    public abstract void registerMonitoringRecordType(int id, String className);
+
     @TpmonInternal()
     public void setDebug(boolean debug) {
         this.debugEnabled = debug;

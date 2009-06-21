@@ -20,9 +20,9 @@ package kieker.tpmon.monitoringRecord;
  * ==================================================
  */
 
-import java.util.StringTokenizer;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.TpmonController;
 
 /**
  * @author Andre van Hoorn
@@ -31,8 +31,10 @@ public class KiekerDummyMonitoringRecord extends AbstractKiekerMonitoringRecord 
 
     private static final long serialVersionUID = 1133L;
 
-    /** Used to identify the type of CSV records */
-    private static int typeId = KiekerDummyMonitoringRecord.class.hashCode();
+   /** Used to identify the type of CSV records
+    * This record type has a fixed value of 0
+    */
+    private static int typeId = 0;
 
     @TpmonInternal()
     public void initFromVector(int recordTypeId,Vector recordVector)

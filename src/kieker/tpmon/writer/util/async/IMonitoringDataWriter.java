@@ -29,6 +29,9 @@ import kieker.tpmon.annotation.TpmonInternal;
 public interface IMonitoringDataWriter {
 
     @TpmonInternal()
+    public void registerMonitoringRecordType(int id, String className);
+
+    @TpmonInternal()
     public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
 
     @TpmonInternal()
