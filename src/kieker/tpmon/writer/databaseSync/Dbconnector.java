@@ -76,6 +76,8 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             "Use the the constant " + TpmonController.WRITER_SYNCDB +
             " and the file system specific configuration properties.";
 
+    private boolean writeRecordTypeIds = false;
+
     public Dbconnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -206,5 +208,15 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isWriteRecordTypeIds() {
+        return this.writeRecordTypeIds;
+    }
+
+    @Override
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        this.writeRecordTypeIds=writeRecordTypeIds;
     }
 }

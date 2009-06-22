@@ -1,5 +1,6 @@
-package kieker.tpmon.writer.util.async;
+package kieker.tpmon.writer;
 
+import kieker.tpmon.writer.util.async.*;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.*;
 import java.util.Vector;
@@ -27,6 +28,12 @@ import kieker.tpmon.annotation.TpmonInternal;
  * @author Andre van Hoorn
  */
 public interface IMonitoringDataWriter {
+
+  @TpmonInternal()
+    public boolean isWriteRecordTypeIds();
+
+    @TpmonInternal()
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds);
 
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className);

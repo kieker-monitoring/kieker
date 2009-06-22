@@ -45,6 +45,8 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     private String storagePathBase = null;
     private File mappingFile = null;
 
+    private boolean writeRecordTypeIds = false;
+
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_ASYNCFS +
@@ -149,5 +151,19 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         }catch(Exception exc){
             log.fatal("Failed to register record type", exc);
         }
+    }
+
+    @Override
+    public boolean isWriteRecordTypeIds() {
+        return this.isWriteRecordTypeIds();
+    }
+
+    @Override
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        for(AbstractWorkerThread t:workers){
+            log.info("t.setWriteRecordTypeIds("+writeRecordTypeIds+")");
+            t.setWriteRecordTypeIds(writeRecordTypeIds);
+        }
+        this.writeRecordTypeIds = writeRecordTypeIds;
     }
 }

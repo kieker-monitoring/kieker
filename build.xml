@@ -331,6 +331,7 @@
               classpathref="run.tests.classpath">
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+<!--            <jvmarg value="-Dtpmon.logMonitoringRecordTypeIds=false"/>-->
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
     </target>

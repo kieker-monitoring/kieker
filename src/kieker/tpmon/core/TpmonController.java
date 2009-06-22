@@ -4,7 +4,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.util.async.IMonitoringDataWriter;
+import kieker.tpmon.writer.IMonitoringDataWriter;
 import kieker.tpmon.writer.databaseSync.Dbconnector;
 import kieker.tpmon.writer.filesystemSync.FileSystemWriter;
 import java.io.FileInputStream;
@@ -92,9 +92,11 @@ public class TpmonController {
     private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
     private String dbTableName = "turbomon10";
     private boolean debug = false;
-    private String filenamePrefix = ""; // e.g. path "/tmp"   
+    private String filenamePrefix = ""; // e.g. path "/tmp/"
     private boolean storeInJavaIoTmpdir = true;
     private String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
+    private boolean logMonitoringRecordTypeIds = false; // eventually, true should become default
+
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
     private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     private TpmonShutdownHook shutdownhook = null;
@@ -152,6 +154,7 @@ public class TpmonController {
                 this.monitoringDataWriter = (IMonitoringDataWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
                 this.monitoringDataWriter.init(monitoringDataWriterInitString);
             }
+            this.monitoringDataWriter.setWriteRecordTypeIds(this.logMonitoringRecordTypeIds);
             Vector<AbstractWorkerThread> worker = this.monitoringDataWriter.getWorkers(); // may be null
             if (worker != null) {
                 for (AbstractWorkerThread w : worker) {
@@ -210,7 +213,6 @@ public class TpmonController {
     public void registerWorker(AbstractWorkerThread newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
-
     private AtomicLong numberOfInserts = new AtomicLong(0);
     // private Date startDate = new Date(initializationTime);
     private boolean monitoringEnabled = true;
@@ -320,7 +322,6 @@ public class TpmonController {
 
         return true;
     }
-
     private static final long offsetA = System.currentTimeMillis() * 1000000 - System.nanoTime();
 
     /**
@@ -360,8 +361,8 @@ public class TpmonController {
             }
             prop.load(is);
         } catch (Exception ex) {
-            log.error("Error loading tpmon.properties file '"+configurationFile+"'", ex);
-            // TODO: introduce static variable 'terminated' or alike
+            log.error("Error loading tpmon.properties file '" + configurationFile + "'", ex);
+        // TODO: introduce static variable 'terminated' or alike
         } finally {
             try {
                 is.close();
@@ -484,6 +485,25 @@ public class TpmonController {
                     ". Using default value " + setInitialExperimentIdBasedOnLastId);
         }
 
+        // load property "logMonitoringRecordTypeIds"
+        String logMonitoringRecordTypeIdsProperty = null;
+        if (System.getProperty("tpmon.logMonitoringRecordTypeIds") != null) { // we use the present virtual machine parameter value
+            logMonitoringRecordTypeIdsProperty = System.getProperty("tpmon.logMonitoringRecordTypeIds");
+        } else { // we use the parameter in the properties file
+            logMonitoringRecordTypeIdsProperty = prop.getProperty("logMonitoringRecordTypeIds");
+        }
+        if (logMonitoringRecordTypeIdsProperty != null && logMonitoringRecordTypeIdsProperty.length() != 0) {
+            if (logMonitoringRecordTypeIdsProperty.toLowerCase().equals("true") || logMonitoringRecordTypeIdsProperty.toLowerCase().equals("false")) {
+                logMonitoringRecordTypeIds = logMonitoringRecordTypeIdsProperty.toLowerCase().equals("true");
+            } else {
+                log.warn("Bad value for logMonitoringRecordTypeIds parameter (" + logMonitoringRecordTypeIdsProperty + ") in tpmonLTW.jar/" + configurationFile +
+                        ". Using default value " + logMonitoringRecordTypeIds);
+            }
+        } else {
+            log.warn("Could not find logMonitoringRecordTypeIdsProperty parameter in tpmonLTW.jar/" + configurationFile +
+                    ". Using default value " + logMonitoringRecordTypeIds);
+        }
+
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
@@ -534,7 +554,6 @@ public class TpmonController {
     public void setDebug(boolean debug) {
         this.debug = debug;
     }
-
     AtomicInteger nextMonitoringRecordType = new AtomicInteger(1);
 
     /**
@@ -544,10 +563,10 @@ public class TpmonController {
      * @return
      */
     @TpmonInternal()
-    public int registerMonitoringRecordType(Class recordTypeClass){
+    public int registerMonitoringRecordType(Class recordTypeClass) {
         String name = recordTypeClass.getCanonicalName();
         int id = this.nextMonitoringRecordType.getAndIncrement();
-        log.info("Registering monitoring record type with id '"+id+"':"+name);
+        log.info("Registering monitoring record type with id '" + id + "':" + name);
         this.monitoringDataWriter.registerMonitoringRecordType(id, name);
         return id;
     }

@@ -1,6 +1,6 @@
 package kieker.tpmon.writer;
 
-import kieker.tpmon.writer.util.async.IMonitoringDataWriter;
+import kieker.tpmon.writer.IMonitoringDataWriter;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.*;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -29,11 +29,18 @@ import kieker.tpmon.annotation.TpmonInternal;
 public abstract class AbstractMonitoringDataWriter implements IMonitoringDataWriter {
 
     private boolean debugEnabled;
-    
+   
     @TpmonInternal()
     public abstract boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
 
+    @TpmonInternal()
     public abstract void registerMonitoringRecordType(int id, String className);
+
+   @TpmonInternal()
+    public abstract boolean isWriteRecordTypeIds();
+
+    @TpmonInternal()
+    public abstract void setWriteRecordTypeIds(boolean writeRecordTypeIds);
 
     @TpmonInternal()
     public void setDebug(boolean debug) {

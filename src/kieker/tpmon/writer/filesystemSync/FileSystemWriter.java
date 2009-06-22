@@ -76,6 +76,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCFS +
             " and the file system specific configuration properties.";
+    private boolean writeRecordTypeIds = false;
 
     public FileSystemWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
@@ -153,10 +154,12 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             final int LAST_FIELD_INDEX = recordFields.size() - 1;
             prepareFile(); // may throw FileNotFoundException
 
-            pos.write('$');
-            pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
-            if (LAST_FIELD_INDEX > 0) {
-                pos.write(';');
+            if (this.isWriteRecordTypeIds()) {
+                pos.write('$');
+                pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+                if (LAST_FIELD_INDEX > 0) {
+                    pos.write(';');
+                }
             }
 
             for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
@@ -194,5 +197,15 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         } catch (Exception exc) {
             log.fatal("Failed to register record type", exc);
         }
+    }
+
+    @Override
+    public boolean isWriteRecordTypeIds() {
+        return this.writeRecordTypeIds;
+    }
+
+    @Override
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        this.writeRecordTypeIds = writeRecordTypeIds;
     }
 }

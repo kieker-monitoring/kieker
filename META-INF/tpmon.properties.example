@@ -29,6 +29,14 @@ monitoringEnabled=true
 monitoringDataWriter=AsyncFS
 monitoringDataWriterInitString=
 
+# 1.1.5 Use monitoring record type IDs
+# Monitoring records can be of different types (e.g., control flow, branches, etc.).
+# In a monitoring run, each record type is registered and assigned an ID which 
+# is unique for a monitoring run. In order to determine the type of a logged 
+# monitoring record, the ID  useMonitoringRecordTypeIds 
+# 
+logMonitoringRecordTypeIds=false
+
 # 1.2 Database configuration
 # (only meaningful if monitoringDataWriter=AsyncDB, or =SyncDB)
  

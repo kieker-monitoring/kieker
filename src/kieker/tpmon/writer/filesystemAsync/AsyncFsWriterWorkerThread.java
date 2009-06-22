@@ -58,16 +58,14 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
     public synchronized void initShutdown() {
         AsyncFsWriterWorkerThread.shutdown = true;
     }
-    
+
 //    private boolean statementChanged = true;
 //    private String nextStatementText;
-
     public AsyncFsWriterWorkerThread(BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue, String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
         log.info("New Tpmon - FsWriter thread created ");
     }
-
     static boolean passed = false;
 
     @TpmonInternal()
@@ -76,7 +74,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
         try {
             while (!finished) {
                 AbstractKiekerMonitoringRecord monitoringRecord = writeQueue.take();
-                if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER){
+                if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
                     writeQueue.add(TpmonController.END_OF_MONITORING_MARKER);
@@ -101,7 +99,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
             // What we need is a listener interface!
             log.error("Will terminate monitoring!");
             TpmonController.getInstance().terminateMonitoring();
-        } finally{
+        } finally {
             this.finished = true;
         }
     }
@@ -161,18 +159,21 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
     @TpmonInternal()
     private void writeDataNow(AbstractKiekerMonitoringRecord monitoringRecord) throws IOException {
         Vector<String> recordFields = monitoringRecord.toStringVector();
-        final int LAST_FIELD_INDEX = recordFields.size()-1;
+        final int LAST_FIELD_INDEX = recordFields.size() - 1;
         prepareFile(); // may throw FileNotFoundException
 
-        pos.write('$'); pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
-        if(LAST_FIELD_INDEX>0) {
-            pos.write(';');
+        if (this.isWriteRecordTypeIds()) {
+            pos.write('$');
+            pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+            if (LAST_FIELD_INDEX > 0) {
+                pos.write(';');
+            }
         }
 
-        for (int i=0;i<=LAST_FIELD_INDEX;i++){
+        for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
             String val = recordFields.elementAt(i);
             pos.write(val);
-            if(i<LAST_FIELD_INDEX){
+            if (i < LAST_FIELD_INDEX) {
                 pos.write(';');
             }
         }

@@ -82,6 +82,8 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
 
+    private boolean writeRecordTypeIds = false;
+
     public AsyncDbconnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId) {
         this.dbDriverClassname = dbDriverClassname;
@@ -224,5 +226,18 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+       @Override
+    public boolean isWriteRecordTypeIds() {
+        return this.isWriteRecordTypeIds();
+    }
+
+    @Override
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        for(AbstractWorkerThread t:workers){
+            t.setWriteRecordTypeIds(this.writeRecordTypeIds);
+        }
+        this.writeRecordTypeIds = true;
     }
 }

@@ -1,12 +1,14 @@
 package kieker.tpmon.writer.util.async;
 
 import kieker.tpmon.annotation.TpmonInternal;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * kieker.tpmon.AbstractWorkerThread
  * 
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +23,23 @@ import kieker.tpmon.annotation.TpmonInternal;
  * limitations under the License.
  * ==================================================
  *
- * @author Matthias Rohr
+ * @author Andre van Hoorn
  */
 public abstract class AbstractWorkerThread extends Thread {
-    
+    private static final Log log = LogFactory.getLog(AbstractWorkerThread.class);
+
+   private boolean writeRecordTypeIds = false;
+
+    @TpmonInternal()
+    public boolean isWriteRecordTypeIds() {
+        return writeRecordTypeIds;
+    }
+
+    @TpmonInternal()
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        this.writeRecordTypeIds = writeRecordTypeIds;
+    }
+
    /**
     * initShutdown has to be called before isFinished will result in true.
     * IsFinished == true means that the worker does not have additional jobs in it's queue 
