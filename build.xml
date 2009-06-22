@@ -19,7 +19,7 @@
 	     by the build process: -->
         <property name="tpmon.version"
                   value="0.95-introducingMonitoringRecord"/>
-  	    <property name="dist.name"
+        <property name="dist.name"
                   value="${kieker.packagenamebase}-${tpmon.version}"/>
         <property name="dist.tpmon.ltw"
                   value="${dist.name}_${kieker-ltwjar.suffix}.jar"/>
@@ -85,6 +85,19 @@
         <mkdir dir="${build.tests.dir}"/>
         <mkdir dir="${build.controlServlet.dir}"/>
         <mkdir dir="tmp"/>
+
+    <!-- Classpath with Kieker Ctrl and external libs  -->
+        <path id="core.classpath">
+            <path refid="classpath.libs"/>
+            <fileset dir="${dist.dir}">
+                <include name="${dist.tpmon.ctrl}"/>
+            </fileset>
+        </path>
+
+        <path id="run.tests.classpath">
+            <path refid="core.classpath"/>
+            <pathelement location="${build.tests.dir}/"/>
+        </path>
     </target>
 
     <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
@@ -120,14 +133,6 @@
             <fileset dir="${build.ctrl.dir}"/>
         </jar>
     </target>
-
-    <!-- Classpath with Kieker Ctrl and external libs  -->
-    <path id="core.classpath">
-        <path refid="classpath.libs"/>
-        <fileset dir="${dist.dir}">
-            <include name="${dist.tpmon.ctrl}"/>
-        </fileset>
-    </path>
 
     <target name="build-tpmon-ltw" depends="init,build-tpmon-ctrl">
         <delete dir="${build.ltw.dir}"/>
@@ -241,11 +246,6 @@
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
     </target>
 
-    <path id="run.tests.classpath">
-        <path refid="core.classpath"/>
-        <pathelement location="${build.tests.dir}/"/>
-    </path>
-
     <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
         <echo>
             This is a small test for the part of Tpmon that
@@ -299,14 +299,27 @@
         <copy file="${aop.xml.example}" tofile="${aop.xml.ltwtests}"/>
     </target>
 
+    <condition property="no.log4j.properties.tests">
+        <not>
+            <available file="${tests.log4j.properties}"/>
+        </not>
+    </condition>
+
+    <target name="init-log4-properties-tests" if="no.log4j.properties.tests">
+        <!-- if no aop.xml, copy example file automatically  -->
+        <echo message="${no.log4j.properties.tests} not existing.
+                       Creating default file."/>
+        <copy file="${log4j.properties.example}" tofile="${tests.log4j.properties}"/>
+    </target>
+
     <target name="compile-tests-loadTimeWeaving"
-	    depends="build-tpmon-ltw,init-aop-xml-ltwtests">
+	    depends="build-tpmon-ltw,init-aop-xml-ltwtests,init-log4-properties-tests">
         <javac source="1.5"
                destDir="${build.tests.dir}"
                classpathref="core.classpath"
                srcdir="src/kieker/tests/loadTimeWeaving/"/>
-        <copy file="src/kieker/tests/log4j.properties"
-              todir="${build.tests.dir}/"/>
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.tests.dir}/log4j.properties"/>
         <copy file="${aop.xml.ltwtests}"
 	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
     </target>
@@ -346,7 +359,7 @@
             </classpath>
         </java>
     </target>
-    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-tpmon-ctw">
+    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-tpmon-ctw,init-log4-properties-tests">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
@@ -354,8 +367,8 @@
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>        
-        <copy file="src/kieker/tests/log4j.properties"
-	      todir="${build.tests.dir}/"/>
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.tests.dir}/log4j.properties"/>
         <iajc destdir="${build.tests.dir}" source="1.5" verbose="true"
               classpathref="core.classpath">
             <sourceroots>
@@ -363,7 +376,7 @@
             </sourceroots>
         </iajc>
     </target>
-    <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore">
+    <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore,init-log4-properties-tests">
         <javac destDir="${build.tests.dir}"
                source="1.5"
                verbose="off"
@@ -374,7 +387,7 @@
         </javac>
     </target>
 
-    <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-tpmon-ctw">
+    <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-tpmon-ctw,init-log4-properties-tests">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
@@ -382,8 +395,8 @@
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tests/log4j.properties"
-	      todir="${build.tests.dir}/"/>
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.tests.dir}/log4j.properties"/>
         <iajc  destdir="${build.tests.dir}" source="1.5" verbose="true"
               classpathref="core.classpath">
             <sourceroots>
@@ -463,7 +476,7 @@
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
         <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
-        <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-* | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
+        <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-*/*.dat | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
         	failonerror="true" />
         <exec command="bash -c &quot;R --vanilla &lt; ./src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/gen-results.r&quot;"/>
         <exec command="okular tmp/benchmark-results.pdf" spawn="true" />
