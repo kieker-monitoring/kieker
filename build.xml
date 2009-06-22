@@ -222,9 +222,8 @@
                 <patternset refid="dist_src_files"/>
             </tarfileset>
         </tar>
-
         <gzip zipfile="${dist.dir}/${dist.tpmon.srcBaseName}.tgz" src="${dist.dir}/${dist.tpmon.srcBaseName}.tar" />
-     	<!-- no longer needed -->
+     	<!-- tar file no longer needed -->
         <delete file="${dist.dir}/${dist.tpmon.srcBaseName}.tar"/>
 
         <zip  zipfile="${dist.dir}/${dist.tpmon.srcBaseName}.zip">
