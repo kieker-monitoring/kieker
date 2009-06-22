@@ -13,30 +13,24 @@
         <pathelement location="."/>
     </path>
 
-    <!-- Classpath with Kieker Ctrl and external libs  -->
-    <path id="core.classpath">
-        <path refid="classpath.libs"/>
-        <fileset dir="${dist.dir}">
-            <include name="${kieker-ctrl.jarnamebase}*.jar"/>
-        </fileset>
-    </path>
-    
     <target name="init-version">
         <tstamp/>
         <!-- Names of the tpmon runtime libraries that will be created
 	     by the build process: -->
         <property name="tpmon.version"
                   value="0.95-introducingMonitoringRecord"/>
+  	    <property name="dist.name"
+                  value="${kieker.packagenamebase}-${tpmon.version}"/>
         <property name="dist.tpmon.ltw"
-                  value="${kieker-ltw.jarnamebase}-${tpmon.version}.jar"/>
+                  value="${dist.name}_${kieker-ltwjar.suffix}.jar"/>
         <property name="dist.tpmon.ctw"
-                  value="${kieker-ctw.jarnamebase}-${tpmon.version}.jar"/>
+                  value="${dist.name}_${kieker-ctwjar.suffix}.jar"/>
         <property name="dist.tpmon.ctrl"
-                  value="${kieker-ctrl.jarnamebase}-${tpmon.version}.jar"/>
-        <property name="dist.tpan"
-                  value="KiekerTpan-${tpmon.version}.jar"/>
+                  value="${dist.name}_${kieker-ctrljar.suffix}.jar"/>
         <property name="dist.tpmon.controlServlet"
-                  value="${kieker-controlServlet.jarnamebase}-${tpmon.version}.war"/>
+                  value="${dist.name}_${kieker-controlServletwar.suffix}.war"/>
+        <property name="dist.tpmon.srcBaseName"
+                  value="${dist.name}_${kieker-src.suffix}"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -58,17 +52,18 @@
         <antcall target="build-tpmon-ltw"/>
         <antcall target="build-tpmon-ctrl"/>
         <antcall target="build-tpmon-control-servlet"/>
+        <antcall target="build-tpmon-sources"/>
     </target>
 
     <condition property="no.tpmon.properties">
-      <not>
-        <available file="${tpmon.properties}"/>
-      </not>
+        <not>
+            <available file="${tpmon.properties}"/>
+        </not>
     </condition>
 
     <target name="init-tpmon-properties" if="no.tpmon.properties">
         <!-- if no tpmon.properties, copy example file automatically  -->
-	<echo message="${tpmon.properties} not existing. 
+        <echo message="${tpmon.properties} not existing.
                        Creating default file."/>
         <copy file="${tpmon.properties.example}" tofile="${tpmon.properties}"/>
     </target>
@@ -76,7 +71,7 @@
     <target name="init" depends="update-version,init-tpmon-properties">
         <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
         <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
-        <fail message="Critical error: AspectJ library not found 
+        <fail message="Critical error: AspectJ library not found
                        in ${aspectjtoolsjar}. 
                        Check your build.properties.">
             <condition>
@@ -104,7 +99,6 @@
                debug="true"
                classpathref="classpath.libs">
             <compilerarg value="-Xlint:all"/>
-            <include name="kieker/tpmon/META-INF/**"/>
             <include name="kieker/tpmon/annotation/**"/>
             <include name="kieker/tpmon/core/**"/>
             <include name="kieker/tpmon/monitoringRecord/**"/>
@@ -112,15 +106,32 @@
             <include name="kieker/tpmon/writer/**"/>
         </javac>
         <copy file="${tpmon.properties}" todir="${build.ctrl.dir}/META-INF"/>
+        <!-- We want to include the sources in this jar -->
+        <copy todir="${build.ctrl.dir}/">
+            <fileset dir="src">
+                <include name="kieker/tpmon/annotation/**/*.java"/>
+                <include name="kieker/tpmon/core/**/*.java"/>
+                <include name="kieker/tpmon/monitoringRecord/**/*.java"/>
+                <include name="kieker/tpmon/reader/**/*.java"/>
+                <include name="kieker/tpmon/writer/**/*.java"/>
+            </fileset>
+        </copy>
         <jar destfile="${dist.dir}/${dist.tpmon.ctrl}">
             <fileset dir="${build.ctrl.dir}"/>
         </jar>
     </target>
 
+    <!-- Classpath with Kieker Ctrl and external libs  -->
+    <path id="core.classpath">
+        <path refid="classpath.libs"/>
+        <fileset dir="${dist.dir}">
+            <include name="${dist.tpmon.ctrl}"/>
+        </fileset>
+    </path>
+
     <target name="build-tpmon-ltw" depends="init,build-tpmon-ctrl">
         <delete dir="${build.ltw.dir}"/>
         <mkdir dir="${build.ltw.dir}"/>
-        <mkdir dir="${build.ltw.dir}/META-INF/"/>
         <iajc destDir="${build.ltw.dir}"
               source="1.5"
               verbose="off"
@@ -137,9 +148,12 @@
             <compilerarg value="-Xlint:all"/>
             <exclude name="kieker/tpmon/probe/aspectJ/**"/>
         </javac>
-        <!--<copy todir="${build.ltw.dir}/META-INF">
-            <fileset dir="src/kieker/tpmon/META-INF"/>
-        </copy>-->
+        <!-- We want to include the sources in this jar -->
+        <copy todir="${build.ltw.dir}/">
+            <fileset dir="src">
+                <include name="kieker/tpmon/probe/**/*.java"/>
+            </fileset>
+        </copy>
         <jar destfile="${dist.dir}/${dist.tpmon.ltw}">
             <fileset dir="${build.ltw.dir}"/>
         </jar>
@@ -157,9 +171,67 @@
                classpathref="core.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
+        <!-- We want to include the sources in this jar -->
+        <copy todir="${build.ctw.dir}/">
+            <fileset dir="src">
+                <include name="kieker/tpmon/probe/aspectJ/**/*.java"/>
+            </fileset>
+        </copy>
         <jar destfile="${dist.dir}/${dist.tpmon.ctw}">
             <fileset dir="${build.ctw.dir}"/>
         </jar>
+    </target>
+
+    <target name="build-tpmon-control-servlet" depends="init,build-tpmon-ctrl">
+        <delete dir="${build.controlServlet.dir}"/>
+        <mkdir dir="${build.controlServlet.dir}"/>
+        <javac source="1.5"
+               destDir="${build.controlServlet.dir}"
+               classpathref="core.classpath"
+               srcdir="src/kieker/controlServlet/"
+               debug="true"
+               includes="kieker/controlServlet/**"/>
+        <!-- We want to include the sources in this war -->
+        <copy todir="${build.controlServlet.dir}/">
+            <fileset dir="src">
+                <include name="kieker/controlServlet/**/*.java"/>
+            </fileset>
+        </copy>
+        <war destfile="${dist.dir}/${dist.tpmon.controlServlet}" webxml="src/kieker/controlServlet/WEB-INF/web.xml">
+            <classes dir="${build.controlServlet.dir}">
+                <exclude name="*/tpmon/**"/>
+            </classes>
+            <zipfileset dir="src/kieker/controlServlet/images" prefix="images"/>
+        </war>
+    </target>
+
+    <patternset id="dist_src_files">
+        <include name="META-INF/aop.xml.example"/>
+        <include name="META-INF/tpmon.properties"/>
+        <include name="src/**/*.java"/>
+        <include name="lib/**"/>
+        <include name="build.xml"/>
+        <include name="build.properties"/>
+        <include name="RELEASENOTES"/>
+    </patternset>
+
+    <target name="build-tpmon-sources" depends="init">
+	<!-- Source archives -->
+        <tar destfile="${dist.dir}/${dist.tpmon.srcBaseName}.tar" longfile="gnu">
+            <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+                <patternset refid="dist_src_files"/>
+            </tarfileset>
+        </tar>
+
+        <gzip zipfile="${dist.dir}/${dist.tpmon.srcBaseName}.tgz" src="${dist.dir}/${dist.tpmon.srcBaseName}.tar" />
+     	<!-- no longer needed -->
+        <delete file="${dist.dir}/${dist.tpmon.srcBaseName}.tar"/>
+
+        <zip  zipfile="${dist.dir}/${dist.tpmon.srcBaseName}.zip">
+            <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_src_files"/>
+            </zipfileset>
+        </zip>
     </target>
 
     <target name="clean">
@@ -216,19 +288,19 @@
     </target>
 
     <condition property="no.aop.xml.ltwtests">
-      <not>
-        <available file="${aop.xml.ltwtests}"/>
-      </not>
+        <not>
+            <available file="${aop.xml.ltwtests}"/>
+        </not>
     </condition>
 
     <target name="init-aop-xml-ltwtests" if="no.aop.xml.ltwtests">
         <!-- if no aop.xml, copy example file automatically  -->
-	<echo message="${aop.xml.ltwtests} not existing. 
+        <echo message="${aop.xml.ltwtests} not existing.
                        Creating default file."/>
         <copy file="${aop.xml.example}" tofile="${aop.xml.ltwtests}"/>
     </target>
 
-    <target name="compile-tests-loadTimeWeaving" 
+    <target name="compile-tests-loadTimeWeaving"
 	    depends="build-tpmon-ltw,init-aop-xml-ltwtests">
         <javac source="1.5"
                destDir="${build.tests.dir}"
@@ -398,22 +470,6 @@
         <exec command="okular tmp/benchmark-results.pdf" spawn="true" />
     </target>
 
-    <target name="build-tpmon-control-servlet" depends="init,build-tpmon-ctrl">
-        <delete dir="${build.controlServlet.dir}"/>
-        <mkdir dir="${build.controlServlet.dir}"/>
-        <javac source="1.5"
-               destDir="${build.controlServlet.dir}"                
-               classpathref="core.classpath"
-               srcdir="src/kieker/controlServlet/"
-               debug="true"
-               includes="kieker/controlServlet/**"/>
-        <war destfile="${dist.dir}/${dist.tpmon.controlServlet}" webxml="src/kieker/controlServlet/WEB-INF/web.xml">
-            <classes dir="${build.controlServlet.dir}">
-                <exclude name="*/tpmon/**"/>
-            </classes>
-            <zipfileset dir="src/kieker/controlServlet/images" prefix="images"/>
-        </war>
-    </target>
     <target name="run-reader" depends="build-tpmon-ctrl">
         <copy file="src/kieker/tests/log4j.properties" todir="${build.tests.dir}/"/>
         <java dir="."
