@@ -43,6 +43,12 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
             throws IllegalArgumentException;
 
     @TpmonInternal()
+    public static AbstractKiekerMonitoringRecord getInstance(){
+        throw new UnsupportedOperationException("Extending classes must override"+
+                "this method");
+    }
+
+    @TpmonInternal()
     public abstract Vector<String> toStringVector();
 
     /**

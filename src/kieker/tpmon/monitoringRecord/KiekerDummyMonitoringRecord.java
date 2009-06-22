@@ -55,4 +55,9 @@ public class KiekerDummyMonitoringRecord extends AbstractKiekerMonitoringRecord 
     public int getRecordTypeId() {
         return typeId;
     }
+
+    @TpmonInternal()
+    public static AbstractKiekerMonitoringRecord getInstance() {
+        return new KiekerDummyMonitoringRecord();
+    }
 }

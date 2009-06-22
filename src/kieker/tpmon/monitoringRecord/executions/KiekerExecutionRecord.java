@@ -61,7 +61,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
      * Do not set unused member variables to dummy values such as -1 etc.!
      */
     @TpmonInternal()
-    public static KiekerExecutionRecord getInstance() {
+    public static AbstractKiekerMonitoringRecord getInstance() {
         return new KiekerExecutionRecord();
     }
 
@@ -69,7 +69,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
     public static KiekerExecutionRecord getInstance(
             String componentName, String methodName,
             long traceId) {
-        KiekerExecutionRecord execData = getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
         execData.componentName = componentName;
         execData.opname = methodName;
         execData.traceId = traceId;
@@ -81,7 +81,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord execData = getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
@@ -96,7 +96,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
             String componentName, String opName,
             long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord execData = getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.traceId = traceId;
@@ -111,7 +111,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
             String sessionId, long traceId,
             long tin, long tout,
             int eoi, int ess) {
-        KiekerExecutionRecord execData = getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
