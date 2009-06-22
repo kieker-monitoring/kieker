@@ -1,7 +1,7 @@
 package kieker.tpmon.monitoringRecord;
 
 /**
- * kieker.tpmon.KiekerExecutionRecord
+ * kieker.tpmon.DummyMonitoringRecord
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -22,7 +22,6 @@ package kieker.tpmon.monitoringRecord;
 
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.core.TpmonController;
 
 /**
  * @author Andre van Hoorn

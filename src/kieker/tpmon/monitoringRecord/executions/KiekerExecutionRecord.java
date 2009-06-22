@@ -128,7 +128,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
      */
     @TpmonInternal()
     public Vector<String> toStringVector() {
-        Vector<String> vec = new Vector<String>(numRecordFields);
+        Vector<String> vec = new Vector<String>(KiekerExecutionRecord.numRecordFields);
         vec.insertElementAt(Integer.toString(this.experimentId), 0);
         vec.insertElementAt(this.componentName + "." + this.opname, 1);
         vec.insertElementAt((this.sessionId == null) ? "NULL" : this.sessionId, 2);
@@ -162,9 +162,9 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
     @TpmonInternal()
     public void initFromStringVector(Vector<String> recordVector)
             throws IllegalArgumentException {
-        if (recordVector.size() > numRecordFields) {
+        if (recordVector.size() > KiekerExecutionRecord.numRecordFields) {
             throw new IllegalArgumentException("Expecting vector with " +
-                    numRecordFields + " elements but found:" + recordVector.size());
+                    KiekerExecutionRecord.numRecordFields + " elements but found:" + recordVector.size());
         }
 
         this.experimentId = Integer.parseInt(recordVector.elementAt(0));
