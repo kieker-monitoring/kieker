@@ -84,7 +84,6 @@ public class FileSystemReader {
             System.exit(1);
         }
         log.info("Tpmon initialized");
-        instance.readMappingFile();
         log.info("Staring to read files");
         instance.openAndRegisterData();
         log.info("Finished to read files");
@@ -178,7 +177,9 @@ public class FileSystemReader {
                 try {
                     st = new StringTokenizer(line, "=");
                     int numTokens = st.countTokens();
-                    if (numTokens == 0) continue;
+                    if (numTokens == 0) {
+                        continue;
+                    }
                     if (numTokens != 2) {
                         throw new IllegalArgumentException("Invalid number of tokens (" + numTokens + ") Expecting 2");
                     }
@@ -213,6 +214,8 @@ public class FileSystemReader {
         log.info("< Loading " + input.getAbsolutePath());
 
         BufferedReader in = null;
+        boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
+
         try {
             in = new BufferedReader(new FileReader(input));
             String line;
@@ -220,14 +223,21 @@ public class FileSystemReader {
             while ((line = in.readLine()) != null) {
                 AbstractKiekerMonitoringRecord rec = null;
                 try {
+                    if (!recordTypeIdMapInitialized && line.startsWith("$")) {
+                        instance.readMappingFile();
+                        recordTypeIdMapInitialized = true;
+                    }
                     st = new StringTokenizer(line, ";");
                     int numTokens = st.countTokens();
                     Vector<String> vec = null;
                     boolean haveTypeId = false;
                     for (int i = 0; i < numTokens; i++) {
+//                        log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
                         String token = st.nextToken();
                         if (i == 0 && token.startsWith("$")) {
                             /* We found a record type ID and need to lookup the class */
+//                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
+
                             Integer id = Integer.valueOf(token.substring(1));
                             Class<AbstractKiekerMonitoringRecord> clazz = this.recordTypeMap.get(id);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
@@ -238,8 +248,8 @@ public class FileSystemReader {
                             rec = KiekerExecutionRecord.getInstance();
                             vec = new Vector<String>(numTokens);
                         }
-                        if (!haveTypeId || i>0) { // only if current field is not the id
-//                            log.info("haveTypeId:" + haveTypeId + ";" + "token:" + token + "i:" + i);
+//                        log.info("haveTypeId:" + haveTypeId + ";" + " token:" + token + "i:" + i);
+                        if (!haveTypeId || i > 0) { // only if current field is not the id
                             vec.insertElementAt(token, haveTypeId ? i - 1 : i);
                         }
                     }
