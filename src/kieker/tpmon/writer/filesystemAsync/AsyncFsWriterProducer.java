@@ -2,6 +2,9 @@ package kieker.tpmon.writer.filesystemAsync;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -44,9 +47,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue = null;
     private String storagePathBase = null;
     private File mappingFile = null;
-
     private boolean writeRecordTypeIds = false;
-
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_ASYNCFS +
@@ -80,30 +81,31 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
             return;
         }
 
-        // TODO Change to format: yyyymmdd-hhmmss
-        int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
-        String storageDir = this.storagePathBase + "/tpmon--" + time + "/";
+        DateFormat m_ISO8601Local =
+                new SimpleDateFormat("yyyyMMdd'-'HHmmss");
+        String dateStr = m_ISO8601Local.format (new java.util.Date());
+        String storageDir = this.storagePathBase + "/tpmon-" + dateStr + "/";
 
         f = new File(storageDir);
-        if(!f.mkdir()){
-            log.error("Failed to create directory '"+this.storagePathBase + "'");
+        if (!f.mkdir()) {
+            log.error("Failed to create directory '" + this.storagePathBase + "'");
             log.error("Will abort init().");
             return;
         }
         log.info("Directory for monitoring data: " + storageDir);
 
-        try{
-            this.mappingFile = new File(storageDir+File.separatorChar+"tpmon.map");
+        try {
+            this.mappingFile = new File(storageDir + File.separatorChar + "tpmon.map");
             this.mappingFile.createNewFile();
-        }catch(Exception exc){
-            log.error("Failed to create mapping file '"+this.mappingFile.getAbsolutePath() + "'", exc);
+        } catch (Exception exc) {
+            log.error("Failed to create mapping file '" + this.mappingFile.getAbsolutePath() + "'", exc);
             log.error("Will abort init().");
             return;
         }
 
         blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, storageDir+"/tpmon");
+            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, storageDir + "/tpmon");
             //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
             workers.add(dbw);
             dbw.start();
@@ -144,11 +146,11 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
-        try{
-        PrintWriter pw = new PrintWriter(this.mappingFile);
-        pw.println("$"+id+"="+className);
-        pw.close();
-        }catch(Exception exc){
+        try {
+            PrintWriter pw = new PrintWriter(this.mappingFile);
+            pw.println("$" + id + "=" + className);
+            pw.close();
+        } catch (Exception exc) {
             log.fatal("Failed to register record type", exc);
         }
     }
@@ -160,8 +162,8 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
     @Override
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        for(AbstractWorkerThread t:workers){
-            log.info("t.setWriteRecordTypeIds("+writeRecordTypeIds+")");
+        for (AbstractWorkerThread t : workers) {
+            log.info("t.setWriteRecordTypeIds(" + writeRecordTypeIds + ")");
             t.setWriteRecordTypeIds(writeRecordTypeIds);
         }
         this.writeRecordTypeIds = writeRecordTypeIds;

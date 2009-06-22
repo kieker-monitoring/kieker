@@ -6,6 +6,8 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.*;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -95,9 +97,10 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             return;
         }
 
-        // TODO Change to format: yyyymmdd-hhmmss
-        int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
-        this.storagePathBase = storagePathBase + "/tpmon--" + time + "/";
+        DateFormat m_ISO8601Local =
+                new SimpleDateFormat("yyyyMMdd'-'HHmmss");
+        String dateStr = m_ISO8601Local.format (new java.util.Date());
+        this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "/";
 
         f = new File(this.storagePathBase);
         if (!f.mkdir()) {
