@@ -558,6 +558,8 @@ public class TpmonController {
 
     /**
      * Registers monitoring record type and returns its id.
+     * If logging of record ids is disabled, -1 is returned and no
+     * registration takes place.
      *
      * @param recordTypeClass
      * @return
@@ -565,10 +567,16 @@ public class TpmonController {
     @TpmonInternal()
     public int registerMonitoringRecordType(Class recordTypeClass) {
         String name = recordTypeClass.getCanonicalName();
-        int id = this.nextMonitoringRecordType.getAndIncrement();
-        log.info("Registering monitoring record type with id '" + id + "':" + name);
-        this.monitoringDataWriter.registerMonitoringRecordType(id, name);
-        return id;
+        if (this.logMonitoringRecordTypeIds) {
+            int id = this.nextMonitoringRecordType.getAndIncrement();
+            log.info("Registering monitoring record type with id '" + id + "':" + name);
+            this.monitoringDataWriter.registerMonitoringRecordType(id, name);
+            return id;
+        } else {
+            log.info("Didn't register the following monitoring record type since " +
+                    "logging of type ids disabled: " + name);
+            return -1;
+        }
     }
 }
 
