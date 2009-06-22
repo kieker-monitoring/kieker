@@ -324,6 +324,24 @@
 	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
     </target>
     
+    <target name="run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes"
+            depends="clean,compile-tests-loadTimeWeaving">
+        <java dir="."
+              fork="true"              
+              classname="kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore"
+              classpathref="run.tests.classpath">
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
+            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+            <jvmarg value="-Daj.weaving.verbose=true"/>
+            <classpath>
+                <pathelement location="${dist.dir}/${dist.tpmon.ltw}"/>
+            </classpath>
+        </java>
+    </target>
+    
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation"
             depends="clean,compile-tests-loadTimeWeaving">
         <java dir="."
@@ -418,7 +436,7 @@
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
     </target>
-
+    
     <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="clean,compile-tests-compileTimeWeaving-bookstoreDB">
         <delete dir="${tests.javadb.kiekerdb.path}"/> <!-- delete existing DB -->
         <java dir="."
