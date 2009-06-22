@@ -37,9 +37,8 @@ public class KiekerDummyMonitoringRecord extends AbstractKiekerMonitoringRecord 
     private static int typeId = 0;
 
     @TpmonInternal()
-    public void initFromVector(int recordTypeId,Vector recordVector)
+    public void initFromStringVector(Vector<String> recordVector)
             throws IllegalArgumentException {
-        typeId = recordTypeId;
         if(recordVector.size()>0) {
             throw new IllegalArgumentException("Expecting vector with "+
                     "0 elements but found:" + recordVector.size());

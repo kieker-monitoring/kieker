@@ -29,12 +29,9 @@ import kieker.tpmon.core.TpmonController;
 public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
 
     private static final long serialVersionUID = 117L;
-
-   /** Used to identify the type of CSV records */
+    /** Used to identify the type of CSV records */
     private static int typeId = TpmonController.getInstance().registerMonitoringRecordType(KiekerExecutionRecord.class);
-
     private static int numRecordFields = 9;
-
     public int experimentId = -1;
     public String vmName = null;
     public String componentName = null;
@@ -93,7 +90,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
         execData.tout = tout;
         return execData;
     }
-    
+
     @TpmonInternal()
     public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
@@ -107,7 +104,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
         execData.tout = tout;
         return execData;
     }
-    
+
     @TpmonInternal()
     public static KiekerExecutionRecord getInstance(
             String componentName, String opName,
@@ -133,8 +130,8 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
     public Vector<String> toStringVector() {
         Vector<String> vec = new Vector<String>(numRecordFields);
         vec.insertElementAt(Integer.toString(this.experimentId), 0);
-        vec.insertElementAt(this.componentName+"."+this.opname, 1);
-        vec.insertElementAt((this.sessionId==null)?"NULL":this.sessionId, 2);
+        vec.insertElementAt(this.componentName + "." + this.opname, 1);
+        vec.insertElementAt((this.sessionId == null) ? "NULL" : this.sessionId, 2);
         vec.insertElementAt(Long.toString(this.traceId), 3);
         vec.insertElementAt(Long.toString(this.tin), 4);
         vec.insertElementAt(Long.toString(this.tout), 5);
@@ -143,7 +140,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
         vec.insertElementAt(Integer.toString(this.eoi), 8);
         return vec;
 
-        // TODO: remove this old implementation:
+    // TODO: remove this old implementation:
 //        StringBuilder strB = new StringBuilder();
 //        strB.append(this.experimentId); strB.append(';');
 //        // concatenate opname
@@ -163,9 +160,34 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
     }
 
     @TpmonInternal()
-     public void initFromVector(int recordTypeId, Vector recordVector)
+    public void initFromStringVector(Vector<String> recordVector)
             throws IllegalArgumentException {
-       throw new UnsupportedOperationException("Not supported yet.");
+        if (recordVector.size() > numRecordFields) {
+            throw new IllegalArgumentException("Expecting vector with " +
+                    numRecordFields + " elements but found:" + recordVector.size());
+        }
+
+        this.experimentId = Integer.parseInt(recordVector.elementAt(0));
+        { // divide name into component and operation name
+            String name = recordVector.elementAt(1);
+            int pos = name.lastIndexOf('.');
+            if (pos == -1) {
+                componentName = "";
+                this.opname = name;
+            } else {
+                componentName = name.substring(0, pos);
+                this.opname = name.substring(pos + 1);
+            }
+        }
+        this.sessionId = recordVector.elementAt(2);
+        this.traceId = (Long.parseLong(recordVector.elementAt(3)));
+        this.tin = Long.parseLong(recordVector.elementAt(4));
+        this.tout = Long.parseLong(recordVector.elementAt(5));
+        this.vmName = recordVector.elementAt(6);
+        this.eoi = Integer.parseInt(recordVector.elementAt(7));
+        this.ess = Integer.parseInt(recordVector.elementAt(8));
+
+        return;
     }
 
     @TpmonInternal()

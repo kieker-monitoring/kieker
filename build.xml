@@ -487,7 +487,7 @@
         <java dir="."
               fork="true"
               classname="kieker.tpmon.reader.fileSystemReader.FileSystemReader"
-              classpathref="run.classpath">
+              classpathref="core.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>

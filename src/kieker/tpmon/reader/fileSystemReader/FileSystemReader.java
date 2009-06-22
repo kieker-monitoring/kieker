@@ -6,9 +6,14 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * kieker.tpmon.fileSystemReader.FileSystemReader
@@ -40,7 +45,8 @@ import kieker.tpmon.annotation.TpmonInternal;
  * 2008/09/15: Initial version
  */
 public class FileSystemReader {
-    
+
+    private static final Log log = LogFactory.getLog(FileSystemReader.class);
     private static FileSystemReader instance;
 
     // instance variables
@@ -49,55 +55,57 @@ public class FileSystemReader {
 
     @TpmonInternal()
     public static void main(String[] args) {
-        
+
 //       Properties props = System.getProperties();
 //       Iterator it = props.keySet().iterator();
 //       while(it.hasNext()) {
 //           Object curKey = it.next();
 //           System.out.println("Key "+curKey.toString() + " "+props.getProperty(curKey.toString()).toString());
 //       }
-        
+
         String inputDir = System.getProperty("inputDir");
-        if (inputDir == null || inputDir.length()==0 || inputDir.equals("${inputDir}")){
-            System.out.println("FileSystemReader>  No input dir found!");
-            System.out.println("FileSystemReader>  Provide an input dir as system property.");
-            System.out.println("FileSystemReader>  Example to read all tpmon-* files from /tmp:\n" +
-                              "                    ant -DinputDir=/tmp/ run-reader    ");
+        if (inputDir == null || inputDir.length() == 0 || inputDir.equals("${inputDir}")) {
+            log.error("No input dir found!");
+            log.error("Provide an input dir as system property.");
+            log.error("Example to read all tpmon-* files from /tmp:\n" +
+                    "                    ant -DinputDir=/tmp/ run-reader    ");
             System.exit(1);
         } else {
-            System.out.println("FileSystemReader>  Reading all tpmon-* files from "+inputDir);            
+            log.info("Reading all tpmon-* files from " + inputDir);
         }
 
-        instance = FileSystemReader.instance();  
+        instance = FileSystemReader.instance();
         instance.setInputDir(new File(inputDir));
-              
-        System.out.println("FileSystemReader>  Activating Tpmon");
+
+        log.info("Activating Tpmon");
         if (!instance.setCtrl(TpmonController.getInstance())) {
-            System.out.println("FileSystemReader>  Initialization of tpmon failed");
-            System.exit(1);            
+            log.error("Initialization of tpmon failed");
+            System.exit(1);
         }
-        System.out.println("FileSystemReader>  Tpmon initialized");
-        System.out.println("FileSystemReader>  Staring to read files");
-        instance.openAndRegisterData();        
-        System.out.println("FileSystemReader>  Finished to read files");
+        log.info("Tpmon initialized");
+        log.info("Staring to read files");
+        instance.openAndRegisterData();
+        log.info("Finished to read files");
         System.exit(0);
     }
-    
+
     @TpmonInternal()
     public boolean setCtrl(TpmonController ctrl) {
         this.ctrl = ctrl;
         return (ctrl != null);
-    }        
-    
+    }
+
     /**
      * @return the singleton instance of this class
      */
     @TpmonInternal()
     public static synchronized FileSystemReader instance() {
-        if (instance == null) instance = new FileSystemReader();
+        if (instance == null) {
+            instance = new FileSystemReader();
+        }
         return instance;
     }
-    
+
     @TpmonInternal()
     public void openAndRegisterData() {
         if (inputDir == null) {
@@ -105,20 +113,20 @@ public class FileSystemReader {
         }
         try {
             File[] inputFiles = inputDir.listFiles(new FileFilter() {
+
                 public boolean accept(File pathname) {
-                    return
-                        pathname.isFile() &&
-                        pathname.getName().startsWith("tpmon") &&
-                        pathname.getName().endsWith(".dat");
-                } });
+                    return pathname.isFile() &&
+                            pathname.getName().startsWith("tpmon") &&
+                            pathname.getName().endsWith(".dat");
+                }
+            });
             for (int i = 0; i < inputFiles.length; i++) {
                 processInputFile(inputFiles[i]);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(
-                "An error occurred while parsing files from directory " +
-                inputDir.getAbsolutePath() + ":");
+                    "An error occurred while parsing files from directory " +
+                    inputDir.getAbsolutePath() + ":");
             e.printStackTrace();
         }
     }
@@ -136,31 +144,30 @@ public class FileSystemReader {
 //    public void setMaximumNumberOfTracesToLoad(long numberOfTracesToLoad) {        
 //        maximumNumberOfTracesToLoad = numberOfTracesToLoad;
 //    }
-
     /**
      * Configures the input directory that will be processed by
      * the next call to {@link #openAndRegisterData()}
      */
     @TpmonInternal()
     public void setInputDir(File inputDir) {
-        if (inputDir == null )
+        if (inputDir == null) {
             throw new IllegalArgumentException("inputDir null");
-        if (!inputDir.isDirectory())
+        }
+        if (!inputDir.isDirectory()) {
             throw new IllegalArgumentException("inputDir is not a directory: " + inputDir.getAbsolutePath());
+        }
         this.inputDir = inputDir;
     }
-   
     // The following data structure will be reused
     //to save the allocation for each execution
-    private StringTokenizer st; 
-    
+    private StringTokenizer st;
     int degradableSleepTime = 0;
 
     @TpmonInternal()
     private void processInputFile(File input) throws IOException {
         System.out.println("< Loading " + input.getAbsolutePath());
-        
-        BufferedReader in = null;        
+
+        BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(input));
             String line, name;
@@ -169,37 +176,50 @@ public class FileSystemReader {
             int expId, eoi, ess;
             String vmname;
             String sessionid;
-            
+
             while ((line = in.readLine()) != null) {
                 try {
                     st = new StringTokenizer(line, ";");
-                    expId = Integer.parseInt(st.nextToken());
-                    name = st.nextToken();
-                    sessionid = st.nextToken();
-                    traceId = Long.getLong(st.nextToken());
-                    tin = Long.parseLong(st.nextToken());
-                    tout = Long.parseLong(st.nextToken());
-                    vmname = st.nextToken();      
-                    // for distributed systems, there are two more columns:
-                    eoi = st.hasMoreTokens() ? Integer.parseInt( st.nextToken() ) : -1;
-                    ess = st.hasMoreTokens() ? Integer.parseInt( st.nextToken() ) : -1;
-                    
-                    // convert opname
-                    int pos = name.lastIndexOf('.');
-                    String componentName;
-                    String methodName;
-                    if (pos == -1) {
-                        componentName = "";
-                        methodName = name;
-                    } else {
-                        componentName = name.substring(0, pos-1);
-                        methodName = name.substring(pos+1);
+                    int numTokens = st.countTokens();
+                    Vector<String> vec = new Vector<String>(numTokens);
+                    for (int i=0; i<numTokens; i++){
+                        vec.insertElementAt(st.nextToken(), i);
                     }
-                    ctrl.setExperimentId(expId);
-                    
-                    if (degradableSleepTime > 0) Thread.sleep(degradableSleepTime*5);
-                    
-                    while (!ctrl.logMonitoringRecord(KiekerExecutionRecord.getInstance(componentName, methodName, sessionid, traceId, tin, tout, eoi, ess))) {
+
+//                    log.info("Found "+st.countTokens()+" tokens");
+//                    expId = Integer.parseInt(st.nextToken());
+//                    name = st.nextToken();
+//                    sessionid = st.nextToken();
+//                    traceId = Long.parseLong(st.nextToken());
+//                    log.info("expId="+traceId);
+//                    tin = Long.parseLong(st.nextToken());
+//                    tout = Long.parseLong(st.nextToken());
+//                    vmname = st.nextToken();
+//                    // for distributed systems, there are two more columns:
+//                    eoi = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
+//                    ess = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
+//
+//                    // convert opname
+//                    int pos = name.lastIndexOf('.');
+//                    String componentName;
+//                    String methodName;
+//                    if (pos == -1) {
+//                        componentName = "";
+//                        methodName = name;
+//                    } else {
+//                        componentName = name.substring(0, pos - 1);
+//                        methodName = name.substring(pos + 1);
+//                    }
+//                    ctrl.setExperimentId(expId);
+
+                    if (degradableSleepTime > 0) {
+                        Thread.sleep(degradableSleepTime * 5);
+                    }
+
+                    AbstractKiekerMonitoringRecord rec = KiekerExecutionRecord.getInstance();
+                    rec.initFromStringVector(vec);
+
+                    while (!ctrl.logMonitoringRecord(rec)) {
                         Thread.sleep(500);
                         ctrl.enableMonitoring();
                         degradableSleepTime += 50;
@@ -207,18 +227,20 @@ public class FileSystemReader {
                     if (degradableSleepTime > 0) {
                         degradableSleepTime--;
                     }
-                }
-                
-                catch (Exception e) {
-                    System.err.println(
-                        "Failed to parse line: {" + line + "} from file " +
-                        input.getAbsolutePath() + ": " + e.getMessage());
+                } catch (Exception e) {
+                    log.error(
+                            "Failed to parse line: {" + line + "} from file " +
+                            input.getAbsolutePath(), e);
+                    log.error("Abort reading");
+                    break;
                 }
             }
-        }
-        finally {
-            if (in != null) try { in.close(); } catch (Exception e) { /* ignore */ }
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) { log.error("Exception", e); }
+            }
         }
     }
-    
 }

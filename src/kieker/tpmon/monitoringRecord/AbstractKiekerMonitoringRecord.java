@@ -39,7 +39,7 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
      * @param recordVector
      */
     @TpmonInternal()
-      public abstract void initFromVector(int recordTypeId, Vector recordVector)
+      public abstract void initFromStringVector(Vector<String> recordVector)
             throws IllegalArgumentException;
 
     @TpmonInternal()
