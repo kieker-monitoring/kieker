@@ -11,7 +11,6 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
  * kieker.tpmon.fileSystemReader.FileSystemReader
  *
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  * again, written to a database, or whatever tpmon is configured to do
  * with the monitoring data.
  *
- * @author Matthias Rohr
+ * @author Matthias Rohr, Andre van Hoorn
  * 
  * History:
  * 2008/09/15: Initial version
@@ -165,17 +164,12 @@ public class FileSystemReader {
 
     @TpmonInternal()
     private void processInputFile(File input) throws IOException {
-        System.out.println("< Loading " + input.getAbsolutePath());
+        log.info("< Loading " + input.getAbsolutePath());
 
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(input));
-            String line, name;
-            long traceId;
-            long tin, tout;
-            int expId, eoi, ess;
-            String vmname;
-            String sessionid;
+            String line;
 
             while ((line = in.readLine()) != null) {
                 try {
@@ -185,32 +179,6 @@ public class FileSystemReader {
                     for (int i=0; i<numTokens; i++){
                         vec.insertElementAt(st.nextToken(), i);
                     }
-
-//                    log.info("Found "+st.countTokens()+" tokens");
-//                    expId = Integer.parseInt(st.nextToken());
-//                    name = st.nextToken();
-//                    sessionid = st.nextToken();
-//                    traceId = Long.parseLong(st.nextToken());
-//                    log.info("expId="+traceId);
-//                    tin = Long.parseLong(st.nextToken());
-//                    tout = Long.parseLong(st.nextToken());
-//                    vmname = st.nextToken();
-//                    // for distributed systems, there are two more columns:
-//                    eoi = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
-//                    ess = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
-//
-//                    // convert opname
-//                    int pos = name.lastIndexOf('.');
-//                    String componentName;
-//                    String methodName;
-//                    if (pos == -1) {
-//                        componentName = "";
-//                        methodName = name;
-//                    } else {
-//                        componentName = name.substring(0, pos - 1);
-//                        methodName = name.substring(pos + 1);
-//                    }
-//                    ctrl.setExperimentId(expId);
 
                     if (degradableSleepTime > 0) {
                         Thread.sleep(degradableSleepTime * 5);
