@@ -19,14 +19,54 @@ package kieker.loganalysis;
  * limitations under the License.
  * ==================================================
  */
-
+import java.util.Vector;
+import kieker.loganalysis.consumer.IMonitoringRecordConsumer;
+import kieker.loganalysis.consumer.MonitoringRecordLogger;
+import kieker.loganalysis.logReader.FSReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class LogAnalysisController {
-    private static final Log log = LogFactory.getLog(LogAnalysisController.class);
 
-    public static void main(String args[]){
+    private static final Log log = LogFactory.getLog(LogAnalysisController.class);
+    private FSReader logReader = null;
+    private Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
+
+    public static void main(String args[]) {
         log.info("Hi, this is Kieker.LogAnalysis");
+
+        String inputDir = System.getProperty("inputDir");
+        if (inputDir == null || inputDir.length() == 0 || inputDir.equals("${inputDir}")) {
+            log.error("No input dir found!");
+            log.error("Provide an input dir as system property.");
+            log.error("Example to read all tpmon-* files from /tmp:\n" +
+                    "                    ant -DinputDir=/tmp/ run-logAnalysis    ");
+            System.exit(1);
+        } else {
+            log.info("Reading all tpmon-* files from " + inputDir);
+        }
+
+        LogAnalysisController analysisInstance = new LogAnalysisController();
+        analysisInstance.setLogReader(new FSReader(inputDir));
+        analysisInstance.addConsumer(new MonitoringRecordLogger());
+        analysisInstance.run();
+        log.info("Bye, this was Kieker.LogAnalysis");
+        System.exit(0);
+    }
+
+    public void run() {
+        for (IMonitoringRecordConsumer c : this.consumers) {
+            this.logReader.registerConsumer(c);
+            c.run();
+        }
+        this.logReader.run();
+    }
+
+    public void setLogReader(FSReader reader) {
+        this.logReader = reader;
+    }
+
+    public void addConsumer(IMonitoringRecordConsumer consumer) {
+        this.consumers.add(consumer);
     }
 }

@@ -53,13 +53,8 @@
         </replaceregexp>
     </target>
 
-    <target name="build-all" depends="clean,init">
-        <antcall target="build-tpmon-ctw"/>
-        <antcall target="build-tpmon-ltw"/>
-        <antcall target="build-tpmon-ctrl"/>
-        <antcall target="build-tpmon-control-servlet"/>
-        <antcall target="build-tpmon-sources"/>
-        <antcall target="build-loganalysis-ctrl"/>
+    <target name="build-all" 
+            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-tpmon-sources,build-loganalysis-ctrl">
     </target>
 
     <condition property="no.loganalysis.properties">
@@ -247,11 +242,10 @@
         <echo message="Creating the library of loganalysis (${dist.tpmon.loganalysis.ctrl})."/>
         <javac destDir="${build.loganalysis.ctrl.dir}"
                source="1.5"
-               srcdir="src"
+               srcdir="src/kieker/loganalysis/"
                debug="true"
-               classpathref="classpath.libs">
+               classpathref="tpmon.core.classpath">
             <compilerarg value="-Xlint:all"/>
-            <include name="kieker/loganalysis/**"/>
         </javac>
         <copy file="${loganalysis.properties}" todir="${build.loganalysis.ctrl.dir}/META-INF"/>
         <!-- We want to include the sources in this jar -->
@@ -591,8 +585,11 @@
               fork="true"
               classname="kieker.loganalysis.LogAnalysisController"
               classpathref="loganalysis.core.classpath">
-            <!--<jvmarg value="-DinputDir=${inputDir}"/>-->
+            <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+           <classpath>
+                <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
+            </classpath>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>

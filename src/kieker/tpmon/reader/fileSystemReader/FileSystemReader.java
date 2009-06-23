@@ -159,6 +159,7 @@ public class FileSystemReader {
         }
         this.inputDir = inputDir;
     }
+
     // The following data structure will be reused
     //to save the allocation for each execution
     private StringTokenizer st;
