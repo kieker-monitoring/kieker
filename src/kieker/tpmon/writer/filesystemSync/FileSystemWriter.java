@@ -18,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
  * kieker.tpmon.FileSystemWriter
  * 
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ import org.apache.commons.logging.LogFactory;
  * option to write to multiple files, while writing with more than one thread into
  * a single file is not considered a save option.     
  *
- * @author Matthias Rohr
+ * @author Matthias Rohr, Andre van Hoorn
  * 
  * History: 
  * 2008/01/04: Refactoring for the first release of 

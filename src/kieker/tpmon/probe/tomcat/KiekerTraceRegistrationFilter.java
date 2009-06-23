@@ -3,7 +3,6 @@ package kieker.tpmon.probe.tomcat;
 import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
@@ -45,7 +44,6 @@ import kieker.tpmon.core.SessionRegistry;
  */
 public class KiekerTraceRegistrationFilter implements Filter {
 
-    private static final TpmonController ctrlInst = TpmonController.getInstance();
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 

@@ -1,7 +1,6 @@
 package kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes;
 
-import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.KiekerBranchingRecord;
+import kieker.tpmon.probe.manual.KiekerTpmonManualBranchProbe;
 
 
 /**
@@ -36,23 +35,16 @@ import kieker.tpmon.monitoringRecord.KiekerBranchingRecord;
  * 2007-04-18: Initial version
  *
  */
-
-
 public class Catalog {
-    private static final TpmonController tpmonInst = TpmonController.getInstance();
-    
-    public static void getBook(boolean complexQuery){
-    	if (complexQuery) {
-            tpmonInst.logMonitoringRecord(KiekerBranchingRecord.getInstance(tpmonInst.getTime(),1,0));
+    public static void getBook(boolean complexQuery) {
+        if (complexQuery) {
+            KiekerTpmonManualBranchProbe.monitorBranch(1,0);
 //		System.out.println("  complex query "+Thread.currentThread().getName());
-		Bookstore.waitabit(20);
-	}
-	else 	{			
-            tpmonInst.logMonitoringRecord(KiekerBranchingRecord.getInstance(tpmonInst.getTime(),1,1));
+            Bookstore.waitabit(20);
+        } else {
+            KiekerTpmonManualBranchProbe.monitorBranch(1,1);
 //		System.out.println("  simple query "+Thread.currentThread().getName());
-		Bookstore.waitabit(2);	
-	}
-
+            Bookstore.waitabit(2);
+        }
     }
-   
 }
