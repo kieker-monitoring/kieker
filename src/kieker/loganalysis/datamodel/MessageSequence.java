@@ -26,7 +26,7 @@ import java.util.Vector;
  */
 public class MessageSequence {
 
-    private long traceId = -1;
+    public long traceId = -1;
     private Vector<Message> seq = null;
 
     public MessageSequence(long traceId, Vector<Message> seq) {
@@ -39,13 +39,13 @@ public class MessageSequence {
     }
 
     public String toString() {
-        StringBuilder strBuild = new StringBuilder("Trace " + this.traceId + ":");
+        StringBuilder strBuild = new StringBuilder("Trace " + this.traceId + ":\n");
         Iterator<Message> it = seq.iterator();
         while (it.hasNext()) {
             Message m = it.next();
             strBuild.append("<");
             strBuild.append(m.toString());
-            strBuild.append(">");
+            strBuild.append(">\n");
         }
         return strBuild.toString();
     }

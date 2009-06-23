@@ -25,28 +25,31 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  */
 
 public class Message {
-    public boolean call;
+    public boolean callMessage;
     public long timestamp;
-    public String caller; // TODO: vm
-    public String callee; // TODO: vm
+    public String sender; // TODO: vm
+    public String receiver; // TODO: vm
     public KiekerExecutionRecord execution;
      
-    public Message(boolean call, long timestamp, String caller, 
-            String callee, KiekerExecutionRecord execution){
-        this.call = call;
+    public Message(boolean callMessage, long timestamp, String sender, 
+            String receiver, KiekerExecutionRecord execution){
+        this.callMessage = callMessage;
         this.timestamp = timestamp;
-        this.caller = caller;
-        this.callee = callee;
+        this.sender = sender;
+        this.receiver = receiver;
         this.execution = execution;
     }
     
     public String toString(){
         StringBuilder strBuild = new StringBuilder();
         strBuild.append(this.timestamp); strBuild.append(':');
-        strBuild.append((this.caller!=null)?this.caller:"$");
-        strBuild.append(this.call?"->":"<-");
-        strBuild.append((this.callee!=null)?this.callee:"$");
-        if(this.call&&this.callee!=null){
+        strBuild.append((this.sender!=null)?this.sender:"$");
+       if(!this.callMessage&&this.sender!=null){
+            strBuild.append("."+this.execution.opname);
+        }
+        strBuild.append(this.callMessage?"|-send->":"|-return->");
+        strBuild.append((this.receiver!=null)?this.receiver:"$");
+        if(this.callMessage&&this.receiver!=null){
             strBuild.append("."+this.execution.opname);
         }
         return strBuild.toString();

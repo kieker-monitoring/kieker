@@ -59,52 +59,32 @@ public class ExecutionSequence {
         KiekerExecutionRecord curE = null, prevE = null;
         while (eSeqIt.hasNext()) {
             curE = eSeqIt.next();
-            if (prevE == null) { // initial execution call
+            // First, we might need to clean up the stack for the next execution callMessage 
+            if (prevE != null && prevE.ess >= curE.ess) {
+                KiekerExecutionRecord curReturnReceiver; // receiver of return message
+                while (curStack.size() > curE.ess) {
+                    prevE = curStack.pop().execution;
+                    curReturnReceiver = curStack.peek().execution;
+                    Message m = new Message(false, prevE.tout, prevE.componentName, curReturnReceiver.componentName, prevE);
+                    mSeq.add(m);
+                    prevE = curReturnReceiver;
+                }
+            }
+            // Now, we handle the current execution callMessage 
+            if (prevE == null) { // initial execution callMessage
                 Message m = new Message(true, curE.tin, null, curE.componentName, curE);
                 mSeq.add(m);
                 curStack.push(m);
-            } else {
-                if (prevE.ess < curE.ess) { // we have a subsequent call
-                    log.info("prevE.ess < curE.ess");
-                    Message m = new Message(true, curE.tin, curE.componentName, prevE.componentName, curE);
-                    mSeq.add(m);
-                    curStack.push(m);
-                } else if (prevE.ess == curE.ess) { // return + call
-                    Message mStack = curStack.pop();
-                    log.info("prevE.ess == curE.ess");
-                    Message m = new Message(false, mStack.execution.tout, prevE.componentName, mStack.execution.componentName, mStack.execution);
-                    mSeq.add(m);
-                    m = new Message(true, curE.tin, mStack.execution.componentName, curE.componentName, curE);
-                    mSeq.add(m);
-                    curStack.push(m);
-                } else { // prevE.ess > curE.ess: returns + call
-                    log.info("else");
-                    // first, we need to clean up the stack
-                    KiekerExecutionRecord curReturnCaller = curStack.pop().execution;
-                    KiekerExecutionRecord curReturnCallee = curStack.peek().execution;
-                    while (curReturnCaller.ess > curE.ess) {
-                        Message m = new Message(false, curReturnCaller.tout, curReturnCaller.componentName, curReturnCallee.componentName, curReturnCaller);
-                        mSeq.add(m);
-                        curReturnCaller = curReturnCallee;
-                        curReturnCaller = curStack.pop().execution;
-                    }
-                    // second, the actual call resulting from the exeuction
-                    Message mStack = curStack.pop();
-                    Message m = new Message(false, mStack.execution.tout, prevE.componentName, mStack.execution.componentName, mStack.execution);
-                    mSeq.add(m);
-                    m = new Message(true, curE.tin, mStack.execution.componentName, curE.componentName, curE);
-                    mSeq.add(m);
-                    curStack.push(m);
-                }
+            } else if (prevE.ess < curE.ess) { // usual callMessage with sender and receiver
+                Message m = new Message(true, curE.tin, prevE.componentName, curE.componentName, curE);
+                mSeq.add(m);
+                curStack.push(m);
             }
-            if (!eSeqIt.hasNext()) { // we possibly need to clean up the stack
-                log.info("!eSeqIt.hasNext()");
-                Message curReturnCaller;
-                Message curReturnCallee;
+            if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
                 while (!curStack.empty()) {
-                    curReturnCaller = curStack.pop();
-                    curReturnCallee = curStack.empty()?null:curStack.peek();
-                    Message m = new Message(false, curReturnCaller.execution.tout, curReturnCaller.execution.componentName, (curReturnCallee==null)?null:curReturnCallee.execution.componentName, curReturnCaller.execution);
+                    curE = curStack.pop().execution;
+                    prevE = curStack.empty() ? null : curStack.peek().execution;
+                    Message m = new Message(false, curE.tout, curE.componentName, prevE==null?null:prevE.componentName, curE);
                     mSeq.add(m);
                 }
             }
@@ -118,13 +98,13 @@ public class ExecutionSequence {
     }
 
     public String toString() {
-        StringBuilder strBuild = new StringBuilder("Trace " + this.traceId + ":");
+        StringBuilder strBuild = new StringBuilder("Trace " + this.traceId + ":\n");
         Iterator<KiekerExecutionRecord> it = sequence.iterator();
         while (it.hasNext()) {
             KiekerExecutionRecord e = it.next();
             strBuild.append("<");
             strBuild.append(e.toString());
-            strBuild.append(">");
+            strBuild.append(">\n");
         }
         return strBuild.toString();
     }
