@@ -28,8 +28,9 @@ import kieker.tpmon.probe.manual.KiekerTpmonManualBranchProbe;
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
  *
- * @author Matthias Rohr
+ * @author Matthias Rohr, Andre van Hoorn
  * History:
+ * 2009/06/23: Adapted for "different record type test"
  * 2008/01/09: Refactoring for the first release of
  *             Kieker and publication under an open source licence
  * 2007-04-18: Initial version
