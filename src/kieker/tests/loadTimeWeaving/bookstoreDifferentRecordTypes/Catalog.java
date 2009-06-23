@@ -1,5 +1,6 @@
 package kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes;
 
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 import kieker.tpmon.probe.manual.KiekerTpmonManualBranchProbe;
 
 
@@ -37,6 +38,7 @@ import kieker.tpmon.probe.manual.KiekerTpmonManualBranchProbe;
  *
  */
 public class Catalog {
+    @TpmonExecutionMonitoringProbe()
     public static void getBook(boolean complexQuery) {
         if (complexQuery) {
             KiekerTpmonManualBranchProbe.monitorBranch(1,0);

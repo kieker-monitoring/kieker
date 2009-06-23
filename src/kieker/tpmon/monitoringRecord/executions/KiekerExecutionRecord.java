@@ -6,7 +6,7 @@ import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.TpmonController;
 
 /**
- * kieker.tpmon.KiekerExecutionRecord
+ * kieker.tpmon.monitoringRecord.KiekerExecutionRecord
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -137,7 +137,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         vec.insertElementAt(Long.toString(this.tout), 5);
         vec.insertElementAt(this.vmName, 6);
         vec.insertElementAt(Integer.toString(this.eoi), 7);
-        vec.insertElementAt(Integer.toString(this.eoi), 8);
+        vec.insertElementAt(Integer.toString(this.ess), 8);
         return vec;
 
     // TODO: remove this old implementation:
@@ -203,6 +203,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
      * @param o
      * @return
      */
+    @TpmonInternal()
     public int compareTo(KiekerExecutionRecord o) {
         if (this.traceId == o.traceId){
             if(this.eoi<o.eoi) return -1;
@@ -213,5 +214,16 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
             if(this.tin>o.tin) return 1;
             return 0;
         }
+    }
+    
+    @TpmonInternal()
+    public String toString(){
+        StringBuilder strBuild = new StringBuilder();
+        Vector<String> valueVec = this.toStringVector();
+        for (String v : valueVec){
+            strBuild.append(v);
+            strBuild.append(' ');
+        }
+        return strBuild.toString();
     }
 }

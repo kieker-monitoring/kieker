@@ -19,9 +19,13 @@ package kieker.loganalysis;
  * limitations under the License.
  * ==================================================
  */
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
+import kieker.loganalysis.consumer.ExecutionSequenceRepositoryFiller;
 import kieker.loganalysis.consumer.IMonitoringRecordConsumer;
 import kieker.loganalysis.consumer.MonitoringRecordLogger;
+import kieker.loganalysis.datamodel.ExecutionSequence;
 import kieker.loganalysis.logReader.FSReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,7 +57,22 @@ public class LogAnalysisController {
         LogAnalysisController analysisInstance = new LogAnalysisController();
         analysisInstance.setLogReader(new FSReader(inputDir));
         analysisInstance.addConsumer(new MonitoringRecordLogger());
+        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        analysisInstance.addConsumer(seqRepConsumer);
         analysisInstance.run();
+
+        /* dump traces as execution sequences */
+            Hashtable<Long, ExecutionSequence> sequenceTable = seqRepConsumer.getExecutionSequenceRepository().getRepositoryAsHashTable();
+            log.info("The repository contains " + sequenceTable.size() + " traces!");
+            Enumeration<ExecutionSequence> seqEnum = sequenceTable.elements();
+            while (seqEnum.hasMoreElements()) {
+                ExecutionSequence seq = seqEnum.nextElement();
+                log.info(seq.toString());
+            }
+        
+        /* dump execution sequences as message sequences */
+        
+
         log.info("Bye, this was Kieker.LogAnalysis");
         System.exit(0);
     }

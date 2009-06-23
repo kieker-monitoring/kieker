@@ -1,5 +1,6 @@
 package kieker.loganalysis.datamodel;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
@@ -29,15 +30,38 @@ public class ExecutionSequence {
     private long traceId = -1; // convenience field. All executions have this traceId.
     private SortedSet<KiekerExecutionRecord> sequence = new TreeSet<KiekerExecutionRecord>();
 
+    private ExecutionSequence(){}
+    
+    public ExecutionSequence(long traceId){
+        this.traceId = traceId;
+    }
+    
     public long getTraceId() {
         return traceId;
     }
 
     public void add(KiekerExecutionRecord record){
+        // TODO: check traceId
         this.sequence.add(record);
     }
 
     public void toMessageSequence(){
         throw new UnsupportedOperationException("");
+    }
+    
+    public SortedSet<KiekerExecutionRecord> getSequence(){
+        return this.sequence;
+    }
+    
+    public String toString(){
+        StringBuilder strBuild = new StringBuilder("Trace "+ this.traceId + ":");
+        Iterator<KiekerExecutionRecord> it = sequence.iterator();
+        while(it.hasNext()){
+            KiekerExecutionRecord e = it.next();
+            strBuild.append("<");
+            strBuild.append(e.toString());
+            strBuild.append(">");            
+        }
+        return strBuild.toString();
     }
 }
