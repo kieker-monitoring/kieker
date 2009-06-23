@@ -39,11 +39,9 @@ public class Catalog {
     public static void getBook(boolean complexQuery) {
         if (complexQuery) {
             KiekerTpmonManualBranchProbe.monitorBranch(1,0);
-//		System.out.println("  complex query "+Thread.currentThread().getName());
             Bookstore.waitabit(20);
         } else {
             KiekerTpmonManualBranchProbe.monitorBranch(1,1);
-//		System.out.println("  simple query "+Thread.currentThread().getName());
             Bookstore.waitabit(2);
         }
     }
