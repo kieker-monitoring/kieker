@@ -1,7 +1,7 @@
 package kieker.loganalysis;
 
 /**
- * kieker.tpmon.TpmonController
+ * kieker.loganalysis.LogAnalysisController
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -26,6 +26,10 @@ import kieker.loganalysis.logReader.FSReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ *
+ * @author Andre van Hoorn
+ */
 public class LogAnalysisController {
 
     private static final Log log = LogFactory.getLog(LogAnalysisController.class);
