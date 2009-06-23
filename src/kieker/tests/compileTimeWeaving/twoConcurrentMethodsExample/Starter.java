@@ -1,6 +1,6 @@
 package kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample;
 
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  * kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample.Starter
@@ -29,13 +29,13 @@ public class Starter extends Thread{
             work();
     }
 
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public void waitP() {
 	try{Thread.sleep(500);} catch (Exception e){}
     }
 
     static boolean boolvar = true;
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     private void work() {
         int a = (int)(Math.random() * 5d);
         for (int i=0; i<2500000; i++) { a += i/1000;}

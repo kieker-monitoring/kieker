@@ -1,11 +1,13 @@
 package kieker.tpmon.writer.filesystemSync;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
-import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.*;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -16,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
  * kieker.tpmon.FileSystemWriter
  * 
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +55,7 @@ import org.apache.commons.logging.LogFactory;
  * option to write to multiple files, while writing with more than one thread into
  * a single file is not considered a save option.     
  *
- * @author Matthias Rohr
+ * @author Matthias Rohr, Andre van Hoorn
  * 
  * History: 
  * 2008/01/04: Refactoring for the first release of 
@@ -67,27 +69,56 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
-    private String filenamePrefix = "";
+    private String storagePathBase = "";
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-
-    private final static String defaultConstructionErrorMsg = 
+    private File mappingFile = null;
+    private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCFS +
-                " and the file system specific configuration properties.";
-    
+            " and the file system specific configuration properties.";
+    private boolean writeRecordTypeIds = false;
+
     public FileSystemWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
-    
+
     @TpmonInternal()
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
-    
-    public FileSystemWriter(String filenamePrefix) {
-        this.filenamePrefix = filenamePrefix;
+
+    public FileSystemWriter(String storagePathBase) {
+        File f = new File(storagePathBase);
+        if (!f.isDirectory()) {
+            log.error(storagePathBase + " is not a directory");
+            log.error("Will abort constructor.");
+            return;
+        }
+
+        DateFormat m_ISO8601Local =
+                new SimpleDateFormat("yyyyMMdd'-'HHmmss");
+        String dateStr = m_ISO8601Local.format(new java.util.Date());
+        this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "/";
+
+        f = new File(this.storagePathBase);
+        if (!f.mkdir()) {
+            log.error("Failed to create directory '" + this.storagePathBase + "'");
+            log.error("Will abort constructor.");
+            return;
+        }
+        log.info("Directory for monitoring data: " + this.storagePathBase);
+
+        try {
+            this.mappingFile = new File(this.storagePathBase + File.separatorChar + "tpmon.map");
+            this.mappingFile.createNewFile();
+            log.info("Mapping file name: " + this.mappingFile.getAbsolutePath());
+        } catch (Exception exc) {
+            log.error("Failed to create mapping file '" + this.mappingFile.getAbsolutePath() + "'", exc);
+            log.error("Will abort init().");
+            return;
+        }
     }
 
     /**
@@ -104,7 +135,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
             int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from ??
             int random = (new Random()).nextInt(100);
-            String filename = this.filenamePrefix + time + "-" + random + ".dat";
+            String filename = this.storagePathBase + "/tpmon-" + time + "-" + random + ".dat";
             log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);
@@ -120,10 +151,27 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     }
 
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
+    public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         try {
+            Vector<String> recordFields = monitoringRecord.toStringVector();
+            final int LAST_FIELD_INDEX = recordFields.size() - 1;
             prepareFile(); // may throw FileNotFoundException
-            pos.println(execData.toKiekerCSVRecord());
+
+            if (this.isWriteRecordTypeIds()) {
+                pos.write('$');
+                pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+                if (LAST_FIELD_INDEX > 0) {
+                    pos.write(';');
+                }
+            }
+
+            for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
+                pos.write(recordFields.get(i));
+                if (i < LAST_FIELD_INDEX) {
+                    pos.write(';');
+                }
+            }
+            pos.println();
             pos.flush();
         } catch (IOException ex) {
             log.error("Failed to write data", ex);
@@ -136,9 +184,40 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
-    
-   @TpmonInternal()
+
+    @TpmonInternal()
     public String getInfoString() {
-        return "filenamePrefix :" + filenamePrefix;
+        return "filenamePrefix :" + storagePathBase;
+    }
+
+    @TpmonInternal()
+    public void registerMonitoringRecordType(int id, String className) {
+        log.info("Registered monitoring record type with id '" + id + "':" + className);
+        FileOutputStream fos = null;
+        PrintWriter pw = null;
+        try {
+            fos = new FileOutputStream(this.mappingFile, true); // append
+            pw = new PrintWriter(fos);
+            pw.println("$" + id + "=" + className);
+        } catch (Exception exc) {
+            log.fatal("Failed to register record type", exc);
+        } finally {
+            try {
+                pw.close();
+                fos.close();
+            } catch (IOException exc) {
+                log.error("IO Exception", exc);
+            }
+        }
+    }
+
+    @Override
+    public boolean isWriteRecordTypeIds() {
+        return this.writeRecordTypeIds;
+    }
+
+    @Override
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        this.writeRecordTypeIds = writeRecordTypeIds;
     }
 }

@@ -2,8 +2,9 @@ package kieker.tpmon.probe.cxf;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.ControlFlowRegistry;
+import kieker.tpmon.core.SessionRegistry;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
 import org.apache.cxf.common.logging.LogUtils;
@@ -43,6 +44,9 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
     // the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
     private static final Logger LOG = LogUtils.getL7dLogger(TpmonSessionIdentifierInInterceptor.class);
 
+    protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+    protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+
     @TpmonInternal()
     public void handleMessage(Message msg) throws Fault {
         if (msg instanceof SoapMessage) {
@@ -59,7 +63,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
                 String sessionId = getStringContentFromHeader(hdr);
                 if (sessionId != null) {
                     LOG.info("registering session identifier " + sessionId);
-                    TpmonController.getInstance().storeThreadLocalSessionId(sessionId);
+                    sessionRegistry.storeThreadLocalSessionId(sessionId);
                 }
             } else {
                 LOG.info("no tpmon session identifier header found!");
@@ -72,7 +76,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
                     try {
                         long traceId = Long.parseLong(traceIdStr);
                         LOG.info("registering trace identifier " + traceId);
-                        TpmonController.getInstance().storeThreadLocalTraceId(traceId);
+                        cfRegistry.storeThreadLocalTraceId(traceId);
                     } catch (Exception exc) {
                         LOG.log(Level.WARNING, exc.getMessage(), exc);
                     }
@@ -88,7 +92,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
                     try {
                         int eoi = Integer.parseInt(eoiStr);
                         LOG.info("registering eoi " + eoi);
-                        TpmonController.getInstance().storeThreadLocalEOI(eoi);
+                        cfRegistry.storeThreadLocalEOI(eoi);
                     } catch (Exception exc) {
                         LOG.log(Level.WARNING, exc.getMessage(), exc);
                     }
@@ -104,7 +108,7 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor {
                     try {
                         int ess = Integer.parseInt(essStr);
                         LOG.info("registering ess " + ess);
-                        TpmonController.getInstance().storeThreadLocalESS(ess);
+                        cfRegistry.storeThreadLocalESS(ess);
                     } catch (Exception exc) {
                         LOG.log(Level.WARNING, exc.getMessage(), exc);
                     }

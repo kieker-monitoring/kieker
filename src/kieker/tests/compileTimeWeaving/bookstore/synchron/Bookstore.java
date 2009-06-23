@@ -1,7 +1,7 @@
 package kieker.tests.compileTimeWeaving.bookstore.synchron;
 
 
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 
 /**
@@ -60,9 +60,9 @@ public class Bookstore extends Thread{
      * (default: 100 requests; interRequestTime 5 (millisecs))
      * 
      * This will be monitored by Tpmon, since it has the
-     * TpmonMonitoringProbe() annotation.
+     * TpmonExecutionMonitoringProbe() annotation.
      */
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void main(String[] args) {
 	
 	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
@@ -84,7 +84,7 @@ public class Bookstore extends Thread{
     	Bookstore.searchBook();
     }
 
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void searchBook() {
 	Catalog.getBook(false);	
 	CRM.getOffers();

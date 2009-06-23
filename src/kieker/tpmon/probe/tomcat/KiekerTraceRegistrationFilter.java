@@ -3,8 +3,9 @@ package kieker.tpmon.probe.tomcat;
 import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.ControlFlowRegistry;
+import kieker.tpmon.core.SessionRegistry;
 
 /**
  * kieker.tpmon.filters.KiekerTraceRegistrationFilter
@@ -43,7 +44,9 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 public class KiekerTraceRegistrationFilter implements Filter {
 
-    private static final TpmonController ctrlInst = TpmonController.getInstance();
+    private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+    private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+
 
     @TpmonInternal()
     public void init(FilterConfig config) throws ServletException {
@@ -61,21 +64,21 @@ public class KiekerTraceRegistrationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
-            ctrlInst.getAndStoreUniqueThreadLocalTraceId();
+            cfRegistry.getAndStoreUniqueThreadLocalTraceId();
             HttpSession session = ((HttpServletRequest) request).getSession(false);
             if (session != null) {
-                ctrlInst.storeThreadLocalSessionId(session.getId());
+                sessionRegistry.storeThreadLocalSessionId(session.getId());
             }
-            ctrlInst.storeThreadLocalEOI(0);
-            ctrlInst.storeThreadLocalESS(1);
+            cfRegistry.storeThreadLocalEOI(0);
+            cfRegistry.storeThreadLocalESS(1);
         }
         try {
             chain.doFilter(request, response);
         } finally {
-            ctrlInst.unsetThreadLocalTraceId();
-            ctrlInst.unsetThreadLocalSessionId();
-            ctrlInst.unsetThreadLocalEOI();
-            ctrlInst.unsetThreadLocalESS();
+            cfRegistry.unsetThreadLocalTraceId();
+            sessionRegistry.unsetThreadLocalSessionId();
+            cfRegistry.unsetThreadLocalEOI();
+            cfRegistry.unsetThreadLocalESS();
         }
     }
 

@@ -1,13 +1,14 @@
 package kieker.tpmon.writer.databaseSync;
 
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
-import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
 import kieker.tpmon.*;
 import java.sql.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -74,6 +75,8 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCDB +
             " and the file system specific configuration properties.";
+
+    private boolean writeRecordTypeIds = false;
 
     public Dbconnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
@@ -145,18 +148,21 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
      * dbconnector.properties.
      */
     @TpmonInternal()
-    public synchronized boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
+    public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         try {
+            // connector only supports execution records so far
+            KiekerExecutionRecord execRecord = (KiekerExecutionRecord) monitoringRecord;
+
             psInsertMonitoringData.setInt(1,
-                    (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : execData.experimentId);
-            psInsertMonitoringData.setString(2, execData.componentName + "." + execData.opname);
-            psInsertMonitoringData.setString(3, execData.sessionId);
-            psInsertMonitoringData.setString(4, String.valueOf(execData.traceId));
-            psInsertMonitoringData.setLong(5, execData.tin);
-            psInsertMonitoringData.setLong(6, execData.tout);
-            psInsertMonitoringData.setString(7, execData.vmName);
-            psInsertMonitoringData.setLong(8, execData.eoi);
-            psInsertMonitoringData.setLong(9, execData.ess);
+                    (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : execRecord.experimentId);
+            psInsertMonitoringData.setString(2, execRecord.componentName + "." + execRecord.opname);
+            psInsertMonitoringData.setString(3, execRecord.sessionId);
+            psInsertMonitoringData.setString(4, String.valueOf(execRecord.traceId));
+            psInsertMonitoringData.setLong(5, execRecord.tin);
+            psInsertMonitoringData.setLong(6, execRecord.tout);
+            psInsertMonitoringData.setString(7, execRecord.vmName);
+            psInsertMonitoringData.setLong(8, execRecord.eoi);
+            psInsertMonitoringData.setLong(9, execRecord.ess);
             psInsertMonitoringData.execute();
         } catch (Exception ex) {
             log.error("Tpmon Error: " + System.currentTimeMillis() + " insertMonitoringData() failed:" + ex.getMessage());
@@ -197,5 +203,20 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
             strB.append(", ACTUAL EXPERIMENT_ID : " + this.experimentId);
         }
         return strB.toString();
+    }
+
+    @TpmonInternal()
+    public void registerMonitoringRecordType(int id, String className) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isWriteRecordTypeIds() {
+        return this.writeRecordTypeIds;
+    }
+
+    @Override
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        this.writeRecordTypeIds=writeRecordTypeIds;
     }
 }

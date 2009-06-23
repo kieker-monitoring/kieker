@@ -1,6 +1,6 @@
 package kieker.tests.compileTimeWeaving.bookstoreBenchmark;
 
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
@@ -56,9 +56,9 @@ public class Bookstore extends Thread{
      * (default: 100 requests; interRequestTime 5 (millisecs))
      * 
      * This will be monitored by Tpmon, since it has the
-     * TpmonMonitoringProbe() annotation.
+     * TpmonExecutionMonitoringProbe() annotation.
      */
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void main(String[] args) {
 	long startTime = System.nanoTime();
 	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
@@ -93,7 +93,7 @@ public class Bookstore extends Thread{
 
     public static AtomicInteger reqs = new AtomicInteger(0);
     
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void searchBook() {       
 	Catalog.getBook(false);	
 	CRM.getOffers();

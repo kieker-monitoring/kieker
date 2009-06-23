@@ -1,6 +1,6 @@
 package kieker.tests.loadTimeWeaving.bookstore;
 
-import kieker.tpmon.annotation.TpmonMonitoringProbe;
+import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  * kieker.tests.bookstore.CRM.java
@@ -40,7 +40,7 @@ public class CRM {
     /**
      * This method will be monitored, since it has an annotation.
      */
-    @TpmonMonitoringProbe()
+    @TpmonExecutionMonitoringProbe()
     public static void getOffers(){
 	Catalog.getBook(true);
     }

@@ -4,10 +4,10 @@ import java.sql.*;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.writer.core.AbstractMonitoringDataWriter;
-import kieker.tpmon.monitoringRecord.KiekerExecutionRecord;
+import kieker.tpmon.writer.AbstractMonitoringDataWriter;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.writer.core.AbstractWorkerThread;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,13 +74,15 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
     
     private static final Log log = LogFactory.getLog(AsyncDbconnector.class);
     private Connection conn = null;
-    private BlockingQueue<KiekerExecutionRecord> blockingQueue;
+    private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue;
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
     private boolean setInitialExperimentIdBasedOnLastId = false;
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
+
+    private boolean writeRecordTypeIds = false;
 
     public AsyncDbconnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId) {
@@ -118,7 +120,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         try {
             conn = DriverManager.getConnection(this.dbConnectionAddress);
             int numberOfConnections = 4;
-            blockingQueue = new ArrayBlockingQueue<KiekerExecutionRecord>(8000);
+            blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
 
 //                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
@@ -170,7 +172,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
     @TpmonInternal()
-    public boolean insertMonitoringDataNow(KiekerExecutionRecord execData) {
+    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }
@@ -190,7 +192,7 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
             }
             }*/
 
-            blockingQueue.add(execData); // tries to add immediately!
+            blockingQueue.add(monitoringRecord); // tries to add immediately!
         //System.out.println("Queue is "+blockingQueue.size());
 
         } catch (Exception ex) {
@@ -219,5 +221,23 @@ public class AsyncDbconnector extends AbstractMonitoringDataWriter {
         strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);
 
         return strB.toString();
+    }
+
+    @TpmonInternal()
+    public void registerMonitoringRecordType(int id, String className) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+       @Override
+    public boolean isWriteRecordTypeIds() {
+        return this.isWriteRecordTypeIds();
+    }
+
+    @Override
+    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        for(AbstractWorkerThread t:workers){
+            t.setWriteRecordTypeIds(this.writeRecordTypeIds);
+        }
+        this.writeRecordTypeIds = true;
     }
 }
