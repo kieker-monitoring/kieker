@@ -26,7 +26,7 @@ import kieker.tpmon.core.TpmonController;
  *
  * @author Andre van Hoorn
  */
-public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
+public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implements Comparable<KiekerExecutionRecord> {
 
     private static final long serialVersionUID = 117L;
     /** Used to identify the type of CSV records */
@@ -193,5 +193,25 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord {
     @TpmonInternal()
     public int getRecordTypeId() {
         return typeId;
+    }
+
+    /**
+     * If the passed object has the same traceId, the comparison is performed
+     * based on the eio and ess values. Otherwise the comparison is based on
+     * the tin value.
+     *
+     * @param o
+     * @return
+     */
+    public int compareTo(KiekerExecutionRecord o) {
+        if (this.traceId == o.traceId){
+            if(this.eoi<o.eoi) return -1;
+            if(this.eoi>o.eoi) return 1;
+            return 0;
+        }else{
+            if(this.tin<o.tin) return -1;
+            if(this.tin>o.tin) return 1;
+            return 0;
+        }
     }
 }
