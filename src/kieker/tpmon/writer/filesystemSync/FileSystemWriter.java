@@ -99,7 +99,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
         DateFormat m_ISO8601Local =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmss");
-        String dateStr = m_ISO8601Local.format (new java.util.Date());
+        String dateStr = m_ISO8601Local.format(new java.util.Date());
         this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "/";
 
         f = new File(this.storagePathBase);
@@ -193,12 +193,21 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
+        FileOutputStream fos = null;
+        PrintWriter pw = null;
         try {
-            PrintWriter pw = new PrintWriter(this.mappingFile);
+            fos = new FileOutputStream(this.mappingFile, true); // append
+            pw = new PrintWriter(fos);
             pw.println("$" + id + "=" + className);
-            pw.close();
         } catch (Exception exc) {
             log.fatal("Failed to register record type", exc);
+        } finally {
+            try {
+                pw.close();
+                fos.close();
+            } catch (IOException exc) {
+                log.error("IO Exception", exc);
+            }
         }
     }
 

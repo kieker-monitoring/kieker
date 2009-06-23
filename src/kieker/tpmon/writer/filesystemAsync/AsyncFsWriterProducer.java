@@ -1,6 +1,8 @@
 package kieker.tpmon.writer.filesystemAsync;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -83,7 +85,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
         DateFormat m_ISO8601Local =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmss");
-        String dateStr = m_ISO8601Local.format (new java.util.Date());
+        String dateStr = m_ISO8601Local.format(new java.util.Date());
         String storageDir = this.storagePathBase + "/tpmon-" + dateStr + "/";
 
         f = new File(storageDir);
@@ -146,12 +148,21 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
+        FileOutputStream fos = null;
+        PrintWriter pw = null;
         try {
-            PrintWriter pw = new PrintWriter(this.mappingFile);
+            fos = new FileOutputStream(this.mappingFile, true); // append
+            pw = new PrintWriter(fos);
             pw.println("$" + id + "=" + className);
-            pw.close();
         } catch (Exception exc) {
             log.fatal("Failed to register record type", exc);
+        } finally {
+            try {
+                pw.close();
+                fos.close();
+            } catch (IOException exc) {
+                log.error("IO Exception", exc);
+            }
         }
     }
 
