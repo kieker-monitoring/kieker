@@ -35,7 +35,7 @@ monitoringDataWriterInitString=
 # is unique for a monitoring run. In order to determine the type of a logged 
 # monitoring record, the ID  useMonitoringRecordTypeIds 
 # 
-logMonitoringRecordTypeIds=false
+logMonitoringRecordTypeIds=true
 
 # 1.2 Database configuration
 # (only meaningful if monitoringDataWriter=AsyncDB, or =SyncDB)
