@@ -62,16 +62,20 @@ public class LogAnalysisController {
         analysisInstance.run();
 
         /* dump traces as execution sequences */
-            Hashtable<Long, ExecutionSequence> sequenceTable = seqRepConsumer.getExecutionSequenceRepository().getRepositoryAsHashTable();
-            log.info("The repository contains " + sequenceTable.size() + " traces!");
-            Enumeration<ExecutionSequence> seqEnum = sequenceTable.elements();
-            while (seqEnum.hasMoreElements()) {
-                ExecutionSequence seq = seqEnum.nextElement();
-                log.info(seq.toString());
-            }
-        
+        Hashtable<Long, ExecutionSequence> sequenceTable = seqRepConsumer.getExecutionSequenceRepository().getRepositoryAsHashTable();
+        log.info("The repository contains " + sequenceTable.size() + " traces!");
+        Enumeration<ExecutionSequence> seqEnum = sequenceTable.elements();
+        while (seqEnum.hasMoreElements()) {
+            ExecutionSequence seq = seqEnum.nextElement();
+            log.info(seq.toString());
+        }
+
         /* dump execution sequences as message sequences */
-        
+        seqEnum = sequenceTable.elements();
+        while (seqEnum.hasMoreElements()) {
+            ExecutionSequence seq = seqEnum.nextElement();
+            log.info(seq.toMessageSequence().toString());
+        }
 
         log.info("Bye, this was Kieker.LogAnalysis");
         System.exit(0);

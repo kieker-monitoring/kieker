@@ -1,5 +1,7 @@
 package kieker.loganalysis.datamodel;
 
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+
 /**
  * kieker.loganalysis.datamodel.Message
  * 
@@ -24,12 +26,29 @@ package kieker.loganalysis.datamodel;
 
 public class Message {
     public boolean call;
-    public String caller;
-    public String callee;
+    public long timestamp;
+    public String caller; // TODO: vm
+    public String callee; // TODO: vm
+    public KiekerExecutionRecord execution;
      
-    public Message(boolean call, String caller, String callee){
+    public Message(boolean call, long timestamp, String caller, 
+            String callee, KiekerExecutionRecord execution){
         this.call = call;
+        this.timestamp = timestamp;
         this.caller = caller;
         this.callee = callee;
+        this.execution = execution;
+    }
+    
+    public String toString(){
+        StringBuilder strBuild = new StringBuilder();
+        strBuild.append(this.timestamp); strBuild.append(':');
+        strBuild.append((this.caller!=null)?this.caller:"$");
+        strBuild.append(this.call?"->":"<-");
+        strBuild.append((this.callee!=null)?this.callee:"$");
+        if(this.call&&this.callee!=null){
+            strBuild.append("."+this.execution.opname);
+        }
+        return strBuild.toString();
     }
 }
