@@ -189,10 +189,10 @@
     </target>
     
     <target name="build-tpmon-ctw" depends="init,build-tpmon-ctrl">
-        <delete dir="${build.ctw.dir}"/>
-        <mkdir  dir="${build.ctw.dir}"/>
+        <delete dir="${build.tpmon.ctw.dir}"/>
+        <mkdir  dir="${build.tpmon.ctw.dir}"/>
         <echo message="Creating the compile-time-weaving library of tpmon (${dist.tpmon.ctw}). This library can be used in two ways: 1) for compile time instrumentation 2) via the tpmon API - if you want to invoke tpmon manually. This library cannot be used for load-time-weaving with the javaagent property!"/>
-        <javac destDir="${build.ctw.dir}"
+        <javac destDir="${build.tpmon.ctw.dir}"
                source="1.5"
                verbose="off"
                srcdir="src/kieker/tpmon/probe/aspectJ/"
@@ -201,13 +201,13 @@
             <compilerarg value="-Xlint:all"/>
         </javac>
         <!-- We want to include the sources in this jar -->
-        <copy todir="${build.ctw.dir}/">
+        <copy todir="${build.tpmon.ctw.dir}/">
             <fileset dir="src">
                 <include name="kieker/tpmon/probe/aspectJ/**/*.java"/>
             </fileset>
         </copy>
         <jar destfile="${dist.dir}/${dist.tpmon.ctw}">
-            <fileset dir="${build.ctw.dir}"/>
+            <fileset dir="${build.tpmon.ctw.dir}"/>
         </jar>
     </target>
 
