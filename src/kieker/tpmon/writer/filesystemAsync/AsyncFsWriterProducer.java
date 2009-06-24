@@ -125,6 +125,10 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }
 
+        if(monitoringRecord == TpmonController.END_OF_MONITORING_MARKER){
+            log.info(log);
+        }
+
         try {
             blockingQueue.add(monitoringRecord); // tries to add immediately!
         //System.out.println(""+blockingQueue.size());
@@ -166,12 +170,12 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         }
     }
 
-    @Override
+    @TpmonInternal()
     public boolean isWriteRecordTypeIds() {
-        return this.isWriteRecordTypeIds();
+        return this.writeRecordTypeIds;
     }
 
-    @Override
+    @TpmonInternal()
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
         for (AbstractWorkerThread t : workers) {
             log.info("t.setWriteRecordTypeIds(" + writeRecordTypeIds + ")");

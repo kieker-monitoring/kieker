@@ -47,7 +47,6 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-    private AbstractKiekerMonitoringRecord execData = null;
     private boolean finished = false;
     private static boolean shutdown = false;
 

@@ -152,7 +152,11 @@ public class TpmonController {
             } else {
                 /* try to load the class by name */
                 this.monitoringDataWriter = (IMonitoringDataWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
-                this.monitoringDataWriter.init(monitoringDataWriterInitString);
+                if(!this.monitoringDataWriter.init(monitoringDataWriterInitString)){
+                    this.monitoringDataWriter = null;
+                    throw new Exception("Initialization of writer failed!");
+                }
+
             }
             this.monitoringDataWriter.setWriteRecordTypeIds(this.logMonitoringRecordTypeIds);
             Vector<AbstractWorkerThread> worker = this.monitoringDataWriter.getWorkers(); // may be null
@@ -293,7 +297,10 @@ public class TpmonController {
     @TpmonInternal()
     public void terminateMonitoring() {
         log.info("Permanently terminating monitoring");
-        this.monitoringDataWriter.writeMonitoringRecord(END_OF_MONITORING_MARKER);
+        if(this.monitoringDataWriter!=null){
+            /* if the initialization of the writer failed, it is set to null*/
+            this.monitoringDataWriter.writeMonitoringRecord(END_OF_MONITORING_MARKER);
+        }
         this.disableMonitoring();
         this.monitoringPermanentlyTerminated = true;
     }
@@ -566,6 +573,12 @@ public class TpmonController {
      */
     @TpmonInternal()
     public int registerMonitoringRecordType(Class recordTypeClass) {
+        if(this.isMonitoringPermanentlyTerminated()){
+            log.warn("Didn't register record type '"+recordTypeClass+
+                    "' because monitoring has been permanently terminated");
+            return -1;
+        }
+
         String name = recordTypeClass.getCanonicalName();
         if (this.logMonitoringRecordTypeIds) {
             int id = this.nextMonitoringRecordType.getAndIncrement();
