@@ -2,10 +2,15 @@ package kieker.tpmon.writer.jmsAsync;
 
 import java.util.Hashtable;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import javax.jms.*;
-import javax.lang.model.type.ExecutableType;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
