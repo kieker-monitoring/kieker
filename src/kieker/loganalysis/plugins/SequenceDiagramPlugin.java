@@ -19,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
 public class SequenceDiagramPlugin {
     private static final Log log = LogFactory.getLog(SequenceDiagramPlugin.class);
     
-    HashMap<String, String> distinctObjects = null;
+    HashMap<String, String> distinctObjects = new HashMap<String,String>();
     int currentObjIndex = 0;
     PrintStream pr = System.out;
 
@@ -55,7 +55,7 @@ public class SequenceDiagramPlugin {
         // get distinct objects. should be enough to check all senders,
         // as returns have senders too.
         for (Message me : messages) {
-            String name = me.sender;
+            String name = (me.sender==null)?"$":me.sender;
             if (addToDistinctObjects(name)) {
                 String shortComponentName = name;
                 if (shortComponentName.indexOf('.') != -1) {
@@ -78,7 +78,7 @@ public class SequenceDiagramPlugin {
         for (Message me : messages) {
             if (me.callMessage) {
                 //String method = me.getReceiver().getOperation().getMethodname();
-                String method = me.receiver;
+                String method = me.execution.opname;
                 if (method.indexOf('(') != -1) {
                     method = me.execution.opname;
                 }
@@ -89,19 +89,19 @@ public class SequenceDiagramPlugin {
                 } else {
                     pr.println("sync();");
                 }
-                pr.println("message(" + distinctObjects.get(me.sender) +
-                        "," + distinctObjects.get(me.receiver) +
+                pr.println("message(" + distinctObjects.get((me.sender==null)?"$":me.sender) +
+                        "," + distinctObjects.get((me.receiver==null)?"$":me.receiver) +
                         ", \"" + method +
                         "\");");
-                pr.println("active(" + distinctObjects.get(me.receiver) + ");");
+                pr.println("active(" + distinctObjects.get((me.receiver==null)?"$":me.receiver) + ");");
                 pr.println("step();");
             } else {
                 pr.println("step();");
                 pr.println("async();");
-                pr.println("rmessage(" + distinctObjects.get(me.sender) +
-                        "," + distinctObjects.get(me.receiver) +
+                pr.println("rmessage(" + distinctObjects.get((me.sender==null)?"$":me.sender) +
+                        "," + distinctObjects.get((me.receiver==null)?"$":me.receiver) +
                         ", \"\");");
-                pr.println("inactive(" + distinctObjects.get(me.sender) + ");");
+                pr.println("inactive(" + distinctObjects.get((me.sender==null)?"$":me.sender) + ");");
             }
         }
         pr.println("inactive(O0);");

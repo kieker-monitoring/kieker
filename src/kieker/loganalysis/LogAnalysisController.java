@@ -27,6 +27,7 @@ import kieker.loganalysis.consumer.IMonitoringRecordConsumer;
 import kieker.loganalysis.consumer.MonitoringRecordLogger;
 import kieker.loganalysis.datamodel.ExecutionSequence;
 import kieker.loganalysis.logReader.FSReader;
+import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -77,6 +78,14 @@ public class LogAnalysisController {
             log.info(seq.toMessageSequence().toString());
         }
 
+        /* generate sequence diagrams */
+        SequenceDiagramPlugin sqTool = new SequenceDiagramPlugin();
+        seqEnum = sequenceTable.elements();
+        while (seqEnum.hasMoreElements()) {
+            ExecutionSequence seq = seqEnum.nextElement();
+            sqTool.processMessageTrace(seq.toMessageSequence());
+        }
+        
         log.info("Bye, this was Kieker.LogAnalysis");
         System.exit(0);
     }

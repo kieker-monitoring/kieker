@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class MonitoringRecordLogger implements IMonitoringRecordConsumer {
-    private static final Log log = LogFactory.getLog(MonitoringRecordLogger.class);
+private static final Log log = LogFactory.getLog(MonitoringRecordLogger.class);
 
     public Vector<String> getRecordTypeSubscriptionList() {
         throw new UnsupportedOperationException("Not supported yet.");
