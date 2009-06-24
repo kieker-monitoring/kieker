@@ -54,7 +54,8 @@
     </target>
 
     <target name="build-all"
-            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-tpmon-sources,build-loganalysis-ctrl">
+            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-tpmon-sources">
+                <!-- build-loganalysis-ctrl -->
     </target>
 
     <condition property="no.loganalysis.properties">
