@@ -233,7 +233,7 @@
     </target>
 
     <!-- Build logAnalysis  -->
-    <target name="build-loganalysis-ctrl" depends="clean,init">
+    <target name="build-loganalysis-ctrl" depends="clean,init,build-tpmon-ctrl">
         <delete dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}/META-INF"/>
