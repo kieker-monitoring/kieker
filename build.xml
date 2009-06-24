@@ -53,7 +53,7 @@
         </replaceregexp>
     </target>
 
-    <target name="build-all" 
+    <target name="build-all"
             depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-tpmon-sources,build-loganalysis-ctrl">
     </target>
 
@@ -364,7 +364,11 @@
         <javac source="1.5"
                destDir="${build.tests.dir}"
                classpathref="tpmon.core.classpath"
-               srcdir="src/kieker/tests/loadTimeWeaving/">
+               srcdir="src"
+               includes="kieker/tests/loadTimeWeaving/"
+               excludes="kieker/tests/loadTimeWeaving/bookstoreDifferentRecordTypes/">
+            <!--<exclude name="src/kieker/tests/loadTimeWeaving/bookstoreDifferentRecordTypes/"/>-->
+<!--               excludes="kieker/tests/loadTimeWeaving/bookstoreDifferentRecordTypes/**">-->
         </javac>
         <copy file="${tests.log4j.properties}"
               tofile="${build.tests.dir}/log4j.properties"/>
@@ -378,7 +382,7 @@
                destDir="${build.tests.dir}"
                classpathref="tpmon.core.classpath"
                srcdir="src/kieker/tests/loadTimeWeaving/">
-           <classpath> <!-- includes kieker/tpmon/probe/manual -->
+            <classpath> <!-- includes kieker/tpmon/probe/manual -->
                 <pathelement location="${dist.dir}/${dist.tpmon.ltw}"/>
             </classpath>
         </javac>
@@ -584,7 +588,7 @@
               classpathref="loganalysis.core.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
-           <classpath>
+            <classpath>
                 <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
             </classpath>
         </java>
