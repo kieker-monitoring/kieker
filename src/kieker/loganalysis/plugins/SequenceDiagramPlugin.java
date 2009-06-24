@@ -47,7 +47,7 @@ public class SequenceDiagramPlugin {
         Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
         pr.println(".PS");
-        pr.println("copy \"sequence.pic\";");
+        pr.println("copy \"bin/sequence.pic\";");
         pr.println("boxwid = 1.1;");
         pr.println("movewid = 0.5;");
 
@@ -148,5 +148,6 @@ public class SequenceDiagramPlugin {
             pr.flush();
             pr.close();
             System.out.println("wrote output to " + fileName);
+            System.out.println("Command: pic2plot -T <X|svg|ps|...> " + fileName);
     }
 }
