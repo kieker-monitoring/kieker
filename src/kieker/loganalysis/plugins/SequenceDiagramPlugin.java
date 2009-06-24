@@ -142,6 +142,6 @@ public class SequenceDiagramPlugin {
             pr.close();
             System.out.println("wrote output to " + fileName);
             System.out.println("Pic file can be converted using pic2plot tool (package plotutils)");
-            System.out.println("Command: pic2plot -T [X|svg|ps|...>]" + fileName);
+            System.out.println("Command: pic2plot -T [X|svg|ps|..>]" + fileName);
     }
 }

@@ -43,15 +43,25 @@ public class Message {
     public String toString(){
         StringBuilder strBuild = new StringBuilder();
         strBuild.append(this.timestamp); strBuild.append(':');
-        strBuild.append((this.sender!=null)?this.sender:"$");
+        strBuild.append(this.getSenderComponentName());
        if(!this.callMessage&&this.sender!=null){
             strBuild.append("."+this.execution.opname);
         }
         strBuild.append(this.callMessage?"|-send->":"|-return->");
-        strBuild.append((this.receiver!=null)?this.receiver:"$");
+        strBuild.append(this.getReceiverComponentName());
         if(this.callMessage&&this.receiver!=null){
             strBuild.append("."+this.execution.opname);
         }
         return strBuild.toString();
+    }
+
+    /** Convenience function which returns "$" in case 'sender' field is null */
+    public String getSenderComponentName(){
+        return (this.sender==null)?"$":this.sender;
+    }
+
+    /** Convenience function which returns "$" in case 'sender' field is null */
+    public String getReceiverComponentName(){
+        return (this.receiver==null)?"$":this.receiver;
     }
 }

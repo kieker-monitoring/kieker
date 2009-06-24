@@ -27,6 +27,7 @@ import kieker.loganalysis.consumer.IMonitoringRecordConsumer;
 import kieker.loganalysis.consumer.MonitoringRecordLogger;
 import kieker.loganalysis.datamodel.ExecutionSequence;
 import kieker.loganalysis.logReader.FSReader;
+import kieker.loganalysis.plugins.DependencyGraphPlugin;
 import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -85,7 +86,11 @@ public class LogAnalysisController {
             ExecutionSequence seq = seqEnum.nextElement();
             sqTool.processMessageTrace(seq.toMessageSequence());
         }
-        
+
+        /* generate dependency diagram */
+        DependencyGraphPlugin depGraphTool = new DependencyGraphPlugin();
+        depGraphTool.processExecutionTraces(sequenceTable.values());
+
         log.info("Bye, this was Kieker.LogAnalysis");
         System.exit(0);
     }
