@@ -124,7 +124,7 @@
     </target>
 
     <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
-    <target name="build-tpmon-ctrl" depends="init">
+    <target name="build-tpmon-ctrl" depends="clean,init">
         <delete dir="${build.tpmon.ctrl.dir}"/>
         <mkdir  dir="${build.tpmon.ctrl.dir}"/>
         <mkdir  dir="${build.tpmon.ctrl.dir}/META-INF"/>
@@ -159,7 +159,7 @@
         </jar>
     </target>
 
-    <target name="build-tpmon-ltw" depends="init,build-tpmon-ctrl">
+    <target name="build-tpmon-ltw" depends="clean,init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.ltw.dir}"/>
         <mkdir dir="${build.tpmon.ltw.dir}"/>
         <iajc destDir="${build.tpmon.ltw.dir}"
@@ -189,7 +189,7 @@
         </jar>
     </target>
     
-    <target name="build-tpmon-ctw" depends="init,build-tpmon-ctrl">
+    <target name="build-tpmon-ctw" depends="clean,init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.ctw.dir}"/>
         <mkdir  dir="${build.tpmon.ctw.dir}"/>
         <echo message="Creating the compile-time-weaving library of tpmon (${dist.tpmon.ctw}). This library can be used in two ways: 1) for compile time instrumentation 2) via the tpmon API - if you want to invoke tpmon manually. This library cannot be used for load-time-weaving with the javaagent property!"/>
@@ -212,7 +212,7 @@
         </jar>
     </target>
 
-    <target name="build-tpmon-control-servlet" depends="init,build-tpmon-ctrl">
+    <target name="build-tpmon-control-servlet" depends="clean,init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.controlServlet.dir}"/>
         <mkdir dir="${build.tpmon.controlServlet.dir}"/>
         <javac source="1.5"
@@ -233,7 +233,7 @@
     </target>
 
     <!-- Build logAnalysis  -->
-    <target name="build-loganalysis-ctrl" depends="init">
+    <target name="build-loganalysis-ctrl" depends="clean,init">
         <delete dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}/META-INF"/>
@@ -268,7 +268,7 @@
         <include name="RELEASENOTES"/>
     </patternset>
 
-    <target name="build-tpmon-sources" depends="init">
+    <target name="build-tpmon-sources" depends="clean,init">
 	<!-- Source archives -->
         <tar destfile="${dist.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
