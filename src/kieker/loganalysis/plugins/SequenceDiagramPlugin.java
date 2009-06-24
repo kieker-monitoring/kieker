@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Refactored copy from LogAnalysis-legacy tool
  * 
- * @author Matthias Rohr, Andre van Hoorn
+ * @author ?Nils Sommer?, Matthias Rohr, Andre van Hoorn
  */
 public class SequenceDiagramPlugin {
     private static final Log log = LogFactory.getLog(SequenceDiagramPlugin.class);
@@ -54,6 +54,7 @@ public class SequenceDiagramPlugin {
 
         // get distinct objects. should be enough to check all senders,
         // as returns have senders too.
+        //log.info("Trace " + messageTrace.traceId + " contains " + messages.size() + " messages.");
         for (Message me : messages) {
             String name = (me.sender==null)?"$":me.sender;
             if (addToDistinctObjects(name)) {
@@ -114,14 +115,6 @@ public class SequenceDiagramPlugin {
 
         pr.println(".PE");
     }
-    /*
-     * for (Message me: messages) {          
-    if (!first) System.out.print(",");
-    if   (me.isCall()) System.out.print("(CALL, "+me.getSender().getOperation().getName()+""+me.getSender().getExecutionId()+", "+me.getReciever().getOperation().getName()+""+me.getReciever().getExecutionId()+")");
-    else               System.out.print("(RETURN, "+me.getSender().getOperation().getName()+""+me.getSender().getExecutionId()+", "+me.getReciever().getOperation().getName()+""+me.getReciever().getExecutionId()+")");
-    first = false;
-    }
-     */
 
     private boolean addToDistinctObjects(String senderOperation) {
         if (distinctObjects.containsKey(senderOperation)) {
@@ -148,6 +141,7 @@ public class SequenceDiagramPlugin {
             pr.flush();
             pr.close();
             System.out.println("wrote output to " + fileName);
-            System.out.println("Command: pic2plot -T <X|svg|ps|...> " + fileName);
+            System.out.println("Pic file can be converted using pic2plot tool (package plotutils)");
+            System.out.println("Command: pic2plot -T [X|svg|ps|...>]" + fileName);
     }
 }

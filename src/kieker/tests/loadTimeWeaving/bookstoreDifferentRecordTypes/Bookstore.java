@@ -35,8 +35,8 @@ import java.util.Vector;
  * 2007-04-18: Initial version
  *
  */
+public class Bookstore extends Thread {
 
-public class Bookstore extends Thread{
     static int numberOfRequests = 1;
     static int interRequestTime = 5;
 
@@ -57,40 +57,43 @@ public class Bookstore extends Thread{
      */
     @TpmonExecutionMonitoringProbe()
     public static void main(String[] args) {
-	
-	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
-	
-	for (int i = 0; i < numberOfRequests; i++) {
-    		System.out.println("Bookstore.main: Starting request "+i);
-		Bookstore newBookstore = new Bookstore();
-		bookstoreScenarios.add(newBookstore);
-		newBookstore.start();
-		Bookstore.waitabit(interRequestTime);
-	}
-    	System.out.println("Bookstore.main: Finished with starting all requests.");
-    	System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-		waitabit(5000);
-		System.exit(0);
+
+        Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+
+        for (int i = 0; i < numberOfRequests; i++) {
+            System.out.println("Bookstore.main: Starting request " + i);
+            Bookstore newBookstore = new Bookstore();
+            bookstoreScenarios.add(newBookstore);
+            newBookstore.start();
+            Bookstore.waitabit(interRequestTime);
+        }
+        System.out.println("Bookstore.main: Finished with starting all requests.");
+        System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
+        waitabit(5000);
+        System.exit(0);
     }
 
     public void run() {
-    	Bookstore.searchBook();
+        Bookstore.searchBook();
     }
 
     @TpmonExecutionMonitoringProbe()
     public static void searchBook() {
-	Catalog.getBook(false);	
-	CRM.getOffers();
+        for (int i = 0; i < 5; i++) {
+            Catalog.getBook(false);
+            CRM.getOffers();
+        }
     }
-   
+
     /**
      * Only encapsulates Thread.sleep()
      */
     public static void waitabit(long waittime) {
-    	if (waittime > 0) {
-		try{
-		Thread.sleep(waittime);
-		} catch(Exception e) {}
-	}
+        if (waittime > 0) {
+            try {
+                Thread.sleep(waittime);
+            } catch (Exception e) {
+            }
+        }
     }
 } 
