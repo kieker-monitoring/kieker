@@ -217,20 +217,17 @@
         <javac source="1.5"
                destDir="${build.tpmon.controlServlet.dir}"
                classpathref="tpmon.core.classpath"
-               srcdir="src/kieker/controlServlet/"
-               debug="true"
-               includes="kieker/controlServlet/**"/>
+               srcdir="src/kieker/tpmon/controlServlet"
+               debug="true"/>
         <!-- We want to include the sources in this war -->
         <copy todir="${build.tpmon.controlServlet.dir}/">
             <fileset dir="src">
-                <include name="kieker/controlServlet/**/*.java"/>
+                <include name="kieker/tpmon/controlServlet/**/*.java"/>
             </fileset>
         </copy>
-        <war destfile="${dist.dir}/${dist.tpmon.controlServlet}" webxml="src/kieker/controlServlet/WEB-INF/web.xml">
-            <classes dir="${build.tpmon.controlServlet.dir}">
-                <exclude name="*/tpmon/**"/>
-            </classes>
-            <zipfileset dir="src/kieker/controlServlet/images" prefix="images"/>
+        <war destfile="${dist.dir}/${dist.tpmon.controlServlet}" webxml="src/kieker/tpmon/controlServlet/WEB-INF/web.xml">
+            <classes dir="${build.tpmon.controlServlet.dir}"/>
+            <zipfileset dir="src/kieker/tpmon/controlServlet/images" prefix="images"/>
         </war>
     </target>
 
