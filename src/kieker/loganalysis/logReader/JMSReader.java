@@ -18,7 +18,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class JMSReader {
+public class JMSReader extends AbstractLogReader {
 
     private static final Log log = LogFactory.getLog(JMSReader.class);
 
@@ -65,9 +65,9 @@ public class JMSReader {
             connection.start();
 
             System.out.println("JMSTestListener1 is started and waits for incomming monitoring events!");
-//            while (true) {
-//                Thread.sleep(10);
-//            }
+            while (true) {
+                Thread.sleep(10);
+            }
         } catch (Exception ex) {
             System.out.println("" + JMSReader.class.getName() + " " + ex.getMessage());
             ex.printStackTrace();

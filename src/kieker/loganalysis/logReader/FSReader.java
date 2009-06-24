@@ -39,10 +39,9 @@ import org.apache.commons.logging.LogFactory;
  * TODO: This is somehow redundant to kieker.tpmon.fileSystemReader.FileSystemReader.
  *       There may be a potential for concepts common to both readers.
  */
-public class FSReader {
+public class FSReader extends AbstractLogReader {
 
     private static final Log log = LogFactory.getLog(FSReader.class);
-    private Vector<IMonitoringRecordConsumer> listeners = new Vector<IMonitoringRecordConsumer>();
     HashMap<Integer, Class<AbstractKiekerMonitoringRecord>> recordTypeMap = new HashMap<Integer, Class<AbstractKiekerMonitoringRecord>>();
     private File inputDir = null;
 
@@ -51,10 +50,6 @@ public class FSReader {
 
     public FSReader(String logDataDir) {
         this.inputDir = new File(logDataDir);
-    }
-
-    public void registerConsumer(IMonitoringRecordConsumer consumer) {
-        this.listeners.add(consumer);
     }
 
     public void run() {
@@ -175,7 +170,7 @@ public class FSReader {
                     }
 
                     rec.initFromStringVector(vec);
-                    for (IMonitoringRecordConsumer c : this.listeners) {
+                    for (IMonitoringRecordConsumer c : this.getConsumers()) {
                         c.consumeMonitoringRecord(rec);
                     }
                 } catch (Exception e) {

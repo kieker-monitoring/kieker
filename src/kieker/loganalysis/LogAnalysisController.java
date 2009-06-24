@@ -27,6 +27,8 @@ import kieker.loganalysis.consumer.IMonitoringRecordConsumer;
 import kieker.loganalysis.consumer.MonitoringRecordLogger;
 import kieker.loganalysis.datamodel.ExecutionSequence;
 import kieker.loganalysis.logReader.FSReader;
+import kieker.loganalysis.logReader.ILogReader;
+import kieker.loganalysis.logReader.JMSReader;
 import kieker.loganalysis.plugins.DependencyGraphPlugin;
 import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import org.apache.commons.logging.Log;
@@ -39,7 +41,7 @@ import org.apache.commons.logging.LogFactory;
 public class LogAnalysisController {
 
     private static final Log log = LogFactory.getLog(LogAnalysisController.class);
-    private FSReader logReader = null;
+    private ILogReader logReader = null;
     private Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
 
     public static void main(String args[]) {
@@ -91,6 +93,16 @@ public class LogAnalysisController {
         DependencyGraphPlugin depGraphTool = new DependencyGraphPlugin();
         depGraphTool.processExecutionTraces(sequenceTable.values());
 
+        /**
+         *  JMS Tests:
+         */
+        log.info("Now we get to the interesting part: THE JMS TEST!");
+
+        analysisInstance = new LogAnalysisController();
+        analysisInstance.setLogReader(new JMSReader());
+        analysisInstance.addConsumer(new MonitoringRecordLogger());
+        analysisInstance.run();
+
         log.info("Bye, this was Kieker.LogAnalysis");
         System.exit(0);
     }
@@ -103,7 +115,7 @@ public class LogAnalysisController {
         this.logReader.run();
     }
 
-    public void setLogReader(FSReader reader) {
+    public void setLogReader(ILogReader reader) {
         this.logReader = reader;
     }
 
