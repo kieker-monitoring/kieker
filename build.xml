@@ -123,7 +123,7 @@
     </target>
 
     <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
-    <target name="build-tpmon-ctrl" depends="clean,init">
+    <target name="build-tpmon-ctrl" depends="init">
         <delete dir="${build.tpmon.ctrl.dir}"/>
         <mkdir  dir="${build.tpmon.ctrl.dir}"/>
         <mkdir  dir="${build.tpmon.ctrl.dir}/META-INF"/>
@@ -158,7 +158,7 @@
         </jar>
     </target>
 
-    <target name="build-tpmon-ltw" depends="clean,init,build-tpmon-ctrl">
+    <target name="build-tpmon-ltw" depends="init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.ltw.dir}"/>
         <mkdir dir="${build.tpmon.ltw.dir}"/>
         <iajc destDir="${build.tpmon.ltw.dir}"
@@ -188,7 +188,7 @@
         </jar>
     </target>
     
-    <target name="build-tpmon-ctw" depends="clean,init,build-tpmon-ctrl">
+    <target name="build-tpmon-ctw" depends="init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.ctw.dir}"/>
         <mkdir  dir="${build.tpmon.ctw.dir}"/>
         <echo message="Creating the compile-time-weaving library of tpmon (${dist.tpmon.ctw}). This library can be used in two ways: 1) for compile time instrumentation 2) via the tpmon API - if you want to invoke tpmon manually. This library cannot be used for load-time-weaving with the javaagent property!"/>
@@ -211,7 +211,7 @@
         </jar>
     </target>
 
-    <target name="build-tpmon-control-servlet" depends="clean,init,build-tpmon-ctrl">
+    <target name="build-tpmon-control-servlet" depends="init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.controlServlet.dir}"/>
         <mkdir dir="${build.tpmon.controlServlet.dir}"/>
         <javac source="1.5"
@@ -232,7 +232,7 @@
     </target>
 
     <!-- Build logAnalysis  -->
-    <target name="build-loganalysis-ctrl" depends="clean,init,build-tpmon-ctrl">
+    <target name="build-loganalysis-ctrl" depends="init,build-tpmon-ctrl">
         <delete dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}/META-INF"/>
@@ -267,7 +267,7 @@
         <include name="RELEASENOTES"/>
     </patternset>
 
-    <target name="build-tpmon-sources" depends="clean,init">
+    <target name="build-tpmon-sources" depends="init">
 	<!-- Source archives -->
         <tar destfile="${dist.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
@@ -293,7 +293,7 @@
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
     </target>
 
-    <target name="run-test-storage" depends="clean,build-tpmon-ctrl">
+    <target name="run-test-storage" depends="build-tpmon-ctrl">
         <echo>
             This is a small test for the part of Tpmon that
             stores monitoring data. Tpmon's monitoring API 
@@ -393,7 +393,7 @@
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes"
-            depends="clean,compile-tests-loadTimeWeavingDifferentRecordTypes">
+            depends="compile-tests-loadTimeWeavingDifferentRecordTypes">
         <java dir="."
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore"
@@ -411,7 +411,7 @@
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation"
-            depends="clean,compile-tests-loadTimeWeaving">
+            depends="compile-tests-loadTimeWeaving">
         <java dir="."
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
@@ -429,7 +429,7 @@
     </target>
 
     <target name="run-tests-loadTimeWeaving-executionOrderTest"
-            depends="clean,compile-tests-loadTimeWeaving">
+            depends="compile-tests-loadTimeWeaving">
         <java dir="."
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
@@ -496,7 +496,7 @@
         </iajc>
     </target>
 
-    <target name="run-tests-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstore">
+    <target name="run-tests-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstore">
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
@@ -507,7 +507,7 @@
         </java>
     </target>
     
-    <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="clean,compile-tests-compileTimeWeaving-bookstoreDB">
+    <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="compile-tests-compileTimeWeaving-bookstoreDB">
         <delete dir="${tests.javadb.kiekerdb.path}"/> <!-- delete existing DB -->
         <java dir="."
               fork="true"
@@ -532,7 +532,7 @@
         </java>
     </target>
 
-    <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="clean,compile-tests-compileTimeWeaving-bookstore">
+    <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="compile-tests-compileTimeWeaving-bookstore">
         <echo message="Using Bookstore variant with synchronized Catalog.getBooks (its slower)."/>
         <java dir="."
               fork="true"
@@ -553,7 +553,7 @@
         </java>
     </target> -->
 
-    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstoreBenchmark">
+    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstoreBenchmark">
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"              
