@@ -38,7 +38,7 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
      * @param recordVector
      */
     @TpmonInternal()
-      public abstract void initFromStringVector(Vector<String> recordVector)
+      public abstract void initFromStringVector(String[] recordVector)
             throws IllegalArgumentException;
 
     @TpmonInternal()
@@ -48,7 +48,7 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     }
 
     @TpmonInternal()
-    public abstract Vector<String> toStringVector();
+    public abstract String[] toStringVector();
 
     /**
      * Returns an id which can be used to identify CSV records of this

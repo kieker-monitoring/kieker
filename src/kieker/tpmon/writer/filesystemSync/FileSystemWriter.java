@@ -153,8 +153,8 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     @TpmonInternal()
     public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         try {
-            Vector<String> recordFields = monitoringRecord.toStringVector();
-            final int LAST_FIELD_INDEX = recordFields.size() - 1;
+            String[] recordFields = monitoringRecord.toStringVector();
+            final int LAST_FIELD_INDEX = recordFields.length - 1;
             prepareFile(); // may throw FileNotFoundException
 
             if (this.isWriteRecordTypeIds()) {
@@ -166,7 +166,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             }
 
             for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
-                pos.write(recordFields.get(i));
+                pos.write(recordFields[i]);
                 if (i < LAST_FIELD_INDEX) {
                     pos.write(';');
                 }

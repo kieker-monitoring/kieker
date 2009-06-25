@@ -41,24 +41,25 @@ public class KiekerBranchingRecord extends AbstractKiekerMonitoringRecord {
     private int branchingOutcome = -1;
     
     @TpmonInternal()
-    public void initFromStringVector(Vector<String> recordVector)
+    public void initFromStringVector(String[] recordVector)
             throws IllegalArgumentException {
-        if(recordVector.size() > KiekerBranchingRecord.numRecordFields) {
+        if(recordVector.length > KiekerBranchingRecord.numRecordFields) {
             throw new IllegalArgumentException("Expecting vector with "+
-                    KiekerBranchingRecord.numRecordFields + " elements but found:" + recordVector.size());
+                    KiekerBranchingRecord.numRecordFields + " elements but found:" + recordVector.length);
         }
-        this.timestamp = Long.parseLong(recordVector.elementAt(0));
-        this.branchID = Integer.parseInt(recordVector.elementAt(1));
-        this.branchingOutcome = Integer.parseInt(recordVector.elementAt(2));
+        this.timestamp = Long.parseLong(recordVector[0]);
+        this.branchID = Integer.parseInt(recordVector[1]);
+        this.branchingOutcome = Integer.parseInt(recordVector[2]);
         return;
     }
 
     @TpmonInternal()
-    public Vector<String> toStringVector() {
-        Vector<String> vec = new Vector<String>(3);
-        vec.insertElementAt(Long.toString(timestamp), 0);
-        vec.insertElementAt(Integer.toString(branchID), 1);
-        vec.insertElementAt(Integer.toString(branchingOutcome), 2);
+    public String[] toStringVector() {
+        String[] vec = {
+            Long.toString(timestamp),
+            Integer.toString(branchID),
+            Integer.toString(branchingOutcome)
+        };
         return vec;
     }
 

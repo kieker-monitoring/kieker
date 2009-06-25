@@ -157,8 +157,8 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
      */
     @TpmonInternal()
     private void writeDataNow(AbstractKiekerMonitoringRecord monitoringRecord) throws IOException {
-        Vector<String> recordFields = monitoringRecord.toStringVector();
-        final int LAST_FIELD_INDEX = recordFields.size() - 1;
+        String[] recordFields = monitoringRecord.toStringVector();
+        final int LAST_FIELD_INDEX = recordFields.length - 1;
         prepareFile(); // may throw FileNotFoundException
 
         if (this.isWriteRecordTypeIds()) {
@@ -170,7 +170,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
         }
 
         for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
-            String val = recordFields.elementAt(i);
+            String val = recordFields[i];
             pos.write(val);
             if (i < LAST_FIELD_INDEX) {
                 pos.write(';');
