@@ -6,7 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.consumer.MonitoringRecordLogger
+ * kieker.consumer.MonitoringRecordTypeLogger
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -26,8 +26,8 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class MonitoringRecordLogger implements IMonitoringRecordConsumer {
-private static final Log log = LogFactory.getLog(MonitoringRecordLogger.class);
+public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
+private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 
     public String[] getRecordTypeSubscriptionList() {
         throw new UnsupportedOperationException("Not supported yet.");

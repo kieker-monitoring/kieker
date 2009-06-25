@@ -24,7 +24,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import kieker.loganalysis.recordConsumer.ExecutionSequenceRepositoryFiller;
 import kieker.loganalysis.recordConsumer.IMonitoringRecordConsumer;
-import kieker.loganalysis.recordConsumer.MonitoringRecordLogger;
+import kieker.loganalysis.recordConsumer.MonitoringRecordTypeLogger;
 import kieker.loganalysis.datamodel.ExecutionSequence;
 import kieker.loganalysis.logReader.FSReader;
 import kieker.loganalysis.logReader.ILogReader;
@@ -60,7 +60,7 @@ public class LogAnalysisController {
 
         LogAnalysisController analysisInstance = new LogAnalysisController();
         analysisInstance.setLogReader(new FSReader(inputDir));
-        analysisInstance.addConsumer(new MonitoringRecordLogger());
+        analysisInstance.addConsumer(new MonitoringRecordTypeLogger());
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
         analysisInstance.addConsumer(seqRepConsumer);
         analysisInstance.run();
@@ -100,7 +100,7 @@ public class LogAnalysisController {
 //
 //        analysisInstance = new LogAnalysisController();
 //        analysisInstance.setLogReader(new JMSReader());
-//        analysisInstance.addConsumer(new MonitoringRecordLogger());
+//        analysisInstance.addConsumer(new MonitoringRecordTypeLogger());
 //        analysisInstance.run();
 
         log.info("Bye, this was Kieker.LogAnalysis");
