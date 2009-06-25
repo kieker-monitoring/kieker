@@ -1,10 +1,12 @@
-package kieker.loganalysis.consumer;
+package kieker.loganalysis.recordConsumer;
 
 import java.util.Vector;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.loganalysis.IMonitoringRecordConsumer
+ * kieker.consumer.MonitoringRecordLogger
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -24,10 +26,18 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
  *
  * @author Andre van Hoorn
  */
-public interface IMonitoringRecordConsumer {
-    public Vector<String> getRecordTypeSubscriptionList();
+public class MonitoringRecordLogger implements IMonitoringRecordConsumer {
+private static final Log log = LogFactory.getLog(MonitoringRecordLogger.class);
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
+    public Vector<String> getRecordTypeSubscriptionList() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-    public void run();
+    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+        log.info("Consumed record:" + monitoringRecord.getRecordTypeId());
+    }
+
+    public void run(){
+        /* We consume synchronously */
+    }
 }

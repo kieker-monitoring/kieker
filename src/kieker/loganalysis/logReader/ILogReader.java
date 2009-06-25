@@ -6,7 +6,7 @@
 package kieker.loganalysis.logReader;
 
 import java.util.Vector;
-import kieker.loganalysis.consumer.IMonitoringRecordConsumer;
+import kieker.loganalysis.recordConsumer.IMonitoringRecordConsumer;
 
 /**
  *

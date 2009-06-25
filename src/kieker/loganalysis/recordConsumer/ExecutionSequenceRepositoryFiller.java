@@ -1,12 +1,14 @@
-package kieker.loganalysis.consumer;
+package kieker.loganalysis.recordConsumer;
 
 import java.util.Vector;
+import kieker.loganalysis.datamodel.ExecutionSequenceRepository;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.consumer.MonitoringRecordLogger
+ * kieker.loganalysis.consumer.ExecutionSequenceRepositoryFiller
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -26,18 +28,29 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class MonitoringRecordLogger implements IMonitoringRecordConsumer {
-private static final Log log = LogFactory.getLog(MonitoringRecordLogger.class);
+public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsumer {
+    private static final Log log = LogFactory.getLog(ExecutionSequenceRepositoryFiller.class);
 
+    private ExecutionSequenceRepository repo = new ExecutionSequenceRepository();
+    
     public Vector<String> getRecordTypeSubscriptionList() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
-        log.info("Consumed record:" + monitoringRecord.getRecordTypeId());
+        if(monitoringRecord instanceof KiekerExecutionRecord){
+            this.repo.addExecution((KiekerExecutionRecord)monitoringRecord);   
+        }else{
+            log.error("Can only consume records of type KiekerExecutionRecord"+
+                    " but passed record is of type " + monitoringRecord.getClass().getName());
+        }
     }
 
     public void run(){
         /* We consume synchronously */
+    }
+    
+    public ExecutionSequenceRepository getExecutionSequenceRepository(){
+        return this.repo;
     }
 }
