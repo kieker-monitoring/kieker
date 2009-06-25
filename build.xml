@@ -317,13 +317,13 @@
                verbose="off"
                debug="true"/>
         <copy file="${tests.log4j.properties}"
-	      todir="${build.tests.dir}/"/>
+	      todir="${build.dir}/"/>
         <java
             dir="."
             fork="true"
             classpathref="run.tests.classpath"
 	    classname="kieker.tests.storageOnly.StorageOnly">
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
@@ -371,7 +371,7 @@
 <!--               excludes="kieker/tests/loadTimeWeaving/bookstoreDifferentRecordTypes/**">-->
         </javac>
         <copy file="${tests.log4j.properties}"
-              tofile="${build.tests.dir}/log4j.properties"/>
+              tofile="${build.dir}/tests.log4j.properties"/>
         <copy file="${aop.xml.ltwtests}"
 	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
     </target>
@@ -387,7 +387,7 @@
             </classpath>
         </javac>
         <copy file="${tests.log4j.properties}"
-              tofile="${build.tests.dir}/log4j.properties"/>
+              tofile="${build.dir}/tests.log4j.properties"/>
         <copy file="${aop.xml.ltwtests}"
 	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
     </target>
@@ -401,7 +401,7 @@
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
             <classpath>
@@ -419,7 +419,7 @@
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
             <classpath>
@@ -437,7 +437,7 @@
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
             <classpath>
@@ -445,6 +445,7 @@
             </classpath>
         </java>
     </target>
+
     <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-tpmon-ctw,init-log4-properties-tests">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
@@ -454,7 +455,7 @@
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>        
         <copy file="${tests.log4j.properties}"
-              tofile="${build.tests.dir}/log4j.properties"/>
+              tofile="${build.dir}/tests.log4j.properties"/>
         <iajc destdir="${build.tests.dir}" source="1.5" verbose="true"
               classpathref="tpmon.core.classpath">
             <sourceroots>
@@ -462,6 +463,7 @@
             </sourceroots>
         </iajc>
     </target>
+
     <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore,init-log4-properties-tests">
         <javac destDir="${build.tests.dir}"
                source="1.5"
@@ -482,7 +484,7 @@
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="${tests.log4j.properties}"
-              tofile="${build.tests.dir}/log4j.properties"/>
+              tofile="${build.dir}/tests.log4j.properties"/>
         <iajc  destdir="${build.tests.dir}" source="1.5" verbose="true"
               classpathref="tpmon.core.classpath">
             <sourceroots>
@@ -493,7 +495,7 @@
             </aspectpath>-->
         </iajc>
     </target>
-    
+
     <target name="run-tests-compileTimeWeaving-bookstore" depends="clean,compile-tests-compileTimeWeaving-bookstore">
         <java dir="."
               fork="true"
@@ -501,7 +503,7 @@
               classpathref="run.tests.classpath">
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
     </target>
     
@@ -511,7 +513,7 @@
               fork="true"
               classpathref="run.tests.classpath"
               classname="kieker.tests.util.JavaDBInitializer">
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dtpmon.dbDriverClassname="/>
             <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:${tests.javadb.kiekerdb.path};user=DBUSER;password=DBPASS"/>
             <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
@@ -523,7 +525,7 @@
             <jvmarg value="-Dtpmon.logMonitoringRecordTypeIds=false"/> <!-- type logging currently not supported by DB writers -->
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dtpmon.dbDriverClassname="/>
             <jvmarg value="-Dtpmon.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
             <jvmarg value="-Dtpmon.dbTableName=APP.tpmondata"/>
@@ -538,7 +540,7 @@
               classpathref="run.tests.classpath">
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
     </target>
   <!--  <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-bookstore">
@@ -559,7 +561,7 @@
             <jvmarg value="-server"/>
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
         <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
         <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-*/*.dat | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
@@ -569,25 +571,25 @@
     </target>
 
     <target name="run-reader" depends="build-tpmon-ctrl">
-        <copy file="${tests.log4j.properties}" todir="${build.tests.dir}/"/>
+        <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
               classname="kieker.tpmon.reader.fileSystemReader.FileSystemReader"
               classpathref="tpmon.core.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
 
     <target name="run-logAnalysis" depends="build-loganalysis-ctrl">
-        <copy file="${tests.log4j.properties}" todir="${build.tests.dir}/"/>
+        <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
               classname="kieker.loganalysis.LogAnalysisController"
               classpathref="loganalysis.core.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <classpath>
                 <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
             </classpath>
