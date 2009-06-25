@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
  * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemote
  *
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

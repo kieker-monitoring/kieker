@@ -96,12 +96,12 @@ public class LogAnalysisController {
         /**
          *  JMS Tests:
          */
-        log.info("Now we get to the interesting part: THE JMS TEST!");
-
-        analysisInstance = new LogAnalysisController();
-        analysisInstance.setLogReader(new JMSReader());
-        analysisInstance.addConsumer(new MonitoringRecordLogger());
-        analysisInstance.run();
+//        log.info("Now we get to the interesting part: THE JMS TEST!");
+//
+//        analysisInstance = new LogAnalysisController();
+//        analysisInstance.setLogReader(new JMSReader());
+//        analysisInstance.addConsumer(new MonitoringRecordLogger());
+//        analysisInstance.run();
 
         log.info("Bye, this was Kieker.LogAnalysis");
         System.exit(0);
