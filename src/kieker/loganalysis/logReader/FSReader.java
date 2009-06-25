@@ -141,7 +141,7 @@ public class FSReader extends AbstractLogReader {
                     }
                     st = new StringTokenizer(line, ";");
                     int numTokens = st.countTokens();
-                    Vector<String> vec = null;
+                    String[] vec = null;
                     boolean haveTypeId = false;
                     for (int i = 0; i < numTokens; i++) {
 //                        log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
@@ -154,19 +154,19 @@ public class FSReader extends AbstractLogReader {
                             Class<AbstractKiekerMonitoringRecord> clazz = this.recordTypeMap.get(id);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
                             rec = (AbstractKiekerMonitoringRecord) m.invoke(null); // call static method
-                            vec = new Vector<String>(numTokens - 1);
+                            vec = new String[numTokens - 1];
                             haveTypeId = true;
                         } else if (i == 0) { // for historic reasons, this is the default type
                             rec = KiekerExecutionRecord.getInstance();
-                            vec = new Vector<String>(numTokens);
+                            vec = new String[numTokens];
                         }
 //                        log.info("haveTypeId:" + haveTypeId + ";" + " token:" + token + "i:" + i);
                         if (!haveTypeId || i > 0) { // only if current field is not the id
-                            vec.insertElementAt(token, haveTypeId ? i - 1 : i);
+                            vec[haveTypeId ? i - 1 : i] = token;;
                         }
                     }
                     if (vec == null) {
-                        vec = new Vector<String>();
+                        vec = new String[0];
                     }
 
                     rec.initFromStringVector(vec);
