@@ -316,7 +316,7 @@
                srcdir="src/kieker/tests/storageOnly/"
                verbose="off"
                debug="true"/>
-        <copy file="src/kieker/tests/log4j.properties"
+        <copy file="${tests.log4j.properties}"
 	      todir="${build.tests.dir}/"/>
         <java
             dir="."
@@ -569,7 +569,7 @@
     </target>
 
     <target name="run-reader" depends="build-tpmon-ctrl">
-        <copy file="src/kieker/tests/log4j.properties" todir="${build.tests.dir}/"/>
+        <copy file="${tests.log4j.properties}" todir="${build.tests.dir}/"/>
         <java dir="."
               fork="true"
               classname="kieker.tpmon.reader.fileSystemReader.FileSystemReader"
@@ -581,7 +581,7 @@
     </target>
 
     <target name="run-logAnalysis" depends="build-loganalysis-ctrl">
-        <copy file="src/kieker/tests/log4j.properties" todir="${build.tests.dir}/"/>
+        <copy file="${tests.log4j.properties}" todir="${build.tests.dir}/"/>
         <java dir="."
               fork="true"
               classname="kieker.loganalysis.LogAnalysisController"
