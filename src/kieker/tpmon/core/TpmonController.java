@@ -311,14 +311,6 @@ public class TpmonController {
             return false;
         }
 
-        // TODO: Dirty hack! Needs to be cleaned up
-        // Possible solution: record's getInstance() requests experimentId and vnName from Controller
-        if (monitoringRecord instanceof KiekerExecutionRecord) {
-            KiekerExecutionRecord lexecData = (KiekerExecutionRecord) monitoringRecord;
-            lexecData.experimentId = this.experimentId;
-            lexecData.vmName = this.vmname;
-        }
-
         numberOfInserts.incrementAndGet();
         // now it fails fast, it disables monitoring when a queue once is full
         if (!this.monitoringDataWriter.writeMonitoringRecord(monitoringRecord)) {

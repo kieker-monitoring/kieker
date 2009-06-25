@@ -47,7 +47,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
     protected static final TpmonController tpmonController = TpmonController.getInstance();
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-
+    protected static final String vmName = tpmonController.getVmname();
 
     /** Iff true, the name of the runtime class is used,
     iff false, the name of the declaring class (interface) is used */
@@ -104,7 +104,8 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
         // a explicity call registerSessionIdentifier(String sessionid, long threadid) from a method
         // that knowns the request object (e.g. a servlet or a spring MVC controller).
         execData.sessionId = sessionRegistry.recallThreadLocalSessionId();
-
+        execData.experimentId = tpmonController.getExperimentId();
+        execData.vmName = vmName;
         return execData;
     }
 

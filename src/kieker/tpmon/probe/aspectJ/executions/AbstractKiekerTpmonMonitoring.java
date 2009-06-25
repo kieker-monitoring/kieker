@@ -34,7 +34,8 @@ public abstract class AbstractKiekerTpmonMonitoring {
 
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-    
+    protected static final String vmName = ctrlInst.getVmname();
+
     @TpmonInternal()
     protected KiekerExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {
        // e.g. "getBook" 
@@ -54,7 +55,9 @@ public abstract class AbstractKiekerTpmonMonitoring {
         if (execData.traceId == -1) { 
             execData.traceId = cfRegistry.getAndStoreUniqueThreadLocalTraceId();
             execData.isEntryPoint = true;
-        } 
+        }
+        execData.vmName = vmName;
+        execData.experimentId = ctrlInst.getExperimentId();
         return execData;
     }
     
