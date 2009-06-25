@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 public class MonitoringRecordLogger implements IMonitoringRecordConsumer {
 private static final Log log = LogFactory.getLog(MonitoringRecordLogger.class);
 
-    public Vector<String> getRecordTypeSubscriptionList() {
+    public String[] getRecordTypeSubscriptionList() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

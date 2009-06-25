@@ -33,7 +33,7 @@ public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsu
 
     private ExecutionSequenceRepository repo = new ExecutionSequenceRepository();
     
-    public Vector<String> getRecordTypeSubscriptionList() {
+    public String[] getRecordTypeSubscriptionList() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

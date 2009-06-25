@@ -25,7 +25,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
  * @author Andre van Hoorn
  */
 public interface IMonitoringRecordConsumer {
-    public Vector<String> getRecordTypeSubscriptionList();
+    public String[] getRecordTypeSubscriptionList();
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
 
