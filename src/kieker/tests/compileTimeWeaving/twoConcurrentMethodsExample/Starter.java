@@ -19,7 +19,7 @@ public class Starter extends Thread{
    public static void main(String[] args) throws InterruptedException {
 	for (int i = 0; i < 10000; i++) {
 		new Starter().start();		
-                Thread.sleep(25); // wait between requests
+                Thread.sleep((int)(Math.random() * 49d)+1); // wait between requests
 	}
 	System.exit(0);
     }
@@ -31,7 +31,7 @@ public class Starter extends Thread{
 
     @TpmonExecutionMonitoringProbe()
     public void waitP() {
-	try{Thread.sleep(500);} catch (Exception e){}
+	try{Thread.sleep((int)(Math.random() * 50d)+475);} catch (Exception e){}
     }
 
     static boolean boolvar = true;
