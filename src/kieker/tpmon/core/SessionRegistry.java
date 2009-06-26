@@ -3,7 +3,7 @@ package kieker.tpmon.core;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /*
- * kieker.tpmon.TpmonController
+ * kieker.tpmon.core.SessionRegistry
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project

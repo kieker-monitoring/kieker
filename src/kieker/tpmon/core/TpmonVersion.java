@@ -3,7 +3,7 @@ package kieker.tpmon.core;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /**
- * kieker.tpmon.TpmonVersion
+ * kieker.tpmon.core.TpmonVersion
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
@@ -34,7 +34,7 @@ public class TpmonVersion {
 	 * The VERSION string is updated by the Ant build file, which looks for the
 	 * pattern: VERSION = <quote>.*<quote>
 	 */
-	private static final String VERSION = "0.95-20090625";
+	private static final String VERSION = "0.95-20090626";
 
 	static final String COPYRIGHT = "Copyright (c) 2006-2009 Kieker Project";
 

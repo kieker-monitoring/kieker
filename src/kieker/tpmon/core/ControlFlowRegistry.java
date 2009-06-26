@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /*
- * kieker.tpmon.TpmonController
+ * kieker.tpmon.core.ControlFlowRegistry
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
