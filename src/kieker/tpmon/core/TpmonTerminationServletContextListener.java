@@ -12,8 +12,8 @@ import org.apache.commons.logging.LogFactory;
  * @author Dennis Kieselhorst
  *
  */
-public class KiekerTerminationServletContextListener implements ServletContextListener {
-	private static final Log LOG = LogFactory.getLog(KiekerTerminationServletContextListener.class);
+public class TpmonTerminationServletContextListener implements ServletContextListener {
+	private static final Log LOG = LogFactory.getLog(TpmonTerminationServletContextListener.class);
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
