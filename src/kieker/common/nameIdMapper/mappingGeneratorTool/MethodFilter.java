@@ -10,16 +10,6 @@ import java.lang.reflect.Method;
  * 
  */
 public interface MethodFilter {
-
-	/**
-	 * This method is called from within the MethodExtractor to filter the
-	 * output methods.
-	 * 
-	 * @param m
-	 *            the method object
-	 * @param c
-	 *            the analyzed class
-	 * @return true if method is accepted
-	 */
+    
 	public abstract boolean accept(Method m, Class<?> c);
 }
