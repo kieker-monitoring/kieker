@@ -25,6 +25,8 @@
                   value="${kieker.tpmon.packagenamebase}-${kieker.version}"/>
         <property name="loganalysis.dist.name"
                   value="${kieker.loganalysis.packagenamebase}-${kieker.version}"/>
+        <property name="common.dist.name"
+                  value="${kieker.common.packagenamebase}-${kieker.version}"/>
         <property name="dist.tpmon.ltw"
                   value="${tpmon.dist.name}_${kieker-tpmon-ltwjar.suffix}.jar"/>
         <property name="dist.tpmon.ctw"
@@ -33,6 +35,8 @@
                   value="${tpmon.dist.name}_${kieker-tpmon-ctrljar.suffix}.jar"/>
         <property name="dist.tpmon.controlServlet"
                   value="${tpmon.dist.name}_${kieker-tpmon-controlServletwar.suffix}.war"/>
+        <property name="dist.kieker.common"
+                  value="${common.dist.name}.jar"/>
         <property name="dist.loganalysis.ctrl"
                   value="${loganalysis.dist.name}_${kieker-loganalysis-ctrljar.suffix}.jar"/>
         <property name="dist.kieker.srcBaseName"
@@ -54,12 +58,25 @@
     </target>
 
     <target name="build-all"
-            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-tpmon-sources,build-loganalysis-ctrl">
+            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-tpmon-sources,build-kieker.common,build-loganalysis-ctrl">
     </target>
 
-    <condition property="no.loganalysis.properties">
+    <condition property="no.kieker.properties">
         <not>
-            <available file="${loganalysis.properties}"/>
+            <available file="${kieker.properties}"/>
+        </not>
+    </condition>
+
+    <target name="init-kieker-properties" if="no.kieker.properties">
+        <!-- if no kieker.common.properties, copy example file automatically  -->
+        <echo message="${kieker.common.properties} not existing.
+                       Creating default file."/>
+        <copy file="${kieker.properties.example}" tofile="${kieker.properties}"/>
+    </target>
+
+    <condition property="no.tpmon.properties">
+        <not>
+            <available file="${tpmon.properties}"/>
         </not>
     </condition>
 
@@ -83,7 +100,7 @@
         <copy file="${tpmon.properties.example}" tofile="${tpmon.properties}"/>
     </target>
 
-    <target name="init" depends="update-version,init-tpmon-properties,init-loganalysis-properties">
+    <target name="init" depends="update-version,init-tpmon-properties,init-kieker-properties,init-loganalysis-properties">
         <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
         <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
         <fail message="Critical error: AspectJ library not found
@@ -105,14 +122,16 @@
             <path refid="classpath.libs"/>
             <fileset dir="${dist.dir}">
                 <include name="${dist.tpmon.ctrl}"/>
+                <include name="${dist.kieker.common}"/>
             </fileset>
         </path>
 
-        <!-- Classpath with Kieker Ctrl and external libs  -->
+        <!-- Classpath with loganalysis and external libs  -->
         <path id="loganalysis.core.classpath">
             <path refid="classpath.libs"/>
             <fileset dir="${dist.dir}">
                 <include name="${dist.loganalysis.ctrl}"/>
+                <include name="${dist.kieker.common}"/>
             </fileset>
         </path>
 
@@ -254,10 +273,36 @@
         </jar>
     </target>
 
+    <!-- Build kieker.common  -->
+    <target name="build-kieker.common" depends="init">
+        <delete dir="${build.kieker.common.dir}"/>
+        <mkdir  dir="${build.kieker.common.dir}"/>
+        <mkdir  dir="${build.kieker.common.dir}/META-INF"/>
+        <echo message="Creating the library of kieker.common (${dist.kieker.common.ctrl})."/>
+        <javac destDir="${build.kieker.common.dir}"
+               source="1.5"
+               srcdir="src/kieker/common/"
+               debug="true"
+               classpathref="classpath.libs">
+            <compilerarg value="-Xlint:all"/>
+        </javac>
+        <copy file="${kieker.properties}" todir="${build.kieker.common.dir}/META-INF"/>
+        <!-- We want to include the sources in this jar -->
+        <copy todir="${build.kieker.common.dir}/">
+            <fileset dir="src">
+                <include name="kieker/common/**/*.java"/>
+            </fileset>
+        </copy>
+        <jar destfile="${dist.dir}/${dist.kieker.common}">
+            <fileset dir="${build.kieker.common.dir}"/>
+        </jar>
+    </target>
+
     <patternset id="dist_src_files">
         <include name="META-INF/aop.xml.example"/>
-        <include name="META-INF/tpmon.properties"/>
-        <include name="META-INF/loganalysis.properties"/>
+        <include name="${tpmon.properties}"/>
+        <include name="${loganalysis.properties}"/>
+        <include name="${kieker.properties}"/>
         <include name="src/**/*.java"/>
         <include name="lib/**"/>
         <include name="build.xml"/>
