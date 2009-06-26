@@ -28,7 +28,6 @@ import kieker.loganalysis.recordConsumer.MonitoringRecordTypeLogger;
 import kieker.loganalysis.datamodel.ExecutionSequence;
 import kieker.loganalysis.logReader.FSReader;
 import kieker.loganalysis.logReader.ILogReader;
-import kieker.loganalysis.logReader.JMSReader;
 import kieker.loganalysis.plugins.DependencyGraphPlugin;
 import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import org.apache.commons.logging.Log;
