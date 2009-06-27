@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import kieker.loganalysis.recordConsumer.IMonitoringRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;

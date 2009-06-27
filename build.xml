@@ -74,9 +74,9 @@
         <copy file="${kieker.properties.example}" tofile="${kieker.properties}"/>
     </target>
 
-    <condition property="no.tpmon.properties">
+    <condition property="no.loganalysis.properties">
         <not>
-            <available file="${tpmon.properties}"/>
+            <available file="${loganalysis.properties}"/>
         </not>
     </condition>
 
@@ -100,7 +100,11 @@
         <copy file="${tpmon.properties.example}" tofile="${tpmon.properties}"/>
     </target>
 
-    <target name="init" depends="update-version,init-tpmon-properties,init-kieker-properties,init-loganalysis-properties">
+    <target name="init-properties" 
+            depends="init-kieker-properties,init-tpmon-properties,init-loganalysis-properties,init-aop-xml-ltwtests,init-log4-properties-tests">
+    </target>
+
+    <target name="init" depends="update-version,init-properties">
         <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
         <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
         <fail message="Critical error: AspectJ library not found
@@ -411,7 +415,7 @@
     </target>
 
     <target name="compile-tests-loadTimeWeaving"
-	    depends="build-tpmon-ltw,init-aop-xml-ltwtests,init-log4-properties-tests">
+	    depends="build-tpmon-ltw">
         <javac source="1.5"
                destDir="${build.tests.dir}"
                classpathref="tpmon.core.classpath"
@@ -428,7 +432,7 @@
     </target>
 
     <target name="compile-tests-loadTimeWeavingDifferentRecordTypes"
-	    depends="build-tpmon-ltw,init-aop-xml-ltwtests,init-log4-properties-tests">
+	        depends="build-tpmon-ltw">
         <javac source="1.5"
                destDir="${build.tests.dir}"
                classpathref="tpmon.core.classpath"
@@ -497,7 +501,7 @@
         </java>
     </target>
 
-    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-tpmon-ctw,init-log4-properties-tests">
+    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
@@ -532,8 +536,8 @@
             </sourceroots>
         </iajc>
     </target>
-
-    <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore,init-log4-properties-tests">
+    
+    <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore">
         <javac destDir="${build.tests.dir}"
                source="1.5"
                verbose="off"
@@ -544,7 +548,7 @@
         </javac>
     </target>
 
-    <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-tpmon-ctw,init-log4-properties-tests">
+    <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
@@ -651,14 +655,17 @@
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
 
-    <target name="run-mappingExtractor" depends="build-tpmon-ctrl">
+    <target name="run-mappingExtractor" depends="build-kieker.common">
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
               classname="kieker.common.nameIdMapper.mappingGeneratorTool.MethodExtractor"
+              classpath="${searchpath}"
               classpathref="kieker.common.classpath">
-            <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dsearchpath=${searchpath}"/>
+            <jvmarg value="-Dfilter=kieker.common.nameIdMapper.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter"/>
+            <jvmarg value="-Dmappingfile=${mappingfile}"/>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>

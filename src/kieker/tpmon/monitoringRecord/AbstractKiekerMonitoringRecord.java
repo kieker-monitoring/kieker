@@ -21,7 +21,6 @@ package kieker.tpmon.monitoringRecord;
  */
 
 import java.io.Serializable;
-import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /**
