@@ -19,26 +19,39 @@ public class Starter extends Thread{
    public static void main(String[] args) throws InterruptedException {
 	for (int i = 0; i < 10000; i++) {
 		new Starter().start();		
-                Thread.sleep((int)(Math.random() * 49d)+1); // wait between requests
+                Thread.sleep((int)(Math.max(0,Math.random() * 115d - (i/142d) )+1)); // wait between requests
 	}
 	System.exit(0);
     }
 
     public void run() {
-            waitP();
-            work();
+		double ranVal = Math.random();
+		if (ranVal < 0.5 ) {
+			if (ranVal < 0.25) {
+				// do nothing
+			} else {
+				waitP(300);
+			}
+		}else {
+			if (ranVal > 0.75) {
+				work();
+				waitP(300);
+			} else {
+				work();
+			}
+		}
     }
 
     @TpmonExecutionMonitoringProbe()
-    public void waitP() {
-	try{Thread.sleep((int)(Math.random() * 50d)+475);} catch (Exception e){}
+    public void waitP(long sleeptime) {
+	try{Thread.sleep(sleeptime);} catch (Exception e){}
     }
 
     static boolean boolvar = true;
     @TpmonExecutionMonitoringProbe()
     private void work() {
         int a = (int)(Math.random() * 5d);
-        for (int i=0; i<2500000; i++) { a += i/1000;}
+        for (int i=0; i<2000000; i++) { a += i/1000;}
         if (a % 10000 == 0 ) boolvar = false;
     }
 } 
