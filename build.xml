@@ -310,6 +310,9 @@
         </copy>
         <jar destfile="${dist.dir}/${dist.kieker.common}">
             <fileset dir="${build.kieker.common.dir}"/>
+           <manifest>
+                <attribute name="Main-Class" value="kieker.common.tools.ToolDispatcher"/>
+            </manifest>
         </jar>
     </target>
 
@@ -681,7 +684,7 @@
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
-              classname="kieker.common.nameIdMapper.mappingGeneratorTool.MethodExtractor"
+              classname="kieker.common.tools.mappingGeneratorTool.MethodExtractor"
               classpath="${searchpath}"
               classpathref="kieker.common.classpath">
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
@@ -692,13 +695,12 @@
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
 
-    <!-- jar="${dist.dir}/${dist.loganalysis.ctrl}" -->
     <target name="run-logAnalysis" depends="build-loganalysis-ctrl">
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
             <echo message="${dist.dir}/${dist.kieker.common}"/>
         <java dir="."
               fork="true"
-classname="kieker.loganalysis.LogAnalysisTool"
+              classname="kieker.loganalysis.LogAnalysisTool"
               classpathref="loganalysis.core.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
