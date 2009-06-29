@@ -73,6 +73,8 @@ public class FilesystemReader extends AbstractLogReader {
                     "An error occurred while parsing files from directory " +
                     inputDir.getAbsolutePath() + ":");
             e.printStackTrace();
+        } finally {
+            super.terminate();
         }
     }
 

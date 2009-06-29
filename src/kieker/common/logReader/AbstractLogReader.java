@@ -19,14 +19,14 @@ public abstract class AbstractLogReader implements ILogReader {
     private final Collection<IMonitoringRecordConsumer> subscribedToAllList =
             new Vector<IMonitoringRecordConsumer>();
     /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<String,Collection<IMonitoringRecordConsumer>> subscriptionMap =
-            new HashMap<String,Collection<IMonitoringRecordConsumer>>();
+    private final HashMap<String, Collection<IMonitoringRecordConsumer>> subscriptionMap =
+            new HashMap<String, Collection<IMonitoringRecordConsumer>>();
 
     public final void addConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList) {
         if (recordTypeSubscriptionList == null) {
             this.subscribedToAllList.add(consumer);
-        }else{
-            for (String recordTypeName : recordTypeSubscriptionList){
+        } else {
+            for (String recordTypeName : recordTypeSubscriptionList) {
                 Collection<IMonitoringRecordConsumer> cList = this.subscriptionMap.get(recordTypeName);
                 if (cList == null) {
                     cList = new Vector<IMonitoringRecordConsumer>(0);
@@ -37,14 +37,31 @@ public abstract class AbstractLogReader implements ILogReader {
         }
     }
 
-    protected final void deliverRecordToConsumers (AbstractKiekerMonitoringRecord r){
-        for (IMonitoringRecordConsumer c : this.subscribedToAllList){
+    protected final void deliverRecordToConsumers(AbstractKiekerMonitoringRecord r) {
+        for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
             c.consumeMonitoringRecord(r);
         }
         Collection<IMonitoringRecordConsumer> cList = this.subscriptionMap.get(r.getClass().getName());
-        if (cList != null){
+        if (cList != null) {
             for (IMonitoringRecordConsumer c : cList) {
                 c.consumeMonitoringRecord(r);
+            }
+        }
+    }
+
+    protected final void terminate() {
+        for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
+            synchronized (c) {
+                c.notify();
+            }
+        }
+        for (Collection<IMonitoringRecordConsumer> cList : this.subscriptionMap.values()) {
+            if (cList != null) {
+                for (IMonitoringRecordConsumer c : cList) {
+                    synchronized (c) {
+                        c.notify();
+                    }
+                }
             }
         }
     }

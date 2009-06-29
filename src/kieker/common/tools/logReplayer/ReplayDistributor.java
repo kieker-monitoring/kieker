@@ -65,6 +65,8 @@ public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
 								.getCompletedTaskCount())
 						+ " tasks... This can take some time");
 		executor.shutdown();
+        this.notifyAll();
+        c.terminateMonitoring();
 	}
 
 	@Override

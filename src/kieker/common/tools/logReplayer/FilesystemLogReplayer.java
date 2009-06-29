@@ -16,7 +16,6 @@ public class FilesystemLogReplayer {
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     private static String inputDir = null;
-
     private static boolean realtimeMode = false;
 
     public static void main(String[] args) {
@@ -33,10 +32,10 @@ public class FilesystemLogReplayer {
         }
 
         String realTimeModeStr = System.getProperty("realtimeMode");
-        if (realTimeModeStr != null  && realTimeModeStr.equalsIgnoreCase("true") ){
+        if (realTimeModeStr != null && realTimeModeStr.equalsIgnoreCase("true")) {
             log.info("Replaying log data in real time");
             realtimeMode = true;
-        }else{
+        } else {
             log.info("Replaying log data in non-real time");
         }
 
@@ -47,9 +46,11 @@ public class FilesystemLogReplayer {
         ctrlInst.setReplayMode(realtimeMode);
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
+
         if (realtimeMode) {
+            ReplayDistributor rd = new ReplayDistributor(7);
             fsReader.addConsumer(
-                    new ReplayDistributor(7),
+                    rd,
                     null); // consume records of all types
         } else {
             fsReader.addConsumer(new IMonitoringRecordConsumer() {
@@ -69,10 +70,10 @@ public class FilesystemLogReplayer {
                 }
             }, null); // consume records of all types
         }
-        
+
         fsReader.run();
 
         log.info("Finished to read files");
-        //System.exit(0);
+    //System.exit(0);
     }
 }
