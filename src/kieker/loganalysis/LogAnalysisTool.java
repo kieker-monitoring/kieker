@@ -3,14 +3,12 @@ package kieker.loganalysis;
 import java.io.File;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.TreeSet;
+import kieker.common.logReader.filesystemReader.FilesystemReader;
 import kieker.loganalysis.datamodel.ExecutionSequence;
-import kieker.loganalysis.logReader.FSReader;
 import kieker.loganalysis.plugins.DependencyGraphPlugin;
 import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import kieker.loganalysis.recordConsumer.ExecutionSequenceRepositoryFiller;
-import kieker.loganalysis.recordConsumer.MonitoringRecordTypeLogger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -76,7 +74,8 @@ public class LogAnalysisTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         AnalysisInstance analysisInstance = new AnalysisInstance();
-        analysisInstance.addLogReader(new FSReader(inputDirName));
+        //analysisInstance.addLogReader(new FSReader(inputDirName));
+        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
         analysisInstance.addConsumer(seqRepConsumer);
         analysisInstance.run();
@@ -110,7 +109,8 @@ public class LogAnalysisTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         AnalysisInstance analysisInstance = new AnalysisInstance();
-        analysisInstance.addLogReader(new FSReader(inputDirName));
+        //analysisInstance.addLogReader(new FSReader(inputDirName));
+        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
         analysisInstance.addConsumer(seqRepConsumer);
         analysisInstance.run();

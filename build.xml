@@ -100,7 +100,7 @@
         <copy file="${tpmon.properties.example}" tofile="${tpmon.properties}"/>
     </target>
 
-    <target name="init-properties" 
+    <target name="init-properties"
             depends="init-kieker-properties,init-tpmon-properties,init-loganalysis-properties,init-aop-xml-ltwtests,init-log4-properties-tests">
     </target>
 
@@ -261,7 +261,7 @@
     </target>
 
     <!-- Build logAnalysis  -->
-    <target name="build-loganalysis-ctrl" depends="init,build-tpmon-ctrl">
+    <target name="build-loganalysis-ctrl" depends="init,build-tpmon-ctrl,build-kieker.common">
         <delete dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}"/>
         <mkdir  dir="${build.loganalysis.ctrl.dir}/META-INF"/>
@@ -519,7 +519,7 @@
         </iajc>
     </target>
 
-<target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="build-tpmon-ctw,init-log4-properties-tests">
+    <target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="build-tpmon-ctw,init-log4-properties-tests">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
               todir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>
@@ -616,15 +616,15 @@
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
     </target>
-	<target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-twoConcurrentMethodsExample">
+    <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-twoConcurrentMethodsExample">
       
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample.Starter"
               classpathref="run.tests.classpath">
-           <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
         </java>
-    </target> 
+    </target>
 
     <target name="run-benchmark-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstoreBenchmark">
         <java dir="."
@@ -684,6 +684,7 @@
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <classpath>
                 <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
+                <pathelement location="${dist.dir}/${dist.kieker.common}"/>
             </classpath>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
