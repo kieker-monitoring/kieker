@@ -7,6 +7,7 @@ package kieker.common.logReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
+
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 /**
@@ -22,7 +23,7 @@ public abstract class AbstractLogReader implements ILogReader {
     private final HashMap<String, Collection<IMonitoringRecordConsumer>> subscriptionMap =
             new HashMap<String, Collection<IMonitoringRecordConsumer>>();
 
-    public final void addConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList) {
+    public final void addConsumer(final IMonitoringRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
         if (recordTypeSubscriptionList == null) {
             this.subscribedToAllList.add(consumer);
         } else {
@@ -37,7 +38,7 @@ public abstract class AbstractLogReader implements ILogReader {
         }
     }
 
-    protected final void deliverRecordToConsumers(AbstractKiekerMonitoringRecord r) {
+    protected final void deliverRecordToConsumers(final AbstractKiekerMonitoringRecord r) {
         for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
             c.consumeMonitoringRecord(r);
         }
@@ -51,16 +52,12 @@ public abstract class AbstractLogReader implements ILogReader {
 
     protected final void terminate() {
         for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
-            synchronized (c) {
-                c.notify();
-            }
+                c.terminate();
         }
         for (Collection<IMonitoringRecordConsumer> cList : this.subscriptionMap.values()) {
             if (cList != null) {
                 for (IMonitoringRecordConsumer c : cList) {
-                    synchronized (c) {
-                        c.notify();
-                    }
+                     c.terminate();
                 }
             }
         }

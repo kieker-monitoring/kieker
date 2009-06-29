@@ -4,6 +4,7 @@ import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.common.logReader.filesystemReader.FilesystemReader;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,9 +19,9 @@ public class FilesystemLogReplayer {
     private static String inputDir = null;
     private static boolean realtimeMode = false;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
-        inputDir = System.getProperty("inputDir");
+        inputDir = "tmp//tpmon-20090629-154255/";//System.getProperty("inputDir");
         if (inputDir == null || inputDir.length() == 0 || inputDir.equals("${inputDir}")) {
             log.error("No input dir found!");
             log.error("Provide an input dir as system property.");
@@ -31,7 +32,7 @@ public class FilesystemLogReplayer {
             log.info("Reading all tpmon-* files from " + inputDir);
         }
 
-        String realTimeModeStr = System.getProperty("realtimeMode");
+        String realTimeModeStr = "true";//System.getProperty("realtimeMode");
         if (realTimeModeStr != null && realTimeModeStr.equalsIgnoreCase("true")) {
             log.info("Replaying log data in real time");
             realtimeMode = true;
@@ -47,13 +48,14 @@ public class FilesystemLogReplayer {
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
 
+        IMonitoringRecordConsumer cons = null;
         if (realtimeMode) {
-            ReplayDistributor rd = new ReplayDistributor(7);
+        	cons = new ReplayDistributor(7);
             fsReader.addConsumer(
-                    rd,
+            		cons,
                     null); // consume records of all types
         } else {
-            fsReader.addConsumer(new IMonitoringRecordConsumer() {
+            fsReader.addConsumer(cons = new IMonitoringRecordConsumer() {
 
                 /** Anonymous consumer class that simply passes all records to the
                  *  controller */
@@ -61,16 +63,20 @@ public class FilesystemLogReplayer {
                     return null; // consume all types
                 }
 
-                public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+                public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
                     ctrlInst.logMonitoringRecord(monitoringRecord);
                 }
 
                 public void execute() {
                     // do nothing, we are synchronous
                 }
+
+				@Override
+				public void terminate() {
+				}
             }, null); // consume records of all types
         }
-
+        cons.execute();
         fsReader.run();
 
         log.info("Finished to read files");

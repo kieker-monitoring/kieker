@@ -1,6 +1,5 @@
 package kieker.common.tools.logReplayer;
 
-import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -8,16 +7,14 @@ import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
-import org.apache.log4j.Logger;
-
 /**
  * IMonitoringRecordConsumer that distributes the log records to the worker
  * thread for "real time" replays.
- * 
+ *
  * @author Robert von Massow
- * 
+ *
  */
-public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
+public class ReplayDistributor implements IMonitoringRecordConsumer {
 
 	public final int numWorkers;
 
@@ -25,54 +22,39 @@ public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
 
 	private final ScheduledThreadPoolExecutor executor;
 
-    private static final TpmonController c = TpmonController.getInstance();
+	private long lTime;
+
+	private static final TpmonController c = TpmonController.getInstance();
 
 	public ReplayDistributor(final int numWorkers) {
 		this.numWorkers = numWorkers;
-		executor = new ScheduledThreadPoolExecutor(numWorkers);
+		this.executor = new ScheduledThreadPoolExecutor(numWorkers);
+		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
+		this.executor
+				.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
 	@Override
 	public void consumeMonitoringRecord(
 			final AbstractKiekerMonitoringRecord monitoringRecord) {
-		if (startTime == -1) { // init on first record
-			offset = monitoringRecord.getLoggingTimestamp() - (20*1000*1000);
-			startTime = c.getTime();
+		if (this.startTime == -1) { // init on first record
+			this.offset = monitoringRecord.getLoggingTimestamp()
+					- (20 * 1000 * 1000);
+			this.startTime = c.getTime();
 		}
-		long schedTime = (monitoringRecord.getLoggingTimestamp() - offset)
-				- (c.getTime() - startTime);
-		executor.schedule(new ReplayWorker(monitoringRecord), schedTime,
+		long schedTime = (monitoringRecord.getLoggingTimestamp() - this.offset)
+				- (c.getTime() - this.startTime);
+		this.executor.schedule(new ReplayWorker(monitoringRecord), schedTime,
 				TimeUnit.NANOSECONDS);
-        System.out.println(monitoringRecord.getLoggingTimestamp() - offset);
-	}
-
-	@Override
-	public void run() {
-		try {
-			synchronized (this) {
-				this.wait();
-			}
-		} catch (InterruptedException e) {
-			List<Runnable> q = executor.shutdownNow();
-			Logger.getLogger(this.getClass()).warn(
-					"Interrupted while " + q.size()
-							+ " records were scheduled for replay");
-			return;
-		}
-		Logger.getLogger(this.getClass()).warn(
-				"Waiting for "
-						+ (executor.getTaskCount() - executor
-								.getCompletedTaskCount())
-						+ " tasks... This can take some time");
-		executor.shutdown();
-        this.notifyAll();
-        c.terminateMonitoring();
+		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord
+				.getLoggingTimestamp()
+				: this.lTime;
 	}
 
 	@Override
 	public void execute() {
-		Thread t = new Thread(this);
-		t.start();
+		// Thread t = new Thread(this);
+		// t.start();
 	}
 
 	@Override
@@ -81,11 +63,25 @@ public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
 	}
 
 	public final long getOffset() {
-		return offset;
+		return this.offset;
 	}
 
 	public final long getStartTime() {
-		return startTime;
+		return this.startTime;
+	}
+
+	@Override
+	public void terminate() {
+		this.executor.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				c.terminateMonitoring();
+			}
+
+		}, (this.lTime - this.offset) - (c.getTime() - this.startTime)
+				+ 100000000, TimeUnit.NANOSECONDS);
+		this.executor.shutdown();
 	}
 
 }

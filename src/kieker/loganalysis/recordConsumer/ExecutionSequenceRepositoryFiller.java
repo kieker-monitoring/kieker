@@ -1,10 +1,10 @@
 package kieker.loganalysis.recordConsumer;
 
 import kieker.common.logReader.IMonitoringRecordConsumer;
-import java.util.Vector;
 import kieker.loganalysis.datamodel.ExecutionSequenceRepository;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
 public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsumer {
     private static final Log log = LogFactory.getLog(ExecutionSequenceRepositoryFiller.class);
 
-    private ExecutionSequenceRepository repo = new ExecutionSequenceRepository();
+    private final ExecutionSequenceRepository repo = new ExecutionSequenceRepository();
 
     /** Consuming only execution records */
     private final static String[] recordTypeSubscriptionList = {
@@ -43,9 +43,9 @@ public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsu
         return recordTypeSubscriptionList;
     }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
         if(monitoringRecord instanceof KiekerExecutionRecord){
-            this.repo.addExecution((KiekerExecutionRecord)monitoringRecord);   
+            this.repo.addExecution((KiekerExecutionRecord)monitoringRecord);
         }else{
             log.error("Can only consume records of type KiekerExecutionRecord"+
                     " but passed record is of type " + monitoringRecord.getClass().getName());
@@ -55,8 +55,13 @@ public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsu
     public void execute(){
         /* We consume synchronously */
     }
-    
+
     public ExecutionSequenceRepository getExecutionSequenceRepository(){
         return this.repo;
     }
+
+	@Override
+	public void terminate() {
+        /* We consume synchronously */
+	}
 }

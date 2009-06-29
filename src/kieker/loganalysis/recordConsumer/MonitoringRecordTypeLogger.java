@@ -1,8 +1,8 @@
 package kieker.loganalysis.recordConsumer;
 
 import kieker.common.logReader.IMonitoringRecordConsumer;
-import java.util.Vector;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -38,11 +38,17 @@ public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
         return recordTypeSubscriptionList;
     }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
         log.info("Consumed record:" + monitoringRecord.getRecordTypeId());
     }
 
     public void execute() {
         /* We consume synchronously */
     }
+
+	@Override
+	public void terminate() {
+        /* We consume synchronously */
+
+	}
 }

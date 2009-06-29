@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+
 import kieker.common.logReader.AbstractLogReader;
-import kieker.common.logReader.IMonitoringRecordConsumer;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -34,14 +35,14 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- * 
- * This reader allows one to read a folder or an single tpmon file and 
- * transforms it to monitoring events that are stored in the file system 
+ *
+ * This reader allows one to read a folder or an single tpmon file and
+ * transforms it to monitoring events that are stored in the file system
  * again, written to a database, or whatever tpmon is configured to do
  * with the monitoring data.
  *
  * @author Matthias Rohr, Andre van Hoorn
- * 
+ *
  * History:
  * 2008/09/15: Initial version
  */
@@ -51,14 +52,15 @@ public class FilesystemReader extends AbstractLogReader {
 
     private File inputDir = null;
 
-    public FilesystemReader (String inputDirName){
+    public FilesystemReader (final String inputDirName){
         this.inputDir = new File(inputDirName);
     }
 
-    @TpmonInternal()
+    @Override
+	@TpmonInternal()
     public void run() {
         try {
-            File[] inputFiles = inputDir.listFiles(new FileFilter() {
+            File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
                 public boolean accept(File pathname) {
                     return pathname.isFile() &&
                             pathname.getName().startsWith("tpmon") &&
@@ -66,14 +68,15 @@ public class FilesystemReader extends AbstractLogReader {
                 }
             });
             for (int i = 0; i < inputFiles.length; i++) {
-                processInputFile(inputFiles[i]);
+                this.processInputFile(inputFiles[i]);
             }
         } catch (IOException e) {
             System.err.println(
                     "An error occurred while parsing files from directory " +
-                    inputDir.getAbsolutePath() + ":");
+                    this.inputDir.getAbsolutePath() + ":");
             e.printStackTrace();
         } finally {
+
             super.terminate();
         }
     }
@@ -126,7 +129,7 @@ public class FilesystemReader extends AbstractLogReader {
     }
 
     @TpmonInternal()
-    private void processInputFile(File input) throws IOException {
+    private void processInputFile(final File input) throws IOException {
         log.info("< Loading " + input.getAbsolutePath());
 
         BufferedReader in = null;

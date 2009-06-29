@@ -5,9 +5,9 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 /**
  * A Runnable to be scheduled via the ReplayDistributor
- * 
+ *
  * @author Robert von Massow
- * 
+ *
  */
 public class ReplayWorker implements Runnable {
 
@@ -21,9 +21,9 @@ public class ReplayWorker implements Runnable {
 
 	@Override
 	public void run() {
-		if (monRec != null) {
-        monRec.setLoggingTimestamp(c.getTime());
-			c.logMonitoringRecord(monRec);
+		if (this.monRec != null) {
+//        this.monRec.setLoggingTimestamp(c.getTime());
+			c.logMonitoringRecord(this.monRec);
 		}
 	}
 }
