@@ -157,7 +157,8 @@ public class FilesystemReader extends AbstractLogReader {
                             Class<AbstractKiekerMonitoringRecord> clazz = this.recordTypeMap.get(id);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
                             rec = (AbstractKiekerMonitoringRecord) m.invoke(null); // call static method
-                            vec = new String[numTokens - 1];
+                            rec.setLoggingTimestamp(Long.getLong(st.nextToken()));
+                            vec = new String[numTokens - 2];
                             haveTypeId = true;
                         } else if (i == 0) { // for historic reasons, this is the default type
                             rec = KiekerExecutionRecord.getInstance();

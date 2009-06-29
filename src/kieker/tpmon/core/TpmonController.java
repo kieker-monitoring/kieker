@@ -312,6 +312,7 @@ public class TpmonController {
 
         numberOfInserts.incrementAndGet();
         // now it fails fast, it disables monitoring when a queue once is full
+        monitoringRecord.setLoggingTimestamp(this.getTime());
         if (!this.monitoringDataWriter.writeMonitoringRecord(monitoringRecord)) {
             log.fatal("Error writing the monitoring data. Will terminate monitoring!");
             this.terminateMonitoring();

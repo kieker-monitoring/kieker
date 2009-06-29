@@ -28,6 +28,8 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 public abstract class AbstractKiekerMonitoringRecord implements Serializable {
 
+    private long loggingTimestamp = -1;
+
     /**
      * Sets the values of this monitoring object's field according to
      * the csvRecord. Additionally, the internal recordTypeId must be
@@ -49,16 +51,17 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     @TpmonInternal()
     public abstract String[] toStringVector();
 
-    /**
-     * Returns an id which can be used to identify CSV records of this
-     * type. The returned value should be unique for the class extending
-     * AbstractKiekerMonitoringRecord. 
-     *
-     * The recommended way is to use the hashCode() method of the class
-     * (not that of the object) stored into a static variable.
-     *
-     * @return an ID unique for the monitoring record's type.
-     */
     @TpmonInternal()
     public abstract int getRecordTypeId();
+
+    @TpmonInternal()
+    public final long getLoggingTimestamp(){
+        return this.loggingTimestamp;
+    }
+    
+    @TpmonInternal()
+    public final void setLoggingTimestamp(long loggingTimestamp){
+        this.loggingTimestamp = loggingTimestamp;
+    }
+
 }

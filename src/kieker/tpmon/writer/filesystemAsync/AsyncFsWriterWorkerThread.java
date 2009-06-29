@@ -3,7 +3,6 @@ package kieker.tpmon.writer.filesystemAsync;
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.util.Random;
-import java.util.Vector;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -161,9 +160,11 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
         final int LAST_FIELD_INDEX = recordFields.length - 1;
         prepareFile(); // may throw FileNotFoundException
 
-        if (this.isWriteRecordTypeIds()) {
+        if (this.isWriteRecordTypeIds()) { // write ID and loggingTimestamp
             pos.write('$');
             pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+            pos.write(';');
+            pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
             if (LAST_FIELD_INDEX > 0) {
                 pos.write(';');
             }

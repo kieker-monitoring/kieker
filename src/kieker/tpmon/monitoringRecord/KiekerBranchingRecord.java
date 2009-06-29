@@ -20,7 +20,6 @@ package kieker.tpmon.monitoringRecord;
  * ==================================================
  */
 
-import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.TpmonController;
 
