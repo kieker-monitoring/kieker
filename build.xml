@@ -282,9 +282,6 @@
         </copy>
         <jar destfile="${dist.dir}/${dist.loganalysis.ctrl}">
             <fileset dir="${build.loganalysis.ctrl.dir}"/>
-            <manifest>
-                <attribute name="Main-Class" value="kieker.loganalysis.LogAnalysisTool"/>
-            </manifest>
         </jar>
     </target>
 
@@ -310,9 +307,6 @@
         </copy>
         <jar destfile="${dist.dir}/${dist.kieker.common}">
             <fileset dir="${build.kieker.common.dir}"/>
-           <manifest>
-                <attribute name="Main-Class" value="kieker.common.tools.ToolDispatcher"/>
-            </manifest>
         </jar>
     </target>
 
