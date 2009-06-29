@@ -90,6 +90,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
     }
 
     public FileSystemWriter(String storagePathBase) {
+        log.info("storagePathBase :" + storagePathBase);
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {
             log.error(storagePathBase + " is not a directory");
@@ -97,10 +98,13 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             return;
         }
 
+        this.storagePathBase = storagePathBase;
+
         DateFormat m_ISO8601Local =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmss");
         String dateStr = m_ISO8601Local.format(new java.util.Date());
         this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "/";
+        log.info("this.storagePathBase :" + this.storagePathBase);
 
         f = new File(this.storagePathBase);
         if (!f.mkdir()) {
@@ -152,6 +156,11 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
 
     @TpmonInternal()
     public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+        if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
+            log.info("Found END_OF_MONITORING_MARKER. Will terminate");
+            return false;
+        }
+
         try {
             String[] recordFields = monitoringRecord.toStringVector();
             final int LAST_FIELD_INDEX = recordFields.length - 1;
@@ -160,6 +169,8 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             if (this.isWriteRecordTypeIds()) {
                 pos.write('$');
                 pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+                pos.write(';');
+                pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
                 if (LAST_FIELD_INDEX > 0) {
                     pos.write(';');
                 }
