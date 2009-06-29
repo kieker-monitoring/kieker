@@ -1,10 +1,13 @@
 package kieker.common.tools.logReplayer;
 
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+
+import org.apache.log4j.Logger;
 
 /**
  * IMonitoringRecordConsumer that distributes the log records to the worker
@@ -13,7 +16,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
  * @author Robert von Massow
  * 
  */
-public class ReplayDistributor implements IMonitoringRecordConsumer {
+public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
 
 	public final int numWorkers;
 
@@ -40,15 +43,30 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 	}
 
 	@Override
-	public void execute() {
+	public void run() {
 		try {
 			synchronized (this) {
 				this.wait();
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			List<Runnable> q = executor.shutdownNow();
+			Logger.getLogger(this.getClass()).warn(
+					"Interrupted while " + q.size()
+							+ " records were scheduled for replay");
+			return;
 		}
-		executor.shutdownNow();
+		Logger.getLogger(this.getClass()).warn(
+				"Waiting for "
+						+ (executor.getTaskCount() - executor
+								.getCompletedTaskCount())
+						+ " tasks... This can take some time");
+		executor.shutdown();
+	}
+
+	@Override
+	public void execute() {
+		Thread t = new Thread(this);
+		t.start();
 	}
 
 	@Override
