@@ -17,7 +17,7 @@ public abstract class AbstractLogReader implements ILogReader {
 
     /** Contains all consumers which consume records of any type */
     private final Collection<IMonitoringRecordConsumer> subscribedToAllList =
-            new Vector();
+            new Vector<IMonitoringRecordConsumer>();
     /** Contains mapping of record types to subscribed consumers */
     private final HashMap<String,Collection<IMonitoringRecordConsumer>> subscriptionMap =
             new HashMap<String,Collection<IMonitoringRecordConsumer>>();

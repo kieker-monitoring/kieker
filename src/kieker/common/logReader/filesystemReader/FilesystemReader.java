@@ -135,7 +135,7 @@ public class FilesystemReader extends AbstractLogReader {
             in = new BufferedReader(new FileReader(input));
             String line;
 
-            while ((line = in.readLine()) != null) {
+            readLine: while ((line = in.readLine()) != null) {
                 AbstractKiekerMonitoringRecord rec = null;
                 try {
                     if (!recordTypeIdMapInitialized && line.startsWith("$")) {
@@ -146,7 +146,7 @@ public class FilesystemReader extends AbstractLogReader {
                     int numTokens = st.countTokens();
                     String[] vec = null;
                     boolean haveTypeId = false;
-                    for (int i = 0; i < numTokens; i++) {
+                    for (int i = 0; st.hasMoreTokens(); i++) {
 //                        log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
                         String token = st.nextToken();
                         if (i == 0 && token.startsWith("$")) {
@@ -157,14 +157,16 @@ public class FilesystemReader extends AbstractLogReader {
                             Class<AbstractKiekerMonitoringRecord> clazz = this.recordTypeMap.get(id);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
                             rec = (AbstractKiekerMonitoringRecord) m.invoke(null); // call static method
-                            rec.setLoggingTimestamp(Long.getLong(st.nextToken()));
+                            token = st.nextToken();
+                            //log.info("LoggingTimestamp: " + Long.valueOf(token) + " (" + token + ")");
+                            rec.setLoggingTimestamp(Long.valueOf(token));
                             vec = new String[numTokens - 2];
                             haveTypeId = true;
                         } else if (i == 0) { // for historic reasons, this is the default type
                             rec = KiekerExecutionRecord.getInstance();
                             vec = new String[numTokens];
                         }
-//                        log.info("haveTypeId:" + haveTypeId + ";" + " token:" + token + "i:" + i);
+                        //log.info("haveTypeId:" + haveTypeId + ";" + " token:" + token + " i:" + i);
                         if (!haveTypeId || i > 0) { // only if current field is not the id
                             vec[haveTypeId ? i - 1 : i] = token;
                         }
@@ -180,7 +182,7 @@ public class FilesystemReader extends AbstractLogReader {
                             "Failed to parse line: {" + line + "} from file " +
                             input.getAbsolutePath(), e);
                     log.error("Abort reading");
-                    break;
+                    break readLine;
                 }
             }
         } finally {

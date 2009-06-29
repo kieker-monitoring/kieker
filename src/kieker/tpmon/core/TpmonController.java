@@ -151,7 +151,7 @@ public class TpmonController {
             } else {
                 /* try to load the class by name */
                 this.monitoringDataWriter = (IMonitoringDataWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
-                if(!this.monitoringDataWriter.init(monitoringDataWriterInitString)){
+                if (!this.monitoringDataWriter.init(monitoringDataWriterInitString)) {
                     this.monitoringDataWriter = null;
                     throw new Exception("Initialization of writer failed!");
                 }
@@ -296,12 +296,22 @@ public class TpmonController {
     @TpmonInternal()
     public void terminateMonitoring() {
         log.info("Permanently terminating monitoring");
-        if(this.monitoringDataWriter!=null){
+        if (this.monitoringDataWriter != null) {
             /* if the initialization of the writer failed, it is set to null*/
             this.monitoringDataWriter.writeMonitoringRecord(END_OF_MONITORING_MARKER);
         }
         this.disableMonitoring();
         this.monitoringPermanentlyTerminated = true;
+    }
+    /**
+     * If true, the loggingTimestamp is not set by the logMonitoringRecord
+     * method. This is required to replay recorded traces with the
+     * original timestamps.
+     */
+    private boolean replayMode = false;
+
+    public void setReplayMode(boolean replayMode) {
+        this.replayMode = replayMode;
     }
 
     @TpmonInternal()
@@ -312,7 +322,9 @@ public class TpmonController {
 
         numberOfInserts.incrementAndGet();
         // now it fails fast, it disables monitoring when a queue once is full
-        monitoringRecord.setLoggingTimestamp(this.getTime());
+        if (!this.replayMode) {
+            monitoringRecord.setLoggingTimestamp(this.getTime());
+        }
         if (!this.monitoringDataWriter.writeMonitoringRecord(monitoringRecord)) {
             log.fatal("Error writing the monitoring data. Will terminate monitoring!");
             this.terminateMonitoring();
@@ -565,8 +577,8 @@ public class TpmonController {
      */
     @TpmonInternal()
     public int registerMonitoringRecordType(Class recordTypeClass) {
-        if(this.isMonitoringPermanentlyTerminated()){
-            log.warn("Didn't register record type '"+recordTypeClass+
+        if (this.isMonitoringPermanentlyTerminated()) {
+            log.warn("Didn't register record type '" + recordTypeClass +
                     "' because monitoring has been permanently terminated");
             return -1;
         }

@@ -14,6 +14,8 @@ import org.apache.commons.logging.LogFactory;
 public class FilesystemLogReplayer {
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
 
+   private static final TpmonController ctrlInst = TpmonController.getInstance();
+
     private static String inputDir = null;
 
     public static void main(String[] args) {
@@ -29,6 +31,12 @@ public class FilesystemLogReplayer {
             log.info("Reading all tpmon-* files from " + inputDir);
         }
 
+        /**
+         * Force the controller to keep the original logging timestamps
+         * of the monitoring records.
+         */
+        ctrlInst.setReplayMode(true);
+
         FilesystemReader fsReader = new FilesystemReader(inputDir);
         fsReader.addConsumer(new IMonitoringRecordConsumer() {
             /** Anonymous consumer class that simply passes all records to the
@@ -38,7 +46,7 @@ public class FilesystemLogReplayer {
             }
 
             public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
-                TpmonController.getInstance().logMonitoringRecord(monitoringRecord);
+                ctrlInst.logMonitoringRecord(monitoringRecord);
             }
 
             public void run() {
