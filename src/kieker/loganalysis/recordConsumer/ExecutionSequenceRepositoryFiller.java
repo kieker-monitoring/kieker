@@ -33,9 +33,14 @@ public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsu
     private static final Log log = LogFactory.getLog(ExecutionSequenceRepositoryFiller.class);
 
     private ExecutionSequenceRepository repo = new ExecutionSequenceRepository();
-    
+
+    /** Consuming only execution records */
+    private final static String[] recordTypeSubscriptionList = {
+        KiekerExecutionRecord.class.getName()
+    };
+
     public String[] getRecordTypeSubscriptionList() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return recordTypeSubscriptionList;
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {

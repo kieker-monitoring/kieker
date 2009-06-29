@@ -173,10 +173,7 @@ public class FilesystemReader extends AbstractLogReader {
                     }
 
                     rec.initFromStringVector(vec);
-
-                   for (IMonitoringRecordConsumer c : this.getConsumers()) {
-                        c.consumeMonitoringRecord(rec);
-                    }
+                    this.deliverRecordToConsumers(rec);
                 } catch (Exception e) {
                     log.error(
                             "Failed to parse line: {" + line + "} from file " +

@@ -30,7 +30,7 @@ public class FilesystemLogReplayer {
         }
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
-        fsReader.registerConsumer(new IMonitoringRecordConsumer() {
+        fsReader.addConsumer(new IMonitoringRecordConsumer() {
             /** Anonymous consumer class that simply passes all records to the
              *  controller */
             public String[] getRecordTypeSubscriptionList() {
@@ -44,7 +44,7 @@ public class FilesystemLogReplayer {
             public void run() {
                 // do nothing, we are synchronous
             }
-        });
+        }, null); // consume records of all types
         fsReader.run();
 
         log.info("Finished to read files");

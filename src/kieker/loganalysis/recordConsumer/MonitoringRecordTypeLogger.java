@@ -28,17 +28,21 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
-private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
+
+    private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
+
+    /** Consuming any records of any type */
+    private final static String[] recordTypeSubscriptionList = null;
 
     public String[] getRecordTypeSubscriptionList() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return recordTypeSubscriptionList;
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         log.info("Consumed record:" + monitoringRecord.getRecordTypeId());
     }
 
-    public void run(){
+    public void run() {
         /* We consume synchronously */
     }
 }

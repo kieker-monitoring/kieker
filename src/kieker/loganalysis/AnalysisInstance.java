@@ -39,7 +39,7 @@ public class AnalysisInstance {
     public void run() {
         for (ILogReader r : this.logReaders) {
             for (IMonitoringRecordConsumer c : this.consumers) {
-                r.registerConsumer(c);
+                r.addConsumer(c, c.getRecordTypeSubscriptionList());
                 c.run();
             }
         }
