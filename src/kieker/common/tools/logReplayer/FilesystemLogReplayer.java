@@ -48,7 +48,9 @@ public class FilesystemLogReplayer {
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
         if (realtimeMode) {
-            fsReader.addConsumer( new ReplayDistributor(7), null);
+            fsReader.addConsumer(
+                    new ReplayDistributor(7),
+                    null); // consume records of all types
         } else {
             fsReader.addConsumer(new IMonitoringRecordConsumer() {
 
@@ -67,6 +69,7 @@ public class FilesystemLogReplayer {
                 }
             }, null); // consume records of all types
         }
+        
         fsReader.run();
 
         log.info("Finished to read files");
