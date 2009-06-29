@@ -77,7 +77,6 @@ public class DependencyGraphPlugin {
                 if (!m.callMessage) {
                     continue;
                 }
-                log.info("Adding dependency: (" + m.getSenderComponentName() + "," + m.getReceiverComponentName() + "" + ")");
                 adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
             }
         }

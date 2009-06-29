@@ -40,7 +40,6 @@ public class JMSReader extends AbstractLogReader {
             log.info("\n\n***\nListening to destination:"+destinationName+" over "+location+" !\n***\n\n");
             MessageConsumer receiver = session.createConsumer(destination);
             receiver.setMessageListener(new MessageListener() {
-
                 public void onMessage(Message message) {
                     if (message instanceof TextMessage) {
                         TextMessage text = (TextMessage) message;
