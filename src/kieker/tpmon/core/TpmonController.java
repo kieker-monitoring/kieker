@@ -99,16 +99,13 @@ public class TpmonController {
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
     private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     private TpmonShutdownHook shutdownhook = null;
-    private static TpmonController ctrlInst = null;
+    private static TpmonController ctrlInst = new TpmonController();
 
     //marks the end of monitoring to the writer threads
     public static final AbstractKiekerMonitoringRecord END_OF_MONITORING_MARKER = new KiekerDummyMonitoringRecord();
 
     @TpmonInternal()
-    public synchronized static TpmonController getInstance() {
-        if (ctrlInst == null) {
-            ctrlInst = new TpmonController();
-        }
+    public static TpmonController getInstance() {
         return TpmonController.ctrlInst;
     }
 

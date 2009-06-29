@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.logReader.IMonitoringRecordConsumer;
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 import org.apache.log4j.Logger;
@@ -24,6 +25,8 @@ public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
 
 	private final ScheduledThreadPoolExecutor executor;
 
+    private static final TpmonController c = TpmonController.getInstance();
+
 	public ReplayDistributor(final int numWorkers) {
 		this.numWorkers = numWorkers;
 		executor = new ScheduledThreadPoolExecutor(numWorkers);
@@ -33,13 +36,14 @@ public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
 	public void consumeMonitoringRecord(
 			final AbstractKiekerMonitoringRecord monitoringRecord) {
 		if (startTime == -1) { // init on first record
-			offset = monitoringRecord.getLoggingTimestamp() - 20000;
-			startTime = System.nanoTime();
+			offset = monitoringRecord.getLoggingTimestamp() - (20*1000*1000);
+			startTime = c.getTime();
 		}
 		long schedTime = (monitoringRecord.getLoggingTimestamp() - offset)
-				- (System.nanoTime() - startTime);
+				- (c.getTime() - startTime);
 		executor.schedule(new ReplayWorker(monitoringRecord), schedTime,
 				TimeUnit.NANOSECONDS);
+        System.out.println(monitoringRecord.getLoggingTimestamp() - offset);
 	}
 
 	@Override

@@ -13,6 +13,8 @@ public class ReplayWorker implements Runnable {
 
 	private final AbstractKiekerMonitoringRecord monRec;
 
+    private static final TpmonController c = TpmonController.getInstance();
+
 	public ReplayWorker(final AbstractKiekerMonitoringRecord monRec) {
 		this.monRec = monRec;
 	}
@@ -20,7 +22,8 @@ public class ReplayWorker implements Runnable {
 	@Override
 	public void run() {
 		if (monRec != null) {
-			TpmonController.getInstance().logMonitoringRecord(monRec);
+        monRec.setLoggingTimestamp(c.getTime());
+			c.logMonitoringRecord(monRec);
 		}
 	}
 }

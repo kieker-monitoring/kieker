@@ -32,12 +32,6 @@ public class FilesystemLogReplayer {
             log.info("Reading all tpmon-* files from " + inputDir);
         }
 
-        /**
-         * Force the controller to keep the original logging timestamps
-         * of the monitoring records.
-         */
-        ctrlInst.setReplayMode(true);
-
         String realTimeModeStr = System.getProperty("realtimeMode");
         if (realTimeModeStr != null  && realTimeModeStr.equalsIgnoreCase("true") ){
             log.info("Replaying log data in real time");
@@ -45,6 +39,12 @@ public class FilesystemLogReplayer {
         }else{
             log.info("Replaying log data in non-real time");
         }
+
+        /**
+         * Force the controller to keep the original logging timestamps
+         * of the monitoring records.
+         */
+        ctrlInst.setReplayMode(realtimeMode);
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
         if (realtimeMode) {
@@ -73,6 +73,6 @@ public class FilesystemLogReplayer {
         fsReader.run();
 
         log.info("Finished to read files");
-        System.exit(0);
+        //System.exit(0);
     }
 }
