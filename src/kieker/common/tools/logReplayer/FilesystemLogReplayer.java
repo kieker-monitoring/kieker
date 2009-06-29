@@ -11,8 +11,8 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class LogReplayer {
-    private static final Log log = LogFactory.getLog(LogReplayer.class);
+public class FilesystemLogReplayer {
+    private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
 
     private static String inputDir = null;
 
