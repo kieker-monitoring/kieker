@@ -39,7 +39,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer, Runnable {
 		long schedTime = (monitoringRecord.getLoggingTimestamp() - offset)
 				- (System.nanoTime() - startTime);
 		executor.schedule(new ReplayWorker(monitoringRecord), schedTime,
-				TimeUnit.MILLISECONDS);
+				TimeUnit.NANOSECONDS);
 	}
 
 	@Override
