@@ -12,11 +12,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class FilesystemLogReplayer {
+
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
-
-   private static final TpmonController ctrlInst = TpmonController.getInstance();
-
+    private static final TpmonController ctrlInst = TpmonController.getInstance();
     private static String inputDir = null;
+
+    private static boolean realtimeMode = false;
 
     public static void main(String[] args) {
 
@@ -38,21 +39,26 @@ public class FilesystemLogReplayer {
         ctrlInst.setReplayMode(true);
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
-        fsReader.addConsumer(new IMonitoringRecordConsumer() {
-            /** Anonymous consumer class that simply passes all records to the
-             *  controller */
-            public String[] getRecordTypeSubscriptionList() {
-                return null; // consume all types
-            }
+        if (realtimeMode) {
+            fsReader.addConsumer( new ReplayDistributor(7), null);
+        } else {
+            fsReader.addConsumer(new IMonitoringRecordConsumer() {
 
-            public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
-                ctrlInst.logMonitoringRecord(monitoringRecord);
-            }
+                /** Anonymous consumer class that simply passes all records to the
+                 *  controller */
+                public String[] getRecordTypeSubscriptionList() {
+                    return null; // consume all types
+                }
 
-            public void run() {
-                // do nothing, we are synchronous
-            }
-        }, null); // consume records of all types
+                public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+                    ctrlInst.logMonitoringRecord(monitoringRecord);
+                }
+
+                public void run() {
+                    // do nothing, we are synchronous
+                }
+            }, null); // consume records of all types
+        }
         fsReader.run();
 
         log.info("Finished to read files");

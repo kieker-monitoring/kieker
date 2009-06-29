@@ -1,4 +1,4 @@
-package kieker.loganalysis.recordConsumer;
+package kieker.common.tools.logReplayer;
 
 import java.util.Timer;
 import java.util.TimerTask;

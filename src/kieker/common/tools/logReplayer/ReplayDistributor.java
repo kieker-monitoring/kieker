@@ -1,12 +1,10 @@
-package kieker.loganalysis.recordConsumer;
+package kieker.common.tools.logReplayer;
 
 import java.util.Timer;
-import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 
 import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -43,7 +41,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 	@Override
 	public void consumeMonitoringRecord(
 			AbstractKiekerMonitoringRecord monitoringRecord) {
-		if (startTime == -1) {
+		if (startTime == -1) { // init on first record
 			offset = monitoringRecord.getLoggingTimestamp() - 200;
 			startTime = System.currentTimeMillis();
 		}
