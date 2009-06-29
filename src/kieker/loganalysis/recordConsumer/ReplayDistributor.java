@@ -44,7 +44,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 	public void consumeMonitoringRecord(
 			AbstractKiekerMonitoringRecord monitoringRecord) {
 		if (startTime == -1) {
-			offset = monitoringRecord.getLoggingTimestamp() + 200;
+			offset = monitoringRecord.getLoggingTimestamp() - 200;
 			startTime = System.currentTimeMillis();
 		}
 		if (timerInitIndex < numWorkers) {
