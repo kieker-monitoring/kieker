@@ -28,5 +28,5 @@ public interface IMonitoringRecordConsumer {
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
 
-    public void run();
+    public void execute();
 }

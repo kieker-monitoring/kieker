@@ -64,7 +64,7 @@ public class FilesystemLogReplayer {
                     ctrlInst.logMonitoringRecord(monitoringRecord);
                 }
 
-                public void run() {
+                public void execute() {
                     // do nothing, we are synchronous
                 }
             }, null); // consume records of all types

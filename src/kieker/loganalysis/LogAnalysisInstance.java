@@ -40,7 +40,7 @@ public class LogAnalysisInstance {
         for (ILogReader r : this.logReaders) {
             for (IMonitoringRecordConsumer c : this.consumers) {
                 r.addConsumer(c, c.getRecordTypeSubscriptionList());
-                c.run();
+                c.execute();
             }
         }
         for (ILogReader r : this.logReaders) {

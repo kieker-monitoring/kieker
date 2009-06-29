@@ -40,7 +40,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 	}
 
 	@Override
-	public void run() {
+	public void execute() {
 		try {
 			synchronized (this) {
 				this.wait();
@@ -53,7 +53,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 
 	@Override
 	public String[] getRecordTypeSubscriptionList() {
-		return new String[] {};
+		return null;
 	}
 
 	public final long getOffset() {

@@ -52,7 +52,7 @@ public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsu
         }
     }
 
-    public void run(){
+    public void execute(){
         /* We consume synchronously */
     }
     
