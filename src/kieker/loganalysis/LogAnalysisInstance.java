@@ -1,7 +1,7 @@
 package kieker.loganalysis;
 
 /**
- * kieker.loganalysis.AnalysisInstance
+ * kieker.loganalysis.LogAnalysisInstance
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -30,9 +30,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class AnalysisInstance {
+public class LogAnalysisInstance {
 
-    private static final Log log = LogFactory.getLog(AnalysisInstance.class);
+    private static final Log log = LogFactory.getLog(LogAnalysisInstance.class);
     private Vector<ILogReader> logReaders = new Vector<ILogReader>();
     private Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
 

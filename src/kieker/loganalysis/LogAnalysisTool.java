@@ -73,7 +73,7 @@ public class LogAnalysisTool {
     private static void task_genSequenceDiagramsForTraceSet(String inputDirName, String outputDirname, TreeSet<Long> traceIds) {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
-        AnalysisInstance analysisInstance = new AnalysisInstance();
+        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
         //analysisInstance.addLogReader(new FSReader(inputDirName));
         analysisInstance.addLogReader(new FilesystemReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
@@ -108,7 +108,7 @@ public class LogAnalysisTool {
     private static void task_genDependencyGraphsForTraceSet(String inputDirName, String outputFilename) {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
-        AnalysisInstance analysisInstance = new AnalysisInstance();
+        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
         //analysisInstance.addLogReader(new FSReader(inputDirName));
         analysisInstance.addLogReader(new FilesystemReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
