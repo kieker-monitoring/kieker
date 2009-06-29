@@ -5,6 +5,12 @@ import kieker.common.logReader.filesystemReader.FilesystemReader;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,12 +20,34 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FilesystemLogReplayer {
 
+    private static CommandLine cmdl = null;
+    private static final CommandLineParser cmdlParser = new BasicParser();
+    private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
+    private static final Options cmdlOpts = new Options();
+
+    static{
+        cmdlOpts.addOption("h", "help", false, "Show help");
+    }
+
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     private static String inputDir = null;
     private static boolean realtimeMode = false;
 
+    private static boolean parseArgs(String[] args){
+        try {
+            cmdl = cmdlParser.parse(cmdlOpts, args);
+        } catch (ParseException e) {
+            log.error("Parse Exception", e);
+            cmdHelpFormatter.printHelp(FilesystemLogReplayer.class.getName(), cmdlOpts);
+            return false;
+        }
+        return true;
+    }
+
     public static void main(final String[] args) {
+
+        parseArgs(args);
 
         inputDir = "tmp//tpmon-20090629-154255/";//System.getProperty("inputDir");
         if (inputDir == null || inputDir.length() == 0 || inputDir.equals("${inputDir}")) {
