@@ -1,10 +1,7 @@
 package kieker.common.tools.logReplayer;
 
-import java.util.Timer;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
-import org.apache.log4j.Logger;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -20,82 +17,43 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 
 	public final int numWorkers;
 
-	private final Timer[] timers;
-
 	private volatile long startTime = -1, offset = -1;
 
-	private final BlockingQueue<AbstractKiekerMonitoringRecord> q;
+	private final ScheduledThreadPoolExecutor executor;
 
-	private int timerInitIndex = 0;
-
-	public ReplayDistributor(int numWorkers) {
+	public ReplayDistributor(final int numWorkers) {
 		this.numWorkers = numWorkers;
-		timers = new Timer[this.numWorkers];
-		for (int i = 0; i < numWorkers; i++) {
-			timers[i] = new Timer();
-		}
-		q = new LinkedBlockingQueue<AbstractKiekerMonitoringRecord>(
-				numWorkers * 10);
+		executor = new ScheduledThreadPoolExecutor(numWorkers);
 	}
 
 	@Override
 	public void consumeMonitoringRecord(
-			AbstractKiekerMonitoringRecord monitoringRecord) {
+			final AbstractKiekerMonitoringRecord monitoringRecord) {
 		if (startTime == -1) { // init on first record
 			offset = monitoringRecord.getLoggingTimestamp() - 200;
 			startTime = System.currentTimeMillis();
 		}
-		if (timerInitIndex < numWorkers) {
-			timers[timerInitIndex].schedule(new ReplayWorker(monitoringRecord,
-					this, timers[timerInitIndex++]), monitoringRecord
-					.getLoggingTimestamp()
-					- offset);
-		} else {
-			try {
-				q.put(monitoringRecord);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				Logger.getLogger(this.getClass()).warn("Interrupted replay before event queue was emptied");
-				synchronized (this) {
-					this.notify();
-				}
-			}
-		}
+		long schedTime = (monitoringRecord.getLoggingTimestamp() - offset)
+				- (System.currentTimeMillis() - startTime);
+		executor.schedule(new ReplayWorker(monitoringRecord), schedTime,
+				TimeUnit.MILLISECONDS);
 	}
 
 	@Override
 	public void run() {
 		try {
-			this.wait();
+			synchronized (this) {
+				this.wait();
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		for (Timer t : timers) {
-			t.cancel();
-		}
+		executor.shutdownNow();
 	}
 
 	@Override
 	public String[] getRecordTypeSubscriptionList() {
 		return new String[] {};
-	}
-
-	protected void reInitTimer(Timer t) {
-		AbstractKiekerMonitoringRecord r;
-		try {
-			r = q.take();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			this.notify();
-			return;
-		}
-		t.schedule(new ReplayWorker(r, this, t), r.getLoggingTimestamp()
-				- offset);
-	}
-
-	public AbstractKiekerMonitoringRecord getEvent()
-			throws InterruptedException {
-		return q.take();
 	}
 
 	public final long getOffset() {
