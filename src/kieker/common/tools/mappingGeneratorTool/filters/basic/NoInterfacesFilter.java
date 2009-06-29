@@ -1,7 +1,7 @@
-package kieker.common.nameIdMapper.mappingGeneratorTool.filters.basic;
+package kieker.common.tools.mappingGeneratorTool.filters.basic;
 
 import java.lang.reflect.Method;
-import kieker.common.nameIdMapper.mappingGeneratorTool.MethodFilter;
+import kieker.common.tools.mappingGeneratorTool.MethodFilter;
 
 /**
  * Excludes Interface methods from output

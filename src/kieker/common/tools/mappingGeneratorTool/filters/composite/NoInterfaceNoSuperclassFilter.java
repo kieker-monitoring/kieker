@@ -1,9 +1,9 @@
-package kieker.common.nameIdMapper.mappingGeneratorTool.filters.composite;
+package kieker.common.tools.mappingGeneratorTool.filters.composite;
 
 import java.lang.reflect.Method;
-import kieker.common.nameIdMapper.mappingGeneratorTool.MethodFilter;
-import kieker.common.nameIdMapper.mappingGeneratorTool.filters.basic.NoInterfacesFilter;
-import kieker.common.nameIdMapper.mappingGeneratorTool.filters.basic.NoSuperclassMethodsFilter;
+import kieker.common.tools.mappingGeneratorTool.MethodFilter;
+import kieker.common.tools.mappingGeneratorTool.filters.basic.NoInterfacesFilter;
+import kieker.common.tools.mappingGeneratorTool.filters.basic.NoSuperclassMethodsFilter;
 
 /**
  * Exclude Interface and superclass methods from output

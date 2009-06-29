@@ -1,5 +1,6 @@
 package kieker.loganalysis.recordConsumer;
 
+import kieker.common.logReader.IMonitoringRecordConsumer;
 import java.util.Vector;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;

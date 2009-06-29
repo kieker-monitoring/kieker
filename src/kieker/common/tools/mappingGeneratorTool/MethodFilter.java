@@ -1,4 +1,4 @@
-package kieker.common.nameIdMapper.mappingGeneratorTool;
+package kieker.common.tools.mappingGeneratorTool;
 
 import java.lang.reflect.Method;
 

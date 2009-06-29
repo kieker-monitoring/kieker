@@ -1,5 +1,6 @@
 package kieker.loganalysis.logReader;
 
+import kieker.common.logReader.AbstractLogReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import kieker.loganalysis.recordConsumer.IMonitoringRecordConsumer;
+import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;

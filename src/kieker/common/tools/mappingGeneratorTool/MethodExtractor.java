@@ -1,7 +1,6 @@
-package kieker.common.nameIdMapper.mappingGeneratorTool;
+package kieker.common.tools.mappingGeneratorTool;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;

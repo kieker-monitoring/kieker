@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package kieker.loganalysis.logReader;
+package kieker.common.logReader;
 
 import java.util.Vector;
-import kieker.loganalysis.recordConsumer.IMonitoringRecordConsumer;
+import kieker.common.logReader.IMonitoringRecordConsumer;
 
 /**
  *

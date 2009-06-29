@@ -1,9 +1,28 @@
 package kieker.loganalysis.plugins;
 
+/*
+ * kieker.loganalysis.plugins.SequenceDiagramPlugin.java
+ *
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ */
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 import kieker.loganalysis.datamodel.Message;
@@ -14,50 +33,32 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Refactored copy from LogAnalysis-legacy tool
  * 
- * @author ?Nils Sommer?, Matthias Rohr, Andre van Hoorn
+ * @author Nils Sommer, Andre van Hoorn
  */
 public class SequenceDiagramPlugin {
+
     private static final Log log = LogFactory.getLog(SequenceDiagramPlugin.class);
-    
-    HashMap<String, String> distinctObjects = new HashMap<String,String>();
-    int currentObjIndex = 0;
-    PrintStream pr = System.out;
 
-    public SequenceDiagramPlugin() {
+    private SequenceDiagramPlugin() {
     }
 
-    /**
-     * Use this constructor in case you do not want to use system.out
-     * for output
-     * @param printStream
-     */
-    public SequenceDiagramPlugin(PrintStream printStream) {
-        this.pr = printStream;
-    }
-
-    public void processMessageTraces(Collection<MessageSequence> messageTraces) {
-        for (MessageSequence mt : messageTraces) {
-            distinctObjects = new HashMap<String, String>();
-            currentObjIndex = 0;
-            processMessageTrace(mt);
-        }
-    }
-
-    public void picFromMessageTrace(MessageSequence messageTrace) {
+    private static void picFromMessageTrace(MessageSequence messageTrace,  PrintStream ps) {
+        HashMap<String, Integer> distinctObjects = new HashMap<String, Integer>();
+        int nextObjIndex = 0;
         Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
-        pr.println(".PS");
-        pr.println("copy \"bin/sequence.pic\";");
-        pr.println("boxwid = 1.1;");
-        pr.println("movewid = 0.5;");
-
+        ps.println(".PS");
+        ps.println("copy \"bin/sequence.pic\";");
+        ps.println("boxwid = 1.1;");
+        ps.println("movewid = 0.5;");
 
         // get distinct objects. should be enough to check all senders,
         // as returns have senders too.
         //log.info("Trace " + messageTrace.traceId + " contains " + messages.size() + " messages.");
         for (Message me : messages) {
-            String name = (me.sender==null)?"$":me.sender;
-            if (addToDistinctObjects(name)) {
+            String name = (me.sender == null) ? "$" : me.sender;
+            if (!distinctObjects.containsKey(name)) {
+                distinctObjects.put(name, nextObjIndex++);
                 String shortComponentName = name;
                 if (shortComponentName.indexOf('.') != -1) {
                     int index = 0;
@@ -68,13 +69,13 @@ public class SequenceDiagramPlugin {
                     }
                     shortComponentName = shortComponentName.substring(index + 1);
                 }
-                pr.println("object(" + distinctObjects.get(name) +
+                ps.println("object(" + distinctObjects.get(name) +
                         ",\"" + shortComponentName + "\");");
             }
         }
-        pr.println("step()");
-        pr.println("active(O0);");
-        pr.println("step();");
+        ps.println("step()");
+        ps.println("active(O0);");
+        ps.println("step();");
         boolean first = true;
         for (Message me : messages) {
             if (me.callMessage) {
@@ -83,65 +84,48 @@ public class SequenceDiagramPlugin {
                 if (method.indexOf('(') != -1) {
                     method = me.execution.opname;
                 }
-                pr.println("step();");
+                ps.println("step();");
                 if (first == true) {
-                    pr.println("async();");
+                    ps.println("async();");
                     first = false;
                 } else {
-                    pr.println("sync();");
+                    ps.println("sync();");
                 }
-                pr.println("message(" + distinctObjects.get((me.sender==null)?"$":me.sender) +
-                        "," + distinctObjects.get((me.receiver==null)?"$":me.receiver) +
+                ps.println("message(" + distinctObjects.get((me.sender == null) ? "$" : me.sender) +
+                        "," + distinctObjects.get((me.receiver == null) ? "$" : me.receiver) +
                         ", \"" + method +
                         "\");");
-                pr.println("active(" + distinctObjects.get((me.receiver==null)?"$":me.receiver) + ");");
-                pr.println("step();");
+                ps.println("active(" + distinctObjects.get((me.receiver == null) ? "$" : me.receiver) + ");");
+                ps.println("step();");
             } else {
-                pr.println("step();");
-                pr.println("async();");
-                pr.println("rmessage(" + distinctObjects.get((me.sender==null)?"$":me.sender) +
-                        "," + distinctObjects.get((me.receiver==null)?"$":me.receiver) +
+                ps.println("step();");
+                ps.println("async();");
+                ps.println("rmessage(" + distinctObjects.get((me.sender == null) ? "$" : me.sender) +
+                        "," + distinctObjects.get((me.receiver == null) ? "$" : me.receiver) +
                         ", \"\");");
-                pr.println("inactive(" + distinctObjects.get((me.sender==null)?"$":me.sender) + ");");
+                ps.println("inactive(" + distinctObjects.get((me.sender == null) ? "$" : me.sender) + ");");
             }
         }
-        pr.println("inactive(O0);");
-        pr.println("step();");
+        ps.println("inactive(O0);");
+        ps.println("step();");
 
         for (Object objs : distinctObjects.values()) {
-            pr.println("complete(" + objs + ");");
+            ps.println("complete(" + objs + ");");
         }
-        pr.println("complete(O0);");
+        ps.println("complete(O0);");
 
-        pr.println(".PE");
+        ps.println(".PE");
     }
 
-    private boolean addToDistinctObjects(String senderOperation) {
-        if (distinctObjects.containsKey(senderOperation)) {
-            return false;
-        } else {
-            distinctObjects.put(senderOperation, "O" + currentObjIndex);
+    public static void writeDotForMessageTrace(MessageSequence msgTrace, String outputFilename) {
+        PrintStream ps = System.out;
+        try {
+            ps = new PrintStream(new FileOutputStream(outputFilename));
+        } catch (FileNotFoundException e) {
+            log.error("File not found", e);
         }
-        currentObjIndex++;
-        return true;
-
-    }
-
-    public void processMessageTrace(MessageSequence msgTrace) {
-            distinctObjects = new HashMap<String, String>();
-            currentObjIndex = 0;
-            String fileName = "/tmp/seqDia" + msgTrace.traceId + ".pic";
-            try {
-                pr = new PrintStream(new FileOutputStream(fileName));
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            picFromMessageTrace(msgTrace);
-            pr.flush();
-            pr.close();
-            System.out.println("wrote output to " + fileName);
-            System.out.println("Pic file can be converted using pic2plot tool (package plotutils)");
-            System.out.println("Command: pic2plot -T [X|svg|ps|..>]" + fileName);
+        picFromMessageTrace(msgTrace, ps);
+        ps.flush();
+        ps.close();
     }
 }

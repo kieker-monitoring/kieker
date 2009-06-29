@@ -1,5 +1,6 @@
 package kieker.loganalysis.logReader;
 
+import kieker.common.logReader.AbstractLogReader;
 import java.util.Hashtable;
 import javax.jms.JMSException;
 import javax.naming.Context;

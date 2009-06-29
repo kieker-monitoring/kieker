@@ -1,10 +1,29 @@
 package kieker.loganalysis.plugins;
 
+/*
+ * kieker.loganalysis.plugins.DependencyGraphPlugin.java
+ *
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ */
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.HashMap;
 import kieker.loganalysis.datamodel.MessageSequence;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,29 +39,16 @@ import kieker.loganalysis.datamodel.Message;
 public class DependencyGraphPlugin {
 
     private static final Log log = LogFactory.getLog(DependencyGraphPlugin.class);
-    HashMap<String, String> distinctObjects = new HashMap<String, String>();
-    int currentObjIndex = 0;
-    PrintStream pr = System.out;
-    AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
-
-    public DependencyGraphPlugin() {
+ 
+    private DependencyGraphPlugin() {
     }
 
-    /**
-     * Use this constructor in case you do not want to use system.out
-     * for output
-     * @param printStream
-     */
-    public DependencyGraphPlugin(PrintStream printStream) {
-        this.pr = printStream;
-    }
-
-    private void dotFromAdjacencyMatrix() {
+    private static void dotFromAdjacencyMatrix(AdjacencyMatrix adjMatrix, PrintStream ps) {
         // preamble:
-        pr.println("digraph G {");
+        ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
-        long[][] matrix = this.adjMatrix.getMatrixAsArray();
-        String[] componentNames = this.adjMatrix.getComponentNames();
+        long[][] matrix = adjMatrix.getMatrixAsArray();
+        String[] componentNames = adjMatrix.getComponentNames();
         for (int i = 0; i < matrix.length; i++) {
             edgestringBuilder.append("\n").append(i).append("[label =\"").append(componentNames[i]).append("\",shape=box];");
         }
@@ -53,16 +59,15 @@ public class DependencyGraphPlugin {
                 }
             }
         }
-        pr.println(edgestringBuilder.toString());
-        pr.println("}");
+        ps.println(edgestringBuilder.toString());
+        ps.println("}");
     }
 
-    public void processExecutionTraces(Collection<ExecutionSequence> eTraces) {
-        distinctObjects = new HashMap<String, String>();
-        currentObjIndex = 0;
-        String fileName = "/tmp/dependencyGraph.dot";
+    public static void writeDotFromExecutionTraces(Collection<ExecutionSequence> eTraces, String outputFilename) {
+    AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
+    PrintStream ps = System.out;
         try {
-            pr = new PrintStream(new FileOutputStream(fileName));
+            ps = new PrintStream(new FileOutputStream(outputFilename));
         } catch (FileNotFoundException e) {
             log.error("File not found.", e);
         }
@@ -73,40 +78,11 @@ public class DependencyGraphPlugin {
                     continue;
                 }
                 log.info("Adding dependency: (" + m.getSenderComponentName() + "," + m.getReceiverComponentName() + "" + ")");
-                this.adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
+                adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
             }
         }
-        this.dotFromAdjacencyMatrix();
-        pr.flush();
-        pr.close();
-        System.out.println("wrote output to " + fileName);
-        System.out.println("Dot file can be converted using dot tool");
-        System.out.println("Command: dot -T [svg|ps|...]" + fileName);
-    }
-
-    public void processMessageTraces(Collection<MessageSequence> msgTraces) {
-        distinctObjects = new HashMap<String, String>();
-        currentObjIndex = 0;
-        String fileName = "/tmp/dependencyGraph.dot";
-        try {
-            pr = new PrintStream(new FileOutputStream(fileName));
-        } catch (FileNotFoundException e) {
-            log.error("File not found.", e);
-        }
-        for (MessageSequence msgTrace : msgTraces) {
-            for (Message m : msgTrace.getSequenceAsVector()) {
-                if (!m.callMessage) {
-                    continue;
-                }
-                log.info("Adding dependency: (" + m.getSenderComponentName() + "," + m.getReceiverComponentName() + "" + ")");
-                this.adjMatrix.addDependency(m.sender, m.receiver);
-            }
-        }
-        this.dotFromAdjacencyMatrix();
-        pr.flush();
-        pr.close();
-        System.out.println("wrote output to " + fileName);
-        System.out.println("Dot file can be converted using dot tool");
-        System.out.println("Command: dot -T [svg|ps|...]" + fileName);
+        dotFromAdjacencyMatrix(adjMatrix, ps);
+        ps.flush();
+        ps.close();
     }
 }

@@ -295,7 +295,7 @@
                source="1.5"
                srcdir="src/kieker/common/"
                debug="true"
-               classpathref="classpath.libs">
+               classpathref="tpmon.core.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
         <copy file="${kieker.properties}" todir="${build.kieker.common.dir}/META-INF"/>
@@ -670,11 +670,12 @@
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
 
+    <!-- classname="kieker.loganalysis.LogAnalysisTool" -->
     <target name="run-logAnalysis" depends="build-loganalysis-ctrl">
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
-              classname="kieker.loganalysis.LogAnalysisController"
+              jar="${dist.dir}/${dist.tpmon.ctrl}"
               classpathref="loganalysis.core.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
