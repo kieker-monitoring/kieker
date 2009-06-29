@@ -30,11 +30,11 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 	public void consumeMonitoringRecord(
 			final AbstractKiekerMonitoringRecord monitoringRecord) {
 		if (startTime == -1) { // init on first record
-			offset = monitoringRecord.getLoggingTimestamp() - 200;
-			startTime = System.currentTimeMillis();
+			offset = monitoringRecord.getLoggingTimestamp() - 20000;
+			startTime = System.nanoTime();
 		}
 		long schedTime = (monitoringRecord.getLoggingTimestamp() - offset)
-				- (System.currentTimeMillis() - startTime);
+				- (System.nanoTime() - startTime);
 		executor.schedule(new ReplayWorker(monitoringRecord), schedTime,
 				TimeUnit.MILLISECONDS);
 	}
