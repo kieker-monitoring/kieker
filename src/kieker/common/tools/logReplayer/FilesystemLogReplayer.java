@@ -26,7 +26,7 @@ public class FilesystemLogReplayer {
             log.error("No input dir found!");
             log.error("Provide an input dir as system property.");
             log.error("Example to read all tpmon-* files from /tmp:\n" +
-                    "                    ant -DinputDir=/tmp/ run-reader    ");
+                    "                    ant -DinputDir=/tmp/ -DrealtimeMode=[true|false] run-reader    ");
             System.exit(1);
         } else {
             log.info("Reading all tpmon-* files from " + inputDir);
@@ -37,6 +37,14 @@ public class FilesystemLogReplayer {
          * of the monitoring records.
          */
         ctrlInst.setReplayMode(true);
+
+        String realTimeModeStr = System.getProperty("realtimeMode");
+        if (realTimeModeStr != null  && realTimeModeStr.equalsIgnoreCase("true") ){
+            log.info("Replaying log data in real time");
+            realtimeMode = true;
+        }else{
+            log.info("Replaying log data in non-real time");
+        }
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
         if (realtimeMode) {
