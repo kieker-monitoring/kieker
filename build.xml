@@ -673,15 +673,18 @@
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
 
-    <!-- classname="kieker.loganalysis.LogAnalysisTool" -->
+    <!--               jar="${dist.dir}/${dist.loganalysis.ctrl}" -->
     <target name="run-logAnalysis" depends="build-loganalysis-ctrl">
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
-              jar="${dist.dir}/${dist.tpmon.ctrl}"
+              classname="kieker.loganalysis.LogAnalysisTool"
               classpathref="loganalysis.core.classpath">
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <classpath>
+                <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
+            </classpath>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
