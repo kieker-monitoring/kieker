@@ -1,4 +1,4 @@
-package kieker.common.logReader.fileSystemReader;
+package kieker.common.logReader.filesystemReader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,14 +11,13 @@ import java.util.StringTokenizer;
 import kieker.common.logReader.AbstractLogReader;
 import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
-import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.common.reader.fileSystemReader.FileSystemReader
+ * kieker.common.reader.fileSystemReader.FilesystemReader
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -46,14 +45,13 @@ import org.apache.commons.logging.LogFactory;
  * History:
  * 2008/09/15: Initial version
  */
-public class FileSystemReader extends AbstractLogReader {
+public class FilesystemReader extends AbstractLogReader {
 
-    private static final Log log = LogFactory.getLog(FileSystemReader.class);
-    private static final TpmonController ctrl = TpmonController.getInstance();
+    private static final Log log = LogFactory.getLog(FilesystemReader.class);
 
     private File inputDir = null;
 
-    public FileSystemReader (String inputDirName){
+    public FilesystemReader (String inputDirName){
         this.inputDir = new File(inputDirName);
     }
 
@@ -61,7 +59,6 @@ public class FileSystemReader extends AbstractLogReader {
     public void run() {
         try {
             File[] inputFiles = inputDir.listFiles(new FileFilter() {
-
                 public boolean accept(File pathname) {
                     return pathname.isFile() &&
                             pathname.getName().startsWith("tpmon") &&

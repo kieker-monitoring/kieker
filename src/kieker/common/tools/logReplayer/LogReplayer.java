@@ -1,7 +1,9 @@
 package kieker.common.tools.logReplayer;
 
-import kieker.tpmon.annotation.TpmonInternal;
+import kieker.common.logReader.IMonitoringRecordConsumer;
+import kieker.common.logReader.filesystemReader.FilesystemReader;
 import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -13,9 +15,7 @@ public class LogReplayer {
     private static final Log log = LogFactory.getLog(LogReplayer.class);
 
     private static String inputDir = null;
-    private static final TpmonController ctrl = TpmonController.getInstance();
 
-    @TpmonInternal()
     public static void main(String[] args) {
 
         inputDir = System.getProperty("inputDir");
@@ -29,7 +29,24 @@ public class LogReplayer {
             log.info("Reading all tpmon-* files from " + inputDir);
         }
 
-        //instance.openAndRegisterData();
+        FilesystemReader fsReader = new FilesystemReader(inputDir);
+        fsReader.registerConsumer(new IMonitoringRecordConsumer() {
+            /** Anonymous consumer class that simply passes all records to the
+             *  controller */
+            public String[] getRecordTypeSubscriptionList() {
+                return null; // consume all types
+            }
+
+            public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+                TpmonController.getInstance().logMonitoringRecord(monitoringRecord);
+            }
+
+            public void run() {
+                // do nothing, we are synchronous
+            }
+        });
+        fsReader.run();
+
         log.info("Finished to read files");
         System.exit(0);
     }
