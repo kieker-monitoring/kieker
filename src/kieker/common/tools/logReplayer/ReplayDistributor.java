@@ -24,10 +24,15 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 
 	private long lTime;
 
+	private int active;
+
+	private final int maxQueueSize;
+
 	private static final TpmonController c = TpmonController.getInstance();
 
 	public ReplayDistributor(final int numWorkers) {
 		this.numWorkers = numWorkers;
+		this.maxQueueSize = numWorkers * 1000;
 		this.executor = new ScheduledThreadPoolExecutor(numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
@@ -43,8 +48,19 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 		}
 		long schedTime = (monitoringRecord.getLoggingTimestamp() - this.offset)
 				- (c.getTime() - this.startTime);
-		this.executor.schedule(new ReplayWorker(monitoringRecord), schedTime,
-				TimeUnit.NANOSECONDS);
+		synchronized (this) {
+			if (this.active > this.maxQueueSize) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			this.active++;
+			this.executor.schedule(new ReplayWorker(monitoringRecord, this),
+					schedTime, TimeUnit.NANOSECONDS);
+
+		}
 		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord
 				.getLoggingTimestamp()
 				: this.lTime;
@@ -80,6 +96,11 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 		}, (this.lTime - this.offset) - (c.getTime() - this.startTime)
 				+ 100000000, TimeUnit.NANOSECONDS);
 		this.executor.shutdown();
+	}
+
+	public synchronized void decreaseActive() {
+		this.active--;
+		this.notify();
 	}
 
 }
