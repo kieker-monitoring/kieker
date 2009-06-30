@@ -1,5 +1,6 @@
 package kieker.loganalysis.recordConsumer;
 
+import java.util.TreeSet;
 import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.loganalysis.datamodel.ExecutionSequenceRepository;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -30,39 +31,51 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsumer {
+
     private static final Log log = LogFactory.getLog(ExecutionSequenceRepositoryFiller.class);
-
     private final ExecutionSequenceRepository repo = new ExecutionSequenceRepository();
-
+    private TreeSet<Long> selectedTraces = null;
     /** Consuming only execution records */
     private final static String[] recordTypeSubscriptionList = {
         KiekerExecutionRecord.class.getName()
     };
+
+    public ExecutionSequenceRepositoryFiller() {
+    }
+
+    /** Considers only the traces with ID given in selectedTraces.
+     *  If selectedTraces is null all traces are considered */
+    public ExecutionSequenceRepositoryFiller(TreeSet<Long> selectedTraces) {
+        this.selectedTraces = selectedTraces;
+    }
 
     public String[] getRecordTypeSubscriptionList() {
         return recordTypeSubscriptionList;
     }
 
     public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
-        if(monitoringRecord instanceof KiekerExecutionRecord){
-            this.repo.addExecution((KiekerExecutionRecord)monitoringRecord);
-        }else{
-            log.error("Can only consume records of type KiekerExecutionRecord"+
+        if (monitoringRecord instanceof KiekerExecutionRecord) {
+            KiekerExecutionRecord execRecord = (KiekerExecutionRecord) monitoringRecord;
+            if (this.selectedTraces == null || this.selectedTraces.contains(execRecord.sessionId)) {
+                this.repo.addExecution((KiekerExecutionRecord) monitoringRecord);
+            }
+        } else {
+            log.error("Can only consume records of type KiekerExecutionRecord" +
                     " but passed record is of type " + monitoringRecord.getClass().getName());
         }
     }
 
-    public boolean execute(){
+    public boolean execute() {
         /* We consume synchronously */
         return true;
     }
 
-    public ExecutionSequenceRepository getExecutionSequenceRepository(){
+    public ExecutionSequenceRepository getExecutionSequenceRepository() {
         return this.repo;
     }
 
-	@Override
-	public void terminate() {
+    @Override
+    public void terminate() {
         /* We consume synchronously */
-	}
+    }
 }

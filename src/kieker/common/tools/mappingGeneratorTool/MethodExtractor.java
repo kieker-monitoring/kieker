@@ -38,10 +38,6 @@ public class MethodExtractor extends ClassLoader {
     }
 
     public static void main(final String[] args) throws ClassNotFoundException {
-//		if (args.length == 0) {
-//			printUsage();
-//			return;
-//		}
 
         String searchpath = System.getProperty("searchpath");
         String filter = System.getProperty("filter");

@@ -694,7 +694,8 @@
               fork="true"
               classname="kieker.loganalysis.LogAnalysisTool"
               classpathref="loganalysis.core.classpath">
-            <arg line="--inputdir ${inputDir} --outputdir tmp/ --plot-Dependency-Graph --plot-Sequence-Diagram"/>
+                  <!-- select-traces 3 -->
+            <arg line="--inputdir ${inputDir} --outputdir tmp/  --plot-Dependency-Graph --plot-Sequence-Diagram"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <classpath>
                 <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>

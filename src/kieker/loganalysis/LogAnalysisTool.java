@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
 
-import java.util.StringTokenizer;
 import java.util.TreeSet;
 import kieker.common.logReader.filesystemReader.FilesystemReader;
 import kieker.loganalysis.datamodel.ExecutionSequence;
@@ -72,7 +71,7 @@ public class LogAnalysisTool {
         cmdlOpts.addOption(OptionBuilder.withLongOpt("plot-Dependency-Graph").hasArg(false).withDescription("Generate a dependency graph (.dot format) from log data").create());
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
 
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("select-traces").withArgName("id0,...,idn").hasArg(true).isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt("select-traces").withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
     }
 
     private static boolean parseArgs(String[] args) {
@@ -95,14 +94,14 @@ public class LogAnalysisTool {
         outputDir = cmdl.getOptionValue("outputdir") + File.separator;
         outputFnPrefix = cmdl.getOptionValue("output-filename-prefix", "");
         if (cmdl.hasOption("select-traces")) { /* Parse liste of trace Ids */
-            String traceIdList = cmdl.getOptionValue("select-traces");
-            StringTokenizer st = new StringTokenizer(traceIdList, ",");
+            String[] traceIdList = cmdl.getOptionValues("select-traces");
             selectedTraces = new TreeSet<Long>();
-            int curIndex = 0;
+            int numSelectedTraces = traceIdList.length;
             try {
-                for (String idStr = st.nextToken(); st.hasMoreTokens(); curIndex++) {
-                    selectedTraces.add(Long.getLong(idStr));
+                for (String idStr : traceIdList) {
+                    selectedTraces.add(Long.valueOf(idStr));
                 }
+                log.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected");
             } catch (Exception e) {
                 System.err.println("Failed to parse list of trace IDs: " + traceIdList + "(" + e.getMessage() + ")");
                 return false;
@@ -115,19 +114,22 @@ public class LogAnalysisTool {
         boolean retval = false;
         int numRequestedTasks = 0;
 
-        try{
-        if (cmdl.hasOption("plot-Sequence-Diagram")) { numRequestedTasks++;
-            task_genSequenceDiagramsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
-        }
-        if (cmdl.hasOption("plot-Dependency-Graph")) { numRequestedTasks++;
-            task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
-        }
-        }catch (Exception ex){
-            System.err.println("An error occured: " + ex.getMessage());
+        try {
+            if (cmdl.hasOption("plot-Sequence-Diagram")) {
+                numRequestedTasks++;
+                task_genSequenceDiagramsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+            }
+            if (cmdl.hasOption("plot-Dependency-Graph")) {
+                numRequestedTasks++;
+                task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+            }
+        } catch (Exception ex) {
+            System.err.println("An error occured: " + ex);
+            ex.printStackTrace();
             return false;
         }
 
-        if (numRequestedTasks == 0){
+        if (numRequestedTasks == 0) {
             System.err.println("No task requested");
             printUsage();
             return false;
@@ -152,7 +154,7 @@ public class LogAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static void task_genSequenceDiagramsForTraceSet(String inputDirName, String outputFnPrefix, TreeSet<Long> traceIds) throws IOException {
+    private static void task_genSequenceDiagramsForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
@@ -169,16 +171,21 @@ public class LogAnalysisTool {
         String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
         while (seqEnum.hasMoreElements()) {
             ExecutionSequence t = seqEnum.nextElement();
-            if (traceIds == null || traceIds.contains(t.getTraceId())) {
+            Long id = t.getTraceId();
+            if (traceIds == null || traceIds.contains(id)) {
                 //String fileName = "/tmp/seqDia" + msgTrace.traceId + ".pic";
-                SequenceDiagramPlugin.writeDotForMessageTrace(t.toMessageSequence(), outputFnBase + "-" + t.getTraceId() + ".pic");
+                SequenceDiagramPlugin.writeDotForMessageTrace(t.toMessageSequence(), outputFnBase + "-" + id + ".pic");
                 numPlots++;
                 lastTraceId = t.getTraceId();
             }
         }
-        System.out.println("Wrote "+numPlots+" sequence diagram"+(numPlots>1?"s":"")+" to file"+(numPlots>1?"s":"")+" '" + outputFnBase  + "-<traceId>.pic'");
-        System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-        System.out.println("Example: pic2plot -T svg " + outputFnBase + "-"+((numPlots>0)?lastTraceId:"<traceId>")+".pic > " + outputFnBase + "-3.svg");
+        if (numPlots > 0) {
+            System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + outputFnBase + "-<traceId>.pic'");
+            System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
+            System.out.println("Example: pic2plot -T svg " + outputFnBase + "-" + ((numPlots > 0) ? lastTraceId : "<traceId>") + ".pic > " + outputFnBase + ".svg");
+        } else {
+            System.out.println("Wrote 0 sequence diagrams");
+        }
     }
 
     /**
