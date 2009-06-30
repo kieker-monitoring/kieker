@@ -182,7 +182,7 @@ public class LogAnalysisTool {
         if (numPlots > 0) {
             System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + outputFnBase + "-<traceId>.pic'");
             System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-            System.out.println("Example: pic2plot -T svg " + outputFnBase + "-" + ((numPlots > 0) ? lastTraceId : "<traceId>") + ".pic > " + outputFnBase + ".svg");
+            System.out.println("Example: pic2plot -T svg " + outputFnBase + "-" + ((numPlots > 0) ? lastTraceId : "<traceId>") + ".pic > " + outputFnBase + "-" + ((numPlots > 0) ? lastTraceId : "<traceId>") + ".svg");
         } else {
             System.out.println("Wrote 0 sequence diagrams");
         }

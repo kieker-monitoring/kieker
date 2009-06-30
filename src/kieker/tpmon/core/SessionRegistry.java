@@ -28,7 +28,7 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 public class SessionRegistry {
 
-    private static SessionRegistry instance = null;
+    private static SessionRegistry instance = new SessionRegistry();
 
     private ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
 
@@ -37,9 +37,6 @@ public class SessionRegistry {
 
     @TpmonInternal()
     public synchronized static SessionRegistry getInstance() {
-        if (instance == null) {
-            instance = new SessionRegistry();
-        }
         return SessionRegistry.instance;
     }
 

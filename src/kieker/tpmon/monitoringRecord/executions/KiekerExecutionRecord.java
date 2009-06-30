@@ -152,13 +152,19 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         this.experimentId = Integer.parseInt(recordVector[0]);
         { // divide name into component and operation name
             String name = recordVector[1];
-            int pos = name.lastIndexOf('.');
-            if (pos == -1) {
+            int posParen = name.lastIndexOf('(');
+            int posDot;
+            if ( posParen != -1) {
+            posDot = name.substring(0, posParen).lastIndexOf('.');
+            } else {
+                posDot = name.lastIndexOf('.');
+            }
+            if (posDot == -1) {
                 componentName = "";
                 this.opname = name;
             } else {
-                componentName = name.substring(0, pos);
-                this.opname = name.substring(pos + 1);
+                componentName = name.substring(0, posDot);
+                this.opname = name.substring(posDot + 1);
             }
         }
         this.sessionId = recordVector[2];

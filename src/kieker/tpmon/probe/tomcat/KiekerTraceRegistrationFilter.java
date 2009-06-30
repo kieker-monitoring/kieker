@@ -7,6 +7,8 @@ import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 
+import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -46,38 +48,60 @@ import org.apache.commons.logging.LogFactory;
  * @author Marco Luebcke
  */
 public class KiekerTraceRegistrationFilter implements Filter {
+
+    private static final String componentName = KiekerTraceRegistrationFilter.class.getName();
+    private static final String opName = "init(FilterConfig config)";
     private static final Log log = LogFactory.getLog(KiekerTraceRegistrationFilter.class);
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+    private static final TpmonController ctrlInst = TpmonController.getInstance();
+    private static final String vmName = ctrlInst.getVmname();
 
     @TpmonInternal()
     public void init(FilterConfig config) throws ServletException {
-/*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
+        /*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
         if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
-            String tpmonConfig = config.getInitParameter("tpmonConfigLocation");
-            if (tpmonConfig != null && !"".equals(tpmonConfig)) {
-                // following system property is needed to customise the configuration of the TpmonController
-                System.setProperty("tpmon.configuration", tpmonConfig);
-            }
+        String tpmonConfig = config.getInitParameter("tpmonConfigLocation");
+        if (tpmonConfig != null && !"".equals(tpmonConfig)) {
+        // following system property is needed to customise the configuration of the TpmonController
+        System.setProperty("tpmon.configuration", tpmonConfig);
+        }
         }*/
     }
 
     @TpmonInternal()
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        log.info("I was being called!");
+        KiekerExecutionRecord execData = null;
+        int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
+        int ess = 0; /* this is the height in the dynamic call tree of this execution */
         if (request instanceof HttpServletRequest) {
-            cfRegistry.getAndStoreUniqueThreadLocalTraceId();
+            execData = KiekerExecutionRecord.getInstance(
+                    componentName,
+                    opName,
+                    cfRegistry.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point*/);
+            execData.isEntryPoint = false;
+            cfRegistry.storeThreadLocalEOI(0); // current execution's eoi is 0
+            cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
+            execData.vmName = vmName;
+            execData.experimentId = ctrlInst.getExperimentId();
             HttpSession session = ((HttpServletRequest) request).getSession(false);
             if (session != null) {
                 sessionRegistry.storeThreadLocalSessionId(session.getId());
             }
             cfRegistry.storeThreadLocalEOI(0);
             cfRegistry.storeThreadLocalESS(1);
+            execData.tin = ctrlInst.getTime();
         }
         try {
             chain.doFilter(request, response);
         } finally {
+            if (execData != null) {
+                execData.tout = ctrlInst.getTime();
+                execData.eoi = eoi;
+                execData.ess = ess;
+                ctrlInst.logMonitoringRecord(execData);
+            }
             cfRegistry.unsetThreadLocalTraceId();
             sessionRegistry.unsetThreadLocalSessionId();
             cfRegistry.unsetThreadLocalEOI();

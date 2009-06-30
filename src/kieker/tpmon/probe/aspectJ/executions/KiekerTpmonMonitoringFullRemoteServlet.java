@@ -64,6 +64,7 @@ public class KiekerTpmonMonitoringFullRemoteServlet extends AbstractKiekerTpmonM
         try {
             this.proceedAndMeasure(thisJoinPoint, execData);
             if (execData.eoi == -1 || execData.ess == -1) {
+                //log.fatal("current operation: "+execData.componentName+"."+execData.opname);
                 log.fatal("eoi and/or ess have invalid values:" +
                         " eoi == " + execData.eoi +
                         " ess == " + execData.ess);

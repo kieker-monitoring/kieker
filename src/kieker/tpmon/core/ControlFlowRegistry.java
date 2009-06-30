@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 public class ControlFlowRegistry {
     private static final Log log = LogFactory.getLog(TpmonController.class);
 
-    private static ControlFlowRegistry instance = null;
+    private static ControlFlowRegistry instance = new ControlFlowRegistry();
 
     private AtomicLong lastThreadId = new AtomicLong(0);
     private ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
@@ -46,10 +46,7 @@ public class ControlFlowRegistry {
     }
 
     @TpmonInternal()
-    public synchronized static ControlFlowRegistry getInstance() {
-        if (instance == null) {
-            instance = new ControlFlowRegistry();
-        }
+    public static ControlFlowRegistry getInstance() {
         return ControlFlowRegistry.instance;
     }
 
@@ -110,6 +107,7 @@ public class ControlFlowRegistry {
      */
     @TpmonInternal()
     public void storeThreadLocalEOI(int eoi) {
+        //log.info(Thread.currentThread().getId());
         this.threadLocalEoi.set(eoi);
     }
 
@@ -119,6 +117,7 @@ public class ControlFlowRegistry {
      */
     @TpmonInternal()
     public int incrementAndRecallThreadLocalEOI() {
+        //log.info(Thread.currentThread().getId());
         Integer curEoi = this.threadLocalEoi.get();
         if (curEoi == null) {
             log.fatal("eoi has not been registered before");
