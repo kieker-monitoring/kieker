@@ -680,7 +680,7 @@
               classname="kieker.common.tools.mappingGeneratorTool.MethodExtractorTool"
               classpath="${searchpath}"
               classpathref="kieker.common.classpath">
-            <arg line="--searchpath ${searchpath} --mapping-file ${mappingfile}  --filter-classname kieker.common.nameIdMapper.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter"/>
+            <arg line="--searchpath ${searchpath} --mapping-file ${mappingfile}  --filter-classname kieker.common.tools.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>

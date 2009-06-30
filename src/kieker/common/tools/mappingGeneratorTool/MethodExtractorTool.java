@@ -106,7 +106,7 @@ class MethodExtractor extends ClassLoader {
             try {
                 filter = (Class<MethodFilter>) loadClass(this.filtername);
             } catch (Exception e) {
-                log.error("Unable to load filter or no filter provided (" + filtername + "), using default filter...");
+                log.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...");
                 e.printStackTrace();
             }
             Vector<File> directories = new Vector<File>();
