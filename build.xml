@@ -677,13 +677,11 @@
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
-              classname="kieker.common.tools.mappingGeneratorTool.MethodExtractor"
+              classname="kieker.common.tools.mappingGeneratorTool.MethodExtractorTool"
               classpath="${searchpath}"
               classpathref="kieker.common.classpath">
+            <arg line="--searchpath ${searchpath} --mapping-file ${mappingfile}  --filter-classname kieker.common.nameIdMapper.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
-            <jvmarg value="-Dsearchpath=${searchpath}"/>
-            <jvmarg value="-Dfilter=kieker.common.nameIdMapper.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter"/>
-            <jvmarg value="-Dmappingfile=${mappingfile}"/>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
