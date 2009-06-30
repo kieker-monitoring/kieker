@@ -7,8 +7,11 @@ import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
- * kieker.tpmon.filters.KiekerTraceRegistrationFilter
+ * kieker.tpmon.probe.tomcat.KiekerTraceRegistrationFilter
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -33,7 +36,7 @@ import kieker.tpmon.core.SessionRegistry;
  * 
  * <filter>
  * <filter-name>sessionRegistrationFilter</filter-name>
- * <filter-class>kieker.tpmon.filters.KiekerTraceRegistrationFilter</filter-class>
+ * <filter-class>kieker.tpmon.probe.tomcat.KiekerTraceRegistrationFilter</filter-class>
  * </filter>
  * <filter-mapping>
  * <filter-name>sessionRegistrationFilter</filter-name>
@@ -43,26 +46,26 @@ import kieker.tpmon.core.SessionRegistry;
  * @author Marco Luebcke
  */
 public class KiekerTraceRegistrationFilter implements Filter {
-
+    private static final Log log = LogFactory.getLog(KiekerTraceRegistrationFilter.class);
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 
-
     @TpmonInternal()
     public void init(FilterConfig config) throws ServletException {
-        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
+/*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
         if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
             String tpmonConfig = config.getInitParameter("tpmonConfigLocation");
             if (tpmonConfig != null && !"".equals(tpmonConfig)) {
                 // following system property is needed to customise the configuration of the TpmonController
                 System.setProperty("tpmon.configuration", tpmonConfig);
             }
-        }
+        }*/
     }
 
     @TpmonInternal()
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
+        log.info("I was being called!");
         if (request instanceof HttpServletRequest) {
             cfRegistry.getAndStoreUniqueThreadLocalTraceId();
             HttpSession session = ((HttpServletRequest) request).getSession(false);
