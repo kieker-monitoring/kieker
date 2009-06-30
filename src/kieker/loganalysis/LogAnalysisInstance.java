@@ -44,7 +44,7 @@ public class LogAnalysisInstance {
             }
         }
         for (ILogReader r : this.logReaders) {
-            r.run();
+            r.execute();
         }
     }
 

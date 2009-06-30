@@ -49,38 +49,43 @@ import org.apache.commons.logging.LogFactory;
 public class FilesystemReader extends AbstractLogReader {
 
     private static final Log log = LogFactory.getLog(FilesystemReader.class);
-
     private File inputDir = null;
 
-    public FilesystemReader (final String inputDirName){
+    public FilesystemReader(final String inputDirName) {
         this.inputDir = new File(inputDirName);
     }
 
     @Override
-	@TpmonInternal()
-    public void run() {
+    @TpmonInternal()
+    public boolean execute() {
+        boolean retVal = false;
         try {
             File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
+
                 public boolean accept(File pathname) {
                     return pathname.isFile() &&
                             pathname.getName().startsWith("tpmon") &&
                             pathname.getName().endsWith(".dat");
                 }
             });
-            for (int i = 0; i < inputFiles.length; i++) {
+            for (int i = 0; inputFiles!=null && i < inputFiles.length; i++) {
                 this.processInputFile(inputFiles[i]);
             }
-        } catch (IOException e) {
-            System.err.println(
+            if (inputFiles == null) {
+                log.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured");
+                retVal = false;
+            } else {
+                retVal = true;
+            }
+        } catch (Exception e) {
+            log.error(
                     "An error occurred while parsing files from directory " +
-                    this.inputDir.getAbsolutePath() + ":");
-            e.printStackTrace();
+                    this.inputDir.getAbsolutePath() + ":", e);
         } finally {
-
             super.terminate();
         }
+        return retVal;
     }
-
     HashMap<Integer, Class<AbstractKiekerMonitoringRecord>> recordTypeMap = new HashMap<Integer, Class<AbstractKiekerMonitoringRecord>>();
 
     @TpmonInternal()
@@ -140,7 +145,8 @@ public class FilesystemReader extends AbstractLogReader {
             in = new BufferedReader(new FileReader(input));
             String line;
 
-            readLine: while ((line = in.readLine()) != null) {
+            readLine:
+            while ((line = in.readLine()) != null) {
                 AbstractKiekerMonitoringRecord rec = null;
                 try {
                     if (!recordTypeIdMapInitialized && line.startsWith("$")) {

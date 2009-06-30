@@ -11,5 +11,5 @@ package kieker.common.logReader;
  */
 public interface ILogReader {
     public void addConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList);
-    public void run();
+    public boolean execute();
 }

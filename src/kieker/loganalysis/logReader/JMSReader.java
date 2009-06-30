@@ -23,7 +23,8 @@ public class JMSReader extends AbstractLogReader {
 
     private static final Log log = LogFactory.getLog(JMSReader.class);
 
-    public void run() {
+    public boolean execute() {
+        boolean retVal = false;
         try {
             Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.exolab.jms.jndi.InitialContextFactory");
@@ -65,13 +66,12 @@ public class JMSReader extends AbstractLogReader {
             connection.start();
 
             System.out.println("JMSTestListener1 is started and waits for incomming monitoring events!");
-            while (true) {
-                Thread.sleep(10);
-            }
+            this.wait();
         } catch (Exception ex) {
             System.out.println("" + JMSReader.class.getName() + " " + ex.getMessage());
             ex.printStackTrace();
+        }  finally {
+            return retVal;
         }
-
     }
 }

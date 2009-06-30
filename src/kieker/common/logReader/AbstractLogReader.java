@@ -61,7 +61,10 @@ public abstract class AbstractLogReader implements ILogReader {
                 }
             }
         }
+        synchronized(this) {
+            this.notifyAll();
+        }
     }
 
-    public abstract void run();
+    public abstract boolean execute();
 }

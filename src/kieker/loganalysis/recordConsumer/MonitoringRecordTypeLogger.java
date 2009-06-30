@@ -42,8 +42,9 @@ public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
         log.info("Consumed record:" + monitoringRecord.getRecordTypeId());
     }
 
-    public void execute() {
+    public boolean execute() {
         /* We consume synchronously */
+        return true;
     }
 
 	@Override

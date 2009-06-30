@@ -10,6 +10,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,46 +25,50 @@ public class FilesystemLogReplayer {
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
     private static final Options cmdlOpts = new Options();
+    
 
-    static{
-        cmdlOpts.addOption("h", "help", false, "Show help");
+    static {
+        cmdlOpts.addOption(OptionBuilder.withArgName("dir").hasArg().withLongOpt("inputdir").isRequired(true).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
+        cmdlOpts.addOption(OptionBuilder.withArgName("true|false").hasArg().withLongOpt("realtime").isRequired(true).withDescription("Replay log data in realtime?").withValueSeparator('=').create("r"));
     }
-
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
-    private static final TpmonController ctrlInst = TpmonController.getInstance();
+    private static TpmonController ctrlInst = null;
     private static String inputDir = null;
     private static boolean realtimeMode = false;
 
-    private static boolean parseArgs(String[] args){
+    private static boolean parseArgs(String[] args) {
         try {
             cmdl = cmdlParser.parse(cmdlOpts, args);
         } catch (ParseException e) {
-            log.error("Parse Exception", e);
-            cmdHelpFormatter.printHelp(FilesystemLogReplayer.class.getName(), cmdlOpts);
+            System.err.println("Error parsing arguments: " + e.getMessage());
+            printUsage();
             return false;
         }
         return true;
     }
 
+    private static void printUsage() {
+        cmdHelpFormatter.printHelp(FilesystemLogReplayer.class.getName(), cmdlOpts);
+    }
+
+    private static boolean initFromArgs() {
+        inputDir = cmdl.getOptionValue("inputdir");
+        log.info("inputDir: " + inputDir);
+        realtimeMode = cmdl.getOptionValue("realtime","false").equals("true");
+        return true;
+    }
+
     public static void main(final String[] args) {
-
-        parseArgs(args);
-
-        inputDir = "tmp//tpmon-20090629-154255/";//System.getProperty("inputDir");
-        if (inputDir == null || inputDir.length() == 0 || inputDir.equals("${inputDir}")) {
-            log.error("No input dir found!");
-            log.error("Provide an input dir as system property.");
-            log.error("Example to read all tpmon-* files from /tmp:\n" +
-                    "                    ant -DinputDir=/tmp/ -DrealtimeMode=[true|false] run-reader    ");
+        if (!parseArgs(args) || !initFromArgs()) {
             System.exit(1);
-        } else {
-            log.info("Reading all tpmon-* files from " + inputDir);
         }
 
-        String realTimeModeStr = "true";//System.getProperty("realtimeMode");
-        if (realTimeModeStr != null && realTimeModeStr.equalsIgnoreCase("true")) {
+        /* Parsed args and initialized variables */
+
+        ctrlInst = TpmonController.getInstance();
+
+        if (realtimeMode) {
             log.info("Replaying log data in real time");
-            realtimeMode = true;
         } else {
             log.info("Replaying log data in non-real time");
         }
@@ -78,9 +83,9 @@ public class FilesystemLogReplayer {
 
         IMonitoringRecordConsumer cons = null;
         if (realtimeMode) {
-        	cons = new ReplayDistributor(7);
+            cons = new ReplayDistributor(7);
             fsReader.addConsumer(
-            		cons,
+                    cons,
                     null); // consume records of all types
         } else {
             fsReader.addConsumer(cons = new IMonitoringRecordConsumer() {
@@ -95,19 +100,20 @@ public class FilesystemLogReplayer {
                     ctrlInst.logMonitoringRecord(monitoringRecord);
                 }
 
-                public void execute() {
+                public boolean execute() {
                     // do nothing, we are synchronous
+                    return true;
                 }
 
-				@Override
-				public void terminate() {
-				}
+                @Override
+                public void terminate() {
+                    ctrlInst.terminateMonitoring();
+                }
             }, null); // consume records of all types
         }
-        cons.execute();
-        fsReader.run();
-
-        log.info("Finished to read files");
-    //System.exit(0);
+        if (!cons.execute() || !fsReader.execute()){
+            log.error("Log Replay failed");
+            System.exit(0);
+        }
     }
 }

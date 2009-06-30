@@ -649,7 +649,7 @@
               fork="true"
               classname="kieker.common.tools.logReplayer.FilesystemLogReplayer"
               classpathref="tpmon.core.classpath">
-            <jvmarg value="-DinputDir=${inputDir}"/>
+            <arg line="--inputdir ${inputDir} --realtime false"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <classpath>
                 <pathelement location="${dist.dir}/${dist.kieker.common}"/>
@@ -664,8 +664,7 @@
               fork="true"
               classname="kieker.common.tools.logReplayer.FilesystemLogReplayer"
               classpathref="tpmon.core.classpath">
-            <jvmarg value="-DinputDir=${inputDir}"/>
-            <jvmarg value="-DrealtimeMode=true"/>
+            <arg line="--inputdir ${inputDir} --realtime true"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <classpath>
                 <pathelement location="${dist.dir}/${dist.kieker.common}"/>

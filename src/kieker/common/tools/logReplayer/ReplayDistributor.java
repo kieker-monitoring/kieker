@@ -30,8 +30,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 		this.numWorkers = numWorkers;
 		this.executor = new ScheduledThreadPoolExecutor(numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
-		this.executor
-				.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
 	@Override
@@ -52,9 +51,8 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 	}
 
 	@Override
-	public void execute() {
-		// Thread t = new Thread(this);
-		// t.start();
+	public boolean execute() {
+        return true;
 	}
 
 	@Override

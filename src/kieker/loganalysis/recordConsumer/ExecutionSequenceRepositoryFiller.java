@@ -52,8 +52,9 @@ public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsu
         }
     }
 
-    public void execute(){
+    public boolean execute(){
         /* We consume synchronously */
+        return true;
     }
 
     public ExecutionSequenceRepository getExecutionSequenceRepository(){
