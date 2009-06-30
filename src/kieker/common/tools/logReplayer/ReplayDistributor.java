@@ -17,6 +17,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 public class ReplayDistributor implements IMonitoringRecordConsumer {
 
 	public final int numWorkers;
+    private final IMonitoringRecordConsumer cons;
 
 	private volatile long startTime = -1, offset = -1;
 
@@ -24,14 +25,23 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 
 	private long lTime;
 
-	private int active;
+	private static final TpmonController ctrlnst = TpmonController.getInstance();
+
+    private int active;
 
 	private final int maxQueueSize;
 
-	private static final TpmonController c = TpmonController.getInstance();
+    /** Private constructor should not be used */
+    private ReplayDistributor() {
+        this.executor = null;
+        this.numWorkers = -1;
+        this.cons = null;
+        this.maxQueueSize = -1;
+    }
 
-	public ReplayDistributor(final int numWorkers) {
+	public ReplayDistributor(final int numWorkers, final IMonitoringRecordConsumer cons) {
 		this.numWorkers = numWorkers;
+        this.cons = cons;
 		this.maxQueueSize = numWorkers * 1000;
 		this.executor = new ScheduledThreadPoolExecutor(numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
@@ -44,10 +54,10 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 		if (this.startTime == -1) { // init on first record
 			this.offset = monitoringRecord.getLoggingTimestamp()
 					- (20 * 1000 * 1000);
-			this.startTime = c.getTime();
+			this.startTime = ctrlnst.getTime();
 		}
 		long schedTime = (monitoringRecord.getLoggingTimestamp() - this.offset)
-				- (c.getTime() - this.startTime);
+				- (ctrlnst.getTime() - this.startTime);
 		synchronized (this) {
 			if (this.active > this.maxQueueSize) {
 				try {
@@ -57,7 +67,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 				}
 			}
 			this.active++;
-			this.executor.schedule(new ReplayWorker(monitoringRecord, this),
+			this.executor.schedule(new ReplayWorker(monitoringRecord, this, this.cons),
 					schedTime, TimeUnit.NANOSECONDS);
 
 		}
@@ -90,10 +100,10 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
 
 			@Override
 			public void run() {
-				c.terminateMonitoring();
+				ctrlnst.terminateMonitoring();
 			}
 
-		}, (this.lTime - this.offset) - (c.getTime() - this.startTime)
+		}, (this.lTime - this.offset) - (ctrlnst.getTime() - this.startTime)
 				+ 100000000, TimeUnit.NANOSECONDS);
 		this.executor.shutdown();
 	}

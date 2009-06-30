@@ -81,14 +81,7 @@ public class FilesystemLogReplayer {
 
         FilesystemReader fsReader = new FilesystemReader(inputDir);
 
-        IMonitoringRecordConsumer cons = null;
-        if (realtimeMode) {
-            cons = new ReplayDistributor(7);
-            fsReader.addConsumer(
-                    cons,
-                    null); // consume records of all types
-        } else {
-            fsReader.addConsumer(cons = new IMonitoringRecordConsumer() {
+        IMonitoringRecordConsumer logCons = new IMonitoringRecordConsumer() {
 
                 /** Anonymous consumer class that simply passes all records to the
                  *  controller */
@@ -105,13 +98,19 @@ public class FilesystemLogReplayer {
                     return true;
                 }
 
-                @Override
                 public void terminate() {
                     ctrlInst.terminateMonitoring();
                 }
-            }, null); // consume records of all types
+            };
+        if (realtimeMode) {
+            IMonitoringRecordConsumer rtDistributorCons = new ReplayDistributor(7, logCons);
+            fsReader.addConsumer(
+                    rtDistributorCons,
+                    null); // consume records of all types
+        } else {
+            fsReader.addConsumer(logCons, null); // consume records of all types
         }
-        if (!cons.execute() || !fsReader.execute()){
+        if (!fsReader.execute()){ // here, we do not start consumers since they don't do anything in execute()
             log.error("Log Replay failed");
             System.exit(0);
         }
