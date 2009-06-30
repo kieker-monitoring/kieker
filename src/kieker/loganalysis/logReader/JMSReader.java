@@ -38,9 +38,10 @@ public class JMSReader extends AbstractLogReader {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             String destinationName = "queue1";
             Destination destination = (Destination) context.lookup(destinationName);
-            log.info("\n\n***\nListening to destination:"+destinationName+" over "+location+" !\n***\n\n");
+            log.info("\n\n***\nListening to destination:" + destinationName + " over " + location + " !\n***\n\n");
             MessageConsumer receiver = session.createConsumer(destination);
             receiver.setMessageListener(new MessageListener() {
+
                 public void onMessage(Message message) {
                     if (message instanceof TextMessage) {
                         TextMessage text = (TextMessage) message;
@@ -70,8 +71,8 @@ public class JMSReader extends AbstractLogReader {
         } catch (Exception ex) {
             System.out.println("" + JMSReader.class.getName() + " " + ex.getMessage());
             ex.printStackTrace();
-        }  finally {
-            return retVal;
-        }
+            retVal = false;
+        } finally { }
+        return retVal;
     }
 }

@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.TreeSet;
 import kieker.loganalysis.datamodel.MessageSequence;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -63,7 +64,7 @@ public class DependencyGraphPlugin {
         ps.println("}");
     }
 
-    public static void writeDotFromExecutionTraces(Collection<ExecutionSequence> eTraces, String outputFilename) {
+    public static void writeDotFromExecutionTraces(Collection<ExecutionSequence> eTraces, String outputFilename, TreeSet<Long> traceIds) {
     AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
     PrintStream ps = System.out;
         try {
@@ -73,12 +74,13 @@ public class DependencyGraphPlugin {
         }
         for (ExecutionSequence eTrace : eTraces) {
             MessageSequence msgTrace = eTrace.toMessageSequence();
+            if (traceIds == null || traceIds.contains(eTrace.getTraceId())) {
             for (Message m : msgTrace.getSequenceAsVector()) {
                 if (!m.callMessage) {
                     continue;
                 }
                 adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
-            }
+            }}
         }
         dotFromAdjacencyMatrix(adjMatrix, ps);
         ps.flush();

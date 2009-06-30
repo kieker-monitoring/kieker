@@ -43,7 +43,7 @@ public class SequenceDiagramPlugin {
     }
 
     private static void picFromMessageTrace(MessageSequence messageTrace,  PrintStream ps) {
-        HashMap<String, Integer> distinctObjects = new HashMap<String, Integer>();
+        HashMap<String, String> distinctObjects = new HashMap<String, String>();
         int nextObjIndex = 0;
         Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
@@ -58,7 +58,7 @@ public class SequenceDiagramPlugin {
         for (Message me : messages) {
             String name = (me.sender == null) ? "$" : me.sender;
             if (!distinctObjects.containsKey(name)) {
-                distinctObjects.put(name, nextObjIndex++);
+                distinctObjects.put(name, "O"+(nextObjIndex++));
                 String shortComponentName = name;
                 if (shortComponentName.indexOf('.') != -1) {
                     int index = 0;
