@@ -11,6 +11,8 @@ package kieker.loganalysis.datamodel;
  */
 public class InvalidTraceException extends Exception {
 
+    private static final long serialVersionUID = 1893L;
+
     public InvalidTraceException(String message) {
         super(message);
     }
