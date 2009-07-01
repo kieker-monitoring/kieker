@@ -52,22 +52,37 @@ public class ExecutionSequence {
         this.sequence.add(record);
     }
 
-    public MessageSequence toMessageSequence() {
+    public MessageSequence toMessageSequence() throws InvalidTraceException {
         Vector<Message> mSeq = new Vector<Message>();
         Stack<Message> curStack = new Stack<Message>();
         Iterator<KiekerExecutionRecord> eSeqIt = this.sequence.iterator();
         KiekerExecutionRecord curE = null, prevE = null;
+        int itNum = 0;
+        log.info("Analyzing trace " + this.traceId);
         while (eSeqIt.hasNext()) {
             curE = eSeqIt.next();
+            if(itNum++ == 0 && curE.ess != 0){
+                InvalidTraceException ex = new InvalidTraceException("First execution must have ess 0 (found " + curE.ess + ")\n Causing execution: " + curE);
+                log.fatal("Found invalid trace", ex);
+                throw ex;
+            }
+            /*log.info("");
+            log.info("Iteration" + (itNum++));
+            log.info("curE:" + curE);
+            log.info("prevE:" + prevE);*/
             // First, we might need to clean up the stack for the next execution callMessage 
             if (prevE != null && prevE.ess >= curE.ess) {
+                //log.info("Cleaning stack ...");
                 KiekerExecutionRecord curReturnReceiver; // receiver of return message
                 while (curStack.size() > curE.ess) {
+                    //log.info("loop begin: curStack.size() " + curStack.size());
                     prevE = curStack.pop().execution;
                     curReturnReceiver = curStack.peek().execution;
                     Message m = new Message(false, prevE.tout, prevE.componentName, curReturnReceiver.componentName, prevE);
                     mSeq.add(m);
                     prevE = curReturnReceiver;
+                    //log.info(m);
+                    //log.info("loop end: curStack.size() " + curStack.size());
                 }
             }
             // Now, we handle the current execution callMessage 

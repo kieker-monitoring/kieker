@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.loganalysis.datamodel.AdjacencyMatrix;
 import kieker.loganalysis.datamodel.ExecutionSequence;
+import kieker.loganalysis.datamodel.InvalidTraceException;
 import kieker.loganalysis.datamodel.Message;
 
 /**
@@ -64,7 +65,7 @@ public class DependencyGraphPlugin {
         ps.println("}");
     }
 
-    public static void writeDotFromExecutionTraces(Collection<ExecutionSequence> eTraces, String outputFilename, TreeSet<Long> traceIds) {
+    public static void writeDotFromExecutionTraces(Collection<ExecutionSequence> eTraces, String outputFilename, TreeSet<Long> traceIds) throws InvalidTraceException {
     AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
     PrintStream ps = System.out;
         try {

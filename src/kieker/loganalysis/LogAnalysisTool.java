@@ -1,13 +1,18 @@
 package kieker.loganalysis;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Enumeration;
 
 import java.util.TreeSet;
 import kieker.common.logReader.filesystemReader.FilesystemReader;
 import kieker.loganalysis.datamodel.ExecutionSequence;
+import kieker.loganalysis.datamodel.InvalidTraceException;
+import kieker.loganalysis.datamodel.MessageSequence;
 import kieker.loganalysis.plugins.DependencyGraphPlugin;
 import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import kieker.loganalysis.recordConsumer.ExecutionSequenceRepositoryFiller;
@@ -49,6 +54,9 @@ public class LogAnalysisTool {
     private static final Log log = LogFactory.getLog(LogAnalysisTool.class);
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
+    private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
+    private static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
+
     private static CommandLine cmdl = null;
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
@@ -69,6 +77,9 @@ public class LogAnalysisTool {
         //cmdlOptGroupTask.isRequired();
         cmdlOpts.addOption(OptionBuilder.withLongOpt("plot-Sequence-Diagram").hasArg(false).withDescription("Generate sequence diagrams (.pic format) from log data").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt("plot-Dependency-Graph").hasArg(false).withDescription("Generate a dependency graph (.dot format) from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Message-Trace").hasArg(false).withDescription("Generate a message trace representation from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Execution-Trace").hasArg(false).withDescription("Generate an execution trace representation from log data").create());
+
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
 
         cmdlOpts.addOption(OptionBuilder.withLongOpt("select-traces").withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
@@ -111,31 +122,43 @@ public class LogAnalysisTool {
     }
 
     private static boolean dispatchTasks() {
-        boolean retval = false;
+        boolean retVal = true;
         int numRequestedTasks = 0;
 
         try {
-            if (cmdl.hasOption("plot-Sequence-Diagram")) {
+           if (retVal && cmdl.hasOption("print-Message-Trace")) {
                 numRequestedTasks++;
-                task_genSequenceDiagramsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+                retVal = task_genMessageTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
-            if (cmdl.hasOption("plot-Dependency-Graph")) {
+            if (retVal && cmdl.hasOption("print-Execution-Trace")) {
                 numRequestedTasks++;
-                task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+                retVal = task_genExecutionTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
+            if (retVal && cmdl.hasOption("plot-Sequence-Diagram")) {
+                numRequestedTasks++;
+                retVal = task_genSequenceDiagramsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+            }
+            if (retVal && cmdl.hasOption("plot-Dependency-Graph")) {
+                numRequestedTasks++;
+                retVal = task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+            }
+
+           if(!retVal) {
+               System.err.println("A task failed");
+           }
         } catch (Exception ex) {
             System.err.println("An error occured: " + ex);
-            ex.printStackTrace();
-            return false;
+            log.error("Exception", ex);
+            retVal = false;
         }
 
         if (numRequestedTasks == 0) {
             System.err.println("No task requested");
             printUsage();
-            return false;
+            retVal = false;
         }
 
-        return retval;
+        return retVal;
     }
 
     public static void main(String args[]) {
@@ -154,7 +177,8 @@ public class LogAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static void task_genSequenceDiagramsForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException {
+    private static boolean task_genSequenceDiagramsForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException {
+        boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
@@ -174,7 +198,12 @@ public class LogAnalysisTool {
             Long id = t.getTraceId();
             if (traceIds == null || traceIds.contains(id)) {
                 //String fileName = "/tmp/seqDia" + msgTrace.traceId + ".pic";
-                SequenceDiagramPlugin.writeDotForMessageTrace(t.toMessageSequence(), outputFnBase + "-" + id + ".pic");
+                MessageSequence mSeq = t.toMessageSequence();
+                if (mSeq == null) {
+                    log.error("Transformation to message trace failed for trace " + id);
+                    retVal = false;
+                }
+                SequenceDiagramPlugin.writeDotForMessageTrace(mSeq, outputFnBase + "-" + id + ".pic");
                 numPlots++;
                 lastTraceId = t.getTraceId();
             }
@@ -186,19 +215,22 @@ public class LogAnalysisTool {
         } else {
             System.out.println("Wrote 0 sequence diagrams");
         }
+        return retVal;
     }
 
     /**
      * Reads the traces from the directory inputDirName and write the
-     * sequence diagrams for traces with IDs given in traceSet to
+     * dependency graph for traces with IDs given in traceSet to
      * the directory outputFnPrefix.
-     * If  traceSet is null, a sequence diagram for each trace is generated.
+     * If  traceSet is null, a dependency graph containing the information
+     * of all traces is generated.
      *
      * @param inputDirName
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static void task_genDependencyGraphsForTraceSet(String inputDirName, String outputFnPrefix, TreeSet<Long> traceIds) throws IOException {
+    private static boolean task_genDependencyGraphsForTraceSet(String inputDirName, String outputFnPrefix, TreeSet<Long> traceIds) throws IOException, InvalidTraceException {
+        boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
@@ -208,12 +240,105 @@ public class LogAnalysisTool {
         analysisInstance.addConsumer(seqRepConsumer);
         analysisInstance.run();
 
-        /* Generate and output sequence diagrams */
+        /* Generate and output dependency graphs */
         Collection<ExecutionSequence> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.values();
         String outputFnBase = new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath();
         DependencyGraphPlugin.writeDotFromExecutionTraces(seqEnum, outputFnBase + ".pic", traceIds);
         System.out.println("Wrote dependency graph to file '" + outputFnBase + ".pic" + "'");
         System.out.println("Dot file can be converted using the dot tool");
         System.out.println("Example: dot -T svg " + outputFnBase + ".pic" + " > " + outputFnBase + ".svg");
+        return retVal;
+    }
+
+    /**
+     * Reads the traces from the directory inputDirName and write the
+     * message trace representation for traces with IDs given in traceSet
+     * to the directory outputFnPrefix.
+     * If  traceSet is null, a message trace for each trace is generated.
+     *
+     * @param inputDirName
+     * @param outputFnPrefix
+     * @param traceSet
+     */
+    private static boolean task_genMessageTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException {
+        boolean retVal = true;
+        log.info("Reading traces from directory '" + inputDirName + "'");
+        /* Read log data and collect execution traces */
+        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
+        //analysisInstance.addLogReader(new FSReader(inputDirName));
+        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
+        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        analysisInstance.addConsumer(seqRepConsumer);
+        analysisInstance.run();
+
+        /* Generate and output message traces */
+        Enumeration<ExecutionSequence> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
+        int numTraces = 0;
+        String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
+        PrintStream ps = System.out;
+        try {
+            ps = new PrintStream(new FileOutputStream(outputFn));
+            while (seqEnum.hasMoreElements()) {
+                ExecutionSequence t = seqEnum.nextElement();
+                Long id = t.getTraceId();
+                if (traceIds == null || traceIds.contains(id)) {
+                    numTraces++;
+                    ps.println(t.toMessageSequence());
+                }
+            }
+            System.out.println("Wrote " + numTraces + " messageTraces" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
+        } catch (FileNotFoundException e) {
+            log.error("File not found", e);
+            retVal = false;
+        } finally {
+            ps.close();
+        }
+        return retVal;
+    }
+
+    /**
+     * Reads the traces from the directory inputDirName and write the
+     * execution trace representation for traces with IDs given in traceSet
+     * to the directory outputFnPrefix.
+     * If  traceSet is null, an execution trace for each trace is generated.
+     *
+     * @param inputDirName
+     * @param outputFnPrefix
+     * @param traceSet
+     */
+    private static boolean task_genExecutionTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException {
+        boolean retVal = true;
+        log.info("Reading traces from directory '" + inputDirName + "'");
+        /* Read log data and collect execution traces */
+        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
+        //analysisInstance.addLogReader(new FSReader(inputDirName));
+        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
+        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        analysisInstance.addConsumer(seqRepConsumer);
+        analysisInstance.run();
+
+        /* Generate and output message traces */
+        Enumeration<ExecutionSequence> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
+        int numTraces = 0;
+        String outputFn = new File(outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
+        PrintStream ps = System.out;
+        try {
+            ps = new PrintStream(new FileOutputStream(outputFn));
+            while (seqEnum.hasMoreElements()) {
+                ExecutionSequence t = seqEnum.nextElement();
+                Long id = t.getTraceId();
+                if (traceIds == null || traceIds.contains(id)) {
+                    numTraces++;
+                    ps.println(t);
+                }
+            }
+            System.out.println("Wrote " + numTraces + " executionTraces" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
+        } catch (FileNotFoundException e) {
+            log.error("File not found", e);
+            retVal = false;
+        } finally {
+            ps.close();
+        }
+        return retVal;
     }
 }
