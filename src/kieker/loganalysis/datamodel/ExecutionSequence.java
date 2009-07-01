@@ -58,7 +58,7 @@ public class ExecutionSequence {
         Iterator<KiekerExecutionRecord> eSeqIt = this.sequence.iterator();
         KiekerExecutionRecord curE = null, prevE = null;
         int itNum = 0;
-        log.info("Analyzing trace " + this.traceId);
+        //log.info("Analyzing trace " + this.traceId);
         while (eSeqIt.hasNext()) {
             curE = eSeqIt.next();
             if(itNum++ == 0 && curE.ess != 0){
