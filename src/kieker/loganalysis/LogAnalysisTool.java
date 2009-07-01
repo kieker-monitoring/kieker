@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 import java.util.TreeSet;
+import kieker.common.logReader.IMonitoringRecordConsumer;
 import kieker.common.logReader.filesystemReader.FilesystemReader;
 import kieker.loganalysis.datamodel.ExecutionSequence;
 import kieker.loganalysis.datamodel.InvalidTraceException;
@@ -17,6 +18,8 @@ import kieker.loganalysis.plugins.DependencyGraphPlugin;
 import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import kieker.loganalysis.recordConsumer.ExecutionSequenceRepositoryFiller;
 
+import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -162,9 +165,13 @@ public class LogAnalysisTool {
     }
 
     public static void main(String args[]) {
-        if (!parseArgs(args) || !initFromArgs() || !dispatchTasks()) {
+        if (true && ((!parseArgs(args) || !initFromArgs() || !dispatchTasks()))) {
             System.exit(1);
         }
+
+        /* As long as we have a dependency from logAnalysis to tpmon,
+         * we need to explicitly terminate tpmon. */
+        TpmonController.getInstance().terminateMonitoring();
     }
 
     /**
@@ -265,7 +272,6 @@ public class LogAnalysisTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
-        //analysisInstance.addLogReader(new FSReader(inputDirName));
         analysisInstance.addLogReader(new FilesystemReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
         analysisInstance.addConsumer(seqRepConsumer);
