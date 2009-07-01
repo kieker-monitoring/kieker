@@ -48,7 +48,7 @@ public class SequenceDiagramPlugin {
         Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
         ps.println(".PS");
-        ps.println("copy \"bin/sequence.pic\";");
+        ps.println("copy \"lib/sequence.pic\";");
         ps.println("boxwid = 1.1;");
         ps.println("movewid = 0.5;");
 

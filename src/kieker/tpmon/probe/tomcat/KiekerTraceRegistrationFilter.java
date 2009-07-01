@@ -76,11 +76,15 @@ public class KiekerTraceRegistrationFilter implements Filter {
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */
         if (request instanceof HttpServletRequest) {
+            HttpServletRequest httpReq = (HttpServletRequest) request;
+            String sessionId = httpReq.getSession().getId();
+            sessionRegistry.storeThreadLocalSessionId(sessionId);
             execData = KiekerExecutionRecord.getInstance(
                     componentName,
                     opName,
                     cfRegistry.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point*/);
             execData.isEntryPoint = false;
+            execData.sessionId = sessionId;
             cfRegistry.storeThreadLocalEOI(0); // current execution's eoi is 0
             cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
             execData.vmName = vmName;
