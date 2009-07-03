@@ -47,26 +47,31 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 
 public class StorageOnly { 
-    public static final int numberOfEvents = 1000;
-    public static TpmonController ctrl = TpmonController.getInstance();
+    private static final int numberOfEvents = 1000;
+    private static final TpmonController ctrl = TpmonController.getInstance();
+    private static final String vmName = ctrl.getVmname();
     
     @TpmonInternal   
     public static void main(String args[]) {
         try {
             System.out.printf("Starting test by adding %d monitoring events\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                ctrl.logMonitoringRecord(KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i,i));
+                KiekerExecutionRecord record = KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i,i);
+                record.vmName = vmName;
+                ctrl.logMonitoringRecord(record);
             }
             System.out.println("Sleeping for 8 seconds");
             Thread.sleep(8000);
             System.out.printf("%d more monitoring points\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                ctrl.logMonitoringRecord(KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i+10000,i));
+                KiekerExecutionRecord record = KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i+10000,i);
+                record.vmName = vmName;
+                ctrl.logMonitoringRecord(record);
             }
             System.out.println("Calling system.exit(0)");
             System.out.println("Sleeping for 60 seconds");
             Thread.sleep(10000);
-            System.exit(0);
+            ctrl.terminateMonitoring();
         } catch (InterruptedException ex) {
             System.out.println("Exception:"+ex);
 			ex.printStackTrace();
