@@ -3,7 +3,7 @@ package kieker.common.logReader;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 /**
- * kieker.loganalysis.IMonitoringRecordConsumer
+ * kieker.loganalysis.IKiekerRecordConsumer
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -23,7 +23,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
  *
  * @author Andre van Hoorn
  */
-public interface IMonitoringRecordConsumer {
+public interface IKiekerRecordConsumer {
     public String[] getRecordTypeSubscriptionList();
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);

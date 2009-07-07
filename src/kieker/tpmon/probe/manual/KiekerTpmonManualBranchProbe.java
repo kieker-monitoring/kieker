@@ -22,6 +22,7 @@ package kieker.tpmon.probe.manual;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.KiekerBranchingRecord;
+import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -30,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class KiekerTpmonManualBranchProbe {
+public class KiekerTpmonManualBranchProbe implements IKiekerMonitoringProbe {
     private static final Log log = LogFactory.getLog(KiekerTpmonManualBranchProbe.class);
     private static final TpmonController ctrlInst = TpmonController.getInstance();
 

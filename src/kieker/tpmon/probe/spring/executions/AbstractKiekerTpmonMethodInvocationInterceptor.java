@@ -5,6 +5,7 @@ import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
+import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
@@ -40,7 +41,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  * @author Marco Luebcke
  */
-public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements MethodInterceptor {
+public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements MethodInterceptor, IKiekerMonitoringProbe {
 
     private static final Log log = LogFactory.getLog(AbstractKiekerTpmonMethodInvocationInterceptor.class);
 

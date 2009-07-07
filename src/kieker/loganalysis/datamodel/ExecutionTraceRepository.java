@@ -24,9 +24,9 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  * 
  * @author Andre van Hoorn
  */
-public class ExecutionSequenceRepository {
+public class ExecutionTraceRepository {
 
-    public Hashtable<Long, ExecutionSequence> repository = new Hashtable<Long, ExecutionSequence>();
+    public Hashtable<Long, ExecutionTrace> repository = new Hashtable<Long, ExecutionTrace>();
 
     /**
      * Adds an execution to the repository.
@@ -35,15 +35,15 @@ public class ExecutionSequenceRepository {
      */
     public void addExecution(KiekerExecutionRecord execRecord) {
         long traceId = execRecord.traceId;
-        ExecutionSequence seq = repository.get(traceId);
+        ExecutionTrace seq = repository.get(traceId);
         if (seq == null) { // create and add new sequence
-            seq = new ExecutionSequence(traceId);
+            seq = new ExecutionTrace(traceId);
             repository.put(traceId, seq);
         }
         seq.add(execRecord);
     }
     
-    public Hashtable<Long, ExecutionSequence> getRepositoryAsHashTable(){
+    public Hashtable<Long, ExecutionTrace> getRepositoryAsHashTable(){
         return this.repository;
     }
 }

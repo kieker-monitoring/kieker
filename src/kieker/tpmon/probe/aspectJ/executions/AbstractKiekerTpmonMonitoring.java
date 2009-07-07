@@ -5,6 +5,7 @@ import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
+import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
@@ -30,7 +31,7 @@ import org.aspectj.lang.annotation.Aspect;
  * @author Andre van Hoorn
  */
 @Aspect
-public abstract class AbstractKiekerTpmonMonitoring {
+public abstract class AbstractKiekerTpmonMonitoring implements IKiekerMonitoringProbe {
 
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();

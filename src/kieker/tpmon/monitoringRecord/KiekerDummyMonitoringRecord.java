@@ -20,7 +20,6 @@ package kieker.tpmon.monitoringRecord;
  * ==================================================
  */
 
-import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /**
@@ -31,12 +30,12 @@ public class KiekerDummyMonitoringRecord extends AbstractKiekerMonitoringRecord 
     private static final long serialVersionUID = 1133L;
 
    /** Used to identify the type of CSV records
-    * This record type has a fixed value of 0
+    *  This record type has a fixed value of 0
     */
     private static int typeId = 0;
 
     @TpmonInternal()
-    public void initFromStringVector(String[] recordVector)
+    public void initFromStringArray(String[] recordVector)
             throws IllegalArgumentException {
         if(recordVector.length>0) {
             throw new IllegalArgumentException("Expecting vector with "+
@@ -46,7 +45,7 @@ public class KiekerDummyMonitoringRecord extends AbstractKiekerMonitoringRecord 
     }
 
     @TpmonInternal()
-    public String[] toStringVector() {
+    public String[] toStringArray() {
         return new String[0];
     }
 

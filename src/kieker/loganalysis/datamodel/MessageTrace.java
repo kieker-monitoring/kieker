@@ -24,23 +24,23 @@ import java.util.Vector;
  *
  * @author Andre van Hoorn
  */
-public class MessageSequence {
+public class MessageTrace {
 
     public long traceId = -1;
-    private Vector<Message> seq = null;
+    private Vector<Message> set = null;
 
-    public MessageSequence(long traceId, Vector<Message> seq) {
+    public MessageTrace(long traceId, Vector<Message> seq) {
         this.traceId = traceId;
-        this.seq = seq;
+        this.set = seq;
     }
 
     public Vector<Message> getSequenceAsVector() {
-        return this.seq;
+        return this.set;
     }
 
     public String toString() {
         StringBuilder strBuild = new StringBuilder("Trace " + this.traceId + ":\n");
-        Iterator<Message> it = seq.iterator();
+        Iterator<Message> it = set.iterator();
         while (it.hasNext()) {
             Message m = it.next();
             strBuild.append("<");

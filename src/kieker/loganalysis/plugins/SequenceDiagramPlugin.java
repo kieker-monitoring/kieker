@@ -26,7 +26,7 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Vector;
 import kieker.loganalysis.datamodel.Message;
-import kieker.loganalysis.datamodel.MessageSequence;
+import kieker.loganalysis.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,7 +42,7 @@ public class SequenceDiagramPlugin {
     private SequenceDiagramPlugin() {
     }
 
-    private static void picFromMessageTrace(MessageSequence messageTrace,  PrintStream ps) {
+    private static void picFromMessageTrace(MessageTrace messageTrace,  PrintStream ps) {
         HashMap<String, String> distinctObjects = new HashMap<String, String>();
         int nextObjIndex = 0;
         Vector<Message> messages = messageTrace.getSequenceAsVector();
@@ -117,7 +117,7 @@ public class SequenceDiagramPlugin {
         ps.println(".PE");
     }
 
-    public static void writeDotForMessageTrace(MessageSequence msgTrace, String outputFilename) {
+    public static void writeDotForMessageTrace(MessageTrace msgTrace, String outputFilename) {
         PrintStream ps = System.out;
         try {
             ps = new PrintStream(new FileOutputStream(outputFilename));

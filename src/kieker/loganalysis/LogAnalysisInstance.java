@@ -20,8 +20,8 @@ package kieker.loganalysis;
  * ==================================================
  */
 import java.util.Vector;
-import kieker.common.logReader.IMonitoringRecordConsumer;
-import kieker.common.logReader.ILogReader;
+import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.common.logReader.IKiekerLogReader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,26 +33,26 @@ import org.apache.commons.logging.LogFactory;
 public class LogAnalysisInstance {
 
     private static final Log log = LogFactory.getLog(LogAnalysisInstance.class);
-    private Vector<ILogReader> logReaders = new Vector<ILogReader>();
-    private Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
+    private final Vector<IKiekerLogReader> logReaders = new Vector<IKiekerLogReader>();
+    private final Vector<IKiekerRecordConsumer> consumers = new Vector<IKiekerRecordConsumer>();
 
     public void run() {
-        for (ILogReader r : this.logReaders) {
-            for (IMonitoringRecordConsumer c : this.consumers) {
+        for (IKiekerLogReader r : this.logReaders) {
+            for (IKiekerRecordConsumer c : this.consumers) {
                 r.addConsumer(c, c.getRecordTypeSubscriptionList());
                 c.execute();
             }
         }
-        for (ILogReader r : this.logReaders) {
+        for (IKiekerLogReader r : this.logReaders) {
             r.execute();
         }
     }
 
-    public void addLogReader(ILogReader reader) {
+    public void setLogReader(IKiekerLogReader reader) {
         this.logReaders.add(reader);
     }
 
-    public void addConsumer(IMonitoringRecordConsumer consumer) {
+    public void addRecordConsumer(IKiekerRecordConsumer consumer) {
         this.consumers.add(consumer);
     }
 }

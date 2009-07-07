@@ -63,9 +63,9 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public class FileSystemWriter extends AbstractMonitoringDataWriter {
+public class syncFsWriter extends AbstractMonitoringDataWriter {
 
-    private static final Log log = LogFactory.getLog(FileSystemWriter.class);
+    private static final Log log = LogFactory.getLog(syncFsWriter.class);
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
@@ -80,7 +80,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
             " and the file system specific configuration properties.";
     private boolean writeRecordTypeIds = false;
 
-    public FileSystemWriter() {
+    public syncFsWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
@@ -89,7 +89,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public FileSystemWriter(String storagePathBase) {
+    public syncFsWriter(String storagePathBase) {
         log.info("storagePathBase :" + storagePathBase);
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {
@@ -162,7 +162,7 @@ public class FileSystemWriter extends AbstractMonitoringDataWriter {
         }
 
         try {
-            String[] recordFields = monitoringRecord.toStringVector();
+            String[] recordFields = monitoringRecord.toStringArray();
             final int LAST_FIELD_INDEX = recordFields.length - 1;
             prepareFile(); // may throw FileNotFoundException
 

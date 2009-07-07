@@ -1,6 +1,6 @@
 package kieker.common.tools.logReplayer;
 
-import kieker.common.logReader.IMonitoringRecordConsumer;
+import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 /**
@@ -12,10 +12,10 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 public class ReplayWorker implements Runnable {
 
 	private final AbstractKiekerMonitoringRecord monRec;
-    private final IMonitoringRecordConsumer cons;
+    private final IKiekerRecordConsumer cons;
 	private final ReplayDistributor rd;
 
-	public ReplayWorker(final AbstractKiekerMonitoringRecord monRec, final ReplayDistributor rd, final IMonitoringRecordConsumer cons) {
+	public ReplayWorker(final AbstractKiekerMonitoringRecord monRec, final ReplayDistributor rd, final IKiekerRecordConsumer cons) {
 		this.monRec = monRec;
         this.cons = cons;
 		this.rd = rd;

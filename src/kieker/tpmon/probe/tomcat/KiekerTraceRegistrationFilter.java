@@ -9,6 +9,7 @@ import kieker.tpmon.core.SessionRegistry;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -47,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Marco Luebcke
  */
-public class KiekerTraceRegistrationFilter implements Filter {
+public class KiekerTraceRegistrationFilter implements Filter, IKiekerMonitoringProbe {
 
     private static final String componentName = KiekerTraceRegistrationFilter.class.getName();
     private static final String opName = "init(FilterConfig config)";

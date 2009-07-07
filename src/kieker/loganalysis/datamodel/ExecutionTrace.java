@@ -30,16 +30,16 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionSequence {
+public class ExecutionTrace {
 
-    private static final Log log = LogFactory.getLog(ExecutionSequence.class);
+    private static final Log log = LogFactory.getLog(ExecutionTrace.class);
     private long traceId = -1; // convenience field. All executions have this traceId.
-    private SortedSet<KiekerExecutionRecord> sequence = new TreeSet<KiekerExecutionRecord>();
+    private SortedSet<KiekerExecutionRecord> set = new TreeSet<KiekerExecutionRecord>();
 
-    private ExecutionSequence() {
+    private ExecutionTrace() {
     }
 
-    public ExecutionSequence(long traceId) {
+    public ExecutionTrace(long traceId) {
         this.traceId = traceId;
     }
 
@@ -49,13 +49,13 @@ public class ExecutionSequence {
 
     public void add(KiekerExecutionRecord record) {
         // TODO: check traceId
-        this.sequence.add(record);
+        this.set.add(record);
     }
 
-    public MessageSequence toMessageSequence() throws InvalidTraceException {
+    public MessageTrace toMessageTrace() throws InvalidTraceException {
         Vector<Message> mSeq = new Vector<Message>();
         Stack<Message> curStack = new Stack<Message>();
-        Iterator<KiekerExecutionRecord> eSeqIt = this.sequence.iterator();
+        Iterator<KiekerExecutionRecord> eSeqIt = this.set.iterator();
         KiekerExecutionRecord curE = null, prevE = null;
         int itNum = 0;
         //log.info("Analyzing trace " + this.traceId);
@@ -105,16 +105,16 @@ public class ExecutionSequence {
             }
             prevE = curE; // prepair next loop
         }
-        return new MessageSequence(this.traceId, mSeq);
+        return new MessageTrace(this.traceId, mSeq);
     }
 
-    public SortedSet<KiekerExecutionRecord> getSequenceAsSortedSet() {
-        return this.sequence;
+    public SortedSet<KiekerExecutionRecord> getTraceAsSortedSet() {
+        return this.set;
     }
 
     public String toString() {
         StringBuilder strBuild = new StringBuilder("Trace " + this.traceId + ":\n");
-        Iterator<KiekerExecutionRecord> it = sequence.iterator();
+        Iterator<KiekerExecutionRecord> it = set.iterator();
         while (it.hasNext()) {
             KiekerExecutionRecord e = it.next();
             strBuild.append("<");

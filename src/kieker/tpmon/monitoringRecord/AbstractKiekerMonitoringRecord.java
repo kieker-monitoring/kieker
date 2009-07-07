@@ -23,11 +23,16 @@ package kieker.tpmon.monitoringRecord;
 import java.io.Serializable;
 import kieker.tpmon.annotation.TpmonInternal;
 
+import kieker.tpmon.core.TpmonController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * @author Andre van Hoorn
  */
 public abstract class AbstractKiekerMonitoringRecord implements Serializable {
-
+    private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringRecord.class);
+    private static final TpmonController ctrlInst = TpmonController.getInstance();
     private long loggingTimestamp = -1;
 
     /**
@@ -39,7 +44,7 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
      * @param recordVector
      */
     @TpmonInternal()
-      public abstract void initFromStringVector(String[] recordVector)
+      public abstract void initFromStringArray(String[] recordVector)
             throws IllegalArgumentException;
 
     @TpmonInternal()
@@ -49,7 +54,7 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     }
 
     @TpmonInternal()
-    public abstract String[] toStringVector();
+    public abstract String[] toStringArray();
 
     @TpmonInternal()
     public abstract int getRecordTypeId();
@@ -64,4 +69,19 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
         this.loggingTimestamp = loggingTimestamp;
     }
 
+    /**
+     * Registers monitoring record type and returns its id.
+     * If logging of record ids is disabled, -1 is returned and no
+     * registration takes place.
+     *
+     * All implementing record types must call this method <b>once</b>
+     * in order to get their type id.
+     *
+     * @param recordTypeClass
+     * @return
+     */
+    @TpmonInternal()
+    protected static final int registerMonitoringRecordType(Class recordTypeClass) {
+        return ctrlInst.registerMonitoringRecordType(recordTypeClass);
+    }
 }

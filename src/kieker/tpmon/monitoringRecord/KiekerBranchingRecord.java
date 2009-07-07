@@ -21,7 +21,6 @@ package kieker.tpmon.monitoringRecord;
  */
 
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.core.TpmonController;
 
 /**
  * @author Andre van Hoorn
@@ -30,17 +29,14 @@ public class KiekerBranchingRecord extends AbstractKiekerMonitoringRecord {
 
     private static final long serialVersionUID = 1113L;
 
-   /** Used to identify the type of CSV records
-    * This record type has a fixed value of 0
-    */
-    private static int typeId = TpmonController.getInstance().registerMonitoringRecordType(KiekerBranchingRecord.class);
+    private static int typeId = AbstractKiekerMonitoringRecord.registerMonitoringRecordType(KiekerBranchingRecord.class);
     private static int numRecordFields = 3;
     private long timestamp = -1;
     private int branchID = -1;
     private int branchingOutcome = -1;
     
     @TpmonInternal()
-    public void initFromStringVector(String[] recordVector)
+    public void initFromStringArray(String[] recordVector)
             throws IllegalArgumentException {
         if(recordVector.length > KiekerBranchingRecord.numRecordFields) {
             throw new IllegalArgumentException("Expecting vector with "+
@@ -53,7 +49,7 @@ public class KiekerBranchingRecord extends AbstractKiekerMonitoringRecord {
     }
 
     @TpmonInternal()
-    public String[] toStringVector() {
+    public String[] toStringArray() {
         String[] vec = {
             Long.toString(timestamp),
             Integer.toString(branchID),

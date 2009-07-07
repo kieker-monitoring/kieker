@@ -5,8 +5,8 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.IMonitoringDataWriter;
-import kieker.tpmon.writer.databaseSync.Dbconnector;
-import kieker.tpmon.writer.filesystemSync.FileSystemWriter;
+import kieker.tpmon.writer.databaseSync.SyncDbConnector;
+import kieker.tpmon.writer.filesystemSync.syncFsWriter;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -16,8 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
-import kieker.tpmon.writer.databaseAsync.AsyncDbconnector;
-import kieker.tpmon.writer.filesystemAsync.AsyncFsWriterProducer;
+import kieker.tpmon.writer.databaseAsync.AsyncDbConnector;
+import kieker.tpmon.writer.filesystemAsync.AsyncFsConnector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -105,7 +105,7 @@ public class TpmonController {
     public static final AbstractKiekerMonitoringRecord END_OF_MONITORING_MARKER = new KiekerDummyMonitoringRecord();
 
     @TpmonInternal()
-    public static TpmonController getInstance() {
+    public final static TpmonController getInstance() {
         return TpmonController.ctrlInst;
     }
 
@@ -131,17 +131,17 @@ public class TpmonController {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringDataWriter = new FileSystemWriter(filenameBase);
+                this.monitoringDataWriter = new syncFsWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringDataWriter = new AsyncFsWriterProducer(filenameBase);
+                this.monitoringDataWriter = new AsyncFsConnector(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
-                this.monitoringDataWriter = new Dbconnector(
+                this.monitoringDataWriter = new SyncDbConnector(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCDB)) {
-                this.monitoringDataWriter = new AsyncDbconnector(
+                this.monitoringDataWriter = new AsyncDbConnector(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId);
@@ -181,7 +181,7 @@ public class TpmonController {
      * or by directly implementing a call to TpmonController.setVmname(...).
      */
     @TpmonInternal()
-    public String getVmname() {
+    public final String getVmname() {
         return this.vmname;
     }
 
@@ -199,7 +199,7 @@ public class TpmonController {
      * @param newVmname
      */
     @TpmonInternal()
-    public void setVmname(String newVmname) {
+    public final void setVmname(String newVmname) {
         log.info(">Kieker-Tpmon: The VM has the NEW name " + newVmname +
                 " Thread:" + Thread.currentThread().getId());
         this.vmname = newVmname;
@@ -210,7 +210,7 @@ public class TpmonController {
      * @param newWorker
      */
     @TpmonInternal()
-    public void registerWorker(AbstractWorkerThread newWorker) {
+    private void registerWorker(AbstractWorkerThread newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
     private AtomicLong numberOfInserts = new AtomicLong(0);
@@ -220,7 +220,7 @@ public class TpmonController {
     private boolean monitoringPermanentlyTerminated = false;
 
     @TpmonInternal()
-    public boolean isDebug() {
+    public final boolean isDebug() {
         return debug;
     }
 
@@ -234,12 +234,12 @@ public class TpmonController {
     }
 
     @TpmonInternal()
-    public boolean isMonitoringEnabled() {
+    public final boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
 
     @TpmonInternal()
-    public boolean isMonitoringPermanentlyTerminated() {
+    public final boolean isMonitoringPermanentlyTerminated() {
         return monitoringPermanentlyTerminated;
     }
     private static final int STANDARDEXPERIMENTID = 0;
@@ -249,7 +249,7 @@ public class TpmonController {
     private int experimentId = STANDARDEXPERIMENTID;
 
     @TpmonInternal()
-    public int getExperimentId() {
+    public final int getExperimentId() {
         return this.experimentId;
     }
 
@@ -267,7 +267,7 @@ public class TpmonController {
      * Enables monitoring.
      */
     @TpmonInternal()
-    public void enableMonitoring() {
+    public final void enableMonitoring() {
         log.info("Enabling monitoring");
         if (this.monitoringPermanentlyTerminated) {
             log.error("Refused to enable monitoring because monitoring has been permanently terminated before");
@@ -281,7 +281,7 @@ public class TpmonController {
      * Monitoring may be enabled again by calling enableMonitoring().
      */
     @TpmonInternal()
-    public void disableMonitoring() {
+    public final void disableMonitoring() {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
     }
@@ -291,7 +291,7 @@ public class TpmonController {
      * Subsequent tries to enable monitoring will be refused.
      */
     @TpmonInternal()
-    public void terminateMonitoring() {
+    public final synchronized void terminateMonitoring() {
         log.info("Permanently terminating monitoring");
         if (this.monitoringDataWriter != null) {
             /* if the initialization of the writer failed, it is set to null*/
@@ -307,12 +307,12 @@ public class TpmonController {
      */
     private boolean replayMode = false;
 
-    public void setReplayMode(boolean replayMode) {
+    public final void setReplayMode(boolean replayMode) {
         this.replayMode = replayMode;
     }
 
     @TpmonInternal()
-    public boolean logMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public final boolean logMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         if (!this.monitoringEnabled) {
             return false;
         }
@@ -339,7 +339,7 @@ public class TpmonController {
      * (The value returned by System.nanoTime() only represents nanoseconds since *some* fixed but arbitrary time.)
      */
     @TpmonInternal()
-    public long getTime() {
+    public final long getTime() {
         return System.nanoTime() + offsetA;
     }
 
@@ -559,9 +559,10 @@ public class TpmonController {
     }
 
     @TpmonInternal()
-    public void setDebug(boolean debug) {
+    public final void setDebug(boolean debug) {
         this.debug = debug;
     }
+
     AtomicInteger nextMonitoringRecordType = new AtomicInteger(1);
 
     /**
@@ -573,7 +574,7 @@ public class TpmonController {
      * @return
      */
     @TpmonInternal()
-    public int registerMonitoringRecordType(Class recordTypeClass) {
+    public final int registerMonitoringRecordType(Class recordTypeClass) {
         if (this.isMonitoringPermanentlyTerminated()) {
             log.warn("Didn't register record type '" + recordTypeClass +
                     "' because monitoring has been permanently terminated");

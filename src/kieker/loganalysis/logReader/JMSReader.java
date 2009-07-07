@@ -1,6 +1,6 @@
 package kieker.loganalysis.logReader;
 
-import kieker.common.logReader.AbstractLogReader;
+import kieker.common.logReader.AbstractKiekerLogReader;
 import java.util.Hashtable;
 import javax.jms.JMSException;
 import javax.naming.Context;
@@ -19,7 +19,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class JMSReader extends AbstractLogReader {
+public class JMSReader extends AbstractKiekerLogReader {
 
     private static final Log log = LogFactory.getLog(JMSReader.class);
 

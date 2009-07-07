@@ -170,6 +170,7 @@
             <include name="kieker/tpmon/monitoringRecord/**"/>
             <include name="kieker/tpmon/reader/**"/>
             <include name="kieker/tpmon/writer/**"/>
+            <include name="kieker/tpmon/probe/IKiekerMonitoringProbe.java"/>
         </javac>
         <copy file="${tpmon.properties}" todir="${build.tpmon.ctrl.dir}/META-INF"/>
         <!-- We want to include the sources in this jar -->

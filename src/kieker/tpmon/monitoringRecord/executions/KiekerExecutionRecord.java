@@ -1,8 +1,7 @@
 package kieker.tpmon.monitoringRecord.executions;
 
-import kieker.tpmon.monitoringRecord.*;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.core.TpmonController;
 
 /**
  * kieker.tpmon.monitoringRecord.KiekerExecutionRecord
@@ -29,7 +28,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
 
     private static final long serialVersionUID = 117L;
     /** Used to identify the type of CSV records */
-    private static final int typeId = TpmonController.getInstance().registerMonitoringRecordType(KiekerExecutionRecord.class);
+    private static final int typeId = AbstractKiekerMonitoringRecord.registerMonitoringRecordType(KiekerExecutionRecord.class);
     private static final int numRecordFields = 9;
     public int experimentId = -1;
     public String vmName = null;
@@ -126,7 +125,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
      * Returns a CSV record for the object.
      */
     @TpmonInternal()
-    public final String[] toStringVector() {
+    public final String[] toStringArray() {
         String[] vec = {
             Integer.toString(this.experimentId),
             this.componentName + "." + this.opname,
@@ -142,7 +141,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     }
 
     @TpmonInternal()
-    public final void initFromStringVector(String[] recordVector)
+    public final void initFromStringArray(String[] recordVector)
             throws IllegalArgumentException {
         if (recordVector.length > KiekerExecutionRecord.numRecordFields) {
             throw new IllegalArgumentException("Expecting vector with " +
@@ -207,7 +206,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     @TpmonInternal()
     public String toString(){
         StringBuilder strBuild = new StringBuilder();
-        String[] valueVec = this.toStringVector();
+        String[] valueVec = this.toStringArray();
         for (String v : valueVec){
             strBuild.append(v);
             strBuild.append(' ');

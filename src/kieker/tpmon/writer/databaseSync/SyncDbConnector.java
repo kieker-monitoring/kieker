@@ -60,9 +60,9 @@ import org.apache.commons.logging.LogFactory;
  * 2006/12/20: Initial Prototype
  *
  */
-public class Dbconnector extends AbstractMonitoringDataWriter {
+public class SyncDbConnector extends AbstractMonitoringDataWriter {
 
-    private static final Log log = LogFactory.getLog(Dbconnector.class);
+    private static final Log log = LogFactory.getLog(SyncDbConnector.class);
     private Connection conn = null;
     private PreparedStatement psInsertMonitoringData;
     private String dbDriverClassname;
@@ -78,7 +78,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
 
     private boolean writeRecordTypeIds = false;
 
-    public Dbconnector() {
+    public SyncDbConnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
@@ -87,7 +87,7 @@ public class Dbconnector extends AbstractMonitoringDataWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public Dbconnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
+    public SyncDbConnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId) {
         this.dbDriverClassname = dbDriverClassname;
         this.dbConnectionAddress = dbConnectionAddress;

@@ -25,11 +25,11 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.TreeSet;
-import kieker.loganalysis.datamodel.MessageSequence;
+import kieker.loganalysis.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.loganalysis.datamodel.AdjacencyMatrix;
-import kieker.loganalysis.datamodel.ExecutionSequence;
+import kieker.loganalysis.datamodel.ExecutionTrace;
 import kieker.loganalysis.datamodel.InvalidTraceException;
 import kieker.loganalysis.datamodel.Message;
 
@@ -65,7 +65,7 @@ public class DependencyGraphPlugin {
         ps.println("}");
     }
 
-    public static void writeDotFromExecutionTraces(Collection<ExecutionSequence> eTraces, String outputFilename, TreeSet<Long> traceIds) throws InvalidTraceException {
+    public static void writeDotFromExecutionTraces(Collection<ExecutionTrace> eTraces, String outputFilename, TreeSet<Long> traceIds) throws InvalidTraceException {
     AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
     PrintStream ps = System.out;
         try {
@@ -73,8 +73,8 @@ public class DependencyGraphPlugin {
         } catch (FileNotFoundException e) {
             log.error("File not found.", e);
         }
-        for (ExecutionSequence eTrace : eTraces) {
-            MessageSequence msgTrace = eTrace.toMessageSequence();
+        for (ExecutionTrace eTrace : eTraces) {
+            MessageTrace msgTrace = eTrace.toMessageTrace();
             if (traceIds == null || traceIds.contains(eTrace.getTraceId())) {
             for (Message m : msgTrace.getSequenceAsVector()) {
                 if (!m.callMessage) {

@@ -3,21 +3,21 @@ package kieker.common.tools.logReplayer;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import kieker.common.logReader.IMonitoringRecordConsumer;
+import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 /**
- * IMonitoringRecordConsumer that distributes the log records to the worker
+ * IKiekerRecordConsumer that distributes the log records to the worker
  * thread for "real time" replays.
  *
  * @author Robert von Massow
  *
  */
-public class ReplayDistributor implements IMonitoringRecordConsumer {
+public class ReplayDistributor implements IKiekerRecordConsumer {
 
 	public final int numWorkers;
-    private final IMonitoringRecordConsumer cons;
+    private final IKiekerRecordConsumer cons;
 
 	private volatile long startTime = -1, offset = -1;
 
@@ -39,7 +39,7 @@ public class ReplayDistributor implements IMonitoringRecordConsumer {
         this.maxQueueSize = -1;
     }
 
-	public ReplayDistributor(final int numWorkers, final IMonitoringRecordConsumer cons) {
+	public ReplayDistributor(final int numWorkers, final IKiekerRecordConsumer cons) {
 		this.numWorkers = numWorkers;
         this.cons = cons;
 		this.maxQueueSize = numWorkers * 1000;

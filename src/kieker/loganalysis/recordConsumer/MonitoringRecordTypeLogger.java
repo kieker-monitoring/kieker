@@ -1,6 +1,6 @@
 package kieker.loganalysis.recordConsumer;
 
-import kieker.common.logReader.IMonitoringRecordConsumer;
+import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 import org.apache.commons.logging.Log;
@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
+public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {
 
     private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 

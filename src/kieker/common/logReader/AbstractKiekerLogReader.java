@@ -14,24 +14,24 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractLogReader implements ILogReader {
+public abstract class AbstractKiekerLogReader implements IKiekerLogReader {
 
     /** Contains all consumers which consume records of any type */
-    private final Collection<IMonitoringRecordConsumer> subscribedToAllList =
-            new Vector<IMonitoringRecordConsumer>();
+    private final Collection<IKiekerRecordConsumer> subscribedToAllList =
+            new Vector<IKiekerRecordConsumer>();
     /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<String, Collection<IMonitoringRecordConsumer>> subscriptionMap =
-            new HashMap<String, Collection<IMonitoringRecordConsumer>>();
+    private final HashMap<String, Collection<IKiekerRecordConsumer>> subscribedToTypeMap =
+            new HashMap<String, Collection<IKiekerRecordConsumer>>();
 
-    public final void addConsumer(final IMonitoringRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
+    public final void addConsumer(final IKiekerRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
         if (recordTypeSubscriptionList == null) {
             this.subscribedToAllList.add(consumer);
         } else {
             for (String recordTypeName : recordTypeSubscriptionList) {
-                Collection<IMonitoringRecordConsumer> cList = this.subscriptionMap.get(recordTypeName);
+                Collection<IKiekerRecordConsumer> cList = this.subscribedToTypeMap.get(recordTypeName);
                 if (cList == null) {
-                    cList = new Vector<IMonitoringRecordConsumer>(0);
-                    this.subscriptionMap.put(recordTypeName, cList);
+                    cList = new Vector<IKiekerRecordConsumer>(0);
+                    this.subscribedToTypeMap.put(recordTypeName, cList);
                 }
                 cList.add(consumer);
             }
@@ -39,24 +39,24 @@ public abstract class AbstractLogReader implements ILogReader {
     }
 
     protected final void deliverRecordToConsumers(final AbstractKiekerMonitoringRecord r) {
-        for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
+        for (IKiekerRecordConsumer c : this.subscribedToAllList) {
             c.consumeMonitoringRecord(r);
         }
-        Collection<IMonitoringRecordConsumer> cList = this.subscriptionMap.get(r.getClass().getName());
+        Collection<IKiekerRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
         if (cList != null) {
-            for (IMonitoringRecordConsumer c : cList) {
+            for (IKiekerRecordConsumer c : cList) {
                 c.consumeMonitoringRecord(r);
             }
         }
     }
 
-    protected final void terminate() {
-        for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
+    public final void terminate() {
+        for (IKiekerRecordConsumer c : this.subscribedToAllList) {
                 c.terminate();
         }
-        for (Collection<IMonitoringRecordConsumer> cList : this.subscriptionMap.values()) {
+        for (Collection<IKiekerRecordConsumer> cList : this.subscribedToTypeMap.values()) {
             if (cList != null) {
-                for (IMonitoringRecordConsumer c : cList) {
+                for (IKiekerRecordConsumer c : cList) {
                      c.terminate();
                 }
             }

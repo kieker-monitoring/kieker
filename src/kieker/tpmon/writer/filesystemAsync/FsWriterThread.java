@@ -35,9 +35,9 @@ import org.apache.commons.logging.LogFactory;
  * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
  *             which may be changed during runtime
  */
-public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
+public class FsWriterThread extends AbstractWorkerThread {
 
-    private static final Log log = LogFactory.getLog(AsyncFsWriterWorkerThread.class);
+    private static final Log log = LogFactory.getLog(FsWriterThread.class);
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
@@ -54,12 +54,12 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
      */
     @TpmonInternal()
     public synchronized void initShutdown() {
-        AsyncFsWriterWorkerThread.shutdown = true;
+        FsWriterThread.shutdown = true;
     }
 
 //    private boolean statementChanged = true;
 //    private String nextStatementText;
-    public AsyncFsWriterWorkerThread(BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue, String filenamePrefix) {
+    public FsWriterThread(BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue, String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
         log.info("New Tpmon - FsWriter thread created ");
@@ -156,7 +156,7 @@ public class AsyncFsWriterWorkerThread extends AbstractWorkerThread {
      */
     @TpmonInternal()
     private void writeDataNow(AbstractKiekerMonitoringRecord monitoringRecord) throws IOException {
-        String[] recordFields = monitoringRecord.toStringVector();
+        String[] recordFields = monitoringRecord.toStringArray();
         final int LAST_FIELD_INDEX = recordFields.length - 1;
         prepareFile(); // may throw FileNotFoundException
 

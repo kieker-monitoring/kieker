@@ -1,8 +1,8 @@
 package kieker.loganalysis.recordConsumer;
 
 import java.util.TreeSet;
-import kieker.common.logReader.IMonitoringRecordConsumer;
-import kieker.loganalysis.datamodel.ExecutionSequenceRepository;
+import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.loganalysis.datamodel.ExecutionTraceRepository;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 
@@ -30,10 +30,10 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsumer {
+public class ExecutionSequenceRepositoryFiller implements IKiekerRecordConsumer {
 
     private static final Log log = LogFactory.getLog(ExecutionSequenceRepositoryFiller.class);
-    private final ExecutionSequenceRepository repo = new ExecutionSequenceRepository();
+    private final ExecutionTraceRepository repo = new ExecutionTraceRepository();
     private TreeSet<Long> selectedTraces = null;
     /** Consuming only execution records */
     private final static String[] recordTypeSubscriptionList = {
@@ -70,7 +70,7 @@ public class ExecutionSequenceRepositoryFiller implements IMonitoringRecordConsu
         return true;
     }
 
-    public ExecutionSequenceRepository getExecutionSequenceRepository() {
+    public ExecutionTraceRepository getExecutionSequenceRepository() {
         return this.repo;
     }
 

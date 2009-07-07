@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import kieker.common.logReader.AbstractLogReader;
+import kieker.common.logReader.AbstractKiekerLogReader;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
@@ -18,7 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.common.reader.fileSystemReader.FilesystemReader
+ * kieker.common.reader.fileSystemReader.FSReader
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -46,12 +46,12 @@ import org.apache.commons.logging.LogFactory;
  * History:
  * 2008/09/15: Initial version
  */
-public class FilesystemReader extends AbstractLogReader {
+public class FSReader extends AbstractKiekerLogReader {
 
-    private static final Log log = LogFactory.getLog(FilesystemReader.class);
+    private static final Log log = LogFactory.getLog(FSReader.class);
     private File inputDir = null;
 
-    public FilesystemReader(final String inputDirName) {
+    public FSReader(final String inputDirName) {
         this.inputDir = new File(inputDirName);
     }
 
@@ -186,7 +186,7 @@ public class FilesystemReader extends AbstractLogReader {
                         vec = new String[0];
                     }
 
-                    rec.initFromStringVector(vec);
+                    rec.initFromStringArray(vec);
                     this.deliverRecordToConsumers(rec);
                 } catch (Exception e) {
                     log.error(

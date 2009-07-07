@@ -9,7 +9,8 @@ package kieker.common.logReader;
  *
  * @author Andre van Hoorn
  */
-public interface ILogReader {
-    public void addConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList);
+public interface IKiekerLogReader {
+    public void addConsumer(IKiekerRecordConsumer consumer, String[] recordTypeSubscriptionList);
     public boolean execute();
+    public void terminate();
 }

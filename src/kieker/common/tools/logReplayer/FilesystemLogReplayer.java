@@ -1,7 +1,7 @@
 package kieker.common.tools.logReplayer;
 
-import kieker.common.logReader.IMonitoringRecordConsumer;
-import kieker.common.logReader.filesystemReader.FilesystemReader;
+import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
@@ -79,9 +79,9 @@ public class FilesystemLogReplayer {
          */
         ctrlInst.setReplayMode(realtimeMode);
 
-        FilesystemReader fsReader = new FilesystemReader(inputDir);
+        FSReader fsReader = new FSReader(inputDir);
 
-        IMonitoringRecordConsumer logCons = new IMonitoringRecordConsumer() {
+        IKiekerRecordConsumer logCons = new IKiekerRecordConsumer() {
 
                 /** Anonymous consumer class that simply passes all records to the
                  *  controller */
@@ -103,7 +103,7 @@ public class FilesystemLogReplayer {
                 }
             };
         if (realtimeMode) {
-            IMonitoringRecordConsumer rtDistributorCons = new ReplayDistributor(7, logCons);
+            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(7, logCons);
             fsReader.addConsumer(
                     rtDistributorCons,
                     null); // consume records of all types

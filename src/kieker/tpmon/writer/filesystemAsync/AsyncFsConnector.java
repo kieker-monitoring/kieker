@@ -38,9 +38,9 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Matthias Rohr, Andre van Hoorn
  */
-public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
+public class AsyncFsConnector extends AbstractMonitoringDataWriter {
 
-    private static final Log log = LogFactory.getLog(AsyncFsWriterProducer.class);
+    private static final Log log = LogFactory.getLog(AsyncFsConnector.class);
     //configuration parameter
     private static final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
@@ -54,7 +54,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
             "Use the the constant " + TpmonController.WRITER_ASYNCFS +
             " and the file system specific configuration properties.";
 
-    public AsyncFsWriterProducer() {
+    public AsyncFsConnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
@@ -68,7 +68,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
         return workers;
     }
 
-    public AsyncFsWriterProducer(String storagePathBase) {
+    public AsyncFsConnector(String storagePathBase) {
         this.storagePathBase = storagePathBase;
         this.init();
     }
@@ -106,7 +106,7 @@ public class AsyncFsWriterProducer extends AbstractMonitoringDataWriter {
 
         blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            AsyncFsWriterWorkerThread dbw = new AsyncFsWriterWorkerThread(blockingQueue, storageDir + "/tpmon");
+            FsWriterThread dbw = new FsWriterThread(blockingQueue, storageDir + "/tpmon");
             //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
             workers.add(dbw);
             dbw.start();

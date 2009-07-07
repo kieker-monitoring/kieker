@@ -9,11 +9,11 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 import java.util.TreeSet;
-import kieker.common.logReader.IMonitoringRecordConsumer;
-import kieker.common.logReader.filesystemReader.FilesystemReader;
-import kieker.loganalysis.datamodel.ExecutionSequence;
+import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.common.logReader.filesystemReader.FSReader;
+import kieker.loganalysis.datamodel.ExecutionTrace;
 import kieker.loganalysis.datamodel.InvalidTraceException;
-import kieker.loganalysis.datamodel.MessageSequence;
+import kieker.loganalysis.datamodel.MessageTrace;
 import kieker.loganalysis.plugins.DependencyGraphPlugin;
 import kieker.loganalysis.plugins.SequenceDiagramPlugin;
 import kieker.loganalysis.recordConsumer.ExecutionSequenceRepositoryFiller;
@@ -189,23 +189,23 @@ public class LogAnalysisTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
-        //analysisInstance.addLogReader(new FSReader(inputDirName));
-        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
+        //analysisInstance.setLogReader(new FSReader(inputDirName));
+        analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
-        analysisInstance.addConsumer(seqRepConsumer);
+        analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 
         /* Generate and output sequence diagrams */
-        Enumeration<ExecutionSequence> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
+        Enumeration<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
         int numPlots = 0;
         long lastTraceId = -1;
         String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
         while (seqEnum.hasMoreElements()) {
-            ExecutionSequence t = seqEnum.nextElement();
+            ExecutionTrace t = seqEnum.nextElement();
             Long id = t.getTraceId();
             if (traceIds == null || traceIds.contains(id)) {
                 //String fileName = "/tmp/seqDia" + msgTrace.traceId + ".pic";
-                MessageSequence mSeq = t.toMessageSequence();
+                MessageTrace mSeq = t.toMessageTrace();
                 if (mSeq == null) {
                     log.error("Transformation to message trace failed for trace " + id);
                     retVal = false;
@@ -241,14 +241,14 @@ public class LogAnalysisTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
-        //analysisInstance.addLogReader(new FSReader(inputDirName));
-        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
+        //analysisInstance.setLogReader(new FSReader(inputDirName));
+        analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
-        analysisInstance.addConsumer(seqRepConsumer);
+        analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 
         /* Generate and output dependency graphs */
-        Collection<ExecutionSequence> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.values();
+        Collection<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.values();
         String outputFnBase = new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath();
         DependencyGraphPlugin.writeDotFromExecutionTraces(seqEnum, outputFnBase + ".pic", traceIds);
         System.out.println("Wrote dependency graph to file '" + outputFnBase + ".pic" + "'");
@@ -272,24 +272,24 @@ public class LogAnalysisTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
-        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
+        analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
-        analysisInstance.addConsumer(seqRepConsumer);
+        analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 
         /* Generate and output message traces */
-        Enumeration<ExecutionSequence> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
+        Enumeration<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
         int numTraces = 0;
         String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
         PrintStream ps = System.out;
         try {
             ps = new PrintStream(new FileOutputStream(outputFn));
             while (seqEnum.hasMoreElements()) {
-                ExecutionSequence t = seqEnum.nextElement();
+                ExecutionTrace t = seqEnum.nextElement();
                 Long id = t.getTraceId();
                 if (traceIds == null || traceIds.contains(id)) {
                     numTraces++;
-                    ps.println(t.toMessageSequence());
+                    ps.println(t.toMessageTrace());
                 }
             }
             System.out.println("Wrote " + numTraces + " messageTraces" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
@@ -317,21 +317,21 @@ public class LogAnalysisTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
-        //analysisInstance.addLogReader(new FSReader(inputDirName));
-        analysisInstance.addLogReader(new FilesystemReader(inputDirName));
+        //analysisInstance.setLogReader(new FSReader(inputDirName));
+        analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
-        analysisInstance.addConsumer(seqRepConsumer);
+        analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 
         /* Generate and output message traces */
-        Enumeration<ExecutionSequence> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
+        Enumeration<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
         int numTraces = 0;
         String outputFn = new File(outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
         PrintStream ps = System.out;
         try {
             ps = new PrintStream(new FileOutputStream(outputFn));
             while (seqEnum.hasMoreElements()) {
-                ExecutionSequence t = seqEnum.nextElement();
+                ExecutionTrace t = seqEnum.nextElement();
                 Long id = t.getTraceId();
                 if (traceIds == null || traceIds.contains(id)) {
                     numTraces++;
