@@ -325,7 +325,8 @@
             <include name="lib/**"/>
             <include name="build.xml"/>
             <include name="build.properties"/>
-        <!--<include name="RELEASENOTES"/>-->
+            <include name="RELEASENOTES"/>
+            <include name="RELEASEHISTORY"/>
         </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
@@ -356,7 +357,8 @@
             <include name="${dist.dir}/${dist.tpan.ctrl}"/>
             <include name="META-INF/*.example"/>
             <include name="lib/**"/>
-        <!--<include name="RELEASENOTES"/>-->
+            <include name="RELEASENOTES"/>
+            <include name="RELEASEHISTORY"/>
         </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">

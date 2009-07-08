@@ -1,0 +1,18 @@
+Introduction:
+
+This document summarizes changes made in all releases starting with 0.90.
+
+* 0.95a
+- Considerable improvements to Kieker's architecture, e.g.
+  - Generalized/extensible monitoring record model (more than executions)
+  - Generalized/extensible writer model (more than database and ﬁlesystem)
+  - Integration of monitoring and analysis data model
+- Major refactorings
+- First release containing core parts of the analysis component Tpan
+
+* 0.90
+- Improved (in terms of performance) concurrency in TpmonController
+
+* 0.91
+- ...
+
