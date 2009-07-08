@@ -1,4 +1,4 @@
-package kieker.tpmon.probe.tomcat;
+package kieker.tpmon.probe.servlet;
 
 import java.io.IOException;
 import javax.servlet.*;
@@ -13,11 +13,9 @@ import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.probe.tomcat.KiekerTraceRegistrationFilter
- *
+/*
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +29,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- * 
+*/
+
+/**
  * Register session id of incoming request
  * 
  * Servlet filter used to register session ids within the TpmonController.
