@@ -314,35 +314,20 @@
         </jar>
     </target>
 
-    <patternset id="dist_src_files">
-        <include name="bin/*.sh"/>
-        <include name="bin/log4j.properties"/>
-        <include name="META-INF/*.example"/>
-        <include name="src/**/*.java"/>
-        <include name="src/kieker/tpmon/controlServlet/WEB-INF/web.xml"/>
-        <include name="src/kieker/tpmon/controlServlet/images/**"/>
-        <include name="lib/**"/>
-        <include name="build.xml"/>
-        <include name="build.properties"/>
-        <!--<include name="RELEASENOTES"/>-->
-    </patternset>
-
-    <patternset id="dist_bin_files">
-        <include name="bin/*.sh"/>
-        <include name="bin/log4j.properties"/>
-	<include name="${dist.dir}/${dist.tpmon.ltw}"/>
-	<include name="${dist.dir}/${dist.tpmon.ctw}"/>
-	<include name="${dist.dir}/${dist.tpmon.ctrl}"/>
-	<include name="${dist.dir}/${dist.tpmon.controlServlet}"/>
-	<include name="${dist.dir}/${dist.kieker.common}"/>
-	<include name="${dist.dir}/${dist.tpan.ctrl}"/>
-        <include name="META-INF/*.example"/>
-        <include name="lib/**"/>
-        <!--<include name="RELEASENOTES"/>-->
-    </patternset>
-
     <target name="build-tpmon-sources" depends="init">
-	<!-- Source archives -->
+        <patternset id="dist_src_files">
+            <include name="bin/*.sh"/>
+            <include name="bin/log4j.properties"/>
+            <include name="META-INF/*.example"/>
+            <include name="src/**/*.java"/>
+            <include name="src/kieker/tpmon/controlServlet/WEB-INF/web.xml"/>
+            <include name="src/kieker/tpmon/controlServlet/images/**"/>
+            <include name="lib/**"/>
+            <include name="build.xml"/>
+            <include name="build.properties"/>
+        <!--<include name="RELEASENOTES"/>-->
+        </patternset>
+
         <tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
                 <patternset refid="dist_src_files"/>
@@ -360,7 +345,20 @@
     </target>
 
     <target name="build-tpmon-binaries" depends="build-all">
-	<!-- Source archives -->
+        <patternset id="dist_bin_files">
+            <include name="bin/*.sh"/>
+            <include name="bin/log4j.properties"/>
+            <include name="${dist.dir}/${dist.tpmon.ltw}"/>
+            <include name="${dist.dir}/${dist.tpmon.ctw}"/>
+            <include name="${dist.dir}/${dist.tpmon.ctrl}"/>
+            <include name="${dist.dir}/${dist.tpmon.controlServlet}"/>
+            <include name="${dist.dir}/${dist.kieker.common}"/>
+            <include name="${dist.dir}/${dist.tpan.ctrl}"/>
+            <include name="META-INF/*.example"/>
+            <include name="lib/**"/>
+        <!--<include name="RELEASENOTES"/>-->
+        </patternset>
+
         <tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
                 <patternset refid="dist_bin_files"/>
@@ -378,7 +376,7 @@
     </target>
 
     <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries">
-    <echo message=""/>
+        <echo message=""/>
     </target>
 
     <target name="clean">
