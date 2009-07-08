@@ -1,5 +1,7 @@
 package kieker.tpmon.probe.aspectJ.executions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -7,7 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * kieker.tpmon.aspects.KiekerTpmonMonitoringFull
+ * kieker.tpmon.aspects.KiekerTpmonExecutionProbeFullServlet
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -28,18 +30,28 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonMonitoringFull extends AbstractKiekerTpmonMonitoring { 
+public class KiekerTpmonExecutionProbeFullServlet extends AbstractKiekerTpmonExecutionProbeServlet {
+    
+    @Pointcut("execution(* *.do*(..)) && args(request,response) ")
+    public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    @Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)")
+    public Object doServletEntryProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+        return super.doServletEntryProfiling(thisJoinPoint);
+    }
 
     @Pointcut("execution(* *.*(..)) && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
-   
+
     @Around("monitoredMethod()")
     public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
         KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+        String sessionId = sessionRegistry.recallThreadLocalSessionId(); // may be null
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){
@@ -47,8 +59,10 @@ public class KiekerTpmonMonitoringFull extends AbstractKiekerTpmonMonitoring {
         } finally {
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
-             * exception! */
+             * execpetion! */
+            execData.sessionId = sessionId;
             ctrlInst.logMonitoringRecord(execData);
+            // Since we didn't register the sessionId we won't unset it!
         }
         return execData.retVal;
     }

@@ -9,7 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemote
+ * kieker.tpmon.aspects.KiekerTpmonExecutionProbeAnnotationRemote
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -30,9 +30,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonMonitoringAnnotationRemote extends AbstractKiekerTpmonMonitoring {
+public class KiekerTpmonExecutionProbeAnnotationRemote extends AbstractKiekerTpmonExecutionProbe {
 
-    private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
+    private static final Log log = LogFactory.getLog(KiekerTpmonExecutionProbeAnnotationRemote.class);
 
     @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))" +
     " && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")

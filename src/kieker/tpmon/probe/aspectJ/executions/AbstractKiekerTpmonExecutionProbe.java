@@ -10,7 +10,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
 /**
- * kieker.tpmon.aspects.AbstractKiekerTpmonMonitoring
+ * kieker.tpmon.aspects.AbstractKiekerTpmonExecutionProbe
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -31,7 +31,7 @@ import org.aspectj.lang.annotation.Aspect;
  * @author Andre van Hoorn
  */
 @Aspect
-public abstract class AbstractKiekerTpmonMonitoring implements IKiekerMonitoringProbe {
+public abstract class AbstractKiekerTpmonExecutionProbe implements IKiekerMonitoringProbe {
 
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();

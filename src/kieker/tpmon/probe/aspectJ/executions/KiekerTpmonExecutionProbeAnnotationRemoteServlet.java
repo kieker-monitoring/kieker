@@ -12,7 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.aspects.KiekerTpmonMonitoringAnnotationRemoteServlet
+ * kieker.tpmon.aspects.KiekerTpmonExecutionProbeAnnotationRemoteServlet
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -33,9 +33,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonMonitoringAnnotationRemoteServlet extends AbstractKiekerTpmonMonitoringServlet {
+public class KiekerTpmonExecutionProbeAnnotationRemoteServlet extends AbstractKiekerTpmonExecutionProbeServlet {
 
-    private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
+    private static final Log log = LogFactory.getLog(KiekerTpmonExecutionProbeAnnotationRemote.class);
 
     @Pointcut("execution(* *.do*(..)) && args(request,response) ")
     public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {

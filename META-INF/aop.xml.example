@@ -52,10 +52,10 @@
 <aspects>        
      <!-- here you usually want to use only ONE aspect. -->
      <!-- Put the remaining in a comment -->
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringAnnotation"/>-->
-     <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringAnnotationRemote"/>
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringAnnotationRemoteServlet"/>-->
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringFull"/>-->
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonMonitoringFullServlet"/>-->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotation"/>-->
+     <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFull"/>-->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullServlet"/>-->
 </aspects>
 </aspectj>

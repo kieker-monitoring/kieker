@@ -3,7 +3,7 @@
     <property file="build.properties"/>
 
     <property name="KiekerTpmonTestAspect"
-              value="KiekerTpmonMonitoringAnnotationRemote.java"/>
+              value="KiekerTpmonExecutionProbeAnnotationRemote.java"/>
 
     <path id="classpath.libs">
         <pathelement path="${classpath}"/>
@@ -541,9 +541,9 @@
 
     <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonExecutionProbe.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoringServlet.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonExecutionProbeServlet.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>        
@@ -559,9 +559,9 @@
 
     <target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="build-tpmon-ctw,init-log4-properties-tests">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonExecutionProbe.java"
               todir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoringServlet.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonExecutionProbeServlet.java"
               todir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>        
@@ -588,9 +588,9 @@
 
     <target name="compile-tests-compileTimeWeaving-bookstoreBenchmark" depends="build-tpmon-ctw">
         <mkdir dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoring.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonExecutionProbe.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonMonitoringServlet.java"
+        <copy file="src/kieker/tpmon/probe/aspectJ/executions/AbstractKiekerTpmonExecutionProbeServlet.java"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="src/kieker/tpmon/probe/aspectJ/executions/${KiekerTpmonTestAspect}"
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>

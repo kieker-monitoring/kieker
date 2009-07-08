@@ -7,7 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
 /**
- * kieker.tpmon.aspects.AbstractKiekerTpmonMonitoringServlet
+ * kieker.tpmon.aspects.AbstractKiekerTpmonExecutionProbeServlet
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -28,7 +28,7 @@ import org.aspectj.lang.annotation.Aspect;
  * @author Andre van Hoorn
  */
 @Aspect
-public abstract class AbstractKiekerTpmonMonitoringServlet extends AbstractKiekerTpmonMonitoring {
+public abstract class AbstractKiekerTpmonExecutionProbeServlet extends AbstractKiekerTpmonExecutionProbe {
 
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 

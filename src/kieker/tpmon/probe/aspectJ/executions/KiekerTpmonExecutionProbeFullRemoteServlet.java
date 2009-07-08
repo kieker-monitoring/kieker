@@ -33,9 +33,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonMonitoringFullRemoteServlet extends AbstractKiekerTpmonMonitoringServlet {
+public class KiekerTpmonExecutionProbeFullRemoteServlet extends AbstractKiekerTpmonExecutionProbeServlet {
 
-    private static final Log log = LogFactory.getLog(KiekerTpmonMonitoringAnnotationRemote.class);
+    private static final Log log = LogFactory.getLog(KiekerTpmonExecutionProbeAnnotationRemote.class);
 
     @Pointcut("execution(* *.do*(..)) && args(request,response) ")
     public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
