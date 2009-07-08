@@ -1,4 +1,4 @@
-package kieker.loganalysis.datamodel;
+package kieker.tpan.datamodel;
 
 import java.util.Arrays;
 import java.util.Hashtable;

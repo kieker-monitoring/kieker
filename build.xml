@@ -23,8 +23,8 @@
                   value="${kieker.packagenamebase}-${kieker.version}"/>
         <property name="tpmon.dist.name"
                   value="${kieker.tpmon.packagenamebase}-${kieker.version}"/>
-        <property name="loganalysis.dist.name"
-                  value="${kieker.loganalysis.packagenamebase}-${kieker.version}"/>
+        <property name="tpan.dist.name"
+                  value="${kieker.tpan.packagenamebase}-${kieker.version}"/>
         <property name="common.dist.name"
                   value="${kieker.common.packagenamebase}-${kieker.version}"/>
         <property name="dist.tpmon.ltw"
@@ -37,10 +37,12 @@
                   value="${tpmon.dist.name}_${kieker-tpmon-controlServletwar.suffix}.war"/>
         <property name="dist.kieker.common"
                   value="${common.dist.name}.jar"/>
-        <property name="dist.loganalysis.ctrl"
-                  value="${loganalysis.dist.name}_${kieker-loganalysis-ctrljar.suffix}.jar"/>
+        <property name="dist.tpan.ctrl"
+                  value="${tpan.dist.name}_${kieker-tpan-ctrljar.suffix}.jar"/>
         <property name="dist.kieker.srcBaseName"
-                  value="${tpmon.dist.name}_${kieker-src.suffix}"/>
+                  value="${kieker.dist.name}_${kieker-src.suffix}"/>
+        <property name="dist.kieker.binBaseName"
+                  value="${kieker.dist.name}_${kieker-bin.suffix}"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -58,7 +60,7 @@
     </target>
 
     <target name="build-all"
-            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-tpmon-sources,build-kieker.common,build-loganalysis-ctrl">
+            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-kieker.common,build-tpan-ctrl">
     </target>
 
     <condition property="no.kieker.properties">
@@ -74,17 +76,17 @@
         <copy file="${kieker.properties.example}" tofile="${kieker.properties}"/>
     </target>
 
-    <condition property="no.loganalysis.properties">
+    <condition property="no.tpan.properties">
         <not>
-            <available file="${loganalysis.properties}"/>
+            <available file="${tpan.properties}"/>
         </not>
     </condition>
 
-    <target name="init-loganalysis-properties" if="no.loganalysis.properties">
-        <!-- if no loganalysis.properties, copy example file automatically  -->
-        <echo message="${loganalysis.properties} not existing.
+    <target name="init-tpan-properties" if="no.tpan.properties">
+        <!-- if no tpan.properties, copy example file automatically  -->
+        <echo message="${tpan.properties} not existing.
                        Creating default file."/>
-        <copy file="${loganalysis.properties.example}" tofile="${loganalysis.properties}"/>
+        <copy file="${tpan.properties.example}" tofile="${tpan.properties}"/>
     </target>
 
     <condition property="no.tpmon.properties">
@@ -101,7 +103,7 @@
     </target>
 
     <target name="init-properties"
-            depends="init-kieker-properties,init-tpmon-properties,init-loganalysis-properties,init-aop-xml-ltwtests,init-log4-properties-tests">
+            depends="init-kieker-properties,init-tpmon-properties,init-tpan-properties,init-aop-xml-ltwtests,init-log4-properties-tests">
     </target>
 
     <target name="init" depends="update-version,init-properties">
@@ -138,11 +140,11 @@
             </fileset>
         </path>
 
-        <!-- Classpath with loganalysis and external libs  -->
-        <path id="loganalysis.core.classpath">
+        <!-- Classpath with tpan and external libs  -->
+        <path id="tpan.core.classpath">
             <path refid="classpath.libs"/>
             <fileset dir="${dist.dir}">
-                <include name="${dist.loganalysis.ctrl}"/>
+                <include name="${dist.tpan.ctrl}"/>
                 <include name="${dist.kieker.common}"/>
             </fileset>
         </path>
@@ -261,28 +263,28 @@
         </war>
     </target>
 
-    <!-- Build logAnalysis  -->
-    <target name="build-loganalysis-ctrl" depends="init,build-tpmon-ctrl,build-kieker.common">
-        <delete dir="${build.loganalysis.ctrl.dir}"/>
-        <mkdir  dir="${build.loganalysis.ctrl.dir}"/>
-        <mkdir  dir="${build.loganalysis.ctrl.dir}/META-INF"/>
-        <echo message="Creating the library of loganalysis (${dist.tpmon.loganalysis.ctrl})."/>
-        <javac destDir="${build.loganalysis.ctrl.dir}"
+    <!-- Build tpan  -->
+    <target name="build-tpan-ctrl" depends="init,build-tpmon-ctrl,build-kieker.common">
+        <delete dir="${build.tpan.ctrl.dir}"/>
+        <mkdir  dir="${build.tpan.ctrl.dir}"/>
+        <mkdir  dir="${build.tpan.ctrl.dir}/META-INF"/>
+        <echo message="Creating the library of tpan (${dist.tpmon.tpan.ctrl})."/>
+        <javac destDir="${build.tpan.ctrl.dir}"
                source="1.5"
-               srcdir="src/kieker/loganalysis/"
+               srcdir="src/kieker/tpan/"
                debug="true"
                classpathref="tpmon.core.classpath">
             <compilerarg value="-Xlint:all"/>
         </javac>
-        <copy file="${loganalysis.properties}" todir="${build.loganalysis.ctrl.dir}/META-INF"/>
+        <copy file="${tpan.properties}" todir="${build.tpan.ctrl.dir}/META-INF"/>
         <!-- We want to include the sources in this jar -->
-        <copy todir="${build.loganalysis.ctrl.dir}/">
+        <copy todir="${build.tpan.ctrl.dir}/">
             <fileset dir="src">
-                <include name="kieker/loganalysis/**/*.java"/>
+                <include name="kieker/tpan/**/*.java"/>
             </fileset>
         </copy>
-        <jar destfile="${dist.dir}/${dist.loganalysis.ctrl}">
-            <fileset dir="${build.loganalysis.ctrl.dir}"/>
+        <jar destfile="${dist.dir}/${dist.tpan.ctrl}">
+            <fileset dir="${build.tpan.ctrl.dir}"/>
         </jar>
     </target>
 
@@ -312,14 +314,29 @@
     </target>
 
     <patternset id="dist_src_files">
-        <include name="META-INF/aop.xml.example"/>
-        <include name="${tpmon.properties}"/>
-        <include name="${loganalysis.properties}"/>
-        <include name="${kieker.properties}"/>
+        <include name="bin/*.sh"/>
+        <include name="bin/log4j.properties"/>
+        <include name="META-INF/*.example"/>
         <include name="src/**/*.java"/>
+        <include name="src/kieker/tpmon/controlServlet/WEB-INF/web.xml"/>
+        <include name="src/kieker/tpmon/controlServlet/images/**"/>
         <include name="lib/**"/>
         <include name="build.xml"/>
         <include name="build.properties"/>
+        <include name="RELEASENOTES"/>
+    </patternset>
+
+    <patternset id="dist_bin_files">
+        <include name="bin/*.sh"/>
+        <include name="bin/log4j.properties"/>
+	<include name="${dist.dir}/${dist.tpmon.ltw}"/>
+	<include name="${dist.dir}/${dist.tpmon.ctw}"/>
+	<include name="${dist.dir}/${dist.tpmon.ctrl}"/>
+	<include name="${dist.dir}/${dist.tpmon.controlServlet}"/>
+	<include name="${dist.dir}/${dist.kieker.common}"/>
+	<include name="${dist.dir}/${dist.tpan.ctrl}"/>
+        <include name="META-INF/*.example"/>
+        <include name="lib/**"/>
         <include name="RELEASENOTES"/>
     </patternset>
 
@@ -330,7 +347,7 @@
                 <patternset refid="dist_src_files"/>
             </tarfileset>
         </tar>
-        <gzip zipfile="${dist.dir}/${dist.kieker.srcBaseName}.tgz" src="${dist.dir}/${dist.kieker.srcBaseName}.tar" />
+        <gzip zipfile="${dist.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${dist.dir}/${dist.kieker.srcBaseName}.tar" />
      	<!-- tar file no longer needed -->
         <delete file="${dist.dir}/${dist.kieker.srcBaseName}.tar"/>
 
@@ -340,6 +357,26 @@
             </zipfileset>
         </zip>
     </target>
+
+    <target name="build-tpmon-binaries" depends="build-all">
+	<!-- Source archives -->
+        <tar destfile="${dist.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
+            <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+                <patternset refid="dist_bin_files"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${dist.dir}/${dist.kieker.binBaseName}.tar.gz" src="${dist.dir}/${dist.kieker.binBaseName}.tar" />
+     	<!-- tar file no longer needed -->
+        <delete file="${dist.dir}/${dist.kieker.binBaseName}.tar"/>
+
+        <zip  zipfile="${dist.dir}/${dist.kieker.binBaseName}.zip">
+            <zipfileset dir="." prefix="${tpmon.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_bin_files"/>
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries" />
 
     <target name="clean">
 	<!-- <delete dir="tmp"/>-->
@@ -687,12 +724,12 @@
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
 
-    <target name="run-logAnalysis" depends="build-loganalysis-ctrl">
+    <target name="run-tpan" depends="build-tpan-ctrl">
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
-              classname="kieker.loganalysis.LogAnalysisTool"
-              classpathref="loganalysis.core.classpath">
+              classname="kieker.tpan.tpanTool"
+              classpathref="tpan.core.classpath">
                   <!-- select-traces 3 -->
             <arg line="--inputdir ${inputDir} --outputdir tmp/  --plot-Dependency-Graph --plot-Sequence-Diagram"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>

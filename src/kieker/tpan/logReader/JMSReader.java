@@ -1,4 +1,4 @@
-package kieker.loganalysis.logReader;
+package kieker.tpan.logReader;
 
 import kieker.common.logReader.AbstractKiekerLogReader;
 import java.util.Hashtable;

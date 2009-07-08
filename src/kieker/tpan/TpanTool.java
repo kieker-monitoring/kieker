@@ -1,4 +1,4 @@
-package kieker.loganalysis;
+package kieker.tpan;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,17 +9,15 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 import java.util.TreeSet;
-import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.filesystemReader.FSReader;
-import kieker.loganalysis.datamodel.ExecutionTrace;
-import kieker.loganalysis.datamodel.InvalidTraceException;
-import kieker.loganalysis.datamodel.MessageTrace;
-import kieker.loganalysis.plugins.DependencyGraphPlugin;
-import kieker.loganalysis.plugins.SequenceDiagramPlugin;
-import kieker.loganalysis.recordConsumer.ExecutionSequenceRepositoryFiller;
+import kieker.tpan.datamodel.ExecutionTrace;
+import kieker.tpan.datamodel.InvalidTraceException;
+import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.DependencyGraphPlugin;
+import kieker.tpan.plugins.SequenceDiagramPlugin;
+import kieker.tpan.recordConsumer.ExecutionSequenceRepositoryFiller;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -31,9 +29,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.loganalysis.LogAnalysisTool
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -49,12 +45,14 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
-public class LogAnalysisTool {
+public class TpanTool {
 
-    private static final Log log = LogFactory.getLog(LogAnalysisTool.class);
+    private static final Log log = LogFactory.getLog(TpanTool.class);
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
@@ -100,7 +98,7 @@ public class LogAnalysisTool {
     }
 
     private static void printUsage() {
-        cmdHelpFormatter.printHelp(LogAnalysisTool.class.getName(), cmdlOpts);
+        cmdHelpFormatter.printHelp(TpanTool.class.getName(), cmdlOpts);
     }
 
     private static boolean initFromArgs() {
@@ -188,7 +186,7 @@ public class LogAnalysisTool {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
-        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
+        TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
@@ -240,7 +238,7 @@ public class LogAnalysisTool {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
-        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
+        TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
@@ -271,7 +269,7 @@ public class LogAnalysisTool {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
-        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
+        TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
         analysisInstance.addRecordConsumer(seqRepConsumer);
@@ -316,7 +314,7 @@ public class LogAnalysisTool {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
-        LogAnalysisInstance analysisInstance = new LogAnalysisInstance();
+        TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
         ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();

@@ -1,8 +1,6 @@
-package kieker.loganalysis;
+package kieker.tpan;
 
-/**
- * kieker.loganalysis.LogAnalysisInstance
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -30,9 +28,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class LogAnalysisInstance {
+public class TpanInstance {
 
-    private static final Log log = LogFactory.getLog(LogAnalysisInstance.class);
+    private static final Log log = LogFactory.getLog(TpanInstance.class);
     private final Vector<IKiekerLogReader> logReaders = new Vector<IKiekerLogReader>();
     private final Vector<IKiekerRecordConsumer> consumers = new Vector<IKiekerRecordConsumer>();
 

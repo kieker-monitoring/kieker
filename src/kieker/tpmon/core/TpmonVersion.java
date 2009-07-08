@@ -34,7 +34,7 @@ public class TpmonVersion {
 	 * The VERSION string is updated by the Ant build file, which looks for the
 	 * pattern: VERSION = <quote>.*<quote>
 	 */
-	private static final String VERSION = "0.95-20090706";
+	private static final String VERSION = "0.95-20090708";
 
 	static final String COPYRIGHT = "Copyright (c) 2006-2009 Kieker Project";
 

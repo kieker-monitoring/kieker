@@ -1,4 +1,4 @@
-package kieker.loganalysis.plugins;
+package kieker.tpan.plugins;
 
 /*
  * kieker.loganalysis.plugins.SequenceDiagramPlugin.java
@@ -25,8 +25,8 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Vector;
-import kieker.loganalysis.datamodel.Message;
-import kieker.loganalysis.datamodel.MessageTrace;
+import kieker.tpan.datamodel.Message;
+import kieker.tpan.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

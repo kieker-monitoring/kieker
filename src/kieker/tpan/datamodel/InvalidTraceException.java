@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package kieker.loganalysis.datamodel;
+package kieker.tpan.datamodel;
 
 /**
  *

@@ -1,4 +1,4 @@
-package kieker.loganalysis.plugins;
+package kieker.tpan.plugins;
 
 /*
  * kieker.loganalysis.plugins.DependencyGraphPlugin.java
@@ -25,13 +25,13 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.TreeSet;
-import kieker.loganalysis.datamodel.MessageTrace;
+import kieker.tpan.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.loganalysis.datamodel.AdjacencyMatrix;
-import kieker.loganalysis.datamodel.ExecutionTrace;
-import kieker.loganalysis.datamodel.InvalidTraceException;
-import kieker.loganalysis.datamodel.Message;
+import kieker.tpan.datamodel.AdjacencyMatrix;
+import kieker.tpan.datamodel.ExecutionTrace;
+import kieker.tpan.datamodel.InvalidTraceException;
+import kieker.tpan.datamodel.Message;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool

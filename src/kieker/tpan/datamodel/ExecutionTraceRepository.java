@@ -1,4 +1,4 @@
-package kieker.loganalysis.datamodel;
+package kieker.tpan.datamodel;
 
 import java.util.Hashtable;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;

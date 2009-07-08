@@ -1,4 +1,4 @@
-package kieker.loganalysis.recordConsumer;
+package kieker.tpan.recordConsumer;
 
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;

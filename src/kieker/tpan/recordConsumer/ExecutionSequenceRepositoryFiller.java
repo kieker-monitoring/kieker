@@ -1,17 +1,15 @@
-package kieker.loganalysis.recordConsumer;
+package kieker.tpan.recordConsumer;
 
 import java.util.TreeSet;
 import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.loganalysis.datamodel.ExecutionTraceRepository;
+import kieker.tpan.datamodel.ExecutionTraceRepository;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.loganalysis.consumer.ExecutionSequenceRepositoryFiller
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -27,7 +25,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
 public class ExecutionSequenceRepositoryFiller implements IKiekerRecordConsumer {
