@@ -117,13 +117,8 @@ public class SequenceDiagramPlugin {
         ps.println(".PE");
     }
 
-    public static void writeDotForMessageTrace(MessageTrace msgTrace, String outputFilename) {
-        PrintStream ps = System.out;
-        try {
-            ps = new PrintStream(new FileOutputStream(outputFilename));
-        } catch (FileNotFoundException e) {
-            log.error("File not found", e);
-        }
+    public static void writeDotForMessageTrace(MessageTrace msgTrace, String outputFilename) throws FileNotFoundException {
+        PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
         picFromMessageTrace(msgTrace, ps);
         ps.flush();
         ps.close();

@@ -19,7 +19,6 @@ package kieker.tpan.plugins;
  * limitations under the License.
  * ==================================================
  */
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -41,7 +40,7 @@ import kieker.tpan.datamodel.Message;
 public class DependencyGraphPlugin {
 
     private static final Log log = LogFactory.getLog(DependencyGraphPlugin.class);
- 
+
     private DependencyGraphPlugin() {
     }
 
@@ -65,23 +64,19 @@ public class DependencyGraphPlugin {
         ps.println("}");
     }
 
-    public static void writeDotFromExecutionTraces(Collection<ExecutionTrace> eTraces, String outputFilename, TreeSet<Long> traceIds) throws InvalidTraceException {
-    AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
-    PrintStream ps = System.out;
-        try {
-            ps = new PrintStream(new FileOutputStream(outputFilename));
-        } catch (FileNotFoundException e) {
-            log.error("File not found.", e);
-        }
+    public static void writeDotFromExecutionTraces(Collection<ExecutionTrace> eTraces, String outputFilename, TreeSet<Long> traceIds) throws InvalidTraceException, FileNotFoundException {
+        AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
+        PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
         for (ExecutionTrace eTrace : eTraces) {
             MessageTrace msgTrace = eTrace.toMessageTrace();
             if (traceIds == null || traceIds.contains(eTrace.getTraceId())) {
-            for (Message m : msgTrace.getSequenceAsVector()) {
-                if (!m.callMessage) {
-                    continue;
+                for (Message m : msgTrace.getSequenceAsVector()) {
+                    if (!m.callMessage) {
+                        continue;
+                    }
+                    adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
                 }
-                adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
-            }}
+            }
         }
         dotFromAdjacencyMatrix(adjMatrix, ps);
         ps.flush();

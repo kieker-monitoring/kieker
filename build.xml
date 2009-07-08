@@ -120,6 +120,7 @@
         </fail>
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${release.dir}"/>
         <mkdir dir="${build.tests.dir}"/>
         <mkdir dir="tmp"/>
 
@@ -323,7 +324,7 @@
         <include name="lib/**"/>
         <include name="build.xml"/>
         <include name="build.properties"/>
-        <include name="RELEASENOTES"/>
+        <!--<include name="RELEASENOTES"/>-->
     </patternset>
 
     <patternset id="dist_bin_files">
@@ -337,21 +338,21 @@
 	<include name="${dist.dir}/${dist.tpan.ctrl}"/>
         <include name="META-INF/*.example"/>
         <include name="lib/**"/>
-        <include name="RELEASENOTES"/>
+        <!--<include name="RELEASENOTES"/>-->
     </patternset>
 
     <target name="build-tpmon-sources" depends="init">
 	<!-- Source archives -->
-        <tar destfile="${dist.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
+        <tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
                 <patternset refid="dist_src_files"/>
             </tarfileset>
         </tar>
-        <gzip zipfile="${dist.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${dist.dir}/${dist.kieker.srcBaseName}.tar" />
+        <gzip zipfile="${release.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${release.dir}/${dist.kieker.srcBaseName}.tar" />
      	<!-- tar file no longer needed -->
-        <delete file="${dist.dir}/${dist.kieker.srcBaseName}.tar"/>
+        <delete file="${release.dir}/${dist.kieker.srcBaseName}.tar"/>
 
-        <zip  zipfile="${dist.dir}/${dist.kieker.srcBaseName}.zip">
+        <zip  zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
             <zipfileset dir="." prefix="${tpmon.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_src_files"/>
             </zipfileset>
@@ -360,27 +361,30 @@
 
     <target name="build-tpmon-binaries" depends="build-all">
 	<!-- Source archives -->
-        <tar destfile="${dist.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
+        <tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
                 <patternset refid="dist_bin_files"/>
             </tarfileset>
         </tar>
-        <gzip zipfile="${dist.dir}/${dist.kieker.binBaseName}.tar.gz" src="${dist.dir}/${dist.kieker.binBaseName}.tar" />
+        <gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
      	<!-- tar file no longer needed -->
-        <delete file="${dist.dir}/${dist.kieker.binBaseName}.tar"/>
+        <delete file="${release.dir}/${dist.kieker.binBaseName}.tar"/>
 
-        <zip  zipfile="${dist.dir}/${dist.kieker.binBaseName}.zip">
+        <zip  zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
             <zipfileset dir="." prefix="${tpmon.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_bin_files"/>
             </zipfileset>
         </zip>
     </target>
 
-    <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries" />
+    <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries">
+    <echo message=""/>
+    </target>
 
     <target name="clean">
 	<!-- <delete dir="tmp"/>-->
         <delete dir="${dist.dir}"/>
+        <delete dir="${release.dir}"/>
         <delete dir="${build.dir}"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>

@@ -1,10 +1,6 @@
 package kieker.common.logReader;
 
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-
-/**
- * kieker.loganalysis.IKiekerRecordConsumer
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -21,14 +17,22 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
  * limitations under the License.
  * ==================================================
  *
+ * This reader allows one to read a folder or an single tpmon file and
+ * transforms it to monitoring events that are stored in the file system
+ * again, written to a database, or whatever tpmon is configured to do
+ * with the monitoring data.
+ */
+
+/**
+ *
  * @author Andre van Hoorn
  */
-public interface IKiekerRecordConsumer {
-    public String[] getRecordTypeSubscriptionList();
+public class LogReaderExecutionException extends Exception {
+    public LogReaderExecutionException(String messString){
+        super(messString);
+    }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
-
-    public boolean execute() throws RecordConsumerExecutionException;
-
-    public void terminate();
+    public LogReaderExecutionException(String messString, Throwable cause){
+        super(messString, cause);
+    }
 }

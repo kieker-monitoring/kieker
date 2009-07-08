@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 import java.util.TreeSet;
+import kieker.common.logReader.LogReaderExecutionException;
+import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
@@ -148,7 +150,9 @@ public class TpanTool {
                System.err.println("A task failed");
            }
         } catch (Exception ex) {
-            System.err.println("An error occured: " + ex);
+            System.err.println("An error occured: " + ex.getMessage());
+            System.err.println("");
+            System.err.println("See 'kieker.log' for details");
             log.error("Exception", ex);
             retVal = false;
         }
@@ -182,7 +186,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genSequenceDiagramsForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException {
+    private static boolean task_genSequenceDiagramsForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
@@ -234,7 +238,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genDependencyGraphsForTraceSet(String inputDirName, String outputFnPrefix, TreeSet<Long> traceIds) throws IOException, InvalidTraceException {
+    private static boolean task_genDependencyGraphsForTraceSet(String inputDirName, String outputFnPrefix, TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
@@ -265,7 +269,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genMessageTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException {
+    private static boolean task_genMessageTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
@@ -310,7 +314,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genExecutionTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException {
+    private static boolean task_genExecutionTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */

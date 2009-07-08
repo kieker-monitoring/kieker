@@ -66,5 +66,5 @@ public abstract class AbstractKiekerLogReader implements IKiekerLogReader {
         }
     }
 
-    public abstract boolean execute();
+    public abstract boolean execute() throws LogReaderExecutionException;
 }

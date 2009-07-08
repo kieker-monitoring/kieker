@@ -1,6 +1,9 @@
 package kieker.common.tools.logReplayer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -25,7 +28,7 @@ public class FilesystemLogReplayer {
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
     private static final Options cmdlOpts = new Options();
-    
+
 
     static {
         cmdlOpts.addOption(OptionBuilder.withArgName("dir").hasArg().withLongOpt("inputdir").isRequired(true).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
@@ -54,11 +57,12 @@ public class FilesystemLogReplayer {
     private static boolean initFromArgs() {
         inputDir = cmdl.getOptionValue("inputdir");
         log.info("inputDir: " + inputDir);
-        realtimeMode = cmdl.getOptionValue("realtime","false").equals("true");
+        realtimeMode = cmdl.getOptionValue("realtime", "false").equals("true");
         return true;
     }
 
     public static void main(final String[] args) {
+        int retVal = 0;
         if (!parseArgs(args) || !initFromArgs()) {
             System.exit(1);
         }
@@ -83,25 +87,25 @@ public class FilesystemLogReplayer {
 
         IKiekerRecordConsumer logCons = new IKiekerRecordConsumer() {
 
-                /** Anonymous consumer class that simply passes all records to the
-                 *  controller */
-                public String[] getRecordTypeSubscriptionList() {
-                    return null; // consume all types
-                }
+            /** Anonymous consumer class that simply passes all records to the
+             *  controller */
+            public String[] getRecordTypeSubscriptionList() {
+                return null; // consume all types
+            }
 
-                public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
-                    ctrlInst.logMonitoringRecord(monitoringRecord);
-                }
+            public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
+                ctrlInst.logMonitoringRecord(monitoringRecord);
+            }
 
-                public boolean execute() {
-                    // do nothing, we are synchronous
-                    return true;
-                }
+            public boolean execute() {
+                // do nothing, we are synchronous
+                return true;
+            }
 
-                public void terminate() {
-                    ctrlInst.terminateMonitoring();
-                }
-            };
+            public void terminate() {
+                ctrlInst.terminateMonitoring();
+            }
+        };
         if (realtimeMode) {
             IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(7, logCons);
             fsReader.addConsumer(
@@ -110,9 +114,21 @@ public class FilesystemLogReplayer {
         } else {
             fsReader.addConsumer(logCons, null); // consume records of all types
         }
-        if (!fsReader.execute()){ // here, we do not start consumers since they don't do anything in execute()
-            log.error("Log Replay failed");
-            System.exit(0);
+        try {
+            if (!fsReader.execute()) {
+                // here, we do not start consumers since they don't do anything in execute()
+                log.error("Log Replay failed");
+                retVal = 1;
+            }
+        } catch (LogReaderExecutionException ex) {
+            log.error("LogReaderExecutioException", ex);
+            retVal = 1;
+        }
+        if (retVal != 0) {
+            System.err.println("An error occured");
+            System.err.println("");
+            System.err.println("See 'kieker.log' for details");
+            System.exit(retVal);
         }
     }
 }

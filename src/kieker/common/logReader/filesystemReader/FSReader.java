@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import kieker.common.logReader.AbstractKiekerLogReader;
+import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
@@ -17,9 +18,7 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.common.reader.fileSystemReader.FSReader
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -40,7 +39,9 @@ import org.apache.commons.logging.LogFactory;
  * transforms it to monitoring events that are stored in the file system
  * again, written to a database, or whatever tpmon is configured to do
  * with the monitoring data.
- *
+ */
+
+/**
  * @author Matthias Rohr, Andre van Hoorn
  *
  * History:
@@ -57,7 +58,7 @@ public class FSReader extends AbstractKiekerLogReader {
 
     @Override
     @TpmonInternal()
-    public boolean execute() {
+    public boolean execute() throws LogReaderExecutionException {
         boolean retVal = false;
         try {
             File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
@@ -72,15 +73,15 @@ public class FSReader extends AbstractKiekerLogReader {
                 this.processInputFile(inputFiles[i]);
             }
             if (inputFiles == null) {
-                log.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured");
-                retVal = false;
+                throw new LogReaderExecutionException("Directory '" + this.inputDir + "' does not exist or an I/O error occured");
             } else {
                 retVal = true;
             }
         } catch (Exception e) {
-            log.error(
-                    "An error occurred while parsing files from directory " +
+            LogReaderExecutionException readerEx = new LogReaderExecutionException("An error occurred while parsing files from directory " +
                     this.inputDir.getAbsolutePath() + ":", e);
+            log.error("Exception", readerEx);
+            throw  readerEx;
         } finally {
             super.terminate();
         }

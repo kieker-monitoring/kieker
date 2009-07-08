@@ -77,7 +77,7 @@ public class MethodExtractorTool {
 
         MethodExtractor extrInstance = new MethodExtractor(cp, filter, mappingFile);
         if (!extrInstance.execute()) {
-            System.err.println("An error occured");
+            System.err.println("An error occured. See 'kieker.log' for details.");
             System.exit(1);
         }
     }

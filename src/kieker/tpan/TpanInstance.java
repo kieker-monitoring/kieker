@@ -21,6 +21,8 @@ import java.util.Vector;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.IKiekerLogReader;
 
+import kieker.common.logReader.LogReaderExecutionException;
+import kieker.common.logReader.RecordConsumerExecutionException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -34,7 +36,7 @@ public class TpanInstance {
     private final Vector<IKiekerLogReader> logReaders = new Vector<IKiekerLogReader>();
     private final Vector<IKiekerRecordConsumer> consumers = new Vector<IKiekerRecordConsumer>();
 
-    public void run() {
+    public void run() throws LogReaderExecutionException, RecordConsumerExecutionException {
         for (IKiekerLogReader r : this.logReaders) {
             for (IKiekerRecordConsumer c : this.consumers) {
                 r.addConsumer(c, c.getRecordTypeSubscriptionList());
