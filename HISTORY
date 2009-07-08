@@ -2,7 +2,7 @@ Introduction:
 
 This document summarizes changes made in all releases starting with 0.90.
 
-* 0.95a
+* 0.95a (Jul 09 2009)
 - Considerable improvements to Kieker's architecture, e.g.
   - Generalized/extensible monitoring record model (more than executions)
   - Generalized/extensible writer model (more than database and ﬁlesystem)
@@ -10,9 +10,17 @@ This document summarizes changes made in all releases starting with 0.90.
 - Major refactorings
 - First release containing core parts of the analysis component Tpan
 
-* 0.90
-- Improved (in terms of performance) concurrency in TpmonController
+* 0.91 (Apr 27 2009)
+- Aspects are in @Aspect style
+- Adapted to operate with Java 6
+- Maven build support
+- Monitoring support for the spring framework with soap, XFC WebService stuff
+- More efficient internal data structures and processing
+- Distributed monitoring
 
-* 0.91
-- ...
+* 0.6 (Jul 30 2008)
+- Added a new test for load-time weaving without Java annotation using full 
+  instrumentation
 
+* 0.5 (May 08 2008)
+- first sourceforge release
