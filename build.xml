@@ -378,7 +378,8 @@
     </target>
 
     <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries">
-        <echo message=""/>
+        <echo message="Sourceforge release instructions can be found at:"/>
+	<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease"/>
     </target>
 
     <target name="clean">
