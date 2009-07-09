@@ -46,8 +46,8 @@ public class KiekerTpmonExecutionProbeAnnotationRemoteServlet extends AbstractKi
         return super.doServletEntryProfiling(thisJoinPoint);
     }
 
-    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))"+
-              " && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))" +
+    " && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
     public void monitoredMethod() {
     }
 
@@ -58,15 +58,21 @@ public class KiekerTpmonExecutionProbeAnnotationRemoteServlet extends AbstractKi
         }
         KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
         execData.sessionId = sessionRegistry.recallThreadLocalSessionId(); // may be null
-        execData.eoi = cfRegistry.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
-        execData.ess = cfRegistry.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
-
+        int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
+        int ess = 0; /* this is the height in the dynamic call tree of this execution */
+        if (execData.isEntryPoint) {
+            cfRegistry.storeThreadLocalEOI(0); // current execution's eoi is 0
+            cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
+        } else {
+            eoi = cfRegistry.incrementAndRecallThreadLocalEOI(); // ess > 1
+            ess = cfRegistry.recallAndIncrementThreadLocalESS(); // ess >= 0
+        }
         try {
             this.proceedAndMeasure(thisJoinPoint, execData);
-            if (execData.eoi == -1 || execData.ess == -1) {
+            if (eoi == -1 || ess == -1) {
                 log.fatal("eoi and/or ess have invalid values:" +
-                        " eoi == " + execData.eoi +
-                        " ess == " + execData.ess);
+                        " eoi == " + eoi +
+                        " ess == " + ess);
                 log.fatal("Terminating Tpmon!");
                 ctrlInst.terminateMonitoring();
             }
@@ -76,8 +82,15 @@ public class KiekerTpmonExecutionProbeAnnotationRemoteServlet extends AbstractKi
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
+            execData.eoi = eoi;
+            execData.ess = ess;
             ctrlInst.logMonitoringRecord(execData);
-            cfRegistry.storeThreadLocalESS(execData.ess);
+            if (execData.isEntryPoint) {
+                cfRegistry.unsetThreadLocalEOI();
+                cfRegistry.unsetThreadLocalESS();
+            } else {
+                cfRegistry.storeThreadLocalESS(ess);
+            }
         }
         return execData.retVal;
     }
