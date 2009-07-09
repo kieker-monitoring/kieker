@@ -18,7 +18,7 @@
         <!-- Names of the tpmon runtime libraries that will be created
 	     by the build process: -->
         <property name="kieker.version"
-                  value="0.95"/>
+                  value="0.95a"/>
         <property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
         <property name="tpmon.dist.name"
@@ -330,7 +330,7 @@
         </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_src_files"/>
             </tarfileset>
         </tar>
@@ -339,22 +339,19 @@
         <delete file="${release.dir}/${dist.kieker.srcBaseName}.tar"/>
 
         <zip  zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
-            <zipfileset dir="." prefix="${tpmon.dist.name}" defaultexcludes="yes">
+            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_src_files"/>
             </zipfileset>
         </zip>
     </target>
 
     <target name="build-tpmon-binaries" depends="build-all">
+	    <echo message="${dist.dir}/${dist.tpmon.ltw}"/>
         <patternset id="dist_bin_files">
             <include name="bin/*.sh"/>
             <include name="bin/log4j.properties"/>
-            <include name="${dist.dir}/${dist.tpmon.ltw}"/>
-            <include name="${dist.dir}/${dist.tpmon.ctw}"/>
-            <include name="${dist.dir}/${dist.tpmon.ctrl}"/>
-            <include name="${dist.dir}/${dist.tpmon.controlServlet}"/>
-            <include name="${dist.dir}/${dist.kieker.common}"/>
-            <include name="${dist.dir}/${dist.tpan.ctrl}"/>
+            <include name="dist/*.jar"/>
+            <include name="dist/*.war"/>
             <include name="META-INF/*.example"/>
             <include name="lib/**"/>
             <include name="RELEASENOTES"/>
@@ -362,7 +359,7 @@
         </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${tpmon.dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_bin_files"/>
             </tarfileset>
         </tar>
@@ -371,7 +368,7 @@
         <delete file="${release.dir}/${dist.kieker.binBaseName}.tar"/>
 
         <zip  zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
-            <zipfileset dir="." prefix="${tpmon.dist.name}" defaultexcludes="yes">
+            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_bin_files"/>
             </zipfileset>
         </zip>
