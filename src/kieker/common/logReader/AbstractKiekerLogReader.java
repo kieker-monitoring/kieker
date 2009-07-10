@@ -10,11 +10,15 @@ import java.util.Vector;
 
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  * @author Andre van Hoorn
  */
 public abstract class AbstractKiekerLogReader implements IKiekerLogReader {
+    private static final Log log = LogFactory.getLog(AbstractKiekerLogReader.class);
 
     /** Contains all consumers which consume records of any type */
     private final Collection<IKiekerRecordConsumer> subscribedToAllList =
@@ -38,30 +42,37 @@ public abstract class AbstractKiekerLogReader implements IKiekerLogReader {
         }
     }
 
-    protected final void deliverRecordToConsumers(final AbstractKiekerMonitoringRecord r) {
-        for (IKiekerRecordConsumer c : this.subscribedToAllList) {
-            c.consumeMonitoringRecord(r);
-        }
-        Collection<IKiekerRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
-        if (cList != null) {
-            for (IKiekerRecordConsumer c : cList) {
+    protected final void deliverRecordToConsumers(final AbstractKiekerMonitoringRecord r) throws LogReaderExecutionException {
+        try {
+            for (IKiekerRecordConsumer c : this.subscribedToAllList) {
                 c.consumeMonitoringRecord(r);
             }
+            Collection<IKiekerRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
+            if (cList != null) {
+                for (IKiekerRecordConsumer c : cList) {
+                    c.consumeMonitoringRecord(r);
+                }
+            }
+        } catch (RecordConsumerExecutionException ex) {
+            log.fatal("RecordConsumerExecutionException", ex);
+            throw new LogReaderExecutionException("A RecordConsumerExecutionException "+
+                    "was caught -- now being rethrown as LogReaderExecutionException", ex);
         }
+
     }
 
     public final void terminate() {
         for (IKiekerRecordConsumer c : this.subscribedToAllList) {
-                c.terminate();
+            c.terminate();
         }
         for (Collection<IKiekerRecordConsumer> cList : this.subscribedToTypeMap.values()) {
             if (cList != null) {
                 for (IKiekerRecordConsumer c : cList) {
-                     c.terminate();
+                    c.terminate();
                 }
             }
         }
-        synchronized(this) {
+        synchronized (this) {
             this.notifyAll();
         }
     }

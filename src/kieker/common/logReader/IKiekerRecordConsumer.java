@@ -26,7 +26,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 public interface IKiekerRecordConsumer {
     public String[] getRecordTypeSubscriptionList();
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
+    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
 
     public boolean execute() throws RecordConsumerExecutionException;
 
