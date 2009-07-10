@@ -6,7 +6,7 @@
 
 BINDIR=$(dirname $0)
 
-JAVAARGS=-Dlog4j.configuration=${BINDIR}/log4j.properties
+JAVAARGS="-Dlog4j.configuration=${BINDIR}/log4j.properties -Xms56m -Xmx1024m"
 MAINCLASSNAME=kieker.tpan.TpanTool
 CLASSPATH=$(ls lib/*.jar | tr "\n" ":")$(ls dist/*.jar | tr "\n" ":")
 
