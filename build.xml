@@ -164,6 +164,7 @@
         <echo message="Creating the library of tpmon (${dist.tpmon.ctrl}) that is supposed for direct invocations - it doesn't contain the AOP instrumentation mechanisms."/>
         <javac destDir="${build.tpmon.ctrl.dir}"
                source="1.5"
+        	   target="1.5"
                srcdir="src"
                debug="true"
                classpathref="classpath.libs">
@@ -196,6 +197,7 @@
         <mkdir dir="${build.tpmon.ltw.dir}"/>
         <iajc destDir="${build.tpmon.ltw.dir}"
               source="1.5"
+        	  target="1.5"
               verbose="off"
               srcdir="src/kieker/tpmon/probe/aspectJ"
               debug="true"
@@ -203,6 +205,7 @@
         </iajc>
         <javac destDir="${build.tpmon.ltw.dir}"
                source="1.5"
+        	   target="1.5"
                verbose="off"
                srcdir="src/kieker/tpmon/probe/"
                debug="true"
@@ -227,6 +230,7 @@
         <echo message="Creating the compile-time-weaving library of tpmon (${dist.tpmon.ctw}). This library can be used in two ways: 1) for compile time instrumentation 2) via the tpmon API - if you want to invoke tpmon manually. This library cannot be used for load-time-weaving with the javaagent property!"/>
         <javac destDir="${build.tpmon.ctw.dir}"
                source="1.5"
+        	   target="1.5"
                verbose="off"
                srcdir="src/kieker/tpmon/probe/aspectJ/"
                debug="true"
@@ -247,7 +251,7 @@
     <target name="build-tpmon-control-servlet" depends="init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.controlServlet.dir}"/>
         <mkdir dir="${build.tpmon.controlServlet.dir}"/>
-        <javac source="1.5"
+        <javac source="1.5" target="1.5"
                destDir="${build.tpmon.controlServlet.dir}"
                classpathref="tpmon.core.classpath"
                srcdir="src/kieker/tpmon/controlServlet"
@@ -271,7 +275,7 @@
         <mkdir  dir="${build.tpan.ctrl.dir}/META-INF"/>
         <echo message="Creating the library of tpan (${dist.tpan.ctrl})."/>
         <javac destDir="${build.tpan.ctrl.dir}"
-               source="1.5"
+               source="1.5" target="1.5"
                srcdir="src/kieker/tpan/"
                debug="true"
                classpathref="tpmon.core.classpath">
@@ -296,7 +300,7 @@
         <mkdir  dir="${build.kieker.common.dir}/META-INF"/>
         <echo message="Creating the library of kieker.common (${dist.kieker.common})."/>
         <javac destDir="${build.kieker.common.dir}"
-               source="1.5"
+               source="1.5" target="1.5"
                srcdir="src/kieker/common/"
                debug="true"
                classpathref="tpmon.core.classpath">
@@ -406,7 +410,7 @@
             should be created in the folder specified in tpmon.properties
             (default: /tmp).
         </echo>
-        <javac source="1.5"
+        <javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
                classpathref="tpmon.core.classpath"
                srcdir="src/kieker/tests/storageOnly/"
@@ -457,7 +461,7 @@
 
     <target name="compile-tests-loadTimeWeaving"
 	    depends="build-tpmon-ltw">
-        <javac source="1.5"
+        <javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
                classpathref="tpmon.core.classpath"
                srcdir="src"
@@ -474,7 +478,7 @@
 
     <target name="compile-tests-loadTimeWeavingDifferentRecordTypes"
 	        depends="build-tpmon-ltw">
-        <javac source="1.5"
+        <javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
                classpathref="tpmon.core.classpath"
                srcdir="src/kieker/tests/loadTimeWeaving/">
@@ -552,7 +556,7 @@
               todir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>        
         <copy file="${tests.log4j.properties}"
               tofile="${build.dir}/tests.log4j.properties"/>
-        <iajc destdir="${build.tests.dir}" source="1.5" verbose="true"
+        <iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
               classpathref="tpmon.core.classpath">
             <sourceroots>
                 <pathelement location="src/kieker/tests/compileTimeWeaving/bookstore/"/>
@@ -570,7 +574,7 @@
               todir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>        
         <copy file="${tests.log4j.properties}"
               tofile="${build.dir}/tests.log4j.properties"/>
-        <iajc destdir="${build.tests.dir}" source="1.5" verbose="true"
+        <iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
               classpathref="tpmon.core.classpath">
             <sourceroots>
                 <pathelement location="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/"/>
@@ -580,7 +584,7 @@
     
     <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="build-tpmon-ctw,compile-tests-compileTimeWeaving-bookstore">
         <javac destDir="${build.tests.dir}"
-               source="1.5"
+               source="1.5" target="1.5"
                verbose="off"
                srcdir="src/kieker/tests/util/"
                debug="true"
@@ -599,7 +603,7 @@
               todir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <copy file="${tests.log4j.properties}"
               tofile="${build.dir}/tests.log4j.properties"/>
-        <iajc  destdir="${build.tests.dir}" source="1.5" verbose="true"
+        <iajc  destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
               classpathref="tpmon.core.classpath">
             <sourceroots>
                 <pathelement location="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/"/>
