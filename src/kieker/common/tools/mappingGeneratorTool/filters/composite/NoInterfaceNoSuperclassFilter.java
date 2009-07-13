@@ -16,7 +16,6 @@ public class NoInterfaceNoSuperclassFilter implements MethodFilter {
 	private final MethodFilter f1 = new NoInterfacesFilter();
 	private final MethodFilter f2 = new NoSuperclassMethodsFilter();
 
-	@Override
 	public boolean accept(final Method m, final Class<?> c) {
 		return f1.accept(m, c) && f2.accept(m, c);
 	}

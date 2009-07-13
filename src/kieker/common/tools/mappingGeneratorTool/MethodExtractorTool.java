@@ -223,14 +223,12 @@ class MethodExtractor extends ClassLoader {
             final String packagePrefix, final MethodFilter filter) {
         File[] classes = dir.listFiles(new FilenameFilter() {
 
-            @Override
             public boolean accept(final File dir, final String name) {
                 return name.endsWith(".class");
             }
         });
         File[] descArray = dir.listFiles(new FilenameFilter() {
 
-            @Override
             public boolean accept(final File f, final String name) {
                 return new File(f, name).isDirectory();
             }
@@ -324,7 +322,6 @@ class MethodExtractor extends ClassLoader {
 
 class NullFilter implements MethodFilter {
 
-    @Override
     public boolean accept(final Method m, final Class<?> c) {
         return true;
     }

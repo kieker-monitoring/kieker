@@ -48,7 +48,6 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
-	@Override
 	public void consumeMonitoringRecord(
 			final AbstractKiekerMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
@@ -76,12 +75,10 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
 				: this.lTime;
 	}
 
-	@Override
 	public boolean execute() {
         return true;
 	}
 
-	@Override
 	public String[] getRecordTypeSubscriptionList() {
 		return null;
 	}
@@ -94,11 +91,9 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
 		return this.startTime;
 	}
 
-	@Override
 	public void terminate() {
 		this.executor.schedule(new Runnable() {
 
-			@Override
 			public void run() {
 				ctrlnst.terminateMonitoring();
 			}

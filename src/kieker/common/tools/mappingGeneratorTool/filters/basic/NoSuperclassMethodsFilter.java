@@ -12,7 +12,6 @@ import kieker.common.tools.mappingGeneratorTool.MethodFilter;
  */
 public class NoSuperclassMethodsFilter implements MethodFilter {
 
-	@Override
 	public boolean accept(final Method m, final Class<?> c) {
 		return m.getDeclaringClass().equals(c);
 	}

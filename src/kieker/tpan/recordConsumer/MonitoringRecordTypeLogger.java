@@ -47,7 +47,6 @@ public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {
         return true;
     }
 
-	@Override
 	public void terminate() {
         /* We consume synchronously */
 

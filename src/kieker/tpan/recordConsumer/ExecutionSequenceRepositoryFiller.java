@@ -74,7 +74,6 @@ public class ExecutionSequenceRepositoryFiller implements IKiekerRecordConsumer 
         return this.repo;
     }
 
-    @Override
     public void terminate() {
         /* We consume synchronously */
     }
