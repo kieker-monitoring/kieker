@@ -87,9 +87,10 @@ public class FSReader extends AbstractKiekerLogReader {
         }
         return retVal;
     }
-    HashMap<Integer, Class<AbstractKiekerMonitoringRecord>> recordTypeMap = new HashMap<Integer, Class<AbstractKiekerMonitoringRecord>>();
+    HashMap<Integer, Class<? extends AbstractKiekerMonitoringRecord>> recordTypeMap = new HashMap<Integer, Class<? extends AbstractKiekerMonitoringRecord>>();
 
     @TpmonInternal()
+    //@SuppressWarnings("unchecked")
     private void readMappingFile() throws IOException {
         File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
         BufferedReader in = null;
@@ -114,7 +115,7 @@ public class FSReader extends AbstractKiekerLogReader {
                     String classname = st.nextToken();
                     log.info("Found mapping: " + id + "<->" + classname);
                     log.info("Loading record type class '" + classname + "'");
-                    Class<AbstractKiekerMonitoringRecord> recordClass = (Class<AbstractKiekerMonitoringRecord>) Class.forName(classname);
+                    Class<? extends AbstractKiekerMonitoringRecord> recordClass = Class.forName(classname).asSubclass(AbstractKiekerMonitoringRecord.class);
                     this.recordTypeMap.put(id, recordClass);
                 } catch (Exception e) {
                     log.error(
@@ -166,7 +167,7 @@ public class FSReader extends AbstractKiekerLogReader {
 //                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
 
                             Integer id = Integer.valueOf(token.substring(1));
-                            Class<AbstractKiekerMonitoringRecord> clazz = this.recordTypeMap.get(id);
+                            Class<? extends AbstractKiekerMonitoringRecord> clazz = this.recordTypeMap.get(id);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
                             rec = (AbstractKiekerMonitoringRecord) m.invoke(null); // call static method
                             token = st.nextToken();

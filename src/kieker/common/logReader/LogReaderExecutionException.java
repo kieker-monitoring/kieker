@@ -28,11 +28,14 @@ package kieker.common.logReader;
  * @author Andre van Hoorn
  */
 public class LogReaderExecutionException extends Exception {
-    public LogReaderExecutionException(String messString){
+
+    public static final long serialVersionUID = 1L;
+
+    public LogReaderExecutionException(String messString) {
         super(messString);
     }
 
-    public LogReaderExecutionException(String messString, Throwable cause){
+    public LogReaderExecutionException(String messString, Throwable cause) {
         super(messString, cause);
     }
 }
