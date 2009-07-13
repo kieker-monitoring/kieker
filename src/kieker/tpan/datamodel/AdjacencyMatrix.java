@@ -83,6 +83,7 @@ public class AdjacencyMatrix {
     
     //XXX the following is copied from JDK 1.6 java.util.Arrays
     //jw: warum nicht gleich JDK1.6 verwenden?
+    //DK: weil es dann leider in JDK 1.5 Umgebungen nicht mehr lauffähig ist (NoSuchMethodError)
     
     /**
      * Copies the specified array, truncating or padding with zeros (if necessary)
