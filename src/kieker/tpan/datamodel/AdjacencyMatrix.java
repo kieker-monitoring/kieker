@@ -81,7 +81,8 @@ public class AdjacencyMatrix {
         return strBuilder.toString();
     }
     
-    //XXX the following is copied from JDK 1.6 java.util.Arrays 
+    //XXX the following is copied from JDK 1.6 java.util.Arrays
+    //jw: warum nicht gleich JDK1.6 verwenden?
     
     /**
      * Copies the specified array, truncating or padding with zeros (if necessary)
@@ -125,6 +126,7 @@ public class AdjacencyMatrix {
      * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
+    @SuppressWarnings("unchecked")
     public static <T> T[] copyOf(T[] original, int newLength) {
         return (T[]) copyOf(original, newLength, original.getClass());
     }
@@ -150,6 +152,7 @@ public class AdjacencyMatrix {
      *     <tt>original</tt> is not of a runtime type that can be stored in
      *     an array of class <tt>newType</tt>
      */
+    @SuppressWarnings("unchecked")
     public static <T,U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType) {
         T[] copy = ((Object)newType == (Object)Object[].class)
             ? (T[]) new Object[newLength]
