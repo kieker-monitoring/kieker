@@ -269,7 +269,7 @@
         <delete dir="${build.tpan.ctrl.dir}"/>
         <mkdir  dir="${build.tpan.ctrl.dir}"/>
         <mkdir  dir="${build.tpan.ctrl.dir}/META-INF"/>
-        <echo message="Creating the library of tpan (${dist.tpmon.tpan.ctrl})."/>
+        <echo message="Creating the library of tpan (${dist.tpan.ctrl})."/>
         <javac destDir="${build.tpan.ctrl.dir}"
                source="1.5"
                srcdir="src/kieker/tpan/"
@@ -294,7 +294,7 @@
         <delete dir="${build.kieker.common.dir}"/>
         <mkdir  dir="${build.kieker.common.dir}"/>
         <mkdir  dir="${build.kieker.common.dir}/META-INF"/>
-        <echo message="Creating the library of kieker.common (${dist.kieker.common.ctrl})."/>
+        <echo message="Creating the library of kieker.common (${dist.kieker.common})."/>
         <javac destDir="${build.kieker.common.dir}"
                source="1.5"
                srcdir="src/kieker/common/"
