@@ -195,14 +195,15 @@
     <target name="build-tpmon-ltw" depends="init,build-tpmon-ctrl">
         <delete dir="${build.tpmon.ltw.dir}"/>
         <mkdir dir="${build.tpmon.ltw.dir}"/>
-        <iajc destDir="${build.tpmon.ltw.dir}"
+        <echo message="Creating the load-time-weaving library of tpmon (${dist.tpmon.ltw})."/>
+        <!-- <iajc destDir="${build.tpmon.ltw.dir}"
               source="1.5"
         	  target="1.5"
               verbose="off"
               srcdir="src/kieker/tpmon/probe/aspectJ"
               debug="true"
               classpathref="tpmon.core.classpath">
-        </iajc>
+        </iajc> -->
         <javac destDir="${build.tpmon.ltw.dir}"
                source="1.5"
         	   target="1.5"
@@ -211,7 +212,7 @@
                debug="true"
                classpathref="tpmon.core.classpath">
             <compilerarg value="-Xlint:all,-path"/>
-            <exclude name="kieker/tpmon/probe/aspectJ/**"/>
+            <!--<exclude name="kieker/tpmon/probe/aspectJ/**"/>-->
         </javac>
         <!-- We want to include the sources in this jar -->
         <copy todir="${build.tpmon.ltw.dir}/">
