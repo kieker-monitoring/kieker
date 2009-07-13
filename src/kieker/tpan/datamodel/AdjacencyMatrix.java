@@ -1,5 +1,6 @@
 package kieker.tpan.datamodel;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Hashtable;
 import org.apache.commons.logging.Log;
@@ -10,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Lena St&ouml;ver
  */
 public class AdjacencyMatrix {
-    private static final Log log = LogFactory.getLog(AdjacencyMatrix.class);
+    private static final Log LOG = LogFactory.getLog(AdjacencyMatrix.class);
 
     // Maps component ids (matrix indices) to component name and vice versa
     private String[] componentId2NameMap = new String[0];
@@ -38,13 +39,13 @@ public class AdjacencyMatrix {
      */
     private int addNewComponentToMatrix(String componentName){
         int newComponentId = this.matrix.length;
-        this.matrix = Arrays.copyOf(this.matrix, newComponentId+1);
+        this.matrix = copyOf(this.matrix, newComponentId+1);
         // increment dimension of old columns
         for (int i=0; i<newComponentId; i++){
-            this.matrix[i]=Arrays.copyOf(this.matrix[i], newComponentId+1);
+            this.matrix[i] = copyOf(this.matrix[i], newComponentId+1);
         }
         this.matrix[newComponentId] = new long[newComponentId+1];
-        this.componentId2NameMap=Arrays.copyOf(this.componentId2NameMap, newComponentId+1);
+        this.componentId2NameMap = copyOf(this.componentId2NameMap, newComponentId+1);
         this.componentId2NameMap[newComponentId]=componentName;
         this.componentName2IdMap.put(componentName,newComponentId);
         return newComponentId;
@@ -78,5 +79,83 @@ public class AdjacencyMatrix {
             }
         }
         return strBuilder.toString();
+    }
+    
+    //XXX the following is copied from JDK 1.6 java.util.Arrays 
+    
+    /**
+     * Copies the specified array, truncating or padding with zeros (if necessary)
+     * so the copy has the specified length.  For all indices that are
+     * valid in both the original array and the copy, the two arrays will
+     * contain identical values.  For any indices that are valid in the
+     * copy but not the original, the copy will contain <tt>0L</tt>.
+     * Such indices will exist if and only if the specified length
+     * is greater than that of the original array.
+     *
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with zeros
+     *     to obtain the specified length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     */
+    private long[] copyOf(long[] original, int newLength) {
+        long[] copy = new long[newLength];
+        System.arraycopy(original, 0, copy, 0,
+                         Math.min(original.length, newLength));
+        return copy;
+    }
+    
+    // Cloning
+    /**
+     * Copies the specified array, truncating or padding with nulls (if necessary)
+     * so the copy has the specified length.  For all indices that are
+     * valid in both the original array and the copy, the two arrays will
+     * contain identical values.  For any indices that are valid in the
+     * copy but not the original, the copy will contain <tt>null</tt>.
+     * Such indices will exist if and only if the specified length
+     * is greater than that of the original array.
+     * The resulting array is of exactly the same class as the original array.
+     *
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with nulls
+     *     to obtain the specified length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static <T> T[] copyOf(T[] original, int newLength) {
+        return (T[]) copyOf(original, newLength, original.getClass());
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with nulls (if necessary)
+     * so the copy has the specified length.  For all indices that are
+     * valid in both the original array and the copy, the two arrays will
+     * contain identical values.  For any indices that are valid in the
+     * copy but not the original, the copy will contain <tt>null</tt>.
+     * Such indices will exist if and only if the specified length
+     * is greater than that of the original array.
+     * The resulting array is of the class <tt>newType</tt>.
+     *
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @param newType the class of the copy to be returned
+     * @return a copy of the original array, truncated or padded with nulls
+     *     to obtain the specified length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws ArrayStoreException if an element copied from
+     *     <tt>original</tt> is not of a runtime type that can be stored in
+     *     an array of class <tt>newType</tt>
+     */
+    public static <T,U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType) {
+        T[] copy = ((Object)newType == (Object)Object[].class)
+            ? (T[]) new Object[newLength]
+            : (T[]) Array.newInstance(newType.getComponentType(), newLength);
+        System.arraycopy(original, 0, copy, 0,
+                         Math.min(original.length, newLength));
+        return copy;
     }
 }
