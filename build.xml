@@ -8,10 +8,16 @@
     <path id="classpath.libs">
         <pathelement path="${classpath}"/>
         <fileset dir="lib">
-            <include name="**/*.jar"/>
+            <include name="*.jar"/>
         </fileset>
         <pathelement location="."/>
     </path>
+	
+    <path id="pmd.libs">
+        <fileset dir="lib/pmd">
+            <include name="*.jar"/>
+        </fileset>
+    </path>	
 
     <target name="init-version">
         <tstamp/>
@@ -747,6 +753,16 @@
             </classpath>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
+    </target>
+    
+    <target name="pmd">
+     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
+     <pmd shortFilenames="true">
+      <ruleset>rulesets/favorites.xml</ruleset>
+      <ruleset>basic</ruleset>
+      <formatter type="html" toFile="pmd_report.html" />
+      <fileset dir="src/kieker/" includes="**/*.java"/>
+     </pmd>
     </target>
 
     <target name="mvn-init">
