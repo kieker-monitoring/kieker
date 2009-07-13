@@ -167,7 +167,7 @@
                srcdir="src"
                debug="true"
                classpathref="classpath.libs">
-            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-path"/>
             <include name="kieker/tpmon/annotation/**"/>
             <include name="kieker/tpmon/core/**"/>
             <include name="kieker/tpmon/monitoringRecord/**"/>
@@ -207,7 +207,7 @@
                srcdir="src/kieker/tpmon/probe/"
                debug="true"
                classpathref="tpmon.core.classpath">
-            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-path"/>
             <exclude name="kieker/tpmon/probe/aspectJ/**"/>
         </javac>
         <!-- We want to include the sources in this jar -->
@@ -231,7 +231,7 @@
                srcdir="src/kieker/tpmon/probe/aspectJ/"
                debug="true"
                classpathref="tpmon.core.classpath">
-            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-path"/>
         </javac>
         <!-- We want to include the sources in this jar -->
         <copy todir="${build.tpmon.ctw.dir}/">
@@ -275,7 +275,7 @@
                srcdir="src/kieker/tpan/"
                debug="true"
                classpathref="tpmon.core.classpath">
-            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-path"/>
         </javac>
         <copy file="${tpan.properties}" todir="${build.tpan.ctrl.dir}/META-INF"/>
         <!-- We want to include the sources in this jar -->
@@ -300,7 +300,7 @@
                srcdir="src/kieker/common/"
                debug="true"
                classpathref="tpmon.core.classpath">
-            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-path"/>
         </javac>
         <copy file="${kieker.properties}" todir="${build.kieker.common.dir}/META-INF"/>
         <!-- We want to include the sources in this jar -->
