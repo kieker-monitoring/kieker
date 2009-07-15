@@ -252,10 +252,10 @@ public class TpanTool {
         /* Generate and output dependency graphs */
         Collection<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.values();
         String outputFnBase = new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath();
-        DependencyGraphPlugin.writeDotFromExecutionTraces(seqEnum, outputFnBase + ".pic", traceIds);
-        System.out.println("Wrote dependency graph to file '" + outputFnBase + ".pic" + "'");
+        DependencyGraphPlugin.writeDotFromExecutionTraces(seqEnum, outputFnBase + ".dot", traceIds);
+        System.out.println("Wrote dependency graph to file '" + outputFnBase + ".dot" + "'");
         System.out.println("Dot file can be converted using the dot tool");
-        System.out.println("Example: dot -T svg " + outputFnBase + ".pic" + " > " + outputFnBase + ".svg");
+        System.out.println("Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg");
         return retVal;
     }
 
