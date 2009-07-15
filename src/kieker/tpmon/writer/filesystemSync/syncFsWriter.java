@@ -140,7 +140,7 @@ public class syncFsWriter extends AbstractMonitoringDataWriter {
             int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from ??
             int random = (new Random()).nextInt(100);
             String filename = this.storagePathBase + "/tpmon-" + time + "-" + random + ".dat";
-            log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
+            //log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);

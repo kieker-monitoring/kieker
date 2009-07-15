@@ -19,7 +19,7 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
 	public final int numWorkers;
     private final IKiekerRecordConsumer cons;
 
-	private volatile long startTime = -1, offset = -1;
+	private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
 
 	private final ScheduledThreadPoolExecutor executor;
 
@@ -51,11 +51,11 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
 	public void consumeMonitoringRecord(
 			final AbstractKiekerMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
-			this.offset = monitoringRecord.getLoggingTimestamp()
-					- (20 * 1000 * 1000);
+            this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
+			this.offset = (20 * 1000 * 1000);
 			this.startTime = ctrlnst.getTime();
 		}
-		long schedTime = (monitoringRecord.getLoggingTimestamp() - this.offset)
+		long schedTime = ((monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) + this.offset)
 				- (ctrlnst.getTime() - this.startTime);
 		synchronized (this) {
 			if (this.active > this.maxQueueSize) {

@@ -107,7 +107,7 @@ public class FilesystemLogReplayer {
             }
         };
         if (realtimeMode) {
-            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(7, logCons);
+            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(40, logCons);
             fsReader.addConsumer(
                     rtDistributorCons,
                     null); // consume records of all types

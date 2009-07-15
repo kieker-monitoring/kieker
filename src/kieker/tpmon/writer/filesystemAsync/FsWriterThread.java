@@ -129,7 +129,7 @@ public class FsWriterThread extends AbstractWorkerThread {
             int random = (new Random()).nextInt(100);
             String filename = this.filenamePrefix + time + "-" + random + ".dat";
 
-            log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
+            //log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
@@ -137,7 +137,7 @@ public class FsWriterThread extends AbstractWorkerThread {
                 pos = new PrintWriter(dos);
                 pos.flush();
             } catch (FileNotFoundException ex) {
-                log.fatal(">Kieker-Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
+                //log.fatal(">Kieker-Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
                 // TODO: this error should be signalled to the controller
                 // e.g. using a listener (do not add a reference to TpmonController!)
                 // TODO: This is a dirty hack!
