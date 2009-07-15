@@ -109,7 +109,7 @@
     </target>
 
     <target name="init-properties"
-            depends="init-kieker-properties,init-tpmon-properties,init-tpan-properties,init-aop-xml-ltwtests,init-log4-properties-tests">
+            depends="init-kieker-properties,init-tpmon-properties,init-tpan-properties,init-log4-properties-tests">
     </target>
 
     <target name="init" depends="update-version,init-properties">
@@ -438,19 +438,6 @@
             <!-- <jvmarg value="-Xloggc:details.out"/> -->
             <!-- <jvmarg value="-verbosegc"/> -->
         </java>
-    </target>
-
-    <condition property="no.aop.xml.ltwtests">
-        <not>
-            <available file="${aop.xml.ltwtests}"/>
-        </not>
-    </condition>
-
-    <target name="init-aop-xml-ltwtests" if="no.aop.xml.ltwtests">
-        <!-- if no aop.xml, copy example file automatically  -->
-        <echo message="${aop.xml.ltwtests} not existing.
-                       Creating default file."/>
-        <copy file="${aop.xml.example}" tofile="${aop.xml.ltwtests}"/>
     </target>
 
     <condition property="no.log4j.properties.tests">
