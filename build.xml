@@ -754,47 +754,44 @@
      </pmd>
     </target>
 
-    <target name="mvn-init">
+    <target name="mvn-init" depends="update-version">
         <xmlproperty file="pom.xml" prefix="pom.xml" />
         <path id="maven-ant-tasks.classpath" path="lib/maven/maven-ant-tasks-2.0.10.jar" />
         <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
             classpathref="maven-ant-tasks.classpath" />
     </target>
+	
     <target name="mvn-deploy" depends="mvn-init, mvn-deploy-base, mvn-deploy-ctrl, mvn-deploy-ctw, mvn-deploy-ltw" />
-    
-    <!--This target will place the tpmonctrl jar file in a maven repository alongside with its 
-        corresponding pom.xml file.
-        For real usage change the repository url to some repository of your choice.
-        To test deployment localy use something like file://localhost/xxx -->  
+	
     <target name="mvn-deploy-ctrl" depends="build-tpmon-ctrl, mvn-deploy-base">
-        <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ctrl.xml" />
+      	<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-tpmon-ctrl.xml" />
         <artifact:deploy file="${dist.dir}/${dist.tpmon.ctrl}">
-            <remoteRepository url="file://localhost/maven/deploy/test"/>
-            <pom refid="maven.project"/>
+            <pom refid="mavenproject"/>
         </artifact:deploy>
     </target>
     
     <target name="mvn-deploy-ctw" depends="build-tpmon-ctw, mvn-deploy-base">
-        <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ctw.xml" />
+      	<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-tpmon-ctw.xml" />
         <artifact:deploy file="${dist.dir}/${dist.tpmon.ctw}">
-            <remoteRepository url="file://localhost/maven/deploy/test"/>
-            <pom refid="maven.project"/>
+            <pom refid="mavenproject"/>
         </artifact:deploy>
     </target>
     
     <target name="mvn-deploy-ltw" depends="build-tpmon-ltw, mvn-deploy-base">
-        <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ltw.xml" />
+      	<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-tpmon-ltw.xml" />
         <artifact:deploy file="${dist.dir}/${dist.tpmon.ltw}">
-            <remoteRepository url="file://localhost/maven/deploy/test"/>
-            <pom refid="maven.project"/>
+            <pom refid="mavenproject"/>
         </artifact:deploy>
     </target>
 	
     <target name="mvn-deploy-base" depends="mvn-init">
-        <artifact:pom id="maven.project" file="pom_ant_kieker-base.xml" />
+      	<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-base.xml" />
         <artifact:deploy file="pom_ant_kieker-base.xml">
-            <remoteRepository url="file://localhost/maven/deploy/test"/>
-            <pom refid="maven.project"/>
+            <pom refid="mavenproject"/>
         </artifact:deploy>
     </target>	
 </project>
