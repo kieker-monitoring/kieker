@@ -24,7 +24,7 @@
         <!-- Names of the tpmon runtime libraries that will be created
 	     by the build process: -->
         <property name="kieker.version"
-                  value="0.95"/>
+                  value="0.95"/> <!-- -20090716-1022 -->
         <property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
         <property name="tpmon.dist.name"
@@ -330,6 +330,7 @@
             <include name="bin/*.sh"/>
             <include name="bin/log4j.properties"/>
             <include name="META-INF/*.example"/>
+	    <include name="${aop.xml.ltwtests}"/>
             <include name="src/**/*.java"/>
             <include name="src/kieker/tpmon/controlServlet/WEB-INF/web.xml"/>
             <include name="src/kieker/tpmon/controlServlet/images/**"/>
@@ -338,6 +339,7 @@
             <include name="build.properties"/>
             <include name="RELEASENOTES"/>
             <include name="HISTORY"/>
+	    <include name="pom_ant_kieker-*.xml"/>
         </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
