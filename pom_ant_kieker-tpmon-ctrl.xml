@@ -5,9 +5,12 @@
   <groupId>net.sf.kieker</groupId>
   <artifactId>tpmon-ctrl</artifactId>
   <name>Kieker Tpmon Controller</name>
-  <version>0.95-20090716-1022-20090716</version>
-  <url>http://kieker.sf.net</url>  
   <packaging>jar</packaging>
+  <parent>
+  	<artifactId>base</artifactId>
+  	<groupId>net.sf.kieker</groupId>
+  	<version>0.95-20090716</version>
+  </parent>
   
   <!-- TODO add dependencies -->
   <dependencies>

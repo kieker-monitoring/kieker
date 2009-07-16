@@ -760,13 +760,13 @@
         <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
             classpathref="maven-ant-tasks.classpath" />
     </target>
-    <target name="mvn-deploy" depends="mvn-init, mvn-deploy-ctrl, mvn-deploy-ctw, mvn-deploy-ltw" />
+    <target name="mvn-deploy" depends="mvn-init, mvn-deploy-base, mvn-deploy-ctrl, mvn-deploy-ctw, mvn-deploy-ltw" />
     
     <!--This target will place the tpmonctrl jar file in a maven repository alongside with its 
         corresponding pom.xml file.
         For real usage change the repository url to some repository of your choice.
         To test deployment localy use something like file://localhost/xxx -->  
-    <target name="mvn-deploy-ctrl" depends="build-tpmon-ctrl, mvn-init">
+    <target name="mvn-deploy-ctrl" depends="build-tpmon-ctrl, mvn-deploy-base">
         <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ctrl.xml" />
         <artifact:deploy file="${dist.dir}/${dist.tpmon.ctrl}">
             <remoteRepository url="file://localhost/maven/deploy/test"/>
@@ -774,7 +774,7 @@
         </artifact:deploy>
     </target>
     
-    <target name="mvn-deploy-ctw" depends="build-tpmon-ctw, mvn-init">
+    <target name="mvn-deploy-ctw" depends="build-tpmon-ctw, mvn-deploy-base">
         <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ctw.xml" />
         <artifact:deploy file="${dist.dir}/${dist.tpmon.ctw}">
             <remoteRepository url="file://localhost/maven/deploy/test"/>
@@ -782,11 +782,19 @@
         </artifact:deploy>
     </target>
     
-    <target name="mvn-deploy-ltw" depends="build-tpmon-ltw, mvn-init">
+    <target name="mvn-deploy-ltw" depends="build-tpmon-ltw, mvn-deploy-base">
         <artifact:pom id="maven.project" file="pom_ant_kieker-tpmon-ltw.xml" />
         <artifact:deploy file="${dist.dir}/${dist.tpmon.ltw}">
             <remoteRepository url="file://localhost/maven/deploy/test"/>
             <pom refid="maven.project"/>
         </artifact:deploy>
     </target>
+	
+    <target name="mvn-deploy-base" depends="mvn-init">
+        <artifact:pom id="maven.project" file="pom_ant_kieker-base.xml" />
+        <artifact:deploy file="pom_ant_kieker-base.xml">
+            <remoteRepository url="file://localhost/maven/deploy/test"/>
+            <pom refid="maven.project"/>
+        </artifact:deploy>
+    </target>	
 </project>
