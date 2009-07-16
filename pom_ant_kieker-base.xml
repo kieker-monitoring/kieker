@@ -49,12 +49,12 @@
   
   <distributionManagement>
     <repository>
-      <id>jwebunit-m2-repo</id>
+      <id>kieker-m2-repo</id>
       <url>scp://shell.sourceforge.net/home/groups/k/ki/kieker/htdocs/m2-repo</url>
       <name>Kieker Maven 2 Repository</name>
     </repository>
     <snapshotRepository>
-      <id>jwebunit-m2-repo-snapshots</id>
+      <id>kieker-m2-repo-snapshots</id>
       <url>scp://shell.sourceforge.net/home/groups/k/ki/kieker/htdocs/m2-repo-snapshots</url>
       <name>Kieker Maven 2 Snapshots Repository</name>
     </snapshotRepository>
