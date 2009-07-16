@@ -11,9 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.aspects.KiekerTpmonExecutionProbeAnnotationRemoteServlet
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -29,7 +27,8 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+/**
  * @author Andre van Hoorn
  */
 @Aspect
