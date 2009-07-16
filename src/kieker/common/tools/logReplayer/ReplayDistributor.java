@@ -55,7 +55,8 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
 			this.offset = (20 * 1000 * 1000);
 			this.startTime = ctrlnst.getTime();
 		}
-		long schedTime = ((monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) + this.offset)
+		long delay;
+		long schedTime = (delay =(monitoringRecord.getLoggingTimestamp() - this.offset))
 				- (ctrlnst.getTime() - this.startTime);
 		synchronized (this) {
 			if (this.active > this.maxQueueSize) {
