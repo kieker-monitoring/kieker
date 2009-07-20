@@ -215,6 +215,7 @@ public class TpmonController {
     }
     private AtomicLong numberOfInserts = new AtomicLong(0);
     // private Date startDate = new Date(initializationTime);
+    // TODO: should be volatile? -> more overhead, but correct!
     private boolean monitoringEnabled = true;
     // if monitoring terminated, it is not allowed to enable monitoring afterwards
     private boolean monitoringPermanentlyTerminated = false;
