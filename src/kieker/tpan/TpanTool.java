@@ -76,7 +76,7 @@ public class TpanTool {
 
 
     static {
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("inputdir").withArgName("dir").hasArg(true).isRequired(true).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt("inputdir").withArgName("dir").hasArg(true).isRequired(false).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
         cmdlOpts.addOption(OptionBuilder.withLongOpt("outputdir").withArgName("dir").hasArg(true).isRequired(true).withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
         cmdlOpts.addOption(OptionBuilder.withLongOpt("output-filename-prefix").withArgName("dir").hasArg(true).isRequired(false).withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 
@@ -86,6 +86,7 @@ public class TpanTool {
         cmdlOpts.addOption(OptionBuilder.withLongOpt("plot-Dependency-Graph").hasArg(false).withDescription("Generate a dependency graph (.dot format) from log data").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Message-Trace").hasArg(false).withDescription("Generate a message trace representation from log data").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Execution-Trace").hasArg(false).withDescription("Generate an execution trace representation from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt("init-basic-JMS-reader").hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
 
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
 
@@ -153,9 +154,9 @@ public class TpanTool {
                 numRequestedTasks++;
                 retVal = task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
-           if (retVal && cmdl.hasOption("showExecutions-jms-commandline-infos")) {
+           if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
                 numRequestedTasks++;
-                retVal = task_showExecutionsJms("tcp://127.0.0.1:3035/","queue1");
+                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue1");
             }
 
            if(!retVal) {
@@ -362,8 +363,9 @@ public class TpanTool {
         return retVal;
     }
 
-    private static boolean task_showExecutionsJms(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException{
+    private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException{
         boolean retVal = true;
+
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " "+jmsDestination);
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
