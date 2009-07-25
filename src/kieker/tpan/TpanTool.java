@@ -15,6 +15,7 @@ import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.recordConsumer.ExecutionSequenceRepositoryFiller;
@@ -50,7 +51,10 @@ import org.apache.commons.logging.LogFactory;
  */
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Matthias Rohr
+ * History
+ * 2009-07-01 (AvH) Initial version
+ * 2009-07-25 (MR) Checks against invalid input dir
  */
 public class TpanTool {
 
@@ -105,6 +109,9 @@ public class TpanTool {
 
     private static boolean initFromArgs() {
         inputDir = cmdl.getOptionValue("inputdir") + File.separator;
+        if (inputDir.equals("${inputDir}/")) {
+            log.error("Invalid iput dir '"+inputDir+"'. Add it as command-line parameter to you ant call (e.g., ant run-tpan -DinputDir=/tmp) or to a properties file.");
+        }
         outputDir = cmdl.getOptionValue("outputdir") + File.separator;
         outputFnPrefix = cmdl.getOptionValue("output-filename-prefix", "");
         if (cmdl.hasOption("select-traces")) { /* Parse liste of trace Ids */
@@ -129,6 +136,7 @@ public class TpanTool {
         int numRequestedTasks = 0;
 
         try {
+
            if (retVal && cmdl.hasOption("print-Message-Trace")) {
                 numRequestedTasks++;
                 retVal = task_genMessageTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
@@ -144,6 +152,10 @@ public class TpanTool {
             if (retVal && cmdl.hasOption("plot-Dependency-Graph")) {
                 numRequestedTasks++;
                 retVal = task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+            }
+           if (retVal && cmdl.hasOption("showExecutions-jms-commandline-infos")) {
+                numRequestedTasks++;
+                retVal = task_showExecutionsJms("tcp://127.0.0.1:3035/","queue1");
             }
 
            if(!retVal) {
@@ -347,6 +359,20 @@ public class TpanTool {
         } finally {
             ps.close();
         }
+        return retVal;
+    }
+
+    private static boolean task_showExecutionsJms(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException{
+        boolean retVal = true;
+        log.info("Trying to start JMS Listener to " + jmsProviderUrl + " "+jmsDestination);
+        /* Read log data and collect execution traces */
+        TpanInstance analysisInstance = new TpanInstance();
+        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
+        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        analysisInstance.addRecordConsumer(seqRepConsumer);
+        analysisInstance.run();
+
+
         return retVal;
     }
 }

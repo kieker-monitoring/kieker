@@ -1,5 +1,7 @@
 package kieker.common.logReader;
 
+import java.util.HashMap;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project

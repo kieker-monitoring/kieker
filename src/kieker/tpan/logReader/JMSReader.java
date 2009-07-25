@@ -1,5 +1,6 @@
 package kieker.tpan.logReader;
 
+import java.util.HashMap;
 import kieker.common.logReader.AbstractKiekerLogReader;
 import java.util.Hashtable;
 import javax.jms.JMSException;
@@ -15,39 +16,73 @@ import javax.jms.MessageFormatException;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
+import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Reads tpmon messages from a (remote or local) JMS queue and processes them in tpan.
+ *
+ *
+ * @author Andre van Hoorn, Matthias Rohr
+ * History
+ * 2009-07-01 (AvH) Initial version
+ * 2009-07-25 (MR)
+ */
 public class JMSReader extends AbstractKiekerLogReader {
 
     private static final Log log = LogFactory.getLog(JMSReader.class);
+    private String jmsProviderUrl = null;
+    private String jmsDestination = null;
 
-    public boolean execute() {
+     /**
+     * @param jmsServerLocation = for instance "tcp://127.0.0.1:3035/"
+     * @param jmsDestination = for instance "queue1"
+     * @return
+     */
+    public JMSReader(String jmsProviderUrl, String jmsDestination) {
+        this.jmsProviderUrl = jmsProviderUrl;
+        this.jmsDestination = jmsDestination;
+         if (jmsProviderUrl == null && jmsDestination == null) {
+             String errormessage = "JMSReader has not sufficient parameters. jmsProviderUrl or jmsDestination is null";
+             log.error(errormessage);
+         }
+
+          if (jmsProviderUrl.equals("") && jmsDestination.equals("")) {
+             String errormessage = "JMSReader has not sufficient parameters. jmsProviderUrl or jmsDestination is empty";
+             log.error(errormessage);
+         }
+    }
+
+   
+    public boolean execute() throws LogReaderExecutionException {
+      
+
         boolean retVal = false;
         try {
             Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.exolab.jms.jndi.InitialContextFactory");
             //properties.put(Context.PROVIDER_URL, "tcp://pc-rohr.informatik.uni-oldenburg.de:3035/");
-            String location = "tcp://127.0.0.1:3035/";
-            properties.put(Context.PROVIDER_URL, location);
+          
+            properties.put(Context.PROVIDER_URL, jmsProviderUrl);
             Context context = new InitialContext(properties);
             ConnectionFactory factory =
                     (ConnectionFactory) context.lookup("ConnectionFactory");
             Connection connection = factory.createConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            String destinationName = "queue1";
-            Destination destination = (Destination) context.lookup(destinationName);
-            log.info("\n\n***\nListening to destination:" + destinationName + " over " + location + " !\n***\n\n");
+           
+            Destination destination = (Destination) context.lookup(jmsDestination);
+            log.info("\n\n***\nListening to destination:" + destination + " at " + jmsProviderUrl + " !\n***\n\n");
             MessageConsumer receiver = session.createConsumer(destination);
             receiver.setMessageListener(new MessageListener() {
 
-                public void onMessage(Message message) {
-                    if (message instanceof TextMessage) {
-                        TextMessage text = (TextMessage) message;
+                public void onMessage(Message jmsMessage) {
+                    if (jmsMessage instanceof TextMessage) {
+                        TextMessage text = (TextMessage) jmsMessage;
                         System.out.println("Received text message: " + text);
                     } else {
-                        ObjectMessage om = (ObjectMessage) message;
+                        ObjectMessage om = (ObjectMessage) jmsMessage;
                         //System.out.println("Received object message: " + om.toString());
                         try {
                             AbstractKiekerMonitoringRecord id = (AbstractKiekerMonitoringRecord) om.getObject();
@@ -75,4 +110,6 @@ public class JMSReader extends AbstractKiekerLogReader {
         } finally { }
         return retVal;
     }
+
+
 }
