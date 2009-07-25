@@ -102,7 +102,8 @@ public class JMSReader extends AbstractKiekerLogReader {
             connection.start();
 
             System.out.println("JMSTestListener1 is started and waits for incomming monitoring events!");
-            this.wait();
+            //todo why was the wait here?? it threw an exception
+            //this.wait();
         } catch (Exception ex) {
             System.out.println("" + JMSReader.class.getName() + " " + ex.getMessage());
             ex.printStackTrace();

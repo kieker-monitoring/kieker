@@ -18,6 +18,7 @@ import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
+import kieker.tpan.recordConsumer.BriefJavaFxInformer;
 import kieker.tpan.recordConsumer.ExecutionSequenceRepositoryFiller;
 
 import kieker.tpmon.core.TpmonController;
@@ -157,6 +158,7 @@ public class TpanTool {
            if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
                 numRequestedTasks++;
                 retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue1");
+                System.out.println("Finished to start task_initBasicJmsReader");
             }
 
            if(!retVal) {
@@ -370,8 +372,10 @@ public class TpanTool {
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
-        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
-        analysisInstance.addRecordConsumer(seqRepConsumer);
+        //ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        //analysisInstance.addRecordConsumer(seqRepConsumer);
+        BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
+        analysisInstance.addRecordConsumer(bjfx);
         analysisInstance.run();
 
 
