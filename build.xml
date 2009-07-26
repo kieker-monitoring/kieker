@@ -149,6 +149,9 @@
 
         <!-- Classpath with tpan and external libs  -->
         <path id="tpan.core.classpath">
+            <fileset dir="tpan-plugins"> <!-- this has to be before! the other libs follow!, else wired javafx errors might occure on com.sun.scenario.scenegraph.SGGroup -->
+                    <include name="**/*.jar"/>
+            </fileset>
             <path refid="classpath.libs"/>
             <fileset dir="${dist.dir}">
                 <include name="${dist.tpan.ctrl}"/>
@@ -740,6 +743,9 @@
                 <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
                 <pathelement location="${dist.dir}/${dist.kieker.common}"/>
                 <pathelement location="${dist.dir}/${dist.tpan.ctrl}"/>
+                 <fileset dir="tpan-plugins">
+                    <include name="**/*.jar"/>
+                 </fileset>
             </classpath>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
@@ -747,18 +753,17 @@
 
     <target name="run-tpan-jmslistener" depends="build-tpan-ctrl">
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
+         <!--<java classname="${main.class}" classpath="${dist.dir}/${application.title}.jar" failonerror="true" fork="true" jvm="${platform.fxhome}/bin/javafx${binary.extension}" jvmargs="${run.jvmargs}">
+            <arg line="${application.args}"/>
+        </java> -->
         <java dir="."
               fork="true"
               classname="kieker.tpan.TpanTool"
+              jvm="/mnt/sda4/netbeans651/netbeans-6.5.1/javafx2/javafx-sdk/bin/javafx"
               classpathref="tpan.core.classpath">
                   <!-- select-traces 3 -->
             <arg line="--outputdir tmp/  --init-basic-JMS-reader"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
-            <classpath>
-                <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
-                <pathelement location="${dist.dir}/${dist.kieker.common}"/>
-                <pathelement location="${dist.dir}/${dist.tpan.ctrl}"/>
-            </classpath>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>            
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>
