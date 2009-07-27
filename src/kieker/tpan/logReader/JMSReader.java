@@ -1,6 +1,5 @@
 package kieker.tpan.logReader;
 
-import java.util.HashMap;
 import kieker.common.logReader.AbstractKiekerLogReader;
 import java.util.Hashtable;
 import javax.jms.JMSException;

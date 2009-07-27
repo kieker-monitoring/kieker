@@ -49,8 +49,7 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
             String errorMessage = "==> Failed to execute JavaFx window = failed to execute Class.forName(KiekerLiveAnalyzer.JavaMain)  - most likely you do not have KiekerLiveAnalyzer.jar in the classpath (put it or link it in your tpan-plugins folder.) \n Message:"+e.getMessage();
             e.printStackTrace();
             System.out.println("==> Failed to start JavaFx window");
-            throw new RecordConsumerExecutionException(errorMessage);
-
+            throw new RecordConsumerExecutionException(errorMessage,e);
         }
         return true;
     }
