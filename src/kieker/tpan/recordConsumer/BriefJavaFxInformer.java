@@ -28,7 +28,15 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
         System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
+        if (jfxRc == null) {
+            System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");
+        } else {
+            jfxRc.consumeMonitoringRecord(monitoringRecord);
+        }
     }
+
+    // this private variable represents access to the javafx window
+    IKiekerRecordConsumer jfxRc = null;
 
     public boolean execute() throws RecordConsumerExecutionException {
         try {
@@ -44,9 +52,6 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
             throw new RecordConsumerExecutionException(errorMessage);
 
         }
-
-
-
         return true;
     }
 

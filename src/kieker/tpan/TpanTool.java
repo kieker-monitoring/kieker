@@ -377,8 +377,6 @@ public class TpanTool {
         BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
         analysisInstance.addRecordConsumer(bjfx);
         analysisInstance.run();
-
-
         return retVal;
     }
 }
