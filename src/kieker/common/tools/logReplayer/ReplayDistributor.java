@@ -68,7 +68,7 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
             } catch (FileNotFoundException ex) {
                 log.info("FileNotFound:", ex);
             }
-            this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
+            this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1*1000*1000) ; // 1 millisecond tolerance
 			this.offset = (2 * 1000 * 1000 * 1000) - firstLoggingTimestamp;
 			this.startTime = ctrlnst.getTime();
             log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);

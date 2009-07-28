@@ -2,6 +2,8 @@ package kieker.tpmon.writer.filesystemAsync;
 
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Random;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
@@ -125,9 +127,12 @@ public class FsWriterThread extends AbstractWorkerThread {
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
 
-            int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
+            DateFormat m_ISO8601Local =
+                    new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+            String dateStr = m_ISO8601Local.format(new java.util.Date());
+            //int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
             int random = (new Random()).nextInt(100);
-            String filename = this.filenamePrefix + time + "-" + random + ".dat";
+            String filename = this.filenamePrefix + "-" + dateStr + "-" + random + ".dat";
 
             //log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
