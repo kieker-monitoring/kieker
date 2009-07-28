@@ -49,7 +49,7 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
 
     @TpmonInternal()
     public static AbstractKiekerMonitoringRecord getInstance(){
-        throw new UnsupportedOperationException("Extending classes must override"+
+        throw new UnsupportedOperationException("Extending classes must override "+
                 "this method");
     }
 

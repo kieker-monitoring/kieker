@@ -6,6 +6,9 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.Collator;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -40,7 +43,6 @@ import org.apache.commons.logging.LogFactory;
  * again, written to a database, or whatever tpmon is configured to do
  * with the monitoring data.
  */
-
 /**
  * @author Matthias Rohr, Andre van Hoorn
  *
@@ -69,7 +71,9 @@ public class FSReader extends AbstractKiekerLogReader {
                             pathname.getName().endsWith(".dat");
                 }
             });
-            for (int i = 0; inputFiles!=null && i < inputFiles.length; i++) {
+
+            Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
+            for (int i = 0; inputFiles != null && i < inputFiles.length; i++) {
                 this.processInputFile(inputFiles[i]);
             }
             if (inputFiles == null) {
@@ -81,7 +85,7 @@ public class FSReader extends AbstractKiekerLogReader {
             LogReaderExecutionException readerEx = new LogReaderExecutionException("An error occurred while parsing files from directory " +
                     this.inputDir.getAbsolutePath() + ":", e);
             log.error("Exception", readerEx);
-            throw  readerEx;
+            throw readerEx;
         } finally {
             super.terminate();
         }
@@ -136,7 +140,7 @@ public class FSReader extends AbstractKiekerLogReader {
     }
 
     @TpmonInternal()
-    private void processInputFile(final File input) throws IOException {
+    private void processInputFile(final File input) throws IOException, LogReaderExecutionException {
         log.info("< Loading " + input.getAbsolutePath());
 
         BufferedReader in = null;
@@ -147,7 +151,6 @@ public class FSReader extends AbstractKiekerLogReader {
             in = new BufferedReader(new FileReader(input));
             String line;
 
-            readLine:
             while ((line = in.readLine()) != null) {
                 AbstractKiekerMonitoringRecord rec = null;
                 try {
@@ -195,7 +198,7 @@ public class FSReader extends AbstractKiekerLogReader {
                             "Failed to parse line: {" + line + "} from file " +
                             input.getAbsolutePath(), e);
                     log.error("Abort reading");
-                    break readLine;
+                    throw new LogReaderExecutionException("LogReaderExecutionException ", e);
                 }
             }
         } finally {
@@ -206,6 +209,29 @@ public class FSReader extends AbstractKiekerLogReader {
                     log.error("Exception", e);
                 }
             }
+        }
+    }
+
+    /** source: http://weblog.janek.org/Archive/2005/01/16/HowtoSortFilesandDirector.html */
+    private static class FileComparator
+            implements Comparator<File> {
+
+        private Collator c = Collator.getInstance();
+
+        public int compare(File f1,
+                File f2) {
+            if (f1 == f2) {
+                return 0;
+            }
+
+            if (f1.isDirectory() && f2.isFile()) {
+                return -1;
+            }
+            if (f1.isFile() && f2.isDirectory()) {
+                return 1;
+            }
+
+            return c.compare(f1.getName(), f2.getName());
         }
     }
 }

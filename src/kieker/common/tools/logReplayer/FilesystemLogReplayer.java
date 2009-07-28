@@ -1,7 +1,5 @@
 package kieker.common.tools.logReplayer;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.filesystemReader.FSReader;
@@ -107,7 +105,7 @@ public class FilesystemLogReplayer {
             }
         };
         if (realtimeMode) {
-            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(40, logCons);
+            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(10, logCons);
             fsReader.addConsumer(
                     rtDistributorCons,
                     null); // consume records of all types
