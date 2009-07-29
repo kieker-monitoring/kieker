@@ -51,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
 public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKiekerMonitoringProbe {
 
     private static final String componentName = KiekerRequestRegistrationAndLoggingFilter.class.getName();
-    private static final String opName = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain";
+    private static final String opName = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain)";
     private static final Log log = LogFactory.getLog(KiekerRequestRegistrationAndLoggingFilter.class);
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
