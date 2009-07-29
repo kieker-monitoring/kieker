@@ -1,5 +1,6 @@
 package kieker.tpmon.core;
 
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.executions.RemoteCallMetaData;
@@ -25,24 +26,49 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  *
  * @author Andre van Hoorn
  */
-
 public class ControlFlowRegistry {
+
     private static final Log log = LogFactory.getLog(TpmonController.class);
-
     private static ControlFlowRegistry instance = new ControlFlowRegistry();
+    private final AtomicLong lastThreadId;
+    private final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
+    private final ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
+    private final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
-    private AtomicLong lastThreadId = new AtomicLong(0);
-    private ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
-
-    private ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
-    private ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
-
-    private ControlFlowRegistry(){
+    private ControlFlowRegistry() {
+        /* In order to (probabilistically!) avoid that other instances in our
+         * system (on another node, in another vm, ...) generate the same thread
+         * ids,  we fill the left-most 10 bits of the thread id with a uniquely
+         * distributed random number.
+         * As a consequence, this constitutes a uniquely distributed offset of
+         * size 2^(64-1-10) = 2^53 = 9007199254740992L in the worst case.
+         * Note that we restrict ourselves to the positive long values so far.
+         * Of course, negative values may occur (as a result of an overflow) --
+         * this does not hurt!
+         */
+        Random r = new Random();
+        long base = ((long)r.nextInt(1024) << (Long.SIZE-10-1));
+        log.info("First threadId will be " + (base + 1));
+        /* can be removed if considered stable
+        log.info("base 0:" + ((long)0 << (Long.SIZE-10-1)));
+        log.info("base 1023:" + ((long)1023 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
+        log.info("base 1022:" + ((long)1022 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
+        log.info("base 1022+1:" + ((long)1022+1 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
+        log.info("base 1022+2:" + ((long)1022+2 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
+        log.info("base r:" + ((long)r.nextInt(1024) << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
+        log.info("overflow?: " + (((long)1023 << (Long.SIZE-10-1))+ 9007199254740991L));
+        log.info("Long.SIZE: " + Long.SIZE);
+        log.info("2^52="+Math.pow(2, 53));
+        log.info("Long.MAX_VALUE: " + Long.MAX_VALUE);
+        log.info("Long.MIN_VALUE: " + Long.MIN_VALUE);
+        log.info("Long.MAX_VALUE+1: " + (Long.MAX_VALUE+1));
+        */
+        //long idBase = (long)r.nextInt(1024) << (Long.SIZE-10+1); // 1024 = 2^10-1
+        lastThreadId = new AtomicLong(base);
     }
 
     @TpmonInternal()
@@ -50,7 +76,7 @@ public class ControlFlowRegistry {
         return ControlFlowRegistry.instance;
     }
 
-  /**
+    /**
      * This method returns a thread-local traceid which is globally
      * unique and stored it local for the thread.
      * The thread is responsible for invalidating the stored curTraceId using
