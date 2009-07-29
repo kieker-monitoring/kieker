@@ -137,7 +137,7 @@ public class syncFsWriter extends AbstractMonitoringDataWriter {
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
 
-   DateFormat m_ISO8601Local =
+            DateFormat m_ISO8601Local =
                     new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
             String dateStr = m_ISO8601Local.format(new java.util.Date());
             //int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from ??
