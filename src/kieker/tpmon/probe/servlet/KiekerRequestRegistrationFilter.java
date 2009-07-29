@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  */
 /**
- * Register session and trace id of incoming request.
+ * Register session id (if it exists) of incoming request.
  * The execution of the filter is not logged.
  * 
  * Servlet filter used to register session ids within the TpmonController.
@@ -76,7 +76,7 @@ public class KiekerRequestRegistrationFilter implements Filter, IKiekerMonitorin
         try {
             chain.doFilter(request, response);
         } finally {
-            cfRegistry.unsetThreadLocalTraceId();
+            cfRegistry.unsetThreadLocalTraceId(); // actually, this should not be necessary
             sessionRegistry.unsetThreadLocalSessionId();
         }
     }

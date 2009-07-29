@@ -70,6 +70,19 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
         }*/
     }
 
+    /** 
+     * Returns the session ID from request @r or null if no session in @r.
+     * 
+     */
+    public final String getSessionId (HttpServletRequest httpReq) {
+            HttpSession session = (httpReq).getSession(false);
+            if (session != null) {
+                return session.getId();
+            } else {
+                return null;
+            }
+    }
+
     @TpmonInternal()
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
@@ -77,17 +90,15 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */
         if (request instanceof HttpServletRequest) {
-            HttpServletRequest httpReq = (HttpServletRequest) request;
-            HttpSession session = (httpReq).getSession(false);
             execData = KiekerExecutionRecord.getInstance(
                     componentName,
                     opName,
                     cfRegistry.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point*/);
-            if (session != null) {
-                sessionRegistry.storeThreadLocalSessionId(session.getId());
-                execData.sessionId = session.getId();
+            execData.sessionId = getSessionId((HttpServletRequest) request);
+            if (execData.sessionId != null) {
+                sessionRegistry.storeThreadLocalSessionId(execData.sessionId);
             }
-            execData.isEntryPoint = false;
+            execData.isEntryPoint = true; // of course (however, we never evaluate it here)!
             cfRegistry.storeThreadLocalEOI(0); // current execution's eoi is 0
             cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
             execData.vmName = vmName;
@@ -101,10 +112,16 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
                 execData.tout = ctrlInst.getTime();
                 execData.eoi = eoi;
                 execData.ess = ess;
-                // TOOD: only log record if current cfRegistry.storeThreadLocalEOI > 0
-                // TODO: if execData.sessionId == null, try again to fetch it (should exist now)
-                ctrlInst.logMonitoringRecord(execData); 
+                //if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)
+                if (execData.sessionId == null){
+                    //log.info("TraceID" + execData.traceId + "had no sessionId so far. Now?");
+                    execData.sessionId = getSessionId((HttpServletRequest) request);
+                    //log.info("New sessionId? " + execData.sessionId);
+                }
+                // TOOD: ?only log record if cfRegistry.recallThreadLocalEOI > 0?
+                ctrlInst.logMonitoringRecord(execData);
             }
+            // since we are in an entry point:
             cfRegistry.unsetThreadLocalTraceId();
             sessionRegistry.unsetThreadLocalSessionId();
             cfRegistry.unsetThreadLocalEOI();
