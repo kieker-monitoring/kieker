@@ -131,8 +131,8 @@ public class FsWriterThread extends AbstractWorkerThread {
                     new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
             String dateStr = m_ISO8601Local.format(new java.util.Date());
             //int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
-            int random = (new Random()).nextInt(100);
-            String filename = this.filenamePrefix + "-" + dateStr + "-" + random + ".dat";
+            //int random = (new Random()).nextInt(100);
+            String filename = this.filenamePrefix + "-" + dateStr + "-" + this.getName() + ".dat";
 
             //log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {

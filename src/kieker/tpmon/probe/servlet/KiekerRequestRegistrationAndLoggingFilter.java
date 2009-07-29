@@ -101,7 +101,9 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
                 execData.tout = ctrlInst.getTime();
                 execData.eoi = eoi;
                 execData.ess = ess;
-                ctrlInst.logMonitoringRecord(execData);
+                // TOOD: only log record if current cfRegistry.storeThreadLocalEOI > 0
+                // TODO: if execData.sessionId == null, try again to fetch it (should exist now)
+                ctrlInst.logMonitoringRecord(execData); 
             }
             cfRegistry.unsetThreadLocalTraceId();
             sessionRegistry.unsetThreadLocalSessionId();
