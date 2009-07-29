@@ -52,7 +52,7 @@ public class ControlFlowRegistry {
          */
         Random r = new Random();
         long base = ((long)r.nextInt(65536) << (Long.SIZE-16-1));
-        /* can be removed if considered stable*/
+        /* can be removed if considered stable
         log.info("base 0:" + ((long)0 << (Long.SIZE-16-1)));
         log.info("base 65535:" + ((long)65535 << (Long.SIZE-16-1)));
         log.info("base 65534:" + ((long)65534 << (Long.SIZE-16-1)));
@@ -65,7 +65,7 @@ public class ControlFlowRegistry {
         log.info("Long.MAX_VALUE: " + Long.MAX_VALUE);
         log.info("Long.MIN_VALUE: " + Long.MIN_VALUE);
         log.info("Long.MAX_VALUE+1: " + (Long.MAX_VALUE+1));
-        
+        */
         //long idBase = (long)r.nextInt(1024) << (Long.SIZE-10+1); // 1024 = 2^10-1
         lastThreadId = new AtomicLong(base);
         log.info("First threadId will be " + (base + 1));
