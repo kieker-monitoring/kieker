@@ -101,7 +101,7 @@ public class syncFsWriter extends AbstractMonitoringDataWriter {
         this.storagePathBase = storagePathBase;
 
         DateFormat m_ISO8601Local =
-                new SimpleDateFormat("yyyyMMdd'-'HHmmss");
+                new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
         String dateStr = m_ISO8601Local.format(new java.util.Date());
         this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "/";
         log.info("this.storagePathBase :" + this.storagePathBase);

@@ -83,7 +83,7 @@ public class AsyncFsConnector extends AbstractMonitoringDataWriter {
         }
 
         DateFormat m_ISO8601Local =
-                new SimpleDateFormat("yyyyMMdd'-'HHmmss");
+                new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
         String dateStr = m_ISO8601Local.format(new java.util.Date());
         String storageDir = this.storagePathBase + "/tpmon-" + dateStr + "/";
 
