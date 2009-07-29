@@ -42,30 +42,30 @@ public class ControlFlowRegistry {
     private ControlFlowRegistry() {
         /* In order to (probabilistically!) avoid that other instances in our
          * system (on another node, in another vm, ...) generate the same thread
-         * ids,  we fill the left-most 10 bits of the thread id with a uniquely
-         * distributed random number.
+         * ids,  we fill the left-most 16 bits of the thread id with a uniquely
+         * distributed random number (0,0000152587890625 = 0,00152587890625 %).
          * As a consequence, this constitutes a uniquely distributed offset of
-         * size 2^(64-1-10) = 2^53 = 9007199254740992L in the worst case.
+         * size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case.
          * Note that we restrict ourselves to the positive long values so far.
          * Of course, negative values may occur (as a result of an overflow) --
          * this does not hurt!
          */
         Random r = new Random();
-        long base = ((long)r.nextInt(1024) << (Long.SIZE-10-1));
-        /* can be removed if considered stable
-        log.info("base 0:" + ((long)0 << (Long.SIZE-10-1)));
-        log.info("base 1023:" + ((long)1023 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
-        log.info("base 1022:" + ((long)1022 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
-        log.info("base 1022+1:" + ((long)1022+1 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
-        log.info("base 1022+2:" + ((long)1022+2 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
-        log.info("base r:" + ((long)r.nextInt(1024) << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
-        log.info("overflow?: " + (((long)1023 << (Long.SIZE-10-1))+ 9007199254740991L));
+        long base = ((long)r.nextInt(65536) << (Long.SIZE-16-1));
+        /* can be removed if considered stable*/
+        log.info("base 0:" + ((long)0 << (Long.SIZE-16-1)));
+        log.info("base 65535:" + ((long)65535 << (Long.SIZE-16-1)));
+        log.info("base 65534:" + ((long)65534 << (Long.SIZE-16-1)));
+        log.info("base 65534+1:" + ((long)65534+1 << (Long.SIZE-16-1)));
+        log.info("base 65534+2:" + ((long)65534+2 << (Long.SIZE-16-1)));
+        log.info("base r:" + ((long)r.nextInt(65536) << (Long.SIZE-16-1)));
+        log.info("overflow?: " + (((long)65535 << (Long.SIZE-16-1))+ 140737488355328L));
         log.info("Long.SIZE: " + Long.SIZE);
-        log.info("2^52="+Math.pow(2, 53));
+        log.info("2^47="+Math.pow(2, 47));
         log.info("Long.MAX_VALUE: " + Long.MAX_VALUE);
         log.info("Long.MIN_VALUE: " + Long.MIN_VALUE);
         log.info("Long.MAX_VALUE+1: " + (Long.MAX_VALUE+1));
-        */
+        
         //long idBase = (long)r.nextInt(1024) << (Long.SIZE-10+1); // 1024 = 2^10-1
         lastThreadId = new AtomicLong(base);
         log.info("First threadId will be " + (base + 1));
