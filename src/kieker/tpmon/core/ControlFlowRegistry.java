@@ -52,7 +52,6 @@ public class ControlFlowRegistry {
          */
         Random r = new Random();
         long base = ((long)r.nextInt(1024) << (Long.SIZE-10-1));
-        log.info("First threadId will be " + (base + 1));
         /* can be removed if considered stable
         log.info("base 0:" + ((long)0 << (Long.SIZE-10-1)));
         log.info("base 1023:" + ((long)1023 << (Long.SIZE-10-1))); //(Long.SIZE-10-1)
@@ -69,6 +68,7 @@ public class ControlFlowRegistry {
         */
         //long idBase = (long)r.nextInt(1024) << (Long.SIZE-10+1); // 1024 = 2^10-1
         lastThreadId = new AtomicLong(base);
+        log.info("First threadId will be " + (base + 1));
     }
 
     @TpmonInternal()
