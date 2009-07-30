@@ -15,11 +15,9 @@ import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.w3c.dom.Element;
 
-/**
- * kieker.tpmon.cxf.TpmonSessionIdentifierInInterceptor
- *
+/*
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +36,9 @@ import org.w3c.dom.Element;
  * and associate it with the current thread id in TpmonController.
  *   
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
- * 
+ */
+
+/**
  * @author Dennis Kieselhorst
  */
 public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor implements IKiekerMonitoringProbe {
@@ -52,21 +52,22 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor i
     public void handleMessage(Message msg) throws Fault {
         if (msg instanceof SoapMessage) {
             SoapMessage soapMsg = (SoapMessage) msg;
-            if (LOG.isLoggable(Level.FINE)) {
-                for (Header hdr : soapMsg.getHeaders()) {
-                    LOG.fine("found header: " + hdr.getName() + " " + hdr.getObject() + ", string content=" + getStringContentFromHeader(hdr));
-                    LOG.finer("type " + hdr.getObject().getClass());
-                }
-            }
+            //if (LOG.isLoggable(Level.FINE)) {
+            //    for (Header hdr : soapMsg.getHeaders()) {
+            //        LOG.fine("found header: " + hdr.getName() + " " + hdr.getObject() + ", string content=" + getStringContentFromHeader(hdr));
+            //        LOG.finer("type " + hdr.getObject().getClass());
+            //    }
+            //}
             /* Extract and register sessionId from SOAP header */
             Header hdr = soapMsg.getHeader(TpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
             if (hdr != null) {
                 String sessionId = getStringContentFromHeader(hdr);
                 if (sessionId != null) {
-                    LOG.info("registering session identifier " + sessionId);
+                    //LOG.info("registering session identifier " + sessionId);
                     sessionRegistry.storeThreadLocalSessionId(sessionId);
                 }
             } else {
+                /* TODO is this critical? */
                 LOG.info("no tpmon session identifier header found!");
             }
             /* Extract and register traceId from SOAP header */
@@ -76,13 +77,14 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor i
                 if (traceIdStr != null) {
                     try {
                         long traceId = Long.parseLong(traceIdStr);
-                        LOG.info("registering trace identifier " + traceId);
+                        //LOG.info("registering trace identifier " + traceId);
                         cfRegistry.storeThreadLocalTraceId(traceId);
                     } catch (Exception exc) {
                         LOG.log(Level.WARNING, exc.getMessage(), exc);
                     }
                 }
             } else {
+                /* TODO is this critical? */
                 LOG.info("no tpmon trace identifier header found!");
             }
             /* Extract and register eoi from SOAP header */
@@ -92,13 +94,14 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor i
                 if (eoiStr != null) {
                     try {
                         int eoi = Integer.parseInt(eoiStr);
-                        LOG.info("registering eoi " + eoi);
+                        //LOG.info("registering eoi " + eoi);
                         cfRegistry.storeThreadLocalEOI(eoi);
                     } catch (Exception exc) {
                         LOG.log(Level.WARNING, exc.getMessage(), exc);
                     }
                 }
             } else {
+                /* TODO is this critical? */
                 LOG.info("no tpmon eoi header found!");
             }
            /* Extract and register ess from SOAP header */
@@ -108,13 +111,14 @@ public class TpmonSessionIdentifierInInterceptor extends SoapHeaderInterceptor i
                 if (essStr != null) {
                     try {
                         int ess = Integer.parseInt(essStr);
-                        LOG.info("registering ess " + ess);
+                        //LOG.info("registering ess " + ess);
                         cfRegistry.storeThreadLocalESS(ess);
                     } catch (Exception exc) {
                         LOG.log(Level.WARNING, exc.getMessage(), exc);
                     }
                 }
             } else {
+                /* TODO is this critical? */
                 LOG.info("no tpmon ess header found!");
             }
         }
