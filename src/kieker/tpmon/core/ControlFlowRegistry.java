@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ControlFlowRegistry {
 
-    private static final Log log = LogFactory.getLog(TpmonController.class);
+    private static final Log log = LogFactory.getLog(ControlFlowRegistry.class);
     private static ControlFlowRegistry instance = new ControlFlowRegistry();
     private final AtomicLong lastThreadId;
     private final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
