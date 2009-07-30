@@ -5,8 +5,8 @@
   <groupId>net.sf.kieker</groupId>
   <artifactId>base</artifactId>
   <name>Kieker Base</name>
-  <version>0.95-20090729</version>
-  <url>http://kieker.sf.net</url>  
+  <version>0.95-20090730</version>
+  <url>http://kieker.sf.net</url>
   <packaging>pom</packaging>
   
   <developers>
@@ -19,7 +19,7 @@
   		<id>matthias</id>
   		<name>Matthias Rohr</name>
   		<email>Matthias.Rohr@Informatik.Uni-Oldenburg.DE</email>
-  	</developer>  	
+  	</developer>
   	<developer>
   		<id>jwaller</id>
   		<name>Jan Waller</name>
