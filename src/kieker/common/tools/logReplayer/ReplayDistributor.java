@@ -1,8 +1,5 @@
 package kieker.common.tools.logReplayer;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -56,24 +53,24 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
-    private static final String outputFn = "SchedulingList";
-    private static PrintStream ps;
+    //private static final String outputFn = "SchedulingList";
+    //private static PrintStream ps;
 
 	public void consumeMonitoringRecord(
 			final AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
 		if (this.startTime == -1) { // init on first record
-            try {
+            //try {
                 // init on first record
-                ps = new PrintStream(new FileOutputStream(outputFn, false)); // do not append
-            } catch (FileNotFoundException ex) {
-                log.info("FileNotFound:", ex);
-            }
+                //ps = new PrintStream(new FileOutputStream(outputFn, false)); // do not append
+            //} catch (FileNotFoundException ex) {
+            //    log.info("FileNotFound:", ex);
+            //}
             this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1*1000*1000) ; // 1 millisecond tolerance
 			this.offset = (2 * 1000 * 1000 * 1000) - firstLoggingTimestamp;
 			this.startTime = ctrlnst.getTime();
-            log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);
-            log.info("offset: " + this.offset);
-            log.info("startTime" + this.startTime);
+            //log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);
+            //log.info("offset: " + this.offset);
+            //log.info("startTime" + this.startTime);
 		}
         if (monitoringRecord.getLoggingTimestamp() < this.firstLoggingTimestamp){
             RecordConsumerExecutionException e = new RecordConsumerExecutionException("Timestamp of current record "+monitoringRecord.getLoggingTimestamp()+" < firstLoggingTimestamp "+ this.firstLoggingTimestamp);
@@ -82,10 +79,10 @@ public class ReplayDistributor implements IKiekerRecordConsumer {
         }
 		long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
 				- (ctrlnst.getTime() - this.startTime); // substract elapsed time
-        ps.println("curT.record: " + monitoringRecord.getLoggingTimestamp());ps.flush();
-        ps.println("curT.ctrl: " + ctrlnst.getTime());ps.flush();
-        ps.println("elapsedT (nsec): " + (ctrlnst.getTime() - this.startTime));
-        ps.println("schedTime (nsec): " + schedTime);
+        //ps.println("curT.record: " + monitoringRecord.getLoggingTimestamp());ps.flush();
+        //ps.println("curT.ctrl: " + ctrlnst.getTime());ps.flush();
+        //ps.println("elapsedT (nsec): " + (ctrlnst.getTime() - this.startTime));
+        //ps.println("schedTime (nsec): " + schedTime);
         if (schedTime < 0){
             RecordConsumerExecutionException e = new RecordConsumerExecutionException("negative scheduling time: "+schedTime);
             log.error("RecordConsumerExecutionException", e);

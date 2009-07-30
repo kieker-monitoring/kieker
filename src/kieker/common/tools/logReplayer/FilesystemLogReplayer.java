@@ -31,11 +31,13 @@ public class FilesystemLogReplayer {
     static {
         cmdlOpts.addOption(OptionBuilder.withArgName("dir").hasArg().withLongOpt("inputdir").isRequired(true).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
         cmdlOpts.addOption(OptionBuilder.withArgName("true|false").hasArg().withLongOpt("realtime").isRequired(true).withDescription("Replay log data in realtime?").withValueSeparator('=').create("r"));
+        cmdlOpts.addOption(OptionBuilder.withArgName("num").hasArg().withLongOpt("realtime-worker-threads").isRequired(false).withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
     }
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
     private static TpmonController ctrlInst = null;
     private static String inputDir = null;
     private static boolean realtimeMode = false;
+    private static int numRealtimeWorkerThreads = -1;
 
     private static boolean parseArgs(String[] args) {
         try {
@@ -53,10 +55,44 @@ public class FilesystemLogReplayer {
     }
 
     private static boolean initFromArgs() {
+        boolean retVal = true;
+
+        /* 1.) init inputDir */
         inputDir = cmdl.getOptionValue("inputdir");
-        log.info("inputDir: " + inputDir);
-        realtimeMode = cmdl.getOptionValue("realtime", "false").equals("true");
-        return true;
+
+        /* 2.) init realtimeMode */
+        String realtimeOptValStr = cmdl.getOptionValue("realtime", "false");
+        if (!(realtimeOptValStr.equals("true") || realtimeOptValStr.equals("false"))) {
+            System.out.println("Invalid value for option realtime: '" + realtimeOptValStr + "'");
+            retVal = false;
+        }
+        realtimeMode = realtimeOptValStr.equals("true");
+
+        /* 3.) init numRealtimeWorkerThreads */
+       String numRealtimeWorkerThreadsStr = cmdl.getOptionValue("realtime-worker-threads", "1");
+        try {
+            numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
+        } catch (NumberFormatException exc) {
+            System.out.println("Invalid value for option realtime-worker-threads: '" + numRealtimeWorkerThreadsStr + "'");
+            log.error("NumberFormatException: ", exc);
+            retVal = false;
+        }
+       if (numRealtimeWorkerThreads < 1) {
+           System.out.println("Option value for realtime-worker-threads must be >= 1; found " + numRealtimeWorkerThreads);
+           log.error("Invalid specification of numRealtimeWorkerThreads:" + numRealtimeWorkerThreads);
+           retVal = false;
+       }
+
+        /* log configuration */
+        if (retVal == true) {
+            log.info("inputDir: " + inputDir);
+            log.info("Replaying in " + (realtimeMode ? "" : "non-") + "realtime mode");
+            if (realtimeMode){
+                log.info("Using " + numRealtimeWorkerThreads + " realtime worker thread" + (numRealtimeWorkerThreads>1?"s":""));
+            }
+        }
+
+        return retVal;
     }
 
     public static void main(final String[] args) {
@@ -105,7 +141,7 @@ public class FilesystemLogReplayer {
             }
         };
         if (realtimeMode) {
-            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(10, logCons);
+            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(numRealtimeWorkerThreads, logCons);
             fsReader.addConsumer(
                     rtDistributorCons,
                     null); // consume records of all types
