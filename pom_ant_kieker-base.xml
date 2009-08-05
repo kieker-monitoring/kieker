@@ -47,6 +47,67 @@
   	<module>tpmon-ltw</module>
   </modules>
   
+    <!-- TODO add further dependencies -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>aopalliance</groupId>
+                <artifactId>aopalliance</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>jms</groupId>
+                <artifactId>jms</artifactId>
+                <version>1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-api</artifactId>
+                <version>2.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-common-utilities</artifactId>
+                <version>2.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-bindings-soap</artifactId>
+                <version>2.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-databinding-aegis</artifactId>
+                <version>2.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>1.6.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.6.5</version>
+            </dependency>
+            <dependency><!-- TODO use spring module jars (not the big one) -->
+                <groupId>org.springframework</groupId>
+                <artifactId>spring</artifactId>
+                <version>2.5.6</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+  
   <distributionManagement>
     <repository>
       <id>kieker-m2-repo</id>

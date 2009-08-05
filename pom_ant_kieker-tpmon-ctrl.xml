@@ -14,17 +14,9 @@
   
   <!-- TODO add dependencies -->
   <dependencies>
-  	<dependency>
-  		<groupId>org.apache.cxf</groupId>
-  		<artifactId>cxf-rt-bindings-soap</artifactId>
-  		<version>2.2</version>
-  		<optional>true</optional>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.cxf</groupId>
-  		<artifactId>cxf-rt-databinding-aegis</artifactId>
-  		<version>2.2</version>
-  		<optional>true</optional>
-  	</dependency>
+      <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+      </dependency>
   </dependencies>  
 </project>
