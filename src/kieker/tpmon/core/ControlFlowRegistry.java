@@ -77,6 +77,16 @@ public class ControlFlowRegistry {
     }
 
     /**
+     * This methods returns a globally unique trace id.
+     *
+     * @return
+     */
+    @TpmonInternal()
+    public long getUniqueTraceId(){
+        return lastThreadId.incrementAndGet();
+    }
+
+    /**
      * This method returns a thread-local traceid which is globally
      * unique and stored it local for the thread.
      * The thread is responsible for invalidating the stored curTraceId using
