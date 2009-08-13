@@ -1,5 +1,7 @@
 package kieker.tpan.logReader;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.common.logReader.AbstractKiekerLogReader;
 import java.util.Hashtable;
 import javax.jms.JMSException;
@@ -80,18 +82,22 @@ public class JMSReader extends AbstractKiekerLogReader {
                     if (jmsMessage instanceof TextMessage) {
                         TextMessage text = (TextMessage) jmsMessage;
                         System.out.println("Received text message: " + text);
+
                     } else {
                         ObjectMessage om = (ObjectMessage) jmsMessage;
                         //System.out.println("Received object message: " + om.toString());
                         try {
-                            AbstractKiekerMonitoringRecord id = (AbstractKiekerMonitoringRecord) om.getObject();
-                            log.info("New monitoring record of type '" + id.getRecordTypeId() + "'");
+                            AbstractKiekerMonitoringRecord rec = (AbstractKiekerMonitoringRecord) om.getObject();
+                            log.info("New monitoring record of type '" + rec.getRecordTypeId() + "'");
+                                deliverRecordToConsumers(rec); 
                         } catch (MessageFormatException em) {
                             log.fatal("MessageFormatException:", em);
                             em.printStackTrace();
                         } catch (JMSException ex) {
                             log.fatal("JMSException ", ex);
                             ex.printStackTrace();
+                        }  catch (LogReaderExecutionException ex) {
+                            Logger.getLogger(JMSReader.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }

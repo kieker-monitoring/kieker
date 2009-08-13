@@ -23,7 +23,7 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
     };
 
     public String[] getRecordTypeSubscriptionList() {
-        return recordTypeSubscriptionList;
+        return null; // null gets it all
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
@@ -34,7 +34,6 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
             jfxRc.consumeMonitoringRecord(monitoringRecord);
         }
     }
-
     // this private variable represents access to the javafx window
     IKiekerRecordConsumer jfxRc = null;
 
@@ -42,7 +41,7 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
         try {
             System.out.println("==> Trying to start JavaFx window");
             String javaFxWindowClassname = "KiekerLiveAnalyzer.JavaMain";
-            IKiekerRecordConsumer jfxRc = (IKiekerRecordConsumer)Class.forName(javaFxWindowClassname).newInstance();
+            jfxRc = (IKiekerRecordConsumer)Class.forName(javaFxWindowClassname).newInstance();
             jfxRc.execute();
             System.out.println("==> Success to start JavaFx window (at least the class invocation)");
         } catch (Exception e) {
@@ -57,5 +56,4 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
     public void terminate() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
