@@ -1,26 +1,24 @@
-package kieker.common.tools.logReplayer;
+package kieker.common.logReader;
 
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * A Runnable to be scheduled via the ReplayDistributor
+ * A Runnable to be scheduled via the RealtimeReplayDistributor
  *
  * @author Robert von Massow
  *
  */
-public class ReplayWorker implements Runnable {
+public class RealtimeReplayWorker implements Runnable {
 
-    private static final Log log = LogFactory.getLog(ReplayWorker.class);
+    private static final Log log = LogFactory.getLog(RealtimeReplayWorker.class);
     private final AbstractKiekerMonitoringRecord monRec;
     private final IKiekerRecordConsumer cons;
-    private final ReplayDistributor rd;
+    private final RealtimeReplayDistributor rd;
 
-    public ReplayWorker(final AbstractKiekerMonitoringRecord monRec, final ReplayDistributor rd, final IKiekerRecordConsumer cons) {
+    public RealtimeReplayWorker(final AbstractKiekerMonitoringRecord monRec, final RealtimeReplayDistributor rd, final IKiekerRecordConsumer cons) {
         this.monRec = monRec;
         this.cons = cons;
         this.rd = rd;

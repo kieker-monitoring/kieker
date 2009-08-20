@@ -54,6 +54,8 @@ public class FSReader extends AbstractKiekerLogReader {
     private static final Log log = LogFactory.getLog(FSReader.class);
     private File inputDir = null;
 
+    //private FSReader(){ }
+
     public FSReader(final String inputDirName) {
         this.inputDir = new File(inputDirName);
     }

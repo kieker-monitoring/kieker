@@ -1,8 +1,10 @@
 package kieker.common.tools.logReplayer;
 
+import kieker.common.logReader.AbstractKiekerLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.filesystemReader.FSReader;
+import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
@@ -26,7 +28,6 @@ public class FilesystemLogReplayer {
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
     private static final Options cmdlOpts = new Options();
-
 
     static {
         cmdlOpts.addOption(OptionBuilder.withArgName("dir").hasArg().withLongOpt("inputdir").isRequired(true).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
@@ -69,7 +70,7 @@ public class FilesystemLogReplayer {
         realtimeMode = realtimeOptValStr.equals("true");
 
         /* 3.) init numRealtimeWorkerThreads */
-       String numRealtimeWorkerThreadsStr = cmdl.getOptionValue("realtime-worker-threads", "1");
+        String numRealtimeWorkerThreadsStr = cmdl.getOptionValue("realtime-worker-threads", "1");
         try {
             numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
         } catch (NumberFormatException exc) {
@@ -77,18 +78,18 @@ public class FilesystemLogReplayer {
             log.error("NumberFormatException: ", exc);
             retVal = false;
         }
-       if (numRealtimeWorkerThreads < 1) {
-           System.out.println("Option value for realtime-worker-threads must be >= 1; found " + numRealtimeWorkerThreads);
-           log.error("Invalid specification of numRealtimeWorkerThreads:" + numRealtimeWorkerThreads);
-           retVal = false;
-       }
+        if (numRealtimeWorkerThreads < 1) {
+            System.out.println("Option value for realtime-worker-threads must be >= 1; found " + numRealtimeWorkerThreads);
+            log.error("Invalid specification of numRealtimeWorkerThreads:" + numRealtimeWorkerThreads);
+            retVal = false;
+        }
 
         /* log configuration */
         if (retVal == true) {
             log.info("inputDir: " + inputDir);
             log.info("Replaying in " + (realtimeMode ? "" : "non-") + "realtime mode");
-            if (realtimeMode){
-                log.info("Using " + numRealtimeWorkerThreads + " realtime worker thread" + (numRealtimeWorkerThreads>1?"s":""));
+            if (realtimeMode) {
+                log.info("Using " + numRealtimeWorkerThreads + " realtime worker thread" + (numRealtimeWorkerThreads > 1 ? "s" : ""));
             }
         }
 
@@ -117,8 +118,6 @@ public class FilesystemLogReplayer {
          */
         ctrlInst.setReplayMode(realtimeMode);
 
-        FSReader fsReader = new FSReader(inputDir);
-
         IKiekerRecordConsumer logCons = new IKiekerRecordConsumer() {
 
             /** Anonymous consumer class that simply passes all records to the
@@ -140,14 +139,18 @@ public class FilesystemLogReplayer {
                 ctrlInst.terminateMonitoring();
             }
         };
+        AbstractKiekerLogReader fsReader;
         if (realtimeMode) {
-            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(numRealtimeWorkerThreads, logCons);
-            fsReader.addConsumer(
-                    rtDistributorCons,
-                    null); // consume records of all types
+//            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(numRealtimeWorkerThreads, logCons);
+//            fsReader.addConsumer(
+//                    rtDistributorCons,
+//                    null); // consume records of all types
+            fsReader = new FSReaderRealtime(inputDir, numRealtimeWorkerThreads);
+
         } else {
-            fsReader.addConsumer(logCons, null); // consume records of all types
+            fsReader = new FSReader(inputDir);
         }
+        fsReader.addConsumer(logCons, null); // consume records of all types
         try {
             if (!fsReader.execute()) {
                 // here, we do not start consumers since they don't do anything in execute()
