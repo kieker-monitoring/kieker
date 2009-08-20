@@ -3,7 +3,7 @@ package kieker.tpmon.writer.databaseSync;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 import kieker.tpmon.*;
 import java.sql.*;
 import java.util.Vector;
@@ -60,7 +60,7 @@ import org.apache.commons.logging.LogFactory;
  * 2006/12/20: Initial Prototype
  *
  */
-public class SyncDbConnector extends AbstractMonitoringDataWriter {
+public class SyncDbConnector extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(SyncDbConnector.class);
     private Connection conn = null;

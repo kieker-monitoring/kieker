@@ -14,13 +14,13 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.writer.AbstractMonitoringDataWriter;
+import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 
 /**
  *
  * @author Matthias Rohr, Andre van Hoorn
  */
-public class AsyncJMSConnector extends AbstractMonitoringDataWriter {
+public class AsyncJMSConnector extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncJMSConnector.class);
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
