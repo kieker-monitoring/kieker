@@ -17,8 +17,8 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractKiekerLogReader implements IKiekerLogReader {
-    private static final Log log = LogFactory.getLog(AbstractKiekerLogReader.class);
+public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonitoringLogReader {
+    private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringLogReader.class);
 
     /** Contains all consumers which consume records of any type */
     private final Collection<IKiekerRecordConsumer> subscribedToAllList =

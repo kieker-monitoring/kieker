@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.writer.AbstractMonitoringLogWriter;
+import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -38,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Matthias Rohr, Andre van Hoorn
  */
-public class AsyncFsConnector extends AbstractMonitoringLogWriter {
+public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncFsConnector.class);
     //configuration parameter

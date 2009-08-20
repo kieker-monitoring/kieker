@@ -29,7 +29,7 @@ import java.util.HashMap;
  *
  * @author Andre van Hoorn
  */
-public interface IKiekerLogReader {
+public interface IKiekerMonitoringLogReader {
     public void addConsumer(IKiekerRecordConsumer consumer, String[] recordTypeSubscriptionList);
     public boolean execute() throws LogReaderExecutionException;
     public void terminate();

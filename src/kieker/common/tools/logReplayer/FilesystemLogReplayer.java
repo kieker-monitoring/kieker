@@ -1,6 +1,6 @@
 package kieker.common.tools.logReplayer;
 
-import kieker.common.logReader.AbstractKiekerLogReader;
+import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.filesystemReader.FSReader;
@@ -139,7 +139,7 @@ public class FilesystemLogReplayer {
                 ctrlInst.terminateMonitoring();
             }
         };
-        AbstractKiekerLogReader fsReader;
+        AbstractKiekerMonitoringLogReader fsReader;
         if (realtimeMode) {
 //            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(numRealtimeWorkerThreads, logCons);
 //            fsReader.addConsumer(

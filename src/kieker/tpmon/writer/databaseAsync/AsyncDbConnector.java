@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.writer.AbstractMonitoringLogWriter;
+import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -56,7 +56,7 @@ import org.apache.commons.logging.LogFactory;
  *             which may be changed during runtime
  * 2007/07/30: Initial Prototype
  */
-public class AsyncDbConnector extends AbstractMonitoringLogWriter {
+public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
 
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +

@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import kieker.common.logReader.AbstractKiekerLogReader;
+import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -49,7 +49,7 @@ import org.apache.commons.logging.LogFactory;
  * History:
  * 2008/09/15: Initial version
  */
-public class FSReader extends AbstractKiekerLogReader {
+public class FSReader extends AbstractKiekerMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSReader.class);
     private File inputDir = null;

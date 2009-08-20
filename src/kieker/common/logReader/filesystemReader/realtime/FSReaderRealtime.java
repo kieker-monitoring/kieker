@@ -4,7 +4,7 @@
  */
 package kieker.common.logReader.filesystemReader.realtime;
 
-import kieker.common.logReader.AbstractKiekerLogReader;
+import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
@@ -19,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class FSReaderRealtime extends AbstractKiekerLogReader {
+public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 

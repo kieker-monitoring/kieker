@@ -4,7 +4,7 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.IMonitoringLogWriter;
+import kieker.tpmon.writer.IKiekerMonitoringLogWriter;
 import kieker.tpmon.writer.databaseSync.SyncDbConnector;
 import kieker.tpmon.writer.filesystemSync.syncFsWriter;
 import java.io.FileInputStream;
@@ -87,7 +87,7 @@ public class TpmonController {
     public final static String WRITER_ASYNCFS = "AsyncFS";
     private String monitoringDataWriterClassname = null;
     private String monitoringDataWriterInitString = null;
-    private IMonitoringLogWriter monitoringDataWriter = null;
+    private IKiekerMonitoringLogWriter monitoringDataWriter = null;
     private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
@@ -149,7 +149,7 @@ public class TpmonController {
                         setInitialExperimentIdBasedOnLastId);
             } else {
                 /* try to load the class by name */
-                this.monitoringDataWriter = (IMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
+                this.monitoringDataWriter = (IKiekerMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
                 if (!this.monitoringDataWriter.init(monitoringDataWriterInitString)) {
                     this.monitoringDataWriter = null;
                     throw new Exception("Initialization of writer failed!");
