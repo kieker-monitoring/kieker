@@ -42,8 +42,6 @@ public class KiekerTpmonManualBranchProbe implements IKiekerMonitoringProbe {
             ctrlInst.logMonitoringRecord(KiekerBranchingRecord.getInstance(ctrlInst.getTime(), branchID, branchingOutcome));
         }catch(Exception exc){
             log.error("Error monitoring branching", exc);
-            log.error("Will permanently terminate monitoring");
-            
         }
     }
 }
