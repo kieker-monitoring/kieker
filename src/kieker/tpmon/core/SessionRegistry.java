@@ -3,8 +3,6 @@ package kieker.tpmon.core;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /*
- * kieker.tpmon.core.SessionRegistry
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -28,15 +26,15 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 public class SessionRegistry {
 
-    private static SessionRegistry instance = new SessionRegistry();
+    private static final SessionRegistry instance = new SessionRegistry();
 
-    private ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
+    private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
 
     private SessionRegistry(){
     }
 
     @TpmonInternal()
-    public synchronized static SessionRegistry getInstance() {
+    public synchronized static final SessionRegistry getInstance() {
         return SessionRegistry.instance;
     }
 
@@ -47,7 +45,7 @@ public class SessionRegistry {
      * the method unsetThreadLocalSessionId()!
      */
     @TpmonInternal()
-    public void storeThreadLocalSessionId(String sessionId) {
+    public final void storeThreadLocalSessionId(String sessionId) {
         this.threadLocalSessionId.set(sessionId);
     }
 
@@ -58,7 +56,7 @@ public class SessionRegistry {
      * @return the sessionid. null if no session registered.
      */
     @TpmonInternal()
-    public String recallThreadLocalSessionId() {
+    public final String recallThreadLocalSessionId() {
         return this.threadLocalSessionId.get();
     }
 
@@ -66,7 +64,7 @@ public class SessionRegistry {
      * This method unsets a previously registered sessionid.
      */
     @TpmonInternal()
-    public void unsetThreadLocalSessionId() {
+    public final void unsetThreadLocalSessionId() {
         this.threadLocalSessionId.remove();
     }
 }
