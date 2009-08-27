@@ -125,8 +125,7 @@ public class ControlFlowRegistry {
         if (traceIdObj == null) {
             //log.info("curTraceId == null");
 
-            // TODO: we should eventually switch to throwing an exception
-            //       instead of -1!
+            // TODO: Eventually, we should throw an exception instead of returning -1!
             return -1;
         }
 //log.info("curTraceId =" + traceIdObj);
