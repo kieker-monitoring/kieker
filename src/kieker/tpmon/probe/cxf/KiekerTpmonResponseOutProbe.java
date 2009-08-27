@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
+import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -47,8 +49,12 @@ import org.w3c.dom.Element;
  */
 public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor implements IKiekerMonitoringProbe {
 
+    private static final String componentName = KiekerTpmonResponseOutProbe.class.getName();
+    private static final String opName = "handleMessage(SoapMessage msg)";
+
     private static final Logger LOG = LogUtils.getL7dLogger(KiekerTpmonResponseOutProbe.class);
 
+    private static final TpmonController ctrlInst = TpmonController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
@@ -57,7 +63,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
     public void handleMessage(SoapMessage msg) throws Fault {
         String sessionID;
         long traceId = cfRegistry.recallThreadLocalTraceId();
-        long tin = -1;
+        long tin = -1, tout = -1;
         boolean isEntryCall = true;
         int eoi = -1, ess = -1;
 
@@ -76,11 +82,16 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
             ess = cfRegistry.recallThreadLocalESS();
             sessionID = sessionRegistry.recallThreadLocalSessionId();
             tin = soapRegistry.recallThreadLocalInRequestTin();
+            tout = ctrlInst.getTime();
             isEntryCall = soapRegistry.recallThreadLocalInRequestIsEntryCall();
         }
 
-        /* The trace is leaving this node, thus we need to clean up. */
+        /* The trace is leaving this node, thus we need to clean up the thread-local variables. */
         unsetKiekerThreadLocalData();
+
+        /* Log this execution */
+        KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, sessionID, traceId, tin, tout, eoi, ess);
+        ctrlInst.logMonitoringRecord(rec);
 
         /* We don't put Kieker data into response header if request didn't
          * contain Kieker information*/
@@ -91,26 +102,25 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
         Document d = DOMUtils.createDocument();
         Element e;
         Header hdr;
-        /* Add sessionId to header */
-        e = d.createElementNS(KiekerTpmonSOAPHeaderConstants.NAMESPACE_URI, KiekerTpmonSOAPHeaderConstants.SESSION_QUALIFIED_NAME);
-        e.setTextContent(sessionID);
-        hdr = new Header(KiekerTpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME, e);
-        msg.getHeaders().add(hdr);
-        /* Add traceId to header */
+        /* 1.) Add sessionId to response header */
+        // There's no need to pass the session ID back.
+
+        /* 2.) Add traceId to response header */
+        // Actually, there's no need to pass the trace ID back but
+        // we do this for consistency checks on the caller side.
         e = d.createElementNS(KiekerTpmonSOAPHeaderConstants.NAMESPACE_URI, KiekerTpmonSOAPHeaderConstants.TRACE_QUALIFIED_NAME);
         e.setTextContent(Long.toString(traceId));
         hdr = new Header(KiekerTpmonSOAPHeaderConstants.TRACE_IDENTIFIER_QNAME, e);
         msg.getHeaders().add(hdr);
-        /* Add eoi to header */
+
+        /* 3.) Add eoi to response header */
         e = d.createElementNS(KiekerTpmonSOAPHeaderConstants.NAMESPACE_URI, KiekerTpmonSOAPHeaderConstants.EOI_QUALIFIED_NAME);
         e.setTextContent(Integer.toString(eoi));
         hdr = new Header(KiekerTpmonSOAPHeaderConstants.EOI_IDENTIFIER_QNAME, e);
         msg.getHeaders().add(hdr);
-        /* Add ess to header */
-        e = d.createElementNS(KiekerTpmonSOAPHeaderConstants.NAMESPACE_URI, KiekerTpmonSOAPHeaderConstants.ESS_QUALIFIED_NAME);
-        e.setTextContent(Integer.toString(ess));
-        hdr = new Header(KiekerTpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME, e);
-        msg.getHeaders().add(hdr);
+
+        /* 4.) Add ess to response header */
+        // There's no need to pass the ESS back.
     }
 
     private final void unsetKiekerThreadLocalData() {

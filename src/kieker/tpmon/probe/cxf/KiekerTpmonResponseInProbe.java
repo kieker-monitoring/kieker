@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
+import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
@@ -37,7 +39,6 @@ import org.w3c.dom.Element;
  *   
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
  */
-
 /**
  * @author Andre van Hoorn, Dennis Kieselhorst
  */
@@ -45,8 +46,12 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
     // the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 
     private static final Logger LOG = LogUtils.getL7dLogger(KiekerTpmonResponseInProbe.class);
+    private static final TpmonController ctrlInst = TpmonController.getInstance();
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+    protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
+    private static final String componentName = KiekerTpmonResponseInProbe.class.getName();
+    private static final String opName = "handleMessage(SoapMessage msg)";
 
     @TpmonInternal()
     public void handleMessage(Message msg) throws Fault {
@@ -54,20 +59,11 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
             SoapMessage soapMsg = (SoapMessage) msg;
 
             /* 1.) Extract sessionId from SOAP header */
-            Header hdr = soapMsg.getHeader(KiekerTpmonSOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
-            String sessionId = getStringContentFromHeader(hdr); // null if hdr==null
-            if (sessionId == null) {
-                /* No Kieker session id in header.
-                 * This may happen for responses from callees w/o Kieker instrumentation. */
-                LOG.log(Level.FINE,
-                        "Found no Kieker sessionID in response header. " +
-                        "Will unset all threadLocal variables");
-                unsetKiekerThreadLocalData();
-                return;
-            }
+            // No need to fetch sessionId from reponse header since it must be
+            // the same as before the request.
 
             /* 2.) Extract eoi from SOAP header */
-            hdr = soapMsg.getHeader(KiekerTpmonSOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
+            Header hdr = soapMsg.getHeader(KiekerTpmonSOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
             String eoiStr = getStringContentFromHeader(hdr); // null if hdr==null
             if (eoiStr == null) {
                 /* No Kieker eoi in header.
@@ -89,26 +85,8 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
             }
 
             /* 3.) Extract ess from SOAP header */
-            hdr = soapMsg.getHeader(KiekerTpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME);
-            String essStr = getStringContentFromHeader(hdr); // null if hdr==null
-            if (essStr == null) {
-                /* No Kieker ess in header.
-                 * This may happen for responses from callees w/o Kieker instrumentation. */
-                LOG.log(Level.FINE,
-                        "Found no Kieker ess in response header. " +
-                        "Will unset all threadLocal variables");
-                unsetKiekerThreadLocalData();
-                return;
-            }
-            int ess = 1;
-            try {
-                ess = Integer.parseInt(essStr);
-            } catch (Exception exc) {
-                /* invalid ess! */
-                LOG.log(Level.WARNING, exc.getMessage(), exc);
-                unsetKiekerThreadLocalData();
-                return;
-            }
+            // No need to fetch ess from reponse header since the stack size
+            // is the same as before the request.
 
             /* 4. Extract traceId from SOAP header */
             hdr = soapMsg.getHeader(KiekerTpmonSOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
@@ -132,11 +110,24 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
                 return;
             }
 
-            /* Store received Kieker trace data */
-            cfRegistry.storeThreadLocalTraceId(traceId);
-            sessionRegistry.storeThreadLocalSessionId(sessionId);
+            /* Recall my thread-local data stored before the SOAP call */
+            long myTraceId = cfRegistry.recallThreadLocalTraceId();
+            String mySessionId = sessionRegistry.recallThreadLocalSessionId();
+            int myEoi = cfRegistry.recallThreadLocalEOI();
+            int myEss = cfRegistry.recallThreadLocalESS();
+            long myTin = soapRegistry.recallThreadLocalOutRequestTin();
+            long myTout = ctrlInst.getTime();
+            // TODO:  Remove following plausibility checks if implementation stable
+            if (myTraceId != traceId) {
+                LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" +
+                        "" + myTraceId + "(before) != " + traceId + "(after)");
+            }
+
+            KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, myEoi, myEss);
+            ctrlInst.logMonitoringRecord(rec);
+
+            /* Store received Kieker eoi */
             cfRegistry.storeThreadLocalEOI(eoi);
-            cfRegistry.storeThreadLocalESS(ess);
         }
     }
 
