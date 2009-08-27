@@ -40,7 +40,7 @@ import org.w3c.dom.Element;
  */
 
 /**
- * @author Dennis Kieselhorst
+ * @author Dennis Kieselhorst, Andre van Hoorn
  */
 public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements IKiekerMonitoringProbe {
     // the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
