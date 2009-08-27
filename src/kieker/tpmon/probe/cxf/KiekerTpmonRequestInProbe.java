@@ -131,6 +131,7 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
             sessionRegistry.storeThreadLocalSessionId(sessionId);
             soapRegistry.storeThreadLocalInRequestIsEntryCall(isEntryCall);
             soapRegistry.storeThreadLocalInRequestTin(tin);
+            soapRegistry.storeThreadLocalInRequestEOI(eoi);
         }
     }
 

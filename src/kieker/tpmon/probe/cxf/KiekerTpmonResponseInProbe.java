@@ -126,7 +126,8 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
             KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, myEoi, myEss);
             ctrlInst.logMonitoringRecord(rec);
 
-            /* Store received Kieker eoi */
+            /* Store received Kieker EOI
+             * ESS remains the same as before the call since we didn't increment the variable! */
             cfRegistry.storeThreadLocalEOI(eoi);
         }
     }

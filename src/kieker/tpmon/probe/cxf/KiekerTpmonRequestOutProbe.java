@@ -65,19 +65,19 @@ public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor i
         if (traceId == -1) {
             /* traceId has not been registered before.
              * This might be caused by a thread which has been spawned
-             * asynchronously. We will now acquire a thread id which
-             * must not be stored in the thread local variable! */
-            traceId = cfRegistry.getUniqueTraceId();
-            eoi = 0;
-            ess = 1;
+             * asynchronously. We will now acquire a thread id and store it
+             * in the thread local variable. */
+            traceId = cfRegistry.getAndStoreUniqueThreadLocalTraceId();
+            eoi = 0; // eoi of this execution
+            ess = 0; // ess of this execution
             isEntryCall = true;
             if (sessionID == null) {
                 sessionID = NULL_SESSIONASYNCTRACE_STR;
             }
         } else {
             /* thread-local traceId exists: eoi and ess should have been registered before */
-            eoi = cfRegistry.recallThreadLocalEOI();
-            ess = cfRegistry.recallThreadLocalESS();
+            eoi = cfRegistry.incrementAndRecallThreadLocalEOI();
+            ess = cfRegistry.recallThreadLocalESS(); // do not increment in this case!
             if (sessionID == null) {
                 sessionID = NULL_SESSION_STR;
             }
@@ -106,7 +106,7 @@ public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor i
         msg.getHeaders().add(hdr);
         /* Add ess to header */
         e = d.createElementNS(KiekerTpmonSOAPHeaderConstants.NAMESPACE_URI, KiekerTpmonSOAPHeaderConstants.ESS_QUALIFIED_NAME);
-        e.setTextContent(Integer.toString(ess));
+        e.setTextContent(Integer.toString(ess+1));
         hdr = new Header(KiekerTpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME, e);
         msg.getHeaders().add(hdr);
     }

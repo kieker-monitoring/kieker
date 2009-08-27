@@ -186,7 +186,7 @@ public class SOAPTraceRegistry {
      * the method unsetThreadLocalEOI()!
      */
     @TpmonInternal()
-    public final void storeThreadLocalOutRequestEOI(int eoi) {
+    public final void storeThreadLocalInRequestEOI(int eoi) {
         //log.info(Thread.currentThread().getId());
         this.threadLocalOutRequestEoi.set(eoi);
     }
@@ -198,7 +198,7 @@ public class SOAPTraceRegistry {
      * @return the eoi. -1 if no eoi registered.
      */
     @TpmonInternal()
-    public final int recallThreadLocalOutRequestEOI() {
+    public final int recallThreadLocalInRequestEOI() {
         Integer curEoi = this.threadLocalOutRequestEoi.get();
         if (curEoi == null) {
             log.fatal("eoi has not been registered before");
@@ -211,7 +211,7 @@ public class SOAPTraceRegistry {
      * This method unsets a previously registered traceid.
      */
     @TpmonInternal()
-    public final void unsetThreadLocalOutRequestEOI() {
+    public final void unsetThreadLocalInRequestEOI() {
         this.threadLocalOutRequestEoi.remove();
     }
 }
