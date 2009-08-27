@@ -130,7 +130,7 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
             cfRegistry.storeThreadLocalESS(ess);
             sessionRegistry.storeThreadLocalSessionId(sessionId);
             soapRegistry.storeThreadLocalInRequestIsEntryCall(isEntryCall);
-            soapRegistry.storeThreadLocalTin(tin);
+            soapRegistry.storeThreadLocalInRequestTin(tin);
         }
     }
 

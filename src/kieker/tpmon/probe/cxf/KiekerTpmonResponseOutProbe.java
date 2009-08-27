@@ -55,9 +55,10 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
 
     @TpmonInternal()
     public void handleMessage(SoapMessage msg) throws Fault {
-        String sessionID = sessionRegistry.recallThreadLocalSessionId();
+        String sessionID;
         long traceId = cfRegistry.recallThreadLocalTraceId();
-        long tin = soapRegistry.recallThreadLocalTin();
+        long tin = -1;
+        boolean isEntryCall = true;
         int eoi = -1, ess = -1;
 
         if (traceId == -1) {
@@ -65,13 +66,17 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
              * Should not happen, since this is a response message! */
             LOG.log(Level.WARNING,
                         "Kieker traceId not registered. " +
-                        "Will unset all threadLocal variables");
+                        "Will unset all threadLocal variables and return.");
+            unsetKiekerThreadLocalData(); // unset all variables
+            return;
         } else { 
             /* thread-local traceId exists: eoi, ess, and sessionID should have
              * been registered before */
             eoi = cfRegistry.recallThreadLocalEOI();
             ess = cfRegistry.recallThreadLocalESS();
             sessionID = sessionRegistry.recallThreadLocalSessionId();
+            tin = soapRegistry.recallThreadLocalInRequestTin();
+            isEntryCall = soapRegistry.recallThreadLocalInRequestIsEntryCall();
         }
 
         /* The trace is leaving this node, thus we need to clean up. */
@@ -79,7 +84,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
 
         /* We don't put Kieker data into response header if request didn't
          * contain Kieker information*/
-        if(soapRegistry.recallThreadLocalInRequestIsEntryCall()){
+        if(isEntryCall){
             return;
         }
 
@@ -114,6 +119,6 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
         cfRegistry.unsetThreadLocalESS();
         sessionRegistry.unsetThreadLocalSessionId();
         soapRegistry.unsetThreadLocalInRequestIsEntryCall();
-        soapRegistry.unsetThreadLocalTin();
+        soapRegistry.unsetThreadLocalInRequestTin();
     }
 }

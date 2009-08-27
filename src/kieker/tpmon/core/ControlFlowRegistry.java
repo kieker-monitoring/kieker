@@ -82,7 +82,10 @@ public class ControlFlowRegistry {
      */
     @TpmonInternal()
     public final long getUniqueTraceId(){
-        return lastThreadId.incrementAndGet();
+        long id = lastThreadId.incrementAndGet();
+        // Since we use -1 as a marker for an invalid traceId,
+        // it must not be returned!
+        return (id==-1)?lastThreadId.incrementAndGet():id;
     }
 
     /**
@@ -93,7 +96,7 @@ public class ControlFlowRegistry {
      */
     @TpmonInternal()
     public final long getAndStoreUniqueThreadLocalTraceId() {
-        long id = lastThreadId.incrementAndGet();
+        long id = this.getUniqueTraceId();
         this.threadLocalTraceId.set(id);
         return id;
     }
@@ -121,6 +124,9 @@ public class ControlFlowRegistry {
         Long traceIdObj = this.threadLocalTraceId.get();
         if (traceIdObj == null) {
             //log.info("curTraceId == null");
+
+            // TODO: we should eventually switch to throwing an exception
+            //       instead of -1!
             return -1;
         }
 //log.info("curTraceId =" + traceIdObj);
@@ -136,7 +142,7 @@ public class ControlFlowRegistry {
     }
 
     /**
-     * Used by the spring aspect to explicitly register an curEoi.
+     * Used to explicitly register an curEoi.
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalEOI()!
      */
@@ -188,7 +194,7 @@ public class ControlFlowRegistry {
     }
 
     /**
-     * Used by the spring aspect to explicitly register a sessionid that is to be collected within
+     * Used to explicitly register a sessionid that is to be collected within
      * a servlet method (that knows the request object).
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalSessionId()!

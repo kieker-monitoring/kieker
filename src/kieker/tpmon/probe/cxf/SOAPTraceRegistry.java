@@ -24,6 +24,10 @@ import org.apache.commons.logging.LogFactory;
  */
 
 /**
+ * CXF does not provide an "around advice" for SOAP requests.
+ * For this reason, we introduced this class wrapping access to
+ * some thread-local variables used to pass information between 
+ * in- and out-interceptors.
  *
  * @author Andre van Hoorn
  */
@@ -32,9 +36,12 @@ public class SOAPTraceRegistry {
 
     private static final SOAPTraceRegistry instance = new SOAPTraceRegistry();
 
-    private final ThreadLocal<Long> threadLocalTin = new ThreadLocal<Long>();
+    private final ThreadLocal<Long> threadLocalInRequestTin = new ThreadLocal<Long>();
+    private final ThreadLocal<Long> threadLocalOutRequestTin = new ThreadLocal<Long>();
     private final ThreadLocal<Boolean> threadLocalInRequestIsEntryCall = new ThreadLocal<Boolean>();
     private final ThreadLocal<Boolean> threadLocalOutRequestIsEntryCall = new ThreadLocal<Boolean>();
+    private final ThreadLocal<Integer> threadLocalOutRequestEoi = new ThreadLocal<Integer>();
+    private final ThreadLocal<Integer> threadLocalOutRequestEss = new ThreadLocal<Integer>();
 
     private SOAPTraceRegistry(){
     }
@@ -50,8 +57,8 @@ public class SOAPTraceRegistry {
      * the method unsetThreadLocalTin()!
      */
     @TpmonInternal()
-    public final void storeThreadLocalTin(long tin) {
-        this.threadLocalTin.set(tin);
+    public final void storeThreadLocalInRequestTin(long tin) {
+        this.threadLocalInRequestTin.set(tin);
     }
 
     /**
@@ -61,8 +68,8 @@ public class SOAPTraceRegistry {
      * @return the time tin. -1 if not registered before.
      */
     @TpmonInternal()
-    public final long recallThreadLocalTin() {
-        Long curTin = this.threadLocalTin.get();
+    public final long recallThreadLocalInRequestTin() {
+        Long curTin = this.threadLocalInRequestTin.get();
         if (curTin == null) {
             log.fatal("tin has not been registered before");
             return -1;
@@ -74,8 +81,42 @@ public class SOAPTraceRegistry {
      * This method unsets a previously registered entry time tin.
      */
     @TpmonInternal()
-    public final void unsetThreadLocalTin() {
-        this.threadLocalTin.remove();
+    public final void unsetThreadLocalInRequestTin() {
+        this.threadLocalInRequestTin.remove();
+    }
+
+    /**
+     * Used to explicitly register the time tin of an outgoing request.
+     * The thread is responsible for invalidating the stored value using
+     * the method unsetThreadLocalTin()!
+     */
+    @TpmonInternal()
+    public final void storeThreadLocalOutRequestTin(long tin) {
+        this.threadLocalOutRequestTin.set(tin);
+    }
+
+    /**
+     * This method returns the thread-local traceid previously
+     * registered using the method registerTraceId(curTraceId).
+     *
+     * @return the time tin. -1 if not registered before.
+     */
+    @TpmonInternal()
+    public final long recallThreadLocalOutRequestTin() {
+        Long curTin = this.threadLocalOutRequestTin.get();
+        if (curTin == null) {
+            log.fatal("tin has not been registered before");
+            return -1;
+        }
+        return curTin;
+    }
+
+    /**
+     * This method unsets a previously registered entry time tin.
+     */
+    @TpmonInternal()
+    public final void unsetThreadLocalOutRequestTin() {
+        this.threadLocalOutRequestTin.remove();
     }
 
     /**
@@ -138,5 +179,74 @@ public class SOAPTraceRegistry {
     @TpmonInternal()
     public final void unsetThreadLocalOutRequestIsEntryCall() {
         this.threadLocalOutRequestIsEntryCall.remove();
+    }
+
+    /**
+     * Used to explicitly register an eoi for an outgoing SOAP request.
+     * The thread is responsible for invalidating the stored curTraceId using
+     * the method unsetThreadLocalEOI()!
+     */
+    @TpmonInternal()
+    public final void storeThreadLocalOutRequestEOI(int eoi) {
+        //log.info(Thread.currentThread().getId());
+        this.threadLocalOutRequestEoi.set(eoi);
+    }
+
+    /**
+     * This method returns the thread-local eoi previously
+     * registered using the method registerTraceId(curTraceId).
+     *
+     * @return the eoi. -1 if no eoi registered.
+     */
+    @TpmonInternal()
+    public final int recallThreadLocalOutRequestEOI() {
+        Integer curEoi = this.threadLocalOutRequestEoi.get();
+        if (curEoi == null) {
+            log.fatal("eoi has not been registered before");
+            return -1;
+        }
+        return curEoi;
+    }
+
+    /**
+     * This method unsets a previously registered traceid.
+     */
+    @TpmonInternal()
+    public final void unsetThreadLocalOutRequestEOI() {
+        this.threadLocalOutRequestEoi.remove();
+    }
+
+   /**
+     * Used to explicitly register an ess of an outgoing SOAP request.
+     * The thread is responsible for invalidating the stored curTraceId using
+     * the method unsetThreadLocalSessionId()!
+     */
+    @TpmonInternal()
+    public final void storeThreadLocalOutRequestESS(int ess) {
+        this.threadLocalOutRequestEss.set(ess);
+    }
+
+    /**
+     * This method returns the ess previously registered using the method
+     * registerTraceId(curTraceId).
+     *
+     * @return the sessionid. -1 if no curEss registered.
+     */
+    @TpmonInternal()
+    public final int recallThreadLocalOutRequestESS() {
+        Integer ess = this.threadLocalOutRequestEss.get();
+        if (ess == null) {
+            log.fatal("ess has not been registered before");
+            return -1;
+        }
+        return ess;
+    }
+
+    /**
+     * This method unsets a previously registered curEss.
+     */
+    @TpmonInternal()
+    public final void unsetThreadLocalOutRequestESS() {
+        this.threadLocalOutRequestEss.remove();
     }
 }

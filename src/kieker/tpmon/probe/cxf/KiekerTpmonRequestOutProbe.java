@@ -84,7 +84,7 @@ public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor i
         }
 
         soapRegistry.storeThreadLocalOutRequestIsEntryCall(isEntryCall);
-        soapRegistry.storeThreadLocalTin(tin);
+        soapRegistry.storeThreadLocalOutRequestTin(tin);
 
         Document d = DOMUtils.createDocument();
         Element e;
