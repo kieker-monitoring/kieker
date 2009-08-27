@@ -65,7 +65,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
         long traceId = cfRegistry.recallThreadLocalTraceId();
         long tin = -1, tout = -1;
         boolean isEntryCall = true;
-        int eoi = -1, ess = -1, myEoi = -1;
+        int eoi = -1, ess = -1, myEoi = -1, myEss = -1;
 
         if (traceId == -1) {
             /* Kieker trace Id not registered.
@@ -79,9 +79,9 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
             /* thread-local traceId exists: eoi, ess, and sessionID should have
              * been registered before */
             eoi = cfRegistry.recallThreadLocalEOI();
-            ess = cfRegistry.recallThreadLocalESS();
             sessionID = sessionRegistry.recallThreadLocalSessionId();
             myEoi = soapRegistry.recallThreadLocalInRequestEOI();
+            myEss = soapRegistry.recallThreadLocalInRequestESS();
             tin = soapRegistry.recallThreadLocalInRequestTin();
             tout = ctrlInst.getTime();
             isEntryCall = soapRegistry.recallThreadLocalInRequestIsEntryCall();
@@ -91,7 +91,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
         unsetKiekerThreadLocalData();
 
         /* Log this execution */
-        KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, sessionID, traceId, tin, tout, myEoi, ess);
+        KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, sessionID, traceId, tin, tout, myEoi, myEss);
         ctrlInst.logMonitoringRecord(rec);
 
         /* We don't put Kieker data into response header if request didn't

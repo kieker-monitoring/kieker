@@ -56,6 +56,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
     @TpmonInternal()
     public void handleMessage(Message msg) throws Fault {
         if (msg instanceof SoapMessage) {
+            boolean isEntryCall = soapRegistry.recallThreadLocalOutRequestIsEntryCall();
             SoapMessage soapMsg = (SoapMessage) msg;
 
             /* 1.) Extract sessionId from SOAP header */
@@ -123,12 +124,17 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
                         "" + myTraceId + "(before) != " + traceId + "(after)");
             }
 
+            // Log this execution
             KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, myEoi, myEss);
             ctrlInst.logMonitoringRecord(rec);
 
             /* Store received Kieker EOI
              * ESS remains the same as before the call since we didn't increment the variable! */
             cfRegistry.storeThreadLocalEOI(eoi);
+
+            if (isEntryCall){ // clean up iff trace's origin was right before the call!
+                unsetKiekerThreadLocalData();
+            }
         }
     }
 

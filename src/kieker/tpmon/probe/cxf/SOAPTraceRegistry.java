@@ -40,7 +40,8 @@ public class SOAPTraceRegistry {
     private final ThreadLocal<Long> threadLocalOutRequestTin = new ThreadLocal<Long>();
     private final ThreadLocal<Boolean> threadLocalInRequestIsEntryCall = new ThreadLocal<Boolean>();
     private final ThreadLocal<Boolean> threadLocalOutRequestIsEntryCall = new ThreadLocal<Boolean>();
-    private final ThreadLocal<Integer> threadLocalOutRequestEoi = new ThreadLocal<Integer>();
+    private final ThreadLocal<Integer> threadLocalInRequestEoi = new ThreadLocal<Integer>();
+    private final ThreadLocal<Integer> threadLocalInRequestEss = new ThreadLocal<Integer>();
 
     private SOAPTraceRegistry(){
     }
@@ -181,14 +182,14 @@ public class SOAPTraceRegistry {
     }
 
     /**
-     * Used to explicitly register an eoi for an outgoing SOAP request.
+     * Used to explicitly register an eoi for an incoming SOAP request.
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalEOI()!
      */
     @TpmonInternal()
     public final void storeThreadLocalInRequestEOI(int eoi) {
         //log.info(Thread.currentThread().getId());
-        this.threadLocalOutRequestEoi.set(eoi);
+        this.threadLocalInRequestEoi.set(eoi);
     }
 
     /**
@@ -199,7 +200,7 @@ public class SOAPTraceRegistry {
      */
     @TpmonInternal()
     public final int recallThreadLocalInRequestEOI() {
-        Integer curEoi = this.threadLocalOutRequestEoi.get();
+        Integer curEoi = this.threadLocalInRequestEoi.get();
         if (curEoi == null) {
             log.fatal("eoi has not been registered before");
             return -1;
@@ -208,10 +209,45 @@ public class SOAPTraceRegistry {
     }
 
     /**
-     * This method unsets a previously registered traceid.
+     * This method unsets a previously registered eoi.
      */
     @TpmonInternal()
     public final void unsetThreadLocalInRequestEOI() {
-        this.threadLocalOutRequestEoi.remove();
+        this.threadLocalInRequestEoi.remove();
+    }
+
+    /**
+     * Used to explicitly register an ess for an incoming SOAP request.
+     * The thread is responsible for invalidating the stored curTraceId using
+     * the method unsetThreadLocalESS()!
+     */
+    @TpmonInternal()
+    public final void storeThreadLocalInRequestESS(int ess) {
+        //log.info(Thread.currentThread().getId());
+        this.threadLocalInRequestEss.set(ess);
+    }
+
+    /**
+     * This method returns the thread-local ess previously
+     * registered using the method registerTraceId(curTraceId).
+     *
+     * @return the ess. -1 if no ess registered.
+     */
+    @TpmonInternal()
+    public final int recallThreadLocalInRequestESS() {
+        Integer curEss = this.threadLocalInRequestEss.get();
+        if (curEss == null) {
+            log.fatal("ess has not been registered before");
+            return -1;
+        }
+        return curEss;
+    }
+
+    /**
+     * This method unsets a previously registered ess.
+     */
+    @TpmonInternal()
+    public final void unsetThreadLocalInRequestESS() {
+        this.threadLocalInRequestEss.remove();
     }
 }
