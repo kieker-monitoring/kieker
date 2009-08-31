@@ -19,7 +19,6 @@ package kieker.tpmon.monitoringRecord;
  * limitations under the License.
  * ==================================================
  */
-
 import java.io.Serializable;
 import kieker.tpmon.annotation.TpmonInternal;
 
@@ -31,9 +30,15 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public abstract class AbstractKiekerMonitoringRecord implements Serializable {
+
     private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringRecord.class);
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     private long loggingTimestamp = -1;
+
+    @TpmonInternal()
+    public static AbstractKiekerMonitoringRecord getInstance() {
+        throw new UnsupportedOperationException("Extending classes must override this method");
+    }
 
     /**
      * Sets the values of this monitoring object's field according to
@@ -44,15 +49,12 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
      * @param recordVector
      */
     @TpmonInternal()
-      public abstract void initFromStringArray(String[] recordVector)
+    public abstract void initFromStringArray(String[] recordVector)
             throws IllegalArgumentException;
 
-    @TpmonInternal()
-    public static AbstractKiekerMonitoringRecord getInstance(){
-        throw new UnsupportedOperationException("Extending classes must override "+
-                "this method");
-    }
-
+    /**
+     * Returns a CSV record for the object.
+     */
     @TpmonInternal()
     public abstract String[] toStringArray();
 
@@ -60,12 +62,12 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     public abstract int getRecordTypeId();
 
     @TpmonInternal()
-    public final long getLoggingTimestamp(){
+    public final long getLoggingTimestamp() {
         return this.loggingTimestamp;
     }
-    
+
     @TpmonInternal()
-    public final void setLoggingTimestamp(long loggingTimestamp){
+    public final void setLoggingTimestamp(long loggingTimestamp) {
         this.loggingTimestamp = loggingTimestamp;
     }
 
