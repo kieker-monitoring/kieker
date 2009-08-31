@@ -53,7 +53,7 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
 
     private static final String NULL_SESSION_STR = "NULL";
-    private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCINTRACE";
+    private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
 
     @TpmonInternal()
     public void handleMessage(Message msg) throws Fault {
@@ -80,7 +80,7 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
             int eoi = -1;
             if (eoiStr != null) {
                 try {
-                    eoi = Integer.parseInt(eoiStr);
+                    eoi = 1 + Integer.parseInt(eoiStr);
                 } catch (Exception exc) {
                     /* invalid eoi! */
                     LOG.log(Level.WARNING, exc.getMessage(), exc);
@@ -120,18 +120,19 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
                 traceId = cfRegistry.getUniqueTraceId();
                 sessionId = NULL_SESSIONASYNCTRACE_STR;
                 isEntryCall = true;
-                eoi = 0;
-                ess = 0;
+                eoi = 0; // EOI of this execution
+                ess = 0; // ESS of this execution
             }
 
             /* Store thread-local values */
             cfRegistry.storeThreadLocalTraceId(traceId);
-            cfRegistry.storeThreadLocalEOI(eoi);
-            cfRegistry.storeThreadLocalESS(ess+1);
+            cfRegistry.storeThreadLocalEOI(eoi+1); // this execution has EOI=eoi
+            cfRegistry.storeThreadLocalESS(ess+1); // this execution has ESS=ess
             sessionRegistry.storeThreadLocalSessionId(sessionId);
             soapRegistry.storeThreadLocalInRequestIsEntryCall(isEntryCall);
             soapRegistry.storeThreadLocalInRequestTin(tin);
             soapRegistry.storeThreadLocalInRequestEOI(eoi); // ess for this execution
+            soapRegistry.storeThreadLocalInRequestESS(ess);
         }
     }
 

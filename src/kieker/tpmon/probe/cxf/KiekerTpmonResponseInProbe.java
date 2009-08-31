@@ -155,5 +155,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
         sessionRegistry.unsetThreadLocalSessionId();
         cfRegistry.unsetThreadLocalEOI();
         cfRegistry.unsetThreadLocalESS();
+        soapRegistry.unsetThreadLocalOutRequestIsEntryCall();
+        soapRegistry.unsetThreadLocalOutRequestTin();
     }
 }

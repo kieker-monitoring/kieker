@@ -48,11 +48,11 @@ public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor i
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
     private static final String NULL_SESSION_STR = "NULL";
-    private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUTTRACE";
+    private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUT";
 
     @TpmonInternal()
     public void handleMessage(SoapMessage msg) throws Fault {
-        String sessionID = sessionRegistry.recallThreadLocalSessionId();
+        String sessionID = null;
         long traceId = cfRegistry.recallThreadLocalTraceId();
         int eoi, ess;
 
@@ -69,15 +69,17 @@ public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor i
              * in the thread local variable. */
             traceId = cfRegistry.getAndStoreUniqueThreadLocalTraceId();
             eoi = 0; // eoi of this execution
+            cfRegistry.storeThreadLocalEOI(eoi);
             ess = 0; // ess of this execution
+            cfRegistry.storeThreadLocalESS(ess);
             isEntryCall = true;
-            if (sessionID == null) {
-                sessionID = NULL_SESSIONASYNCTRACE_STR;
-            }
+            sessionID = NULL_SESSIONASYNCTRACE_STR;
+            sessionRegistry.storeThreadLocalSessionId(sessionID);
         } else {
             /* thread-local traceId exists: eoi and ess should have been registered before */
             eoi = cfRegistry.incrementAndRecallThreadLocalEOI();
             ess = cfRegistry.recallThreadLocalESS(); // do not increment in this case!
+            sessionID = sessionRegistry.recallThreadLocalSessionId();
             if (sessionID == null) {
                 sessionID = NULL_SESSION_STR;
             }
@@ -106,7 +108,7 @@ public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor i
         msg.getHeaders().add(hdr);
         /* Add ess to header */
         e = d.createElementNS(KiekerTpmonSOAPHeaderConstants.NAMESPACE_URI, KiekerTpmonSOAPHeaderConstants.ESS_QUALIFIED_NAME);
-        e.setTextContent(Integer.toString(ess+1));
+        e.setTextContent(Integer.toString(ess + 1));
         hdr = new Header(KiekerTpmonSOAPHeaderConstants.ESS_IDENTIFIER_QNAME, e);
         msg.getHeaders().add(hdr);
     }

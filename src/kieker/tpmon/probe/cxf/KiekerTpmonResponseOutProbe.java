@@ -132,5 +132,6 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
         soapRegistry.unsetThreadLocalInRequestIsEntryCall();
         soapRegistry.unsetThreadLocalInRequestTin();
         soapRegistry.unsetThreadLocalInRequestEOI();
+        soapRegistry.unsetThreadLocalInRequestESS();
     }
 }
