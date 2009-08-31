@@ -67,7 +67,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     public static final KiekerExecutionRecord getInstance(
             String componentName, String methodName,
             long traceId) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = methodName;
         execData.traceId = traceId;
@@ -79,7 +79,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
@@ -94,7 +94,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
             String componentName, String opName,
             long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.traceId = traceId;
@@ -109,7 +109,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
             String sessionId, long traceId,
             long tin, long tout,
             int eoi, int ess) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord)getInstance();
+        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
@@ -153,8 +153,8 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
             String name = recordVector[1];
             int posParen = name.lastIndexOf('(');
             int posDot;
-            if ( posParen != -1) {
-            posDot = name.substring(0, posParen).lastIndexOf('.');
+            if (posParen != -1) {
+                posDot = name.substring(0, posParen).lastIndexOf('.');
             } else {
                 posDot = name.lastIndexOf('.');
             }
@@ -192,25 +192,22 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
      */
     @TpmonInternal()
     public int compareTo(KiekerExecutionRecord o) {
-        if (this.traceId == o.traceId){
-            if(this.eoi<o.eoi) return -1;
-            if(this.eoi>o.eoi) return 1;
+        if (this.traceId == o.traceId) {
+            if (this.eoi < o.eoi) {
+                return -1;
+            }
+            if (this.eoi > o.eoi) {
+                return 1;
+            }
             return 0;
-        }else{
-            if(this.tin<o.tin) return -1;
-            if(this.tin>o.tin) return 1;
+        } else {
+            if (this.tin < o.tin) {
+                return -1;
+            }
+            if (this.tin > o.tin) {
+                return 1;
+            }
             return 0;
         }
-    }
-    
-    @TpmonInternal()
-    public String toString(){
-        StringBuilder strBuild = new StringBuilder();
-        String[] valueVec = this.toStringArray();
-        for (String v : valueVec){
-            strBuild.append(v);
-            strBuild.append(' ');
-        }
-        return strBuild.toString();
     }
 }

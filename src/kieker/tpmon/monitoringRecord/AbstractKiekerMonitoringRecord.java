@@ -86,4 +86,16 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     protected static final int registerMonitoringRecordType(Class recordTypeClass) {
         return ctrlInst.registerMonitoringRecordType(recordTypeClass);
     }
+
+    @Override
+    @TpmonInternal()
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder();
+        String[] valueVec = this.toStringArray();
+        for (String v : valueVec) {
+            strBuild.append(v);
+            strBuild.append(' ');
+        }
+        return strBuild.toString();
+    }
 }
