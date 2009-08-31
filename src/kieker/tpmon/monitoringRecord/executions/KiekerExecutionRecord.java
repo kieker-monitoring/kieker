@@ -143,7 +143,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     @TpmonInternal()
     public final void initFromStringArray(String[] recordVector)
             throws IllegalArgumentException {
-        if (recordVector.length > KiekerExecutionRecord.numRecordFields) {
+        if (recordVector.length != KiekerExecutionRecord.numRecordFields) {
             throw new IllegalArgumentException("Expecting vector with " +
                     KiekerExecutionRecord.numRecordFields + " elements but found:" + recordVector.length);
         }
