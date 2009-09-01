@@ -109,7 +109,7 @@ public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
         blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
         for (int i = 0; i < numberOfFsWriters; i++) {
             FsWriterThread dbw = new FsWriterThread(blockingQueue, storageDir + "/tpmon");
-            //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
+            dbw.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
             workers.add(dbw);
             dbw.start();
         }

@@ -67,6 +67,7 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         for (int i = 0; i < numberOfJmsWriters; i++) {
             JMSWriterThread dbw = new JMSWriterThread(blockingQueue, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
             workers.add(dbw);
+            dbw.setDaemon(true);
             dbw.start();
         }
         //System.out.println(">Kieker-numberOfJmsWriters: (" + numberOfFsWriters + " threads) will write to the file system");

@@ -140,8 +140,7 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
                     "VALUES (" + experimentId + ",?,?,?,?,?,?,?,?)";
             for (int i = 0; i < numberOfConnections; i++) {
                 DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(this.dbConnectionAddress), blockingQueue, preparedQuery);
-                dbw.setDaemon(true);
-                //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
+                dbw.setDaemon(true); //might lead to inconsistent data due to harsh shutdown
                 dbw.start();
                 //TODO: Fix this (there shouldn't be a dependency to the TpmonCtrl)
                 //TpmonController.getInstance().registerWorker(dbw);
