@@ -4,7 +4,6 @@ import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Random;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -69,6 +68,7 @@ public class FsWriterThread extends AbstractWorkerThread {
     static boolean passed = false;
 
     @TpmonInternal()
+    @Override
     public void run() {
         log.info("FsWriter thread running");
         try {
@@ -83,7 +83,7 @@ public class FsWriterThread extends AbstractWorkerThread {
                 }
                 if (monitoringRecord != null) {
                     consume(monitoringRecord);
-                //System.out.println("FSW "+writeQueue.size());
+                    //System.out.println("FSW "+writeQueue.size());
                 } else {
                     // timeout ... 
                     if (shutdown && writeQueue.isEmpty()) {

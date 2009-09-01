@@ -10,9 +10,7 @@ import kieker.tpmon.writer.filesystemSync.syncFsWriter;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
-import java.math.BigInteger;
 import java.util.Properties;
-import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -97,7 +95,7 @@ public class TpmonController {
     private boolean storeInJavaIoTmpdir = true;
     private String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     private boolean logMonitoringRecordTypeIds = false; // eventually, true should become default
- 
+    private int asyncRecordQueueSize = 8000;
     // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
     private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     private TpmonShutdownHook shutdownhook = null;
@@ -136,7 +134,7 @@ public class TpmonController {
                 this.monitoringDataWriter = new syncFsWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringDataWriter = new AsyncFsConnector(filenameBase);
+                this.monitoringDataWriter = new AsyncFsConnector(filenameBase, asyncRecordQueueSize);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
                 this.monitoringDataWriter = new SyncDbConnector(
                         dbDriverClassname, dbConnectionAddress,
@@ -146,10 +144,12 @@ public class TpmonController {
                 this.monitoringDataWriter = new AsyncDbConnector(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
-                        setInitialExperimentIdBasedOnLastId);
+                        setInitialExperimentIdBasedOnLastId, asyncRecordQueueSize);
             } else {
                 /* try to load the class by name */
                 this.monitoringDataWriter = (IKiekerMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
+                //add asyncRecordQueueSize
+                monitoringDataWriterInitString += " | asyncRecordQueueSize="+asyncRecordQueueSize;
                 if (!this.monitoringDataWriter.init(monitoringDataWriterInitString)) {
                     this.monitoringDataWriter = null;
                     throw new Exception("Initialization of writer failed!");
@@ -373,7 +373,7 @@ public class TpmonController {
             prop.load(is);
         } catch (Exception ex) {
             log.error("Error loading tpmon.properties file '" + configurationFile + "'", ex);
-        // TODO: introduce static variable 'terminated' or alike
+            // TODO: introduce static variable 'terminated' or alike
         } finally {
             try {
                 is.close();
@@ -511,8 +511,32 @@ public class TpmonController {
                         ". Using default value " + logMonitoringRecordTypeIds);
             }
         } else {
-            log.warn("Could not find logMonitoringRecordTypeIdsProperty parameter in tpmonLTW.jar/" + configurationFile +
+            log.warn("Could not find logMonitoringRecordTypeIds parameter in tpmonLTW.jar/" + configurationFile +
                     ". Using default value " + logMonitoringRecordTypeIds);
+        }
+
+        // load property "asyncRecordQueueSize"
+        String asyncRecordQueueSizeProperty = null;
+        if (System.getProperty("tpmon.asyncRecordQueueSize") != null) { // we use the present virtual machine parameter value
+            asyncRecordQueueSizeProperty = System.getProperty("tpmon.asyncRecordQueueSize");
+        } else { // we use the parameter in the properties file
+            asyncRecordQueueSizeProperty = prop.getProperty("asyncRecordQueueSize");
+        }
+        if (asyncRecordQueueSizeProperty != null && asyncRecordQueueSizeProperty.length() != 0) {
+            int asyncRecordQueueSizeValue = -1;
+            try {
+                asyncRecordQueueSizeValue = Integer.parseInt(asyncRecordQueueSizeProperty);
+            } catch (NumberFormatException ex) {
+            }
+            if (asyncRecordQueueSizeValue >= 0) {
+                asyncRecordQueueSize = asyncRecordQueueSizeValue;
+            } else {
+                log.warn("Bad value for asyncRecordQueueSize parameter (" + asyncRecordQueueSizeProperty + ") in tpmonLTW.jar/" + configurationFile +
+                        ". Using default value " + asyncRecordQueueSize);
+            }
+        } else {
+            log.warn("Could not find asyncRecordQueueSize parameter in tpmonLTW.jar/" + configurationFile +
+                    ". Using default value " + asyncRecordQueueSize);
         }
 
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
@@ -600,24 +624,24 @@ public class TpmonController {
 
 
 // TODO: remove Leichen!
-     // values might be not written to the database in case of an system.exit(0)!
-    // The place holders are usually much smaller and storage therefore much faster and requires less space.
-    //private boolean encodeMethodNames = false;
-    // trace sampling:
-    // if activated, approximately every n-th (traceSampleingFrequency) trace will be made persistend
-    // this allows to save the overhead and space for storing data.
-    // WARNING: Trace sampling should not be used if a session-based evaluation is targeted!
-    //          For this, a sessionid based sampleing is required (not implemented yet)
-    //private boolean traceSampleing = false;
-    //private int traceSampleingFrequency = 2;
+// values might be not written to the database in case of an system.exit(0)!
+// The place holders are usually much smaller and storage therefore much faster and requires less space.
+//private boolean encodeMethodNames = false;
+// trace sampling:
+// if activated, approximately every n-th (traceSampleingFrequency) trace will be made persistend
+// this allows to save the overhead and space for storing data.
+// WARNING: Trace sampling should not be used if a session-based evaluation is targeted!
+//          For this, a sessionid based sampleing is required (not implemented yet)
+//private boolean traceSampleing = false;
+//private int traceSampleingFrequency = 2;
 
 // only used if encodeMethodNames == true
 //    private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
-    // lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
-    // each monitoring point after that
-    // (The following might produce in very very few cases a colision in a large DISTRIBUTED system with a large number
-    // of instrumented methods. For save usage in a critical distributed system, where the monitoring data is extremely critical,
-    // only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)
+// lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
+// each monitoring point after that
+// (The following might produce in very very few cases a colision in a large DISTRIBUTED system with a large number
+// of instrumented methods. For save usage in a critical distributed system, where the monitoring data is extremely critical,
+// only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)
 //    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
 
 //      Not supported any more
@@ -668,18 +692,18 @@ public class TpmonController {
 
 //        newMethodname = methodname;
 
-    /**
-     * This method is only rarely used to store the name recordings in the same
-     * datasource that the monitoring data.
-     *
-     * The encodings can be distinguished from normal monitoring data by
-     * tin == tout == executionOrderIndex == executionStacksize == -5.
-     * For those entries, the *sessionid* field represents the encoded operation name (= component.method) and
-     * the *operation* field will be the full component.methodname.
-     *
-     * Therefore,
-     * grep "-5,-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
-     */
+/**
+ * This method is only rarely used to store the name recordings in the same
+ * datasource that the monitoring data.
+ *
+ * The encodings can be distinguished from normal monitoring data by
+ * tin == tout == executionOrderIndex == executionStacksize == -5.
+ * For those entries, the *sessionid* field represents the encoded operation name (= component.method) and
+ * the *operation* field will be the full component.methodname.
+ *
+ * Therefore,
+ * grep "-5,-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
+ */
 //   Not supported any more
 //    @TpmonInternal()
 //    private void storeEncodedName(String component, String newMethodname, String encodedName) {
@@ -697,11 +721,11 @@ public class TpmonController {
 //        // NOTE: experimentId and vmname will be set inside insertMonitoringDataNow(.)
 //        this.monitoringDataWriter.insertMonitoringDataNow(monitoringRecord);
 //    }
-    /**
-     * Internal method to convert the method names into a proper format
-     * @param methodname
-     * @return methodname without a double componentname
-     */
+/**
+ * Internal method to convert the method names into a proper format
+ * @param methodname
+ * @return methodname without a double componentname
+ */
 //    @TpmonInternal()
 //    private String formatMethodName(String methodname) {
 //        // methodname: A.a(), componentname: de.comp.A
@@ -728,5 +752,5 @@ public class TpmonController {
 //            return methodname.substring(indexBeginOfMethodname, methodname.length()).replaceAll(" ", "");
 //        }
 //    }
-    //private long seed = 0;
-    //private double d3 = 0.3d;
+//private long seed = 0;
+//private double d3 = 0.3d;

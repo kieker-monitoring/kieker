@@ -47,6 +47,7 @@ public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue = null;
     private String storagePathBase = null;
+    private int asyncRecordQueueSize = 8000;
     private File mappingFile = null;
     private boolean writeRecordTypeIds = false;
     private final static String defaultConstructionErrorMsg =
@@ -68,8 +69,9 @@ public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
         return workers;
     }
 
-    public AsyncFsConnector(String storagePathBase) {
+    public AsyncFsConnector(String storagePathBase, int asyncRecordQueueSize) {
         this.storagePathBase = storagePathBase;
+        this.asyncRecordQueueSize = asyncRecordQueueSize;
         this.init();
     }
 
@@ -104,7 +106,7 @@ public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
             return;
         }
 
-        blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
+        blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
         for (int i = 0; i < numberOfFsWriters; i++) {
             FsWriterThread dbw = new FsWriterThread(blockingQueue, storageDir + "/tpmon");
             //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown

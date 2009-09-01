@@ -32,6 +32,7 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     private String topic;
     private long messageTimeToLive;
     private boolean writeRecordTypeIds;
+    private int asyncRecordQueueSize = 8000;
 
     /**
      * Init String. Expect key=value pairs separated by |.
@@ -62,7 +63,7 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         }
         log.info("XX Init successful!");
 
-        this.blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
+        this.blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
         for (int i = 0; i < numberOfJmsWriters; i++) {
             JMSWriterThread dbw = new JMSWriterThread(blockingQueue, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
             workers.add(dbw);
@@ -95,6 +96,7 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         this.factoryLookupName = map.get("jmsFactoryLookupName");
         this.topic = map.get("jmsTopic");
         this.messageTimeToLive = Long.valueOf(map.get("jmsMessageTimeToLive"));
+        this.asyncRecordQueueSize = Integer.valueOf(map.get("asyncRecordQueueSize"));
 
         return true;
     }
@@ -112,7 +114,7 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         return strB.toString();
     }
 
-   @TpmonInternal()
+    @TpmonInternal()
     public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncJmsProducer.insertMonitoringDataNow");
@@ -120,7 +122,7 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
 
         try {
             blockingQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
-        //int currentQueueSize = blockingQueue.size();
+            //int currentQueueSize = blockingQueue.size();
         } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
             return false;
@@ -128,12 +130,12 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         return true;
     }
 
-   @TpmonInternal()
+    @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
-        log.warn("I am just predending to register classname "+className+" with id " + id);
+        log.warn("I am just predending to register classname " + className + " with id " + id);
     }
 
-   @TpmonInternal()
+    @TpmonInternal()
     public boolean isWriteRecordTypeIds() {
         return this.writeRecordTypeIds;
     }

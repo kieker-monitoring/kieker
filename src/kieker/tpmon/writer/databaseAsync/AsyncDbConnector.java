@@ -81,15 +81,16 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     private boolean setInitialExperimentIdBasedOnLastId = false;
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
-
+    private int asyncRecordQueueSize = 8000;
     private boolean writeRecordTypeIds = false;
 
     public AsyncDbConnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
-            boolean setInitialExperimentIdBasedOnLastId) {
+            boolean setInitialExperimentIdBasedOnLastId, int asyncRecordQueueSize) {
         this.dbDriverClassname = dbDriverClassname;
         this.dbConnectionAddress = dbConnectionAddress;
         this.dbTableName = dbTableName;
         this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
+        this.asyncRecordQueueSize = asyncRecordQueueSize;
         this.init();
     }
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
@@ -120,7 +121,7 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         try {
             conn = DriverManager.getConnection(this.dbConnectionAddress);
             int numberOfConnections = 4;
-            blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(8000);
+            blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
 
 //                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
@@ -133,7 +134,7 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
                 }
                 log.info(" set initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
             }
-            
+
             String preparedQuery = "INSERT INTO " + this.dbTableName +
                     " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
                     "VALUES (" + experimentId + ",?,?,?,?,?,?,?,?)";
@@ -142,8 +143,8 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
                 dbw.setDaemon(true);
                 //dbw.setDaemon(true); might lead to inconsistent data due to harsh shutdown
                 dbw.start();
-            //TODO: Fix this (there shouldn't be a dependency to the TpmonCtrl)
-            //TpmonController.getInstance().registerWorker(dbw);
+                //TODO: Fix this (there shouldn't be a dependency to the TpmonCtrl)
+                //TpmonController.getInstance().registerWorker(dbw);
             }
             log.info("Tpmon (" + numberOfConnections + " threads) connected to database");
         } catch (SQLException ex) {
@@ -193,7 +194,7 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
             }*/
 
             blockingQueue.add(monitoringRecord); // tries to add immediately!
-        //System.out.println("Queue is "+blockingQueue.size());
+            //System.out.println("Queue is "+blockingQueue.size());
 
         } catch (Exception ex) {
             log.error("" + System.currentTimeMillis() + " insertMonitoringData() failed: SQLException: ", ex);
@@ -228,14 +229,14 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-       @Override
+    @Override
     public boolean isWriteRecordTypeIds() {
         return this.isWriteRecordTypeIds();
     }
 
     @Override
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        for(AbstractWorkerThread t:workers){
+        for (AbstractWorkerThread t : workers) {
             t.setWriteRecordTypeIds(this.writeRecordTypeIds);
         }
         this.writeRecordTypeIds = true;

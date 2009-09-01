@@ -39,6 +39,13 @@ monitoringDataWriterInitString=
 # 
 logMonitoringRecordTypeIds=true
 
+# 1.1.6 Queue Size used to store Monitoring Records
+# Asyncronous Writers need to store Monitoring Records in an internal Queue.
+# This parameter defines the Number of Records cached. If this number is exceeded
+# Kieker will terminate with a Queue Full Exception!
+#
+asyncRecordQueueSize=8000
+
 # 1.2 Database configuration
 # (only meaningful if monitoringDataWriter=AsyncDB, or =SyncDB)
  
