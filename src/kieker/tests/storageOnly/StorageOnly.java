@@ -56,7 +56,7 @@ public class StorageOnly {
         try {
             System.out.printf("Starting test by adding %d monitoring events\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                KiekerExecutionRecord record = KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i,i);
+                KiekerExecutionRecord record = KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L, ctrl.getVmname(),i,i);
                 record.vmName = vmName;
                 ctrl.logMonitoringRecord(record);
             }
@@ -64,7 +64,7 @@ public class StorageOnly {
             Thread.sleep(8000);
             System.out.printf("%d more monitoring points\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                KiekerExecutionRecord record = KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,i+10000,i);
+                KiekerExecutionRecord record = KiekerExecutionRecord.getInstance(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,ctrl.getVmname(),i+10000,i);
                 record.vmName = vmName;
                 ctrl.logMonitoringRecord(record);
             }

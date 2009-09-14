@@ -59,6 +59,8 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
 
+    protected static final String vmName = ctrlInst.getVmname();
+    
     @TpmonInternal()
     public void handleMessage(SoapMessage msg) throws Fault {
         String sessionID;
@@ -91,7 +93,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
         unsetKiekerThreadLocalData();
 
         /* Log this execution */
-        KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, sessionID, traceId, tin, tout, myEoi, myEss);
+        KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, sessionID, traceId, tin, tout, vmName, myEoi, myEss);
         ctrlInst.logMonitoringRecord(rec);
 
         /* We don't put Kieker data into response header if request didn't

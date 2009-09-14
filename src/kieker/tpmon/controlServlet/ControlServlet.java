@@ -172,7 +172,7 @@ public class ControlServlet extends HttpServlet {
                 sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
                 cfRegistry.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.logMonitoringRecord(KiekerExecutionRecord.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), i, i));
+                    ctrlInst.logMonitoringRecord(KiekerExecutionRecord.getInstance("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), ctrlInst.getVmname(), i, i));
                 }
                 cfRegistry.unsetThreadLocalTraceId();
                 sessionRegistry.unsetThreadLocalSessionId();

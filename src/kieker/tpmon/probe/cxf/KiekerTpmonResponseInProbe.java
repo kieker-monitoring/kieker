@@ -52,7 +52,8 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
     private static final String componentName = KiekerTpmonResponseInProbe.class.getName();
     private static final String opName = "handleMessage(SoapMessage msg)";
-
+    protected static final String vmName = ctrlInst.getVmname();
+    
     @TpmonInternal()
     public void handleMessage(Message msg) throws Fault {
         if (msg instanceof SoapMessage) {
@@ -125,7 +126,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
             }
 
             // Log this execution
-            KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, myEoi, myEss);
+            KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, vmName, myEoi, myEss);
             ctrlInst.logMonitoringRecord(rec);
 
             /* Store received Kieker EOI

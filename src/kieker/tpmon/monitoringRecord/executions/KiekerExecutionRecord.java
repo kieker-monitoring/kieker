@@ -107,7 +107,8 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     public static final KiekerExecutionRecord getInstance(
             String componentName, String opName,
             String sessionId, long traceId,
-            long tin, long tout,
+            long tin, long tout, 
+            String vnName,
             int eoi, int ess) {
         KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
         execData.componentName = componentName;
@@ -116,6 +117,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         execData.traceId = traceId;
         execData.tin = tin;
         execData.tout = tout;
+        execData.vmName = vnName;
         execData.eoi = eoi;
         execData.ess = ess;
         return execData;
@@ -133,7 +135,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
             Long.toString(this.traceId),
             Long.toString(this.tin),
             Long.toString(this.tout),
-            this.vmName,
+            (this.vmName == null) ? "NULLHOST" : this.vmName,
             Integer.toString(this.eoi),
             Integer.toString(this.ess)
         };
