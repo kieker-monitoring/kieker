@@ -5,7 +5,6 @@ import kieker.tpmon.annotation.TpmonInternal;
 /**
  * kieker.tpmon.core.TpmonVersion
  * 
- * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,6 @@ import kieker.tpmon.annotation.TpmonInternal;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==================================================
  * 
  * This class provides the method getVersion which returns the version number 
  * set during build (String replacement task within build.xml).
@@ -34,7 +32,7 @@ public class TpmonVersion {
 	 * The VERSION string is updated by the Ant build file, which looks for the
 	 * pattern: VERSION = <quote>.*<quote>
 	 */
-	private static final String VERSION = "0.95-20090914";
+	private static final String VERSION = "0.95-20091001";
 
 	static final String COPYRIGHT = "Copyright (c) 2006-2009 Kieker Project";
 
