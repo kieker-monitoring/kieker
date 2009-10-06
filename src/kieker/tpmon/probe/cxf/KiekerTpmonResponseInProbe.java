@@ -127,6 +127,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
 
             // Log this execution
             KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, vmName, myEoi, myEss);
+            rec.experimentId = ctrlInst.getExperimentId();
             ctrlInst.logMonitoringRecord(rec);
 
             /* Store received Kieker EOI

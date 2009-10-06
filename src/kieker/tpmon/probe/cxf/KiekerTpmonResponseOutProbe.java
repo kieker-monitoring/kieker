@@ -94,6 +94,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
 
         /* Log this execution */
         KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, sessionID, traceId, tin, tout, vmName, myEoi, myEss);
+        rec.experimentId = ctrlInst.getExperimentId();
         ctrlInst.logMonitoringRecord(rec);
 
         /* We don't put Kieker data into response header if request didn't
