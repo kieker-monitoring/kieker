@@ -126,13 +126,13 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
 
             /* Store thread-local values */
             cfRegistry.storeThreadLocalTraceId(traceId);
-            cfRegistry.storeThreadLocalEOI(eoi+1); // this execution has EOI=eoi
+            cfRegistry.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
             cfRegistry.storeThreadLocalESS(ess+1); // this execution has ESS=ess
             sessionRegistry.storeThreadLocalSessionId(sessionId);
             soapRegistry.storeThreadLocalInRequestIsEntryCall(isEntryCall);
             soapRegistry.storeThreadLocalInRequestTin(tin);
-            soapRegistry.storeThreadLocalInRequestEOI(eoi); // ess for this execution
-            soapRegistry.storeThreadLocalInRequestESS(ess);
+            soapRegistry.storeThreadLocalInRequestEOI(eoi); // eoi for this execution
+            soapRegistry.storeThreadLocalInRequestESS(ess); // ess for this execution
         }
     }
 
