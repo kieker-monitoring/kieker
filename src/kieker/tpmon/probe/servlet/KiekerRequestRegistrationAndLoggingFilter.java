@@ -58,6 +58,8 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     private static final String vmName = ctrlInst.getVmname();
 
+    private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
+
     @TpmonInternal()
     public void init(FilterConfig config) throws ServletException {
         /*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
@@ -95,9 +97,10 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
                     opName,
                     cfRegistry.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point*/);
             execData.sessionId = getSessionId((HttpServletRequest) request);
-            if (execData.sessionId != null) {
-                sessionRegistry.storeThreadLocalSessionId(execData.sessionId);
+            if (execData.sessionId == null) {
+                execData.sessionId = NULL_SESSION_STR;
             }
+            sessionRegistry.storeThreadLocalSessionId(execData.sessionId);
             execData.isEntryPoint = true; // of course (however, we never evaluate it here)!
             cfRegistry.storeThreadLocalEOI(0); // current execution's eoi is 0
             cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
