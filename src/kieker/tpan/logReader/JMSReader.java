@@ -65,19 +65,19 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
             Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.exolab.jms.jndi.InitialContextFactory");
             //properties.put(Context.PROVIDER_URL, "tcp://pc-rohr.informatik.uni-oldenburg.de:3035/");
-          
+
+            // JMS initialization
             properties.put(Context.PROVIDER_URL, jmsProviderUrl);
             Context context = new InitialContext(properties);
             ConnectionFactory factory =
                     (ConnectionFactory) context.lookup("ConnectionFactory");
             Connection connection = factory.createConnection();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-           
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);           
             Destination destination = (Destination) context.lookup(jmsDestination);
             log.info("\n\n***\nListening to destination:" + destination + " at " + jmsProviderUrl + " !\n***\n\n");
             MessageConsumer receiver = session.createConsumer(destination);
             receiver.setMessageListener(new MessageListener() {
-
+            // the MessageListener will execute onMessage each time a message comes in
                 public void onMessage(Message jmsMessage) {
                     if (jmsMessage instanceof TextMessage) {
                         TextMessage text = (TextMessage) jmsMessage;
@@ -107,8 +107,6 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
             connection.start();
 
             System.out.println("JMSTestListener1 is started and waits for incomming monitoring events!");
-            //todo why was the wait here?? it threw an exception
-            //this.wait();
         } catch (Exception ex) {
             System.out.println("" + JMSReader.class.getName() + " " + ex.getMessage());
             ex.printStackTrace();
