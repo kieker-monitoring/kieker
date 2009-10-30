@@ -719,6 +719,22 @@
         <java dir="."
               fork="true"
               classname="kieker.tpan.TpanTool"
+              classpathref="tpan.core.classpath">
+                  <!-- select-traces 3 -->
+            <arg line="--outputdir tmp/  --init-basic-JMS-reader"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>            
+        </java>
+        <delete file="${build.tests.dir}/log4j.properties"/>
+    </target>
+
+    <target name="run-tpan-jmslistener-javafx" depends="build-tpan-ctrl">
+        <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
+         <!--<java classname="${main.class}" classpath="${dist.dir}/${application.title}.jar" failonerror="true" fork="true" jvm="${platform.fxhome}/bin/javafx${binary.extension}" jvmargs="${run.jvmargs}">
+            <arg line="${application.args}"/>
+        </java> -->
+        <java dir="."
+              fork="true"
+              classname="kieker.tpan.TpanTool"
               jvm="/mnt/sda4/netbeans651/netbeans-6.5.1/javafx2/javafx-sdk/bin/javafx"
               classpathref="tpan.core.classpath">
                   <!-- select-traces 3 -->

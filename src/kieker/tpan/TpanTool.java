@@ -21,6 +21,7 @@ import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.recordConsumer.BriefJavaFxInformer;
 import kieker.tpan.recordConsumer.ExecutionSequenceRepositoryFiller;
 
+import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
 import kieker.tpmon.core.TpmonController;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -372,10 +373,17 @@ public class TpanTool {
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
+
+        MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
+        analysisInstance.addRecordConsumer(recordTypeLogger);
+
         //ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
         //analysisInstance.addRecordConsumer(seqRepConsumer);
-        BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
-        analysisInstance.addRecordConsumer(bjfx);
+
+        /*@Matthias: Deactivated this, since the ant task didn't run (Andre) */
+        //BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
+        //analysisInstance.addRecordConsumer(bjfx);
+
         analysisInstance.run();
         return retVal;
     }
