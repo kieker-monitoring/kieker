@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package kieker.tpmon.writer.jmsAsync;
 
 import java.util.HashMap;
@@ -14,8 +10,26 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.annotation.TpmonInternal;
+import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ */
 /**
  *
  * @author Matthias Rohr, Andre van Hoorn
@@ -23,9 +37,11 @@ import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncJMSConnector.class);
-    private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
+    private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
+    private JMSWriterThread typeWriter; // publishes record type/classname mappings
     private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
-    private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue = null;
+    private BlockingQueue<AbstractKiekerMonitoringRecord> recordQueue = null;
+    private BlockingQueue<MonitoringRecordTypeClassnameMapping> typeQueue = null;
     private String contextFactoryType; // type of the jms factory implementation, e.g.
     private String providerUrl;
     private String factoryLookupName;
@@ -63,12 +79,18 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         }
         log.info("XX Init successful!");
 
-        this.blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
-        for (int i = 0; i < numberOfJmsWriters; i++) {
-            JMSWriterThread dbw = new JMSWriterThread(blockingQueue, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
-            workers.add(dbw);
-            dbw.setDaemon(true);
-            dbw.start();
+        this.recordQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
+        // init *the* record type writer
+        JMSWriterThread<MonitoringRecordTypeClassnameMapping> typeWriter = new JMSWriterThread<MonitoringRecordTypeClassnameMapping>(typeQueue, new MonitoringRecordTypeClassnameMapping(-1, null), contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
+        typeWriterAndRecordWriters.add(typeWriter);
+        typeWriter.setDaemon(true);
+        typeWriter.start();
+        // init record writers
+        for (int i = 1; i <= numberOfJmsWriters; i++) {
+            JMSWriterThread<AbstractKiekerMonitoringRecord> recordWriter = new JMSWriterThread<AbstractKiekerMonitoringRecord>(recordQueue, TpmonController.END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
+            typeWriterAndRecordWriters.add(recordWriter);
+            recordWriter.setDaemon(true);
+            recordWriter.start();
         }
         //System.out.println(">Kieker-numberOfJmsWriters: (" + numberOfFsWriters + " threads) will write to the file system");
         log.info(">Kieker-Tpmon: (" + numberOfJmsWriters + " threads) will send to the JMS server topic");
@@ -122,8 +144,8 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         }
 
         try {
-            blockingQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
-            //int currentQueueSize = blockingQueue.size();
+            recordQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
+        //int currentQueueSize = recordQueue.size();
         } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
             return false;
@@ -133,7 +155,8 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
 
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
-        log.warn("I am just predending to register classname " + className + " with id " + id);
+        log.info("Publishing record id/class mapping: " + id + "/" + className);
+        this.typeQueue.add(new MonitoringRecordTypeClassnameMapping(id, className));
     }
 
     @TpmonInternal()
@@ -143,7 +166,7 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
 
     @TpmonInternal()
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        for (AbstractWorkerThread t : workers) {
+        for (AbstractWorkerThread t : typeWriterAndRecordWriters) {
             log.info("t.setWriteRecordTypeIds(" + writeRecordTypeIds + ")");
             t.setWriteRecordTypeIds(writeRecordTypeIds);
         }
@@ -151,6 +174,6 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     }
 
     public Vector<AbstractWorkerThread> getWorkers() {
-        return this.workers;
+        return this.typeWriterAndRecordWriters;
     }
 }

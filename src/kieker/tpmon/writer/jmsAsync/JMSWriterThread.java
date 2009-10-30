@@ -1,5 +1,6 @@
 package kieker.tpmon.writer.jmsAsync;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -21,9 +22,27 @@ import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ */
+
 /**
  * The writer moves monitoring data via messaging to a JMS server. This uses the
- * publish/subscribe pattern. The JMS server will only keep each monitoring event
+ * publishRecord/subscribe pattern. The JMS server will only keep each monitoring event
  * for messageTimeToLive milliseconds presents before it is deleted. 
  * 
  * At the moment, JmsWorkers do not share any connections, 
@@ -32,24 +51,25 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
  * History:
  * 2008-09-13: Initial prototype
  * 
- * @author matthias
+ * @author Matthias Rohr
  */
-public class JMSWriterThread extends AbstractWorkerThread {
+public class JMSWriterThread<T> extends AbstractWorkerThread {
     // configuration parameters                
 
     private Session session;
     private Connection connection;
     private MessageProducer sender;
     private static final Log log = LogFactory.getLog(JMSWriterThread.class);
-    private BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue = null;
+    private BlockingQueue<T> writeQueue = null;
     private boolean finished = false;
     private static boolean shutdown = false;
-
-    public JMSWriterThread(BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue, String contextFactoryType, String providerUrl, String factoryLookupName, String topic, long messageTimeToLive) {
-        System.out.printf("JMS connect with factorytype:%s, providerurl: %s, factorylookupname: %s, topic: %s \n", contextFactoryType, providerUrl, factoryLookupName, topic);
-        System.out.println("JMS connect with messagetimetolive:" + messageTimeToLive);
+    private final T END_OF_MONITORING_MARKER;
+    
+    public JMSWriterThread(BlockingQueue<T> writeQueue, T endOfMonitoringMarker, String contextFactoryType, String providerUrl, String factoryLookupName, String topic, long messageTimeToLive) {
+        log.info("JMS connect with factorytype:"+contextFactoryType+", providerurl: "+providerUrl+", factorylookupname: "+factoryLookupName+", topic: "+topic+" \n");
+        log.info("JMS connect with messagetimetolive:" + messageTimeToLive);
         this.writeQueue = writeQueue;
-
+        this.END_OF_MONITORING_MARKER = endOfMonitoringMarker;
         try {
             Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
@@ -59,7 +79,7 @@ public class JMSWriterThread extends AbstractWorkerThread {
             ConnectionFactory factory = (ConnectionFactory) context.lookup(factoryLookupName);
             connection = factory.createConnection();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            System.out.println("Looking for topic " + topic);
+            log.info("Looking for topic " + topic);
             Destination destination = (Destination) context.lookup(topic);
             connection.start();
 
@@ -73,14 +93,15 @@ public class JMSWriterThread extends AbstractWorkerThread {
             log.error(Level.SEVERE, ex);
         }
     }
-
+    
     @TpmonInternal
-    private void publish(AbstractKiekerMonitoringRecord execData) {
-        try {
-            ObjectMessage messageObject = session.createObjectMessage(execData);
+    private void consume(T execData) throws Exception {
+       try {
+            // TODO: casting to serializable may throw an exception!
+            ObjectMessage messageObject = session.createObjectMessage((Serializable)execData);
             //TextMessage message = session.createTextMessage("Hello World!");
             sender.send(messageObject);
-        //System.out.println("sended execution "+insertData.opname+" "+insertData.tin);
+        //System.out.println("sent execution "+insertData.opname+" "+insertData.tin);
 
 //            Object so = messageObject.getObject();
 //            InsertData id2 = (InsertData) so;
@@ -92,21 +113,17 @@ public class JMSWriterThread extends AbstractWorkerThread {
     }
 
     @TpmonInternal
-    private void consume(Object traceidObject) throws Exception {
-        publish((AbstractKiekerMonitoringRecord) traceidObject);
-    }
-
-    @TpmonInternal
     public void run() {
         log.info("JmsWriter thread running");
         //System.out.println("FsWriter thread running");
         try {
             while (!finished) {
-                AbstractKiekerMonitoringRecord monitoringRecord = writeQueue.take();
-                if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
+                T monitoringRecord = writeQueue.take();
+                if (monitoringRecord == this.END_OF_MONITORING_MARKER) {
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
-                    writeQueue.add(TpmonController.END_OF_MONITORING_MARKER);
+                    // TODO: ACTIVATE MARKER!
+                    writeQueue.add(this.END_OF_MONITORING_MARKER);
                     finished = true;
                     break;
                 }
@@ -122,8 +139,9 @@ public class JMSWriterThread extends AbstractWorkerThread {
             }
             log.info("JMS writer finished");
         } catch (Exception ex) {
+            // TODO: terminate monitoring?
             // e.g. Interrupted Exception or IOException
-            log.error("JMX writer will halt", ex);
+            log.error("JMS writer will halt", ex);
         } finally {
             this.finished = true;
         }

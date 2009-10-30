@@ -3,9 +3,7 @@ package kieker.tpmon.monitoringRecord.executions;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.annotation.TpmonInternal;
 
-/**
- * kieker.tpmon.monitoringRecord.KiekerExecutionRecord
- * 
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -21,9 +19,11 @@ import kieker.tpmon.annotation.TpmonInternal;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * @author Andre van Hoorn
  */
+  
+ /** 
+  *@author Andre van Hoorn
+  */
 public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implements Comparable<KiekerExecutionRecord> {
 
     private static final long serialVersionUID = 117L;
