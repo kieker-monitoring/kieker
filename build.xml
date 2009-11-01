@@ -723,6 +723,11 @@
                   <!-- select-traces 3 -->
             <arg line="--outputdir tmp/  --init-basic-JMS-reader"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>            
+            <classpath>
+                <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
+                <pathelement location="${dist.dir}/${dist.kieker.common}"/>
+                <pathelement location="${dist.dir}/${dist.tpan.ctrl}"/>
+            </classpath>
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>

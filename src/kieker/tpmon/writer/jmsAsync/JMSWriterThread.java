@@ -18,8 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import javax.naming.NamingException;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
 /*
@@ -39,7 +37,6 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * The writer moves monitoring data via messaging to a JMS server. This uses the
  * publishRecord/subscribe pattern. The JMS server will only keep each monitoring event
@@ -64,12 +61,17 @@ public class JMSWriterThread<T> extends AbstractWorkerThread {
     private boolean finished = false;
     private static boolean shutdown = false;
     private final T END_OF_MONITORING_MARKER;
-    
+
     public JMSWriterThread(BlockingQueue<T> writeQueue, T endOfMonitoringMarker, String contextFactoryType, String providerUrl, String factoryLookupName, String topic, long messageTimeToLive) {
-        log.info("JMS connect with factorytype:"+contextFactoryType+", providerurl: "+providerUrl+", factorylookupname: "+factoryLookupName+", topic: "+topic+" \n");
+        log.info("JMS connect with factorytype:" + contextFactoryType + ", providerurl: " + providerUrl + ", factorylookupname: " + factoryLookupName + ", topic: " + topic + " \n");
         log.info("JMS connect with messagetimetolive:" + messageTimeToLive);
         this.writeQueue = writeQueue;
         this.END_OF_MONITORING_MARKER = endOfMonitoringMarker;
+        if (this.END_OF_MONITORING_MARKER == null) {
+            log.error("endofMonitoringMarker must not be null!");
+        } else {
+            log.info("Constructing JmsWriter (" + this.END_OF_MONITORING_MARKER.getClass().getName() + ")");
+        }
         try {
             Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
@@ -88,17 +90,19 @@ public class JMSWriterThread<T> extends AbstractWorkerThread {
             sender.setDisableMessageID(false);
             sender.setTimeToLive(messageTimeToLive); // time to live defaults in millisecs
         } catch (JMSException ex) {
-            log.error(Level.SEVERE, ex);
+            log.error("JMS Exception while constructing JMS Writer", ex);
+            throw new RuntimeException(ex);
         } catch (NamingException ex) {
-            log.error(Level.SEVERE, ex);
+            log.error("NamingException while constructing JMS Writer", ex);
+            throw new RuntimeException(ex);
         }
     }
-    
+
     @TpmonInternal
     private void consume(T execData) throws Exception {
-       try {
+        try {
             // TODO: casting to serializable may throw an exception!
-            ObjectMessage messageObject = session.createObjectMessage((Serializable)execData);
+            ObjectMessage messageObject = session.createObjectMessage((Serializable) execData);
             //TextMessage message = session.createTextMessage("Hello World!");
             sender.send(messageObject);
         //System.out.println("sent execution "+insertData.opname+" "+insertData.tin);
@@ -114,7 +118,7 @@ public class JMSWriterThread<T> extends AbstractWorkerThread {
 
     @TpmonInternal
     public void run() {
-        log.info("JmsWriter thread running");
+        log.info("JmsWriter thread (" + this.END_OF_MONITORING_MARKER.getClass().getName() + ") running");
         //System.out.println("FsWriter thread running");
         try {
             while (!finished) {
@@ -122,8 +126,8 @@ public class JMSWriterThread<T> extends AbstractWorkerThread {
                 if (monitoringRecord == this.END_OF_MONITORING_MARKER) {
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
-                    // TODO: ACTIVATE MARKER!
                     writeQueue.add(this.END_OF_MONITORING_MARKER);
+                    this.closeConnection();
                     finished = true;
                     break;
                 }
@@ -133,6 +137,7 @@ public class JMSWriterThread<T> extends AbstractWorkerThread {
                 } else {
                     // timeout ... 
                     if (shutdown && writeQueue.isEmpty()) {
+                        this.closeConnection();
                         finished = true;
                     }
                 }
@@ -150,14 +155,21 @@ public class JMSWriterThread<T> extends AbstractWorkerThread {
     @TpmonInternal
     public boolean isFinished() {
         if (finished) {
+            this.closeConnection();
+        }
+        return finished;
+    }
+
+    @TpmonInternal
+    private void closeConnection(){
+            log.info("Closing JMS connection");
             try {
                 sender.close();
                 session.close();
                 connection.close();
             } catch (Exception e) {
+                log.error("Error closing connection", e);
             }
-        }
-        return finished;
     }
 
     /**

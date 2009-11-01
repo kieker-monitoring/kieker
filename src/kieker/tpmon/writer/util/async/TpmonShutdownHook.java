@@ -8,7 +8,7 @@ import kieker.tpmon.annotation.TpmonInternal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
+/*
  * kieker.tpmon.TpmonShutdownHook
  * 
  * ==================LICENCE=========================
@@ -26,7 +26,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ * /
+
+/**
  * This class ensures that virtual machine shutdown (e.g., cause by a
  * System.exit(int)) is delayed until all monitoring data is written.
  * This is important for the asynchronous writers for the files system

@@ -158,7 +158,7 @@ public class TpanTool {
             }
            if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
                 numRequestedTasks++;
-                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue1");
+                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue2");
                 System.out.println("Finished to start task_initBasicJmsReader");
             }
 
@@ -183,13 +183,20 @@ public class TpanTool {
     }
 
     public static void main(String args[]) {
+        try{
         if (true && ((!parseArgs(args) || !initFromArgs() || !dispatchTasks()))) {
             System.exit(1);
         }
 
+        //Thread.sleep(2000);
+
         /* As long as we have a dependency from logAnalysis to tpmon,
-         * we need to explicitly terminate tpmon. */
+         * we need t terminate tpmon explicitly. */
         TpmonController.getInstance().terminateMonitoring();
+        } catch (Exception exc){
+            System.err.println("An error occured. See log for details");
+            log.fatal(args, exc);
+        }
     }
 
     /**

@@ -11,7 +11,8 @@ import java.io.Serializable;
  *
  * @author Andre van Hoorn
  */
-class MonitoringRecordTypeClassnameMapping implements Serializable {
+public class MonitoringRecordTypeClassnameMapping implements Serializable {
+    private static final long serialVersionUID = 5477L;
     public final int id;
     public final String classname;
 

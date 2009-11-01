@@ -1,7 +1,6 @@
 package kieker.tpmon.monitoringRecord;
 
-/**
- * kieker.tpmon.AbstractKiekerMonitoringRecord
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -84,7 +83,8 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
      */
     @TpmonInternal()
     protected static final int registerMonitoringRecordType(Class recordTypeClass) {
-        return ctrlInst.registerMonitoringRecordType(recordTypeClass);
+        // ctrlInst leads to error
+        return TpmonController.getInstance().registerMonitoringRecordType(recordTypeClass);
     }
 
     @Override
