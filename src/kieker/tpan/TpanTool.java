@@ -376,6 +376,11 @@ public class TpanTool {
     private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException{
         boolean retVal = true;
 
+        /** As long as we have a dependency to tpmon, 
+         *  we load it explicitly in order to avoid 
+         *  later delays.*/
+        TpmonController ctrl = TpmonController.getInstance();
+        
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " "+jmsDestination);
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();

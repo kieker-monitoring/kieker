@@ -40,6 +40,7 @@ public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {
 
     public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
         log.info("Consumed record:" + monitoringRecord.getRecordTypeId());
+        log.info(monitoringRecord.toString());
     }
 
     public boolean execute() {

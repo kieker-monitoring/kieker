@@ -100,7 +100,7 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
                                     // TODO: we could retry it in a couple of seconds
                                     log.error("Found no mapping for record type id " + rec.getRecordTypeId());
                                 } else {
-                                    log.info("New monitoring record of type " + clazz.getName() + " (id:" + rec.getRecordTypeId() + ")");
+                                    //log.info("New monitoring record of type " + clazz.getName() + " (id:" + rec.getRecordTypeId() + ")");
                                     deliverRecordToConsumers(rec);
                                 }
                             } else if (omo instanceof MonitoringRecordTypeClassnameMapping) {
