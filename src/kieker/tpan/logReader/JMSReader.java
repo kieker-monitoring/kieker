@@ -1,5 +1,6 @@
 package kieker.tpan.logReader;
 
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
@@ -18,8 +19,6 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import kieker.common.logReader.LogReaderExecutionException;
-import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
-import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
 import org.apache.commons.logging.Log;
@@ -92,26 +91,34 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
                         ObjectMessage om = (ObjectMessage) jmsMessage;
                         //System.out.println("Received object message: " + om.toString());
                         try {
-                            if (om instanceof AbstractKiekerMonitoringRecord) {
+                            Serializable omo = om.getObject();
+                            if (omo instanceof AbstractKiekerMonitoringRecord) {
                                 AbstractKiekerMonitoringRecord rec =
-                                        (AbstractKiekerMonitoringRecord) om.getObject();
-                                log.info("New monitoring record of type '" + rec.getRecordTypeId() + "'");
-                                deliverRecordToConsumers(rec);
-                            } else if (true || om instanceof MonitoringRecordTypeClassnameMapping) {
+                                        (AbstractKiekerMonitoringRecord) omo;
+                                Class<? extends AbstractKiekerMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getRecordTypeId());
+                                if (clazz == null) {
+                                    // TODO: we could retry it in a couple of seconds
+                                    log.error("Found no mapping for record type id " + rec.getRecordTypeId());
+                                } else {
+                                    log.info("New monitoring record of type " + clazz.getName() + " (id:" + rec.getRecordTypeId() + ")");
+                                    deliverRecordToConsumers(rec);
+                                }
+                            } else if (omo instanceof MonitoringRecordTypeClassnameMapping) {
                                 MonitoringRecordTypeClassnameMapping m =
-                                        (MonitoringRecordTypeClassnameMapping) om.getObject();
-                                log.info("Received mapping " + m.id + "/" + m.classname);
+                                        (MonitoringRecordTypeClassnameMapping) omo;
+                                registerRecordTypeIdMapping(m.typeId, m.classname);
+                                log.info("Received mapping " + m.typeId + "/" + m.classname);
                             } else {
                                 log.info("Unknown type of message " + om);
                             }
                         } catch (MessageFormatException em) {
-                            log.fatal("MessageFormatException:");//, em);
+                            log.fatal("MessageFormatException:", em);
                         } catch (JMSException ex) {
                             log.fatal("JMSException ", ex);
                         } catch (LogReaderExecutionException ex) {
                             log.error("LogReaderExecutionException", ex);
                         } catch (Exception ex) {
-                            log.error("Exception");
+                            log.error("Exception", ex);
                         }
                     }
                 }

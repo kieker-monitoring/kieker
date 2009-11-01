@@ -158,7 +158,7 @@ public class TpanTool {
             }
            if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
                 numRequestedTasks++;
-                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue2");
+                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue1");
                 System.out.println("Finished to start task_initBasicJmsReader");
             }
 

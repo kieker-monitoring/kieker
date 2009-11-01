@@ -93,7 +93,6 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
         }
         return retVal;
     }
-    HashMap<Integer, Class<? extends AbstractKiekerMonitoringRecord>> recordTypeMap = new HashMap<Integer, Class<? extends AbstractKiekerMonitoringRecord>>();
 
     @TpmonInternal()
     //@SuppressWarnings("unchecked")
@@ -119,10 +118,7 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
                     // the leading $ is optional
                     Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr);
                     String classname = st.nextToken();
-                    log.info("Found mapping: " + id + "<->" + classname);
-                    log.info("Loading record type class '" + classname + "'");
-                    Class<? extends AbstractKiekerMonitoringRecord> recordClass = Class.forName(classname).asSubclass(AbstractKiekerMonitoringRecord.class);
-                    this.recordTypeMap.put(id, recordClass);
+                    super.registerRecordTypeIdMapping(id, classname);
                 } catch (Exception e) {
                     log.error(
                             "Failed to parse line: {" + line + "} from file " +
@@ -172,7 +168,7 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
 //                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
 
                             Integer id = Integer.valueOf(token.substring(1));
-                            Class<? extends AbstractKiekerMonitoringRecord> clazz = this.recordTypeMap.get(id);
+                            Class<? extends AbstractKiekerMonitoringRecord> clazz = super.fetchClassForRecordTypeId(id);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
                             rec = (AbstractKiekerMonitoringRecord) m.invoke(null); // call static method
                             token = st.nextToken();

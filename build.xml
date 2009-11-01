@@ -722,7 +722,8 @@
               classpathref="tpan.core.classpath">
                   <!-- select-traces 3 -->
             <arg line="--outputdir tmp/  --init-basic-JMS-reader"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>            
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dtpmon.configuration=${tests.jmsreader.tpmon.properties}"/>
             <classpath>
                 <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
                 <pathelement location="${dist.dir}/${dist.kieker.common}"/>

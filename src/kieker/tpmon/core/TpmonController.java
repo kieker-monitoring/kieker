@@ -21,9 +21,7 @@ import kieker.tpmon.writer.filesystemAsync.AsyncFsConnector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.core.TpmonController
- * 
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
