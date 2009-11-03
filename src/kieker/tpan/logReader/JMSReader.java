@@ -82,6 +82,7 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
             MessageConsumer receiver = session.createConsumer(destination);
             receiver.setMessageListener(new MessageListener() {
                 // the MessageListener will execute onMessage each time a message comes in
+
                 public void onMessage(Message jmsMessage) {
                     if (jmsMessage instanceof TextMessage) {
                         TextMessage text = (TextMessage) jmsMessage;
