@@ -33,19 +33,18 @@ import org.apache.commons.logging.LogFactory;
 public class TpanInstance {
 
     private static final Log log = LogFactory.getLog(TpanInstance.class);
-    private final Vector<IKiekerMonitoringLogReader> logReaders = new Vector<IKiekerMonitoringLogReader>();
+    private IKiekerMonitoringLogReader logReader;
     private final Vector<IKiekerRecordConsumer> consumers = new Vector<IKiekerRecordConsumer>();
 
     public void run() throws LogReaderExecutionException, RecordConsumerExecutionException {
-        for (IKiekerMonitoringLogReader r : this.logReaders) {
             for (IKiekerRecordConsumer c : this.consumers) {
-                r.addConsumer(c, c.getRecordTypeSubscriptionList());
+                this.logReader.addConsumer(c, c.getRecordTypeSubscriptionList());
                 c.execute();
             }
-        }
         try {
-            for (IKiekerMonitoringLogReader r : this.logReaders) {
-                r.execute();
+            if (!this.logReader.execute()){
+                log.error("Calling execute() on logReader returned false");
+                throw new LogReaderExecutionException("Calling execute() on logReader returned false");
             }
         } catch (LogReaderExecutionException exc) {
             log.fatal("LogReaderException! Will terminate consumers.");
@@ -57,7 +56,7 @@ public class TpanInstance {
     }
 
     public void setLogReader(IKiekerMonitoringLogReader reader) {
-        this.logReaders.add(reader);
+        this.logReader = reader;
     }
 
     public void addRecordConsumer(IKiekerRecordConsumer consumer) {
