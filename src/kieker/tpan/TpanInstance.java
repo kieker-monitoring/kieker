@@ -49,7 +49,7 @@ public class TpanInstance {
         } catch (LogReaderExecutionException exc) {
             log.fatal("LogReaderException! Will terminate consumers.");
             for (IKiekerRecordConsumer c : this.consumers) {
-                c.execute();
+                c.terminate();
             }
             throw exc;
         }
