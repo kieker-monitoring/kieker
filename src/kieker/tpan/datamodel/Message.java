@@ -25,16 +25,18 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  */
 
 public class Message {
-    public boolean callMessage;
-    public long timestamp;
-    public String sender; // TODO: vm
-    public String receiver; // TODO: vm
-    public KiekerExecutionRecord execution;
+    public final boolean callMessage;
+    public final long timestamp;
+    //public String senderComponentName; // TODO: remove
+    //public String receiverComponentName; // TODO: remove
+    public final KiekerExecutionRecord sender, receiver, execution;
      
-    public Message(boolean callMessage, long timestamp, String sender, 
-            String receiver, KiekerExecutionRecord execution){
+    public Message(boolean callMessage, long timestamp, KiekerExecutionRecord sender, 
+            KiekerExecutionRecord receiver, KiekerExecutionRecord execution){
         this.callMessage = callMessage;
         this.timestamp = timestamp;
+        //this.senderComponentName = sender;
+        //this.receiverComponentName = receiver;
         this.sender = sender;
         this.receiver = receiver;
         this.execution = execution;
@@ -42,26 +44,49 @@ public class Message {
     
     public String toString(){
         StringBuilder strBuild = new StringBuilder();
-        strBuild.append(this.timestamp); strBuild.append(':');
+
+        strBuild.append(this.callMessage?"S":"R").append(" ");
+        strBuild.append(this.timestamp); strBuild.append(" ");
+       if(this.sender != null){   
+            strBuild.append("[").append(this.sender.eoi)
+                    .append(",").append(this.sender.ess).append("]");
+            strBuild.append(this.sender.vmName).append("::");
+        }
         strBuild.append(this.getSenderComponentName());
-       if(!this.callMessage&&this.sender!=null){
-            strBuild.append("."+this.execution.opname);
+       if(this.sender != null){           
+            strBuild.append(".").append(this.sender.opname);
         }
-        strBuild.append(this.callMessage?"|-send->":"|-return->");
+        strBuild.append(" --> ");
+       if(this.receiver != null){           
+            strBuild.append("[").append(this.receiver.eoi)
+                    .append(",").append(this.receiver.ess).append("]");
+            strBuild.append(this.receiver.vmName).append("::");
+        }
         strBuild.append(this.getReceiverComponentName());
-        if(this.callMessage&&this.receiver!=null){
-            strBuild.append("."+this.execution.opname);
+        if(this.receiver != null){
+            strBuild.append(".").append(this.receiver.opname);
         }
+        
+//        strBuild.append(this.timestamp); strBuild.append(':');
+//        strBuild.append(this.getSenderComponentName());
+//       if(!this.callMessage&&this.senderComponentName!=null){
+//            strBuild.append("."+this.execution.opname);
+//        }
+//        strBuild.append(this.callMessage?"|-send->":"|-return->");
+//        strBuild.append(this.getReceiverComponentName());
+//        if(this.callMessage&&this.receiverComponentName!=null){
+//            strBuild.append("."+this.execution.opname);
+//        }
         return strBuild.toString();
     }
 
-    /** Convenience function which returns "$" in case 'sender' field is null */
+    /** Convenience function which returns "$" in case 'senderComponentName' field is null */
     public String getSenderComponentName(){
-        return (this.sender==null)?"$":this.sender;
+        return (this.sender==null)?"$":this.sender.componentName;
     }
 
-    /** Convenience function which returns "$" in case 'sender' field is null */
+    /** Convenience function which returns "$" in case 'senderComponentName' field is null */
     public String getReceiverComponentName(){
-        return (this.receiver==null)?"$":this.receiver;
+        return (this.receiver==null)?"$":this.receiver.componentName;
     }
 }

@@ -73,12 +73,12 @@ public class ExecutionTrace {
             // First, we might need to clean up the stack for the next execution callMessage 
             if (prevE != null && prevE.ess >= curE.ess) {
                 //log.info("Cleaning stack ...");
-                KiekerExecutionRecord curReturnReceiver; // receiver of return message
+                KiekerExecutionRecord curReturnReceiver; // receiverComponentName of return message
                 while (curStack.size() > curE.ess) {
                     //log.info("loop begin: curStack.size() " + curStack.size());
                     prevE = curStack.pop().execution;
                     curReturnReceiver = curStack.peek().execution;
-                    Message m = new Message(false, prevE.tout, prevE.componentName, curReturnReceiver.componentName, prevE);
+                    Message m = new Message(false, prevE.tout, prevE, curReturnReceiver, prevE);
                     mSeq.add(m);
                     prevE = curReturnReceiver;
                     //log.info(m);
@@ -87,11 +87,11 @@ public class ExecutionTrace {
             }
             // Now, we handle the current execution callMessage 
             if (prevE == null) { // initial execution callMessage
-                Message m = new Message(true, curE.tin, null, curE.componentName, curE);
+                Message m = new Message(true, curE.tin, null, curE, curE);
                 mSeq.add(m);
                 curStack.push(m);
-            } else if (prevE.ess < curE.ess) { // usual callMessage with sender and receiver
-                Message m = new Message(true, curE.tin, prevE.componentName, curE.componentName, curE);
+            } else if (prevE.ess < curE.ess) { // usual callMessage with senderComponentName and receiverComponentName
+                Message m = new Message(true, curE.tin, prevE, curE, curE);
                 mSeq.add(m);
                 curStack.push(m);
             }
@@ -99,7 +99,7 @@ public class ExecutionTrace {
                 while (!curStack.empty()) {
                     curE = curStack.pop().execution;
                     prevE = curStack.empty() ? null : curStack.peek().execution;
-                    Message m = new Message(false, curE.tout, curE.componentName, prevE==null?null:prevE.componentName, curE);
+                    Message m = new Message(false, curE.tout, curE, prevE, curE);
                     mSeq.add(m);
                 }
             }

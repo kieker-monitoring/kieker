@@ -56,7 +56,7 @@ public class SequenceDiagramPlugin {
         // as returns have senders too.
         //log.info("Trace " + messageTrace.traceId + " contains " + messages.size() + " messages.");
         for (Message me : messages) {
-            String name = (me.sender == null) ? "$" : me.sender;
+            String name = me.getSenderComponentName();
             if (!distinctObjects.containsKey(name)) {
                 distinctObjects.put(name, "O"+(nextObjIndex++));
                 String shortComponentName = name;
@@ -80,9 +80,9 @@ public class SequenceDiagramPlugin {
         for (Message me : messages) {
             if (me.callMessage) {
                 //String method = me.getReceiver().getOperation().getMethodname();
-                String method = me.execution.opname;
+                String method = me.receiver.opname;
                 if (method.indexOf('(') != -1) {
-                    method = me.execution.opname;
+                    method = me.receiver.opname;
                 }
                 ps.println("step();");
                 if (first == true) {
@@ -91,19 +91,19 @@ public class SequenceDiagramPlugin {
                 } else {
                     ps.println("sync();");
                 }
-                ps.println("message(" + distinctObjects.get((me.sender == null) ? "$" : me.sender) +
-                        "," + distinctObjects.get((me.receiver == null) ? "$" : me.receiver) +
+                ps.println("message(" + distinctObjects.get(me.getSenderComponentName()) +
+                        "," + distinctObjects.get(me.getReceiverComponentName()) +
                         ", \"" + method +
                         "\");");
-                ps.println("active(" + distinctObjects.get((me.receiver == null) ? "$" : me.receiver) + ");");
+                ps.println("active(" + distinctObjects.get(me.getReceiverComponentName()) + ");");
                 ps.println("step();");
             } else {
                 ps.println("step();");
                 ps.println("async();");
-                ps.println("rmessage(" + distinctObjects.get((me.sender == null) ? "$" : me.sender) +
-                        "," + distinctObjects.get((me.receiver == null) ? "$" : me.receiver) +
+                ps.println("rmessage(" + distinctObjects.get(me.getSenderComponentName()) +
+                        "," + distinctObjects.get(me.getReceiverComponentName()) +
                         ", \"\");");
-                ps.println("inactive(" + distinctObjects.get((me.sender == null) ? "$" : me.sender) + ");");
+                ps.println("inactive(" + distinctObjects.get(me.getSenderComponentName()) + ");");
             }
         }
         ps.println("inactive(O0);");
