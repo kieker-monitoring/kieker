@@ -45,7 +45,7 @@ public class Message {
     public String toString(){
         StringBuilder strBuild = new StringBuilder();
 
-        strBuild.append(this.callMessage?"S":"R").append(" ");
+        strBuild.append(this.callMessage?"SND":"RCV").append(" ");
         strBuild.append(this.timestamp); strBuild.append(" ");
        if(this.sender != null){   
             strBuild.append(this.sender.vmName).append("::");
