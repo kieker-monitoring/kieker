@@ -113,12 +113,20 @@ public class ExecutionTrace {
     }
 
     public String toString() {
-        StringBuilder strBuild = new StringBuilder("Trace " + this.traceId + ":\n");
+        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId + ":\n");
         Iterator<KiekerExecutionRecord> it = set.iterator();
         while (it.hasNext()) {
             KiekerExecutionRecord e = it.next();
             strBuild.append("<");
-            strBuild.append(e.toString());
+            strBuild.append("[").append(e.eoi)
+                    .append(",").append(e.ess).append("]").append(" ");
+            strBuild.append(e.tin).append("-").append(e.tout).append(" ");
+            strBuild.append((e.vmName!=null)?e.vmName:"<NOVMNAME>").append("::");
+            strBuild.append((e.componentName!=null)?e.componentName:"<NOCOMPONENTNAME>").append(".");            
+            strBuild.append((e.opname!=null)?e.opname:"<NOOPNAME>").append(" ");            
+            
+            strBuild.append((e.sessionId!=null)?e.sessionId:"<NOSESSIONID>");            
+            
             strBuild.append(">\n");
         }
         return strBuild.toString();

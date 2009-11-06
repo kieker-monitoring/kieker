@@ -48,23 +48,23 @@ public class Message {
         strBuild.append(this.callMessage?"S":"R").append(" ");
         strBuild.append(this.timestamp); strBuild.append(" ");
        if(this.sender != null){   
-            strBuild.append("[").append(this.sender.eoi)
-                    .append(",").append(this.sender.ess).append("]");
             strBuild.append(this.sender.vmName).append("::");
         }
         strBuild.append(this.getSenderComponentName());
        if(this.sender != null){           
             strBuild.append(".").append(this.sender.opname);
+            strBuild.append("[").append(this.sender.eoi)
+                    .append(",").append(this.sender.ess).append("]");
         }
         strBuild.append(" --> ");
        if(this.receiver != null){           
-            strBuild.append("[").append(this.receiver.eoi)
-                    .append(",").append(this.receiver.ess).append("]");
             strBuild.append(this.receiver.vmName).append("::");
         }
         strBuild.append(this.getReceiverComponentName());
         if(this.receiver != null){
             strBuild.append(".").append(this.receiver.opname);
+            strBuild.append("[").append(this.receiver.eoi)
+                    .append(",").append(this.receiver.ess).append("]");
         }
         
 //        strBuild.append(this.timestamp); strBuild.append(':');
