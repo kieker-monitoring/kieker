@@ -60,34 +60,42 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
         this.inputDir = new File(inputDirName);
     }
 
+    static final String filePrefix = "tpmon";
+    static final String filePostfix = ".dat";
+
     @Override
     @TpmonInternal()
     public boolean execute() throws LogReaderExecutionException {
         boolean retVal = false;
         try {
             File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
-
                 public boolean accept(File pathname) {
                     return pathname.isFile() &&
-                            pathname.getName().startsWith("tpmon") &&
-                            pathname.getName().endsWith(".dat");
+                            pathname.getName().startsWith(filePrefix) &&
+                            pathname.getName().endsWith(filePostfix);
                 }
             });
 
-            Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
-            for (int i = 0; inputFiles != null && i < inputFiles.length; i++) {
-                this.processInputFile(inputFiles[i]);
-            }
             if (inputFiles == null) {
-                throw new LogReaderExecutionException("Directory '" + this.inputDir + "' does not exist or an I/O error occured");
+                throw new LogReaderExecutionException("Directory '" + this.inputDir + "' does not exist or an I/O error occured. No files starting with '"
+                        +filePrefix+"' and ending with '"+filePostfix+"' could be found.");
             } else {
                 retVal = true;
             }
-        } catch (Exception e) {
-            LogReaderExecutionException readerEx = new LogReaderExecutionException("An error occurred while parsing files from directory " +
-                    this.inputDir.getAbsolutePath() + ":", e);
-            log.error("Exception", readerEx);
-            throw readerEx;
+            Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
+            for (int i = 0; inputFiles != null && i < inputFiles.length; i++) {
+                this.processInputFile(inputFiles[i]);
+            }            
+        } catch (LogReaderExecutionException e) {
+            log.error("Exception", e);
+            throw e;
+        } catch (Exception e2) {
+            if (!(e2 instanceof LogReaderExecutionException)) {
+                LogReaderExecutionException readerEx = new LogReaderExecutionException("An error occurred while parsing files from directory " +
+                        this.inputDir.getAbsolutePath() + ":", e2);
+                log.error("Exception", readerEx);
+                throw readerEx;
+            }
         } finally {
             super.terminate();
         }

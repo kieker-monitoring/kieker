@@ -10,7 +10,7 @@
   <parent>
   	<artifactId>base</artifactId>
   	<groupId>net.sf.kieker</groupId>
-  	<version>0.95-20091106</version>
+  	<version>0.95-20091109</version>
   </parent>
   
   <!-- TODO add dependencies -->
