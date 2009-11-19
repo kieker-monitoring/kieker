@@ -30,7 +30,6 @@ Initially, the following steps are required:
          example with the default configuration.
 4. Copy the file dist/kieker-tpmon-<version>_controlServlet.war
    from the binary distribution to the webapps/ directory
-
 5. A prepared jpetstore.war file is already located in the 
    webapps/ directory. If you want to rebuild the sources, 
    for example to modify the instrumentation, see Section APPENDIX
@@ -59,19 +58,21 @@ generated from the monitoring data employing Kieker.Tpan.
    - tpmon-<DATE-TIME>-Thread-<Y>.dat which contains the monitoring records.
    - tpmon.dat which contains the mapping between monitoring record type 
      and implementing class.
-4. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
+4. Kieker includes a control servlet to check the status of Kieker.Tpmon.
+   It can be accessed via: http://localhost:8080/kieker-tpmon-<version>_controlServlet/
+5. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
    graph for this monitoring log. The script bin/tpan.sh is contained in 
    Kieker's binary release.
    Additionally, the tools graphviz (www.graphviz.org/) and 
    plotutils (www.gnu.org/software/plotutils/) are required.
    A call to bin/tpan.sh lists the available options.
- 4.1 Dependendy graph
+ 5.1 Dependendy graph
    - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-Dependency-Graph
    - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
      directory tmp/. 
      Kieker.Tpan's output gives further instructions how to convert this 
      file to graphic formats like svg and png using graphviz's pic2plot tool.
- 4.2 Sequence diagram
+ 5.2 Sequence diagram
    - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
    - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
      directory tmp/. 

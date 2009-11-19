@@ -428,16 +428,23 @@
 
     <target name="build-example-JPetStoreExample" depends="init">
     <property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
+    <property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
 	    <echo message="${dist.dir}/${dist.kieker.example.jpetstore}"/>
         <patternset id="dist_jpetstoreExample_files">
             <include name="examples/JPetStoreExample/README"/>
             <include name="examples/JPetStoreExample/${tomcat.dir}/**"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/work/**"/>
-            <include name="examples/JPetStoreExample/${tomcat.dir}/work"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/temp/**"/>
-            <include name="examples/JPetStoreExample/${tomcat.dir}/temp"/>
+            <include name="examples/JPetStoreExample/${jpetstore.dir}/**"/>
+            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/devlib/kieker*.jar"/>
+            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/nbproject/**"/>
+            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/reports/**"/>
+            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/wars/**"/>
+            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/webapp/**"/>
+            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/work/**"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/bin/catalina.sh.localjvmmem.conf/"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/work/**/*"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/temp/**/*"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/jpetstore/"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/kieker*controlServlet/"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/kieker*controlServlet*/"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/kieker*.jar"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/aspectj*.jar"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/commons-logging*.jar"/>
