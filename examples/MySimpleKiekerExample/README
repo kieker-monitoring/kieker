@@ -5,6 +5,12 @@ This example demonstrates how
 2. and how to use Kieker.Tpan for 
    analyze/visualize the collected monitoring data
 
+All experiments employ AspectJ for weaving the monitoring 
+probes into the application. Two different AspectJ configuration 
+files are used for the examples (to be found in META-INF).
+The Java methods to be instrumented are instrumented using Java 
+annotations.
+
 Initially, the following steps are required:
 1.Download Kieker's *binary* distribution from 
   http://kieker.sourceforge.net.
@@ -31,6 +37,49 @@ Initially, the following steps are required:
    README is based on the run-targets in the ant file build.xml.
    
 
- 
+SZENARIO 1:
+This example generates a filesystem monitoring log containing 
+execution and trace data into the directory tmp/tpmon-<DATE-TIME>/.
+The application is a simple 3-class Java application, referred to 
+as "bookstore example". The sources can be found in src/bookstoreTracing/.
+Three methods are instrumented with the annotation 
+@TpmonExecutionMonitoringProbe() contained in the Kieker framework.
+
+1. Execute the ant target run-tests-loadTimeWeaving-bookstore-Tracing
+   $ ant run-tests-loadTimeWeaving-bookstore-Tracing
+2. The generated monitoring data can be found in tmp/tpmon-<DATE-TIME>/.
+   The console output contains the exact the directory name.
+
+   The directory contains two files: 
+   - tpmon-<DATE-TIME>-Thread-<Y>.dat which contains the monitoring records.
+     Despite of the timestamps, the file should look like this:
+     $1;1258621800818383199;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800816269391;1258621800818365517;pc-vanhoorn;1;1
+     $1;1258621800866920181;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800846767436;1258621800866898602;pc-vanhoorn;3;2
+     $1;1258621800867048415;0;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();NULL;4807451864729649153;1258621800846723537;1258621800867045091;pc-vanhoorn;2;1
+     $1;1258621800867105743;0;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();NULL;4807451864729649153;1258621800805892068;1258621800867059802;pc-vanhoorn;0;0
+   - tpmon.dat which contains the mapping between monitoring record type 
+     and implementing class:
+     $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
+
+3. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
+   graph for this monitoring log. The script bin/tpan.sh is contained in 
+   Kieker's binary release.
+   Additionally, the tools graphviz (www.graphviz.org/) and 
+   plotutils (www.gnu.org/software/plotutils/) are required.
+   A call to bin/tpan.sh lists the available options.
+ 3.1 Dependendy graph
+   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p RR -o tmp/ --plot-
+   - A .dot-file with the prefix 'RR' containing the diagram is created in the 
+     directory tmp/. 
+     Kieker.Tpan's output gives further instructions how to convert this 
+     file to graphic formats like svg and png using graphviz's pic2plot tool.
+ 3.2 Sequence diagram
+   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p RR -o tmp/ --plot-Sequence-Diagram
+   - A .pic-file with the prefix 'RR' containing the diagram is created in the 
+     directory tmp/. 
+     Kieker.Tpan's output gives further instructions how to convert this 
+     file to graphic formats like svg and png using plotutil's pic2plot tool.
+     
+
 
 

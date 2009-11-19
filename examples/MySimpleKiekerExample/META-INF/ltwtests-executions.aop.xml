@@ -42,9 +42,9 @@
 
 	<!-- instrument the kieker.tests -->
 	<!--<include within="kieker.tests..*"/>-->
-	<include within="tseMyExample.bookstore..*"/>
-	<include within="tseMyExample.bookstore30SekDelayed..*"/>
-	<include within="tseMyExample.bookstoreTracing..*"/>
+	<include within="mySimpleKiekerExample.bookstore..*"/>
+	<include within="mySimpleKiekerExample.bookstore30SekDelayed..*"/>
+	<include within="mySimpleKiekerExample.bookstoreTracing..*"/>
 
 
         <!-- don't weave all packages of kieker and some packages of sun -->
