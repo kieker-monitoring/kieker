@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="KiekerMyExample" default="build-all" basedir=".">
+    <property file="build.properties"/>
+
+    <path id="classpath.libs">
+        <pathelement path="${classpath}"/>
+        <fileset dir="lib">
+            <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="."/>
+    </path>
+
+    <target name="build-all"
+            depends="clean,init,compile-all">
+    </target>
+
+    <path id="run.classpath">
+        <path refid="classpath.libs"/>
+        <pathelement location="${build.dir}/"/>
+    </path>
+
+    <condition property="no.tpmon.properties">
+        <not>
+            <available file="${tpmon.properties}"/>
+        </not>
+    </condition>
+
+    <target name="init-tpmon-properties" if="no.tpmon.properties">
+        <!-- if no tpmon.properties, copy example file automatically  -->
+        <echo message="${tpmon.properties} not existing.
+                       Creating default file."/>
+        <copy file="${tpmon.properties.example}" tofile="${tpmon.properties}"/>
+    </target>
+
+    <target name="init-properties"
+            depends="init-tpmon-properties">
+    </target>
+
+    <target name="init" depends="init-properties">
+        <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
+        <!--<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
+        <fail message="Critical error: AspectJ library not found
+                       in ${aspectjtoolsjar}. 
+                       Check your build.properties.">
+            <condition>
+                <not>
+                    <available file="${aspectjtoolsjar}"/>
+                </not>
+            </condition>
+        </fail>-->
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="tmp"/>
+    </target>
+
+    <target name="compile-all"
+	    depends="clean,init">
+        <javac source="1.5" target="1.5"
+               destDir="${build.dir}"
+               debug="true"
+               classpathref="classpath.libs"
+               srcdir="src">
+        </javac>
+    </target>
+
+    <target name="clean">
+	    <!-- <delete dir="tmp"/>-->
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes"
+            depends="compile-all">
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.dir}/tests.log4j.properties"/>
+        <copy file="${aop.xml.ltwtests}"
+	      tofile="${build.dir}/META-INF/aop.xml"/>
+        <java dir="."
+              fork="true"
+              classname="tseMyExample.bookstore.Bookstore"
+              classpathref="run.classpath">
+            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+            <jvmarg value="-Daj.weaving.verbose=true"/>
+        </java>
+    </target>
+
+    <target name="run-tests-loadTimeWeaving-bookstore-LongRun"
+            depends="compile-all">
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.dir}/tests.log4j.properties"/>
+        <copy file="${aop.xml.ltwtests}"
+	      tofile="${build.dir}/META-INF/aop.xml"/>
+        <java dir="."
+              fork="true"
+              classname="tseMyExample.bookstore30SekDelayed.Bookstore"
+              classpathref="run.classpath">
+            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+            <jvmarg value="-Daj.weaving.verbose=true"/>
+        </java>
+    </target>
+
+    <target name="run-tests-loadTimeWeaving-bookstore-Tracing"
+            depends="compile-all">
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.dir}/tests.log4j.properties"/>
+        <copy file="${aop.xml.ltwtestsExecutions}"
+	      tofile="${build.dir}/META-INF/aop.xml"/>
+        <java dir="."
+              fork="true"
+              classname="tseMyExample.bookstoreTracing.Bookstore"
+              classpathref="run.classpath">
+            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+            <jvmarg value="-Daj.weaving.verbose=true"/>
+        </java>
+    </target>
+
+    <target name="run-RTMonitor" depends="compile-all">
+        <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
+        <java dir="."
+              fork="true"
+              classname="tseMyExample.recordConsumer.RTMonitor"
+              classpathref="run.classpath">
+            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
+            <jvmarg value="-DinputDir=${inputDir}"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+        </java>
+        <delete file="${build.dir}/log4j.properties"/>
+    </target>
+</project>

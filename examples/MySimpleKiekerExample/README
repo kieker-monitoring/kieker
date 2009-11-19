@@ -1,0 +1,36 @@
+This example demonstrates how 
+1. use Kieker.Tpmon to instrument a simple 
+   Java application and how to log 
+   monitoring data
+2. and how to use Kieker.Tpan for 
+   analyze/visualize the collected monitoring data
+
+Initially, the following steps are required:
+1.Download Kieker's *binary* distribution from 
+  http://kieker.sourceforge.net.
+2.Copy the following files from the binary distribution 
+  to the lib/ directory of this example:
+  * dist/kieker-common-<version>.jar
+  * dist/kieker-tpan-<version>_ctrl.jar
+  * dist/kieker-tpmon-<version>_ctrl.jar
+  * dist/kieker-tpmon-<version>_ctw.jar
+  * dist/kieker-tpmon-<version>_ltw.jar
+  * lib/aspectjrt-<version>.jar
+  * lib/aspectjtools-<version>.jar
+  * lib/aspectjweaver-<version>.jar
+  * lib/commons-cli-<version>.jar
+  * lib/commons-logging-<version>.jar
+  * lib/log4j-<version>.jar
+3.Copy META-INF/tpmon.properties.example to 
+  META-INF/tpmon.properties and modify this configuration file
+  according to your needs. 
+  NOTE: There's no need to change tpmon.properties to run the 
+        example with the default configuration.
+4. You should check whether you installed ant (http://ant.apache.org/), 
+   since the execution of all examples described in this 
+   README is based on the run-targets in the ant file build.xml.
+   
+
+ 
+
+
