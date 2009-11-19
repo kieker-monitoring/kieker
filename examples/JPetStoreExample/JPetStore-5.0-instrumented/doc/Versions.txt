@@ -1,0 +1,8 @@
+Apache iBATIS 2.1.6
+Apache Struts 1.2.7
+JUnit 3.8.1
+Ant 1.6.5
+HSQLDB 1.8.0.1
+JMock 1.0.1
+CGLIB 2.1.3
+Emma 2.0.5312

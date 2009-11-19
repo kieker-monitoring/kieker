@@ -68,7 +68,7 @@ Three methods are instrumented with the annotation
    plotutils (www.gnu.org/software/plotutils/) are required.
    A call to bin/tpan.sh lists the available options.
  3.1 Dependendy graph
-   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-
+   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-Dependency-Graph
    - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
      directory tmp/. 
      Kieker.Tpan's output gives further instructions how to convert this 

@@ -1,0 +1,9 @@
+####################################
+# Database Connectivity Properties
+####################################
+
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost/jpetstore
+username=jpetstore
+password=ibatis9977
+

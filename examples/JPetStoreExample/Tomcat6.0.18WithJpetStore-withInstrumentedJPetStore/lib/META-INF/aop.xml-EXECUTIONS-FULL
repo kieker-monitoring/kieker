@@ -1,0 +1,62 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
+
+<!-- In the aop.xml you have to specify the packages that 
+     can be instrumented. This is done by using "include" 
+     and "exclude" lists. 
+
+     Additionally, one instrumentation mode has to be selected.
+     The standard mode is the TpmonMonitorInstrumentationAspect,
+     which activates monitoring for all java methods that belong 
+     to classes within the includes but not in the exludes, 
+     and are annotated with a  @TpmonMonitoringProbe() java 
+     annotation placed before the java method. 
+     
+     If you want to monitor ALL methods of a java program:
+     1. add an matching "include" tag, 
+     2. uncomment the aspect (in the aspects section) 
+     TpmonMonitorFullInstServlet and put the others in a comment.
+     
+     Mode details and are in the Kieker tutorial
+     -->
+
+
+<aspectj>
+	<!-- turn verbose on to check which files are instrumented -->
+	<!-- <weaver options="-verbose"/> -->
+	<weaver options="">
+	
+        <!-- <include within="*"/> -->
+
+	<!-- uncomment following to instrument sun jpetstore -->
+	<!-- <include within="com.sun.j2ee.blueprints..*"/> -->
+	<!-- <exclude within="java..*,com.sun.corba..*,com.sun.enterprise..*,com.sun.appserv..*"/> -->
+	<!-- <exclude within="com.sun.j2ee.blueprints.waf.controller.web.EventMapping,com.sun.j2ee.blueprints.waf.processmanager..*"/> -->
+
+	<!-- uncomment following to instrument dacapo eclipse benchmark -->
+	<!-- <include within="org.eclipse..*"/> -->
+
+	<!-- uncomment following to instrument ibatis jpetstore -->
+	<include within="com.ibatis.jpetstore..*"/>
+	<!--<include within="org.apache.struts.action.ActionServlet" />-->
+
+
+	<!-- instrument the kieker.tests -->
+	<include within="kieker.tests..*"/>
+
+
+        <!-- don't weave all packages of kieker and some packages of sun -->
+        <exclude within="kieker.tpmon..*"/>
+	<exclude within="java..*,com.sun.corba..*,com.sun.enterprise..*,com.sun.appserv..*"/>
+</weaver>
+
+<aspects>        
+     <!-- here you usually want to use only ONE aspect. -->
+     <!-- Put the remaining in a comment -->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotation"/>-->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>-->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFull"/>-->
+     <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullRemoteServlet"/>
+     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullServlet"/>-->
+</aspects>
+</aspectj>
