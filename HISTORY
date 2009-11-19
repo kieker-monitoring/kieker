@@ -2,10 +2,14 @@ Introduction:
 
 This document summarizes changes made in all releases starting with 0.90.
 
+* 1.0 (Nov 18 2009)
+- Minor changes to Kieker's architecture
+- Bug fixes
+
 * 0.95a (Jul 09 2009)
 - Considerable improvements to Kieker's architecture, e.g.
   - Generalized/extensible monitoring record model (more than executions)
-  - Generalized/extensible writer model (more than database and ﬁlesystem)
+  - Generalized/extensible writer model (more than database and filesystem)
   - Integration of monitoring and analysis data model
 - Major refactorings
 - First release containing core parts of the analysis component Tpan

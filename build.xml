@@ -24,7 +24,7 @@
         <!-- Names of the tpmon runtime libraries that will be created
 	     by the build process: -->
         <property name="kieker.version"
-                  value="0.95"/> <!-- -20090716-1022 -->
+                  value="1.0"/> <!-- -20090716-1022 -->
         <property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
         <property name="tpmon.dist.name"
@@ -49,6 +49,8 @@
                   value="${kieker.dist.name}_${kieker-src.suffix}"/>
         <property name="dist.kieker.binBaseName"
                   value="${kieker.dist.name}_${kieker-bin.suffix}"/>
+        <property name="dist.kieker.example.myexample"
+                  value="${kieker.example.myexample.packagenamebase}"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -390,7 +392,35 @@
         </zip>
     </target>
 
-    <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries">
+    <target name="build-example" depends="init">
+	    <echo message="${dist.dir}/${dist.kieker.example.myexample}"/>
+        <patternset id="dist_myExample_files">
+            <include name="examples/MySimpleKiekerExample/README"/>
+            <include name="examples/MySimpleKiekerExample/build.xml"/>
+            <include name="examples/MySimpleKiekerExample/build.properties"/>
+            <include name="examples/MySimpleKiekerExample/lib/"/>
+            <exclude name="examples/MySimpleKiekerExample/lib/**"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/**"/>
+            <include name="examples/MySimpleKiekerExample/src/**"/>
+        </patternset>
+
+        <tar destfile="${release.dir}/${dist.kieker.example.myexample}.tar" longfile="gnu">
+            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_bin_files"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${release.dir}/${dist.kieker.example.myexample}.tar.gz" src="${release.dir}/${dist.kieker.example.myexample}.tar" />
+     	<!-- tar file no longer needed -->
+        <delete file="${release.dir}/${dist.kieker.example.myexample}.tar"/>
+
+        <zip  zipfile="${release.dir}/${dist.kieker.example.myexample}.zip">
+            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_myExample_files"/>
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries,build-example">
         <echo message="Sourceforge release instructions can be found at:"/>
 	<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease"/>
 	<echo message="scp dist/release/kieker-VERSION_* USER@frs.sourceforge.net:uploads"/>
@@ -508,7 +538,9 @@
             </classpath>
         </java>
     </target>
-    
+
+    <!-- TODO: doesn't work at the moment; probably because an appropriate aop.xml
+               with a non-annotation aspect needs to be passed -->
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation"
             depends="compile-tests-loadTimeWeaving">
         <java dir="."
@@ -623,7 +655,8 @@
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
     </target>
-    
+
+    <!-- TODO: test doesn't run at the moment. We should pass a fix tpmon.properties! -->
     <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="compile-tests-compileTimeWeaving-bookstoreDB">
         <delete dir="${tests.javadb.kiekerdb.path}"/> <!-- delete existing DB -->
         <java dir="."
@@ -649,8 +682,9 @@
         </java>
     </target>
 
+    <!-- TODO: monitoring log contains invalid traces (lowest eoi/ess 1;1 instead of 0;0) -->
     <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="compile-tests-compileTimeWeaving-bookstore">
-        <echo message="Using Bookstore variant with synchronized Catalog.getBooks (its slower)."/>
+        <echo message="Using Bookstore variant with synchronized Catalog.getBooks (is slower)."/>
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.synchron.Bookstore"
@@ -660,16 +694,19 @@
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
     </target>
-    <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="clean,compile-tests-compileTimeWeaving-twoConcurrentMethodsExample">
-      
+
+    <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample">  
         <java dir="."
               fork="true"
               classname="kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample.Starter"
               classpathref="run.tests.classpath">
-            <jvmarg value="-Dlog4j.configuration=${build.tests.dir}/log4j.properties"/>
+            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
     </target>
 
+    <!--
     <target name="run-benchmark-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstoreBenchmark">
         <java dir="."
               fork="true"
@@ -683,10 +720,10 @@
         <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
         <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-*/*.dat | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
         	failonerror="true" />
-        <exec command="bash -c &quot;R --vanilla &lt; ./src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/gen-results.r&quot;"/>
+        <exec command="bash -c &quot;R -vanilla &lt; ./src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/gen-results.r&quot;"/>
         <exec command="okular tmp/benchmark-results.pdf" spawn="true" />
     </target>
-
+    -->
 
     <!-- TODO: These run targets should be removed since wrapper scripts are supposed to start tpan & co   -->
 
