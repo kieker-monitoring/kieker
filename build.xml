@@ -399,8 +399,12 @@
             <include name="examples/MySimpleKiekerExample/build.xml"/>
             <include name="examples/MySimpleKiekerExample/build.properties"/>
             <include name="examples/MySimpleKiekerExample/lib/"/>
-            <exclude name="examples/MySimpleKiekerExample/lib/**"/>
-            <include name="examples/MySimpleKiekerExample/META-INF/**"/>
+            <exclude name="examples/MySimpleKiekerExample/lib/*.jar"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTs.aop.xml"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-executions.aop.xml"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/tests.log4j.properties"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/tpmon.properties.example"/>
             <include name="examples/MySimpleKiekerExample/src/**"/>
         </patternset>
 
