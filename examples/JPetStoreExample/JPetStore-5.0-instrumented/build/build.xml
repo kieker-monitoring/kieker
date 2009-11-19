@@ -136,6 +136,10 @@
                 <exclude name="**/*.class"/>
             </fileset>
         </copy>
+       <copy todir="${webclasses}">
+            <fileset dir="${classes}"/>
+        </copy>
+
         <copy todir="${weblib}">
             <fileset dir="${lib}"/>
         </copy>

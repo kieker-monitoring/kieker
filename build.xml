@@ -51,6 +51,8 @@
                   value="${kieker.dist.name}_${kieker-bin.suffix}"/>
         <property name="dist.kieker.example.myexample"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerExample"/>
+        <property name="dist.kieker.example.jpetstore"
+                  value="${kieker.dist.name}_${kieker-examples.suffix}-JPetStoreExample"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -392,7 +394,7 @@
         </zip>
     </target>
 
-    <target name="build-example" depends="init">
+    <target name="build-example-MySimpleKiekerExample" depends="init">
 	    <echo message="${dist.dir}/${dist.kieker.example.myexample}"/>
         <patternset id="dist_myExample_files">
             <include name="examples/MySimpleKiekerExample/README"/>
@@ -424,7 +426,45 @@
         </zip>
     </target>
 
-    <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries,build-example">
+    <target name="build-example-JPetStoreExample" depends="init">
+    <property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
+	    <echo message="${dist.dir}/${dist.kieker.example.jpetstore}"/>
+        <patternset id="dist_jpetstoreExample_files">
+            <include name="examples/JPetStoreExample/README"/>
+            <include name="examples/JPetStoreExample/${tomcat.dir}/**"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/work/**"/>
+            <include name="examples/JPetStoreExample/${tomcat.dir}/work"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/temp/**"/>
+            <include name="examples/JPetStoreExample/${tomcat.dir}/temp"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/jpetstore/"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/kieker*controlServlet/"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/kieker*.jar"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/aspectj*.jar"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/commons-logging*.jar"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/META-INF/tpmon.properties"/>
+        </patternset>
+
+        <tar destfile="${release.dir}/${dist.kieker.example.jpetstore}.tar" longfile="gnu">
+            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_jpetstoreExample_files"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${release.dir}/${dist.kieker.example.jpetstore}.tar.gz" src="${release.dir}/${dist.kieker.example.jpetstore}.tar" />
+     	<!-- tar file no longer needed -->
+        <delete file="${release.dir}/${dist.kieker.example.jpetstore}.tar"/>
+
+        <zip  zipfile="${release.dir}/${dist.kieker.example.jpetstore}.zip">
+            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_jpetstoreExample_files"/>
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="build-examples" depends="init,build-example-MySimpleKiekerExample,build-example-JPetStoreExample">
+
+    </target>
+
+    <target name="release" depends="build-all,build-tpmon-sources,build-tpmon-binaries,build-examples">
         <echo message="Sourceforge release instructions can be found at:"/>
 	<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease"/>
 	<echo message="scp dist/release/kieker-VERSION_* USER@frs.sourceforge.net:uploads"/>

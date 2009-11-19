@@ -1,8 +1,87 @@
+This example demonstrates 
+1. how to use Kieker.Tpan to instrument a Java application 
+   running in a Java EE container (session and trace information)
+2. how to use Kieker.Tpan for visualizing the recorded monitoring
+   data.
 
-1. 
+All experiments employ AspectJ for weaving the monitoring 
+probes into the application. Two different AspectJ configuration 
+files are used for the examples (to be found in lib/META-INF/, 
+the configuration file used is aop.xml).
+The Java methods to be instrumented are selected using Java 
+annotations.
 
-3. In order to rebuild the JPetStore sources (located in JPetStore-5.0-instrumented/), 
-   the following steps are required:
+Initially, the following steps are required:
+1. Download Kieker's *binary* distribution from 
+   http://kieker.sourceforge.net.
+2. Copy the following files from the binary distribution 
+   to the lib/ directory of this example:
+   * dist/kieker-common-<version>.jar
+   * dist/kieker-tpmon-<version>_ctrl.jar
+   * dist/kieker-tpmon-<version>_ltw.jar
+   * lib/aspectjrt-<version>.jar
+   * lib/aspectjtools-<version>.jar
+   * lib/aspectjweaver-<version>.jar
+   * lib/commons-logging-<version>.jar
+3. Copy lib/META-INF/tpmon.properties.example to 
+   lib/META-INF/tpmon.properties and modify this configuration file
+   according to your needs. 
+   NOTE: There's no need to change tpmon.properties to run the 
+         example with the default configuration.
+4. Copy the file dist/kieker-tpmon-<version>_controlServlet.war
+   from the binary distribution to the webapps/ directory
+
+5. A prepared jpetstore.war file is already located in the 
+   webapps/ directory. If you want to rebuild the sources, 
+   for example to modify the instrumentation, see Section APPENDIX
+   below.
+
+SCENARIO
+In this example, the tomcat Java EE Servlet container is started and
+some monitoring data is generated employing the Kieker.Tpmon 
+instrumentation by manually accessing the JPetStore web application. 
+Finally, visualizations (sequence diagrams and a dependency graph) are 
+generated from the monitoring data employing Kieker.Tpan.
+
+1. Start the tomcat server using the bin/startup.sh script in the 
+   tomcat's bin/ directory.
+   You should make sure, that the tomcat started properly, by taking 
+   a look at the logs/catalina.out file.
+   On error, the file logs/localhost.<date>.log may contain detailed 
+   to resolve the issue.
+2. Now you can access the JPetStore application by opening the URL
+   http://localhost:8080/jpetstore/
+   Kieker intialization messages should now appear in logs/catalina.out
+   file. The output includes the information where the data is written to
+   (should be the temp/tpmon-<DATE-TIME>/ directory).
+3. Browse through the application
+   The directory contains two files: 
+   - tpmon-<DATE-TIME>-Thread-<Y>.dat which contains the monitoring records.
+   - tpmon.dat which contains the mapping between monitoring record type 
+     and implementing class.
+4. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
+   graph for this monitoring log. The script bin/tpan.sh is contained in 
+   Kieker's binary release.
+   Additionally, the tools graphviz (www.graphviz.org/) and 
+   plotutils (www.gnu.org/software/plotutils/) are required.
+   A call to bin/tpan.sh lists the available options.
+ 4.1 Dependendy graph
+   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-Dependency-Graph
+   - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
+     directory tmp/. 
+     Kieker.Tpan's output gives further instructions how to convert this 
+     file to graphic formats like svg and png using graphviz's pic2plot tool.
+ 4.2 Sequence diagram
+   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
+   - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
+     directory tmp/. 
+     Kieker.Tpan's output gives further instructions how to convert this 
+     file to graphic formats like svg and png using plotutil's pic2plot tool.
+
+APPENDIX
+
+In order to rebuild the JPetStore sources (located in JPetStore-5.0-instrumented/), 
+the following steps are required:
  - copy the file kieker-tpmon-<version>_ctrl.jar from Kieker's
    binary distribution to the JPetStore's devlib/ directory.
    (includes the Java annotation @TpmonExecutionMonitoringProbe used 
