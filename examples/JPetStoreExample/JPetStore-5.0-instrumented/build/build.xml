@@ -136,11 +136,6 @@
                 <exclude name="**/*.class"/>
             </fileset>
         </copy>
-        <copy todir="${webclasses}">
-            <fileset dir="${classes}">
-                <exclude name="org/trustsoft/**/*"/>
-            </fileset>
-        </copy>
         <copy todir="${weblib}">
             <fileset dir="${lib}"/>
         </copy>
@@ -163,26 +158,6 @@
         </jar>
     </target>
 
-    <target name="build-catalogComplexityManager-servlet" depends="">
-        <delete dir="catalogComplexityManagerServlet"/>
-        <mkdir dir="catalogComplexityManagerServlet"/>
-        <javac source="1.5" target="1.5"
-               destDir="catalogComplexityManagerServlet"
-               classpathref="classpath"
-               srcdir="../src/org/trustsoft/evaluation/jpetstore/catalog/"
-               debug="true"/>
-        <war destfile="${wars}/catalogComplexityManagerServlet.war" webxml="../src/org/trustsoft/evaluation/jpetstore/catalog/servlet/WEB-INF/web.xml">
-            <classes dir="catalogComplexityManagerServlet/">
-                <include name="org/trustsoft/evaluation/jpetstore/catalog/servlet/*"/>
-            </classes>
-        </war>
-        <jar jarfile="${wars}/catalogBusinessLogic.jar">
-            <fileset dir="catalogComplexityManagerServlet">
-                <include name="org/trustsoft/evaluation/jpetstore/catalog/component/*"/>
-            </fileset>
-        </jar>
-    </target>
-
-    <target name="all" depends="war,build-catalogComplexityManager-servlet"/> <!-- test.report, coverage.report, -->
+    <target name="all" depends="war"/> <!-- test.report, coverage.report, -->
 
 </project>

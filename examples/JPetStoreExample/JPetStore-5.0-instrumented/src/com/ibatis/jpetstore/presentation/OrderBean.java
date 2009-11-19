@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
-import org.trustsoft.slastic.monadapt.annotation.SLAsticSLAMonitoringProbe;
 
 public class OrderBean extends AbstractBean {
 
@@ -132,7 +131,6 @@ public class OrderBean extends AbstractBean {
     }
   }
 
-  @SLAsticSLAMonitoringProbe(serviceId=53)
   @TpmonExecutionMonitoringProbe
   public String newOrder() {
     Map sessionMap = ActionContext.getActionContext().getSessionMap();

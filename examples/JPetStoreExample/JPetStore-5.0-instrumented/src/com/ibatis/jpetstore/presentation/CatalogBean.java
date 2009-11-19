@@ -6,7 +6,6 @@ import com.ibatis.jpetstore.domain.Item;
 import com.ibatis.jpetstore.domain.Product;
 import com.ibatis.jpetstore.service.CatalogService;
 import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
-import org.trustsoft.slastic.monadapt.annotation.SLAsticSLAMonitoringProbe;
 
 public class CatalogBean extends AbstractBean {
 
@@ -123,7 +122,6 @@ public class CatalogBean extends AbstractBean {
     this.itemList = itemList;
   }
 
-  @SLAsticSLAMonitoringProbe(serviceId=13)
   @TpmonExecutionMonitoringProbe
   public String viewCategory() {
     if (categoryId != null) {
@@ -133,7 +131,6 @@ public class CatalogBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @SLAsticSLAMonitoringProbe(serviceId=23)
   @TpmonExecutionMonitoringProbe
   public String viewProduct() {
     if (productId != null) {
@@ -143,7 +140,6 @@ public class CatalogBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @SLAsticSLAMonitoringProbe(serviceId=33)
   @TpmonExecutionMonitoringProbe
   public String viewItem() {
     item = catalogService.getItem(itemId);

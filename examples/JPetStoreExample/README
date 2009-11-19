@@ -1,0 +1,13 @@
+
+1. 
+
+3. In order to rebuild the JPetStore sources (located in JPetStore-5.0-instrumented/), 
+   the following steps are required:
+ - copy the file kieker-tpmon-<version>_ctrl.jar from Kieker's
+   binary distribution to the JPetStore's devlib/ directory.
+   (includes the Java annotation @TpmonExecutionMonitoringProbe used 
+    for the instrumentation)
+ - build the JPetStore with build.xml in the build/ directory:
+   $ ant
+ - you'll find the packaged JPetStore .war-file in build/wars/
+ - Copy the file to the webapps/ directory of the tomcat

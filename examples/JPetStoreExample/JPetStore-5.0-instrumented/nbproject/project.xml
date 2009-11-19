@@ -65,7 +65,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/2">
             <compilation-unit>
                 <package-root>src</package-root>
-                <classpath mode="compile">devlib/ant-junit.jar:devlib/ant-launcher.jar:devlib/ant.jar:devlib/cglib-nodep-2.1_3.jar:devlib/emma.jar:devlib/emma_ant.jar:devlib/jmock-1.0.1.jar:devlib/jmock-cglib-1.0.1.jar:devlib/junit.jar:devlib/servlet.jar:lib/antlr.jar:lib/beanaction.jar:lib/commons-beanutils.jar:lib/commons-digester.jar:lib/commons-fileupload.jar:lib/commons-logging.jar:lib/commons-validator.jar:lib/hsqldb.jar:lib/ibatis-common-2.jar:lib/ibatis-dao-2.jar:lib/ibatis-sqlmap-2.jar:lib/jakarta-oro.jar:lib/struts.jar</classpath>
+                <classpath mode="compile">devlib/ant-junit.jar:devlib/ant-launcher.jar:devlib/ant.jar:devlib/cglib-nodep-2.1_3.jar:devlib/emma.jar:devlib/emma_ant.jar:devlib/jmock-1.0.1.jar:devlib/jmock-cglib-1.0.1.jar:devlib/junit.jar:devlib/servlet.jar:lib/antlr.jar:lib/beanaction.jar:lib/commons-beanutils.jar:lib/commons-digester.jar:lib/commons-fileupload.jar:lib/commons-logging.jar:lib/commons-validator.jar:lib/hsqldb.jar:lib/ibatis-common-2.jar:lib/ibatis-dao-2.jar:lib/ibatis-sqlmap-2.jar:lib/jakarta-oro.jar:lib/struts.jar:devlib/kieker-tpmon-1.0_ctrl.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
             <compilation-unit>
