@@ -71,7 +71,7 @@
 # -----------------------------------------------------------------------------
 
 #JAVA_OPTS=" -Dtpmon.storeInJavaIoTmpdir=false -Dtpmon.customStoragePath=/home/voorn/tmp/"
-JAVA_OPTS=" -Dtpmon.storeInJavaIoTmpdir=true -javaagent:lib/aspectjweaver-1.6.4.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVA_OPTS=" -Dtpmon.storeInJavaIoTmpdir=true -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVA_OPTS="${JAVA_OPTS} -Dtpmon.configuration=$(dirname $0)/../lib/META-INF/tpmon.properties"
 
 HEAPSIZEINIT_DEFAULT=256m
