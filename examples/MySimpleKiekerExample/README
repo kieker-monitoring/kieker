@@ -80,6 +80,45 @@ Three methods are instrumented with the annotation
      Kieker.Tpan's output gives further instructions how to convert this 
      file to graphic formats like svg and png using plotutil's pic2plot tool.
      
+SZENARIO 2:
+This examples demonstrates how to use custom monitoring probes and monitoring 
+records defined outside the Kieker framework together .
+The sources can be found in src/bookstoreDifferentRecordTypes/.
+Three methods are instrumented with the annotation @TpmonExecutionMonitoringProbe()
+from above as well as @TpmonExecutionMonitoringProbe() measuring the response 
+times (durations) of the method executions.
+The sources of the annotation, the probe, and the monitoring record can be found 
+in src/mySimpleKiekerExample/<annotation/|probe/|monitoringRecord/>.
 
+1. $ ant run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes
+2. Again, the generated monitoring data can be found in tmp/tpmon-<DATE-TIME>/.
+   Now, both the .dat file and the .map file contain additional entries 
+   due to the newly introduced record:
+   - The .dat files now additionally contain the respone time measurements:
+      $2;1258624662952569355;mySimpleKiekerExample.bookstoreDifferentRecordTypes.Catalog;getBook;2083622
+   - The .map file contains the mapping of the identifier to the the 
+     class implementing the monitoring record type:
+      $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
+      $2=mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord
+   
+SZENARIO 3:
+This example demonstrates how to implement a response time monitor which 
+continuously checks, whether the observed response times are below a 
+specified threshold (service level objective).
+The sources of the response time monitor based on Kieker.Tpan can be found 
+in src/mySimpleKiekerExample/recordConsumer/.
 
+1. We will first generate 30 seconds of monitoring data using a slightly 
+   extended example as used in SZENARIO 2 (sources in src/bookstore30SekDelayed).
+   $ ant run-tests-loadTimeWeaving-bookstore-LongRun
+   
+2. Now use the Kieker-provided relatime-replayer to replay the monitoring 
+   data in real-time:
+   $ ant run-RTMonitor -DinputDir=tmp/<DATE-TIME>/
+
+  For each incoming the output reports whether the incoming response time 
+  record satisfies or violates the service level objective.
+
+  Since the monitoring log also contains execution/trace data, visualizations 
+  can be generated as describes in Szenario 1.
 

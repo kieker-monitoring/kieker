@@ -57,7 +57,7 @@
      <!-- Put the remaining in a comment -->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotation"/>-->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>-->
-     <aspect name="tseMyExample.probe.MyRTMonitoringProbe"/>
+     <aspect name="mySimpleKiekerExample.probe.MyRTMonitoringProbe"/>
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFull"/>-->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullServlet"/>-->

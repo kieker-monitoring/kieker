@@ -42,7 +42,7 @@
 
 	<!-- instrument the kieker.tests -->
 	<!--<include within="kieker.tests..*"/>-->
-	<include within="mySimpleKiekerExample.bookstore..*"/>
+	<include within="mySimpleKiekerExample.bookstoreDifferentRecordTypes..*"/>
 	<include within="mySimpleKiekerExample.bookstore30SekDelayed..*"/>
 	<include within="mySimpleKiekerExample.bookstoreTracing..*"/>
 
@@ -56,7 +56,7 @@
      <!-- here you usually want to use only ONE aspect. -->
      <!-- Put the remaining in a comment -->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotation"/>-->
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>-->
+     <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>
      <aspect name="mySimpleKiekerExample.probe.MyRTMonitoringProbe"/>
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFull"/>-->
