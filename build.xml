@@ -50,7 +50,7 @@
         <property name="dist.kieker.binBaseName"
                   value="${kieker.dist.name}_${kieker-bin.suffix}"/>
         <property name="dist.kieker.example.myexample"
-                  value="${kieker.example.myexample.packagenamebase}"/>
+                  value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerExample"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -399,14 +399,18 @@
             <include name="examples/MySimpleKiekerExample/build.xml"/>
             <include name="examples/MySimpleKiekerExample/build.properties"/>
             <include name="examples/MySimpleKiekerExample/lib/"/>
-            <exclude name="examples/MySimpleKiekerExample/lib/**"/>
-            <include name="examples/MySimpleKiekerExample/META-INF/**"/>
+            <exclude name="examples/MySimpleKiekerExample/lib/*.jar"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTs.aop.xml"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-executions.aop.xml"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/tests.log4j.properties"/>
+            <include name="examples/MySimpleKiekerExample/META-INF/tpmon.properties.example"/>
             <include name="examples/MySimpleKiekerExample/src/**"/>
         </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.example.myexample}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_bin_files"/>
+                <patternset refid="dist_myExample_files"/>
             </tarfileset>
         </tar>
         <gzip zipfile="${release.dir}/${dist.kieker.example.myexample}.tar.gz" src="${release.dir}/${dist.kieker.example.myexample}.tar" />
