@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="KiekerOverheadEvaluation" default="build-all" basedir=".">
+    <property file="build.properties"/>
+
+    <path id="classpath.libs">
+        <pathelement path="${classpath}"/>
+        <fileset dir="lib">
+            <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="."/>
+    </path>
+
+    <target name="build-all"
+            depends="clean,init,compile-all">
+    </target>
+
+    <path id="run.classpath">
+        <path refid="classpath.libs"/>
+        <pathelement location="${build.dir}/"/>
+    </path>
+
+    <target name="init" depends="">
+        <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
+        <!--<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
+        <fail message="Critical error: AspectJ library not found
+                       in ${aspectjtoolsjar}. 
+                       Check your build.properties.">
+            <condition>
+                <not>
+                    <available file="${aspectjtoolsjar}"/>
+                </not>
+            </condition>
+        </fail>-->
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="tmp"/>
+    </target>
+
+    <target name="compile-all"
+	    depends="init">
+        <javac source="1.5" target="1.5"
+               destDir="${build.dir}"
+               debug="true"
+               classpathref="classpath.libs"
+               srcdir="src">
+        </javac>
+    </target>
+
+    <target name="clean">
+	    <!-- <delete dir="tmp"/>-->
+        <delete dir="${build.dir}"/>
+    </target>
+
+</project>
