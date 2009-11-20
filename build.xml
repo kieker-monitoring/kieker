@@ -53,6 +53,8 @@
                   value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerExample"/>
         <property name="dist.kieker.example.jpetstore"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-JPetStoreExample"/>
+        <property name="dist.kieker.example.microbenchmark"
+                  value="${kieker.dist.name}_${kieker-examples.suffix}-OverheadEvaluationMicrobenchmark"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -467,7 +469,33 @@
         </zip>
     </target>
 
-    <target name="build-examples" depends="init,build-example-MySimpleKiekerExample,build-example-JPetStoreExample">
+    <target name="build-example-microbenchmark" depends="init">
+        <property name="microbenchmark.dir" value="OverheadEvaluationMicrobenchmark/"/>
+	<echo message="${dist.dir}/${dist.kieker.example.microbenchmark}"/>
+        <patternset id="dist_microbenchmarkExample_files">
+            <include name="examples/${microbenchmark.dir}/**"/>
+            <exclude name="examples/${microbenchmark.dir}/results/**/*"/>
+            <exclude name="examples/${microbenchmark.dir}//tmp/**/*"/>
+            <exclude name="examples/${microbenchmark.dir}/lib/**/*.jar"/>
+        </patternset>
+
+        <tar destfile="${release.dir}/${dist.kieker.example.microbenchmark}.tar" longfile="gnu">
+            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_microbenchmarkExample_files"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${release.dir}/${dist.kieker.example.microbenchmark}.tar.gz" src="${release.dir}/${dist.kieker.example.microbenchmark}.tar" />
+     	<!-- tar file no longer needed -->
+        <delete file="${release.dir}/${dist.kieker.example.microbenchmark}.tar"/>
+
+        <zip  zipfile="${release.dir}/${dist.kieker.example.microbenchmark}.zip">
+            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_microbenchmarkExample_files"/>
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="build-examples" depends="init,build-example-MySimpleKiekerExample,build-example-JPetStoreExample,build-example-microbenchmark">
 
     </target>
 
