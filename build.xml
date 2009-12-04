@@ -860,8 +860,13 @@
               jvm="/mnt/sda4/netbeans651/netbeans-6.5.1/javafx2/javafx-sdk/bin/javafx"
               classpathref="tpan.core.classpath">
                   <!-- select-traces 3 -->
-            <arg line="--outputdir tmp/  --init-basic-JMS-reader"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>            
+            <arg line="--outputdir tmp/  --init-basic-JMS-readerJavaFx"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>  
+	     <classpath>
+                <pathelement location="${dist.dir}/${dist.tpmon.ctrl}"/>
+                <pathelement location="${dist.dir}/${dist.kieker.common}"/>
+                <pathelement location="${dist.dir}/${dist.tpan.ctrl}"/>
+            </classpath>          
         </java>
         <delete file="${build.tests.dir}/log4j.properties"/>
     </target>

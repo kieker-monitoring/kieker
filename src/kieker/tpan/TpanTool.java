@@ -89,6 +89,7 @@ public class TpanTool {
         cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Message-Trace").hasArg(false).withDescription("Generate a message trace representation from log data").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Execution-Trace").hasArg(false).withDescription("Generate an execution trace representation from log data").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt("init-basic-JMS-reader").hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt("init-basic-JMS-readerJavaFx").hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
 
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
 
@@ -159,6 +160,11 @@ public class TpanTool {
            if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
                 numRequestedTasks++;
                 retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue1");
+                System.out.println("Finished to start task_initBasicJmsReader");
+            }
+            if (retVal && cmdl.hasOption("init-basic-JMS-readerJavaFx")) {
+                numRequestedTasks++;
+                retVal = task_initBasicJmsReaderJavaFx("tcp://127.0.0.1:3035/","queue1");
                 System.out.println("Finished to start task_initBasicJmsReader");
             }
 
@@ -395,6 +401,33 @@ public class TpanTool {
         /*@Matthias: Deactivated this, since the ant task didn't run (Andre) */
         //BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
         //analysisInstance.addRecordConsumer(bjfx);
+
+        analysisInstance.run();
+        return retVal;
+    }
+
+        private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException{
+        boolean retVal = true;
+
+        /** As long as we have a dependency to tpmon,
+         *  we load it explicitly in order to avoid
+         *  later delays.*/
+        TpmonController ctrl = TpmonController.getInstance();
+
+        log.info("Trying to start JMS Listener to " + jmsProviderUrl + " "+jmsDestination);
+        /* Read log data and collect execution traces */
+        TpanInstance analysisInstance = new TpanInstance();
+        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
+
+        MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
+        analysisInstance.addRecordConsumer(recordTypeLogger);
+
+        //ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        //analysisInstance.addRecordConsumer(seqRepConsumer);
+
+        /*@Matthias: Deactivated this, since the ant task didn't run (Andre) */
+        BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
+        analysisInstance.addRecordConsumer(bjfx);
 
         analysisInstance.run();
         return retVal;
