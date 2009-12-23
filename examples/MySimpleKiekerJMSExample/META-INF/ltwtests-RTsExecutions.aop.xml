@@ -42,10 +42,7 @@
 
 	<!-- instrument the kieker.tests -->
 	<!--<include within="kieker.tests..*"/>-->
-	<include within="mySimpleKiekerExample.bookstoreDifferentRecordTypes..*"/>
-	<include within="mySimpleKiekerExample.bookstore30SekDelayed..*"/>
-	<include within="mySimpleKiekerExample.bookstoreTracing..*"/>
-
+	<include within="mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek..*"/>
 
         <!-- don't weave all packages of kieker and some packages of sun -->
         <exclude within="kieker.tpmon..*"/>
@@ -57,7 +54,7 @@
      <!-- Put the remaining in a comment -->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotation"/>-->
      <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>
-     <aspect name="mySimpleKiekerExample.probe.MyRTMonitoringProbe"/>
+     <aspect name="mySimpleKiekerJMSExample.probe.MyRTMonitoringProbe"/>
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFull"/>-->
      <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullServlet"/>-->
