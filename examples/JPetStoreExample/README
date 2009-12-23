@@ -11,11 +11,12 @@ the configuration file used is aop.xml).
 The Java methods to be instrumented are selected using Java 
 annotations.
 
-Initially, the following steps are required:
+Initially, the following steps are required to in the 
+directory Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/lib/:
 1. Download Kieker's *binary* distribution from 
    http://kieker.sourceforge.net.
 2. Copy the following files from the binary distribution 
-   to the lib/ directory of this example:
+   to the tomcat directory:
    * dist/kieker-common-<version>.jar
    * dist/kieker-tpmon-<version>_ctrl.jar
    * dist/kieker-tpmon-<version>_ltw.jar

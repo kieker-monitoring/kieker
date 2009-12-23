@@ -1,5 +1,5 @@
 This example contains two micro benchmarks to quantify the 
-performance overhead cause by the Kieker framework 
+performance overhead caused by the Kieker framework 
 components. 
 
 All experiments employ AspectJ for weaving the monitoring 

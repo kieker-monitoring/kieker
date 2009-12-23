@@ -51,6 +51,8 @@
                   value="${kieker.dist.name}_${kieker-bin.suffix}"/>
         <property name="dist.kieker.example.myexample"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerExample"/>
+        <property name="dist.kieker.example.myjmsexample"
+                  value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerJMSExample"/>
         <property name="dist.kieker.example.jpetstore"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-JPetStoreExample"/>
         <property name="dist.kieker.example.microbenchmark"
@@ -428,6 +430,36 @@
         </zip>
     </target>
 
+    <target name="build-example-MySimpleKiekerJMSExample" depends="init">
+	    <echo message="${dist.dir}/${dist.kieker.example.myjmsexample}"/>
+        <patternset id="dist_myJMSExample_files">
+            <include name="examples/MySimpleKiekerJMSExample/README"/>
+            <include name="examples/MySimpleKiekerJMSExample/build.xml"/>
+            <include name="examples/MySimpleKiekerJMSExample/build.properties"/>
+            <include name="examples/MySimpleKiekerJMSExample/lib/"/>
+            <exclude name="examples/MySimpleKiekerJMSExample/lib/*.jar"/>
+            <include name="examples/MySimpleKiekerJMSExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
+            <include name="examples/MySimpleKiekerJMSExample/META-INF/tests.log4j.properties"/>
+            <include name="examples/MySimpleKiekerJMSExample/META-INF/tpmon.properties.example"/>
+            <include name="examples/MySimpleKiekerJMSExample/src/**"/>
+        </patternset>
+
+        <tar destfile="${release.dir}/${dist.kieker.example.myjmsexample}.tar" longfile="gnu">
+            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_myJMSExample_files"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${release.dir}/${dist.kieker.example.myjmsexample}.tar.gz" src="${release.dir}/${dist.kieker.example.myjmsexample}.tar" />
+     	<!-- tar file no longer needed -->
+        <delete file="${release.dir}/${dist.kieker.example.myjmsexample}.tar"/>
+
+        <zip  zipfile="${release.dir}/${dist.kieker.example.myjmsexample}.zip">
+            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+                <patternset refid="dist_myJMSExample_files"/>
+            </zipfileset>
+        </zip>
+    </target>
+
     <target name="build-example-JPetStoreExample" depends="init">
     <property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
     <property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
@@ -495,7 +527,7 @@
         </zip>
     </target>
 
-    <target name="build-examples" depends="init,build-example-MySimpleKiekerExample,build-example-JPetStoreExample,build-example-microbenchmark">
+    <target name="build-examples" depends="init,build-example-MySimpleKiekerExample,build-example-MySimpleKiekerJMSExample,build-example-JPetStoreExample,build-example-microbenchmark">
 
     </target>
 
