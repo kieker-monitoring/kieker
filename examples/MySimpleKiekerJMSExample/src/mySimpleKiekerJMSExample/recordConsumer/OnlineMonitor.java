@@ -31,11 +31,16 @@ public class OnlineMonitor implements IKiekerRecordConsumer {
     }
 
     public String[] getRecordTypeSubscriptionList() {
-        return new String[]{MyRTMonitoringRecord.class.getName()};
+        return new String[]{
+            MyRTMonitoringRecord.class.getName(),
+            KiekerExecutionRecord.class.getName()
+        };
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord r) throws RecordConsumerExecutionException {
         if (r instanceof KiekerExecutionRecord) {
+            KiekerExecutionRecord execRec = (KiekerExecutionRecord) r;
+            log.info("Received execution record:" + execRec);
         } else if (r instanceof MyRTMonitoringRecord) {
             MyRTMonitoringRecord rtRec = (MyRTMonitoringRecord) r;
             long rtMs = rtRec.rt / (1000 * 1000);
@@ -57,21 +62,9 @@ public class OnlineMonitor implements IKiekerRecordConsumer {
     public static void main(String[] args) {
         log.info("Hi, this is " + OnlineMonitor.class.getName());
 
-        String inputDir = System.getProperty("inputDir");
-        if (inputDir == null || inputDir.length() == 0 || inputDir.equals("${inputDir}")) {
-            log.error("No input dir found!");
-            log.error("Provide an input dir as system property.");
-            log.error("Example to read all tpmon-* files from /tmp:\n" +
-                    "                    ant -DinputDir=/tmp/ run-RTMonitor    ");
-            System.exit(1);
-        } else {
-            log.info("Reading all tpmon-* files from " + inputDir);
-        }
-
         OnlineMonitor rtMonitor = new OnlineMonitor(1800);
 
         IKiekerMonitoringLogReader logReader;
-        logReader = new FSReaderRealtime(inputDir, 7);
         logReader = new JMSReader("tcp://127.0.0.1:3035/", "queue1");
 
         TpanInstance analysisInstance = new TpanInstance();

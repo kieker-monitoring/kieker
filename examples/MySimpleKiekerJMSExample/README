@@ -42,100 +42,28 @@ Initially, the following steps are required:
 5. Decompress the JMS server archive openjms-<versiob>.tar.gz (included in the 
    Kieker binaries) to the root directory of this example:  
    $ tar -xzf openjms-0.7.7-beta-1.tar.gz
-   
+ 
+ 
+ SZENARIO:
+ 
  #################                                     ##################
  # Bookstore App #   Kieker         ##############     # Online Monitor #
  #      with     #-- Monitoring --> # JMS Server #---->#   employing    #
  #  Kieker.Tpmon #   Records        ##############     #  Kieker.Tpan   #
  #################                                     ##################
  
-
-SZENARIO 1:
-This example generates a filesystem monitoring log containing 
-execution and trace data into the directory tmp/tpmon-<DATE-TIME>/.
 The application is a simple 3-class Java application, referred to 
-as "bookstore example". The sources can be found in src/bookstoreTracing/.
-Three methods are instrumented with the annotation 
-@TpmonExecutionMonitoringProbe() contained in the Kieker framework.
+as "bookstore example". 
+The sources can be found in src/mySimpleKiekerJMSExample/bookstoreDifferentRecordTypes60Sek/.
+Three methods are instrumented with the annotation @TpmonExecutionMonitoringProbe() contained 
+in the Kieker framework and @MyRTProbe() defined in this example archive.
 
 1. First, you need to start the JMS server:
    $ openjms-0.7.7-beta-1/bin/startup.sh
-2. 
-
-1. Execute the ant target run-tests-loadTimeWeaving-bookstore-Tracing
-   $ ant run-tests-loadTimeWeaving-bookstore-Tracing
-2. The generated monitoring data can be found in tmp/tpmon-<DATE-TIME>/.
-   The console output contains the exact directory name.
-
-   The directory contains two files: 
-   - tpmon-<DATE-TIME>-Thread-<Y>.dat which contains the monitoring records.
-     Despite of the timestamps, the file should look like this:
-     $1;1258621800818383199;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800816269391;1258621800818365517;pc-vanhoorn;1;1
-     $1;1258621800866920181;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800846767436;1258621800866898602;pc-vanhoorn;3;2
-     $1;1258621800867048415;0;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();NULL;4807451864729649153;1258621800846723537;1258621800867045091;pc-vanhoorn;2;1
-     $1;1258621800867105743;0;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();NULL;4807451864729649153;1258621800805892068;1258621800867059802;pc-vanhoorn;0;0
-   - tpmon.dat which contains the mapping between monitoring record type 
-     and implementing class:
-     $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
-
-3. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
-   graph for this monitoring log. The script bin/tpan.sh is contained in 
-   Kieker's binary release.
-   Additionally, the tools graphviz (www.graphviz.org/) and 
-   plotutils (www.gnu.org/software/plotutils/) are required.
-   A call to bin/tpan.sh lists the available options.
- 3.1 Dependendy graph
-   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-Dependency-Graph
-   - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
-     directory tmp/. 
-     Kieker.Tpan's output gives further instructions how to convert this 
-     file to graphic formats like svg and png using graphviz's pic2plot tool.
- 3.2 Sequence diagram
-   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
-   - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
-     directory tmp/. 
-     Kieker.Tpan's output gives further instructions how to convert this 
-     file to graphic formats like svg and png using plotutil's pic2plot tool.
-     
-SZENARIO 2:
-This examples demonstrates how to use custom monitoring probes and monitoring 
-records defined outside the Kieker framework together with Kieker-provided probes 
-and records. The sources can be found in src/bookstoreDifferentRecordTypes/.
-Three methods are instrumented with the annotation @TpmonExecutionMonitoringProbe()
-from above as well as @TpmonExecutionMonitoringProbe() measuring the response 
-times (i.e., durations) of the method executions.
-The sources of the annotation, the probe, and the monitoring record can be found 
-in src/mySimpleKiekerExample/<annotation/|probe/|monitoringRecord/>.
-
-1. $ ant run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes
-2. Again, the generated monitoring data can be found in tmp/tpmon-<DATE-TIME>/.
-   Now, both the .dat file and the .map file contain additional entries 
-   due to the newly introduced record:
-   - The .dat files now additionally contain the respone time measurements:
-      $2;1258624662952569355;mySimpleKiekerExample.bookstoreDifferentRecordTypes.Catalog;getBook;2083622
-   - The .map file contains the mapping of the identifier to the 
-     class implementing the monitoring record type:
-      $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
-      $2=mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord
+2. Now, we start the analysis part:
+   $ ant run-JMSMonitor
+3. Now, start the instrumented application:
+   run-tests-loadTimeWeaving-bookstore-60Sek
    
-SZENARIO 3:
-This example demonstrates how to implement a response time monitor which 
-continuously checks, whether the observed response times are below a 
-specified threshold (service level objective).
-The sources of the response time monitor based on Kieker.Tpan can be found 
-in src/mySimpleKiekerExample/recordConsumer/.
-
-1. We will first generate 30 seconds of monitoring data using a slightly 
-   extended bookstore example from SZENARIO 2 (sources in src/bookstore30SekDelayed).
-   $ ant run-tests-loadTimeWeaving-bookstore-LongRun
-   
-2. Now we use the Kieker-provided relatime-replayer to replay the monitoring 
-   data in real-time and the custom response time monitor:
-   $ ant run-RTMonitor -DinputDir=tmp/<DATE-TIME>/
-
-  For each incoming the output of the respone time monitor reports whether the incoming 
-  response time record satisfies or violates the service level objective.
-
-  Since the monitoring log also contains execution/trace data, visualizations 
-  can be generated, as describes in Szenario 1.
-
+The JMSMonitor now prints information on every incoming monitoring recordConsumer
+to Stdout.
