@@ -4,12 +4,15 @@
  */
 package mySimpleKiekerJMSExample.recordConsumer;
 
+import kieker.common.logReader.IKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
 import kieker.tpan.TpanInstance;
+import kieker.tpan.logReader.JMSReader;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import mySimpleKiekerJMSExample.monitoringRecord.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,12 +21,12 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author avanhoorn
  */
-public class RTMonitor implements IKiekerRecordConsumer {
+public class OnlineMonitor implements IKiekerRecordConsumer {
 
-    private static final Log log = LogFactory.getLog(RTMonitor.class);
+    private static final Log log = LogFactory.getLog(OnlineMonitor.class);
     private final long rtSloMs;
 
-    public RTMonitor(long rtSloMs) {
+    public OnlineMonitor(long rtSloMs) {
         this.rtSloMs = rtSloMs;
     }
 
@@ -32,12 +35,15 @@ public class RTMonitor implements IKiekerRecordConsumer {
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord r) throws RecordConsumerExecutionException {
-        MyRTMonitoringRecord rtRec = (MyRTMonitoringRecord) r;
-        long rtMs = rtRec.rt/(1000*1000);
-        if (rtMs > this.rtSloMs) {
-            log.error("rtRec.rt (ms) > this.rtSloMs: " + rtMs + ">" + this.rtSloMs);
-        } else {
-            log.info("rtRec.rt (ms) <=this.rtSloMs: " + rtMs + "<=" + this.rtSloMs);
+        if (r instanceof KiekerExecutionRecord) {
+        } else if (r instanceof MyRTMonitoringRecord) {
+            MyRTMonitoringRecord rtRec = (MyRTMonitoringRecord) r;
+            long rtMs = rtRec.rt / (1000 * 1000);
+            if (rtMs > this.rtSloMs) {
+                log.error("rtRec.rt (ms) > this.rtSloMs: " + rtMs + ">" + this.rtSloMs);
+            } else {
+                log.info("rtRec.rt (ms) <=this.rtSloMs: " + rtMs + "<=" + this.rtSloMs);
+            }
         }
     }
 
@@ -49,7 +55,7 @@ public class RTMonitor implements IKiekerRecordConsumer {
     }
 
     public static void main(String[] args) {
-        log.info("Hi, this is " + RTMonitor.class.getName());
+        log.info("Hi, this is " + OnlineMonitor.class.getName());
 
         String inputDir = System.getProperty("inputDir");
         if (inputDir == null || inputDir.length() == 0 || inputDir.equals("${inputDir}")) {
@@ -62,11 +68,14 @@ public class RTMonitor implements IKiekerRecordConsumer {
             log.info("Reading all tpmon-* files from " + inputDir);
         }
 
-        RTMonitor rtMonitor = new RTMonitor(1800);
+        OnlineMonitor rtMonitor = new OnlineMonitor(1800);
 
-        FSReaderRealtime fsReaderRealtime = new FSReaderRealtime(inputDir, 7);
+        IKiekerMonitoringLogReader logReader;
+        logReader = new FSReaderRealtime(inputDir, 7);
+        logReader = new JMSReader("tcp://127.0.0.1:3035/", "queue1");
+
         TpanInstance analysisInstance = new TpanInstance();
-        analysisInstance.setLogReader(fsReaderRealtime);
+        analysisInstance.setLogReader(logReader);
         analysisInstance.addRecordConsumer(rtMonitor);
 
         try {

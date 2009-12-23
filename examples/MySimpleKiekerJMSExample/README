@@ -1,15 +1,15 @@
 This examples demonstrate 
-1. how to use Kieker.Tpmon to instrument a simple 
-   Java application and how to log 
-   monitoring data
-2. and how to use Kieker.Tpan for 
-   analyzing/visualizing the recorded monitoring data
+*  How to use Kieker to monitor a simple Java application 
+   and how to analyze the data online, i.e., while the 
+   application is running. 
+   Kieker.Tpmon and Kieker.Tpan communicate via  
+   Java Messaging Service (JMS).
 
 All experiments employ AspectJ for weaving the monitoring 
-probes into the application. Two different AspectJ configuration 
-files are used for the examples (to be found in META-INF).
+probes into the application. The AspectJ configuration file 
+is META-INF/ltwtests-RTsExecutions.aop.xml.
 The Java methods to be instrumented are selected using Java 
-annotations.
+annotations (here: traces and response times).
 
 Initially, the following steps are required:
 1.Download Kieker's *binary* distribution from 
@@ -27,15 +27,28 @@ Initially, the following steps are required:
   * lib/commons-cli-<version>.jar
   * lib/commons-logging-<version>.jar
   * lib/log4j-<version>.jar
+  * openjms-<version>.jar
+  * openjms-common-<version>.jar
+  * openjms-net-<version>.jar
 3.Copy META-INF/tpmon.properties.example to 
   META-INF/tpmon.properties and modify this configuration file
   according to your needs. 
   NOTE: There's no need to change tpmon.properties to run the 
-        example with the default configuration.
+        example with the default configuration (it is already 
+	configured to use the JMS monitoring writer).
 4. You should check whether you installed ant (http://ant.apache.org/), 
    since the execution of all examples described in this 
    README is based on the run-targets in the ant file build.xml.
+5. Decompress the JMS server archive openjms-<versiob>.tar.gz (included in the 
+   Kieker binaries) to the root directory of this example:  
+   $ tar -xzf openjms-0.7.7-beta-1.tar.gz
    
+ #################                                     ##################
+ # Bookstore App #   Kieker         ##############     # Online Monitor #
+ #      with     #-- Monitoring --> # JMS Server #---->#   employing    #
+ #  Kieker.Tpmon #   Records        ##############     #  Kieker.Tpan   #
+ #################                                     ##################
+ 
 
 SZENARIO 1:
 This example generates a filesystem monitoring log containing 
@@ -44,6 +57,10 @@ The application is a simple 3-class Java application, referred to
 as "bookstore example". The sources can be found in src/bookstoreTracing/.
 Three methods are instrumented with the annotation 
 @TpmonExecutionMonitoringProbe() contained in the Kieker framework.
+
+1. First, you need to start the JMS server:
+   $ openjms-0.7.7-beta-1/bin/startup.sh
+2. 
 
 1. Execute the ant target run-tests-loadTimeWeaving-bookstore-Tracing
    $ ant run-tests-loadTimeWeaving-bookstore-Tracing
