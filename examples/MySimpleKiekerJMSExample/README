@@ -1,0 +1,124 @@
+This examples demonstrate 
+1. how to use Kieker.Tpmon to instrument a simple 
+   Java application and how to log 
+   monitoring data
+2. and how to use Kieker.Tpan for 
+   analyzing/visualizing the recorded monitoring data
+
+All experiments employ AspectJ for weaving the monitoring 
+probes into the application. Two different AspectJ configuration 
+files are used for the examples (to be found in META-INF).
+The Java methods to be instrumented are selected using Java 
+annotations.
+
+Initially, the following steps are required:
+1.Download Kieker's *binary* distribution from 
+  http://kieker.sourceforge.net.
+2.Copy the following files from the binary distribution 
+  to the lib/ directory of this example:
+  * dist/kieker-common-<version>.jar
+  * dist/kieker-tpan-<version>_ctrl.jar
+  * dist/kieker-tpmon-<version>_ctrl.jar
+  * dist/kieker-tpmon-<version>_ctw.jar
+  * dist/kieker-tpmon-<version>_ltw.jar
+  * lib/aspectjrt-<version>.jar
+  * lib/aspectjtools-<version>.jar
+  * lib/aspectjweaver-<version>.jar
+  * lib/commons-cli-<version>.jar
+  * lib/commons-logging-<version>.jar
+  * lib/log4j-<version>.jar
+3.Copy META-INF/tpmon.properties.example to 
+  META-INF/tpmon.properties and modify this configuration file
+  according to your needs. 
+  NOTE: There's no need to change tpmon.properties to run the 
+        example with the default configuration.
+4. You should check whether you installed ant (http://ant.apache.org/), 
+   since the execution of all examples described in this 
+   README is based on the run-targets in the ant file build.xml.
+   
+
+SZENARIO 1:
+This example generates a filesystem monitoring log containing 
+execution and trace data into the directory tmp/tpmon-<DATE-TIME>/.
+The application is a simple 3-class Java application, referred to 
+as "bookstore example". The sources can be found in src/bookstoreTracing/.
+Three methods are instrumented with the annotation 
+@TpmonExecutionMonitoringProbe() contained in the Kieker framework.
+
+1. Execute the ant target run-tests-loadTimeWeaving-bookstore-Tracing
+   $ ant run-tests-loadTimeWeaving-bookstore-Tracing
+2. The generated monitoring data can be found in tmp/tpmon-<DATE-TIME>/.
+   The console output contains the exact directory name.
+
+   The directory contains two files: 
+   - tpmon-<DATE-TIME>-Thread-<Y>.dat which contains the monitoring records.
+     Despite of the timestamps, the file should look like this:
+     $1;1258621800818383199;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800816269391;1258621800818365517;pc-vanhoorn;1;1
+     $1;1258621800866920181;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800846767436;1258621800866898602;pc-vanhoorn;3;2
+     $1;1258621800867048415;0;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();NULL;4807451864729649153;1258621800846723537;1258621800867045091;pc-vanhoorn;2;1
+     $1;1258621800867105743;0;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();NULL;4807451864729649153;1258621800805892068;1258621800867059802;pc-vanhoorn;0;0
+   - tpmon.dat which contains the mapping between monitoring record type 
+     and implementing class:
+     $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
+
+3. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
+   graph for this monitoring log. The script bin/tpan.sh is contained in 
+   Kieker's binary release.
+   Additionally, the tools graphviz (www.graphviz.org/) and 
+   plotutils (www.gnu.org/software/plotutils/) are required.
+   A call to bin/tpan.sh lists the available options.
+ 3.1 Dependendy graph
+   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-Dependency-Graph
+   - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
+     directory tmp/. 
+     Kieker.Tpan's output gives further instructions how to convert this 
+     file to graphic formats like svg and png using graphviz's pic2plot tool.
+ 3.2 Sequence diagram
+   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
+   - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
+     directory tmp/. 
+     Kieker.Tpan's output gives further instructions how to convert this 
+     file to graphic formats like svg and png using plotutil's pic2plot tool.
+     
+SZENARIO 2:
+This examples demonstrates how to use custom monitoring probes and monitoring 
+records defined outside the Kieker framework together with Kieker-provided probes 
+and records. The sources can be found in src/bookstoreDifferentRecordTypes/.
+Three methods are instrumented with the annotation @TpmonExecutionMonitoringProbe()
+from above as well as @TpmonExecutionMonitoringProbe() measuring the response 
+times (i.e., durations) of the method executions.
+The sources of the annotation, the probe, and the monitoring record can be found 
+in src/mySimpleKiekerExample/<annotation/|probe/|monitoringRecord/>.
+
+1. $ ant run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes
+2. Again, the generated monitoring data can be found in tmp/tpmon-<DATE-TIME>/.
+   Now, both the .dat file and the .map file contain additional entries 
+   due to the newly introduced record:
+   - The .dat files now additionally contain the respone time measurements:
+      $2;1258624662952569355;mySimpleKiekerExample.bookstoreDifferentRecordTypes.Catalog;getBook;2083622
+   - The .map file contains the mapping of the identifier to the 
+     class implementing the monitoring record type:
+      $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
+      $2=mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord
+   
+SZENARIO 3:
+This example demonstrates how to implement a response time monitor which 
+continuously checks, whether the observed response times are below a 
+specified threshold (service level objective).
+The sources of the response time monitor based on Kieker.Tpan can be found 
+in src/mySimpleKiekerExample/recordConsumer/.
+
+1. We will first generate 30 seconds of monitoring data using a slightly 
+   extended bookstore example from SZENARIO 2 (sources in src/bookstore30SekDelayed).
+   $ ant run-tests-loadTimeWeaving-bookstore-LongRun
+   
+2. Now we use the Kieker-provided relatime-replayer to replay the monitoring 
+   data in real-time and the custom response time monitor:
+   $ ant run-RTMonitor -DinputDir=tmp/<DATE-TIME>/
+
+  For each incoming the output of the respone time monitor reports whether the incoming 
+  response time record satisfies or violates the service level objective.
+
+  Since the monitoring log also contains execution/trace data, visualizations 
+  can be generated, as describes in Szenario 1.
+
