@@ -27,9 +27,6 @@ Initially, the following steps are required:
   * lib/commons-cli-<version>.jar
   * lib/commons-logging-<version>.jar
   * lib/log4j-<version>.jar
-  * openjms-<version>.jar
-  * openjms-common-<version>.jar
-  * openjms-net-<version>.jar
 3.Copy META-INF/tpmon.properties.example to 
   META-INF/tpmon.properties and modify this configuration file
   according to your needs. 
@@ -39,11 +36,17 @@ Initially, the following steps are required:
 4. You should check whether you installed ant (http://ant.apache.org/), 
    since the execution of all examples described in this 
    README is based on the run-targets in the ant file build.xml.
-5. Decompress the JMS server archive openjms-<versiob>.tar.gz (included in the 
-   Kieker binaries) to the root directory of this example:  
-   $ tar -xzf openjms-0.7.7-beta-1.tar.gz
- 
- 
+5. Download a OpenJMS install archive (zip or tar.gz) from 
+   http://openjms.sourceforge.net and decompress it to the root 
+   directory of this example (e.g., $ tar -xzf openjms-<version>.tar.gz)
+   
+   Now, copy the following files from the OpenJMS lib/ folder to lib/ directory 
+   of this example:
+   * openjms-<version>.jar
+   * openjms-common-<version>.jar
+   * openjms-net-<version>.jar
+
+
  SZENARIO:
  
  #################                                     ##################
