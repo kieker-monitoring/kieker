@@ -1,5 +1,7 @@
 package kieker.tpmon.monitoringRecord.executions;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.annotation.TpmonInternal;
 
@@ -140,6 +142,20 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
             Integer.toString(this.ess)
         };
         return vec;
+    }
+
+
+
+
+    @TpmonInternal()
+    public final void initFromString(String kiekerExecutionRecordString){        
+        StringTokenizer stk = new StringTokenizer(kiekerExecutionRecordString,AbstractKiekerMonitoringRecord.separator);
+        ArrayList<String> als = new ArrayList<String>();
+        while (stk.hasMoreElements()) {
+            als.add(stk.nextToken());
+        }
+        String[] vec = (String[])als.toArray(new String[als.size()]);        
+        initFromStringArray(vec);
     }
 
     @TpmonInternal()

@@ -31,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractKiekerMonitoringRecord implements Serializable {
 
     private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringRecord.class);
-    private static final TpmonController ctrlInst = TpmonController.getInstance();
     private long loggingTimestamp = -1;
 
     @TpmonInternal()
@@ -84,18 +83,48 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     @TpmonInternal()
     protected static final int registerMonitoringRecordType(Class recordTypeClass) {
         // ctrlInst leads to error
+        // REALY UGLY DEPENDNECY! Every tool that uses AbstractKiekerExecutionMonitoringRecord needs JMS stuff...
         return TpmonController.getInstance().registerMonitoringRecordType(recordTypeClass);
     }
 
+
+
+     public static final String separator = ";";
+    /**
+     * Creates a string serialization for this KiekerExecutionRecord, that
+     * can be used to reconstruct a KiekerExecutionRecord, based on the initFromString
+     * method.
+     *
+     * Semicolon is used as internal separator (static variable separator). There are no semicolons in methodsnames, etc. but
+     * be careful with extensions.
+     *
+     * Matthias Rohr
+     */
     @Override
     @TpmonInternal()
-    public String toString() {
-        StringBuilder strBuild = new StringBuilder();
-        String[] valueVec = this.toStringArray();
-        for (String v : valueVec) {
-            strBuild.append(v);
-            strBuild.append(' ');
+    public final String toString() {
+        String[] recordVector = this.toStringArray();
+        StringBuilder sb = new StringBuilder();
+        boolean first=true;
+        for (String curStr : recordVector) {
+            if (!first) {
+                sb.append(separator);
+            }
+            sb.append(curStr);
+            first = false;
         }
-        return strBuild.toString();
+        return sb.toString();
     }
+
+    //    @Override
+//    @TpmonInternal()
+//    public String toString() {
+//        StringBuilder strBuild = new StringBuilder();
+//        String[] valueVec = this.toStringArray();
+//        for (String v : valueVec) {
+//            strBuild.append(v);
+//            strBuild.append(' ');
+//        }
+//        return strBuild.toString();
+//    }
 }
