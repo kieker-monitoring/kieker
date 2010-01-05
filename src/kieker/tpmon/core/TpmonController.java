@@ -368,6 +368,10 @@ public class TpmonController {
                 log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
                 is = TpmonController.class.getClassLoader().getResourceAsStream(configurationFile);
             }
+            // TODO: the fall-back file in the tpmon library should be renamed to
+            //       META-INF/tpmon.properties.default or alike, in order to
+            //       avoid strange behavior caused by the order of jars being
+            //       being loaded by the classloader.
             prop.load(is);
         } catch (Exception ex) {
             log.error("Error loading tpmon.properties file '" + configurationFile + "'", ex);
