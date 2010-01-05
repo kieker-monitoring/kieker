@@ -89,7 +89,8 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     }
 
 
-
+     // TODO (by André): Why is the separator declared here? Should be configured
+     //                  for a reader/writer.
      public static final String separator = ";";
 
      /**

@@ -144,7 +144,6 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         return vec;
     }
 
-
     // TODO (by Andre): This method should not be part of the record since
     //                  initFromStringArray already provides the serialization
     //                  functionality!
