@@ -94,6 +94,8 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
      //                  for a reader/writer.
      public static final String separator = ";";
 
+     // TODO (by André): we should not (ab)use toString for serialization purposes
+     //                  since this is not the purpose of Object's toString method.
      /**
      * Creates a string serialization for this KiekerExecutionRecord, that
      * can be used to reconstruct a KiekerExecutionRecord, based on the initFromString
