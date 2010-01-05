@@ -84,13 +84,15 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     protected static final int registerMonitoringRecordType(Class recordTypeClass) {
         // ctrlInst leads to error
         // REALY UGLY DEPENDNECY! Every tool that uses AbstractKiekerExecutionMonitoringRecord needs JMS stuff...
+        // (by Andre) Not true: only if JMS is configured as writer; but yes, this dependency is very ugly!
         return TpmonController.getInstance().registerMonitoringRecordType(recordTypeClass);
     }
 
 
 
      public static final String separator = ";";
-    /**
+
+     /**
      * Creates a string serialization for this KiekerExecutionRecord, that
      * can be used to reconstruct a KiekerExecutionRecord, based on the initFromString
      * method.
@@ -108,7 +110,7 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
         boolean first=true;
         for (String curStr : recordVector) {
             if (!first) {
-                sb.append(separator);
+                sb.append(AbstractKiekerMonitoringRecord.separator);
             }
             sb.append(curStr);
             first = false;

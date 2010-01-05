@@ -145,8 +145,14 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     }
 
 
-
-
+    // TODO (by Andre): This method should not be part of the record since
+    //                  initFromStringArray already provides the serialization
+    //                  functionality!
+    //                  If a writer/reader uses a CSV representation for records,
+    //                  it can use the initFromStringArray function (have a look
+    //                  at the FS Writers's method writeDataNow!) and the logic
+    //                  to transform the array into a CSV string should be part
+    //                  of the writer.
     @TpmonInternal()
     public final void initFromString(String kiekerExecutionRecordString){        
         StringTokenizer stk = new StringTokenizer(kiekerExecutionRecordString,AbstractKiekerMonitoringRecord.separator);
