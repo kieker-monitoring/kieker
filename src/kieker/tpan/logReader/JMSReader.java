@@ -1,8 +1,6 @@
 package kieker.tpan.logReader;
 
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import java.util.Hashtable;
 import javax.jms.JMSException;
@@ -49,6 +47,12 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
     public JMSReader(String jmsProviderUrl, String jmsDestination) {
             initInstanceFromArgs(jmsProviderUrl, jmsDestination);  // throws IllegalArgumentException
     }
+
+    /** Constructor for JMSReader. Requires a subsequent call to the init
+     *  method in order to specify the input directory using the parameter
+     *  @a inputDirName. */
+    public JMSReader(){ }
+
 
    /** Valid key/value pair: inputDirName=INPUTDIRECTORY | numWorkers=XX */
     @TpmonInternal()
