@@ -65,6 +65,7 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
      */
     protected final void initVarsFromInitString(String initString) throws IllegalArgumentException {
         if (initString == null || initString.length() == 0) {
+            initStringProcessed = true;
             return;
         }
 
@@ -84,6 +85,8 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
         } catch (Exception exc) {
             throw new IllegalArgumentException("Error parsing init string '" + initString + "'", exc);
         }
+
+        initStringProcessed = true;
     }
 
     public final void addConsumer(final IKiekerRecordConsumer consumer, final String[] recordTypeSubscriptionList) {

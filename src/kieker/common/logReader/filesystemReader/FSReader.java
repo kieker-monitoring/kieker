@@ -71,7 +71,7 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
 
    private void initInstanceFromArgs(final String inputDirName) throws IllegalArgumentException {
         if (inputDirName == null || inputDirName.equals("")) {
-            throw new IllegalArgumentException("Invalid or missing property inputDirName" + inputDirName);
+            throw new IllegalArgumentException("Invalid or missing property inputDirName: " + inputDirName);
         }
         this.inputDir = new File(inputDirName);
     }
