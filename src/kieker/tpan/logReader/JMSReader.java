@@ -49,12 +49,12 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
     }
 
     /** Constructor for JMSReader. Requires a subsequent call to the init
-     *  method in order to specify the input directory using the parameter
-     *  @a inputDirName. */
+     *  method in order to specify the input directory using the parameters 
+     *  @a jmsServerLocation and @a jmsDestination. */
     public JMSReader(){ }
 
 
-   /** Valid key/value pair: inputDirName=INPUTDIRECTORY | numWorkers=XX */
+   /** Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 */
     @TpmonInternal()
     public void init(String initString) throws IllegalArgumentException {
         super.initVarsFromInitString(initString); // throws IllegalArgumentException
