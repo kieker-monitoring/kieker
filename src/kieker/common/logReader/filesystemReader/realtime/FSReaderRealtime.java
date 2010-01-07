@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package kieker.common.logReader.filesystemReader.realtime;
 
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
@@ -34,7 +30,7 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
      */
     private class FSReaderRealtimeCons implements IKiekerRecordConsumer {
 
-        FSReaderRealtime master;
+        private final FSReaderRealtime master;
 
         public FSReaderRealtimeCons(FSReaderRealtime master) {
             this.master = master;
