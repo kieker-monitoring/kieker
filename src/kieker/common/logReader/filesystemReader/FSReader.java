@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
@@ -54,9 +53,26 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
     private static final Log log = LogFactory.getLog(FSReader.class);
     private File inputDir = null;
 
-    //private FSReader(){ }
+    /** Constructor for FSReader. Requires a subsequent call to the init
+     *  method in order to specify the input directory using the parameter
+     *  @a inputDirName. */
+    public FSReader(){ }
 
     public FSReader(final String inputDirName) {
+        initInstanceFromArgs(inputDirName); // throws IllegalArgumentException
+    }
+
+    /** Valid key/value pair: inputDirName=INPUTDIRECTORY */
+    @TpmonInternal()
+    public void init(String initString) throws IllegalArgumentException{
+        super.initVarsFromInitString(initString); // throws IllegalArgumentException
+        this.initInstanceFromArgs(this.getInitProperty("inputDirName")); // throws IllegalArgumentException
+    }
+
+   private void initInstanceFromArgs(final String inputDirName) throws IllegalArgumentException {
+        if (inputDirName == null || inputDirName.equals("")) {
+            throw new IllegalArgumentException("Invalid or missing property inputDirName" + inputDirName);
+        }
         this.inputDir = new File(inputDirName);
     }
 

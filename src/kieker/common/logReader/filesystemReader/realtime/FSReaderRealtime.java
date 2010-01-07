@@ -11,6 +11,7 @@ import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSReader;
 
 import kieker.common.logReader.RealtimeReplayDistributor;
+import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +25,7 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
     /* delegate */
-    private final FSReader fsReader;
+    private FSReader fsReader;
     private RealtimeReplayDistributor rtDistributor = null;
 
     /**
@@ -32,9 +33,10 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
      * to the FSReaderRealtime instance.
      */
     private class FSReaderRealtimeCons implements IKiekerRecordConsumer {
+
         FSReaderRealtime master;
 
-        public FSReaderRealtimeCons (FSReaderRealtime master){
+        public FSReaderRealtimeCons(FSReaderRealtime master) {
             this.master = master;
         }
 
@@ -61,7 +63,42 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
         }
     }
 
+    /** Constructor for FSReaderRealtime. Requires a subsequent call to the init
+     *  method in order to specify the input directory and number of workers
+     *  using the parameter @a inputDirName. */
+    public FSReaderRealtime() {
+    }
+
+    /** Valid key/value pair: inputDirName=INPUTDIRECTORY | numWorkers=XX */
+    @TpmonInternal()
+    public void init(String initString) throws IllegalArgumentException {
+        super.initVarsFromInitString(initString);
+
+        String numWorkersString = this.getInitProperty("numWorkers");
+        int numWorkers = -1;
+        if (numWorkersString == null) {
+            throw new IllegalArgumentException("Missing init parameter 'numWorkers'");
+        }
+        try {
+            numWorkers = Integer.parseInt(numWorkersString);
+        } catch (NumberFormatException ex) { /* value of numWorkers remains -1 */ }
+
+        initInstanceFromArgs(this.getInitProperty("inputDirName"), numWorkers);
+    }
+
     public FSReaderRealtime(final String inputDirName, int numWorkers) {
+        initInstanceFromArgs(inputDirName, numWorkers);
+    }
+
+    private void initInstanceFromArgs(final String inputDirName, int numWorkers) throws IllegalArgumentException {
+        if (inputDirName == null || inputDirName.equals("")) {
+            throw new IllegalArgumentException("Invalid proprty value for inputDirName:" + inputDirName);
+        }
+
+        if (numWorkers <= 0) {
+            throw new IllegalArgumentException("Invalid proprty value for numWorkers: " + numWorkers);
+        }
+
         fsReader = new FSReader(inputDirName);
         IKiekerRecordConsumer rtCons = new FSReaderRealtimeCons(this);
         rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons);

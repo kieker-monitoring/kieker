@@ -1,7 +1,5 @@
 package kieker.common.logReader;
 
-import java.util.HashMap;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -30,6 +28,7 @@ import java.util.HashMap;
  * @author Andre van Hoorn
  */
 public interface IKiekerMonitoringLogReader {
+    public void init(String initString) throws IllegalArgumentException;
     public void addConsumer(IKiekerRecordConsumer consumer, String[] recordTypeSubscriptionList);
     public boolean execute() throws LogReaderExecutionException;
     public void terminate();

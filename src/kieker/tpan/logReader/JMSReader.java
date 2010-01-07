@@ -19,6 +19,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import kieker.common.logReader.LogReaderExecutionException;
+import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
 import org.apache.commons.logging.Log;
@@ -42,20 +43,32 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
     /**
      * @param jmsServerLocation = for instance "tcp://127.0.0.1:3035/"
      * @param jmsDestination = for instance "queue1"
+     * @throws IllegalArgumentException if passed parameters are null or empty.
      * @return
      */
     public JMSReader(String jmsProviderUrl, String jmsDestination) {
-        this.jmsProviderUrl = jmsProviderUrl;
-        this.jmsDestination = jmsDestination;
-        if (jmsProviderUrl == null && jmsDestination == null) {
-            String errormessage = "JMSReader has not sufficient parameters. jmsProviderUrl or jmsDestination is null";
-            log.error(errormessage);
+            initInstanceFromArgs(jmsProviderUrl, jmsDestination);  // throws IllegalArgumentException
+    }
+
+   /** Valid key/value pair: inputDirName=INPUTDIRECTORY | numWorkers=XX */
+    @TpmonInternal()
+    public void init(String initString) throws IllegalArgumentException {
+        super.initVarsFromInitString(initString); // throws IllegalArgumentException
+
+        String jmsProviderUrlP = this.getInitProperty("jmsProviderUrl", null);
+        String jmsDestinationP = this.getInitProperty("jmsDestination", null);
+        initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP); // throws IllegalArgumentException
+    }
+
+    private void initInstanceFromArgs(final String jmsProviderUrl,
+            final String jmsDestination) throws IllegalArgumentException {
+        if (jmsProviderUrl == null || jmsProviderUrl.equals("")
+                || jmsDestination == null || jmsDestination.equals("")) {
+            throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl or jmsDestination is null");
         }
 
-        if (jmsProviderUrl.equals("") && jmsDestination.equals("")) {
-            String errormessage = "JMSReader has not sufficient parameters. jmsProviderUrl or jmsDestination is empty";
-            log.error(errormessage);
-        }
+        this.jmsProviderUrl = jmsProviderUrl;
+        this.jmsDestination = jmsDestination;
     }
 
     /**
