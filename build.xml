@@ -542,6 +542,7 @@
         <delete dir="${dist.dir}"/>
         <delete dir="${release.dir}"/>
         <delete dir="${build.dir}"/>
+        <delete dir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
         <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
     </target>
