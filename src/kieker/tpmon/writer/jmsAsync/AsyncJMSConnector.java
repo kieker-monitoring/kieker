@@ -78,10 +78,15 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
 
         boolean retVal = true;
         try {
-            if (!this.initVarsFromInitString(initString)) {
-                log.error("init failed");
-                return false;
-            }
+            super.initVarsFromInitString(initString);
+
+        this.contextFactoryType = super.getInitProperty("jmsContextFactoryType");
+        this.providerUrl = super.getInitProperty("jmsProviderUrl");
+        this.factoryLookupName = super.getInitProperty("jmsFactoryLookupName");
+        this.topic = super.getInitProperty("jmsTopic");
+        this.messageTimeToLive = Long.valueOf(super.getInitProperty("jmsMessageTimeToLive"));
+        this.asyncRecordQueueSize = Integer.valueOf(super.getInitProperty("asyncRecordQueueSize"));
+
 
             this.recordQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
             this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(asyncTypeQueueSize);
@@ -105,33 +110,6 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
             retVal = false;
         } 
         return retVal;
-    }
-
-    @TpmonInternal
-    private boolean initVarsFromInitString(String initString) {
-        HashMap<String, String> map = new HashMap<String, String>();
-        StringTokenizer keyValListTokens = new StringTokenizer(initString, "|");
-        while (keyValListTokens.hasMoreTokens()) {
-            String curKeyValToken = keyValListTokens.nextToken().trim();
-            StringTokenizer keyValTokens = new StringTokenizer(curKeyValToken, "=");
-            if (keyValTokens.countTokens() != 2) {
-                log.error("Expected key=value pair, found " + curKeyValToken);
-                return false;
-            }
-            String key = keyValTokens.nextToken().trim();
-            String val = keyValTokens.nextToken().trim();
-            log.info("Found key/value pair: " + key + "=" + val);
-            map.put(key, val);
-        }
-
-        this.contextFactoryType = map.get("jmsContextFactoryType");
-        this.providerUrl = map.get("jmsProviderUrl");
-        this.factoryLookupName = map.get("jmsFactoryLookupName");
-        this.topic = map.get("jmsTopic");
-        this.messageTimeToLive = Long.valueOf(map.get("jmsMessageTimeToLive"));
-        this.asyncRecordQueueSize = Integer.valueOf(map.get("asyncRecordQueueSize"));
-
-        return true;
     }
 
     @TpmonInternal()
