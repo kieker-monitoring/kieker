@@ -50,7 +50,7 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
  * 
  * @author Matthias Rohr
  */
-public class JMSWriterThread<T> extends AbstractWorkerThread {
+public final class JMSWriterThread<T> extends AbstractWorkerThread {
     // configuration parameters                
 
     private Session session;

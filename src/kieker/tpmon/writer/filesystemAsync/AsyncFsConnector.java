@@ -38,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Matthias Rohr, Andre van Hoorn
  */
-public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
+public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncFsConnector.class);
     //configuration parameter
@@ -49,7 +49,6 @@ public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
     private String storagePathBase = null;
     private int asyncRecordQueueSize = 8000;
     private File mappingFile = null;
-    private boolean writeRecordTypeIds = false;
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_ASYNCFS +
@@ -121,7 +120,7 @@ public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      */
     @TpmonInternal()
-    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }
@@ -172,16 +171,11 @@ public class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
     }
 
     @TpmonInternal()
-    public boolean isWriteRecordTypeIds() {
-        return this.writeRecordTypeIds;
-    }
-
-    @TpmonInternal()
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        super.setWriteRecordTypeIds(writeRecordTypeIds);
         for (AbstractWorkerThread t : workers) {
             log.info("t.setWriteRecordTypeIds(" + writeRecordTypeIds + ")");
             t.setWriteRecordTypeIds(writeRecordTypeIds);
         }
-        this.writeRecordTypeIds = writeRecordTypeIds;
     }
 }

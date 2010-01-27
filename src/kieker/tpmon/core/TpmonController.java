@@ -6,7 +6,7 @@ import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.IKiekerMonitoringLogWriter;
 import kieker.tpmon.writer.databaseSync.SyncDbConnector;
-import kieker.tpmon.writer.filesystemSync.syncFsWriter;
+import kieker.tpmon.writer.filesystemSync.SyncFsWriter;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -74,7 +74,7 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public class TpmonController {
+public final class TpmonController {
 
     private static final Log log = LogFactory.getLog(TpmonController.class);
     public final static String WRITER_SYNCDB = "SyncDB";
@@ -129,7 +129,7 @@ public class TpmonController {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringDataWriter = new syncFsWriter(filenameBase);
+                this.monitoringDataWriter = new SyncFsWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
                 this.monitoringDataWriter = new AsyncFsConnector(filenameBase, asyncRecordQueueSize);

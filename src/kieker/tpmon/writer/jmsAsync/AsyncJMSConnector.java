@@ -35,7 +35,7 @@ import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
  *
  * @author Matthias Rohr, Andre van Hoorn
  */
-public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
+public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncJMSConnector.class);
     private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
@@ -50,7 +50,6 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     private String factoryLookupName;
     private String topic;
     private long messageTimeToLive;
-    private boolean writeRecordTypeIds;
     private int asyncRecordQueueSize = 8000;
     private int asyncTypeQueueSize = 20;
 
@@ -177,18 +176,14 @@ public class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         this.typeQueue.add(new MonitoringRecordTypeClassnameMapping(id, className));
     }
 
-    @TpmonInternal()
-    public boolean isWriteRecordTypeIds() {
-        return this.writeRecordTypeIds;
-    }
 
     @TpmonInternal()
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+        super.setWriteRecordTypeIds(writeRecordTypeIds);
         for (AbstractWorkerThread t : typeWriterAndRecordWriters) {
             log.info("t.setWriteRecordTypeIds(" + writeRecordTypeIds + ")");
             t.setWriteRecordTypeIds(writeRecordTypeIds);
         }
-        this.writeRecordTypeIds = writeRecordTypeIds;
     }
 
     @TpmonInternal

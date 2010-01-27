@@ -4,7 +4,6 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.tpmon.*;
 import java.sql.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -60,7 +59,7 @@ import org.apache.commons.logging.LogFactory;
  * 2006/12/20: Initial Prototype
  *
  */
-public class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
+public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(SyncDbConnector.class);
     private Connection conn = null;
@@ -75,8 +74,6 @@ public class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
             "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCDB +
             " and the file system specific configuration properties.";
-
-    private boolean writeRecordTypeIds = false;
 
     public SyncDbConnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
@@ -208,15 +205,5 @@ public class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isWriteRecordTypeIds() {
-        return this.writeRecordTypeIds;
-    }
-
-    @Override
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        this.writeRecordTypeIds=writeRecordTypeIds;
     }
 }

@@ -56,7 +56,7 @@ import org.apache.commons.logging.LogFactory;
  *             which may be changed during runtime
  * 2007/07/30: Initial Prototype
  */
-public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
+public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
 
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
@@ -82,7 +82,6 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
     private int asyncRecordQueueSize = 8000;
-    private boolean writeRecordTypeIds = false;
 
     public AsyncDbConnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId, int asyncRecordQueueSize) {
@@ -229,15 +228,10 @@ public class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     }
 
     @Override
-    public boolean isWriteRecordTypeIds() {
-        return this.isWriteRecordTypeIds();
-    }
-
-    @Override
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
+    public void setWriteRecordTypeIds(final boolean writeRecordTypeIds) {
+        super.setWriteRecordTypeIds(writeRecordTypeIds);
         for (AbstractWorkerThread t : workers) {
-            t.setWriteRecordTypeIds(this.writeRecordTypeIds);
+            t.setWriteRecordTypeIds(writeRecordTypeIds);
         }
-        this.writeRecordTypeIds = true;
     }
 }

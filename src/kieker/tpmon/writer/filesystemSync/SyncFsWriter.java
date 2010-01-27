@@ -4,7 +4,6 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.tpmon.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,9 +62,9 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public class syncFsWriter extends AbstractKiekerMonitoringLogWriter {
+public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
 
-    private static final Log log = LogFactory.getLog(syncFsWriter.class);
+    private static final Log log = LogFactory.getLog(SyncFsWriter.class);
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
@@ -78,9 +77,8 @@ public class syncFsWriter extends AbstractKiekerMonitoringLogWriter {
             "Do not select this writer using the fully qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_SYNCFS +
             " and the file system specific configuration properties.";
-    private boolean writeRecordTypeIds = false;
 
-    public syncFsWriter() {
+    public SyncFsWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
@@ -89,7 +87,7 @@ public class syncFsWriter extends AbstractKiekerMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public syncFsWriter(String storagePathBase) {
+    public SyncFsWriter(String storagePathBase) {
         log.info("storagePathBase :" + storagePathBase);
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {
@@ -223,15 +221,5 @@ public class syncFsWriter extends AbstractKiekerMonitoringLogWriter {
                 log.error("IO Exception", exc);
             }
         }
-    }
-
-    @Override
-    public boolean isWriteRecordTypeIds() {
-        return this.writeRecordTypeIds;
-    }
-
-    @Override
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        this.writeRecordTypeIds = writeRecordTypeIds;
     }
 }

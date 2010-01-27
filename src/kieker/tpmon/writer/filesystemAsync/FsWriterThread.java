@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
  * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
  *             which may be changed during runtime
  */
-public class FsWriterThread extends AbstractWorkerThread {
+public final class FsWriterThread extends AbstractWorkerThread {
 
     private static final Log log = LogFactory.getLog(FsWriterThread.class);
     // configuration parameters

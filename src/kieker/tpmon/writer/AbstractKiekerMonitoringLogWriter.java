@@ -28,6 +28,7 @@ import kieker.tpmon.annotation.TpmonInternal;
 public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonitoringLogWriter {
 
     private boolean debugEnabled;
+    private boolean writeRecordTypeIds;
    
     @TpmonInternal()
     public abstract boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
@@ -36,10 +37,14 @@ public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonito
     public abstract void registerMonitoringRecordType(int id, String className);
 
    @TpmonInternal()
-    public abstract boolean isWriteRecordTypeIds();
+    public boolean isWriteRecordTypeIds(){
+       return this.writeRecordTypeIds;
+   }
 
     @TpmonInternal()
-    public abstract void setWriteRecordTypeIds(boolean writeRecordTypeIds);
+    public void setWriteRecordTypeIds(final boolean writeRecordTypeIds){
+        this.writeRecordTypeIds = writeRecordTypeIds;
+    }
 
     @TpmonInternal()
     public void setDebug(boolean debug) {
