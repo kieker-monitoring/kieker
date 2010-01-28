@@ -71,8 +71,8 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     @TpmonInternal
     public boolean init(String initString) {
         if (initString == null || initString.length() == 0) {
-            log.error("Invalid initString. Valid example for tpmon.properties:\n" +
-                    "monitoringDataWriterInitString=jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000");
+            log.error("Invalid initString. Valid example for tpmon.properties:\n"
+                    + "monitoringDataWriterInitString=jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000");
             return false;
         }
 
@@ -80,12 +80,12 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         try {
             super.initVarsFromInitString(initString);
 
-        this.contextFactoryType = super.getInitProperty("jmsContextFactoryType");
-        this.providerUrl = super.getInitProperty("jmsProviderUrl");
-        this.factoryLookupName = super.getInitProperty("jmsFactoryLookupName");
-        this.topic = super.getInitProperty("jmsTopic");
-        this.messageTimeToLive = Long.valueOf(super.getInitProperty("jmsMessageTimeToLive"));
-        this.asyncRecordQueueSize = Integer.valueOf(super.getInitProperty("asyncRecordQueueSize"));
+            this.contextFactoryType = super.getInitProperty("jmsContextFactoryType");
+            this.providerUrl = super.getInitProperty("jmsProviderUrl");
+            this.factoryLookupName = super.getInitProperty("jmsFactoryLookupName");
+            this.topic = super.getInitProperty("jmsTopic");
+            this.messageTimeToLive = Long.valueOf(super.getInitProperty("jmsMessageTimeToLive"));
+            this.asyncRecordQueueSize = Integer.valueOf(super.getInitProperty("asyncRecordQueueSize"));
 
 
             this.recordQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
@@ -108,7 +108,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         } catch (Exception exc) {
             log.fatal("Error initiliazing JMS Connector", exc);
             retVal = false;
-        } 
+        }
         return retVal;
     }
 
@@ -140,7 +140,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
             } else {
                 recordQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
             }
-        //int currentQueueSize = recordQueue.size();
+            //int currentQueueSize = recordQueue.size();
         } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
             return false;
@@ -153,7 +153,6 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         log.info("Publishing record id/class mapping: " + id + "/" + className);
         this.typeQueue.add(new MonitoringRecordTypeClassnameMapping(id, className));
     }
-
 
     @TpmonInternal()
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
