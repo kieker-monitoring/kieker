@@ -117,14 +117,11 @@ public class FilesystemLogReplayerStarter {
     }
 
     public static void main(final String[] args) {
-        int retVal = 0;
         if (!parseArgs(args) || !initFromArgs()) {
             System.exit(1);
         }
 
         /* Parsed args and initialized variables */
-
-        ctrlInst = TpmonController.getInstance();
 
         if (realtimeMode) {
             log.info("Replaying log data in real time");
@@ -132,60 +129,13 @@ public class FilesystemLogReplayerStarter {
             log.info("Replaying log data in non-real time");
         }
 
-        /**
-         * Force the controller to keep the original logging timestamps
-         * of the monitoring records.
-         */
-        ctrlInst.setReplayMode(realtimeMode);
+        FileSystemReplayer player = new FileSystemReplayer(inputDir, realtimeMode, numRealtimeWorkerThreads);
 
-        IKiekerRecordConsumer logCons = new IKiekerRecordConsumer() {
-
-            /** Anonymous consumer class that simply passes all records to the
-             *  controller */
-            public String[] getRecordTypeSubscriptionList() {
-                return null; // consume all types
-            }
-
-            public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
-                ctrlInst.logMonitoringRecord(monitoringRecord);
-            }
-
-            public boolean execute() {
-                // do nothing, we are synchronous
-                return true;
-            }
-
-            public void terminate() {
-                ctrlInst.terminateMonitoring();
-            }
-        };
-        AbstractKiekerMonitoringLogReader fsReader;
-        if (realtimeMode) {
-//            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(numRealtimeWorkerThreads, logCons);
-//            fsReader.addConsumer(
-//                    rtDistributorCons,
-//                    null); // consume records of all types
-            fsReader = new FSReaderRealtime(inputDir, numRealtimeWorkerThreads);
-
-        } else {
-            fsReader = new FSReader(inputDir);
-        }
-        fsReader.addConsumer(logCons, null); // consume records of all types
-        try {
-            if (!fsReader.execute()) {
-                // here, we do not start consumers since they don't do anything in execute()
-                log.error("Log Replay failed");
-                retVal = 1;
-            }
-        } catch (LogReaderExecutionException ex) {
-            log.error("LogReaderExecutioException", ex);
-            retVal = 1;
-        }
-        if (retVal != 0) {
+        if (!player.execute()) {
             System.err.println("An error occured");
             System.err.println("");
             System.err.println("See 'kieker.log' for details");
-            System.exit(retVal);
+            System.exit(1);
         }
     }
 }
