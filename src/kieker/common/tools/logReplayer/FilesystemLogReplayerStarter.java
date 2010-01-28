@@ -129,7 +129,7 @@ public class FilesystemLogReplayerStarter {
             log.info("Replaying log data in non-real time");
         }
 
-        FileSystemReplayer player = new FileSystemReplayer(inputDir, realtimeMode, numRealtimeWorkerThreads);
+        FileSystemLogReplayer player = new FileSystemLogReplayer(inputDir, realtimeMode, numRealtimeWorkerThreads);
 
         if (!player.execute()) {
             System.err.println("An error occured");

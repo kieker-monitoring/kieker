@@ -33,21 +33,21 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class FileSystemReplayer {
-    private static final Log log = LogFactory.getLog(FileSystemReplayer.class);
+public class FileSystemLogReplayer {
+    private static final Log log = LogFactory.getLog(FileSystemLogReplayer.class);
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     private String inputDir = null;
     private boolean realtimeMode = false;
     private int numRealtimeWorkerThreads = -1;
 
-    private FileSystemReplayer() {}
+    private FileSystemLogReplayer() {}
 
     /** Normal replay mode (i.e., non-real-time). */
-    public FileSystemReplayer(final String inputDir){
+    public FileSystemLogReplayer(final String inputDir){
         this.inputDir = inputDir;
     }
 
-    public FileSystemReplayer(final String inputDir, final boolean realtimeMode, final int numRealtimeWorkerThreads){
+    public FileSystemLogReplayer(final String inputDir, final boolean realtimeMode, final int numRealtimeWorkerThreads){
         this.inputDir = inputDir;
         this.realtimeMode = realtimeMode;
         this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
