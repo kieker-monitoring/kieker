@@ -37,7 +37,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * Simple class to store monitoroing data in the file system. Although a
  * buffered writer is used, outliers (delays of 1000 ms) occur from time
  * to time if many monitoring events have to be writen. We believe that

@@ -1,5 +1,24 @@
 package kieker.common.tools.logReplayer;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ */
+
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
@@ -22,7 +41,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class FilesystemLogReplayer {
+public class FilesystemLogReplayerStarter {
 
     private static CommandLine cmdl = null;
     private static final CommandLineParser cmdlParser = new BasicParser();
@@ -34,7 +53,8 @@ public class FilesystemLogReplayer {
         cmdlOpts.addOption(OptionBuilder.withArgName("true|false").hasArg().withLongOpt("realtime").isRequired(true).withDescription("Replay log data in realtime?").withValueSeparator('=').create("r"));
         cmdlOpts.addOption(OptionBuilder.withArgName("num").hasArg().withLongOpt("realtime-worker-threads").isRequired(false).withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
     }
-    private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
+    
+    private static final Log log = LogFactory.getLog(FilesystemLogReplayerStarter.class);
     private static TpmonController ctrlInst = null;
     private static String inputDir = null;
     private static boolean realtimeMode = false;
@@ -52,7 +72,7 @@ public class FilesystemLogReplayer {
     }
 
     private static void printUsage() {
-        cmdHelpFormatter.printHelp(FilesystemLogReplayer.class.getName(), cmdlOpts);
+        cmdHelpFormatter.printHelp(FilesystemLogReplayerStarter.class.getName(), cmdlOpts);
     }
 
     private static boolean initFromArgs() {
