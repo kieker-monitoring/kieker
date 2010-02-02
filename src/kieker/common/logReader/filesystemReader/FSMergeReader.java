@@ -1,8 +1,10 @@
 package kieker.common.logReader.filesystemReader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -62,8 +64,9 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
     private class FSReaderCons implements IKiekerRecordConsumer {
 
         private final FSMergeReader master;
-        private List<FSReader> readers;
-        private List<FSReader> activeReaders;
+        private final String[] inputDirs;
+        private final List<Thread> readerThreads = new ArrayList<Thread>();
+        private final List<Thread> activeReaders = new ArrayList<Thread>();
         private ConcurrentSkipListMap<AbstractKiekerMonitoringRecord, Thread> nextRecordsFromReaders = new ConcurrentSkipListMap<AbstractKiekerMonitoringRecord, Thread>(new Comparator<AbstractKiekerMonitoringRecord>() {
 
             public int compare(AbstractKiekerMonitoringRecord t, AbstractKiekerMonitoringRecord t1) {
@@ -86,10 +89,25 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
             }
         });
 
-        public FSReaderCons(final FSMergeReader master, final List<FSReader> readers) {
+        public FSReaderCons(final FSMergeReader master, final String[] inputDirs) {
             this.master = master;
-            this.readers = readers;
-            this.activeReaders = new ArrayList<FSReader>(readers);
+            this.inputDirs = inputDirs;
+            ThreadGroup tg = new ThreadGroup("FS reader threads");
+            for (int i = 0; i < inputDirs.length; i++) {
+                final FSReader r = new FSReader(this.inputDirs[i]);
+                final Thread t = new Thread(tg, new Runnable() {
+
+                    public void run() {
+                        try {
+                            r.execute();
+                        } catch (LogReaderExecutionException ex) {
+                            log.error(r, ex);
+                        }
+                    }
+                });
+                this.readerThreads.add(t);
+                this.activeReaders.add(t);
+            }
         }
 
         public String[] getRecordTypeSubscriptionList() {
@@ -100,11 +118,14 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
             Thread t = Thread.currentThread();
             this.nextRecordsFromReaders.put(monitoringRecord, t);
             try {
-                if (this.nextRecordsFromReaders.size() == this.readers.size()) {
-                    this.notify();
+                /* as soon as all readers provided a record, notify consumers */
+                // TODO: remaining problem: what if reader provides no record?
+                synchronized (t) {
+                    if (this.nextRecordsFromReaders.size() == this.activeReaders.size()) {
+                        this.notify();
+                    } // TODO: thread-safe?
+                    t.wait();
                 }
-                // TODO: handle last record (which aborts reader)
-                Thread.currentThread().wait();
             } catch (InterruptedException ex) {
                 log.error("Reader has been interrupted. Terminating consumer. ", ex);
                 this.terminate();
@@ -114,10 +135,10 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
         public boolean execute() throws RecordConsumerExecutionException {
             // TODO: start reader Threads
 
-            while (readers.size() > 0) {
+            while (activeReaders.size() > 0) {
                 try {
                     this.wait();
-                    // TODO: fetch reader and notify
+                    Map.Entry<AbstractKiekerMonitoringRecord, Thread> k = this.nextRecordsFromReaders.pollFirstEntry();
                     this.master.deliverRecordToConsumers(this.nextRecordsFromReaders.firstKey());
                 } catch (InterruptedException ex) {
                     log.error("Was interrupted", ex);
@@ -132,7 +153,15 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
         }
 
         public void terminate() {
-            this.master.terminate();
+            Thread t = Thread.currentThread();
+            if (this.readerThreads.contains(t)) {
+                this.activeReaders.remove(t);
+                this.notifyAll();
+            } else {
+                if (this.activeReaders.size() == 0) {
+                    this.master.terminate();
+                }
+            }
         }
     }
 
