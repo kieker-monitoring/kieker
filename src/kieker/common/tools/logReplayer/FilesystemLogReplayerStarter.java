@@ -19,13 +19,7 @@ package kieker.common.tools.logReplayer;
  *
  */
 
-import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.logReader.LogReaderExecutionException;
-import kieker.common.logReader.filesystemReader.FSReader;
-import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
