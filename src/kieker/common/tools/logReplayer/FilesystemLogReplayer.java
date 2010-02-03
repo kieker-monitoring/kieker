@@ -39,6 +39,7 @@ public class FilesystemLogReplayer {
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     private String[] inputDirs = null;
     private boolean realtimeMode = false;
+    private boolean keepOriginalLoggingTimestamps = true;
     private int numRealtimeWorkerThreads = -1;
 
     private FilesystemLogReplayer() {}
@@ -48,10 +49,11 @@ public class FilesystemLogReplayer {
         this.inputDirs = inputDirs;
     }
 
-    public FilesystemLogReplayer(final String[] inputDirs, final boolean realtimeMode, final int numRealtimeWorkerThreads){
+    public FilesystemLogReplayer(final String[] inputDirs, final boolean keepOriginalLoggingTimestamps, final boolean realtimeMode, final int numRealtimeWorkerThreads){
         this.inputDirs = inputDirs;
         this.realtimeMode = realtimeMode;
         this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
+        this.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestamps;
     }
 
     /**
@@ -63,7 +65,7 @@ public class FilesystemLogReplayer {
          * Force the controller to keep the original logging timestamps
          * of the monitoring records.
          */
-        ctrlInst.setReplayMode(realtimeMode);
+        ctrlInst.setReplayMode(this.keepOriginalLoggingTimestamps);
 
         IKiekerRecordConsumer logCons = new IKiekerRecordConsumer() {
 

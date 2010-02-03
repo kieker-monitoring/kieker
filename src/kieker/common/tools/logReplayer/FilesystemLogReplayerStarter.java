@@ -18,7 +18,7 @@ package kieker.common.tools.logReplayer;
  * ==================================================
  *
  */
-import java.util.StringTokenizer;
+
 import kieker.tpmon.core.TpmonController;
 
 import org.apache.commons.cli.BasicParser;
@@ -42,17 +42,20 @@ public class FilesystemLogReplayerStarter {
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
     private static final Options cmdlOpts = new Options();
     private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
+    private static final String CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS = "keep-logging-timestamps";
     private static final String CMD_OPT_NAME_REALTIME = "realtime";
     private static final String CMD_OPT_NAME_NUM_REALTIME_WORKERS = "realtime-worker-threads";
 
     static {
         cmdlOpts.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs().withLongOpt(CMD_OPT_NAME_INPUTDIRS).isRequired(true).withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
+        cmdlOpts.addOption(OptionBuilder.withArgName("true|false").hasArg().withLongOpt(CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS).isRequired(false).withDescription("Replay the original logging timestamps (defaults to true)?)").withValueSeparator('=').create("k"));
         cmdlOpts.addOption(OptionBuilder.withArgName("true|false").hasArg().withLongOpt(CMD_OPT_NAME_REALTIME).isRequired(true).withDescription("Replay log data in realtime?").withValueSeparator('=').create("r"));
         cmdlOpts.addOption(OptionBuilder.withArgName("num").hasArg().withLongOpt(CMD_OPT_NAME_NUM_REALTIME_WORKERS).isRequired(false).withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
     }
     private static final Log log = LogFactory.getLog(FilesystemLogReplayerStarter.class);
     private static TpmonController ctrlInst = null;
     private static String[] inputDirs = null;
+    private static boolean keepOriginalLoggingTimestamps;
     private static boolean realtimeMode = false;
     private static int numRealtimeWorkerThreads = -1;
 
@@ -77,7 +80,15 @@ public class FilesystemLogReplayerStarter {
         /* 1.) init inputDirs */
         inputDirs = cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 
-        /* 2.) init realtimeMode */
+        /* 2.) init keepOriginalLoggingTimestamps */
+       String keepOriginalLoggingTimestampsOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "true");
+        if (!(keepOriginalLoggingTimestampsOptValStr.equals("true") || keepOriginalLoggingTimestampsOptValStr.equals("false"))) {
+            System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '" + keepOriginalLoggingTimestampsOptValStr + "'");
+            retVal = false;
+        }
+        keepOriginalLoggingTimestamps = keepOriginalLoggingTimestampsOptValStr.equals("true");
+
+        /* 3.) init realtimeMode */
         String realtimeOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
         if (!(realtimeOptValStr.equals("true") || realtimeOptValStr.equals("false"))) {
             System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
@@ -85,7 +96,7 @@ public class FilesystemLogReplayerStarter {
         }
         realtimeMode = realtimeOptValStr.equals("true");
 
-        /* 3.) init numRealtimeWorkerThreads */
+        /* 4.) init numRealtimeWorkerThreads */
         String numRealtimeWorkerThreadsStr = cmdl.getOptionValue(CMD_OPT_NAME_NUM_REALTIME_WORKERS, "1");
         try {
             numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
@@ -138,7 +149,7 @@ public class FilesystemLogReplayerStarter {
             log.info("Replaying log data in non-real time");
         }
 
-        FilesystemLogReplayer player = new FilesystemLogReplayer(inputDirs, realtimeMode, numRealtimeWorkerThreads);
+        FilesystemLogReplayer player = new FilesystemLogReplayer(inputDirs, keepOriginalLoggingTimestamps, realtimeMode, numRealtimeWorkerThreads);
 
         if (!player.execute()) {
             System.err.println("An error occured");
