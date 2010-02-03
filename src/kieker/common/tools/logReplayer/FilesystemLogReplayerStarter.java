@@ -18,7 +18,7 @@ package kieker.common.tools.logReplayer;
  * ==================================================
  *
  */
-
+import java.util.StringTokenizer;
 import kieker.tpmon.core.TpmonController;
 
 import org.apache.commons.cli.BasicParser;
@@ -41,16 +41,18 @@ public class FilesystemLogReplayerStarter {
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
     private static final Options cmdlOpts = new Options();
+    private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
+    private static final String CMD_OPT_NAME_REALTIME = "realtime";
+    private static final String CMD_OPT_NAME_NUM_REALTIME_WORKERS = "realtime-worker-threads";
 
     static {
-        cmdlOpts.addOption(OptionBuilder.withArgName("dir").hasArg().withLongOpt("inputdir").isRequired(true).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
-        cmdlOpts.addOption(OptionBuilder.withArgName("true|false").hasArg().withLongOpt("realtime").isRequired(true).withDescription("Replay log data in realtime?").withValueSeparator('=').create("r"));
-        cmdlOpts.addOption(OptionBuilder.withArgName("num").hasArg().withLongOpt("realtime-worker-threads").isRequired(false).withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
+        cmdlOpts.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs().withLongOpt(CMD_OPT_NAME_INPUTDIRS).isRequired(true).withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
+        cmdlOpts.addOption(OptionBuilder.withArgName("true|false").hasArg().withLongOpt(CMD_OPT_NAME_REALTIME).isRequired(true).withDescription("Replay log data in realtime?").withValueSeparator('=').create("r"));
+        cmdlOpts.addOption(OptionBuilder.withArgName("num").hasArg().withLongOpt(CMD_OPT_NAME_NUM_REALTIME_WORKERS).isRequired(false).withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
     }
-    
     private static final Log log = LogFactory.getLog(FilesystemLogReplayerStarter.class);
     private static TpmonController ctrlInst = null;
-    private static String inputDir = null;
+    private static String[] inputDirs = null;
     private static boolean realtimeMode = false;
     private static int numRealtimeWorkerThreads = -1;
 
@@ -72,35 +74,35 @@ public class FilesystemLogReplayerStarter {
     private static boolean initFromArgs() {
         boolean retVal = true;
 
-        /* 1.) init inputDir */
-        inputDir = cmdl.getOptionValue("inputdir");
+        /* 1.) init inputDirs */
+        inputDirs = cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 
         /* 2.) init realtimeMode */
-        String realtimeOptValStr = cmdl.getOptionValue("realtime", "false");
+        String realtimeOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
         if (!(realtimeOptValStr.equals("true") || realtimeOptValStr.equals("false"))) {
-            System.out.println("Invalid value for option realtime: '" + realtimeOptValStr + "'");
+            System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
             retVal = false;
         }
         realtimeMode = realtimeOptValStr.equals("true");
 
         /* 3.) init numRealtimeWorkerThreads */
-        String numRealtimeWorkerThreadsStr = cmdl.getOptionValue("realtime-worker-threads", "1");
+        String numRealtimeWorkerThreadsStr = cmdl.getOptionValue(CMD_OPT_NAME_NUM_REALTIME_WORKERS, "1");
         try {
             numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
         } catch (NumberFormatException exc) {
-            System.out.println("Invalid value for option realtime-worker-threads: '" + numRealtimeWorkerThreadsStr + "'");
+            System.out.println("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr + "'");
             log.error("NumberFormatException: ", exc);
             retVal = false;
         }
         if (numRealtimeWorkerThreads < 1) {
-            System.out.println("Option value for realtime-worker-threads must be >= 1; found " + numRealtimeWorkerThreads);
-            log.error("Invalid specification of numRealtimeWorkerThreads:" + numRealtimeWorkerThreads);
+            System.out.println("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found " + numRealtimeWorkerThreads);
+            log.error("Invalid specification of " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":" + numRealtimeWorkerThreads);
             retVal = false;
         }
 
         /* log configuration */
         if (retVal == true) {
-            log.info("inputDir: " + inputDir);
+            log.info("inputDirs: " + StringArrayToDeliminedString(inputDirs, ';'));
             log.info("Replaying in " + (realtimeMode ? "" : "non-") + "realtime mode");
             if (realtimeMode) {
                 log.info("Using " + numRealtimeWorkerThreads + " realtime worker thread" + (numRealtimeWorkerThreads > 1 ? "s" : ""));
@@ -108,6 +110,19 @@ public class FilesystemLogReplayerStarter {
         }
 
         return retVal;
+    }
+
+    private static String StringArrayToDeliminedString(String[] array, char delimiter) {
+        StringBuilder arTostr = new StringBuilder();
+        if (array.length > 0) {
+            arTostr.append(array[0]);
+            for (int i = 1; i < array.length; i++) {
+                arTostr.append(delimiter);
+                arTostr.append(array[i]);
+            }
+        }
+        return arTostr.toString();
+
     }
 
     public static void main(final String[] args) {
@@ -123,7 +138,7 @@ public class FilesystemLogReplayerStarter {
             log.info("Replaying log data in non-real time");
         }
 
-        FilesystemLogReplayer player = new FilesystemLogReplayer(inputDir, realtimeMode, numRealtimeWorkerThreads);
+        FilesystemLogReplayer player = new FilesystemLogReplayer(inputDirs, realtimeMode, numRealtimeWorkerThreads);
 
         if (!player.execute()) {
             System.err.println("An error occured");

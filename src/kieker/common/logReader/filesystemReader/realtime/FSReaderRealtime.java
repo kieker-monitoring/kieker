@@ -1,12 +1,14 @@
 package kieker.common.logReader.filesystemReader.realtime;
 
+import java.util.StringTokenizer;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.common.logReader.filesystemReader.FSReader;
 
 import kieker.common.logReader.RealtimeReplayDistributor;
+import kieker.common.logReader.filesystemReader.FSMergeReader;
+import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import org.apache.commons.logging.Log;
@@ -21,8 +23,11 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
     /* delegate */
-    private FSReader fsReader;
+    private AbstractKiekerMonitoringLogReader fsReader;
     private RealtimeReplayDistributor rtDistributor = null;
+
+    private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
+    private static final String PROP_NAME_INPUTDIRNAMES = "inputDirNames";
 
     /**
      * Acts as a consumer to the rtDistributor and delegates incoming records
@@ -65,37 +70,62 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
     public FSReaderRealtime() {
     }
 
-    /** Valid key/value pair: inputDirName=INPUTDIRECTORY | numWorkers=XX */
+    /** Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN | numWorkers=XX */
     @TpmonInternal()
     public void init(String initString) throws IllegalArgumentException {
         super.initVarsFromInitString(initString);
 
-        String numWorkersString = this.getInitProperty("numWorkers");
+        String numWorkersString = this.getInitProperty(PROP_NAME_NUM_WORKERS);
         int numWorkers = -1;
         if (numWorkersString == null) {
-            throw new IllegalArgumentException("Missing init parameter 'numWorkers'");
+            throw new IllegalArgumentException("Missing init parameter '"+PROP_NAME_NUM_WORKERS+"'");
         }
         try {
             numWorkers = Integer.parseInt(numWorkersString);
         } catch (NumberFormatException ex) { /* value of numWorkers remains -1 */ }
 
-        initInstanceFromArgs(this.getInitProperty("inputDirName"), numWorkers);
+        initInstanceFromArgs(inputDirNameListToArray(this.getInitProperty(PROP_NAME_INPUTDIRNAMES)), numWorkers);
     }
 
-    public FSReaderRealtime(final String inputDirName, int numWorkers) {
-        initInstanceFromArgs(inputDirName, numWorkers);
+    public FSReaderRealtime(final String[] inputDirNames, int numWorkers) {
+        initInstanceFromArgs(inputDirNames, numWorkers);
     }
 
-    private void initInstanceFromArgs(final String inputDirName, int numWorkers) throws IllegalArgumentException {
-        if (inputDirName == null || inputDirName.equals("")) {
-            throw new IllegalArgumentException("Invalid proprty value for inputDirName:" + inputDirName);
+    private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException{
+       String[] dirNameArray;
+
+        // parse inputDir property value
+       if (inputDirNameList == null || inputDirNameList.trim().length() == 0){
+           log.error("Invalid argument value for inputDirNameList:" + inputDirNameList);
+           throw new IllegalArgumentException("Invalid argument value for inputDirNameList:" + inputDirNameList);
+       }
+        try {
+            StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
+            dirNameArray = new String[dirNameTokenizer.countTokens()];
+            for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
+                dirNameArray[i] = dirNameTokenizer.nextToken().trim();
+            }
+        } catch (Exception exc) {
+            throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
+        }
+       return dirNameArray;
+    }
+
+    private void initInstanceFromArgs(final String[] inputDirNames, int numWorkers) throws IllegalArgumentException {
+        if (inputDirNames == null || inputDirNames.length <= 0) {
+            throw new IllegalArgumentException("Invalid property value for "+PROP_NAME_INPUTDIRNAMES+":" + inputDirNames);
         }
 
         if (numWorkers <= 0) {
-            throw new IllegalArgumentException("Invalid proprty value for numWorkers: " + numWorkers);
+            throw new IllegalArgumentException("Invalid proprty value for "+PROP_NAME_NUM_WORKERS+": " + numWorkers);
         }
 
-        fsReader = new FSReader(inputDirName);
+        if (inputDirNames.length == 1){
+            // faster since there's no threading overhead
+            fsReader = new FSReader(inputDirNames[0]);
+        } else {
+            fsReader = new FSMergeReader(inputDirNames);
+        }
         IKiekerRecordConsumer rtCons = new FSReaderRealtimeCons(this);
         rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons);
         fsReader.addConsumer(rtDistributor, null);

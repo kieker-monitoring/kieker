@@ -50,6 +50,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FSReader extends AbstractKiekerMonitoringLogReader {
 
+    private static final String PROP_NAME_INPUTDIR = "inputDirName";
     private static final Log log = LogFactory.getLog(FSReader.class);
     private File inputDir = null;
 
@@ -66,12 +67,12 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
     @TpmonInternal()
     public void init(String initString) throws IllegalArgumentException{
         super.initVarsFromInitString(initString); // throws IllegalArgumentException
-        this.initInstanceFromArgs(this.getInitProperty("inputDirName")); // throws IllegalArgumentException
+        this.initInstanceFromArgs(this.getInitProperty(PROP_NAME_INPUTDIR)); // throws IllegalArgumentException
     }
 
    private void initInstanceFromArgs(final String inputDirName) throws IllegalArgumentException {
         if (inputDirName == null || inputDirName.equals("")) {
-            throw new IllegalArgumentException("Invalid or missing property inputDirName: " + inputDirName);
+            throw new IllegalArgumentException("Invalid or missing property "+PROP_NAME_INPUTDIR+": " + inputDirName);
         }
         this.inputDir = new File(inputDirName);
     }

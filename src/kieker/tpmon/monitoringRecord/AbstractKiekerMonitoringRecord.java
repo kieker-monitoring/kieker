@@ -111,13 +111,10 @@ public abstract class AbstractKiekerMonitoringRecord implements Serializable {
     public final String toString() {
         String[] recordVector = this.toStringArray();
         StringBuilder sb = new StringBuilder();
-        boolean first=true;
+        sb.append(this.loggingTimestamp);
         for (String curStr : recordVector) {
-            if (!first) {
                 sb.append(AbstractKiekerMonitoringRecord.separator);
-            }
             sb.append(curStr);
-            first = false;
         }
         return sb.toString();
     }

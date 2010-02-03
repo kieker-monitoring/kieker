@@ -50,8 +50,8 @@ import org.apache.commons.logging.LogFactory;
 public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSMergeReader.class);
-    private static final String PROP_NAME_INPUTDIRS = "inputDirs"; // value: semicolon-separated list of directories
-    private String[] inputDirs;
+    public static final String PROP_NAME_INPUTDIRS = "inputDirs"; // value: semicolon-separated list of directories
+    private String[] inputDirs = null;
     private boolean terminate = false;
 
     public void setTerminate(boolean terminate) {
@@ -61,6 +61,9 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
     // TODO: provide constructor with time interval
     public FSMergeReader(final String[] inputDirs) {
         this.inputDirs = inputDirs;
+    }
+
+    public FSMergeReader() {
     }
     /**
      * Acts as a consumer to the FSReader and delegates incoming records
@@ -73,28 +76,30 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
         private final FSMergeReader master;
         private final String[] inputDirs;
         // we synchronize access to the following data structures on this object.
+        private Thread mainThread;
+        private boolean errorOccured = false;
+        private boolean isTerminated = false;
         private final List<Thread> readerThreads = new ArrayList<Thread>();
         private final List<Thread> activeReaders = new ArrayList<Thread>();
         private final AbstractKiekerMonitoringRecord FS_READER_TERMINATION_MARKER = new KiekerDummyMonitoringRecord();
         private TreeMap<AbstractKiekerMonitoringRecord, Thread> nextRecordsFromReaders = new TreeMap<AbstractKiekerMonitoringRecord, Thread>(new Comparator<AbstractKiekerMonitoringRecord>() {
 
             public int compare(AbstractKiekerMonitoringRecord t, AbstractKiekerMonitoringRecord t1) {
-                if (t == t1) {
-                    return 0;
-                }
                 if (t == FS_READER_TERMINATION_MARKER) {
                     return 1;
                 }
                 if (t1 == FS_READER_TERMINATION_MARKER) {
                     return -1;
                 }
+                /* Only return 0 (equal) iff the objects are identical */
+                if (t == t1) {
+                    return 0;
+                }
                 if (t.getLoggingTimestamp() < t1.getLoggingTimestamp()) {
                     return -1;
-                }
-                if (t.getLoggingTimestamp() > t1.getLoggingTimestamp()) {
+                } else {
                     return 1;
                 }
-                return 0;
             }
         });
 
@@ -109,31 +114,44 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
 
         /** Note that this method is accessed concurrently! */
         public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+            if (this.isTerminated) {
+                throw new RecordConsumerExecutionException("Consumer already terminated");
+            }
+
             Thread t = Thread.currentThread();
-            this.nextRecordsFromReaders.put(monitoringRecord, t);
+            log.info("Putting record " + monitoringRecord);
             synchronized (this) {
-                if (this.nextRecordsFromReaders.size() == this.activeReaders.size()) {
-                    this.notify(); // wake up master thread waiting in execute()
-                }
-                if (monitoringRecord == FS_READER_TERMINATION_MARKER) {
-                    /* if it is the FS_READER_TERMINATION_MARKER, the method
-                     * call originates from the terminate method (called by one
-                     * the reader threads) and we must not block! */
-                } else {
-                    synchronized (t) {
-                        try {
-                            t.wait();
-                        } catch (InterruptedException ex) {
-                            log.error("Reader thread has been interrupted. Terminating consumer. ", ex);
-                            this.terminate();
-                        }
+                this.nextRecordsFromReaders.put(monitoringRecord, t);
+                log.info("NextrecordList" + this.nextRecordsFromReaders);
+            }
+            if (monitoringRecord == FS_READER_TERMINATION_MARKER) {
+                /* if it is the FS_READER_TERMINATION_MARKER, the method
+                 * call originates from the terminate method (called by one
+                 * the reader threads) and we must not block! */
+                synchronized (t) { // TODO: required to sync on t?
+                    log.info("Notifying master");
+                    synchronized (this) {
+                        this.notify(); // notify master in execute(that there's a new record)
                     }
                 }
-
+            } else {
+                synchronized (t) {
+                    try {
+                        synchronized (this) {
+                            this.notify(); // notify master in execute(that there's a new record)
+                        }
+                        t.wait();
+                        log.info("Woke up");
+                    } catch (InterruptedException ex) {
+                        log.error("Reader thread has been interrupted. Terminating consumer. ", ex);
+                        this.terminate();
+                    }
+                }
             }
         }
 
         public boolean execute() throws RecordConsumerExecutionException {
+            this.mainThread = Thread.currentThread();
             // init and start reader threads
             ThreadGroup tg = new ThreadGroup("FS reader threads");
             for (int i = 0; i < inputDirs.length; i++) {
@@ -146,9 +164,10 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                             r.execute();
                         } catch (LogReaderExecutionException ex) {
                             log.error(r, ex);
+                            reportReaderException(ex);
                         }
                     }
-                });
+                }, this.inputDirs[i]);
                 this.readerThreads.add(t);
                 this.activeReaders.add(t);
             }
@@ -156,46 +175,74 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                 t.start();
             }
 
+            log.info("All threads started. Proceeding to main loop ...");
+
             /* caution: from now on, we have a multi-threaded reader
              *          and need to synchronize (on 'this'). */
-
-            synchronized (this) {
-                while (activeReaders.size() > 0) {
-                    try {
-                        this.wait();
-                        Map.Entry<AbstractKiekerMonitoringRecord, Thread> k =
-                                this.nextRecordsFromReaders.pollFirstEntry();
-                        this.master.deliverRecordToConsumers(k.getKey());
-                        k.getValue().notify(); // wake up blocked thread (in consume...())
-                    } catch (InterruptedException ex) {
-                        log.error("Was interrupted", ex);
-                    } catch (LogReaderExecutionException ex) {
-                        log.info("LogReaderExecutionException", ex);
-                        throw new RecordConsumerExecutionException("LogReaderExecutionException", ex);
+            while (true) {
+                try {
+                    Map.Entry<AbstractKiekerMonitoringRecord, Thread> k;
+                    Thread recordProvidingThread = null;
+                    synchronized (this) {
+                        while (this.nextRecordsFromReaders.size() != this.readerThreads.size()) {
+                            this.wait();
+                            if (this.errorOccured) {
+                                log.error("Found error flag set");
+                                throw new LogReaderExecutionException("An error occured");
+                            }
+                        }
+                        k = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+                        log.info("Found record " + k.getKey());
+                        if (k.getKey() == FS_READER_TERMINATION_MARKER) {
+                            log.info("All reader threads provided FS_READER_TERMINATION_MARKER");
+                            this.terminate();
+                            return true;
+                        } else {
+                            this.nextRecordsFromReaders.pollFirstEntry(); // now, well remove
+                            this.master.deliverRecordToConsumers(k.getKey());
+                            recordProvidingThread = k.getValue();
+                        }
+                    } // release monitor
+                    if (recordProvidingThread != null) { // only if we need to wake up s.o.
+                        synchronized (recordProvidingThread) {
+                            recordProvidingThread.notify(); // wake up blocked thread (in consume...())
+                        }
                     }
+                } catch (Exception ex) {
+                    log.info("Exception while reading", ex);
+                    this.terminate();
+                    throw new RecordConsumerExecutionException("Error while reading", ex);
                 }
-                this.terminate();
             }
-            return true;
+        }
+
+        public synchronized void reportReaderException(LogReaderExecutionException ex) {
+            Thread t = Thread.currentThread();
+            log.error("FSReader thread '" + t.getName() + "' reports exception", ex);
+            this.errorOccured = true;
+            this.notifyAll();
         }
 
         /** Note that this method is accessed concurrently! */
-        public void terminate() {
+        public synchronized void terminate() {
+            if (this.isTerminated) {
+                return;
+            }
             Thread t = Thread.currentThread();
-            synchronized (this) {
-                if (this.readerThreads.contains(t)) { // i.e., a reader thread called terminate()
-                    this.activeReaders.remove(t);
-                    try {
-                        this.consumeMonitoringRecord(FS_READER_TERMINATION_MARKER);
-                    } catch (RecordConsumerExecutionException ex) {
-                        log.error("Error occured while sending FS_READER_TERMINATION_MARKER", ex);
-                    }
-                } else {
-                    if (this.activeReaders.size() == 0) {
-                        this.master.setTerminate(terminate);
-                        this.master.terminate();
-                    }
+            if (this.readerThreads.contains(t)) { // i.e., a reader thread called terminate()
+                log.info("Removing myself from the list of active readers");
+                this.activeReaders.remove(t);
+                try {
+                    this.consumeMonitoringRecord(FS_READER_TERMINATION_MARKER);
+                } catch (RecordConsumerExecutionException ex) {
+                    log.error("Error occured while sending FS_READER_TERMINATION_MARKER", ex);
                 }
+            } else if (t == this.mainThread) {
+                log.info("Main thread initiating reader shutdown");
+                this.master.setTerminate(terminate);
+                this.master.terminate();
+                this.isTerminated = true;
+                this.notifyAll();
             }
         }
     }
@@ -205,17 +252,12 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
         concurrentConsumer = new FSReaderCons(this, inputDirs);
         synchronized (this) {
             try {
-                concurrentConsumer.execute();
-                this.wait(); // will be notified by terminate() method in super class
-            } catch (InterruptedException ex) {
-                Logger.getLogger(FSMergeReader.class.getName()).log(Level.SEVERE, null, ex);
+                return concurrentConsumer.execute();
             } catch (RecordConsumerExecutionException ex) {
                 log.error("RecordConsumerExecutionException occured", ex);
                 throw new LogReaderExecutionException("RecordConsumerExecutionException occured", ex);
             }
         }
-
-        return true;
     }
 
     /**
@@ -224,11 +266,11 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
     public void init(String initString) throws IllegalArgumentException {
         super.initVarsFromInitString(initString);
         String dirList = super.getInitProperty(PROP_NAME_INPUTDIRS);
+
         if (dirList == null) {
             log.error("Missing value for property " + PROP_NAME_INPUTDIRS);
             throw new IllegalArgumentException("Missing value for property " + PROP_NAME_INPUTDIRS);
-        }
-        // parse inputDir property value
+        } // parse inputDir property value
         try {
             StringTokenizer dirNameTokenizer = new StringTokenizer(dirList, ";");
             this.inputDirs = new String[dirNameTokenizer.countTokens()];
@@ -237,6 +279,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
             }
         } catch (Exception exc) {
             throw new IllegalArgumentException("Error parsing list of input directories'" + dirList + "'", exc);
+
         }
     }
 }

@@ -22,6 +22,7 @@ package kieker.common.tools.logReplayer;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
+import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
 import kieker.tpmon.core.TpmonController;
@@ -36,19 +37,19 @@ import org.apache.commons.logging.LogFactory;
 public class FilesystemLogReplayer {
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
     private static final TpmonController ctrlInst = TpmonController.getInstance();
-    private String inputDir = null;
+    private String[] inputDirs = null;
     private boolean realtimeMode = false;
     private int numRealtimeWorkerThreads = -1;
 
     private FilesystemLogReplayer() {}
 
     /** Normal replay mode (i.e., non-real-time). */
-    public FilesystemLogReplayer(final String inputDir){
-        this.inputDir = inputDir;
+    public FilesystemLogReplayer(final String[] inputDirs){
+        this.inputDirs = inputDirs;
     }
 
-    public FilesystemLogReplayer(final String inputDir, final boolean realtimeMode, final int numRealtimeWorkerThreads){
-        this.inputDir = inputDir;
+    public FilesystemLogReplayer(final String[] inputDirs, final boolean realtimeMode, final int numRealtimeWorkerThreads){
+        this.inputDirs = inputDirs;
         this.realtimeMode = realtimeMode;
         this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
     }
@@ -87,14 +88,15 @@ public class FilesystemLogReplayer {
         };
         AbstractKiekerMonitoringLogReader fsReader;
         if (realtimeMode) {
-//            IKiekerRecordConsumer rtDistributorCons = new ReplayDistributor(numRealtimeWorkerThreads, logCons);
-//            fsReader.addConsumer(
-//                    rtDistributorCons,
-//                    null); // consume records of all types
-            fsReader = new FSReaderRealtime(inputDir, numRealtimeWorkerThreads);
+          fsReader = new FSReaderRealtime(inputDirs, numRealtimeWorkerThreads);
 
         } else {
-            fsReader = new FSReader(inputDir);
+            if (inputDirs.length == 1){
+                // faster since there's no threading overhead
+                fsReader = new FSReader(inputDirs[0]);
+            } else {
+                fsReader = new FSMergeReader(inputDirs);
+            }
         }
         fsReader.addConsumer(logCons, null); // consume records of all types
         try {
