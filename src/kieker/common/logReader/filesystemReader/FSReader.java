@@ -37,12 +37,12 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  *
- * This reader allows one to read a folder or an single tpmon file and
- * transforms it to monitoring events that are stored in the file system
- * again, written to a database, or whatever tpmon is configured to do
- * with the monitoring data.
  */
+
 /**
+ * This reader allows one to read a folder (the contained tpmon-*.dat files, 
+ * respectively) and transform pass the monitoring events to registered consumers.
+ *
  * @author Matthias Rohr, Andre van Hoorn
  *
  * History:
