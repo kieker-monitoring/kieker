@@ -2,10 +2,10 @@ package kieker.tpan.recordConsumer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -46,9 +46,14 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
     /** TraceId x trace */
-    private Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
+    private final Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
+    private final boolean considerHostname;
+    /** Representative x # of equivalents */
+    private final HashMap<ExecutionTraceHashContainer, Integer> eTracesEquivClassesMap =
+            new HashMap<ExecutionTraceHashContainer, Integer>();
     /** Timestamp of most recent execution x trace */
-    private TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
+    private final TreeSet<ExecutionTrace> timeoutMap =
+            new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
         /** Order traces by tins  */
         public int compare(ExecutionTrace t1, ExecutionTrace t2) {
@@ -63,7 +68,8 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
     private final long maxTraceDurationNanosecs;
     private long highestTout = -1;
     private boolean terminate = false;
-    private boolean ignoreInvalidTraces = false;
+    private final boolean ignoreInvalidTraces;
+    private final boolean onlyEquivClasses;
     private List<IMessageTraceReceiver> messageTraceListeners = new ArrayList<IMessageTraceReceiver>();
     private List<IExecutionTraceReceiver> executionTraceListeners = new ArrayList<IExecutionTraceReceiver>();
     private final TreeSet<Long> selectedTraces;
@@ -71,13 +77,18 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
         KiekerExecutionRecord.class.getName()
     };
 
-    public TraceReconstructionFilter(final long maxTraceDurationSecs, final boolean ignoreInvalidTraces, final TreeSet<Long> selectedTraces) {
+    public TraceReconstructionFilter(final long maxTraceDurationSecs,
+            final boolean ignoreInvalidTraces,
+            final boolean onlyEquivClasses, final boolean considerHostname,
+            final TreeSet<Long> selectedTraces) {
         if (maxTraceDurationSecs > 0) {
             this.maxTraceDurationNanosecs = maxTraceDurationSecs / (1000 * 1000 * 1000);
         } else {
             this.maxTraceDurationNanosecs = Long.MAX_VALUE;
         }
         this.ignoreInvalidTraces = ignoreInvalidTraces;
+        this.onlyEquivClasses = onlyEquivClasses;
+        this.considerHostname = considerHostname;
         this.selectedTraces = selectedTraces;
     }
 
@@ -119,6 +130,23 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
             pendingTraces.remove(polledTrace.getTraceId());
             log.info("Removed pending trace:" + polledTrace);
             try {
+                boolean isNewTrace = true;
+                if (this.onlyEquivClasses) {
+                    ExecutionTraceHashContainer polledTraceHashContainer =
+                            new ExecutionTraceHashContainer(polledTrace);
+                    Integer numOccurences = this.eTracesEquivClassesMap.get(polledTraceHashContainer);
+                    if (numOccurences == null){
+                        numOccurences = new Integer(1);
+                    } else {
+                        isNewTrace = false;
+                        numOccurences = new Integer(numOccurences.intValue()+1);
+                    }
+                    this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
+                }
+
+                if (!isNewTrace) {
+                    continue;
+                }
                 MessageTrace mt = polledTrace.toMessageTrace();
                 if (mt != null) {
                     for (IMessageTraceReceiver l : messageTraceListeners) {
@@ -159,6 +187,67 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
             this.processQueue();
         } catch (RecordConsumerExecutionException ex) {
             log.error("Error prossessing queue", ex);
+        }
+    }
+
+    private class ExecutionTraceHashContainer {
+
+        private final ExecutionTrace t;
+        private final int hashCode;
+
+        public ExecutionTraceHashContainer(final ExecutionTrace t) {
+            this.t = t;
+            int h = 0;
+            // TODO: need a better hash function considering the order (e.g., MD5)
+            for (KiekerExecutionRecord r : t.getTraceAsSortedSet()) {
+                h ^= r.componentName.hashCode();
+                h ^= r.opname.hashCode();
+                if (considerHostname) {
+                    h ^= r.vmName.hashCode();
+                }
+            }
+            //
+            this.hashCode = h;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.hashCode;
+        }
+
+        private boolean executionsEqual(KiekerExecutionRecord r1, KiekerExecutionRecord r2) {
+            if (r1 == r2) {
+                return true;
+            }
+            if (r1 == null || r2 == null) {
+                return false;
+            }
+            return r1.componentName.equals(r2.componentName)
+                    && r1.opname.equals(r2.opname)
+                    && r1.eoi == r2.eoi
+                    && r1.ess == r2.ess
+                    && (!considerHostname || r1.vmName.equals(r2.vmName));
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            ExecutionTrace otherTrace = ((ExecutionTraceHashContainer) obj).t;
+            if (this.t.getLength() != otherTrace.getLength()) {
+                return false;
+            }
+            Iterator<KiekerExecutionRecord> otherIterator = otherTrace.getTraceAsSortedSet().iterator();
+            for (KiekerExecutionRecord r1 : this.t.getTraceAsSortedSet()) {
+                if (!this.executionsEqual(r1, otherIterator.next())) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

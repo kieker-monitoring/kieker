@@ -78,24 +78,41 @@ public class TpanTool {
     private static String task = null;
     private static String outputFnPrefix = null;
     private static TreeSet<Long> selectedTraces = null;
+    private static boolean onlyEquivClasses = true; // false;
+    private static boolean considerHostname = true;
+
+    private static final String CMD_OPT_NAME_INPUTDIR = "inputdir";
+    private static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
+    private static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
+    private static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
+    private static final String CMD_OPT_NAME_TRACEEQUIVCLASSES = "trace-equivalence-classes";
+    private static final String CMD_OPT_NAME_CONSIDERHOSTNAMES = "consider-hostname";
+
+    private static final String CMD_OPT_NAME_PLOTSEQD = "plot-Sequence-Diagram";
+    private static final String CMD_OPT_NAME_PLOTDEPG = "plot-Dependency-Graph";
+    private static final String CMD_OPT_NAME_PRINTMSGTRACE = "print-Message-Trace";
+    private static final String CMD_OPT_NAME_PRINTEXECTRACE = "print-Execution-Trace";
+    private static final String CMD_OPT_NAME_INITJMSREADER = "init-basic-JMS-reader";
+    private static final String CMD_OPT_NAME_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
 
     static {
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("inputdir").withArgName("dir").hasArg(true).isRequired(false).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("outputdir").withArgName("dir").hasArg(true).isRequired(true).withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("output-filename-prefix").withArgName("dir").hasArg(true).isRequired(false).withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIR).withArgName("dir").hasArg(true).isRequired(false).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTDIR).withArgName("dir").hasArg(true).isRequired(true).withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("dir").hasArg(true).isRequired(false).withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 
         //OptionGroup cmdlOptGroupTask = new OptionGroup();
         //cmdlOptGroupTask.isRequired();
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("plot-Sequence-Diagram").hasArg(false).withDescription("Generate sequence diagrams (.pic format) from log data").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("plot-Dependency-Graph").hasArg(false).withDescription("Generate a dependency graph (.dot format) from log data").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Message-Trace").hasArg(false).withDescription("Generate a message trace representation from log data").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("print-Execution-Trace").hasArg(false).withDescription("Generate an execution trace representation from log data").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("init-basic-JMS-reader").hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("init-basic-JMS-readerJavaFx").hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_PLOTSEQD).hasArg(false).withDescription("Generate sequence diagrams (.pic format) from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_PLOTDEPG).hasArg(false).withDescription("Generate a dependency graph (.dot format) from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_PRINTMSGTRACE).hasArg(false).withDescription("Generate a message trace representation from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_PRINTEXECTRACE).hasArg(false).withDescription("Generate an execution trace representation from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_INITJMSREADER).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_INITJMSREADERJFX).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
 
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
-
-        cmdlOpts.addOption(OptionBuilder.withLongOpt("select-traces").withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSES).withArgName("true|false").hasArgs().isRequired(false).withDescription("Detect trace equivalence classes and perform actions on representatives (defaults to false).").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_CONSIDERHOSTNAMES).withArgName("true|false").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces (defaults to true).").create("t"));
     }
 
     private static boolean parseArgs(String[] args) {
@@ -114,14 +131,14 @@ public class TpanTool {
     }
 
     private static boolean initFromArgs() {
-        inputDir = cmdl.getOptionValue("inputdir") + File.separator;
+        inputDir = cmdl.getOptionValue(CMD_OPT_NAME_INPUTDIR) + File.separator;
         if (inputDir.equals("${inputDir}/")) {
-            log.error("Invalid iput dir '" + inputDir + "'. Add it as command-line parameter to you ant call (e.g., ant run-tpan -DinputDir=/tmp) or to a properties file.");
+            log.error("Invalid input dir '" + inputDir + "'. Add it as command-line parameter to you ant call (e.g., ant run-tpan -DinputDir=/tmp) or to a properties file.");
         }
-        outputDir = cmdl.getOptionValue("outputdir") + File.separator;
-        outputFnPrefix = cmdl.getOptionValue("output-filename-prefix", "");
-        if (cmdl.hasOption("select-traces")) { /* Parse liste of trace Ids */
-            String[] traceIdList = cmdl.getOptionValues("select-traces");
+        outputDir = cmdl.getOptionValue(CMD_OPT_NAME_OUTPUTDIR) + File.separator;
+        outputFnPrefix = cmdl.getOptionValue(CMD_OPT_NAME_OUTPUTFNPREFIX, "");
+        if (cmdl.hasOption(CMD_OPT_NAME_SELECTTRACES)) { /* Parse liste of trace Ids */
+            String[] traceIdList = cmdl.getOptionValues(CMD_OPT_NAME_SELECTTRACES);
             selectedTraces = new TreeSet<Long>();
             int numSelectedTraces = traceIdList.length;
             try {
@@ -134,6 +151,22 @@ public class TpanTool {
                 return false;
             }
         }
+
+        String considerHostnameOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_CONSIDERHOSTNAMES, "true");
+        if (!(considerHostnameOptValStr.equals("true") || considerHostnameOptValStr.equals("false"))) {
+            System.err.println("Invalid value for option " + CMD_OPT_NAME_CONSIDERHOSTNAMES + ": '" + considerHostnameOptValStr + "'");
+            return false;
+        }
+        considerHostname = considerHostnameOptValStr.equals("true");
+
+        String onlyEquivClassesOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_TRACEEQUIVCLASSES, "false");
+        if (!(onlyEquivClassesOptValStr.equals("true") || onlyEquivClassesOptValStr.equals("false"))) {
+            System.err.println("Invalid value for option " + CMD_OPT_NAME_TRACEEQUIVCLASSES + ": '" + onlyEquivClassesOptValStr + "'");
+            return false;
+        }
+        onlyEquivClasses = onlyEquivClassesOptValStr.equals("true");
+ 
+
         return true;
     }
 
@@ -143,28 +176,28 @@ public class TpanTool {
 
         try {
 
-            if (retVal && cmdl.hasOption("print-Message-Trace")) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_PRINTMSGTRACE)) {
                 numRequestedTasks++;
                 retVal = task_genMessageTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
-            if (retVal && cmdl.hasOption("print-Execution-Trace")) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_PRINTEXECTRACE)) {
                 numRequestedTasks++;
                 retVal = task_genExecutionTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
-            if (retVal && cmdl.hasOption("plot-Sequence-Diagram")) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_PLOTSEQD)) {
                 numRequestedTasks++;
                 retVal = task_genSequenceDiagramsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
-            if (retVal && cmdl.hasOption("plot-Dependency-Graph")) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_PLOTDEPG)) {
                 numRequestedTasks++;
                 retVal = task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
-            if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_INITJMSREADER)) {
                 numRequestedTasks++;
                 retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/", "queue1");
                 System.out.println("Finished to start task_initBasicJmsReader");
             }
-            if (retVal && cmdl.hasOption("init-basic-JMS-readerJavaFx")) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_INITJMSREADERJFX)) {
                 numRequestedTasks++;
                 retVal = task_initBasicJmsReaderJavaFx("tcp://127.0.0.1:3035/", "queue1");
                 System.out.println("Finished to start task_initBasicJmsReader");
@@ -234,7 +267,7 @@ public class TpanTool {
             public void newTrace(MessageTrace t) {
                 numPlots.incrementAndGet();
                 try {
-                    SequenceDiagramPlugin.writeDotForMessageTrace(t, outputFnBase + "-" + t.getTraceId() + ".pic");
+                    SequenceDiagramPlugin.writeDotForMessageTrace(t, outputFnBase + "-" + t.getTraceId() + ".pic", considerHostname);
                 } catch (FileNotFoundException ex) {
                     log.error("FileNotFoundException: ", ex);
                     retVal.set(false);
@@ -242,7 +275,7 @@ public class TpanTool {
                 lastTraceId.set(t.getTraceId());
             }
         };
-        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, traceIds);
         mtReconstrFilter.addMessageTraceListener(sqdWriter);
         analysisInstance.addRecordConsumer(mtReconstrFilter);
         analysisInstance.run();
@@ -283,7 +316,7 @@ public class TpanTool {
                 mtRepo.newTrace(t);
             }
         };
-        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, traceIds);
         mtReconstrFilter.addMessageTraceListener(repoFiller);
 
         analysisInstance.addRecordConsumer(mtReconstrFilter);
@@ -292,7 +325,7 @@ public class TpanTool {
         /* Generate and output dependency graphs */
         Collection<MessageTrace> mTraces = mtRepo.getMessageTraceRepository().values();
         String outputFnBase = new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath();
-        DependencyGraphPlugin.writeDotFromMessageTraces(mTraces, outputFnBase + ".dot");
+        DependencyGraphPlugin.writeDotFromMessageTraces(mTraces, outputFnBase + ".dot", considerHostname);
         System.out.println("Wrote dependency graph to file '" + outputFnBase + ".dot" + "'");
         System.out.println("Dot file can be converted using the dot tool");
         System.out.println("Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg");
@@ -330,7 +363,7 @@ public class TpanTool {
                     myPs.println(t);
                 }
             };
-            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, traceIds);
             mtReconstrFilter.addMessageTraceListener(mtWriter);
             analysisInstance.addRecordConsumer(mtReconstrFilter);
             analysisInstance.run();
@@ -379,7 +412,7 @@ public class TpanTool {
                     myPs.println(t);
                 }
             };
-            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, traceIds);
             mtReconstrFilter.addExecutionTraceListener(etWriter);
             analysisInstance.addRecordConsumer(mtReconstrFilter);
             analysisInstance.run();

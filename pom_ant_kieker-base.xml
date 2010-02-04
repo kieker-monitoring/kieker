@@ -5,7 +5,7 @@
   <groupId>net.sf.kieker</groupId>
   <artifactId>base</artifactId>
   <name>Kieker Base</name>
-  <version>1.0-20100204</version>
+  <version>1.0-20100205</version>
   <url>http://kieker.sf.net</url>
   <packaging>pom</packaging>
   

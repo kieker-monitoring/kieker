@@ -112,6 +112,10 @@ public class ExecutionTrace {
         return this.set;
     }
 
+    public final int getLength(){
+        return this.set.size();
+    }
+
     public String toString() {
         StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId + ":\n");
         Iterator<KiekerExecutionRecord> it = set.iterator();

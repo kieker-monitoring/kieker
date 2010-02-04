@@ -62,7 +62,7 @@ public class DependencyGraphPlugin {
         ps.println("}");
     }
 
-    public static void writeDotFromMessageTraces(Collection<MessageTrace> mTraces, String outputFilename) throws InvalidTraceException, FileNotFoundException {
+    public static void writeDotFromMessageTraces(final Collection<MessageTrace> mTraces, final String outputFilename, final boolean considerHost) throws InvalidTraceException, FileNotFoundException {
         AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
         for (MessageTrace mTrace : mTraces) {
@@ -70,7 +70,10 @@ public class DependencyGraphPlugin {
                     if (!m.callMessage) {
                         continue;
                     }
-                    adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
+                    String senderLabel = m.getSenderLabel(considerHost);
+                    String receiverLabel  = m.getReceiverLabel(considerHost);
+
+                    adjMatrix.addDependency(senderLabel, receiverLabel);
                 }
         }
         dotFromAdjacencyMatrix(adjMatrix, ps);

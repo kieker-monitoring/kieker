@@ -42,7 +42,7 @@ public class SequenceDiagramPlugin {
     private SequenceDiagramPlugin() {
     }
 
-    private static void picFromMessageTrace(MessageTrace messageTrace,  PrintStream ps) {
+    private static void picFromMessageTrace(final MessageTrace messageTrace, final  PrintStream ps, final boolean considerHost) {
         HashMap<String, String> distinctObjects = new HashMap<String, String>();
         int nextObjIndex = 0;
         Vector<Message> messages = messageTrace.getSequenceAsVector();
@@ -56,7 +56,7 @@ public class SequenceDiagramPlugin {
         // as returns have senders too.
         //log.info("Trace " + messageTrace.traceId + " contains " + messages.size() + " messages.");
         for (Message me : messages) {
-            String name = me.getSenderComponentName();
+            String name = me.getSenderLabel(considerHost);
             if (!distinctObjects.containsKey(name)) {
                 distinctObjects.put(name, "O"+(nextObjIndex++));
                 String shortComponentName = name;
@@ -67,7 +67,11 @@ public class SequenceDiagramPlugin {
                             break;
                         }
                     }
-                    shortComponentName = shortComponentName.substring(index + 1);
+                    if (considerHost){
+                        shortComponentName = me.sender.vmName + "::" + shortComponentName.substring(index + 1);
+                    } else {
+                        shortComponentName = shortComponentName.substring(index + 1);
+                    }
                 }
                 ps.println("object(" + distinctObjects.get(name) +
                         ",\"" + shortComponentName + "\");");
@@ -91,19 +95,19 @@ public class SequenceDiagramPlugin {
                 } else {
                     ps.println("sync();");
                 }
-                ps.println("message(" + distinctObjects.get(me.getSenderComponentName()) +
-                        "," + distinctObjects.get(me.getReceiverComponentName()) +
+                ps.println("message(" + distinctObjects.get(me.getSenderLabel(considerHost)) +
+                        "," + distinctObjects.get(me.getReceiverLabel(considerHost)) +
                         ", \"" + method +
                         "\");");
-                ps.println("active(" + distinctObjects.get(me.getReceiverComponentName()) + ");");
+                ps.println("active(" + distinctObjects.get(me.getReceiverLabel(considerHost)) + ");");
                 ps.println("step();");
             } else {
                 ps.println("step();");
                 ps.println("async();");
-                ps.println("rmessage(" + distinctObjects.get(me.getSenderComponentName()) +
-                        "," + distinctObjects.get(me.getReceiverComponentName()) +
+                ps.println("rmessage(" + distinctObjects.get(me.getSenderLabel(considerHost)) +
+                        "," + distinctObjects.get(me.getReceiverLabel(considerHost)) +
                         ", \"\");");
-                ps.println("inactive(" + distinctObjects.get(me.getSenderComponentName()) + ");");
+                ps.println("inactive(" + distinctObjects.get(me.getSenderLabel(considerHost)) + ");");
             }
         }
         ps.println("inactive(O0);");
@@ -117,9 +121,9 @@ public class SequenceDiagramPlugin {
         ps.println(".PE");
     }
 
-    public static void writeDotForMessageTrace(MessageTrace msgTrace, String outputFilename) throws FileNotFoundException {
+    public static void writeDotForMessageTrace(MessageTrace msgTrace, String outputFilename, final boolean considerHost) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
-        picFromMessageTrace(msgTrace, ps);
+        picFromMessageTrace(msgTrace, ps, considerHost);
         ps.flush();
         ps.close();
     }

@@ -23,16 +23,16 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  *
  * @author Andre van Hoorn
  */
-
 public class Message {
+
     public final boolean callMessage;
     public final long timestamp;
     //public String senderComponentName; // TODO: remove
     //public String receiverComponentName; // TODO: remove
     public final KiekerExecutionRecord sender, receiver, execution;
-     
-    public Message(boolean callMessage, long timestamp, KiekerExecutionRecord sender, 
-            KiekerExecutionRecord receiver, KiekerExecutionRecord execution){
+
+    public Message(boolean callMessage, long timestamp, KiekerExecutionRecord sender,
+            KiekerExecutionRecord receiver, KiekerExecutionRecord execution) {
         this.callMessage = callMessage;
         this.timestamp = timestamp;
         //this.senderComponentName = sender;
@@ -41,39 +41,32 @@ public class Message {
         this.receiver = receiver;
         this.execution = execution;
     }
-    
-    public String toString(){
+
+    public String toString() {
         StringBuilder strBuild = new StringBuilder();
 
-        strBuild.append(this.callMessage?"SND":"RCV").append(" ");
-        strBuild.append(this.timestamp); strBuild.append(" ");
-       if(this.sender != null){   
-            strBuild.append(this.sender.vmName).append("::");
-        }
-        strBuild.append(this.getSenderComponentName());
-       if(this.sender != null){           
+        strBuild.append(this.callMessage ? "SND" : "RCV").append(" ");
+        strBuild.append(this.timestamp);
+        strBuild.append(" ");
+        strBuild.append(this.getSenderLabel(true)); // include vmName
+        if (this.sender != null) {
             strBuild.append(".").append(this.sender.opname);
-            strBuild.append("[").append(this.sender.eoi)
-                    .append(",").append(this.sender.ess).append("]");
+            strBuild.append("[").append(this.sender.eoi).append(",").append(this.sender.ess).append("]");
         }
         strBuild.append(" --> ");
-       if(this.receiver != null){           
-            strBuild.append(this.receiver.vmName).append("::");
-        }
-        strBuild.append(this.getReceiverComponentName());
-        if(this.receiver != null){
+        strBuild.append(this.getReceiverLabel(true)); // include vmName
+        if (this.receiver != null) {
             strBuild.append(".").append(this.receiver.opname);
-            strBuild.append("[").append(this.receiver.eoi)
-                    .append(",").append(this.receiver.ess).append("]");
+            strBuild.append("[").append(this.receiver.eoi).append(",").append(this.receiver.ess).append("]");
         }
-        
+
 //        strBuild.append(this.timestamp); strBuild.append(':');
-//        strBuild.append(this.getSenderComponentName());
+//        strBuild.append(this.getSenderLabel());
 //       if(!this.callMessage&&this.senderComponentName!=null){
 //            strBuild.append("."+this.execution.opname);
 //        }
 //        strBuild.append(this.callMessage?"|-send->":"|-return->");
-//        strBuild.append(this.getReceiverComponentName());
+//        strBuild.append(this.getReceiverLabel());
 //        if(this.callMessage&&this.receiverComponentName!=null){
 //            strBuild.append("."+this.execution.opname);
 //        }
@@ -81,12 +74,26 @@ public class Message {
     }
 
     /** Convenience function which returns "$" in case 'senderComponentName' field is null */
-    public String getSenderComponentName(){
-        return (this.sender==null)?"$":this.sender.componentName;
+    public String getSenderLabel(final boolean includeHostname) {
+        if (this.sender == null) {
+            return "$";
+        }
+        if (includeHostname) {
+            return this.sender.vmName + "::" + this.sender.componentName;
+        } else {
+            return this.sender.componentName;
+        }
     }
 
     /** Convenience function which returns "$" in case 'senderComponentName' field is null */
-    public String getReceiverComponentName(){
-        return (this.receiver==null)?"$":this.receiver.componentName;
+    public String getReceiverLabel(final boolean includeHostname) {
+        if (this.receiver == null) {
+            return "$";
+        }
+        if (includeHostname) {
+            return this.receiver.vmName + "::" + this.receiver.componentName;
+        } else {
+            return this.receiver.componentName;
+        }
     }
 }
