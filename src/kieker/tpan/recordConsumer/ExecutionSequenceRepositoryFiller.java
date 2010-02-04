@@ -56,7 +56,7 @@ public class ExecutionSequenceRepositoryFiller implements IKiekerRecordConsumer 
     public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
         if (monitoringRecord instanceof KiekerExecutionRecord) {
             KiekerExecutionRecord execRecord = (KiekerExecutionRecord) monitoringRecord;
-            if (this.selectedTraces == null || this.selectedTraces.contains(execRecord.sessionId)) {
+            if (this.selectedTraces == null || this.selectedTraces.contains(execRecord.traceId)) {
                 this.repo.addExecution((KiekerExecutionRecord) monitoringRecord);
             }
         } else {

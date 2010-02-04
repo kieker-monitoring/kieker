@@ -1,23 +1,15 @@
 package kieker.common.logReader.filesystemReader;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
 
@@ -42,6 +34,8 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  */
 /**
+ * TOOD: This reader should, as soon as proven to be stable, become the FSReader.
+ *
  * Filesystem reader which reads from multiple directories simultaneously
  * while ordering the records by the logging timestamp.
  *
@@ -119,17 +113,17 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
             }
 
             Thread t = Thread.currentThread();
-            log.info("Putting record " + monitoringRecord);
+            //log.info("Putting record " + monitoringRecord);
             synchronized (this) {
                 this.nextRecordsFromReaders.put(monitoringRecord, t);
-                log.info("NextrecordList" + this.nextRecordsFromReaders);
+                //log.info("NextrecordList" + this.nextRecordsFromReaders);
             }
             if (monitoringRecord == FS_READER_TERMINATION_MARKER) {
                 /* if it is the FS_READER_TERMINATION_MARKER, the method
                  * call originates from the terminate method (called by one
                  * the reader threads) and we must not block! */
                 synchronized (t) { // TODO: required to sync on t?
-                    log.info("Notifying master");
+                    //log.info("Notifying master");
                     synchronized (this) {
                         this.notify(); // notify master in execute(that there's a new record)
                     }
@@ -141,7 +135,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                             this.notify(); // notify master in execute(that there's a new record)
                         }
                         t.wait();
-                        log.info("Woke up");
+                        //log.info("Woke up");
                     } catch (InterruptedException ex) {
                         log.error("Reader thread has been interrupted. Terminating consumer. ", ex);
                         this.terminate();
@@ -167,7 +161,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                             reportReaderException(ex);
                         }
                     }
-                }, this.inputDirs[i]);
+                }, "Reader thread for "+this.inputDirs[i]);
                 this.readerThreads.add(t);
                 this.activeReaders.add(t);
             }
@@ -175,7 +169,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                 t.start();
             }
 
-            log.info("All threads started. Proceeding to main loop ...");
+            //log.info("All threads started. Proceeding to main loop ...");
 
             /* caution: from now on, we have a multi-threaded reader
              *          and need to synchronize (on 'this'). */
@@ -192,7 +186,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                             }
                         }
                         k = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
-                        log.info("Found record " + k.getKey());
+                        //log.info("Found record " + k.getKey());
                         if (k.getKey() == FS_READER_TERMINATION_MARKER) {
                             log.info("All reader threads provided FS_READER_TERMINATION_MARKER");
                             this.terminate();
@@ -209,9 +203,9 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                         }
                     }
                 } catch (Exception ex) {
-                    log.info("Exception while reading", ex);
+                    log.error("Exception while reading. Terminating.", ex);
                     this.terminate();
-                    throw new RecordConsumerExecutionException("Error while reading", ex);
+                    throw new RecordConsumerExecutionException("Error while reading. Terminating.", ex);
                 }
             }
         }
@@ -230,7 +224,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
             }
             Thread t = Thread.currentThread();
             if (this.readerThreads.contains(t)) { // i.e., a reader thread called terminate()
-                log.info("Removing myself from the list of active readers");
+                //log.info("Removing myself from the list of active readers");
                 this.activeReaders.remove(t);
                 try {
                     this.consumeMonitoringRecord(FS_READER_TERMINATION_MARKER);
@@ -238,7 +232,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                     log.error("Error occured while sending FS_READER_TERMINATION_MARKER", ex);
                 }
             } else if (t == this.mainThread) {
-                log.info("Main thread initiating reader shutdown");
+                //log.info("Main thread initiating reader shutdown");
                 this.master.setTerminate(terminate);
                 this.master.terminate();
                 this.isTerminated = true;

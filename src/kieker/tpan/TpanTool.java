@@ -215,14 +215,15 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genSequenceDiagramsForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static boolean task_genSequenceDiagramsForTraceSet(final String inputDirName, final String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        ExecutionSequenceRepositoryFiller seqRepConsumer =
+                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
         analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 
@@ -274,7 +275,8 @@ public class TpanTool {
         TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        ExecutionSequenceRepositoryFiller seqRepConsumer = 
+                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
         analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 
@@ -304,7 +306,8 @@ public class TpanTool {
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        ExecutionSequenceRepositoryFiller seqRepConsumer =
+                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
         analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 
@@ -350,7 +353,8 @@ public class TpanTool {
         TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        ExecutionSequenceRepositoryFiller seqRepConsumer =
+                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
         analysisInstance.addRecordConsumer(seqRepConsumer);
         analysisInstance.run();
 

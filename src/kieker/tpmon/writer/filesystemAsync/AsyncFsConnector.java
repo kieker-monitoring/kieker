@@ -47,6 +47,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue = null;
     private String storagePathBase = null;
+    private String storageDir = null; // full path
     private int asyncRecordQueueSize = 8000;
     private File mappingFile = null;
     private final static String defaultConstructionErrorMsg =
@@ -86,7 +87,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
         DateFormat m_ISO8601Local =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
         String dateStr = m_ISO8601Local.format(new java.util.Date());
-        String storageDir = this.storagePathBase + "/tpmon-" + dateStr + "/";
+        storageDir = this.storagePathBase + "/tpmon-" + dateStr + "/";
 
         f = new File(storageDir);
         if (!f.mkdir()) {
@@ -146,7 +147,8 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
 
     @TpmonInternal()
     public String getInfoString() {
-        return "filenamePrefix :" + storagePathBase;
+        return "filenamePrefix :" + this.storagePathBase +
+                ", outputDirectory :" + this.storageDir;
     }
 
     @TpmonInternal()

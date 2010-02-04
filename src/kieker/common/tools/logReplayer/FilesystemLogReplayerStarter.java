@@ -87,7 +87,7 @@ public class FilesystemLogReplayerStarter {
             retVal = false;
         }
         keepOriginalLoggingTimestamps = keepOriginalLoggingTimestampsOptValStr.equals("true");
-        log.info("Keeping timestamp: " + (keepOriginalLoggingTimestamps?"true":"false"));
+        log.info("Keeping original logging timestamps: " + (keepOriginalLoggingTimestamps?"true":"false"));
 
         /* 3.) init realtimeMode */
         String realtimeOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
@@ -149,6 +149,8 @@ public class FilesystemLogReplayerStarter {
         } else {
             log.info("Replaying log data in non-real time");
         }
+
+        System.out.println(TpmonController.getInstance().getConnectorInfo());
 
         FilesystemLogReplayer player = new FilesystemLogReplayer(inputDirs, keepOriginalLoggingTimestamps, realtimeMode, numRealtimeWorkerThreads);
 
