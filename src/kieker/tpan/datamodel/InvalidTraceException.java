@@ -17,4 +17,7 @@ public class InvalidTraceException extends Exception {
         super(message);
     }
 
+    public InvalidTraceException(String message, Throwable t) {
+        super(message, t);
+    }
 }

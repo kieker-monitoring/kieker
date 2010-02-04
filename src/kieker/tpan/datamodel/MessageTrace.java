@@ -26,7 +26,11 @@ import java.util.Vector;
  */
 public class MessageTrace {
 
-    public long traceId = -1;
+    private long traceId = -1;
+
+    public long getTraceId() {
+        return traceId;
+    }
     private Vector<Message> set = null;
 
     public MessageTrace(long traceId, Vector<Message> seq) {

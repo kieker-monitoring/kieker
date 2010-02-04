@@ -6,9 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Enumeration;
 
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSReader;
@@ -19,7 +21,10 @@ import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.recordConsumer.BriefJavaFxInformer;
-import kieker.tpan.recordConsumer.ExecutionSequenceRepositoryFiller;
+import kieker.tpan.datamodel.MessageTraceRepository;
+import kieker.tpan.recordConsumer.IExecutionTraceReceiver;
+import kieker.tpan.recordConsumer.IMessageTraceReceiver;
+import kieker.tpan.recordConsumer.TraceReconstructionFilter;
 
 import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
 import kieker.tpmon.core.TpmonController;
@@ -51,7 +56,6 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * @author Andre van Hoorn, Matthias Rohr
  * History
@@ -65,7 +69,6 @@ public class TpanTool {
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
     private static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
-
     private static CommandLine cmdl = null;
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
@@ -75,7 +78,6 @@ public class TpanTool {
     private static String task = null;
     private static String outputFnPrefix = null;
     private static TreeSet<Long> selectedTraces = null;
-
 
     static {
         cmdlOpts.addOption(OptionBuilder.withLongOpt("inputdir").withArgName("dir").hasArg(true).isRequired(false).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
@@ -114,7 +116,7 @@ public class TpanTool {
     private static boolean initFromArgs() {
         inputDir = cmdl.getOptionValue("inputdir") + File.separator;
         if (inputDir.equals("${inputDir}/")) {
-            log.error("Invalid iput dir '"+inputDir+"'. Add it as command-line parameter to you ant call (e.g., ant run-tpan -DinputDir=/tmp) or to a properties file.");
+            log.error("Invalid iput dir '" + inputDir + "'. Add it as command-line parameter to you ant call (e.g., ant run-tpan -DinputDir=/tmp) or to a properties file.");
         }
         outputDir = cmdl.getOptionValue("outputdir") + File.separator;
         outputFnPrefix = cmdl.getOptionValue("output-filename-prefix", "");
@@ -141,7 +143,7 @@ public class TpanTool {
 
         try {
 
-           if (retVal && cmdl.hasOption("print-Message-Trace")) {
+            if (retVal && cmdl.hasOption("print-Message-Trace")) {
                 numRequestedTasks++;
                 retVal = task_genMessageTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
@@ -157,20 +159,20 @@ public class TpanTool {
                 numRequestedTasks++;
                 retVal = task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
             }
-           if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
+            if (retVal && cmdl.hasOption("init-basic-JMS-reader")) {
                 numRequestedTasks++;
-                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/","queue1");
+                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/", "queue1");
                 System.out.println("Finished to start task_initBasicJmsReader");
             }
             if (retVal && cmdl.hasOption("init-basic-JMS-readerJavaFx")) {
                 numRequestedTasks++;
-                retVal = task_initBasicJmsReaderJavaFx("tcp://127.0.0.1:3035/","queue1");
+                retVal = task_initBasicJmsReaderJavaFx("tcp://127.0.0.1:3035/", "queue1");
                 System.out.println("Finished to start task_initBasicJmsReader");
             }
 
-           if(!retVal) {
-               System.err.println("A task failed");
-           }
+            if (!retVal) {
+                System.err.println("A task failed");
+            }
         } catch (Exception ex) {
             System.err.println("An error occured: " + ex.getMessage());
             System.err.println("");
@@ -189,17 +191,17 @@ public class TpanTool {
     }
 
     public static void main(String args[]) {
-        try{
-        if (true && ((!parseArgs(args) || !initFromArgs() || !dispatchTasks()))) {
-            System.exit(1);
-        }
+        try {
+            if (true && ((!parseArgs(args) || !initFromArgs() || !dispatchTasks()))) {
+                System.exit(1);
+            }
 
-        //Thread.sleep(2000);
+            //Thread.sleep(2000);
 
-        /* As long as we have a dependency from logAnalysis to tpmon,
-         * we need t terminate tpmon explicitly. */
-        TpmonController.getInstance().terminateMonitoring();
-        } catch (Exception exc){
+            /* As long as we have a dependency from logAnalysis to tpmon,
+             * we need t terminate tpmon explicitly. */
+            TpmonController.getInstance().terminateMonitoring();
+        } catch (Exception exc) {
             System.err.println("An error occured. See log for details");
             log.fatal(args, exc);
         }
@@ -216,45 +218,43 @@ public class TpanTool {
      * @param traceSet
      */
     private static boolean task_genSequenceDiagramsForTraceSet(final String inputDirName, final String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
-        boolean retVal = true;
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer =
-                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
-        analysisInstance.addRecordConsumer(seqRepConsumer);
+
+        final AtomicBoolean retVal = new AtomicBoolean(true);
+        final AtomicLong lastTraceId = new AtomicLong(-1);
+        final AtomicInteger numPlots = new AtomicInteger(0);
+        final String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
+        IMessageTraceReceiver sqdWriter = new IMessageTraceReceiver() {
+
+            // TODO: handle erros appropriately
+            public void newTrace(MessageTrace t) {
+                numPlots.incrementAndGet();
+                try {
+                    SequenceDiagramPlugin.writeDotForMessageTrace(t, outputFnBase + "-" + t.getTraceId() + ".pic");
+                } catch (FileNotFoundException ex) {
+                    log.error("FileNotFoundException: ", ex);
+                    retVal.set(false);
+                }
+                lastTraceId.set(t.getTraceId());
+            }
+        };
+        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+        mtReconstrFilter.addMessageTraceListener(sqdWriter);
+        analysisInstance.addRecordConsumer(mtReconstrFilter);
         analysisInstance.run();
 
-        /* Generate and output sequence diagrams */
-        Enumeration<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
-        int numPlots = 0;
-        long lastTraceId = -1;
-        String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
-        while (seqEnum.hasMoreElements()) {
-            ExecutionTrace t = seqEnum.nextElement();
-            Long id = t.getTraceId();
-            if (traceIds == null || traceIds.contains(id)) {
-                //String fileName = "/tmp/seqDia" + msgTrace.traceId + ".pic";
-                MessageTrace mSeq = t.toMessageTrace();
-                if (mSeq == null) {
-                    log.error("Transformation to message trace failed for trace " + id);
-                    retVal = false;
-                }
-                SequenceDiagramPlugin.writeDotForMessageTrace(mSeq, outputFnBase + "-" + id + ".pic");
-                numPlots++;
-                lastTraceId = t.getTraceId();
-            }
-        }
-        if (numPlots > 0) {
-            System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + outputFnBase + "-<traceId>.pic'");
+        if (numPlots.intValue() > 0) {
+            System.out.println("Wrote " + numPlots.intValue() + " sequence diagram" + (numPlots.intValue() > 1 ? "s" : "") + " to file" + (numPlots.intValue() > 1 ? "s" : "") + " with name pattern '" + outputFnBase + "-<traceId>.pic'");
             System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-            System.out.println("Example: pic2plot -T svg " + outputFnBase + "-" + ((numPlots > 0) ? lastTraceId : "<traceId>") + ".pic > " + outputFnBase + "-" + ((numPlots > 0) ? lastTraceId : "<traceId>") + ".svg");
+            System.out.println("Example: pic2plot -T svg " + outputFnBase + "-" + ((numPlots.intValue() > 0) ? lastTraceId : "<traceId>") + ".pic > " + outputFnBase + "-" + ((numPlots.intValue() > 0) ? lastTraceId : "<traceId>") + ".svg");
         } else {
             System.out.println("Wrote 0 sequence diagrams");
         }
-        return retVal;
+        return retVal.get();
     }
 
     /**
@@ -275,15 +275,24 @@ public class TpanTool {
         TpanInstance analysisInstance = new TpanInstance();
         //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer = 
-                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
-        analysisInstance.addRecordConsumer(seqRepConsumer);
+        final MessageTraceRepository mtRepo = new MessageTraceRepository();
+        IMessageTraceReceiver repoFiller = new IMessageTraceReceiver() {
+
+            // TODO: handle erros appropriately
+            public void newTrace(MessageTrace t) {
+                mtRepo.newTrace(t);
+            }
+        };
+        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+        mtReconstrFilter.addMessageTraceListener(repoFiller);
+
+        analysisInstance.addRecordConsumer(mtReconstrFilter);
         analysisInstance.run();
 
         /* Generate and output dependency graphs */
-        Collection<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.values();
+        Collection<MessageTrace> mTraces = mtRepo.getMessageTraceRepository().values();
         String outputFnBase = new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath();
-        DependencyGraphPlugin.writeDotFromExecutionTraces(seqEnum, outputFnBase + ".dot", traceIds);
+        DependencyGraphPlugin.writeDotFromMessageTraces(mTraces, outputFnBase + ".dot");
         System.out.println("Wrote dependency graph to file '" + outputFnBase + ".dot" + "'");
         System.out.println("Dot file can be converted using the dot tool");
         System.out.println("Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg");
@@ -306,33 +315,36 @@ public class TpanTool {
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer =
-                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
-        analysisInstance.addRecordConsumer(seqRepConsumer);
-        analysisInstance.run();
 
-        /* Generate and output message traces */
-        Enumeration<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
-        int numTraces = 0;
+        final AtomicInteger numTraces = new AtomicInteger(0);
+
         String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
-        PrintStream ps = System.out;
+        PrintStream ps = null;
         try {
-            ps = new PrintStream(new FileOutputStream(outputFn));
-            while (seqEnum.hasMoreElements()) {
-                ExecutionTrace t = seqEnum.nextElement();
-                Long id = t.getTraceId();
-                if (traceIds == null || traceIds.contains(id)) {
-                    numTraces++;
-                    ps.println(t.toMessageTrace());
+            final PrintStream myPs = new PrintStream(new FileOutputStream(outputFn));
+            ps = myPs;
+            IMessageTraceReceiver mtWriter = new IMessageTraceReceiver() {
+
+                public void newTrace(MessageTrace t) {
+                    numTraces.incrementAndGet();
+                    myPs.println(t);
                 }
-            }
-            System.out.println("Wrote " + numTraces + " messageTraces" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
+            };
+            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+            mtReconstrFilter.addMessageTraceListener(mtWriter);
+            analysisInstance.addRecordConsumer(mtReconstrFilter);
+            analysisInstance.run();
+
+            System.out.println("Wrote " + numTraces.intValue() + " messageTraces" + (numTraces.intValue() > 1 ? "s" : "") + " to file '" + outputFn + "'");
         } catch (FileNotFoundException e) {
             log.error("File not found", e);
             retVal = false;
         } finally {
-            ps.close();
+            if (ps != null) {
+                ps.close();
+            }
         }
+
         return retVal;
     }
 
@@ -351,47 +363,49 @@ public class TpanTool {
         log.info("Reading traces from directory '" + inputDirName + "'");
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
-        //analysisInstance.setLogReader(new FSReader(inputDirName));
         analysisInstance.setLogReader(new FSReader(inputDirName));
-        ExecutionSequenceRepositoryFiller seqRepConsumer =
-                (traceIds==null)?new ExecutionSequenceRepositoryFiller():new ExecutionSequenceRepositoryFiller(traceIds);
-        analysisInstance.addRecordConsumer(seqRepConsumer);
-        analysisInstance.run();
 
-        /* Generate and output message traces */
-        Enumeration<ExecutionTrace> seqEnum = seqRepConsumer.getExecutionSequenceRepository().repository.elements();
-        int numTraces = 0;
+        final AtomicInteger numTraces = new AtomicInteger(0);
+
         String outputFn = new File(outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
-        PrintStream ps = System.out;
+        PrintStream ps = null;
         try {
-            ps = new PrintStream(new FileOutputStream(outputFn));
-            while (seqEnum.hasMoreElements()) {
-                ExecutionTrace t = seqEnum.nextElement();
-                Long id = t.getTraceId();
-                if (traceIds == null || traceIds.contains(id)) {
-                    numTraces++;
-                    ps.println(t);
+            final PrintStream myPs = new PrintStream(new FileOutputStream(outputFn));
+            ps = myPs;
+            IExecutionTraceReceiver etWriter = new IExecutionTraceReceiver() {
+
+                public void newTrace(ExecutionTrace t) {
+                    numTraces.incrementAndGet();
+                    myPs.println(t);
                 }
-            }
-            System.out.println("Wrote " + numTraces + " executionTraces" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
+            };
+            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, traceIds);
+            mtReconstrFilter.addExecutionTraceListener(etWriter);
+            analysisInstance.addRecordConsumer(mtReconstrFilter);
+            analysisInstance.run();
+
+            System.out.println("Wrote " + numTraces.intValue() + " executionTraces" + (numTraces.intValue() > 1 ? "s" : "") + " to file '" + outputFn + "'");
         } catch (FileNotFoundException e) {
             log.error("File not found", e);
             retVal = false;
         } finally {
-            ps.close();
+            if (ps != null) {
+                ps.close();
+            }
         }
+
         return retVal;
     }
 
-    private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException{
+    private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
 
         /** As long as we have a dependency to tpmon, 
          *  we load it explicitly in order to avoid 
          *  later delays.*/
         TpmonController ctrl = TpmonController.getInstance();
-        
-        log.info("Trying to start JMS Listener to " + jmsProviderUrl + " "+jmsDestination);
+
+        log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
@@ -399,7 +413,7 @@ public class TpanTool {
         MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
         analysisInstance.addRecordConsumer(recordTypeLogger);
 
-        //ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        //MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
         //analysisInstance.addRecordConsumer(seqRepConsumer);
 
         /*@Matthias: Deactivated this, since the ant task didn't run (Andre) */
@@ -410,7 +424,7 @@ public class TpanTool {
         return retVal;
     }
 
-        private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException{
+    private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
 
         /** As long as we have a dependency to tpmon,
@@ -418,7 +432,7 @@ public class TpanTool {
          *  later delays.*/
         TpmonController ctrl = TpmonController.getInstance();
 
-        log.info("Trying to start JMS Listener to " + jmsProviderUrl + " "+jmsDestination);
+        log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
@@ -426,7 +440,7 @@ public class TpanTool {
         MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
         analysisInstance.addRecordConsumer(recordTypeLogger);
 
-        //ExecutionSequenceRepositoryFiller seqRepConsumer = new ExecutionSequenceRepositoryFiller();
+        //MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
         //analysisInstance.addRecordConsumer(seqRepConsumer);
 
         /*@Matthias: Deactivated this, since the ant task didn't run (Andre) */

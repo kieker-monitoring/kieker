@@ -23,12 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.TreeSet;
 import kieker.tpan.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.AdjacencyMatrix;
-import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.datamodel.Message;
 
@@ -64,19 +62,16 @@ public class DependencyGraphPlugin {
         ps.println("}");
     }
 
-    public static void writeDotFromExecutionTraces(Collection<ExecutionTrace> eTraces, String outputFilename, TreeSet<Long> traceIds) throws InvalidTraceException, FileNotFoundException {
+    public static void writeDotFromMessageTraces(Collection<MessageTrace> mTraces, String outputFilename) throws InvalidTraceException, FileNotFoundException {
         AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
-        for (ExecutionTrace eTrace : eTraces) {
-            MessageTrace msgTrace = eTrace.toMessageTrace();
-            if (traceIds == null || traceIds.contains(eTrace.getTraceId())) {
-                for (Message m : msgTrace.getSequenceAsVector()) {
+        for (MessageTrace mTrace : mTraces) {
+                for (Message m : mTrace.getSequenceAsVector()) {
                     if (!m.callMessage) {
                         continue;
                     }
                     adjMatrix.addDependency(m.getSenderComponentName(), m.getReceiverComponentName());
                 }
-            }
         }
         dotFromAdjacencyMatrix(adjMatrix, ps);
         ps.flush();

@@ -108,7 +108,7 @@ public class ExecutionTrace {
         return new MessageTrace(this.traceId, mSeq);
     }
 
-    public SortedSet<KiekerExecutionRecord> getTraceAsSortedSet() {
+    public final SortedSet<KiekerExecutionRecord> getTraceAsSortedSet() {
         return this.set;
     }
 
