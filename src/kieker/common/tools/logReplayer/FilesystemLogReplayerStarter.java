@@ -81,12 +81,13 @@ public class FilesystemLogReplayerStarter {
         inputDirs = cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 
         /* 2.) init keepOriginalLoggingTimestamps */
-       String keepOriginalLoggingTimestampsOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "true");
+       String keepOriginalLoggingTimestampsOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
         if (!(keepOriginalLoggingTimestampsOptValStr.equals("true") || keepOriginalLoggingTimestampsOptValStr.equals("false"))) {
             System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '" + keepOriginalLoggingTimestampsOptValStr + "'");
             retVal = false;
         }
         keepOriginalLoggingTimestamps = keepOriginalLoggingTimestampsOptValStr.equals("true");
+        log.info("Keeping timestamp: " + (keepOriginalLoggingTimestamps?"true":"false"));
 
         /* 3.) init realtimeMode */
         String realtimeOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
