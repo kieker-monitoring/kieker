@@ -238,7 +238,7 @@ public class TpanTool {
 
             mtReconstrFilter.printStatusMessage();
 
-            if (componentPlotDepGraph != null){
+            if (componentPlotDepGraph != null) {
                 componentPlotDepGraph.saveToDotFile(new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !onlyEquivClasses);
             }
 
@@ -251,7 +251,7 @@ public class TpanTool {
 
             if (!ignoreInvalidTraces && numErrorCount > 0) {
                 log.error(numErrorCount + " errors occured in trace processing components");
-                throw new Exception (numErrorCount + " errors occured in trace processing components");
+                throw new Exception(numErrorCount + " errors occured in trace processing components");
             }
 
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
@@ -452,7 +452,10 @@ public class TpanTool {
                 ExecutionTrace t = e.getKey();
                 ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId());
             }
-            System.out.println("Wrote " + numClasses + " equivalence classes" + (numClasses > 1 ? "s" : "") + " to file '" + outputFn + "'");
+            System.out.println("");
+            System.out.println("#");
+            System.out.println("# Plugin: " + "Trace equivalence report");
+            System.out.println("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'");
         } catch (FileNotFoundException e) {
             log.error("File not found", e);
             retVal = false;
