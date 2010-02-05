@@ -22,21 +22,18 @@ package kieker.tpan.plugins;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.Collection;
 import kieker.tpan.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.AdjacencyMatrix;
-import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.datamodel.Message;
-import kieker.tpan.recordConsumer.IMessageTraceReceiver;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public class DependencyGraphPlugin implements IMessageTraceReceiver {
+public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingComponent {
 
     private static final Log log = LogFactory.getLog(DependencyGraphPlugin.class);
     private AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
@@ -72,11 +69,17 @@ public class DependencyGraphPlugin implements IMessageTraceReceiver {
         ps.println("}");
     }
 
-    public void saveToFile(final String outputFilename, final boolean includeWeights) throws FileNotFoundException {
-        PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
+    private int numGraphsSaved = 0;
+
+    public void saveToDotFile(final String outputFnBase, final boolean includeWeights) throws FileNotFoundException {
+        PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
         this.dotFromAdjacencyMatrix(adjMatrix, ps, includeWeights);
         ps.flush();
         ps.close();
+        this.numGraphsSaved++;
+        System.out.println("Wrote dependency graph to file '" + outputFnBase + ".dot" + "'");
+        System.out.println("Dot file can be converted using the dot tool");
+        System.out.println("Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg");
     }
 
     public void newTrace(MessageTrace t) {
@@ -89,5 +92,17 @@ public class DependencyGraphPlugin implements IMessageTraceReceiver {
 
             adjMatrix.addDependency(senderLabel, receiverLabel);
         }
+        this.reportSuccess(t.getTraceId());
+    }
+
+    @Override
+    public void printStatusMessage() {
+        super.printStatusMessage();
+        System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : ""));
+    }
+
+    @Override
+    public void cleanup() {
+        // no cleanup required
     }
 }

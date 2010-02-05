@@ -1,12 +1,6 @@
 package kieker.tpan.recordConsumer;
 
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-/**
+/*
  * kieker.consumer.MonitoringRecordTypeLogger
  *
  * ==================LICENCE=========================
@@ -24,7 +18,15 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
  * @author Andre van Hoorn
  */
 public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {

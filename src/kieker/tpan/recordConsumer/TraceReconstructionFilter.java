@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.InvalidTraceException;
@@ -20,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.TraceProcessingException;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 
 /*
@@ -164,6 +164,9 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
                     log.error("Failed to transform execution trace to message trace: " + polledTrace, ex);
                     throw new RecordConsumerExecutionException("Failed to transform execution trace to message trace: " + polledTrace, ex);
                 }
+            } catch (TraceProcessingException ex){
+                log.error("Trace processing exception", ex);
+                throw new RecordConsumerExecutionException("Trace processing exception", ex);
             }
         }
     }

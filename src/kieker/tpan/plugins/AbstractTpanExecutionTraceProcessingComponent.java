@@ -1,10 +1,6 @@
-package kieker.tpan.recordConsumer;
-
 /*
- * kieker.consumer.MonitoringRecordTypeLogger
- *
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +16,17 @@ package kieker.tpan.recordConsumer;
  * ==================================================
  */
 
-import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.plugins.TraceProcessingException;
+package kieker.tpan.plugins;
+
+import kieker.tpan.recordConsumer.IExecutionTraceReceiver;
+
 
 /**
  *
  * @author Andre van Hoorn
  */
-public interface IMessageTraceReceiver {
-    public void newTrace (MessageTrace t) throws TraceProcessingException;
+public abstract class AbstractTpanExecutionTraceProcessingComponent 
+        extends AbstractTpanTraceProcessingComponent
+        implements IExecutionTraceReceiver {
+
 }
