@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import java.util.TreeSet;
@@ -22,12 +24,11 @@ import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.AbstractTpanExecutionTraceProcessingComponent;
 import kieker.tpan.plugins.AbstractTpanMessageTraceProcessingComponent;
+import kieker.tpan.plugins.AbstractTpanTraceProcessingComponent;
 import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.plugins.TraceProcessingException;
 import kieker.tpan.recordConsumer.BriefJavaFxInformer;
-import kieker.tpan.recordConsumer.IExecutionTraceReceiver;
-import kieker.tpan.recordConsumer.IMessageTraceReceiver;
 import kieker.tpan.recordConsumer.TraceReconstructionFilter;
 
 import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
@@ -38,7 +39,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.ParseException;
 
 import org.apache.commons.logging.Log;
@@ -173,8 +173,6 @@ public class TpanTool {
             return false;
         }
         onlyEquivClasses = onlyEquivClassesOptValStr.equals("true");
-
-
         return true;
     }
 
@@ -183,27 +181,72 @@ public class TpanTool {
         int numRequestedTasks = 0;
 
         try {
-
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACE)) {
+            List<AbstractTpanMessageTraceProcessingComponent> msgTraceProcessingComponents = new ArrayList<AbstractTpanMessageTraceProcessingComponent>();
+            List<AbstractTpanExecutionTraceProcessingComponent> execTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
+            // fill list of msgTraceProcessingComponents:
+            AbstractTpanMessageTraceProcessingComponent componentPrintMsgTrace = null;
+            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACE)) {
                 numRequestedTasks++;
-                retVal = task_genMessageTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+                componentPrintMsgTrace = task_createMessageTraceDumpComponent(outputDir + File.separator + outputFnPrefix);
+                msgTraceProcessingComponents.add(componentPrintMsgTrace);
             }
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACE)) {
+            AbstractTpanExecutionTraceProcessingComponent componentPrintExecTrace = null;
+            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACE)) {
                 numRequestedTasks++;
-                retVal = task_genExecutionTracesForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+                componentPrintExecTrace = task_createExecutionTraceDumpComponent(outputDir + File.separator + outputFnPrefix);
+                execTraceProcessingComponents.add(componentPrintExecTrace);
             }
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
-                numRequestedTasks++;
-                retVal = task_genTraceEquivalenceReportForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
-            }
+            AbstractTpanMessageTraceProcessingComponent componentPlotSeqDiagr = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQD)) {
                 numRequestedTasks++;
-                retVal = task_genSequenceDiagramsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, ignoreInvalidTraces, selectedTraces);
+                componentPlotSeqDiagr = task_createSequenceDiagramPlotComponent(outputDir + File.separator + outputFnPrefix);
+                msgTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
+            DependencyGraphPlugin componentPlotDepGraph = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTDEPG)) {
                 numRequestedTasks++;
-                retVal = task_genDependencyGraphsForTraceSet(inputDir, outputDir + File.separator + outputFnPrefix, selectedTraces);
+                componentPlotDepGraph = task_createDependencyGraphPlotComponent();
+                msgTraceProcessingComponents.add(componentPlotDepGraph);
             }
+
+            List<AbstractTpanTraceProcessingComponent> allTraceProcessingComponents = new ArrayList<AbstractTpanTraceProcessingComponent>();
+            allTraceProcessingComponents.addAll(msgTraceProcessingComponents);
+            allTraceProcessingComponents.addAll(execTraceProcessingComponents);
+            TpanInstance analysisInstance = new TpanInstance();
+            analysisInstance.setLogReader(new FSReader(inputDir));
+
+            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, selectedTraces);
+            for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
+                mtReconstrFilter.addMessageTraceListener(c);
+            }
+            for (AbstractTpanExecutionTraceProcessingComponent c : execTraceProcessingComponents) {
+                mtReconstrFilter.addExecutionTraceListener(c);
+            }
+            analysisInstance.addRecordConsumer(mtReconstrFilter);
+            analysisInstance.run();
+
+            if (componentPlotDepGraph != null){
+                componentPlotDepGraph.saveToDotFile(new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !onlyEquivClasses);
+            }
+
+            int numErrorCount = 0;
+            for (AbstractTpanTraceProcessingComponent c : allTraceProcessingComponents) {
+                numErrorCount += c.getErrorCount();
+                c.printStatusMessage();
+                c.cleanup();
+            }
+
+            if (!ignoreInvalidTraces && numErrorCount > 0) {
+                log.error(numErrorCount + " errors occured in trace processing components");
+                throw new Exception (numErrorCount + " errors occured in trace processing components");
+            }
+
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
+                numRequestedTasks++;
+                retVal = task_genTraceEquivalenceReportForTraceSet(outputDir + File.separator + outputFnPrefix, mtReconstrFilter);
+            }
+
+            // TODO: these tasks should be removed 
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADER)) {
                 numRequestedTasks++;
                 retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/", "queue1");
@@ -262,10 +305,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genSequenceDiagramsForTraceSet(final String inputDirName, final String outputFnPrefix, final boolean ignoreInvalidTraces, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
-        TpanInstance analysisInstance = new TpanInstance();
-        analysisInstance.setLogReader(new FSReader(inputDirName));
-
+    private static AbstractTpanMessageTraceProcessingComponent task_createSequenceDiagramPlotComponent(final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
         AbstractTpanMessageTraceProcessingComponent sqdWriter = new AbstractTpanMessageTraceProcessingComponent() {
 
@@ -294,17 +334,7 @@ public class TpanTool {
                 // nothing to do
             }
         };
-        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, ignoreInvalidTraces, onlyEquivClasses, considerHostname, traceIds);
-        mtReconstrFilter.addMessageTraceListener(sqdWriter);
-        analysisInstance.addRecordConsumer(mtReconstrFilter);
-        analysisInstance.run();
-
-        sqdWriter.cleanup();
-        if (!ignoreInvalidTraces && sqdWriter.getErrorCount() > 0) {
-            return false;
-        }
-        sqdWriter.printStatusMessage();
-        return true;
+        return sqdWriter;
     }
 
     /**
@@ -318,31 +348,10 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genDependencyGraphsForTraceSet(String inputDirName,
-            String outputFnPrefix, TreeSet<Long> traceIds)
-            throws IOException, InvalidTraceException, LogReaderExecutionException,
-            RecordConsumerExecutionException {
-        TpanInstance analysisInstance = new TpanInstance();
-        analysisInstance.setLogReader(new FSReader(inputDirName));
+    private static DependencyGraphPlugin task_createDependencyGraphPlotComponent() {
+
         DependencyGraphPlugin depGraph = new DependencyGraphPlugin(considerHostname);
-        TraceReconstructionFilter mtReconstrFilter =
-                new TraceReconstructionFilter(-1, false, onlyEquivClasses,
-                considerHostname, traceIds);
-        mtReconstrFilter.addMessageTraceListener(depGraph);
-
-        analysisInstance.addRecordConsumer(mtReconstrFilter);
-        analysisInstance.run();
-
-        /* Output dependency graphs */
-        String outputFnBase = new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath();
-        depGraph.saveToDotFile(outputFnBase, !onlyEquivClasses);
-
-        depGraph.cleanup();
-        if (!ignoreInvalidTraces && depGraph.getErrorCount() > 0) {
-            return false;
-        }
-        depGraph.printStatusMessage();
-        return true;
+        return depGraph;
     }
 
     /**
@@ -355,10 +364,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genMessageTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
-        TpanInstance analysisInstance = new TpanInstance();
-        analysisInstance.setLogReader(new FSReader(inputDirName));
-
+    private static AbstractTpanMessageTraceProcessingComponent task_createMessageTraceDumpComponent(String outputFnPrefix) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
         final String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
         AbstractTpanMessageTraceProcessingComponent mtWriter = new AbstractTpanMessageTraceProcessingComponent() {
 
@@ -373,7 +379,7 @@ public class TpanTool {
             public void printStatusMessage() {
                 super.printStatusMessage();
                 int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " messageTraces" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
+                System.out.println("Wrote " + numTraces + " message trace" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
             }
 
             @Override
@@ -383,17 +389,7 @@ public class TpanTool {
                 }
             }
         };
-        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, traceIds);
-        mtReconstrFilter.addMessageTraceListener(mtWriter);
-        analysisInstance.addRecordConsumer(mtReconstrFilter);
-        analysisInstance.run();
-        mtWriter.cleanup();
-
-        if (!ignoreInvalidTraces && mtWriter.getErrorCount() > 0) {
-            return false;
-        }
-        mtWriter.printStatusMessage();
-        return true;
+        return mtWriter;
     }
 
     /**
@@ -406,13 +402,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static boolean task_genExecutionTracesForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
-        boolean retVal = true;
-        log.info("Reading traces from directory '" + inputDirName + "'");
-        /* Read log data and collect execution traces */
-        TpanInstance analysisInstance = new TpanInstance();
-        analysisInstance.setLogReader(new FSReader(inputDirName));
-
+    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(String outputFnPrefix) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         final String outputFn = new File(outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
         AbstractTpanExecutionTraceProcessingComponent etWriter = new AbstractTpanExecutionTraceProcessingComponent() {
 
@@ -427,7 +417,7 @@ public class TpanTool {
             public void printStatusMessage() {
                 super.printStatusMessage();
                 int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " executionTraces" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
+                System.out.println("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
             }
 
             @Override
@@ -437,39 +427,20 @@ public class TpanTool {
                 }
             }
         };
-        TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, traceIds);
-        mtReconstrFilter.addExecutionTraceListener(etWriter);
-        analysisInstance.addRecordConsumer(mtReconstrFilter);
-        analysisInstance.run();
-        etWriter.cleanup();
-
-       if (!ignoreInvalidTraces && etWriter.getErrorCount() > 0) {
-            return false;
-        }
-        etWriter.printStatusMessage();
-        return true;
+        return etWriter;
     }
 
-    private static boolean task_genTraceEquivalenceReportForTraceSet(String inputDirName, String outputFnPrefix, final TreeSet<Long> traceIds) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static boolean task_genTraceEquivalenceReportForTraceSet(final String outputFnPrefix, final TraceReconstructionFilter trf) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
-        log.info("Reading traces from directory '" + inputDirName + "'");
-        /* Read log data and collect execution traces */
-        TpanInstance analysisInstance = new TpanInstance();
-        analysisInstance.setLogReader(new FSReader(inputDirName));
-
         String outputFn = new File(outputFnPrefix + TRACE_EQUIV_CLASSES_FN_PREFIX + ".txt").getCanonicalPath();
         PrintStream ps = null;
         try {
-            final PrintStream myPs = new PrintStream(new FileOutputStream(outputFn));
-            ps = myPs;
-            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, traceIds);
-            analysisInstance.addRecordConsumer(mtReconstrFilter);
-            analysisInstance.run();
+            ps = new PrintStream(new FileOutputStream(outputFn));
             int numClasses = 0;
-            HashMap<ExecutionTrace, Integer> classMap = mtReconstrFilter.getEquivalenceClassMap();
+            HashMap<ExecutionTrace, Integer> classMap = trf.getEquivalenceClassMap();
             for (Entry<ExecutionTrace, Integer> e : classMap.entrySet()) {
                 ExecutionTrace t = e.getKey();
-                myPs.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId());
+                ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId());
             }
             System.out.println("Wrote " + numClasses + " equivalence classes" + (numClasses > 1 ? "s" : "") + " to file '" + outputFn + "'");
         } catch (FileNotFoundException e) {
