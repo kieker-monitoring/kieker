@@ -30,6 +30,12 @@ public abstract class AbstractTpanTraceProcessingComponent {
     private long lastTraceIdSuccess = -1;
     private long lastTraceIdError = -1;
 
+    private String name = "no name";
+
+    public AbstractTpanTraceProcessingComponent (final String name){
+        this.name = name;
+    }
+
     protected final void reportSuccess(final long traceId){
         this.lastTraceIdSuccess = traceId;
         this.numTracesSucceeded++;
@@ -62,11 +68,22 @@ public abstract class AbstractTpanTraceProcessingComponent {
         return lastTraceIdSuccess;
     }
 
+    protected void printMessage(final String[] lines){
+        System.out.println("");
+        System.out.println("#");
+        System.out.println("# Plugin: " + this.name);
+        for (String l : lines){
+            System.out.println(l);
+        }
+    }
+
     public void printStatusMessage(){
-        System.out.print("Trace processing summary: ");
-        System.out.print(this.numTracesProcessed + " total; ");
-        System.out.print(this.numTracesSucceeded + " succeeded; ");
-        System.out.println(this.numTracesFailed + " failed.");
+        this.printMessage(new String[] {
+            "Trace processing summary: "
+                    + this.numTracesProcessed + " total; "
+                    + this.numTracesSucceeded + " succeeded; "
+                    + this.numTracesFailed + " failed."
+        });
     }
 
 

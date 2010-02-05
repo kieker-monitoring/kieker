@@ -39,7 +39,8 @@ public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingCom
     private AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
     private final boolean considerHost;
 
-    public DependencyGraphPlugin(final boolean considerHost) {
+    public DependencyGraphPlugin(final String name, final boolean considerHost) {
+        super(name);
         this.considerHost = considerHost;
     }
 
@@ -77,9 +78,11 @@ public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingCom
         ps.flush();
         ps.close();
         this.numGraphsSaved++;
-        System.out.println("Wrote dependency graph to file '" + outputFnBase + ".dot" + "'");
-        System.out.println("Dot file can be converted using the dot tool");
-        System.out.println("Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg");
+        this.printMessage(new String[] {
+        "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'",
+        "Dot file can be converted using the dot tool",
+        "Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg"
+        });
     }
 
     public void newTrace(MessageTrace t) {

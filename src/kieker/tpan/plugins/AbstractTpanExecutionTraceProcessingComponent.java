@@ -28,5 +28,7 @@ import kieker.tpan.recordConsumer.IExecutionTraceReceiver;
 public abstract class AbstractTpanExecutionTraceProcessingComponent 
         extends AbstractTpanTraceProcessingComponent
         implements IExecutionTraceReceiver {
-
+        public AbstractTpanExecutionTraceProcessingComponent (String name){
+            super(name);
+        }
 }

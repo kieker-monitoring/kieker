@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.AbstractTpanTraceProcessingComponent;
 import kieker.tpan.plugins.TraceProcessingException;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 
@@ -45,7 +46,7 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionFilter implements IKiekerRecordConsumer {
+public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IKiekerRecordConsumer {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
     /** TraceId x trace */
@@ -80,10 +81,11 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
         KiekerExecutionRecord.class.getName()
     };
 
-    public TraceReconstructionFilter(final long maxTraceDurationSecs,
+    public TraceReconstructionFilter(final String name, final long maxTraceDurationSecs,
             final boolean ignoreInvalidTraces,
             final boolean onlyEquivClasses, final boolean considerHostname,
             final TreeSet<Long> selectedTraces) {
+        super (name);
         if (maxTraceDurationSecs > 0) {
             this.maxTraceDurationNanosecs = maxTraceDurationSecs / (1000 * 1000 * 1000);
         } else {
@@ -122,7 +124,9 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
         if (!this.timeoutMap.add(seq)) { // (re-)add trace to timeoutMap
             log.error("Equal entry existed in timeout already:" + seq);
         }
+
         this.processQueue();
+
     }
 
     private void processQueue() throws RecordConsumerExecutionException {
@@ -133,14 +137,15 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
             pendingTraces.remove(polledTrace.getTraceId());
             log.info("Removed pending trace:" + polledTrace);
             try {
-                // if the trace is invalid, the following method throws an exception
+                // if the polled trace is invalid, the following method throws
+                // an exception
                 MessageTrace mt = polledTrace.toMessageTrace();
                 boolean isNewTrace = true;
                 if (this.onlyEquivClasses) {
                     ExecutionTraceHashContainer polledTraceHashContainer =
                             new ExecutionTraceHashContainer(polledTrace);
                     AtomicInteger numOccurences = this.eTracesEquivClassesMap.get(polledTraceHashContainer);
-                    if (numOccurences == null){
+                    if (numOccurences == null) {
                         numOccurences = new AtomicInteger(1);
                         this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
                     } else {
@@ -161,13 +166,16 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
                         l.newTrace(polledTrace);
                     }
                 }
+                this.reportSuccess(polledTrace.getTraceId());
             } catch (InvalidTraceException ex) {
+                this.reportError(polledTrace.getTraceId());
                 if (!ignoreInvalidTraces) {
                     log.error("Failed to transform execution trace to message trace: " + polledTrace, ex);
                     throw new RecordConsumerExecutionException("Failed to transform execution trace to message trace: " + polledTrace, ex);
                 }
-            } catch (TraceProcessingException ex){
+            } catch (TraceProcessingException ex) {
                 log.error("Trace processing exception", ex);
+                this.reportError(polledTrace.getTraceId());
                 throw new RecordConsumerExecutionException("Trace processing exception", ex);
             }
         }
@@ -198,12 +206,17 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
         }
     }
 
-    public HashMap<ExecutionTrace,Integer> getEquivalenceClassMap() {
-        final HashMap<ExecutionTrace,Integer> map = new HashMap<ExecutionTrace,Integer>();
-        for (Entry<ExecutionTraceHashContainer,AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()){
+    public HashMap<ExecutionTrace, Integer> getEquivalenceClassMap() {
+        final HashMap<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>();
+        for (Entry<ExecutionTraceHashContainer, AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()) {
             map.put(entry.getKey().t, entry.getValue().intValue());
         }
         return map;
+    }
+
+    @Override
+    public void cleanup() {
+        // no need to do anything
     }
 
     private class ExecutionTraceHashContainer {

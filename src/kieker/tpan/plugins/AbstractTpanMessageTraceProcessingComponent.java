@@ -27,4 +27,7 @@ import kieker.tpan.recordConsumer.IMessageTraceReceiver;
 public abstract class AbstractTpanMessageTraceProcessingComponent 
         extends AbstractTpanTraceProcessingComponent
         implements IMessageTraceReceiver {
+    public AbstractTpanMessageTraceProcessingComponent (String name){
+        super (name);
+    }
 }
