@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -14,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
@@ -49,8 +52,8 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
     private final Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
     private final boolean considerHostname;
     /** Representative x # of equivalents */
-    private final HashMap<ExecutionTraceHashContainer, Integer> eTracesEquivClassesMap =
-            new HashMap<ExecutionTraceHashContainer, Integer>();
+    private final HashMap<ExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap =
+            new HashMap<ExecutionTraceHashContainer, AtomicInteger>();
     /** Timestamp of most recent execution x trace */
     private final TreeSet<ExecutionTrace> timeoutMap =
             new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
@@ -134,14 +137,14 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
                 if (this.onlyEquivClasses) {
                     ExecutionTraceHashContainer polledTraceHashContainer =
                             new ExecutionTraceHashContainer(polledTrace);
-                    Integer numOccurences = this.eTracesEquivClassesMap.get(polledTraceHashContainer);
+                    AtomicInteger numOccurences = this.eTracesEquivClassesMap.get(polledTraceHashContainer);
                     if (numOccurences == null){
-                        numOccurences = new Integer(1);
+                        numOccurences = new AtomicInteger(1);
+                        this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
                     } else {
                         isNewTrace = false;
-                        numOccurences = new Integer(numOccurences.intValue()+1);
+                        numOccurences.incrementAndGet();
                     }
-                    this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
                 }
 
                 if (!isNewTrace) {
@@ -188,6 +191,14 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
         } catch (RecordConsumerExecutionException ex) {
             log.error("Error prossessing queue", ex);
         }
+    }
+
+    public HashMap<ExecutionTrace,Integer> getEquivalenceClassMap() {
+        final HashMap<ExecutionTrace,Integer> map = new HashMap<ExecutionTrace,Integer>();
+        for (Entry<ExecutionTraceHashContainer,AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()){
+            map.put(entry.getKey().t, entry.getValue().intValue());
+        }
+        return map;
     }
 
     private class ExecutionTraceHashContainer {

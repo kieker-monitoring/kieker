@@ -29,32 +29,42 @@ import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.AdjacencyMatrix;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.datamodel.Message;
+import kieker.tpan.recordConsumer.IMessageTraceReceiver;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public class DependencyGraphPlugin {
+public class DependencyGraphPlugin implements IMessageTraceReceiver {
 
     private static final Log log = LogFactory.getLog(DependencyGraphPlugin.class);
+    private AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
+    private final boolean considerHost;
 
-    private DependencyGraphPlugin() {
+    public DependencyGraphPlugin(final boolean considerHost) {
+        this.considerHost = considerHost;
     }
 
-    private static void dotFromAdjacencyMatrix(AdjacencyMatrix adjMatrix, PrintStream ps) {
+    private void dotFromAdjacencyMatrix(AdjacencyMatrix adjMatrix, PrintStream ps, final boolean includeWeights) {
         // preamble:
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
         long[][] matrix = adjMatrix.getMatrixAsArray();
         String[] componentNames = adjMatrix.getComponentNames();
         for (int i = 0; i < matrix.length; i++) {
-            edgestringBuilder.append("\n").append(i).append("[label =\"").append(componentNames[i]).append("\",shape=box];");
+            edgestringBuilder.append("\n").append(i).append("[label =\"")
+                    .append(componentNames[i]).append("\",shape=box];");
         }
         for (int i = 0; i < matrix.length; i++) {
             for (int k = 0; k < matrix[i].length; k++) {
                 if (matrix[i][k] > 0) {
-                    edgestringBuilder.append("\n").append(i).append("->").append(k).append("[label = ").append(matrix[i][k]).append(",style=dashed,arrowhead=open,").append("weight =").append(matrix[i][k]).append(" ]");
+                    edgestringBuilder.append("\n").append(i).append("->").append(k)
+                            .append("[style=dashed,arrowhead=open");
+                    if (includeWeights){
+                        edgestringBuilder.append(",label = ").append(matrix[i][k]).append(", weight =").append(matrix[i][k]);
+                    }
+                    edgestringBuilder.append(" ]");
                 }
             }
         }
@@ -62,22 +72,22 @@ public class DependencyGraphPlugin {
         ps.println("}");
     }
 
-    public static void writeDotFromMessageTraces(final Collection<MessageTrace> mTraces, final String outputFilename, final boolean considerHost) throws InvalidTraceException, FileNotFoundException {
-        AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
+    public void saveToFile(final String outputFilename, final boolean includeWeights) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
-        for (MessageTrace mTrace : mTraces) {
-                for (Message m : mTrace.getSequenceAsVector()) {
-                    if (!m.callMessage) {
-                        continue;
-                    }
-                    String senderLabel = m.getSenderLabel(considerHost);
-                    String receiverLabel  = m.getReceiverLabel(considerHost);
-
-                    adjMatrix.addDependency(senderLabel, receiverLabel);
-                }
-        }
-        dotFromAdjacencyMatrix(adjMatrix, ps);
+        this.dotFromAdjacencyMatrix(adjMatrix, ps, includeWeights);
         ps.flush();
         ps.close();
+    }
+
+    public void newTrace(MessageTrace t) {
+        for (Message m : t.getSequenceAsVector()) {
+            if (!m.callMessage) {
+                continue;
+            }
+            String senderLabel = m.getSenderLabel(considerHost);
+            String receiverLabel = m.getReceiverLabel(considerHost);
+
+            adjMatrix.addDependency(senderLabel, receiverLabel);
+        }
     }
 }
