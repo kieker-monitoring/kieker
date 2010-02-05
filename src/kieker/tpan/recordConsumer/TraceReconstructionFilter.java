@@ -133,6 +133,8 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
             pendingTraces.remove(polledTrace.getTraceId());
             log.info("Removed pending trace:" + polledTrace);
             try {
+                // if the trace is invalid, the following method throws an exception
+                MessageTrace mt = polledTrace.toMessageTrace();
                 boolean isNewTrace = true;
                 if (this.onlyEquivClasses) {
                     ExecutionTraceHashContainer polledTraceHashContainer =
@@ -150,7 +152,7 @@ public class TraceReconstructionFilter implements IKiekerRecordConsumer {
                 if (!isNewTrace) {
                     continue;
                 }
-                MessageTrace mt = polledTrace.toMessageTrace();
+
                 if (mt != null) {
                     for (IMessageTraceReceiver l : messageTraceListeners) {
                         l.newTrace(mt);

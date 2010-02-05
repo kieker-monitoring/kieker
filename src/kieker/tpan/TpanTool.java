@@ -88,6 +88,7 @@ public class TpanTool {
     private static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
     private static final String CMD_OPT_NAME_TRACEEQUIVCLASSES = "trace-equivalence-classes";
     private static final String CMD_OPT_NAME_CONSIDERHOSTNAMES = "consider-hostname";
+    private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     private static final String CMD_OPT_NAME_TASK_PLOTSEQD = "plot-Sequence-Diagram";
     private static final String CMD_OPT_NAME_TASK_PLOTDEPG = "plot-Dependency-Graph";
     private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACE = "print-Message-Trace";
@@ -117,6 +118,7 @@ public class TpanTool {
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSES).withArgName("true|false").hasArgs().isRequired(false).withDescription("Detect trace equivalence classes and perform actions on representatives (defaults to false).").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_CONSIDERHOSTNAMES).withArgName("true|false").hasArgs().isRequired(false).withDescription("Consider this hostname to distinguish executions (defaults to true).").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).withArgName("true|false").hasArgs().isRequired(false).withDescription("Continue after the occurence of an invalid trace (defaults to false).").create());
     }
 
     private static boolean parseArgs(String[] args) {
@@ -162,6 +164,13 @@ public class TpanTool {
             return false;
         }
         considerHostname = considerHostnameOptValStr.equals("true");
+
+        String ignoreInvalidTracesOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_IGNOREINVALIDTRACES, "false");
+        if (!(ignoreInvalidTracesOptValStr.equals("true") || ignoreInvalidTracesOptValStr.equals("false"))) {
+            System.err.println("Invalid value for option " + CMD_OPT_NAME_IGNOREINVALIDTRACES + ": '" + ignoreInvalidTracesOptValStr + "'");
+            return false;
+        }
+        ignoreInvalidTraces = ignoreInvalidTracesOptValStr.equals("true");
 
         String onlyEquivClassesOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_TRACEEQUIVCLASSES, "false");
         if (!(onlyEquivClassesOptValStr.equals("true") || onlyEquivClassesOptValStr.equals("false"))) {
@@ -211,7 +220,7 @@ public class TpanTool {
             TpanInstance analysisInstance = new TpanInstance();
             analysisInstance.setLogReader(new FSReader(inputDir));
 
-            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, false, onlyEquivClasses, considerHostname, selectedTraces);
+            TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(-1, ignoreInvalidTraces, onlyEquivClasses, considerHostname, selectedTraces);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
                 mtReconstrFilter.addMessageTraceListener(c);
             }
@@ -280,10 +289,8 @@ public class TpanTool {
                 System.exit(1);
             }
 
-            //Thread.sleep(2000);
-
             /* As long as we have a dependency from logAnalysis to tpmon,
-             * we need t terminate tpmon explicitly. */
+             * we need to terminate tpmon explicitly. */
             TpmonController.getInstance().terminateMonitoring();
         } catch (Exception exc) {
             System.err.println("An error occured. See log for details");
@@ -345,7 +352,6 @@ public class TpanTool {
      * @param traceSet
      */
     private static DependencyGraphPlugin task_createDependencyGraphPlotComponent() {
-
         DependencyGraphPlugin depGraph = new DependencyGraphPlugin(considerHostname);
         return depGraph;
     }
