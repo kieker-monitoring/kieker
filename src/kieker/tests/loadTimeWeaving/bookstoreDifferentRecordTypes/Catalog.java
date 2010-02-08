@@ -45,7 +45,7 @@ public class Catalog {
             Bookstore.waitabit(20);
         } else {
             KiekerTpmonManualBranchProbe.monitorBranch(1,1);
-            Bookstore.waitabit(2);
+            Bookstore.waitabit(2000); //
         }
     }
 }

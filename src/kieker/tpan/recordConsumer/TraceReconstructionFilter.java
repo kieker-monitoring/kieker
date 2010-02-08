@@ -87,7 +87,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             final TreeSet<Long> selectedTraces) {
         super (name);
         if (maxTraceDurationSecs > 0) {
-            this.maxTraceDurationNanosecs = maxTraceDurationSecs / (1000 * 1000 * 1000);
+            this.maxTraceDurationNanosecs = maxTraceDurationSecs * (1000 * 1000 * 1000);
         } else {
             this.maxTraceDurationNanosecs = Long.MAX_VALUE;
         }
