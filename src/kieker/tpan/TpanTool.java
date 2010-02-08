@@ -14,7 +14,6 @@ import java.util.TreeSet;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSMergeReader;
-import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.datamodel.MessageTrace;
@@ -95,8 +94,8 @@ public class TpanTool {
     private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACE = "print-Message-Trace";
     private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACE = "print-Execution-Trace";
     private static final String CMD_OPT_NAME_TASK_EQUIVCLASSREPORT = "print-Equivalence-Classes";
-    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
-    private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
+//    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
+//    private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
 
     static {
         // TODO: OptionGroups?
@@ -112,8 +111,11 @@ public class TpanTool {
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACE).hasArg(false).withDescription("Generate a message trace representation from log data").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACE).hasArg(false).withDescription("Generate an execution trace representation from log data").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription("Output an overview about the trace equivalence classes").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADER).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADERJFX).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
+
+
+        /* These tasks should be moved to a dedicated tool, since this tool covers trace analysis */
+//        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADER).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
+//        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADERJFX).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
 
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
@@ -259,17 +261,17 @@ public class TpanTool {
                 retVal = task_genTraceEquivalenceReportForTraceSet(outputDir + File.separator + outputFnPrefix, mtReconstrFilter);
             }
 
-            // TODO: these tasks should be removed 
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADER)) {
-                numRequestedTasks++;
-                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/", "queue1");
-                System.out.println("Finished to start task_initBasicJmsReader");
-            }
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADERJFX)) {
-                numRequestedTasks++;
-                retVal = task_initBasicJmsReaderJavaFx("tcp://127.0.0.1:3035/", "queue1");
-                System.out.println("Finished to start task_initBasicJmsReader");
-            }
+            // TODO: these tasks should be moved to a decicated tool
+//            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADER)) {
+//                numRequestedTasks++;
+//                retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/", "queue1");
+//                System.out.println("Finished to start task_initBasicJmsReader");
+//            }
+//            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADERJFX)) {
+//                numRequestedTasks++;
+//                retVal = task_initBasicJmsReaderJavaFx("tcp://127.0.0.1:3035/", "queue1");
+//                System.out.println("Finished to start task_initBasicJmsReader");
+//            }
 
             if (!retVal) {
                 System.err.println("A task failed");
