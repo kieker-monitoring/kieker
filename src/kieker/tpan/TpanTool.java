@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
@@ -75,14 +76,14 @@ public class TpanTool {
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
     private static final Options cmdlOpts = new Options();
-    private static String inputDir = null;
+    private static String[] inputDirs = null;
     private static String outputDir = null;
     private static String outputFnPrefix = null;
     private static TreeSet<Long> selectedTraces = null;
     private static boolean onlyEquivClasses = true; // false;
     private static boolean considerHostname = true;
     private static boolean ignoreInvalidTraces = false;
-    private static final String CMD_OPT_NAME_INPUTDIR = "inputdir";
+    private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
     private static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
     private static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
     private static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
@@ -100,7 +101,7 @@ public class TpanTool {
     static {
         // TODO: OptionGroups?
 
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIR).withArgName("dir").hasArg(true).isRequired(false).withDescription("Log directory to read data from").withValueSeparator('=').create("i"));
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(false).withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTDIR).withArgName("dir").hasArg(true).isRequired(true).withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("dir").hasArg(true).isRequired(false).withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 
@@ -137,10 +138,8 @@ public class TpanTool {
     }
 
     private static boolean initFromArgs() {
-        inputDir = cmdl.getOptionValue(CMD_OPT_NAME_INPUTDIR) + File.separator;
-        if (inputDir.equals("${inputDir}/")) {
-            log.error("Invalid input dir '" + inputDir + "'. Add it as command-line parameter to you ant call (e.g., ant run-tpan -DinputDir=/tmp) or to a properties file.");
-        }
+        inputDirs = cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
+ 
         outputDir = cmdl.getOptionValue(CMD_OPT_NAME_OUTPUTDIR) + File.separator;
         outputFnPrefix = cmdl.getOptionValue(CMD_OPT_NAME_OUTPUTFNPREFIX, "");
         if (cmdl.hasOption(CMD_OPT_NAME_SELECTTRACES)) { /* Parse liste of trace Ids */
@@ -224,7 +223,8 @@ public class TpanTool {
             allTraceProcessingComponents.addAll(msgTraceProcessingComponents);
             allTraceProcessingComponents.addAll(execTraceProcessingComponents);
             TpanInstance analysisInstance = new TpanInstance();
-            analysisInstance.setLogReader(new FSReader(inputDir));
+            //analysisInstance.setLogReader(new FSReader(inputDirs));
+            analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
             TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, -1, ignoreInvalidTraces, onlyEquivClasses, considerHostname, selectedTraces);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
