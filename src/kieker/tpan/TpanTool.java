@@ -90,11 +90,11 @@ public class TpanTool {
     private static final String CMD_OPT_NAME_TRACEEQUIVCLASSMODE = "trace-equivalence-mode";
     private static final String CMD_OPT_NAME_NOHOSTNAMES = "ignore-hostnames";
     private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
-    private static final String CMD_OPT_NAME_TASK_PLOTSEQD = "plot-Sequence-Diagram";
-    private static final String CMD_OPT_NAME_TASK_PLOTDEPG = "plot-Dependency-Graph";
-    private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACE = "print-Message-Trace";
-    private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACE = "print-Execution-Trace";
-    private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACE = "print-invalid-Execution-Trace";
+    private static final String CMD_OPT_NAME_TASK_PLOTSEQDS = "plot-Sequence-Diagrams";
+    private static final String CMD_OPT_NAME_TASK_PLOTDEPGS = "plot-Dependency-Graphs";
+    private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
+    private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
+    private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
     private static final String CMD_OPT_NAME_TASK_EQUIVCLASSREPORT = "print-Equivalence-Classes";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
@@ -108,11 +108,11 @@ public class TpanTool {
 
         //OptionGroup cmdlOptGroupTask = new OptionGroup();
         //cmdlOptGroupTask.isRequired();
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQD).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPG).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACE).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACE).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACE).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPGS).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription("Output an overview about the trace equivalence classes").create());
 
 
@@ -187,7 +187,7 @@ public class TpanTool {
             List<AbstractTpanExecutionTraceProcessingComponent> invalidTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
             // fill list of msgTraceProcessingComponents:
             AbstractTpanMessageTraceProcessingComponent componentPrintMsgTrace = null;
-            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACE)) {
+            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
                 numRequestedTasks++;
                 componentPrintMsgTrace = 
                         task_createMessageTraceDumpComponent(PRINTMSGTRACE_COMPONENT_NAME,
@@ -195,7 +195,7 @@ public class TpanTool {
                 msgTraceProcessingComponents.add(componentPrintMsgTrace);
             }
             AbstractTpanExecutionTraceProcessingComponent componentPrintExecTrace = null;
-            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACE)) {
+            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
                 numRequestedTasks++;
                 componentPrintExecTrace = 
                         task_createExecutionTraceDumpComponent(PRINTEXECTRACE_COMPONENT_NAME,
@@ -203,7 +203,7 @@ public class TpanTool {
                 execTraceProcessingComponents.add(componentPrintExecTrace);
             }
             AbstractTpanExecutionTraceProcessingComponent componentPrintInvalidTrace = null;
-            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACE)) {
+            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
                 numRequestedTasks++;
                 componentPrintInvalidTrace = 
                         task_createExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME,
@@ -211,7 +211,7 @@ public class TpanTool {
                 invalidTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
             AbstractTpanMessageTraceProcessingComponent componentPlotSeqDiagr = null;
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQD)) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQDS)) {
                 numRequestedTasks++;
                 componentPlotSeqDiagr = 
                         task_createSequenceDiagramPlotComponent(PLOTSEQDIAGR_COMPONENT_NAME,
@@ -219,7 +219,7 @@ public class TpanTool {
                 msgTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
             DependencyGraphPlugin componentPlotDepGraph = null;
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTDEPG)) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTDEPGS)) {
                 numRequestedTasks++;
                 componentPlotDepGraph =
                         task_createDependencyGraphPlotComponent(PLOTDEPGRAPH_COMPONENT_NAME);
