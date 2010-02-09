@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -128,7 +130,12 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             seq = new ExecutionTrace(traceId);
             pendingTraces.put(traceId, seq);
         }
-        seq.add(execRecord);
+        try {
+            seq.add(execRecord);
+        } catch (InvalidTraceException ex) { // this would be a bug!
+            log.fatal("Attempt to add record to wrong trace", ex);
+            throw new RecordConsumerExecutionException("Attempt to add record to wrong trace");
+        }
         if (!this.timeoutMap.add(seq)) { // (re-)add trace to timeoutMap
             log.error("Equal entry existed in timeout already:" + seq);
         }

@@ -1,5 +1,8 @@
 package kieker.tpan.datamodel;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.Stack;
@@ -32,9 +35,28 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ExecutionTrace {
 
+    private static final Calendar cal1970 = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+    private static final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
     private long traceId = -1; // convenience field. All executions have this traceId.
     private SortedSet<KiekerExecutionRecord> set = new TreeSet<KiekerExecutionRecord>();
+
+    private long minTin = Integer.MAX_VALUE;
+
+    public int getMaxStackDepth() {
+        return maxStackDepth;
+    }
+
+    public long getMaxTout() {
+        return maxTout;
+    }
+
+    public long getMinTin() {
+        return minTin;
+    }
+    private long maxTout = Integer.MIN_VALUE;
+    private int maxStackDepth = -1;
 
     private ExecutionTrace() {
     }
@@ -47,8 +69,13 @@ public class ExecutionTrace {
         return traceId;
     }
 
-    public void add(KiekerExecutionRecord record) {
-        // TODO: check traceId
+    public void add(KiekerExecutionRecord record) throws InvalidTraceException {
+        if (this.traceId != record.traceId){
+            throw new InvalidTraceException("TraceId of new record ("+record.traceId+") differs from Id of this trace ("+this.traceId+")");
+        }
+        if (record.tin < this.minTin) this.minTin = record.tin;
+        if (record.tout > this.maxTout) this.maxTout = record.tout;
+        if (record.ess > this.maxStackDepth) this.maxStackDepth = record.ess;
         this.set.add(record);
     }
 
@@ -128,8 +155,19 @@ public class ExecutionTrace {
         return this.set.size();
     }
 
+    public String timestampToString (long timestamp){
+        GregorianCalendar c = (GregorianCalendar)cal1970.clone();
+        c.add(Calendar.SECOND, (int)(timestamp/(1000*1000*1000)));
+        return c.toString();
+        //return df.format(c);
+    }
+
     public String toString() {
-        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId + ":\n");
+        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId)
+                .append(" (minTin=").append(this.minTin).append("(").append(timestampToString(this.minTin)).append(")")
+                .append("; maxTout=").append(this.maxTout)
+                .append("; maxStackDepth=").append(this.maxStackDepth)
+                .append("):\n");
         Iterator<KiekerExecutionRecord> it = set.iterator();
         while (it.hasNext()) {
             KiekerExecutionRecord e = it.next();
