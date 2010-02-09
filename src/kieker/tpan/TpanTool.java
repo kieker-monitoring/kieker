@@ -6,11 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
 import java.util.TreeSet;
+import java.util.Vector;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSMergeReader;
@@ -33,6 +35,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
@@ -100,33 +103,49 @@ public class TpanTool {
     private static final String CMD_OPT_NAME_MAXTRACEDURATION = "max-trace-duration";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
+    private static final Vector<Option> options = new Vector<Option>();
 
     static {
         // TODO: OptionGroups?
 
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(false).withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTDIR).withArgName("dir").hasArg(true).isRequired(true).withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("dir").hasArg(true).isRequired(false).withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(true).withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTDIR).withArgName("dir").hasArg(true).isRequired(true).withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("prefix").hasArg(true).isRequired(false).withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 
         //OptionGroup cmdlOptGroupTask = new OptionGroup();
         //cmdlOptGroupTask.isRequired();
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPGS).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription("Output an overview about the trace equivalence classes").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPGS).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription("Output an overview about the trace equivalence classes").create());
 
         /* These tasks should be moved to a dedicated tool, since this tool covers trace analysis */
 //        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADER).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
 //        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADERJFX).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
 
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSMODE).hasArg(false).isRequired(false).withDescription("If selected, the selected tasks are performed on representatives of the equivalence classes only.").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_NOHOSTNAMES).hasArg(false).isRequired(false).withDescription("If selected, the hostnames of the executions are NOT considered.").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription("Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSMODE).hasArg(false).isRequired(false).withDescription("If selected, the selected tasks are performed on representatives of the equivalence classes only.").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_NOHOSTNAMES).hasArg(false).isRequired(false).withDescription("If selected, the hostnames of the executions are NOT considered.").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription("Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
+
+        for (Option o : options) {
+            cmdlOpts.addOption(o);
+        }
+
+        cmdHelpFormatter.setOptionComparator(new Comparator() {
+            public int compare(Object o1, Object o2) {
+                if (o1 == o2) return 0;
+                int posO1 = options.indexOf(o1);
+                int posO2 = options.indexOf(o2);
+                if (posO1 < posO2) return -1;
+                if (posO1 > posO2) return 1;
+                return 0;
+            }
+        });
     }
 
     private static boolean parseArgs(String[] args) {
@@ -141,7 +160,7 @@ public class TpanTool {
     }
 
     private static void printUsage() {
-        cmdHelpFormatter.printHelp(TpanTool.class.getName(), cmdlOpts);
+        cmdHelpFormatter.printHelp(80, TpanTool.class.getName(), "", cmdlOpts, "", true);
     }
 
     private static boolean initFromArgs() {
@@ -169,16 +188,16 @@ public class TpanTool {
         ignoreInvalidTraces = cmdl.hasOption(CMD_OPT_NAME_IGNOREINVALIDTRACES);
         traceEquivClassMode = cmdl.hasOption(CMD_OPT_NAME_TRACEEQUIVCLASSMODE);
 
-        String maxTraceDurationStr = cmdl.getOptionValue(CMD_OPT_NAME_MAXTRACEDURATION, maxTraceDuration+"");
+        String maxTraceDurationStr = cmdl.getOptionValue(CMD_OPT_NAME_MAXTRACEDURATION, maxTraceDuration + "");
         try {
             maxTraceDuration = Integer.parseInt(maxTraceDurationStr);
         } catch (NumberFormatException exc) {
-            System.err.println("\nFailed to parse int value of property " +
-                    CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): " +
-                    maxTraceDurationStr);
-            log.error("Failed to parse int value of property " +
-                    CMD_OPT_NAME_MAXTRACEDURATION +
-                    " (must be an integer):" + maxTraceDurationStr, exc);
+            System.err.println("\nFailed to parse int value of property "
+                    + CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): "
+                    + maxTraceDurationStr);
+            log.error("Failed to parse int value of property "
+                    + CMD_OPT_NAME_MAXTRACEDURATION
+                    + " (must be an integer):" + maxTraceDurationStr, exc);
             return false;
         }
 
