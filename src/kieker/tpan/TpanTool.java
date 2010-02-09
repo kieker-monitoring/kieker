@@ -83,6 +83,7 @@ public class TpanTool {
     private static boolean traceEquivClassMode = true; // false;
     private static boolean considerHostname = true;
     private static boolean ignoreInvalidTraces = false;
+    private static int maxTraceDuration = -1; // infinite
     private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
     private static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
     private static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
@@ -96,6 +97,7 @@ public class TpanTool {
     private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
     private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
     private static final String CMD_OPT_NAME_TASK_EQUIVCLASSREPORT = "print-Equivalence-Classes";
+    private static final String CMD_OPT_NAME_MAXTRACEDURATION = "max-trace-duration";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
 
@@ -115,24 +117,24 @@ public class TpanTool {
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription("Output an overview about the trace equivalence classes").create());
 
-
         /* These tasks should be moved to a dedicated tool, since this tool covers trace analysis */
 //        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADER).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
 //        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADERJFX).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
 
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSMODE).hasArg(false).isRequired(false).withDescription("If selected, the performed tasks performed on representatives of equivalence classes only.").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSMODE).hasArg(false).isRequired(false).withDescription("If selected, the selected tasks are performed on representatives of the equivalence classes only.").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_NOHOSTNAMES).hasArg(false).isRequired(false).withDescription("If selected, the hostnames of the executions are NOT considered.").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription("Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
     }
 
     private static boolean parseArgs(String[] args) {
         try {
             cmdl = cmdlParser.parse(cmdlOpts, args);
         } catch (ParseException e) {
-            System.err.println("Error parsing arguments: " + e.getMessage());
             printUsage();
+            System.err.println("\nError parsing arguments: " + e.getMessage());
             return false;
         }
         return true;
@@ -157,7 +159,8 @@ public class TpanTool {
                 }
                 log.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected");
             } catch (Exception e) {
-                System.err.println("Failed to parse list of trace IDs: " + traceIdList + "(" + e.getMessage() + ")");
+                System.err.println("\nFailed to parse list of trace IDs: " + traceIdList + "(" + e.getMessage() + ")");
+                log.error("Failed to parse list of trace IDs: " + traceIdList, e);
                 return false;
             }
         }
@@ -165,6 +168,19 @@ public class TpanTool {
         considerHostname = !cmdl.hasOption(CMD_OPT_NAME_NOHOSTNAMES);
         ignoreInvalidTraces = cmdl.hasOption(CMD_OPT_NAME_IGNOREINVALIDTRACES);
         traceEquivClassMode = cmdl.hasOption(CMD_OPT_NAME_TRACEEQUIVCLASSMODE);
+
+        String maxTraceDurationStr = cmdl.getOptionValue(CMD_OPT_NAME_MAXTRACEDURATION, maxTraceDuration+"");
+        try {
+            maxTraceDuration = Integer.parseInt(maxTraceDurationStr);
+        } catch (NumberFormatException exc) {
+            System.err.println("\nFailed to parse int value of property " +
+                    CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): " +
+                    maxTraceDurationStr);
+            log.error("Failed to parse int value of property " +
+                    CMD_OPT_NAME_MAXTRACEDURATION +
+                    " (must be an integer):" + maxTraceDurationStr, exc);
+            return false;
+        }
 
         return true;
     }
@@ -177,8 +193,8 @@ public class TpanTool {
         final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
         final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
         final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-        final String PLOTDEPGRAPH_COMPONENT_NAME = "Dependency graph";
-        final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagram";
+        final String PLOTDEPGRAPH_COMPONENT_NAME = "Dependency graphs";
+        final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
 
         TraceReconstructionFilter mtReconstrFilter = null;
         try {
@@ -189,7 +205,7 @@ public class TpanTool {
             AbstractTpanMessageTraceProcessingComponent componentPrintMsgTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
                 numRequestedTasks++;
-                componentPrintMsgTrace = 
+                componentPrintMsgTrace =
                         task_createMessageTraceDumpComponent(PRINTMSGTRACE_COMPONENT_NAME,
                         outputDir + File.separator + outputFnPrefix);
                 msgTraceProcessingComponents.add(componentPrintMsgTrace);
@@ -197,7 +213,7 @@ public class TpanTool {
             AbstractTpanExecutionTraceProcessingComponent componentPrintExecTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
                 numRequestedTasks++;
-                componentPrintExecTrace = 
+                componentPrintExecTrace =
                         task_createExecutionTraceDumpComponent(PRINTEXECTRACE_COMPONENT_NAME,
                         outputDir + File.separator + outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt", false);
                 execTraceProcessingComponents.add(componentPrintExecTrace);
@@ -205,7 +221,7 @@ public class TpanTool {
             AbstractTpanExecutionTraceProcessingComponent componentPrintInvalidTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
                 numRequestedTasks++;
-                componentPrintInvalidTrace = 
+                componentPrintInvalidTrace =
                         task_createExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME,
                         outputDir + File.separator + outputFnPrefix + INVALID_TRACES_FN_PREFIX + ".txt", true);
                 invalidTraceProcessingComponents.add(componentPrintInvalidTrace);
@@ -213,7 +229,7 @@ public class TpanTool {
             AbstractTpanMessageTraceProcessingComponent componentPlotSeqDiagr = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQDS)) {
                 numRequestedTasks++;
-                componentPlotSeqDiagr = 
+                componentPlotSeqDiagr =
                         task_createSequenceDiagramPlotComponent(PLOTSEQDIAGR_COMPONENT_NAME,
                         outputDir + File.separator + outputFnPrefix);
                 msgTraceProcessingComponents.add(componentPlotSeqDiagr);
@@ -246,7 +262,7 @@ public class TpanTool {
             analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
             mtReconstrFilter =
-                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, 2000, ignoreInvalidTraces, traceEquivClassMode, considerHostname, selectedTraces);
+                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, maxTraceDuration, ignoreInvalidTraces, traceEquivClassMode, considerHostname, selectedTraces);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
                 mtReconstrFilter.addMessageTraceListener(c);
             }
@@ -318,7 +334,11 @@ public class TpanTool {
 
     public static void main(String args[]) {
         try {
-            if (true && ((!parseArgs(args) || !initFromArgs() || !dispatchTasks()))) {
+            if (!parseArgs(args) || !initFromArgs()) {
+                System.exit(1);
+            }
+
+            if (!dispatchTasks()) {
                 System.exit(1);
             }
 
@@ -452,7 +472,7 @@ public class TpanTool {
             public void printStatusMessage() {
                 super.printStatusMessage();
                 int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " execution trace" + (artifactMode?" artifact":"") + (numTraces > 1 ? "s" : "") + " to file '" + myOutputFn + "'");
+                System.out.println("Wrote " + numTraces + " execution trace" + (artifactMode ? " artifact" : "") + (numTraces > 1 ? "s" : "") + " to file '" + myOutputFn + "'");
             }
 
             @Override

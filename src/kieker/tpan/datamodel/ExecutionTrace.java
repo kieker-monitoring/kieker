@@ -76,6 +76,7 @@ public class ExecutionTrace {
                 log.fatal("Found invalid trace", ex);
                 throw ex;
             }
+            prevEoi = curE.eoi;
 
             /*log.info("");
             log.info("Iteration" + (itNum++));
