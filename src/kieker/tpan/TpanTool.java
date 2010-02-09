@@ -189,31 +189,40 @@ public class TpanTool {
             AbstractTpanMessageTraceProcessingComponent componentPrintMsgTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACE)) {
                 numRequestedTasks++;
-                componentPrintMsgTrace = task_createMessageTraceDumpComponent(PRINTMSGTRACE_COMPONENT_NAME, outputDir + File.separator + outputFnPrefix);
+                componentPrintMsgTrace = 
+                        task_createMessageTraceDumpComponent(PRINTMSGTRACE_COMPONENT_NAME,
+                        outputDir + File.separator + outputFnPrefix);
                 msgTraceProcessingComponents.add(componentPrintMsgTrace);
             }
             AbstractTpanExecutionTraceProcessingComponent componentPrintExecTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACE)) {
                 numRequestedTasks++;
-                componentPrintExecTrace = task_createExecutionTraceDumpComponent(PRINTEXECTRACE_COMPONENT_NAME, outputDir + File.separator + outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt");
+                componentPrintExecTrace = 
+                        task_createExecutionTraceDumpComponent(PRINTEXECTRACE_COMPONENT_NAME,
+                        outputDir + File.separator + outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt", false);
                 execTraceProcessingComponents.add(componentPrintExecTrace);
             }
             AbstractTpanExecutionTraceProcessingComponent componentPrintInvalidTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACE)) {
                 numRequestedTasks++;
-                componentPrintInvalidTrace = task_createExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME, outputDir + File.separator + outputFnPrefix + INVALID_TRACES_FN_PREFIX + ".txt");
+                componentPrintInvalidTrace = 
+                        task_createExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME,
+                        outputDir + File.separator + outputFnPrefix + INVALID_TRACES_FN_PREFIX + ".txt", true);
                 invalidTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
             AbstractTpanMessageTraceProcessingComponent componentPlotSeqDiagr = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQD)) {
                 numRequestedTasks++;
-                componentPlotSeqDiagr = task_createSequenceDiagramPlotComponent(PLOTSEQDIAGR_COMPONENT_NAME, outputDir + File.separator + outputFnPrefix);
+                componentPlotSeqDiagr = 
+                        task_createSequenceDiagramPlotComponent(PLOTSEQDIAGR_COMPONENT_NAME,
+                        outputDir + File.separator + outputFnPrefix);
                 msgTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
             DependencyGraphPlugin componentPlotDepGraph = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTDEPG)) {
                 numRequestedTasks++;
-                componentPlotDepGraph = task_createDependencyGraphPlotComponent(PLOTDEPGRAPH_COMPONENT_NAME);
+                componentPlotDepGraph =
+                        task_createDependencyGraphPlotComponent(PLOTDEPGRAPH_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotDepGraph);
             }
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
@@ -428,7 +437,7 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, String outputFn) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         final String myOutputFn = new File(outputFn).getCanonicalPath();
         AbstractTpanExecutionTraceProcessingComponent etWriter = new AbstractTpanExecutionTraceProcessingComponent(name) {
 
@@ -443,7 +452,7 @@ public class TpanTool {
             public void printStatusMessage() {
                 super.printStatusMessage();
                 int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + myOutputFn + "'");
+                System.out.println("Wrote " + numTraces + " execution trace" + (artifactMode?" artifact":"") + (numTraces > 1 ? "s" : "") + " to file '" + myOutputFn + "'");
             }
 
             @Override
