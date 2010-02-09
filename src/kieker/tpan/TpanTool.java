@@ -70,6 +70,7 @@ public class TpanTool {
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
     private static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
+    private static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
     private static final String TRACE_EQUIV_CLASSES_FN_PREFIX = "traceEquivClasses";
     private static CommandLine cmdl = null;
     private static final CommandLineParser cmdlParser = new BasicParser();
@@ -79,7 +80,7 @@ public class TpanTool {
     private static String outputDir = null;
     private static String outputFnPrefix = null;
     private static TreeSet<Long> selectedTraces = null;
-    private static boolean onlyEquivClasses = true; // false;
+    private static boolean traceEquivClassMode = true; // false;
     private static boolean considerHostname = true;
     private static boolean ignoreInvalidTraces = false;
     private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
@@ -87,12 +88,13 @@ public class TpanTool {
     private static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
     private static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
     private static final String CMD_OPT_NAME_TRACEEQUIVCLASSMODE = "trace-equivalence-mode";
-    private static final String CMD_OPT_NAME_CONSIDERHOSTNAMES = "consider-hostname";
+    private static final String CMD_OPT_NAME_NOHOSTNAMES = "ignore-hostnames";
     private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     private static final String CMD_OPT_NAME_TASK_PLOTSEQD = "plot-Sequence-Diagram";
     private static final String CMD_OPT_NAME_TASK_PLOTDEPG = "plot-Dependency-Graph";
     private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACE = "print-Message-Trace";
     private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACE = "print-Execution-Trace";
+    private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACE = "print-invalid-Execution-Trace";
     private static final String CMD_OPT_NAME_TASK_EQUIVCLASSREPORT = "print-Equivalence-Classes";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
@@ -106,10 +108,11 @@ public class TpanTool {
 
         //OptionGroup cmdlOptGroupTask = new OptionGroup();
         //cmdlOptGroupTask.isRequired();
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQD).hasArg(false).withDescription("Generate sequence diagrams (.pic format) from log data").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPG).hasArg(false).withDescription("Generate a dependency graph (.dot format) from log data").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACE).hasArg(false).withDescription("Generate a message trace representation from log data").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACE).hasArg(false).withDescription("Generate an execution trace representation from log data").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQD).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPG).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACE).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACE).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACE).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription("Output an overview about the trace equivalence classes").create());
 
 
@@ -119,9 +122,9 @@ public class TpanTool {
 
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
         cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0,...,idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create("t"));
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSMODE).withArgName("true|false").hasArgs().isRequired(false).withDescription("Detect trace equivalence classes and perform actions on representatives (defaults to false).").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_CONSIDERHOSTNAMES).withArgName("true|false").hasArgs().isRequired(false).withDescription("Consider this hostname to distinguish executions (defaults to true).").create());
-        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).withArgName("true|false").hasArgs().isRequired(false).withDescription("Continue after the occurence of an invalid trace (defaults to false).").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSMODE).hasArg(false).isRequired(false).withDescription("If selected, the performed tasks performed on representatives of equivalence classes only.").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_NOHOSTNAMES).hasArg(false).isRequired(false).withDescription("If selected, the hostnames of the executions are NOT considered.").create());
+        cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
     }
 
     private static boolean parseArgs(String[] args) {
@@ -159,26 +162,10 @@ public class TpanTool {
             }
         }
 
-        String considerHostnameOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_CONSIDERHOSTNAMES, "true");
-        if (!(considerHostnameOptValStr.equals("true") || considerHostnameOptValStr.equals("false"))) {
-            System.err.println("Invalid value for option " + CMD_OPT_NAME_CONSIDERHOSTNAMES + ": '" + considerHostnameOptValStr + "'");
-            return false;
-        }
-        considerHostname = considerHostnameOptValStr.equals("true");
+        considerHostname = !cmdl.hasOption(CMD_OPT_NAME_NOHOSTNAMES);
+        ignoreInvalidTraces = cmdl.hasOption(CMD_OPT_NAME_IGNOREINVALIDTRACES);
+        traceEquivClassMode = cmdl.hasOption(CMD_OPT_NAME_TRACEEQUIVCLASSMODE);
 
-        String ignoreInvalidTracesOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_IGNOREINVALIDTRACES, "false");
-        if (!(ignoreInvalidTracesOptValStr.equals("true") || ignoreInvalidTracesOptValStr.equals("false"))) {
-            System.err.println("Invalid value for option " + CMD_OPT_NAME_IGNOREINVALIDTRACES + ": '" + ignoreInvalidTracesOptValStr + "'");
-            return false;
-        }
-        ignoreInvalidTraces = ignoreInvalidTracesOptValStr.equals("true");
-
-        String onlyEquivClassesOptValStr = cmdl.getOptionValue(CMD_OPT_NAME_TRACEEQUIVCLASSMODE, "false");
-        if (!(onlyEquivClassesOptValStr.equals("true") || onlyEquivClassesOptValStr.equals("false"))) {
-            System.err.println("Invalid value for option " + CMD_OPT_NAME_TRACEEQUIVCLASSMODE + ": '" + onlyEquivClassesOptValStr + "'");
-            return false;
-        }
-        onlyEquivClasses = onlyEquivClassesOptValStr.equals("true");
         return true;
     }
 
@@ -189,12 +176,15 @@ public class TpanTool {
         final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
         final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
         final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
+        final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
         final String PLOTDEPGRAPH_COMPONENT_NAME = "Dependency graph";
         final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagram";
 
+        TraceReconstructionFilter mtReconstrFilter = null;
         try {
             List<AbstractTpanMessageTraceProcessingComponent> msgTraceProcessingComponents = new ArrayList<AbstractTpanMessageTraceProcessingComponent>();
             List<AbstractTpanExecutionTraceProcessingComponent> execTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
+            List<AbstractTpanExecutionTraceProcessingComponent> invalidTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
             // fill list of msgTraceProcessingComponents:
             AbstractTpanMessageTraceProcessingComponent componentPrintMsgTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACE)) {
@@ -205,8 +195,14 @@ public class TpanTool {
             AbstractTpanExecutionTraceProcessingComponent componentPrintExecTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACE)) {
                 numRequestedTasks++;
-                componentPrintExecTrace = task_createExecutionTraceDumpComponent(PRINTEXECTRACE_COMPONENT_NAME, outputDir + File.separator + outputFnPrefix);
+                componentPrintExecTrace = task_createExecutionTraceDumpComponent(PRINTEXECTRACE_COMPONENT_NAME, outputDir + File.separator + outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt");
                 execTraceProcessingComponents.add(componentPrintExecTrace);
+            }
+            AbstractTpanExecutionTraceProcessingComponent componentPrintInvalidTrace = null;
+            if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACE)) {
+                numRequestedTasks++;
+                componentPrintInvalidTrace = task_createExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME, outputDir + File.separator + outputFnPrefix + INVALID_TRACES_FN_PREFIX + ".txt");
+                invalidTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
             AbstractTpanMessageTraceProcessingComponent componentPlotSeqDiagr = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQD)) {
@@ -235,25 +231,27 @@ public class TpanTool {
             List<AbstractTpanTraceProcessingComponent> allTraceProcessingComponents = new ArrayList<AbstractTpanTraceProcessingComponent>();
             allTraceProcessingComponents.addAll(msgTraceProcessingComponents);
             allTraceProcessingComponents.addAll(execTraceProcessingComponents);
+            allTraceProcessingComponents.addAll(invalidTraceProcessingComponents);
             TpanInstance analysisInstance = new TpanInstance();
             //analysisInstance.setLogReader(new FSReader(inputDirs));
             analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
-            TraceReconstructionFilter mtReconstrFilter = 
-                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, 3, ignoreInvalidTraces, onlyEquivClasses, considerHostname, selectedTraces);
+            mtReconstrFilter = 
+                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, 2000, ignoreInvalidTraces, traceEquivClassMode, considerHostname, selectedTraces);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
                 mtReconstrFilter.addMessageTraceListener(c);
             }
             for (AbstractTpanExecutionTraceProcessingComponent c : execTraceProcessingComponents) {
                 mtReconstrFilter.addExecutionTraceListener(c);
             }
+            for (AbstractTpanExecutionTraceProcessingComponent c : invalidTraceProcessingComponents) {
+                mtReconstrFilter.addInvalidExecutionTraceArtifactListener(c);
+            }
             analysisInstance.addRecordConsumer(mtReconstrFilter);
             analysisInstance.run();
 
-            mtReconstrFilter.printStatusMessage();
-
             if (componentPlotDepGraph != null) {
-                componentPlotDepGraph.saveToDotFile(new File(outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !onlyEquivClasses);
+                componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !traceEquivClassMode);
             }
 
             int numErrorCount = 0;
@@ -293,6 +291,12 @@ public class TpanTool {
             System.err.println("See 'kieker.log' for details");
             log.error("Exception", ex);
             retVal = false;
+        } finally {
+            System.out.println(mtReconstrFilter.getInvalidTraces());
+
+            if (mtReconstrFilter != null){
+            mtReconstrFilter.printStatusMessage();
+            }
         }
 
         return retVal;
@@ -419,11 +423,11 @@ public class TpanTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
-        final String outputFn = new File(outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
+    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, String outputFn) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
+        final String myOutputFn = new File(outputFn).getCanonicalPath();
         AbstractTpanExecutionTraceProcessingComponent etWriter = new AbstractTpanExecutionTraceProcessingComponent(name) {
 
-            final PrintStream ps = new PrintStream(new FileOutputStream(outputFn));
+            final PrintStream ps = new PrintStream(new FileOutputStream(myOutputFn));
 
             public void newTrace(ExecutionTrace t) {
                 ps.println(t);
@@ -434,7 +438,7 @@ public class TpanTool {
             public void printStatusMessage() {
                 super.printStatusMessage();
                 int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + outputFn + "'");
+                System.out.println("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + myOutputFn + "'");
             }
 
             @Override

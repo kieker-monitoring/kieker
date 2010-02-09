@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -55,6 +56,12 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     /** Representative x # of equivalents */
     private final HashMap<ExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap =
             new HashMap<ExecutionTraceHashContainer, AtomicInteger>();
+    /** We need to keep track of invalid trace's IDs */
+    private final Set<Long> invalidTraces = new TreeSet<Long>();
+
+    public Set<Long> getInvalidTraces() {
+        return invalidTraces;
+    }
     /** Timestamp of most recent execution x trace */
     private final TreeSet<ExecutionTrace> timeoutMap =
             new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
@@ -76,18 +83,19 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private final boolean onlyEquivClasses;
     private List<IMessageTraceReceiver> messageTraceListeners = new ArrayList<IMessageTraceReceiver>();
     private List<IExecutionTraceReceiver> executionTraceListeners = new ArrayList<IExecutionTraceReceiver>();
+    private List<IExecutionTraceReceiver> invalidExecutionTraceArtifactListeners = new ArrayList<IExecutionTraceReceiver>();
     private final TreeSet<Long> selectedTraces;
     private final static String[] recordTypeSubscriptionList = {
         KiekerExecutionRecord.class.getName()
     };
 
-    public TraceReconstructionFilter(final String name, final long maxTraceDurationSecs,
+    public TraceReconstructionFilter(final String name, final long maxTraceDurationMillisecs,
             final boolean ignoreInvalidTraces,
             final boolean onlyEquivClasses, final boolean considerHostname,
             final TreeSet<Long> selectedTraces) {
-        super (name);
-        if (maxTraceDurationSecs > 0) {
-            this.maxTraceDurationNanosecs = maxTraceDurationSecs * (1000 * 1000 * 1000);
+        super(name);
+        if (maxTraceDurationMillisecs > 0) {
+            this.maxTraceDurationNanosecs = maxTraceDurationMillisecs * (1000 * 1000);
         } else {
             this.maxTraceDurationNanosecs = Long.MAX_VALUE;
         }
@@ -134,11 +142,12 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                 && (terminate
                 || (timeoutMap.first().getTraceAsSortedSet().first().tin < (highestTout - maxTraceDurationNanosecs)))) {
             ExecutionTrace polledTrace = timeoutMap.pollFirst();
-            pendingTraces.remove(polledTrace.getTraceId());
-            log.info("Removed pending trace:" + polledTrace);
+            long curTraceId = polledTrace.getTraceId();
+            pendingTraces.remove(curTraceId);
+            log.info("Removed pending trace (ID:" + curTraceId + "):" + polledTrace);
             try {
-                // if the polled trace is invalid, the following method throws
-                // an exception
+                // if the polled trace is invalid, the following method toMesageTrace
+                // throws an exception
                 MessageTrace mt = polledTrace.toMessageTrace();
                 boolean isNewTrace = true;
                 if (this.onlyEquivClasses) {
@@ -166,16 +175,29 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                         l.newTrace(polledTrace);
                     }
                 }
-                this.reportSuccess(polledTrace.getTraceId());
+                this.reportSuccess(curTraceId);
             } catch (InvalidTraceException ex) {
-                this.reportError(polledTrace.getTraceId());
-                if (!ignoreInvalidTraces) {
-                    log.error("Failed to transform execution trace to message trace: " + polledTrace, ex);
-                    throw new RecordConsumerExecutionException("Failed to transform execution trace to message trace: " + polledTrace, ex);
+                for (IExecutionTraceReceiver l : invalidExecutionTraceArtifactListeners) {
+                    try {
+                        l.newTrace(polledTrace);
+                    } catch (TraceProcessingException ex1) {
+                        log.error("Trace processing exception (ID:" + curTraceId + ")", ex);
+                        this.reportError(curTraceId);
+                        throw new RecordConsumerExecutionException("Trace processing exception", ex);
+                    }
+                }
+                if (!this.invalidTraces.contains(curTraceId)) {
+                    // only once per traceID (otherwise, we would report all trace fragments)
+                    this.reportError(curTraceId);
+                    this.invalidTraces.add(curTraceId);
+                    if (!ignoreInvalidTraces) {
+                        log.error("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + polledTrace, ex);
+                        throw new RecordConsumerExecutionException("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + polledTrace, ex);
+                    }
                 }
             } catch (TraceProcessingException ex) {
-                log.error("Trace processing exception", ex);
-                this.reportError(polledTrace.getTraceId());
+                log.error("Trace processing exception (ID:" + curTraceId + ")", ex);
+                this.reportError(curTraceId);
                 throw new RecordConsumerExecutionException("Trace processing exception", ex);
             }
         }
@@ -187,6 +209,10 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
 
     public void addExecutionTraceListener(IExecutionTraceReceiver l) {
         this.executionTraceListeners.add(l);
+    }
+
+    public void addInvalidExecutionTraceArtifactListener(IExecutionTraceReceiver l) {
+        this.invalidExecutionTraceArtifactListeners.add(l);
     }
 
     public boolean execute() throws RecordConsumerExecutionException {

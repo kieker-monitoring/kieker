@@ -59,13 +59,24 @@ public class ExecutionTrace {
         KiekerExecutionRecord curE = null, prevE = null;
         int itNum = 0;
         //log.info("Analyzing trace " + this.traceId);
+        int prevEoi = -1;
         while (eSeqIt.hasNext()) {
             curE = eSeqIt.next();
             if(itNum++ == 0 && curE.ess != 0){
-                InvalidTraceException ex = new InvalidTraceException("First execution must have ess 0 (found " + curE.ess + ")\n Causing execution: " + curE);
+                InvalidTraceException ex = 
+                        new InvalidTraceException("First execution must have ess "+
+                        "0 (found " + curE.ess + ")\n Causing execution: " + curE);
                 log.fatal("Found invalid trace", ex);
                 throw ex;
             }
+            if (prevEoi!=curE.eoi-1){
+                InvalidTraceException ex =
+                        new InvalidTraceException("Eois must increment by 1 --" +
+                        "but found sequence <"+prevEoi+","+curE.eoi+">" +"(Execution: "+curE+")");
+                log.fatal("Found invalid trace", ex);
+                throw ex;
+            }
+
             /*log.info("");
             log.info("Iteration" + (itNum++));
             log.info("curE:" + curE);
