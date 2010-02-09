@@ -236,7 +236,7 @@ public class TpanTool {
             //analysisInstance.setLogReader(new FSReader(inputDirs));
             analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
-            mtReconstrFilter = 
+            mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, 2000, ignoreInvalidTraces, traceEquivClassMode, considerHostname, selectedTraces);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
                 mtReconstrFilter.addMessageTraceListener(c);
@@ -248,17 +248,23 @@ public class TpanTool {
                 mtReconstrFilter.addInvalidExecutionTraceArtifactListener(c);
             }
             analysisInstance.addRecordConsumer(mtReconstrFilter);
-            analysisInstance.run();
-
-            if (componentPlotDepGraph != null) {
-                componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !traceEquivClassMode);
-            }
 
             int numErrorCount = 0;
-            for (AbstractTpanTraceProcessingComponent c : allTraceProcessingComponents) {
-                numErrorCount += c.getErrorCount();
-                c.printStatusMessage();
-                c.cleanup();
+            try {
+                analysisInstance.run();
+
+                if (componentPlotDepGraph != null) {
+                    componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !traceEquivClassMode);
+                }
+            } catch (Exception exc) {
+                log.error("Error occured while running analysis", exc);
+                throw new Exception("Error occured while running analysis", exc);
+            } finally {
+                for (AbstractTpanTraceProcessingComponent c : allTraceProcessingComponents) {
+                    numErrorCount += c.getErrorCount();
+                    c.printStatusMessage();
+                    c.cleanup();
+                }
             }
 
             if (!ignoreInvalidTraces && numErrorCount > 0) {
@@ -288,15 +294,14 @@ public class TpanTool {
         } catch (Exception ex) {
             System.err.println("An error occured: " + ex.getMessage());
             System.err.println("");
-            System.err.println("See 'kieker.log' for details");
             log.error("Exception", ex);
             retVal = false;
         } finally {
-            System.out.println(mtReconstrFilter.getInvalidTraces());
-
-            if (mtReconstrFilter != null){
-            mtReconstrFilter.printStatusMessage();
+            if (mtReconstrFilter != null) {
+                mtReconstrFilter.printStatusMessage();
             }
+            System.out.println("");
+            System.out.println("See 'kieker.log' for details");
         }
 
         return retVal;
