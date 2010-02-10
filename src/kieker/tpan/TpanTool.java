@@ -221,22 +221,22 @@ public class TpanTool {
             return false;
         }
 
-        DateFormat m_ISO8601Local = new SimpleDateFormat(DATE_FORMAT_PATTERN);
-        m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
+        DateFormat m_ISO8601UTC = new SimpleDateFormat(DATE_FORMAT_PATTERN);
+        m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
         
         try {
             String ignoreRecordsBeforeTimestampString = cmdl.getOptionValue(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE, null);
             String ignoreRecordsAfterTimestampString = cmdl.getOptionValue(CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
             if (ignoreRecordsBeforeTimestampString != null) {
-                Date ignoreBeforeDate = m_ISO8601Local.parse(ignoreRecordsBeforeTimestampString);
+                Date ignoreBeforeDate = m_ISO8601UTC.parse(ignoreRecordsBeforeTimestampString);
                 ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-                log.info("Ignoring records before "+m_ISO8601Local.format(ignoreBeforeDate)
+                log.info("Ignoring records before "+m_ISO8601UTC.format(ignoreBeforeDate)
                         +" ("+ignoreRecordsBeforeTimestamp+")");
             }
             if (ignoreRecordsAfterTimestampString != null) {
-                Date ignoreAfterDate = m_ISO8601Local.parse(ignoreRecordsAfterTimestampString);
+                Date ignoreAfterDate = m_ISO8601UTC.parse(ignoreRecordsAfterTimestampString);
                 ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-                log.info("Ignoring records after "+m_ISO8601Local.format(ignoreAfterDate)
+                log.info("Ignoring records after "+m_ISO8601UTC.format(ignoreAfterDate)
                         +" ("+ignoreRecordsAfterTimestamp+")");
             }            
         } catch (java.text.ParseException ex) {

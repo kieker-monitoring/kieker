@@ -9,6 +9,7 @@ import java.util.Stack;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
+import kieker.tpan.TpanInstance;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,8 +39,6 @@ public class ExecutionTrace {
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
     private long traceId = -1; // convenience field. All executions have this traceId.
     private SortedSet<KiekerExecutionRecord> set = new TreeSet<KiekerExecutionRecord>();
-
-    private final static DateFormat m_ISO8601Local = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 
     private long minTin = Long.MAX_VALUE;
     private long maxTout = Long.MIN_VALUE;
@@ -142,16 +141,10 @@ public class ExecutionTrace {
         return this.set.size();
     }
 
-    public String timestampToString (long timestamp){
-        GregorianCalendar c = new GregorianCalendar(TimeZone.getTimeZone("CET"));
-        c.setTimeInMillis(timestamp/((long)1000*1000));
-        return m_ISO8601Local.format(c.getTime());
-    }
-
     public String toString() {
         StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId)
-                .append(" (minTin=").append(this.minTin).append("(").append(timestampToString(this.minTin)).append(")")
-                .append("; maxTout=").append(this.maxTout).append("(").append(timestampToString(this.maxTout)).append(")")
+                .append(" (minTin=").append(this.minTin).append(" (").append(TpanInstance.convertLoggingTimestampToUTCString(this.minTin)).append(")")
+                .append("; maxTout=").append(this.maxTout).append(" (").append(TpanInstance.convertLoggingTimestampToUTCString(this.maxTout)).append(")")
                 .append("; maxStackDepth=").append(this.maxStackDepth)
                 .append("):\n");
         Iterator<KiekerExecutionRecord> it = set.iterator();

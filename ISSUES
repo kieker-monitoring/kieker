@@ -1,3 +1,5 @@
+Andre, Feb 10, 2009:
+DB writers only support records of type KiekerExecutionRecord.
 
 Andre, Nov 20, 2009:
 DBWriterTest doesn't work at the moment (FSWriter is used.)
