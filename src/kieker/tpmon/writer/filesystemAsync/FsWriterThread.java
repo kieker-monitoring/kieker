@@ -128,10 +128,10 @@ public final class FsWriterThread extends AbstractWorkerThread {
             filenameInitialized = true;
             entriesInCurrentFileCounter = 0;
 
-            DateFormat m_ISO8601Local =
+            DateFormat m_ISO8601UTC =
                     new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-            m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
-            String dateStr = m_ISO8601Local.format(new java.util.Date());
+            m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String dateStr = m_ISO8601UTC.format(new java.util.Date());
             //int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
             //int random = (new Random()).nextInt(100);
             String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";

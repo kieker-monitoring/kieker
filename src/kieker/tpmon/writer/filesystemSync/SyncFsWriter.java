@@ -99,10 +99,10 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
 
         this.storagePathBase = storagePathBase;
 
-        DateFormat m_ISO8601Local =
+        DateFormat m_ISO8601UTC =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-        m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateStr = m_ISO8601Local.format(new java.util.Date());
+        m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dateStr = m_ISO8601UTC.format(new java.util.Date());
         this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "-UTC/";
         log.info("this.storagePathBase :" + this.storagePathBase);
 

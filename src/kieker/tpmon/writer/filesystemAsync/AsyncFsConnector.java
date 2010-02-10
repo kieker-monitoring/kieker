@@ -85,10 +85,10 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
             return;
         }
 
-        DateFormat m_ISO8601Local =
+        DateFormat m_ISO8601UTC =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-        m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateStr = m_ISO8601Local.format(new java.util.Date());
+        m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dateStr = m_ISO8601UTC.format(new java.util.Date());
         storageDir = this.storagePathBase + "/tpmon-" + dateStr + "-UTC/";
 
         f = new File(storageDir);

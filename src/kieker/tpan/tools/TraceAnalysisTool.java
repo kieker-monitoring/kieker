@@ -1,4 +1,4 @@
-package kieker.tpan;
+package kieker.tpan.tools;
 
 /*
  * ==================LICENCE=========================
@@ -38,6 +38,7 @@ import java.util.Vector;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSMergeReader;
+import kieker.tpan.TpanInstance;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.datamodel.MessageTrace;
@@ -68,12 +69,10 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn, Matthias Rohr
  * History
- * 2009-07-01 (AvH) Initial version
- * 2009-07-25 (MR) Checks against invalid input dir
  */
-public class TpanTool {
+public class TraceAnalysisTool {
 
-    private static final Log log = LogFactory.getLog(TpanTool.class);
+    private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
@@ -180,7 +179,7 @@ public class TpanTool {
     }
 
     private static void printUsage() {
-        cmdHelpFormatter.printHelp(80, TpanTool.class.getName(), "", cmdlOpts, "", true);
+        cmdHelpFormatter.printHelp(80, TraceAnalysisTool.class.getName(), "", cmdlOpts, "", true);
     }
 
     private static boolean initFromArgs() {
