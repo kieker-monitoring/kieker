@@ -130,18 +130,20 @@ public class LoggingTimestampConverterTool {
         return true;
     }
 
+    private static final String dateFormatPattern = "EEE, d MMM yyyy HH:mm:ss Z";
+
     public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
         GregorianCalendar c = new GregorianCalendar();
         c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-        DateFormat m_ISO8601UTC = new SimpleDateFormat();
+        DateFormat m_ISO8601UTC = new SimpleDateFormat(dateFormatPattern);
         m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return m_ISO8601UTC.format(c.getTime()) + " UTC";
+        return m_ISO8601UTC.format(c.getTime()) + " (UTC)";
     }
 
     public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
         GregorianCalendar c = new GregorianCalendar();
         c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-        DateFormat m_ISO8601UTC = new SimpleDateFormat();
-        return m_ISO8601UTC.format(c.getTime()) + " local";
+        DateFormat m_ISO8601UTC = new SimpleDateFormat(dateFormatPattern);
+        return m_ISO8601UTC.format(c.getTime()) + " (local time)";
     }
 }
