@@ -66,19 +66,4 @@ public class TpanInstance {
     public void addRecordConsumer(IKiekerRecordConsumer consumer) {
         this.consumers.add(consumer);
     }
-
-    public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
-        GregorianCalendar c = new GregorianCalendar();
-        c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-        DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-        m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return m_ISO8601UTC.format(c.getTime()) + " UTC";
-    }
-
-    public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
-        GregorianCalendar c = new GregorianCalendar();
-        c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-        DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-        return m_ISO8601UTC.format(c.getTime()) + " UTC";
-    }
 }

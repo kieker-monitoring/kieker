@@ -10,6 +10,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.TpanInstance;
+import kieker.tpan.tools.LoggingTimestampConverterTool;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -143,8 +144,10 @@ public class ExecutionTrace {
 
     public String toString() {
         StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId)
-                .append(" (minTin=").append(this.minTin).append(" (").append(TpanInstance.convertLoggingTimestampToUTCString(this.minTin)).append(")")
-                .append("; maxTout=").append(this.maxTout).append(" (").append(TpanInstance.convertLoggingTimestampToUTCString(this.maxTout)).append(")")
+                .append(" (minTin=").append(this.minTin).append(" (")
+                .append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.minTin)).append(")")
+                .append("; maxTout=").append(this.maxTout).append(" (")
+                .append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.maxTout)).append(")")
                 .append("; maxStackDepth=").append(this.maxStackDepth)
                 .append("):\n");
         Iterator<KiekerExecutionRecord> it = set.iterator();
