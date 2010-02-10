@@ -17,7 +17,6 @@ package kieker.tpan.tools;
  * limitations under the License.
  * ==================================================
  */
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -86,17 +85,15 @@ public class TraceAnalysisTool {
     private static String[] inputDirs = null;
     private static String outputDir = null;
     private static String outputFnPrefix = null;
-    private static TreeSet<Long> selectedTraces = null;
+    private static TreeSet<Long> selectedTraces = null; // null means select all
     private static boolean traceEquivClassMode = true; // false;
     private static boolean considerHostname = true;
     private static boolean ignoreInvalidTraces = false;
-    private static int maxTraceDuration = -1; // infinite
-    private static long ignoreRecordsBeforeTimestamp = 0;
-    private static long ignoreRecordsAfterTimestamp = Long.MAX_VALUE;
-
+    private static int maxTraceDurationMillis = TraceReconstructionFilter.MAX_DURATION_MILLIS; // infinite
+    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionFilter.MIN_TIMESTAMP;
+    private static long ignoreRecordsAfterTimestamp = TraceReconstructionFilter.MAX_TIMESTAMP;
     private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
     private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
-
     private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
     private static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
     private static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
@@ -207,9 +204,9 @@ public class TraceAnalysisTool {
         ignoreInvalidTraces = cmdl.hasOption(CMD_OPT_NAME_IGNOREINVALIDTRACES);
         traceEquivClassMode = cmdl.hasOption(CMD_OPT_NAME_TRACEEQUIVCLASSMODE);
 
-        String maxTraceDurationStr = cmdl.getOptionValue(CMD_OPT_NAME_MAXTRACEDURATION, maxTraceDuration + "");
+        String maxTraceDurationStr = cmdl.getOptionValue(CMD_OPT_NAME_MAXTRACEDURATION, maxTraceDurationMillis + "");
         try {
-            maxTraceDuration = Integer.parseInt(maxTraceDurationStr);
+            maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
         } catch (NumberFormatException exc) {
             System.err.println("\nFailed to parse int value of property "
                     + CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): "
@@ -222,28 +219,107 @@ public class TraceAnalysisTool {
 
         DateFormat m_ISO8601UTC = new SimpleDateFormat(DATE_FORMAT_PATTERN);
         m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-        
+
         try {
             String ignoreRecordsBeforeTimestampString = cmdl.getOptionValue(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE, null);
             String ignoreRecordsAfterTimestampString = cmdl.getOptionValue(CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
             if (ignoreRecordsBeforeTimestampString != null) {
                 Date ignoreBeforeDate = m_ISO8601UTC.parse(ignoreRecordsBeforeTimestampString);
                 ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-                log.info("Ignoring records before "+m_ISO8601UTC.format(ignoreBeforeDate)
-                        +" ("+ignoreRecordsBeforeTimestamp+")");
+                log.info("Ignoring records before " + m_ISO8601UTC.format(ignoreBeforeDate)
+                        + " (" + ignoreRecordsBeforeTimestamp + ")");
             }
             if (ignoreRecordsAfterTimestampString != null) {
                 Date ignoreAfterDate = m_ISO8601UTC.parse(ignoreRecordsAfterTimestampString);
                 ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-                log.info("Ignoring records after "+m_ISO8601UTC.format(ignoreAfterDate)
-                        +" ("+ignoreRecordsAfterTimestamp+")");
-            }            
+                log.info("Ignoring records after " + m_ISO8601UTC.format(ignoreAfterDate)
+                        + " (" + ignoreRecordsAfterTimestamp + ")");
+            }
         } catch (java.text.ParseException ex) {
             System.err.println("Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
             log.error("Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP, ex);
             return false;
         }
         return true;
+    }
+
+    private static String stringArrToStringList(String[] strs) {
+        StringBuilder strB = new StringBuilder();
+        boolean first = true;
+        for (String s : strs) {
+            if (!first) {
+                strB.append(", ");
+            } else {
+                first = false;
+            }
+            strB.append(s);
+        }
+        return strB.toString();
+    }
+
+    private static void dumpConfiguration() {
+        Vector<Option> myOpts = new Vector<Option>(options);
+
+        System.out.println("#");
+        System.out.println("# Configuration");
+        for (Option o : options) {
+            String longOpt = o.getLongOpt();
+            String val = "<null>";
+            boolean dumpedOp = false;
+            if (longOpt.equals(CMD_OPT_NAME_INPUTDIRS)) {
+                val = stringArrToStringList(inputDirs);
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_OUTPUTDIR)) {
+                val = outputDir;
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_OUTPUTFNPREFIX)) {
+                val = outputFnPrefix;
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTSEQDS)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTDEPGS)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PRINTEXECTRACES)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
+                val = cmdl.hasOption(longOpt) ? "true" : "false";
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_SELECTTRACES)) {
+                if (selectedTraces != null) {
+                    val = selectedTraces.toString();
+                } else {
+                    val = "<select all>";
+                }
+
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_TRACEEQUIVCLASSMODE)) {
+                val = traceEquivClassMode ? "true" : "false";
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_NOHOSTNAMES)) {
+                val = !considerHostname ? "true" : "false";
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
+                val = ignoreInvalidTraces ? "true" : "false";
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_MAXTRACEDURATION)) {
+                val = maxTraceDurationMillis + " ms";
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE)) {
+                val = LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(ignoreRecordsBeforeTimestamp)
+                        + " (" + LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(ignoreRecordsBeforeTimestamp) + ")";
+                dumpedOp = true;
+            } else if (longOpt.equals(CMD_OPT_NAME_IGNORERECORDSAFTERDATE)) {
+                val = LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(ignoreRecordsAfterTimestamp)
+                        + " (" + LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(ignoreRecordsAfterTimestamp) + ")";
+                dumpedOp = true;
+            } else {
+                val = cmdl.getOptionValues(longOpt).toString();
+                log.warn("Unformatted confguration output for option " + longOpt);
+            }
+            System.out.println("--" + longOpt + ": " + val);
+            if (dumpedOp) {
+                myOpts.remove(o);
+            }
+        }
     }
 
     private static boolean dispatchTasks() {
@@ -324,7 +400,7 @@ public class TraceAnalysisTool {
 
             mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME,
-                    maxTraceDuration, ignoreInvalidTraces, traceEquivClassMode,
+                    maxTraceDurationMillis, ignoreInvalidTraces, traceEquivClassMode,
                     considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
                     ignoreRecordsAfterTimestamp);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
@@ -401,6 +477,8 @@ public class TraceAnalysisTool {
             if (!parseArgs(args) || !initFromArgs()) {
                 System.exit(1);
             }
+
+            dumpConfiguration();
 
             if (!dispatchTasks()) {
                 System.exit(1);

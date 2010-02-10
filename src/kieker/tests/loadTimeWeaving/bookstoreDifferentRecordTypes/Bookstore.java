@@ -4,7 +4,6 @@ import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 
 /*
- * kieker.tests.bookstore.Bookstore.java
  *
  * ==================LICENCE=========================
  * Copyright 2006-2010 the Kieker Project
@@ -38,7 +37,7 @@ import java.util.Vector;
 public class Bookstore extends Thread {
 
     static int numberOfRequests = 3;
-    static int interRequestTime = 5;
+    static int interRequestTime = 1000;
 
     public static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
 

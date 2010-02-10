@@ -1,34 +1,6 @@
 package kieker.tpan.recordConsumer;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.tpan.datamodel.InvalidTraceException;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.tpan.datamodel.ExecutionTrace;
-import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.plugins.AbstractTpanTraceProcessingComponent;
-import kieker.tpan.plugins.TraceProcessingException;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
-
 /*
- *kieker.loganalysis.datamodel.ExecutionSequenceRepository
- *
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
  *
@@ -45,6 +17,31 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  * limitations under the License.
  * ==================================================
  */
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.tpan.datamodel.InvalidTraceException;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
+import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.tpan.datamodel.ExecutionTrace;
+import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.AbstractTpanTraceProcessingComponent;
+import kieker.tpan.plugins.TraceProcessingException;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+
 /**
  *
  * @author Andre van Hoorn
@@ -60,6 +57,11 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             new HashMap<ExecutionTraceHashContainer, AtomicInteger>();
     /** We need to keep track of invalid trace's IDs */
     private final Set<Long> invalidTraces = new TreeSet<Long>();
+
+    public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
+    public static final long MIN_TIMESTAMP = 0;
+    private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
+    public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
     public Set<Long> getInvalidTraces() {
         return invalidTraces;
@@ -78,7 +80,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             return t1LowestTin < t2LowestTin ? -1 : 1;
         }
     });
-    private final long maxTraceDurationNanosecs;
+    private final long maxTraceDurationNanos;
     private long highestTout = -1;
     private boolean terminate = false;
     private final boolean ignoreInvalidTraces;
@@ -93,17 +95,20 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         KiekerExecutionRecord.class.getName()
     };
 
-    public TraceReconstructionFilter(final String name, final long maxTraceDurationMillisecs,
+    public TraceReconstructionFilter(final String name, final long maxTraceDurationMillis,
             final boolean ignoreInvalidTraces,
             final boolean onlyEquivClasses, final boolean considerHostname,
             final TreeSet<Long> selectedTraces,
             final long ignoreRecordsBefore, final long ignoreRecordsAfter) {
         super(name);
-        if (maxTraceDurationMillisecs > 0) {
-            this.maxTraceDurationNanosecs = maxTraceDurationMillisecs * (1000 * 1000);
-        } else {
-            this.maxTraceDurationNanosecs = Long.MAX_VALUE;
+        if (maxTraceDurationMillis < 0){
+            throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: "+maxTraceDurationMillis+")");
         }
+        if (maxTraceDurationMillis == MAX_DURATION_MILLIS){
+            this.maxTraceDurationNanos = MAX_DURATION_NANOS;
+        } else {
+            this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000);
+        } 
         this.ignoreInvalidTraces = ignoreInvalidTraces;
         this.onlyEquivClasses = onlyEquivClasses;
         this.considerHostname = considerHostname;
@@ -158,7 +163,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private void processQueue() throws RecordConsumerExecutionException {
         while (!timeoutMap.isEmpty()
                 && (terminate
-                || (timeoutMap.first().getTraceAsSortedSet().first().tin < (highestTout - maxTraceDurationNanosecs)))) {
+                || (timeoutMap.first().getTraceAsSortedSet().first().tin < (highestTout - maxTraceDurationNanos)))) {
             ExecutionTrace polledTrace = timeoutMap.pollFirst();
             long curTraceId = polledTrace.getTraceId();
             pendingTraces.remove(curTraceId);
