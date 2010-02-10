@@ -1,19 +1,19 @@
 package kieker.tpan.datamodel;
 
 import java.text.DateFormat;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.Stack;
+import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.loganalysis.datamodel.ExecutionSequence
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2009 Kieker Project
@@ -30,32 +30,19 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * @author Andre van Hoorn
+ */
+
+/** @author Andre van Hoorn
  */
 public class ExecutionTrace {
-
-    private static final Calendar cal1970 = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-    private static final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
     private long traceId = -1; // convenience field. All executions have this traceId.
     private SortedSet<KiekerExecutionRecord> set = new TreeSet<KiekerExecutionRecord>();
 
-    private long minTin = Integer.MAX_VALUE;
+    private final static DateFormat m_ISO8601Local = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 
-    public int getMaxStackDepth() {
-        return maxStackDepth;
-    }
-
-    public long getMaxTout() {
-        return maxTout;
-    }
-
-    public long getMinTin() {
-        return minTin;
-    }
-    private long maxTout = Integer.MIN_VALUE;
+    private long minTin = Long.MAX_VALUE;
+    private long maxTout = Long.MIN_VALUE;
     private int maxStackDepth = -1;
 
     private ExecutionTrace() {
@@ -156,16 +143,15 @@ public class ExecutionTrace {
     }
 
     public String timestampToString (long timestamp){
-        GregorianCalendar c = (GregorianCalendar)cal1970.clone();
-        c.add(Calendar.SECOND, (int)(timestamp/(1000*1000*1000)));
-        return c.toString();
-        //return df.format(c);
+        GregorianCalendar c = new GregorianCalendar(TimeZone.getTimeZone("CET"));
+        c.setTimeInMillis(timestamp/((long)1000*1000));
+        return m_ISO8601Local.format(c.getTime());
     }
 
     public String toString() {
         StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId)
                 .append(" (minTin=").append(this.minTin).append("(").append(timestampToString(this.minTin)).append(")")
-                .append("; maxTout=").append(this.maxTout)
+                .append("; maxTout=").append(this.maxTout).append("(").append(timestampToString(this.maxTout)).append(")")
                 .append("; maxStackDepth=").append(this.maxStackDepth)
                 .append("):\n");
         Iterator<KiekerExecutionRecord> it = set.iterator();
@@ -185,4 +171,17 @@ public class ExecutionTrace {
         }
         return strBuild.toString();
     }
+
+    public int getMaxStackDepth() {
+        return this.maxStackDepth;
+    }
+
+    public long getMaxTout() {
+        return this.maxTout;
+    }
+
+    public long getMinTin() {
+        return this.minTin;
+    }
+
 }

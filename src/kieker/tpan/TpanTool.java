@@ -1,15 +1,37 @@
 package kieker.tpan;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2010 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import java.util.TreeSet;
 import java.util.Vector;
@@ -43,23 +65,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
  * @author Andre van Hoorn, Matthias Rohr
  * History
@@ -87,6 +92,12 @@ public class TpanTool {
     private static boolean considerHostname = true;
     private static boolean ignoreInvalidTraces = false;
     private static int maxTraceDuration = -1; // infinite
+    private static long ignoreRecordsBeforeTimestamp = 0;
+    private static long ignoreRecordsAfterTimestamp = Long.MAX_VALUE;
+
+    private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
+    private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
+
     private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
     private static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
     private static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
@@ -101,7 +112,9 @@ public class TpanTool {
     private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
     private static final String CMD_OPT_NAME_TASK_EQUIVCLASSREPORT = "print-Equivalence-Classes";
     private static final String CMD_OPT_NAME_MAXTRACEDURATION = "max-trace-duration";
-//    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
+    private static final String CMD_OPT_NAME_IGNORERECORDSBEFOREDATE = "ignore-records-before-date";
+    private static final String CMD_OPT_NAME_IGNORERECORDSAFTERDATE = "ignore-records-after-date";
+    //    private static final String CMD_OPT_NAME_TASK_INITJMSREADER = "init-basic-JMS-reader";
 //    private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX = "init-basic-JMS-readerJavaFx";
     private static final Vector<Option> options = new Vector<Option>();
 
@@ -131,17 +144,25 @@ public class TpanTool {
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_NOHOSTNAMES).hasArg(false).isRequired(false).withDescription("If selected, the hostnames of the executions are NOT considered.").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription("Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
-
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE).withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription("Records logged before this date (UTC timezone) are ignored.").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSAFTERDATE).withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription("Records logged after this date (UTC timezone) are ignored.").create());
         for (Option o : options) {
             cmdlOpts.addOption(o);
         }
         cmdHelpFormatter.setOptionComparator(new Comparator() {
+
             public int compare(Object o1, Object o2) {
-                if (o1 == o2) return 0;
+                if (o1 == o2) {
+                    return 0;
+                }
                 int posO1 = options.indexOf(o1);
                 int posO2 = options.indexOf(o2);
-                if (posO1 < posO2) return -1;
-                if (posO1 > posO2) return 1;
+                if (posO1 < posO2) {
+                    return -1;
+                }
+                if (posO1 > posO2) {
+                    return 1;
+                }
                 return 0;
             }
         });
@@ -200,6 +221,29 @@ public class TpanTool {
             return false;
         }
 
+        DateFormat m_ISO8601Local = new SimpleDateFormat(DATE_FORMAT_PATTERN);
+        m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
+        
+        try {
+            String ignoreRecordsBeforeTimestampString = cmdl.getOptionValue(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE, null);
+            String ignoreRecordsAfterTimestampString = cmdl.getOptionValue(CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
+            if (ignoreRecordsBeforeTimestampString != null) {
+                Date ignoreBeforeDate = m_ISO8601Local.parse(ignoreRecordsBeforeTimestampString);
+                ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
+                log.info("Ignoring records before "+m_ISO8601Local.format(ignoreBeforeDate)
+                        +" ("+ignoreRecordsBeforeTimestamp+")");
+            }
+            if (ignoreRecordsAfterTimestampString != null) {
+                Date ignoreAfterDate = m_ISO8601Local.parse(ignoreRecordsAfterTimestampString);
+                ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
+                log.info("Ignoring records after "+m_ISO8601Local.format(ignoreAfterDate)
+                        +" ("+ignoreRecordsAfterTimestamp+")");
+            }            
+        } catch (java.text.ParseException ex) {
+            System.err.println("Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
+            log.error("Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP, ex);
+            return false;
+        }
         return true;
     }
 
@@ -280,7 +324,10 @@ public class TpanTool {
             analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
             mtReconstrFilter =
-                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, maxTraceDuration, ignoreInvalidTraces, traceEquivClassMode, considerHostname, selectedTraces);
+                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME,
+                    maxTraceDuration, ignoreInvalidTraces, traceEquivClassMode,
+                    considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
+                    ignoreRecordsAfterTimestamp);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
                 mtReconstrFilter.addMessageTraceListener(c);
             }
@@ -513,7 +560,11 @@ public class TpanTool {
             HashMap<ExecutionTrace, Integer> classMap = trf.getEquivalenceClassMap();
             for (Entry<ExecutionTrace, Integer> e : classMap.entrySet()) {
                 ExecutionTrace t = e.getKey();
-                ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId());
+                ps.println("Class " + numClasses++
+                        + " ; cardinality: " + e.getValue()
+                        + "; # executions: " + t.getLength()
+                        + "; representative: " + t.getTraceId()
+                        + "; max. stack depth: " + t.getMaxStackDepth());
             }
             System.out.println("");
             System.out.println("#");

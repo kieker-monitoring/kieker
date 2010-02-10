@@ -4,6 +4,7 @@ import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -129,10 +130,11 @@ public final class FsWriterThread extends AbstractWorkerThread {
 
             DateFormat m_ISO8601Local =
                     new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+            m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
             String dateStr = m_ISO8601Local.format(new java.util.Date());
             //int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from?
             //int random = (new Random()).nextInt(100);
-            String filename = this.filenamePrefix + "-" + dateStr + "-" + this.getName() + ".dat";
+            String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
 
             //log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {

@@ -83,6 +83,8 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private boolean terminate = false;
     private final boolean ignoreInvalidTraces;
     private final boolean onlyEquivClasses;
+    private final long ignoreRecordsBeforeTimestamp;
+    private final long ignoreRecordsAfterTimestamp;
     private List<IMessageTraceReceiver> messageTraceListeners = new ArrayList<IMessageTraceReceiver>();
     private List<IExecutionTraceReceiver> executionTraceListeners = new ArrayList<IExecutionTraceReceiver>();
     private List<IExecutionTraceReceiver> invalidExecutionTraceArtifactListeners = new ArrayList<IExecutionTraceReceiver>();
@@ -94,7 +96,8 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     public TraceReconstructionFilter(final String name, final long maxTraceDurationMillisecs,
             final boolean ignoreInvalidTraces,
             final boolean onlyEquivClasses, final boolean considerHostname,
-            final TreeSet<Long> selectedTraces) {
+            final TreeSet<Long> selectedTraces,
+            final long ignoreRecordsBefore, final long ignoreRecordsAfter) {
         super(name);
         if (maxTraceDurationMillisecs > 0) {
             this.maxTraceDurationNanosecs = maxTraceDurationMillisecs * (1000 * 1000);
@@ -105,6 +108,8 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         this.onlyEquivClasses = onlyEquivClasses;
         this.considerHostname = considerHostname;
         this.selectedTraces = selectedTraces;
+        this.ignoreRecordsBeforeTimestamp = ignoreRecordsBefore;
+        this.ignoreRecordsAfterTimestamp = ignoreRecordsAfter;
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
@@ -112,6 +117,12 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             log.error("Received monitoring record no instance of " + KiekerExecutionRecord.class.getName());
         }
         KiekerExecutionRecord execRecord = (KiekerExecutionRecord) monitoringRecord;
+
+        long curLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
+        if (curLoggingTimestamp < this.ignoreRecordsBeforeTimestamp
+                || curLoggingTimestamp > this.ignoreRecordsAfterTimestamp){
+            return;
+        }
 
         long traceId = execRecord.traceId;
 

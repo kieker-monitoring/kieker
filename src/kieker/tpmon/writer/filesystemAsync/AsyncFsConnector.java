@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -86,8 +87,9 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
 
         DateFormat m_ISO8601Local =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+        m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
         String dateStr = m_ISO8601Local.format(new java.util.Date());
-        storageDir = this.storagePathBase + "/tpmon-" + dateStr + "/";
+        storageDir = this.storagePathBase + "/tpmon-" + dateStr + "-UTC/";
 
         f = new File(storageDir);
         if (!f.mkdir()) {

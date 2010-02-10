@@ -8,6 +8,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.apache.commons.logging.Log;
@@ -100,8 +101,9 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
 
         DateFormat m_ISO8601Local =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+        m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
         String dateStr = m_ISO8601Local.format(new java.util.Date());
-        this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "/";
+        this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "-UTC/";
         log.info("this.storagePathBase :" + this.storagePathBase);
 
         f = new File(this.storagePathBase);
@@ -137,10 +139,11 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
 
             DateFormat m_ISO8601Local =
                     new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+            m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
             String dateStr = m_ISO8601Local.format(new java.util.Date());
             //int time = (int) (System.currentTimeMillis() - 1177404043379L);     // TODO: where does this number come from ??
             int random = (new Random()).nextInt(100);
-            String filename = this.storagePathBase + "/tpmon-" + dateStr + "-" + random + ".dat";
+            String filename = this.storagePathBase + "/tpmon-" + dateStr + "-UTC-" + random + ".dat";
             //log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);

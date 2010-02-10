@@ -10,5 +10,8 @@ fi
 
 for tstamp in $*; do
     echo -n "${tstamp}: "
-    date -d "1970-01-01 $((${tstamp}/(1000*1000*1000))) secs"
+    echo -n $(date -u -d "1970-01-01 $((${tstamp}/(1000*1000*1000))) secs")
+    echo -n " ("
+    echo -n $(date -d "1970-01-01 $((${tstamp}/(1000*1000*1000))) secs")
+    echo    ")"
 done

@@ -3,8 +3,7 @@ package kieker.tpan.datamodel;
 import java.util.Iterator;
 import java.util.Vector;
 
-/**
- * kieker.loganalysis.datamodel.MessageSequence
+/*
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -21,8 +20,9 @@ import java.util.Vector;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * @author Andre van Hoorn
+ */
+
+/** @author Andre van Hoorn
  */
 public class MessageTrace {
 
