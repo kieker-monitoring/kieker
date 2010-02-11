@@ -17,6 +17,7 @@ package kieker.tpan.tools;
  * limitations under the License.
  * ==================================================
  */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -45,6 +46,7 @@ import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.AbstractTpanExecutionTraceProcessingComponent;
 import kieker.tpan.plugins.AbstractTpanMessageTraceProcessingComponent;
 import kieker.tpan.plugins.AbstractTpanTraceProcessingComponent;
+import kieker.tpan.plugins.CallingTreePlugin;
 import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.plugins.TraceProcessingException;
@@ -74,6 +76,7 @@ public class TraceAnalysisTool {
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
+    private static final String CALLING_TREE_FN_PREFIX = "callingTree";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
     private static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
     private static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
@@ -103,6 +106,7 @@ public class TraceAnalysisTool {
     private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     private static final String CMD_OPT_NAME_TASK_PLOTSEQDS = "plot-Sequence-Diagrams";
     private static final String CMD_OPT_NAME_TASK_PLOTDEPGS = "plot-Dependency-Graphs";
+    private static final String CMD_OPT_NAME_TASK_PLOTCALLINGTREE = "plot-Calling-Tree";
     private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
     private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
     private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
@@ -125,6 +129,7 @@ public class TraceAnalysisTool {
         //cmdlOptGroupTask.isRequired();
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPGS).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCALLINGTREE).hasArg(false).withDescription("Generate and store calling trees (.dot files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
@@ -278,6 +283,7 @@ public class TraceAnalysisTool {
             } else if (longOpt.equals(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTSEQDS)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTDEPGS)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTCALLINGTREE)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTEXECTRACES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
@@ -332,6 +338,7 @@ public class TraceAnalysisTool {
         final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
         final String PLOTDEPGRAPH_COMPONENT_NAME = "Dependency graphs";
         final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
+        final String PLOTCALLINGTREE_COMPONENT_NAME = "Calling trees";
 
         TraceReconstructionFilter mtReconstrFilter = null;
         try {
@@ -378,6 +385,13 @@ public class TraceAnalysisTool {
                         task_createDependencyGraphPlotComponent(PLOTDEPGRAPH_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotDepGraph);
             }
+            CallingTreePlugin componentPlotCallingTree = null;
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCALLINGTREE)) {
+                numRequestedTasks++;
+                componentPlotCallingTree =
+                        task_createCallingTreePlotComponent(PLOTCALLINGTREE_COMPONENT_NAME);
+                msgTraceProcessingComponents.add(componentPlotCallingTree);
+            }
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
                 numRequestedTasks++;
                 // the actual execution of the task is performed below
@@ -420,6 +434,10 @@ public class TraceAnalysisTool {
 
                 if (componentPlotDepGraph != null) {
                     componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !traceEquivClassMode);
+                }
+
+                if (componentPlotCallingTree != null) {
+                    componentPlotCallingTree.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + CALLING_TREE_FN_PREFIX).getCanonicalPath(), false); // !traceEquivClassMode
                 }
             } catch (Exception exc) {
                 log.error("Error occured while running analysis", exc);
@@ -537,8 +555,7 @@ public class TraceAnalysisTool {
 
     /**
      * Reads the traces from the directory inputDirName and write the
-     * dependency graph for traces with IDs given in traceSet to
-     * the directory outputFnPrefix.
+     * dependency graph to the directory outputFnPrefix.
      * If  traceSet is null, a dependency graph containing the information
      * of all traces is generated.
      *
@@ -549,6 +566,21 @@ public class TraceAnalysisTool {
     private static DependencyGraphPlugin task_createDependencyGraphPlotComponent(final String name) {
         DependencyGraphPlugin depGraph = new DependencyGraphPlugin(name, considerHostname);
         return depGraph;
+    }
+
+    /**
+     * Reads the traces from the directory inputDirName and write the
+     * calling tree for traces to the directory outputFnPrefix.
+     * If  traceSet is null, a calling tree containing the information
+     * of all traces is generated.
+     *
+     * @param inputDirName
+     * @param outputFnPrefix
+     * @param traceSet
+     */
+    private static CallingTreePlugin task_createCallingTreePlotComponent(final String name) {
+        CallingTreePlugin callingTree = new CallingTreePlugin(name, considerHostname);
+        return callingTree;
     }
 
     /**

@@ -21,13 +21,14 @@ package kieker.tpan.plugins;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Hashtable;
 import java.util.Stack;
 import java.util.Vector;
 import kieker.tpan.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.AdjacencyMatrix;
 import kieker.tpan.datamodel.CallingTreeNode;
+import kieker.tpan.datamodel.CallingTreeOperationHashKey;
 import kieker.tpan.datamodel.Message;
 
 /**
@@ -37,7 +38,8 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
 
     private static final Log log = LogFactory.getLog(CallingTreePlugin.class);
 
-    private final CallingTreeNode root = new CallingTreeNode(null);
+    private final CallingTreeNode root = 
+            new CallingTreeNode(null, new CallingTreeOperationHashKey("$", "", ""));
 
     private final boolean considerHost;
 
@@ -46,9 +48,37 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         this.considerHost = considerHost;
     }
 
-    /** Traverse tree recursively and generate dot code. */
-    private void dotFromSubTree (CallingTreeNode n, PrintStream ps, boolean includeWeights){
-        //TODO: hier weiter!
+    /** Traverse tree recursively and generate dot code for edges. */
+    private void dotEdgesFromSubTree (CallingTreeNode n,
+            Hashtable<CallingTreeNode,Integer> nodeIds,
+            Integer nextNodeId, PrintStream ps){
+        StringBuilder strBuild = new StringBuilder();
+        nodeIds.put(n, nextNodeId);
+        strBuild.append(nextNodeId++).append("[label =\"")
+                    .append(n.getLabel(considerHost)).append("\",shape=box];");
+        ps.println(strBuild.toString());
+        for (CallingTreeNode child : n.getChildren()){
+            dotEdgesFromSubTree(child, nodeIds, nextNodeId, ps);
+        }
+    }
+
+    /** Traverse tree recursively and generate dot code for vertices. */
+    private void dotVerticesFromSubTree (CallingTreeNode n,
+            Hashtable<CallingTreeNode,Integer> nodeIds,
+            PrintStream ps, boolean includeWeights){
+        int thisId = nodeIds.get(n);
+        for (CallingTreeNode child : n.getChildren()){
+        StringBuilder strBuild = new StringBuilder();
+            int childId = nodeIds.get(child);
+            strBuild.append("\n").append(thisId).append("->").append(childId)
+                            .append("[style=dashed,arrowhead=open");
+                    if (includeWeights){
+                        strBuild.append(",label = ").append("").append(", weight =").append("");
+                    }
+                    strBuild.append(" ]");
+        ps.println(strBuild.toString());
+                    dotVerticesFromSubTree(child, nodeIds, ps, includeWeights);
+        }
     }
 
     private void dotFromCallingTree(PrintStream ps, final boolean includeWeights) {
@@ -56,22 +86,11 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
 
-        for (int i = 0; i < matrix.length; i++) {
-            edgestringBuilder.append("\n").append(i).append("[label =\"")
-                    .append(componentNames[i]).append("\",shape=box];");
-        }
-        for (int i = 0; i < matrix.length; i++) {
-            for (int k = 0; k < matrix[i].length; k++) {
-                if (matrix[i][k] > 0) {
-                    edgestringBuilder.append("\n").append(i).append("->").append(k)
-                            .append("[style=dashed,arrowhead=open");
-                    if (includeWeights){
-                        edgestringBuilder.append(",label = ").append(matrix[i][k]).append(", weight =").append(matrix[i][k]);
-                    }
-                    edgestringBuilder.append(" ]");
-                }
-            }
-        }
+        Hashtable<CallingTreeNode, Integer> nodeIds = new Hashtable<CallingTreeNode, Integer>();
+
+        dotEdgesFromSubTree(root, nodeIds, new Integer(0), ps);
+        dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);
+
         ps.println(edgestringBuilder.toString());
         ps.println("}");
     }
@@ -97,19 +116,20 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         Vector<Message> msgTraceVec = t.getSequenceAsVector();
         CallingTreeNode curNode = root;
         curStack.push(curNode);
-        for (Message m : msgTraceVec){
+        for (final Message m : msgTraceVec){
             if (m.callMessage){
-                curNode = curNode.getChildForName(m.receiver.componentName, m.receiver.opname, m.receiver.vmName);
+                curNode = curNode.getChildForName(m.receiver.componentName,
+                        m.receiver.opname, m.receiver.vmName);
                 curStack.push(curNode);
             } else {
                 curNode = curStack.pop();
             }
         }
-        if (curNode != root){
-            log.fatal("Stack not empty after processing trace");
-            this.reportError(t.getTraceId());
-            throw new TraceProcessingException("Stack not empty after processing trace");
-        }
+//        if (curNode != root){
+//            log.fatal("Stack not empty after processing trace");
+//            this.reportError(t.getTraceId());
+//            throw new TraceProcessingException("Stack not empty after processing trace");
+//        }
         this.reportSuccess(t.getTraceId());
     }
 
