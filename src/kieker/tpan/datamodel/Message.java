@@ -2,8 +2,7 @@ package kieker.tpan.datamodel;
 
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 
-/**
- * kieker.loganalysis.datamodel.Message
+/*
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -20,7 +19,9 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
 public class Message {

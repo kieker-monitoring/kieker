@@ -1,6 +1,7 @@
 package kieker.tpan.plugins;
 
 /*
+ *
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
  *
@@ -20,34 +21,41 @@ package kieker.tpan.plugins;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Stack;
+import java.util.Vector;
 import kieker.tpan.datamodel.MessageTrace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.AdjacencyMatrix;
+import kieker.tpan.datamodel.CallingTreeNode;
 import kieker.tpan.datamodel.Message;
 
 /**
- * Refactored copy from LogAnalysis-legacy tool
- * 
- * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * @author Andre van Hoorn
  */
-public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingComponent {
+public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingComponent {
 
-    private static final Log log = LogFactory.getLog(DependencyGraphPlugin.class);
-    private AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
+    private static final Log log = LogFactory.getLog(CallingTreePlugin.class);
+
+    private final CallingTreeNode root = new CallingTreeNode(null);
+
     private final boolean considerHost;
 
-    public DependencyGraphPlugin(final String name, final boolean considerHost) {
+    public CallingTreePlugin(final String name, final boolean considerHost) {
         super(name);
         this.considerHost = considerHost;
     }
 
-    private void dotFromAdjacencyMatrix(AdjacencyMatrix adjMatrix, PrintStream ps, final boolean includeWeights) {
+    /** Traverse tree recursively and generate dot code. */
+    private void dotFromSubTree (CallingTreeNode n, PrintStream ps, boolean includeWeights){
+        //TODO: hier weiter!
+    }
+
+    private void dotFromCallingTree(PrintStream ps, final boolean includeWeights) {
         // preamble:
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
-        long[][] matrix = adjMatrix.getMatrixAsArray();
-        String[] componentNames = adjMatrix.getComponentNames();
+
         for (int i = 0; i < matrix.length; i++) {
             edgestringBuilder.append("\n").append(i).append("[label =\"")
                     .append(componentNames[i]).append("\",shape=box];");
@@ -72,26 +80,35 @@ public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingCom
 
     public void saveToDotFile(final String outputFnBase, final boolean includeWeights) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        this.dotFromAdjacencyMatrix(adjMatrix, ps, includeWeights);
+        this.dotFromCallingTree(ps, includeWeights);
         ps.flush();
         ps.close();
         this.numGraphsSaved++;
         this.printMessage(new String[] {
-        "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'",
+        "Wrote calling tree to file '" + outputFnBase + ".dot" + "'",
         "Dot file can be converted using the dot tool",
         "Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg"
         });
     }
 
-    public void newTrace(MessageTrace t) {
-        for (Message m : t.getSequenceAsVector()) {
-            if (!m.callMessage) {
-                continue;
-            }
-            String senderLabel = m.getSenderLabel(considerHost);
-            String receiverLabel = m.getReceiverLabel(considerHost);
+    public void newTrace(MessageTrace t) throws TraceProcessingException {
+        Stack<CallingTreeNode> curStack = new Stack<CallingTreeNode>();
 
-            adjMatrix.addDependency(senderLabel, receiverLabel);
+        Vector<Message> msgTraceVec = t.getSequenceAsVector();
+        CallingTreeNode curNode = root;
+        curStack.push(curNode);
+        for (Message m : msgTraceVec){
+            if (m.callMessage){
+                curNode = curNode.getChildForName(m.receiver.componentName, m.receiver.opname, m.receiver.vmName);
+                curStack.push(curNode);
+            } else {
+                curNode = curStack.pop();
+            }
+        }
+        if (curNode != root){
+            log.fatal("Stack not empty after processing trace");
+            this.reportError(t.getTraceId());
+            throw new TraceProcessingException("Stack not empty after processing trace");
         }
         this.reportSuccess(t.getTraceId());
     }
@@ -99,7 +116,7 @@ public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingCom
     @Override
     public void printStatusMessage() {
         super.printStatusMessage();
-        System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : ""));
+        System.out.println("Saved " + this.numGraphsSaved + " calling tree" + (this.numGraphsSaved > 1 ? "s" : ""));
     }
 
     @Override
