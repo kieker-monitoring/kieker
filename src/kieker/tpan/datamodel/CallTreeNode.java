@@ -1,13 +1,14 @@
 package kieker.tpan.datamodel;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.List;
 
 public class CallTreeNode {
 
     private CallTreeNode parent;
-    private Hashtable<CallTreeOperationHashKey, CallTreeNode> children =
-            new Hashtable<CallTreeOperationHashKey, CallTreeNode>();
+    private List<CallTreeNode> children =
+            new ArrayList<CallTreeNode>();
     private final CallTreeOperationHashKey opInfo;
 
     public CallTreeNode(final CallTreeNode parent, CallTreeOperationHashKey opInfo) {
@@ -19,7 +20,7 @@ public class CallTreeNode {
     }
 
     public final Collection<CallTreeNode> getChildren() {
-        return children.values();
+        return children;
     }
 
     /** Returns the child node with given operation, name, and vmName.
@@ -28,11 +29,15 @@ public class CallTreeNode {
             final String operationName, final String vmName) {
         CallTreeOperationHashKey k =
                 new CallTreeOperationHashKey(componentName, operationName, vmName);
-        CallTreeNode node =
-                this.children.get(k);
+        CallTreeNode node = null;
+        for (CallTreeNode n : children){
+         if (n.opInfo.equals(k)){
+             node = n;
+         }
+        }
         if (node == null) {
             node = new CallTreeNode(this, k);
-            this.children.put(k, node);
+            this.children.add(node);
         }
         return node;
     }
