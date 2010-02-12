@@ -146,8 +146,9 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         }
     }
 
-    public static void writeDotForMessageTrace(final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights, final boolean considerHost) throws FileNotFoundException {
+    public static void writeDotForMessageTrace(final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights, final boolean considerHost) throws FileNotFoundException, TraceProcessingException {
         final CallTreeNode root = new CallTreeNode(null, new CallTreeOperationHashKey("$", "", ""));
+        addTraceToTree(root, msgTrace);
         saveTreeToDotFile(root, outputFilename, includeWeights, considerHost);
     }
 

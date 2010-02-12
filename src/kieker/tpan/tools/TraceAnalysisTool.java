@@ -76,7 +76,8 @@ public class TraceAnalysisTool {
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
-    private static final String AGGREGATED_CALL_TREE_FN_PREFIX = "callTree";
+    private static final String AGGREGATED_CALL_TREE_FN_PREFIX = "aggregatedCallTree";
+    private static final String CALL_TREE_FN_PREFIX = "callTree";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
     private static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
     private static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
@@ -105,8 +106,9 @@ public class TraceAnalysisTool {
     private static final String CMD_OPT_NAME_NOHOSTNAMES = "ignore-hostnames";
     private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     private static final String CMD_OPT_NAME_TASK_PLOTSEQDS = "plot-Sequence-Diagrams";
-    private static final String CMD_OPT_NAME_TASK_PLOTDEPGS = "plot-Dependency-Graphs";
+    private static final String CMD_OPT_NAME_TASK_PLOTDEPG = "plot-Dependency-Graph";
     private static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE = "plot-Aggregated-Call-Tree";
+    private static final String CMD_OPT_NAME_TASK_PLOTCALLTREES = "plot-Call-Trees";
     private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
     private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
     private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
@@ -128,11 +130,12 @@ public class TraceAnalysisTool {
         //OptionGroup cmdlOptGroupTask = new OptionGroup();
         //cmdlOptGroupTask.isRequired();
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
-        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPGS).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
-        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE).hasArg(false).withDescription("Generate and store calling trees (.dot files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPG).hasArg(false).withDescription("Generate and store a dependency graph (.dot file)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE).hasArg(false).withDescription("Generate and store an aggregated call tree (.dot files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCALLTREES).hasArg(false).withDescription("Generate and store call trees for the selected traces (.dot files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
-        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save a execution trace representations of invalid trace artifacts (.txt files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription("Output an overview about the trace equivalence classes").create());
 
         /* These tasks should be moved to a dedicated tool, since this tool covers trace analysis */
@@ -282,8 +285,9 @@ public class TraceAnalysisTool {
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTSEQDS)
-                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTDEPGS)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTDEPG)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTCALLTREES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTEXECTRACES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
@@ -336,9 +340,11 @@ public class TraceAnalysisTool {
         final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
         final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
         final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-        final String PLOTDEPGRAPH_COMPONENT_NAME = "Dependency graphs";
+        final String PLOTDEPGRAPH_COMPONENT_NAME = "Dependency graph";
         final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
-        final String PLOTCALLINGTREE_COMPONENT_NAME = "Calling trees";
+        final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call trees";
+        final String PLOTCALLTREE_COMPONENT_NAME = "Call trees";
+        
 
         TraceReconstructionFilter mtReconstrFilter = null;
         try {
@@ -379,17 +385,25 @@ public class TraceAnalysisTool {
                 msgTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
             DependencyGraphPlugin componentPlotDepGraph = null;
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTDEPGS)) {
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTDEPG)) {
                 numRequestedTasks++;
                 componentPlotDepGraph =
                         task_createDependencyGraphPlotComponent(PLOTDEPGRAPH_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotDepGraph);
             }
+            AbstractTpanMessageTraceProcessingComponent componentPlotCallTrees = null;
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
+                numRequestedTasks++;
+                componentPlotCallTrees =
+                        task_createCallTreesPlotComponent(PLOTCALLTREE_COMPONENT_NAME,
+                        outputDir + File.separator + outputFnPrefix);
+                msgTraceProcessingComponents.add(componentPlotCallTrees);
+            }
             CallTreePlugin componentPlotAggregatedCallTree = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)) {
                 numRequestedTasks++;
                 componentPlotAggregatedCallTree =
-                        task_createCallingTreePlotComponent(PLOTCALLINGTREE_COMPONENT_NAME);
+                        task_createAggregatedCallTreePlotComponent(PLOTAGGREGATEDCALLTREE_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotAggregatedCallTree);
             }
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
@@ -578,11 +592,43 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static CallTreePlugin task_createCallingTreePlotComponent(final String name) {
+    private static CallTreePlugin task_createAggregatedCallTreePlotComponent(final String name) {
         CallTreePlugin callingTree = new CallTreePlugin(name, considerHostname);
         return callingTree;
     }
 
+    private static AbstractTpanMessageTraceProcessingComponent task_createCallTreesPlotComponent(final String name, final String outputFnPrefix) throws IOException {
+        final String outputFnBase = new File(outputFnPrefix + CALL_TREE_FN_PREFIX).getCanonicalPath();
+        AbstractTpanMessageTraceProcessingComponent ctWriter = new AbstractTpanMessageTraceProcessingComponent(name) {
+
+            public void newTrace(MessageTrace t) throws TraceProcessingException {
+                try {
+                    CallTreePlugin.writeDotForMessageTrace(t, outputFnBase + "-" + t.getTraceId(), false, considerHostname);
+                    this.reportSuccess(t.getTraceId());
+                } catch (FileNotFoundException ex) {
+                    this.reportError(t.getTraceId());
+                    throw new TraceProcessingException("File not found", ex);
+                }
+            }
+
+            @Override
+            public void printStatusMessage() {
+                super.printStatusMessage();
+                int numPlots = this.getSuccessCount();
+                long lastSuccessTracesId = this.getLastTraceIdSuccess();
+                System.out.println("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + outputFnBase + "-<traceId>.dot'");
+                System.out.println("Dot files can be converted using the dot tool");
+                System.out.println("Example: dot -T svg " + outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " + outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg");
+            }
+
+            @Override
+            public void cleanup() {
+                // nothing to do
+            }
+        };
+        return ctWriter;
+    }    
+    
     /**
      * Reads the traces from the directory inputDirName and write the
      * message trace representation for traces with IDs given in traceSet
