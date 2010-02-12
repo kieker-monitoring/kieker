@@ -26,13 +26,14 @@ public class CallingTreeNode {
      *  The node is created if it doesn't exist. */
     public final CallingTreeNode getChildForName(final String componentName,
             final String operationName, final String vmName) {
-        CallingTreeOperationHashKey k = new CallingTreeOperationHashKey(componentName, operationName, vmName);
+        CallingTreeOperationHashKey k =
+                new CallingTreeOperationHashKey(componentName, operationName, vmName);
         CallingTreeNode node =
                 this.children.get(k);
         if (node == null) {
             node = new CallingTreeNode(this, k);
             this.children.put(k, node);
-        }
+        } 
         return node;
     }
 

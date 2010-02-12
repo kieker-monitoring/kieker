@@ -85,7 +85,7 @@ public class Bookstore extends Thread {
 
     @TpmonExecutionMonitoringProbe()
     public static void searchBook() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             Catalog.getBook(false);
             CRM.getOffers();
         }

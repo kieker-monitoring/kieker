@@ -37,10 +37,8 @@ import kieker.tpan.datamodel.Message;
 public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingComponent {
 
     private static final Log log = LogFactory.getLog(CallingTreePlugin.class);
-
-    private final CallingTreeNode root = 
+    private final CallingTreeNode root =
             new CallingTreeNode(null, new CallingTreeOperationHashKey("$", "", ""));
-
     private final boolean considerHost;
 
     public CallingTreePlugin(final String name, final boolean considerHost) {
@@ -48,36 +46,36 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         this.considerHost = considerHost;
     }
 
+    int i = 0;
+
     /** Traverse tree recursively and generate dot code for edges. */
-    private void dotEdgesFromSubTree (CallingTreeNode n,
-            Hashtable<CallingTreeNode,Integer> nodeIds,
-            Integer nextNodeId, PrintStream ps){
+    private void dotEdgesFromSubTree(CallingTreeNode n,
+            Hashtable<CallingTreeNode, Integer> nodeIds,
+            Integer nextNodeId, PrintStream ps) {
         StringBuilder strBuild = new StringBuilder();
-        nodeIds.put(n, nextNodeId);
-        strBuild.append(nextNodeId++).append("[label =\"")
-                    .append(n.getLabel(considerHost)).append("\",shape=box];");
+        nodeIds.put(n, i);
+        strBuild.append(i++).append("[label =\"").append(n.getLabel(considerHost)).append("\",shape=box];");
         ps.println(strBuild.toString());
-        for (CallingTreeNode child : n.getChildren()){
+        for (CallingTreeNode child : n.getChildren()) {
             dotEdgesFromSubTree(child, nodeIds, nextNodeId, ps);
         }
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    private void dotVerticesFromSubTree (CallingTreeNode n,
-            Hashtable<CallingTreeNode,Integer> nodeIds,
-            PrintStream ps, boolean includeWeights){
+    private void dotVerticesFromSubTree(CallingTreeNode n,
+            Hashtable<CallingTreeNode, Integer> nodeIds,
+            PrintStream ps, boolean includeWeights) {
         int thisId = nodeIds.get(n);
-        for (CallingTreeNode child : n.getChildren()){
-        StringBuilder strBuild = new StringBuilder();
+        for (CallingTreeNode child : n.getChildren()) {
+            StringBuilder strBuild = new StringBuilder();
             int childId = nodeIds.get(child);
-            strBuild.append("\n").append(thisId).append("->").append(childId)
-                            .append("[style=dashed,arrowhead=open");
-                    if (includeWeights){
-                        strBuild.append(",label = ").append("").append(", weight =").append("");
-                    }
-                    strBuild.append(" ]");
-        ps.println(strBuild.toString());
-                    dotVerticesFromSubTree(child, nodeIds, ps, includeWeights);
+            strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=dashed,arrowhead=open");
+            if (includeWeights) {
+                strBuild.append(",label = ").append("").append(", weight =").append("");
+            }
+            strBuild.append(" ]");
+            ps.println(strBuild.toString());
+            dotVerticesFromSubTree(child, nodeIds, ps, includeWeights);
         }
     }
 
@@ -94,7 +92,6 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         ps.println(edgestringBuilder.toString());
         ps.println("}");
     }
-
     private int numGraphsSaved = 0;
 
     public void saveToDotFile(final String outputFnBase, final boolean includeWeights) throws FileNotFoundException {
@@ -103,11 +100,11 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         ps.flush();
         ps.close();
         this.numGraphsSaved++;
-        this.printMessage(new String[] {
-        "Wrote calling tree to file '" + outputFnBase + ".dot" + "'",
-        "Dot file can be converted using the dot tool",
-        "Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg"
-        });
+        this.printMessage(new String[]{
+                    "Wrote calling tree to file '" + outputFnBase + ".dot" + "'",
+                    "Dot file can be converted using the dot tool",
+                    "Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg"
+                });
     }
 
     public void newTrace(MessageTrace t) throws TraceProcessingException {
@@ -116,20 +113,28 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         Vector<Message> msgTraceVec = t.getSequenceAsVector();
         CallingTreeNode curNode = root;
         curStack.push(curNode);
-        for (final Message m : msgTraceVec){
-            if (m.callMessage){
-                curNode = curNode.getChildForName(m.receiver.componentName,
+        System.out.println(curStack);
+        for (final Message m : msgTraceVec) {
+            if (m.callMessage) {
+                curNode = curStack.peek();
+                System.out.println(m);
+                CallingTreeNode child =
+                        curNode.getChildForName(m.receiver.componentName,
                         m.receiver.opname, m.receiver.vmName);
+                System.out.println(curNode +" -> " + child);
+                curNode = child;
                 curStack.push(curNode);
             } else {
+                System.out.println(m);
                 curNode = curStack.pop();
             }
+            System.out.println(curStack);
         }
-//        if (curNode != root){
-//            log.fatal("Stack not empty after processing trace");
-//            this.reportError(t.getTraceId());
-//            throw new TraceProcessingException("Stack not empty after processing trace");
-//        }
+        if (curStack.pop() != root) {
+            log.fatal("Stack not empty after processing trace");
+            this.reportError(t.getTraceId());
+            throw new TraceProcessingException("Stack not empty after processing trace");
+        }
         this.reportSuccess(t.getTraceId());
     }
 

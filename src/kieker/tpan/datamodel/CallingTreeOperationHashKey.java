@@ -27,8 +27,10 @@ public class CallingTreeOperationHashKey {
         return this.hashCode;
     }
 
+    @Override
     public final boolean equals(Object o){
         if (o == this) return true;
+        if (! (o instanceof CallingTreeOperationHashKey)) return false;
         CallingTreeOperationHashKey k = (CallingTreeOperationHashKey)o;
 
         return this.componentName.equals(k.componentName)
