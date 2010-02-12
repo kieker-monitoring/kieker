@@ -437,7 +437,7 @@ public class TraceAnalysisTool {
                 }
 
                 if (componentPlotCallingTree != null) {
-                    componentPlotCallingTree.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + CALLING_TREE_FN_PREFIX).getCanonicalPath(), false); // !traceEquivClassMode
+                    componentPlotCallingTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + CALLING_TREE_FN_PREFIX).getCanonicalPath(), false); // !traceEquivClassMode
                 }
             } catch (Exception exc) {
                 log.error("Error occured while running analysis", exc);
@@ -527,7 +527,7 @@ public class TraceAnalysisTool {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
-                    SequenceDiagramPlugin.writeDotForMessageTrace(t, outputFnBase + "-" + t.getTraceId() + ".pic", considerHostname);
+                    SequenceDiagramPlugin.writePicForMessageTrace(t, outputFnBase + "-" + t.getTraceId() + ".pic", considerHostname);
                     this.reportSuccess(t.getTraceId());
                 } catch (FileNotFoundException ex) {
                     this.reportError(t.getTraceId());

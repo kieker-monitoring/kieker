@@ -31,6 +31,9 @@ import kieker.tpan.datamodel.CallingTreeOperationHashKey;
 import kieker.tpan.datamodel.Message;
 
 /**
+ * Plugin providing the creation of calling trees both for individual traces 
+ * and an aggregated form mulitple traces.
+ *
  * @author Andre van Hoorn
  */
 public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingComponent {
@@ -45,26 +48,23 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         this.considerHost = considerHost;
     }
 
-    int i = 0;
-
     /** Traverse tree recursively and generate dot code for edges. */
-    private void dotEdgesFromSubTree(CallingTreeNode n,
+    private static void dotEdgesFromSubTree(CallingTreeNode n,
             Hashtable<CallingTreeNode, Integer> nodeIds,
-            Integer nextNodeId, PrintStream ps) {
+            IntContainer nextNodeId, PrintStream ps, final boolean considerHost) {
         StringBuilder strBuild = new StringBuilder();
-        nodeIds.put(n, i);
-        strBuild.append(i++).append("[label =\"")
-                .append((n==root)?"$":n.getLabel(true, considerHost)).append("\",shape=oval];");
+        nodeIds.put(n, nextNodeId.i);
+        strBuild.append(nextNodeId.i++).append("[label =\"").append((n.getParent() == null) ? "$" : n.getLabel(true, considerHost)).append("\",shape=oval];");
         ps.println(strBuild.toString());
         for (CallingTreeNode child : n.getChildren()) {
-            dotEdgesFromSubTree(child, nodeIds, nextNodeId, ps);
+            dotEdgesFromSubTree(child, nodeIds, nextNodeId, ps, considerHost);
         }
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    private void dotVerticesFromSubTree(CallingTreeNode n,
-            Hashtable<CallingTreeNode, Integer> nodeIds,
-            PrintStream ps, boolean includeWeights) {
+    private static void dotVerticesFromSubTree(final CallingTreeNode n,
+            final Hashtable<CallingTreeNode, Integer> nodeIds,
+            final PrintStream ps, final boolean includeWeights) {
         int thisId = nodeIds.get(n);
         for (CallingTreeNode child : n.getChildren()) {
             StringBuilder strBuild = new StringBuilder();
@@ -79,14 +79,14 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         }
     }
 
-    private void dotFromCallingTree(PrintStream ps, final boolean includeWeights) {
+    private static void dotFromCallingTree(final CallingTreeNode root, final PrintStream ps, final boolean includeWeights, final boolean considerHost) {
         // preamble:
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
 
         Hashtable<CallingTreeNode, Integer> nodeIds = new Hashtable<CallingTreeNode, Integer>();
 
-        dotEdgesFromSubTree(root, nodeIds, new Integer(0), ps);
+        dotEdgesFromSubTree(root, nodeIds, new IntContainer(0), ps, considerHost);
         dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);
 
         ps.println(edgestringBuilder.toString());
@@ -94,11 +94,15 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
     }
     private int numGraphsSaved = 0;
 
-    public void saveToDotFile(final String outputFnBase, final boolean includeWeights) throws FileNotFoundException {
+    private static void saveTreeToDotFile(final CallingTreeNode root, final String outputFnBase, final boolean includeWeights, final boolean considerHost) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        this.dotFromCallingTree(ps, includeWeights);
+        dotFromCallingTree(root, ps, includeWeights, considerHost);
         ps.flush();
         ps.close();
+    }
+
+    public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights) throws FileNotFoundException {
+        saveTreeToDotFile(this.root, outputFnBase, includeWeights, considerHost);
         this.numGraphsSaved++;
         this.printMessage(new String[]{
                     "Wrote calling tree to file '" + outputFnBase + ".dot" + "'",
@@ -107,7 +111,7 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
                 });
     }
 
-    public void newTrace(MessageTrace t) throws TraceProcessingException {
+    private static void addTraceToTree(final CallingTreeNode root, final MessageTrace t) throws TraceProcessingException {
         Stack<CallingTreeNode> curStack = new Stack<CallingTreeNode>();
 
         Vector<Message> msgTraceVec = t.getSequenceAsVector();
@@ -127,10 +131,23 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         }
         if (curStack.pop() != root) {
             log.fatal("Stack not empty after processing trace");
-            this.reportError(t.getTraceId());
             throw new TraceProcessingException("Stack not empty after processing trace");
         }
-        this.reportSuccess(t.getTraceId());
+    }
+
+    public void newTrace(final MessageTrace t) throws TraceProcessingException {
+        try {
+            addTraceToTree(root, t);
+            this.reportSuccess(t.getTraceId());
+        } catch (TraceProcessingException ex) {
+            log.error("TraceProcessingException", ex);
+            this.reportError(t.getTraceId());
+        }
+    }
+
+    public static void writeDotForMessageTrace(final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights, final boolean considerHost) throws FileNotFoundException {
+        final CallingTreeNode root = new CallingTreeNode(null, new CallingTreeOperationHashKey("$", "", ""));
+        saveTreeToDotFile(root, outputFilename, includeWeights, considerHost);
     }
 
     @Override
@@ -142,5 +159,14 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
     @Override
     public void cleanup() {
         // no cleanup required
+    }
+}
+
+class IntContainer {
+
+    public int i = 0;
+
+    public IntContainer(int initVal) {
+        this.i = initVal;
     }
 }

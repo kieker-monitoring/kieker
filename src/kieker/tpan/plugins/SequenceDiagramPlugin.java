@@ -121,7 +121,7 @@ public class SequenceDiagramPlugin {
         ps.println(".PE");
     }
 
-    public static void writeDotForMessageTrace(MessageTrace msgTrace, String outputFilename, final boolean considerHost) throws FileNotFoundException {
+    public static void writePicForMessageTrace(MessageTrace msgTrace, String outputFilename, final boolean considerHost) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
         picFromMessageTrace(msgTrace, ps, considerHost);
         ps.flush();
