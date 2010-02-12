@@ -46,7 +46,7 @@ import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.AbstractTpanExecutionTraceProcessingComponent;
 import kieker.tpan.plugins.AbstractTpanMessageTraceProcessingComponent;
 import kieker.tpan.plugins.AbstractTpanTraceProcessingComponent;
-import kieker.tpan.plugins.CallingTreePlugin;
+import kieker.tpan.plugins.CallTreePlugin;
 import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.plugins.TraceProcessingException;
@@ -76,7 +76,7 @@ public class TraceAnalysisTool {
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
-    private static final String CALLING_TREE_FN_PREFIX = "callingTree";
+    private static final String AGGREGATED_CALL_TREE_FN_PREFIX = "callTree";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
     private static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
     private static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
@@ -106,7 +106,7 @@ public class TraceAnalysisTool {
     private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     private static final String CMD_OPT_NAME_TASK_PLOTSEQDS = "plot-Sequence-Diagrams";
     private static final String CMD_OPT_NAME_TASK_PLOTDEPGS = "plot-Dependency-Graphs";
-    private static final String CMD_OPT_NAME_TASK_PLOTCALLINGTREE = "plot-Calling-Tree";
+    private static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE = "plot-Aggregated-Call-Tree";
     private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
     private static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
     private static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
@@ -129,7 +129,7 @@ public class TraceAnalysisTool {
         //cmdlOptGroupTask.isRequired();
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPGS).hasArg(false).withDescription("Generate and store dependency graphs (.dot files)").create());
-        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCALLINGTREE).hasArg(false).withDescription("Generate and store calling trees (.dot files)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE).hasArg(false).withDescription("Generate and store calling trees (.dot files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false).withDescription("Save execution trace representations of valid traces (.txt files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription("Save execution trace representations of invalid trace artifacts (.txt files)").create());
@@ -283,7 +283,7 @@ public class TraceAnalysisTool {
             } else if (longOpt.equals(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTSEQDS)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTDEPGS)
-                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTCALLINGTREE)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTEXECTRACES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
@@ -385,12 +385,12 @@ public class TraceAnalysisTool {
                         task_createDependencyGraphPlotComponent(PLOTDEPGRAPH_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotDepGraph);
             }
-            CallingTreePlugin componentPlotCallingTree = null;
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCALLINGTREE)) {
+            CallTreePlugin componentPlotAggregatedCallTree = null;
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)) {
                 numRequestedTasks++;
-                componentPlotCallingTree =
+                componentPlotAggregatedCallTree =
                         task_createCallingTreePlotComponent(PLOTCALLINGTREE_COMPONENT_NAME);
-                msgTraceProcessingComponents.add(componentPlotCallingTree);
+                msgTraceProcessingComponents.add(componentPlotAggregatedCallTree);
             }
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
                 numRequestedTasks++;
@@ -436,8 +436,8 @@ public class TraceAnalysisTool {
                     componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !traceEquivClassMode);
                 }
 
-                if (componentPlotCallingTree != null) {
-                    componentPlotCallingTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + CALLING_TREE_FN_PREFIX).getCanonicalPath(), false); // !traceEquivClassMode
+                if (componentPlotAggregatedCallTree != null) {
+                    componentPlotAggregatedCallTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + AGGREGATED_CALL_TREE_FN_PREFIX).getCanonicalPath(), false); // !traceEquivClassMode
                 }
             } catch (Exception exc) {
                 log.error("Error occured while running analysis", exc);
@@ -578,8 +578,8 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static CallingTreePlugin task_createCallingTreePlotComponent(final String name) {
-        CallingTreePlugin callingTree = new CallingTreePlugin(name, considerHostname);
+    private static CallTreePlugin task_createCallingTreePlotComponent(final String name) {
+        CallTreePlugin callingTree = new CallTreePlugin(name, considerHostname);
         return callingTree;
     }
 

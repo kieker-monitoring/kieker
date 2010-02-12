@@ -3,14 +3,14 @@ package kieker.tpan.datamodel;
 import java.util.Collection;
 import java.util.Hashtable;
 
-public class CallingTreeNode {
+public class CallTreeNode {
 
-    private CallingTreeNode parent;
-    private Hashtable<CallingTreeOperationHashKey, CallingTreeNode> children =
-            new Hashtable<CallingTreeOperationHashKey, CallingTreeNode>();
-    private final CallingTreeOperationHashKey opInfo;
+    private CallTreeNode parent;
+    private Hashtable<CallTreeOperationHashKey, CallTreeNode> children =
+            new Hashtable<CallTreeOperationHashKey, CallTreeNode>();
+    private final CallTreeOperationHashKey opInfo;
 
-    public CallingTreeNode(final CallingTreeNode parent, CallingTreeOperationHashKey opInfo) {
+    public CallTreeNode(final CallTreeNode parent, CallTreeOperationHashKey opInfo) {
         this.parent = parent;
         if (opInfo == null) {
             throw new IllegalArgumentException("opInfo must not be null");
@@ -18,20 +18,20 @@ public class CallingTreeNode {
         this.opInfo = opInfo;
     }
 
-    public final Collection<CallingTreeNode> getChildren() {
+    public final Collection<CallTreeNode> getChildren() {
         return children.values();
     }
 
     /** Returns the child node with given operation, name, and vmName.
      *  The node is created if it doesn't exist. */
-    public final CallingTreeNode getChildForName(final String componentName,
+    public final CallTreeNode getChildForName(final String componentName,
             final String operationName, final String vmName) {
-        CallingTreeOperationHashKey k =
-                new CallingTreeOperationHashKey(componentName, operationName, vmName);
-        CallingTreeNode node =
+        CallTreeOperationHashKey k =
+                new CallTreeOperationHashKey(componentName, operationName, vmName);
+        CallTreeNode node =
                 this.children.get(k);
         if (node == null) {
-            node = new CallingTreeNode(this, k);
+            node = new CallTreeNode(this, k);
             this.children.put(k, node);
         }
         return node;
@@ -45,7 +45,7 @@ public class CallingTreeNode {
         return opInfo.getOperationName();
     }
 
-    public final CallingTreeNode getParent() {
+    public final CallTreeNode getParent() {
         return parent;
     }
 

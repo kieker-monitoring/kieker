@@ -4,14 +4,14 @@ package kieker.tpan.datamodel;
  *
  * @author Andre van Hoorn
  */
-public class CallingTreeOperationHashKey {
+public class CallTreeOperationHashKey {
     private final String componentName;
     private final String operationName;
     private final String vmName;
 
     private final int hashCode; // the final is computed once and never changes
 
-    public CallingTreeOperationHashKey(final String componentName,
+    public CallTreeOperationHashKey(final String componentName,
             final String operationName, final String vmName) {
         this.componentName = componentName;
         this.operationName = operationName;
@@ -30,8 +30,8 @@ public class CallingTreeOperationHashKey {
     @Override
     public final boolean equals(Object o){
         if (o == this) return true;
-        if (! (o instanceof CallingTreeOperationHashKey)) return false;
-        CallingTreeOperationHashKey k = (CallingTreeOperationHashKey)o;
+        if (! (o instanceof CallTreeOperationHashKey)) return false;
+        CallTreeOperationHashKey k = (CallTreeOperationHashKey)o;
 
         return this.componentName.equals(k.componentName)
                 && this.operationName.equals(k.operationName)
