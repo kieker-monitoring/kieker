@@ -1,7 +1,6 @@
 package kieker.tpan.plugins;
 
 /*
- *
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
  *
@@ -54,7 +53,8 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
             Integer nextNodeId, PrintStream ps) {
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, i);
-        strBuild.append(i++).append("[label =\"").append(n.getLabel(considerHost)).append("\",shape=box];");
+        strBuild.append(i++).append("[label =\"")
+                .append((n==root)?"$":n.getLabel(true, considerHost)).append("\",shape=oval];");
         ps.println(strBuild.toString());
         for (CallingTreeNode child : n.getChildren()) {
             dotEdgesFromSubTree(child, nodeIds, nextNodeId, ps);
@@ -69,7 +69,7 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         for (CallingTreeNode child : n.getChildren()) {
             StringBuilder strBuild = new StringBuilder();
             int childId = nodeIds.get(child);
-            strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=dashed,arrowhead=open");
+            strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
             if (includeWeights) {
                 strBuild.append(",label = ").append("").append(", weight =").append("");
             }
@@ -113,22 +113,17 @@ public class CallingTreePlugin extends AbstractTpanMessageTraceProcessingCompone
         Vector<Message> msgTraceVec = t.getSequenceAsVector();
         CallingTreeNode curNode = root;
         curStack.push(curNode);
-        System.out.println(curStack);
         for (final Message m : msgTraceVec) {
             if (m.callMessage) {
                 curNode = curStack.peek();
-                System.out.println(m);
                 CallingTreeNode child =
                         curNode.getChildForName(m.receiver.componentName,
                         m.receiver.opname, m.receiver.vmName);
-                System.out.println(curNode +" -> " + child);
                 curNode = child;
                 curStack.push(curNode);
             } else {
-                System.out.println(m);
                 curNode = curStack.pop();
             }
-            System.out.println(curStack);
         }
         if (curStack.pop() != root) {
             log.fatal("Stack not empty after processing trace");

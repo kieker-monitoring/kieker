@@ -33,7 +33,7 @@ public class CallingTreeNode {
         if (node == null) {
             node = new CallingTreeNode(this, k);
             this.children.put(k, node);
-        } 
+        }
         return node;
     }
 
@@ -53,16 +53,36 @@ public class CallingTreeNode {
         return this.opInfo.getVmName();
     }
 
+    private String getShortComponentName() {
+        String shortComponentName = this.getComponentName();
+        if (shortComponentName.indexOf('.') != -1) {
+            int index = 0;
+            for (index = shortComponentName.length() - 1; index > 0; index--) {
+                if (shortComponentName.charAt(index) == '.') {
+                    break;
+                }
+            }
+            shortComponentName = shortComponentName.substring(index + 1);
+
+        }
+        return shortComponentName;
+    }
+
     /** Convenience function which returns "$" in case 'senderComponentName' field is null */
-    public String getLabel(final boolean includeHostname) {
+    public String getLabel(final boolean shortComponentName, final boolean includeHostname) {
         if (this.opInfo == null) {
             return "$";
         }
         StringBuilder strBuild = new StringBuilder();
         if (includeHostname) {
-            strBuild.append(this.getVmName()).append("::");
+            strBuild.append(this.getVmName()).append("::\\n");
         }
-        strBuild.append(this.getComponentName()).append(".").append(this.getOperationName());
+        if (shortComponentName) {
+            strBuild.append(this.getShortComponentName());
+        } else {
+            strBuild.append(this.getComponentName());
+        }
+        strBuild.append(".").append(this.getOperationName());
 
         return strBuild.toString();
 
@@ -71,6 +91,6 @@ public class CallingTreeNode {
 
     @Override
     public String toString() {
-        return this.getLabel(true);
+        return this.getLabel(false, true); // false, include hostname
     }
 }
