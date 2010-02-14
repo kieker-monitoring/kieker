@@ -40,26 +40,26 @@ public class AllocationFactory extends AbstractSystemSubFactory {
         super(systemFactory);
     }
 
-    /** Returns the instance for the passed name; null if no instance
-     *  with this name.
+    /** Returns the instance for the passed factoryIdentifier; null if no instance
+     *  with this factoryIdentifier.
      */
-    public final AllocationComponentInstance getAllocationComponentInstanceByName(final String name){
-        return this.allocationComponentInstancesByName.get(name);
+    public final AllocationComponentInstance getAllocationComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
+        return this.allocationComponentInstancesByName.get(factoryIdentifier);
     }
 
     public final AllocationComponentInstance createAndRegisterAllocationComponentInstance(
-            final String name,
+            final String factoryIdentifier,
             final AssemblyComponentInstance assemblyComponentInstance,
             final ExecutionContainer executionContainer){
             AllocationComponentInstance newInst;
-            if (this.allocationComponentInstancesByName.containsKey(name)){
-                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            if (this.allocationComponentInstancesByName.containsKey(factoryIdentifier)){
+                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new AllocationComponentInstance(id,
                     assemblyComponentInstance, executionContainer);
             this.allocationComponentInstancesById.add(id, newInst);
-            this.allocationComponentInstancesByName.put(name, newInst);
+            this.allocationComponentInstancesByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 

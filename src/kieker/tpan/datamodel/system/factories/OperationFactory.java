@@ -39,26 +39,26 @@ public class OperationFactory extends AbstractSystemSubFactory {
         super(systemFactory);
     }
 
-    /** Returns the instance for the passed name; null if no instance
-     *  with this name.
+    /** Returns the instance for the passed factoryIdentifier; null if no instance
+     *  with this factoryIdentifier.
      */
-    public final Operation getOperationByName(final String name){
-        return this.operationsByName.get(name);
+    public final Operation getOperationByFactoryIdentifier(final String factoryIdentifier){
+        return this.operationsByName.get(factoryIdentifier);
     }
 
     public final Operation createAndRegisterOperation(
-            final String name,
+            final String factoryIdentifier,
             final ComponentType componentType,
             final Signature signature){
             Operation newInst;
-            if (this.operationsByName.containsKey(name)){
-                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            if (this.operationsByName.containsKey(factoryIdentifier)){
+                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new Operation(id,
                     componentType, signature);
             this.operationsById.add(id, newInst);
-            this.operationsByName.put(name, newInst);
+            this.operationsByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 

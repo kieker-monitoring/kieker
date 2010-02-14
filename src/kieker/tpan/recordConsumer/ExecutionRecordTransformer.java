@@ -75,27 +75,27 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
         String operationName =
                 new StringBuilder(allocationComponentName).append(".").append(execRec.opname).toString();
 
-        AllocationComponentInstance allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByName(allocationComponentName);
+        AllocationComponentInstance allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);
         if (allocInst == null) { /* Allocation component instance doesn't exist */
             AssemblyComponentInstance assemblyComponent =
-                    this.systemFactory.getAssemblyFactory().getAssemblyComponentInstanceByName(assemblyComponentName);
+                    this.systemFactory.getAssemblyFactory().getAssemblyComponentInstanceByFactoryIdentifier(assemblyComponentName);
             if (assemblyComponent == null) { // assembly instance doesn't exist
                 ComponentType componentType =
-                        this.systemFactory.getTypeRepositoryFactory().getComponentTypeByName(componentTypeName);
+                        this.systemFactory.getTypeRepositoryFactory().getComponentTypeByFactoryIdentifier(componentTypeName);
                 if (componentType == null) {
                     /* Component type doesn't exist */
-                    componentType = this.systemFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName);
+                    componentType = this.systemFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
                 }
                 assemblyComponent = this.systemFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(assemblyComponentName, componentType);
             }
-            ExecutionContainer execContainer = this.systemFactory.getExecutionEnvironmentFactory().getExecutionContainerByName(executionContainerName);
+            ExecutionContainer execContainer = this.systemFactory.getExecutionEnvironmentFactory().getExecutionContainerByFactoryIdentifier(executionContainerName);
             if (execContainer == null){ /* doesn't exist, yet */
-               execContainer = systemFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName);
+               execContainer = systemFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
             }
             allocInst = this.systemFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
         }
 
-        Operation op = this.systemFactory.getOperationFactory().getOperationByName(operationName);
+        Operation op = this.systemFactory.getOperationFactory().getOperationByFactoryIdentifier(operationName);
         if (op == null) { /* Operation doesn't exist */
             Signature signature = new Signature(operationName, "<>", new String[0]);
             op = this.systemFactory.getOperationFactory().createAndRegisterOperation(operationName, allocInst.getAssemblyComponent().getType(), signature);
@@ -110,6 +110,8 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
                 throw new RecordConsumerExecutionException("ExecutionEventProcessingException occured", ex);
             }
         }
+
+        System.out.println(execution);
     }
 
     public boolean execute() throws RecordConsumerExecutionException {

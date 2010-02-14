@@ -39,24 +39,24 @@ public class AssemblyFactory extends AbstractSystemSubFactory{
         super(systemFactory);
     }
 
-    /** Returns the instance for the passed name; null if no instance
-     *  with this name.
+    /** Returns the instance for the passed factoryIdentifier; null if no instance
+     *  with this factoryIdentifier.
      */
-    public final AssemblyComponentInstance getAssemblyComponentInstanceByName(final String name){
-        return this.assemblyComponentInstancesByName.get(name);
+    public final AssemblyComponentInstance getAssemblyComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
+        return this.assemblyComponentInstancesByName.get(factoryIdentifier);
     }
 
     public final AssemblyComponentInstance createAndRegisterAssemblyComponentInstance(
-            final String name,
+            final String factoryIdentifier,
             final ComponentType componentType){
             AssemblyComponentInstance newInst;
-            if (this.assemblyComponentInstancesByName.containsKey(name)){
-                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            if (this.assemblyComponentInstancesByName.containsKey(factoryIdentifier)){
+                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
-            newInst = new AssemblyComponentInstance(id, name, componentType);
+            newInst = new AssemblyComponentInstance(id, "@"+id, componentType);
             this.assemblyComponentInstancesById.add(id, newInst);
-            this.assemblyComponentInstancesByName.put(name, newInst);
+            this.assemblyComponentInstancesByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 

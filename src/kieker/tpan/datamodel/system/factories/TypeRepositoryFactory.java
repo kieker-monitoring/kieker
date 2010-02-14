@@ -36,23 +36,24 @@ public class TypeRepositoryFactory extends AbstractSystemSubFactory {
         super(systemFactory);
     }
 
-    /** Returns the instance for the passed name; null if no instance
-     *  with this name.
+    /** Returns the instance for the passed factoryIdentifier; null if no instance
+     *  with this factoryIdentifier.
      */
-    public final ComponentType getComponentTypeByName(final String name) {
-        return this.componentTypesByName.get(name);
+    public final ComponentType getComponentTypeByFactoryIdentifier(final String factoryIdentifier) {
+        return this.componentTypesByName.get(factoryIdentifier);
     }
 
     public final ComponentType createAndRegisterComponentType(
+            final String factoryIdentifier,
             final String fullqualifiedName) {
         ComponentType newInst;
-        if (this.componentTypesByName.containsKey(fullqualifiedName)) {
-            throw new IllegalArgumentException("Element with name " + fullqualifiedName + "exists already");
+        if (this.componentTypesByName.containsKey(factoryIdentifier)) {
+            throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
         }
         int id = this.getAndIncrementNextId();
         newInst = new ComponentType(id, fullqualifiedName);
         this.componentTypesById.add(id, newInst);
-        this.componentTypesByName.put(fullqualifiedName, newInst);
+        this.componentTypesByName.put(factoryIdentifier, newInst);
         return newInst;
     }
 

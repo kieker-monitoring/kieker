@@ -37,23 +37,24 @@ public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
         super(systemFactory);
     }
 
-   /** Returns the instance for the passed name; null if no instance
-     *  with this name.
+   /** Returns the instance for the passed factoryIdentifier; null if no instance
+     *  with this factoryIdentifier.
      */
-    public final ExecutionContainer getExecutionContainerByName(final String name){
-        return this.executionContainersByName.get(name);
+    public final ExecutionContainer getExecutionContainerByFactoryIdentifier(final String factoryIdentifier){
+        return this.executionContainersByName.get(factoryIdentifier);
     }
 
     public final ExecutionContainer createAndRegisterExecutionContainer(
+            final String factoryIdentifier,
             final String name){
             ExecutionContainer newInst;
-            if (this.executionContainersByName.containsKey(name)){
-                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            if (this.executionContainersByName.containsKey(factoryIdentifier)){
+                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new ExecutionContainer(id, null, name);
             this.executionContainersById.add(id, newInst);
-            this.executionContainersByName.put(name, newInst);
+            this.executionContainersByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
