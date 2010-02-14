@@ -23,6 +23,15 @@ public class CallTreeNode {
         return children;
     }
 
+    /** Creates a new child and adds it to the nodes list of children */
+    public final CallTreeNode createNewChild(final String componentName,
+            final String operationName, final String vmName) {
+        CallTreeOperationHashKey k = new CallTreeOperationHashKey(componentName, operationName, vmName);
+        CallTreeNode node = new CallTreeNode(this, k);
+        this.children.add(node);
+        return node;
+    }
+
     /** Returns the child node with given operation, name, and vmName.
      *  The node is created if it doesn't exist. */
     public final CallTreeNode getChildForName(final String componentName,
@@ -30,10 +39,10 @@ public class CallTreeNode {
         CallTreeOperationHashKey k =
                 new CallTreeOperationHashKey(componentName, operationName, vmName);
         CallTreeNode node = null;
-        for (CallTreeNode n : children){
-         if (n.opInfo.equals(k)){
-             node = n;
-         }
+        for (CallTreeNode n : children) {
+            if (n.opInfo.equals(k)) {
+                node = n;
+            }
         }
         if (node == null) {
             node = new CallTreeNode(this, k);

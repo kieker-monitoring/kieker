@@ -43,10 +43,13 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
     private final CallTreeNode root =
             new CallTreeNode(null, new CallTreeOperationHashKey("$", "", ""));
     private final boolean considerHost;
+    private final boolean aggregated;
 
-    public CallTreePlugin(final String name, final boolean considerHost) {
+    public CallTreePlugin(final String name, final boolean considerHost,
+            final boolean aggregated) {
         super(name);
         this.considerHost = considerHost;
+        this.aggregated = aggregated;
     }
 
     /** Traverse tree recursively and generate dot code for edges. */
@@ -112,7 +115,9 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
                 });
     }
 
-    private static void addTraceToTree(final CallTreeNode root, final MessageTrace t) throws TraceProcessingException {
+    private static void addTraceToTree(final CallTreeNode root, 
+            final MessageTrace t, final boolean aggregated)
+            throws TraceProcessingException {
         Stack<CallTreeNode> curStack = new Stack<CallTreeNode>();
 
         Vector<Message> msgTraceVec = t.getSequenceAsVector();
@@ -121,9 +126,14 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         for (final Message m : msgTraceVec) {
             if (m.callMessage) {
                 curNode = curStack.peek();
-                CallTreeNode child =
-                        curNode.getChildForName(m.receiver.componentName,
+                CallTreeNode child;
+                if (aggregated){
+                    child = curNode.getChildForName(m.receiver.componentName,
                         m.receiver.opname, m.receiver.vmName);
+                } else {
+                    child = curNode.createNewChild(m.receiver.componentName,
+                        m.receiver.opname, m.receiver.vmName);
+                }
                 curNode = child;
                 curStack.push(curNode);
             } else {
@@ -138,7 +148,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
 
     public void newTrace(final MessageTrace t) throws TraceProcessingException {
         try {
-            addTraceToTree(root, t);
+            addTraceToTree(root, t, this.aggregated);
             this.reportSuccess(t.getTraceId());
         } catch (TraceProcessingException ex) {
             log.error("TraceProcessingException", ex);
@@ -148,7 +158,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
 
     public static void writeDotForMessageTrace(final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights, final boolean considerHost) throws FileNotFoundException, TraceProcessingException {
         final CallTreeNode root = new CallTreeNode(null, new CallTreeOperationHashKey("$", "", ""));
-        addTraceToTree(root, msgTrace);
+        addTraceToTree(root, msgTrace, false); // false: no aggregation
         saveTreeToDotFile(root, outputFilename, includeWeights, considerHost);
     }
 

@@ -593,7 +593,7 @@ public class TraceAnalysisTool {
      * @param traceSet
      */
     private static CallTreePlugin task_createAggregatedCallTreePlotComponent(final String name) {
-        CallTreePlugin callingTree = new CallTreePlugin(name, considerHostname);
+        CallTreePlugin callingTree = new CallTreePlugin(name, considerHostname, true); // true: aggregated
         return callingTree;
     }
 
