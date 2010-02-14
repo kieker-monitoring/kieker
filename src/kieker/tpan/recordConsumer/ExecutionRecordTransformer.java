@@ -17,6 +17,7 @@
  */
 package kieker.tpan.recordConsumer;
 
+import java.util.ArrayList;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
@@ -40,6 +41,9 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
     private final SystemEntityFactory systemFactory;
     private final boolean considerExecutionContainer;
 
+    private ArrayList<IExecutionListener> listeners =
+            new ArrayList<IExecutionListener>();
+
     public ExecutionRecordTransformer(
             final SystemEntityFactory systemFactory,
             final boolean considerExecutionEnvironment) {
@@ -49,6 +53,10 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
 
     public String[] getRecordTypeSubscriptionList() {
         return new String[]{KiekerExecutionRecord.class.getName()};
+    }
+
+    public void addListener (IExecutionListener l){
+        this.listeners.add(l);
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
@@ -95,6 +103,14 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
 
         Execution execution = new Execution(op, allocInst, execRec.traceId,
                 execRec.sessionId, execRec.eoi, execRec.ess, execRec.tin, execRec.tout);
+        for (IExecutionListener l : this.listeners){
+            try {
+                l.newExecutionEvent(execution);
+            } catch (ExecutionEventProcessingException ex) {
+                throw new RecordConsumerExecutionException("ExecutionEventProcessingException occured", ex);
+            }
+        }
+        System.out.println(execution);
     }
 
     public boolean execute() throws RecordConsumerExecutionException {

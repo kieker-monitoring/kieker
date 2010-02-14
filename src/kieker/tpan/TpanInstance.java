@@ -17,10 +17,7 @@ package kieker.tpan;
  * limitations under the License.
  * ==================================================
  */
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+
 import java.util.Vector;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.IKiekerMonitoringLogReader;

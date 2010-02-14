@@ -18,6 +18,7 @@ package kieker.tpan.tools;
  * ==================================================
  */
 
+import java.awt.datatransfer.SystemFlavorMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,6 +43,7 @@ import kieker.tpan.TpanInstance;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.AbstractTpanExecutionTraceProcessingComponent;
 import kieker.tpan.plugins.AbstractTpanMessageTraceProcessingComponent;
@@ -51,6 +53,7 @@ import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.plugins.TraceProcessingException;
 import kieker.tpan.recordConsumer.BriefJavaFxInformer;
+import kieker.tpan.recordConsumer.ExecutionRecordTransformer;
 import kieker.tpan.recordConsumer.TraceReconstructionFilter;
 
 import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
@@ -441,6 +444,10 @@ public class TraceAnalysisTool {
                 mtReconstrFilter.addInvalidExecutionTraceArtifactListener(c);
             }
             analysisInstance.addRecordConsumer(mtReconstrFilter);
+
+            // TEST with new meta-model
+            SystemEntityFactory fac = new SystemEntityFactory();
+            analysisInstance.addRecordConsumer(new ExecutionRecordTransformer(fac, considerHostname));
 
             int numErrorCount = 0;
             try {
