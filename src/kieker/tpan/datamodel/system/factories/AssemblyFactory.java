@@ -1,6 +1,7 @@
 package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.AssemblyComponentInstance;
 import kieker.tpan.datamodel.system.ComponentType;
@@ -57,5 +58,9 @@ public class AssemblyFactory extends AbstractSystemSubFactory{
             this.assemblyComponentInstancesById.add(id, newInst);
             this.assemblyComponentInstancesByName.put(name, newInst);
             return newInst;
+    }
+
+    public final Collection<AssemblyComponentInstance> getAssemblyComponentInstances(){
+        return this.assemblyComponentInstancesById;
     }
 }

@@ -1,6 +1,7 @@
 package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.ExecutionContainer;
 
@@ -54,5 +55,9 @@ public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
             this.executionContainersById.add(id, newInst);
             this.executionContainersByName.put(name, newInst);
             return newInst;
+    }
+
+    public final Collection<ExecutionContainer> getExecutionContainers(){
+        return this.executionContainersById;
     }
 }

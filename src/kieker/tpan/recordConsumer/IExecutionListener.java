@@ -27,4 +27,6 @@ import kieker.tpan.datamodel.system.Execution;
 public interface IExecutionListener {
     public void newExecutionEvent (Execution execution)
             throws ExecutionEventProcessingException;
+
+    public void terminate();
 }

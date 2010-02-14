@@ -1,6 +1,7 @@
 package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.ComponentType;
 
@@ -53,5 +54,9 @@ public class TypeRepositoryFactory extends AbstractSystemSubFactory {
         this.componentTypesById.add(id, newInst);
         this.componentTypesByName.put(fullqualifiedName, newInst);
         return newInst;
+    }
+
+    public final Collection<ComponentType> getComponentTypes(){
+        return this.componentTypesById;
     }
 }

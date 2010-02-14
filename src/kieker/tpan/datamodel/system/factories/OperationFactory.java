@@ -1,6 +1,7 @@
 package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.ComponentType;
 import kieker.tpan.datamodel.system.Operation;
@@ -59,5 +60,9 @@ public class OperationFactory extends AbstractSystemSubFactory {
             this.operationsById.add(id, newInst);
             this.operationsByName.put(name, newInst);
             return newInst;
+    }
+
+    public final Collection<Operation> getOperations(){
+        return this.operationsById;
     }
 }

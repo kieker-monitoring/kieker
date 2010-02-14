@@ -145,7 +145,6 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         }
 
         this.processQueue();
-
     }
 
     private void processQueue() throws ExecutionEventProcessingException {
@@ -155,7 +154,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             ExecutionTrace polledTrace = timeoutMap.pollFirst();
             long curTraceId = polledTrace.getTraceId();
             pendingTraces.remove(curTraceId);
-            log.info("Removed pending trace (ID:" + curTraceId + "):" + polledTrace);
+            //log.info("Removed pending trace (ID:" + curTraceId + "):" + polledTrace);
             try {
                 // if the polled trace is invalid, the following method toMesageTrace
                 // throws an exception
@@ -224,6 +223,15 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
 
     public void addInvalidExecutionTraceArtifactListener(IExecutionTraceReceiver l) {
         this.invalidExecutionTraceArtifactListeners.add(l);
+    }
+
+    public void terminate() {
+        try {
+            this.terminate = true;
+            this.processQueue();
+        } catch (ExecutionEventProcessingException ex) {
+            log.error("Error prossessing queue", ex);
+        }
     }
 
     public HashMap<ExecutionTrace, Integer> getEquivalenceClassMap() {

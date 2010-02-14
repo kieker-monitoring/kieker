@@ -1,5 +1,6 @@
 package kieker.tpan.datamodel.system;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.Stack;
@@ -28,14 +29,34 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-
 /** @author Andre van Hoorn
  */
 public class ExecutionTrace {
+
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
     private long traceId = -1; // convenience field. All executions have this traceId.
-    private SortedSet<Execution> set = new TreeSet<Execution>();
+    private SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
 
+        public int compare(Execution e1, Execution e2) {
+            if (e1.getTraceId() == e2.getTraceId()) {
+                if (e1.getEoi() < e2.getEoi()) {
+                    return -1;
+                }
+                if (e1.getEoi() > e2.getEoi()) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (e1.getTin() < e2.getTin()) {
+                    return -1;
+                }
+                if (e1.getTin() > e2.getTin()) {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+    });
     private long minTin = Long.MAX_VALUE;
     private long maxTout = Long.MIN_VALUE;
     private int maxStackDepth = -1;
@@ -52,12 +73,18 @@ public class ExecutionTrace {
     }
 
     public void add(Execution execution) throws InvalidTraceException {
-        if (this.traceId != execution.getTraceId()){
-            throw new InvalidTraceException("TraceId of new record ("+execution.getTraceId()+") differs from Id of this trace ("+this.traceId+")");
+        if (this.traceId != execution.getTraceId()) {
+            throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.traceId + ")");
         }
-        if (execution.getTin() < this.minTin) this.minTin = execution.getTin();
-        if (execution.getTout() > this.maxTout) this.maxTout = execution.getTout();
-        if (execution.getEss() > this.maxStackDepth) this.maxStackDepth = execution.getEss();
+        if (execution.getTin() < this.minTin) {
+            this.minTin = execution.getTin();
+        }
+        if (execution.getTout() > this.maxTout) {
+            this.maxTout = execution.getTout();
+        }
+        if (execution.getEss() > this.maxStackDepth) {
+            this.maxStackDepth = execution.getEss();
+        }
         this.set.add(execution);
     }
 
@@ -71,17 +98,17 @@ public class ExecutionTrace {
         int prevEoi = -1;
         while (eSeqIt.hasNext()) {
             curE = eSeqIt.next();
-            if(itNum++ == 0 && curE.getEss() != 0){
-                InvalidTraceException ex = 
-                        new InvalidTraceException("First execution must have ess "+
-                        "0 (found " + curE.getEss() + ")\n Causing execution: " + curE);
+            if (itNum++ == 0 && curE.getEss() != 0) {
+                InvalidTraceException ex =
+                        new InvalidTraceException("First execution must have ess "
+                        + "0 (found " + curE.getEss() + ")\n Causing execution: " + curE);
                 log.fatal("Found invalid trace", ex);
                 throw ex;
             }
-            if (prevEoi!=curE.getEoi()-1){
+            if (prevEoi != curE.getEoi() - 1) {
                 InvalidTraceException ex =
-                        new InvalidTraceException("Eois must increment by 1 --" +
-                        "but found sequence <"+prevEoi+","+curE.getEoi()+">" +"(Execution: "+curE+")");
+                        new InvalidTraceException("Eois must increment by 1 --"
+                        + "but found sequence <" + prevEoi + "," + curE.getEoi() + ">" + "(Execution: " + curE + ")");
                 log.fatal("Found invalid trace", ex);
                 throw ex;
             }
@@ -133,19 +160,13 @@ public class ExecutionTrace {
         return this.set;
     }
 
-    public final int getLength(){
+    public final int getLength() {
         return this.set.size();
     }
 
     public String toString() {
-        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId)
-                .append(" (minTin=").append(this.minTin).append(" (")
-                .append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.minTin)).append(")")
-                .append("; maxTout=").append(this.maxTout).append(" (")
-                .append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.maxTout)).append(")")
-                .append("; maxStackDepth=").append(this.maxStackDepth)
-                .append("):\n");
-        for (Execution e : this.set){
+        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
+        for (Execution e : this.set) {
             strBuild.append(e.toString()).append("\n");
         }
         return strBuild.toString();
@@ -162,5 +183,4 @@ public class ExecutionTrace {
     public long getMinTin() {
         return this.minTin;
     }
-
 }

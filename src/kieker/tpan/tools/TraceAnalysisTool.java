@@ -18,7 +18,6 @@ package kieker.tpan.tools;
  * ==================================================
  */
 
-import java.awt.datatransfer.SystemFlavorMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -350,6 +349,9 @@ public class TraceAnalysisTool {
         
 
         TraceReconstructionFilter mtReconstrFilter = null;
+        // TEST with new meta-model
+        kieker.tpan.plugins.TraceReconstructionFilter mtReconstrFilter2 = null;
+        // END test with new meta-model
         try {
             List<AbstractTpanMessageTraceProcessingComponent> msgTraceProcessingComponents = new ArrayList<AbstractTpanMessageTraceProcessingComponent>();
             List<AbstractTpanExecutionTraceProcessingComponent> execTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
@@ -446,8 +448,16 @@ public class TraceAnalysisTool {
             analysisInstance.addRecordConsumer(mtReconstrFilter);
 
             // TEST with new meta-model
-            SystemEntityFactory fac = new SystemEntityFactory();
-            analysisInstance.addRecordConsumer(new ExecutionRecordTransformer(fac, considerHostname));
+//            SystemEntityFactory fac = new SystemEntityFactory();
+//            mtReconstrFilter2 =
+//                    new kieker.tpan.plugins.TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME+" <new meta-model>",
+//                    maxTraceDurationMillis, ignoreInvalidTraces, traceEquivClassMode,
+//                    considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
+//                    ignoreRecordsAfterTimestamp);
+//            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(fac, considerHostname);
+//            execRecTransformer.addListener(mtReconstrFilter2);
+//            analysisInstance.addRecordConsumer(execRecTransformer);
+            // END test with new meta-model
 
             int numErrorCount = 0;
             try {
@@ -504,6 +514,10 @@ public class TraceAnalysisTool {
             if (mtReconstrFilter != null) {
                 mtReconstrFilter.printStatusMessage();
             }
+            if (mtReconstrFilter2 != null){
+                mtReconstrFilter2.printStatusMessage();
+            }
+
             System.out.println("");
             System.out.println("See 'kieker.log' for details");
         }

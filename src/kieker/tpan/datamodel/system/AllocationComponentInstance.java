@@ -41,8 +41,8 @@ public class AllocationComponentInstance {
     @Override
     public final String toString(){
         StringBuilder strBuild = new StringBuilder();
-        strBuild.append(this.assemblyComponent.toString())
-                .append(" @ ").append(this.executionContainer.getName());
+        strBuild.append(this.executionContainer.getName())
+                .append("::").append(this.assemblyComponent.toString());
         return strBuild.toString();
     }
 

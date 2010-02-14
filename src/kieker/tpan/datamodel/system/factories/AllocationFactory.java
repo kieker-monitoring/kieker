@@ -1,6 +1,7 @@
 package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
 import kieker.tpan.datamodel.system.AssemblyComponentInstance;
@@ -60,5 +61,9 @@ public class AllocationFactory extends AbstractSystemSubFactory {
             this.allocationComponentInstancesById.add(id, newInst);
             this.allocationComponentInstancesByName.put(name, newInst);
             return newInst;
+    }
+
+    public final Collection<AllocationComponentInstance> getAllocationComponentInstances(){
+        return this.allocationComponentInstancesById;
     }
 }
