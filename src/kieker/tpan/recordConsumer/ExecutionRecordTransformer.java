@@ -72,8 +72,9 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
         String assemblyComponentName = componentTypeName;
         String allocationComponentName =
                 new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
-        String operationName =
+        String operationFactoryName =
                 new StringBuilder(allocationComponentName).append(".").append(execRec.opname).toString();
+        String operationName = execRec.opname;
 
         AllocationComponentInstance allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);
         if (allocInst == null) { /* Allocation component instance doesn't exist */
@@ -95,10 +96,10 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
             allocInst = this.systemFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
         }
 
-        Operation op = this.systemFactory.getOperationFactory().getOperationByFactoryIdentifier(operationName);
+        Operation op = this.systemFactory.getOperationFactory().getOperationByFactoryIdentifier(operationFactoryName);
         if (op == null) { /* Operation doesn't exist */
             Signature signature = new Signature(operationName, "<>", new String[0]);
-            op = this.systemFactory.getOperationFactory().createAndRegisterOperation(operationName, allocInst.getAssemblyComponent().getType(), signature);
+            op = this.systemFactory.getOperationFactory().createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
         }
 
         Execution execution = new Execution(op, allocInst, execRec.traceId,
