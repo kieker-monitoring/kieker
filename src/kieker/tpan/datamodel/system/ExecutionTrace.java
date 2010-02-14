@@ -1,15 +1,12 @@
-package kieker.tpan.datamodel;
+package kieker.tpan.datamodel.system;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
+import kieker.tpan.datamodel.InvalidTraceException;
 import kieker.tpan.tools.LoggingTimestampConverterTool;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 public class ExecutionTrace {
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
     private long traceId = -1; // convenience field. All executions have this traceId.
-    private SortedSet<KiekerExecutionRecord> set = new TreeSet<KiekerExecutionRecord>();
+    private SortedSet<Execution> set = new TreeSet<Execution>();
 
     private long minTin = Long.MAX_VALUE;
     private long maxTout = Long.MIN_VALUE;
@@ -54,55 +51,55 @@ public class ExecutionTrace {
         return traceId;
     }
 
-    public void add(KiekerExecutionRecord record) throws InvalidTraceException {
-        if (this.traceId != record.traceId){
-            throw new InvalidTraceException("TraceId of new record ("+record.traceId+") differs from Id of this trace ("+this.traceId+")");
+    public void add(Execution execution) throws InvalidTraceException {
+        if (this.traceId != execution.getTraceId()){
+            throw new InvalidTraceException("TraceId of new record ("+execution.getTraceId()+") differs from Id of this trace ("+this.traceId+")");
         }
-        if (record.tin < this.minTin) this.minTin = record.tin;
-        if (record.tout > this.maxTout) this.maxTout = record.tout;
-        if (record.ess > this.maxStackDepth) this.maxStackDepth = record.ess;
-        this.set.add(record);
+        if (execution.getTin() < this.minTin) this.minTin = execution.getTin();
+        if (execution.getTout() > this.maxTout) this.maxTout = execution.getTout();
+        if (execution.getEss() > this.maxStackDepth) this.maxStackDepth = execution.getEss();
+        this.set.add(execution);
     }
 
     public MessageTrace toMessageTrace() throws InvalidTraceException {
         Vector<Message> mSeq = new Vector<Message>();
         Stack<Message> curStack = new Stack<Message>();
-        Iterator<KiekerExecutionRecord> eSeqIt = this.set.iterator();
-        KiekerExecutionRecord curE = null, prevE = null;
+        Iterator<Execution> eSeqIt = this.set.iterator();
+        Execution curE = null, prevE = null;
         int itNum = 0;
         //log.info("Analyzing trace " + this.traceId);
         int prevEoi = -1;
         while (eSeqIt.hasNext()) {
             curE = eSeqIt.next();
-            if(itNum++ == 0 && curE.ess != 0){
+            if(itNum++ == 0 && curE.getEss() != 0){
                 InvalidTraceException ex = 
                         new InvalidTraceException("First execution must have ess "+
-                        "0 (found " + curE.ess + ")\n Causing execution: " + curE);
+                        "0 (found " + curE.getEss() + ")\n Causing execution: " + curE);
                 log.fatal("Found invalid trace", ex);
                 throw ex;
             }
-            if (prevEoi!=curE.eoi-1){
+            if (prevEoi!=curE.getEoi()-1){
                 InvalidTraceException ex =
                         new InvalidTraceException("Eois must increment by 1 --" +
-                        "but found sequence <"+prevEoi+","+curE.eoi+">" +"(Execution: "+curE+")");
+                        "but found sequence <"+prevEoi+","+curE.getEoi()+">" +"(Execution: "+curE+")");
                 log.fatal("Found invalid trace", ex);
                 throw ex;
             }
-            prevEoi = curE.eoi;
+            prevEoi = curE.getEoi();
 
             /*log.info("");
             log.info("Iteration" + (itNum++));
             log.info("curE:" + curE);
             log.info("prevE:" + prevE);*/
             // First, we might need to clean up the stack for the next execution callMessage 
-            if (prevE != null && prevE.ess >= curE.ess) {
+            if (prevE != null && prevE.getEss() >= curE.getEss()) {
                 //log.info("Cleaning stack ...");
-                KiekerExecutionRecord curReturnReceiver; // receiverComponentName of return message
-                while (curStack.size() > curE.ess) {
+                Execution curReturnReceiver; // receiverComponentName of return message
+                while (curStack.size() > curE.getEss()) {
                     //log.info("loop begin: curStack.size() " + curStack.size());
-                    prevE = curStack.pop().execution;
-                    curReturnReceiver = curStack.peek().execution;
-                    Message m = new Message(false, prevE.tout, prevE, curReturnReceiver, prevE);
+                    prevE = curStack.pop().getSendingExecution(); //.execution;
+                    curReturnReceiver = curStack.peek().getSendingExecution(); //.execution;
+                    Message m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
                     mSeq.add(m);
                     prevE = curReturnReceiver;
                     //log.info(m);
@@ -111,19 +108,19 @@ public class ExecutionTrace {
             }
             // Now, we handle the current execution callMessage 
             if (prevE == null) { // initial execution callMessage
-                Message m = new Message(true, curE.tin, null, curE, curE);
+                Message m = new SynchronousCallMessage(curE.getTin(), null, curE);
                 mSeq.add(m);
                 curStack.push(m);
-            } else if (prevE.ess < curE.ess) { // usual callMessage with senderComponentName and receiverComponentName
-                Message m = new Message(true, curE.tin, prevE, curE, curE);
+            } else if (prevE.getEss() < curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
+                Message m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
                 mSeq.add(m);
                 curStack.push(m);
             }
             if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
                 while (!curStack.empty()) {
-                    curE = curStack.pop().execution;
-                    prevE = curStack.empty() ? null : curStack.peek().execution;
-                    Message m = new Message(false, curE.tout, curE, prevE, curE);
+                    curE = curStack.pop().getSendingExecution(); //.execution;
+                    prevE = curStack.empty() ? null : curStack.peek().getSendingExecution(); //.execution;
+                    Message m = new SynchronousReplyMessage(curE.getTout(), curE, prevE);
                     mSeq.add(m);
                 }
             }
@@ -132,7 +129,7 @@ public class ExecutionTrace {
         return new MessageTrace(this.traceId, mSeq);
     }
 
-    public final SortedSet<KiekerExecutionRecord> getTraceAsSortedSet() {
+    public final SortedSet<Execution> getTraceAsSortedSet() {
         return this.set;
     }
 
@@ -148,20 +145,8 @@ public class ExecutionTrace {
                 .append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.maxTout)).append(")")
                 .append("; maxStackDepth=").append(this.maxStackDepth)
                 .append("):\n");
-        Iterator<KiekerExecutionRecord> it = set.iterator();
-        while (it.hasNext()) {
-            KiekerExecutionRecord e = it.next();
-            strBuild.append("<");
-            strBuild.append("[").append(e.eoi)
-                    .append(",").append(e.ess).append("]").append(" ");
-            strBuild.append(e.tin).append("-").append(e.tout).append(" ");
-            strBuild.append((e.vmName!=null)?e.vmName:"<NOVMNAME>").append("::");
-            strBuild.append((e.componentName!=null)?e.componentName:"<NOCOMPONENTNAME>").append(".");            
-            strBuild.append((e.opname!=null)?e.opname:"<NOOPNAME>").append(" ");            
-            
-            strBuild.append((e.sessionId!=null)?e.sessionId:"<NOSESSIONID>");            
-            
-            strBuild.append(">\n");
+        for (Execution e : this.set){
+            strBuild.append(e.toString()).append("\n");
         }
         return strBuild.toString();
     }
