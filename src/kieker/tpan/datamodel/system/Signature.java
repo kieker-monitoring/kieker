@@ -25,9 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Andre van Hoorn
  */
 public class Signature {
-    private static final AtomicInteger nextId = new AtomicInteger(0);
-
-    private final int id = nextId.getAndIncrement();
     private final String name;
 
     private final String returnType;
@@ -56,9 +53,5 @@ public class Signature {
 
     public final String getReturnType() {
         return this.returnType;
-    }
-
-    public final int getId() {
-        return this.id;
     }
 }

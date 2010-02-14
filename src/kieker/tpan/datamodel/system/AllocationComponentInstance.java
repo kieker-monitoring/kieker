@@ -45,4 +45,18 @@ public class AllocationComponentInstance {
                 .append(this.assemblyComponent.toString());
         return strBuild.toString();
     }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof AllocationComponentInstance)){
+            return false;
+        }
+        AllocationComponentInstance other = (AllocationComponentInstance)obj;
+        return other.id == this.id;
+    }
 }

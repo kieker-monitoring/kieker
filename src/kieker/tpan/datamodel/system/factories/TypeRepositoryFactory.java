@@ -2,7 +2,6 @@ package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.concurrent.atomic.AtomicInteger;
 import kieker.tpan.datamodel.system.ComponentType;
 
 /*
@@ -22,17 +21,37 @@ import kieker.tpan.datamodel.system.ComponentType;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  *
  * @author Andre van Hoorn
  */
-public class TypeRepositoryFactory {
-    private final AtomicInteger nextId = new AtomicInteger(0);
+public class TypeRepositoryFactory extends AbstractSystemSubFactory {
 
-    private final Hashtable<String, ComponentType>
-            componentTypesByName =
+    private final Hashtable<String, ComponentType> componentTypesByName =
             new Hashtable<String, ComponentType>();
-    private final ArrayList<ComponentType>
-            componentTypesById = new ArrayList<ComponentType>();
+    private final ArrayList<ComponentType> componentTypesById = new ArrayList<ComponentType>();
+
+    public TypeRepositoryFactory(SystemEntityFactory systemFactory) {
+        super(systemFactory);
+    }
+
+    /** Returns the instance for the passed name; null if no instance
+     *  with this name.
+     */
+    public final ComponentType getComponentTypeByName(final String name) {
+        return this.componentTypesByName.get(name);
+    }
+
+    public final ComponentType createAndRegisterComponentType(
+            final String fullqualifiedName) {
+        ComponentType newInst;
+        if (this.componentTypesByName.containsKey(fullqualifiedName)) {
+            throw new IllegalArgumentException("Element with name " + fullqualifiedName + "exists already");
+        }
+        int id = this.getAndIncrementNextId();
+        newInst = new ComponentType(id, fullqualifiedName);
+        this.componentTypesById.add(id, newInst);
+        this.componentTypesByName.put(fullqualifiedName, newInst);
+        return newInst;
+    }
 }

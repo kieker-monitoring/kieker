@@ -2,7 +2,6 @@ package kieker.tpan.datamodel.system;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  * ==================LICENCE=========================
@@ -27,19 +26,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Andre van Hoorn
  */
 public class ExecutionContainer {
-    private static final AtomicInteger nextId = new AtomicInteger(0);
-
-    private final int id = nextId.getAndIncrement();
+    private final int id;
     private final String name;
     private final ExecutionContainer parent;
     private Collection<ExecutionContainer> childContainers = new ArrayList<ExecutionContainer>();
 
     private ExecutionContainer(){
+        this.id = -1;
         this.parent = null;
         this.name = null; }
 
-    public ExecutionContainer(final ExecutionContainer parent,
+    public ExecutionContainer(final int id,
+            final ExecutionContainer parent,
             final String name){
+        this.id = id;
         this.name = name;
         this.parent = parent;
     }
@@ -62,5 +62,19 @@ public class ExecutionContainer {
 
     public final void addChildContainer(ExecutionContainer container){
         this.childContainers.add(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ExecutionContainer)){
+            return false;
+        }
+        ExecutionContainer other = (ExecutionContainer)obj;
+        return other.id == this.id;
     }
 }

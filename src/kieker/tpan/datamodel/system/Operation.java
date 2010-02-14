@@ -1,7 +1,5 @@
 package kieker.tpan.datamodel.system;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -25,19 +23,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Andre van Hoorn
  */
 public class Operation {
-    private static final AtomicInteger nextId = new AtomicInteger(0);
-
-    private final int id = nextId.getAndIncrement();
+    private final int id;
     private final ComponentType componentType;
     private final Signature signature;
 
     private Operation (){
+        this.id = -1;
         this.componentType = null;
         this.signature = null;
     }
 
-    public Operation (final ComponentType componentType,
+    public Operation (final int id,
+            final ComponentType componentType,
             final Signature signature){
+        this.id = id;
         this.componentType = componentType;
         this.signature = signature;
     }
@@ -52,5 +51,19 @@ public class Operation {
 
     public final Signature getSignature() {
         return signature;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Operation)){
+            return false;
+        }
+        Operation other = (Operation)obj;
+        return other.id == this.id;
     }
 }

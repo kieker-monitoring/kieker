@@ -2,8 +2,9 @@ package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.concurrent.atomic.AtomicInteger;
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.system.AssemblyComponentInstance;
+import kieker.tpan.datamodel.system.ExecutionContainer;
 
 /*
  * ==================LICENCE=========================
@@ -27,12 +28,37 @@ import kieker.tpan.datamodel.system.AllocationComponentInstance;
  *
  * @author Andre van Hoorn
  */
-public class AllocationFactory {
-    private final AtomicInteger nextId = new AtomicInteger(0);
-
+public class AllocationFactory extends AbstractSystemSubFactory {
     private final Hashtable<String, AllocationComponentInstance>
             allocationComponentInstancesByName =
             new Hashtable<String, AllocationComponentInstance>();
     private final ArrayList<AllocationComponentInstance>
             allocationComponentInstancesById = new ArrayList<AllocationComponentInstance>();
+
+    public AllocationFactory(SystemEntityFactory systemFactory){
+        super(systemFactory);
+    }
+
+    /** Returns the instance for the passed name; null if no instance
+     *  with this name.
+     */
+    public final AllocationComponentInstance getAllocationComponentInstanceByName(final String name){
+        return this.allocationComponentInstancesByName.get(name);
+    }
+
+    public final AllocationComponentInstance createAndRegisterAllocationComponentInstance(
+            final String name,
+            final AssemblyComponentInstance assemblyComponentInstance,
+            final ExecutionContainer executionContainer){
+            AllocationComponentInstance newInst;
+            if (this.allocationComponentInstancesByName.containsKey(name)){
+                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            }
+            int id = this.getAndIncrementNextId();
+            newInst = new AllocationComponentInstance(id,
+                    assemblyComponentInstance, executionContainer);
+            this.allocationComponentInstancesById.add(id, newInst);
+            this.allocationComponentInstancesByName.put(name, newInst);
+            return newInst;
+    }
 }

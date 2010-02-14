@@ -312,7 +312,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             if (this == obj) {
                 return true;
             }
-            if (obj == null) {
+            if (obj == null || !(obj instanceof ExecutionTrace)) {
                 return false;
             }
             ExecutionTrace otherTrace = ((ExecutionTraceHashContainer) obj).t;

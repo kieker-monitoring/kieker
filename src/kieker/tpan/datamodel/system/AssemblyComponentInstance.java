@@ -34,8 +34,8 @@ public class AssemblyComponentInstance {
     }
 
     public AssemblyComponentInstance(
-            final int id,
-            final ComponentType type, final String name){
+            final int id, final String name,
+            final ComponentType type){
         this.id = id;
         this.name = name;
         this.type = type;
@@ -59,5 +59,19 @@ public class AssemblyComponentInstance {
         strBuild.append(this.name).append(":")
                 .append(this.type.getFullQualifiedName());
         return strBuild.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof AssemblyComponentInstance)){
+            return false;
+        }
+        AssemblyComponentInstance other = (AssemblyComponentInstance)obj;
+        return other.id == this.id;
     }
 }

@@ -2,7 +2,6 @@ package kieker.tpan.datamodel.system;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  * ==================LICENCE=========================
@@ -26,21 +25,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Andre van Hoorn
  */
 public class ComponentType {
-
-    private static final AtomicInteger nextId = new AtomicInteger(0);
-
-    private final int id = nextId.getAndIncrement();
+    private final int id;
     private final String packageName;
     private final String typeName;
     private Collection<Operation> operations = new ArrayList<Operation>();
 
-    public ComponentType(final String packageName,
+    public ComponentType(final int id, final String packageName,
             final String typeName) {
+        this.id = id;
         this.packageName = packageName;
         this.typeName = typeName;
     }
 
-    public ComponentType(final String fullqualifiedTypeName) {
+    public ComponentType(final int id, final String fullqualifiedTypeName) {
+        this.id = id;
         String tmpPackagName;
         String tmpTypeName;
         if (fullqualifiedTypeName.indexOf('.') != -1) {
@@ -81,9 +79,22 @@ public class ComponentType {
         return this.operations;
     }
 
-    public final Operation newOperation(Signature signature){
-        Operation op = new Operation(this, signature);
+    public final Operation addOperation(Operation op){
         this.operations.add(op);
         return op;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ComponentType)){
+            return false;
+        }
+        ComponentType other = (ComponentType)obj;
+        return other.id == this.id;
     }
 }

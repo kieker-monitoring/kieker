@@ -23,7 +23,7 @@ package kieker.tpan.datamodel.system;
  * @author Andre van Hoorn
  */
 public class Execution {
-    private final Operation op;
+    private final Operation operation;
     private final AllocationComponentInstance allocationComponent;
     private long traceId;
     private String sessionId;
@@ -33,7 +33,7 @@ public class Execution {
     private final long tout;
 
     public Execution() {
-        this.op = null;
+        this.operation = null;
         this.allocationComponent = null;
         this.traceId = -1;
         this.sessionId = null;
@@ -44,7 +44,7 @@ public class Execution {
     }
 
     public Execution(Operation op, AllocationComponentInstance allocationComponent, long traceId, String sessionId, int eoi, int ess, long tin, long tout) {
-        this.op = op;
+        this.operation = op;
         this.allocationComponent = allocationComponent;
         this.traceId = traceId;
         this.sessionId = sessionId;
@@ -66,8 +66,8 @@ public class Execution {
         return ess;
     }
 
-    public final Operation getOp() {
-        return op;
+    public final Operation getOperation() {
+        return operation;
     }
 
     public final String getSessionId() {
@@ -86,6 +86,7 @@ public class Execution {
         return traceId;
     }
 
+    @Override
     public String toString(){
         StringBuilder strBuild = new StringBuilder();
             strBuild.append("<");
@@ -93,7 +94,7 @@ public class Execution {
                     .append(",").append(this.ess).append("]").append(" ");
             strBuild.append(this.tin).append("-").append(this.tout).append(" ");
             strBuild.append(this.allocationComponent.toString()).append(".");
-            strBuild.append(this.op.getSignature().getName()).append(" ");
+            strBuild.append(this.operation.getSignature().getName()).append(" ");
 
             strBuild.append((this.sessionId!=null)?this.sessionId:"<NOSESSIONID>");
 

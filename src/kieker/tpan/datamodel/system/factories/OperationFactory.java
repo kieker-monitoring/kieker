@@ -2,8 +2,9 @@ package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.concurrent.atomic.AtomicInteger;
+import kieker.tpan.datamodel.system.ComponentType;
 import kieker.tpan.datamodel.system.Operation;
+import kieker.tpan.datamodel.system.Signature;
 
 /*
  * ==================LICENCE=========================
@@ -27,11 +28,36 @@ import kieker.tpan.datamodel.system.Operation;
  *
  * @author Andre van Hoorn
  */
-public class OperationFactory {
-    private final AtomicInteger nextId = new AtomicInteger(0);
-
+public class OperationFactory extends AbstractSystemSubFactory {
     private final Hashtable<String, Operation> operationsByName =
             new Hashtable<String, Operation>();
     private final ArrayList<Operation> operationsById =
             new ArrayList<Operation>();
+
+    public OperationFactory(SystemEntityFactory systemFactory){
+        super(systemFactory);
+    }
+
+    /** Returns the instance for the passed name; null if no instance
+     *  with this name.
+     */
+    public final Operation getOperationByName(final String name){
+        return this.operationsByName.get(name);
+    }
+
+    public final Operation createAndRegisterOperation(
+            final String name,
+            final ComponentType componentType,
+            final Signature signature){
+            Operation newInst;
+            if (this.operationsByName.containsKey(name)){
+                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            }
+            int id = this.getAndIncrementNextId();
+            newInst = new Operation(id,
+                    componentType, signature);
+            this.operationsById.add(id, newInst);
+            this.operationsByName.put(name, newInst);
+            return newInst;
+    }
 }

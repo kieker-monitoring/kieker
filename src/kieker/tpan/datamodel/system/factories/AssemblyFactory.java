@@ -2,8 +2,8 @@ package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.concurrent.atomic.AtomicInteger;
 import kieker.tpan.datamodel.system.AssemblyComponentInstance;
+import kieker.tpan.datamodel.system.ComponentType;
 
 /*
  * ==================LICENCE=========================
@@ -27,12 +27,35 @@ import kieker.tpan.datamodel.system.AssemblyComponentInstance;
  *
  * @author Andre van Hoorn
  */
-public class AssemblyFactory {
-    private final AtomicInteger nextId = new AtomicInteger(0);
-
+public class AssemblyFactory extends AbstractSystemSubFactory{
     private final Hashtable<String, AssemblyComponentInstance>
             assemblyComponentInstancesByName =
             new Hashtable<String, AssemblyComponentInstance>();
     private final ArrayList<AssemblyComponentInstance>
             assemblyComponentInstancesById = new ArrayList<AssemblyComponentInstance>();
+
+    public AssemblyFactory(SystemEntityFactory systemFactory){
+        super(systemFactory);
+    }
+
+    /** Returns the instance for the passed name; null if no instance
+     *  with this name.
+     */
+    public final AssemblyComponentInstance getAssemblyComponentInstanceByName(final String name){
+        return this.assemblyComponentInstancesByName.get(name);
+    }
+
+    public final AssemblyComponentInstance createAndRegisterAssemblyComponentInstance(
+            final String name,
+            final ComponentType componentType){
+            AssemblyComponentInstance newInst;
+            if (this.assemblyComponentInstancesByName.containsKey(name)){
+                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            }
+            int id = this.getAndIncrementNextId();
+            newInst = new AssemblyComponentInstance(id, name, componentType);
+            this.assemblyComponentInstancesById.add(id, newInst);
+            this.assemblyComponentInstancesByName.put(name, newInst);
+            return newInst;
+    }
 }

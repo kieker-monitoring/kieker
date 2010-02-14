@@ -2,7 +2,6 @@ package kieker.tpan.datamodel.system.factories;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.concurrent.atomic.AtomicInteger;
 import kieker.tpan.datamodel.system.ExecutionContainer;
 
 /*
@@ -27,11 +26,33 @@ import kieker.tpan.datamodel.system.ExecutionContainer;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionEnvironmentFactory {
-    private final AtomicInteger nextId = new AtomicInteger(0);
-
+public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
     private final Hashtable<String, ExecutionContainer> executionContainersByName =
             new Hashtable<String, ExecutionContainer>();
     private final ArrayList<ExecutionContainer> executionContainersById =
             new ArrayList<ExecutionContainer>();
+
+    public ExecutionEnvironmentFactory(SystemEntityFactory systemFactory){
+        super(systemFactory);
+    }
+
+   /** Returns the instance for the passed name; null if no instance
+     *  with this name.
+     */
+    public final ExecutionContainer getExecutionContainerByName(final String name){
+        return this.executionContainersByName.get(name);
+    }
+
+    public final ExecutionContainer createAndRegisterExecutionContainer(
+            final String name){
+            ExecutionContainer newInst;
+            if (this.executionContainersByName.containsKey(name)){
+                throw new IllegalArgumentException("Element with name " + name + "exists already");
+            }
+            int id = this.getAndIncrementNextId();
+            newInst = new ExecutionContainer(id, null, name);
+            this.executionContainersById.add(id, newInst);
+            this.executionContainersByName.put(name, newInst);
+            return newInst;
+    }
 }
