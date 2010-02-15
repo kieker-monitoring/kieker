@@ -48,6 +48,7 @@ import kieker.tpan.plugins.traceReconstruction.AbstractTpanExecutionTraceProcess
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanTraceProcessingComponent;
 import kieker.tpan.plugins.callTree.CallTreePlugin;
+import kieker.tpan.plugins.dependencyGraph.AllocationComponentDependencyGraph;
 import kieker.tpan.plugins.dependencyGraph.DependencyGraphPlugin;
 import kieker.tpan.plugins.sequenceDiagram.SequenceDiagramPlugin;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
@@ -590,7 +591,7 @@ public class TraceAnalysisTool {
      * @param traceSet
      */
     private static DependencyGraphPlugin task_createDependencyGraphPlotComponent(final String name) {
-        DependencyGraphPlugin depGraph = new DependencyGraphPlugin(name, systemEntityFactory);
+        DependencyGraphPlugin depGraph = new AllocationComponentDependencyGraph(name, systemEntityFactory);
         return depGraph;
     }
 

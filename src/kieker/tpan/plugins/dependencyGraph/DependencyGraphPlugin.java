@@ -24,7 +24,6 @@ import java.io.PrintStream;
 import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.AllocationComponentInstance;
 import kieker.tpan.datamodel.Execution;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
@@ -36,7 +35,7 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingComponent {
+public abstract class DependencyGraphPlugin<T> extends AbstractTpanMessageTraceProcessingComponent {
 
     private static final Log log = LogFactory.getLog(DependencyGraphPlugin.class);
     private AdjacencyMatrix adjMatrix;
@@ -47,33 +46,13 @@ public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingCom
         this.adjMatrix = new AdjacencyMatrix(systemEntityFactory);
     }
 
-    private String nodeLabel(final AllocationComponentDependencyNode node,
-            final boolean shortLabels){
-        AllocationComponentInstance component = node.getAllocationComponent();
-        if (component == super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent){
-            return "$";
-        }
+    protected abstract String nodeLabel(final DependencyNode<T> node,
+            final boolean shortLabels);
 
-        String resourceContainerName = component.getExecutionContainer().getName();
-        String assemblyComponentName = component.getAssemblyComponent().getName();
-        String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
-        String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
-
-        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::")
-                .append(assemblyComponentName).append(":");
-        if (!shortLabels){
-            strBuild.append(componentTypePackagePrefx);
-        } else {
-            strBuild.append("..");
-        }
-        strBuild.append(componentTypeIdentifier);
-        return strBuild.toString();
-    }
-
-    private void dotEdges(Collection<AllocationComponentDependencyNode> nodes,
+    private void dotEdges(Collection<DependencyNode> nodes,
             PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
-        for (AllocationComponentDependencyNode node : nodes) {
+        for (DependencyNode node : nodes) {
             strBuild.append(node.getId()).append("[label =\"")
                     .append(nodeLabel(node, shortLabels)).append("\",shape=box];\n");
         }
@@ -81,15 +60,16 @@ public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingCom
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    private void dotVerticesFromSubTree(final AllocationComponentDependencyNode n,
+    private void dotVerticesFromSubTree(final DependencyNode n,
         final PrintStream ps, final boolean includeWeights) {
-        for (AllocationComponentDependencyEdge outgoingDependency : n.getOutgoingDependencies()) {
-            AllocationComponentDependencyNode destNode = outgoingDependency.getDestination();
+        for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>)n.getOutgoingDependencies()) {
+            DependencyNode destNode = outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
             strBuild.append("\n").append(n.getId()).append("->")
                     .append(destNode.getId()).append("[style=dashed,arrowhead=open");
-            if (includeWeights) {
-                strBuild.append(",label = ").append(outgoingDependency.getOutgoingWeight()).append(", weight =").append(outgoingDependency.getOutgoingWeight());
+            if (includeWeights && outgoingDependency instanceof WeightedDependencyEdge) {
+                WeightedDependencyEdge weightedOutgoingDependency = (WeightedDependencyEdge) outgoingDependency;
+                strBuild.append(",label = ").append(weightedOutgoingDependency.getOutgoingWeight()).append(", weight =").append(((WeightedDependencyEdge)outgoingDependency).getOutgoingWeight());
             }
             strBuild.append(" ]");
             dotVerticesFromSubTree(destNode, ps, includeWeights);

@@ -22,11 +22,13 @@ package kieker.tpan.plugins.dependencyGraph;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractDependencyEdge<T> {
-    private final T source;
-    private final T destination;
+public class DependencyEdge<T extends DependencyNode<T>> {
+    private T source;
+    private T destination;
 
-    public AbstractDependencyEdge (
+    public DependencyEdge() { };
+
+    public DependencyEdge (
             final T source,
             final T destination){
         this.source = source;
@@ -41,5 +43,11 @@ public abstract class AbstractDependencyEdge<T> {
         return this.source;
     }
 
+    public final void setDestination(T destination) {
+        this.destination = destination;
+    }
 
+    public final void setSource(T source) {
+        this.source = source;
+    }
 }

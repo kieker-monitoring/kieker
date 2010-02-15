@@ -15,15 +15,15 @@ import org.apache.commons.logging.LogFactory;
 public class AdjacencyMatrix {
 
     private static final Log LOG = LogFactory.getLog(AdjacencyMatrix.class);
-    private TreeMap<Integer, AllocationComponentDependencyNode> allocationComponentNodes =
-            new TreeMap<Integer, AllocationComponentDependencyNode>();
-    private AllocationComponentDependencyNode allocationComponentDependenciesRootNode;
+    private TreeMap<Integer, DependencyNode> allocationComponentNodes =
+            new TreeMap<Integer, DependencyNode>();
+    private DependencyNode allocationComponentDependenciesRootNode;
 
     public AdjacencyMatrix(final SystemEntityFactory systemEntityFactory) {
         final AllocationComponentInstance allocationComponentRoot =
                 systemEntityFactory.getAllocationFactory().rootAllocationComponent;
         allocationComponentDependenciesRootNode =
-                new AllocationComponentDependencyNode(allocationComponentRoot.getId(),
+                new DependencyNode(allocationComponentRoot.getId(),
                 allocationComponentRoot);
         this.allocationComponentNodes.put(allocationComponentDependenciesRootNode.getId(), allocationComponentDependenciesRootNode);
     }
@@ -31,25 +31,25 @@ public class AdjacencyMatrix {
     public void addDependency(Execution sendingExecution, Execution receivingExecution) {
         AllocationComponentInstance senderComponent = sendingExecution.getAllocationComponent();
         AllocationComponentInstance receiverComponent = receivingExecution.getAllocationComponent();
-        AllocationComponentDependencyNode senderDependencyNode = this.allocationComponentNodes.get(senderComponent.getId());
-        AllocationComponentDependencyNode receiverDependencyNode = this.allocationComponentNodes.get(receiverComponent.getId());
+        DependencyNode senderDependencyNode = this.allocationComponentNodes.get(senderComponent.getId());
+        DependencyNode receiverDependencyNode = this.allocationComponentNodes.get(receiverComponent.getId());
         if (senderDependencyNode == null) {
-            senderDependencyNode = new AllocationComponentDependencyNode(senderComponent.getId(), senderComponent);
+            senderDependencyNode = new DependencyNode(senderComponent.getId(), senderComponent);
             this.allocationComponentNodes.put(senderDependencyNode.getId(), senderDependencyNode);
         }
         if (receiverDependencyNode == null) {
-            receiverDependencyNode = new AllocationComponentDependencyNode(receiverComponent.getId(), receiverComponent);
+            receiverDependencyNode = new DependencyNode(receiverComponent.getId(), receiverComponent);
             this.allocationComponentNodes.put(receiverDependencyNode.getId(), receiverDependencyNode);
         }
         senderDependencyNode.addOutgoingDependency(receiverDependencyNode);
         receiverDependencyNode.addIncomingDependency(senderDependencyNode);
     }
 
-    public final AllocationComponentDependencyNode getAllocationComponentDependenciesRootNode() {
+    public final DependencyNode getAllocationComponentDependenciesRootNode() {
         return this.allocationComponentDependenciesRootNode;
     }
 
-    public Collection<AllocationComponentDependencyNode> getAllocationComponentNodes() {
+    public Collection<DependencyNode> getAllocationComponentNodes() {
         return allocationComponentNodes.values();
     }
 }

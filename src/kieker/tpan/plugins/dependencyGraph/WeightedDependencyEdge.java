@@ -21,15 +21,13 @@ package kieker.tpan.plugins.dependencyGraph;
  *
  * @author Andre van Hoorn
  */
-public class WeightedDependencyEdge<T> extends AbstractDependencyEdge<T> {
+public class WeightedDependencyEdge extends DependencyEdge {
 
     private int outgoingWeight = 0;
     private int incomingWeight = 0;
 
-    public WeightedDependencyEdge(
-            final T source,
-            final T destination) {
-        super(source, destination);
+    public WeightedDependencyEdge() {
+        super();
     }
 
     public final int getIncomingWeight() {
