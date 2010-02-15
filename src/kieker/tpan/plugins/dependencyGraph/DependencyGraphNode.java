@@ -25,7 +25,7 @@ import java.util.TreeMap;
  *
  * @author Andre van Hoorn
  */
-public class DependencyNode<T> {
+public class DependencyGraphNode<T> {
     private final T entity;
     private final int id;
 
@@ -35,7 +35,7 @@ public class DependencyNode<T> {
      private final TreeMap<Integer, DependencyEdge> outgoingDependencies
             = new TreeMap<Integer, DependencyEdge>();
 
-    public DependencyNode (final int id, final T entity){
+    public DependencyGraphNode (final int id, final T entity){
         this.id = id;
         this.entity = entity;
     }
@@ -52,7 +52,7 @@ public class DependencyNode<T> {
         return this.outgoingDependencies.values();
     }
 
-    public DependencyEdge addOutgoingDependency(DependencyNode<T> destination){
+    public void addOutgoingDependency(DependencyGraphNode<T> destination){
         DependencyEdge e = this.outgoingDependencies.get(destination.getId());
         if (e == null){
             e = new DependencyEdge();
@@ -60,11 +60,10 @@ public class DependencyNode<T> {
             e.setDestination(destination);
             this.outgoingDependencies.put(destination.getId(), e);
         }
-        return e;
-        //e.incOutgoingWeight();
+        e.incOutgoingWeight();
     }
 
-    public DependencyEdge addIncomingDependency(DependencyNode source){
+    public void addIncomingDependency(DependencyGraphNode source){
        DependencyEdge e = this.incomingDependencies.get(source.getId());
         if (e == null){
             e = new DependencyEdge();
@@ -72,8 +71,7 @@ public class DependencyNode<T> {
             e.setDestination(source);
             this.incomingDependencies.put(source.getId(), e);
         }
-       return e;
-        //e.incIncomingWeight();
+        e.incIncomingWeight();
     }
 
     public final int getId() {

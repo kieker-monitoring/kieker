@@ -22,7 +22,7 @@ package kieker.tpan.plugins.dependencyGraph;
  *
  * @author Andre van Hoorn
  */
-public class DependencyEdge<T extends DependencyNode<T>> {
+public class DependencyEdge<T extends DependencyGraphNode<T>> {
     private T source;
     private T destination;
 
@@ -49,5 +49,24 @@ public class DependencyEdge<T extends DependencyNode<T>> {
 
     public final void setSource(T source) {
         this.source = source;
+    }
+
+        private int outgoingWeight = 0;
+    private int incomingWeight = 0;
+
+    public final int getIncomingWeight() {
+        return this.incomingWeight;
+    }
+
+    public final int getOutgoingWeight() {
+        return this.outgoingWeight;
+    }
+
+    public final void incOutgoingWeight() {
+        this.outgoingWeight++;
+    }
+
+    public final void incIncomingWeight() {
+        this.incomingWeight++;
     }
 }

@@ -39,15 +39,18 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
 public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProcessingComponent {
 
     private static final Log log = LogFactory.getLog(ComponentDependencyGraphPlugin.class);
-    private AbstractDependencyGraph<AllocationComponentInstance> dependencyGraph;
+    private DependencyGraph<AllocationComponentInstance> dependencyGraph;
 
     public ComponentDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory) {
         super(name, systemEntityFactory);
-        this.dependencyGraph = new ComponentDependencyGraph(systemEntityFactory);
+        this.dependencyGraph = 
+                new DependencyGraph<AllocationComponentInstance>(
+                systemEntityFactory.getAllocationFactory().rootAllocationComponent.getId(),
+                systemEntityFactory.getAllocationFactory().rootAllocationComponent);
     }
 
-    protected String nodeLabel(final DependencyNode<AllocationComponentInstance> node,
+    protected String nodeLabel(final DependencyGraphNode<AllocationComponentInstance> node,
             final boolean shortLabels) {
         AllocationComponentInstance component = (AllocationComponentInstance) node.getAllocationComponent();
         if (component == super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent) {
@@ -69,10 +72,10 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
         return strBuild.toString();
     }
 
-    private void dotEdges(Collection<DependencyNode<AllocationComponentInstance>> nodes,
+    private void dotEdges(Collection<DependencyGraphNode<AllocationComponentInstance>> nodes,
             PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
-        for (DependencyNode node : nodes) {
+        for (DependencyGraphNode node : nodes) {
             strBuild.append(node.getId()).append("[label =\"")
                     .append(nodeLabel(node, shortLabels)).append("\",shape=box];\n");
         }
@@ -80,16 +83,15 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    private void dotVerticesFromSubTree(final DependencyNode n,
+    private void dotVerticesFromSubTree(final DependencyGraphNode n,
         final PrintStream ps, final boolean includeWeights) {
         for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>)n.getOutgoingDependencies()) {
-            DependencyNode destNode = outgoingDependency.getDestination();
+            DependencyGraphNode destNode = outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
             strBuild.append("\n").append(n.getId()).append("->")
                     .append(destNode.getId()).append("[style=dashed,arrowhead=open");
-            if (includeWeights && outgoingDependency instanceof WeightedDependencyEdge) {
-                WeightedDependencyEdge weightedOutgoingDependency = (WeightedDependencyEdge) outgoingDependency;
-                strBuild.append(",label = ").append(weightedOutgoingDependency.getOutgoingWeight()).append(", weight =").append(((WeightedDependencyEdge)outgoingDependency).getOutgoingWeight());
+            if (includeWeights) {
+                strBuild.append(",label = ").append(outgoingDependency.getOutgoingWeight()).append(", weight =").append((outgoingDependency).getOutgoingWeight());
             }
             strBuild.append(" ]");
             dotVerticesFromSubTree(destNode, ps, includeWeights);
@@ -97,7 +99,7 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
         }
     }
 
-    private void dotFromAdjacencyMatrix(
+    private void graphToDot(
             final PrintStream ps, final boolean includeWeights,
             final boolean shortLabels) {
         // preamble:
@@ -118,7 +120,7 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
     public void saveToDotFile(final String outputFnBase, final boolean includeWeights,
             final boolean considerHost, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        this.dotFromAdjacencyMatrix(ps, includeWeights, shortLabels);
+        this.graphToDot(ps, includeWeights, shortLabels);
         ps.flush();
         ps.close();
         this.numGraphsSaved++;
@@ -134,10 +136,20 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
             if (m instanceof SynchronousReplyMessage) {
                 continue;
             }
-            Execution senderExecution = m.getSendingExecution();
-            Execution receiverExecution = m.getReceivingExecution();
-            dependencyGraph.addDependency(senderExecution, receiverExecution);
-      log.info("New dependency" + senderExecution.getOperation() + "->" + receiverExecution.getOperation());
+        AllocationComponentInstance senderComponent = m.getSendingExecution().getAllocationComponent();
+        AllocationComponentInstance receiverComponent = m.getReceivingExecution().getAllocationComponent();
+        DependencyGraphNode<AllocationComponentInstance> senderNode = this.dependencyGraph.getNode(senderComponent.getId());
+        DependencyGraphNode<AllocationComponentInstance> receiverNode = this.dependencyGraph.getNode(receiverComponent.getId());
+        if (senderNode == null) {
+            senderNode = new DependencyGraphNode<AllocationComponentInstance>(senderComponent.getId(), senderComponent);
+            this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+        }
+        if (receiverNode == null) {
+            receiverNode = new DependencyGraphNode<AllocationComponentInstance>(receiverComponent.getId(), receiverComponent);
+            this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+        }
+        senderNode.addOutgoingDependency(receiverNode);
+        receiverNode.addIncomingDependency(senderNode);
         }
         this.reportSuccess(t.getTraceId());
     }
