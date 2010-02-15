@@ -39,7 +39,7 @@ import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.tpan.TpanInstance;
-import kieker.tpan.datamodel.InvalidTraceException;
+import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.system.ExecutionTrace;
 import kieker.tpan.datamodel.system.MessageTrace;
 import kieker.tpan.datamodel.system.factories.SystemEntityFactory;

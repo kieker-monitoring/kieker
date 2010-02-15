@@ -6,7 +6,7 @@ import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
-import kieker.tpan.datamodel.InvalidTraceException;
+import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.system.Message;
 import kieker.tpan.tools.LoggingTimestampConverterTool;
 import org.apache.commons.logging.Log;

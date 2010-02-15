@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel;
+package kieker.tpan.plugins.dependencyGraph;
 
 import java.util.Collection;
 import java.util.TreeMap;

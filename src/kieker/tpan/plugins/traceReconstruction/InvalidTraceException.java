@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package kieker.tpan.datamodel;
+package kieker.tpan.plugins.traceReconstruction;
 
 /**
  *

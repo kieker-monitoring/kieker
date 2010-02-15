@@ -24,7 +24,6 @@ import java.io.PrintStream;
 import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.AdjacencyMatrix;
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
 import kieker.tpan.datamodel.system.Execution;
 import kieker.tpan.datamodel.system.Message;
