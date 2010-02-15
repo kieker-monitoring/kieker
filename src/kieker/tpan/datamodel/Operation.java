@@ -1,6 +1,6 @@
-package kieker.tpan.datamodel.system;
+package kieker.tpan.datamodel;
 
-import kieker.tpan.datamodel.system.factories.AbstractSystemSubFactory;
+import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
 
 /*
  * ==================LICENCE=========================

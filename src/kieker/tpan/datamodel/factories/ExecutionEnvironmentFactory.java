@@ -1,8 +1,8 @@
-package kieker.tpan.datamodel.system.factories;
+package kieker.tpan.datamodel.factories;
 
 import java.util.Collection;
 import java.util.Hashtable;
-import kieker.tpan.datamodel.system.ExecutionContainer;
+import kieker.tpan.datamodel.ExecutionContainer;
 
 /*
  * ==================LICENCE=========================

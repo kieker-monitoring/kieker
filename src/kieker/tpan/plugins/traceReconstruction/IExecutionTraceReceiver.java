@@ -1,7 +1,7 @@
 package kieker.tpan.plugins.traceReconstruction;
 
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
-import kieker.tpan.datamodel.system.ExecutionTrace;
+import kieker.tpan.datamodel.ExecutionTrace;
 
 /*
  * kieker.consumer.MonitoringRecordTypeLogger

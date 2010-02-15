@@ -18,7 +18,7 @@ package kieker.tpan.plugins.traceReconstruction;
  * ==================================================
  */
 
-import kieker.tpan.datamodel.system.Execution;
+import kieker.tpan.datamodel.Execution;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -33,9 +33,9 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import kieker.tpan.datamodel.system.ExecutionTrace;
-import kieker.tpan.datamodel.system.MessageTrace;
-import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.ExecutionTrace;
+import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.recordConsumer.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tpan.recordConsumer.executionRecordTransformation.IExecutionListener;
 

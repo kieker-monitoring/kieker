@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.system;
+package kieker.tpan.datamodel;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -7,7 +7,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
-import kieker.tpan.datamodel.system.Message;
+import kieker.tpan.datamodel.Message;
 import kieker.tpan.tools.LoggingTimestampConverterTool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

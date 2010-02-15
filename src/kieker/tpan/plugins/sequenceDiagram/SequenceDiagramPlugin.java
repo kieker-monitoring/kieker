@@ -22,12 +22,12 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.TreeSet;
 import java.util.Vector;
-import kieker.tpan.datamodel.system.AllocationComponentInstance;
-import kieker.tpan.datamodel.system.Message;
-import kieker.tpan.datamodel.system.MessageTrace;
-import kieker.tpan.datamodel.system.SynchronousCallMessage;
-import kieker.tpan.datamodel.system.SynchronousReplyMessage;
-import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.Message;
+import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.SynchronousCallMessage;
+import kieker.tpan.datamodel.SynchronousReplyMessage;
+import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

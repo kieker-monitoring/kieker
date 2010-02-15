@@ -24,12 +24,12 @@ import java.io.PrintStream;
 import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.system.AllocationComponentInstance;
-import kieker.tpan.datamodel.system.Execution;
-import kieker.tpan.datamodel.system.Message;
-import kieker.tpan.datamodel.system.MessageTrace;
-import kieker.tpan.datamodel.system.SynchronousReplyMessage;
-import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.Execution;
+import kieker.tpan.datamodel.Message;
+import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.SynchronousReplyMessage;
+import kieker.tpan.datamodel.factories.SystemEntityFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool

@@ -1,8 +1,8 @@
-package kieker.tpan.datamodel.system;
+package kieker.tpan.datamodel;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2010 Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,23 @@ package kieker.tpan.datamodel.system;
  *
  * @author Andre van Hoorn
  */
-public class SynchronousReplyMessage extends Message {
+public class LoggedExecution extends Execution {
+    private final long loggingTimestamp;
 
-    public SynchronousReplyMessage() {
+    private LoggedExecution() {
         super();
+        this.loggingTimestamp = -1;
     }
 
-    public SynchronousReplyMessage(final long timestamp,
-            final Execution sendingExecution,
-            final Execution receivingExecution){
-        super(timestamp, sendingExecution, receivingExecution);
+    public LoggedExecution(final Operation op,
+            final AllocationComponentInstance allocationComponent, final long traceId,
+            final String sessionId, final int eoi, final int ess, final long tin,
+            final long tout, long loggingTimestamp) {
+        super(op, allocationComponent, traceId, sessionId, eoi, ess, tin, tout);
+        this.loggingTimestamp = loggingTimestamp;
+    }
+
+    public final long getLoggingTimestamp() {
+        return this.loggingTimestamp;
     }
 }

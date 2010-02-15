@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.system;
+package kieker.tpan.datamodel;
 
 import java.util.ArrayList;
 import java.util.Collection;

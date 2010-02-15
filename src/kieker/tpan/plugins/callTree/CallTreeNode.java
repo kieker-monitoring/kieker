@@ -3,8 +3,8 @@ package kieker.tpan.plugins.callTree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import kieker.tpan.datamodel.system.AllocationComponentInstance;
-import kieker.tpan.datamodel.system.Operation;
+import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.Operation;
 
 public class CallTreeNode {
 

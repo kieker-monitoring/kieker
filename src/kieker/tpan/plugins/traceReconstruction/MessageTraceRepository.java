@@ -3,7 +3,7 @@ package kieker.tpan.plugins.traceReconstruction;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import java.util.Hashtable;
-import kieker.tpan.datamodel.system.MessageTrace;
+import kieker.tpan.datamodel.MessageTrace;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

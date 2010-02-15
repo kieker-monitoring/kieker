@@ -1,6 +1,6 @@
 package kieker.tpan.plugins.dependencyGraph;
 
-import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponentInstance;
 
 /*
  * ==================LICENCE=========================

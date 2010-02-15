@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.system;
+package kieker.tpan.datamodel;
 
 /*
  * ==================LICENCE=========================

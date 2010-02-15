@@ -1,9 +1,9 @@
-package kieker.tpan.datamodel.system.factories;
+package kieker.tpan.datamodel.factories;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicInteger;
-import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponentInstance;
 
 /*
  * ==================LICENCE=========================

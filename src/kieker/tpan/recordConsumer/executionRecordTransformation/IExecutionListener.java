@@ -1,6 +1,6 @@
 package kieker.tpan.recordConsumer.executionRecordTransformation;
 
-import kieker.tpan.datamodel.system.Execution;
+import kieker.tpan.datamodel.Execution;
 
 /*
  * ==================LICENCE=========================

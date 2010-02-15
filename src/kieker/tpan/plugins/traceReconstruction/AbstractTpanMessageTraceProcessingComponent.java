@@ -18,7 +18,7 @@
 
 package kieker.tpan.plugins.traceReconstruction;
 
-import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.factories.SystemEntityFactory;
 
 /**
  *

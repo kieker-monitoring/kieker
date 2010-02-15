@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponentInstance;
 
 /*
  * ==================LICENCE=========================
