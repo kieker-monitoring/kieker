@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel;
+package kieker.tpan.plugins.callTree;
 
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
 import kieker.tpan.datamodel.system.Operation;

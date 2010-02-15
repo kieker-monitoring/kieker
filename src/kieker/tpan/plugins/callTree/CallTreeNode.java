@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel;
+package kieker.tpan.plugins.callTree;
 
 import java.util.ArrayList;
 import java.util.Collection;

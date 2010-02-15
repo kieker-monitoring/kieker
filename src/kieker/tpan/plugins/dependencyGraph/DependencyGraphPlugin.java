@@ -1,4 +1,4 @@
-package kieker.tpan.plugins;
+package kieker.tpan.plugins.dependencyGraph;
 
 /*
  * ==================LICENCE=========================
@@ -17,6 +17,7 @@ package kieker.tpan.plugins;
  * limitations under the License.
  * ==================================================
  */
+import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;

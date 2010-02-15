@@ -5,7 +5,7 @@ import java.util.TreeMap;
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
 import kieker.tpan.datamodel.system.Execution;
 import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
-import kieker.tpan.plugins.AllocationComponentDependencyNode;
+import kieker.tpan.plugins.dependencyGraph.AllocationComponentDependencyNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

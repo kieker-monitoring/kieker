@@ -16,19 +16,18 @@
  * ==================================================
  */
 
-package kieker.tpan.plugins;
+package kieker.tpan.plugins.traceReconstruction;
 
 import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
-
 
 /**
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractTpanExecutionTraceProcessingComponent 
+public abstract class AbstractTpanMessageTraceProcessingComponent 
         extends AbstractTpanTraceProcessingComponent
-        implements IExecutionTraceReceiver {
-        public AbstractTpanExecutionTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
-            super(name, systemEntityFactory);
-        }
+        implements IMessageTraceReceiver {
+    public AbstractTpanMessageTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
+        super (name, systemEntityFactory);
+    }
 }

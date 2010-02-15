@@ -1,4 +1,4 @@
-package kieker.tpan.plugins;
+package kieker.tpan.plugins.dependencyGraph;
 
 import java.util.Collection;
 import java.util.Comparator;

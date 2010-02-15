@@ -1,4 +1,4 @@
-package kieker.tpan.plugins;
+package kieker.tpan.plugins.callTree;
 
 /*
  * ==================LICENCE=========================
@@ -17,6 +17,8 @@ package kieker.tpan.plugins;
  * limitations under the License.
  * ==================================================
  */
+import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
+import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -25,8 +27,6 @@ import java.util.Stack;
 import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.CallTreeNode;
-import kieker.tpan.datamodel.CallTreeOperationHashKey;
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
 import kieker.tpan.datamodel.system.Message;
 import kieker.tpan.datamodel.system.MessageTrace;

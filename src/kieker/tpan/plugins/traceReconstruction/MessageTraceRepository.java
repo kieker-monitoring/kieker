@@ -1,5 +1,7 @@
-package kieker.tpan.plugins;
+package kieker.tpan.plugins.traceReconstruction;
 
+import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
+import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.MessageTrace;
 
