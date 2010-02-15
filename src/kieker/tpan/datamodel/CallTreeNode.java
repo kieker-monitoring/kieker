@@ -3,6 +3,8 @@ package kieker.tpan.datamodel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.system.Operation;
 
 public class CallTreeNode {
 
@@ -24,9 +26,9 @@ public class CallTreeNode {
     }
 
     /** Creates a new child and adds it to the nodes list of children */
-    public final CallTreeNode createNewChild(final String componentName,
-            final String operationName, final String vmName) {
-        CallTreeOperationHashKey k = new CallTreeOperationHashKey(componentName, operationName, vmName);
+    public final CallTreeNode createNewChild(final AllocationComponentInstance allocationComponent,
+            final Operation operation) {
+        CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
         CallTreeNode node = new CallTreeNode(this, k);
         this.children.add(node);
         return node;
@@ -34,10 +36,10 @@ public class CallTreeNode {
 
     /** Returns the child node with given operation, name, and vmName.
      *  The node is created if it doesn't exist. */
-    public final CallTreeNode getChildForName(final String componentName,
-            final String operationName, final String vmName) {
+    public final CallTreeNode getChild(final AllocationComponentInstance allocationComponent,
+            final Operation operation) {
         CallTreeOperationHashKey k =
-                new CallTreeOperationHashKey(componentName, operationName, vmName);
+                new CallTreeOperationHashKey(allocationComponent, operation);
         CallTreeNode node = null;
         for (CallTreeNode n : children) {
             if (n.opInfo.equals(k)) {
@@ -51,60 +53,19 @@ public class CallTreeNode {
         return node;
     }
 
-    public final String getComponentName() {
-        return opInfo.getComponentName();
+    public final AllocationComponentInstance getAllocationComponent() {
+        return opInfo.getAllocationComponent();
     }
 
-    public final String getOperationName() {
-        return opInfo.getOperationName();
+    public final Operation getOperation() {
+        return opInfo.getOperation();
     }
 
     public final CallTreeNode getParent() {
         return parent;
     }
 
-    public final String getVmName() {
-        return this.opInfo.getVmName();
-    }
-
-    private String getShortComponentName() {
-        String shortComponentName = this.getComponentName();
-        if (shortComponentName.indexOf('.') != -1) {
-            int index = 0;
-            for (index = shortComponentName.length() - 1; index > 0; index--) {
-                if (shortComponentName.charAt(index) == '.') {
-                    break;
-                }
-            }
-            shortComponentName = shortComponentName.substring(index + 1);
-
-        }
-        return shortComponentName;
-    }
-
-    /** Convenience function which returns "$" in case 'senderComponentName' field is null */
-    public String getLabel(final boolean shortComponentName, final boolean includeHostname) {
-        if (this.opInfo == null) {
-            return "$";
-        }
-        StringBuilder strBuild = new StringBuilder();
-        if (includeHostname) {
-            strBuild.append(this.getVmName()).append("::\\n");
-        }
-        if (shortComponentName) {
-            strBuild.append(this.getShortComponentName());
-        } else {
-            strBuild.append(this.getComponentName());
-        }
-        strBuild.append(".").append(this.getOperationName());
-
-        return strBuild.toString();
-
-
-    }
-
-    @Override
-    public String toString() {
-        return this.getLabel(false, true); // false, include hostname
+    public final boolean isRootNode(){
+        return this.parent == null;
     }
 }

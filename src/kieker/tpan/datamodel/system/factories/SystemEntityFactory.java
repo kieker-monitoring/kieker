@@ -47,7 +47,7 @@ public class SystemEntityFactory {
                 new ExecutionContainer(AbstractSystemSubFactory.ROOT_ELEMENT_ID, null, "$");
         this.executionEnvironmentFactory = new ExecutionEnvironmentFactory(this, rootExecutionContainer);
         AllocationComponentInstance rootAllocation =
-                new AllocationComponentInstance(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, null);
+                new AllocationComponentInstance(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, rootExecutionContainer);
         this.allocationFactory = new AllocationFactory(this, rootAllocation);
         Signature rootSignature = new Signature("$", "<>", new String[]{});
         Operation rootOperation = new Operation(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootComponentType, rootSignature);

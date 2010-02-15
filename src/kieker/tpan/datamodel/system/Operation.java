@@ -1,5 +1,7 @@
 package kieker.tpan.datamodel.system;
 
+import kieker.tpan.datamodel.system.factories.AbstractSystemSubFactory;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -23,6 +25,7 @@ package kieker.tpan.datamodel.system;
  * @author Andre van Hoorn
  */
 public class Operation {
+    public static final int ROOT_OPERATION_ID = AbstractSystemSubFactory.ROOT_ELEMENT_ID;
     private final int id;
     private final ComponentType componentType;
     private final Signature signature;
@@ -65,5 +68,14 @@ public class Operation {
         }
         Operation other = (Operation)obj;
         return other.id == this.id;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder();
+        strBuild.append(this.componentType.getFullQualifiedName())
+                .append(".")
+                .append(this.signature.toString());
+        return strBuild.toString();
     }
 }

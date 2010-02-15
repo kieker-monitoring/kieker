@@ -39,9 +39,9 @@ import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.tpan.TpanInstance;
-import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.InvalidTraceException;
-import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.system.ExecutionTrace;
+import kieker.tpan.datamodel.system.MessageTrace;
 import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.AbstractTpanExecutionTraceProcessingComponent;
@@ -51,9 +51,9 @@ import kieker.tpan.plugins.CallTreePlugin;
 import kieker.tpan.plugins.DependencyGraphPlugin;
 import kieker.tpan.plugins.SequenceDiagramPlugin;
 import kieker.tpan.plugins.TraceProcessingException;
+import kieker.tpan.plugins.TraceReconstructionFilter;
 import kieker.tpan.recordConsumer.BriefJavaFxInformer;
 import kieker.tpan.recordConsumer.ExecutionRecordTransformer;
-import kieker.tpan.recordConsumer.TraceReconstructionFilter;
 
 import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
 import kieker.tpmon.core.TpmonController;
@@ -97,6 +97,7 @@ public class TraceAnalysisTool {
     private static TreeSet<Long> selectedTraces = null; // null means select all
     private static boolean traceEquivClassMode = true; // false;
     private static boolean considerHostname = true;
+    private static boolean shortLabels = true;
     private static boolean ignoreInvalidTraces = false;
     private static int maxTraceDurationMillis = TraceReconstructionFilter.MAX_DURATION_MILLIS; // infinite
     private static long ignoreRecordsBeforeTimestamp = TraceReconstructionFilter.MIN_TIMESTAMP;
@@ -352,9 +353,6 @@ public class TraceAnalysisTool {
         
 
         TraceReconstructionFilter mtReconstrFilter = null;
-        // TEST with new meta-model
-        kieker.tpan.plugins.TraceReconstructionFilter mtReconstrFilter2 = null;
-        // END test with new meta-model
         try {
             List<AbstractTpanMessageTraceProcessingComponent> msgTraceProcessingComponents = new ArrayList<AbstractTpanMessageTraceProcessingComponent>();
             List<AbstractTpanExecutionTraceProcessingComponent> execTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
@@ -434,10 +432,10 @@ public class TraceAnalysisTool {
             //analysisInstance.setLogReader(new FSReader(inputDirs));
             analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
-            mtReconstrFilter =
+           mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
                     maxTraceDurationMillis, ignoreInvalidTraces, traceEquivClassMode,
-                    considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
+                    selectedTraces, ignoreRecordsBeforeTimestamp,
                     ignoreRecordsAfterTimestamp);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
                 mtReconstrFilter.addMessageTraceListener(c);
@@ -448,16 +446,9 @@ public class TraceAnalysisTool {
             for (AbstractTpanExecutionTraceProcessingComponent c : invalidTraceProcessingComponents) {
                 mtReconstrFilter.addInvalidExecutionTraceArtifactListener(c);
             }
-            analysisInstance.addRecordConsumer(mtReconstrFilter);
 
-            // TEST with new meta-model
-            mtReconstrFilter2 =
-                    new kieker.tpan.plugins.TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME+" <new meta-model>", systemEntityFactory,
-                    maxTraceDurationMillis, ignoreInvalidTraces, traceEquivClassMode,
-                    considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
-                    ignoreRecordsAfterTimestamp);
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory, considerHostname);
-            execRecTransformer.addListener(mtReconstrFilter2);
+            execRecTransformer.addListener(mtReconstrFilter);
             analysisInstance.addRecordConsumer(execRecTransformer);
             // END test with new meta-model
 
@@ -466,11 +457,12 @@ public class TraceAnalysisTool {
                 analysisInstance.run();
 
                 if (componentPlotDepGraph != null) {
-                    componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(), !traceEquivClassMode);
+                    componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
+                            !traceEquivClassMode, considerHostname, shortLabels);
                 }
 
                 if (componentPlotAggregatedCallTree != null) {
-                    componentPlotAggregatedCallTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + AGGREGATED_CALL_TREE_FN_PREFIX).getCanonicalPath(), false); // !traceEquivClassMode
+                    componentPlotAggregatedCallTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + AGGREGATED_CALL_TREE_FN_PREFIX).getCanonicalPath(), false, shortLabels); // !traceEquivClassMode
                 }
             } catch (Exception exc) {
                 log.error("Error occured while running analysis", exc);
@@ -489,7 +481,8 @@ public class TraceAnalysisTool {
             }
 
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
-                retVal = task_genTraceEquivalenceReportForTraceSet(outputDir + File.separator + outputFnPrefix, mtReconstrFilter);
+                retVal = task_genTraceEquivalenceReportForTraceSet(outputDir + File.separator + outputFnPrefix, 
+                        mtReconstrFilter);
             }
 
             // TODO: these tasks should be moved to a decicated tool
@@ -516,10 +509,6 @@ public class TraceAnalysisTool {
             if (mtReconstrFilter != null) {
                 mtReconstrFilter.printStatusMessage();
             }
-            if (mtReconstrFilter2 != null){
-                mtReconstrFilter2.printStatusMessage();
-            }
-
             System.out.println("");
             System.out.println("See 'kieker.log' for details");
         }
@@ -564,7 +553,7 @@ public class TraceAnalysisTool {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
-                    SequenceDiagramPlugin.writePicForMessageTrace(t, outputFnBase + "-" + t.getTraceId() + ".pic", considerHostname);
+                    SequenceDiagramPlugin.writePicForMessageTrace(this.getSystemEntityFactory(), t, outputFnBase + "-" + t.getTraceId() + ".pic", considerHostname, shortLabels);
                     this.reportSuccess(t.getTraceId());
                 } catch (FileNotFoundException ex) {
                     this.reportError(t.getTraceId());
@@ -601,14 +590,14 @@ public class TraceAnalysisTool {
      * @param traceSet
      */
     private static DependencyGraphPlugin task_createDependencyGraphPlotComponent(final String name) {
-        DependencyGraphPlugin depGraph = new DependencyGraphPlugin(name, systemEntityFactory, considerHostname);
+        DependencyGraphPlugin depGraph = new DependencyGraphPlugin(name, systemEntityFactory);
         return depGraph;
     }
 
     /**
      * Reads the traces from the directory inputDirName and write the
-     * calling tree for traces to the directory outputFnPrefix.
-     * If  traceSet is null, a calling tree containing the information
+     * call tree for traces to the directory outputFnPrefix.
+     * If  traceSet is null, a call tree containing the information
      * of all traces is generated.
      *
      * @param inputDirName
@@ -626,7 +615,8 @@ public class TraceAnalysisTool {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
-                    CallTreePlugin.writeDotForMessageTrace(t, outputFnBase + "-" + t.getTraceId(), false, considerHostname);
+                    CallTreePlugin.writeDotForMessageTrace(systemEntityFactory, t, outputFnBase + "-" + t.getTraceId(),
+                            false, considerHostname, shortLabels);
                     this.reportSuccess(t.getTraceId());
                 } catch (FileNotFoundException ex) {
                     this.reportError(t.getTraceId());

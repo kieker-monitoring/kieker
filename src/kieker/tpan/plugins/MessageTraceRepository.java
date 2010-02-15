@@ -1,8 +1,12 @@
-package kieker.tpan.recordConsumer;
+package kieker.tpan.plugins;
+
+import java.util.Hashtable;
+import kieker.tpan.datamodel.system.MessageTrace;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /*
- * kieker.consumer.MonitoringRecordTypeLogger
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -20,13 +24,24 @@ package kieker.tpan.recordConsumer;
  * ==================================================
  */
 
-import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.plugins.TraceProcessingException;
-
 /**
- *
  * @author Andre van Hoorn
  */
-public interface IMessageTraceReceiver {
-    public void newTrace (MessageTrace t) throws TraceProcessingException;
+public class MessageTraceRepository implements IMessageTraceReceiver {
+
+    private static final Log log = LogFactory.getLog(MessageTraceRepository.class);
+    private Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
+
+    // TODO: handle equivalence classes
+
+    public MessageTraceRepository() {
+    }
+
+    public Hashtable<Long, MessageTrace> getMessageTraceRepository() {
+        return this.repo;
+    }
+
+    public void newTrace(MessageTrace t) throws TraceProcessingException {
+        this.repo.put(t.getTraceId(), t);
+    }
 }

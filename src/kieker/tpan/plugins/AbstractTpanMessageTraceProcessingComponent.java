@@ -19,7 +19,6 @@
 package kieker.tpan.plugins;
 
 import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
-import kieker.tpan.recordConsumer.IMessageTraceReceiver;
 
 /**
  *

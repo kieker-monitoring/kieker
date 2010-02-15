@@ -7,6 +7,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.datamodel.InvalidTraceException;
+import kieker.tpan.datamodel.system.Message;
 import kieker.tpan.tools.LoggingTimestampConverterTool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,7 +62,8 @@ public class ExecutionTrace {
     private long maxTout = Long.MIN_VALUE;
     private int maxStackDepth = -1;
 
-    private ExecutionTrace() { }
+    private ExecutionTrace() {
+    }
 
     public ExecutionTrace(long traceId) {
         this.traceId = traceId;
@@ -118,9 +120,11 @@ public class ExecutionTrace {
             if (prevE != rootExecution && prevE.getEss() >= curE.getEss()) {
                 Execution curReturnReceiver; // receiverComponentName of return message
                 while (curStack.size() > curE.getEss()) {
-                    prevE = curStack.pop().getSendingExecution(); //.execution;
-                    curReturnReceiver = curStack.peek().getSendingExecution(); //.execution;
-                    Message m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
+                    Message poppedCall = curStack.pop();
+                    prevE = poppedCall.getReceivingExecution(); //.execution;
+                    curReturnReceiver = poppedCall.getSendingExecution(); //curStack.peek().getSendingExecution(); //.execution;
+                    Message m = new SynchronousReplyMessage(prevE.getTout(),
+                            prevE, curReturnReceiver);
                     mSeq.add(m);
                     prevE = curReturnReceiver;
                 }
@@ -136,11 +140,15 @@ public class ExecutionTrace {
                 curStack.push(m);
             }
             if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
+                Execution curReturnReceiver; // receiverComponentName of return message
                 while (!curStack.empty()) {
-                    curE = curStack.pop().getSendingExecution(); //.execution;
-                    prevE = curStack.empty() ? rootExecution : curStack.peek().getSendingExecution(); //.execution;
-                    Message m = new SynchronousReplyMessage(curE.getTout(), curE, prevE);
+                    Message poppedCall = curStack.pop();
+                    prevE = poppedCall.getReceivingExecution(); //.execution;
+                    curReturnReceiver = poppedCall.getSendingExecution(); //curStack.peek().getSendingExecution(); //.execution;
+                    Message m = new SynchronousReplyMessage(prevE.getTout(),
+                            prevE, curReturnReceiver);
                     mSeq.add(m);
+                    prevE = curReturnReceiver;
                 }
             }
             prevE = curE; // prepair next loop
@@ -156,10 +164,12 @@ public class ExecutionTrace {
         return this.set.size();
     }
 
+    @Override
     public String toString() {
         StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
         for (Execution e : this.set) {
-            strBuild.append(e.toString()).append("\n");
+            strBuild.append("<");
+            strBuild.append(e.toString()).append(">\n");
         }
         return strBuild.toString();
     }

@@ -89,7 +89,6 @@ public class Execution {
     @Override
     public String toString(){
         StringBuilder strBuild = new StringBuilder();
-            strBuild.append("<");
             strBuild.append("[").append(this.eoi)
                     .append(",").append(this.ess).append("]").append(" ");
             strBuild.append(this.tin).append("-").append(this.tout).append(" ");
@@ -98,7 +97,6 @@ public class Execution {
 
             strBuild.append((this.sessionId!=null)?this.sessionId:"<NOSESSIONID>");
 
-            strBuild.append(">");
             return strBuild.toString();
     }
 }

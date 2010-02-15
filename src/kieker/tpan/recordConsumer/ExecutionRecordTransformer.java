@@ -111,8 +111,6 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
                 throw new RecordConsumerExecutionException("ExecutionEventProcessingException occured", ex);
             }
         }
-
-        System.out.println(execution);
     }
 
     public boolean execute() throws RecordConsumerExecutionException {

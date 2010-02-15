@@ -54,4 +54,16 @@ public class Signature {
     public final String getReturnType() {
         return this.returnType;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder();
+        strBuild.append(this.name).append("(")
+                .append(this.paramTypeList)
+                .append(")")
+                .append(":")
+                .append(this.returnType);
+
+        return strBuild.toString();
+    }
 }

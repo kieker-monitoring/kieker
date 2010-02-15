@@ -1,25 +1,25 @@
 package kieker.tpan.datamodel;
 
+import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.system.Operation;
+
 /**
  *
  * @author Andre van Hoorn
  */
 public class CallTreeOperationHashKey {
-    private final String componentName;
-    private final String operationName;
-    private final String vmName;
+    private final AllocationComponentInstance allocationComponent;
+    private final Operation operation;
 
     private final int hashCode; // the final is computed once and never changes
 
-    public CallTreeOperationHashKey(final String componentName,
-            final String operationName, final String vmName) {
-        this.componentName = componentName;
-        this.operationName = operationName;
-        this.vmName = vmName;
+    public CallTreeOperationHashKey(final AllocationComponentInstance allocationComponent,
+            final Operation operation) {
+        this.allocationComponent = allocationComponent;
+        this.operation = operation;
         this.hashCode =
-                this.componentName.hashCode()
-                ^ this.operationName.hashCode()
-                ^ this.vmName.hashCode();
+                this.allocationComponent.hashCode()
+                ^ this.operation.hashCode();
     }
 
     @Override
@@ -33,20 +33,15 @@ public class CallTreeOperationHashKey {
         if (! (o instanceof CallTreeOperationHashKey)) return false;
         CallTreeOperationHashKey k = (CallTreeOperationHashKey)o;
 
-        return this.componentName.equals(k.componentName)
-                && this.operationName.equals(k.operationName)
-                && this.vmName.equals(k.vmName);
+        return this.allocationComponent.equals(k.allocationComponent)
+                && this.operation.equals(k.operation);
     }
 
-    public final String getComponentName() {
-        return this.componentName;
+    public final AllocationComponentInstance getAllocationComponent() {
+        return this.allocationComponent;
     }
 
-    public final String getOperationName() {
-        return this.operationName;
-    }
-
-    public final String getVmName() {
-        return this.vmName;
+    public final Operation getOperation() {
+        return this.operation;
     }
 }

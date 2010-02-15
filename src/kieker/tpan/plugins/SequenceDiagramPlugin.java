@@ -17,21 +17,24 @@ package kieker.tpan.plugins;
  * limitations under the License.
  * ==================================================
  */
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.Vector;
-import kieker.tpan.datamodel.Message;
-import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.system.Message;
+import kieker.tpan.datamodel.system.MessageTrace;
+import kieker.tpan.datamodel.system.SynchronousCallMessage;
+import kieker.tpan.datamodel.system.SynchronousReplyMessage;
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
  * 
- * @author Nils Sommer, Andre van Hoorn
+ * @author Andre van Hoorn, Nils Sommer
  */
 public class SequenceDiagramPlugin {
 
@@ -40,9 +43,31 @@ public class SequenceDiagramPlugin {
     private SequenceDiagramPlugin() {
     }
 
-    private static void picFromMessageTrace(final MessageTrace messageTrace, final  PrintStream ps, final boolean considerHost) {
-        HashMap<String, String> distinctObjects = new HashMap<String, String>();
-        int nextObjIndex = 0;
+    private static String componentLabel(final SystemEntityFactory systemEntityFactory,
+            final AllocationComponentInstance component, final boolean shortLabels) {
+        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
+            return "$";
+        }
+
+        String resourceContainerName = component.getExecutionContainer().getName();
+        String assemblyComponentName = component.getAssemblyComponent().getName();
+        String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
+        String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
+
+        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::").append(assemblyComponentName).append(":");
+        if (!shortLabels) {
+            strBuild.append(componentTypePackagePrefx);
+        } else {
+            strBuild.append("..");
+        }
+        strBuild.append(componentTypeIdentifier);
+        return strBuild.toString();
+    }
+
+    private static void picFromMessageTrace(final SystemEntityFactory systemEntityFactory,
+            final MessageTrace messageTrace, final PrintStream ps, final boolean considerHost,
+            final boolean shortLabels) {
+        // dot node ID x component instance
         Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
         ps.println(".PS");
@@ -50,42 +75,41 @@ public class SequenceDiagramPlugin {
         ps.println("boxwid = 1.1;");
         ps.println("movewid = 0.5;");
 
-        // get distinct objects. should be enough to check all senders,
-        // as returns have senders too.
-        //log.info("Trace " + messageTrace.traceId + " contains " + messages.size() + " messages.");
+        TreeSet<Integer> plottedComponentIds = new TreeSet<Integer>();
+
+        final AllocationComponentInstance rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
+        final String rootDotId = "O" + rootAllocationComponent.getId();
+        ps.println("object(O" + rootAllocationComponent.getId()
+                + ",\"" + componentLabel(systemEntityFactory, rootAllocationComponent, shortLabels) + "\");");
+        plottedComponentIds.add(rootAllocationComponent.getId());
         for (Message me : messages) {
-            String name = me.getSenderLabel(considerHost);
-            if (!distinctObjects.containsKey(name)) {
-                distinctObjects.put(name, "O"+(nextObjIndex++));
-                String shortComponentName = name;
-                if (shortComponentName.indexOf('.') != -1) {
-                    int index = 0;
-                    for (index = shortComponentName.length() - 1; index > 0; index--) {
-                        if (shortComponentName.charAt(index) == '.') {
-                            break;
-                        }
-                    }
-                    if (considerHost){
-                        shortComponentName = me.sender.vmName + "::" + shortComponentName.substring(index + 1);
-                    } else {
-                        shortComponentName = shortComponentName.substring(index + 1);
-                    }
-                }
-                ps.println("object(" + distinctObjects.get(name) +
-                        ",\"" + shortComponentName + "\");");
+            AllocationComponentInstance senderComponent = me.getSendingExecution().getAllocationComponent();
+            AllocationComponentInstance receiverComponent = me.getReceivingExecution().getAllocationComponent();
+            if (!plottedComponentIds.contains(senderComponent.getId())) {
+                ps.println("object(O" + senderComponent.getId()
+                        + ",\"" + componentLabel(systemEntityFactory, senderComponent, shortLabels) + "\");");
+                plottedComponentIds.add(senderComponent.getId());
+            }
+            if (!plottedComponentIds.contains(receiverComponent.getId())) {
+                ps.println("object(O" + receiverComponent.getId()
+                        + ",\"" + componentLabel(systemEntityFactory, receiverComponent, shortLabels) + "\");");
+                plottedComponentIds.add(receiverComponent.getId());
             }
         }
         ps.println("step()");
-        ps.println("active(O0);");
+        ps.println("active(" + rootDotId + ");");
         ps.println("step();");
         boolean first = true;
         for (Message me : messages) {
-            if (me.callMessage) {
-                //String method = me.getReceiver().getOperation().getMethodname();
-                String method = me.receiver.opname;
-                if (method.indexOf('(') != -1) {
-                    method = me.receiver.opname;
-                }
+            AllocationComponentInstance senderComponent = me.getSendingExecution().getAllocationComponent();
+            AllocationComponentInstance receiverComponent = me.getReceivingExecution().getAllocationComponent();
+            String senderDotId = "O" + senderComponent.getId();
+            String receiverDotId = "O" + receiverComponent.getId();
+            if (me instanceof SynchronousCallMessage) {
+                String method = me.getReceivingExecution().getOperation().getSignature().getName();
+                //if (method.indexOf('(') != -1) {
+                //    method = me.receiver.opname;
+                //}
                 ps.println("step();");
                 if (first == true) {
                     ps.println("async();");
@@ -93,35 +117,38 @@ public class SequenceDiagramPlugin {
                 } else {
                     ps.println("sync();");
                 }
-                ps.println("message(" + distinctObjects.get(me.getSenderLabel(considerHost)) +
-                        "," + distinctObjects.get(me.getReceiverLabel(considerHost)) +
-                        ", \"" + method +
-                        "\");");
-                ps.println("active(" + distinctObjects.get(me.getReceiverLabel(considerHost)) + ");");
+                ps.println("message(" + senderDotId
+                        + "," + receiverDotId
+                        + ", \"" + method
+                        + "\");");
+                ps.println("active(" + receiverDotId + ");");
                 ps.println("step();");
-            } else {
+            } else if (me instanceof SynchronousReplyMessage) {
                 ps.println("step();");
                 ps.println("async();");
-                ps.println("rmessage(" + distinctObjects.get(me.getSenderLabel(considerHost)) +
-                        "," + distinctObjects.get(me.getReceiverLabel(considerHost)) +
-                        ", \"\");");
-                ps.println("inactive(" + distinctObjects.get(me.getSenderLabel(considerHost)) + ");");
+                ps.println("rmessage(" + senderDotId
+                        + "," + receiverDotId
+                        + ", \"\");");
+                ps.println("inactive(" + senderDotId + ");");
+            } else {
+                log.error("Message type not supported: " + me.getClass().getName());
             }
         }
-        ps.println("inactive(O0);");
+        ps.println("inactive(" + rootDotId + ");");
         ps.println("step();");
 
-        for (Object objs : distinctObjects.values()) {
-            ps.println("complete(" + objs + ");");
+        for (int i : plottedComponentIds) {
+            ps.println("complete(O" + i + ");");
         }
-        ps.println("complete(O0);");
+        ps.println("complete(" + rootDotId + ");");
 
         ps.println(".PE");
     }
 
-    public static void writePicForMessageTrace(MessageTrace msgTrace, String outputFilename, final boolean considerHost) throws FileNotFoundException {
+    public static void writePicForMessageTrace(final SystemEntityFactory systemEntityFactory,
+            MessageTrace msgTrace, String outputFilename, final boolean considerHost, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
-        picFromMessageTrace(msgTrace, ps, considerHost);
+        picFromMessageTrace(systemEntityFactory, msgTrace, ps, considerHost, shortLabels);
         ps.flush();
         ps.close();
     }

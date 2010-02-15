@@ -49,7 +49,6 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
     /** TraceId x trace */
     private final Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
-    private final boolean considerHostname;
     /** Representative x # of equivalents */
     private final HashMap<ExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap =
             new HashMap<ExecutionTraceHashContainer, AtomicInteger>();
@@ -96,7 +95,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             final SystemEntityFactory systemEntityFactory,
             final long maxTraceDurationMillis,
             final boolean ignoreInvalidTraces,
-            final boolean onlyEquivClasses, final boolean considerHostname,
+            final boolean onlyEquivClasses,
             final TreeSet<Long> selectedTraces,
             final long ignoreRecordsBefore, final long ignoreRecordsAfter) {
         super(name, systemEntityFactory);
@@ -115,7 +114,6 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         } 
         this.ignoreInvalidTraces = ignoreInvalidTraces;
         this.onlyEquivClasses = onlyEquivClasses;
-        this.considerHostname = considerHostname;
         this.selectedTraces = selectedTraces;
         this.ignoreRecordsBeforeTimestamp = ignoreRecordsBefore;
         this.ignoreRecordsAfterTimestamp = ignoreRecordsAfter;
@@ -267,7 +265,10 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             int h = 0;
             // TODO: need a better hash function considering the order (e.g., MD5)
             for (Execution r : t.getTraceAsSortedSet()) {
-                h^=r.hashCode();
+                h^=r.getOperation().getId();
+                h^=r.getAllocationComponent().getId();
+                h^=r.getEoi();
+                h^=r.getEss();
             }
             //
             this.hashCode = h;
@@ -285,10 +286,11 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             if (r1 == null || r2 == null) {
                 return false;
             }
-            return r1.getAllocationComponent().equals(r2.getAllocationComponent())
-                    && r1.getOperation().equals(r2.getOperation())
+            boolean retVal = r1.getAllocationComponent().getId() ==r2.getAllocationComponent().getId()
+                    && r1.getOperation().getId() == r2.getOperation().getId()
                     && r1.getEoi() == r2.getEoi()
                     && r1.getEss() == r2.getEss();
+            return retVal;
         }
 
         @Override
@@ -296,7 +298,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             if (this == obj) {
                 return true;
             }
-            if (obj == null || !(obj instanceof ExecutionTrace)) {
+            if (obj == null || !(obj instanceof ExecutionTraceHashContainer)) {
                 return false;
             }
             ExecutionTrace otherTrace = ((ExecutionTraceHashContainer) obj).t;
@@ -305,7 +307,8 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             }
             Iterator<Execution> otherIterator = otherTrace.getTraceAsSortedSet().iterator();
             for (Execution r1 : this.t.getTraceAsSortedSet()) {
-                if (!this.executionsEqual(r1, otherIterator.next())) {
+                Execution r2 = otherIterator.next();
+                if (!this.executionsEqual(r1, r2)) {
                     return false;
                 }
             }
