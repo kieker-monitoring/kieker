@@ -15,7 +15,7 @@
  * limitations under the License.
  * ==================================================
  */
-package kieker.tpan.recordConsumer;
+package kieker.tpan.recordConsumer.executionRecordTransformation;
 
 import java.util.ArrayList;
 import kieker.common.logReader.IKiekerRecordConsumer;

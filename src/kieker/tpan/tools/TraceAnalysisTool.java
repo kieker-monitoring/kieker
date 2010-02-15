@@ -53,7 +53,7 @@ import kieker.tpan.plugins.sequenceDiagram.SequenceDiagramPlugin;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tpan.recordConsumer.BriefJavaFxInformer;
-import kieker.tpan.recordConsumer.ExecutionRecordTransformer;
+import kieker.tpan.recordConsumer.executionRecordTransformation.ExecutionRecordTransformer;
 
 import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
 import kieker.tpmon.core.TpmonController;

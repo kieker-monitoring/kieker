@@ -1,4 +1,4 @@
-package kieker.tpan.recordConsumer;
+package kieker.tpan.recordConsumer.executionRecordTransformation;
 
 import kieker.tpan.datamodel.system.Execution;
 

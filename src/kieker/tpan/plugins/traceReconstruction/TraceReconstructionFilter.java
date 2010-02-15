@@ -37,8 +37,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.tpan.datamodel.system.ExecutionTrace;
 import kieker.tpan.datamodel.system.MessageTrace;
 import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
-import kieker.tpan.recordConsumer.ExecutionEventProcessingException;
-import kieker.tpan.recordConsumer.IExecutionListener;
+import kieker.tpan.recordConsumer.executionRecordTransformation.ExecutionEventProcessingException;
+import kieker.tpan.recordConsumer.executionRecordTransformation.IExecutionListener;
 
 /**
  *
