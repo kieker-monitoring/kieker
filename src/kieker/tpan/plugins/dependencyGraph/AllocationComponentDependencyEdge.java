@@ -1,7 +1,5 @@
 package kieker.tpan.plugins.dependencyGraph;
 
-import kieker.tpan.datamodel.AllocationComponentInstance;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -22,7 +20,7 @@ import kieker.tpan.datamodel.AllocationComponentInstance;
 
 /**
  *
- * @author voorn
+ * @author Andre van Hoorn
  */
 public class AllocationComponentDependencyEdge {
     private final AllocationComponentDependencyNode source;

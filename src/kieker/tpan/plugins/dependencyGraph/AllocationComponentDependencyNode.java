@@ -1,9 +1,7 @@
 package kieker.tpan.plugins.dependencyGraph;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import kieker.tpan.datamodel.AllocationComponentInstance;
 
 /*
@@ -26,7 +24,7 @@ import kieker.tpan.datamodel.AllocationComponentInstance;
 
 /**
  *
- * @author voorn
+ * @author Andre van Hoorn
  */
 public class AllocationComponentDependencyNode {
     private final AllocationComponentInstance allocationComponent;
