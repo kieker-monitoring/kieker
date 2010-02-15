@@ -52,7 +52,7 @@ public class DependencyNode<T> {
         return this.outgoingDependencies.values();
     }
 
-    public void addOutgoingDependency(DependencyNode<T> destination){
+    public DependencyEdge addOutgoingDependency(DependencyNode<T> destination){
         DependencyEdge e = this.outgoingDependencies.get(destination.getId());
         if (e == null){
             e = new DependencyEdge();
@@ -60,10 +60,11 @@ public class DependencyNode<T> {
             e.setDestination(destination);
             this.outgoingDependencies.put(destination.getId(), e);
         }
+        return e;
         //e.incOutgoingWeight();
     }
 
-    public void addIncomingDependency(DependencyNode source){
+    public DependencyEdge addIncomingDependency(DependencyNode source){
        DependencyEdge e = this.incomingDependencies.get(source.getId());
         if (e == null){
             e = new DependencyEdge();
@@ -71,6 +72,7 @@ public class DependencyNode<T> {
             e.setDestination(source);
             this.incomingDependencies.put(source.getId(), e);
         }
+       return e;
         //e.incIncomingWeight();
     }
 

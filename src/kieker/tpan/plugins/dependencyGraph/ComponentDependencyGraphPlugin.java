@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+import kieker.tpan.datamodel.AllocationComponentInstance;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.Execution;
@@ -35,21 +36,40 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public abstract class DependencyGraphPlugin<T> extends AbstractTpanMessageTraceProcessingComponent {
+public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProcessingComponent {
 
-    private static final Log log = LogFactory.getLog(DependencyGraphPlugin.class);
-    private AdjacencyMatrix adjMatrix;
+    private static final Log log = LogFactory.getLog(ComponentDependencyGraphPlugin.class);
+    private AbstractDependencyGraph<AllocationComponentInstance> dependencyGraph;
 
-    public DependencyGraphPlugin(final String name,
+    public ComponentDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory) {
         super(name, systemEntityFactory);
-        this.adjMatrix = new AdjacencyMatrix(systemEntityFactory);
+        this.dependencyGraph = new ComponentDependencyGraph(systemEntityFactory);
     }
 
-    protected abstract String nodeLabel(final DependencyNode<T> node,
-            final boolean shortLabels);
+    protected String nodeLabel(final DependencyNode<AllocationComponentInstance> node,
+            final boolean shortLabels) {
+        AllocationComponentInstance component = (AllocationComponentInstance) node.getAllocationComponent();
+        if (component == super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent) {
+            return "$";
+        }
 
-    private void dotEdges(Collection<DependencyNode> nodes,
+        String resourceContainerName = component.getExecutionContainer().getName();
+        String assemblyComponentName = component.getAssemblyComponent().getName();
+        String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
+        String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
+
+        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::").append(assemblyComponentName).append(":");
+        if (!shortLabels) {
+            strBuild.append(componentTypePackagePrefx);
+        } else {
+            strBuild.append("..");
+        }
+        strBuild.append(componentTypeIdentifier);
+        return strBuild.toString();
+    }
+
+    private void dotEdges(Collection<DependencyNode<AllocationComponentInstance>> nodes,
             PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
         for (DependencyNode node : nodes) {
@@ -84,9 +104,9 @@ public abstract class DependencyGraphPlugin<T> extends AbstractTpanMessageTraceP
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
 
-        dotEdges(this.adjMatrix.getAllocationComponentNodes(), ps,
+        dotEdges(this.dependencyGraph.getNodes(), ps,
                 shortLabels);
-        dotVerticesFromSubTree(this.adjMatrix.getAllocationComponentDependenciesRootNode(),
+        dotVerticesFromSubTree(this.dependencyGraph.getRootNode(),
                 ps, includeWeights);
 
         ps.println(edgestringBuilder.toString());
@@ -116,7 +136,7 @@ public abstract class DependencyGraphPlugin<T> extends AbstractTpanMessageTraceP
             }
             Execution senderExecution = m.getSendingExecution();
             Execution receiverExecution = m.getReceivingExecution();
-            adjMatrix.addDependency(senderExecution, receiverExecution);
+            dependencyGraph.addDependency(senderExecution, receiverExecution);
       log.info("New dependency" + senderExecution.getOperation() + "->" + receiverExecution.getOperation());
         }
         this.reportSuccess(t.getTraceId());
