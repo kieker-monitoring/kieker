@@ -36,6 +36,7 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import kieker.tpan.datamodel.system.ExecutionTrace;
 import kieker.tpan.datamodel.system.MessageTrace;
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 import kieker.tpan.recordConsumer.ExecutionEventProcessingException;
 import kieker.tpan.recordConsumer.IExecutionListener;
 
@@ -89,12 +90,21 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private List<IExecutionTraceReceiver> invalidExecutionTraceArtifactListeners = new ArrayList<IExecutionTraceReceiver>();
     private final TreeSet<Long> selectedTraces;
 
-    public TraceReconstructionFilter(final String name, final long maxTraceDurationMillis,
+    private final Execution rootExecution;
+
+    public TraceReconstructionFilter(final String name, 
+            final SystemEntityFactory systemEntityFactory,
+            final long maxTraceDurationMillis,
             final boolean ignoreInvalidTraces,
             final boolean onlyEquivClasses, final boolean considerHostname,
             final TreeSet<Long> selectedTraces,
             final long ignoreRecordsBefore, final long ignoreRecordsAfter) {
-        super(name);
+        super(name, systemEntityFactory);
+        this.rootExecution = new Execution(
+                super.getSystemEntityFactory().getOperationFactory().rootOperation,
+                super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent,
+                -1, "-1", -1, -1, -1, -1
+                );
         if (maxTraceDurationMillis < 0){
             throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: "+maxTraceDurationMillis+")");
         }
@@ -158,7 +168,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             try {
                 // if the polled trace is invalid, the following method toMesageTrace
                 // throws an exception
-                MessageTrace mt = polledTrace.toMessageTrace();
+                MessageTrace mt = polledTrace.toMessageTrace(this.rootExecution);
                 boolean isNewTrace = true;
                 if (this.onlyEquivClasses) {
                     ExecutionTraceHashContainer polledTraceHashContainer =

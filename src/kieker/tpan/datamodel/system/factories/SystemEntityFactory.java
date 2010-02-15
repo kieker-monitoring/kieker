@@ -1,5 +1,12 @@
 package kieker.tpan.datamodel.system.factories;
 
+import kieker.tpan.datamodel.system.AllocationComponentInstance;
+import kieker.tpan.datamodel.system.AssemblyComponentInstance;
+import kieker.tpan.datamodel.system.ComponentType;
+import kieker.tpan.datamodel.system.ExecutionContainer;
+import kieker.tpan.datamodel.system.Operation;
+import kieker.tpan.datamodel.system.Signature;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -17,24 +24,34 @@ package kieker.tpan.datamodel.system.factories;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  *
  * @author Andre van Hoorn
  */
 public class SystemEntityFactory {
-    private final TypeRepositoryFactory typeRepositoryFactory =
-            new TypeRepositoryFactory(this);
-    private final AssemblyFactory assemblyFactory =
-            new AssemblyFactory(this);
-    private final ExecutionEnvironmentFactory executionEnvironmentFactory =
-            new ExecutionEnvironmentFactory(this);
-    private final AllocationFactory allocationFactory =
-            new AllocationFactory(this);
-    private final OperationFactory operationFactory =
-            new OperationFactory(this);
 
-    public SystemEntityFactory(){
+    private final TypeRepositoryFactory typeRepositoryFactory;
+    private final AssemblyFactory assemblyFactory;
+    private final ExecutionEnvironmentFactory executionEnvironmentFactory;
+    private final AllocationFactory allocationFactory;
+    private final OperationFactory operationFactory;
+
+    public SystemEntityFactory() {
+        ComponentType rootComponentType =
+                new ComponentType(AbstractSystemSubFactory.ROOT_ELEMENT_ID, "$");
+        this.typeRepositoryFactory = new TypeRepositoryFactory(this, rootComponentType);
+        AssemblyComponentInstance rootAssemblyComponentInstance =
+                new AssemblyComponentInstance(AbstractSystemSubFactory.ROOT_ELEMENT_ID, "$", rootComponentType);
+        this.assemblyFactory = new AssemblyFactory(this, rootAssemblyComponentInstance);
+        ExecutionContainer rootExecutionContainer =
+                new ExecutionContainer(AbstractSystemSubFactory.ROOT_ELEMENT_ID, null, "$");
+        this.executionEnvironmentFactory = new ExecutionEnvironmentFactory(this, rootExecutionContainer);
+        AllocationComponentInstance rootAllocation =
+                new AllocationComponentInstance(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, null);
+        this.allocationFactory = new AllocationFactory(this, rootAllocation);
+        Signature rootSignature = new Signature("$", "<>", new String[]{});
+        Operation rootOperation = new Operation(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
+        this.operationFactory = new OperationFactory(this, rootOperation);
     }
 
     public final AllocationFactory getAllocationFactory() {

@@ -76,6 +76,9 @@ import org.apache.commons.logging.LogFactory;
 public class TraceAnalysisTool {
 
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
+
+    private static final SystemEntityFactory systemEntityFactory = new SystemEntityFactory();
+
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
     private static final String AGGREGATED_CALL_TREE_FN_PREFIX = "aggregatedCallTree";
@@ -432,7 +435,7 @@ public class TraceAnalysisTool {
             analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
             mtReconstrFilter =
-                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME,
+                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
                     maxTraceDurationMillis, ignoreInvalidTraces, traceEquivClassMode,
                     considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
                     ignoreRecordsAfterTimestamp);
@@ -448,15 +451,14 @@ public class TraceAnalysisTool {
             analysisInstance.addRecordConsumer(mtReconstrFilter);
 
             // TEST with new meta-model
-//            SystemEntityFactory fac = new SystemEntityFactory();
-//            mtReconstrFilter2 =
-//                    new kieker.tpan.plugins.TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME+" <new meta-model>",
-//                    maxTraceDurationMillis, ignoreInvalidTraces, traceEquivClassMode,
-//                    considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
-//                    ignoreRecordsAfterTimestamp);
-//            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(fac, considerHostname);
-//            execRecTransformer.addListener(mtReconstrFilter2);
-//            analysisInstance.addRecordConsumer(execRecTransformer);
+            mtReconstrFilter2 =
+                    new kieker.tpan.plugins.TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME+" <new meta-model>", systemEntityFactory,
+                    maxTraceDurationMillis, ignoreInvalidTraces, traceEquivClassMode,
+                    considerHostname, selectedTraces, ignoreRecordsBeforeTimestamp,
+                    ignoreRecordsAfterTimestamp);
+            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory, considerHostname);
+            execRecTransformer.addListener(mtReconstrFilter2);
+            analysisInstance.addRecordConsumer(execRecTransformer);
             // END test with new meta-model
 
             int numErrorCount = 0;
@@ -558,7 +560,7 @@ public class TraceAnalysisTool {
      */
     private static AbstractTpanMessageTraceProcessingComponent task_createSequenceDiagramPlotComponent(final String name, final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
-        AbstractTpanMessageTraceProcessingComponent sqdWriter = new AbstractTpanMessageTraceProcessingComponent(name) {
+        AbstractTpanMessageTraceProcessingComponent sqdWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
@@ -599,7 +601,7 @@ public class TraceAnalysisTool {
      * @param traceSet
      */
     private static DependencyGraphPlugin task_createDependencyGraphPlotComponent(final String name) {
-        DependencyGraphPlugin depGraph = new DependencyGraphPlugin(name, considerHostname);
+        DependencyGraphPlugin depGraph = new DependencyGraphPlugin(name, systemEntityFactory, considerHostname);
         return depGraph;
     }
 
@@ -614,13 +616,13 @@ public class TraceAnalysisTool {
      * @param traceSet
      */
     private static CallTreePlugin task_createAggregatedCallTreePlotComponent(final String name) {
-        CallTreePlugin callingTree = new CallTreePlugin(name, considerHostname, true); // true: aggregated
+        CallTreePlugin callingTree = new CallTreePlugin(name, systemEntityFactory, considerHostname, true); // true: aggregated
         return callingTree;
     }
 
     private static AbstractTpanMessageTraceProcessingComponent task_createCallTreesPlotComponent(final String name, final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix + CALL_TREE_FN_PREFIX).getCanonicalPath();
-        AbstractTpanMessageTraceProcessingComponent ctWriter = new AbstractTpanMessageTraceProcessingComponent(name) {
+        AbstractTpanMessageTraceProcessingComponent ctWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
@@ -662,7 +664,7 @@ public class TraceAnalysisTool {
      */
     private static AbstractTpanMessageTraceProcessingComponent task_createMessageTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
         final String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
-        AbstractTpanMessageTraceProcessingComponent mtWriter = new AbstractTpanMessageTraceProcessingComponent(name) {
+        AbstractTpanMessageTraceProcessingComponent mtWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
             PrintStream ps = new PrintStream(new FileOutputStream(outputFn));
 
@@ -700,7 +702,7 @@ public class TraceAnalysisTool {
      */
     private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         final String myOutputFn = new File(outputFn).getCanonicalPath();
-        AbstractTpanExecutionTraceProcessingComponent etWriter = new AbstractTpanExecutionTraceProcessingComponent(name) {
+        AbstractTpanExecutionTraceProcessingComponent etWriter = new AbstractTpanExecutionTraceProcessingComponent(name, systemEntityFactory) {
 
             final PrintStream ps = new PrintStream(new FileOutputStream(myOutputFn));
 

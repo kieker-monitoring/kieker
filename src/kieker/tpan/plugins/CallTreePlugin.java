@@ -29,6 +29,7 @@ import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.CallTreeNode;
 import kieker.tpan.datamodel.CallTreeOperationHashKey;
 import kieker.tpan.datamodel.Message;
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 
 
 /**
@@ -45,9 +46,9 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
     private final boolean considerHost;
     private final boolean aggregated;
 
-    public CallTreePlugin(final String name, final boolean considerHost,
+    public CallTreePlugin(final String name, SystemEntityFactory systemEntityFactory, final boolean considerHost,
             final boolean aggregated) {
-        super(name);
+        super(name, systemEntityFactory);
         this.considerHost = considerHost;
         this.aggregated = aggregated;
     }

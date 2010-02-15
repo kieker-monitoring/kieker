@@ -1,6 +1,5 @@
 package kieker.tpan.datamodel.system.factories;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.ExecutionContainer;
@@ -30,11 +29,15 @@ import kieker.tpan.datamodel.system.ExecutionContainer;
 public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
     private final Hashtable<String, ExecutionContainer> executionContainersByName =
             new Hashtable<String, ExecutionContainer>();
-    private final ArrayList<ExecutionContainer> executionContainersById =
-            new ArrayList<ExecutionContainer>();
+    private final Hashtable<Integer, ExecutionContainer> executionContainersById =
+            new Hashtable<Integer, ExecutionContainer>();
 
-    public ExecutionEnvironmentFactory(SystemEntityFactory systemFactory){
+    public final ExecutionContainer rootExecutionContainer;
+
+    public ExecutionEnvironmentFactory(final SystemEntityFactory systemFactory,
+            final ExecutionContainer rootExecutionContainer){
         super(systemFactory);
+        this.rootExecutionContainer = rootExecutionContainer;
     }
 
    /** Returns the instance for the passed factoryIdentifier; null if no instance
@@ -53,12 +56,12 @@ public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
             }
             int id = this.getAndIncrementNextId();
             newInst = new ExecutionContainer(id, null, name);
-            this.executionContainersById.add(id, newInst);
+            this.executionContainersById.put(id, newInst);
             this.executionContainersByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
     public final Collection<ExecutionContainer> getExecutionContainers(){
-        return this.executionContainersById;
+        return this.executionContainersById.values();
     }
 }

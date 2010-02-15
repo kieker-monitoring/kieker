@@ -28,7 +28,9 @@ import kieker.tpan.datamodel.system.AllocationComponentInstance;
  * @author Andre van Hoorn
  */
 public abstract class AbstractSystemSubFactory {
-    private final AtomicInteger nextId = new AtomicInteger(0);
+    public final static int ROOT_ELEMENT_ID = 0;
+
+    private final AtomicInteger nextId = new AtomicInteger(ROOT_ELEMENT_ID+1);
 
     private final SystemEntityFactory systemFactory;
 
@@ -42,5 +44,9 @@ public abstract class AbstractSystemSubFactory {
 
     protected final int getAndIncrementNextId() {
         return this.nextId.getAndIncrement();
+    }
+
+    protected final SystemEntityFactory getSystemFactory() {
+        return systemFactory;
     }
 }

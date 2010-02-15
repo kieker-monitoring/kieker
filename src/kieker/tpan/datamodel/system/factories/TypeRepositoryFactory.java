@@ -1,6 +1,5 @@
 package kieker.tpan.datamodel.system.factories;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.ComponentType;
@@ -30,10 +29,14 @@ public class TypeRepositoryFactory extends AbstractSystemSubFactory {
 
     private final Hashtable<String, ComponentType> componentTypesByName =
             new Hashtable<String, ComponentType>();
-    private final ArrayList<ComponentType> componentTypesById = new ArrayList<ComponentType>();
+    private final Hashtable<Integer,ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>();
 
-    public TypeRepositoryFactory(SystemEntityFactory systemFactory) {
+    public final ComponentType rootComponent;
+
+    public TypeRepositoryFactory(final SystemEntityFactory systemFactory,
+            final ComponentType rootComponent) {
         super(systemFactory);
+        this.rootComponent = rootComponent;
     }
 
     /** Returns the instance for the passed factoryIdentifier; null if no instance
@@ -52,12 +55,12 @@ public class TypeRepositoryFactory extends AbstractSystemSubFactory {
         }
         int id = this.getAndIncrementNextId();
         newInst = new ComponentType(id, fullqualifiedName);
-        this.componentTypesById.add(id, newInst);
+        this.componentTypesById.put(id, newInst);
         this.componentTypesByName.put(factoryIdentifier, newInst);
         return newInst;
     }
 
     public final Collection<ComponentType> getComponentTypes(){
-        return this.componentTypesById;
+        return this.componentTypesById.values();
     }
 }

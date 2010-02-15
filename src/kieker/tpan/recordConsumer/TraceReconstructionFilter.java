@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 import kieker.tpan.plugins.AbstractTpanTraceProcessingComponent;
 import kieker.tpan.plugins.TraceProcessingException;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
@@ -95,12 +96,14 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         KiekerExecutionRecord.class.getName()
     };
 
-    public TraceReconstructionFilter(final String name, final long maxTraceDurationMillis,
+    public TraceReconstructionFilter(final String name, 
+            final SystemEntityFactory systemEntityFactory,
+            final long maxTraceDurationMillis,
             final boolean ignoreInvalidTraces,
             final boolean onlyEquivClasses, final boolean considerHostname,
             final TreeSet<Long> selectedTraces,
             final long ignoreRecordsBefore, final long ignoreRecordsAfter) {
-        super(name);
+        super(name, systemEntityFactory);
         if (maxTraceDurationMillis < 0){
             throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: "+maxTraceDurationMillis+")");
         }

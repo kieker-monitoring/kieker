@@ -18,6 +18,8 @@
 
 package kieker.tpan.plugins;
 
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
+
 /**
  *
  * @author Andre van Hoorn
@@ -30,9 +32,17 @@ public abstract class AbstractTpanTraceProcessingComponent {
     private long lastTraceIdSuccess = -1;
     private long lastTraceIdError = -1;
 
-    private String name = "no name";
+    private final String name;
+    private final SystemEntityFactory systemEntityFactory;
 
-    public AbstractTpanTraceProcessingComponent (final String name){
+    private AbstractTpanTraceProcessingComponent(){
+        this.name = "no name";
+        this.systemEntityFactory = null;
+    }
+
+    public AbstractTpanTraceProcessingComponent (final String name, 
+            final SystemEntityFactory systemEntityFactory){
+        this.systemEntityFactory = systemEntityFactory;
         this.name = name;
     }
 
@@ -84,6 +94,10 @@ public abstract class AbstractTpanTraceProcessingComponent {
                     + this.numTracesSucceeded + " succeeded; "
                     + this.numTracesFailed + " failed."
         });
+    }
+
+   protected final SystemEntityFactory getSystemEntityFactory() {
+        return this.systemEntityFactory;
     }
 
 

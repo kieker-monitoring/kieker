@@ -1,6 +1,5 @@
 package kieker.tpan.datamodel.system.factories;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.AllocationComponentInstance;
@@ -33,11 +32,15 @@ public class AllocationFactory extends AbstractSystemSubFactory {
     private final Hashtable<String, AllocationComponentInstance>
             allocationComponentInstancesByName =
             new Hashtable<String, AllocationComponentInstance>();
-    private final ArrayList<AllocationComponentInstance>
-            allocationComponentInstancesById = new ArrayList<AllocationComponentInstance>();
+    private final Hashtable<Integer, AllocationComponentInstance>
+            allocationComponentInstancesById = new Hashtable<Integer, AllocationComponentInstance>();
 
-    public AllocationFactory(SystemEntityFactory systemFactory){
+    public final AllocationComponentInstance rootAllocationComponent;
+
+    public AllocationFactory(final SystemEntityFactory systemFactory,
+            final AllocationComponentInstance rootAllocationComponent){
         super(systemFactory);
+        this.rootAllocationComponent = rootAllocationComponent;
     }
 
     /** Returns the instance for the passed factoryIdentifier; null if no instance
@@ -58,12 +61,12 @@ public class AllocationFactory extends AbstractSystemSubFactory {
             int id = this.getAndIncrementNextId();
             newInst = new AllocationComponentInstance(id,
                     assemblyComponentInstance, executionContainer);
-            this.allocationComponentInstancesById.add(id, newInst);
+            this.allocationComponentInstancesById.put(id, newInst);
             this.allocationComponentInstancesByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
     public final Collection<AllocationComponentInstance> getAllocationComponentInstances(){
-        return this.allocationComponentInstancesById;
+        return this.allocationComponentInstancesById.values();
     }
 }

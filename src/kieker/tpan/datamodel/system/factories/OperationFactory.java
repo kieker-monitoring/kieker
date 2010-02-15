@@ -1,6 +1,5 @@
 package kieker.tpan.datamodel.system.factories;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.ComponentType;
@@ -32,11 +31,15 @@ import kieker.tpan.datamodel.system.Signature;
 public class OperationFactory extends AbstractSystemSubFactory {
     private final Hashtable<String, Operation> operationsByName =
             new Hashtable<String, Operation>();
-    private final ArrayList<Operation> operationsById =
-            new ArrayList<Operation>();
+    private final Hashtable<Integer, Operation> operationsById =
+            new Hashtable<Integer, Operation>();
 
-    public OperationFactory(SystemEntityFactory systemFactory){
+    public final Operation rootOperation;
+
+    public OperationFactory(final SystemEntityFactory systemFactory,
+            final Operation rootOperation){
         super(systemFactory);
+        this.rootOperation = rootOperation;
     }
 
     /** Returns the instance for the passed factoryIdentifier; null if no instance
@@ -57,12 +60,12 @@ public class OperationFactory extends AbstractSystemSubFactory {
             int id = this.getAndIncrementNextId();
             newInst = new Operation(id,
                     componentType, signature);
-            this.operationsById.add(id, newInst);
+            this.operationsById.put(id, newInst);
             this.operationsByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
     public final Collection<Operation> getOperations(){
-        return this.operationsById;
+        return this.operationsById.values();
     }
 }

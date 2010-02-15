@@ -61,8 +61,7 @@ public class ExecutionTrace {
     private long maxTout = Long.MIN_VALUE;
     private int maxStackDepth = -1;
 
-    private ExecutionTrace() {
-    }
+    private ExecutionTrace() { }
 
     public ExecutionTrace(long traceId) {
         this.traceId = traceId;
@@ -88,16 +87,16 @@ public class ExecutionTrace {
         this.set.add(execution);
     }
 
-    public MessageTrace toMessageTrace() throws InvalidTraceException {
+    public MessageTrace toMessageTrace(final Execution rootExecution)
+            throws InvalidTraceException {
         Vector<Message> mSeq = new Vector<Message>();
         Stack<Message> curStack = new Stack<Message>();
         Iterator<Execution> eSeqIt = this.set.iterator();
-        Execution curE = null, prevE = null;
-        int itNum = 0;
-        //log.info("Analyzing trace " + this.traceId);
+
+        Execution prevE = rootExecution;
         int prevEoi = -1;
-        while (eSeqIt.hasNext()) {
-            curE = eSeqIt.next();
+        for (int itNum = 0; eSeqIt.hasNext(); itNum++) {
+            Execution curE = eSeqIt.next();
             if (itNum++ == 0 && curE.getEss() != 0) {
                 InvalidTraceException ex =
                         new InvalidTraceException("First execution must have ess "
@@ -114,28 +113,21 @@ public class ExecutionTrace {
             }
             prevEoi = curE.getEoi();
 
-            /*log.info("");
-            log.info("Iteration" + (itNum++));
-            log.info("curE:" + curE);
-            log.info("prevE:" + prevE);*/
-            // First, we might need to clean up the stack for the next execution callMessage 
-            if (prevE != null && prevE.getEss() >= curE.getEss()) {
-                //log.info("Cleaning stack ...");
+            // First, we might need to clean up the stack for the next execution
+            // callMessage
+            if (prevE != rootExecution && prevE.getEss() >= curE.getEss()) {
                 Execution curReturnReceiver; // receiverComponentName of return message
                 while (curStack.size() > curE.getEss()) {
-                    //log.info("loop begin: curStack.size() " + curStack.size());
                     prevE = curStack.pop().getSendingExecution(); //.execution;
                     curReturnReceiver = curStack.peek().getSendingExecution(); //.execution;
                     Message m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
                     mSeq.add(m);
                     prevE = curReturnReceiver;
-                    //log.info(m);
-                    //log.info("loop end: curStack.size() " + curStack.size());
                 }
             }
             // Now, we handle the current execution callMessage 
-            if (prevE == null) { // initial execution callMessage
-                Message m = new SynchronousCallMessage(curE.getTin(), null, curE);
+            if (prevE == rootExecution) { // initial execution callMessage
+                Message m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
                 mSeq.add(m);
                 curStack.push(m);
             } else if (prevE.getEss() < curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
@@ -146,7 +138,7 @@ public class ExecutionTrace {
             if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
                 while (!curStack.empty()) {
                     curE = curStack.pop().getSendingExecution(); //.execution;
-                    prevE = curStack.empty() ? null : curStack.peek().getSendingExecution(); //.execution;
+                    prevE = curStack.empty() ? rootExecution : curStack.peek().getSendingExecution(); //.execution;
                     Message m = new SynchronousReplyMessage(curE.getTout(), curE, prevE);
                     mSeq.add(m);
                 }

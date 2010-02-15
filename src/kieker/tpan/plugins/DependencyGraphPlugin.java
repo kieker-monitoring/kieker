@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.AdjacencyMatrix;
 import kieker.tpan.datamodel.Message;
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
@@ -37,8 +38,8 @@ public class DependencyGraphPlugin extends AbstractTpanMessageTraceProcessingCom
     private AdjacencyMatrix adjMatrix = new AdjacencyMatrix();
     private final boolean considerHost;
 
-    public DependencyGraphPlugin(final String name, final boolean considerHost) {
-        super(name);
+    public DependencyGraphPlugin(final String name, SystemEntityFactory systemEntityFactory, final boolean considerHost) {
+        super(name, systemEntityFactory);
         this.considerHost = considerHost;
     }
 

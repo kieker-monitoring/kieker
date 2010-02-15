@@ -1,6 +1,5 @@
 package kieker.tpan.datamodel.system.factories;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.system.AssemblyComponentInstance;
@@ -32,11 +31,15 @@ public class AssemblyFactory extends AbstractSystemSubFactory{
     private final Hashtable<String, AssemblyComponentInstance>
             assemblyComponentInstancesByName =
             new Hashtable<String, AssemblyComponentInstance>();
-    private final ArrayList<AssemblyComponentInstance>
-            assemblyComponentInstancesById = new ArrayList<AssemblyComponentInstance>();
+    private final Hashtable<Integer, AssemblyComponentInstance>
+            assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponentInstance>();
 
-    public AssemblyFactory(SystemEntityFactory systemFactory){
+    public final AssemblyComponentInstance rootAssemblyComponent;
+
+    public AssemblyFactory(final SystemEntityFactory systemFactory,
+            final AssemblyComponentInstance rootAssemblyComponent){
         super(systemFactory);
+        this.rootAssemblyComponent = rootAssemblyComponent;
     }
 
     /** Returns the instance for the passed factoryIdentifier; null if no instance
@@ -55,12 +58,12 @@ public class AssemblyFactory extends AbstractSystemSubFactory{
             }
             int id = this.getAndIncrementNextId();
             newInst = new AssemblyComponentInstance(id, "@"+id, componentType);
-            this.assemblyComponentInstancesById.add(id, newInst);
+            this.assemblyComponentInstancesById.put(id, newInst);
             this.assemblyComponentInstancesByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
     public final Collection<AssemblyComponentInstance> getAssemblyComponentInstances(){
-        return this.assemblyComponentInstancesById;
+        return this.assemblyComponentInstancesById.values();
     }
 }

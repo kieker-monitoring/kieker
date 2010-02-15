@@ -18,6 +18,7 @@
 
 package kieker.tpan.plugins;
 
+import kieker.tpan.datamodel.system.factories.SystemEntityFactory;
 import kieker.tpan.recordConsumer.IMessageTraceReceiver;
 
 /**
@@ -27,7 +28,7 @@ import kieker.tpan.recordConsumer.IMessageTraceReceiver;
 public abstract class AbstractTpanMessageTraceProcessingComponent 
         extends AbstractTpanTraceProcessingComponent
         implements IMessageTraceReceiver {
-    public AbstractTpanMessageTraceProcessingComponent (String name){
-        super (name);
+    public AbstractTpanMessageTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
+        super (name, systemEntityFactory);
     }
 }
