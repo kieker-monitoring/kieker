@@ -38,13 +38,24 @@ public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
             final ExecutionContainer rootExecutionContainer){
         super(systemFactory);
         this.rootExecutionContainer = rootExecutionContainer;
+        this.executionContainersById.put(rootExecutionContainer.getId(),
+                rootExecutionContainer);
     }
 
    /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final ExecutionContainer getExecutionContainerByFactoryIdentifier(final String factoryIdentifier){
+    public final ExecutionContainer getExecutionContainerByFactoryIdentifier(
+            final String factoryIdentifier){
         return this.executionContainersByName.get(factoryIdentifier);
+    }
+
+   /** Returns the instance for the passed container ID; null if no instance
+     *  with this ID.
+     */
+    public final ExecutionContainer getExecutionContainerByContainerId(
+            final int containerId){
+        return this.executionContainersById.get(containerId);
     }
 
     public final ExecutionContainer createAndRegisterExecutionContainer(

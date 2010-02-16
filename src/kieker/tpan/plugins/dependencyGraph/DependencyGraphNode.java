@@ -40,7 +40,7 @@ public class DependencyGraphNode<T> {
         this.entity = entity;
     }
 
-   public final T getAllocationComponent() {
+   public final T getEntity() {
         return this.entity;
     }
 
