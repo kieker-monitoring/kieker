@@ -49,6 +49,7 @@ import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessin
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanTraceProcessingComponent;
 import kieker.tpan.plugins.callTree.CallTreePlugin;
 import kieker.tpan.plugins.dependencyGraph.ComponentDependencyGraphPlugin;
+import kieker.tpan.plugins.dependencyGraph.ContainerDependencyGraphPlugin;
 import kieker.tpan.plugins.sequenceDiagram.SequenceDiagramPlugin;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter;
@@ -80,7 +81,9 @@ public class TraceAnalysisTool {
     private static final SystemEntityFactory systemEntityFactory = new SystemEntityFactory();
 
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
-    private static final String DEPENDENCY_GRAPH_FN_PREFIX = "dependencyGraph";
+    private static final String COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "componentDependencyGraph";
+    private static final String CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX = "containerDependencyGraph";
+    private static final String OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "operationDependencyGraph";
     private static final String AGGREGATED_CALL_TREE_FN_PREFIX = "aggregatedCallTree";
     private static final String CALL_TREE_FN_PREFIX = "callTree";
     private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
@@ -112,7 +115,9 @@ public class TraceAnalysisTool {
     private static final String CMD_OPT_NAME_NOHOSTNAMES = "ignore-hostnames";
     private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     private static final String CMD_OPT_NAME_TASK_PLOTSEQDS = "plot-Sequence-Diagrams";
-    private static final String CMD_OPT_NAME_TASK_PLOTDEPG = "plot-Dependency-Graph";
+    private static final String CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG = "plot-Component-Dependency-Graph";
+    private static final String CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG = "plot-Container-Dependency-Graph";
+    private static final String CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG = "plot-Operation-Dependency-Graph";
     private static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE = "plot-Aggregated-Call-Tree";
     private static final String CMD_OPT_NAME_TASK_PLOTCALLTREES = "plot-Call-Trees";
     private static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
@@ -136,7 +141,9 @@ public class TraceAnalysisTool {
         //OptionGroup cmdlOptGroupTask = new OptionGroup();
         //cmdlOptGroupTask.isRequired();
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription("Generate and store sequence diagrams (.pic files)").create());
-        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTDEPG).hasArg(false).withDescription("Generate and store a dependency graph (.dot file)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG).hasArg(false).withDescription("Generate and store a component dependency graph (.dot file)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG).hasArg(false).withDescription("Generate and store a container dependency graph (.dot file)").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG).hasArg(false).withDescription("Generate and store a operation dependency graph (.dot file)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE).hasArg(false).withDescription("Generate and store an aggregated call tree (.dot files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCALLTREES).hasArg(false).withDescription("Generate and store call trees for the selected traces (.dot files)").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription("Save message trace representations of valid traces (.txt files)").create());
@@ -291,7 +298,9 @@ public class TraceAnalysisTool {
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTSEQDS)
-                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTDEPG)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
+                    || longOpt.equals(CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PLOTCALLTREES)
                     || longOpt.equals(CMD_OPT_NAME_TASK_PRINTEXECTRACES)
@@ -346,7 +355,9 @@ public class TraceAnalysisTool {
         final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
         final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
         final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-        final String PLOTDEPGRAPH_COMPONENT_NAME = "Dependency graph";
+        final String PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph";
+        final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
+        final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
         final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
         final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call trees";
         final String PLOTCALLTREE_COMPONENT_NAME = "Call trees";
@@ -390,13 +401,27 @@ public class TraceAnalysisTool {
                         outputDir + File.separator + outputFnPrefix);
                 msgTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
-            ComponentDependencyGraphPlugin componentPlotDepGraph = null;
-            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTDEPG)) {
+            ComponentDependencyGraphPlugin componentPlotComponentDepGraph = null;
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG)) {
                 numRequestedTasks++;
-                componentPlotDepGraph =
-                        task_createDependencyGraphPlotComponent(PLOTDEPGRAPH_COMPONENT_NAME);
-                msgTraceProcessingComponents.add(componentPlotDepGraph);
+                componentPlotComponentDepGraph =
+                        task_createComponentDependencyGraphPlotComponent(PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME);
+                msgTraceProcessingComponents.add(componentPlotComponentDepGraph);
             }
+            ContainerDependencyGraphPlugin componentPlotContainerDepGraph = null;
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
+                numRequestedTasks++;
+                componentPlotContainerDepGraph =
+                        task_createContainerDependencyGraphPlotComponent(PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
+                msgTraceProcessingComponents.add(componentPlotContainerDepGraph);
+            }
+//           OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
+//            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)) {
+//                numRequestedTasks++;
+//                componentPlotOperationDepGraph =
+//                        task_createOperationDependencyGraphPlotComponent(PLOTOPERATIONDEPGRAPH_COMPONENT_NAME);
+//                msgTraceProcessingComponents.add(componentPlotOperationDepGraph);
+//            }
             AbstractTpanMessageTraceProcessingComponent componentPlotCallTrees = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
                 numRequestedTasks++;
@@ -456,10 +481,18 @@ public class TraceAnalysisTool {
             try {
                 analysisInstance.run();
 
-                if (componentPlotDepGraph != null) {
-                    componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
+                if (componentPlotComponentDepGraph != null) {
+                    componentPlotComponentDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
                             !traceEquivClassMode, shortLabels);
                 }
+                if (componentPlotContainerDepGraph != null) {
+                    componentPlotContainerDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
+                            !traceEquivClassMode, shortLabels);
+                }
+//                if (componentPlotOperationDepGraph != null) {
+//                    componentPlotOperationDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + Operation_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
+//                            !traceEquivClassMode, shortLabels);
+//                }
 
                 if (componentPlotAggregatedCallTree != null) {
                     componentPlotAggregatedCallTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + AGGREGATED_CALL_TREE_FN_PREFIX).getCanonicalPath(), false, shortLabels); // !traceEquivClassMode
@@ -589,8 +622,13 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static ComponentDependencyGraphPlugin task_createDependencyGraphPlotComponent(final String name) {
+    private static ComponentDependencyGraphPlugin task_createComponentDependencyGraphPlotComponent(final String name) {
         ComponentDependencyGraphPlugin depGraph = new ComponentDependencyGraphPlugin(name, systemEntityFactory);
+        return depGraph;
+    }
+
+    private static ContainerDependencyGraphPlugin task_createContainerDependencyGraphPlotComponent(final String name) {
+        ContainerDependencyGraphPlugin depGraph = new ContainerDependencyGraphPlugin(name, systemEntityFactory);
         return depGraph;
     }
 
