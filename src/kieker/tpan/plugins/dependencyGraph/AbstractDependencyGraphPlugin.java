@@ -36,21 +36,19 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
 public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessageTraceProcessingComponent {
 
     private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
-    private DependencyGraph<T> dependencyGraph;
+    protected final DependencyGraph<T> dependencyGraph;
 
     public AbstractDependencyGraphPlugin(final String name,
-            final SystemEntityFactory systemEntityFactory) {
+            final SystemEntityFactory systemEntityFactory, 
+            final DependencyGraph<T> dependencyGraph){
         super(name, systemEntityFactory);
-        this.dependencyGraph =
-                new DependencyGraph(
-                systemEntityFactory.getAllocationFactory().rootAllocationComponent.getId(),
-                systemEntityFactory.getAllocationFactory().rootAllocationComponent);
+        this.dependencyGraph = dependencyGraph;
     }
 
     protected abstract void dotEdges(Collection<DependencyGraphNode<T>> nodes,
             PrintStream ps, final boolean shortLabels);
 
-    protected abstract void dotVerticesFromSubTree(final DependencyGraphNode n,
+    protected abstract void dotVerticesFromSubTree(final DependencyGraphNode<T> n,
             final PrintStream ps, final boolean includeWeights);
 
     private void graphToDot(

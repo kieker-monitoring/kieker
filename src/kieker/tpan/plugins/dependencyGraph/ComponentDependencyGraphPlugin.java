@@ -38,15 +38,13 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
 public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugin<AllocationComponentInstance> {
 
     private static final Log log = LogFactory.getLog(ComponentDependencyGraphPlugin.class);
-    private DependencyGraph<AllocationComponentInstance> dependencyGraph;
 
     public ComponentDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory) {
-        super(name, systemEntityFactory);
-        this.dependencyGraph = 
-                new DependencyGraph<AllocationComponentInstance>(
+        super(name, systemEntityFactory,
+                new DependencyGraph(
                 systemEntityFactory.getAllocationFactory().rootAllocationComponent.getId(),
-                systemEntityFactory.getAllocationFactory().rootAllocationComponent);
+                systemEntityFactory.getAllocationFactory().rootAllocationComponent));
     }
 
     protected String nodeLabel(final DependencyGraphNode<AllocationComponentInstance> node,
@@ -75,20 +73,18 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
         for (DependencyGraphNode node : nodes) {
-            strBuild.append(node.getId()).append("[label =\"")
-                    .append(nodeLabel(node, shortLabels)).append("\",shape=box];\n");
+            strBuild.append(node.getId()).append("[label =\"").append(nodeLabel(node, shortLabels)).append("\",shape=box];\n");
         }
         ps.println(strBuild.toString());
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
     protected void dotVerticesFromSubTree(final DependencyGraphNode n,
-        final PrintStream ps, final boolean includeWeights) {
-        for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>)n.getOutgoingDependencies()) {
+            final PrintStream ps, final boolean includeWeights) {
+        for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>) n.getOutgoingDependencies()) {
             DependencyGraphNode destNode = outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
-            strBuild.append("\n").append(n.getId()).append("->")
-                    .append(destNode.getId()).append("[style=dashed,arrowhead=open");
+            strBuild.append("\n").append(n.getId()).append("->").append(destNode.getId()).append("[style=dashed,arrowhead=open");
             if (includeWeights) {
                 strBuild.append(",label = ").append(outgoingDependency.getOutgoingWeight()).append(", weight =").append((outgoingDependency).getOutgoingWeight());
             }
@@ -103,20 +99,20 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             if (m instanceof SynchronousReplyMessage) {
                 continue;
             }
-        AllocationComponentInstance senderComponent = m.getSendingExecution().getAllocationComponent();
-        AllocationComponentInstance receiverComponent = m.getReceivingExecution().getAllocationComponent();
-        DependencyGraphNode<AllocationComponentInstance> senderNode = this.dependencyGraph.getNode(senderComponent.getId());
-        DependencyGraphNode<AllocationComponentInstance> receiverNode = this.dependencyGraph.getNode(receiverComponent.getId());
-        if (senderNode == null) {
-            senderNode = new DependencyGraphNode<AllocationComponentInstance>(senderComponent.getId(), senderComponent);
-            this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-        }
-        if (receiverNode == null) {
-            receiverNode = new DependencyGraphNode<AllocationComponentInstance>(receiverComponent.getId(), receiverComponent);
-            this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-        }
-        senderNode.addOutgoingDependency(receiverNode);
-        receiverNode.addIncomingDependency(senderNode);
+            AllocationComponentInstance senderComponent = m.getSendingExecution().getAllocationComponent();
+            AllocationComponentInstance receiverComponent = m.getReceivingExecution().getAllocationComponent();
+            DependencyGraphNode<AllocationComponentInstance> senderNode = this.dependencyGraph.getNode(senderComponent.getId());
+            DependencyGraphNode<AllocationComponentInstance> receiverNode = this.dependencyGraph.getNode(receiverComponent.getId());
+            if (senderNode == null) {
+                senderNode = new DependencyGraphNode<AllocationComponentInstance>(senderComponent.getId(), senderComponent);
+                this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+            }
+            if (receiverNode == null) {
+                receiverNode = new DependencyGraphNode<AllocationComponentInstance>(receiverComponent.getId(), receiverComponent);
+                this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+            }
+            senderNode.addOutgoingDependency(receiverNode);
+            receiverNode.addIncomingDependency(senderNode);
         }
         this.reportSuccess(t.getTraceId());
     }
