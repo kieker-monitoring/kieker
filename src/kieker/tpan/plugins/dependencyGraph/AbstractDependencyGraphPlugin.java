@@ -22,11 +22,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
-import kieker.tpan.datamodel.AllocationComponentInstance;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.plugins.util.dot.DotFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
@@ -37,6 +37,9 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
 
     private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
     protected final DependencyGraph<T> dependencyGraph;
+
+    public static final String STEREOTYPE_EXECUTION_CONTAINER="<<execution container>>";
+    public static final String STEREOTYPE_ALLOCATION_COMPONENT="<<component>>";
 
     public AbstractDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory, 
@@ -55,15 +58,12 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
             final PrintStream ps, final boolean includeWeights,
             final boolean shortLabels) {
         // preamble:
-        ps.println("digraph G {");
-        StringBuilder edgestringBuilder = new StringBuilder();
+        ps.println("digraph G {\n rankdir="+DotFactory.DOT_DOT_RANKDIR_LR+";");
 
         dotEdges(this.dependencyGraph.getNodes(), ps,
                 shortLabels);
         dotVerticesFromSubTree(this.dependencyGraph.getRootNode(),
                 ps, includeWeights);
-
-        ps.println(edgestringBuilder.toString());
         ps.println("}");
     }
     private int numGraphsSaved = 0;

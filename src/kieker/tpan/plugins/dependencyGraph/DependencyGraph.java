@@ -2,8 +2,6 @@ package kieker.tpan.plugins.dependencyGraph;
 
 import java.util.Collection;
 import java.util.TreeMap;
-import kieker.tpan.datamodel.AllocationComponentInstance;
-import kieker.tpan.datamodel.Execution;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,7 +17,7 @@ public class DependencyGraph<T> {
     private DependencyGraphNode<T> rootNode;
 
     public DependencyGraph(int rootNodeId, T rootEntity) {
-        this.rootNode = new DependencyGraphNode(rootNodeId, rootEntity);
+        this.rootNode = new DependencyGraphNode<T>(rootNodeId, rootEntity);
         this.nodes.put(rootNodeId, rootNode);
     }
 

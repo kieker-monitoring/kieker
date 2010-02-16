@@ -66,7 +66,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         StringBuilder strBuild = new StringBuilder();//(resourceContainerName).append("::")
         strBuild.append(assemblyComponentName).append(":");
         if (!shortLabels) {
-            strBuild.append(componentTypePackagePrefx);
+            strBuild.append(componentTypePackagePrefx).append(".");
         } else {
             strBuild.append("..");
         }
@@ -95,13 +95,14 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 
         ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
         int rootContainerId = rootContainer.getId();
+        AllocationComponentInstance rootComponent = this.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent;
         StringBuilder strBuild = new StringBuilder();
         for (Entry<Integer, Collection<DependencyGraphNode<AllocationComponentInstance>>> entry : component2containerMapping.entrySet()) {
             int curContainerId = entry.getKey();
             ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getExecutionContainerByContainerId(curContainerId);
             if (curContainerId == rootContainerId) {
                 strBuild.append(DotFactory.createNode("",
-                        COMPONENT_NODE_ID_PREFIX + rootContainer.getId(),
+                        COMPONENT_NODE_ID_PREFIX + rootComponent.getId(),
                         componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabels),
                         DotFactory.DOT_SHAPE_OVAL,
                         null, // style

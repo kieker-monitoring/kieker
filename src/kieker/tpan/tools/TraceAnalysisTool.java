@@ -50,6 +50,7 @@ import kieker.tpan.plugins.traceReconstruction.AbstractTpanTraceProcessingCompon
 import kieker.tpan.plugins.callTree.CallTreePlugin;
 import kieker.tpan.plugins.dependencyGraph.ComponentDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.ContainerDependencyGraphPlugin;
+import kieker.tpan.plugins.dependencyGraph.OperationDependencyGraphPlugin;
 import kieker.tpan.plugins.sequenceDiagram.SequenceDiagramPlugin;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter;
@@ -415,13 +416,13 @@ public class TraceAnalysisTool {
                         task_createContainerDependencyGraphPlotComponent(PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotContainerDepGraph);
             }
-//           OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
-//            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)) {
-//                numRequestedTasks++;
-//                componentPlotOperationDepGraph =
-//                        task_createOperationDependencyGraphPlotComponent(PLOTOPERATIONDEPGRAPH_COMPONENT_NAME);
-//                msgTraceProcessingComponents.add(componentPlotOperationDepGraph);
-//            }
+           OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
+            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)) {
+                numRequestedTasks++;
+                componentPlotOperationDepGraph =
+                        task_createOperationDependencyGraphPlotComponent(PLOTOPERATIONDEPGRAPH_COMPONENT_NAME);
+                msgTraceProcessingComponents.add(componentPlotOperationDepGraph);
+            }
             AbstractTpanMessageTraceProcessingComponent componentPlotCallTrees = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
                 numRequestedTasks++;
@@ -489,10 +490,10 @@ public class TraceAnalysisTool {
                     componentPlotContainerDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
                             !traceEquivClassMode, shortLabels);
                 }
-//                if (componentPlotOperationDepGraph != null) {
-//                    componentPlotOperationDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + Operation_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-//                            !traceEquivClassMode, shortLabels);
-//                }
+                if (componentPlotOperationDepGraph != null) {
+                    componentPlotOperationDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
+                            !traceEquivClassMode, shortLabels);
+                }
 
                 if (componentPlotAggregatedCallTree != null) {
                     componentPlotAggregatedCallTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + AGGREGATED_CALL_TREE_FN_PREFIX).getCanonicalPath(), false, shortLabels); // !traceEquivClassMode
@@ -629,6 +630,11 @@ public class TraceAnalysisTool {
 
     private static ContainerDependencyGraphPlugin task_createContainerDependencyGraphPlotComponent(final String name) {
         ContainerDependencyGraphPlugin depGraph = new ContainerDependencyGraphPlugin(name, systemEntityFactory);
+        return depGraph;
+    }
+
+    private static OperationDependencyGraphPlugin task_createOperationDependencyGraphPlotComponent(final String name) {
+        OperationDependencyGraphPlugin depGraph = new OperationDependencyGraphPlugin(name, systemEntityFactory);
         return depGraph;
     }
 
