@@ -76,7 +76,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     /** Traverse tree recursively and generate dot code for vertices. */
     protected void dotVerticesFromSubTree(final DependencyGraphNode<ExecutionContainer> n,
             final PrintStream ps, final boolean includeWeights) {
-        for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>) n.getOutgoingDependencies()) {
+        for (DependencyEdge outgoingDependency : n.getOutgoingDependencies()) {
             DependencyGraphNode<ExecutionContainer> destNode = outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
             if (includeWeights) {
