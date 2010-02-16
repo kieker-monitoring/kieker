@@ -458,7 +458,7 @@ public class TraceAnalysisTool {
 
                 if (componentPlotDepGraph != null) {
                     componentPlotDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-                            !traceEquivClassMode, considerHostname, shortLabels);
+                            !traceEquivClassMode, shortLabels);
                 }
 
                 if (componentPlotAggregatedCallTree != null) {

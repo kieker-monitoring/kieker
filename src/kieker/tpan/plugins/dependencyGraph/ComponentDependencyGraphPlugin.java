@@ -25,7 +25,6 @@ import java.util.Collection;
 import kieker.tpan.datamodel.AllocationComponentInstance;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.Execution;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
@@ -36,7 +35,7 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProcessingComponent {
+public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugin<AllocationComponentInstance> {
 
     private static final Log log = LogFactory.getLog(ComponentDependencyGraphPlugin.class);
     private DependencyGraph<AllocationComponentInstance> dependencyGraph;
@@ -72,7 +71,7 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
         return strBuild.toString();
     }
 
-    private void dotEdges(Collection<DependencyGraphNode<AllocationComponentInstance>> nodes,
+    protected void dotEdges(Collection<DependencyGraphNode<AllocationComponentInstance>> nodes,
             PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
         for (DependencyGraphNode node : nodes) {
@@ -83,7 +82,7 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    private void dotVerticesFromSubTree(final DependencyGraphNode n,
+    protected void dotVerticesFromSubTree(final DependencyGraphNode n,
         final PrintStream ps, final boolean includeWeights) {
         for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>)n.getOutgoingDependencies()) {
             DependencyGraphNode destNode = outgoingDependency.getDestination();
@@ -97,38 +96,6 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
             dotVerticesFromSubTree(destNode, ps, includeWeights);
             ps.println(strBuild.toString());
         }
-    }
-
-    private void graphToDot(
-            final PrintStream ps, final boolean includeWeights,
-            final boolean shortLabels) {
-        // preamble:
-        ps.println("digraph G {");
-        StringBuilder edgestringBuilder = new StringBuilder();
-
-        dotEdges(this.dependencyGraph.getNodes(), ps,
-                shortLabels);
-        dotVerticesFromSubTree(this.dependencyGraph.getRootNode(),
-                ps, includeWeights);
-
-        ps.println(edgestringBuilder.toString());
-        ps.println("}");
-    }
-
-    private int numGraphsSaved = 0;
-
-    public void saveToDotFile(final String outputFnBase, final boolean includeWeights,
-            final boolean considerHost, final boolean shortLabels) throws FileNotFoundException {
-        PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        this.graphToDot(ps, includeWeights, shortLabels);
-        ps.flush();
-        ps.close();
-        this.numGraphsSaved++;
-        this.printMessage(new String[] {
-        "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'",
-        "Dot file can be converted using the dot tool",
-        "Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg"
-        });
     }
 
     public void newTrace(MessageTrace t) {
@@ -152,16 +119,5 @@ public class ComponentDependencyGraphPlugin extends AbstractTpanMessageTraceProc
         receiverNode.addIncomingDependency(senderNode);
         }
         this.reportSuccess(t.getTraceId());
-    }
-
-    @Override
-    public void printStatusMessage() {
-        super.printStatusMessage();
-        System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : ""));
-    }
-
-    @Override
-    public void cleanup() {
-        // no cleanup required
     }
 }
