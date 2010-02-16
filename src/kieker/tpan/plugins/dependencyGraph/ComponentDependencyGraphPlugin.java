@@ -46,14 +46,14 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     public ComponentDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory) {
         super(name, systemEntityFactory,
-                new DependencyGraph(
+                new DependencyGraph<AllocationComponentInstance>(
                 systemEntityFactory.getAllocationFactory().rootAllocationComponent.getId(),
                 systemEntityFactory.getAllocationFactory().rootAllocationComponent));
     }
 
     private String componentNodeLabel(final DependencyGraphNode<AllocationComponentInstance> node,
             final boolean shortLabels) {
-        AllocationComponentInstance component = (AllocationComponentInstance) node.getEntity();
+        AllocationComponentInstance component = node.getEntity();
         if (component == super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent) {
             return "$";
         }
@@ -63,7 +63,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        StringBuilder strBuild = new StringBuilder();//(resourceContainerName).append("::")
+        StringBuilder strBuild = new StringBuilder(STEREOTYPE_ALLOCATION_COMPONENT+"\\n");//(resourceContainerName).append("::")
         strBuild.append(assemblyComponentName).append(":");
         if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx).append(".");
@@ -116,7 +116,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             } else {
                 strBuild.append(DotFactory.createCluster("",
                         CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
-                        curContainer.getName(),
+                        STEREOTYPE_EXECUTION_CONTAINER+"\\n"+curContainer.getName(),
                         DotFactory.DOT_SHAPE_BOX, // shape
                         null, // style
                         null, // framecolor
@@ -125,7 +125,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null));  // misc
                 // dot code for contained components
-                for (DependencyGraphNode node : entry.getValue()) {
+                for (DependencyGraphNode<AllocationComponentInstance> node : entry.getValue()) {
                     strBuild.append(DotFactory.createNode("",
                             COMPONENT_NODE_ID_PREFIX + node.getId(),
                             componentNodeLabel(node, shortLabels),
@@ -147,10 +147,10 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    protected void dotVerticesFromSubTree(final DependencyGraphNode n,
+    protected void dotVerticesFromSubTree(final DependencyGraphNode<AllocationComponentInstance> n,
             final PrintStream ps, final boolean includeWeights) {
         for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>) n.getOutgoingDependencies()) {
-            DependencyGraphNode destNode = outgoingDependency.getDestination();
+            DependencyGraphNode<AllocationComponentInstance> destNode = outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
             if (includeWeights) {
                 strBuild.append(DotFactory.createConnection(

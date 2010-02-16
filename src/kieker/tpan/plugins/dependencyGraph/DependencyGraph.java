@@ -36,4 +36,7 @@ public class DependencyGraph<T> {
     public Collection<DependencyGraphNode<T>> getNodes() {
         return nodes.values();
     }
+
+    /** Return number of nodes */
+    public int size(){ return this.nodes.size(); }
 }

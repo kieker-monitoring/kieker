@@ -241,7 +241,6 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             }
             senderNode.addOutgoingDependency(receiverNode);
             receiverNode.addIncomingDependency(senderNode);
-            System.out.println(String.format("Added dependency %s->%s", senderNode.getId(), receiverNode.getId()));
         }
         this.reportSuccess(t.getTraceId());
     }

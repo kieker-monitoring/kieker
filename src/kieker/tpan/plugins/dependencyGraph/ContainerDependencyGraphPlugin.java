@@ -42,7 +42,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     public ContainerDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory) {
         super(name, systemEntityFactory,
-                new DependencyGraph(
+                new DependencyGraph<ExecutionContainer>(
                 systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer.getId(),
                 systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer));
     }
@@ -58,7 +58,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             int curContainerId = node.getId();
             strBuild.append(DotFactory.createNode("",
                     CONTAINER_NODE_ID_PREFIX + node.getId(),
-                    curContainer.getName(),
+                    (curContainerId == rootContainerId)?"$":STEREOTYPE_EXECUTION_CONTAINER+"\\n"+curContainer.getName(),
                     (curContainerId == rootContainerId)?DotFactory.DOT_SHAPE_OVAL:DotFactory.DOT_SHAPE_BOX3D,
                     null, // style
                     null, // framecolor
@@ -74,10 +74,10 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    protected void dotVerticesFromSubTree(final DependencyGraphNode n,
+    protected void dotVerticesFromSubTree(final DependencyGraphNode<ExecutionContainer> n,
             final PrintStream ps, final boolean includeWeights) {
         for (DependencyEdge outgoingDependency : (Collection<DependencyEdge>) n.getOutgoingDependencies()) {
-            DependencyGraphNode destNode = outgoingDependency.getDestination();
+            DependencyGraphNode<ExecutionContainer> destNode = outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
             if (includeWeights) {
                 strBuild.append(DotFactory.createConnection(

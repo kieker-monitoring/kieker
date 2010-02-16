@@ -20,27 +20,23 @@ import java.util.TreeMap;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  *
  * @author Andre van Hoorn
  */
 public class DependencyGraphNode<T> {
+
     private final T entity;
     private final int id;
+    private final TreeMap<Integer, DependencyEdge> incomingDependencies = new TreeMap<Integer, DependencyEdge>();
+    private final TreeMap<Integer, DependencyEdge> outgoingDependencies = new TreeMap<Integer, DependencyEdge>();
 
-    private final TreeMap<Integer, DependencyEdge> incomingDependencies
-            = new TreeMap<Integer, DependencyEdge>();
-
-     private final TreeMap<Integer, DependencyEdge> outgoingDependencies
-            = new TreeMap<Integer, DependencyEdge>();
-
-    public DependencyGraphNode (final int id, final T entity){
+    public DependencyGraphNode(final int id, final T entity) {
         this.id = id;
         this.entity = entity;
     }
 
-   public final T getEntity() {
+    public final T getEntity() {
         return this.entity;
     }
 
@@ -52,20 +48,21 @@ public class DependencyGraphNode<T> {
         return this.outgoingDependencies.values();
     }
 
-    public void addOutgoingDependency(DependencyGraphNode<T> destination){
+    public void addOutgoingDependency(DependencyGraphNode<T> destination) {
         DependencyEdge e = this.outgoingDependencies.get(destination.getId());
-        if (e == null){
+        if (e == null) {
             e = new DependencyEdge();
             e.setSource(this);
             e.setDestination(destination);
+            System.out.println(String.format("Adding dependency %s(%s)->%s (relations: %s)", this.getId(), this.toString(), destination.getId(), this.outgoingDependencies.size()));
             this.outgoingDependencies.put(destination.getId(), e);
         }
         e.incOutgoingWeight();
     }
 
-    public void addIncomingDependency(DependencyGraphNode source){
-       DependencyEdge e = this.incomingDependencies.get(source.getId());
-        if (e == null){
+    public void addIncomingDependency(DependencyGraphNode<T> source) {
+        DependencyEdge e = this.incomingDependencies.get(source.getId());
+        if (e == null) {
             e = new DependencyEdge();
             e.setSource(this);
             e.setDestination(source);
