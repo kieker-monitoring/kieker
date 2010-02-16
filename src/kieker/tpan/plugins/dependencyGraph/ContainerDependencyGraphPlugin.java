@@ -58,8 +58,8 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             int curContainerId = node.getId();
             strBuild.append(DotFactory.createNode("",
                     CONTAINER_NODE_ID_PREFIX + node.getId(),
-                    (curContainerId == rootContainerId)?"$":STEREOTYPE_EXECUTION_CONTAINER+"\\n"+curContainer.getName(),
-                    (curContainerId == rootContainerId)?DotFactory.DOT_SHAPE_OVAL:DotFactory.DOT_SHAPE_BOX3D,
+                    (curContainerId == rootContainerId) ? "$" : STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
+                    (curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_OVAL : DotFactory.DOT_SHAPE_BOX3D,
                     null, // style
                     null, // framecolor
                     null, // fillcolor
@@ -77,7 +77,8 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     protected void dotVerticesFromSubTree(final DependencyGraphNode<ExecutionContainer> n,
             final PrintStream ps, final boolean includeWeights) {
         for (DependencyEdge outgoingDependency : n.getOutgoingDependencies()) {
-            DependencyGraphNode<ExecutionContainer> destNode = outgoingDependency.getDestination();
+            DependencyGraphNode<ExecutionContainer> destNode =
+                    (DependencyGraphNode<ExecutionContainer>) outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
             if (includeWeights) {
                 strBuild.append(DotFactory.createConnection(
@@ -95,7 +96,9 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         DotFactory.DOT_STYLE_DASHED,
                         DotFactory.DOT_ARROWHEAD_OPEN));
             }
-            dotVerticesFromSubTree(destNode, ps, includeWeights);
+            if (n != destNode) {
+                dotVerticesFromSubTree(destNode, ps, includeWeights);
+            }
             ps.println(strBuild.toString());
         }
     }
@@ -109,19 +112,22 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             AllocationComponentInstance receiverComponent = m.getReceivingExecution().getAllocationComponent();
             ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
             ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
-            DependencyGraphNode<ExecutionContainer> senderNode = this.dependencyGraph.getNode(senderComponent.getId());
-            DependencyGraphNode<ExecutionContainer> receiverNode = this.dependencyGraph.getNode(receiverComponent.getId());
+            DependencyGraphNode<ExecutionContainer> senderNode = this.dependencyGraph.getNode(senderContainer.getId());
+            DependencyGraphNode<ExecutionContainer> receiverNode = this.dependencyGraph.getNode(receiverContainer.getId());
 
             if (senderNode == null) {
                 senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
+                System.out.println("Adding node: " + senderNode + " id: " + senderNode.getId());
                 this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
             }
             if (receiverNode == null) {
                 receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
+                System.out.println("Adding node: " + receiverNode + " id: " + receiverNode.getId());
                 this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
             }
             senderNode.addOutgoingDependency(receiverNode);
             receiverNode.addIncomingDependency(senderNode);
+            System.out.println("Size: " + this.dependencyGraph.size());
         }
         this.reportSuccess(t.getTraceId());
     }

@@ -150,7 +150,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     protected void dotVerticesFromSubTree(final DependencyGraphNode<AllocationComponentInstance> n,
             final PrintStream ps, final boolean includeWeights) {
         for (DependencyEdge outgoingDependency : n.getOutgoingDependencies()) {
-            DependencyGraphNode<AllocationComponentInstance> destNode = outgoingDependency.getDestination();
+            DependencyGraphNode destNode = outgoingDependency.getDestination();
             StringBuilder strBuild = new StringBuilder();
             if (includeWeights) {
                 strBuild.append(DotFactory.createConnection(
@@ -168,7 +168,9 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         DotFactory.DOT_STYLE_DASHED,
                         DotFactory.DOT_ARROWHEAD_OPEN));
             }
+            if (n != destNode){
             dotVerticesFromSubTree(destNode, ps, includeWeights);
+            }
             ps.println(strBuild.toString());
         }
     }

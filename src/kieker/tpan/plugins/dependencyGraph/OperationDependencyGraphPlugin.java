@@ -57,7 +57,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         this.pairFactory = new AllocationComponentOperationPairFactory(systemEntityFactory, super.dependencyGraph.getRootNode().getEntity());
     }
 
-    private String containerNodeLabel(final ExecutionContainer container){
+    private String containerNodeLabel(final ExecutionContainer container) {
         return String.format("%s\\n%s", STEREOTYPE_EXECUTION_CONTAINER, container.getName());
     }
 
@@ -68,7 +68,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        StringBuilder strBuild = new StringBuilder(STEREOTYPE_ALLOCATION_COMPONENT+"\\n");
+        StringBuilder strBuild = new StringBuilder(STEREOTYPE_ALLOCATION_COMPONENT + "\\n");
         strBuild.append(assemblyComponentName).append(":");
         if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx).append(".");
@@ -203,7 +203,9 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         DotFactory.DOT_STYLE_DASHED,
                         DotFactory.DOT_ARROWHEAD_OPEN));
             }
-            dotVerticesFromSubTree(destNode, ps, includeWeights);
+            if (n != destNode) {
+                dotVerticesFromSubTree(destNode, ps, includeWeights);
+            }
             ps.println(strBuild.toString());
         }
     }
@@ -218,14 +220,14 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             int rootOperationId = this.getSystemEntityFactory().getOperationFactory().rootOperation.getId();
             Operation senderOperation = m.getSendingExecution().getOperation();
             Operation receiverOperation = m.getReceivingExecution().getOperation();
-            final String senderPairFactoryName = senderComponent.getId()+"-"+senderOperation.getId();
-            final String receiverPairFactoryName = receiverComponent.getId()+"-"+receiverOperation.getId();
+            final String senderPairFactoryName = senderComponent.getId() + "-" + senderOperation.getId();
+            final String receiverPairFactoryName = receiverComponent.getId() + "-" + receiverOperation.getId();
             AllocationComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? this.dependencyGraph.getRootNode().getEntity() : this.pairFactory.getPairByFactoryName(senderPairFactoryName);
             AllocationComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? this.dependencyGraph.getRootNode().getEntity() : this.pairFactory.getPairByFactoryName(receiverPairFactoryName);
-            if (senderPair == null){
+            if (senderPair == null) {
                 senderPair = this.pairFactory.createAndRegisterPair(senderPairFactoryName, senderOperation, receiverComponent);
             }
-            if (receiverPair == null){
+            if (receiverPair == null) {
                 receiverPair = this.pairFactory.createAndRegisterPair(receiverPairFactoryName, receiverOperation, receiverComponent);
             }
 
@@ -235,7 +237,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                 senderNode = new DependencyGraphNode<AllocationComponentOperationPair>(senderPair.getId(), senderPair);
                 this.dependencyGraph.addNode(senderNode.getId(), senderNode);
             }
-             if (receiverNode == null) {
+            if (receiverNode == null) {
                 receiverNode = new DependencyGraphNode<AllocationComponentOperationPair>(receiverPair.getId(), receiverPair);
                 this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
             }
