@@ -98,10 +98,10 @@ public class SequenceDiagramPlugin {
                 plottedComponentIds.add(receiverComponent.getId());
             }
         }
-        ps.println("step()");
+        //ps.println("step()");
         ps.println("step()");
         ps.println("active(" + rootDotId + ");");
-        ps.println("step();");
+        //ps.println("step();");
         boolean first = true;
         for (Message me : messages) {
             AllocationComponentInstance senderComponent = me.getSendingExecution().getAllocationComponent();
@@ -113,7 +113,7 @@ public class SequenceDiagramPlugin {
                 //if (method.indexOf('(') != -1) {
                 //    method = me.receiver.opname;
                 //}
-                ps.println("step();");
+                //ps.println("step();");
                 if (first == true) {
                     ps.println("async();");
                     first = false;
