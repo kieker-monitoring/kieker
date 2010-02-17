@@ -72,38 +72,6 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ps.println(strBuild.toString());
     }
 
-//    /** Traverse tree recursively and generate dot code for vertices. */
-//    protected void dotVerticesFromSubTree(final DependencyGraphNode<ExecutionContainer> n,
-//            final PrintStream ps, final boolean includeWeights) {
-//        System.out.println(String.format("Node: %s has %s outgoing dependencies",
-//                n.getEntity().getName(), n.getOutgoingDependencies().size()));
-//        for (DependencyEdge outgoingDependency : n.getOutgoingDependencies()) {
-//            DependencyGraphNode<ExecutionContainer> destNode =
-//                    (DependencyGraphNode<ExecutionContainer>) outgoingDependency.getDestination();
-//            StringBuilder strBuild = new StringBuilder();
-//            if (includeWeights) {
-//                strBuild.append(DotFactory.createConnection(
-//                        "",
-//                        CONTAINER_NODE_ID_PREFIX + n.getId(),
-//                        CONTAINER_NODE_ID_PREFIX + destNode.getId(),
-//                        "" + outgoingDependency.getOutgoingWeight(),
-//                        DotFactory.DOT_STYLE_DASHED,
-//                        DotFactory.DOT_ARROWHEAD_OPEN));
-//            } else {
-//                strBuild.append(DotFactory.createConnection(
-//                        "",
-//                        CONTAINER_NODE_ID_PREFIX + n.getId(),
-//                        CONTAINER_NODE_ID_PREFIX + destNode.getId(),
-//                        DotFactory.DOT_STYLE_DASHED,
-//                        DotFactory.DOT_ARROWHEAD_OPEN));
-//            }
-//            if (n != destNode) {
-//                dotVerticesFromSubTree(destNode, ps, includeWeights);
-//            }
-//            ps.println(strBuild.toString());
-//        }
-//    }
-
     public void newTrace(MessageTrace t) {
         for (Message m : t.getSequenceAsVector()) {
             if (m instanceof SynchronousReplyMessage) {

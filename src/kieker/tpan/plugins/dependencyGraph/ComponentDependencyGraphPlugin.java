@@ -145,35 +145,6 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ps.println(strBuild.toString());
     }
 
-//    /** Traverse tree recursively and generate dot code for vertices. */
-//    protected void dotVerticesFromSubTree(final DependencyGraphNode<AllocationComponentInstance> n,
-//            final PrintStream ps, final boolean includeWeights) {
-//        for (WeightedBidirectionalEdge<AllocationComponentInstance> outgoingDependency : n.getOutgoingDependencies()) {
-//            DependencyGraphNode<AllocationComponentInstance> destNode = outgoingDependency.getDestination();
-//            StringBuilder strBuild = new StringBuilder();
-//            if (includeWeights) {
-//                strBuild.append(DotFactory.createConnection(
-//                        "",
-//                        COMPONENT_NODE_ID_PREFIX + n.getId(),
-//                        COMPONENT_NODE_ID_PREFIX + destNode.getId(),
-//                        "" + outgoingDependency.getOutgoingWeight(),
-//                        DotFactory.DOT_STYLE_DASHED,
-//                        DotFactory.DOT_ARROWHEAD_OPEN));
-//            } else {
-//                strBuild.append(DotFactory.createConnection(
-//                        "",
-//                        COMPONENT_NODE_ID_PREFIX + n.getId(),
-//                        COMPONENT_NODE_ID_PREFIX + destNode.getId(),
-//                        DotFactory.DOT_STYLE_DASHED,
-//                        DotFactory.DOT_ARROWHEAD_OPEN));
-//            }
-//            if (n != destNode) {
-//                dotVerticesFromSubTree(destNode, ps, includeWeights);
-//            }
-//            ps.println(strBuild.toString());
-//        }
-//    }
-
     public void newTrace(MessageTrace t) {
         for (Message m : t.getSequenceAsVector()) {
             if (m instanceof SynchronousReplyMessage) {
