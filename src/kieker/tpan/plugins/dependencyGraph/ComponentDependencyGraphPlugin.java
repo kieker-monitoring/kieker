@@ -40,7 +40,6 @@ import kieker.tpan.plugins.util.dot.DotFactory;
 public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugin<AllocationComponentInstance> {
 
     private static final Log log = LogFactory.getLog(ComponentDependencyGraphPlugin.class);
-    private final String COMPONENT_NODE_ID_PREFIX = "component";
     private final String CONTAINER_NODE_ID_PREFIX = "container";
 
     public ComponentDependencyGraphPlugin(final String name,
@@ -63,7 +62,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        StringBuilder strBuild = new StringBuilder(STEREOTYPE_ALLOCATION_COMPONENT+"\\n");//(resourceContainerName).append("::")
+        StringBuilder strBuild = new StringBuilder(STEREOTYPE_ALLOCATION_COMPONENT + "\\n");//(resourceContainerName).append("::")
         strBuild.append(assemblyComponentName).append(":");
         if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx).append(".");
@@ -102,7 +101,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getExecutionContainerByContainerId(curContainerId);
             if (curContainerId == rootContainerId) {
                 strBuild.append(DotFactory.createNode("",
-                        COMPONENT_NODE_ID_PREFIX + rootComponent.getId(),
+                        getNodeId(this.dependencyGraph.getRootNode()),
                         componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabels),
                         DotFactory.DOT_SHAPE_OVAL,
                         null, // style
@@ -116,7 +115,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             } else {
                 strBuild.append(DotFactory.createCluster("",
                         CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
-                        STEREOTYPE_EXECUTION_CONTAINER+"\\n"+curContainer.getName(),
+                        STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
                         DotFactory.DOT_SHAPE_BOX, // shape
                         null, // style
                         null, // framecolor
@@ -127,7 +126,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                 // dot code for contained components
                 for (DependencyGraphNode<AllocationComponentInstance> node : entry.getValue()) {
                     strBuild.append(DotFactory.createNode("",
-                            COMPONENT_NODE_ID_PREFIX + node.getId(),
+                            getNodeId(node),
                             componentNodeLabel(node, shortLabels),
                             DotFactory.DOT_SHAPE_BOX,
                             null, // style
@@ -146,34 +145,34 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ps.println(strBuild.toString());
     }
 
-    /** Traverse tree recursively and generate dot code for vertices. */
-    protected void dotVerticesFromSubTree(final DependencyGraphNode<AllocationComponentInstance> n,
-            final PrintStream ps, final boolean includeWeights) {
-        for (DependencyEdge outgoingDependency : n.getOutgoingDependencies()) {
-            DependencyGraphNode destNode = outgoingDependency.getDestination();
-            StringBuilder strBuild = new StringBuilder();
-            if (includeWeights) {
-                strBuild.append(DotFactory.createConnection(
-                        "",
-                        COMPONENT_NODE_ID_PREFIX + n.getId(),
-                        COMPONENT_NODE_ID_PREFIX + destNode.getId(),
-                        "" + outgoingDependency.getOutgoingWeight(),
-                        DotFactory.DOT_STYLE_DASHED,
-                        DotFactory.DOT_ARROWHEAD_OPEN));
-            } else {
-                strBuild.append(DotFactory.createConnection(
-                        "",
-                        COMPONENT_NODE_ID_PREFIX + n.getId(),
-                        COMPONENT_NODE_ID_PREFIX + destNode.getId(),
-                        DotFactory.DOT_STYLE_DASHED,
-                        DotFactory.DOT_ARROWHEAD_OPEN));
-            }
-            if (n != destNode){
-            dotVerticesFromSubTree(destNode, ps, includeWeights);
-            }
-            ps.println(strBuild.toString());
-        }
-    }
+//    /** Traverse tree recursively and generate dot code for vertices. */
+//    protected void dotVerticesFromSubTree(final DependencyGraphNode<AllocationComponentInstance> n,
+//            final PrintStream ps, final boolean includeWeights) {
+//        for (WeightedBidirectionalEdge<AllocationComponentInstance> outgoingDependency : n.getOutgoingDependencies()) {
+//            DependencyGraphNode<AllocationComponentInstance> destNode = outgoingDependency.getDestination();
+//            StringBuilder strBuild = new StringBuilder();
+//            if (includeWeights) {
+//                strBuild.append(DotFactory.createConnection(
+//                        "",
+//                        COMPONENT_NODE_ID_PREFIX + n.getId(),
+//                        COMPONENT_NODE_ID_PREFIX + destNode.getId(),
+//                        "" + outgoingDependency.getOutgoingWeight(),
+//                        DotFactory.DOT_STYLE_DASHED,
+//                        DotFactory.DOT_ARROWHEAD_OPEN));
+//            } else {
+//                strBuild.append(DotFactory.createConnection(
+//                        "",
+//                        COMPONENT_NODE_ID_PREFIX + n.getId(),
+//                        COMPONENT_NODE_ID_PREFIX + destNode.getId(),
+//                        DotFactory.DOT_STYLE_DASHED,
+//                        DotFactory.DOT_ARROWHEAD_OPEN));
+//            }
+//            if (n != destNode) {
+//                dotVerticesFromSubTree(destNode, ps, includeWeights);
+//            }
+//            ps.println(strBuild.toString());
+//        }
+//    }
 
     public void newTrace(MessageTrace t) {
         for (Message m : t.getSequenceAsVector()) {

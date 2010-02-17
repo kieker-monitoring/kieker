@@ -102,6 +102,7 @@ public class TraceAnalysisTool {
     private static boolean traceEquivClassMode = true; // false;
     private static boolean considerHostname = true;
     private static boolean shortLabels = true;
+    private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
     private static int maxTraceDurationMillis = TraceReconstructionFilter.MAX_DURATION_MILLIS; // infinite
     private static long ignoreRecordsBeforeTimestamp = TraceReconstructionFilter.MIN_TIMESTAMP;
@@ -484,15 +485,15 @@ public class TraceAnalysisTool {
 
                 if (componentPlotComponentDepGraph != null) {
                     componentPlotComponentDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-                            !traceEquivClassMode, shortLabels);
+                            !traceEquivClassMode, shortLabels, includeSelfLoops);
                 }
                 if (componentPlotContainerDepGraph != null) {
                     componentPlotContainerDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-                            !traceEquivClassMode, shortLabels);
+                            !traceEquivClassMode, shortLabels, includeSelfLoops);
                 }
                 if (componentPlotOperationDepGraph != null) {
                     componentPlotOperationDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-                            !traceEquivClassMode, shortLabels);
+                            !traceEquivClassMode, shortLabels, includeSelfLoops);
                 }
 
                 if (componentPlotAggregatedCallTree != null) {

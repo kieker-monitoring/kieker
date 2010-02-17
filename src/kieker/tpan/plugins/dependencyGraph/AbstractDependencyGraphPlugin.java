@@ -38,8 +38,10 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
     private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
     protected final DependencyGraph<T> dependencyGraph;
 
-    public static final String STEREOTYPE_EXECUTION_CONTAINER="<<execution container>>";
+    public static final String STEREOTYPE_EXECUTION_CONTAINER="<<node>>";
     public static final String STEREOTYPE_ALLOCATION_COMPONENT="<<component>>";
+
+    private static final String NODE_PREFIX="depNode_";
 
     public AbstractDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory, 
@@ -51,27 +53,64 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
     protected abstract void dotEdges(Collection<DependencyGraphNode<T>> nodes,
             PrintStream ps, final boolean shortLabels);
 
-    protected abstract void dotVerticesFromSubTree(final DependencyGraphNode<T> n,
-            final PrintStream ps, final boolean includeWeights);
+//    protected abstract void dotVerticesFromSubTree(final DependencyGraphNode<T> n,
+//            final PrintStream ps, final boolean includeWeights);
+
+    protected final String getNodeId (DependencyGraphNode<T> n){
+        return NODE_PREFIX+n.getId();
+    }
+
+    protected void dotVertices(final Collection<DependencyGraphNode<T>> nodes,
+            final PrintStream ps, final boolean includeWeights, final boolean plotSelfLoops) {
+        for (DependencyGraphNode<T> curNode : nodes) {
+            for (WeightedBidirectionalEdge outgoingDependency : curNode.getOutgoingDependencies()) {
+                DependencyGraphNode destNode =
+                        (DependencyGraphNode) outgoingDependency.getDestination();
+                if (curNode == destNode && !plotSelfLoops) {
+                    continue;
+                }
+                StringBuilder strBuild = new StringBuilder();
+                if (includeWeights) {
+                    strBuild.append(DotFactory.createConnection(
+                            "",
+                            getNodeId(curNode),
+                            getNodeId(destNode),
+                            "" + outgoingDependency.getOutgoingWeight(),
+                            DotFactory.DOT_STYLE_DASHED,
+                            DotFactory.DOT_ARROWHEAD_OPEN));
+                } else {
+                    strBuild.append(DotFactory.createConnection(
+                            "",
+                            getNodeId(curNode),
+                            getNodeId(destNode),
+                            DotFactory.DOT_STYLE_DASHED,
+                            DotFactory.DOT_ARROWHEAD_OPEN));
+                }
+                ps.println(strBuild.toString());
+            }
+        }
+    }
 
     private void graphToDot(
             final PrintStream ps, final boolean includeWeights,
-            final boolean shortLabels) {
+            final boolean shortLabels, final boolean plotSelfLoops) {
         // preamble:
         ps.println("digraph G {\n rankdir="+DotFactory.DOT_DOT_RANKDIR_LR+";");
 
         dotEdges(this.dependencyGraph.getNodes(), ps,
                 shortLabels);
-        dotVerticesFromSubTree(this.dependencyGraph.getRootNode(),
-                ps, includeWeights);
+        dotVertices(this.dependencyGraph.getNodes(), ps, includeWeights,
+                plotSelfLoops);
+//        dotVerticesFromSubTree(this.dependencyGraph.getRootNode(),
+//                ps, includeWeights);
         ps.println("}");
     }
     private int numGraphsSaved = 0;
 
     public final void saveToDotFile(final String outputFnBase, final boolean includeWeights,
-            final boolean shortLabels) throws FileNotFoundException {
+            final boolean shortLabels, final boolean plotSelfLoops) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        this.graphToDot(ps, includeWeights, shortLabels);
+        this.graphToDot(ps, includeWeights, shortLabels, plotSelfLoops);
         ps.flush();
         ps.close();
         this.numGraphsSaved++;
