@@ -56,7 +56,7 @@ public class Bookstore extends Thread {
      * This will be monitored by Tpmon, since it has the
      * TpmonExecutionMonitoringProbe() annotation.
      */
-    @TpmonExecutionMonitoringProbe()
+    //@TpmonExecutionMonitoringProbe()
     public static void main(String[] args) throws InterruptedException {
 
         for (int i = 0; i < numberOfRequests; i++) {
@@ -75,6 +75,7 @@ public class Bookstore extends Thread {
         }
     }
 
+    @Override
     public void run() {
         Bookstore.searchBook();
         synchronized (bookstoreScenarios) {

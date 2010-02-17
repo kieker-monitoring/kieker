@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.SynchronousCallMessage;
@@ -43,18 +44,19 @@ public class SequenceDiagramPlugin {
     private SequenceDiagramPlugin() {
     }
 
-    private static String componentLabel(final SystemEntityFactory systemEntityFactory,
+    private static String componentLabel(//final SystemEntityFactory systemEntityFactory,
             final AllocationComponentInstance component, final boolean shortLabels) {
-        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
-            return "$";
-        }
+//        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
+//            return "$";
+//        }
 
-        String resourceContainerName = component.getExecutionContainer().getName();
+//        String resourceContainerName = component.getExecutionContainer().getName();
         String assemblyComponentName = component.getAssemblyComponent().getName();
         String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::").append(assemblyComponentName).append(":");
+        StringBuilder strBuild = //new StringBuilder(resourceContainerName).append("::").
+                new StringBuilder(assemblyComponentName).append(":");
         if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx);
         } else {
@@ -79,23 +81,24 @@ public class SequenceDiagramPlugin {
 
         final AllocationComponentInstance rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
         final String rootDotId = "O" + rootAllocationComponent.getId();
-        ps.println("object(O" + rootAllocationComponent.getId()
-                + ",\"" + componentLabel(systemEntityFactory, rootAllocationComponent, shortLabels) + "\");");
+        ps.println("actor(O" + rootAllocationComponent.getId()
+                + ",\"\");");
         plottedComponentIds.add(rootAllocationComponent.getId());
         for (Message me : messages) {
             AllocationComponentInstance senderComponent = me.getSendingExecution().getAllocationComponent();
             AllocationComponentInstance receiverComponent = me.getReceivingExecution().getAllocationComponent();
             if (!plottedComponentIds.contains(senderComponent.getId())) {
                 ps.println("object(O" + senderComponent.getId()
-                        + ",\"" + componentLabel(systemEntityFactory, senderComponent, shortLabels) + "\");");
+                        + ",\"" + senderComponent.getExecutionContainer().getName() +"::\",\"" + componentLabel(senderComponent, shortLabels) + "\");");
                 plottedComponentIds.add(senderComponent.getId());
             }
             if (!plottedComponentIds.contains(receiverComponent.getId())) {
                 ps.println("object(O" + receiverComponent.getId()
-                        + ",\"" + componentLabel(systemEntityFactory, receiverComponent, shortLabels) + "\");");
+                        + ",\"" + receiverComponent.getExecutionContainer().getName() +"::\",\"" + componentLabel(receiverComponent, shortLabels) + "\");");
                 plottedComponentIds.add(receiverComponent.getId());
             }
         }
+        ps.println("step()");
         ps.println("step()");
         ps.println("active(" + rootDotId + ");");
         ps.println("step();");
