@@ -162,7 +162,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         while (stk.hasMoreElements()) {
             als.add(stk.nextToken());
         }
-        String[] vec = (String[])als.toArray(new String[als.size()]);        
+        String[] vec = als.toArray(new String[als.size()]);        
         initFromStringArray(vec);
     }
 

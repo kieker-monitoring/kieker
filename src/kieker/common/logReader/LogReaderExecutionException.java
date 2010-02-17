@@ -29,7 +29,7 @@ package kieker.common.logReader;
  */
 public class LogReaderExecutionException extends Exception {
 
-    public static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 14537L;
 
     public LogReaderExecutionException(String messString) {
         super(messString);

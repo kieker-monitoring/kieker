@@ -23,31 +23,31 @@ package kieker.tpan.plugins.dependencyGraph;
  * @author Andre van Hoorn
  */
 public class WeightedBidirectionalEdge<T> {
-    private T source;
-    private T destination;
+    private DependencyGraphNode<T> source;
+    private DependencyGraphNode<T> destination;
 
     public WeightedBidirectionalEdge() { };
 
     public WeightedBidirectionalEdge (
-            final T source,
-            final T destination){
+            final DependencyGraphNode<T> source,
+            final DependencyGraphNode<T> destination){
         this.source = source;
         this.destination = destination;
     }
 
-    public final T getDestination() {
+    public final DependencyGraphNode<T> getDestination() {
         return this.destination;
     }
 
-    public final T getSource() {
+    public final DependencyGraphNode<T> getSource() {
         return this.source;
     }
 
-    public final void setDestination(T destination) {
+    public final void setDestination(DependencyGraphNode<T> destination) {
         this.destination = destination;
     }
 
-    public final void setSource(T source) {
+    public final void setSource(DependencyGraphNode<T> source) {
         this.source = source;
     }
 

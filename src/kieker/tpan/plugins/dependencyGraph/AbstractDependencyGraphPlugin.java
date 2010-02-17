@@ -63,9 +63,9 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
     protected void dotVertices(final Collection<DependencyGraphNode<T>> nodes,
             final PrintStream ps, final boolean includeWeights, final boolean plotSelfLoops) {
         for (DependencyGraphNode<T> curNode : nodes) {
-            for (WeightedBidirectionalEdge outgoingDependency : curNode.getOutgoingDependencies()) {
-                DependencyGraphNode destNode =
-                        (DependencyGraphNode) outgoingDependency.getDestination();
+            for (WeightedBidirectionalEdge<T> outgoingDependency : curNode.getOutgoingDependencies()) {
+                DependencyGraphNode<T> destNode =
+                         outgoingDependency.getDestination();
                 if (curNode == destNode && !plotSelfLoops) {
                     continue;
                 }
@@ -101,8 +101,6 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
                 shortLabels);
         dotVertices(this.dependencyGraph.getNodes(), ps, includeWeights,
                 plotSelfLoops);
-//        dotVerticesFromSubTree(this.dependencyGraph.getRootNode(),
-//                ps, includeWeights);
         ps.println("}");
     }
     private int numGraphsSaved = 0;
