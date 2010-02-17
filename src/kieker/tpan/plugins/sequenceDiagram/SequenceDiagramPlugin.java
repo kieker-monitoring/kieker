@@ -67,7 +67,7 @@ public class SequenceDiagramPlugin {
     }
 
     private static void picFromMessageTrace(final SystemEntityFactory systemEntityFactory,
-            final MessageTrace messageTrace, final PrintStream ps, final boolean considerHost,
+            final MessageTrace messageTrace, final PrintStream ps, 
             final boolean shortLabels) {
         // dot node ID x component instance
         Vector<Message> messages = messageTrace.getSequenceAsVector();
@@ -149,9 +149,9 @@ public class SequenceDiagramPlugin {
     }
 
     public static void writePicForMessageTrace(final SystemEntityFactory systemEntityFactory,
-            MessageTrace msgTrace, String outputFilename, final boolean considerHost, final boolean shortLabels) throws FileNotFoundException {
+            MessageTrace msgTrace, String outputFilename, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
-        picFromMessageTrace(systemEntityFactory, msgTrace, ps, considerHost, shortLabels);
+        picFromMessageTrace(systemEntityFactory, msgTrace, ps, shortLabels);
         ps.flush();
         ps.close();
     }

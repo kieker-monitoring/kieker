@@ -46,18 +46,16 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
 
     private static final Log log = LogFactory.getLog(CallTreePlugin.class);
     private final CallTreeNode root;
-    private final boolean considerHost;
     private final boolean aggregated;
     private final SystemEntityFactory systemEntityFactory;
 
-    public CallTreePlugin(final String name, SystemEntityFactory systemEntityFactory, final boolean considerHost,
+    public CallTreePlugin(final String name, SystemEntityFactory systemEntityFactory, 
             final boolean aggregated) {
         super(name, systemEntityFactory);
         this.systemEntityFactory = systemEntityFactory;
         root = new CallTreeNode(null,
                 new CallTreeOperationHashKey(this.systemEntityFactory.getAllocationFactory().rootAllocationComponent,
                 this.systemEntityFactory.getOperationFactory().rootOperation));
-        this.considerHost = considerHost;
         this.aggregated = aggregated;
     }
 
@@ -89,14 +87,14 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
     private static void dotEdgesFromSubTree(final SystemEntityFactory systemEntityFactory,
             CallTreeNode n,
             Hashtable<CallTreeNode, Integer> nodeIds,
-            IntContainer nextNodeId, PrintStream ps, final boolean considerHost,  final boolean shortLabels) {
+            IntContainer nextNodeId, PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, nextNodeId.i);
         strBuild.append(nextNodeId.i++).append("[label =\"").append(nodeLabel(n, shortLabels))
                 .append("\",shape=oval];");
         ps.println(strBuild.toString());
         for (CallTreeNode child : n.getChildren()) {
-            dotEdgesFromSubTree(systemEntityFactory, child, nodeIds, nextNodeId, ps, considerHost, shortLabels);
+            dotEdgesFromSubTree(systemEntityFactory, child, nodeIds, nextNodeId, ps, shortLabels);
         }
     }
 
@@ -120,14 +118,14 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
 
     private static void dotFromCallingTree(final SystemEntityFactory systemEntityFactory,
             final CallTreeNode root, final PrintStream ps,
-            final boolean includeWeights, final boolean considerHost, final boolean shortLabels) {
+            final boolean includeWeights, final boolean shortLabels) {
         // preamble:
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
 
         Hashtable<CallTreeNode, Integer> nodeIds = new Hashtable<CallTreeNode, Integer>();
 
-        dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, considerHost, shortLabels);
+        dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
         dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);
 
         ps.println(edgestringBuilder.toString());
@@ -137,16 +135,16 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
 
     private static void saveTreeToDotFile(final SystemEntityFactory systemEntityFactory,
             final CallTreeNode root, final String outputFnBase, final boolean includeWeights,
-            final boolean considerHost, final boolean shortLabels) throws FileNotFoundException {
+            final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, considerHost, shortLabels);
+        dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, shortLabels);
         ps.flush();
         ps.close();
     }
 
     public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException {
-        saveTreeToDotFile(this.systemEntityFactory, this.root, outputFnBase, includeWeights, considerHost, shortLabels);
+        saveTreeToDotFile(this.systemEntityFactory, this.root, outputFnBase, includeWeights, shortLabels);
         this.numGraphsSaved++;
         this.printMessage(new String[]{
                     "Wrote call tree to file '" + outputFnBase + ".dot" + "'",
@@ -200,12 +198,12 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
 
     public static void writeDotForMessageTrace(final SystemEntityFactory systemEntityFactory,
             final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights,
-            final boolean considerHost, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
+            final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
         final CallTreeNode root = new CallTreeNode(null,
                 new CallTreeOperationHashKey(systemEntityFactory.getAllocationFactory().rootAllocationComponent,
                 systemEntityFactory.getOperationFactory().rootOperation));
         addTraceToTree(root, msgTrace, false); // false: no aggregation
-        saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, considerHost, shortLabels);
+        saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, shortLabels);
     }
 
     @Override

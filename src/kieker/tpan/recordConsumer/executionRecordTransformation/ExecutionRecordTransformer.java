@@ -39,16 +39,13 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
 
     private final SystemEntityFactory systemFactory;
-    private final boolean considerExecutionContainer;
 
     private ArrayList<IExecutionListener> listeners =
             new ArrayList<IExecutionListener>();
 
     public ExecutionRecordTransformer(
-            final SystemEntityFactory systemFactory,
-            final boolean considerExecutionEnvironment) {
+            final SystemEntityFactory systemFactory) {
         this.systemFactory = systemFactory;
-        this.considerExecutionContainer = considerExecutionEnvironment;
     }
 
     public String[] getRecordTypeSubscriptionList() {

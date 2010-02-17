@@ -296,7 +296,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             }
             boolean retVal = 
                     (((equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getId() == r2.getAllocationComponent().getId())
-                    || ((equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId()))
+                    || ((equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) && r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId()))
                     && r1.getOperation().getId() == r2.getOperation().getId()
                     && r1.getEoi() == r2.getEoi()
                     && r1.getEss() == r2.getEss();

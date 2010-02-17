@@ -100,12 +100,10 @@ public class TraceAnalysisTool {
     private static String outputDir = null;
     private static String outputFnPrefix = null;
     private static TreeSet<Long> selectedTraces = null; // null means select all
-    //private static boolean traceEquivClassMode = true; // false;
     private static TraceEquivalenceClassModes traceEquivalenceClassMode = TraceEquivalenceClassModes.DISABLED;
     private static final String TRACE_EQUIVALENCE_MODE_STR_DISABLED = "disabled";
     private static final String TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY = "assembly";
     private static final String TRACE_EQUIVALENCE_MODE_STR_ALLOCATION = "allocation";
-    private static boolean considerHostname = true;
     private static boolean shortLabels = true;
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
@@ -119,7 +117,7 @@ public class TraceAnalysisTool {
     private static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
     private static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
     private static final String CMD_OPT_NAME_TRACEEQUIVCLASSMODE = "trace-equivalence-mode";
-    private static final String CMD_OPT_NAME_NOHOSTNAMES = "ignore-hostnames";
+    private static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
     private static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     private static final String CMD_OPT_NAME_TASK_PLOTSEQDS = "plot-Sequence-Diagrams";
     private static final String CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG = "plot-Component-Dependency-Graph";
@@ -165,11 +163,11 @@ public class TraceAnalysisTool {
         //cmdlOpts.addOptionGroup(cmdlOptGroupTask);
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false).withDescription("Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACEEQUIVCLASSMODE).withArgName(String.format("%s|%s|%s", TRACE_EQUIVALENCE_MODE_STR_ALLOCATION, TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY, TRACE_EQUIVALENCE_MODE_STR_DISABLED)).hasArg(true).isRequired(false).withDescription("If selected, the selected tasks are performed on representatives of the equivalence classes only.").create());
-        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_NOHOSTNAMES).hasArg(false).isRequired(false).withDescription("If selected, the hostnames of the executions are NOT considered.").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription("Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE).withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription("Records logged before this date (UTC timezone) are ignored.").create());
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSAFTERDATE).withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription("Records logged after this date (UTC timezone) are ignored.").create());
+        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SHORTLABELS).hasArg(false).isRequired(false).withDescription("If selected, the hostnames of the executions are NOT considered.").create());
         for (Option o : options) {
             cmdlOpts.addOption(o);
         }
@@ -228,7 +226,7 @@ public class TraceAnalysisTool {
             }
         }
 
-        considerHostname = !cmdl.hasOption(CMD_OPT_NAME_NOHOSTNAMES);
+        shortLabels = cmdl.hasOption(CMD_OPT_NAME_SHORTLABELS);
         ignoreInvalidTraces = cmdl.hasOption(CMD_OPT_NAME_IGNOREINVALIDTRACES);
 
         String traceEquivClassModeStr = cmdl.getOptionValue(CMD_OPT_NAME_TRACEEQUIVCLASSMODE, null);
@@ -345,8 +343,8 @@ public class TraceAnalysisTool {
                     val = TRACE_EQUIVALENCE_MODE_STR_DISABLED;
                 }
                 dumpedOp = true;
-            } else if (longOpt.equals(CMD_OPT_NAME_NOHOSTNAMES)) {
-                val = !considerHostname ? "true" : "false";
+            } else if (longOpt.equals(CMD_OPT_NAME_SHORTLABELS)) {
+               val = shortLabels ? "true" : "false";
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
                 val = ignoreInvalidTraces ? "true" : "false";
@@ -498,7 +496,7 @@ public class TraceAnalysisTool {
                 mtReconstrFilter.addInvalidExecutionTraceArtifactListener(c);
             }
 
-            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory, considerHostname);
+            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
             analysisInstance.addRecordConsumer(execRecTransformer);
             // END test with new meta-model
@@ -509,15 +507,15 @@ public class TraceAnalysisTool {
 
                 if (componentPlotComponentDepGraph != null) {
                     componentPlotComponentDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-                            (traceEquivalenceClassMode != TraceEquivalenceClassModes.DISABLED), shortLabels, includeSelfLoops);
+                            (traceEquivalenceClassMode == TraceEquivalenceClassModes.DISABLED), shortLabels, includeSelfLoops);
                 }
                 if (componentPlotContainerDepGraph != null) {
                     componentPlotContainerDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-                            (traceEquivalenceClassMode != TraceEquivalenceClassModes.DISABLED), shortLabels, includeSelfLoops);
+                            (traceEquivalenceClassMode == TraceEquivalenceClassModes.DISABLED), shortLabels, includeSelfLoops);
                 }
                 if (componentPlotOperationDepGraph != null) {
                     componentPlotOperationDepGraph.saveToDotFile(new File(outputDir + File.separator + outputFnPrefix + OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getCanonicalPath(),
-                            (traceEquivalenceClassMode != TraceEquivalenceClassModes.DISABLED), shortLabels, includeSelfLoops);
+                            (traceEquivalenceClassMode == TraceEquivalenceClassModes.DISABLED), shortLabels, includeSelfLoops);
                 }
 
                 if (componentPlotAggregatedCallTree != null) {
@@ -612,7 +610,7 @@ public class TraceAnalysisTool {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
-                    SequenceDiagramPlugin.writePicForMessageTrace(this.getSystemEntityFactory(), t, outputFnBase + "-" + t.getTraceId() + ".pic", considerHostname, shortLabels);
+                    SequenceDiagramPlugin.writePicForMessageTrace(this.getSystemEntityFactory(), t, outputFnBase + "-" + t.getTraceId() + ".pic", shortLabels);
                     this.reportSuccess(t.getTraceId());
                 } catch (FileNotFoundException ex) {
                     this.reportError(t.getTraceId());
@@ -674,7 +672,7 @@ public class TraceAnalysisTool {
      * @param traceSet
      */
     private static CallTreePlugin task_createAggregatedCallTreePlotComponent(final String name) {
-        CallTreePlugin callingTree = new CallTreePlugin(name, systemEntityFactory, considerHostname, true); // true: aggregated
+        CallTreePlugin callingTree = new CallTreePlugin(name, systemEntityFactory, true); // true: aggregated
         return callingTree;
     }
 
@@ -685,7 +683,7 @@ public class TraceAnalysisTool {
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
                     CallTreePlugin.writeDotForMessageTrace(systemEntityFactory, t, outputFnBase + "-" + t.getTraceId(),
-                            false, considerHostname, shortLabels);
+                            false, shortLabels); // no weights
                     this.reportSuccess(t.getTraceId());
                 } catch (FileNotFoundException ex) {
                     this.reportError(t.getTraceId());
