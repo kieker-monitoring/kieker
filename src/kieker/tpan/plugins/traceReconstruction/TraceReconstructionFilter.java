@@ -17,7 +17,6 @@ package kieker.tpan.plugins.traceReconstruction;
  * limitations under the License.
  * ==================================================
  */
-
 import kieker.tpan.datamodel.Execution;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,7 +42,7 @@ import kieker.tpan.recordConsumer.executionRecordTransformation.IExecutionListen
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IExecutionListener{
+public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IExecutionListener {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
     /** TraceId x trace */
@@ -53,7 +52,6 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             new HashMap<ExecutionTraceHashContainer, AtomicInteger>();
     /** We need to keep track of invalid trace's IDs */
     private final Set<Long> invalidTraces = new TreeSet<Long>();
-
     public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
     public static final long MIN_TIMESTAMP = 0;
     private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
@@ -80,47 +78,53 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private long highestTout = -1;
     private boolean terminate = false;
     private final boolean ignoreInvalidTraces;
-    private final boolean onlyEquivClasses;
+    //private final boolean onlyEquivClasses;
+    private final TraceEquivalenceClassModes equivalenceMode;
     private final long ignoreRecordsBeforeTimestamp;
     private final long ignoreRecordsAfterTimestamp;
     private List<IMessageTraceReceiver> messageTraceListeners = new ArrayList<IMessageTraceReceiver>();
     private List<IExecutionTraceReceiver> executionTraceListeners = new ArrayList<IExecutionTraceReceiver>();
     private List<IExecutionTraceReceiver> invalidExecutionTraceArtifactListeners = new ArrayList<IExecutionTraceReceiver>();
     private final TreeSet<Long> selectedTraces;
-
     private final Execution rootExecution;
 
-    public TraceReconstructionFilter(final String name, 
+    public enum TraceEquivalenceClassModes {
+
+        DISABLED, ASSEMBLY, ALLOCATION
+    };
+
+    public TraceReconstructionFilter(final String name,
             final SystemEntityFactory systemEntityFactory,
             final long maxTraceDurationMillis,
             final boolean ignoreInvalidTraces,
-            final boolean onlyEquivClasses,
+            //final boolean onlyEquivClasses,
+            final TraceEquivalenceClassModes traceEquivalenceCallMode,
             final TreeSet<Long> selectedTraces,
             final long ignoreRecordsBefore, final long ignoreRecordsAfter) {
         super(name, systemEntityFactory);
         this.rootExecution = new Execution(
                 super.getSystemEntityFactory().getOperationFactory().rootOperation,
                 super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent,
-                -1, "-1", -1, -1, -1, -1
-                );
-        if (maxTraceDurationMillis < 0){
-            throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: "+maxTraceDurationMillis+")");
+                -1, "-1", -1, -1, -1, -1);
+        if (maxTraceDurationMillis < 0) {
+            throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + maxTraceDurationMillis + ")");
         }
-        if (maxTraceDurationMillis == MAX_DURATION_MILLIS){
+        if (maxTraceDurationMillis == MAX_DURATION_MILLIS) {
             this.maxTraceDurationNanos = MAX_DURATION_NANOS;
         } else {
             this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000);
-        } 
+        }
         this.ignoreInvalidTraces = ignoreInvalidTraces;
-        this.onlyEquivClasses = onlyEquivClasses;
+        //this.onlyEquivClasses = onlyEquivClasses;
+        this.equivalenceMode = traceEquivalenceCallMode;
         this.selectedTraces = selectedTraces;
         this.ignoreRecordsBeforeTimestamp = ignoreRecordsBefore;
         this.ignoreRecordsAfterTimestamp = ignoreRecordsAfter;
     }
 
-    public void newExecutionEvent(Execution execution) throws ExecutionEventProcessingException{
+    public void newExecutionEvent(Execution execution) throws ExecutionEventProcessingException {
         if (execution.getTin() < this.ignoreRecordsBeforeTimestamp
-                || execution.getTout() > this.ignoreRecordsAfterTimestamp){
+                || execution.getTout() > this.ignoreRecordsAfterTimestamp) {
             return;
         }
 
@@ -167,7 +171,8 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                 // throws an exception
                 MessageTrace mt = polledTrace.toMessageTrace(this.rootExecution);
                 boolean isNewTrace = true;
-                if (this.onlyEquivClasses) {
+                //if (this.onlyEquivClasses) {
+                if (equivalenceMode != TraceEquivalenceClassModes.DISABLED) {
                     ExecutionTraceHashContainer polledTraceHashContainer =
                             new ExecutionTraceHashContainer(polledTrace);
                     AtomicInteger numOccurences = this.eTracesEquivClassesMap.get(polledTraceHashContainer);
@@ -264,10 +269,14 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             int h = 0;
             // TODO: need a better hash function considering the order (e.g., MD5)
             for (Execution r : t.getTraceAsSortedSet()) {
-                h^=r.getOperation().getId();
-                h^=r.getAllocationComponent().getId();
-                h^=r.getEoi();
-                h^=r.getEss();
+                h ^= r.getOperation().getId();
+                if (equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
+                    h ^= r.getAllocationComponent().getId();
+                } else if (equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) {
+                    h ^= r.getAllocationComponent().getAssemblyComponent().getId();
+                }
+                h ^= r.getEoi();
+                h ^= r.getEss();
             }
             //
             this.hashCode = h;
@@ -285,7 +294,9 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             if (r1 == null || r2 == null) {
                 return false;
             }
-            boolean retVal = r1.getAllocationComponent().getId() ==r2.getAllocationComponent().getId()
+            boolean retVal = 
+                    (((equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getId() == r2.getAllocationComponent().getId())
+                    || ((equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId()))
                     && r1.getOperation().getId() == r2.getOperation().getId()
                     && r1.getEoi() == r2.getEoi()
                     && r1.getEss() == r2.getEss();

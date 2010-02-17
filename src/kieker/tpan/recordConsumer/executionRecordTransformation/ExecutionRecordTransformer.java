@@ -66,8 +66,8 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
         }
         KiekerExecutionRecord execRec = (KiekerExecutionRecord) monitoringRecord;
 
-        String executionContainerName =
-                (this.considerExecutionContainer) ? execRec.vmName : "DEFAULTCONTAINER";
+        String executionContainerName = execRec.vmName;
+                //(this.considerExecutionContainer) ? execRec.vmName : "DEFAULTCONTAINER";
         String componentTypeName = execRec.componentName;
         String assemblyComponentName = componentTypeName;
         String allocationComponentName =
