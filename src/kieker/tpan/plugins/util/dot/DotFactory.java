@@ -38,6 +38,8 @@ public static final String DOT_STYLE_DASHED = "dashed";
 public static final String DOT_ARROWHEAD_OPEN = "open";
 public static final double DOT_DEFAULT_FONTSIZE = 0.0;
 public static final String DOT_DOT_RANKDIR_LR = "LR";
+public static final String DOT_FILLCOLOR_WHITE = "white";
+public static final String DOT_STYLE_FILLED = "filled";
 
 /**
  * Private empty constructor to mark this class as not useful to instantiate because is has only static members.

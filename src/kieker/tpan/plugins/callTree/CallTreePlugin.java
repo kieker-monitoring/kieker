@@ -92,7 +92,9 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, nextNodeId.i);
         strBuild.append(nextNodeId.i++).append("[label =\"").append(nodeLabel(n, shortLabels))
-                .append("\",shape="+DotFactory.DOT_SHAPE_NONE+"];");
+                .append("\",shape="+DotFactory.DOT_SHAPE_NONE
+                +",style="+DotFactory.DOT_STYLE_FILLED
+                +",fillcolor="+DotFactory.DOT_FILLCOLOR_WHITE+"];");
         ps.println(strBuild.toString());
         for (CallTreeNode child : n.getChildren()) {
             dotEdgesFromSubTree(systemEntityFactory, child, nodeIds, nextNodeId, ps, shortLabels);

@@ -59,9 +59,9 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                     getNodeId(node),
                     (curContainerId == rootContainerId) ? "$" : STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
                     (curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D,
-                    null, // style
+                    DotFactory.DOT_STYLE_FILLED, // style
                     null, // framecolor
-                    null, // fillcolor
+                    DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
                     null, // fontcolor
                     DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                     null, // imagefilename

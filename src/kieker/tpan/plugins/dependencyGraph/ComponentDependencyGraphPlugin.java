@@ -104,9 +104,9 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         getNodeId(this.dependencyGraph.getRootNode()),
                         componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabels),
                         DotFactory.DOT_SHAPE_NONE,
-                        null, // style
+                        DotFactory.DOT_STYLE_FILLED, // style
                         null, // framecolor
-                        null, // fillcolor
+                        DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
                         null, // fontcolor
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null, // imagefilename
@@ -117,9 +117,9 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
                         STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
                         DotFactory.DOT_SHAPE_BOX, // shape
-                        null, // style
+                        DotFactory.DOT_STYLE_FILLED, // style
                         null, // framecolor
-                        null, // fillcolor
+                        DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
                         null, // fontcolor
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null));  // misc
@@ -129,9 +129,9 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                             getNodeId(node),
                             componentNodeLabel(node, shortLabels),
                             DotFactory.DOT_SHAPE_BOX,
-                            null, // style
+                            DotFactory.DOT_STYLE_FILLED, // style
                             null, // framecolor
-                            null, // fillcolor
+                            DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
                             null, // fontcolor
                             DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                             null, // imagefilename
