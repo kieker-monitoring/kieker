@@ -24,9 +24,28 @@ fi
 DIRNAME="$1"
 shift
 
-for f in $DIRNAME/*.pic; do 
+PIC_FILES=$(find ${DIRNAME} -name "*.pic")
+DOT_FILES=$(find ${DIRNAME} -name "*.dot")
+
+PIC_COUNTER=0
+DOT_COUNTER=0
+
+for f in ${PIC_FILES}; do 
     BASENAME=$(echo $f. | cut -d'.' -f1); 
-    for ext in svg png; do 
-	pic2plot -T $ext $f > $BASENAME.$ext ; 
+    for ext in $*; do 
+	pic2plot -T $ext $f > $BASENAME.$ext ;
     done; 
+    PIC_COUNTER=$(($PIC_COUNTER+1))
 done
+
+for f in ${DOT_FILES}; do 
+    BASENAME=$(echo $f. | cut -d'.' -f1); 
+    for ext in $*; do 
+	dot -T $ext $f > $BASENAME.$ext ; 
+    done; 
+    DOT_COUNTER=$(($DOT_COUNTER+1))
+done
+
+echo 
+echo "Processed ${DOT_COUNTER} .dot files"
+echo "Processed ${PIC_COUNTER} .pic files"
