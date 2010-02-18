@@ -1,7 +1,9 @@
 #!/bin/bash
 
-## Converts the tpmon logging timestamp to a human-readable
-## format using the date tool
+# Converts the tpmon logging timestamp to a human-readable
+# format using the date tool
+#
+# @author Andre van Hoorn
 
 BINDIR=$(dirname $0)
 

@@ -3,6 +3,7 @@
 #
 # Wrapper script needs improvement!
 #
+# @author Andre van Hoorn
 
 BINDIR=$(dirname $0)
 
