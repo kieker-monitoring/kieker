@@ -64,7 +64,8 @@ public class RTMonitor implements IKiekerRecordConsumer {
 
         RTMonitor rtMonitor = new RTMonitor(1800);
 
-        FSReaderRealtime fsReaderRealtime = new FSReaderRealtime(inputDir, 7);
+        FSReaderRealtime fsReaderRealtime =
+                new FSReaderRealtime(new String[]{inputDir}, 7);
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(fsReaderRealtime);
         analysisInstance.addRecordConsumer(rtMonitor);

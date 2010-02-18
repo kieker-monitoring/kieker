@@ -120,5 +120,5 @@ in src/mySimpleKiekerExample/recordConsumer/.
   response time record satisfies or violates the service level objective.
 
   Since the monitoring log also contains execution/trace data, visualizations 
-  can be generated, as describes in Szenario 1.
+  can be generated, as described in Szenario 1.
 

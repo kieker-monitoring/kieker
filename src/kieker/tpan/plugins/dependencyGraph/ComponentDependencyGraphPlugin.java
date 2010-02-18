@@ -103,7 +103,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                 strBuild.append(DotFactory.createNode("",
                         getNodeId(this.dependencyGraph.getRootNode()),
                         componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabels),
-                        DotFactory.DOT_SHAPE_OVAL,
+                        DotFactory.DOT_SHAPE_NONE,
                         null, // style
                         null, // framecolor
                         null, // fillcolor

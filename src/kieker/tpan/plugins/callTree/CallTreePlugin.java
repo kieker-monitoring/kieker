@@ -34,6 +34,7 @@ import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.plugins.util.dot.DotFactory;
 
 
 /**
@@ -71,7 +72,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::")
+        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n")
                 .append(assemblyComponentName).append(":");
         if (!shortLabels){
             strBuild.append(componentTypePackagePrefx);
@@ -91,7 +92,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, nextNodeId.i);
         strBuild.append(nextNodeId.i++).append("[label =\"").append(nodeLabel(n, shortLabels))
-                .append("\",shape=oval];");
+                .append("\",shape="+DotFactory.DOT_SHAPE_NONE+"];");
         ps.println(strBuild.toString());
         for (CallTreeNode child : n.getChildren()) {
             dotEdgesFromSubTree(systemEntityFactory, child, nodeIds, nextNodeId, ps, shortLabels);

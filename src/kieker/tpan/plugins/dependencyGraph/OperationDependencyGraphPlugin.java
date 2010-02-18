@@ -123,7 +123,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                 strBuild.append(DotFactory.createNode("",
                         getNodeId(this.dependencyGraph.getRootNode()),
                         "$",
-                        DotFactory.DOT_SHAPE_OVAL,
+                        DotFactory.DOT_SHAPE_NONE,
                         null, // style
                         null, // framecolor
                         null, // fillcolor
