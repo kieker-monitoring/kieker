@@ -161,7 +161,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         strBuild.append(DotFactory.createNode("",
                                 getNodeId(curPair),
                                 curPair.getEntity().getOperation().getSignature().getName().toString(),
-                                DotFactory.DOT_SHAPE_BOX,
+                                DotFactory.DOT_SHAPE_OVAL,
                                 null, // style
                                 null, // framecolor
                                 null, // fillcolor

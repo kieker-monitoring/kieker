@@ -61,24 +61,26 @@ Three methods are instrumented with the annotation
      and implementing class:
      $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
 
-3. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
-   graph for this monitoring log. The script bin/tpan.sh is contained in 
+3. We will now use the Kieker.Tpan-based TraceAnalysisTool  to generate sequence 
+   diagrams and a dependency graph for this monitoring log. The tool can be
+   invoked using the wrapper script bin/trace-analysis.sh which contained in 
    Kieker's binary release.
-   Additionally, the tools graphviz (www.graphviz.org/) and 
-   plotutils (www.gnu.org/software/plotutils/) are required.
-   A call to bin/tpan.sh lists the available options.
+   Additionally, the tools graphviz (www.graphviz.org/) and plotutils 
+   (www.gnu.org/software/plotutils/) are required.
+   A call to bin/trace-analysis.sh lists the available options.
  3.1 Dependendy graph
-   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-Dependency-Graph
+   - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/
+      --plot-Dependency-Graphs
    - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
      directory tmp/. 
-     Kieker.Tpan's output gives further instructions how to convert this 
+     The console output gives further instructions how to convert this 
      file to graphic formats like svg and png using graphviz's pic2plot tool.
- 3.2 Sequence diagram
-   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
-   - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
-     directory tmp/. 
-     Kieker.Tpan's output gives further instructions how to convert this 
-     file to graphic formats like svg and png using plotutil's pic2plot tool.
+ 3.2 Sequence diagrams
+   - $ bin/trace-analysis -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
+   - For each diagram, a .pic-file with the prefix 'BAR' is created in the directory 
+     tmp/. 
+     The console output gives further instructions how to convert these 
+     files to graphic formats like svg and png using plotutil's pic2plot tool.
      
 SZENARIO 2:
 This examples demonstrates how to use custom monitoring probes and monitoring 

@@ -40,6 +40,8 @@ public class Bookstore extends Thread {
     static int numberOfRequests = 30;
     static int interRequestTime = 1000;
 
+    static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+
     /**
      *
      * main is the load driver for the Bookstore. It creates 
@@ -55,10 +57,7 @@ public class Bookstore extends Thread {
      * This will be monitored by Tpmon, since it has the
      * TpmonExecutionMonitoringProbe() annotation.
      */
-    public static void main(String[] args) {
-
-        Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
-
+    public static void main(String[] args) throws InterruptedException {
         for (int i = 0; i < numberOfRequests; i++) {
             System.out.println("Bookstore.main: Starting request " + i);
             Bookstore newBookstore = new Bookstore();
@@ -66,14 +65,22 @@ public class Bookstore extends Thread {
             newBookstore.start();
             Bookstore.waitabit(interRequestTime);
         }
-        System.out.println("Bookstore.main: Finished with starting all requests.");
-        System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-        waitabit(5000);
-        System.exit(0);
+         System.out.println("Bookstore.main: Finished with starting all requests.");
+        System.out.println("Bookstore.main: Waiting for threads to terminate");
+        synchronized (bookstoreScenarios) {
+            while (!bookstoreScenarios.isEmpty()) {
+                bookstoreScenarios.wait();
+            }
+        }
     }
 
+    @Override
     public void run() {
         Bookstore.searchBook();
+        synchronized (bookstoreScenarios) {
+            bookstoreScenarios.remove(this);
+            bookstoreScenarios.notify();
+        }
     }
 
     @MyRTProbe()
