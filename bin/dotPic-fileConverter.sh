@@ -30,25 +30,34 @@ DOT_FILES=$(find ${DIRNAME} -name "*.dot")
 PIC_COUNTER=0
 DOT_COUNTER=0
 
-if (echo "$ext" | grep pdf ) && !(echo "$ext" | grep ps); then
-    echo must generate ps first
-    exit 1
-fi
+EXTS=$*
 
 for f in ${PIC_FILES}; do 
     BASENAME=$(echo $f. | cut -d'.' -f1); 
-    for ext in $*; do 
-	pic2plot -T $ext $f > $BASENAME.$ext ;
+    if (echo "${EXTS}" | grep -q pdf) && !(echo "$*" | grep -q ps); then
+	EXTS="$EXTS ps"
+    fi
+    for ext in ${EXTS}; do 
+	if !(echo "${ext}" | grep -q pdf); then
+	    pic2plot -T ${ext} $f > ${BASENAME}.${ext} ;  
+	fi
     done; 
-    PIC_COUNTER=$(($PIC_COUNTER+1))
+    if (echo "${EXTS}" | grep -q pdf); then
+	echo ps2pdf ${BASENAME}.ps ${BASENAME}.pdf
+	ps2pdf ${BASENAME}.ps ${BASENAME}.pdf \
+	    && pdfcrop ${BASENAME}.pdf \
+	    && rm ${BASENAME}.pdf \
+	    && mv ${BASENAME}-crop.pdf ${BASENAME}.pdf
+    fi
+    PIC_COUNTER=$((${PIC_COUNTER}+1))
 done
 
 for f in ${DOT_FILES}; do 
     BASENAME=$(echo $f. | cut -d'.' -f1); 
-    for ext in $*; do 
-	dot -T $ext $f > $BASENAME.$ext ; 
+    for ext in ${EXTS}; do 
+	dot -T ${ext} $f > ${BASENAME}.${ext} ; 
     done; 
-    DOT_COUNTER=$(($DOT_COUNTER+1))
+    DOT_COUNTER=$((${DOT_COUNTER}+1))
 done
 
 echo 
