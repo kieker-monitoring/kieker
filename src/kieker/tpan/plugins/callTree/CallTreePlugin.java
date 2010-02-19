@@ -34,6 +34,7 @@ import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.plugins.util.IntContainer;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
 
@@ -218,13 +219,5 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
     @Override
     public void cleanup() {
         // no cleanup required
-    }
-}
-class IntContainer {
-
-    public int i = 0;
-
-    public IntContainer(int initVal) {
-        this.i = initVal;
     }
 }

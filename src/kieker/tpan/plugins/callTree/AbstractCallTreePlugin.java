@@ -28,6 +28,7 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AssemblyComponentInstance;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Operation;
@@ -35,6 +36,7 @@ import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.plugins.dependencyGraph.AllocationComponentOperationPair;
+import kieker.tpan.plugins.util.IntContainer;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
 /**
@@ -50,6 +52,27 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
     public AbstractCallTreePlugin(final String name, SystemEntityFactory systemEntityFactory,
             final boolean aggregated) {
         super(name, systemEntityFactory);
+    }
+
+    private static final String assemblyComponentOperationPairNodeLabel(
+            final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
+       AssemblyComponentOperationPair p =
+                (AssemblyComponentOperationPair) node.getEntity();
+        AssemblyComponentInstance component = p.getAssemblyComponent();
+        Operation operation = p.getOperation();
+        String assemblyComponentName = component.getName();
+        String componentTypePackagePrefx = component.getType().getPackageName();
+        String componentTypeIdentifier = component.getType().getTypeName();
+
+        StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
+        if (!shortLabels) {
+            strBuild.append(componentTypePackagePrefx);
+        } else {
+            strBuild.append("..");
+        }
+        strBuild.append(componentTypeIdentifier).append(".");
+        strBuild.append(operation.getSignature().getName());
+        return strBuild.toString();
     }
 
     private static final String allocationComponentOperationPairNodeLabel(
@@ -75,10 +98,14 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
     }
 
     protected static final String nodeLabel(
-            final AbstractCallTreeNode<?> node, final boolean shortLabels) {
-
-        if (node instanceof AbstractCallTreeNode<AllocationComponentOperationPair>){
-            
+            final AbstractCallTreeNode node, final boolean shortLabels) {
+        if (node.getEntity() instanceof AllocationComponentOperationPair) {
+            return allocationComponentOperationPairNodeLabel(node, shortLabels);
+        } else if (node.getEntity() instanceof AssemblyComponentOperationPair) {
+            return assemblyComponentOperationPairNodeLabel(node, shortLabels);
+        } else {
+            throw new UnsupportedOperationException("Node type not supported: " +
+                    node.getEntity().getClass().getName());
         }
     }
 
@@ -89,7 +116,9 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             IntContainer nextNodeId, PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, nextNodeId.i);
-        strBuild.append(nextNodeId.i++).append("[label =\"").append(allocationComponentOperationPairNodeLabel(n, shortLabels)).append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
+        strBuild.append(nextNodeId.i++).append("[label =\"")
+                .append(nodeLabel(n, shortLabels))
+                .append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
         ps.println(strBuild.toString());
         for (WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
             dotEdgesFromSubTree(systemEntityFactory, child.getDestination(), nodeIds, nextNodeId, ps, shortLabels);
@@ -172,14 +201,5 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
         addTraceToTree(root, msgTrace, false); // false: no aggregation
         saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, shortLabels);
-    }
-}
-
-class IntContainer {
-
-    public int i = 0;
-
-    public IntContainer(int initVal) {
-        this.i = initVal;
     }
 }
