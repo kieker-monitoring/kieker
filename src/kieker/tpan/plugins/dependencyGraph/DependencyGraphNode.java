@@ -28,8 +28,8 @@ public class DependencyGraphNode<T> {
 
     private final T entity;
     private final int id;
-    private final TreeMap<Integer, WeightedBidirectionalEdge<T>> incomingDependencies = new TreeMap<Integer, WeightedBidirectionalEdge<T>>();
-    private final TreeMap<Integer, WeightedBidirectionalEdge<T>> outgoingDependencies = new TreeMap<Integer, WeightedBidirectionalEdge<T>>();
+    private final TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
+    private final TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
 
     public DependencyGraphNode(final int id, final T entity) {
         this.id = id;
@@ -40,18 +40,18 @@ public class DependencyGraphNode<T> {
         return this.entity;
     }
 
-    public final Collection<WeightedBidirectionalEdge<T>> getIncomingDependencies() {
+    public final Collection<WeightedBidirectionalDependencyGraphEdge<T>> getIncomingDependencies() {
         return this.incomingDependencies.values();
     }
 
-    public final Collection<WeightedBidirectionalEdge<T>> getOutgoingDependencies() {
+    public final Collection<WeightedBidirectionalDependencyGraphEdge<T>> getOutgoingDependencies() {
         return this.outgoingDependencies.values();
     }
 
     public void addOutgoingDependency(DependencyGraphNode<T> destination) {
-        WeightedBidirectionalEdge<T> e = this.outgoingDependencies.get(destination.getId());
+        WeightedBidirectionalDependencyGraphEdge<T> e = this.outgoingDependencies.get(destination.getId());
         if (e == null) {
-            e = new WeightedBidirectionalEdge<T>();
+            e = new WeightedBidirectionalDependencyGraphEdge<T>();
             e.setSource(this);
             e.setDestination(destination);
             this.outgoingDependencies.put(destination.getId(), e);
@@ -60,9 +60,9 @@ public class DependencyGraphNode<T> {
     }
 
     public void addIncomingDependency(DependencyGraphNode<T> source) {
-        WeightedBidirectionalEdge<T> e = this.incomingDependencies.get(source.getId());
+        WeightedBidirectionalDependencyGraphEdge<T> e = this.incomingDependencies.get(source.getId());
         if (e == null) {
-            e = new WeightedBidirectionalEdge<T>();
+            e = new WeightedBidirectionalDependencyGraphEdge<T>();
             e.setSource(this);
             e.setDestination(source);
             this.incomingDependencies.put(source.getId(), e);

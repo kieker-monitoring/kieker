@@ -53,9 +53,6 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
     protected abstract void dotEdges(Collection<DependencyGraphNode<T>> nodes,
             PrintStream ps, final boolean shortLabels);
 
-//    protected abstract void dotVerticesFromSubTree(final DependencyGraphNode<T> n,
-//            final PrintStream ps, final boolean includeWeights);
-
     protected final String getNodeId (DependencyGraphNode<T> n){
         return NODE_PREFIX+n.getId();
     }
@@ -63,7 +60,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
     protected void dotVertices(final Collection<DependencyGraphNode<T>> nodes,
             final PrintStream ps, final boolean includeWeights, final boolean plotSelfLoops) {
         for (DependencyGraphNode<T> curNode : nodes) {
-            for (WeightedBidirectionalEdge<T> outgoingDependency : curNode.getOutgoingDependencies()) {
+            for (WeightedBidirectionalDependencyGraphEdge<T> outgoingDependency : curNode.getOutgoingDependencies()) {
                 DependencyGraphNode<T> destNode =
                          outgoingDependency.getDestination();
                 if (curNode == destNode && !plotSelfLoops) {

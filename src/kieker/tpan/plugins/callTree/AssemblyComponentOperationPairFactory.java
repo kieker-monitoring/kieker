@@ -1,9 +1,9 @@
-package kieker.tpan.plugins.dependencyGraph;
+package kieker.tpan.plugins.callTree;
 
 import kieker.tpan.datamodel.factories.*;
 import java.util.Collection;
 import java.util.Hashtable;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AssemblyComponentInstance;
 import kieker.tpan.datamodel.Operation;
 
 /*
@@ -28,70 +28,70 @@ import kieker.tpan.datamodel.Operation;
  *
  * @author Andre van Hoorn
  */
-public class AllocationComponentOperationPairFactory extends AbstractSystemSubFactory {
-    private final Hashtable<String, AllocationComponentOperationPair> pairsByName =
-            new Hashtable<String, AllocationComponentOperationPair>();
-    private final Hashtable<Integer, AllocationComponentOperationPair> pairsById =
-            new Hashtable<Integer, AllocationComponentOperationPair>();
+public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFactory {
+    private final Hashtable<String, AssemblyComponentOperationPair> pairsByName =
+            new Hashtable<String, AssemblyComponentOperationPair>();
+    private final Hashtable<Integer, AssemblyComponentOperationPair> pairsById =
+            new Hashtable<Integer, AssemblyComponentOperationPair>();
 
-    public final AllocationComponentOperationPair rootPair;
+    public final AssemblyComponentOperationPair rootPair;
 
-    public AllocationComponentOperationPairFactory(final SystemEntityFactory systemFactory,
-            final AllocationComponentOperationPair rootPair){
+    public AssemblyComponentOperationPairFactory(final SystemEntityFactory systemFactory,
+            final AssemblyComponentOperationPair rootPair){
         super(systemFactory);
         this.rootPair = rootPair;
     }
 
     /** Returns a corresponding pair instance (existing or newly created) */
-    public final AllocationComponentOperationPair getPairInstanceByPair(
-            final AllocationComponentInstance allocationComponent,
+    public final AssemblyComponentOperationPair getPairInstanceByPair(
+            final AssemblyComponentInstance AssemblyComponent,
             final Operation operation){
-        AllocationComponentOperationPair inst = 
-                this.getPairByFactoryName(allocationComponent.getId()+"-"+operation.getId());
+        AssemblyComponentOperationPair inst =
+                this.getPairByFactoryName(AssemblyComponent.getId()+"-"+operation.getId());
         if (inst == null){
-            return this.createAndRegisterPair(operation, allocationComponent);
+            return this.createAndRegisterPair(operation, AssemblyComponent);
         }
         return inst;
     }
 
-    private final AllocationComponentOperationPair createAndRegisterPair(
+    private final AssemblyComponentOperationPair createAndRegisterPair(
             final Operation operation,
-            final AllocationComponentInstance allocationComponent){
-            return this.createAndRegisterPair(allocationComponent.getId()+"-"+operation.getId(),
-                    operation, allocationComponent);
+            final AssemblyComponentInstance AssemblyComponent){
+            return this.createAndRegisterPair(AssemblyComponent.getId()+"-"+operation.getId(),
+                    operation, AssemblyComponent);
     }
 
     /** Returns the instance for the passed factory name; null if no instance
      *  with this factory name.
      */
-    public final AllocationComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
+    public final AssemblyComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
         return this.pairsByName.get(factoryIdentifier);
     }
 
     /** Returns the instance for the passed ID; null if no instance
      *  with this ID.
      */
-    public final AllocationComponentOperationPair getPairById(final int id){
+    public final AssemblyComponentOperationPair getPairById(final int id){
         return this.pairsById.get(id);
     }
 
-    public final AllocationComponentOperationPair createAndRegisterPair(
+    public final AssemblyComponentOperationPair createAndRegisterPair(
             final String factoryIdentifier,
             final Operation operation,
-            final AllocationComponentInstance allocationComponent){
-            AllocationComponentOperationPair newInst;
+            final AssemblyComponentInstance AssemblyComponent){
+            AssemblyComponentOperationPair newInst;
             if (this.pairsByName.containsKey(factoryIdentifier)){
                 throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
-            newInst = new AllocationComponentOperationPair(id,
-                    operation, allocationComponent);
+            newInst = new AssemblyComponentOperationPair(id,
+                    operation, AssemblyComponent);
             this.pairsById.put(id, newInst);
             this.pairsByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
-    public final Collection<AllocationComponentOperationPair> getPairs(){
+    public final Collection<AssemblyComponentOperationPair> getPairs(){
         return this.pairsById.values();
     }
 }
