@@ -30,6 +30,11 @@ DOT_FILES=$(find ${DIRNAME} -name "*.dot")
 PIC_COUNTER=0
 DOT_COUNTER=0
 
+if (echo "$ext" | grep pdf ) && !(echo "$ext" | grep ps); then
+    echo must generate ps first
+    exit 1
+fi
+
 for f in ${PIC_FILES}; do 
     BASENAME=$(echo $f. | cut -d'.' -f1); 
     for ext in $*; do 
