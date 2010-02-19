@@ -135,6 +135,8 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             int childId = nodeIds.get(child.getDestination());
             strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
             if (includeWeights) {
+                strBuild.append(",label = ").append("").append(", weight =").append(child.getOutgoingWeight());
+            } else {
                 strBuild.append(",label = ").append("").append(", weight =").append("");
             }
             strBuild.append(" ]");
