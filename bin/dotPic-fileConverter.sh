@@ -43,9 +43,8 @@ for f in ${PIC_FILES}; do
 	fi
     done; 
     if (echo "${EXTS}" | grep -q pdf); then
-	echo ps2pdf ${BASENAME}.ps ${BASENAME}.pdf
 	ps2pdf ${BASENAME}.ps ${BASENAME}.pdf \
-	    && pdfcrop ${BASENAME}.pdf \
+	    && (pdfcrop ${BASENAME}.pdf > /dev/null) \
 	    && rm ${BASENAME}.pdf \
 	    && mv ${BASENAME}-crop.pdf ${BASENAME}.pdf
     fi
