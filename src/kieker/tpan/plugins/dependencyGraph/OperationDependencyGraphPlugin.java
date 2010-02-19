@@ -126,9 +126,9 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         getNodeId(this.dependencyGraph.getRootNode()),
                         "$",
                         DotFactory.DOT_SHAPE_NONE,
-                        DotFactory.DOT_STYLE_FILLED, // style
+                        null, // style
                         null, // framecolor
-                        DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
+                        null, // fillcolor
                         null, // fontcolor
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null, // imagefilename
