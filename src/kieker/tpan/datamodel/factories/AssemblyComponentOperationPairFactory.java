@@ -1,5 +1,6 @@
-package kieker.tpan.plugins.callTree;
+package kieker.tpan.datamodel.factories;
 
+import kieker.tpan.datamodel.AssemblyComponentOperationPair;
 import kieker.tpan.datamodel.factories.*;
 import java.util.Collection;
 import java.util.Hashtable;

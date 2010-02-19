@@ -1,6 +1,6 @@
-package kieker.tpan.plugins.callTree;
+package kieker.tpan.datamodel;
 
-import kieker.tpan.datamodel.AssemblyComponentInstance;
+import kieker.tpan.datamodel.AllocationComponentInstance;
 import kieker.tpan.datamodel.Operation;
 
 /*
@@ -25,31 +25,31 @@ import kieker.tpan.datamodel.Operation;
  *
  * @author Andre van Hoorn
  */
-public class AssemblyComponentOperationPair {
+public class AllocationComponentOperationPair {
     private final int id;
     private final Operation operation;
 
-    private final AssemblyComponentInstance assemblyComponent;
+    private final AllocationComponentInstance allocationComponent;
 
-    private AssemblyComponentOperationPair (){
+    private AllocationComponentOperationPair (){
         this.id = -1;
         this.operation = null;
-        this.assemblyComponent = null;
+        this.allocationComponent = null;
     }
 
-    public AssemblyComponentOperationPair (
-            final int id, final Operation operation, final AssemblyComponentInstance AssemblyComponent){
+    public AllocationComponentOperationPair (
+            final int id, final Operation operation, final AllocationComponentInstance allocationComponent){
         this.id = id;
         this.operation = operation;
-        this.assemblyComponent = AssemblyComponent;
+        this.allocationComponent = allocationComponent;
     }
 
     public final int getId() {
         return this.id;
     }
 
-    public final AssemblyComponentInstance getAssemblyComponent() {
-        return this.assemblyComponent;
+    public final AllocationComponentInstance getAllocationComponent() {
+        return this.allocationComponent;
     }
 
     public final Operation getOperation() {
@@ -58,7 +58,7 @@ public class AssemblyComponentOperationPair {
 
     @Override
     public String toString() {
-        return  +  this.assemblyComponent.getId()+":"
+        return  +  this.allocationComponent.getId()+":"
                 + this.operation.getId()
                 + "@"+this.id + "";
     }

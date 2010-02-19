@@ -1,10 +1,11 @@
-package kieker.tpan.plugins.dependencyGraph;
+package kieker.tpan.datamodel.factories;
 
 import kieker.tpan.datamodel.factories.*;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.AllocationComponentInstance;
 import kieker.tpan.datamodel.Operation;
+import kieker.tpan.datamodel.AllocationComponentOperationPair;
 
 /*
  * ==================LICENCE=========================
