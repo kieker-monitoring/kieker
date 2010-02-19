@@ -50,8 +50,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
 
     private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
 
-    public AbstractCallTreePlugin(final String name, SystemEntityFactory systemEntityFactory,
-            final boolean aggregated) {
+    public AbstractCallTreePlugin(final String name, SystemEntityFactory systemEntityFactory) {
         super(name, systemEntityFactory);
     }
 
@@ -202,5 +201,10 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
         addTraceToTree(root, msgTrace, false); // false: no aggregation
         saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, shortLabels);
+    }
+
+    @Override
+    public void cleanup() {
+        // no cleanup required
     }
 }
