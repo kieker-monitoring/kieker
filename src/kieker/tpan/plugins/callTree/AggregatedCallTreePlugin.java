@@ -38,7 +38,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
     public AggregatedCallTreePlugin(final String name,
             SystemEntityFactory systemEntityFactory,
             AbstractAggregatedCallTreeNode<T> root) {
-        super(name, systemEntityFactory, true);
+        super(name, systemEntityFactory);
         this.root = root;
         this.systemEntityFactory = systemEntityFactory;
     }
