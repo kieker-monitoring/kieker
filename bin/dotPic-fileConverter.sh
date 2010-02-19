@@ -54,6 +54,7 @@ done
 if [ ! -z "${DOT_FILES}" ]; then
     for f in ${DOT_FILES}; do 
 	BASENAME=$(echo $f | sed -E s/'\.[[:alnum:]]+$'//g); 
+	echo "${BASENAME}"
 	for ext in ${EXTS}; do 
 	    dot -T ${ext} ${f} > ${BASENAME}.${ext} ; 
 	    if (echo "${ext}" | grep -q pdf); then
