@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import kieker.tpan.datamodel.SynchronousCallMessage;
+import kieker.tpan.datamodel.factories.SystemEntityFactory;
 
 /*
  * ==================LICENCE=========================
@@ -22,6 +23,7 @@ import kieker.tpan.datamodel.SynchronousCallMessage;
  * limitations under the License.
  * ==================================================
  */
+
 /**
  *
  * @author Andre van Hoorn
@@ -30,22 +32,26 @@ public abstract class AbstractCallTreeNode<T> {
 
     private final T entity;
     private final int id;
-    private WeightedDirectedCallTreeEdge<T> parentEdge;
+    private final SystemEntityFactory systemEntityFactory;
+
+    private final boolean rootNode;
 
     private final List<WeightedDirectedCallTreeEdge<T>> childEdges =
             new ArrayList<WeightedDirectedCallTreeEdge<T>>();
 
-    public AbstractCallTreeNode(final int id, final T entity) {
+    public AbstractCallTreeNode(
+            final int id,
+            final SystemEntityFactory systemEntityFactory,
+            final T entity,
+            final boolean rootNode) {
         this.id = id;
+        this.systemEntityFactory = systemEntityFactory;
+        this.rootNode = rootNode;
         this.entity = entity;
     }
 
     public final T getEntity() {
         return this.entity;
-    }
-
-    public final WeightedDirectedCallTreeEdge<T> getParentEdge() {
-        return this.parentEdge;
     }
 
     public final Collection<WeightedDirectedCallTreeEdge<T>> getChildEdges() {
@@ -64,6 +70,10 @@ public abstract class AbstractCallTreeNode<T> {
     }
 
     public final boolean isRootNode(){
-        return this.parentEdge == null;
+        return this.rootNode;
+    }
+
+    protected final SystemEntityFactory getSystemEntityFactory() {
+        return systemEntityFactory;
     }
 }

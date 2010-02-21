@@ -55,7 +55,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                 AbstractSystemSubFactory.ROOT_ELEMENT_ID,
                 new AllocationComponentOperationPair(AbstractSystemSubFactory.ROOT_ELEMENT_ID,
                 systemEntityFactory.getOperationFactory().rootOperation, systemEntityFactory.getAllocationFactory().rootAllocationComponent)));
-        this.pairFactory = new AllocationComponentOperationPairFactory(systemEntityFactory, super.dependencyGraph.getRootNode().getEntity());
+        this.pairFactory = new AllocationComponentOperationPairFactory(systemEntityFactory);
     }
 
     private String containerNodeLabel(final ExecutionContainer container) {
@@ -191,16 +191,11 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             int rootOperationId = this.getSystemEntityFactory().getOperationFactory().rootOperation.getId();
             Operation senderOperation = m.getSendingExecution().getOperation();
             Operation receiverOperation = m.getReceivingExecution().getOperation();
-            final String senderPairFactoryName = senderComponent.getId() + "-" + senderOperation.getId();
-            final String receiverPairFactoryName = receiverComponent.getId() + "-" + receiverOperation.getId();
-            AllocationComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? this.dependencyGraph.getRootNode().getEntity() : this.pairFactory.getPairByFactoryName(senderPairFactoryName);
-            AllocationComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? this.dependencyGraph.getRootNode().getEntity() : this.pairFactory.getPairByFactoryName(receiverPairFactoryName);
-            if (senderPair == null) {
-                senderPair = this.pairFactory.createAndRegisterPair(senderPairFactoryName, senderOperation, receiverComponent);
-            }
-            if (receiverPair == null) {
-                receiverPair = this.pairFactory.createAndRegisterPair(receiverPairFactoryName, receiverOperation, receiverComponent);
-            }
+            /* The following two get-calls to the factory return s.th. in either case */
+            AllocationComponentOperationPair senderPair =
+                    (senderOperation.getId() == rootOperationId) ? this.dependencyGraph.getRootNode().getEntity() : this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+            AllocationComponentOperationPair receiverPair =
+                    (receiverOperation.getId() == rootOperationId) ? this.dependencyGraph.getRootNode().getEntity() : this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
             DependencyGraphNode<AllocationComponentOperationPair> senderNode = this.dependencyGraph.getNode(senderPair.getId());
             DependencyGraphNode<AllocationComponentOperationPair> receiverNode = this.dependencyGraph.getNode(receiverPair.getId());

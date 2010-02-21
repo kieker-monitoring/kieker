@@ -17,7 +17,6 @@ package kieker.tpan.tools;
  * limitations under the License.
  * ==================================================
  */
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,12 +41,17 @@ import kieker.tpan.TpanInstance;
 import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
+import kieker.tpan.datamodel.factories.AllocationComponentOperationPairFactory;
+import kieker.tpan.datamodel.factories.AssemblyComponentOperationPairFactory;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.logReader.JMSReader;
+import kieker.tpan.plugins.callTree.AbstractCallTreePlugin;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanExecutionTraceProcessingComponent;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanTraceProcessingComponent;
 import kieker.tpan.plugins.callTree.CallTreePlugin;
+import kieker.tpan.plugins.callTree.TraceCallTreeNode;
 import kieker.tpan.plugins.dependencyGraph.ComponentDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.ContainerDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.OperationDependencyGraphPlugin;
@@ -74,14 +78,15 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn, Matthias Rohr
- * History
  */
 public class TraceAnalysisTool {
 
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
-
     private static final SystemEntityFactory systemEntityFactory = new SystemEntityFactory();
-
+    private static final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory =
+            new AllocationComponentOperationPairFactory(systemEntityFactory);
+    private static final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory =
+            new AssemblyComponentOperationPairFactory(systemEntityFactory);
     private static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     private static final String COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "componentDependencyGraph";
     private static final String CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX = "containerDependencyGraph";
@@ -230,18 +235,18 @@ public class TraceAnalysisTool {
         ignoreInvalidTraces = cmdl.hasOption(CMD_OPT_NAME_IGNOREINVALIDTRACES);
 
         String traceEquivClassModeStr = cmdl.getOptionValue(CMD_OPT_NAME_TRACEEQUIVCLASSMODE, null);
-        if (traceEquivClassModeStr == null || traceEquivClassModeStr.equals(TRACE_EQUIVALENCE_MODE_STR_DISABLED)){
+        if (traceEquivClassModeStr == null || traceEquivClassModeStr.equals(TRACE_EQUIVALENCE_MODE_STR_DISABLED)) {
             traceEquivalenceClassMode = TraceEquivalenceClassModes.DISABLED;
         } else {
-            if (traceEquivClassModeStr.equals(TRACE_EQUIVALENCE_MODE_STR_ALLOCATION)){
+            if (traceEquivClassModeStr.equals(TRACE_EQUIVALENCE_MODE_STR_ALLOCATION)) {
                 traceEquivalenceClassMode = TraceEquivalenceClassModes.ALLOCATION;
-            } else if (traceEquivClassModeStr.equals(TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY)){
+            } else if (traceEquivClassModeStr.equals(TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY)) {
                 traceEquivalenceClassMode = TraceEquivalenceClassModes.ASSEMBLY;
             } else {
                 log.error("Invalid value for property " + CMD_OPT_NAME_TRACEEQUIVCLASSMODE + ":" + traceEquivClassModeStr);
                 return false;
             }
-        } 
+        }
 
         String maxTraceDurationStr = cmdl.getOptionValue(CMD_OPT_NAME_MAXTRACEDURATION, maxTraceDurationMillis + "");
         try {
@@ -335,16 +340,16 @@ public class TraceAnalysisTool {
 
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_TRACEEQUIVCLASSMODE)) {
-                if (traceEquivalenceClassMode == TraceEquivalenceClassModes.ALLOCATION){
+                if (traceEquivalenceClassMode == TraceEquivalenceClassModes.ALLOCATION) {
                     val = TRACE_EQUIVALENCE_MODE_STR_ALLOCATION;
-                } else if (traceEquivalenceClassMode == TraceEquivalenceClassModes.ASSEMBLY){
+                } else if (traceEquivalenceClassMode == TraceEquivalenceClassModes.ASSEMBLY) {
                     val = TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY;
-                } else if (traceEquivalenceClassMode == TraceEquivalenceClassModes.DISABLED){
+                } else if (traceEquivalenceClassMode == TraceEquivalenceClassModes.DISABLED) {
                     val = TRACE_EQUIVALENCE_MODE_STR_DISABLED;
                 }
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_SHORTLABELS)) {
-               val = shortLabels ? "true" : "false";
+                val = shortLabels ? "true" : "false";
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
                 val = ignoreInvalidTraces ? "true" : "false";
@@ -385,7 +390,7 @@ public class TraceAnalysisTool {
         final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
         final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call trees";
         final String PLOTCALLTREE_COMPONENT_NAME = "Call trees";
-        
+
 
         TraceReconstructionFilter mtReconstrFilter = null;
         try {
@@ -439,7 +444,7 @@ public class TraceAnalysisTool {
                         task_createContainerDependencyGraphPlotComponent(PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotContainerDepGraph);
             }
-           OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
+            OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)) {
                 numRequestedTasks++;
                 componentPlotOperationDepGraph =
@@ -481,7 +486,7 @@ public class TraceAnalysisTool {
             //analysisInstance.setLogReader(new FSReader(inputDirs));
             analysisInstance.setLogReader(new FSMergeReader(inputDirs));
 
-           mtReconstrFilter =
+            mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
                     maxTraceDurationMillis, ignoreInvalidTraces, traceEquivalenceClassMode,
                     selectedTraces, ignoreRecordsBeforeTimestamp,
@@ -538,7 +543,7 @@ public class TraceAnalysisTool {
             }
 
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
-                retVal = task_genTraceEquivalenceReportForTraceSet(outputDir + File.separator + outputFnPrefix, 
+                retVal = task_genTraceEquivalenceReportForTraceSet(outputDir + File.separator + outputFnPrefix,
                         mtReconstrFilter);
             }
 
@@ -678,12 +683,16 @@ public class TraceAnalysisTool {
 
     private static AbstractTpanMessageTraceProcessingComponent task_createCallTreesPlotComponent(final String name, final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix + CALL_TREE_FN_PREFIX).getCanonicalPath();
+
         AbstractTpanMessageTraceProcessingComponent ctWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
-                    CallTreePlugin.writeDotForMessageTrace(systemEntityFactory, t, outputFnBase + "-" + t.getTraceId(),
-                            false, shortLabels); // no weights
+                final TraceCallTreeNode rootNode =
+                new TraceCallTreeNode(AbstractSystemSubFactory.ROOT_ELEMENT_ID,
+                systemEntityFactory, allocationComponentOperationPairFactory,
+                allocationComponentOperationPairFactory.rootPair, true); // rootNode
+                    AbstractCallTreePlugin.writeDotForMessageTrace(systemEntityFactory, rootNode, t, outputFnBase + "-" + t.getTraceId(), false, shortLabels); // no weights
                     this.reportSuccess(t.getTraceId());
                 } catch (FileNotFoundException ex) {
                     this.reportError(t.getTraceId());
@@ -707,8 +716,8 @@ public class TraceAnalysisTool {
             }
         };
         return ctWriter;
-    }    
-    
+    }
+
     /**
      * Reads the traces from the directory inputDirName and write the
      * message trace representation for traces with IDs given in traceSet

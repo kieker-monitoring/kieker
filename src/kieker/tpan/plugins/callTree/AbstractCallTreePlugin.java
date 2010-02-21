@@ -56,8 +56,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
 
     private static final String assemblyComponentOperationPairNodeLabel(
             final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
-       AssemblyComponentOperationPair p =
-                (AssemblyComponentOperationPair) node.getEntity();
+       AssemblyComponentOperationPair p = node.getEntity();
         AssemblyComponentInstance component = p.getAssemblyComponent();
         Operation operation = p.getOperation();
         String assemblyComponentName = component.getName();
@@ -70,15 +69,14 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
         } else {
             strBuild.append("..");
         }
-        strBuild.append(componentTypeIdentifier).append(".");
+        strBuild.append(componentTypeIdentifier).append("\\n.");
         strBuild.append(operation.getSignature().getName());
         return strBuild.toString();
     }
 
     private static final String allocationComponentOperationPairNodeLabel(
             final AbstractCallTreeNode<AllocationComponentOperationPair> node, final boolean shortLabels) {
-        AllocationComponentOperationPair p =
-                (AllocationComponentOperationPair) node.getEntity();
+        AllocationComponentOperationPair p = node.getEntity();
         AllocationComponentInstance component = p.getAllocationComponent();
         Operation operation = p.getOperation();
         String resourceContainerName = component.getExecutionContainer().getName();
@@ -92,7 +90,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
         } else {
             strBuild.append("..");
         }
-        strBuild.append(componentTypeIdentifier).append(".");
+        strBuild.append(componentTypeIdentifier).append("\\n.");
         strBuild.append(operation.getSignature().getName());
         return strBuild.toString();
     }
@@ -100,9 +98,9 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
     protected static final String nodeLabel(
             final AbstractCallTreeNode node, final boolean shortLabels) {
         if (node.getEntity() instanceof AllocationComponentOperationPair) {
-            return allocationComponentOperationPairNodeLabel(node, shortLabels);
+            return allocationComponentOperationPairNodeLabel((AbstractCallTreeNode<AllocationComponentOperationPair>)node, shortLabels);
         } else if (node.getEntity() instanceof AssemblyComponentOperationPair) {
-            return assemblyComponentOperationPairNodeLabel(node, shortLabels);
+            return assemblyComponentOperationPairNodeLabel((AbstractCallTreeNode<AssemblyComponentOperationPair>)node, shortLabels);
         } else {
             throw new UnsupportedOperationException("Node type not supported: " +
                     node.getEntity().getClass().getName());
@@ -117,7 +115,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, nextNodeId.i);
         strBuild.append(nextNodeId.i++).append("[label =\"")
-                .append(nodeLabel(n, shortLabels))
+                .append(n.isRootNode()? "$" : nodeLabel(n, shortLabels))
                 .append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
         ps.println(strBuild.toString());
         for (WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
@@ -127,6 +125,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
 
     /** Traverse tree recursively and generate dot code for vertices. */
     private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n,
+            final IntContainer eoiCounter,
             final Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds,
             final PrintStream ps, final boolean includeWeights) {
         int thisId = nodeIds.get(n);
@@ -135,19 +134,21 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             int childId = nodeIds.get(child.getDestination());
             strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
             if (includeWeights) {
-                strBuild.append(",label = ").append("").append(", weight =").append(child.getOutgoingWeight());
-            } else {
-                strBuild.append(",label = ").append("").append(", weight =").append("");
+                strBuild.append(",label=\"").append(child.getOutgoingWeight()).append("\"");
+            } else if (eoiCounter != null){
+                strBuild.append(",label=\"").append(eoiCounter.i++).append(".\"");
             }
             strBuild.append(" ]");
             ps.println(strBuild.toString());
-            dotVerticesFromSubTree(child.getDestination(), nodeIds, ps, includeWeights);
+            dotVerticesFromSubTree(child.getDestination(), eoiCounter, nodeIds, ps, includeWeights);
         }
     }
 
     private static void dotFromCallingTree(final SystemEntityFactory systemEntityFactory,
             final AbstractCallTreeNode<?> root, final PrintStream ps,
-            final boolean includeWeights, final boolean shortLabels) {
+            final boolean includeWeights,
+            final boolean includeEois,
+            final boolean shortLabels) {
         // preamble:
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
@@ -155,7 +156,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
         Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>();
 
         dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
-        dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);
+        dotVerticesFromSubTree(root, includeEois?new IntContainer(1):null, nodeIds, ps, includeWeights);
 
         ps.println(edgestringBuilder.toString());
         ps.println("}");
@@ -163,9 +164,9 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
 
     protected static void saveTreeToDotFile(final SystemEntityFactory systemEntityFactory,
             final AbstractCallTreeNode<?> root, final String outputFnBase, final boolean includeWeights,
-            final boolean shortLabels) throws FileNotFoundException {
+            final boolean includeEois, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, shortLabels);
+        dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, includeEois, shortLabels);
         ps.flush();
         ps.close();
     }
@@ -202,7 +203,8 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
         addTraceToTree(root, msgTrace, false); // false: no aggregation
-        saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, shortLabels);
+        saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights,
+                true, shortLabels); // includeEois
     }
 
     @Override

@@ -2,6 +2,7 @@ package kieker.tpan.plugins.callTree;
 
 import java.util.TreeMap;
 import kieker.tpan.datamodel.SynchronousCallMessage;
+import kieker.tpan.datamodel.factories.SystemEntityFactory;
 
 /*
  * ==================LICENCE=========================
@@ -31,8 +32,12 @@ public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTree
     protected final TreeMap<Integer, WeightedDirectedCallTreeEdge<T>> childMap =
             new TreeMap<Integer, WeightedDirectedCallTreeEdge<T>>();
 
-    public AbstractAggregatedCallTreeNode(final int id, final T entity) {
-        super(id, entity);
+    public AbstractAggregatedCallTreeNode(
+            final int id,
+            final SystemEntityFactory systemEntityFactory,
+            final T entity,
+            final boolean rootNode) {
+        super(id, systemEntityFactory, entity, rootNode);
     }
 
     public abstract AbstractCallTreeNode<T> newCall(SynchronousCallMessage callMsg);

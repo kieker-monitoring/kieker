@@ -1,8 +1,5 @@
 package kieker.tpan.datamodel;
 
-import kieker.tpan.datamodel.AssemblyComponentInstance;
-import kieker.tpan.datamodel.Operation;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project

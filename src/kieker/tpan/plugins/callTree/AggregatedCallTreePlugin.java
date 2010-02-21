@@ -33,20 +33,20 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
     private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
 
     private final AbstractAggregatedCallTreeNode<T> root;
-    private final SystemEntityFactory systemEntityFactory;
 
     public AggregatedCallTreePlugin(final String name,
             SystemEntityFactory systemEntityFactory,
             AbstractAggregatedCallTreeNode<T> root) {
         super(name, systemEntityFactory);
         this.root = root;
-        this.systemEntityFactory = systemEntityFactory;
     }
     private int numGraphsSaved = 0;
 
     public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException {
-        saveTreeToDotFile(this.systemEntityFactory, this.root, outputFnBase, includeWeights, shortLabels);
+        saveTreeToDotFile(super.getSystemEntityFactory(), this.root, 
+                outputFnBase, includeWeights, false, // do not include EOIs
+                shortLabels);
         this.numGraphsSaved++;
         this.printMessage(new String[]{
                     "Wrote call tree to file '" + outputFnBase + ".dot" + "'",

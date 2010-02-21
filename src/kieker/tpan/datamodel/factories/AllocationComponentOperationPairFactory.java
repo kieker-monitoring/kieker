@@ -1,6 +1,5 @@
 package kieker.tpan.datamodel.factories;
 
-import kieker.tpan.datamodel.factories.*;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.AllocationComponentInstance;
@@ -37,10 +36,13 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
 
     public final AllocationComponentOperationPair rootPair;
 
-    public AllocationComponentOperationPairFactory(final SystemEntityFactory systemFactory,
-            final AllocationComponentOperationPair rootPair){
+    public AllocationComponentOperationPairFactory(final SystemEntityFactory systemFactory){
         super(systemFactory);
-        this.rootPair = rootPair;
+        AllocationComponentInstance rootAllocation =
+                systemFactory.getAllocationFactory().rootAllocationComponent;
+        Operation rootOperation =
+                systemFactory.getOperationFactory().rootOperation;
+        this.rootPair = getPairInstanceByPair(rootAllocation, rootOperation);
     }
 
     /** Returns a corresponding pair instance (existing or newly created) */
@@ -65,7 +67,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
     /** Returns the instance for the passed factory name; null if no instance
      *  with this factory name.
      */
-    public final AllocationComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
+    private final AllocationComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
         return this.pairsByName.get(factoryIdentifier);
     }
 
@@ -76,7 +78,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
         return this.pairsById.get(id);
     }
 
-    public final AllocationComponentOperationPair createAndRegisterPair(
+    private final AllocationComponentOperationPair createAndRegisterPair(
             final String factoryIdentifier,
             final Operation operation,
             final AllocationComponentInstance allocationComponent){

@@ -1,7 +1,6 @@
 package kieker.tpan.datamodel.factories;
 
 import kieker.tpan.datamodel.AssemblyComponentOperationPair;
-import kieker.tpan.datamodel.factories.*;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.AssemblyComponentInstance;
@@ -37,10 +36,14 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
 
     public final AssemblyComponentOperationPair rootPair;
 
-    public AssemblyComponentOperationPairFactory(final SystemEntityFactory systemFactory,
-            final AssemblyComponentOperationPair rootPair){
+    public AssemblyComponentOperationPairFactory(
+            final SystemEntityFactory systemFactory){
         super(systemFactory);
-        this.rootPair = rootPair;
+        AssemblyComponentInstance rootAssembly =
+                systemFactory.getAssemblyFactory().rootAssemblyComponent;
+        Operation rootOperation =
+                systemFactory.getOperationFactory().rootOperation;
+        this.rootPair = this.getPairInstanceByPair(rootAssembly, rootOperation);
     }
 
     /** Returns a corresponding pair instance (existing or newly created) */
@@ -65,7 +68,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
     /** Returns the instance for the passed factory name; null if no instance
      *  with this factory name.
      */
-    public final AssemblyComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
+    private final AssemblyComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
         return this.pairsByName.get(factoryIdentifier);
     }
 
@@ -76,7 +79,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
         return this.pairsById.get(id);
     }
 
-    public final AssemblyComponentOperationPair createAndRegisterPair(
+    private final AssemblyComponentOperationPair createAndRegisterPair(
             final String factoryIdentifier,
             final Operation operation,
             final AssemblyComponentInstance AssemblyComponent){
