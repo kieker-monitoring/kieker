@@ -47,10 +47,10 @@ import kieker.tpan.datamodel.factories.AssemblyComponentOperationPairFactory;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.logReader.JMSReader;
 import kieker.tpan.plugins.callTree.AbstractCallTreePlugin;
+import kieker.tpan.plugins.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanExecutionTraceProcessingComponent;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanTraceProcessingComponent;
-import kieker.tpan.plugins.callTree.CallTreePlugin;
 import kieker.tpan.plugins.callTree.TraceCallTreeNode;
 import kieker.tpan.plugins.dependencyGraph.ComponentDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.ContainerDependencyGraphPlugin;
@@ -459,7 +459,7 @@ public class TraceAnalysisTool {
                         outputDir + File.separator + outputFnPrefix);
                 msgTraceProcessingComponents.add(componentPlotCallTrees);
             }
-            CallTreePlugin componentPlotAggregatedCallTree = null;
+            AggregatedAllocationComponentOperationCallTreePlugin componentPlotAggregatedCallTree = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)) {
                 numRequestedTasks++;
                 componentPlotAggregatedCallTree =
@@ -524,7 +524,8 @@ public class TraceAnalysisTool {
                 }
 
                 if (componentPlotAggregatedCallTree != null) {
-                    componentPlotAggregatedCallTree.saveTreeToDotFile(new File(outputDir + File.separator + outputFnPrefix + AGGREGATED_CALL_TREE_FN_PREFIX).getCanonicalPath(), false, shortLabels); // !traceEquivClassMode
+                    componentPlotAggregatedCallTree.saveTreeToDotFile(
+                            new File(outputDir + File.separator + outputFnPrefix + AGGREGATED_CALL_TREE_FN_PREFIX).getCanonicalPath(), true, shortLabels); // includeWeights
                 }
             } catch (Exception exc) {
                 log.error("Error occured while running analysis", exc);
@@ -676,9 +677,10 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static CallTreePlugin task_createAggregatedCallTreePlotComponent(final String name) {
-        CallTreePlugin callingTree = new CallTreePlugin(name, systemEntityFactory, true); // true: aggregated
-        return callingTree;
+    private static AggregatedAllocationComponentOperationCallTreePlugin task_createAggregatedCallTreePlotComponent(final String name) {
+        AggregatedAllocationComponentOperationCallTreePlugin callTree =
+                new AggregatedAllocationComponentOperationCallTreePlugin(name, allocationComponentOperationPairFactory, systemEntityFactory);
+        return callTree;
     }
 
     private static AbstractTpanMessageTraceProcessingComponent task_createCallTreesPlotComponent(final String name, final String outputFnPrefix) throws IOException {
