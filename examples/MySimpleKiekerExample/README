@@ -28,7 +28,7 @@ Initially, the following steps are required:
   * lib/commons-logging-<version>.jar
   * lib/log4j-<version>.jar
 3.Copy META-INF/tpmon.properties.example to 
-  META-INF/tpmon.properties and modify this configuration file
+   META-INF/tpmon.properties and modify this configuration file
   according to your needs. 
   NOTE: There's no need to change tpmon.properties to run the 
         example with the default configuration.
@@ -89,6 +89,9 @@ Three methods are instrumented with the annotation
      (The script bin/dotPic-fileConverter.sh can be used to convert all 
       files contained in a directory to any output format supported by
       pic2plot.)
+ 3.3 The directory tpmon-testdata/ contains two monitoring logs of this
+     scenario and of a slightly extended example with 333 traces (of three
+     different trace types)
      
 SZENARIO 2:
 This examples demonstrates how to use custom monitoring probes and monitoring 
