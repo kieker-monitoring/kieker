@@ -32,11 +32,13 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
+import kieker.tpan.TpanInstance;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.recordConsumer.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tpan.recordConsumer.executionRecordTransformation.IExecutionListener;
+import kieker.tpan.tools.LoggingTimestampConverterTool;
 
 /**
  *
@@ -75,7 +77,17 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         }
     });
     private final long maxTraceDurationNanos;
+    private long minTin = -1;
+
+    public final long getFirstTimestamp() {
+        return minTin;
+    }
     private long highestTout = -1;
+
+    /** Return latest timestamp */
+    public final long getLastTimestamp() {
+        return highestTout;
+    }
     private boolean terminate = false;
     private final boolean ignoreInvalidTraces;
     //private final boolean onlyEquivClasses;
@@ -135,6 +147,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             return;
         }
 
+        this.minTin = (this.minTin<0 || execution.getTin() < this.minTin) ? execution.getTin() : this.minTin;
         this.highestTout = execution.getTout() > this.highestTout ? execution.getTout() : this.highestTout;
         ExecutionTrace seq = pendingTraces.get(traceId);
         if (seq != null) { // create and add new sequence
@@ -324,5 +337,20 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             }
             return true;
         }
+    }
+
+    @Override
+    public void printStatusMessage() {
+        super.printStatusMessage();
+        String minTinStr = new StringBuilder().append(this.minTin)
+                .append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.minTin))
+                .append(",").append(LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(this.minTin))
+                .append(")").toString();
+        String maxToutStr = new StringBuilder().append(this.highestTout)
+                .append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.highestTout))
+                .append(",").append(LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(this.highestTout))
+                .append(")").toString();
+        System.out.println("First timestamp: " + minTinStr);
+        System.out.println("Last timestamp: "  + maxToutStr);
     }
 }

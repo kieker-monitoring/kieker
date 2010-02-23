@@ -92,7 +92,7 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
         String allocationComponentName =
                 new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
         String operationFactoryName =
-                new StringBuilder(allocationComponentName).append(".").append(execRec.opname).toString();
+                new StringBuilder(assemblyComponentName).append(".").append(execRec.opname).toString();
         String operationSignatureStr = execRec.opname;
 
         AllocationComponentInstance allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);

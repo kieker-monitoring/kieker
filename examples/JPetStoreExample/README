@@ -69,17 +69,26 @@ generated from the monitoring data employing Kieker.Tpan.
    plotutils (www.gnu.org/software/plotutils/) are required.
    A call to bin/tpan.sh lists the available options.
  5.1 Dependendy graph
-   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ --plot-Dependency-Graph
+   - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ 
+     --plot-Operation-Dependency-Graph  --plot-Component-Dependency-Graph
+     --plot-Container-Dependency-Graph   
    - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
      directory tmp/. 
      Kieker.Tpan's output gives further instructions how to convert this 
      file to graphic formats like svg and png using graphviz's pic2plot tool.
+     (The script bin/dotPic-fileConverter.sh can be used to convert all 
+      files contained in a directory to any output format supported by dot.)
  5.2 Sequence diagram
-   - $ bin/tpan.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
+   - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagrams
    - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
      directory tmp/. 
      Kieker.Tpan's output gives further instructions how to convert this 
      file to graphic formats like svg and png using plotutil's pic2plot tool.
+    (The script bin/dotPic-fileConverter.sh can be used to convert all 
+      files contained in a directory to any output format supported by
+      pic2plot.)
+ 5.3 The directory tpmon-testdata/ contains a monitoring log which can also be 
+     used as an input directory to generate diagrams.
 
 APPENDIX
 
