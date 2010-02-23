@@ -548,7 +548,12 @@ public class TraceAnalysisTool {
                         mtReconstrFilter);
             }
 
-            systemEntityFactory.saveSystemToHTMLFile(outputDir + File.separator + outputFnPrefix + File.separator +"system-entities");
+            final String systemEntitiesHtmlFn = new File(outputDir + File.separator + outputFnPrefix + File.separator +"system-entities").getAbsolutePath();
+            systemEntityFactory.saveSystemToHTMLFile(systemEntitiesHtmlFn);
+            System.out.println("");
+            System.out.println("#");
+            System.out.println("# Plugin: " + "System Entity Factory");
+            System.out.println("Wrote table of system entities to file '" + systemEntitiesHtmlFn + ".html'");
 
             // TODO: these tasks should be moved to a decicated tool
 //            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADER)) {
