@@ -68,19 +68,27 @@ Three methods are instrumented with the annotation
    Additionally, the tools graphviz (www.graphviz.org/) and plotutils 
    (www.gnu.org/software/plotutils/) are required.
    A call to bin/trace-analysis.sh lists the available options.
- 3.1 Dependendy graph
-   - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/
-      --plot-Dependency-Graphs
-   - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
+ 3.1 Dependendy graphs. Kieker allows to generate dependency graphs on
+   three abstraction levels: operation, component, container. 
+    - The following call generates graphs for all three levels:
+      $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/
+	--plot-Operation-Dependency-Graph  --plot-Component-Dependency-Graph
+	--plot-Container-Dependency-Graph     
+   - .dot-files with the prefix 'FOO' containing the diagrams are created in the 
      directory tmp/. 
      The console output gives further instructions how to convert this 
      file to graphic formats like svg and png using graphviz's pic2plot tool.
+     (The script bin/dotPic-fileConverter.sh can be used to convert all 
+      files contained in a directory to any output format supported by dot.)
  3.2 Sequence diagrams
    - $ bin/trace-analysis -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
    - For each diagram, a .pic-file with the prefix 'BAR' is created in the directory 
      tmp/. 
      The console output gives further instructions how to convert these 
      files to graphic formats like svg and png using plotutil's pic2plot tool.
+     (The script bin/dotPic-fileConverter.sh can be used to convert all 
+      files contained in a directory to any output format supported by
+      pic2plot.)
      
 SZENARIO 2:
 This examples demonstrates how to use custom monitoring probes and monitoring 

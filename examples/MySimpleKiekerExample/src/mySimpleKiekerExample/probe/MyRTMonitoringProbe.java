@@ -1,7 +1,6 @@
 package mySimpleKiekerExample.probe;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.*;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
