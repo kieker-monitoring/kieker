@@ -58,12 +58,19 @@ public class Signature {
     @Override
     public String toString() {
         StringBuilder strBuild = new StringBuilder();
-        strBuild.append(this.name).append("(")
-                .append(this.paramTypeList)
-                .append(")")
+        strBuild.append(this.name).append("(");
+        boolean first = true;
+        for (String t : this.paramTypeList){
+            if (!first){
+                strBuild.append(",");
+            } else {
+                first = false;
+            }
+            strBuild.append(t);
+        }
+        strBuild.append(")")
                 .append(":")
                 .append(this.returnType);
-
         return strBuild.toString();
     }
 }

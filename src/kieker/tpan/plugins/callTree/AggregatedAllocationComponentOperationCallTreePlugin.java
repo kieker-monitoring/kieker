@@ -39,45 +39,43 @@ public class AggregatedAllocationComponentOperationCallTreePlugin
         super(name, systemEntityFactory,
                 new AggregatedAllocationComponentOperationCallTreeNode(
                 AbstractSystemSubFactory.ROOT_ELEMENT_ID, systemEntityFactory,
-                allocationComponentOperationPairFactory, allocationComponentOperationPairFactory.rootPair, true
-                )
-        );
+                allocationComponentOperationPairFactory, allocationComponentOperationPairFactory.rootPair, true));
     }
 }
 
-    class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
+class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 
-        private final AllocationComponentOperationPairFactory pairFactory;
+    private final AllocationComponentOperationPairFactory pairFactory;
 
-        public AggregatedAllocationComponentOperationCallTreeNode(final int id,
-                final SystemEntityFactory systemEntityFactory,
-                final AllocationComponentOperationPairFactory pairFactory,
-                final AllocationComponentOperationPair entity,
-                final boolean rootNode) {
-            super(id, systemEntityFactory, entity, rootNode);
-            this.pairFactory = pairFactory;
-        }
-
-        @Override
-        public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(SynchronousCallMessage callMsg) {
-            AllocationComponentInstance allocationComponent =
-                    callMsg.getReceivingExecution().getAllocationComponent();
-            Operation op = callMsg.getReceivingExecution().getOperation();
-            AllocationComponentOperationPair destination = // will never be null!
-                    this.pairFactory.getPairInstanceByPair(allocationComponent, op);
-            WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e =
-                    this.childMap.get(destination.getId());
-            AbstractCallTreeNode<AllocationComponentOperationPair> n;
-            if (e != null) {
-                n = e.getDestination();
-            } else {
-                n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(),
-                        this.getSystemEntityFactory(), pairFactory, destination, false); // ! rootNode
-                e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, n);
-                this.childMap.put(destination.getId(), e);
-                super.appendChildEdge(e);
-            }
-            e.incOutgoingWeight();
-            return n;
-        }
+    public AggregatedAllocationComponentOperationCallTreeNode(final int id,
+            final SystemEntityFactory systemEntityFactory,
+            final AllocationComponentOperationPairFactory pairFactory,
+            final AllocationComponentOperationPair entity,
+            final boolean rootNode) {
+        super(id, systemEntityFactory, entity, rootNode);
+        this.pairFactory = pairFactory;
     }
+
+    @Override
+    public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(SynchronousCallMessage callMsg) {
+        AllocationComponentInstance allocationComponent =
+                callMsg.getReceivingExecution().getAllocationComponent();
+        Operation op = callMsg.getReceivingExecution().getOperation();
+        AllocationComponentOperationPair destination = // will never be null!
+                this.pairFactory.getPairInstanceByPair(allocationComponent, op);
+        WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e =
+                this.childMap.get(destination.getId());
+        AbstractCallTreeNode<AllocationComponentOperationPair> n;
+        if (e != null) {
+            n = e.getDestination();
+        } else {
+            n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(),
+                    this.getSystemEntityFactory(), pairFactory, destination, false); // ! rootNode
+            e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, n);
+            this.childMap.put(destination.getId(), e);
+            super.appendChildEdge(e);
+        }
+        e.incOutgoingWeight();
+        return n;
+    }
+}

@@ -388,8 +388,8 @@ public class TraceAnalysisTool {
         final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
         final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
         final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
-        final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call trees";
-        final String PLOTCALLTREE_COMPONENT_NAME = "Call trees";
+        final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
+        final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
 
 
         TraceReconstructionFilter mtReconstrFilter = null;
@@ -547,6 +547,8 @@ public class TraceAnalysisTool {
                 retVal = task_genTraceEquivalenceReportForTraceSet(outputDir + File.separator + outputFnPrefix,
                         mtReconstrFilter);
             }
+
+            systemEntityFactory.saveSystemToHTMLFile(outputDir + File.separator + outputFnPrefix + File.separator +"system-entities");
 
             // TODO: these tasks should be moved to a decicated tool
 //            if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADER)) {

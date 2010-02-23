@@ -18,6 +18,7 @@
 package kieker.tpan.recordConsumer.executionRecordTransformation;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.AllocationComponentInstance;
@@ -56,6 +57,27 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
         this.listeners.add(l);
     }
 
+    private Signature createSignature(final String operationSignatureStr){
+        String returnType = "N/A";
+        String name;
+        String[] paramTypeList;
+        int openParenIdx = operationSignatureStr.indexOf('(');
+        if (openParenIdx == -1){ // no parameter list
+            paramTypeList = new String[]{};
+            name = operationSignatureStr;
+        } else {
+            name = operationSignatureStr.substring(0, openParenIdx);
+            StringTokenizer strTokenizer =
+                    new StringTokenizer(operationSignatureStr.substring(openParenIdx+1, operationSignatureStr.length()-1), ",");
+            paramTypeList = new String[strTokenizer.countTokens()];
+            for (int i=0; strTokenizer.hasMoreTokens(); i++){
+                paramTypeList[i] = strTokenizer.nextToken().trim();
+            }
+        }
+
+        return new Signature(name, returnType, paramTypeList);
+    }
+
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
         if (!(monitoringRecord instanceof KiekerExecutionRecord)) {
             throw new RecordConsumerExecutionException("Can only process records of type"
@@ -71,7 +93,7 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
                 new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
         String operationFactoryName =
                 new StringBuilder(allocationComponentName).append(".").append(execRec.opname).toString();
-        String operationName = execRec.opname;
+        String operationSignatureStr = execRec.opname;
 
         AllocationComponentInstance allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);
         if (allocInst == null) { /* Allocation component instance doesn't exist */
@@ -95,8 +117,9 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
 
         Operation op = this.systemFactory.getOperationFactory().getOperationByFactoryIdentifier(operationFactoryName);
         if (op == null) { /* Operation doesn't exist */
-            Signature signature = new Signature(operationName, "<>", new String[0]);
+            Signature signature = createSignature(operationSignatureStr);
             op = this.systemFactory.getOperationFactory().createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
+            allocInst.getAssemblyComponent().getType().addOperation(op);
         }
 
         Execution execution = new Execution(op, allocInst, execRec.traceId,
