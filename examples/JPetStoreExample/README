@@ -16,7 +16,7 @@ directory Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/lib/:
 1. Download Kieker's *binary* distribution from 
    http://kieker.sourceforge.net.
 2. Copy the following files from the binary distribution 
-   to the tomcat directory:
+   to the tomcat's lib/ directory:
    * dist/kieker-common-<version>.jar
    * dist/kieker-tpmon-<version>_ctrl.jar
    * dist/kieker-tpmon-<version>_ltw.jar
@@ -44,7 +44,8 @@ Finally, visualizations (sequence diagrams and a dependency graph) are
 generated from the monitoring data employing Kieker.Tpan.
 
 1. Start the tomcat server using the bin/startup.sh script in the 
-   tomcat's bin/ directory.
+   tomcat's bin/ directory (you may have to "chmod +x bin/*.sh" in 
+   order to set the executable flags of tomcat's shell scripts).
    You should make sure, that the tomcat started properly, by taking 
    a look at the logs/catalina.out file.
    On error, the file logs/localhost.<date>.log may contain detailed 
@@ -61,8 +62,8 @@ generated from the monitoring data employing Kieker.Tpan.
      and implementing class.
 4. Kieker includes a control servlet to check the status of Kieker.Tpmon.
    It can be accessed via: http://localhost:8080/kieker-tpmon-<version>_controlServlet/
-5. We will now use Kieker.Tpan to generate a sequence diagram and a dependency 
-   graph for this monitoring log. The script bin/tpan.sh is contained in 
+5. We will now use Kieker.Tpan to generate sequence diagrams and dependency 
+   graphs for this monitoring log. The script bin/trace-analysis.sh is contained in 
    Kieker's binary release.
    Additionally, the tools graphviz (www.graphviz.org/) and 
    plotutils (www.gnu.org/software/plotutils/) are required.
