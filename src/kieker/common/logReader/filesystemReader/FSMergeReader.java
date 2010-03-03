@@ -175,7 +175,9 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
              *          and need to synchronize (on 'this'). */
             while (true) {
                 try {
-                    Map.Entry<AbstractKiekerMonitoringRecord, Thread> k;
+                    // Does not work with Java 1.5:
+                    //Map.Entry<AbstractKiekerMonitoringRecord, Thread> firstEntry;
+                    AbstractKiekerMonitoringRecord lowestKey;
                     Thread recordProvidingThread = null;
                     synchronized (this) {
                         while (this.nextRecordsFromReaders.size() != this.readerThreads.size()) {
@@ -185,16 +187,17 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
                                 throw new LogReaderExecutionException("An error occured");
                             }
                         }
-                        k = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
-                        //log.info("Found record " + k.getKey());
-                        if (k.getKey() == FS_READER_TERMINATION_MARKER) {
+                        lowestKey = this.nextRecordsFromReaders.firstKey(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+                        //1.5 un-compatibility: firstEntry = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+                        if (lowestKey == FS_READER_TERMINATION_MARKER) {
                             log.info("All reader threads provided FS_READER_TERMINATION_MARKER");
                             this.terminate();
                             return true;
                         } else {
-                            this.nextRecordsFromReaders.pollFirstEntry(); // now, well remove
-                            this.master.deliverRecordToConsumers(k.getKey());
-                            recordProvidingThread = k.getValue();
+                            recordProvidingThread = this.nextRecordsFromReaders.get(lowestKey);
+                            this.nextRecordsFromReaders.remove(lowestKey); // now, well remove
+                            //1.5 un-compatibility: this.nextRecordsFromReaders.pollFirstEntry(); // now, well remove
+                            this.master.deliverRecordToConsumers(lowestKey);
                         }
                     } // release monitor
                     if (recordProvidingThread != null) { // only if we need to wake up s.o.
