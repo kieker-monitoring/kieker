@@ -19,7 +19,6 @@ Initially, the following steps are required:
   * dist/kieker-common-<version>.jar
   * dist/kieker-tpan-<version>_ctrl.jar
   * dist/kieker-tpmon-<version>_ctrl.jar
-  * dist/kieker-tpmon-<version>_ctw.jar
   * dist/kieker-tpmon-<version>_ltw.jar
   * lib/aspectjrt-<version>.jar
   * lib/aspectjtools-<version>.jar
@@ -45,9 +44,11 @@ Initially, the following steps are required:
    * openjms-<version>.jar
    * openjms-common-<version>.jar
    * openjms-net-<version>.jar
+   * jms-<version>.jar
+   * concurrent-<version>.jar
+   * spice-jndikit-<version>.jar
 
-
- SZENARIO:
+ SCENARIO:
  
  #################                                     ##################
  # Bookstore App #   Kieker         ##############     # Online Monitor #
@@ -64,9 +65,9 @@ in the Kieker framework and @MyRTProbe() defined in this example archive.
 1. First, you need to start the JMS server (you may have to set your JAVA_HOME variable first):
    ($ export JAVA_HOME=PATH-TO-YOUR-JVM)
    $ openjms-0.7.7-beta-1/bin/startup.sh
-2. Now, we start the analysis part:
+2. Now, we start the analysis part (in a new terminal):
    $ ant run-JMSMonitor
-3. Now, start the instrumented application:
+3. Now, start the instrumented application (in another terminal):
    $ ant run-tests-loadTimeWeaving-bookstore-60Sek
    
 The JMSMonitor now prints information on every incoming monitoring recordConsumer

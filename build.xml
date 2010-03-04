@@ -24,7 +24,7 @@
         <!-- Names of the tpmon runtime libraries that will be created
 	     by the build process: -->
         <property name="kieker.version"
-                  value="1.0"/> <!-- -20090716-1022 -->
+                  value="1.1"/> <!-- -20090716-1022 -->
         <property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
         <property name="tpmon.dist.name"
@@ -349,6 +349,7 @@
             <include name="build.xml"/>
             <include name="build.properties"/>
             <include name="RELEASENOTES"/>
+            <include name="ISSUES"/>
             <include name="HISTORY"/>
 	    <include name="pom_ant_kieker-*.xml"/>
         </patternset>
@@ -379,6 +380,7 @@
             <include name="META-INF/*.example"/>
             <include name="lib/**"/>
             <include name="RELEASENOTES"/>
+            <include name="ISSUES"/>
             <include name="HISTORY"/>
         </patternset>
 
@@ -405,6 +407,7 @@
             <include name="examples/MySimpleKiekerExample/build.xml"/>
             <include name="examples/MySimpleKiekerExample/build.properties"/>
             <include name="examples/MySimpleKiekerExample/lib/"/>
+            <include name="examples/MySimpleKiekerExample/tpmon-testdata/"/>
             <exclude name="examples/MySimpleKiekerExample/lib/*.jar"/>
             <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTs.aop.xml"/>
             <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
@@ -438,6 +441,7 @@
             <include name="examples/MySimpleKiekerJMSExample/build.properties"/>
             <include name="examples/MySimpleKiekerJMSExample/lib/"/>
             <exclude name="examples/MySimpleKiekerJMSExample/lib/*.jar"/>
+            <exclude name="examples/MySimpleKiekerJMSExample/**/*.log"/>
             <include name="examples/MySimpleKiekerJMSExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
             <include name="examples/MySimpleKiekerJMSExample/META-INF/tests.log4j.properties"/>
             <include name="examples/MySimpleKiekerJMSExample/META-INF/tpmon.properties.example"/>
@@ -466,6 +470,7 @@
 	    <echo message="${dist.dir}/${dist.kieker.example.jpetstore}"/>
         <patternset id="dist_jpetstoreExample_files">
             <include name="examples/JPetStoreExample/README"/>
+            <include name="examples/JPetStoreExample/tpmon-testdata/**"/>
             <include name="examples/JPetStoreExample/${tomcat.dir}/**"/>
             <include name="examples/JPetStoreExample/${jpetstore.dir}/**"/>
             <exclude name="examples/JPetStoreExample/${jpetstore.dir}/devlib/kieker*.jar"/>
@@ -477,6 +482,7 @@
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/bin/catalina.sh.localjvmmem.conf/"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/work/**/*"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/temp/**/*"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/logs/**/*"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/jpetstore/"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/kieker*controlServlet*/"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/kieker*.jar"/>

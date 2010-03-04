@@ -19,7 +19,6 @@ Initially, the following steps are required:
   * dist/kieker-common-<version>.jar
   * dist/kieker-tpan-<version>_ctrl.jar
   * dist/kieker-tpmon-<version>_ctrl.jar
-  * dist/kieker-tpmon-<version>_ctw.jar
   * dist/kieker-tpmon-<version>_ltw.jar
   * lib/aspectjrt-<version>.jar
   * lib/aspectjtools-<version>.jar
@@ -37,7 +36,7 @@ Initially, the following steps are required:
    README is based on the run-targets in the ant file build.xml.
    
 
-SZENARIO 1:
+SCENARIO 1:
 This example generates a filesystem monitoring log containing 
 execution and trace data into the directory tmp/tpmon-<DATE-TIME>/.
 The application is a simple 3-class Java application, referred to 
@@ -61,19 +60,23 @@ Three methods are instrumented with the annotation
      and implementing class:
      $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
 
-3. We will now use the Kieker.Tpan-based TraceAnalysisTool  to generate sequence 
-   diagrams and a dependency graph for this monitoring log. The tool can be
-   invoked using the wrapper script bin/trace-analysis.sh which contained in 
-   Kieker's binary release.
+3. We will now use the Kieker.Tpan-based TraceAnalysisTool to generate sequence 
+   diagrams and a dependency graph for this monitoring log. Please change to 
+   the base directory of Kieker's binary release. The tool can be invoked using 
+   the wrapper script bin/trace-analysis.sh (it may be necessary to chmod +x /bin/*.sh).
+   A call to bin/trace-analysis.sh lists the available options.
+
    Additionally, the tools graphviz (www.graphviz.org/) and plotutils 
    (www.gnu.org/software/plotutils/) are required.
-   A call to bin/trace-analysis.sh lists the available options.
+
+   You should create a directory tmp/ for the output files.
+
  3.1 Dependendy graphs. Kieker allows to generate dependency graphs on
    three abstraction levels: operation, component, container. 
     - The following call generates graphs for all three levels:
       $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/
 	--plot-Operation-Dependency-Graph  --plot-Component-Dependency-Graph
-	--plot-Container-Dependency-Graph     
+	--plot-Container-Dependency-Graph  --short-labels   
    - .dot-files with the prefix 'FOO' containing the diagrams are created in the 
      directory tmp/. 
      The console output gives further instructions how to convert this 
@@ -81,7 +84,8 @@ Three methods are instrumented with the annotation
      (The script bin/dotPic-fileConverter.sh can be used to convert all 
       files contained in a directory to any output format supported by dot.)
  3.2 Sequence diagrams
-   - $ bin/trace-analysis -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagram
+   - $ bin/trace-analysis -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ 
+       --plot-Sequence-Diagrams --short-labels
    - For each diagram, a .pic-file with the prefix 'BAR' is created in the directory 
      tmp/. 
      The console output gives further instructions how to convert these 
@@ -93,7 +97,7 @@ Three methods are instrumented with the annotation
      scenario and of a slightly extended example with 333 traces (of three
      different trace types)
      
-SZENARIO 2:
+SCENARIO 2:
 This examples demonstrates how to use custom monitoring probes and monitoring 
 records defined outside the Kieker framework together with Kieker-provided probes 
 and records. The sources can be found in src/bookstoreDifferentRecordTypes/.
@@ -114,7 +118,7 @@ in src/mySimpleKiekerExample/<annotation/|probe/|monitoringRecord/>.
       $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
       $2=mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord
    
-SZENARIO 3:
+SCENARIO 3:
 This example demonstrates how to implement a response time monitor which 
 continuously checks, whether the observed response times are below a 
 specified threshold (service level objective).
@@ -122,7 +126,7 @@ The sources of the response time monitor based on Kieker.Tpan can be found
 in src/mySimpleKiekerExample/recordConsumer/.
 
 1. We will first generate 30 seconds of monitoring data using a slightly 
-   extended bookstore example from SZENARIO 2 (sources in src/bookstore30SekDelayed).
+   extended bookstore example from Scenario 2 (sources in src/bookstore30SekDelayed).
    $ ant run-tests-loadTimeWeaving-bookstore-LongRun
    
 2. Now we use the Kieker-provided relatime-replayer to replay the monitoring 
@@ -133,5 +137,5 @@ in src/mySimpleKiekerExample/recordConsumer/.
   response time record satisfies or violates the service level objective.
 
   Since the monitoring log also contains execution/trace data, visualizations 
-  can be generated, as described in Szenario 1.
+  can be generated, as described in Scenario 1.
 

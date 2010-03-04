@@ -11,12 +11,12 @@ the configuration file used is aop.xml).
 The Java methods to be instrumented are selected using Java 
 annotations.
 
-Initially, the following steps are required to in the 
+Initially, the following steps are required to be performed in the 
 directory Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/lib/:
 1. Download Kieker's *binary* distribution from 
    http://kieker.sourceforge.net.
 2. Copy the following files from the binary distribution 
-   to the tomcat's lib/ directory:
+   to the lib/ directory:
    * dist/kieker-common-<version>.jar
    * dist/kieker-tpmon-<version>_ctrl.jar
    * dist/kieker-tpmon-<version>_ltw.jar
@@ -63,15 +63,20 @@ generated from the monitoring data employing Kieker.Tpan.
 4. Kieker includes a control servlet to check the status of Kieker.Tpmon.
    It can be accessed via: http://localhost:8080/kieker-tpmon-<version>_controlServlet/
 5. We will now use Kieker.Tpan to generate sequence diagrams and dependency 
-   graphs for this monitoring log. The script bin/trace-analysis.sh is contained in 
-   Kieker's binary release.
-   Additionally, the tools graphviz (www.graphviz.org/) and 
-   plotutils (www.gnu.org/software/plotutils/) are required.
-   A call to bin/tpan.sh lists the available options.
- 5.1 Dependendy graph
+   graphs for this monitoring log. Please change to the base directory of Kieker's 
+   binary release. The tool can be invoked using the wrapper script bin/trace-analysis.sh 
+  (it may be necessary to chmod +x /bin/*.sh).  
+  A call to bin/trace-analysis.sh lists the available options.
+
+   Additionally, the tools graphviz (www.graphviz.org/) and plotutils 
+   (www.gnu.org/software/plotutils/) are required.
+
+   You should create a directory tmp/ for the output files.
+
+ 5.1 Dependendy graphs
    - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ 
-     --plot-Operation-Dependency-Graph  --plot-Component-Dependency-Graph
-     --plot-Container-Dependency-Graph   
+     --plot-Operation-Dependency-Graph --plot-Component-Dependency-Graph
+     --plot-Container-Dependency-Graph --short-labels  
    - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
      directory tmp/. 
      Kieker.Tpan's output gives further instructions how to convert this 
@@ -79,7 +84,8 @@ generated from the monitoring data employing Kieker.Tpan.
      (The script bin/dotPic-fileConverter.sh can be used to convert all 
       files contained in a directory to any output format supported by dot.)
  5.2 Sequence diagram
-   - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ --plot-Sequence-Diagrams
+   - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ 
+       --plot-Sequence-Diagrams --short-labels
    - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
      directory tmp/. 
      Kieker.Tpan's output gives further instructions how to convert this 
