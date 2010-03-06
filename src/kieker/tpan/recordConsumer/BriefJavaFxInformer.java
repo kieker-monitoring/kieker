@@ -8,6 +8,9 @@ package kieker.tpan.recordConsumer;
 
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
+import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 
@@ -15,7 +18,23 @@ import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
  *
  * @author matthias
  */
-public class BriefJavaFxInformer implements IKiekerRecordConsumer {
+public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTraceReceiver {
+
+    public BriefJavaFxInformer() {
+        try {
+            System.out.println("==> Trying to start JavaFx window");
+            String javaFxWindowClassname = "KiekerLiveAnalyzer.JavaMain";
+            Object obj = Class.forName(javaFxWindowClassname).newInstance();
+            jfxRc = (IKiekerRecordConsumer) obj;
+            jfxTr = (IMessageTraceReceiver) obj; // dont wonder, its the same object twice
+            System.out.println("==> Success to start JavaFx window (at least the class invocation)");
+        } catch (Exception e) {
+            System.out.println("==> Failed to execute JavaFx window = failed to execute Class.forName(KiekerLiveAnalyzer.JavaMain)  - most likely you do not have KiekerLiveAnalyzer.jar in the classpath (put it or link it in your tpan-plugins folder.) \n Message:"+e.getMessage());
+            e.printStackTrace();
+            System.out.println("==> Failed to start JavaFx window");
+            //throw new RecordConsumerExecutionException(errorMessage,e);
+        }
+    }
 
     /** Consuming only execution records */
     private final static String[] recordTypeSubscriptionList = {
@@ -36,20 +55,10 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
     }
     // this private variable represents access to the javafx window
     IKiekerRecordConsumer jfxRc = null;
+    IMessageTraceReceiver jfxTr = null;
 
     public boolean execute() throws RecordConsumerExecutionException {
-        try {
-            System.out.println("==> Trying to start JavaFx window");
-            String javaFxWindowClassname = "KiekerLiveAnalyzer.JavaMain";
-            jfxRc = (IKiekerRecordConsumer)Class.forName(javaFxWindowClassname).newInstance();
-            jfxRc.execute();
-            System.out.println("==> Success to start JavaFx window (at least the class invocation)");
-        } catch (Exception e) {
-            String errorMessage = "==> Failed to execute JavaFx window = failed to execute Class.forName(KiekerLiveAnalyzer.JavaMain)  - most likely you do not have KiekerLiveAnalyzer.jar in the classpath (put it or link it in your tpan-plugins folder.) \n Message:"+e.getMessage();
-            e.printStackTrace();
-            System.out.println("==> Failed to start JavaFx window");
-            throw new RecordConsumerExecutionException(errorMessage,e);
-        }
+        jfxRc.execute();
         return true;
     }
 
@@ -58,5 +67,9 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
         jfxRc.terminate();
         } catch(Exception e){}
         // nothing to do
+    }
+
+    public void newTrace(MessageTrace t) throws TraceProcessingException {
+        jfxTr.newTrace(t);
     }
 }

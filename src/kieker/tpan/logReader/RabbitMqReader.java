@@ -146,8 +146,8 @@ public class RabbitMqReader extends AbstractKiekerMonitoringLogReader {
 
             KiekerExecutionRecord ker = (KiekerExecutionRecord)KiekerExecutionRecord.getInstance();
             ker.initFromString(execRecStringWithoutFirstToken);
-            System.out.println(execRecStringWithoutFirstToken);
-                System.out.printf("Recieved (%d) and decoded KiekerExecutionRecord: %s \n", numberOfMessagesReceived, ker);
+            // System.out.println(execRecStringWithoutFirstToken);
+            //    System.out.printf("Recieved (%d) and decoded KiekerExecutionRecord: %s \n", numberOfMessagesReceived, ker);
             deliverRecordToConsumers(ker);
             } catch (Exception e) {
                 System.out.printf("Recieved (%d) but could not Decode as KiekerExecutionRecord: %s \n %s", numberOfMessagesReceived, execRecordString,e.getMessage());

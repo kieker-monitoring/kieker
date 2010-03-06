@@ -56,6 +56,7 @@ import kieker.tpan.plugins.dependencyGraph.ComponentDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.ContainerDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.OperationDependencyGraphPlugin;
 import kieker.tpan.plugins.sequenceDiagram.SequenceDiagramPlugin;
+import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter.TraceEquivalenceClassModes;
@@ -390,20 +391,24 @@ public class TraceAnalysisTool {
         }
     }
 
+
+    // this was moved to here from the inside of dispathTasks()
+        private static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
+        private static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
+        private static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
+        private static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
+        private static final String PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph";
+        private static final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
+        private static final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
+        private static final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
+        private static final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
+        private static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
+
     private static boolean dispatchTasks() {
         boolean retVal = true;
         int numRequestedTasks = 0;
 
-        final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
-        final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
-        final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
-        final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-        final String PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph";
-        final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
-        final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
-        final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
-        final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
-        final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
+
 
 
         TraceReconstructionFilter mtReconstrFilter = null;
@@ -902,4 +907,35 @@ public class TraceAnalysisTool {
         analysisInstance.run();
         return retVal;
     }
+
+
+    /**
+     * This method is used to initialize a typical set of filters, required for
+     * message trace analysis. Every new trace object is passed to the messageTraceListener.
+     *
+     * Kieker Live Analysis adds itself as listener.
+     *
+     * You'll need a tpanInstance (with a reader) before invoking this method.
+     */
+    public static void createMessageTraceFiltersAndRegisterMessageTraceListener(TpanInstance tpanInstance, IMessageTraceReceiver messageTraceListener) {
+        if (tpanInstance == null) tpanInstance = new TpanInstance();
+      
+            TraceReconstructionFilter mtReconstrFilter = null;
+            mtReconstrFilter =
+                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
+                    10*60*1000, // maxTraceDurationMillis,
+                    true, //ignoreInvalidTraces,
+                    TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
+                    null, // selectedTraces, // null means all
+                    ignoreRecordsBeforeTimestamp, // default Long.MIN
+                    ignoreRecordsAfterTimestamp); // default Long.MAX
+            
+            mtReconstrFilter.addMessageTraceListener(messageTraceListener);
+
+            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
+            execRecTransformer.addListener(mtReconstrFilter);
+            tpanInstance.addRecordConsumer(execRecTransformer);
+    }
+
+
 }
