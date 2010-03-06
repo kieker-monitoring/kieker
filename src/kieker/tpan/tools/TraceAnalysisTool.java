@@ -77,6 +77,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ *
+ * This is the main class to start Tpan - the model synthesis and analysis
+ * server to process the monitoring data that comes from the instrumented
+ * system, or from a file that contains Kieker monitoring data. Tpan can
+ * produce output such as sequence diagrams, dependency graphs on demand.
+ * Alternatively it can be used continuously for online performance
+ * analysis, anomaly detection or live visualization of system behavior.
+ *
+ * A Tpan is started via ant-script or command line. Visualization
+ * and output should be implemented as plugins. These plugins must be
+ * implemented to be loaded at runtime (Class.forName...) in order to keep
+ * compile-time dependencies low.
+ *
+ *
  * @author Andre van Hoorn, Matthias Rohr
  */
 public class TraceAnalysisTool {

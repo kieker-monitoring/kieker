@@ -27,7 +27,7 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
     }
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
-        System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
+       // System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
         if (jfxRc == null) {
             System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");
         } else {

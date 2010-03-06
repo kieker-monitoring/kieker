@@ -160,5 +160,12 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
         }
     }
 
+    /**
+     *
+     * True is returned if its finished?
+     *
+     * @return
+     * @throws LogReaderExecutionException
+     */
     public abstract boolean execute() throws LogReaderExecutionException;
 }

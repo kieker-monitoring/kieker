@@ -24,10 +24,20 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
  * @author Andre van Hoorn
  */
 public interface IKiekerRecordConsumer {
+
+    /**
+     * Simply return null to get records of all types.
+     * @return
+     */
     public String[] getRecordTypeSubscriptionList();
 
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
 
+    /**
+     * TODO: Add documentation! What means true? Whats the semantic of execute?
+     * Has it to be called before or after consumeMonitoringRecord? Just once or multiple times?
+     * @return
+     */
     public boolean execute() throws RecordConsumerExecutionException;
 
     public void terminate();
