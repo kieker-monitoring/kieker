@@ -54,6 +54,9 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer {
     }
 
     public void terminate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try{
+        jfxRc.terminate();
+        } catch(Exception e){}
+        // nothing to do
     }
 }

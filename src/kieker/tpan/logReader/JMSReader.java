@@ -79,19 +79,15 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
      * A call to this method is a blocking call.
      */
     public boolean execute() throws LogReaderExecutionException {
-
-
         boolean retVal = false;
         try {
             Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.exolab.jms.jndi.InitialContextFactory");
-            //properties.put(Context.PROVIDER_URL, "tcp://pc-rohr.informatik.uni-oldenburg.de:3035/");
 
             // JMS initialization
             properties.put(Context.PROVIDER_URL, jmsProviderUrl);
             Context context = new InitialContext(properties);
-            ConnectionFactory factory =
-                    (ConnectionFactory) context.lookup("ConnectionFactory");
+            ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
             Connection connection = factory.createConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Destination destination = (Destination) context.lookup(jmsDestination);
