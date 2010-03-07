@@ -917,7 +917,7 @@ public class TraceAnalysisTool {
      *
      * You'll need a tpanInstance (with a reader) before invoking this method.
      */
-    public static void createMessageTraceFiltersAndRegisterMessageTraceListener(TpanInstance tpanInstance, IMessageTraceReceiver messageTraceListener) {
+    public static void createMessageTraceFiltersAndRegisterMessageTraceListener(TpanInstance tpanInstance, BriefJavaFxInformer messageTraceListener) {
         if (tpanInstance == null) tpanInstance = new TpanInstance();
       
             TraceReconstructionFilter mtReconstrFilter = null;
@@ -928,12 +928,24 @@ public class TraceAnalysisTool {
                     TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
                     null, // selectedTraces, // null means all
                     ignoreRecordsBeforeTimestamp, // default Long.MIN
-                    ignoreRecordsAfterTimestamp); // default Long.MAX
-            
+                    ignoreRecordsAfterTimestamp); // default Long.MAX            
             mtReconstrFilter.addMessageTraceListener(messageTraceListener);
+
+
+            TraceReconstructionFilter uniqueMtReconstrFilter = null;
+            uniqueMtReconstrFilter =
+                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
+                    2*1000, // maxTraceDurationMillis,
+                    false, //ignoreInvalidTraces,
+                    TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
+                    null, // selectedTraces, // null means all
+                    ignoreRecordsBeforeTimestamp, // default Long.MIN
+                    ignoreRecordsAfterTimestamp); // default Long.MAX
+             uniqueMtReconstrFilter.addMessageTraceListener(messageTraceListener.getJfxUniqueTr());
 
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
+            execRecTransformer.addListener(uniqueMtReconstrFilter);
             tpanInstance.addRecordConsumer(execRecTransformer);
             System.out.println("MessageTraceListener registered");
     }

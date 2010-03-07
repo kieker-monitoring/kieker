@@ -53,9 +53,20 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTrace
             jfxRc.consumeMonitoringRecord(monitoringRecord);
         }
     }
-    // this private variable represents access to the javafx window
+    // these variables represents access to the javafx window
     IKiekerRecordConsumer jfxRc = null;
     IMessageTraceReceiver jfxTr = null;
+    IMessageTraceReceiver jfxUniqueTr = null;
+
+    public void setUniqueTraceReceiver(IMessageTraceReceiver mtr){
+        jfxUniqueTr = mtr;
+    }
+
+    public IMessageTraceReceiver getJfxUniqueTr() {
+        return jfxUniqueTr;
+    }
+
+
 
     public boolean execute() throws RecordConsumerExecutionException {
         jfxRc.execute();
