@@ -36,6 +36,8 @@ public interface IKiekerRecordConsumer {
     /**
      * TODO: Add documentation! What means true? Whats the semantic of execute?
      * Has it to be called before or after consumeMonitoringRecord? Just once or multiple times?
+     *
+     *
      * @return
      */
     public boolean execute() throws RecordConsumerExecutionException;

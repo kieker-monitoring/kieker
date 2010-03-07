@@ -923,8 +923,8 @@ public class TraceAnalysisTool {
             TraceReconstructionFilter mtReconstrFilter = null;
             mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
-                    10*60*1000, // maxTraceDurationMillis,
-                    true, //ignoreInvalidTraces,
+                    2*1000, // maxTraceDurationMillis,
+                    false, //ignoreInvalidTraces,
                     TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
                     null, // selectedTraces, // null means all
                     ignoreRecordsBeforeTimestamp, // default Long.MIN
@@ -935,6 +935,7 @@ public class TraceAnalysisTool {
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
             tpanInstance.addRecordConsumer(execRecTransformer);
+            System.out.println("MessageTraceListener registered");
     }
 
 

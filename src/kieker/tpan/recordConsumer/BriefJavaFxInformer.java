@@ -70,6 +70,7 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTrace
     }
 
     public void newTrace(MessageTrace t) throws TraceProcessingException {
+        //System.out.println("BJFX new Traces"+t.getTraceId());
         jfxTr.newTrace(t);
     }
 }
