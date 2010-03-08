@@ -502,8 +502,8 @@ public class TraceAnalysisTool {
             allTraceProcessingComponents.addAll(execTraceProcessingComponents);
             allTraceProcessingComponents.addAll(invalidTraceProcessingComponents);
             TpanInstance analysisInstance = new TpanInstance();
-            //analysisInstance.setLogReader(new FSReader(inputDirs));
-            analysisInstance.setLogReader(new FSMergeReader(inputDirs));
+            //analysisInstance.setLogReader(new FSMergeReader(inputDirs));
+            analysisInstance.setLogReader(new JMSReader("tcp://localhost:3035/","queue1"));
 
             mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
