@@ -101,7 +101,6 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private final Execution rootExecution;
 
     public enum TraceEquivalenceClassModes {
-
         DISABLED, ASSEMBLY, ALLOCATION
     };
 

@@ -55,7 +55,7 @@ public class Bookstore extends Thread{
      * This will be monitored by Tpmon, since it has the
      * TpmonExecutionMonitoringProbe() annotation.
      */
-    @TpmonExecutionMonitoringProbe()
+    //@TpmonExecutionMonitoringProbe(
     public static void main(String[] args) throws InterruptedException {
 	for (int i = 0; i < numberOfRequests; i++) {
     		System.out.println("Bookstore.main: Starting request "+i);

@@ -915,6 +915,8 @@ public class TraceAnalysisTool {
      *
      * Kieker Live Analysis adds itself as listener.
      *
+     * TO BE REMOVED INTO
+     *
      * You'll need a tpanInstance (with a reader) before invoking this method.
      */
     public static void createMessageTraceFiltersAndRegisterMessageTraceListener(TpanInstance tpanInstance, BriefJavaFxInformer messageTraceListener) {
@@ -923,25 +925,26 @@ public class TraceAnalysisTool {
             TraceReconstructionFilter mtReconstrFilter = null;
             mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
-                    2*1000, // maxTraceDurationMillis,
-                    false, //ignoreInvalidTraces,
+                    60*1000, // maxTraceDurationMillis,
+                    true, //ignoreInvalidTraces,
                     TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
                     null, // selectedTraces, // null means all
                     ignoreRecordsBeforeTimestamp, // default Long.MIN
                     ignoreRecordsAfterTimestamp); // default Long.MAX            
             mtReconstrFilter.addMessageTraceListener(messageTraceListener);
-
+            mtReconstrFilter.addInvalidExecutionTraceArtifactListener(messageTraceListener.getJfxBrokenExecutionTraceReceiver());  // i know that its dirty
 
             TraceReconstructionFilter uniqueMtReconstrFilter = null;
             uniqueMtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
-                    2*1000, // maxTraceDurationMillis,
-                    false, //ignoreInvalidTraces,
+                    60*1000, // maxTraceDurationMillis,
+                    true, //ignoreInvalidTraces,
                     TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
                     null, // selectedTraces, // null means all
                     ignoreRecordsBeforeTimestamp, // default Long.MIN
                     ignoreRecordsAfterTimestamp); // default Long.MAX
-             uniqueMtReconstrFilter.addMessageTraceListener(messageTraceListener.getJfxUniqueTr());
+             uniqueMtReconstrFilter.addMessageTraceListener(messageTraceListener.getJfxUniqueTr()); // i know that its dirty
+
 
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
@@ -949,6 +952,4 @@ public class TraceAnalysisTool {
             tpanInstance.addRecordConsumer(execRecTransformer);
             System.out.println("MessageTraceListener registered");
     }
-
-
 }

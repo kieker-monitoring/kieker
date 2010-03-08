@@ -9,6 +9,7 @@ package kieker.tpan.recordConsumer;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.traceReconstruction.IExecutionTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
@@ -57,6 +58,8 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTrace
     IKiekerRecordConsumer jfxRc = null;
     IMessageTraceReceiver jfxTr = null;
     IMessageTraceReceiver jfxUniqueTr = null;
+    IExecutionTraceReceiver jfxBrokenExecutionTraceReceiver = null;
+
 
     public void setUniqueTraceReceiver(IMessageTraceReceiver mtr){
         jfxUniqueTr = mtr;
@@ -66,7 +69,15 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTrace
         return jfxUniqueTr;
     }
 
+    public IExecutionTraceReceiver getJfxBrokenExecutionTraceReceiver() {
+        return jfxBrokenExecutionTraceReceiver;
+    }
 
+    public void setJfxBrokenExecutionTraceReceiver(IExecutionTraceReceiver jfxBrokenExecutionTraceReceiver) {
+        this.jfxBrokenExecutionTraceReceiver = jfxBrokenExecutionTraceReceiver;
+    }
+
+    
 
     public boolean execute() throws RecordConsumerExecutionException {
         jfxRc.execute();
