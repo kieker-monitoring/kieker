@@ -1,66 +1,4 @@
-
-%% bare_jrnl.tex
-%% V1.1
-%% 2002/08/13
-%% by Michael Shell
-%% mshell@ece.gatech.edu
-%%
-%% NOTE: This text file uses MS Windows line feed conventions. When (human)
-%% reading this file on other platforms, you may have to use a text
-%% editor that can handle lines terminated by the MS Windows line feed
-%% characters (0x0D 0x0A).
-%%
-%% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.6 or later) with an IEEE journal paper.
-%%
-%% Support sites:
-%% http://www.ieee.org
-%% and/or
-%% http://www.ctan.org/tex-archive/macros/latex/contrib/supported/IEEEtran/
-%%
-%% This code is offered as-is - no warranty - user assumes all risk.
-%% Free to use, distribute and modify.
-
-% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
-% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
-% *** with production work. IEEE's font choices can trigger bugs that do  ***
-% *** not appear when using other class files.                            ***
-% Testflow can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/supported/IEEEtran/testflow
-
-
-% Note that the a4paper option is mainly intended so that authors in
-% countries using A4 can easily print to A4 and see how their papers will
-% look in print. Authors are encouraged to use U.S. letter paper when
-% submitting to IEEE. Use the testflow package mentioned above to verify
-% correct handling of both paper sizes by the author's LaTeX system.
-%
-% Also note that the "draftcls", not "draft", option should be used if
-% it is desired that the figures are to be displayed in draft mode.
-
-% *************************************************************************
-% You can now use this template both for submitting to peer review and,
-% if your paper is accepted, for sending in final publication materials.
-% To change from peer review format (single column, double-spaced) to
-% final publication format (double column, single-spaced), just move the
-% comment-line sign (%) from one \documentclass line to the other.
-% The first is for peer review format(single column), the second is for final publication(double column).
-
-% \documentclass[a4paper,12pt]{easychair-a5}
-% \documentclass[a4paper,12pt,normalheadings]{scrartcl} % plainheadsepline,plainfootsepline,openany,normalheadings, notitlepage, ,DIV15,
-
-% \documentclass[a5paper]{scrartcl}
 \documentclass[12pt,journal,a4paper,twocolumn,final,oneside]{IEEEtran}%final,finalsubmission,
-% \documentclass[9.5pt,journal,final,finalsubmission,twocolumn]{IEEEtran} % onecolumn
-% *************************************************************************
-
-% \input{inc/style.inc}
-% \input{inc/defsCommands.inc}
-% \input{inc/hyphenation.inc}
-
-% If the IEEEtran.cls has not been installed into the LaTeX system files,
-% manually specify the path to it:
-% \documentclass[journal,draftcls,onecolumn]{../sty/IEEEtran}
 
 \usepackage{multicol}
 
@@ -117,199 +55,8 @@
 \usepackage{nomencl}
 \def\nomname{Glossary}
 \makenomenclature
-% To add an entry to the glossary:
-% \nomenclature{Architectural style}{``a specialization of element and relation ...''}
 
-% some very useful LaTeX packages include:
-
-%\usepackage{cite}      % Written by Donald Arseneau
-                        % V1.6 and later of IEEEtran pre-defines the format
-                        % of the cite.sty package \cite{} output to follow
-                        % that of IEEE. Loading the cite package will
-                        % result in citation numbers being automatically
-                        % sorted and properly "ranged". i.e.,
-                        % [1], [9], [2], [7], [5], [6]
-                        % (without using cite.sty)
-                        % will become:
-                        % [1], [2], [5]--[7], [9] (using cite.sty)
-                        % cite.sty's \cite will automatically add leading
-                        % space, if needed. Use cite.sty's noadjust option
-                        % (cite.sty V3.8 and later) if you want to turn this
-                        % off. cite.sty is already installed on most LaTeX
-                        % systems. The latest version can be obtained at:
-                        % http://www.ctan.org/tex-archive/macros/latex/contrib/supported/cite/
-
-\usepackage{graphicx}  % Written by David Carlisle and Sebastian Rahtz
-                        % Required if you want graphics, photos, etc.
-                        % graphicx.sty is already installed on most LaTeX
-                        % systems. The latest version and documentation can
-                        % be obtained at:
-                        % http://www.ctan.org/tex-archive/macros/latex/required/graphics/
-                        % Another good source of documentation is "Using
-                        % Imported Graphics in LaTeX2e" by Keith Reckdahl
-                        % which can be found as esplatex.ps and epslatex.pdf
-                        % at: http://www.ctan.org/tex-archive/info/
-
-%\usepackage{psfrag}    % Written by Craig Barratt, Michael C. Grant,
-                        % and David Carlisle
-                        % This package allows you to substitute LaTeX
-                        % commands for text in imported EPS graphic files.
-                        % In this way, LaTeX symbols can be placed into
-                        % graphics that have been generated by other
-                        % applications. You must use latex->dvips->ps2pdf
-                        % workflow (not direct pdf output from pdflatex) if
-                        % you wish to use this capability because it works
-                        % via some PostScript tricks. Alternatively, the
-                        % graphics could be processed as separate files via
-                        % psfrag and dvips, then converted to PDF for
-                        % inclusion in the main file which uses pdflatex.
-                        % Docs are in "The PSfrag System" by Michael C. Grant
-                        % and David Carlisle. There is also some information
-                        % about using psfrag in "Using Imported Graphics in
-                        % LaTeX2e" by Keith Reckdahl which documents the
-                        % graphicx package (see above). The psfrag package
-                        % and documentation can be obtained at:
-                        % http://www.ctan.org/tex-archive/macros/latex/contrib/supported/psfrag/
-
-% MUST BE LOADED BEFORE HYPERREF
-%\usepackage{subfigure} % Written by Steven Douglas Cochran
-                        % This package makes it easy to put subfigures
-                        % in your figures. i.e. "figure 1a and 1b"
-                        % Docs are in "Using Imported Graphics in LaTeX2e"
-                        % by Keith Reckdahl which also documents the graphicx
-                        % package (see above). subfigure.sty is already
-                        % installed on most LaTeX systems. The latest version
-                        % and documentation can be obtained at:
-                        % http://www.ctan.org/tex-archive/macros/latex/contrib/supported/subfigure/
-
-%loaded by hyperref!!
-%\usepackage{url}       % Written by Donald Arseneau
-                        % Provides better support for handling and breaking
-                        % URLs. url.sty is already installed on most LaTeX
-                        % systems. The latest version can be obtained at:
-                        % http://www.ctan.org/tex-archive/macros/latex/contrib/other/misc/
-                        % Read the url.sty source comments for usage information.
-
-%\usepackage{stfloats}  % Written by Sigitas Tolusis
-                        % Gives LaTeX2e the ability to do double column
-                        % floats at the bottom of the page as well as the top.
-                        % (e.g., "\begin{figure*}[!b]" is not normally
-                        % possible in LaTeX2e). This is an invasive package
-                        % which rewrites many portions of the LaTeX2e output
-                        % routines. It may not work with other packages that
-                        % modify the LaTeX2e output routine and/or with other
-                        % versions of LaTeX. The latest version and
-                        % documentation can be obtained at:
-                        % http://www.ctan.org/tex-archive/macros/latex/contrib/supported/sttools/
-                        % Documentation is contained in the stfloats.sty
-                        % comments as well as in the presfull.pdf file.
-                        % Do not use the stfloats baselinefloat ability as
-                        % IEEE does not allow \baselineskip to stretch.
-                        % Authors submitting work to the IEEE should note
-                        % that IEEE rarely uses double column equations and
-                        % that authors should try to avoid such use.
-                        % Do not be tempted to use the cuted.sty or
-                        % midfloat.sty package (by the same author) as IEEE
-                        % does not format its papers in such ways.
-
-%\usepackage{amsmath}   % From the American Mathematical Society
-                        % A popular package that provides many helpful commands
-                        % for dealing with mathematics. Note that the AMSmath
-                        % package sets \interdisplaylinepenalty to 10000 thus
-                        % preventing page breaks from occurring within multiline
-                        % equations. Use:
-%\interdisplaylinepenalty=2500
-                        % after loading amsmath to restore such page breaks
-                        % as IEEEtran.cls normally does. amsmath.sty is already
-                        % installed on most LaTeX systems. The latest version
-                        % and documentation can be obtained at:
-                        % http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
-
-
-
-% Other popular packages for formatting tables and equations include:
-
-% Frank Mittelbach's and David Carlisle's array.sty which improves the
-% LaTeX2e array and tabular environments to provide better appearances and
-% additional user controls. Array.sty is already installed on most systems.
-% The latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/tools/
-
-% Mark Wooding's extremely powerful MDW tools, especially mdwmath.sty and
-% mdwtab.sty which are used to format equations and tables, respectively.
-% The MDWtools set is already installed on most LaTeX systems. The lastest
-% version and documentation is available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/supported/mdwtools/
-
-% V1.6 of IEEEtran contains the IEEEeqnarray family of commands that can
-% be used to generate multiline equations as well as matrices, tables, etc.
-
-
-% Also of notable interest:
-
-% Scott Pakin's eqparbox package for creating (automatically sized) equal
-% width boxes. Available:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/supported/eqparbox/
-
-
-
-
-% *** Do not adjust lengths that control margins, column widths, etc. ***
-% *** Do not use packages that alter fonts (such as pslatex).         ***
-% There should be no need to do such things with IEEEtran.cls V1.6 and later.
-
-% Reminder: the "draftcls", not "draft", class option should be used if
-% it is desired that the figures are to be displayed while in draft mode.
-
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-%
-%\begin{figure}
-%\centering
-%\includegraphics[width=2.5in]{myfigure.eps}
-%\caption{Simulation Results}
-%\label{fig_sim}
-%\end{figure}
-
-
-% An example of a double column floating figure using two subfigures.
-% (The subfigure.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfigure command, the
-% \label for the overall fgure must come after \caption.
-% \hfil must be used as a separator to get equal spacing
-%
-%\begin{figure*}
-%\centerline{\subfigure[Case I]{\includegraphics[width=2.5in]{subfigcase1.eps}
-%\label{fig_first_case}}
-%\hfil
-%\subfigure[Case II]{\includegraphics[width=2.5in]{subfigcase2.eps}
-%\label{fig_second_case}}}
-%\caption{Simulation results}
-%\label{fig_sim}
-%\end{figure*}
-
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table. Table text will default to
-% \footnotesize as IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% The array package and the MDW tools package offers better commands
-%% for making tables than plain LaTeX2e's tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
+\usepackage{graphicx}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor SPECjAppServer experi-ments}
@@ -327,7 +74,6 @@
 \newcommand{\SLAsticPhonetic}{{\sffamily\mbox{SLAstic}}}
 \newcommand{\SLAsticComponent}[1]{\mbox{SLAstic.#1}}
 \newcommand{\SLAsticSIM}{\SLAsticComponent{SIM}}
-% \newcommand{\SLAsticMONREC}{\SLAsticComponent{MON-REC}}
 \newcommand{\SLAsticMON}{\SLAsticComponent{MON}}
 \newcommand{\SLAsticREC}{\SLAsticComponent{REC}}
 \newcommand{\SLAsticCTRL}{\SLAsticComponent{CONTROL}}
@@ -381,84 +127,23 @@
 
 \setcounter{page}{1}
 
-%
-% paper title
 \title{%
 Kieker Architecture%
 }
-%
-%
-% author names and IEEE memberships
-% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
-% a structure at a ~ so this keeps an author's name from being broken across
-% two lines.
-% use \thanks{} to gain access to the first footnote area
-% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
-% was not built to handle multiple paragraphs
-\author{%\normalsize%
+
+\author{%
 Kieker project
-% Andr\'e~van~Hoorn$^{1,3}$, %~\IEEEmembership{Member,~IEEE,}
-% Matthias~Rohr$^{1,2}$, %~\IEEEmembership{Member,~IEEE~Computer~Society} %
-% Wilhelm~Hasselbring$^{1,3}$, %\normalsize %~\IEEEmembership{Member,~IEEE~Computer~Society}\\
-% Jan~Waller$^3$,\\ %
-% Jens~Ehlers$^3$, %\normalsize %
-% S\"oren~Frey$^3$, and %
-% Dennis~Kieselhorst$^4$\\[1ex]\normalsize
-% $^1$ Graduate School TrustSoft, University of Oldenburg, D-26111 Oldenburg. Germany\\
-% $^2$ BTC AG -- Business Technology Consulting AG, D-26121 Oldenburg, Germany\\
-% $^3$ Software Engineering Group, University of Kiel, D-24098 Kiel, Germany\\
-% $^4$ EWE TEL GmbH, D-26133 Oldenburg, Germany
-% ,
-% Author~...,~\IEEEmembership{Fellow,~OSA,}
-% and~Author~N,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
-% \thanks{}% <-this % stops a space
 }
 
-% note the % following the last \IEEEmembership and also the first \thanks -
-% these prevent an unwanted space from occurring between the last author name
-% and the end of the author line. i.e., if you had this:
-%
-% \author{....lastname \thanks{...} \thanks{...} }
-%                     ^------------^------------^----Do not want these spaces!
-%
-% a space would be appended to the last name and could cause every name on that
-% line to be shifted left slightly. This is one of those "LaTeX things". For
-% instance, "A\textbf{} \textbf{}B" will typeset as "A B" not "AB". If you want
-% "AB" then you have to do: "A\textbf{}\textbf{}B"
-% \thanks is no different in this regard, so shield the last } of each \thanks
-% that ends a line with a % and do not let a space in before the next \thanks.
-% Spaces after \IEEEmembership other than the last one are OK (and needed) as
-% you are supposed to have spaces between the names. For what it is worth,
-% this is a minor point as most people would not even notice if the said evil
-% space somehow managed to creep in.
-%
-% The paper headers
-% \markboth{van Hoorn \MakeLowercase{\textit{et al.}}: Continuous Monitoring of Software Services: Design and Application of the Kieker Framework%
-% }{van Hoorn \MakeLowercase{\textit{et al.}}: Continuous Monitoring of Software Services: Design and Application of the Kieker Framework}
-% The only time the second header will appear is for the odd numbered pages
-% after the title page when using the twoside option.
-
-
-% If you want to put a publisher's ID mark on the page
-% (can leave text blank if you just want to see how the
-% text height on the first page will be reduced by IEEE)
-%\pubid{0000--0000/00\$00.00~\copyright~2002 IEEE}
-
-% use only for invited papers
-%\specialpapernotice{(Invited Paper)}
-
-% make the title area
 \maketitle
 
+\begin{abstract}\small
+\ldots
+\end{abstract}
 
 
-
+\nocite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework,RohrHoornMatevskaStoeverSommerGieseckeHasselbring2008KiekerContinuousMonitoringAndOnDemandVisualizationOfJavaSoftwareBehavior}
 \bibliographystyle{unsrtnat-abbrv} %abbrvnat, abbrvnatAvanhoorn % alpha
-% \bibliographystyle{abbrvnat} % alpha
 \bibliography{bibliography}
 
-%
-% \input{B_Biographies.inc.tex}
-
-% that's all folks
 \end{document}
