@@ -1,13 +1,13 @@
 package kieker.tpmon.writer.databaseSync;
 
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 import java.sql.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -145,10 +145,10 @@ public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
      * dbconnector.properties.
      */
     @TpmonInternal()
-    public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public synchronized boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         try {
             // connector only supports execution records so far
-            KiekerExecutionRecord execRecord = (KiekerExecutionRecord) monitoringRecord;
+            OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
 
             psInsertMonitoringData.setInt(1,
                     (this.setInitialExperimentIdBasedOnLastId && this.experimentId >= 0) ? this.experimentId : execRecord.experimentId);

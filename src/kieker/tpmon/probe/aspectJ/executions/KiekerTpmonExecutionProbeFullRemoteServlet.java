@@ -2,7 +2,7 @@ package kieker.tpmon.probe.aspectJ.executions;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -56,7 +56,7 @@ public class KiekerTpmonExecutionProbeFullRemoteServlet extends AbstractKiekerTp
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+        OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
         execData.sessionId = sessionRegistry.recallThreadLocalSessionId(); // may be null
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */

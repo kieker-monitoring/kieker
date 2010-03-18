@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,7 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
 
     private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringLogReader.class);
     private final HashMap<String, String> map = new HashMap<String, String>();
-    protected Map<Integer, Class<? extends AbstractKiekerMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<Integer, Class<? extends AbstractKiekerMonitoringRecord>>());
+    protected Map<Integer, Class<? extends AbstractMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<Integer, Class<? extends AbstractMonitoringRecord>>());
     /** Contains all consumers which consume records of any type */
     private final Collection<IKiekerRecordConsumer> subscribedToAllList =
             new Vector<IKiekerRecordConsumer>();
@@ -104,7 +104,7 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
         }
     }
 
-    protected final void deliverRecordToConsumers(final AbstractKiekerMonitoringRecord r) throws LogReaderExecutionException {
+    protected final void deliverRecordToConsumers(final AbstractMonitoringRecord r) throws LogReaderExecutionException {
         try {
             for (IKiekerRecordConsumer c : this.subscribedToAllList) {
                 c.consumeMonitoringRecord(r);
@@ -129,7 +129,7 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
                 return;
             }
 
-            Class<? extends AbstractKiekerMonitoringRecord> recordClass = Class.forName(classname).asSubclass(AbstractKiekerMonitoringRecord.class);
+            Class<? extends AbstractMonitoringRecord> recordClass = Class.forName(classname).asSubclass(AbstractMonitoringRecord.class);
             this.recordTypeMap.put(recordTypeId, recordClass);
             log.info("Registered record type mapping " + recordTypeId + "/" + classname);
         } catch (ClassNotFoundException ex) {
@@ -140,7 +140,7 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
 
     /** Returns the class for record type with the given id. 
      *  If no such mapping exists, null is returned. */
-    protected final Class<? extends AbstractKiekerMonitoringRecord> fetchClassForRecordTypeId(int recordTypeId) {
+    protected final Class<? extends AbstractMonitoringRecord> fetchClassForRecordTypeId(int recordTypeId) {
         return this.recordTypeMap.get(recordTypeId);
     }
 

@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,7 +49,7 @@ public class RealtimeReplayDistributor implements IKiekerRecordConsumer {
     //private static final String outputFn = "SchedulingList";
     //private static PrintStream ps;
     public void consumeMonitoringRecord(
-            final AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+            final AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
         if (this.startTime == -1) { // init on first record
             //try {
             // init on first record

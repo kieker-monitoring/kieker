@@ -5,7 +5,7 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -74,7 +74,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     
     private static final Log log = LogFactory.getLog(AsyncDbConnector.class);
     private Connection conn = null;
-    private BlockingQueue<AbstractKiekerMonitoringRecord> blockingQueue;
+    private BlockingQueue<AbstractMonitoringRecord> blockingQueue;
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
@@ -120,7 +120,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         try {
             conn = DriverManager.getConnection(this.dbConnectionAddress);
             int numberOfConnections = 4;
-            blockingQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
+            blockingQueue = new ArrayBlockingQueue<AbstractMonitoringRecord>(asyncRecordQueueSize);
 
 //                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
@@ -171,7 +171,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
     @TpmonInternal()
-    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }

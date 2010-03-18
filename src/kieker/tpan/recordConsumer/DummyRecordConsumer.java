@@ -7,7 +7,7 @@ package kieker.tpan.recordConsumer;
 
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 /**
  *
@@ -20,7 +20,7 @@ public class DummyRecordConsumer implements IKiekerRecordConsumer {
         return null; // null gets it all
     }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
         System.out.println("DummyRecordConsumer consumed "+monitoringRecord);
     }
 

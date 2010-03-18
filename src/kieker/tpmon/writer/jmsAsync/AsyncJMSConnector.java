@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.jmsAsync;
 
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.KiekerDummyMonitoringRecord;
+import kieker.common.monitoringRecord.DummyMonitoringRecord;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 
 /*
@@ -39,9 +39,9 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
     private JMSWriterThread typeWriter; // publishes record type/classname mappings
     private static final MonitoringRecordTypeClassnameMapping TYPE_WRITER_END_OF_MONITORING_MARKER = new MonitoringRecordTypeClassnameMapping(-1, null);
-    private static final AbstractKiekerMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new KiekerDummyMonitoringRecord();
+    private static final AbstractMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
     private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
-    private BlockingQueue<AbstractKiekerMonitoringRecord> recordQueue = null;
+    private BlockingQueue<AbstractMonitoringRecord> recordQueue = null;
     private BlockingQueue<MonitoringRecordTypeClassnameMapping> typeQueue = null;
     private String contextFactoryType; // type of the jms factory implementation, e.g.
     private String providerUrl;
@@ -86,7 +86,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
             this.asyncRecordQueueSize = Integer.valueOf(super.getInitProperty("asyncRecordQueueSize"));
 
 
-            this.recordQueue = new ArrayBlockingQueue<AbstractKiekerMonitoringRecord>(asyncRecordQueueSize);
+            this.recordQueue = new ArrayBlockingQueue<AbstractMonitoringRecord>(asyncRecordQueueSize);
             this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(asyncTypeQueueSize);
             // init *the* record type writer
             typeWriter = new JMSWriterThread<MonitoringRecordTypeClassnameMapping>(typeQueue, AsyncJMSConnector.TYPE_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
@@ -95,8 +95,8 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
             typeWriter.start();
             // init record writers
             for (int i = 1; i <= numberOfJmsWriters; i++) {
-                JMSWriterThread<AbstractKiekerMonitoringRecord> recordWriter =
-                        new JMSWriterThread<AbstractKiekerMonitoringRecord>(recordQueue, AsyncJMSConnector.RECORD_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
+                JMSWriterThread<AbstractMonitoringRecord> recordWriter =
+                        new JMSWriterThread<AbstractMonitoringRecord>(recordQueue, AsyncJMSConnector.RECORD_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
                 typeWriterAndRecordWriters.add(recordWriter);
                 recordWriter.setDaemon(true);
                 recordWriter.start();
@@ -124,7 +124,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     }
 
     @TpmonInternal()
-    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncJmsProducer.insertMonitoringDataNow");
         }

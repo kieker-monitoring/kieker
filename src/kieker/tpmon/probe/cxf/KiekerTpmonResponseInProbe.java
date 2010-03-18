@@ -6,7 +6,7 @@ import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
@@ -126,7 +126,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
             }
 
             // Log this execution
-            KiekerExecutionRecord rec = KiekerExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, vmName, myEoi, myEss);
+            OperationExecutionRecord rec = OperationExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, vmName, myEoi, myEss);
             rec.experimentId = ctrlInst.getExperimentId();
             ctrlInst.logMonitoringRecord(rec);
 

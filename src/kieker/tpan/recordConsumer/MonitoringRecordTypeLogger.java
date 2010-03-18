@@ -20,7 +20,7 @@ package kieker.tpan.recordConsumer;
  * ==================================================
  */
 import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,7 +38,7 @@ public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {
         return recordTypeSubscriptionList;
     }
 
-    public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
+    public void consumeMonitoringRecord(final AbstractMonitoringRecord monitoringRecord) {
         log.info("Consumed record:" + monitoringRecord.getRecordTypeId());
         log.info(monitoringRecord.toString());
     }

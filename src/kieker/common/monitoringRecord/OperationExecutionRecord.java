@@ -1,9 +1,8 @@
-package kieker.common.monitoringRecord.executions;
+package kieker.common.monitoringRecord;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.annotation.TpmonInternal;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 /*
  * ==================LICENCE=========================
@@ -26,11 +25,10 @@ import kieker.tpmon.annotation.TpmonInternal;
  /** 
   *@author Andre van Hoorn
   */
-public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implements Comparable<KiekerExecutionRecord> {
+public class OperationExecutionRecord extends AbstractMonitoringRecord implements Comparable<OperationExecutionRecord> {
 
     private static final long serialVersionUID = 117L;
     /** Used to identify the type of CSV records */
-    private static final int typeId = AbstractKiekerMonitoringRecord.registerMonitoringRecordType(KiekerExecutionRecord.class);
     private static final int numRecordFields = 9;
     public int experimentId = -1;
     public String vmName = null;
@@ -46,42 +44,28 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     public Object retVal = null;
 
     /**
-     * Constructor private such that instances are only created by calling 
-     * the static method getInstance().
-     * The reason is that we might eventually introduce an object pool in 
-     * order to avoid the frequent creation of KiekerExecutionRecord objects.
-     */
-    private KiekerExecutionRecord() {
-    }
-
-    /**
      * Returns an instance of KiekerExecutionRecord.
      * The member variables are initialized that way that only actually
      * used variables must be updated.
      * Do not set unused member variables to dummy values such as -1 etc.!
      */
-    @TpmonInternal()
-    public static final AbstractKiekerMonitoringRecord getInstance() {
-        return new KiekerExecutionRecord();
-    }
+    public OperationExecutionRecord() { }
 
-    @TpmonInternal()
-    public static final KiekerExecutionRecord getInstance(
+    public static final OperationExecutionRecord getInstance(
             String componentName, String methodName,
             long traceId) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
+        OperationExecutionRecord execData = (OperationExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = methodName;
         execData.traceId = traceId;
         return execData;
     }
 
-    @TpmonInternal()
-    public static final KiekerExecutionRecord getInstance(
+    public static final OperationExecutionRecord getInstance(
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
+        OperationExecutionRecord execData = (OperationExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
@@ -91,12 +75,11 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         return execData;
     }
 
-    @TpmonInternal()
-    public static final KiekerExecutionRecord getInstance(
+    public static final OperationExecutionRecord getInstance(
             String componentName, String opName,
             long traceId,
             long tin, long tout) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
+        OperationExecutionRecord execData = (OperationExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.traceId = traceId;
@@ -105,14 +88,13 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         return execData;
     }
 
-    @TpmonInternal()
-    public static final KiekerExecutionRecord getInstance(
+    public static final OperationExecutionRecord getInstance(
             String componentName, String opName,
             String sessionId, long traceId,
             long tin, long tout, 
             String vnName,
             int eoi, int ess) {
-        KiekerExecutionRecord execData = (KiekerExecutionRecord) getInstance();
+        OperationExecutionRecord execData = (OperationExecutionRecord) getInstance();
         execData.componentName = componentName;
         execData.opname = opName;
         execData.sessionId = sessionId;
@@ -128,7 +110,6 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     /**
      * Returns a CSV record for the object.
      */
-    @TpmonInternal()
     public final String[] toStringArray() {
         String[] vec = {
             Integer.toString(this.experimentId),
@@ -153,11 +134,10 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
     //                  to transform the array into/from a CSV string should be 
     //                  part of the reader/writer.
     //                  Moreover, it seems that this method is not part of the
-    //                  AbstractKiekerMonitoringRecord and thus, it is not
+    //                  AbstractMonitoringRecord and thus, it is not
     //                  guaranteed that each record type implements the method.
-    @TpmonInternal()
     public final void initFromString(String kiekerExecutionRecordString){        
-        StringTokenizer stk = new StringTokenizer(kiekerExecutionRecordString,AbstractKiekerMonitoringRecord.separator);
+        StringTokenizer stk = new StringTokenizer(kiekerExecutionRecordString,AbstractMonitoringRecord.separator);
         ArrayList<String> als = new ArrayList<String>();
         while (stk.hasMoreElements()) {
             als.add(stk.nextToken());
@@ -166,12 +146,11 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         initFromStringArray(vec);
     }
 
-    @TpmonInternal()
     public final void initFromStringArray(String[] recordVector)
             throws IllegalArgumentException {
-        if (recordVector.length != KiekerExecutionRecord.numRecordFields) {
+        if (recordVector.length != OperationExecutionRecord.numRecordFields) {
             throw new IllegalArgumentException("Expecting vector with " +
-                    KiekerExecutionRecord.numRecordFields + " elements but found:" + recordVector.length);
+                    OperationExecutionRecord.numRecordFields + " elements but found:" + recordVector.length);
         }
 
         this.experimentId = Integer.parseInt(recordVector[0]);
@@ -203,7 +182,6 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
         return;
     }
 
-    @TpmonInternal()
     public int getRecordTypeId() {
         return typeId;
     }
@@ -216,8 +194,7 @@ public class KiekerExecutionRecord extends AbstractKiekerMonitoringRecord implem
      * @param o
      * @return
      */
-    @TpmonInternal()
-    public int compareTo(KiekerExecutionRecord o) {
+    public int compareTo(OperationExecutionRecord o) {
         if (this.traceId == o.traceId) {
             if (this.eoi < o.eoi) {
                 return -1;

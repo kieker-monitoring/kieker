@@ -26,7 +26,7 @@ import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -75,7 +75,7 @@ public class FilesystemLogReplayer {
                 return null; // consume all types
             }
 
-            public void consumeMonitoringRecord(final AbstractKiekerMonitoringRecord monitoringRecord) {
+            public void consumeMonitoringRecord(final AbstractMonitoringRecord monitoringRecord) {
                 ctrlInst.logMonitoringRecord(monitoringRecord);
             }
 

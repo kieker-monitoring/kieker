@@ -18,7 +18,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -106,10 +106,10 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
                         //System.out.println("Received object message: " + om.toString());
                         try {
                             Serializable omo = om.getObject();
-                            if (omo instanceof AbstractKiekerMonitoringRecord) {
-                                AbstractKiekerMonitoringRecord rec =
-                                        (AbstractKiekerMonitoringRecord) omo;
-                                Class<? extends AbstractKiekerMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getRecordTypeId());
+                            if (omo instanceof AbstractMonitoringRecord) {
+                                AbstractMonitoringRecord rec =
+                                        (AbstractMonitoringRecord) omo;
+                                Class<? extends AbstractMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getRecordTypeId());
                                 if (clazz == null) {
                                     // TODO: we could retry it in a couple of seconds
                                     log.error("Found no mapping for record type id " + rec.getRecordTypeId());

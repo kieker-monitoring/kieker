@@ -1,6 +1,6 @@
 package kieker.common.logReader;
 
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,11 +14,11 @@ import org.apache.commons.logging.LogFactory;
 public class RealtimeReplayWorker implements Runnable {
 
     private static final Log log = LogFactory.getLog(RealtimeReplayWorker.class);
-    private final AbstractKiekerMonitoringRecord monRec;
+    private final AbstractMonitoringRecord monRec;
     private final IKiekerRecordConsumer cons;
     private final RealtimeReplayDistributor rd;
 
-    public RealtimeReplayWorker(final AbstractKiekerMonitoringRecord monRec, final RealtimeReplayDistributor rd, final IKiekerRecordConsumer cons) {
+    public RealtimeReplayWorker(final AbstractMonitoringRecord monRec, final RealtimeReplayDistributor rd, final IKiekerRecordConsumer cons) {
         this.monRec = monRec;
         this.cons = cons;
         this.rd = rd;

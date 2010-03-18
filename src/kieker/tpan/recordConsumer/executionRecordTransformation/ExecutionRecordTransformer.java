@@ -29,8 +29,8 @@ import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 
 /**
  * Transforms KiekerExecutionRecords into Execution objects.
@@ -50,7 +50,7 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
     }
 
     public String[] getRecordTypeSubscriptionList() {
-        return new String[]{KiekerExecutionRecord.class.getName()};
+        return new String[]{OperationExecutionRecord.class.getName()};
     }
 
     public void addListener (IExecutionListener l){
@@ -78,12 +78,12 @@ public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
         return new Signature(name, returnType, paramTypeList);
     }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
-        if (!(monitoringRecord instanceof KiekerExecutionRecord)) {
+    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+        if (!(monitoringRecord instanceof OperationExecutionRecord)) {
             throw new RecordConsumerExecutionException("Can only process records of type"
-                    + KiekerExecutionRecord.class.getName() + " but received" + monitoringRecord.getClass().getName());
+                    + OperationExecutionRecord.class.getName() + " but received" + monitoringRecord.getClass().getName());
         }
-        KiekerExecutionRecord execRec = (KiekerExecutionRecord) monitoringRecord;
+        OperationExecutionRecord execRec = (OperationExecutionRecord) monitoringRecord;
 
         String executionContainerName = execRec.vmName;
                 //(this.considerExecutionContainer) ? execRec.vmName : "DEFAULTCONTAINER";

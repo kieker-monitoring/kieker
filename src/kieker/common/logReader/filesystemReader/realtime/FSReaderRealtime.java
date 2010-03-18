@@ -9,8 +9,7 @@ import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.RealtimeReplayDistributor;
 import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.common.logReader.filesystemReader.FSReader;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -45,7 +44,7 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
             return null;
         }
 
-        public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+        public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
             try {
                 this.master.deliverRecordToConsumers(monitoringRecord);
             } catch (LogReaderExecutionException ex) {
@@ -71,7 +70,6 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
     }
 
     /** Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN | numWorkers=XX */
-    @TpmonInternal()
     public void init(String initString) throws IllegalArgumentException {
         super.initVarsFromInitString(initString);
 

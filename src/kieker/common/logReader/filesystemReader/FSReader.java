@@ -13,9 +13,8 @@ import java.util.StringTokenizer;
 
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.LogReaderExecutionException;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -64,7 +63,6 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
     }
 
     /** Valid key/value pair: inputDirName=INPUTDIRECTORY */
-    @TpmonInternal()
     public void init(String initString) throws IllegalArgumentException{
         super.initVarsFromInitString(initString); // throws IllegalArgumentException
         this.initInstanceFromArgs(this.getInitProperty(PROP_NAME_INPUTDIR)); // throws IllegalArgumentException
@@ -81,7 +79,6 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
     static final String filePostfix = ".dat";
 
     @Override
-    @TpmonInternal()
     public boolean execute() throws LogReaderExecutionException {
         boolean retVal = false;
         try {
@@ -119,7 +116,6 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
         return retVal;
     }
 
-    @TpmonInternal()
     //@SuppressWarnings("unchecked")
     private void readMappingFile() throws IOException {
         File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
@@ -162,7 +158,6 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
         }
     }
 
-    @TpmonInternal()
     private void processInputFile(final File input) throws IOException, LogReaderExecutionException {
         log.info("< Loading " + input.getAbsolutePath());
 
@@ -175,7 +170,7 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
             String line;
 
             while ((line = in.readLine()) != null) {
-                AbstractKiekerMonitoringRecord rec = null;
+                AbstractMonitoringRecord rec = null;
                 try {
                     if (!recordTypeIdMapInitialized && line.startsWith("$")) {
                         this.readMappingFile();
@@ -193,16 +188,16 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
 //                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
 
                             Integer id = Integer.valueOf(token.substring(1));
-                            Class<? extends AbstractKiekerMonitoringRecord> clazz = super.fetchClassForRecordTypeId(id);
+                            Class<? extends AbstractMonitoringRecord> clazz = super.fetchClassForRecordTypeId(id);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
-                            rec = (AbstractKiekerMonitoringRecord) m.invoke(null); // call static method
+                            rec = (AbstractMonitoringRecord) m.invoke(null); // call static method
                             token = st.nextToken();
                             //log.info("LoggingTimestamp: " + Long.valueOf(token) + " (" + token + ")");
                             rec.setLoggingTimestamp(Long.valueOf(token));
                             vec = new String[numTokens - 2];
                             haveTypeId = true;
                         } else if (i == 0) { // for historic reasons, this is the default type
-                            rec = KiekerExecutionRecord.getInstance();
+                            rec = OperationExecutionRecord.getInstance();
                             vec = new String[numTokens];
                         }
                         //log.info("haveTypeId:" + haveTypeId + ";" + " token:" + token + " i:" + i);

@@ -5,10 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,14 +37,14 @@ public class DbWriterThread extends AbstractWorkerThread {
 
     private static final Log log = LogFactory.getLog(DbWriterThread.class);
     private Connection conn;
-    private BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue;
+    private BlockingQueue<AbstractMonitoringRecord> writeQueue;
     private PreparedStatement psInsertMonitoringData;
     private static boolean shutdown = false;
     private boolean finished = false;
     boolean statementChanged = true;
     String nextStatementText;
 
-    public DbWriterThread(Connection initializedConnection, BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue, String statementtext) {
+    public DbWriterThread(Connection initializedConnection, BlockingQueue<AbstractMonitoringRecord> writeQueue, String statementtext) {
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
@@ -70,7 +70,7 @@ public class DbWriterThread extends AbstractWorkerThread {
         log.info("Dbwriter thread running");
         try {
             while (!finished) {
-                AbstractKiekerMonitoringRecord data = writeQueue.take();
+                AbstractMonitoringRecord data = writeQueue.take();
                 if (data == TpmonController.END_OF_MONITORING_MARKER){
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
@@ -104,7 +104,7 @@ public class DbWriterThread extends AbstractWorkerThread {
      * writes next item into database
      */
     @TpmonInternal()
-    private void consume(AbstractKiekerMonitoringRecord monitoringRecord) throws SQLException {
+    private void consume(AbstractMonitoringRecord monitoringRecord) throws SQLException {
         //if (TpmonController.debug) System.out.println("DbWriterThread "+this+" Consuming "+monitoringRecord);
         try {
             if (statementChanged || psInsertMonitoringData == null) {
@@ -112,7 +112,7 @@ public class DbWriterThread extends AbstractWorkerThread {
                 statementChanged = false;
             }
 
-            KiekerExecutionRecord execData = (KiekerExecutionRecord) monitoringRecord;
+            OperationExecutionRecord execData = (OperationExecutionRecord) monitoringRecord;
             psInsertMonitoringData.setString(1, execData.componentName + "." + execData.opname);
             psInsertMonitoringData.setString(2, execData.sessionId);
             psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));

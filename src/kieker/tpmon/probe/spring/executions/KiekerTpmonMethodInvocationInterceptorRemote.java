@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.spring.executions;
 
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import kieker.tpmon.annotation.TpmonInternal;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -51,7 +51,7 @@ public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKieker
             return invocation.proceed();
         }
 
-        KiekerExecutionRecord execData = this.initExecutionData(invocation);
+        OperationExecutionRecord execData = this.initExecutionData(invocation);
         execData.eoi = cfRegistry.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
         execData.ess = cfRegistry.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
 

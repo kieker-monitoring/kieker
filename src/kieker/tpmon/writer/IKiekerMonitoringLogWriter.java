@@ -1,7 +1,7 @@
 package kieker.tpmon.writer;
 
 import kieker.tpmon.writer.util.async.*;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;
@@ -39,7 +39,7 @@ public interface IKiekerMonitoringLogWriter {
     public void registerMonitoringRecordType(int id, String className);
 
     @TpmonInternal()
-    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
+    public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord);
 
     @TpmonInternal()
     public boolean init(String initString);

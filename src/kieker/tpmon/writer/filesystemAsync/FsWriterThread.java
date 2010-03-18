@@ -5,7 +5,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -43,7 +43,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
-    private BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue = null;
+    private BlockingQueue<AbstractMonitoringRecord> writeQueue = null;
     private String filenamePrefix = null;
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
@@ -61,7 +61,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
 
 //    private boolean statementChanged = true;
 //    private String nextStatementText;
-    public FsWriterThread(BlockingQueue<AbstractKiekerMonitoringRecord> writeQueue, String filenamePrefix) {
+    public FsWriterThread(BlockingQueue<AbstractMonitoringRecord> writeQueue, String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
         log.info("New Tpmon - FsWriter thread created ");
@@ -74,7 +74,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
         log.info("FsWriter thread running");
         try {
             while (!finished) {
-                AbstractKiekerMonitoringRecord monitoringRecord = writeQueue.take();
+                AbstractMonitoringRecord monitoringRecord = writeQueue.take();
                 if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
@@ -106,7 +106,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
     }
 
     @TpmonInternal()
-    private void consume(AbstractKiekerMonitoringRecord monitoringRecord) throws Exception {
+    private void consume(AbstractMonitoringRecord monitoringRecord) throws Exception {
         // TODO: We should check whether this is necessary. 
         // This should only cover an initial action which can be 
         // moved before the while loop in run()
@@ -162,7 +162,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
      * @throws java.io.IOException
      */
     @TpmonInternal()
-    private void writeDataNow(AbstractKiekerMonitoringRecord monitoringRecord) throws IOException {
+    private void writeDataNow(AbstractMonitoringRecord monitoringRecord) throws IOException {
         String[] recordFields = monitoringRecord.toStringArray();
         final int LAST_FIELD_INDEX = recordFields.length - 1;
         prepareFile(); // may throw FileNotFoundException

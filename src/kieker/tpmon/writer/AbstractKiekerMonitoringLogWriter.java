@@ -2,7 +2,7 @@ package kieker.tpmon.writer;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.annotation.TpmonInternal;
 
 import org.apache.commons.logging.Log;
@@ -38,7 +38,7 @@ public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonito
     private final HashMap<String, String> map = new HashMap<String, String>();
 
     @TpmonInternal()
-    public abstract boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord);
+    public abstract boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord);
 
     @TpmonInternal()
     public abstract void registerMonitoringRecordType(int id, String className);

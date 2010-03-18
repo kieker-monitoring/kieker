@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.aspectJ.executions;
 
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -39,7 +39,7 @@ public class KiekerTpmonExecutionProbeFull extends AbstractKiekerTpmonExecutionP
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+        OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
         } catch (Exception e){

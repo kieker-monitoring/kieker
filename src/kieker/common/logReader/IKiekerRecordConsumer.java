@@ -1,6 +1,6 @@
 package kieker.common.logReader;
 
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 /**
  * kieker.loganalysis.IKiekerRecordConsumer
@@ -38,7 +38,7 @@ public interface IKiekerRecordConsumer {
      * @param monitoringRecord
      * @throws RecordConsumerExecutionException
      */
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
+    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
 
     /**
      * Starts a record consumer.

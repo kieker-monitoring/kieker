@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -15,7 +15,7 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.KiekerDummyMonitoringRecord;
+import kieker.common.monitoringRecord.DummyMonitoringRecord;
 import kieker.tpmon.writer.databaseAsync.AsyncDbConnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsConnector;
 import org.apache.commons.logging.Log;
@@ -102,7 +102,7 @@ public final class TpmonController {
     private static TpmonController ctrlInst = new TpmonController();
 
     //marks the end of monitoring to the writer threads
-    public static final AbstractKiekerMonitoringRecord END_OF_MONITORING_MARKER = new KiekerDummyMonitoringRecord();
+    public static final AbstractMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 
     @TpmonInternal()
     public final static TpmonController getInstance() {
@@ -315,7 +315,7 @@ public final class TpmonController {
     }
 
     @TpmonInternal()
-    public final boolean logMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public final boolean logMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (!this.monitoringEnabled) {
             return false;
         }
@@ -714,7 +714,7 @@ public final class TpmonController {
 //        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
 //        String opname = component + newMethodname;
 //        numberOfInserts.incrementAndGet();
-//        AbstractKiekerMonitoringRecord monitoringRecord = AbstractKiekerMonitoringRecord.getInstance();
+//        AbstractMonitoringRecord monitoringRecord = AbstractMonitoringRecord.getInstance();
 //        monitoringRecord.componentName = opname;
 //        monitoringRecord.opname = encodedName;
 //        monitoringRecord.traceId = -5;

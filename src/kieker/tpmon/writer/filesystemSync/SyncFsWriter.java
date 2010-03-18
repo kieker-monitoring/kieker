@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.filesystemSync;
 
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
@@ -159,7 +159,7 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
     }
 
     @TpmonInternal()
-    public synchronized boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public synchronized boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
             log.info("Found END_OF_MONITORING_MARKER. Will terminate");
             return false;

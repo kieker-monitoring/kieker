@@ -12,8 +12,8 @@ import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.plugins.traceReconstruction.IExecutionTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 
 /**
  *
@@ -39,14 +39,14 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTrace
 
     /** Consuming only execution records */
     private final static String[] recordTypeSubscriptionList = {
-        KiekerExecutionRecord.class.getName()
+        OperationExecutionRecord.class.getName()
     };
 
     public String[] getRecordTypeSubscriptionList() {
         return null; // null gets it all
     }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
        // System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
         if (jfxRc == null) {
             System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");

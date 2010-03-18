@@ -8,7 +8,7 @@ import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -88,11 +88,11 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
     @TpmonInternal()
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        KiekerExecutionRecord execData = null;
+        OperationExecutionRecord execData = null;
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */
         if (request instanceof HttpServletRequest) {
-            execData = KiekerExecutionRecord.getInstance(
+            execData = OperationExecutionRecord.getInstance(
                     componentName,
                     opName,
                     cfRegistry.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point*/);

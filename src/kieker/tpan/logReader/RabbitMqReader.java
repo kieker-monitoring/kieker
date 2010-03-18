@@ -18,10 +18,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 /**
  *
  * This reader is an alternative to the JMS reader. RabbitMQ
@@ -134,12 +134,12 @@ public class RabbitMqReader extends AbstractKiekerMonitoringLogReader {
             String execRecordString = new String(delivery.getBody());
 
         try {
-            //AbstractKiekerMonitoringRecord abs = AbstractKiekerMonitoringRecord.getInstance();
+            //AbstractMonitoringRecord abs = AbstractMonitoringRecord.getInstance();
             //abs.initFromStringArray(toStringArray(execRecordString));
             int indexOfFirstTokenEnd = execRecordString.indexOf(";");
             String execRecStringWithoutFirstToken = execRecordString.substring(indexOfFirstTokenEnd+1, execRecordString.length());
 
-            KiekerExecutionRecord ker = (KiekerExecutionRecord)KiekerExecutionRecord.getInstance();
+            OperationExecutionRecord ker = (OperationExecutionRecord)OperationExecutionRecord.getInstance();
             ker.initFromString(execRecStringWithoutFirstToken);
             // System.out.println(execRecStringWithoutFirstToken);
             //    System.out.printf("Recieved (%d) and decoded KiekerExecutionRecord: %s \n", numberOfMessagesReceived, ker);
@@ -160,7 +160,7 @@ public class RabbitMqReader extends AbstractKiekerMonitoringLogReader {
 
     @TpmonInternal()
     private final String[] toStringArray(String stringSerialization){
-        StringTokenizer stk = new StringTokenizer(stringSerialization,AbstractKiekerMonitoringRecord.separator);
+        StringTokenizer stk = new StringTokenizer(stringSerialization,AbstractMonitoringRecord.separator);
         ArrayList<String> als = new ArrayList<String>();
         while (stk.hasMoreElements()) {
             als.add(stk.nextToken());

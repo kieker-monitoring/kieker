@@ -9,8 +9,8 @@ import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.common.monitoringRecord.KiekerDummyMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.monitoringRecord.DummyMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,10 +74,10 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
         private boolean isTerminated = false;
         private final List<Thread> readerThreads = new ArrayList<Thread>();
         private final List<Thread> activeReaders = new ArrayList<Thread>();
-        private final AbstractKiekerMonitoringRecord FS_READER_TERMINATION_MARKER = new KiekerDummyMonitoringRecord();
-        private TreeMap<AbstractKiekerMonitoringRecord, Thread> nextRecordsFromReaders = new TreeMap<AbstractKiekerMonitoringRecord, Thread>(new Comparator<AbstractKiekerMonitoringRecord>() {
+        private final AbstractMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
+        private TreeMap<AbstractMonitoringRecord, Thread> nextRecordsFromReaders = new TreeMap<AbstractMonitoringRecord, Thread>(new Comparator<AbstractMonitoringRecord>() {
 
-            public int compare(AbstractKiekerMonitoringRecord t, AbstractKiekerMonitoringRecord t1) {
+            public int compare(AbstractMonitoringRecord t, AbstractMonitoringRecord t1) {
                 if (t == FS_READER_TERMINATION_MARKER) {
                     return 1;
                 }
@@ -106,7 +106,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
         }
 
         /** Note that this method is accessed concurrently! */
-        public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+        public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
             if (this.isTerminated) {
                 throw new RecordConsumerExecutionException("Consumer already terminated");
             }
@@ -175,8 +175,8 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
             while (true) {
                 try {
                     // Does not work with Java 1.5:
-                    //Map.Entry<AbstractKiekerMonitoringRecord, Thread> firstEntry;
-                    AbstractKiekerMonitoringRecord lowestKey;
+                    //Map.Entry<AbstractMonitoringRecord, Thread> firstEntry;
+                    AbstractMonitoringRecord lowestKey;
                     Thread recordProvidingThread = null;
                     synchronized (this) {
                         while (this.nextRecordsFromReaders.size() != this.readerThreads.size()) {

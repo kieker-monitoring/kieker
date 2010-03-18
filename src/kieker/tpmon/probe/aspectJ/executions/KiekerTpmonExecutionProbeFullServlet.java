@@ -2,7 +2,7 @@ package kieker.tpmon.probe.aspectJ.executions;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.OperationExecutionRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -50,7 +50,7 @@ public class KiekerTpmonExecutionProbeFullServlet extends AbstractKiekerTpmonExe
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
-        KiekerExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+        OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
         String sessionId = sessionRegistry.recallThreadLocalSessionId(); // may be null
         try{
             this.proceedAndMeasure(thisJoinPoint, execData);
