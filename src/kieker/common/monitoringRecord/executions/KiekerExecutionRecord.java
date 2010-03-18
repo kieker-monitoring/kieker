@@ -1,8 +1,8 @@
-package kieker.tpmon.monitoringRecord.executions;
+package kieker.common.monitoringRecord.executions;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.annotation.TpmonInternal;
 
 /*

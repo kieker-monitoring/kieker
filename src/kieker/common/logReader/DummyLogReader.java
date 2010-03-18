@@ -7,7 +7,7 @@ package kieker.common.logReader;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
 
 /**
  * This is a logReader for testing. It creates just some random data. All

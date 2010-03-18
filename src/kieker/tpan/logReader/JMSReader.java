@@ -18,7 +18,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

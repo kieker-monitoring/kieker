@@ -3,7 +3,7 @@ package kieker.tpmon.core;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.monitoringRecord.executions.RemoteCallMetaData;
+import kieker.common.monitoringRecord.executions.RemoteCallMetaData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

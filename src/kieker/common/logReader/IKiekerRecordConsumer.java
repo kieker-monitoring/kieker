@@ -1,6 +1,6 @@
 package kieker.common.logReader;
 
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 /**
  * kieker.loganalysis.IKiekerRecordConsumer

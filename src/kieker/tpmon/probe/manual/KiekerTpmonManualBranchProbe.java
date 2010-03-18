@@ -21,7 +21,7 @@ package kieker.tpmon.probe.manual;
  */
 
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.KiekerBranchingRecord;
+import kieker.common.monitoringRecord.KiekerBranchingRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

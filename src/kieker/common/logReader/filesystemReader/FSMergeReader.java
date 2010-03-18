@@ -9,8 +9,8 @@ import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.KiekerDummyMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

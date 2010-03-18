@@ -18,10 +18,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
 /**
  *
  * This reader is an alternative to the JMS reader. RabbitMQ

@@ -29,8 +29,8 @@ import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.executions.KiekerExecutionRecord;
 
 /**
  * Transforms KiekerExecutionRecords into Execution objects.

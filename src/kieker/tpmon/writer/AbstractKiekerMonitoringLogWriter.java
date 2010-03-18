@@ -2,7 +2,7 @@ package kieker.tpmon.writer;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.annotation.TpmonInternal;
 
 import org.apache.commons.logging.Log;

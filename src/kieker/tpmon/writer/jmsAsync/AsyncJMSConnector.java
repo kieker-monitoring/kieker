@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.jmsAsync;
 
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
+import kieker.common.monitoringRecord.KiekerDummyMonitoringRecord;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 
 /*

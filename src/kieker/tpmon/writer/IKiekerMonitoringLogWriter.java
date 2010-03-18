@@ -1,7 +1,7 @@
 package kieker.tpmon.writer;
 
 import kieker.tpmon.writer.util.async.*;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.*;
 import java.util.Vector;
 import kieker.tpmon.annotation.TpmonInternal;

@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -15,7 +15,7 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.monitoringRecord.KiekerDummyMonitoringRecord;
+import kieker.common.monitoringRecord.KiekerDummyMonitoringRecord;
 import kieker.tpmon.writer.databaseAsync.AsyncDbConnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsConnector;
 import org.apache.commons.logging.Log;
