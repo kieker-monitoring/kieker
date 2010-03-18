@@ -27,18 +27,27 @@ public interface IKiekerRecordConsumer {
 
     /**
      * Simply return null to get records of all types.
+     * 
      * @return
      */
     public String[] getRecordTypeSubscriptionList();
 
+    /**
+     * Called for each new record.
+     *
+     * @param monitoringRecord
+     * @throws RecordConsumerExecutionException
+     */
     public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
 
     /**
-     * TODO: Add documentation! What means true? Whats the semantic of execute?
-     * Has it to be called before or after consumeMonitoringRecord? Just once or multiple times?
+     * Starts a record consumer.
+     * This method is called once when a TpanInstance's run() method is called.
+     * This implementation must not be a blocking!
+     * Asynchronous consumers would spawn (an) aynchronous thread(s) in this
+     * method.
      *
-     *
-     * @return
+     * @return must true on success; false otherwise.
      */
     public boolean execute() throws RecordConsumerExecutionException;
 

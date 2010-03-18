@@ -1,7 +1,5 @@
 package kieker.tpmon.writer.jmsAsync;
 
-import java.util.HashMap;
-import java.util.StringTokenizer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;

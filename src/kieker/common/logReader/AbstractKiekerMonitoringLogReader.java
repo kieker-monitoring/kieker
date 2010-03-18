@@ -144,7 +144,7 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
         return this.recordTypeMap.get(recordTypeId);
     }
 
-    public final void terminate() {
+    public void terminate() {
         for (IKiekerRecordConsumer c : this.subscribedToAllList) {
             c.terminate();
         }

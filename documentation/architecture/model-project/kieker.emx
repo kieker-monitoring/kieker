@@ -328,7 +328,9 @@
           </ownedParameter>
         </ownedOperation>
         <ownedOperation xmi:id="_EzeVoDHREd-Dw_r6qZDmjQ" name="setLoggingTimestamp" isLeaf="true">
-          <ownedParameter xmi:id="_P9og8DHREd-Dw_r6qZDmjQ" name="loggingTimestamp"/>
+          <ownedParameter xmi:id="_P9og8DHREd-Dw_r6qZDmjQ" name="loggingTimestamp">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+          </ownedParameter>
         </ownedOperation>
         <ownedOperation xmi:id="_2vD_sDHQEd-Dw_r6qZDmjQ" name="getLoggingTimestamp" isLeaf="true">
           <ownedParameter xmi:id="_5FXvwDHQEd-Dw_r6qZDmjQ" name="Parameter1" direction="return">
@@ -1194,7 +1196,7 @@
               <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_H8toYzHaEd-Dw_r6qZDmjQ"/>
             </children>
             <styles xmi:type="umlnotation:UMLClassifierStyle" xmi:id="_H8rzMTHaEd-Dw_r6qZDmjQ" fontName="Arial" fontHeight="12" showListVisibility="Text" showListSignature="true" lineColor="0" showParent="QualifiedName" showStereotype="Text" useClassifierShape="true"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_H8rzMjHaEd-Dw_r6qZDmjQ" x="5750" y="1375"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_H8rzMjHaEd-Dw_r6qZDmjQ" x="3125" y="1250"/>
           </children>
           <children xmi:id="_sK88MDHaEd-Dw_r6qZDmjQ" element="_sK7uEDHaEd-Dw_r6qZDmjQ">
             <children xmi:id="_sK9jQDHaEd-Dw_r6qZDmjQ" type="ImageCompartment">
@@ -1269,7 +1271,7 @@
             </children>
             <children xmi:id="__EuhwzHeEd-Dw_r6qZDmjQ" type="FromRoleLabel" element="__EnNADHeEd-Dw_r6qZDmjQ">
               <children xmi:id="__EvI0DHeEd-Dw_r6qZDmjQ" type="FromRole"/>
-              <layoutConstraint xmi:type="notation:Location" xmi:id="__EuhxDHeEd-Dw_r6qZDmjQ" x="238" y="-1001"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="__EuhxDHeEd-Dw_r6qZDmjQ" x="504" y="-1001"/>
             </children>
             <children xmi:id="__EvI0THeEd-Dw_r6qZDmjQ" type="ToQualifierLabel" element="__EobIDHeEd-Dw_r6qZDmjQ">
               <children xmi:id="__EvI0zHeEd-Dw_r6qZDmjQ" type="QualifierCompartment">
@@ -1380,7 +1382,7 @@
           </ownedParameter>
         </ownedOperation>
         <ownedOperation xmi:id="_ZQKGIDHaEd-Dw_r6qZDmjQ" name="addConsumer">
-          <ownedParameter xmi:id="_bA_xoDHaEd-Dw_r6qZDmjQ" name="consumer"/>
+          <ownedParameter xmi:id="_bA_xoDHaEd-Dw_r6qZDmjQ" name="consumer" type="_H8qlEDHaEd-Dw_r6qZDmjQ"/>
           <ownedParameter xmi:id="_cC1pIDHaEd-Dw_r6qZDmjQ" name="recordTypeSubscriptionList">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fozqQTHaEd-Dw_r6qZDmjQ" value="*"/>
@@ -1395,7 +1397,7 @@
         <ownedOperation xmi:id="_lxrF8DHaEd-Dw_r6qZDmjQ" name="terminate"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_sK7uEDHaEd-Dw_r6qZDmjQ" name="AbstractKiekerMonitoringLogReader" clientDependency="_wXDwQDHaEd-Dw_r6qZDmjQ" isAbstract="true">
-        <ownedAttribute xmi:id="__EnNADHeEd-Dw_r6qZDmjQ" name="allTypeConsumers" visibility="private" type="_Vg6s4DHdEd-Dw_r6qZDmjQ" association="__Eml8DHeEd-Dw_r6qZDmjQ">
+        <ownedAttribute xmi:id="__EnNADHeEd-Dw_r6qZDmjQ" name="anyTypeConsumers" visibility="private" type="_Vg6s4DHdEd-Dw_r6qZDmjQ" association="__Eml8DHeEd-Dw_r6qZDmjQ">
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__En0ETHeEd-Dw_r6qZDmjQ" value="*"/>
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__En0EDHeEd-Dw_r6qZDmjQ"/>
         </ownedAttribute>
