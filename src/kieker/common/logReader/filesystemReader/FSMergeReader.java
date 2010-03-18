@@ -3,7 +3,6 @@ package kieker.common.logReader.filesystemReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;

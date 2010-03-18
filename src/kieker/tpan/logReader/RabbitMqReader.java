@@ -5,13 +5,10 @@
 
 package kieker.tpan.logReader;
 
-import java.io.Serializable;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.ConnectionParameters;
-import com.rabbitmq.client.GetResponse;
 import com.rabbitmq.client.QueueingConsumer;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,14 +19,12 @@ import org.apache.commons.logging.LogFactory;
 import kieker.common.logReader.LogReaderExecutionException;
 import kieker.tpmon.annotation.TpmonInternal;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
 /**
  *
- * This reader is an alternative to the JMS reader. RabbitMQ can be
- * faster, as it does not transfer objects but raw data. Furthermore,
+ * This reader is an alternative to the JMS reader. RabbitMQ
  * showed RabbitMQ high performance in experiments.
  *
  * @author matthias

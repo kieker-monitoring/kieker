@@ -19,7 +19,6 @@ package kieker.tpan.recordConsumer;
  * limitations under the License.
  * ==================================================
  */
-
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
@@ -32,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
 public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {
 
     private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
-
     /** Consuming any records of any type */
     private final static String[] recordTypeSubscriptionList = null;
 
@@ -50,8 +48,7 @@ public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {
         return true;
     }
 
-	public void terminate() {
+    public void terminate() {
         /* We consume synchronously */
-
-	}
+    }
 }
