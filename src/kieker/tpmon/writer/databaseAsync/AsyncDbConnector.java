@@ -5,10 +5,10 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -67,7 +67,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal()
+    
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -94,7 +94,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     }
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
 
-    @TpmonInternal()
+    
     public Vector<AbstractWorkerThread> getWorkers() {
         return workers;
     }
@@ -102,7 +102,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     /**
      * Returns false if an error occurs. Errors are printed to stdout (e.g., App-server logfiles), even if debug = false.
      */
-    @TpmonInternal()
+    
     public boolean init() {
         if (this.isDebug()) {
             log.info("Tpmon asyncDbconnector init");
@@ -161,7 +161,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
 //     * TODO: Is this method ever used??
 //     * Use this method to insert data into the database.
 //     */
-//    @TpmonInternal()
+//    
 //    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
 //        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
 //    }
@@ -170,7 +170,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
-    @TpmonInternal()
+    
     public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
@@ -201,7 +201,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         return true;
     }
 
-    @TpmonInternal()
+    
     public String getInfoString() {
         StringBuilder strB = new StringBuilder();
 
@@ -222,7 +222,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         return strB.toString();
     }
 
-    @TpmonInternal()
+    
     public void registerMonitoringRecordType(int id, String className) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -1,4 +1,4 @@
-package kieker.common.monitoringRecord;
+package kieker.common.record;
 
 /*
  *

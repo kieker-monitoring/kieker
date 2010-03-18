@@ -1,6 +1,6 @@
 package kieker.common.logReader;
 
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

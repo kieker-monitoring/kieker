@@ -2,7 +2,7 @@ package kieker.tpmon.probe.cxf;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
@@ -55,7 +55,7 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
     private static final String NULL_SESSION_STR = "NULL";
     private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
 
-    @TpmonInternal()
+    
     public void handleMessage(Message msg) throws Fault {
         if (msg instanceof SoapMessage) {
             SoapMessage soapMsg = (SoapMessage) msg;
@@ -136,7 +136,7 @@ public class KiekerTpmonRequestInProbe extends SoapHeaderInterceptor implements 
         }
     }
 
-    @TpmonInternal()
+    
     private final String getStringContentFromHeader(final Header hdr) {
         if (hdr == null) {
             return null;

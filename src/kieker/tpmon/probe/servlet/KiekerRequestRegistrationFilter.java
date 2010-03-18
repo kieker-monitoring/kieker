@@ -3,7 +3,7 @@ package kieker.tpmon.probe.servlet;
 import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 
@@ -52,7 +52,7 @@ public class KiekerRequestRegistrationFilter implements Filter, IKiekerMonitorin
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 
-    @TpmonInternal()
+    
     public void init(FilterConfig config) throws ServletException {
         /*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
         if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
@@ -64,7 +64,7 @@ public class KiekerRequestRegistrationFilter implements Filter, IKiekerMonitorin
         }*/
     }
 
-    @TpmonInternal()
+    
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
@@ -81,7 +81,7 @@ public class KiekerRequestRegistrationFilter implements Filter, IKiekerMonitorin
         }
     }
 
-    @TpmonInternal()
+    
     public void destroy() {
     }
 }

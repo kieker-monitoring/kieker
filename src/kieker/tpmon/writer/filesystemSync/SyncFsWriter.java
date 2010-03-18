@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.filesystemSync;
 
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.Vector;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -83,7 +83,7 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal()
+    
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -128,7 +128,7 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
     /**
      * Determines and sets a new Filename
      */
-    @TpmonInternal()
+    
     private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
@@ -158,7 +158,7 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
         }
     }
 
-    @TpmonInternal()
+    // TODO: keep track of record type ID mapping!
     public synchronized boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
             log.info("Found END_OF_MONITORING_MARKER. Will terminate");
@@ -166,13 +166,13 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
         }
 
         try {
-            String[] recordFields = monitoringRecord.toStringArray();
+            Object[] recordFields = monitoringRecord.toArray();
             final int LAST_FIELD_INDEX = recordFields.length - 1;
             prepareFile(); // may throw FileNotFoundException
 
             if (this.isWriteRecordTypeIds()) {
                 pos.write('$');
-                pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+                pos.write(monitoringRecord.getClass().getName());
                 pos.write(';');
                 pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
                 if (LAST_FIELD_INDEX > 0) {
@@ -181,7 +181,7 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
             }
 
             for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
-                pos.write(recordFields[i]);
+                pos.write(recordFields[i].toString());
                 if (i < LAST_FIELD_INDEX) {
                     pos.write(';');
                 }
@@ -195,17 +195,17 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
         return true;
     }
 
-    @TpmonInternal()
+    
     public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
 
-    @TpmonInternal()
+    
     public String getInfoString() {
         return "filenamePrefix :" + storagePathBase;
     }
 
-    @TpmonInternal()
+    
     public void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
         FileOutputStream fos = null;

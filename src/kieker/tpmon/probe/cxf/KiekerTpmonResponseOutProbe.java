@@ -3,11 +3,11 @@ package kieker.tpmon.probe.cxf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -61,7 +61,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
 
     protected static final String vmName = ctrlInst.getVmname();
     
-    @TpmonInternal()
+    
     public void handleMessage(SoapMessage msg) throws Fault {
         String sessionID;
         long traceId = cfRegistry.recallThreadLocalTraceId();
@@ -93,7 +93,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
         unsetKiekerThreadLocalData();
 
         /* Log this execution */
-        OperationExecutionRecord rec = OperationExecutionRecord.getInstance(componentName, opName, sessionID, traceId, tin, tout, vmName, myEoi, myEss);
+        OperationExecutionRecord rec = new OperationExecutionRecord(componentName, opName, sessionID, traceId, tin, tout, vmName, myEoi, myEss);
         rec.experimentId = ctrlInst.getExperimentId();
         ctrlInst.logMonitoringRecord(rec);
 

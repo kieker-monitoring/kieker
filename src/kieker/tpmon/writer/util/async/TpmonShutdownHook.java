@@ -3,7 +3,7 @@ package kieker.tpmon.writer.util.async;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
 import java.util.Vector;
-import kieker.tpmon.annotation.TpmonInternal;
+
 //import kieker.tpmon.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,12 +59,12 @@ public class TpmonShutdownHook extends Thread {
      * allow the TpmonShutdownHook to wait till the worker is finished.
      * @param newWorker
      */
-    @TpmonInternal()
+    
     public void registerWorker(AbstractWorkerThread newWorker){
         workers.add(newWorker);
     }
     
-    @TpmonInternal()
+    
     public void run(){ // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
         try {
             // is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
@@ -80,7 +80,7 @@ public class TpmonShutdownHook extends Thread {
         }
     }
     
-    @TpmonInternal()
+    
     public synchronized void initateShutdownForAllWorkers(){
         for (AbstractWorkerThread wrk: workers) {
             if (wrk != null) wrk.initShutdown();
@@ -88,7 +88,7 @@ public class TpmonShutdownHook extends Thread {
         TpmonController.getInstance().terminateMonitoring();
     }
     
-    @TpmonInternal()
+    
     public synchronized boolean allWorkersFinished(){
         for (AbstractWorkerThread wrk: workers) {
             if (wrk != null && wrk.isFinished() == false) 

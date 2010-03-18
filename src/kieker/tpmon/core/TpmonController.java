@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -14,8 +14,8 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.DummyMonitoringRecord;
+
+import kieker.common.record.DummyMonitoringRecord;
 import kieker.tpmon.writer.databaseAsync.AsyncDbConnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsConnector;
 import org.apache.commons.logging.Log;
@@ -104,7 +104,7 @@ public final class TpmonController {
     //marks the end of monitoring to the writer threads
     public static final AbstractMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 
-    @TpmonInternal()
+    
     public final static TpmonController getInstance() {
         return TpmonController.ctrlInst;
     }
@@ -182,7 +182,7 @@ public final class TpmonController {
      * you have to set the vmname manually (e.g., via the tpmon-control-servlet, 
      * or by directly implementing a call to TpmonController.setVmname(...).
      */
-    @TpmonInternal()
+    
     public final String getVmname() {
         return this.vmname;
     }
@@ -200,7 +200,7 @@ public final class TpmonController {
      * 
      * @param newVmname
      */
-    @TpmonInternal()
+    
     public final void setVmname(String newVmname) {
         log.info(">Kieker-Tpmon: The VM has the NEW name " + newVmname +
                 " Thread:" + Thread.currentThread().getId());
@@ -211,7 +211,7 @@ public final class TpmonController {
      * See TpmonShutdownHook.registerWorker
      * @param newWorker
      */
-    @TpmonInternal()
+    
     private void registerWorker(AbstractWorkerThread newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
@@ -222,7 +222,7 @@ public final class TpmonController {
     // if monitoring terminated, it is not allowed to enable monitoring afterwards
     private boolean monitoringPermanentlyTerminated = false;
 
-    @TpmonInternal()
+    
     public final boolean isDebug() {
         return debug;
     }
@@ -231,17 +231,17 @@ public final class TpmonController {
      * Shows how many inserts have been performed since last restart of the execution
      * environment.
      */
-    @TpmonInternal()
+    
     public long getNumberOfInserts() {
         return numberOfInserts.longValue();
     }
 
-    @TpmonInternal()
+    
     public final boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
 
-    @TpmonInternal()
+    
     public final boolean isMonitoringPermanentlyTerminated() {
         return monitoringPermanentlyTerminated;
     }
@@ -251,17 +251,17 @@ public final class TpmonController {
     // instead, we decided to provide an "expensive" increment method.
     private int experimentId = STANDARDEXPERIMENTID;
 
-    @TpmonInternal()
+    
     public final int getExperimentId() {
         return this.experimentId;
     }
 
-    @TpmonInternal()
+    
     public synchronized int incExperimentId() {
         return this.experimentId++;
     }
 
-    @TpmonInternal()
+    
     public void setExperimentId(int newExperimentID) {
         this.experimentId = newExperimentID;
     }
@@ -269,7 +269,7 @@ public final class TpmonController {
     /**
      * Enables monitoring.
      */
-    @TpmonInternal()
+    
     public final void enableMonitoring() {
         log.info("Enabling monitoring");
         if (this.monitoringPermanentlyTerminated) {
@@ -283,7 +283,7 @@ public final class TpmonController {
      * Disables to store monitoring data.
      * Monitoring may be enabled again by calling enableMonitoring().
      */
-    @TpmonInternal()
+    
     public final void disableMonitoring() {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
@@ -293,7 +293,7 @@ public final class TpmonController {
      * Permanently terminates monitoring (e.g., due to a failure).
      * Subsequent tries to enable monitoring will be refused.
      */
-    @TpmonInternal()
+    
     public final synchronized void terminateMonitoring() {
         log.info("Permanently terminating monitoring");
         if (this.monitoringDataWriter != null) {
@@ -314,7 +314,7 @@ public final class TpmonController {
         this.replayMode = replayMode;
     }
 
-    @TpmonInternal()
+    
     public final boolean logMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (!this.monitoringEnabled) {
             return false;
@@ -341,7 +341,7 @@ public final class TpmonController {
      * In contrast to System.nanoTime(), it gives the nano seconds between the current time and midnight, January 1, 1970 UTC.
      * (The value returned by System.nanoTime() only represents nanoseconds since *some* fixed but arbitrary time.)
      */
-    @TpmonInternal()
+    
     public final long getTime() {
         return System.nanoTime() + offsetA;
     }
@@ -354,7 +354,7 @@ public final class TpmonController {
      *
      * If it fails, it uses hard-coded standard values.    
      */
-    @TpmonInternal()
+    
     private void loadPropertiesFile() {
         String configurationFile = "META-INF/tpmon.properties";
         InputStream is = null;
@@ -566,7 +566,7 @@ public final class TpmonController {
         }
     }
 
-    @TpmonInternal()
+    
     public String getConnectorInfo() {
         StringBuilder strB = new StringBuilder();
 
@@ -579,17 +579,17 @@ public final class TpmonController {
         return strB.toString();
     }
 
-    @TpmonInternal()
+    
     public String getDateString() {
         return java.util.Calendar.getInstance().getTime().toString();
     }
 
-    @TpmonInternal()
+    
     public String getVersion() {
         return TpmonVersion.getVERSION();
     }
 
-    @TpmonInternal()
+    
     public final void setDebug(boolean debug) {
         this.debug = debug;
     }
@@ -604,7 +604,7 @@ public final class TpmonController {
      * @param recordTypeClass
      * @return
      */
-    @TpmonInternal()
+    
     public final int registerMonitoringRecordType(Class recordTypeClass) {
         if (this.isMonitoringPermanentlyTerminated()) {
             log.warn("Didn't register record type '" + recordTypeClass +
@@ -709,7 +709,7 @@ public final class TpmonController {
  * grep "-5,-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
  */
 //   Not supported any more
-//    @TpmonInternal()
+//    
 //    private void storeEncodedName(String component, String newMethodname, String encodedName) {
 //        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
 //        String opname = component + newMethodname;
@@ -730,7 +730,7 @@ public final class TpmonController {
  * @param methodname
  * @return methodname without a double componentname
  */
-//    @TpmonInternal()
+//    
 //    private String formatMethodName(String methodname) {
 //        // methodname: A.a(), componentname: de.comp.A
 //        // therefore componentname+methodname = de.comp.AA.a()

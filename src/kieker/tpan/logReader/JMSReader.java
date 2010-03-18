@@ -17,8 +17,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import kieker.common.logReader.LogReaderExecutionException;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,7 +55,7 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
 
 
    /** Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 */
-    @TpmonInternal()
+    
     public void init(String initString) throws IllegalArgumentException {
         super.initVarsFromInitString(initString); // throws IllegalArgumentException
 
@@ -109,10 +109,10 @@ public class JMSReader extends AbstractKiekerMonitoringLogReader {
                             if (omo instanceof AbstractMonitoringRecord) {
                                 AbstractMonitoringRecord rec =
                                         (AbstractMonitoringRecord) omo;
-                                Class<? extends AbstractMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getRecordTypeId());
+                                Class<? extends AbstractMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getClass().getName());
                                 if (clazz == null) {
                                     // TODO: we could retry it in a couple of seconds
-                                    log.error("Found no mapping for record type id " + rec.getRecordTypeId());
+                                    log.error("Found no mapping for record type " + rec.getClass().getName());
                                 } else {
                                     //log.info("New monitoring record of type " + clazz.getName() + " (id:" + rec.getRecordTypeId() + ")");
                                     deliverRecordToConsumers(rec);

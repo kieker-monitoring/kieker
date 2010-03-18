@@ -7,7 +7,7 @@ package kieker.common.logReader;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 
 /**
  * This is a logReader for testing. It creates just some random data. All
@@ -33,7 +33,7 @@ public class DummyLogReader extends AbstractKiekerMonitoringLogReader{
             try {Thread.sleep(sleeptime);} catch (InterruptedException ex) {
                 Logger.getLogger(DummyLogReader.class.getName()).log(Level.SEVERE, null, ex);}
 
-            OperationExecutionRecord testRecord = OperationExecutionRecord.getInstance("ComponentA", "OperationA", i, startTime, System.nanoTime());
+            OperationExecutionRecord testRecord = new OperationExecutionRecord("ComponentA", "OperationA", i, startTime, System.nanoTime());
             deliverRecordToConsumers(testRecord);
         }        
     }

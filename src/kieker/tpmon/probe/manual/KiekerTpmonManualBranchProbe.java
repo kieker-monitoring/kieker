@@ -21,7 +21,7 @@ package kieker.tpmon.probe.manual;
  */
 
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.BranchingRecord;
+import kieker.common.record.BranchingRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +39,7 @@ public class KiekerTpmonManualBranchProbe implements IKiekerMonitoringProbe {
         /* try-catch in order to avoid that any exception is propagated
          * to the application code. */
         try{
-            ctrlInst.logMonitoringRecord(BranchingRecord.getInstance(ctrlInst.getTime(), branchID, branchingOutcome));
+            ctrlInst.logMonitoringRecord(new BranchingRecord(ctrlInst.getTime(), branchID, branchingOutcome));
         }catch(Exception exc){
             log.error("Error monitoring branching", exc);
         }

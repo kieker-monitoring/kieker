@@ -1,7 +1,7 @@
 package kieker.tpmon.probe.aspectJ.executions;
 
 import javax.servlet.http.HttpServletRequest;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.SessionRegistry;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,7 +32,7 @@ public abstract class AbstractKiekerTpmonExecutionProbeServlet extends AbstractK
 
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 
-    @TpmonInternal()
+    
     public Object doServletEntryProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();

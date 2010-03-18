@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.cxf;
 
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
@@ -50,7 +50,7 @@ public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor i
     private static final String NULL_SESSION_STR = "NULL";
     private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUT";
 
-    @TpmonInternal()
+    
     public void handleMessage(SoapMessage msg) throws Fault {
         String sessionID = null;
         long traceId = cfRegistry.recallThreadLocalTraceId();

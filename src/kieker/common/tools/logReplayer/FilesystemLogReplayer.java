@@ -26,7 +26,7 @@ import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.common.logReader.filesystemReader.FSReader;
 import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

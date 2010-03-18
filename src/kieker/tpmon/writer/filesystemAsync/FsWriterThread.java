@@ -5,9 +5,9 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,7 +54,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
     /**
      * It is okay that it may be called multiple times for the same class
      */
-    @TpmonInternal()
+    
     public synchronized void initShutdown() {
         FsWriterThread.shutdown = true;
     }
@@ -68,7 +68,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
     }
     static boolean passed = false;
 
-    @TpmonInternal()
+    
     @Override
     public void run() {
         log.info("FsWriter thread running");
@@ -105,7 +105,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
         }
     }
 
-    @TpmonInternal()
+    
     private void consume(AbstractMonitoringRecord monitoringRecord) throws Exception {
         // TODO: We should check whether this is necessary. 
         // This should only cover an initial action which can be 
@@ -119,7 +119,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
     /**
      * Determines and sets a new Filename
      */
-    @TpmonInternal()
+    
     private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
@@ -156,20 +156,20 @@ public final class FsWriterThread extends AbstractWorkerThread {
         }
     }
 
+    // TODO: keep track of record type ID mapping!
     /**
      * Note that it's not necessary to synchronize this method since 
      * a file is written at most by one thread.
      * @throws java.io.IOException
      */
-    @TpmonInternal()
     private void writeDataNow(AbstractMonitoringRecord monitoringRecord) throws IOException {
-        String[] recordFields = monitoringRecord.toStringArray();
+        Object[] recordFields = monitoringRecord.toArray();
         final int LAST_FIELD_INDEX = recordFields.length - 1;
         prepareFile(); // may throw FileNotFoundException
 
         if (this.isWriteRecordTypeIds()) { // write ID and loggingTimestamp
             pos.write('$');
-            pos.write(Integer.toString(monitoringRecord.getRecordTypeId()));
+            pos.write(monitoringRecord.getClass().getName());
             pos.write(';');
             pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
             if (LAST_FIELD_INDEX > 0) {
@@ -178,8 +178,8 @@ public final class FsWriterThread extends AbstractWorkerThread {
         }
 
         for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
-            String val = recordFields[i];
-            pos.write(val);
+            Object val = recordFields[i];
+            pos.write(val.toString());
             if (i < LAST_FIELD_INDEX) {
                 pos.write(';');
             }
@@ -188,7 +188,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
         pos.flush();
     }
 
-    @TpmonInternal()
+    
     public boolean isFinished() {
         return finished;
     }

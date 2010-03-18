@@ -1,15 +1,15 @@
 package kieker.tpmon.writer.jmsAsync;
 
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.DummyMonitoringRecord;
+import kieker.common.record.DummyMonitoringRecord;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 
 /*
@@ -66,7 +66,6 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
      * @param initString
      * @return true on success. false on error.
      */
-    @TpmonInternal
     public boolean init(String initString) {
         if (initString == null || initString.length() == 0) {
             log.error("Invalid initString. Valid example for tpmon.properties:\n"
@@ -110,7 +109,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         return retVal;
     }
 
-    @TpmonInternal()
+    
     public String getInfoString() {
         StringBuilder strB = new StringBuilder();
 
@@ -123,7 +122,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         return strB.toString();
     }
 
-    @TpmonInternal()
+    
     public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncJmsProducer.insertMonitoringDataNow");
@@ -146,13 +145,13 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         return true;
     }
 
-    @TpmonInternal()
+    
     public void registerMonitoringRecordType(int id, String className) {
         log.info("Publishing record id/class mapping: " + id + "/" + className);
         this.typeQueue.add(new MonitoringRecordTypeClassnameMapping(id, className));
     }
 
-    @TpmonInternal()
+    
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
         super.setWriteRecordTypeIds(writeRecordTypeIds);
         for (AbstractWorkerThread t : typeWriterAndRecordWriters) {
@@ -161,7 +160,6 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
         }
     }
 
-    @TpmonInternal
     public Vector<AbstractWorkerThread> getWorkers() {
         return this.typeWriterAndRecordWriters;
     }

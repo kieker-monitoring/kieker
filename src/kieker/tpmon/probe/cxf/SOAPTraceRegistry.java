@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.cxf;
 
-import kieker.tpmon.annotation.TpmonInternal;
+
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,7 +46,7 @@ public class SOAPTraceRegistry {
     private SOAPTraceRegistry(){
     }
 
-    @TpmonInternal()
+    
     public synchronized static final SOAPTraceRegistry getInstance() {
         return SOAPTraceRegistry.instance;
     }
@@ -56,7 +56,7 @@ public class SOAPTraceRegistry {
      * The thread is responsible for invalidating the stored value using
      * the method unsetThreadLocalTin()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalInRequestTin(long tin) {
         this.threadLocalInRequestTin.set(tin);
     }
@@ -67,7 +67,7 @@ public class SOAPTraceRegistry {
      *
      * @return the time tin. -1 if not registered before.
      */
-    @TpmonInternal()
+    
     public final long recallThreadLocalInRequestTin() {
         Long curTin = this.threadLocalInRequestTin.get();
         if (curTin == null) {
@@ -80,7 +80,7 @@ public class SOAPTraceRegistry {
     /**
      * This method unsets a previously registered entry time tin.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalInRequestTin() {
         this.threadLocalInRequestTin.remove();
     }
@@ -90,7 +90,7 @@ public class SOAPTraceRegistry {
      * The thread is responsible for invalidating the stored value using
      * the method unsetThreadLocalTin()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalOutRequestTin(long tin) {
         this.threadLocalOutRequestTin.set(tin);
     }
@@ -101,7 +101,7 @@ public class SOAPTraceRegistry {
      *
      * @return the time tin. -1 if not registered before.
      */
-    @TpmonInternal()
+    
     public final long recallThreadLocalOutRequestTin() {
         Long curTin = this.threadLocalOutRequestTin.get();
         if (curTin == null) {
@@ -114,7 +114,7 @@ public class SOAPTraceRegistry {
     /**
      * This method unsets a previously registered entry time tin.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalOutRequestTin() {
         this.threadLocalOutRequestTin.remove();
     }
@@ -123,7 +123,7 @@ public class SOAPTraceRegistry {
      * This method is used to store whether or not an incoming SOAP call
      * was the entry point to the current trace.
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalInRequestIsEntryCall(boolean isEntry){
         this.threadLocalInRequestIsEntryCall.set(isEntry);
     }
@@ -145,7 +145,7 @@ public class SOAPTraceRegistry {
     /**
      * This method unsets a previously registered variable isInRequestEntryCall.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalInRequestIsEntryCall() {
         this.threadLocalInRequestIsEntryCall.remove();
     }
@@ -154,7 +154,7 @@ public class SOAPTraceRegistry {
      * This method is used to store whether or not an outgoing SOAP call
      * was the entry point to the current trace.
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalOutRequestIsEntryCall(boolean isEntry){
         this.threadLocalOutRequestIsEntryCall.set(isEntry);
     }
@@ -176,7 +176,7 @@ public class SOAPTraceRegistry {
     /**
      * This method unsets a previously registered variable isOutRequestEntryCall.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalOutRequestIsEntryCall() {
         this.threadLocalOutRequestIsEntryCall.remove();
     }
@@ -186,7 +186,7 @@ public class SOAPTraceRegistry {
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalEOI()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalInRequestEOI(int eoi) {
         //log.info(Thread.currentThread().getId());
         this.threadLocalInRequestEoi.set(eoi);
@@ -198,7 +198,7 @@ public class SOAPTraceRegistry {
      *
      * @return the eoi. -1 if no eoi registered.
      */
-    @TpmonInternal()
+    
     public final int recallThreadLocalInRequestEOI() {
         Integer curEoi = this.threadLocalInRequestEoi.get();
         if (curEoi == null) {
@@ -211,7 +211,7 @@ public class SOAPTraceRegistry {
     /**
      * This method unsets a previously registered eoi.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalInRequestEOI() {
         this.threadLocalInRequestEoi.remove();
     }
@@ -221,7 +221,7 @@ public class SOAPTraceRegistry {
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalESS()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalInRequestESS(int ess) {
         //log.info(Thread.currentThread().getId());
         this.threadLocalInRequestEss.set(ess);
@@ -233,7 +233,7 @@ public class SOAPTraceRegistry {
      *
      * @return the ess. -1 if no ess registered.
      */
-    @TpmonInternal()
+    
     public final int recallThreadLocalInRequestESS() {
         Integer curEss = this.threadLocalInRequestEss.get();
         if (curEss == null) {
@@ -246,7 +246,7 @@ public class SOAPTraceRegistry {
     /**
      * This method unsets a previously registered ess.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalInRequestESS() {
         this.threadLocalInRequestEss.remove();
     }

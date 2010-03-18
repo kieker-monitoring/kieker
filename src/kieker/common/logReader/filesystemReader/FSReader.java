@@ -13,8 +13,8 @@ import java.util.StringTokenizer;
 
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.LogReaderExecutionException;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.OperationExecutionRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -187,8 +187,9 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
                             /* We found a record type ID and need to lookup the class */
 //                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
 
-                            Integer id = Integer.valueOf(token.substring(1));
-                            Class<? extends AbstractMonitoringRecord> clazz = super.fetchClassForRecordTypeId(id);
+                            //Integer id = Integer.valueOf(token.substring(1));
+                            // TODO: use IDs
+                            Class<? extends AbstractMonitoringRecord> clazz = super.fetchClassForRecordTypeId(token);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
                             rec = (AbstractMonitoringRecord) m.invoke(null); // call static method
                             token = st.nextToken();
@@ -197,7 +198,7 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
                             vec = new String[numTokens - 2];
                             haveTypeId = true;
                         } else if (i == 0) { // for historic reasons, this is the default type
-                            rec = OperationExecutionRecord.getInstance();
+                            rec = new OperationExecutionRecord();
                             vec = new String[numTokens];
                         }
                         //log.info("haveTypeId:" + haveTypeId + ";" + " token:" + token + " i:" + i);
@@ -209,7 +210,8 @@ public class FSReader extends AbstractKiekerMonitoringLogReader {
                         vec = new String[0];
                     }
 
-                    rec.initFromStringArray(vec);
+                    // TODO: create typed array
+                    rec.initFromArray(vec);
                     this.deliverRecordToConsumers(rec);
                 } catch (Exception e) {
                     log.error(

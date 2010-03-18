@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.tpmon.annotation.TpmonInternal;
+
 
 /*
  * ==================LICENCE=========================
@@ -33,7 +33,7 @@ public class SessionRegistry {
     private SessionRegistry(){
     }
 
-    @TpmonInternal()
+    
     public synchronized static final SessionRegistry getInstance() {
         return SessionRegistry.instance;
     }
@@ -44,7 +44,7 @@ public class SessionRegistry {
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalSessionId()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalSessionId(String sessionId) {
         this.threadLocalSessionId.set(sessionId);
     }
@@ -55,7 +55,7 @@ public class SessionRegistry {
      *
      * @return the sessionid. null if no session registered.
      */
-    @TpmonInternal()
+    
     public final String recallThreadLocalSessionId() {
         return this.threadLocalSessionId.get();
     }
@@ -63,7 +63,7 @@ public class SessionRegistry {
     /**
      * This method unsets a previously registered sessionid.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalSessionId() {
         this.threadLocalSessionId.remove();
     }

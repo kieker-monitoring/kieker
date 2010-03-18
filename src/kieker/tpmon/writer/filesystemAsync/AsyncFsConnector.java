@@ -11,10 +11,10 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -60,12 +60,12 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal()
+    
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal()
+    
     public Vector<AbstractWorkerThread> getWorkers() {
         return workers;
     }
@@ -76,7 +76,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
         this.init();
     }
 
-    @TpmonInternal()
+    
     public void init() {
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {
@@ -122,7 +122,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      */
-    @TpmonInternal()
+    
     public boolean writeMonitoringRecord(final AbstractMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
@@ -142,18 +142,18 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
         return true;
     }
 
-    @TpmonInternal()
+    
     public String getFilenamePrefix() {
         return storagePathBase;
     }
 
-    @TpmonInternal()
+    
     public String getInfoString() {
         return "filenamePrefix :" + this.storagePathBase +
                 ", outputDirectory :" + this.storageDir;
     }
 
-    @TpmonInternal()
+    
     public void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
         FileOutputStream fos = null;
@@ -174,7 +174,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
         }
     }
 
-    @TpmonInternal()
+    
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
         super.setWriteRecordTypeIds(writeRecordTypeIds);
         for (AbstractWorkerThread t : workers) {

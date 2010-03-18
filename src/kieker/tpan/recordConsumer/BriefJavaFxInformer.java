@@ -12,8 +12,8 @@ import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.plugins.traceReconstruction.IExecutionTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.OperationExecutionRecord;
 
 /**
  *

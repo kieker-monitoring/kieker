@@ -3,12 +3,12 @@ package kieker.tpmon.probe.servlet;
 import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,7 +60,7 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
 
     private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
 
-    @TpmonInternal()
+    
     public void init(FilterConfig config) throws ServletException {
         /*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
         if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
@@ -85,14 +85,14 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
             }
     }
 
-    @TpmonInternal()
+    
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         OperationExecutionRecord execData = null;
         int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
         int ess = 0; /* this is the height in the dynamic call tree of this execution */
         if (request instanceof HttpServletRequest) {
-            execData = OperationExecutionRecord.getInstance(
+            execData = new OperationExecutionRecord(
                     componentName,
                     opName,
                     cfRegistry.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point*/);
@@ -132,7 +132,7 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
         }
     }
 
-    @TpmonInternal()
+    
     public void destroy() {
     }
 }

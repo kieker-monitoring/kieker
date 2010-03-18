@@ -17,7 +17,7 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import javax.naming.NamingException;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
 /*
@@ -98,7 +98,6 @@ public final class JMSWriterThread<T> extends AbstractWorkerThread {
         }
     }
 
-    @TpmonInternal
     private void consume(T execData) throws Exception {
         try {
             // TODO: casting to serializable may throw an exception!
@@ -116,7 +115,6 @@ public final class JMSWriterThread<T> extends AbstractWorkerThread {
         }
     }
 
-    @TpmonInternal
     public void run() {
         log.info("JmsWriter thread (" + this.END_OF_MONITORING_MARKER.getClass().getName() + ") running");
         //System.out.println("FsWriter thread running");
@@ -152,7 +150,6 @@ public final class JMSWriterThread<T> extends AbstractWorkerThread {
         }
     }
 
-    @TpmonInternal
     public boolean isFinished() {
         if (finished) {
             this.closeConnection();
@@ -160,7 +157,6 @@ public final class JMSWriterThread<T> extends AbstractWorkerThread {
         return finished;
     }
 
-    @TpmonInternal
     private void closeConnection(){
             log.info("Closing JMS connection");
             try {
@@ -175,7 +171,6 @@ public final class JMSWriterThread<T> extends AbstractWorkerThread {
     /**
      * Initials the shutdown
      */
-    @TpmonInternal
     public void initShutdown() {
         //the variable might be set to false more often than required
         JMSWriterThread.shutdown = true;

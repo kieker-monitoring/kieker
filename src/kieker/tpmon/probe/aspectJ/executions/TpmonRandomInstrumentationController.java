@@ -1,6 +1,6 @@
 package kieker.tpmon.probe.aspectJ.executions;
 
-import kieker.tpmon.annotation.TpmonInternal;
+
 import java.util.HashMap;
 import java.util.Random;
 
@@ -40,7 +40,7 @@ public class TpmonRandomInstrumentationController {
     private static Random randomGen = new Random();
     private static double probabilityToInstrument = randomGen.nextDouble(); 
     
-    @TpmonInternal()
+    
     public static synchronized Boolean isMonitored(String signature) {        
         Boolean hashedObject = monitoredOperations.get(signature);
         if (hashedObject != null) {

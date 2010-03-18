@@ -2,11 +2,11 @@ package kieker.tpmon.probe.cxf;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
@@ -54,7 +54,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
     private static final String opName = "handleMessage(SoapMessage msg)";
     protected static final String vmName = ctrlInst.getVmname();
     
-    @TpmonInternal()
+    
     public void handleMessage(Message msg) throws Fault {
         if (msg instanceof SoapMessage) {
             boolean isEntryCall = soapRegistry.recallThreadLocalOutRequestIsEntryCall();
@@ -126,7 +126,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
             }
 
             // Log this execution
-            OperationExecutionRecord rec = OperationExecutionRecord.getInstance(componentName, opName, mySessionId, myTraceId, myTin, myTout, vmName, myEoi, myEss);
+            OperationExecutionRecord rec = new OperationExecutionRecord(componentName, opName, mySessionId, myTraceId, myTin, myTout, vmName, myEoi, myEss);
             rec.experimentId = ctrlInst.getExperimentId();
             ctrlInst.logMonitoringRecord(rec);
 
@@ -140,7 +140,7 @@ public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements
         }
     }
 
-    @TpmonInternal()
+    
     private final String getStringContentFromHeader(final Header hdr) {
         if (hdr == null) {
             return null;

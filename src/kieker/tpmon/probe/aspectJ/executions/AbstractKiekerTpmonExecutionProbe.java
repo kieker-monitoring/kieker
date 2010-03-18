@@ -1,9 +1,9 @@
 package kieker.tpmon.probe.aspectJ.executions;
 
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.*;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,7 +37,7 @@ public abstract class AbstractKiekerTpmonExecutionProbe implements IKiekerMonito
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     protected static final String vmName = ctrlInst.getVmname();
 
-    @TpmonInternal()
+    
     protected OperationExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {
        // e.g. "getBook" 
         String methodname = thisJoinPoint.getSignature().getName();
@@ -46,7 +46,7 @@ public abstract class AbstractKiekerTpmonExecutionProbe implements IKiekerMonito
         int paranthIndex = paramList.lastIndexOf('(');
         paramList = paramList.substring(paranthIndex); // paramList is now e.g.,  "()"
 
-        OperationExecutionRecord execData = OperationExecutionRecord.getInstance(
+        OperationExecutionRecord execData = new OperationExecutionRecord(
                 thisJoinPoint.getSignature().getDeclaringTypeName() /* component */, 
                 methodname + paramList /* operation */, 
                 cfRegistry.recallThreadLocalTraceId() /* traceId, -1 if entry point*/);
@@ -62,10 +62,10 @@ public abstract class AbstractKiekerTpmonExecutionProbe implements IKiekerMonito
         return execData;
     }
     
-    @TpmonInternal()
+    
     public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable;
     
-    @TpmonInternal()
+    
     protected void proceedAndMeasure(ProceedingJoinPoint thisJoinPoint,
             OperationExecutionRecord execData) throws Throwable {
         execData.tin = ctrlInst.getTime(); // startint stopwatch    

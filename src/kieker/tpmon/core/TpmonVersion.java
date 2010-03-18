@@ -1,6 +1,6 @@
 package kieker.tpmon.core;
 
-import kieker.tpmon.annotation.TpmonInternal;
+
 
 /**
  * kieker.tpmon.core.TpmonVersion
@@ -49,7 +49,7 @@ public class TpmonVersion {
      *
      * @return the version String.
      */
-    @TpmonInternal()
+    
 	public static final String getVERSION() {
 		return VERSION;
 	}

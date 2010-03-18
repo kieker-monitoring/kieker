@@ -7,7 +7,7 @@ package kieker.tpan.recordConsumer;
 
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 
 /**
  *

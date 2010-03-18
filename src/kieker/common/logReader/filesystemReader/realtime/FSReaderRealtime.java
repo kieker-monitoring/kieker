@@ -9,7 +9,7 @@ import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.common.logReader.RealtimeReplayDistributor;
 import kieker.common.logReader.filesystemReader.FSMergeReader;
 import kieker.common.logReader.filesystemReader.FSReader;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

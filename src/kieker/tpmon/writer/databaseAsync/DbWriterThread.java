@@ -5,10 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+
+import kieker.common.record.OperationExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -51,7 +51,7 @@ public class DbWriterThread extends AbstractWorkerThread {
         log.info("New Tpmon - DbWriter thread created");
     }
 
-    @TpmonInternal()
+    
     synchronized void changeStatement(String statementtext) {
         nextStatementText = statementtext;
         statementChanged = true;
@@ -60,12 +60,12 @@ public class DbWriterThread extends AbstractWorkerThread {
     /**
      * May be called more often than required... but that doesn't harm
      */
-    @TpmonInternal()
+    
     public void initShutdown() {
         DbWriterThread.shutdown = true;
     }
 
-    @TpmonInternal()
+    
     public void run() {
         log.info("Dbwriter thread running");
         try {
@@ -103,7 +103,7 @@ public class DbWriterThread extends AbstractWorkerThread {
     /**
      * writes next item into database
      */
-    @TpmonInternal()
+    
     private void consume(AbstractMonitoringRecord monitoringRecord) throws SQLException {
         //if (TpmonController.debug) System.out.println("DbWriterThread "+this+" Consuming "+monitoringRecord);
         try {
@@ -129,7 +129,7 @@ public class DbWriterThread extends AbstractWorkerThread {
         }
     }
 
-    @TpmonInternal()
+    
     public boolean isFinished() {
         return finished;
     }

@@ -2,8 +2,8 @@ package kieker.tpmon.writer;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
-import kieker.tpmon.annotation.TpmonInternal;
+import kieker.common.record.AbstractMonitoringRecord;
+
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,16 +37,16 @@ public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonito
     private boolean writeRecordTypeIds;
     private final HashMap<String, String> map = new HashMap<String, String>();
 
-    @TpmonInternal()
+    
     public abstract boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord);
 
-    @TpmonInternal()
+    
     public abstract void registerMonitoringRecordType(int id, String className);
 
     /** Returns the value for the initialization property @a propName or the
      *  the passed default value @a default if no value for this property
      *  exists. */
-   @TpmonInternal()
+   
     protected final String getInitProperty(String propName, String defaultVal) {
         if (!this.initStringProcessed) {
             log.error("InitString not yet processed. " +
@@ -64,7 +64,7 @@ public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonito
 
     /** Returns the value for the initialization property @a propName or null
      *  if no value for this property exists. */
-   @TpmonInternal()
+   
     protected final String getInitProperty(String propName) {
         return this.getInitProperty(propName, null);
     }
@@ -76,7 +76,7 @@ public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonito
      * After this method is executed, the parameter values can be retrieved
      * using the method getInitProperty(..).
      */
-   @TpmonInternal()
+   
     protected final void initVarsFromInitString(String initString) throws IllegalArgumentException {
         if (initString == null || initString.length() == 0) {
             initStringProcessed = true;
@@ -103,22 +103,22 @@ public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonito
         initStringProcessed = true;
     }
 
-   @TpmonInternal()
+   
     public boolean isWriteRecordTypeIds(){
        return this.writeRecordTypeIds;
    }
 
-    @TpmonInternal()
+    
     public void setWriteRecordTypeIds(final boolean writeRecordTypeIds){
         this.writeRecordTypeIds = writeRecordTypeIds;
     }
 
-    @TpmonInternal()
+    
     public void setDebug(boolean debug) {
         this.debugEnabled = debug;
     }
 
-    @TpmonInternal()
+    
     public boolean isDebug() {
         return this.debugEnabled;
     }

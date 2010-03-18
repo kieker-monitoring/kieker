@@ -17,11 +17,11 @@ import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.common.logReader.LogReaderExecutionException;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+
+import kieker.common.record.AbstractMonitoringRecord;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 /**
  *
  * This reader is an alternative to the JMS reader. RabbitMQ
@@ -65,7 +65,7 @@ public class RabbitMqReader extends AbstractKiekerMonitoringLogReader {
     public RabbitMqReader(){ }
 
     /** Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 */
-    @TpmonInternal()
+    
     public void init(String initString) throws IllegalArgumentException {
         super.initVarsFromInitString(initString); // throws IllegalArgumentException
 
@@ -139,8 +139,11 @@ public class RabbitMqReader extends AbstractKiekerMonitoringLogReader {
             int indexOfFirstTokenEnd = execRecordString.indexOf(";");
             String execRecStringWithoutFirstToken = execRecordString.substring(indexOfFirstTokenEnd+1, execRecordString.length());
 
-            OperationExecutionRecord ker = (OperationExecutionRecord)OperationExecutionRecord.getInstance();
-            ker.initFromString(execRecStringWithoutFirstToken);
+            OperationExecutionRecord ker = new OperationExecutionRecord();
+            if (true){
+            throw new RuntimeException("tokenize string");
+            }
+            // OLD: ker.initFromString(execRecStringWithoutFirstToken);
             // System.out.println(execRecStringWithoutFirstToken);
             //    System.out.printf("Recieved (%d) and decoded KiekerExecutionRecord: %s \n", numberOfMessagesReceived, ker);
             deliverRecordToConsumers(ker);
@@ -158,9 +161,9 @@ public class RabbitMqReader extends AbstractKiekerMonitoringLogReader {
     }
 
 
-    @TpmonInternal()
+    
     private final String[] toStringArray(String stringSerialization){
-        StringTokenizer stk = new StringTokenizer(stringSerialization,AbstractMonitoringRecord.separator);
+        StringTokenizer stk = new StringTokenizer(stringSerialization,";");
         ArrayList<String> als = new ArrayList<String>();
         while (stk.hasMoreElements()) {
             als.add(stk.nextToken());

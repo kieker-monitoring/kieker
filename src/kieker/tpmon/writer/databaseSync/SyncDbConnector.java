@@ -1,13 +1,13 @@
 package kieker.tpmon.writer.databaseSync;
 
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 import java.sql.*;
 import java.util.Vector;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+
+import kieker.common.record.OperationExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -79,7 +79,7 @@ public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    @TpmonInternal()
+    
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -96,7 +96,7 @@ public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     /**
      * Returns false if an error occurs.
      */
-    @TpmonInternal()
+    
     private boolean init() {
         if (this.isDebug()) {
             log.debug("Tpmon dbconnector init");
@@ -144,7 +144,7 @@ public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
      * file system. The storage mode is configured in the file
      * dbconnector.properties.
      */
-    @TpmonInternal()
+    
     public synchronized boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
         try {
             // connector only supports execution records so far
@@ -175,12 +175,12 @@ public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         return true;
     }
 
-    @TpmonInternal()
+    
     public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
 
-    @TpmonInternal()
+    
     public String getInfoString() {
         StringBuilder strB = new StringBuilder();
 
@@ -202,7 +202,7 @@ public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         return strB.toString();
     }
 
-    @TpmonInternal()
+    
     public void registerMonitoringRecordType(int id, String className) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -1,6 +1,6 @@
 package kieker.tpmon.writer.util.async;
 
-import kieker.tpmon.annotation.TpmonInternal;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -30,12 +30,12 @@ public abstract class AbstractWorkerThread extends Thread {
 
    private boolean writeRecordTypeIds = false;
 
-    @TpmonInternal()
+    
     public boolean isWriteRecordTypeIds() {
         return writeRecordTypeIds;
     }
 
-    @TpmonInternal()
+    
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
         this.writeRecordTypeIds = writeRecordTypeIds;
     }
@@ -45,13 +45,13 @@ public abstract class AbstractWorkerThread extends Thread {
     * IsFinished == true means that the worker does not have additional jobs in it's queue 
     * and won't accept new jobs.
     */
-    @TpmonInternal()
+    
    public abstract boolean isFinished();
        
    /**
     * Notifies the worker that the system shutdown process is initiated and that it should finish soon.
     * After a while, isFinished should result in true, if system can halt.
     */
-    @TpmonInternal()
+    
    public abstract void initShutdown();
 }

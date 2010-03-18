@@ -1,8 +1,8 @@
 package kieker.tpmon.probe.spring.executions;
 
-import kieker.common.monitoringRecord.OperationExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
@@ -54,17 +54,17 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
     iff false, the name of the declaring class (interface) is used */
     protected boolean useRuntimeClassname = true;
 
-    @TpmonInternal()
+    
     public boolean getUseRuntimeClassname() {
         return useRuntimeClassname;
     }
 
-    @TpmonInternal()
+    
     public void setUseRuntimeClassname(boolean useRuntimeClassname) {
         this.useRuntimeClassname = useRuntimeClassname;
     }
 
-    @TpmonInternal()
+    
     protected OperationExecutionRecord initExecutionData(MethodInvocation invocation) {
         long traceId = cfRegistry.recallThreadLocalTraceId();
 
@@ -91,7 +91,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
             componentName = invocation.getMethod().getDeclaringClass().getName();
         }
 
-        OperationExecutionRecord execData = OperationExecutionRecord.getInstance(
+        OperationExecutionRecord execData = new OperationExecutionRecord(
                 componentName /* component */,
                 opname /* operation */,
                 traceId /* -1 if entry point*/);
@@ -113,10 +113,10 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
     /**
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
      */
-    @TpmonInternal()
+    
     public abstract Object invoke(MethodInvocation invocation) throws Throwable;
 
-    @TpmonInternal()
+    
     protected void proceedAndMeasure(MethodInvocation invocation,
             OperationExecutionRecord execData) throws Throwable {
         execData.tin = tpmonController.getTime();

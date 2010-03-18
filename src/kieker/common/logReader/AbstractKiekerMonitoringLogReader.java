@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,8 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
 
     private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringLogReader.class);
     private final HashMap<String, String> map = new HashMap<String, String>();
-    protected Map<Integer, Class<? extends AbstractMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<Integer, Class<? extends AbstractMonitoringRecord>>());
+    /** class name x class object */
+    protected Map<String, Class<? extends AbstractMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<String, Class<? extends AbstractMonitoringRecord>>());
     /** Contains all consumers which consume records of any type */
     private final Collection<IKiekerRecordConsumer> subscribedToAllList =
             new Vector<IKiekerRecordConsumer>();
@@ -130,7 +131,7 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
             }
 
             Class<? extends AbstractMonitoringRecord> recordClass = Class.forName(classname).asSubclass(AbstractMonitoringRecord.class);
-            this.recordTypeMap.put(recordTypeId, recordClass);
+            this.recordTypeMap.put(recordClass.getClass().getName(), recordClass);
             log.info("Registered record type mapping " + recordTypeId + "/" + classname);
         } catch (ClassNotFoundException ex) {
             log.error("Error loading record type class by name", ex);
@@ -140,8 +141,8 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
 
     /** Returns the class for record type with the given id. 
      *  If no such mapping exists, null is returned. */
-    protected final Class<? extends AbstractMonitoringRecord> fetchClassForRecordTypeId(int recordTypeId) {
-        return this.recordTypeMap.get(recordTypeId);
+    protected final Class<? extends AbstractMonitoringRecord> fetchClassForRecordTypeId(String id) {
+        return this.recordTypeMap.get(id);
     }
 
     public void terminate() {

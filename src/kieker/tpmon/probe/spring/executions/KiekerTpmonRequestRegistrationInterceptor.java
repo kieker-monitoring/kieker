@@ -1,7 +1,7 @@
 package kieker.tpmon.probe.spring.executions;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.annotation.TpmonInternal;
+
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import org.springframework.ui.ModelMap;
@@ -36,7 +36,7 @@ public class KiekerTpmonRequestRegistrationInterceptor implements WebRequestInte
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 
 
-    @TpmonInternal()
+    
     public void preHandle(WebRequest request) throws Exception {
         cfRegistry.getAndStoreUniqueThreadLocalTraceId();
         sessionRegistry.storeThreadLocalSessionId(request.getSessionId());
@@ -44,7 +44,7 @@ public class KiekerTpmonRequestRegistrationInterceptor implements WebRequestInte
         cfRegistry.storeThreadLocalESS(1);
     }
 
-    @TpmonInternal()
+    
     public void postHandle(WebRequest request, ModelMap map) throws Exception {
         cfRegistry.unsetThreadLocalTraceId();
         sessionRegistry.unsetThreadLocalSessionId();
@@ -52,7 +52,7 @@ public class KiekerTpmonRequestRegistrationInterceptor implements WebRequestInte
         cfRegistry.unsetThreadLocalESS();
     }
 
-    @TpmonInternal()
+    
     public void afterCompletion(WebRequest request, Exception map) throws Exception {
     }
 }

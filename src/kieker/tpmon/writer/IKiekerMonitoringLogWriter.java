@@ -1,10 +1,8 @@
 package kieker.tpmon.writer;
 
 import kieker.tpmon.writer.util.async.*;
-import kieker.common.monitoringRecord.AbstractMonitoringRecord;
-import kieker.tpmon.*;
+import kieker.common.record.AbstractMonitoringRecord;
 import java.util.Vector;
-import kieker.tpmon.annotation.TpmonInternal;
 
 /**
  * kieker.tpmon.IKiekerMonitoringLogWriter
@@ -29,33 +27,24 @@ import kieker.tpmon.annotation.TpmonInternal;
  */
 public interface IKiekerMonitoringLogWriter {
 
-  @TpmonInternal()
     public boolean isWriteRecordTypeIds();
 
-    @TpmonInternal()
     public void setWriteRecordTypeIds(boolean writeRecordTypeIds);
 
-    @TpmonInternal()
     public void registerMonitoringRecordType(int id, String className);
 
-    @TpmonInternal()
     public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord);
 
-    @TpmonInternal()
     public boolean init(String initString);
 
     /**
      * Returns a vector of workers, or null if none.
      */
-    @TpmonInternal()
     public Vector<AbstractWorkerThread> getWorkers();
 
-    @TpmonInternal()
     public void setDebug(boolean debug);
 
-    @TpmonInternal()
     public boolean isDebug();
 
-    @TpmonInternal()
     public String getInfoString();
 }

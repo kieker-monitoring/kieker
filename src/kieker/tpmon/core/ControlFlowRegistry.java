@@ -2,8 +2,7 @@ package kieker.tpmon.core;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.common.monitoringRecord.executions.RemoteCallMetaData;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -70,7 +69,7 @@ public class ControlFlowRegistry {
         log.info("First threadId will be " + (base + 1));
     }
 
-    @TpmonInternal()
+    
     public static final ControlFlowRegistry getInstance() {
         return ControlFlowRegistry.instance;
     }
@@ -80,7 +79,7 @@ public class ControlFlowRegistry {
      *
      * @return
      */
-    @TpmonInternal()
+    
     public final long getUniqueTraceId(){
         long id = lastThreadId.incrementAndGet();
         // Since we use -1 as a marker for an invalid traceId,
@@ -94,7 +93,7 @@ public class ControlFlowRegistry {
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalTraceId()!
      */
-    @TpmonInternal()
+    
     public final long getAndStoreUniqueThreadLocalTraceId() {
         long id = this.getUniqueTraceId();
         this.threadLocalTraceId.set(id);
@@ -106,7 +105,7 @@ public class ControlFlowRegistry {
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalTraceId()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalTraceId(long traceId) {
         this.threadLocalTraceId.set(traceId);
     }
@@ -118,7 +117,7 @@ public class ControlFlowRegistry {
      * @return the traceid. -1 if no curTraceId has been registered
      *         for this thread.
      */
-    @TpmonInternal()
+    
     public final long recallThreadLocalTraceId() {
         //log.info("Recalling curTraceId");
         Long traceIdObj = this.threadLocalTraceId.get();
@@ -135,7 +134,7 @@ public class ControlFlowRegistry {
     /**
      * This method unsets a previously registered traceid.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalTraceId() {
         this.threadLocalTraceId.remove();
     }
@@ -145,7 +144,7 @@ public class ControlFlowRegistry {
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalEOI()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalEOI(int eoi) {
         //log.info(Thread.currentThread().getId());
         this.threadLocalEoi.set(eoi);
@@ -155,7 +154,7 @@ public class ControlFlowRegistry {
      * Since this method accesses a ThreadLocal variable,
      * it is not (necessary to be) thread-safe.
      */
-    @TpmonInternal()
+    
     public final int incrementAndRecallThreadLocalEOI() {
         //log.info(Thread.currentThread().getId());
         Integer curEoi = this.threadLocalEoi.get();
@@ -174,7 +173,7 @@ public class ControlFlowRegistry {
      *
      * @return the sessionid. -1 if no curEoi registered.
      */
-    @TpmonInternal()
+    
     public final int recallThreadLocalEOI() {
         Integer curEoi = this.threadLocalEoi.get();
         if (curEoi == null) {
@@ -187,7 +186,7 @@ public class ControlFlowRegistry {
     /**
      * This method unsets a previously registered traceid.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalEOI() {
         this.threadLocalEoi.remove();
     }
@@ -198,7 +197,7 @@ public class ControlFlowRegistry {
      * The thread is responsible for invalidating the stored curTraceId using
      * the method unsetThreadLocalSessionId()!
      */
-    @TpmonInternal()
+    
     public final void storeThreadLocalESS(int ess) {
         this.threadLocalEss.set(ess);
     }
@@ -207,7 +206,7 @@ public class ControlFlowRegistry {
      * Since this method accesses a ThreadLocal variable,
      *  it is not (necessary to be) thread-safe.
      */
-    @TpmonInternal()
+    
     public final int recallAndIncrementThreadLocalESS() {
         Integer curEss = this.threadLocalEss.get();
         if (curEss == null) {
@@ -224,7 +223,7 @@ public class ControlFlowRegistry {
      *
      * @return the sessionid. -1 if no curEss registered.
      */
-    @TpmonInternal()
+    
     public final int recallThreadLocalESS() {
         Integer ess = this.threadLocalEss.get();
         if (ess == null) {
@@ -237,59 +236,8 @@ public class ControlFlowRegistry {
     /**
      * This method unsets a previously registered curEss.
      */
-    @TpmonInternal()
+    
     public final void unsetThreadLocalESS() {
         this.threadLocalEss.remove();
-    }
-
-    /**
-     * Use a RemoteCallMetaData object to transport tracing data together
-     * with a remote method call. This is required to allows  tracing in
-     * distributed systems.
-     *
-     * @param threadid
-     */
-    @TpmonInternal()
-    public final RemoteCallMetaData getRemoteCallMetaData() {
-        long curTraceId = this.recallThreadLocalTraceId();
-        if (curTraceId == -1) { // no curTraceId was registered
-            log.info("Tpmon: warning traceid was null");
-            curTraceId = this.getAndStoreUniqueThreadLocalTraceId();
-        }
-
-        int curEoi = this.recallThreadLocalEOI();
-        if (curEoi == -1) {
-            log.info("Tpmon: warning eoi == -1");
-            curEoi = 0;
-            this.storeThreadLocalEOI(0);
-        }
-
-        int curEss = this.recallThreadLocalESS();
-        if (curEss == -1) {
-            log.info("Tpmon: warning ess == -1");
-            curEss = 0;
-            this.storeThreadLocalESS(0);
-        }
-
-        return new RemoteCallMetaData(curTraceId, curEoi, curEss);
-    }
-
-    /**
-     * This method has to be called to register an incomming remote call
-     * @param rcmd
-     * @param threadid
-     */
-    @TpmonInternal()
-    public final void registerRemoteCallMetaData(RemoteCallMetaData rcmd) {
-        if (rcmd == null) {
-            log.info("Tpmon: RCMD == null");
-            this.getAndStoreUniqueThreadLocalTraceId();
-            this.storeThreadLocalEOI(0);
-            this.storeThreadLocalESS(0);
-        } else {
-            this.storeThreadLocalTraceId(rcmd.traceid);
-            this.storeThreadLocalEOI(rcmd.eoi);
-            this.storeThreadLocalESS(rcmd.ess);
-        }
     }
 }

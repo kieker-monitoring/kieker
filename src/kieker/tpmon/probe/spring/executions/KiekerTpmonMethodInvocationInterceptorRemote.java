@@ -1,7 +1,7 @@
 package kieker.tpmon.probe.spring.executions;
 
-import kieker.common.monitoringRecord.OperationExecutionRecord;
-import kieker.tpmon.annotation.TpmonInternal;
+import kieker.common.record.OperationExecutionRecord;
+
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
@@ -43,7 +43,7 @@ public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKieker
     /**
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
      */
-    @TpmonInternal()
+    
     public Object invoke(MethodInvocation invocation) throws Throwable {
         long traceId = cfRegistry.recallThreadLocalTraceId();
         // Only go on if a traceId has been registered before
