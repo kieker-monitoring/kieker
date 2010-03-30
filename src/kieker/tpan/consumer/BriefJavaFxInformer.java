@@ -17,21 +17,21 @@ import kieker.common.record.OperationExecutionRecord;
  *
  * @author matthias
  */
-public class BriefJavaFxInformer implements IRecordConsumer, IMessageTraceReceiver {
+public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageTraceReceiver {
 
     public BriefJavaFxInformer() {
         try {
             System.out.println("==> Trying to start JavaFx window");
             String javaFxWindowClassname = "KiekerLiveAnalyzer.JavaMain";
             Object obj = Class.forName(javaFxWindowClassname).newInstance();
-            jfxRc = (IRecordConsumer) obj;
+            jfxRc = (IMonitoringRecordConsumer) obj;
             jfxTr = (IMessageTraceReceiver) obj; // dont wonder, its the same object twice
             System.out.println("==> Success to start JavaFx window (at least the class invocation)");
         } catch (Exception e) {
             System.out.println("==> Failed to execute JavaFx window = failed to execute Class.forName(KiekerLiveAnalyzer.JavaMain)  - most likely you do not have KiekerLiveAnalyzer.jar in the classpath (put it or link it in your tpan-plugins folder.) \n Message:"+e.getMessage());
             e.printStackTrace();
             System.out.println("==> Failed to start JavaFx window");
-            //throw new RecordConsumerExecutionException(errorMessage,e);
+            //throw new MonitoringRecordConsumerExecutionException(errorMessage,e);
         }
     }
 
@@ -44,7 +44,7 @@ public class BriefJavaFxInformer implements IRecordConsumer, IMessageTraceReceiv
         return null; // null gets it all
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
        // System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
         if (jfxRc == null) {
             System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");
@@ -53,7 +53,7 @@ public class BriefJavaFxInformer implements IRecordConsumer, IMessageTraceReceiv
         }
     }
     // these variables represents access to the javafx window
-    IRecordConsumer jfxRc = null;
+    IMonitoringRecordConsumer jfxRc = null;
     IMessageTraceReceiver jfxTr = null;
     IMessageTraceReceiver jfxUniqueTr = null;
     IExecutionTraceReceiver jfxBrokenExecutionTraceReceiver = null;
@@ -77,7 +77,7 @@ public class BriefJavaFxInformer implements IRecordConsumer, IMessageTraceReceiv
 
     
 
-    public boolean execute() throws RecordConsumerExecutionException {
+    public boolean execute() throws MonitoringRecordConsumerExecutionException {
         jfxRc.execute();
         return true;
     }

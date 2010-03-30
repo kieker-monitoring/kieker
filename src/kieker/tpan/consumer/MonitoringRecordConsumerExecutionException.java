@@ -27,15 +27,15 @@ package kieker.tpan.consumer;
  *
  * @author Andre van Hoorn
  */
-public class RecordConsumerExecutionException extends Exception {
+public class MonitoringRecordConsumerExecutionException extends Exception {
 
     public static final long serialVersionUID = 1L;
 
-    public RecordConsumerExecutionException(String messString) {
+    public MonitoringRecordConsumerExecutionException(String messString) {
         super(messString);
     }
 
-    public RecordConsumerExecutionException(String messString, Throwable cause) {
+    public MonitoringRecordConsumerExecutionException(String messString, Throwable cause) {
         super(messString, cause);
     }
 }

@@ -20,8 +20,8 @@ package kieker.tpan.consumer.executionRecordTransformation;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.consumer.IRecordConsumer;
-import kieker.tpan.consumer.RecordConsumerExecutionException;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import kieker.tpan.datamodel.AllocationComponentInstance;
 import kieker.tpan.datamodel.AssemblyComponentInstance;
 import kieker.tpan.datamodel.ComponentType;
@@ -37,7 +37,7 @@ import kieker.common.record.OperationExecutionRecord;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformer implements IRecordConsumer {
+public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
 
     private final SystemEntityFactory systemFactory;
 
@@ -78,9 +78,9 @@ public class ExecutionRecordTransformer implements IRecordConsumer {
         return new Signature(name, returnType, paramTypeList);
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
         if (!(monitoringRecord instanceof OperationExecutionRecord)) {
-            throw new RecordConsumerExecutionException("Can only process records of type"
+            throw new MonitoringRecordConsumerExecutionException("Can only process records of type"
                     + OperationExecutionRecord.class.getName() + " but received" + monitoringRecord.getClass().getName());
         }
         OperationExecutionRecord execRec = (OperationExecutionRecord) monitoringRecord;
@@ -128,12 +128,12 @@ public class ExecutionRecordTransformer implements IRecordConsumer {
             try {
                 l.newExecutionEvent(execution);
             } catch (ExecutionEventProcessingException ex) {
-                throw new RecordConsumerExecutionException("ExecutionEventProcessingException occured", ex);
+                throw new MonitoringRecordConsumerExecutionException("ExecutionEventProcessingException occured", ex);
             }
         }
     }
 
-    public boolean execute() throws RecordConsumerExecutionException {
+    public boolean execute() throws MonitoringRecordConsumerExecutionException {
         return true;
     }
 

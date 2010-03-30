@@ -3,9 +3,9 @@ package kieker.tools.logReplayer;
 import java.util.StringTokenizer;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.consumer.IRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.RecordConsumerExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 
 import kieker.tpan.reader.filesystem.FSMergeReader;
 import kieker.tpan.reader.filesystem.FSReader;
@@ -31,7 +31,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
      * Acts as a consumer to the rtDistributor and delegates incoming records
      * to the FSReaderRealtime instance.
      */
-    private class FSReaderRealtimeCons implements IRecordConsumer {
+    private class FSReaderRealtimeCons implements IMonitoringRecordConsumer {
 
         private final FSReaderRealtime master;
 
@@ -43,16 +43,16 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             return null;
         }
 
-        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
             try {
                 this.master.deliverRecordToConsumers(monitoringRecord);
             } catch (LogReaderExecutionException ex) {
                 log.info("LogReaderExecutionException", ex);
-                throw new RecordConsumerExecutionException("LogReaderExecutionException", ex);
+                throw new MonitoringRecordConsumerExecutionException("LogReaderExecutionException", ex);
             }
         }
 
-        public boolean execute() throws RecordConsumerExecutionException {
+        public boolean execute() throws MonitoringRecordConsumerExecutionException {
             /* do nothing */
             return true;
         }
@@ -123,7 +123,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
         } else {
             fsReader = new FSMergeReader(inputDirNames);
         }
-        IRecordConsumer rtCons = new FSReaderRealtimeCons(this);
+        IMonitoringRecordConsumer rtCons = new FSReaderRealtimeCons(this);
         rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons);
         fsReader.addConsumer(rtDistributor, null);
     }

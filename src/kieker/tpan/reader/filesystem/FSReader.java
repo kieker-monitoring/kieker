@@ -187,11 +187,10 @@ public class FSReader extends AbstractMonitoringLogReader {
                             /* We found a record type ID and need to lookup the class */
 //                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
 
-                            //Integer id = Integer.valueOf(token.substring(1));
+                            Integer id = Integer.valueOf(token.substring(1));
                             // TODO: use IDs
-                            Class<? extends IMonitoringRecord> clazz = super.fetchClassForRecordTypeId(token);
-                            Method m = clazz.getMethod("getInstance"); // lookup method getInstance
-                            rec = (IMonitoringRecord) m.invoke(null); // call static method
+                            Class<? extends IMonitoringRecord> clazz = super.fetchClassForRecordTypeId(id);
+                            rec = (IMonitoringRecord) clazz.newInstance();
                             token = st.nextToken();
                             //log.info("LoggingTimestamp: " + Long.valueOf(token) + " (" + token + ")");
                             rec.setLoggingTimestamp(Long.valueOf(token));
@@ -211,7 +210,8 @@ public class FSReader extends AbstractMonitoringLogReader {
                     }
 
                     // TODO: create typed array
-                    rec.initFromArray(vec);
+                    Object[] typedArray = StringToTypedArray(vec, rec.getValueTypes());
+                    rec.initFromArray(typedArray);
                     this.deliverRecordToConsumers(rec);
                 } catch (Exception e) {
                     log.error(
@@ -230,6 +230,49 @@ public class FSReader extends AbstractMonitoringLogReader {
                 }
             }
         }
+    }
+
+    private final Object[] StringToTypedArray(String[] vec, Class[] valueTypes)
+    throws IllegalArgumentException{
+        final Object[] typedArray = new Object[vec.length];
+        int curIdx = -1;
+        for (Class clazz : valueTypes){
+            curIdx++;
+            if (clazz == String.class){
+                typedArray[curIdx] = vec[curIdx];
+                continue;
+            }
+            if (clazz == int.class || clazz == Integer.class){
+                typedArray[curIdx] = Integer.valueOf(vec[curIdx]);
+                continue;
+            }
+            if (clazz == long.class || clazz == Long.class){
+                typedArray[curIdx] = Long.valueOf(vec[curIdx]);
+                continue;
+            }
+            if (clazz == float.class || clazz == Float.class){
+                typedArray[curIdx] = Float.valueOf(vec[curIdx]);
+                continue;
+            }
+            if (clazz == double.class || clazz == Double.class){
+                typedArray[curIdx] = Double.valueOf(vec[curIdx]);
+                continue;
+            }
+            if (clazz == byte.class || clazz == Byte.class){
+                typedArray[curIdx] = Byte.valueOf(vec[curIdx]);
+                continue;
+            }
+            if (clazz == short.class || clazz == Short.class){
+                typedArray[curIdx] = Short.valueOf(vec[curIdx]);
+                continue;
+            }
+            if (clazz == boolean.class || clazz == Boolean.class){
+                typedArray[curIdx] = Boolean.valueOf(vec[curIdx]);
+                continue;
+            }
+            throw new IllegalArgumentException("Unsupported type: " + clazz.getName());
+        }
+        return typedArray;
     }
 
     /** source: http://weblog.janek.org/Archive/2005/01/16/HowtoSortFilesandDirector.html */

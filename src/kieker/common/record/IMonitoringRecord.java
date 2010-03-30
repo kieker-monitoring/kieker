@@ -28,4 +28,5 @@ public interface IMonitoringRecord {
     public void setLoggingTimestamp(long loggingTimestamp);
     public Object[] toArray();
     public void initFromArray(Object[] values);
+    public Class[] getValueTypes();
 }

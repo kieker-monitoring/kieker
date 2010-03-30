@@ -1,7 +1,6 @@
 package kieker.common.record;
 
-/**
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -34,6 +33,14 @@ public class BranchingRecord extends AbstractMonitoringRecord {
         this.timestamp = timestamp;
         this.branchID = branchID;
         this.branchingOutcome = branchingOutcome;
+    }
+
+    public Class[] getValueTypes() {
+        return new Class[] {
+          long.class, // timestamp
+          int.class,  // branchId
+          int.class   // branchingOutcome
+        };
     }
 
     public void initFromArray(Object[] values) throws IllegalArgumentException {

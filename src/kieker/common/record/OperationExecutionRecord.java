@@ -98,6 +98,20 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
                 };
     }
 
+    public Class[] getValueTypes() {
+        return new Class[] {
+                    int.class,    // experimentId
+                    String.class, // component + op
+                    String.class, // sessionId
+                    long.class,   // traceId
+                    long.class,   // tin
+                    long.class,   // tout
+                    String.class, // vmName
+                    int.class,    // eoi
+                    int.class     // ess
+                };
+    }
+
     public final void initFromArray(Object[] values)
             throws IllegalArgumentException {
         try {

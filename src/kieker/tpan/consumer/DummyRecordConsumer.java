@@ -11,18 +11,18 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @author matthias
  */
-public class DummyRecordConsumer implements IRecordConsumer {
+public class DummyRecordConsumer implements IMonitoringRecordConsumer {
 
 
     public String[] getRecordTypeSubscriptionList() {
         return null; // null gets it all
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
         System.out.println("DummyRecordConsumer consumed "+monitoringRecord);
     }
 
-    public boolean execute() throws RecordConsumerExecutionException {
+    public boolean execute() throws MonitoringRecordConsumerExecutionException {
         System.out.println("DummyRecordConsumer.execute()");
         return true;
     }

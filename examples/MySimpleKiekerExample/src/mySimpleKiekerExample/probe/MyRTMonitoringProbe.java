@@ -33,7 +33,7 @@ public class MyRTMonitoringProbe implements IKiekerMonitoringProbe {
 
     @Around(value = "execution(@mySimpleKiekerExample.annotation.MyRTProbe * *.*(..))")
     public Object probe(ProceedingJoinPoint j) throws Throwable {
-        MyRTMonitoringRecord record = (MyRTMonitoringRecord)MyRTMonitoringRecord.getInstance();
+        MyRTMonitoringRecord record = new MyRTMonitoringRecord();
         record.component = j.getSignature().getDeclaringTypeName();
         record.service = j.getSignature().getName();
         Object retval; 

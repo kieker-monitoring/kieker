@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.consumer.IRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.RecordConsumerExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
@@ -64,7 +64,7 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
      */
     private FSReaderCons concurrentConsumer;
 
-    private class FSReaderCons implements IRecordConsumer {
+    private class FSReaderCons implements IMonitoringRecordConsumer {
 
         private final FSMergeReader master;
         private final String[] inputDirs;
@@ -106,9 +106,9 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
         }
 
         /** Note that this method is accessed concurrently! */
-        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
             if (this.isTerminated) {
-                throw new RecordConsumerExecutionException("Consumer already terminated");
+                throw new MonitoringRecordConsumerExecutionException("Consumer already terminated");
             }
 
             Thread t = Thread.currentThread();
@@ -143,7 +143,7 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
             }
         }
 
-        public boolean execute() throws RecordConsumerExecutionException {
+        public boolean execute() throws MonitoringRecordConsumerExecutionException {
             this.mainThread = Thread.currentThread();
             // init and start reader threads
             ThreadGroup tg = new ThreadGroup("FS reader threads");
@@ -207,7 +207,7 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
                 } catch (Exception ex) {
                     log.error("Exception while reading. Terminating.", ex);
                     this.terminate();
-                    throw new RecordConsumerExecutionException("Error while reading. Terminating.", ex);
+                    throw new MonitoringRecordConsumerExecutionException("Error while reading. Terminating.", ex);
                 }
             }
         }
@@ -230,7 +230,7 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
                 this.activeReaders.remove(t);
                 try {
                     this.consumeMonitoringRecord(FS_READER_TERMINATION_MARKER);
-                } catch (RecordConsumerExecutionException ex) {
+                } catch (MonitoringRecordConsumerExecutionException ex) {
                     log.error("Error occured while sending FS_READER_TERMINATION_MARKER", ex);
                 }
             } else if (t == this.mainThread) {
@@ -249,7 +249,7 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
         synchronized (this) {
             try {
                 return concurrentConsumer.execute();
-            } catch (RecordConsumerExecutionException ex) {
+            } catch (MonitoringRecordConsumerExecutionException ex) {
                 log.error("RecordConsumerExecutionException occured", ex);
                 throw new LogReaderExecutionException("RecordConsumerExecutionException occured", ex);
             }

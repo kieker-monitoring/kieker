@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.consumer.IRecordConsumer;
-import kieker.tpan.consumer.RecordConsumerExecutionException;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,14 +25,14 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
 
     private static final Log log = LogFactory.getLog(AbstractMonitoringLogReader.class);
     private final HashMap<String, String> map = new HashMap<String, String>();
-    /** class name x class object */
-    protected Map<String, Class<? extends IMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<String, Class<? extends IMonitoringRecord>>());
+    /** id x class object */
+    protected Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<Integer, Class<? extends IMonitoringRecord>>());
     /** Contains all consumers which consume records of any type */
-    private final Collection<IRecordConsumer> subscribedToAllList =
-            new Vector<IRecordConsumer>();
+    private final Collection<IMonitoringRecordConsumer> subscribedToAllList =
+            new Vector<IMonitoringRecordConsumer>();
     /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<String, Collection<IRecordConsumer>> subscribedToTypeMap =
-            new HashMap<String, Collection<IRecordConsumer>>();
+    private final HashMap<String, Collection<IMonitoringRecordConsumer>> subscribedToTypeMap =
+            new HashMap<String, Collection<IMonitoringRecordConsumer>>();
 
     /** Returns the value for the initialization property @a propName or the
      *  the passed default value @a default if no value for this property
@@ -91,14 +91,14 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
         initStringProcessed = true;
     }
 
-    public final void addConsumer(final IRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
+    public final void addConsumer(final IMonitoringRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
         if (recordTypeSubscriptionList == null) {
             this.subscribedToAllList.add(consumer);
         } else {
             for (String recordTypeName : recordTypeSubscriptionList) {
-                Collection<IRecordConsumer> cList = this.subscribedToTypeMap.get(recordTypeName);
+                Collection<IMonitoringRecordConsumer> cList = this.subscribedToTypeMap.get(recordTypeName);
                 if (cList == null) {
-                    cList = new Vector<IRecordConsumer>(0);
+                    cList = new Vector<IMonitoringRecordConsumer>(0);
                     this.subscribedToTypeMap.put(recordTypeName, cList);
                 }
                 cList.add(consumer);
@@ -108,16 +108,16 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
 
     protected final void deliverRecordToConsumers(final IMonitoringRecord r) throws LogReaderExecutionException {
         try {
-            for (IRecordConsumer c : this.subscribedToAllList) {
+            for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
                 c.consumeMonitoringRecord(r);
             }
-            Collection<IRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
+            Collection<IMonitoringRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
             if (cList != null) {
-                for (IRecordConsumer c : cList) {
+                for (IMonitoringRecordConsumer c : cList) {
                     c.consumeMonitoringRecord(r);
                 }
             }
-        } catch (RecordConsumerExecutionException ex) {
+        } catch (MonitoringRecordConsumerExecutionException ex) {
             log.fatal("RecordConsumerExecutionException", ex);
             throw new LogReaderExecutionException("A RecordConsumerExecutionException " +
                     "was caught -- now being rethrown as LogReaderExecutionException", ex);
@@ -132,7 +132,7 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
             }
 
             Class<? extends IMonitoringRecord> recordClass = Class.forName(classname).asSubclass(IMonitoringRecord.class);
-            this.recordTypeMap.put(recordClass.getClass().getName(), recordClass);
+            this.recordTypeMap.put(recordTypeId, recordClass);
             log.info("Registered record type mapping " + recordTypeId + "/" + classname);
         } catch (ClassNotFoundException ex) {
             log.error("Error loading record type class by name", ex);
@@ -142,17 +142,17 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
 
     /** Returns the class for record type with the given id. 
      *  If no such mapping exists, null is returned. */
-    protected final Class<? extends IMonitoringRecord> fetchClassForRecordTypeId(String id) {
+    protected final Class<? extends IMonitoringRecord> fetchClassForRecordTypeId(int id) {
         return this.recordTypeMap.get(id);
     }
 
     public void terminate() {
-        for (IRecordConsumer c : this.subscribedToAllList) {
+        for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
             c.terminate();
         }
-        for (Collection<IRecordConsumer> cList : this.subscribedToTypeMap.values()) {
+        for (Collection<IMonitoringRecordConsumer> cList : this.subscribedToTypeMap.values()) {
             if (cList != null) {
-                for (IRecordConsumer c : cList) {
+                for (IMonitoringRecordConsumer c : cList) {
                     c.terminate();
                 }
             }

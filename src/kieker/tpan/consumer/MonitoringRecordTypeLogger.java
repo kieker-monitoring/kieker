@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class MonitoringRecordTypeLogger implements IRecordConsumer {
+public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
 
     private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
     /** Consuming any records of any type */

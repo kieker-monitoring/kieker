@@ -37,4 +37,8 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord {
     public Object[] toArray() {
        return new Object[]{};
     }
+
+    public Class[] getValueTypes() {
+        return new Class[]{};
+    }
 }

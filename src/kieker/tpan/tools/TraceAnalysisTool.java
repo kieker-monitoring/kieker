@@ -35,7 +35,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.RecordConsumerExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.ExecutionTrace;
@@ -62,6 +62,7 @@ import kieker.tpan.consumer.BriefJavaFxInformer;
 import kieker.tpan.consumer.executionRecordTransformation.ExecutionRecordTransformer;
 
 import kieker.tpan.consumer.MonitoringRecordTypeLogger;
+import kieker.tpan.reader.filesystem.FSMergeReader;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -499,8 +500,8 @@ public class TraceAnalysisTool {
             allTraceProcessingComponents.addAll(execTraceProcessingComponents);
             allTraceProcessingComponents.addAll(invalidTraceProcessingComponents);
             TpanInstance analysisInstance = new TpanInstance();
-            //analysisInstance.setLogReader(new FSMergeReader(inputDirs));
-            analysisInstance.setLogReader(new JMSReader("tcp://localhost:3035/","queue1"));
+            analysisInstance.setLogReader(new FSMergeReader(inputDirs));
+            //analysisInstance.setLogReader(new JMSReader("tcp://localhost:3035/","queue1"));
 
             mtReconstrFilter =
                     new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
@@ -564,7 +565,7 @@ public class TraceAnalysisTool {
                         mtReconstrFilter);
             }
 
-            final String systemEntitiesHtmlFn = new File(outputDir + File.separator + outputFnPrefix + File.separator +"system-entities").getAbsolutePath();
+            final String systemEntitiesHtmlFn = new File(outputDir + File.separator + outputFnPrefix + "system-entities").getAbsolutePath();
             systemEntityFactory.saveSystemToHTMLFile(systemEntitiesHtmlFn);
             System.out.println("");
             System.out.println("#");
@@ -750,7 +751,7 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractTpanMessageTraceProcessingComponent task_createMessageTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, InvalidTraceException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static AbstractTpanMessageTraceProcessingComponent task_createMessageTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, InvalidTraceException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         final String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
         AbstractTpanMessageTraceProcessingComponent mtWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
@@ -788,7 +789,7 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         final String myOutputFn = new File(outputFn).getCanonicalPath();
         AbstractTpanExecutionTraceProcessingComponent etWriter = new AbstractTpanExecutionTraceProcessingComponent(name, systemEntityFactory) {
 
@@ -816,7 +817,7 @@ public class TraceAnalysisTool {
         return etWriter;
     }
 
-    private static boolean task_genTraceEquivalenceReportForTraceSet(final String outputFnPrefix, final TraceReconstructionFilter trf) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static boolean task_genTraceEquivalenceReportForTraceSet(final String outputFnPrefix, final TraceReconstructionFilter trf) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         boolean retVal = true;
         String outputFn = new File(outputFnPrefix + TRACE_EQUIV_CLASSES_FN_PREFIX + ".txt").getCanonicalPath();
         PrintStream ps = null;
@@ -848,7 +849,7 @@ public class TraceAnalysisTool {
         return retVal;
     }
 
-    private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         boolean retVal = true;
 
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);
@@ -870,7 +871,7 @@ public class TraceAnalysisTool {
         return retVal;
     }
 
-    private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
+    private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         boolean retVal = true;
 
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);

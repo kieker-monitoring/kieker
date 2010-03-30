@@ -19,11 +19,11 @@ package kieker.tpan;
  */
 
 import java.util.Vector;
-import kieker.tpan.consumer.IRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.IMonitoringLogReader;
 
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.RecordConsumerExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -50,10 +50,10 @@ public class TpanInstance {
     private static final Log log = LogFactory.getLog(TpanInstance.class);
     private IMonitoringLogReader logReader;
     // this are the consumers for data that are comming into kieker by readers (files or system under monitoring)
-    private final Vector<IRecordConsumer> consumers = new Vector<IRecordConsumer>();
+    private final Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
 
-    public void run() throws LogReaderExecutionException, RecordConsumerExecutionException {
-        for (IRecordConsumer c : this.consumers) {
+    public void run() throws LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
+        for (IMonitoringRecordConsumer c : this.consumers) {
             this.logReader.addConsumer(c, c.getRecordTypeSubscriptionList());
             c.execute();
         }
@@ -69,7 +69,7 @@ public class TpanInstance {
             }
         } catch (LogReaderExecutionException exc) {            
             log.fatal("LogReaderException! Will terminate consumers.");
-            for (IRecordConsumer c : this.consumers) {
+            for (IMonitoringRecordConsumer c : this.consumers) {
                 c.terminate();
             }
             throw exc;
@@ -80,7 +80,7 @@ public class TpanInstance {
         this.logReader = reader;
     }
 
-    public void addRecordConsumer(IRecordConsumer consumer) {
+    public void addRecordConsumer(IMonitoringRecordConsumer consumer) {
         this.consumers.add(consumer);
     }
 }

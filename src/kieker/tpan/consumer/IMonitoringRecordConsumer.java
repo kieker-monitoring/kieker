@@ -24,7 +24,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-public interface IRecordConsumer {
+public interface IMonitoringRecordConsumer {
 
     /**
      * Simply return null to get records of all types.
@@ -37,9 +37,9 @@ public interface IRecordConsumer {
      * Called for each new record.
      *
      * @param monitoringRecord
-     * @throws RecordConsumerExecutionException
+     * @throws MonitoringRecordConsumerExecutionException
      */
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException;
 
     /**
      * Starts a record consumer.
@@ -50,7 +50,7 @@ public interface IRecordConsumer {
      *
      * @return must true on success; false otherwise.
      */
-    public boolean execute() throws RecordConsumerExecutionException;
+    public boolean execute() throws MonitoringRecordConsumerExecutionException;
 
     public void terminate();
 }

@@ -4,21 +4,21 @@
  */
 package mySimpleKiekerExample.recordConsumer;
 
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.logReader.LogReaderExecutionException;
-import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
+import kieker.common.record.IMonitoringRecord;
+import kieker.tools.logReplayer.FSReaderRealtime;
 import kieker.tpan.TpanInstance;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.reader.LogReaderExecutionException;
 import mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  *
- * @author avanhoorn
+ * @author Andre van Hoorn
  */
-public class RTMonitor implements IKiekerRecordConsumer {
+public class RTMonitor implements IMonitoringRecordConsumer {
 
     private static final Log log = LogFactory.getLog(RTMonitor.class);
     private final long rtSloMs;
@@ -31,7 +31,7 @@ public class RTMonitor implements IKiekerRecordConsumer {
         return new String[]{MyRTMonitoringRecord.class.getName()};
     }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord r) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(IMonitoringRecord r) throws MonitoringRecordConsumerExecutionException {
         MyRTMonitoringRecord rtRec = (MyRTMonitoringRecord) r;
         long rtMs = rtRec.rt/(1000*1000);
         if (rtMs > this.rtSloMs) {
@@ -74,7 +74,7 @@ public class RTMonitor implements IKiekerRecordConsumer {
             analysisInstance.run();
         } catch (LogReaderExecutionException e) {
             log.error("LogReaderExecutionException:", e);
-        } catch (RecordConsumerExecutionException e) {
+        } catch (MonitoringRecordConsumerExecutionException e) {
             log.error("RecordConsumerExecutionException:", e);
         }
     }

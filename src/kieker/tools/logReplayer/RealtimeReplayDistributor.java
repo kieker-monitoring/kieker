@@ -1,7 +1,7 @@
 package kieker.tools.logReplayer;
 
-import kieker.tpan.consumer.IRecordConsumer;
-import kieker.tpan.consumer.RecordConsumerExecutionException;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import kieker.common.record.IMonitoringRecord;
@@ -12,17 +12,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * IRecordConsumer that distributes the log records to the worker
+ * IMonitoringRecordConsumer that distributes the log records to the worker
  * thread for "real time" replays.
  *
  * @author Robert von Massow
  *
  */
-public class RealtimeReplayDistributor implements IRecordConsumer {
+public class RealtimeReplayDistributor implements IMonitoringRecordConsumer {
 
     private static final Log log = LogFactory.getLog(RealtimeReplayDistributor.class);
     public final int numWorkers;
-    private final IRecordConsumer cons;
+    private final IMonitoringRecordConsumer cons;
     private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
     private final ScheduledThreadPoolExecutor executor;
     private long lTime;
@@ -38,7 +38,7 @@ public class RealtimeReplayDistributor implements IRecordConsumer {
         this.maxQueueSize = -1;
     }
 
-    public RealtimeReplayDistributor(final int numWorkers, final IRecordConsumer cons) {
+    public RealtimeReplayDistributor(final int numWorkers, final IMonitoringRecordConsumer cons) {
         this.numWorkers = numWorkers;
         this.cons = cons;
         this.maxQueueSize = numWorkers * 1000;
@@ -50,7 +50,7 @@ public class RealtimeReplayDistributor implements IRecordConsumer {
     //private static final String outputFn = "SchedulingList";
     //private static PrintStream ps;
     public void consumeMonitoringRecord(
-            final IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+            final IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
         if (this.startTime == -1) { // init on first record
             //try {
             // init on first record
@@ -66,7 +66,7 @@ public class RealtimeReplayDistributor implements IRecordConsumer {
             //log.info("startTime" + this.startTime);
         }
         if (monitoringRecord.getLoggingTimestamp() < this.firstLoggingTimestamp) {
-            RecordConsumerExecutionException e = new RecordConsumerExecutionException("Timestamp of current record " + monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
+            MonitoringRecordConsumerExecutionException e = new MonitoringRecordConsumerExecutionException("Timestamp of current record " + monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
             log.error("RecordConsumerExecutionException", e);
             throw e;
         }
@@ -77,7 +77,7 @@ public class RealtimeReplayDistributor implements IRecordConsumer {
         //ps.println("elapsedT (nsec): " + (ctrlnst.getTime() - this.startTime));
         //ps.println("schedTime (nsec): " + schedTime);
         if (schedTime < 0) {
-            RecordConsumerExecutionException e = new RecordConsumerExecutionException("negative scheduling time: " + schedTime);
+            MonitoringRecordConsumerExecutionException e = new MonitoringRecordConsumerExecutionException("negative scheduling time: " + schedTime);
             log.error("RecordConsumerExecutionException", e);
             throw e;
         }

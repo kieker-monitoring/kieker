@@ -21,7 +21,7 @@ package kieker.tools.logReplayer;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.consumer.IRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.reader.filesystem.FSMergeReader;
 import kieker.tpan.reader.filesystem.FSReader;
@@ -66,7 +66,7 @@ public class FilesystemLogReplayer {
          */
         ctrlInst.setReplayMode(this.keepOriginalLoggingTimestamps);
 
-        IRecordConsumer logCons = new IRecordConsumer() {
+        IMonitoringRecordConsumer logCons = new IMonitoringRecordConsumer() {
 
             /** Anonymous consumer class that simply passes all records to the
              *  controller */
