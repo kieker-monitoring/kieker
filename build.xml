@@ -203,8 +203,6 @@
             <fileset dir="src">
                 <include name="kieker/tpmon/annotation/**/*.java"/>
                 <include name="kieker/tpmon/core/**/*.java"/>
-                <include name="kieker/tpmon/monitoringRecord/**/*.java"/>
-                <include name="kieker/tpmon/reader/**/*.java"/>
                 <include name="kieker/tpmon/writer/**/*.java"/>
             </fileset>
         </copy>

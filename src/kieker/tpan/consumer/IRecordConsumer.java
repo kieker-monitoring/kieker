@@ -2,8 +2,7 @@ package kieker.tpan.consumer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 
-/**
- * kieker.loganalysis.IRecordConsumer
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -20,7 +19,9 @@ import kieker.common.record.AbstractMonitoringRecord;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
 public interface IRecordConsumer {
