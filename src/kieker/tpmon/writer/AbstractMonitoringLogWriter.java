@@ -6,9 +6,7 @@ import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.AbstractMonitoringLogWriter.java
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -24,8 +22,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * @author Andre van Hoorn
+ */
+
+/** @author Andre van Hoorn
  */
 public abstract class AbstractMonitoringLogWriter implements IMonitoringLogWriter {
 

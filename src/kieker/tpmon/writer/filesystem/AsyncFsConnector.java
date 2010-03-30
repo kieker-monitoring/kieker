@@ -1,9 +1,6 @@
 package kieker.tpmon.writer.filesystem;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -18,8 +15,7 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.asyncFsWriter.AsyncFsWriterProducer
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -36,7 +32,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- * 
+ */
+
+/**
  * @author Matthias Rohr, Andre van Hoorn
  */
 public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
@@ -50,7 +48,7 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
     private String storagePathBase = null;
     private String storageDir = null; // full path
     private int asyncRecordQueueSize = 8000;
-    private File mappingFile = null;
+
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. " +
             "Use the the constant " + TpmonController.WRITER_ASYNCFS +
@@ -99,18 +97,19 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
         }
         log.info("Directory for monitoring data: " + storageDir);
 
+        final MappingFileWriter mappingFileWriter;
+        final String mappingFileFn = storageDir + File.separatorChar + "tpmon.map";
         try {
-            this.mappingFile = new File(storageDir + File.separatorChar + "tpmon.map");
-            this.mappingFile.createNewFile();
+            mappingFileWriter = new MappingFileWriter(mappingFileFn);
         } catch (Exception exc) {
-            log.error("Failed to create mapping file '" + this.mappingFile.getAbsolutePath() + "'", exc);
+            log.error("Failed to create mapping file '" + mappingFileFn + "'", exc);
             log.error("Will abort init().");
             return;
         }
 
         blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
         for (int i = 0; i < numberOfFsWriters; i++) {
-            FsWriterThread dbw = new FsWriterThread(blockingQueue, storageDir + "/tpmon");
+            FsWriterThread dbw = new FsWriterThread(blockingQueue, mappingFileWriter, storageDir + "/tpmon");
             dbw.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
             workers.add(dbw);
             dbw.start();
@@ -144,26 +143,5 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
     public String getInfoString() {
         return "filenamePrefix :" + this.storagePathBase +
                 ", outputDirectory :" + this.storageDir;
-    }
-
-    
-    private void registerMonitoringRecordType(int id, String className) {
-        log.info("Registered monitoring record type with id '" + id + "':" + className);
-        FileOutputStream fos = null;
-        PrintWriter pw = null;
-        try {
-            fos = new FileOutputStream(this.mappingFile, true); // append
-            pw = new PrintWriter(fos);
-            pw.println("$" + id + "=" + className);
-        } catch (Exception exc) {
-            log.fatal("Failed to register record type", exc);
-        } finally {
-            try {
-                pw.close();
-                fos.close();
-            } catch (IOException exc) {
-                log.error("IO Exception", exc);
-            }
-        }
     }
 }

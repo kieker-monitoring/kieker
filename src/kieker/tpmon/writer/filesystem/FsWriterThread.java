@@ -50,6 +50,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
     private PrintWriter pos = null;
     private boolean finished = false;
     private static boolean shutdown = false;
+    private final MappingFileWriter mappingFileWriter;
 
     /**
      * It is okay that it may be called multiple times for the same class
@@ -61,9 +62,12 @@ public final class FsWriterThread extends AbstractWorkerThread {
 
 //    private boolean statementChanged = true;
 //    private String nextStatementText;
-    public FsWriterThread(BlockingQueue<IMonitoringRecord> writeQueue, String filenamePrefix) {
+    public FsWriterThread(final BlockingQueue<IMonitoringRecord> writeQueue,
+            final MappingFileWriter mappingFileWriter,
+            final String filenamePrefix) {
         this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
+        this.mappingFileWriter = mappingFileWriter;
         log.info("New Tpmon - FsWriter thread created ");
     }
     static boolean passed = false;
@@ -167,15 +171,12 @@ public final class FsWriterThread extends AbstractWorkerThread {
         final int LAST_FIELD_INDEX = recordFields.length - 1;
         prepareFile(); // may throw FileNotFoundException
 
-        if (this.isWriteRecordTypeIds()) { // write ID and loggingTimestamp
-            pos.write('$');
-            pos.write(monitoringRecord.getClass().getName());
+            pos.write("$"+this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()));
             pos.write(';');
             pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
             if (LAST_FIELD_INDEX > 0) {
                 pos.write(';');
             }
-        }
 
         for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
             Object val = recordFields[i];

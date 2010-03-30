@@ -73,7 +73,9 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-    private File mappingFile = null;
+
+    private final MappingFileWriter mappingFileWriter;
+
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the fully qualified classname. "
             + "Use the the constant " + TpmonController.WRITER_SYNCFS
@@ -93,7 +95,7 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
         if (!f.isDirectory()) {
             log.error(storagePathBase + " is not a directory");
             log.error("Will abort constructor.");
-            return;
+            throw new IllegalArgumentException(storagePathBase + " is not a directory");
         }
 
         this.storagePathBase = storagePathBase;
@@ -109,18 +111,17 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
         if (!f.mkdir()) {
             log.error("Failed to create directory '" + this.storagePathBase + "'");
             log.error("Will abort constructor.");
-            return;
+            throw new IllegalArgumentException("Failed to create directory '" + this.storagePathBase + "'");
         }
         log.info("Directory for monitoring data: " + this.storagePathBase);
 
+        final String mappingFileFn = this.storagePathBase + File.separatorChar + "tpmon.map";
         try {
-            this.mappingFile = new File(this.storagePathBase + File.separatorChar + "tpmon.map");
-            this.mappingFile.createNewFile();
-            log.info("Mapping file name: " + this.mappingFile.getAbsolutePath());
+            this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
         } catch (Exception exc) {
-            log.error("Failed to create mapping file '" + this.mappingFile.getAbsolutePath() + "'", exc);
+            log.error("Failed to create mapping file '" + mappingFileFn + "'", exc);
             log.error("Will abort init().");
-            return;
+            throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", exc);
         }
     }
 
@@ -168,8 +169,7 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
             final int LAST_FIELD_INDEX = recordFields.length - 1;
             prepareFile(); // may throw FileNotFoundException
 
-            pos.write('$');
-            pos.write(monitoringRecord.getClass().getName());
+            pos.write("$"+this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()));
             pos.write(';');
             pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
             if (LAST_FIELD_INDEX > 0) {
@@ -197,25 +197,5 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
 
     public String getInfoString() {
         return "filenamePrefix :" + storagePathBase;
-    }
-
-    private void registerMonitoringRecordType(int id, String className) {
-        log.info("Registered monitoring record type with id '" + id + "':" + className);
-        FileOutputStream fos = null;
-        PrintWriter pw = null;
-        try {
-            fos = new FileOutputStream(this.mappingFile, true); // append
-            pw = new PrintWriter(fos);
-            pw.println("$" + id + "=" + className);
-        } catch (Exception exc) {
-            log.fatal("Failed to register record type", exc);
-        } finally {
-            try {
-                pw.close();
-                fos.close();
-            } catch (IOException exc) {
-                log.error("IO Exception", exc);
-            }
-        }
     }
 }
