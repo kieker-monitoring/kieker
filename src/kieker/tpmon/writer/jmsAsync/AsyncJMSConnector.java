@@ -1,6 +1,5 @@
 package kieker.tpmon.writer.jmsAsync;
 
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,6 +9,7 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.common.record.DummyMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
 
 /*
@@ -39,9 +39,9 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
     private JMSWriterThread typeWriter; // publishes record type/classname mappings
     private static final MonitoringRecordTypeClassnameMapping TYPE_WRITER_END_OF_MONITORING_MARKER = new MonitoringRecordTypeClassnameMapping(-1, null);
-    private static final AbstractMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
+    private static final IMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
     private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
-    private BlockingQueue<AbstractMonitoringRecord> recordQueue = null;
+    private BlockingQueue<IMonitoringRecord> recordQueue = null;
     private BlockingQueue<MonitoringRecordTypeClassnameMapping> typeQueue = null;
     private String contextFactoryType; // type of the jms factory implementation, e.g.
     private String providerUrl;
@@ -85,7 +85,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
             this.asyncRecordQueueSize = Integer.valueOf(super.getInitProperty("asyncRecordQueueSize"));
 
 
-            this.recordQueue = new ArrayBlockingQueue<AbstractMonitoringRecord>(asyncRecordQueueSize);
+            this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
             this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(asyncTypeQueueSize);
             // init *the* record type writer
             typeWriter = new JMSWriterThread<MonitoringRecordTypeClassnameMapping>(typeQueue, AsyncJMSConnector.TYPE_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
@@ -94,8 +94,8 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
             typeWriter.start();
             // init record writers
             for (int i = 1; i <= numberOfJmsWriters; i++) {
-                JMSWriterThread<AbstractMonitoringRecord> recordWriter =
-                        new JMSWriterThread<AbstractMonitoringRecord>(recordQueue, AsyncJMSConnector.RECORD_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
+                JMSWriterThread<IMonitoringRecord> recordWriter =
+                        new JMSWriterThread<IMonitoringRecord>(recordQueue, AsyncJMSConnector.RECORD_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
                 typeWriterAndRecordWriters.add(recordWriter);
                 recordWriter.setDaemon(true);
                 recordWriter.start();
@@ -123,7 +123,7 @@ public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
     }
 
     
-    public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncJmsProducer.insertMonitoringDataNow");
         }

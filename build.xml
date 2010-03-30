@@ -174,7 +174,7 @@
     </target>
 
     <!-- build a tpmon package that doesn't contain the aspect code (for direct invocation of tpmon) -->
-    <target name="build-tpmon-ctrl" depends="init">
+    <target name="build-tpmon-ctrl" depends="init,build-kieker.common">
         <delete dir="${build.tpmon.ctrl.dir}"/>
         <mkdir  dir="${build.tpmon.ctrl.dir}"/>
         <mkdir  dir="${build.tpmon.ctrl.dir}/META-INF"/>

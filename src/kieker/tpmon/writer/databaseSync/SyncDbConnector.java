@@ -1,11 +1,16 @@
 package kieker.tpmon.writer.databaseSync;
 
-import kieker.common.record.AbstractMonitoringRecord;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import java.sql.*;
 import java.util.Vector;
+import kieker.common.record.IMonitoringRecord;
 
 import kieker.common.record.OperationExecutionRecord;
 import org.apache.commons.logging.Log;
@@ -145,7 +150,7 @@ public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
      * dbconnector.properties.
      */
     
-    public synchronized boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
+    public synchronized boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
         try {
             // connector only supports execution records so far
             OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;

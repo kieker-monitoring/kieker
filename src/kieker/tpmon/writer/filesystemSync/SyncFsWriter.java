@@ -1,6 +1,5 @@
 package kieker.tpmon.writer.filesystemSync;
 
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
@@ -10,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.Vector;
+import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -159,7 +159,7 @@ public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
     }
 
     // TODO: keep track of record type ID mapping!
-    public synchronized boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
+    public synchronized boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
         if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
             log.info("Found END_OF_MONITORING_MARKER. Will terminate");
             return false;

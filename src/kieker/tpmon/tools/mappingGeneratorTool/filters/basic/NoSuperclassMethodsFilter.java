@@ -1,7 +1,7 @@
-package kieker.common.tools.mappingGeneratorTool.filters.basic;
+package kieker.tpmon.tools.mappingGeneratorTool.filters.basic;
 
 import java.lang.reflect.Method;
-import kieker.common.tools.mappingGeneratorTool.MethodFilter;
+import kieker.tpmon.tools.mappingGeneratorTool.MethodFilter;
 
 /**
  * 

@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 
 import kieker.common.record.OperationExecutionRecord;
@@ -37,14 +37,14 @@ public class DbWriterThread extends AbstractWorkerThread {
 
     private static final Log log = LogFactory.getLog(DbWriterThread.class);
     private Connection conn;
-    private BlockingQueue<AbstractMonitoringRecord> writeQueue;
+    private BlockingQueue<IMonitoringRecord> writeQueue;
     private PreparedStatement psInsertMonitoringData;
     private static boolean shutdown = false;
     private boolean finished = false;
     boolean statementChanged = true;
     String nextStatementText;
 
-    public DbWriterThread(Connection initializedConnection, BlockingQueue<AbstractMonitoringRecord> writeQueue, String statementtext) {
+    public DbWriterThread(Connection initializedConnection, BlockingQueue<IMonitoringRecord> writeQueue, String statementtext) {
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
@@ -70,7 +70,7 @@ public class DbWriterThread extends AbstractWorkerThread {
         log.info("Dbwriter thread running");
         try {
             while (!finished) {
-                AbstractMonitoringRecord data = writeQueue.take();
+                IMonitoringRecord data = writeQueue.take();
                 if (data == TpmonController.END_OF_MONITORING_MARKER){
                     log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
@@ -104,7 +104,7 @@ public class DbWriterThread extends AbstractWorkerThread {
      * writes next item into database
      */
     
-    private void consume(AbstractMonitoringRecord monitoringRecord) throws SQLException {
+    private void consume(IMonitoringRecord monitoringRecord) throws SQLException {
         //if (TpmonController.debug) System.out.println("DbWriterThread "+this+" Consuming "+monitoringRecord);
         try {
             if (statementChanged || psInsertMonitoringData == null) {

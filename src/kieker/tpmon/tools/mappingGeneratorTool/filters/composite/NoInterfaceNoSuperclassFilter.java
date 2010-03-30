@@ -1,9 +1,9 @@
-package kieker.common.tools.mappingGeneratorTool.filters.composite;
+package kieker.tpmon.tools.mappingGeneratorTool.filters.composite;
 
 import java.lang.reflect.Method;
-import kieker.common.tools.mappingGeneratorTool.MethodFilter;
-import kieker.common.tools.mappingGeneratorTool.filters.basic.NoInterfacesFilter;
-import kieker.common.tools.mappingGeneratorTool.filters.basic.NoSuperclassMethodsFilter;
+import kieker.tpmon.tools.mappingGeneratorTool.MethodFilter;
+import kieker.tpmon.tools.mappingGeneratorTool.filters.basic.NoInterfacesFilter;
+import kieker.tpmon.tools.mappingGeneratorTool.filters.basic.NoSuperclassMethodsFilter;
 
 /**
  * Exclude Interface and superclass methods from output

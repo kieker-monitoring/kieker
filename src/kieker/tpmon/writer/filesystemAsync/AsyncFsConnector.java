@@ -11,7 +11,7 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
@@ -46,7 +46,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
     private static final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
-    private BlockingQueue<AbstractMonitoringRecord> blockingQueue = null;
+    private BlockingQueue<IMonitoringRecord> blockingQueue = null;
     private String storagePathBase = null;
     private String storageDir = null; // full path
     private int asyncRecordQueueSize = 8000;
@@ -108,7 +108,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
             return;
         }
 
-        blockingQueue = new ArrayBlockingQueue<AbstractMonitoringRecord>(asyncRecordQueueSize);
+        blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
         for (int i = 0; i < numberOfFsWriters; i++) {
             FsWriterThread dbw = new FsWriterThread(blockingQueue, storageDir + "/tpmon");
             dbw.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
@@ -123,7 +123,7 @@ public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      */
     
-    public boolean writeMonitoringRecord(final AbstractMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }

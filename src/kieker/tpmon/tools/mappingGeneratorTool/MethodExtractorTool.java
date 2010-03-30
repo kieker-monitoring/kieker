@@ -1,4 +1,4 @@
-package kieker.common.tools.mappingGeneratorTool;
+package kieker.tpmon.tools.mappingGeneratorTool;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -11,7 +11,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import kieker.common.nameIdMapper.NameIdMap;
 
-import kieker.common.tools.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter;
+import kieker.tpmon.tools.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

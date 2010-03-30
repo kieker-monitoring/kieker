@@ -1,11 +1,15 @@
 package kieker.tpmon.writer.databaseAsync;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
@@ -74,7 +78,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
     
     private static final Log log = LogFactory.getLog(AsyncDbConnector.class);
     private Connection conn = null;
-    private BlockingQueue<AbstractMonitoringRecord> blockingQueue;
+    private BlockingQueue<IMonitoringRecord> blockingQueue;
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
     private String dbTableName = "turbomon10";
@@ -120,7 +124,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
         try {
             conn = DriverManager.getConnection(this.dbConnectionAddress);
             int numberOfConnections = 4;
-            blockingQueue = new ArrayBlockingQueue<AbstractMonitoringRecord>(asyncRecordQueueSize);
+            blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
 
 //                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
 //                 new Thread(dbw).start();  
@@ -171,7 +175,7 @@ public final class AsyncDbConnector extends AbstractKiekerMonitoringLogWriter {
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
     
-    public boolean writeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.debug("Async.insertMonitoringDataNow");
         }

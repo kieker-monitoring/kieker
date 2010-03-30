@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.record.DummyMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.writer.databaseAsync.AsyncDbConnector;
 import kieker.tpmon.writer.filesystemAsync.AsyncFsConnector;
 import org.apache.commons.logging.Log;
@@ -315,7 +316,7 @@ public final class TpmonController {
     }
 
     
-    public final boolean logMonitoringRecord(AbstractMonitoringRecord monitoringRecord) {
+    public final boolean logMonitoringRecord(IMonitoringRecord monitoringRecord) {
         if (!this.monitoringEnabled) {
             return false;
         }
