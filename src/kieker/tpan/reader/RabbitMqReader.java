@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package kieker.tpan.logReader;
+package kieker.tpan.reader;
 
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;

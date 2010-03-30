@@ -1,4 +1,4 @@
-package kieker.common.logReader.filesystemReader;
+package kieker.tpan.reader.filesystemReader;
 
 import java.io.BufferedReader;
 import java.io.File;

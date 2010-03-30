@@ -1,4 +1,4 @@
-package kieker.tpan.logReader;
+package kieker.tpan.reader;
 
 import java.io.Serializable;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;

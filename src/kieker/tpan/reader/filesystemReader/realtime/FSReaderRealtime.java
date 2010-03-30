@@ -1,4 +1,4 @@
-package kieker.common.logReader.filesystemReader.realtime;
+package kieker.tpan.reader.filesystemReader.realtime;
 
 import java.util.StringTokenizer;
 import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
@@ -7,8 +7,8 @@ import kieker.common.logReader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 
 import kieker.common.logReader.RealtimeReplayDistributor;
-import kieker.common.logReader.filesystemReader.FSMergeReader;
-import kieker.common.logReader.filesystemReader.FSReader;
+import kieker.tpan.reader.filesystemReader.FSMergeReader;
+import kieker.tpan.reader.filesystemReader.FSReader;
 import kieker.common.record.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

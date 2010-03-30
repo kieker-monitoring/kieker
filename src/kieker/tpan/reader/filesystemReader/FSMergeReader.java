@@ -1,4 +1,4 @@
-package kieker.common.logReader.filesystemReader;
+package kieker.tpan.reader.filesystemReader;
 
 import java.util.ArrayList;
 import java.util.Comparator;
