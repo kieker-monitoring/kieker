@@ -1,8 +1,8 @@
 package mySimpleKiekerJMSExample.monitoringRecord;
 
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 
-/**
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -22,45 +22,47 @@ import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-public class MyRTMonitoringRecord extends AbstractKiekerMonitoringRecord {
+public class MyRTMonitoringRecord extends AbstractMonitoringRecord {
 
-    private static final long serialVersionUID = 1775L;
-    /** Used to identify the type of CSV records
-     * This record type has a fixed value of 0
-     */
-    private static int typeId = AbstractKiekerMonitoringRecord.registerMonitoringRecordType(MyRTMonitoringRecord.class);
+    private static final long serialVersionUID = 1799875L;
+
     private static int numRecordFields = 3;
-    public long rt = -1;
+
     public String component = null;
     public String service = null;
+    public long rt = -1;
 
-    public void initFromStringArray(String[] recordVector)
+    public final void initFromArray(Object[] values)
             throws IllegalArgumentException {
-        // String[]
-        if (recordVector.length > MyRTMonitoringRecord.numRecordFields) {
-            throw new IllegalArgumentException("Expecting vector with " +
-                    MyRTMonitoringRecord.numRecordFields + " elements but found:" + recordVector.length);
+        try {
+            if (values.length != MyRTMonitoringRecord.numRecordFields) {
+                throw new IllegalArgumentException("Expecting vector with "
+                        + MyRTMonitoringRecord.numRecordFields + " elements but found:" + values.length);
+            }
+
+            this.component = (String) values[0];
+            this.service = (String) values[1];
+            this.rt = (Long) values[2];
+
+        } catch (Exception exc) {
+            throw new IllegalArgumentException("Failed to init", exc);
         }
-        this.component = recordVector[0];
-        this.service = recordVector[1];
-        this.rt = Long.parseLong(recordVector[2]);
+
         return;
     }
 
-    public String[] toStringArray() {
-        // String[] = {....}
-        String[] vec = {
-            (this.component == null) ? "NULLCOMPONENT" : this.component,
-            (this.service == null) ? "NULLSERVICE" : this.service,
-            Long.toString(rt),};
-        return vec;
+    public final Object[] toArray() {
+        return new Object[]{
+                    (this.component == null) ? "NULLCOMPONENT" : this.component,
+                    (this.service == null) ? "NULLSERVICE" : this.service,
+                    this.rt};
     }
 
-    public int getRecordTypeId() {
-        return typeId;
-    }
-
-    public static AbstractKiekerMonitoringRecord getInstance() {
-        return new MyRTMonitoringRecord();
+    public Class[] getValueTypes() {
+        return new Class[]{
+            String.class, // component
+            String.class, // service
+            long.class    // rt
+        };
     }
 }

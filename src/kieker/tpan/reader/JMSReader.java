@@ -107,20 +107,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
                             if (omo instanceof IMonitoringRecord) {
                                 IMonitoringRecord rec =
                                         (IMonitoringRecord) omo;
-                                //Class<? extends IMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getClass().getName());
-                                //if (clazz == null) {
-                                //    // TODO: we could retry it in a couple of seconds
-                                //    log.error("Found no mapping for record type " + rec.getClass().getName());
-                                //} else {
-                                    //log.info("New monitoring record of type " + clazz.getName() + " (id:" + rec.getRecordTypeId() + ")");
                                 deliverRecordToConsumers(rec);
-                                //}
-                            } else if (omo instanceof MonitoringRecordTypeClassnameMapping) {
-                                // TODO: do we need this at all?
-                                MonitoringRecordTypeClassnameMapping m =
-                                        (MonitoringRecordTypeClassnameMapping) omo;
-                                registerRecordTypeIdMapping(m.typeId, m.classname);
-                                log.info("Received mapping " + m.typeId + "/" + m.classname);
                             } else {
                                 log.info("Unknown type of message " + om);
                             }

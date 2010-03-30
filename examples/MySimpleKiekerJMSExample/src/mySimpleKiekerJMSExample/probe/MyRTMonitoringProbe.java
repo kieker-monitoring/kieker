@@ -1,7 +1,6 @@
 package mySimpleKiekerJMSExample.probe;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.*;
 import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -34,7 +33,7 @@ public class MyRTMonitoringProbe implements IKiekerMonitoringProbe {
 
     @Around(value = "execution(@mySimpleKiekerJMSExample.annotation.MyRTProbe * *.*(..))")
     public Object probe(ProceedingJoinPoint j) throws Throwable {
-        MyRTMonitoringRecord record = (MyRTMonitoringRecord)MyRTMonitoringRecord.getInstance();
+        MyRTMonitoringRecord record = new MyRTMonitoringRecord();
         record.component = j.getSignature().getDeclaringTypeName();
         record.service = j.getSignature().getName();
         Object retval; 

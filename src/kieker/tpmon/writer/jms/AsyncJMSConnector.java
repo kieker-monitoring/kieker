@@ -38,7 +38,7 @@ public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncJMSConnector.class);
     private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
-    private JMSWriterThread typeWriter; // publishes record type/classname mappings
+    //private JMSWriterThread typeWriter; // publishes record type/classname mappings
     private static final MonitoringRecordTypeClassnameMapping TYPE_WRITER_END_OF_MONITORING_MARKER = new MonitoringRecordTypeClassnameMapping(-1, null);
     private static final IMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
     private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
@@ -89,10 +89,11 @@ public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
             this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
             this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(asyncTypeQueueSize);
             // init *the* record type writer
-            typeWriter = new JMSWriterThread<MonitoringRecordTypeClassnameMapping>(typeQueue, AsyncJMSConnector.TYPE_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
-            typeWriterAndRecordWriters.add(typeWriter);
-            typeWriter.setDaemon(true);
-            typeWriter.start();
+            // TODO: required?
+            //typeWriter = new JMSWriterThread<MonitoringRecordTypeClassnameMapping>(typeQueue, AsyncJMSConnector.TYPE_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
+            //typeWriterAndRecordWriters.add(typeWriter);
+            //typeWriter.setDaemon(true);
+            //typeWriter.start();
             // init record writers
             for (int i = 1; i <= numberOfJmsWriters; i++) {
                 JMSWriterThread<IMonitoringRecord> recordWriter =

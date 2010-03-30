@@ -4,24 +4,23 @@
  */
 package mySimpleKiekerJMSExample.recordConsumer;
 
-import kieker.common.logReader.IKiekerMonitoringLogReader;
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.logReader.LogReaderExecutionException;
-import kieker.common.logReader.RecordConsumerExecutionException;
-import kieker.common.logReader.filesystemReader.realtime.FSReaderRealtime;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.TpanInstance;
-import kieker.tpan.logReader.JMSReader;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.reader.IMonitoringLogReader;
+import kieker.tpan.reader.JMSReader;
+import kieker.tpan.reader.LogReaderExecutionException;
 import mySimpleKiekerJMSExample.monitoringRecord.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  *
- * @author avanhoorn
+ * @author Andre van Hoorn
  */
-public class OnlineMonitor implements IKiekerRecordConsumer {
+public class OnlineMonitor implements IMonitoringRecordConsumer {
 
     private static final Log log = LogFactory.getLog(OnlineMonitor.class);
     private final long rtSloMs;
@@ -33,13 +32,13 @@ public class OnlineMonitor implements IKiekerRecordConsumer {
     public String[] getRecordTypeSubscriptionList() {
         return new String[]{
             MyRTMonitoringRecord.class.getName(),
-            KiekerExecutionRecord.class.getName()
+            OperationExecutionRecord.class.getName()
         };
     }
 
-    public void consumeMonitoringRecord(AbstractKiekerMonitoringRecord r) throws RecordConsumerExecutionException {
-        if (r instanceof KiekerExecutionRecord) {
-            KiekerExecutionRecord execRec = (KiekerExecutionRecord) r;
+    public void consumeMonitoringRecord(IMonitoringRecord r) throws MonitoringRecordConsumerExecutionException {
+        if (r instanceof OperationExecutionRecord) {
+            OperationExecutionRecord execRec = (OperationExecutionRecord) r;
             log.info("Received execution record:" + execRec);
         } else if (r instanceof MyRTMonitoringRecord) {
             MyRTMonitoringRecord rtRec = (MyRTMonitoringRecord) r;
@@ -64,7 +63,7 @@ public class OnlineMonitor implements IKiekerRecordConsumer {
 
         OnlineMonitor rtMonitor = new OnlineMonitor(1800);
 
-        IKiekerMonitoringLogReader logReader;
+        IMonitoringLogReader logReader;
         logReader = new JMSReader("tcp://127.0.0.1:3035/", "queue1");
 
         TpanInstance analysisInstance = new TpanInstance();
@@ -75,7 +74,7 @@ public class OnlineMonitor implements IKiekerRecordConsumer {
             analysisInstance.run();
         } catch (LogReaderExecutionException e) {
             log.error("LogReaderExecutionException:", e);
-        } catch (RecordConsumerExecutionException e) {
+        } catch (MonitoringRecordConsumerExecutionException e) {
             log.error("RecordConsumerExecutionException:", e);
         }
     }

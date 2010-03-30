@@ -1,5 +1,7 @@
 package kieker.common.record;
 
+import java.io.Serializable;
+
 /*
  *
  * ==================LICENCE=========================
@@ -23,7 +25,7 @@ package kieker.common.record;
  *
  * @author Andre van Hoorn
  */
-public interface IMonitoringRecord {
+public interface IMonitoringRecord extends Serializable {
     public long getLoggingTimestamp();
     public void setLoggingTimestamp(long loggingTimestamp);
     public Object[] toArray();

@@ -26,7 +26,7 @@ monitoringEnabled=true
 # - AsyncFS (Asynchronous File System Writer as configured under Section 1.3 below)
 # -  SyncDB (Synchronous Database Writer as configured under Section 1.3 below)
 # - AsyncDB (Asynchronous Database Writer as configured under Section 1.3 below)
-monitoringDataWriter=kieker.tpmon.writer.jmsAsync.AsyncJMSConnector
+monitoringDataWriter=kieker.tpmon.writer.jms.AsyncJMSConnector
 monitoringDataWriterInitString=jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000
 #monitoringDataWriter=AsyncFS
 #monitoringDataWriterInitString=
