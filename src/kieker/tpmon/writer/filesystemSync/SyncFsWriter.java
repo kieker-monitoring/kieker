@@ -75,15 +75,14 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
     private PrintWriter pos = null;
     private File mappingFile = null;
     private final static String defaultConstructionErrorMsg =
-            "Do not select this writer using the fully qualified classname. " +
-            "Use the the constant " + TpmonController.WRITER_SYNCFS +
-            " and the file system specific configuration properties.";
+            "Do not select this writer using the fully qualified classname. "
+            + "Use the the constant " + TpmonController.WRITER_SYNCFS
+            + " and the file system specific configuration properties.";
 
     public SyncFsWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -128,7 +127,6 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
     /**
      * Determines and sets a new Filename
      */
-    
     private void prepareFile() throws FileNotFoundException {
         if (entriesInCurrentFileCounter++ > maxEntriesInFile || !filenameInitialized) {
             if (pos != null) {
@@ -170,14 +168,12 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
             final int LAST_FIELD_INDEX = recordFields.length - 1;
             prepareFile(); // may throw FileNotFoundException
 
-            if (this.isWriteRecordTypeIds()) {
-                pos.write('$');
-                pos.write(monitoringRecord.getClass().getName());
+            pos.write('$');
+            pos.write(monitoringRecord.getClass().getName());
+            pos.write(';');
+            pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
+            if (LAST_FIELD_INDEX > 0) {
                 pos.write(';');
-                pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
-                if (LAST_FIELD_INDEX > 0) {
-                    pos.write(';');
-                }
             }
 
             for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
@@ -195,18 +191,15 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
         return true;
     }
 
-    
     public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
 
-    
     public String getInfoString() {
         return "filenamePrefix :" + storagePathBase;
     }
 
-    
-    public void registerMonitoringRecordType(int id, String className) {
+    private void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
         FileOutputStream fos = null;
         PrintWriter pw = null;

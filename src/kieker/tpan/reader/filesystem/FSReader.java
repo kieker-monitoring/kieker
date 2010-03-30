@@ -10,10 +10,10 @@ import java.text.Collator;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.StringTokenizer;
+import kieker.common.record.IMonitoringRecord;
 
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 
 import org.apache.commons.logging.Log;
@@ -170,7 +170,7 @@ public class FSReader extends AbstractMonitoringLogReader {
             String line;
 
             while ((line = in.readLine()) != null) {
-                AbstractMonitoringRecord rec = null;
+                IMonitoringRecord rec = null;
                 try {
                     if (!recordTypeIdMapInitialized && line.startsWith("$")) {
                         this.readMappingFile();
@@ -189,9 +189,9 @@ public class FSReader extends AbstractMonitoringLogReader {
 
                             //Integer id = Integer.valueOf(token.substring(1));
                             // TODO: use IDs
-                            Class<? extends AbstractMonitoringRecord> clazz = super.fetchClassForRecordTypeId(token);
+                            Class<? extends IMonitoringRecord> clazz = super.fetchClassForRecordTypeId(token);
                             Method m = clazz.getMethod("getInstance"); // lookup method getInstance
-                            rec = (AbstractMonitoringRecord) m.invoke(null); // call static method
+                            rec = (IMonitoringRecord) m.invoke(null); // call static method
                             token = st.nextToken();
                             //log.info("LoggingTimestamp: " + Long.valueOf(token) + " (" + token + ")");
                             rec.setLoggingTimestamp(Long.valueOf(token));

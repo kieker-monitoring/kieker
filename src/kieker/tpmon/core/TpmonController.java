@@ -12,13 +12,12 @@ import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Properties;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpmon.writer.databaseAsync.AsyncDbConnector;
-import kieker.tpmon.writer.filesystemAsync.AsyncFsConnector;
+import kieker.tpmon.writer.database.AsyncDbConnector;
+import kieker.tpmon.writer.filesystem.AsyncFsConnector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -157,7 +156,6 @@ public final class TpmonController {
                 }
 
             }
-            this.monitoringDataWriter.setWriteRecordTypeIds(this.logMonitoringRecordTypeIds);
             Vector<AbstractWorkerThread> worker = this.monitoringDataWriter.getWorkers(); // may be null
             if (worker != null) {
                 for (AbstractWorkerThread w : worker) {
@@ -501,25 +499,6 @@ public final class TpmonController {
                     ". Using default value " + setInitialExperimentIdBasedOnLastId);
         }
 
-        // load property "logMonitoringRecordTypeIds"
-        String logMonitoringRecordTypeIdsProperty = null;
-        if (System.getProperty("tpmon.logMonitoringRecordTypeIds") != null) { // we use the present virtual machine parameter value
-            logMonitoringRecordTypeIdsProperty = System.getProperty("tpmon.logMonitoringRecordTypeIds");
-        } else { // we use the parameter in the properties file
-            logMonitoringRecordTypeIdsProperty = prop.getProperty("logMonitoringRecordTypeIds");
-        }
-        if (logMonitoringRecordTypeIdsProperty != null && logMonitoringRecordTypeIdsProperty.length() != 0) {
-            if (logMonitoringRecordTypeIdsProperty.toLowerCase().equals("true") || logMonitoringRecordTypeIdsProperty.toLowerCase().equals("false")) {
-                logMonitoringRecordTypeIds = logMonitoringRecordTypeIdsProperty.toLowerCase().equals("true");
-            } else {
-                log.warn("Bad value for logMonitoringRecordTypeIds parameter (" + logMonitoringRecordTypeIdsProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + logMonitoringRecordTypeIds);
-            }
-        } else {
-            log.warn("Could not find logMonitoringRecordTypeIds parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + logMonitoringRecordTypeIds);
-        }
-
         // load property "asyncRecordQueueSize"
         String asyncRecordQueueSizeProperty = null;
         if (System.getProperty("tpmon.asyncRecordQueueSize") != null) { // we use the present virtual machine parameter value
@@ -594,168 +573,4 @@ public final class TpmonController {
     public final void setDebug(boolean debug) {
         this.debug = debug;
     }
-
-    AtomicInteger nextMonitoringRecordType = new AtomicInteger(1);
-
-    /**
-     * Registers monitoring record type and returns its id.
-     * If logging of record ids is disabled, -1 is returned and no
-     * registration takes place.
-     *
-     * @param recordTypeClass
-     * @return
-     */
-    
-    public final int registerMonitoringRecordType(Class recordTypeClass) {
-        if (this.isMonitoringPermanentlyTerminated()) {
-            log.warn("Didn't register record type '" + recordTypeClass +
-                    "' because monitoring has been permanently terminated");
-            return -1;
-        }
-
-        String name = recordTypeClass.getCanonicalName();
-        if (this.logMonitoringRecordTypeIds) {
-            int id = this.nextMonitoringRecordType.getAndIncrement();
-            log.info("Registering monitoring record type with id '" + id + "':" + name);
-            this.monitoringDataWriter.registerMonitoringRecordType(id, name);
-            return id;
-        } else {
-            log.info("Didn't register the following monitoring record type since " +
-                    "logging of type ids disabled: " + name);
-            return -1;
-        }
-    }
 }
-
-
-// TODO: remove Leichen!
-// values might be not written to the database in case of an system.exit(0)!
-// The place holders are usually much smaller and storage therefore much faster and requires less space.
-//private boolean encodeMethodNames = false;
-// trace sampling:
-// if activated, approximately every n-th (traceSampleingFrequency) trace will be made persistend
-// this allows to save the overhead and space for storing data.
-// WARNING: Trace sampling should not be used if a session-based evaluation is targeted!
-//          For this, a sessionid based sampleing is required (not implemented yet)
-//private boolean traceSampleing = false;
-//private int traceSampleingFrequency = 2;
-
-// only used if encodeMethodNames == true
-//    private HashMap<String, String> methodNameEncoder = new HashMap<String, String>();
-// lastEncodedMethodName provides some kind of distributed system unique offset, numbers are increased by 1 for
-// each monitoring point after that
-// (The following might produce in very very few cases a colision in a large DISTRIBUTED system with a large number
-// of instrumented methods. For save usage in a critical distributed system, where the monitoring data is extremely critical,
-// only file system storage should be used and component and methodnames should be decoded locally to avoid this problem (or disable encodeMethodNames).)
-//    private int lastEncodedMethodName = Math.abs(getVmname().hashCode() % 10000);
-
-//      Not supported any more
-//        if (traceSampleing) { // approximately (!) every traceSampleingFrequency-th trace will be monitored
-//            if (!(monitoringRecord.traceId % traceSampleingFrequency == 0)) {
-//                return true;
-//            }
-//        }
-//log.info("ComponentName "+componentname);
-//log.info("Methodname "+methodname);
-
-// methodname: A.a(), componentname: de.comp.A
-// therefore componentname+methodname = de.comp.AA.a()
-// The "A" is double, this is not nice
-
-//Example:
-//ComponentName ts5.de.store.Catalog
-//MethodName ts5.de.store.dataModel.Book ts5.de.store.Catalog.getBook(boolean, java.lang.String)
-
-//int whereToCut = methodname.lastIndexOf(".");
-//int doublePointPosition = methodname.lastIndexOf("..");
-//if (doublePointPosition != -1) whereToCut = methodname.lastIndexOf(".",doublePointPosition-1);
-//String newMethodname = ""+methodname.subSequence(whereToCut,methodname.length());
-
-// A methodname looks like this *.*(*
-// the "(" is only once in a methodname
-
-// Encoding method and component names stores just placeholders for the component and method names.
-// The place holders are usually much smaller and storage therefore much faster and requires less space.
-//            if (encodeMethodNames) {
-//                String combinedName = componentname + methodname;
-//                String encodedName = methodNameEncoder.get(combinedName);
-//                if (encodedName == null) { // Method unknown
-//                    //           log.info("Kieker-Tpmon: First time logging of "+component+" and "+methodname);
-//                    lastEncodedMethodName++; // remember we are synchronized here :)
-//                    encodedName = new String("E-" + lastEncodedMethodName); // the method names in java are not allowed to have "-" in it
-//                    methodNameEncoder.put(combinedName, encodedName);
-//                    storeEncodedName(componentname, formatMethodName(methodname), encodedName);
-//                }
-//                newMethodname = encodedName;
-//                componentname = ""; // we do not need a seperate componentname
-//            } else { // methodname is formated, and a full method and component name be made persistent
-//                newMethodname = formatMethodName(methodname);
-//            }
-//        } else {
-
-//        }
-
-//        newMethodname = methodname;
-
-/**
- * This method is only rarely used to store the name recordings in the same
- * datasource that the monitoring data.
- *
- * The encodings can be distinguished from normal monitoring data by
- * tin == tout == executionOrderIndex == executionStacksize == -5.
- * For those entries, the *sessionid* field represents the encoded operation name (= component.method) and
- * the *operation* field will be the full component.methodname.
- *
- * Therefore,
- * grep "-5,-5,-5,-5,-5$" will identify the lines that contain encoding information in monitoring files.
- */
-//   Not supported any more
-//    
-//    private void storeEncodedName(String component, String newMethodname, String encodedName) {
-//        // log.info("Kieker-Tpmon: Encoding "+component+""+newMethodname+" by "+encodedName);
-//        String opname = component + newMethodname;
-//        numberOfInserts.incrementAndGet();
-//        AbstractMonitoringRecord monitoringRecord = AbstractMonitoringRecord.getInstance();
-//        monitoringRecord.componentName = opname;
-//        monitoringRecord.opname = encodedName;
-//        monitoringRecord.traceId = -5;
-//        monitoringRecord.tin = -5;
-//        monitoringRecord.tout = -5;
-//        monitoringRecord.eoi = -5;
-//        monitoringRecord.ess = -5;
-//        // NOTE: experimentId and vmname will be set inside insertMonitoringDataNow(.)
-//        this.monitoringDataWriter.insertMonitoringDataNow(monitoringRecord);
-//    }
-/**
- * Internal method to convert the method names into a proper format
- * @param methodname
- * @return methodname without a double componentname
- */
-//    
-//    private String formatMethodName(String methodname) {
-//        // methodname: A.a(), componentname: de.comp.A
-//        // therefore componentname+methodname = de.comp.AA.a()
-//        // The "A" is double, this is not nice
-//
-//        //Example:
-//        //ComponentName ts5.de.store.Catalog
-//        //MethodName ts5.de.store.dataModel.Book ts5.de.store.Catalog.getBook(boolean, java.lang.String)
-//
-//        //int whereToCut = methodname.lastIndexOf(".");
-//        //int doublePointPosition = methodname.lastIndexOf("..");
-//        //if (doublePointPosition != -1) whereToCut = methodname.lastIndexOf(".",doublePointPosition-1);
-//        //String newMethodname = ""+methodname.subSequence(whereToCut,methodname.length());
-//
-//        // A methodname looks like this *.*(*
-//        // the "(" is only once in a methodname
-//
-//        int indexOfOpenBrace = methodname.lastIndexOf("(");
-//        int indexBeginOfMethodname = methodname.lastIndexOf(".", indexOfOpenBrace);
-//        if (indexBeginOfMethodname == -1) {
-//            return methodname;
-//        } else {
-//            return methodname.substring(indexBeginOfMethodname, methodname.length()).replaceAll(" ", "");
-//        }
-//    }
-//private long seed = 0;
-//private double d3 = 0.3d;

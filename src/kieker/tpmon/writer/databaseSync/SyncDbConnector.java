@@ -206,9 +206,4 @@ public final class SyncDbConnector extends AbstractMonitoringLogWriter {
         }
         return strB.toString();
     }
-
-    
-    public void registerMonitoringRecordType(int id, String className) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

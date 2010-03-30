@@ -37,12 +37,6 @@ public abstract class AbstractMonitoringLogWriter implements IMonitoringLogWrite
     private boolean writeRecordTypeIds;
     private final HashMap<String, String> map = new HashMap<String, String>();
 
-    
-    public abstract boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord);
-
-    
-    public abstract void registerMonitoringRecordType(int id, String className);
-
     /** Returns the value for the initialization property @a propName or the
      *  the passed default value @a default if no value for this property
      *  exists. */
@@ -103,17 +97,6 @@ public abstract class AbstractMonitoringLogWriter implements IMonitoringLogWrite
         initStringProcessed = true;
     }
 
-   
-    public boolean isWriteRecordTypeIds(){
-       return this.writeRecordTypeIds;
-   }
-
-    
-    public void setWriteRecordTypeIds(final boolean writeRecordTypeIds){
-        this.writeRecordTypeIds = writeRecordTypeIds;
-    }
-
-    
     public void setDebug(boolean debug) {
         this.debugEnabled = debug;
     }

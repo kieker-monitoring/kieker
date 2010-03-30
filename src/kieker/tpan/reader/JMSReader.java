@@ -16,7 +16,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 
-import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -104,10 +104,10 @@ public class JMSReader extends AbstractMonitoringLogReader {
                         //System.out.println("Received object message: " + om.toString());
                         try {
                             Serializable omo = om.getObject();
-                            if (omo instanceof AbstractMonitoringRecord) {
-                                AbstractMonitoringRecord rec =
-                                        (AbstractMonitoringRecord) omo;
-                                Class<? extends AbstractMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getClass().getName());
+                            if (omo instanceof IMonitoringRecord) {
+                                IMonitoringRecord rec =
+                                        (IMonitoringRecord) omo;
+                                Class<? extends IMonitoringRecord> clazz = fetchClassForRecordTypeId(rec.getClass().getName());
                                 if (clazz == null) {
                                     // TODO: we could retry it in a couple of seconds
                                     log.error("Found no mapping for record type " + rec.getClass().getName());

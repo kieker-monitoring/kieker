@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.filesystemAsync;
+package kieker.tpmon.writer.filesystem;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -120,28 +120,21 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
     }
 
     /**
-     * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
+     * This method is not synchronized.
      */
-    
     public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         if (this.isDebug()) {
             log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
         }
 
-        if(monitoringRecord == TpmonController.END_OF_MONITORING_MARKER){
-            log.info(log);
-        }
-
         try {
             blockingQueue.add(monitoringRecord); // tries to add immediately!
-        //System.out.println(""+blockingQueue.size());
         } catch (Exception ex) {
             log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex);
             return false;
         }
         return true;
     }
-
     
     public String getFilenamePrefix() {
         return storagePathBase;
@@ -154,7 +147,7 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
     }
 
     
-    public void registerMonitoringRecordType(int id, String className) {
+    private void registerMonitoringRecordType(int id, String className) {
         log.info("Registered monitoring record type with id '" + id + "':" + className);
         FileOutputStream fos = null;
         PrintWriter pw = null;
@@ -171,15 +164,6 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
             } catch (IOException exc) {
                 log.error("IO Exception", exc);
             }
-        }
-    }
-
-    
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        super.setWriteRecordTypeIds(writeRecordTypeIds);
-        for (AbstractWorkerThread t : workers) {
-            log.info("t.setWriteRecordTypeIds(" + writeRecordTypeIds + ")");
-            t.setWriteRecordTypeIds(writeRecordTypeIds);
         }
     }
 }

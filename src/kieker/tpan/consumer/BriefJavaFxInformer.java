@@ -6,11 +6,11 @@
 
 package kieker.tpan.consumer;
 
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.plugins.traceReconstruction.IExecutionTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 
 /**
@@ -44,7 +44,7 @@ public class BriefJavaFxInformer implements IRecordConsumer, IMessageTraceReceiv
         return null; // null gets it all
     }
 
-    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
        // System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
         if (jfxRc == null) {
             System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");

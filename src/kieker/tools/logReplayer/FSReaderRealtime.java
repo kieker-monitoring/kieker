@@ -1,15 +1,14 @@
 package kieker.tools.logReplayer;
 
 import java.util.StringTokenizer;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 
-import kieker.tools.logReplayer.RealtimeReplayDistributor;
 import kieker.tpan.reader.filesystem.FSMergeReader;
 import kieker.tpan.reader.filesystem.FSReader;
-import kieker.common.record.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,7 +43,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             return null;
         }
 
-        public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
             try {
                 this.master.deliverRecordToConsumers(monitoringRecord);
             } catch (LogReaderExecutionException ex) {

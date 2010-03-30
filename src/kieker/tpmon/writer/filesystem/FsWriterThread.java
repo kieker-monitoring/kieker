@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.filesystemAsync;
+package kieker.tpmon.writer.filesystem;
 
 import java.util.concurrent.BlockingQueue;
 import java.io.*;

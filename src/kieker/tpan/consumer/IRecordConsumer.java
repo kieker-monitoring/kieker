@@ -1,6 +1,6 @@
 package kieker.tpan.consumer;
 
-import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 /*
  *
@@ -39,7 +39,7 @@ public interface IRecordConsumer {
      * @param monitoringRecord
      * @throws RecordConsumerExecutionException
      */
-    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException;
 
     /**
      * Starts a record consumer.

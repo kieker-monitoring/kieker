@@ -1,8 +1,6 @@
 package kieker.tpan.consumer;
 
 /*
- * kieker.consumer.MonitoringRecordTypeLogger
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -19,8 +17,8 @@ package kieker.tpan.consumer;
  * limitations under the License.
  * ==================================================
  */
-import kieker.common.record.AbstractMonitoringRecord;
 
+import kieker.common.record.IMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,7 +35,7 @@ public class MonitoringRecordTypeLogger implements IRecordConsumer {
         return recordTypeSubscriptionList;
     }
 
-    public void consumeMonitoringRecord(final AbstractMonitoringRecord monitoringRecord) {
+    public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         log.info("Consumed record:" + monitoringRecord.getClass().getName());
         log.info(monitoringRecord.toString());
     }

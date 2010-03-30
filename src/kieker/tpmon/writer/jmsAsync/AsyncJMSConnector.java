@@ -146,20 +146,6 @@ public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
     }
 
     
-    public void registerMonitoringRecordType(int id, String className) {
-        log.info("Publishing record id/class mapping: " + id + "/" + className);
-        this.typeQueue.add(new MonitoringRecordTypeClassnameMapping(id, className));
-    }
-
-    
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        super.setWriteRecordTypeIds(writeRecordTypeIds);
-        for (AbstractWorkerThread t : typeWriterAndRecordWriters) {
-            log.info("t.setWriteRecordTypeIds(" + writeRecordTypeIds + ")");
-            t.setWriteRecordTypeIds(writeRecordTypeIds);
-        }
-    }
-
     public Vector<AbstractWorkerThread> getWorkers() {
         return this.typeWriterAndRecordWriters;
     }

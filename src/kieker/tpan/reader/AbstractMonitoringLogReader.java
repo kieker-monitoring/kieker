@@ -10,10 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
-
-import kieker.common.record.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +26,7 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
     private static final Log log = LogFactory.getLog(AbstractMonitoringLogReader.class);
     private final HashMap<String, String> map = new HashMap<String, String>();
     /** class name x class object */
-    protected Map<String, Class<? extends AbstractMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<String, Class<? extends AbstractMonitoringRecord>>());
+    protected Map<String, Class<? extends IMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<String, Class<? extends IMonitoringRecord>>());
     /** Contains all consumers which consume records of any type */
     private final Collection<IRecordConsumer> subscribedToAllList =
             new Vector<IRecordConsumer>();
@@ -107,7 +106,7 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
         }
     }
 
-    protected final void deliverRecordToConsumers(final AbstractMonitoringRecord r) throws LogReaderExecutionException {
+    protected final void deliverRecordToConsumers(final IMonitoringRecord r) throws LogReaderExecutionException {
         try {
             for (IRecordConsumer c : this.subscribedToAllList) {
                 c.consumeMonitoringRecord(r);
@@ -132,7 +131,7 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
                 return;
             }
 
-            Class<? extends AbstractMonitoringRecord> recordClass = Class.forName(classname).asSubclass(AbstractMonitoringRecord.class);
+            Class<? extends IMonitoringRecord> recordClass = Class.forName(classname).asSubclass(IMonitoringRecord.class);
             this.recordTypeMap.put(recordClass.getClass().getName(), recordClass);
             log.info("Registered record type mapping " + recordTypeId + "/" + classname);
         } catch (ClassNotFoundException ex) {
@@ -143,7 +142,7 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
 
     /** Returns the class for record type with the given id. 
      *  If no such mapping exists, null is returned. */
-    protected final Class<? extends AbstractMonitoringRecord> fetchClassForRecordTypeId(String id) {
+    protected final Class<? extends IMonitoringRecord> fetchClassForRecordTypeId(String id) {
         return this.recordTypeMap.get(id);
     }
 

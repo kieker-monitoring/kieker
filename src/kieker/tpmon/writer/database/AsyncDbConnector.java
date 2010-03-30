@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.databaseAsync;
+package kieker.tpmon.writer.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -224,18 +224,5 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
         strB.append(", setInitialExperimentIdBasedOnLastId : " + setInitialExperimentIdBasedOnLastId);
 
         return strB.toString();
-    }
-
-    
-    public void registerMonitoringRecordType(int id, String className) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setWriteRecordTypeIds(final boolean writeRecordTypeIds) {
-        super.setWriteRecordTypeIds(writeRecordTypeIds);
-        for (AbstractWorkerThread t : workers) {
-            t.setWriteRecordTypeIds(writeRecordTypeIds);
-        }
     }
 }

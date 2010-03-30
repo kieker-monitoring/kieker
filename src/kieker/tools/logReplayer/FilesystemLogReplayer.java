@@ -19,13 +19,13 @@ package kieker.tools.logReplayer;
  * 
  */
 
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.reader.filesystem.FSMergeReader;
 import kieker.tpan.reader.filesystem.FSReader;
 import kieker.tpmon.core.TpmonController;
-import kieker.common.record.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -74,7 +74,7 @@ public class FilesystemLogReplayer {
                 return null; // consume all types
             }
 
-            public void consumeMonitoringRecord(final AbstractMonitoringRecord monitoringRecord) {
+            public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
                 ctrlInst.logMonitoringRecord(monitoringRecord);
             }
 

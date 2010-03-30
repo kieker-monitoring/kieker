@@ -5,7 +5,7 @@
 
 package kieker.tpan.consumer;
 
-import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  *
@@ -18,7 +18,7 @@ public class DummyRecordConsumer implements IRecordConsumer {
         return null; // null gets it all
     }
 
-    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
         System.out.println("DummyRecordConsumer consumed "+monitoringRecord);
     }
 

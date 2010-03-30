@@ -19,6 +19,7 @@ package kieker.tpan.consumer.executionRecordTransformation;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.AllocationComponentInstance;
@@ -29,7 +30,6 @@ import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 
 /**
@@ -78,7 +78,7 @@ public class ExecutionRecordTransformer implements IRecordConsumer {
         return new Signature(name, returnType, paramTypeList);
     }
 
-    public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
         if (!(monitoringRecord instanceof OperationExecutionRecord)) {
             throw new RecordConsumerExecutionException("Can only process records of type"
                     + OperationExecutionRecord.class.getName() + " but received" + monitoringRecord.getClass().getName());

@@ -27,12 +27,6 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
  */
 public interface IMonitoringLogWriter {
 
-    public boolean isWriteRecordTypeIds();
-
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds);
-
-    public void registerMonitoringRecordType(int id, String className);
-
     public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord);
 
     public boolean init(String initString);

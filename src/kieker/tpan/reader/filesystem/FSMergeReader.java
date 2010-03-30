@@ -9,8 +9,8 @@ import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.DummyMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,10 +74,10 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
         private boolean isTerminated = false;
         private final List<Thread> readerThreads = new ArrayList<Thread>();
         private final List<Thread> activeReaders = new ArrayList<Thread>();
-        private final AbstractMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
-        private TreeMap<AbstractMonitoringRecord, Thread> nextRecordsFromReaders = new TreeMap<AbstractMonitoringRecord, Thread>(new Comparator<AbstractMonitoringRecord>() {
+        private final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
+        private TreeMap<IMonitoringRecord, Thread> nextRecordsFromReaders = new TreeMap<IMonitoringRecord, Thread>(new Comparator<IMonitoringRecord>() {
 
-            public int compare(AbstractMonitoringRecord t, AbstractMonitoringRecord t1) {
+            public int compare(IMonitoringRecord t, IMonitoringRecord t1) {
                 if (t == FS_READER_TERMINATION_MARKER) {
                     return 1;
                 }
@@ -106,7 +106,7 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
         }
 
         /** Note that this method is accessed concurrently! */
-        public void consumeMonitoringRecord(AbstractMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
+        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws RecordConsumerExecutionException {
             if (this.isTerminated) {
                 throw new RecordConsumerExecutionException("Consumer already terminated");
             }
@@ -176,7 +176,7 @@ public class FSMergeReader extends AbstractMonitoringLogReader {
                 try {
                     // Does not work with Java 1.5:
                     //Map.Entry<AbstractMonitoringRecord, Thread> firstEntry;
-                    AbstractMonitoringRecord lowestKey;
+                    IMonitoringRecord lowestKey;
                     Thread recordProvidingThread = null;
                     synchronized (this) {
                         while (this.nextRecordsFromReaders.size() != this.readerThreads.size()) {
