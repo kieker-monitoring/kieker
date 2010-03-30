@@ -13,10 +13,8 @@ import com.rabbitmq.client.QueueingConsumer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.common.logReader.LogReaderExecutionException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import java.util.logging.Level;

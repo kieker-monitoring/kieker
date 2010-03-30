@@ -19,9 +19,9 @@ package kieker.tools.logReplayer;
  * 
  */
 
-import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
+import kieker.tpan.reader.AbstractKiekerMonitoringLogReader;
 import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.logReader.LogReaderExecutionException;
+import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.reader.filesystemReader.FSMergeReader;
 import kieker.tpan.reader.filesystemReader.FSReader;
 import kieker.tpan.reader.filesystemReader.realtime.FSReaderRealtime;

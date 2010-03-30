@@ -36,8 +36,8 @@ import kieker.tpan.TpanInstance;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
-import kieker.tpan.recordConsumer.executionRecordTransformation.ExecutionEventProcessingException;
-import kieker.tpan.recordConsumer.executionRecordTransformation.IExecutionListener;
+import kieker.tpan.consumer.executionRecordTransformation.ExecutionEventProcessingException;
+import kieker.tpan.consumer.executionRecordTransformation.IExecutionListener;
 import kieker.tpan.tools.LoggingTimestampConverterTool;
 
 /**

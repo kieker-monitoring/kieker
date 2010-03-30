@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
-import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
-import kieker.common.logReader.LogReaderExecutionException;
+import kieker.tpan.reader.AbstractKiekerMonitoringLogReader;
+import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 

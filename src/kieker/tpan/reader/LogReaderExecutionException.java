@@ -1,4 +1,4 @@
-package kieker.common.logReader;
+package kieker.tpan.reader;
 
 /*
  * ==================LICENCE=========================
@@ -27,9 +27,15 @@ package kieker.common.logReader;
  *
  * @author Andre van Hoorn
  */
-public interface IKiekerMonitoringLogReader {
-    public void init(String initString) throws IllegalArgumentException;
-    public void addConsumer(IKiekerRecordConsumer consumer, String[] recordTypeSubscriptionList);
-    public boolean execute() throws LogReaderExecutionException;
-    public void terminate();
+public class LogReaderExecutionException extends Exception {
+
+    public static final long serialVersionUID = 14537L;
+
+    public LogReaderExecutionException(String messString) {
+        super(messString);
+    }
+
+    public LogReaderExecutionException(String messString, Throwable cause) {
+        super(messString, cause);
+    }
 }

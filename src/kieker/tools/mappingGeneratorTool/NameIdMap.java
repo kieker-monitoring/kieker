@@ -1,4 +1,4 @@
-package kieker.common.nameIdMapper;
+package kieker.tools.mappingGeneratorTool;
 
 import java.io.BufferedReader;
 import java.io.File;

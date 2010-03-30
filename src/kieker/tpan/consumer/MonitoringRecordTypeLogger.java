@@ -1,4 +1,4 @@
-package kieker.tpan.recordConsumer;
+package kieker.tpan.consumer;
 
 /*
  * kieker.consumer.MonitoringRecordTypeLogger

@@ -34,7 +34,7 @@ import java.util.TimeZone;
 
 import java.util.TreeSet;
 import java.util.Vector;
-import kieker.common.logReader.LogReaderExecutionException;
+import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.common.logReader.RecordConsumerExecutionException;
 import kieker.tpan.reader.filesystemReader.FSMergeReader;
 import kieker.tpan.TpanInstance;
@@ -60,10 +60,10 @@ import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter.TraceEquivalenceClassModes;
-import kieker.tpan.recordConsumer.BriefJavaFxInformer;
-import kieker.tpan.recordConsumer.executionRecordTransformation.ExecutionRecordTransformer;
+import kieker.tpan.consumer.BriefJavaFxInformer;
+import kieker.tpan.consumer.executionRecordTransformation.ExecutionRecordTransformer;
 
-import kieker.tpan.recordConsumer.MonitoringRecordTypeLogger;
+import kieker.tpan.consumer.MonitoringRecordTypeLogger;
 import kieker.tpmon.core.TpmonController;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;

@@ -1,7 +1,6 @@
 package kieker.tpan.reader;
 
 import java.io.Serializable;
-import kieker.common.logReader.AbstractKiekerMonitoringLogReader;
 import java.util.Hashtable;
 import javax.jms.JMSException;
 import javax.naming.Context;
@@ -16,7 +15,6 @@ import javax.jms.MessageFormatException;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
-import kieker.common.logReader.LogReaderExecutionException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;

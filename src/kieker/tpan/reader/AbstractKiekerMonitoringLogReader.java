@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kieker.common.logReader;
+package kieker.tpan.reader;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.common.logReader.RecordConsumerExecutionException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 

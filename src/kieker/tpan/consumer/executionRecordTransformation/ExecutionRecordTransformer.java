@@ -15,7 +15,7 @@
  * limitations under the License.
  * ==================================================
  */
-package kieker.tpan.recordConsumer.executionRecordTransformation;
+package kieker.tpan.consumer.executionRecordTransformation;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;

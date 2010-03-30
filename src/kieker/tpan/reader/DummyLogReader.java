@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package kieker.common.logReader;
+package kieker.tpan.reader;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -9,7 +9,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import kieker.common.nameIdMapper.NameIdMap;
 
 import kieker.tools.mappingGeneratorTool.filters.composite.NoInterfaceNoSuperclassFilter;
 import org.apache.commons.cli.BasicParser;

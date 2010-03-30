@@ -4,7 +4,7 @@
  *
  */
 
-package kieker.tpan.recordConsumer;
+package kieker.tpan.consumer;
 
 import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.logReader.RecordConsumerExecutionException;

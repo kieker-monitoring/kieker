@@ -1,8 +1,10 @@
-package kieker.common.logReader;
+package kieker.tpan.consumer.executionRecordTransformation;
+
+import kieker.tpan.datamodel.Execution;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +18,15 @@ package kieker.common.logReader;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * This reader allows one to read a folder or an single tpmon file and
- * transforms it to monitoring events that are stored in the file system
- * again, written to a database, or whatever tpmon is configured to do
- * with the monitoring data.
  */
 
 /**
  *
  * @author Andre van Hoorn
  */
-public class LogReaderExecutionException extends Exception {
+public interface IExecutionListener {
+    public void newExecutionEvent (Execution execution)
+            throws ExecutionEventProcessingException;
 
-    public static final long serialVersionUID = 14537L;
-
-    public LogReaderExecutionException(String messString) {
-        super(messString);
-    }
-
-    public LogReaderExecutionException(String messString, Throwable cause) {
-        super(messString, cause);
-    }
+    public void terminate();
 }

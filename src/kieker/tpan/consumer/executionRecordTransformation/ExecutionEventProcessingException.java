@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package kieker.tpan.recordConsumer.executionRecordTransformation;
+package kieker.tpan.consumer.executionRecordTransformation;
 
 /**
  *
