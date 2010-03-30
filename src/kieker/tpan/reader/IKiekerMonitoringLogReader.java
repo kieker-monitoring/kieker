@@ -1,6 +1,6 @@
 package kieker.tpan.reader;
 
-import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IKiekerRecordConsumer;
 
 /*
  * ==================LICENCE=========================

@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import kieker.tpan.reader.AbstractKiekerMonitoringLogReader;
-import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IKiekerRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.DummyMonitoringRecord;
 

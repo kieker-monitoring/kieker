@@ -1,4 +1,4 @@
-package kieker.common.logReader;
+package kieker.tpan.consumer;
 
 /*
  * ==================LICENCE=========================

@@ -19,7 +19,6 @@ package kieker.tpan.consumer;
  * limitations under the License.
  * ==================================================
  */
-import kieker.common.logReader.IKiekerRecordConsumer;
 import kieker.common.record.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;

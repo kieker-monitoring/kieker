@@ -19,8 +19,8 @@ package kieker.tpan.consumer.executionRecordTransformation;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.AllocationComponentInstance;
 import kieker.tpan.datamodel.AssemblyComponentInstance;
 import kieker.tpan.datamodel.ComponentType;

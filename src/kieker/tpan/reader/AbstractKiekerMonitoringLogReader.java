@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import kieker.common.logReader.IKiekerRecordConsumer;
-import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.RecordConsumerExecutionException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 

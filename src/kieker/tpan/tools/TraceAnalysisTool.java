@@ -35,7 +35,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.tpan.reader.filesystemReader.FSMergeReader;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;

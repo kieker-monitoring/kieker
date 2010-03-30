@@ -19,11 +19,11 @@ package kieker.tpan;
  */
 
 import java.util.Vector;
-import kieker.common.logReader.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IKiekerRecordConsumer;
 import kieker.tpan.reader.IKiekerMonitoringLogReader;
 
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.common.logReader.RecordConsumerExecutionException;
+import kieker.tpan.consumer.RecordConsumerExecutionException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -1,5 +1,7 @@
-package kieker.common.logReader;
+package kieker.tools.logReplayer;
 
+import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.common.record.AbstractMonitoringRecord;
 
 import org.apache.commons.logging.Log;
