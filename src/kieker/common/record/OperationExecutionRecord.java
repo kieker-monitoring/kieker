@@ -1,9 +1,5 @@
 package kieker.common.record;
 
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-import kieker.common.record.AbstractMonitoringRecord;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
