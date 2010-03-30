@@ -352,6 +352,9 @@
                debug="true"
                classpathref="tpmon.core.classpath">
             <compilerarg value="-Xlint:all,-path"/>
+         <classpath> <!-- includes kieker/tpmon/probe/manual -->
+                <pathelement location="${dist.dir}/${dist.tpan.ctrl}"/>
+            </classpath>
         </javac>
         <!-- We want to include the sources in this jar -->
         <copy todir="${build.kieker.tools.dir}/">
