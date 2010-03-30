@@ -1,6 +1,6 @@
 package kieker.tools.logReplayer;
 
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -12,17 +12,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * IKiekerRecordConsumer that distributes the log records to the worker
+ * IRecordConsumer that distributes the log records to the worker
  * thread for "real time" replays.
  *
  * @author Robert von Massow
  *
  */
-public class RealtimeReplayDistributor implements IKiekerRecordConsumer {
+public class RealtimeReplayDistributor implements IRecordConsumer {
 
     private static final Log log = LogFactory.getLog(RealtimeReplayDistributor.class);
     public final int numWorkers;
-    private final IKiekerRecordConsumer cons;
+    private final IRecordConsumer cons;
     private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
     private final ScheduledThreadPoolExecutor executor;
     private long lTime;
@@ -38,7 +38,7 @@ public class RealtimeReplayDistributor implements IKiekerRecordConsumer {
         this.maxQueueSize = -1;
     }
 
-    public RealtimeReplayDistributor(final int numWorkers, final IKiekerRecordConsumer cons) {
+    public RealtimeReplayDistributor(final int numWorkers, final IRecordConsumer cons) {
         this.numWorkers = numWorkers;
         this.cons = cons;
         this.maxQueueSize = numWorkers * 1000;

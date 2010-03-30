@@ -1,12 +1,12 @@
-package kieker.tpan.reader.filesystemReader;
+package kieker.tpan.reader.filesystem;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import kieker.tpan.reader.AbstractKiekerMonitoringLogReader;
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.reader.AbstractMonitoringLogReader;
+import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
+public class FSMergeReader extends AbstractMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSMergeReader.class);
     public static final String PROP_NAME_INPUTDIRS = "inputDirs"; // value: semicolon-separated list of directories
@@ -64,7 +64,7 @@ public class FSMergeReader extends AbstractKiekerMonitoringLogReader {
      */
     private FSReaderCons concurrentConsumer;
 
-    private class FSReaderCons implements IKiekerRecordConsumer {
+    private class FSReaderCons implements IRecordConsumer {
 
         private final FSMergeReader master;
         private final String[] inputDirs;

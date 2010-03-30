@@ -1,6 +1,6 @@
 package kieker.tpan.reader;
 
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IRecordConsumer;
 
 /*
  * ==================LICENCE=========================
@@ -29,9 +29,9 @@ import kieker.tpan.consumer.IKiekerRecordConsumer;
  *
  * @author Andre van Hoorn
  */
-public interface IKiekerMonitoringLogReader {
+public interface IMonitoringLogReader {
     public void init(String initString) throws IllegalArgumentException;
-    public void addConsumer(IKiekerRecordConsumer consumer, String[] recordTypeSubscriptionList);
+    public void addConsumer(IRecordConsumer consumer, String[] recordTypeSubscriptionList);
     public boolean execute() throws LogReaderExecutionException;
     public void terminate();
 }

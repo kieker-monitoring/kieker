@@ -11,7 +11,7 @@ import kieker.common.record.AbstractMonitoringRecord;
  *
  * @author matthias
  */
-public class DummyRecordConsumer implements IKiekerRecordConsumer {
+public class DummyRecordConsumer implements IRecordConsumer {
 
 
     public String[] getRecordTypeSubscriptionList() {

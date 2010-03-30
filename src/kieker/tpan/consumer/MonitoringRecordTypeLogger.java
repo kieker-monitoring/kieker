@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class MonitoringRecordTypeLogger implements IKiekerRecordConsumer {
+public class MonitoringRecordTypeLogger implements IRecordConsumer {
 
     private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
     /** Consuming any records of any type */

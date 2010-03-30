@@ -2,7 +2,7 @@ package kieker.tpmon.writer.filesystemSync;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
+import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,7 +63,7 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public final class SyncFsWriter extends AbstractKiekerMonitoringLogWriter {
+public final class SyncFsWriter extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(SyncFsWriter.class);
     // configuration parameters

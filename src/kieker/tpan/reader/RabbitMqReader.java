@@ -27,7 +27,7 @@ import kieker.common.record.OperationExecutionRecord;
  *
  * @author matthias
  */
-public class RabbitMqReader extends AbstractKiekerMonitoringLogReader {
+public class RabbitMqReader extends AbstractMonitoringLogReader {
 
     private String rmqHostName = "localhost";
     private String rmqVirtualHost = "kiekertest";

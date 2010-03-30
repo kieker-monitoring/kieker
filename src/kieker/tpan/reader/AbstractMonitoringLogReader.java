@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 
 import kieker.common.record.AbstractMonitoringRecord;
@@ -22,18 +22,18 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonitoringLogReader {
+public abstract class AbstractMonitoringLogReader implements IMonitoringLogReader {
 
-    private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringLogReader.class);
+    private static final Log log = LogFactory.getLog(AbstractMonitoringLogReader.class);
     private final HashMap<String, String> map = new HashMap<String, String>();
     /** class name x class object */
     protected Map<String, Class<? extends AbstractMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<String, Class<? extends AbstractMonitoringRecord>>());
     /** Contains all consumers which consume records of any type */
-    private final Collection<IKiekerRecordConsumer> subscribedToAllList =
-            new Vector<IKiekerRecordConsumer>();
+    private final Collection<IRecordConsumer> subscribedToAllList =
+            new Vector<IRecordConsumer>();
     /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<String, Collection<IKiekerRecordConsumer>> subscribedToTypeMap =
-            new HashMap<String, Collection<IKiekerRecordConsumer>>();
+    private final HashMap<String, Collection<IRecordConsumer>> subscribedToTypeMap =
+            new HashMap<String, Collection<IRecordConsumer>>();
 
     /** Returns the value for the initialization property @a propName or the
      *  the passed default value @a default if no value for this property
@@ -92,14 +92,14 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
         initStringProcessed = true;
     }
 
-    public final void addConsumer(final IKiekerRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
+    public final void addConsumer(final IRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
         if (recordTypeSubscriptionList == null) {
             this.subscribedToAllList.add(consumer);
         } else {
             for (String recordTypeName : recordTypeSubscriptionList) {
-                Collection<IKiekerRecordConsumer> cList = this.subscribedToTypeMap.get(recordTypeName);
+                Collection<IRecordConsumer> cList = this.subscribedToTypeMap.get(recordTypeName);
                 if (cList == null) {
-                    cList = new Vector<IKiekerRecordConsumer>(0);
+                    cList = new Vector<IRecordConsumer>(0);
                     this.subscribedToTypeMap.put(recordTypeName, cList);
                 }
                 cList.add(consumer);
@@ -109,12 +109,12 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
 
     protected final void deliverRecordToConsumers(final AbstractMonitoringRecord r) throws LogReaderExecutionException {
         try {
-            for (IKiekerRecordConsumer c : this.subscribedToAllList) {
+            for (IRecordConsumer c : this.subscribedToAllList) {
                 c.consumeMonitoringRecord(r);
             }
-            Collection<IKiekerRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
+            Collection<IRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
             if (cList != null) {
-                for (IKiekerRecordConsumer c : cList) {
+                for (IRecordConsumer c : cList) {
                     c.consumeMonitoringRecord(r);
                 }
             }
@@ -148,12 +148,12 @@ public abstract class AbstractKiekerMonitoringLogReader implements IKiekerMonito
     }
 
     public void terminate() {
-        for (IKiekerRecordConsumer c : this.subscribedToAllList) {
+        for (IRecordConsumer c : this.subscribedToAllList) {
             c.terminate();
         }
-        for (Collection<IKiekerRecordConsumer> cList : this.subscribedToTypeMap.values()) {
+        for (Collection<IRecordConsumer> cList : this.subscribedToTypeMap.values()) {
             if (cList != null) {
-                for (IKiekerRecordConsumer c : cList) {
+                for (IRecordConsumer c : cList) {
                     c.terminate();
                 }
             }

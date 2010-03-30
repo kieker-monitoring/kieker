@@ -1,6 +1,6 @@
 package kieker.tools.logReplayer;
 
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.common.record.AbstractMonitoringRecord;
 
@@ -17,10 +17,10 @@ public class RealtimeReplayWorker implements Runnable {
 
     private static final Log log = LogFactory.getLog(RealtimeReplayWorker.class);
     private final AbstractMonitoringRecord monRec;
-    private final IKiekerRecordConsumer cons;
+    private final IRecordConsumer cons;
     private final RealtimeReplayDistributor rd;
 
-    public RealtimeReplayWorker(final AbstractMonitoringRecord monRec, final RealtimeReplayDistributor rd, final IKiekerRecordConsumer cons) {
+    public RealtimeReplayWorker(final AbstractMonitoringRecord monRec, final RealtimeReplayDistributor rd, final IRecordConsumer cons) {
         this.monRec = monRec;
         this.cons = cons;
         this.rd = rd;

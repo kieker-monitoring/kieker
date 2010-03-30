@@ -19,7 +19,7 @@ package kieker.tpan.consumer.executionRecordTransformation;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 import kieker.tpan.datamodel.AllocationComponentInstance;
 import kieker.tpan.datamodel.AssemblyComponentInstance;
@@ -37,7 +37,7 @@ import kieker.common.record.OperationExecutionRecord;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformer implements IKiekerRecordConsumer {
+public class ExecutionRecordTransformer implements IRecordConsumer {
 
     private final SystemEntityFactory systemFactory;
 

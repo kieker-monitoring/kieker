@@ -1,14 +1,14 @@
 package kieker.tools.logReplayer;
 
 import java.util.StringTokenizer;
-import kieker.tpan.reader.AbstractKiekerMonitoringLogReader;
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.reader.AbstractMonitoringLogReader;
+import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
 
 import kieker.tools.logReplayer.RealtimeReplayDistributor;
-import kieker.tpan.reader.filesystemReader.FSMergeReader;
-import kieker.tpan.reader.filesystemReader.FSReader;
+import kieker.tpan.reader.filesystem.FSMergeReader;
+import kieker.tpan.reader.filesystem.FSReader;
 import kieker.common.record.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,12 +17,12 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
+public class FSReaderRealtime extends AbstractMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
     /* delegate */
-    private AbstractKiekerMonitoringLogReader fsReader;
+    private AbstractMonitoringLogReader fsReader;
     private RealtimeReplayDistributor rtDistributor = null;
 
     private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
@@ -32,7 +32,7 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
      * Acts as a consumer to the rtDistributor and delegates incoming records
      * to the FSReaderRealtime instance.
      */
-    private class FSReaderRealtimeCons implements IKiekerRecordConsumer {
+    private class FSReaderRealtimeCons implements IRecordConsumer {
 
         private final FSReaderRealtime master;
 
@@ -124,7 +124,7 @@ public class FSReaderRealtime extends AbstractKiekerMonitoringLogReader {
         } else {
             fsReader = new FSMergeReader(inputDirNames);
         }
-        IKiekerRecordConsumer rtCons = new FSReaderRealtimeCons(this);
+        IRecordConsumer rtCons = new FSReaderRealtimeCons(this);
         rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons);
         fsReader.addConsumer(rtDistributor, null);
     }

@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.core.TpmonController;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
+import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 
 /*
  * ==================LICENCE=========================
@@ -33,7 +33,7 @@ import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
  *
  * @author Matthias Rohr, Andre van Hoorn
  */
-public final class AsyncJMSConnector extends AbstractKiekerMonitoringLogWriter {
+public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncJMSConnector.class);
     private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();

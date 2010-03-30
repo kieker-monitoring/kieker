@@ -10,7 +10,7 @@ import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
+import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Matthias Rohr, Andre van Hoorn
  */
-public final class AsyncFsConnector extends AbstractKiekerMonitoringLogWriter {
+public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncFsConnector.class);
     //configuration parameter

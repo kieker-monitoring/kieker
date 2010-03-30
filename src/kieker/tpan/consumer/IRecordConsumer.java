@@ -3,7 +3,7 @@ package kieker.tpan.consumer;
 import kieker.common.record.AbstractMonitoringRecord;
 
 /**
- * kieker.loganalysis.IKiekerRecordConsumer
+ * kieker.loganalysis.IRecordConsumer
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -23,7 +23,7 @@ import kieker.common.record.AbstractMonitoringRecord;
  *
  * @author Andre van Hoorn
  */
-public interface IKiekerRecordConsumer {
+public interface IRecordConsumer {
 
     /**
      * Simply return null to get records of all types.

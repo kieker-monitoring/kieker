@@ -1,4 +1,4 @@
-package kieker.tpan.reader.filesystemReader;
+package kieker.tpan.reader.filesystem;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
-import kieker.tpan.reader.AbstractKiekerMonitoringLogReader;
+import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
@@ -47,7 +47,7 @@ import org.apache.commons.logging.LogFactory;
  * History:
  * 2008/09/15: Initial version
  */
-public class FSReader extends AbstractKiekerMonitoringLogReader {
+public class FSReader extends AbstractMonitoringLogReader {
 
     private static final String PROP_NAME_INPUTDIR = "inputDirName";
     private static final Log log = LogFactory.getLog(FSReader.class);

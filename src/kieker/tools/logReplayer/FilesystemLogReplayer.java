@@ -19,11 +19,11 @@ package kieker.tools.logReplayer;
  * 
  */
 
-import kieker.tpan.reader.AbstractKiekerMonitoringLogReader;
-import kieker.tpan.consumer.IKiekerRecordConsumer;
+import kieker.tpan.reader.AbstractMonitoringLogReader;
+import kieker.tpan.consumer.IRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.reader.filesystemReader.FSMergeReader;
-import kieker.tpan.reader.filesystemReader.FSReader;
+import kieker.tpan.reader.filesystem.FSMergeReader;
+import kieker.tpan.reader.filesystem.FSReader;
 import kieker.tpmon.core.TpmonController;
 import kieker.common.record.AbstractMonitoringRecord;
 import org.apache.commons.logging.Log;
@@ -66,7 +66,7 @@ public class FilesystemLogReplayer {
          */
         ctrlInst.setReplayMode(this.keepOriginalLoggingTimestamps);
 
-        IKiekerRecordConsumer logCons = new IKiekerRecordConsumer() {
+        IRecordConsumer logCons = new IRecordConsumer() {
 
             /** Anonymous consumer class that simply passes all records to the
              *  controller */
@@ -87,7 +87,7 @@ public class FilesystemLogReplayer {
                 ctrlInst.terminateMonitoring();
             }
         };
-        AbstractKiekerMonitoringLogReader fsReader;
+        AbstractMonitoringLogReader fsReader;
         if (realtimeMode) {
           fsReader = new FSReaderRealtime(inputDirs, numRealtimeWorkerThreads);
 

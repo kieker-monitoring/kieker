@@ -16,7 +16,7 @@ import kieker.common.record.OperationExecutionRecord;
  *
  * @author matthias
  */
-public class DummyLogReader extends AbstractKiekerMonitoringLogReader{
+public class DummyLogReader extends AbstractMonitoringLogReader{
 
     private int i = 1;
 

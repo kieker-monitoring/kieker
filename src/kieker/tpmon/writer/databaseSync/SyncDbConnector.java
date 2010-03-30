@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
+import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 
@@ -64,7 +64,7 @@ import org.apache.commons.logging.LogFactory;
  * 2006/12/20: Initial Prototype
  *
  */
-public final class SyncDbConnector extends AbstractKiekerMonitoringLogWriter {
+public final class SyncDbConnector extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(SyncDbConnector.class);
     private Connection conn = null;

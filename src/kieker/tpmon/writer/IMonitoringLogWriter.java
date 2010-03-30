@@ -5,7 +5,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
 /**
- * kieker.tpmon.IKiekerMonitoringLogWriter
+ * kieker.tpmon.IMonitoringLogWriter
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -25,7 +25,7 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
  *
  * @author Andre van Hoorn
  */
-public interface IKiekerMonitoringLogWriter {
+public interface IMonitoringLogWriter {
 
     public boolean isWriteRecordTypeIds();
 

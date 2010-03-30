@@ -19,8 +19,8 @@ package kieker.tpan;
  */
 
 import java.util.Vector;
-import kieker.tpan.consumer.IKiekerRecordConsumer;
-import kieker.tpan.reader.IKiekerMonitoringLogReader;
+import kieker.tpan.consumer.IRecordConsumer;
+import kieker.tpan.reader.IMonitoringLogReader;
 
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
@@ -48,12 +48,12 @@ import org.apache.commons.logging.LogFactory;
 public class TpanInstance {
 
     private static final Log log = LogFactory.getLog(TpanInstance.class);
-    private IKiekerMonitoringLogReader logReader;
+    private IMonitoringLogReader logReader;
     // this are the consumers for data that are comming into kieker by readers (files or system under monitoring)
-    private final Vector<IKiekerRecordConsumer> consumers = new Vector<IKiekerRecordConsumer>();
+    private final Vector<IRecordConsumer> consumers = new Vector<IRecordConsumer>();
 
     public void run() throws LogReaderExecutionException, RecordConsumerExecutionException {
-        for (IKiekerRecordConsumer c : this.consumers) {
+        for (IRecordConsumer c : this.consumers) {
             this.logReader.addConsumer(c, c.getRecordTypeSubscriptionList());
             c.execute();
         }
@@ -69,18 +69,18 @@ public class TpanInstance {
             }
         } catch (LogReaderExecutionException exc) {            
             log.fatal("LogReaderException! Will terminate consumers.");
-            for (IKiekerRecordConsumer c : this.consumers) {
+            for (IRecordConsumer c : this.consumers) {
                 c.terminate();
             }
             throw exc;
         }
     }
 
-    public void setLogReader(IKiekerMonitoringLogReader reader) {
+    public void setLogReader(IMonitoringLogReader reader) {
         this.logReader = reader;
     }
 
-    public void addRecordConsumer(IKiekerRecordConsumer consumer) {
+    public void addRecordConsumer(IRecordConsumer consumer) {
         this.consumers.add(consumer);
     }
 }

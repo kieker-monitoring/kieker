@@ -17,14 +17,14 @@ import kieker.common.record.OperationExecutionRecord;
  *
  * @author matthias
  */
-public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTraceReceiver {
+public class BriefJavaFxInformer implements IRecordConsumer, IMessageTraceReceiver {
 
     public BriefJavaFxInformer() {
         try {
             System.out.println("==> Trying to start JavaFx window");
             String javaFxWindowClassname = "KiekerLiveAnalyzer.JavaMain";
             Object obj = Class.forName(javaFxWindowClassname).newInstance();
-            jfxRc = (IKiekerRecordConsumer) obj;
+            jfxRc = (IRecordConsumer) obj;
             jfxTr = (IMessageTraceReceiver) obj; // dont wonder, its the same object twice
             System.out.println("==> Success to start JavaFx window (at least the class invocation)");
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class BriefJavaFxInformer implements IKiekerRecordConsumer, IMessageTrace
         }
     }
     // these variables represents access to the javafx window
-    IKiekerRecordConsumer jfxRc = null;
+    IRecordConsumer jfxRc = null;
     IMessageTraceReceiver jfxTr = null;
     IMessageTraceReceiver jfxUniqueTr = null;
     IExecutionTraceReceiver jfxBrokenExecutionTraceReceiver = null;

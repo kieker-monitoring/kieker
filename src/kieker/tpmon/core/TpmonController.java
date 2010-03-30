@@ -4,7 +4,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.IKiekerMonitoringLogWriter;
+import kieker.tpmon.writer.IMonitoringLogWriter;
 import kieker.tpmon.writer.databaseSync.SyncDbConnector;
 import kieker.tpmon.writer.filesystemSync.SyncFsWriter;
 import java.io.FileInputStream;
@@ -86,7 +86,7 @@ public final class TpmonController {
     public final static String WRITER_ASYNCFS = "AsyncFS";
     private String monitoringDataWriterClassname = null;
     private String monitoringDataWriterInitString = null;
-    private IKiekerMonitoringLogWriter monitoringDataWriter = null;
+    private IMonitoringLogWriter monitoringDataWriter = null;
     private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
@@ -148,7 +148,7 @@ public final class TpmonController {
                         setInitialExperimentIdBasedOnLastId, asyncRecordQueueSize);
             } else {
                 /* try to load the class by name */
-                this.monitoringDataWriter = (IKiekerMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
+                this.monitoringDataWriter = (IMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
                 //add asyncRecordQueueSize
                 monitoringDataWriterInitString += " | asyncRecordQueueSize="+asyncRecordQueueSize;
                 if (!this.monitoringDataWriter.init(monitoringDataWriterInitString)) {

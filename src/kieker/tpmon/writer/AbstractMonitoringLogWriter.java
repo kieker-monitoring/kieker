@@ -9,7 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * kieker.tpmon.AbstractKiekerMonitoringLogWriter.java
+ * kieker.tpmon.AbstractMonitoringLogWriter.java
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -29,9 +29,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractKiekerMonitoringLogWriter implements IKiekerMonitoringLogWriter {
+public abstract class AbstractMonitoringLogWriter implements IMonitoringLogWriter {
 
-    private static final Log log = LogFactory.getLog(AbstractKiekerMonitoringLogWriter.class);
+    private static final Log log = LogFactory.getLog(AbstractMonitoringLogWriter.class);
 
     private boolean debugEnabled;
     private boolean writeRecordTypeIds;

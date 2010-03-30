@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * 2009-07-01 (AvH) Initial version
  * 2009-07-25 (MR)
  */
-public class JMSReader extends AbstractKiekerMonitoringLogReader {
+public class JMSReader extends AbstractMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(JMSReader.class);
     private String jmsProviderUrl = null;
