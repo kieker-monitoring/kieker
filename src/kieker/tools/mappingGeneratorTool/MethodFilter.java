@@ -1,4 +1,4 @@
-package kieker.tpmon.tools.mappingGeneratorTool;
+package kieker.tools.mappingGeneratorTool;
 
 import java.lang.reflect.Method;
 

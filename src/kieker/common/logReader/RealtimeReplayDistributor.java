@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 public class RealtimeReplayDistributor implements IKiekerRecordConsumer {
 
     private static final Log log = LogFactory.getLog(RealtimeReplayDistributor.class);
-    private static TpmonController ctrlInst = null;
     public final int numWorkers;
     private final IKiekerRecordConsumer cons;
     private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;

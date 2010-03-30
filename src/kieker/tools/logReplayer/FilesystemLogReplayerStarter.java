@@ -1,4 +1,4 @@
-package kieker.tpmon.tools.logReplayer;
+package kieker.tools.logReplayer;
 
 /*
  * ==================LICENCE=========================

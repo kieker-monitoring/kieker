@@ -33,6 +33,8 @@
                   value="${kieker.tpan.packagenamebase}-${kieker.version}"/>
         <property name="common.dist.name"
                   value="${kieker.common.packagenamebase}-${kieker.version}"/>
+        <property name="tools.dist.name"
+                  value="${kieker.tools.packagenamebase}-${kieker.version}"/>
         <property name="dist.tpmon.ltw"
                   value="${tpmon.dist.name}_${kieker-tpmon-ltwjar.suffix}.jar"/>
         <property name="dist.tpmon.ctw"
@@ -43,6 +45,8 @@
                   value="${tpmon.dist.name}_${kieker-tpmon-controlServletwar.suffix}.war"/>
         <property name="dist.kieker.common"
                   value="${common.dist.name}.jar"/>
+        <property name="dist.kieker.tools"
+                  value="${tools.dist.name}.jar"/>
         <property name="dist.tpan.ctrl"
                   value="${tpan.dist.name}_${kieker-tpan-ctrljar.suffix}.jar"/>
         <property name="dist.kieker.srcBaseName"
@@ -74,7 +78,7 @@
     </target>
 
     <target name="build-all"
-            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-kieker.common,build-tpan-ctrl">
+            depends="clean,init,build-tpmon-ctw,build-tpmon-ltw,build-tpmon-ctrl,build-tpmon-control-servlet,build-kieker.common,build-tpan-ctrl,build-kieker.tools">
     </target>
 
     <condition property="no.kieker.properties">
@@ -333,6 +337,30 @@
         </copy>
         <jar destfile="${dist.dir}/${dist.kieker.common}">
             <fileset dir="${build.kieker.common.dir}"/>
+        </jar>
+    </target>
+
+    <!-- Build kieker.tools  -->
+    <target name="build-kieker.tools" depends="init,build-kieker.common,build-tpmon-ctrl,build-tpan-ctrl">
+        <delete dir="${build.kieker.tools.dir}"/>
+        <mkdir  dir="${build.kieker.tools.dir}"/>
+        <mkdir  dir="${build.kieker.tools.dir}/META-INF"/>
+        <echo message="Creating the library of kieker.tools (${dist.kieker.tools})."/>
+        <javac destDir="${build.kieker.tools.dir}"
+               source="1.5" target="1.5"
+               srcdir="src/kieker/tools/"
+               debug="true"
+               classpathref="tpmon.core.classpath">
+            <compilerarg value="-Xlint:all,-path"/>
+        </javac>
+        <!-- We want to include the sources in this jar -->
+        <copy todir="${build.kieker.tools.dir}/">
+            <fileset dir="src">
+                <include name="kieker/tools/**/*.java"/>
+            </fileset>
+        </copy>
+        <jar destfile="${dist.dir}/${dist.kieker.tools}">
+            <fileset dir="${build.kieker.tools.dir}"/>
         </jar>
     </target>
 
