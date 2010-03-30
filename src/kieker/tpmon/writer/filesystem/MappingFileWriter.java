@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.Integer;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map;
 import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
@@ -40,7 +36,7 @@ public class MappingFileWriter {
     private static final Log log = LogFactory.getLog(MappingFileWriter.class);
 
     private final File mappingFile;
-    private int nextId = 0;
+    private int nextId = 1; // first ID is 1
     private final Hashtable<Class<? extends IMonitoringRecord>, Integer> class2idMap = new Hashtable<Class<? extends IMonitoringRecord>,Integer>();
 
     public MappingFileWriter(final String mappingFileFn) throws IOException{

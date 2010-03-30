@@ -1,1 +1,1 @@
-$1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
+$1=kieker.common.record.OperationExecutionRecord
