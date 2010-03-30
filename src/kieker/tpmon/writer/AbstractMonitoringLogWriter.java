@@ -2,8 +2,6 @@ package kieker.tpmon.writer;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import kieker.common.record.IMonitoringRecord;
-
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,7 +32,6 @@ public abstract class AbstractMonitoringLogWriter implements IMonitoringLogWrite
     private static final Log log = LogFactory.getLog(AbstractMonitoringLogWriter.class);
 
     private boolean debugEnabled;
-    private boolean writeRecordTypeIds;
     private final HashMap<String, String> map = new HashMap<String, String>();
 
     /** Returns the value for the initialization property @a propName or the

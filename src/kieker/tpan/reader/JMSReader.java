@@ -17,7 +17,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpmon.writer.jmsAsync.MonitoringRecordTypeClassnameMapping;
+import kieker.common.record.MonitoringRecordTypeClassnameMapping;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -192,8 +192,6 @@
             <compilerarg value="-Xlint:all,-path"/>
             <include name="kieker/tpmon/annotation/**"/>
             <include name="kieker/tpmon/core/**"/>
-            <include name="kieker/tpmon/monitoringRecord/**"/>
-            <include name="kieker/tpmon/reader/**"/>
             <include name="kieker/tpmon/writer/**"/>
             <include name="kieker/tpmon/probe/IKiekerMonitoringProbe.java"/>
         </javac>
@@ -289,7 +287,7 @@
     </target>
 
     <!-- Build tpan  -->
-    <target name="build-tpan-ctrl" depends="init,build-tpmon-ctrl,build-kieker.common">
+    <target name="build-tpan-ctrl" depends="init,build-kieker.common">
         <delete dir="${build.tpan.ctrl.dir}"/>
         <mkdir  dir="${build.tpan.ctrl.dir}"/>
         <mkdir  dir="${build.tpan.ctrl.dir}/META-INF"/>
@@ -298,7 +296,7 @@
                source="1.5" target="1.5"
                srcdir="src/kieker/tpan/"
                debug="true"
-               classpathref="tpmon.core.classpath">
+               classpathref="kieker.common.classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
         <copy file="${tpan.properties}" todir="${build.tpan.ctrl.dir}/META-INF"/>

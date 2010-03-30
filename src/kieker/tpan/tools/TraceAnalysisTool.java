@@ -36,7 +36,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.RecordConsumerExecutionException;
-import kieker.tpan.reader.filesystem.FSMergeReader;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.ExecutionTrace;
@@ -56,7 +55,6 @@ import kieker.tpan.plugins.dependencyGraph.ComponentDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.ContainerDependencyGraphPlugin;
 import kieker.tpan.plugins.dependencyGraph.OperationDependencyGraphPlugin;
 import kieker.tpan.plugins.sequenceDiagram.SequenceDiagramPlugin;
-import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tpan.plugins.traceReconstruction.TraceReconstructionFilter.TraceEquivalenceClassModes;
@@ -64,7 +62,6 @@ import kieker.tpan.consumer.BriefJavaFxInformer;
 import kieker.tpan.consumer.executionRecordTransformation.ExecutionRecordTransformer;
 
 import kieker.tpan.consumer.MonitoringRecordTypeLogger;
-import kieker.tpmon.core.TpmonController;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -617,9 +614,6 @@ public class TraceAnalysisTool {
                 System.exit(1);
             }
 
-            /* As long as we have a dependency from logAnalysis to tpmon,
-             * we need to terminate tpmon explicitly. */
-            TpmonController.getInstance().terminateMonitoring();
         } catch (Exception exc) {
             System.err.println("An error occured. See log for details");
             log.fatal(args, exc);
@@ -857,11 +851,6 @@ public class TraceAnalysisTool {
     private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
 
-        /** As long as we have a dependency to tpmon, 
-         *  we load it explicitly in order to avoid 
-         *  later delays.*/
-        TpmonController ctrl = TpmonController.getInstance();
-
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);
         /* Read log data and collect execution traces */
         TpanInstance analysisInstance = new TpanInstance();
@@ -883,11 +872,6 @@ public class TraceAnalysisTool {
 
     private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, RecordConsumerExecutionException {
         boolean retVal = true;
-
-        /** As long as we have a dependency to tpmon,
-         *  we load it explicitly in order to avoid
-         *  later delays.*/
-        TpmonController ctrl = TpmonController.getInstance();
 
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);
         /* Read log data and collect execution traces */

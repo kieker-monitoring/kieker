@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.jmsAsync;
+package kieker.tpmon.writer.jms;
 
 import java.io.Serializable;
 import java.util.Hashtable;

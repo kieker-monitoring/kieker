@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.jmsAsync;
+package kieker.common.record;
 
 /*
  * ==================LICENCE=========================

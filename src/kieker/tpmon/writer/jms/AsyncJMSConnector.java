@@ -1,5 +1,6 @@
-package kieker.tpmon.writer.jmsAsync;
+package kieker.tpmon.writer.jms;
 
+import kieker.common.record.MonitoringRecordTypeClassnameMapping;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
