@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.filesystemSync;
+package kieker.tpmon.writer.filesystem;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;

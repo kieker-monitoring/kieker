@@ -1,4 +1,4 @@
-package kieker.tpmon.writer.databaseSync;
+package kieker.tpmon.writer.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
