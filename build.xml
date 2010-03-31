@@ -681,9 +681,7 @@
             </classpath>
         </java>
     </target>
-
-    <!-- TODO: doesn't work at the moment; probably because an appropriate aop.xml
-               with a non-annotation aspect needs to be passed -->
+    
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation"
             depends="compile-tests-loadTimeWeaving">
         <copy file="${tests.log4j.properties}"

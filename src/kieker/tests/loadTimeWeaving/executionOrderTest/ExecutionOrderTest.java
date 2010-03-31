@@ -61,7 +61,6 @@ public class ExecutionOrderTest {
         a(true);
         a(false);        
 		d1();
-        System.exit(0);
     }
 
 
