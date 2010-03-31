@@ -368,7 +368,8 @@
             <include name="bin/*.sh"/>
             <include name="bin/log4j.properties"/>
             <include name="META-INF/*.example"/>
-	    <include name="${aop.xml.ltwtests}"/>
+	    <include name="${aop.xml.ltwtests.annotation}"/>
+	    <include name="${aop.xml.ltwtests.noannotation}"/>
             <include name="src/**/*.java"/>
             <include name="src/kieker/tpmon/controlServlet/WEB-INF/web.xml"/>
             <include name="src/kieker/tpmon/controlServlet/images/**"/>
@@ -644,10 +645,6 @@
             <!--<exclude name="src/kieker/tests/loadTimeWeaving/bookstoreDifferentRecordTypes/"/>-->
 <!--               excludes="kieker/tests/loadTimeWeaving/bookstoreDifferentRecordTypes/**">-->
         </javac>
-        <copy file="${tests.log4j.properties}"
-              tofile="${build.dir}/tests.log4j.properties"/>
-        <copy file="${aop.xml.ltwtests}"
-	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
     </target>
 
     <target name="compile-tests-loadTimeWeavingDifferentRecordTypes"
@@ -660,14 +657,14 @@
                 <pathelement location="${dist.dir}/${dist.tpmon.ltw}"/>
             </classpath>
         </javac>
-        <copy file="${tests.log4j.properties}"
-              tofile="${build.dir}/tests.log4j.properties"/>
-        <copy file="${aop.xml.ltwtests}"
-	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes"
             depends="compile-tests-loadTimeWeavingDifferentRecordTypes">
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.dir}/tests.log4j.properties"/>
+        <copy file="${aop.xml.ltwtests.annotation}"
+	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
         <java dir="."
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore"
@@ -688,6 +685,10 @@
                with a non-annotation aspect needs to be passed -->
     <target name="run-tests-loadTimeWeaving-bookstoreWithoutAnnotation"
             depends="compile-tests-loadTimeWeaving">
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.dir}/tests.log4j.properties"/>
+        <copy file="${aop.xml.ltwtests.noannotation}"
+	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
         <java dir="."
               fork="true"              
               classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
@@ -706,6 +707,10 @@
 
     <target name="run-tests-loadTimeWeaving-executionOrderTest"
             depends="compile-tests-loadTimeWeaving">
+        <copy file="${tests.log4j.properties}"
+              tofile="${build.dir}/tests.log4j.properties"/>
+        <copy file="${aop.xml.ltwtests.noannotation}"
+	      tofile="${build.tests.dir}/META-INF/aop.xml"/>
         <java dir="."
               fork="true"
               classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
@@ -801,7 +806,6 @@
         </java>
     </target>
 
-    <!-- TODO: test doesn't run at the moment. We should pass a fix tpmon.properties! -->
     <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="compile-tests-compileTimeWeaving-bookstoreDB">
         <delete dir="${tests.javadb.kiekerdb.path}"/> <!-- delete existing DB -->
         <java dir="."
@@ -827,7 +831,6 @@
         </java>
     </target>
 
-    <!-- TODO: monitoring log contains invalid traces (lowest eoi/ess 1;1 instead of 0;0) -->
     <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="compile-tests-compileTimeWeaving-bookstore">
         <echo message="Using Bookstore variant with synchronized Catalog.getBooks (is slower)."/>
         <java dir="."
