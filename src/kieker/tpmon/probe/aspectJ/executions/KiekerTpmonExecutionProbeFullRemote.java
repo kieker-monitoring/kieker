@@ -31,11 +31,11 @@ import org.apache.commons.logging.LogFactory;
   * @author Andre van Hoorn
  */
 @Aspect
-public class KiekerTpmonExecutionProbeAnnotationRemote extends AbstractKiekerTpmonExecutionProbe {
+public class KiekerTpmonExecutionProbeFullRemote extends AbstractKiekerTpmonExecutionProbe {
 
-    private static final Log log = LogFactory.getLog(KiekerTpmonExecutionProbeAnnotationRemote.class);
+    private static final Log log = LogFactory.getLog(KiekerTpmonExecutionProbeFullRemote.class);
 
-    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))")
+    @Pointcut("execution(* *.*(..))")
     public void monitoredMethod() {
     }
 
