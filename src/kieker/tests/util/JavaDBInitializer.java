@@ -21,13 +21,11 @@ package kieker.tests.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
@@ -73,6 +71,7 @@ public class JavaDBInitializer {
             log.error(ex);
             System.exit(1);
         }
+        log.info(JavaDBInitializer.class.getName()+".main(..) done");
     }
 
     private static boolean readProperties(){

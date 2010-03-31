@@ -6,8 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-/**
- * kieker.tpmon.aspects.KiekerTpmonExecutionProbeAnnotation
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -24,26 +23,26 @@ import org.aspectj.lang.annotation.Pointcut;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+/**
  * @author Andre van Hoorn
  */
 @Aspect
 public class KiekerTpmonExecutionProbeAnnotation extends AbstractKiekerTpmonExecutionProbe {
 
-    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))"+
-              " && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))")
     public void monitoredMethod() {
     }
-   
+
     @Around("monitoredMethod()")
     public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {
             return thisJoinPoint.proceed();
         }
         OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
-        try{
+        try {
             this.proceedAndMeasure(thisJoinPoint, execData);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e; // exceptions are forwarded          
         } finally {
             /* note that proceedAndMeasure(...) even sets the variable name

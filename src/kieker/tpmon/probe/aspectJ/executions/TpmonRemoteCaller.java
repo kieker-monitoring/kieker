@@ -5,8 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * kieker.tpmon.aspects.TpmonRemoteCaller
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -23,7 +22,9 @@ import java.lang.annotation.Target;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * This annotation marks methods that are exit points for remote calls
  * that go to an other virtual machine. The annotation tries to ensure
  * that the trace id is propergated to an other instance of tpmon in

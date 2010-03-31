@@ -45,8 +45,7 @@ public class KiekerTpmonExecutionProbeAnnotationRemoteServlet extends AbstractKi
         return super.doServletEntryProfiling(thisJoinPoint);
     }
 
-    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))" +
-    " && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
+    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))")
     public void monitoredMethod() {
     }
 

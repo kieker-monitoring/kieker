@@ -817,7 +817,7 @@
               fork="true"
               classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
               classpathref="run.tests.classpath">
-            <jvmarg value="-Dtpmon.logMonitoringRecordTypeIds=false"/> <!-- type logging currently not supported by DB writers -->
+            <jvmarg value="-Dtpmon.configuration=${tests.db.tpmon.properties}"/>
             <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>

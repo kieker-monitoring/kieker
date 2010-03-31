@@ -361,8 +361,8 @@ public final class TpmonController {
 
         try {
             if (System.getProperty("tpmon.configuration") != null) { // we use the present virtual machine parameter value
-                log.info("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
                 configurationFile = System.getProperty("tpmon.configuration");
+                log.info("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
                 is = new FileInputStream(configurationFile);
             } else {
                 log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);

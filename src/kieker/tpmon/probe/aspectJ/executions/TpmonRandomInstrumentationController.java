@@ -4,9 +4,7 @@ package kieker.tpmon.probe.aspectJ.executions;
 import java.util.HashMap;
 import java.util.Random;
 
-/**
- * kieker.tpmon.aspects.TpmonRandomInstrumentationController
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -22,8 +20,9 @@ import java.util.Random;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * This is a central place for realizing a random registry 
+ */
+
+/** This is a central place for realizing a random registry
  * of instrumented operations.
  * 
  * A random subset of all operations will receive a isMonitored(..) == true

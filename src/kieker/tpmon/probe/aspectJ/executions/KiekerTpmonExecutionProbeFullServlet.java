@@ -8,8 +8,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-/**
- * kieker.tpmon.aspects.KiekerTpmonExecutionProbeFullServlet
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -26,7 +25,9 @@ import org.aspectj.lang.annotation.Pointcut;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
 @Aspect
@@ -41,7 +42,7 @@ public class KiekerTpmonExecutionProbeFullServlet extends AbstractKiekerTpmonExe
         return super.doServletEntryProfiling(thisJoinPoint);
     }
 
-    @Pointcut("execution(* *.*(..)) && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
+    @Pointcut("execution(* *.*(..))")
     public void monitoredMethod() {
     }
 
