@@ -38,7 +38,6 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * Simple class to store monitoroing data in the file system. Although a
  * buffered writer is used, outliers (delays of 1000 ms) occur from time
@@ -100,11 +99,9 @@ public final class TpmonController {
     private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
     private TpmonShutdownHook shutdownhook = null;
     private static TpmonController ctrlInst = new TpmonController();
-
     //marks the end of monitoring to the writer threads
     public static final AbstractMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 
-    
     public final static TpmonController getInstance() {
         return TpmonController.ctrlInst;
     }
@@ -115,10 +112,10 @@ public final class TpmonController {
         } catch (Exception ex) {
         } // nothing to do -- vmname will be "unknown"
 
-        log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:" +
-                Thread.currentThread().getId());
-        log.info(">Kieker-Tpmon: Virtual Machine start time " +
-                ManagementFactory.getRuntimeMXBean().getStartTime());
+        log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:"
+                + Thread.currentThread().getId());
+        log.info(">Kieker-Tpmon: Virtual Machine start time "
+                + ManagementFactory.getRuntimeMXBean().getStartTime());
 
         shutdownhook = new TpmonShutdownHook();
         Runtime.getRuntime().addShutdownHook(shutdownhook);
@@ -149,7 +146,7 @@ public final class TpmonController {
                 /* try to load the class by name */
                 this.monitoringDataWriter = (IMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
                 //add asyncRecordQueueSize
-                monitoringDataWriterInitString += " | asyncRecordQueueSize="+asyncRecordQueueSize;
+                monitoringDataWriterInitString += " | asyncRecordQueueSize=" + asyncRecordQueueSize;
                 if (!this.monitoringDataWriter.init(monitoringDataWriterInitString)) {
                     this.monitoringDataWriter = null;
                     throw new Exception("Initialization of writer failed!");
@@ -181,7 +178,6 @@ public final class TpmonController {
      * you have to set the vmname manually (e.g., via the tpmon-control-servlet, 
      * or by directly implementing a call to TpmonController.setVmname(...).
      */
-    
     public final String getVmname() {
         return this.vmname;
     }
@@ -199,10 +195,9 @@ public final class TpmonController {
      * 
      * @param newVmname
      */
-    
     public final void setVmname(String newVmname) {
-        log.info(">Kieker-Tpmon: The VM has the NEW name " + newVmname +
-                " Thread:" + Thread.currentThread().getId());
+        log.info(">Kieker-Tpmon: The VM has the NEW name " + newVmname
+                + " Thread:" + Thread.currentThread().getId());
         this.vmname = newVmname;
     }
 
@@ -210,7 +205,6 @@ public final class TpmonController {
      * See TpmonShutdownHook.registerWorker
      * @param newWorker
      */
-    
     private void registerWorker(AbstractWorkerThread newWorker) {
         this.shutdownhook.registerWorker(newWorker);
     }
@@ -221,7 +215,6 @@ public final class TpmonController {
     // if monitoring terminated, it is not allowed to enable monitoring afterwards
     private boolean monitoringPermanentlyTerminated = false;
 
-    
     public final boolean isDebug() {
         return debug;
     }
@@ -230,17 +223,14 @@ public final class TpmonController {
      * Shows how many inserts have been performed since last restart of the execution
      * environment.
      */
-    
     public long getNumberOfInserts() {
         return numberOfInserts.longValue();
     }
 
-    
     public final boolean isMonitoringEnabled() {
         return monitoringEnabled;
     }
 
-    
     public final boolean isMonitoringPermanentlyTerminated() {
         return monitoringPermanentlyTerminated;
     }
@@ -250,17 +240,14 @@ public final class TpmonController {
     // instead, we decided to provide an "expensive" increment method.
     private int experimentId = STANDARDEXPERIMENTID;
 
-    
     public final int getExperimentId() {
         return this.experimentId;
     }
 
-    
     public synchronized int incExperimentId() {
         return this.experimentId++;
     }
 
-    
     public void setExperimentId(int newExperimentID) {
         this.experimentId = newExperimentID;
     }
@@ -268,7 +255,6 @@ public final class TpmonController {
     /**
      * Enables monitoring.
      */
-    
     public final void enableMonitoring() {
         log.info("Enabling monitoring");
         if (this.monitoringPermanentlyTerminated) {
@@ -282,7 +268,6 @@ public final class TpmonController {
      * Disables to store monitoring data.
      * Monitoring may be enabled again by calling enableMonitoring().
      */
-    
     public final void disableMonitoring() {
         log.info("Disabling monitoring");
         this.monitoringEnabled = false;
@@ -292,7 +277,6 @@ public final class TpmonController {
      * Permanently terminates monitoring (e.g., due to a failure).
      * Subsequent tries to enable monitoring will be refused.
      */
-    
     public final synchronized void terminateMonitoring() {
         log.info("Permanently terminating monitoring");
         if (this.monitoringDataWriter != null) {
@@ -313,7 +297,6 @@ public final class TpmonController {
         this.replayMode = replayMode;
     }
 
-    
     public final boolean logMonitoringRecord(IMonitoringRecord monitoringRecord) {
         if (!this.monitoringEnabled) {
             return false;
@@ -340,7 +323,6 @@ public final class TpmonController {
      * In contrast to System.nanoTime(), it gives the nano seconds between the current time and midnight, January 1, 1970 UTC.
      * (The value returned by System.nanoTime() only represents nanoseconds since *some* fixed but arbitrary time.)
      */
-    
     public final long getTime() {
         return System.nanoTime() + offsetA;
     }
@@ -353,21 +335,30 @@ public final class TpmonController {
      *
      * If it fails, it uses hard-coded standard values.    
      */
-    
     private void loadPropertiesFile() {
-        String configurationFile = "META-INF/tpmon.properties";
         InputStream is = null;
         Properties prop = new Properties();
-
+        String configurationFile = null;
         try {
             if (System.getProperty("tpmon.configuration") != null) { // we use the present virtual machine parameter value
                 configurationFile = System.getProperty("tpmon.configuration");
                 log.info("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
                 is = new FileInputStream(configurationFile);
             } else {
-                log.info("Tpmon: Loading properties from tpmon library jar/" + configurationFile);
-                log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                // no system property.
+
+                // Trying to find configuration file in classpath
+                configurationFile = "META-INF/tpmon.properties";
                 is = TpmonController.class.getClassLoader().getResourceAsStream(configurationFile);
+                if (is != null) { // success
+                    log.info("Tpmon: Loading properties from properties file in classpath: " + configurationFile);
+                    log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                } else { // default file in jar as fall-back
+                    configurationFile = "META-INF/tpmon.properties.example";
+                    log.info("Tpmon: Loading properties from tpmon library jar!" + configurationFile);
+                    log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                    is = TpmonController.class.getClassLoader().getResourceAsStream(configurationFile);
+                }
             }
             // TODO: the fall-back file in the tpmon library should be renamed to
             //       META-INF/tpmon.properties.default or alike, in order to
@@ -396,8 +387,8 @@ public final class TpmonController {
         if (dbDriverClassnameProperty != null && dbDriverClassnameProperty.length() != 0) {
             dbDriverClassname = dbDriverClassnameProperty;
         } else {
-            log.info("No dbDriverClassname parameter found in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + dbDriverClassname + ".");
+            log.info("No dbDriverClassname parameter found in tpmonLTW.jar/" + configurationFile
+                    + ". Using default value " + dbDriverClassname + ".");
         }
 
         // load property "dbConnectionAddress"
@@ -410,8 +401,8 @@ public final class TpmonController {
         if (dbConnectionAddressProperty != null && dbConnectionAddressProperty.length() != 0) {
             dbConnectionAddress = dbConnectionAddressProperty;
         } else {
-            log.warn("No dbConnectionAddress parameter found in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + dbConnectionAddress + ".");
+            log.warn("No dbConnectionAddress parameter found in tpmonLTW.jar/" + configurationFile
+                    + ". Using default value " + dbConnectionAddress + ".");
         }
 
 // the filenamePrefix (folder where tpmon stores its data) 
@@ -429,12 +420,12 @@ public final class TpmonController {
             if (storeInJavaIoTmpdirProperty.toLowerCase().equals("true") || storeInJavaIoTmpdirProperty.toLowerCase().equals("false")) {
                 storeInJavaIoTmpdir = storeInJavaIoTmpdirProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for tpmon.storeInJavaIoTmpdir (or provided via command line) parameter (" + storeInJavaIoTmpdirProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + storeInJavaIoTmpdir);
+                log.warn("Bad value for tpmon.storeInJavaIoTmpdir (or provided via command line) parameter (" + storeInJavaIoTmpdirProperty + ") in tpmonLTW.jar/" + configurationFile
+                        + ". Using default value " + storeInJavaIoTmpdir);
             }
         } else {
-            log.warn("No tpmon.storeInJavaIoTmpdir parameter found in tpmonLTW.jar/" + configurationFile +
-                    " (or provided via command line). Using default value '" + storeInJavaIoTmpdir + "'.");
+            log.warn("No tpmon.storeInJavaIoTmpdir parameter found in tpmonLTW.jar/" + configurationFile
+                    + " (or provided via command line). Using default value '" + storeInJavaIoTmpdir + "'.");
         }
 
         if (storeInJavaIoTmpdir) {
@@ -450,8 +441,8 @@ public final class TpmonController {
             if (customStoragePathProperty != null && customStoragePathProperty.length() != 0) {
                 filenamePrefix = customStoragePathProperty;
             } else {
-                log.warn("No tpmon.customStoragePath parameter found in tpmonLTW.jar/" + configurationFile +
-                        " (or provided via command line). Using default value '" + customStoragePath + "'.");
+                log.warn("No tpmon.customStoragePath parameter found in tpmonLTW.jar/" + configurationFile
+                        + " (or provided via command line). Using default value '" + customStoragePath + "'.");
                 filenamePrefix =
                         customStoragePath;
             }
@@ -467,8 +458,8 @@ public final class TpmonController {
         if (dbTableNameProperty != null && dbTableNameProperty.length() != 0) {
             dbTableName = dbTableNameProperty;
         } else {
-            log.warn("No dbTableName  parameter found in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + dbTableName + ".");
+            log.warn("No dbTableName  parameter found in tpmonLTW.jar/" + configurationFile
+                    + ". Using default value " + dbTableName + ".");
         }
 
         // load property "debug"
@@ -477,12 +468,12 @@ public final class TpmonController {
             if (debugProperty.toLowerCase().equals("true") || debugProperty.toLowerCase().equals("false")) {
                 debug = debugProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + debug);
+                log.warn("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile
+                        + ". Using default value " + debug);
             }
         } else {
-            log.warn("Could not find debug parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + debug);
+            log.warn("Could not find debug parameter in tpmonLTW.jar/" + configurationFile
+                    + ". Using default value " + debug);
         }
 
         // load property "setInitialExperimentIdBasedOnLastId"
@@ -491,12 +482,12 @@ public final class TpmonController {
             if (setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true") || setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("false")) {
                 setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for setInitialExperimentIdBasedOnLastId parameter (" + setInitialExperimentIdBasedOnLastIdProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + setInitialExperimentIdBasedOnLastId);
+                log.warn("Bad value for setInitialExperimentIdBasedOnLastId parameter (" + setInitialExperimentIdBasedOnLastIdProperty + ") in tpmonLTW.jar/" + configurationFile
+                        + ". Using default value " + setInitialExperimentIdBasedOnLastId);
             }
         } else {
-            log.warn("Could not find setInitialExperimentIdBasedOnLastId parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + setInitialExperimentIdBasedOnLastId);
+            log.warn("Could not find setInitialExperimentIdBasedOnLastId parameter in tpmonLTW.jar/" + configurationFile
+                    + ". Using default value " + setInitialExperimentIdBasedOnLastId);
         }
 
         // load property "asyncRecordQueueSize"
@@ -515,12 +506,12 @@ public final class TpmonController {
             if (asyncRecordQueueSizeValue >= 0) {
                 asyncRecordQueueSize = asyncRecordQueueSizeValue;
             } else {
-                log.warn("Bad value for asyncRecordQueueSize parameter (" + asyncRecordQueueSizeProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + asyncRecordQueueSize);
+                log.warn("Bad value for asyncRecordQueueSize parameter (" + asyncRecordQueueSizeProperty + ") in tpmonLTW.jar/" + configurationFile
+                        + ". Using default value " + asyncRecordQueueSize);
             }
         } else {
-            log.warn("Could not find asyncRecordQueueSize parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + asyncRecordQueueSize);
+            log.warn("Could not find asyncRecordQueueSize parameter in tpmonLTW.jar/" + configurationFile
+                    + ". Using default value " + asyncRecordQueueSize);
         }
 
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
@@ -528,13 +519,13 @@ public final class TpmonController {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
                 monitoringEnabled = monitoringEnabledProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in tpmonLTW.jar/" + configurationFile +
-                        ". Using default value " + monitoringEnabled);
+                log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in tpmonLTW.jar/" + configurationFile
+                        + ". Using default value " + monitoringEnabled);
             }
 
         } else {
-            log.warn("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile +
-                    ". Using default value " + monitoringEnabled);
+            log.warn("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile
+                    + ". Using default value " + monitoringEnabled);
         }
 
         if (monitoringEnabled == false) {
@@ -546,7 +537,6 @@ public final class TpmonController {
         }
     }
 
-    
     public String getConnectorInfo() {
         StringBuilder strB = new StringBuilder();
 
@@ -559,17 +549,14 @@ public final class TpmonController {
         return strB.toString();
     }
 
-    
     public String getDateString() {
         return java.util.Calendar.getInstance().getTime().toString();
     }
 
-    
     public String getVersion() {
         return TpmonVersion.getVERSION();
     }
 
-    
     public final void setDebug(boolean debug) {
         this.debug = debug;
     }
