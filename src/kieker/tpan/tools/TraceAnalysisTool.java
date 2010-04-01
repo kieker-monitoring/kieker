@@ -62,7 +62,7 @@ import kieker.tpan.consumer.BriefJavaFxInformer;
 import kieker.tpan.consumer.executionRecordTransformation.ExecutionRecordTransformer;
 
 import kieker.tpan.consumer.MonitoringRecordTypeLogger;
-import kieker.tpan.reader.filesystem.FSMergeReader;
+import kieker.tpan.reader.filesystem.FSReader;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -500,7 +500,7 @@ public class TraceAnalysisTool {
             allTraceProcessingComponents.addAll(execTraceProcessingComponents);
             allTraceProcessingComponents.addAll(invalidTraceProcessingComponents);
             TpanInstance analysisInstance = new TpanInstance();
-            analysisInstance.setLogReader(new FSMergeReader(inputDirs));
+            analysisInstance.setLogReader(new FSReader(inputDirs));
             //analysisInstance.setLogReader(new JMSReader("tcp://localhost:3035/","queue1"));
 
             mtReconstrFilter =

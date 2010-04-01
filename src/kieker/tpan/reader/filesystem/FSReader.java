@@ -1,27 +1,23 @@
 package kieker.tpan.reader.filesystem;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.text.Collator;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.StringTokenizer;
-import kieker.common.record.IMonitoringRecord;
-
+import java.util.TreeMap;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
+import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.common.record.OperationExecutionRecord;
+import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.common.record.DummyMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,266 +31,251 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
  */
-
 /**
- * This reader allows one to read a folder (the contained tpmon-*.dat files, 
- * respectively) and transform pass the monitoring events to registered consumers.
+ * TOOD: This reader should, as soon as proven to be stable, become the FSDirectoryReader.
  *
- * @author Matthias Rohr, Andre van Hoorn
+ * Filesystem reader which reads from multiple directories simultaneously
+ * while ordering the records by the logging timestamp.
  *
- * History:
- * 2008/09/15: Initial version
+ * @author Andre van Hoorn
  */
 public class FSReader extends AbstractMonitoringLogReader {
 
-    private static final String PROP_NAME_INPUTDIR = "inputDirName";
     private static final Log log = LogFactory.getLog(FSReader.class);
-    private File inputDir = null;
+    public static final String PROP_NAME_INPUTDIRS = "inputDirs"; // value: semicolon-separated list of directories
+    private String[] inputDirs = null;
+    private boolean terminate = false;
 
-    /** Constructor for FSReader. Requires a subsequent call to the init
-     *  method in order to specify the input directory using the parameter
-     *  @a inputDirName. */
-    public FSReader(){ }
-
-    public FSReader(final String inputDirName) {
-        initInstanceFromArgs(inputDirName); // throws IllegalArgumentException
+    public void setTerminate(boolean terminate) {
+        this.terminate = terminate;
     }
 
-    /** Valid key/value pair: inputDirName=INPUTDIRECTORY */
-    public void init(String initString) throws IllegalArgumentException{
-        super.initVarsFromInitString(initString); // throws IllegalArgumentException
-        this.initInstanceFromArgs(this.getInitProperty(PROP_NAME_INPUTDIR)); // throws IllegalArgumentException
+    // TODO: provide constructor with time interval
+    public FSReader(final String[] inputDirs) {
+        this.inputDirs = inputDirs;
     }
 
-   private void initInstanceFromArgs(final String inputDirName) throws IllegalArgumentException {
-        if (inputDirName == null || inputDirName.equals("")) {
-            throw new IllegalArgumentException("Invalid or missing property "+PROP_NAME_INPUTDIR+": " + inputDirName);
+    public FSReader() {
+    }
+    /**
+     * Acts as a consumer to the FSDirectoryReader and delegates incoming records
+     * to ...
+     */
+    private FSReaderCons concurrentConsumer;
+
+    private class FSReaderCons implements IMonitoringRecordConsumer {
+
+        private final FSReader master;
+        private final String[] inputDirs;
+        // we synchronize access to the following data structures on this object.
+        private Thread mainThread;
+        private boolean errorOccured = false;
+        private boolean isTerminated = false;
+        private final List<Thread> readerThreads = new ArrayList<Thread>();
+        private final List<Thread> activeReaders = new ArrayList<Thread>();
+        private final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
+        private TreeMap<IMonitoringRecord, Thread> nextRecordsFromReaders = new TreeMap<IMonitoringRecord, Thread>(new Comparator<IMonitoringRecord>() {
+
+            public int compare(IMonitoringRecord t, IMonitoringRecord t1) {
+                if (t == FS_READER_TERMINATION_MARKER) {
+                    return 1;
+                }
+                if (t1 == FS_READER_TERMINATION_MARKER) {
+                    return -1;
+                }
+                /* Only return 0 (equal) iff the objects are identical */
+                if (t == t1) {
+                    return 0;
+                }
+                if (t.getLoggingTimestamp() < t1.getLoggingTimestamp()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+
+        public FSReaderCons(final FSReader master, final String[] inputDirs) {
+            this.master = master;
+            this.inputDirs = inputDirs;
         }
-        this.inputDir = new File(inputDirName);
-    }
 
-    static final String filePrefix = "tpmon";
-    static final String filePostfix = ".dat";
+        public String[] getRecordTypeSubscriptionList() {
+            return null;
+        }
+
+        /** Note that this method is accessed concurrently! */
+        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
+            if (this.isTerminated) {
+                throw new MonitoringRecordConsumerExecutionException("Consumer already terminated");
+            }
+
+            Thread t = Thread.currentThread();
+            //log.info("Putting record " + monitoringRecord);
+            synchronized (this) {
+                this.nextRecordsFromReaders.put(monitoringRecord, t);
+                //log.info("NextrecordList" + this.nextRecordsFromReaders);
+            }
+            if (monitoringRecord == FS_READER_TERMINATION_MARKER) {
+                /* if it is the FS_READER_TERMINATION_MARKER, the method
+                 * call originates from the terminate method (called by one
+                 * the reader threads) and we must not block! */
+                synchronized (t) { // TODO: required to sync on t?
+                    //log.info("Notifying master");
+                    synchronized (this) {
+                        this.notify(); // notify master in execute(that there's a new record)
+                    }
+                }
+            } else {
+                synchronized (t) {
+                    try {
+                        synchronized (this) {
+                            this.notify(); // notify master in execute(that there's a new record)
+                        }
+                        t.wait();
+                        //log.info("Woke up");
+                    } catch (InterruptedException ex) {
+                        log.error("Reader thread has been interrupted. Terminating consumer. ", ex);
+                        this.terminate();
+                    }
+                }
+            }
+        }
+
+        public boolean execute() throws MonitoringRecordConsumerExecutionException {
+            this.mainThread = Thread.currentThread();
+            // init and start reader threads
+            ThreadGroup tg = new ThreadGroup("FS reader threads");
+            for (int i = 0; i < inputDirs.length; i++) {
+                final FSDirectoryReader r = new FSDirectoryReader(this.inputDirs[i]);
+                r.addConsumer(this, null); // consume records of any type and pass to this
+                final Thread t = new Thread(tg, new Runnable() {
+
+                    public void run() {
+                        try {
+                            r.execute();
+                        } catch (LogReaderExecutionException ex) {
+                            log.error(r, ex);
+                            reportReaderException(ex);
+                        }
+                    }
+                }, "Reader thread for "+this.inputDirs[i]);
+                this.readerThreads.add(t);
+                this.activeReaders.add(t);
+            }
+            for (Thread t : this.readerThreads) {
+                t.start();
+            }
+
+            //log.info("All threads started. Proceeding to main loop ...");
+
+            /* caution: from now on, we have a multi-threaded reader
+             *          and need to synchronize (on 'this'). */
+            while (true) {
+                try {
+                    // Does not work with Java 1.5:
+                    //Map.Entry<AbstractMonitoringRecord, Thread> firstEntry;
+                    IMonitoringRecord lowestKey;
+                    Thread recordProvidingThread = null;
+                    synchronized (this) {
+                        while (this.nextRecordsFromReaders.size() != this.readerThreads.size()) {
+                            this.wait();
+                            if (this.errorOccured) {
+                                log.error("Found error flag set");
+                                throw new LogReaderExecutionException("An error occured");
+                            }
+                        }
+                        lowestKey = this.nextRecordsFromReaders.firstKey(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+                        //1.5 un-compatibility: firstEntry = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+                        if (lowestKey == FS_READER_TERMINATION_MARKER) {
+                            log.info("All reader threads provided FS_READER_TERMINATION_MARKER");
+                            this.terminate();
+                            return true;
+                        } else {
+                            recordProvidingThread = this.nextRecordsFromReaders.get(lowestKey);
+                            this.nextRecordsFromReaders.remove(lowestKey); // now, well remove
+                            //1.5 un-compatibility: this.nextRecordsFromReaders.pollFirstEntry(); // now, well remove
+                            this.master.deliverRecordToConsumers(lowestKey);
+                        }
+                    } // release monitor
+                    if (recordProvidingThread != null) { // only if we need to wake up s.o.
+                        synchronized (recordProvidingThread) {
+                            recordProvidingThread.notify(); // wake up blocked thread (in consume...())
+                        }
+                    }
+                } catch (Exception ex) {
+                    log.error("Exception while reading. Terminating.", ex);
+                    this.terminate();
+                    throw new MonitoringRecordConsumerExecutionException("Error while reading. Terminating.", ex);
+                }
+            }
+        }
+
+        public synchronized void reportReaderException(LogReaderExecutionException ex) {
+            Thread t = Thread.currentThread();
+            log.error("FSReader thread '" + t.getName() + "' reports exception", ex);
+            this.errorOccured = true;
+            this.notifyAll();
+        }
+
+        /** Note that this method is accessed concurrently! */
+        public synchronized void terminate() {
+            if (this.isTerminated) {
+                return;
+            }
+            Thread t = Thread.currentThread();
+            if (this.readerThreads.contains(t)) { // i.e., a reader thread called terminate()
+                //log.info("Removing myself from the list of active readers");
+                this.activeReaders.remove(t);
+                try {
+                    this.consumeMonitoringRecord(FS_READER_TERMINATION_MARKER);
+                } catch (MonitoringRecordConsumerExecutionException ex) {
+                    log.error("Error occured while sending FS_READER_TERMINATION_MARKER", ex);
+                }
+            } else if (t == this.mainThread) {
+                //log.info("Main thread initiating reader shutdown");
+                this.master.setTerminate(terminate);
+                this.master.terminate();
+                this.isTerminated = true;
+                this.notifyAll();
+            }
+        }
+    }
 
     @Override
     public boolean execute() throws LogReaderExecutionException {
-        boolean retVal = false;
+        concurrentConsumer = new FSReaderCons(this, inputDirs);
+        synchronized (this) {
+            try {
+                return concurrentConsumer.execute();
+            } catch (MonitoringRecordConsumerExecutionException ex) {
+                log.error("RecordConsumerExecutionException occured", ex);
+                throw new LogReaderExecutionException("RecordConsumerExecutionException occured", ex);
+            }
+        }
+    }
+
+    /**
+     * @param initString List of input directories separated by semicolon
+     */
+    public void init(String initString) throws IllegalArgumentException {
+        super.initVarsFromInitString(initString);
+        String dirList = super.getInitProperty(PROP_NAME_INPUTDIRS);
+
+        if (dirList == null) {
+            log.error("Missing value for property " + PROP_NAME_INPUTDIRS);
+            throw new IllegalArgumentException("Missing value for property " + PROP_NAME_INPUTDIRS);
+        } // parse inputDir property value
         try {
-            File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
-                public boolean accept(File pathname) {
-                    return pathname.isFile() &&
-                            pathname.getName().startsWith(filePrefix) &&
-                            pathname.getName().endsWith(filePostfix);
-                }
-            });
+            StringTokenizer dirNameTokenizer = new StringTokenizer(dirList, ";");
+            this.inputDirs = new String[dirNameTokenizer.countTokens()];
+            for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
+                this.inputDirs[i] = dirNameTokenizer.nextToken().trim();
+            }
+        } catch (Exception exc) {
+            throw new IllegalArgumentException("Error parsing list of input directories'" + dirList + "'", exc);
 
-            if (inputFiles == null) {
-                throw new LogReaderExecutionException("Directory '" + this.inputDir + "' does not exist or an I/O error occured. No files starting with '"
-                        +filePrefix+"' and ending with '"+filePostfix+"' could be found.");
-            } else {
-                retVal = true;
-            }
-            Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
-            for (int i = 0; inputFiles != null && i < inputFiles.length; i++) {
-                this.processInputFile(inputFiles[i]);
-            }            
-        } catch (LogReaderExecutionException e) {
-            log.error("Exception", e);
-            throw e;
-        } catch (Exception e2) {
-            if (!(e2 instanceof LogReaderExecutionException)) {
-                LogReaderExecutionException readerEx = new LogReaderExecutionException("An error occurred while parsing files from directory " +
-                        this.inputDir.getAbsolutePath() + ":", e2);
-                log.error("Exception", readerEx);
-                throw readerEx;
-            }
-        } finally {
-            super.terminate();
-        }
-        return retVal;
-    }
-
-    //@SuppressWarnings("unchecked")
-    private void readMappingFile() throws IOException {
-        File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
-        BufferedReader in = null;
-        StringTokenizer st = null;
-        try {
-            in = new BufferedReader(new FileReader(mappingFile));
-            String line;
-
-            while ((line = in.readLine()) != null) {
-                try {
-                    st = new StringTokenizer(line, "=");
-                    int numTokens = st.countTokens();
-                    if (numTokens == 0) {
-                        continue;
-                    }
-                    if (numTokens != 2) {
-                        throw new IllegalArgumentException("Invalid number of tokens (" + numTokens + ") Expecting 2");
-                    }
-                    String idStr = st.nextToken();
-                    // the leading $ is optional
-                    Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr);
-                    String classname = st.nextToken();
-                    super.registerRecordTypeIdMapping(id, classname);
-                } catch (Exception e) {
-                    log.error(
-                            "Failed to parse line: {" + line + "} from file " +
-                            mappingFile.getAbsolutePath(), e);
-                    break;
-                }
-            }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (Exception e) {
-                    log.error("Exception", e);
-                }
-            }
-        }
-    }
-
-    private void processInputFile(final File input) throws IOException, LogReaderExecutionException {
-        log.info("< Loading " + input.getAbsolutePath());
-
-        BufferedReader in = null;
-        boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
-        StringTokenizer st = null;
-
-        try {
-            in = new BufferedReader(new FileReader(input));
-            String line;
-
-            while ((line = in.readLine()) != null) {
-                IMonitoringRecord rec = null;
-                try {
-                    if (!recordTypeIdMapInitialized && line.startsWith("$")) {
-                        this.readMappingFile();
-                        recordTypeIdMapInitialized = true;
-                    }
-                    st = new StringTokenizer(line, ";");
-                    int numTokens = st.countTokens();
-                    String[] vec = null;
-                    boolean haveTypeId = false;
-                    for (int i = 0; st.hasMoreTokens(); i++) {
-//                        log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
-                        String token = st.nextToken();
-                        if (i == 0 && token.startsWith("$")) {
-                            /* We found a record type ID and need to lookup the class */
-//                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
-
-                            Integer id = Integer.valueOf(token.substring(1));
-                            // TODO: use IDs
-                            Class<? extends IMonitoringRecord> clazz = super.fetchClassForRecordTypeId(id);
-                            rec = (IMonitoringRecord) clazz.newInstance();
-                            token = st.nextToken();
-                            //log.info("LoggingTimestamp: " + Long.valueOf(token) + " (" + token + ")");
-                            rec.setLoggingTimestamp(Long.valueOf(token));
-                            vec = new String[numTokens - 2];
-                            haveTypeId = true;
-                        } else if (i == 0) { // for historic reasons, this is the default type
-                            rec = new OperationExecutionRecord();
-                            vec = new String[numTokens];
-                        }
-                        //log.info("haveTypeId:" + haveTypeId + ";" + " token:" + token + " i:" + i);
-                        if (!haveTypeId || i > 0) { // only if current field is not the id
-                            vec[haveTypeId ? i - 1 : i] = token;
-                        }
-                    }
-                    if (vec == null) {
-                        vec = new String[0];
-                    }
-
-                    // TODO: create typed array
-                    Object[] typedArray = StringToTypedArray(vec, rec.getValueTypes());
-                    rec.initFromArray(typedArray);
-                    this.deliverRecordToConsumers(rec);
-                } catch (Exception e) {
-                    log.error(
-                            "Failed to parse line: {" + line + "} from file " +
-                            input.getAbsolutePath(), e);
-                    log.error("Abort reading");
-                    throw new LogReaderExecutionException("LogReaderExecutionException ", e);
-                }
-            }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (Exception e) {
-                    log.error("Exception", e);
-                }
-            }
-        }
-    }
-
-    private final Object[] StringToTypedArray(String[] vec, Class[] valueTypes)
-    throws IllegalArgumentException{
-        final Object[] typedArray = new Object[vec.length];
-        int curIdx = -1;
-        for (Class clazz : valueTypes){
-            curIdx++;
-            if (clazz == String.class){
-                typedArray[curIdx] = vec[curIdx];
-                continue;
-            }
-            if (clazz == int.class || clazz == Integer.class){
-                typedArray[curIdx] = Integer.valueOf(vec[curIdx]);
-                continue;
-            }
-            if (clazz == long.class || clazz == Long.class){
-                typedArray[curIdx] = Long.valueOf(vec[curIdx]);
-                continue;
-            }
-            if (clazz == float.class || clazz == Float.class){
-                typedArray[curIdx] = Float.valueOf(vec[curIdx]);
-                continue;
-            }
-            if (clazz == double.class || clazz == Double.class){
-                typedArray[curIdx] = Double.valueOf(vec[curIdx]);
-                continue;
-            }
-            if (clazz == byte.class || clazz == Byte.class){
-                typedArray[curIdx] = Byte.valueOf(vec[curIdx]);
-                continue;
-            }
-            if (clazz == short.class || clazz == Short.class){
-                typedArray[curIdx] = Short.valueOf(vec[curIdx]);
-                continue;
-            }
-            if (clazz == boolean.class || clazz == Boolean.class){
-                typedArray[curIdx] = Boolean.valueOf(vec[curIdx]);
-                continue;
-            }
-            throw new IllegalArgumentException("Unsupported type: " + clazz.getName());
-        }
-        return typedArray;
-    }
-
-    /** source: http://weblog.janek.org/Archive/2005/01/16/HowtoSortFilesandDirector.html */
-    private static class FileComparator
-            implements Comparator<File> {
-
-        private Collator c = Collator.getInstance();
-
-        public int compare(File f1,
-                File f2) {
-            if (f1 == f2) {
-                return 0;
-            }
-
-            if (f1.isDirectory() && f2.isFile()) {
-                return -1;
-            }
-            if (f1.isFile() && f2.isDirectory()) {
-                return 1;
-            }
-
-            return c.compare(f1.getName(), f2.getName());
         }
     }
 }

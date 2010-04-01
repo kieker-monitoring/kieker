@@ -23,7 +23,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.reader.filesystem.FSMergeReader;
 import kieker.tpan.reader.filesystem.FSReader;
 import kieker.tpmon.core.TpmonController;
 import org.apache.commons.logging.Log;
@@ -92,12 +91,7 @@ public class FilesystemLogReplayer {
           fsReader = new FSReaderRealtime(inputDirs, numRealtimeWorkerThreads);
 
         } else {
-            if (inputDirs.length == 1){
-                // faster since there's no threading overhead
-                fsReader = new FSReader(inputDirs[0]);
-            } else {
-                fsReader = new FSMergeReader(inputDirs);
-            }
+                fsReader = new FSReader(inputDirs);
         }
         fsReader.addConsumer(logCons, null); // consume records of all types
         try {
