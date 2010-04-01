@@ -8,7 +8,6 @@ import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 
 import kieker.tpan.reader.filesystem.FSReader;
-import kieker.tpan.reader.filesystem.FSReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -70,7 +69,6 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
     /** Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN | numWorkers=XX */
     public void init(String initString) throws IllegalArgumentException {
         super.initVarsFromInitString(initString);
-
         String numWorkersString = this.getInitProperty(PROP_NAME_NUM_WORKERS);
         int numWorkers = -1;
         if (numWorkersString == null) {

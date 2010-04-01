@@ -29,6 +29,8 @@ public class BranchingRecord extends AbstractMonitoringRecord {
     private int branchID = -1;
     private int branchingOutcome = -1;
 
+    public BranchingRecord () { };
+
     public BranchingRecord (long timestamp, int branchID, int branchingOutcome) {
         this.timestamp = timestamp;
         this.branchID = branchID;
