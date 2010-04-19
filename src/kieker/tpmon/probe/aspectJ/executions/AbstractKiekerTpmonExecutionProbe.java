@@ -35,7 +35,7 @@ public abstract class AbstractKiekerTpmonExecutionProbe implements IKiekerMonito
 
     protected static final TpmonController ctrlInst = TpmonController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-    protected static final String vmName = ctrlInst.getVmname();
+    protected static final String vmName = ctrlInst.getVmName();
 
     
     protected OperationExecutionRecord initExecutionData(ProceedingJoinPoint thisJoinPoint) {

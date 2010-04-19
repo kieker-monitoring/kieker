@@ -59,7 +59,7 @@ public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor 
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
 
-    protected static final String vmName = ctrlInst.getVmname();
+    protected static final String vmName = ctrlInst.getVmName();
     
     
     public void handleMessage(SoapMessage msg) throws Fault {

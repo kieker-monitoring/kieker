@@ -48,7 +48,7 @@ public abstract class AbstractKiekerTpmonMethodInvocationInterceptor implements 
     protected static final TpmonController tpmonController = TpmonController.getInstance();
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-    protected static final String vmName = tpmonController.getVmname();
+    protected static final String vmName = tpmonController.getVmName();
 
     /** Iff true, the name of the runtime class is used,
     iff false, the name of the declaring class (interface) is used */

@@ -195,7 +195,7 @@
             <include name="kieker/tpmon/writer/**"/>
             <include name="kieker/tpmon/probe/IKiekerMonitoringProbe.java"/>
         </javac>
-        <copy file="${tpmon.properties.example}" todir="${build.tpmon.ctrl.dir}/META-INF"/>
+        <copy file="${tpmon.properties.example}" tofile="${build.tpmon.ctrl.dir}/META-INF/tpmon.properties.default"/>
         <!-- We want to include the sources in this jar -->
         <copy todir="${build.tpmon.ctrl.dir}/">
             <fileset dir="src">

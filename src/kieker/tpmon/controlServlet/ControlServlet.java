@@ -103,7 +103,7 @@ public class ControlServlet extends HttpServlet {
         out.println("<h2>TpmonControlServlet</h2>");
         out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ctrlInst.getTime() + "<br>");
         out.println("Host:\"" + hostname + "\"<br>");
-        out.println("Vmname:\"" + ctrlInst.getVmname() + "\"<br>");
+        out.println("Vmname:\"" + ctrlInst.getVmName() + "\"<br>");
 
         String action = request.getParameter("action");
         if (action == null) {
@@ -172,7 +172,7 @@ public class ControlServlet extends HttpServlet {
                 sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
                 cfRegistry.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.logMonitoringRecord(new OperationExecutionRecord("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), ctrlInst.getVmname(), i, i));
+                    ctrlInst.logMonitoringRecord(new OperationExecutionRecord("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), ctrlInst.getVmName(), i, i));
                 }
                 cfRegistry.unsetThreadLocalTraceId();
                 sessionRegistry.unsetThreadLocalSessionId();
@@ -255,7 +255,7 @@ public class ControlServlet extends HttpServlet {
         bu.append("</FORM> <br><br>");
         bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
         bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
-        bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ctrlInst.getVmname() + "\"/>");
+        bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ctrlInst.getVmName() + "\"/>");
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
         bu.append(" Create 12 fake entries into the log (operation kieker.tpmonControlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
         bu.append(" Tpmon monitoring events since last execution environment restart = "+ctrlInst.getNumberOfInserts()+" <br>");

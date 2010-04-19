@@ -28,7 +28,7 @@ import java.io.Serializable;
 public interface IMonitoringRecord extends Serializable {
     public long getLoggingTimestamp();
     public void setLoggingTimestamp(long loggingTimestamp);
-    public Object[] toArray();
     public void initFromArray(Object[] values);
+    public Object[] toArray();
     public Class[] getValueTypes();
 }

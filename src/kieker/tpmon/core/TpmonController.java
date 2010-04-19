@@ -12,7 +12,9 @@ import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -68,7 +70,7 @@ import org.apache.commons.logging.LogFactory;
  * 2008/07/07: New feature to encode method and component names
  *             before making data persistent. This speeds up storage
  *             and saves space.
- * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
+ * 2008/05/29: Changed vmid to vmName (defaults to hostname),
  *             which may be changed during runtime
  * 2008/01/04: Refactoring for the first release of 
  *             Kieker and publication under an open source licence
@@ -78,46 +80,66 @@ import org.apache.commons.logging.LogFactory;
 public final class TpmonController {
 
     private static final Log log = LogFactory.getLog(TpmonController.class);
+    private static final TpmonController ctrlInst = new TpmonController();
+    //marks the end of monitoring to the writer threads
+    public static final AbstractMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
     public final static String WRITER_SYNCDB = "SyncDB";
     public final static String WRITER_ASYNCDB = "AsyncDB";
     public final static String WRITER_SYNCFS = "SyncFS";
     public final static String WRITER_ASYNCFS = "AsyncFS";
+    private final TpmonShutdownHook shutdownhook = new TpmonShutdownHook();
     private String monitoringDataWriterClassname = null;
     private String monitoringDataWriterInitString = null;
-    private IMonitoringLogWriter monitoringDataWriter = null;
-    private String vmname = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
     private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
     private String dbTableName = "turbomon10";
-    private boolean debug = false;
-    private String filenamePrefix = ""; // e.g. path "/tmp/"
-    private boolean storeInJavaIoTmpdir = true;
-    private String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
-    private boolean logMonitoringRecordTypeIds = false; // eventually, true should become default
-    private int asyncRecordQueueSize = 8000;
-    // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
-    private boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some 
-    private TpmonShutdownHook shutdownhook = null;
-    private static TpmonController ctrlInst = new TpmonController();
-    //marks the end of monitoring to the writer threads
-    public static final AbstractMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 
+    private enum DebugModes {
+
+        ENABLED, DISABLED;
+
+        /** Returns true iff debug is enabled. */
+        public final boolean isDebugEnabled() {
+            return this.equals(ENABLED);
+        }
+
+        ;
+    };
+
+    private enum ControllerStates {
+        ENABLED, DISABLED, TERMINATED;
+    }
+    // The following variables are declared volatile since they are access by
+    // multiple threads
+    private final AtomicReference<ControllerStates> controllerState =
+            new AtomicReference<ControllerStates>(ControllerStates.ENABLED);
+    private volatile DebugModes debugMode = DebugModes.DISABLED;
+    private volatile String filenamePrefix = ""; // e.g. path "/tmp/"
+    private volatile boolean storeInJavaIoTmpdir = true;
+    private volatile String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
+    private volatile int asyncRecordQueueSize = 8000;
+    private volatile IMonitoringLogWriter monitoringLogWriter = null;
+    private volatile String vmName = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
+    // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
+    private volatile boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some
+
+    /** Returns the singleton instance. */
     public final static TpmonController getInstance() {
         return TpmonController.ctrlInst;
     }
 
+    /** Private constructor. */
     private TpmonController() {
         try {
-            vmname = java.net.InetAddress.getLocalHost().getHostName();
+            vmName = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception ex) {
-        } // nothing to do -- vmname will be "unknown"
+        } // nothing to do -- vmName will be "unknown"
 
-        log.info(">Kieker-Tpmon: The VM has the name " + vmname + " Thread:"
+        log.info("The VM has the name " + vmName + " Thread:"
                 + Thread.currentThread().getId());
-        log.info(">Kieker-Tpmon: Virtual Machine start time "
+        log.info("Virtual Machine start time "
                 + ManagementFactory.getRuntimeMXBean().getStartTime());
 
-        shutdownhook = new TpmonShutdownHook();
         Runtime.getRuntime().addShutdownHook(shutdownhook);
 
         loadPropertiesFile();
@@ -128,32 +150,32 @@ public final class TpmonController {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringDataWriter = new SyncFsWriter(filenameBase);
+                this.monitoringLogWriter = new SyncFsWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringDataWriter = new AsyncFsConnector(filenameBase, asyncRecordQueueSize);
+                this.monitoringLogWriter = new AsyncFsConnector(filenameBase, asyncRecordQueueSize);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
-                this.monitoringDataWriter = new SyncDbConnector(
+                this.monitoringLogWriter = new SyncDbConnector(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCDB)) {
-                this.monitoringDataWriter = new AsyncDbConnector(
+                this.monitoringLogWriter = new AsyncDbConnector(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId, asyncRecordQueueSize);
             } else {
                 /* try to load the class by name */
-                this.monitoringDataWriter = (IMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
+                this.monitoringLogWriter = (IMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
                 //add asyncRecordQueueSize
                 monitoringDataWriterInitString += " | asyncRecordQueueSize=" + asyncRecordQueueSize;
-                if (!this.monitoringDataWriter.init(monitoringDataWriterInitString)) {
-                    this.monitoringDataWriter = null;
+                if (!this.monitoringLogWriter.init(monitoringDataWriterInitString)) {
+                    this.monitoringLogWriter = null;
                     throw new Exception("Initialization of writer failed!");
                 }
 
             }
-            Vector<AbstractWorkerThread> worker = this.monitoringDataWriter.getWorkers(); // may be null
+            Vector<AbstractWorkerThread> worker = this.monitoringLogWriter.getWorkers(); // may be null
             if (worker != null) {
                 for (AbstractWorkerThread w : worker) {
                     this.registerWorker(w);
@@ -162,43 +184,43 @@ public final class TpmonController {
             // TODO: we should add a getter to all writers like isInitialized.
             //       right now, the following even appears in case init failed.
             //       Or can we simply throw an exception from within the constructors
-            log.info(">Kieker-Tpmon: Initialization completed.\n Connector Info: " + this.getConnectorInfo());
+            log.info("Initialization completed.\n Connector Info: " + this.getConnectorInfo());
         } catch (Exception exc) {
-            log.error(">Kieker-Tpmon: Disabling monitoring", exc);
+            log.error("Disabling monitoring", exc);
             this.terminateMonitoring();
         }
     }
 
     /**
-     * The vmname which defaults to the hostname, and may be set by tpmon-control-servlet.
-     * The vmname will be part of the monitoring data and allows to assing observations
+     * The vmName which defaults to the hostname, and may be set by tpmon-control-servlet.
+     * The vmName will be part of the monitoring data and allows to assing observations
      * in cases where the software system is deployed on more than one host.
      * 
      * When you want to distinguish multiple Virtual Machines on one host,
-     * you have to set the vmname manually (e.g., via the tpmon-control-servlet, 
+     * you have to set the vmName manually (e.g., via the tpmon-control-servlet,
      * or by directly implementing a call to TpmonController.setVmname(...).
      */
-    public final String getVmname() {
-        return this.vmname;
+    public final String getVmName() {
+        return this.vmName;
     }
 
     /**
-     * Allows to set an own vmname, a field in the monitoring data to distinguish
+     * Allows to set an own vmName, a field in the monitoring data to distinguish
      * multiple hosts / vms in a system. This method is for instance used by
      * the tpmon control servlet. 
      * 
-     * The vmname defaults to the hostname.
+     * The vmName defaults to the hostname.
      * 
      * When you want to distinguish multiple Virtual Machines on one host,
-     * you have to set the vmname manually (e.g., via the tpmon-control-servlet, 
+     * you have to set the vmName manually (e.g., via the tpmon-control-servlet,
      * or by directly implementing a call to TpmonController.setVmname(...).
      * 
      * @param newVmname
      */
     public final void setVmname(String newVmname) {
-        log.info(">Kieker-Tpmon: The VM has the NEW name " + newVmname
+        log.info("The VM has the NEW name " + newVmname
                 + " Thread:" + Thread.currentThread().getId());
-        this.vmname = newVmname;
+        this.vmName = newVmname;
     }
 
     /**
@@ -209,14 +231,9 @@ public final class TpmonController {
         this.shutdownhook.registerWorker(newWorker);
     }
     private AtomicLong numberOfInserts = new AtomicLong(0);
-    // private Date startDate = new Date(initializationTime);
-    // TODO: should be volatile? -> more overhead, but correct!
-    private boolean monitoringEnabled = true;
-    // if monitoring terminated, it is not allowed to enable monitoring afterwards
-    private boolean monitoringPermanentlyTerminated = false;
 
     public final boolean isDebug() {
-        return debug;
+        return this.debugMode.equals(DebugModes.ENABLED);
     }
 
     /**
@@ -228,49 +245,61 @@ public final class TpmonController {
     }
 
     public final boolean isMonitoringEnabled() {
-        return monitoringEnabled;
+        return this.controllerState.get().equals(ControllerStates.ENABLED);
     }
 
     public final boolean isMonitoringPermanentlyTerminated() {
-        return monitoringPermanentlyTerminated;
+        return this.controllerState.get().equals(ControllerStates.TERMINATED);
     }
-    private static final int STANDARDEXPERIMENTID = 0;
-    // we do not use AtomicInteger since we only rarely 
-    // set the value (common case -- getting -- faster now).
-    // instead, we decided to provide an "expensive" increment method.
-    private int experimentId = STANDARDEXPERIMENTID;
+    private static final int DEFAULT_EXPERIMENTID = 0;
+    private AtomicInteger experimentId = new AtomicInteger(DEFAULT_EXPERIMENTID);
 
     public final int getExperimentId() {
-        return this.experimentId;
+        return this.experimentId.intValue();
     }
 
+    /** Increments the experiment ID by 1 and returns the new value. */
     public synchronized int incExperimentId() {
-        return this.experimentId++;
+        return this.experimentId.incrementAndGet();
     }
 
     public void setExperimentId(int newExperimentID) {
-        this.experimentId = newExperimentID;
+        this.experimentId.set(newExperimentID);
     }
 
     /**
      * Enables monitoring.
+     *
+     * @throws IllegalStateException if controller has been terminated prior to call
      */
     public final void enableMonitoring() {
         log.info("Enabling monitoring");
-        if (this.monitoringPermanentlyTerminated) {
-            log.error("Refused to enable monitoring because monitoring has been permanently terminated before");
-        } else {
-            this.monitoringEnabled = true;
+        synchronized (this.controllerState) {
+            if (this.controllerState.get().equals(ControllerStates.TERMINATED)) {
+                IllegalStateException ex = new IllegalStateException("Refused to enable monitoring because monitoring has been permanently terminated before");
+                log.error("Monitoring cannot be enabled", ex);
+                throw ex;
+            }
+            this.controllerState.set(ControllerStates.ENABLED);
         }
     }
 
     /**
-     * Disables to store monitoring data.
+     * Disables monitoring.
      * Monitoring may be enabled again by calling enableMonitoring().
+     *
+     * @throws IllegalStateException if controller has been terminated prior to call
      */
     public final void disableMonitoring() {
         log.info("Disabling monitoring");
-        this.monitoringEnabled = false;
+        synchronized (this.controllerState) {
+            if (this.controllerState.get().equals(ControllerStates.TERMINATED)) {
+                IllegalStateException ex = new IllegalStateException("Refused to enable monitoring because monitoring has been permanently terminated before");
+                log.error("Monitoring cannot be enabled", ex);
+                throw ex;
+            }
+            this.controllerState.set(ControllerStates.DISABLED);
+        }
     }
 
     /**
@@ -279,35 +308,61 @@ public final class TpmonController {
      */
     public final synchronized void terminateMonitoring() {
         log.info("Permanently terminating monitoring");
-        if (this.monitoringDataWriter != null) {
-            /* if the initialization of the writer failed, it is set to null*/
-            this.monitoringDataWriter.writeMonitoringRecord(END_OF_MONITORING_MARKER);
+        synchronized (this.controllerState) {
+            if (this.monitoringLogWriter != null) {
+                /* if the initialization of the writer failed, it is set to null*/
+                this.monitoringLogWriter.writeMonitoringRecord(END_OF_MONITORING_MARKER);
+            }
+            this.controllerState.set(ControllerStates.TERMINATED);
         }
-        this.disableMonitoring();
-        this.monitoringPermanentlyTerminated = true;
     }
+
+    private enum ReplayModes { REALTIME, REPLAY };
+
     /**
      * If true, the loggingTimestamp is not set by the logMonitoringRecord
      * method. This is required to replay recorded traces with the
      * original timestamps.
      */
-    private boolean replayMode = false;
+    private volatile boolean replayMode = false;
 
+    /**
+     * Enables or disables the replay mode (for monitoring the value should 
+     * be false, i.e. the replay mode is disabled). 
+     * If the controller is in replay mode, the logMonitoringRecord method
+     * does not set the logging timestamp of the passed monitoring record.
+     *
+     * @param replayMode
+     */
     public final void setReplayMode(boolean replayMode) {
         this.replayMode = replayMode;
     }
 
+    /**
+     * Passes the given monitoring record to the configured writer if the
+     * controller is enabled.
+     * 
+     * If the controller is in replay mode (usually, this is only required to replay
+     * already recorded log data), the logMonitoringRecord method does not set the logging
+     * timestamp of the passed monitoring record.
+     *
+     * @param monitoringRecord the record to be logged
+     * @return true if the record has been passed the writer successfully; false
+     *         in case an error occured or the controller is not enabled.
+     */
     public final boolean logMonitoringRecord(IMonitoringRecord monitoringRecord) {
-        if (!this.monitoringEnabled) {
+        if (!this.controllerState.get().equals(ControllerStates.ENABLED)) {
             return false;
         }
 
         numberOfInserts.incrementAndGet();
-        // now it fails fast, it disables monitoring when a queue once is full
+
         if (!this.replayMode) {
             monitoringRecord.setLoggingTimestamp(this.getTime());
         }
-        if (!this.monitoringDataWriter.writeMonitoringRecord(monitoringRecord)) {
+
+        // fail fast, e.g., terminates the controller if a writer's buffer is full
+        if (!this.monitoringLogWriter.writeMonitoringRecord(monitoringRecord)) {
             log.fatal("Error writing the monitoring data. Will terminate monitoring!");
             this.terminateMonitoring();
             return false;
@@ -315,25 +370,23 @@ public final class TpmonController {
 
         return true;
     }
+
+    /** Offset used to determine the number of nanoseconds since 1970-1-1.
+     *  This is necessary since System.nanoTime() returns the elapsed nanoseconds
+     *  since *some* fixed but arbitrary time.)
+     */
     private static final long offsetA = System.currentTimeMillis() * 1000000 - System.nanoTime();
 
     /**
-     * This method can used by the probes to get the time stamps. It uses nano seconds as precision.
-     *
-     * In contrast to System.nanoTime(), it gives the nano seconds between the current time and midnight, January 1, 1970 UTC.
-     * (The value returned by System.nanoTime() only represents nanoseconds since *some* fixed but arbitrary time.)
+     * Returns the timestamp for the current time.
+     * The value corresponds to the number of nano seconds elapsed  Jan 1, 1970 UTC.
      */
     public final long getTime() {
         return System.nanoTime() + offsetA;
     }
 
     /**    
-     * Loads configuration values from the file
-     * tpmonLTW.jar/META-INF/dbconnector.properties or another
-     * tpmon configuration file specified by the JVM parameter
-     * tpmon.configuration.
-     *
-     * If it fails, it uses hard-coded standard values.    
+     *  Loads properties from configuration file. 
      */
     private void loadPropertiesFile() {
         InputStream is = null;
@@ -354,7 +407,7 @@ public final class TpmonController {
                     log.info("Tpmon: Loading properties from properties file in classpath: " + configurationFile);
                     log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
                 } else { // default file in jar as fall-back
-                    configurationFile = "META-INF/tpmon.properties.example";
+                    configurationFile = "META-INF/tpmon.properties.default";
                     log.info("Tpmon: Loading properties from tpmon library jar!" + configurationFile);
                     log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
                     is = TpmonController.class.getClassLoader().getResourceAsStream(configurationFile);
@@ -374,7 +427,7 @@ public final class TpmonController {
             } catch (Exception ex) { /* nothing we can do */ }
         }
 
-        // load property monitoringDataWriter
+        // load property monitoringLogWriter
         monitoringDataWriterClassname = prop.getProperty("monitoringDataWriter");
         monitoringDataWriterInitString = prop.getProperty("monitoringDataWriterInitString");
 
@@ -466,14 +519,18 @@ public final class TpmonController {
         String debugProperty = prop.getProperty("debug");
         if (debugProperty != null && debugProperty.length() != 0) {
             if (debugProperty.toLowerCase().equals("true") || debugProperty.toLowerCase().equals("false")) {
-                debug = debugProperty.toLowerCase().equals("true");
+                if (debugProperty.toLowerCase().equals("true")) {
+                    this.debugMode = DebugModes.ENABLED;
+                } else {
+                    this.debugMode = DebugModes.DISABLED;
+                }
             } else {
                 log.warn("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile
-                        + ". Using default value " + debug);
+                        + ". Using default value " + this.debugMode.isDebugEnabled());
             }
         } else {
             log.warn("Could not find debug parameter in tpmonLTW.jar/" + configurationFile
-                    + ". Using default value " + debug);
+                    + ". Using default value " + this.debugMode.isDebugEnabled());
         }
 
         // load property "setInitialExperimentIdBasedOnLastId"
@@ -517,47 +574,72 @@ public final class TpmonController {
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
-                monitoringEnabled = monitoringEnabledProperty.toLowerCase().equals("true");
+                if (monitoringEnabledProperty.toLowerCase().equals("true")){
+                    this.controllerState.set(ControllerStates.ENABLED);
+                } else {
+                    this.controllerState.set(ControllerStates.DISABLED);
+                }
             } else {
                 log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in tpmonLTW.jar/" + configurationFile
-                        + ". Using default value " + monitoringEnabled);
+                        + ". Using default value " + this.controllerState.get().equals(ControllerStates.ENABLED));
             }
 
         } else {
             log.warn("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile
-                    + ". Using default value " + monitoringEnabled);
+                    + ". Using default value " + this.controllerState.get().equals(ControllerStates.ENABLED));
         }
 
-        if (monitoringEnabled == false) {
-            log.info(">Kieker-Tpmon: Notice, monitoring is deactived (monitoringEnables=false in dbconnector.properties within tpmonLTW.jar)");
+        if (!this.controllerState.get().equals(ControllerStates.ENABLED)) {
+            log.info("Monitoring is not enabled");
         }
 
-        if (debug) {
+        if (this.debugMode.isDebugEnabled()) {
             log.info(getConnectorInfo());
         }
     }
 
+    /** Returns a human-readable information string about the controller configuration.
+     *  @return the information string
+     */
     public String getConnectorInfo() {
         StringBuilder strB = new StringBuilder();
 
-        strB.append("monitoringDataWriter : " + this.monitoringDataWriter.getClass().getCanonicalName());
+        strB.append("monitoringDataWriter : " + this.monitoringLogWriter.getClass().getCanonicalName());
         strB.append(",");
-        strB.append(" monitoringDataWriter config : (below), " + this.monitoringDataWriter.getInfoString());
+        strB.append(" monitoringDataWriter config : (below), " + this.monitoringLogWriter.getInfoString());
         strB.append(",");
-        strB.append(" version :" + this.getVersion() + ", debug :" + debug + ", enabled :" + isMonitoringEnabled() + ", terminated :" + isMonitoringPermanentlyTerminated() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmname());
+        strB.append(" version :" + this.getVersion() + ", debug :" + this.debugMode.isDebugEnabled() + ", enabled :" + isMonitoringEnabled() + ", terminated :" + isMonitoringPermanentlyTerminated() + ", experimentID :" + getExperimentId() + ", vmname :" + getVmName());
 
         return strB.toString();
     }
 
+    /**
+     * Returns a human-readable string with the current date and time.
+     *
+     * @return the date/time string.
+     */
     public String getDateString() {
         return java.util.Calendar.getInstance().getTime().toString();
     }
 
+    /**
+     * Return the version name of this controller instance.
+     * @return the version name
+     */
     public String getVersion() {
         return TpmonVersion.getVERSION();
     }
 
+    /**
+     * Sets the debug mode to the given parameter value.
+     *
+     * @param debug iff true, debug mode is enabled
+     */
     public final void setDebug(boolean debug) {
-        this.debug = debug;
+        if (debug) {
+            this.debugMode = DebugModes.ENABLED;
+        } else {
+            this.debugMode = DebugModes.DISABLED;
+        }
     }
 }

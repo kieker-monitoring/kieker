@@ -49,13 +49,13 @@ import kieker.tpmon.core.TpmonController;
 public class StorageOnly { 
     private static final int numberOfEvents = 1000;
     private static final TpmonController ctrl = TpmonController.getInstance();
-    private static final String vmName = ctrl.getVmname();
+    private static final String vmName = ctrl.getVmName();
     
     public static void main(String args[]) {
         try {
             System.out.printf("Starting test by adding %d monitoring events\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L, ctrl.getVmname(),i,i);
+                OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L, ctrl.getVmName(),i,i);
                 record.vmName = vmName;
                 ctrl.logMonitoringRecord(record);
             }
@@ -63,7 +63,7 @@ public class StorageOnly {
             Thread.sleep(8000);
             System.out.printf("%d more monitoring points\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
-                OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,ctrl.getVmname(),i+10000,i);
+                OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,ctrl.getVmName(),i+10000,i);
                 record.vmName = vmName;
                 ctrl.logMonitoringRecord(record);
             }

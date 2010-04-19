@@ -56,7 +56,7 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     private static final TpmonController ctrlInst = TpmonController.getInstance();
-    private static final String vmName = ctrlInst.getVmname();
+    private static final String vmName = ctrlInst.getVmName();
 
     private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
 

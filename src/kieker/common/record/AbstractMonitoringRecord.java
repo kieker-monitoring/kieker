@@ -1,7 +1,6 @@
 package kieker.common.record;
 
 /*
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -27,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
     private static final Log log = LogFactory.getLog(AbstractMonitoringRecord.class);
-    private long loggingTimestamp = -1;
+    private volatile long loggingTimestamp = -1;
 
     public final long getLoggingTimestamp() {
         return this.loggingTimestamp;
