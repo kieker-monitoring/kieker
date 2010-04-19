@@ -176,22 +176,35 @@ Basic architectural principles are:
 
 \clearpage
 
+\section{MonitoringRecord}
 
-\section{Tpmon}
+\begin{figure}[h]\centering
+\includegraphics[scale=0.65]{figures/model/kieker_MonitoringRecord}%
+\caption{Monitoring record interface and abstract implementation}
+\label{fig:record:IMonitoringRecordAndAbstractMonitoringRecord}
+\end{figure}
+
+Figure~\ref{fig:record:IMonitoringRecordAndAbstractMonitoringRecord} \dots
+
+\section{Monitoring Component}
 
 \subsection{TpmonController}
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.55]{figures/model/kieker_TpmonController}%
+\includegraphics[scale=0.65]{figures/model/kieker_TpmonController}%
 \caption{TpmonController}
 \end{figure}
- 
-\subsection{AbstractKiekerMonitoringRecord}
 
-\begin{figure}[h]\centering
-\includegraphics[scale=0.55]{figures/model/kieker_AbstractKiekerMonitoringRecord}%
-\caption{AbstractKiekerMonitoringRecord}
-\end{figure}
+At any time, the controller is in either of the following states: %
+enabled, disabled, or terminated. Transitions between these states can be %
+initiated externally by calling one of the coresponding methods, i.e., %
+\textit{disableMonitoring()}, \textit{enableMonitoring()}, and %
+\textit{terminateMonitoring()}. When the controller is not enabled, calls to %
+the method \textit{logMonitoringRecord(\dots)} have no effect and return %
+immediately. The meaning of the terminated state is that an unrecoverable error %
+occured and it is unsafe to proceed and the controller's state cannot be switched %
+to enabled or disabled any more. Arbitrarily frequent transitions between enabled %
+and disabled are possible in both directions, 
 
 \subsection{KiekerMonitoringLogWriter}
 
