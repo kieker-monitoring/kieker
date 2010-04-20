@@ -18,11 +18,10 @@ package kieker.tools.logReplayer;
  * ==================================================
  * 
  */
-
 import kieker.common.record.IMonitoringRecord;
+import kieker.tpan.TpanInstance;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
-import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.reader.filesystem.FSReader;
 import kieker.tpmon.core.TpmonController;
 import org.apache.commons.logging.Log;
@@ -33,21 +32,23 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class FilesystemLogReplayer {
+
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     private String[] inputDirs = null;
-    private boolean realtimeMode = false;
+    private volatile boolean realtimeMode = false;
     private boolean keepOriginalLoggingTimestamps = true;
     private int numRealtimeWorkerThreads = -1;
 
-    private FilesystemLogReplayer() {}
+    private FilesystemLogReplayer() {
+    }
 
     /** Normal replay mode (i.e., non-real-time). */
-    public FilesystemLogReplayer(final String[] inputDirs){
+    public FilesystemLogReplayer(final String[] inputDirs) {
         this.inputDirs = inputDirs;
     }
 
-    public FilesystemLogReplayer(final String[] inputDirs, final boolean keepOriginalLoggingTimestamps, final boolean realtimeMode, final int numRealtimeWorkerThreads){
+    public FilesystemLogReplayer(final String[] inputDirs, final boolean keepOriginalLoggingTimestamps, final boolean realtimeMode, final int numRealtimeWorkerThreads) {
         this.inputDirs = inputDirs;
         this.realtimeMode = realtimeMode;
         this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
@@ -56,7 +57,7 @@ public class FilesystemLogReplayer {
 
     /**
      * @return true on success; false otherwise */
-    public boolean execute(){
+    public boolean execute() {
         boolean success = true;
 
         /**
@@ -74,6 +75,7 @@ public class FilesystemLogReplayer {
             }
 
             public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+                log.info("Received record" + monitoringRecord);
                 ctrlInst.logMonitoringRecord(monitoringRecord);
             }
 
@@ -82,26 +84,25 @@ public class FilesystemLogReplayer {
                 return true;
             }
 
-            public void terminate() {
-                ctrlInst.terminateMonitoring();
+            public void terminate(final boolean error) {
+                log.info("Termination was initiated");
+                //ctrlInst.terminateMonitoring();
             }
         };
         AbstractMonitoringLogReader fsReader;
         if (realtimeMode) {
-          fsReader = new FSReaderRealtime(inputDirs, numRealtimeWorkerThreads);
-
+            fsReader = new FSReaderRealtime(inputDirs, numRealtimeWorkerThreads);
         } else {
-                fsReader = new FSReader(inputDirs);
+            fsReader = new FSReader(inputDirs);
         }
-        fsReader.addConsumer(logCons, null); // consume records of all types
+        TpanInstance tpanInstance = new TpanInstance();
+        tpanInstance.setLogReader(fsReader);
+        tpanInstance.addRecordConsumer(logCons);
         try {
-            if (!fsReader.execute()) {
-                // here, we do not start consumers since they don't do anything in execute()
-                log.error("Log Replay failed");
-                success = false;
-            }
-        } catch (LogReaderExecutionException ex) {
-            log.error("LogReaderExecutioException", ex);
+            tpanInstance.run();
+            success = true;
+        } catch (Exception ex) {
+            log.error("Exception", ex);
             success = false;
         }
         return success;

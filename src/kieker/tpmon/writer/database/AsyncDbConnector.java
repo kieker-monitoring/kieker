@@ -16,11 +16,10 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.asyncDbconnector.AsyncDbconnector
+/*
  *
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2010 the Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +33,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- * 
+ */
+
+/**
  * Stores monitoring data into a database.
  *
  * Warning !
@@ -56,26 +57,24 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr
  *
  * History (Build) (change the String BUILD when this file is changed):
- * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
+ * 2008/05/29: Changed vmid to vmname (defaults to hostname),
  *             which may be changed during runtime
  * 2007/07/30: Initial Prototype
  */
 public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
 
     private final static String defaultConstructionErrorMsg =
-            "Do not select this writer using the full-qualified classname. " +
-            "Use the the constant " + TpmonController.WRITER_ASYNCDB +
-            " and the file system specific configuration properties.";
+            "Do not select this writer using the full-qualified classname. "
+            + "Use the the constant " + TpmonController.WRITER_ASYNCDB
+            + " and the file system specific configuration properties.";
 
     public AsyncDbConnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
-    
     private static final Log log = LogFactory.getLog(AsyncDbConnector.class);
     private Connection conn = null;
     private BlockingQueue<IMonitoringRecord> blockingQueue;
@@ -98,7 +97,6 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
     }
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
 
-    
     public Vector<AbstractWorkerThread> getWorkers() {
         return workers;
     }
@@ -106,11 +104,8 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
     /**
      * Returns false if an error occurs. Errors are printed to stdout (e.g., App-server logfiles), even if debug = false.
      */
-    
     public boolean init() {
-        if (this.isDebug()) {
-            log.info("Tpmon asyncDbconnector init");
-        }
+        log.info("Tpmon asyncDbconnector init");
         try {
             if (this.dbDriverClassname != null && this.dbDriverClassname.length() != 0) {
                 // NOTE: It's absolutely ok to have no class loaded at this point!
@@ -127,7 +122,7 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
             blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
 
 //                DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(TpmonController.dbConnectionAddress),blockingQueue);
-//                 new Thread(dbw).start();  
+//                 new Thread(dbw).start();
             if (this.setInitialExperimentIdBasedOnLastId) {
                 // set initial experiment id based on last id (increased by 1)
                 Statement stm = conn.createStatement();     // TODO: FindBugs says this method may fail to close the database resource
@@ -138,9 +133,9 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
                 log.info(" set initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
             }
 
-            String preparedQuery = "INSERT INTO " + this.dbTableName +
-                    " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
-                    "VALUES (" + experimentId + ",?,?,?,?,?,?,?,?)";
+            String preparedQuery = "INSERT INTO " + this.dbTableName
+                    + " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)"
+                    + "VALUES (" + experimentId + ",?,?,?,?,?,?,?,?)";
             for (int i = 0; i < numberOfConnections; i++) {
                 DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(this.dbConnectionAddress), blockingQueue, preparedQuery);
                 dbw.setDaemon(true); //might lead to inconsistent data due to harsh shutdown
@@ -165,25 +160,20 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
 //     * TODO: Is this method ever used??
 //     * Use this method to insert data into the database.
 //     */
-//    
+//
 //    public boolean insertMonitoringDataNow(int experimentId, String vmName, String opname, String traceid, long tin, long tout, int executionOrderIndex, int executionStackSize) {
 //        return this.insertMonitoringDataNow(experimentId, vmName, opname, "nosession", traceid, tin, tout, executionOrderIndex, executionStackSize);
 //    }
-
     /**
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
-    
     public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
-        if (this.isDebug()) {
-            log.debug("Async.insertMonitoringDataNow");
-        }
         try {
             // INSERT INTO `newSchema` ( `experimentid` , `operation` , `traceid` , `tin` , `tout` ) VALUES ( '0', '1231', '1231', '12312', '1221233' );
             /*
              * BY ANDRE: I disabled this for the moment since we don't seem to use the db anyhow
-             * 
+             *
             if (experimentId != TpmonController.getExperimentId() || !vmname.equals(TpmonController.getVmname())) { // ExperimentId and vmname may be changed
             experimentId = TpmonController.getExperimentId();
             vmname = TpmonController.getVmname();
@@ -205,18 +195,15 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
         return true;
     }
 
-    
     public String getInfoString() {
         StringBuilder strB = new StringBuilder();
 
         //only show the password if debug is on
         String dbConnectionAddress2 = dbConnectionAddress;
-        if (!this.isDebug()) {
-            if (dbConnectionAddress.toLowerCase().contains("password")) {
-                int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
-                dbConnectionAddress2 =
-                        dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
-            }
+        if (dbConnectionAddress.toLowerCase().contains("password")) {
+            int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
+            dbConnectionAddress2 =
+                    dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
         }
         strB.append("dbDriverClassname :" + dbDriverClassname);
         strB.append(", dbConnectionAddress : " + dbConnectionAddress2);

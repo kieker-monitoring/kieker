@@ -115,14 +115,14 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumer {
         return this.startTime;
     }
 
-    public void terminate() {
+    public void terminate(final boolean error) {
         long terminationDelay = (this.lTime + this.offset) - (ctrlnst.getTime() - this.startTime) + 100000000;
         log.info("Will terminate in " + terminationDelay + "nsecs from now");
         this.executor.schedule(new Runnable() {
 
             public void run() {
-                ctrlnst.terminateMonitoring();
-                cons.terminate();
+                //ctrlnst.terminateMonitoring();
+                cons.terminate(error);
                 log.info("Terminating Controller");
             }
         }, terminationDelay, TimeUnit.NANOSECONDS);

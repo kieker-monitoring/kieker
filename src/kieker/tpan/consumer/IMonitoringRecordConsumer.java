@@ -3,7 +3,6 @@ package kieker.tpan.consumer;
 import kieker.common.record.IMonitoringRecord;
 
 /*
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -44,13 +43,19 @@ public interface IMonitoringRecordConsumer {
     /**
      * Starts a record consumer.
      * This method is called once when a TpanInstance's run() method is called.
-     * This implementation must not be a blocking!
+     * This implementation must not be blocking!
      * Asynchronous consumers would spawn (an) aynchronous thread(s) in this
      * method.
      *
-     * @return must true on success; false otherwise.
+     * @return true on success; false otherwise.
      */
     public boolean execute() throws MonitoringRecordConsumerExecutionException;
 
-    public void terminate();
+    /**
+     * Initiates a termination of the consumer. The value of the parameter
+     * error indicates whether an error occured.
+     *
+     * @param error true iff an error occured.
+     */
+    public void terminate(boolean error);
 }

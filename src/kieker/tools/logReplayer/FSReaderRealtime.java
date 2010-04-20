@@ -55,8 +55,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             return true;
         }
 
-        public void terminate() {
-            this.master.terminate();
+        public void terminate(final boolean error) {
         }
     }
 
@@ -122,5 +121,6 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
 
     public boolean execute() throws LogReaderExecutionException {
         return this.fsReader.execute();
+        
     }
 }

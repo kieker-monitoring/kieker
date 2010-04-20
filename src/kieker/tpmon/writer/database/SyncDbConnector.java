@@ -16,8 +16,7 @@ import kieker.common.record.OperationExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.Dbconnector.java
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2009 Kieker Project
@@ -34,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+/**
  * Stores monitoring data into a database.
  *
  * Warning! This class is an academic prototype and not intended
@@ -76,15 +76,14 @@ public final class SyncDbConnector extends AbstractMonitoringLogWriter {
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
     private final static String defaultConstructionErrorMsg =
-            "Do not select this writer using the fully qualified classname. " +
-            "Use the the constant " + TpmonController.WRITER_SYNCDB +
-            " and the file system specific configuration properties.";
+            "Do not select this writer using the fully qualified classname. "
+            + "Use the the constant " + TpmonController.WRITER_SYNCDB
+            + " and the file system specific configuration properties.";
 
     public SyncDbConnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -101,11 +100,8 @@ public final class SyncDbConnector extends AbstractMonitoringLogWriter {
     /**
      * Returns false if an error occurs.
      */
-    
     private boolean init() {
-        if (this.isDebug()) {
-            log.debug("Tpmon dbconnector init");
-        }
+        log.debug("Tpmon dbconnector init");
         try {
             if (this.dbDriverClassname != null && this.dbDriverClassname.length() != 0) {
                 // NOTE: It's absolutely ok to have no class loaded at this point!
@@ -126,15 +122,15 @@ public final class SyncDbConnector extends AbstractMonitoringLogWriter {
                 log.info("Tpmon: Setting initial experiment id based on last id (=" + (experimentId - 1) + " + 1 = " + experimentId + ")");
                 Statement stm = conn.createStatement();     // TODO: FindBugs says this method may fail to close the database resource
                 ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + this.dbTableName);
-                if (res.next()) { 
+                if (res.next()) {
                     this.experimentId = res.getInt(1) + 1;
                 }
-            // this.experimentId keeps the old value else
+                // this.experimentId keeps the old value else
             }
 
-            psInsertMonitoringData = conn.prepareStatement("INSERT INTO " + dbTableName +
-                    " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" +
-                    "VALUES (?,?,?,?,?,?,?,?,?)");
+            psInsertMonitoringData = conn.prepareStatement("INSERT INTO " + dbTableName
+                    + " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)"
+                    + "VALUES (?,?,?,?,?,?,?,?,?)");
         } catch (SQLException ex) {
             log.error("Tpmon: SQLException: " + ex.getMessage());
             log.error("Tpmon: SQLState: " + ex.getSQLState());
@@ -149,7 +145,6 @@ public final class SyncDbConnector extends AbstractMonitoringLogWriter {
      * file system. The storage mode is configured in the file
      * dbconnector.properties.
      */
-    
     public synchronized boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
         try {
             // connector only supports execution records so far
@@ -180,22 +175,18 @@ public final class SyncDbConnector extends AbstractMonitoringLogWriter {
         return true;
     }
 
-    
     public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
 
-    
     public String getInfoString() {
         StringBuilder strB = new StringBuilder();
 
         //only show the password if debug is on
         String dbConnectionAddress2 = dbConnectionAddress;
-        if (!this.isDebug()) {
-            if (dbConnectionAddress.toLowerCase().contains("password")) {
-                int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
-                dbConnectionAddress2 = dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
-            }
+        if (dbConnectionAddress.toLowerCase().contains("password")) {
+            int posPassw = dbConnectionAddress.toLowerCase().lastIndexOf("password");
+            dbConnectionAddress2 = dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
         }
         strB.append("dbDriverClassname :" + dbDriverClassname);
         strB.append(", dbConnectionAddress : " + dbConnectionAddress2);

@@ -1,15 +1,30 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package kieker.tpan.reader;
 
+/*
+ *
+ * ==================LICENCE=========================
+ * Copyright 2010 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ */
+
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
@@ -25,13 +40,13 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
 
     private static final Log log = LogFactory.getLog(AbstractMonitoringLogReader.class);
     private final HashMap<String, String> map = new HashMap<String, String>();
-    /** id x class object */
-    protected Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = Collections.synchronizedMap(new HashMap<Integer, Class<? extends IMonitoringRecord>>());
+    /** recordTypeId x class object */
+    private Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
     /** Contains all consumers which consume records of any type */
-    private final Collection<IMonitoringRecordConsumer> subscribedToAllList =
+    private final Collection<IMonitoringRecordConsumer> anyTypeConsumers =
             new Vector<IMonitoringRecordConsumer>();
     /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<String, Collection<IMonitoringRecordConsumer>> subscribedToTypeMap =
+    private final HashMap<String, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
             new HashMap<String, Collection<IMonitoringRecordConsumer>>();
 
     /** Returns the value for the initialization property @a propName or the
@@ -93,28 +108,37 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
 
     public final void addConsumer(final IMonitoringRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
         if (recordTypeSubscriptionList == null) {
-            this.subscribedToAllList.add(consumer);
+            this.anyTypeConsumers.add(consumer);
         } else {
             for (String recordTypeName : recordTypeSubscriptionList) {
-                Collection<IMonitoringRecordConsumer> cList = this.subscribedToTypeMap.get(recordTypeName);
+                Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(recordTypeName);
                 if (cList == null) {
                     cList = new Vector<IMonitoringRecordConsumer>(0);
-                    this.subscribedToTypeMap.put(recordTypeName, cList);
+                    this.specificTypeConsumers.put(recordTypeName, cList);
                 }
                 cList.add(consumer);
             }
         }
     }
 
-    protected final void deliverRecordToConsumers(final IMonitoringRecord r) throws LogReaderExecutionException {
+    /**
+     * Delivers the given record to the consumers that are registered for this
+     * type of records.
+     *
+     * This method should be used by implementing classes.
+     *
+     * @param monitoringRecord the record
+     * @throws LogReaderExecutionException if an error occurs
+     */
+    protected final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws LogReaderExecutionException {
         try {
-            for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
-                c.consumeMonitoringRecord(r);
+            for (IMonitoringRecordConsumer c : this.anyTypeConsumers) {
+                c.consumeMonitoringRecord(monitoringRecord);
             }
-            Collection<IMonitoringRecordConsumer> cList = this.subscribedToTypeMap.get(r.getClass().getName());
+            Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(monitoringRecord.getClass().getName());
             if (cList != null) {
                 for (IMonitoringRecordConsumer c : cList) {
-                    c.consumeMonitoringRecord(r);
+                    c.consumeMonitoringRecord(monitoringRecord);
                 }
             }
         } catch (MonitoringRecordConsumerExecutionException ex) {
@@ -124,6 +148,15 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
         }
     }
 
+    /**
+     * Registers a mapping if the given record type recordTypeId to the corresponding classname.
+     *
+     * This method should be used by implementing classes.
+     *
+     * @param recordTypeId
+     * @param classname
+     * @throws LogReaderExecutionException
+     */
     protected final void registerRecordTypeIdMapping(int recordTypeId, String classname) throws LogReaderExecutionException {
         try {
             if (this.recordTypeMap.get(recordTypeId) != null) {
@@ -140,34 +173,17 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
         }
     }
 
-    /** Returns the class for record type with the given id. 
-     *  If no such mapping exists, null is returned. */
-    protected final Class<? extends IMonitoringRecord> fetchClassForRecordTypeId(int id) {
-        return this.recordTypeMap.get(id);
-    }
-
-    public void terminate() {
-        for (IMonitoringRecordConsumer c : this.subscribedToAllList) {
-            c.terminate();
-        }
-        for (Collection<IMonitoringRecordConsumer> cList : this.subscribedToTypeMap.values()) {
-            if (cList != null) {
-                for (IMonitoringRecordConsumer c : cList) {
-                    c.terminate();
-                }
-            }
-        }
-        synchronized (this) {
-            this.notifyAll();
-        }
-    }
-
     /**
+     * Returns the class object for the given record type ID record type recordTypeId,
+     * which has been registered before by calling the registerRecordTypeIdMapping
+     * method.
      *
-     * True is returned if its finished?
+     * This method should be used by implementing classes.
      *
-     * @return
-     * @throws LogReaderExecutionException
+     * @param recordTypeId the record type ID
+     * @return the class object
      */
-    public abstract boolean execute() throws LogReaderExecutionException;
+    protected final Class<? extends IMonitoringRecord> fetchClassForRecordTypeId(int recordTypeId) {
+        return this.recordTypeMap.get(recordTypeId);
+    }
 }

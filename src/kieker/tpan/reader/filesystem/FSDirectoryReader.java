@@ -109,9 +109,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                 log.error("Exception", readerEx);
                 throw readerEx;
             }
-        } finally {
-            super.terminate();
-        }
+        } 
         return retVal;
     }
 

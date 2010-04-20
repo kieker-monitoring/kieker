@@ -137,9 +137,9 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public void terminate() {
+    public void terminate(final boolean error) {
         for (IExecutionListener l : this.listeners){
-            l.terminate();
+            l.terminate(error);
         }
     }
 }

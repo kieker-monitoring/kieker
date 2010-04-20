@@ -27,7 +27,7 @@ public class DummyRecordConsumer implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public void terminate() {
+    public void terminate(final boolean error) {
         // nothing to do
     }
 

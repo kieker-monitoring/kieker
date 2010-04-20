@@ -30,7 +30,6 @@ public abstract class AbstractMonitoringLogWriter implements IMonitoringLogWrite
 
     private static final Log log = LogFactory.getLog(AbstractMonitoringLogWriter.class);
 
-    private boolean debugEnabled;
     private final HashMap<String, String> map = new HashMap<String, String>();
 
     /** Returns the value for the initialization property @a propName or the
@@ -91,14 +90,5 @@ public abstract class AbstractMonitoringLogWriter implements IMonitoringLogWrite
         }
 
         initStringProcessed = true;
-    }
-
-    public void setDebug(boolean debug) {
-        this.debugEnabled = debug;
-    }
-
-    
-    public boolean isDebug() {
-        return this.debugEnabled;
     }
 }

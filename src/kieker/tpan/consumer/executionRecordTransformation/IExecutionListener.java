@@ -28,5 +28,5 @@ public interface IExecutionListener {
     public void newExecutionEvent (Execution execution)
             throws ExecutionEventProcessingException;
 
-    public void terminate();
+    public void terminate(final boolean error);
 }

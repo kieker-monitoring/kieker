@@ -317,8 +317,6 @@ public final class TpmonController {
         }
     }
 
-    private enum ReplayModes { REALTIME, REPLAY };
-
     /**
      * If true, the loggingTimestamp is not set by the logMonitoringRecord
      * method. This is required to replay recorded traces with the
@@ -334,7 +332,7 @@ public final class TpmonController {
      *
      * @param replayMode
      */
-    public final void setReplayMode(boolean replayMode) {
+    public final void setReplayMode(final boolean replayMode) {
         this.replayMode = replayMode;
     }
 
@@ -350,7 +348,7 @@ public final class TpmonController {
      * @return true if the record has been passed the writer successfully; false
      *         in case an error occured or the controller is not enabled.
      */
-    public final boolean logMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    public final boolean logMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         if (!this.controllerState.get().equals(ControllerStates.ENABLED)) {
             return false;
         }

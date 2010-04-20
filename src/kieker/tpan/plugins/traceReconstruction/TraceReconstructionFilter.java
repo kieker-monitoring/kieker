@@ -88,15 +88,15 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     public final long getLastTimestamp() {
         return highestTout;
     }
-    private boolean terminate = false;
+    private volatile boolean terminate = false;
     private final boolean ignoreInvalidTraces;
     //private final boolean onlyEquivClasses;
     private final TraceEquivalenceClassModes equivalenceMode;
     private final long ignoreRecordsBeforeTimestamp;
     private final long ignoreRecordsAfterTimestamp;
-    private List<IMessageTraceReceiver> messageTraceListeners = new ArrayList<IMessageTraceReceiver>();
-    private List<IExecutionTraceReceiver> executionTraceListeners = new ArrayList<IExecutionTraceReceiver>();
-    private List<IExecutionTraceReceiver> invalidExecutionTraceArtifactListeners = new ArrayList<IExecutionTraceReceiver>();
+    private final List<IMessageTraceReceiver> messageTraceListeners = new ArrayList<IMessageTraceReceiver>();
+    private final List<IExecutionTraceReceiver> executionTraceListeners = new ArrayList<IExecutionTraceReceiver>();
+    private final List<IExecutionTraceReceiver> invalidExecutionTraceArtifactListeners = new ArrayList<IExecutionTraceReceiver>();
     private final TreeSet<Long> selectedTraces;
     private final Execution rootExecution;
 
@@ -249,7 +249,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         this.invalidExecutionTraceArtifactListeners.add(l);
     }
 
-    public void terminate() {
+    public void terminate(final boolean error) {
         try {
             this.terminate = true;
             this.processQueue();

@@ -28,9 +28,10 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
  */
 public interface IMonitoringLogWriter {
 
-    /** Writes the passed monitoring record.
+    /**
+     * Writes the passed monitoring record.
      *
-     *@return true iff the operation was successful.
+     * @return true iff the operation was successful.
      */
     public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord);
 
@@ -49,22 +50,6 @@ public interface IMonitoringLogWriter {
      * Returns a vector of workers, or null if none.
      */
     public Vector<AbstractWorkerThread> getWorkers();
-
-    // TODO: check if required
-    /**
-     * Sets the writer's debug level.
-     *
-     * @param debug true iff debug shall be enabled
-     */
-    public void setDebug(boolean debug);
-
-    // TODO: check if required
-    /**
-     * Returns the writer's debug level.
-     *
-     * @return true iff debug enabled
-     */
-    public boolean isDebug();
 
     /**
      * Returns a human-readable information string about the writer's

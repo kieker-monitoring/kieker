@@ -117,10 +117,6 @@ public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
 
     
     public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
-        if (this.isDebug()) {
-            log.info(">Kieker-Tpmon: AsyncJmsProducer.insertMonitoringDataNow");
-        }
-
         try {
             if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
                 // "translate" END_OF_MONITORING_MARKER

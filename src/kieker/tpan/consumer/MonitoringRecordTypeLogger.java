@@ -45,7 +45,7 @@ public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public void terminate() {
+    public void terminate(final boolean error) {
         /* We consume synchronously */
     }
 }

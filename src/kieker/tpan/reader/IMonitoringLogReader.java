@@ -24,14 +24,41 @@ import kieker.tpan.consumer.IMonitoringRecordConsumer;
  * again, written to a database, or whatever tpmon is configured to do
  * with the monitoring data.
  */
-
 /**
  *
  * @author Andre van Hoorn
  */
 public interface IMonitoringLogReader {
+
+    /**
+     * Initialize instance from passed initialization string which is typically
+     * a list of separated parameter/values pairs.
+     * The implementing class AbstractMonitoringLogWriter includes convenient
+     * methods to extract configuration values from an initString.
+     *
+     * @param initString the initialization string
+     * @throws IllegalArgumentException if an error occured
+     */
     public void init(String initString) throws IllegalArgumentException;
+
+    /**
+     * Adds the given consumer with the given subscription list to the reader's
+     * list of consumers.
+     *
+     * This method is called from the framework and should not be called manually.
+     *
+     * @param consumer the consumer
+     * @param recordTypeSubscriptionList the subscription list
+     */
     public void addConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList);
+
+    /**
+     * Starts the reader. This method is intended to be a blocking operation,
+     * i.e., it is assumed that reading is finished as soon as this method
+     * returns.
+     *
+     * @return true iff reading was successful
+     * @throws LogReaderExecutionException if an error occurs
+     */
     public boolean execute() throws LogReaderExecutionException;
-    public void terminate();
 }

@@ -82,9 +82,9 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
         return true;
     }
 
-    public void terminate() {
+    public void terminate(final boolean error) {
         try{
-        jfxRc.terminate();
+        jfxRc.terminate(error);
         } catch(Exception e){}
         // nothing to do
     }

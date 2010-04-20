@@ -17,7 +17,6 @@ package kieker.tpan;
  * limitations under the License.
  * ==================================================
  */
-
 import java.util.Vector;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.IMonitoringLogReader;
@@ -67,12 +66,16 @@ public class TpanInstance {
                     throw new LogReaderExecutionException("Calling execute() on logReader returned false");
                 }
             }
-        } catch (LogReaderExecutionException exc) {            
+        } catch (LogReaderExecutionException exc) {
             log.fatal("LogReaderException! Will terminate consumers.");
             for (IMonitoringRecordConsumer c : this.consumers) {
-                c.terminate();
+                c.terminate(true); // terminate due to an error
             }
             throw exc;
+        }
+        for (IMonitoringRecordConsumer c : this.consumers) {
+            log.info("Terminating consumer " + c);
+            c.terminate(false); // terminate after successful execution
         }
     }
 

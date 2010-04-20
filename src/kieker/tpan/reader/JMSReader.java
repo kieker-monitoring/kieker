@@ -145,9 +145,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
             System.out.println("" + JMSReader.class.getName() + " " + ex.getMessage());
             ex.printStackTrace();
             retVal = false;
-        } finally {
-            super.terminate();
-        }
+        } 
         return retVal;
     }
 }

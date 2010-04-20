@@ -12,11 +12,9 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.asyncFsWriter.AsyncFsWriterWorkerThread
- *
+/*
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +28,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- * 
- * @author Matthias Rohr
+ */
+
+/** @author Matthias Rohr
  * 
  * History:
  * 2008/05/29: Changed vmid to vmname (defaults to hostname), 
@@ -48,8 +47,8 @@ public final class FsWriterThread extends AbstractWorkerThread {
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
-    private boolean finished = false;
-    private static boolean shutdown = false;
+    private volatile boolean finished = false;
+    private volatile static boolean shutdown = false;
     private final MappingFileWriter mappingFileWriter;
 
     /**

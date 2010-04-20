@@ -1,10 +1,12 @@
 package kieker.tpan.reader.filesystem;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
@@ -33,10 +35,8 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  */
 /**
- * TOOD: This reader should, as soon as proven to be stable, become the FSDirectoryReader.
- *
  * Filesystem reader which reads from multiple directories simultaneously
- * while ordering the records by the logging timestamp.
+ * ordered by the logging timestamp.
  *
  * @author Andre van Hoorn
  */
@@ -44,18 +44,14 @@ public class FSReader extends AbstractMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSReader.class);
     public static final String PROP_NAME_INPUTDIRS = "inputDirs"; // value: semicolon-separated list of directories
-    private String[] inputDirs = null;
-    private boolean terminate = false;
-
-    public void setTerminate(boolean terminate) {
-        this.terminate = terminate;
-    }
+    private volatile String[] inputDirs = null;
 
     // TODO: provide constructor with time interval
     public FSReader(final String[] inputDirs) {
         this.inputDirs = inputDirs;
     }
 
+    /** Default constructor used for construction by reflection. */
     public FSReader() {
     }
     /**
@@ -69,13 +65,14 @@ public class FSReader extends AbstractMonitoringLogReader {
         private final FSReader master;
         private final String[] inputDirs;
         // we synchronize access to the following data structures on this object.
-        private Thread mainThread;
-        private boolean errorOccured = false;
-        private boolean isTerminated = false;
-        private final List<Thread> readerThreads = new ArrayList<Thread>();
-        private final List<Thread> activeReaders = new ArrayList<Thread>();
+        //private volatile Thread mainThread;
+        private final AtomicBoolean errorOccured = new AtomicBoolean(false);
+        private final AtomicBoolean isTerminated = new AtomicBoolean(false);
+        private final Collection<Thread> readerThreads = new ArrayList<Thread>();
+        //private final List<Thread> activeReaders = new ArrayList<Thread>();
         private final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
-        private TreeMap<IMonitoringRecord, Thread> nextRecordsFromReaders = new TreeMap<IMonitoringRecord, Thread>(new Comparator<IMonitoringRecord>() {
+        // guarded by recordListLock
+        private final TreeMap<IMonitoringRecord, CountDownLatch> orderRecordBuffer = new TreeMap<IMonitoringRecord, CountDownLatch>(new Comparator<IMonitoringRecord>() {
 
             public int compare(IMonitoringRecord t, IMonitoringRecord t1) {
                 if (t == FS_READER_TERMINATION_MARKER) {
@@ -105,139 +102,111 @@ public class FSReader extends AbstractMonitoringLogReader {
             return null;
         }
 
-        /** Note that this method is accessed concurrently! */
+        /** 
+         * Threads executing this method (concurrently) put record into sorted
+         * buffer, notify the buffer consumer and block until they are granted
+         * to read the next record.
+         */
         public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
-            if (this.isTerminated) {
+            if (this.isTerminated.get()) {
                 throw new MonitoringRecordConsumerExecutionException("Consumer already terminated");
             }
 
-            Thread t = Thread.currentThread();
-            //log.info("Putting record " + monitoringRecord);
-            synchronized (this) {
-                this.nextRecordsFromReaders.put(monitoringRecord, t);
-                //log.info("NextrecordList" + this.nextRecordsFromReaders);
-            }
-            if (monitoringRecord == FS_READER_TERMINATION_MARKER) {
-                /* if it is the FS_READER_TERMINATION_MARKER, the method
-                 * call originates from the terminate method (called by one
-                 * the reader threads) and we must not block! */
-                synchronized (t) { // TODO: required to sync on t?
-                    //log.info("Notifying master");
-                    synchronized (this) {
-                        this.notify(); // notify master in execute(that there's a new record)
-                    }
+            try {
+                final CountDownLatch myLatch = new CountDownLatch(1);
+                synchronized (this.orderRecordBuffer) {
+                    this.orderRecordBuffer.put(monitoringRecord, myLatch);
+                    this.orderRecordBuffer.notifyAll(); // notify main thread of new record
                 }
-            } else {
-                synchronized (t) {
-                    try {
-                        synchronized (this) {
-                            this.notify(); // notify master in execute(that there's a new record)
-                        }
-                        t.wait();
-                        //log.info("Woke up");
-                    } catch (InterruptedException ex) {
-                        log.error("Reader thread has been interrupted. Terminating consumer. ", ex);
-                        this.terminate();
-                    }
+                if (monitoringRecord != FS_READER_TERMINATION_MARKER) {
+                    myLatch.await(); // countDown called by main thread
                 }
+            } catch (InterruptedException ex) {
+                log.error("Reader thread has been interrupted.", ex);
+                this.errorOccured.set(true);
             }
         }
 
         public boolean execute() throws MonitoringRecordConsumerExecutionException {
-            this.mainThread = Thread.currentThread();
-            // init and start reader threads
-            ThreadGroup tg = new ThreadGroup("FS reader threads");
-            for (int i = 0; i < inputDirs.length; i++) {
-                final FSDirectoryReader r = new FSDirectoryReader(this.inputDirs[i]);
-                r.addConsumer(this, null); // consume records of any type and pass to this
-                final Thread t = new Thread(tg, new Runnable() {
+            try {
+                { // 1. init and start reader threads
+                    for (int i = 0; i < inputDirs.length; i++) {
+                        final FSDirectoryReader r = new FSDirectoryReader(this.inputDirs[i]);
+                        r.addConsumer(this, null); // consume records of any type and pass to this
+                        final Thread t = new Thread(new Runnable() {
 
-                    public void run() {
-                        try {
-                            r.execute();
-                        } catch (LogReaderExecutionException ex) {
-                            log.error(r, ex);
-                            reportReaderException(ex);
-                        }
+                            public void run() {
+                                try {
+                                    r.execute();
+                                    consumeMonitoringRecord(FS_READER_TERMINATION_MARKER); // signal termination
+                                } catch (Exception ex) {
+                                    log.error(r, ex);
+                                    reportReaderException(ex);
+                                }
+                            }
+                        }, "Reader thread for " + this.inputDirs[i]);
+                        this.readerThreads.add(t);
+                        t.start();
                     }
-                }, "Reader thread for "+this.inputDirs[i]);
-                this.readerThreads.add(t);
-                this.activeReaders.add(t);
-            }
-            for (Thread t : this.readerThreads) {
-                t.start();
-            }
+                }
 
-            //log.info("All threads started. Proceeding to main loop ...");
-
-            /* caution: from now on, we have a multi-threaded reader
-             *          and need to synchronize (on 'this'). */
-            while (true) {
-                try {
-                    // Does not work with Java 1.5:
-                    //Map.Entry<AbstractMonitoringRecord, Thread> firstEntry;
-                    IMonitoringRecord lowestKey;
-                    Thread recordProvidingThread = null;
-                    synchronized (this) {
-                        while (this.nextRecordsFromReaders.size() != this.readerThreads.size()) {
-                            this.wait();
-                            if (this.errorOccured) {
+                // 2. now process all records provided by the threads in the right order
+                while (true) {
+                    // Does not work with Java 1.5: Map.Entry<AbstractMonitoringRecord, Thread> firstEntry;
+                    IMonitoringRecord nextRecord;
+                    CountDownLatch consumerLatch = null;
+                    synchronized (orderRecordBuffer) {
+                        while (this.orderRecordBuffer.size() < this.readerThreads.size()) { // always there must be one record from each thread
+                            orderRecordBuffer.wait();
+                            if (this.errorOccured.get()) {
                                 log.error("Found error flag set");
                                 throw new LogReaderExecutionException("An error occured");
                             }
                         }
-                        lowestKey = this.nextRecordsFromReaders.firstKey(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+
+                        nextRecord = this.orderRecordBuffer.firstKey(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
                         //1.5 un-compatibility: firstEntry = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
-                        if (lowestKey == FS_READER_TERMINATION_MARKER) {
+                        if (nextRecord == FS_READER_TERMINATION_MARKER) {
                             log.info("All reader threads provided FS_READER_TERMINATION_MARKER");
-                            this.terminate();
-                            return true;
+                            return true; // we're done
                         } else {
-                            recordProvidingThread = this.nextRecordsFromReaders.get(lowestKey);
-                            this.nextRecordsFromReaders.remove(lowestKey); // now, well remove
-                            //1.5 un-compatibility: this.nextRecordsFromReaders.pollFirstEntry(); // now, well remove
-                            this.master.deliverRecordToConsumers(lowestKey);
+                            consumerLatch = this.orderRecordBuffer.get(nextRecord);
+                            if (this.orderRecordBuffer.remove(nextRecord) == null) { // now, well remove
+                                log.warn("failed to remove nextRecord " + nextRecord);
+                            }
+                            this.master.deliverRecordToConsumers(nextRecord);
                         }
                     } // release monitor
-                    if (recordProvidingThread != null) { // only if we need to wake up s.o.
-                        synchronized (recordProvidingThread) {
-                            recordProvidingThread.notify(); // wake up blocked thread (in consume...())
-                        }
+                    if (consumerLatch != null) { // wake up blocked thread (in consume...())
+                        consumerLatch.countDown();
+                    } else {
+                        log.warn("consumerLatch == null");
                     }
-                } catch (Exception ex) {
-                    log.error("Exception while reading. Terminating.", ex);
-                    this.terminate();
-                    throw new MonitoringRecordConsumerExecutionException("Error while reading. Terminating.", ex);
                 }
+            } catch (Exception ex) {
+                log.error("Exception while reading. Terminating.", ex);
+                this.errorOccured.set(true);
+                throw new MonitoringRecordConsumerExecutionException("Error while reading. Terminating.", ex);
             }
         }
 
-        public synchronized void reportReaderException(LogReaderExecutionException ex) {
+        private synchronized void reportReaderException(Exception ex) {
             Thread t = Thread.currentThread();
             log.error("FSReader thread '" + t.getName() + "' reports exception", ex);
-            this.errorOccured = true;
+            this.errorOccured.set(true);
             this.notifyAll();
         }
 
-        /** Note that this method is accessed concurrently! */
-        public synchronized void terminate() {
-            if (this.isTerminated) {
-                return;
+        public void terminate(final boolean error) {
+            log.info("terminate method called");
+            if (error) {
+                this.errorOccured.set(true);
             }
-            Thread t = Thread.currentThread();
-            if (this.readerThreads.contains(t)) { // i.e., a reader thread called terminate()
-                //log.info("Removing myself from the list of active readers");
-                this.activeReaders.remove(t);
-                try {
-                    this.consumeMonitoringRecord(FS_READER_TERMINATION_MARKER);
-                } catch (MonitoringRecordConsumerExecutionException ex) {
-                    log.error("Error occured while sending FS_READER_TERMINATION_MARKER", ex);
-                }
-            } else if (t == this.mainThread) {
-                //log.info("Main thread initiating reader shutdown");
-                this.master.setTerminate(terminate);
-                this.master.terminate();
-                this.isTerminated = true;
+            synchronized (this.orderRecordBuffer) {
+                this.orderRecordBuffer.put(FS_READER_TERMINATION_MARKER, null);
+                this.orderRecordBuffer.notifyAll(); // notify main thread of new record
+            }
+            synchronized (this) {
                 this.notifyAll();
             }
         }
@@ -246,14 +215,17 @@ public class FSReader extends AbstractMonitoringLogReader {
     @Override
     public boolean execute() throws LogReaderExecutionException {
         concurrentConsumer = new FSReaderCons(this, inputDirs);
-        synchronized (this) {
-            try {
-                return concurrentConsumer.execute();
-            } catch (MonitoringRecordConsumerExecutionException ex) {
-                log.error("RecordConsumerExecutionException occured", ex);
-                throw new LogReaderExecutionException("RecordConsumerExecutionException occured", ex);
-            }
+        boolean success = false;
+        try {
+            success = concurrentConsumer.execute();
+        } catch (MonitoringRecordConsumerExecutionException ex) {
+            log.error("RecordConsumerExecutionException occured", ex);
+            throw new LogReaderExecutionException("RecordConsumerExecutionException occured", ex);
+        } finally {
+            log.info("Initiating shutdown");
+            concurrentConsumer.terminate(success);
         }
+        return success;
     }
 
     /**

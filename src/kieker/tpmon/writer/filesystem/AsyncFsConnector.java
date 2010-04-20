@@ -114,22 +114,18 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
             workers.add(dbw);
             dbw.start();
         }
-        //System.out.println(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
-        log.info(">Kieker-Tpmon: (" + numberOfFsWriters + " threads) will write to the file system");
+        //System.out.println("(" + numberOfFsWriters + " threads) will write to the file system");
+        log.info("(" + numberOfFsWriters + " threads) will write to the file system");
     }
 
     /**
      * This method is not synchronized.
      */
     public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-        if (this.isDebug()) {
-            log.info(">Kieker-Tpmon: AsyncFsWriterDispatcher.insertMonitoringDataNow");
-        }
-
         try {
             blockingQueue.add(monitoringRecord); // tries to add immediately!
         } catch (Exception ex) {
-            log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " insertMonitoringData() failed: Exception: " + ex);
+            log.error(" insertMonitoringData() failed: Exception: " + ex);
             return false;
         }
         return true;
