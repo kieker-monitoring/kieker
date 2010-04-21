@@ -137,7 +137,7 @@ public class FSReader extends AbstractMonitoringLogReader {
 
                             public void run() {
                                 try {
-                                    r.execute();
+                                    r.read();
                                     consumeMonitoringRecord(FS_READER_TERMINATION_MARKER); // signal termination
                                 } catch (Exception ex) {
                                     log.error(r, ex);
@@ -198,7 +198,6 @@ public class FSReader extends AbstractMonitoringLogReader {
         }
 
         public void terminate(final boolean error) {
-            log.info("terminate method called");
             if (error) {
                 this.errorOccured.set(true);
             }
@@ -213,7 +212,7 @@ public class FSReader extends AbstractMonitoringLogReader {
     }
 
     @Override
-    public boolean execute() throws LogReaderExecutionException {
+    public boolean read() throws LogReaderExecutionException {
         concurrentConsumer = new FSReaderCons(this, inputDirs);
         boolean success = false;
         try {
@@ -222,7 +221,6 @@ public class FSReader extends AbstractMonitoringLogReader {
             log.error("RecordConsumerExecutionException occured", ex);
             throw new LogReaderExecutionException("RecordConsumerExecutionException occured", ex);
         } finally {
-            log.info("Initiating shutdown");
             concurrentConsumer.terminate(success);
         }
         return success;

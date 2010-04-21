@@ -1,7 +1,9 @@
 package kieker.tools.logReplayer;
 
 import java.util.StringTokenizer;
+import java.util.concurrent.CountDownLatch;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tpan.TpanInstance;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.LogReaderExecutionException;
@@ -19,11 +21,13 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
-    /* delegate */
-    private AbstractMonitoringLogReader fsReader;
+    /* manages the lifecycle of the reader and consumers */
+    private final TpanInstance tpanInstance = new TpanInstance();
     private RealtimeReplayDistributor rtDistributor = null;
     private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
     private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
+    /** Reader will wait for this latch before read() returns */
+    private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
     /**
      * Acts as a consumer to the rtDistributor and delegates incoming records
@@ -45,7 +49,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             try {
                 this.master.deliverRecordToConsumers(monitoringRecord);
             } catch (LogReaderExecutionException ex) {
-                log.info("LogReaderExecutionException", ex);
+                log.error("LogReaderExecutionException", ex);
                 throw new MonitoringRecordConsumerExecutionException("LogReaderExecutionException", ex);
             }
         }
@@ -113,14 +117,27 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             throw new IllegalArgumentException("Invalid proprty value for " + PROP_NAME_NUM_WORKERS + ": " + numWorkers);
         }
 
-        fsReader = new FSReader(inputDirNames);
-        IMonitoringRecordConsumer rtCons = new FSReaderRealtimeCons(this);
-        rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons);
-        fsReader.addConsumer(rtDistributor, null);
+        final AbstractMonitoringLogReader fsReader = new FSReader(inputDirNames);
+        final IMonitoringRecordConsumer rtCons = new FSReaderRealtimeCons(this);
+        rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, terminationLatch);
+        //fsReader.addConsumer(rtDistributor, null);
+        this.tpanInstance.setLogReader(fsReader);
+        this.tpanInstance.addRecordConsumer(rtDistributor);
     }
 
-    public boolean execute() throws LogReaderExecutionException {
-        return this.fsReader.execute();
-        
+    /**
+     * Replays the monitoring log in real-time and returns after the complete
+     * log was being replayed.
+     */
+    public boolean read() throws LogReaderExecutionException {
+        boolean success = true;
+        try {
+            this.tpanInstance.run();
+            this.terminationLatch.await();
+        } catch (Exception ex) {
+            log.error("An error occured while reading", ex);
+            throw new LogReaderExecutionException("An error occured while reading", ex);
+        }
+        return success;
     }
 }

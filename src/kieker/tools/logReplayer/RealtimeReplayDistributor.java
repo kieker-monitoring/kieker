@@ -1,5 +1,6 @@
 package kieker.tools.logReplayer;
 
+import java.util.concurrent.CountDownLatch;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -27,8 +28,9 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumer {
     private final ScheduledThreadPoolExecutor executor;
     private long lTime;
     private static final TpmonController ctrlnst = TpmonController.getInstance();
-    private int active;
+    private volatile int active;
     private final int maxQueueSize;
+    private final CountDownLatch terminationLatch;
 
     /** Private constructor should not be used */
     private RealtimeReplayDistributor() {
@@ -36,15 +38,24 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumer {
         this.numWorkers = -1;
         this.cons = null;
         this.maxQueueSize = -1;
+        this.terminationLatch = null;
     }
 
-    public RealtimeReplayDistributor(final int numWorkers, final IMonitoringRecordConsumer cons) {
+    /**
+     * Constructs a RealtimeReplayDistributor.
+     * 
+     * @param numWorkers number of worker threads processing the internal record buffer
+     * @param cons the consumer
+     * @param terminationLatch will be decremented after the last record was replayed
+     */
+    public RealtimeReplayDistributor(final int numWorkers, final IMonitoringRecordConsumer cons, final CountDownLatch terminationLatch) {
         this.numWorkers = numWorkers;
         this.cons = cons;
         this.maxQueueSize = numWorkers * 1000;
         this.executor = new ScheduledThreadPoolExecutor(numWorkers);
         this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
         this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+        this.terminationLatch = terminationLatch;
     }
 
     //private static final String outputFn = "SchedulingList";
@@ -122,8 +133,13 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumer {
 
             public void run() {
                 //ctrlnst.terminateMonitoring();
-                cons.terminate(error);
-                log.info("Terminating Controller");
+                if (terminationLatch != null) {
+                    terminationLatch.countDown(); // signal that last record has been scheduled
+                } else {
+                    log.warn("terminationLatch == null");
+                }
+                //cons.terminate(error);
+                //log.info("Terminating Controller");
             }
         }, terminationDelay, TimeUnit.NANOSECONDS);
         this.executor.shutdown();

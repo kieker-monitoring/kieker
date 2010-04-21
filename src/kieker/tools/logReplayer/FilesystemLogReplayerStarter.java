@@ -154,7 +154,7 @@ public class FilesystemLogReplayerStarter {
 
         FilesystemLogReplayer player = new FilesystemLogReplayer(inputDirs, keepOriginalLoggingTimestamps, realtimeMode, numRealtimeWorkerThreads);
 
-        if (!player.execute()) {
+        if (!player.replay()) {
             System.err.println("An error occured");
             System.err.println("");
             System.err.println("See 'kieker.log' for details");

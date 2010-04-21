@@ -61,7 +61,7 @@ public class TpanInstance {
                 log.error("Error: LogReader is missing - cannot execute run() without it!");
                 throw new LogReaderExecutionException(" LogReader is missing - cannot execute run() without it!");
             } else {
-                if (!this.logReader.execute()) {
+                if (!this.logReader.read()) {
                     log.error("Calling execute() on logReader returned false");
                     throw new LogReaderExecutionException("Calling execute() on logReader returned false");
                 }

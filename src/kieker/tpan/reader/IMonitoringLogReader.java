@@ -54,11 +54,11 @@ public interface IMonitoringLogReader {
 
     /**
      * Starts the reader. This method is intended to be a blocking operation,
-     * i.e., it is assumed that reading is finished as soon as this method
+     * i.e., it is assumed that reading has finished before this method
      * returns.
      *
      * @return true iff reading was successful
-     * @throws LogReaderExecutionException if an error occurs
+     * @throws LogReaderExecutionException if an error occured
      */
-    public boolean execute() throws LogReaderExecutionException;
+    public boolean read() throws LogReaderExecutionException;
 }

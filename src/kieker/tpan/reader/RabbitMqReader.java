@@ -89,7 +89,7 @@ public class RabbitMqReader extends AbstractMonitoringLogReader {
     /**
      * A call to this method is a blocking call.
      */
-    public boolean execute() throws LogReaderExecutionException {
+    public boolean read() throws LogReaderExecutionException {
         boolean retVal = false;
 
         System.out.printf("Starting connection to the Rabbit MQ message broker at %s : %d. (User %s, Pass %s)\n",rmqHostName,rmqPortNumber,rmqUserName,rmqPassword);

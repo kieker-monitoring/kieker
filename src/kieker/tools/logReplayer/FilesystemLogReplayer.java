@@ -57,7 +57,7 @@ public class FilesystemLogReplayer {
 
     /**
      * @return true on success; false otherwise */
-    public boolean execute() {
+    public boolean replay() {
         boolean success = true;
 
         /**
@@ -75,7 +75,6 @@ public class FilesystemLogReplayer {
             }
 
             public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-                log.info("Received record" + monitoringRecord);
                 ctrlInst.logMonitoringRecord(monitoringRecord);
             }
 
@@ -85,8 +84,6 @@ public class FilesystemLogReplayer {
             }
 
             public void terminate(final boolean error) {
-                log.info("Termination was initiated");
-                //ctrlInst.terminateMonitoring();
             }
         };
         AbstractMonitoringLogReader fsReader;

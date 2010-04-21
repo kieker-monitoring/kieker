@@ -76,7 +76,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
     /**
      * A call to this method is a blocking call.
      */
-    public boolean execute() throws LogReaderExecutionException {
+    public boolean read() throws LogReaderExecutionException {
         boolean retVal = false;
         try {
             Hashtable<String, String> properties = new Hashtable<String, String>();
@@ -92,7 +92,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
             log.info("\n\n***\nListening to destination:" + destination + " at " + jmsProviderUrl + " !\n***\n\n");
             MessageConsumer receiver = session.createConsumer(destination);
             receiver.setMessageListener(new MessageListener() {
-                // the MessageListener will execute onMessage each time a message comes in
+                // the MessageListener will read onMessage each time a message comes in
 
                 public void onMessage(Message jmsMessage) {
                     if (jmsMessage instanceof TextMessage) {

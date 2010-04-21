@@ -1,7 +1,7 @@
 package kieker.tpmon.writer;
 
 import java.util.Vector;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
 import org.apache.commons.logging.Log;
@@ -30,30 +30,14 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class NullWriter extends AbstractKiekerMonitoringLogWriter {
+public class NullWriter extends AbstractMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(NullWriter.class);
-    private boolean writeRecordTypeIds = false;
 
     @Override
-    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
+    public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
         // do nothing
         return true;
-    }
-
-    @Override
-    public void registerMonitoringRecordType(int id, String className) {
-        // do nothing
-    }
-
-    @Override
-    public boolean isWriteRecordTypeIds() {
-        return this.writeRecordTypeIds;
-    }
-
-    @Override
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        this.writeRecordTypeIds = writeRecordTypeIds;
     }
 
     public boolean init(String initString) {

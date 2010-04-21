@@ -78,7 +78,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
     static final String filePostfix = ".dat";
 
     @Override
-    public boolean execute() throws LogReaderExecutionException {
+    public boolean read() throws LogReaderExecutionException {
         boolean retVal = false;
         try {
             File[] inputFiles = this.inputDir.listFiles(new FileFilter() {

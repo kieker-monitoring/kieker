@@ -388,19 +388,17 @@ public class TraceAnalysisTool {
             }
         }
     }
-
-
     // this was moved to here from the inside of dispathTasks()
-        private static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
-        private static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
-        private static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
-        private static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-        private static final String PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph";
-        private static final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
-        private static final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
-        private static final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
-        private static final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
-        private static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
+    private static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
+    private static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
+    private static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
+    private static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
+    private static final String PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph";
+    private static final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
+    private static final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
+    private static final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
+    private static final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
+    private static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
 
     private static boolean dispatchTasks() {
         boolean retVal = true;
@@ -711,10 +709,10 @@ public class TraceAnalysisTool {
 
             public void newTrace(MessageTrace t) throws TraceProcessingException {
                 try {
-                final TraceCallTreeNode rootNode =
-                new TraceCallTreeNode(AbstractSystemSubFactory.ROOT_ELEMENT_ID,
-                systemEntityFactory, allocationComponentOperationPairFactory,
-                allocationComponentOperationPairFactory.rootPair, true); // rootNode
+                    final TraceCallTreeNode rootNode =
+                            new TraceCallTreeNode(AbstractSystemSubFactory.ROOT_ELEMENT_ID,
+                            systemEntityFactory, allocationComponentOperationPairFactory,
+                            allocationComponentOperationPairFactory.rootPair, true); // rootNode
                     AbstractCallTreePlugin.writeDotForMessageTrace(systemEntityFactory, rootNode, t, outputFnBase + "-" + t.getTraceId(), false, shortLabels); // no weights
                     this.reportSuccess(t.getTraceId());
                 } catch (FileNotFoundException ex) {
@@ -893,7 +891,6 @@ public class TraceAnalysisTool {
         return retVal;
     }
 
-
     /**
      * This method is used to initialize a typical set of filters, required for
      * message trace analysis. Every new trace object is passed to the messageTraceListener.
@@ -905,36 +902,38 @@ public class TraceAnalysisTool {
      * You'll need a tpanInstance (with a reader) before invoking this method.
      */
     public static void createMessageTraceFiltersAndRegisterMessageTraceListener(TpanInstance tpanInstance, BriefJavaFxInformer messageTraceListener) {
-        if (tpanInstance == null) tpanInstance = new TpanInstance();
-      
-            TraceReconstructionFilter mtReconstrFilter = null;
-            mtReconstrFilter =
-                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
-                    60*1000, // maxTraceDurationMillis,
-                    true, //ignoreInvalidTraces,
-                    TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
-                    null, // selectedTraces, // null means all
-                    ignoreRecordsBeforeTimestamp, // default Long.MIN
-                    ignoreRecordsAfterTimestamp); // default Long.MAX            
-            mtReconstrFilter.addMessageTraceListener(messageTraceListener);
-            mtReconstrFilter.addInvalidExecutionTraceArtifactListener(messageTraceListener.getJfxBrokenExecutionTraceReceiver());  // i know that its dirty
+        if (tpanInstance == null) {
+            tpanInstance = new TpanInstance();
+        }
 
-            TraceReconstructionFilter uniqueMtReconstrFilter = null;
-            uniqueMtReconstrFilter =
-                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
-                    60*1000, // maxTraceDurationMillis,
-                    true, //ignoreInvalidTraces,
-                    TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
-                    null, // selectedTraces, // null means all
-                    ignoreRecordsBeforeTimestamp, // default Long.MIN
-                    ignoreRecordsAfterTimestamp); // default Long.MAX
-             uniqueMtReconstrFilter.addMessageTraceListener(messageTraceListener.getJfxUniqueTr()); // i know that its dirty
+        TraceReconstructionFilter mtReconstrFilter = null;
+        mtReconstrFilter =
+                new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
+                60 * 1000, // maxTraceDurationMillis,
+                true, //ignoreInvalidTraces,
+                TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
+                null, // selectedTraces, // null means all
+                ignoreRecordsBeforeTimestamp, // default Long.MIN
+                ignoreRecordsAfterTimestamp); // default Long.MAX
+        mtReconstrFilter.addMessageTraceListener(messageTraceListener);
+        mtReconstrFilter.addInvalidExecutionTraceArtifactListener(messageTraceListener.getJfxBrokenExecutionTraceReceiver());  // i know that its dirty
+
+        TraceReconstructionFilter uniqueMtReconstrFilter = null;
+        uniqueMtReconstrFilter =
+                new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
+                60 * 1000, // maxTraceDurationMillis,
+                true, //ignoreInvalidTraces,
+                TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
+                null, // selectedTraces, // null means all
+                ignoreRecordsBeforeTimestamp, // default Long.MIN
+                ignoreRecordsAfterTimestamp); // default Long.MAX
+        uniqueMtReconstrFilter.addMessageTraceListener(messageTraceListener.getJfxUniqueTr()); // i know that its dirty
 
 
-            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
-            execRecTransformer.addListener(mtReconstrFilter);
-            execRecTransformer.addListener(uniqueMtReconstrFilter);
-            tpanInstance.addRecordConsumer(execRecTransformer);
-            System.out.println("MessageTraceListener registered");
+        ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
+        execRecTransformer.addListener(mtReconstrFilter);
+        execRecTransformer.addListener(uniqueMtReconstrFilter);
+        tpanInstance.addRecordConsumer(execRecTransformer);
+        System.out.println("MessageTraceListener registered");
     }
 }

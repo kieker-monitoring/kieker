@@ -55,7 +55,7 @@ public class OnlineMonitor implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public void terminate() {
+    public void terminate(final boolean error) {
     }
 
     public static void main(String[] args) {
