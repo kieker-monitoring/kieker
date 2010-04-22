@@ -85,7 +85,7 @@ public class TpmonShutdownHook extends Thread {
         for (AbstractWorkerThread wrk: workers) {
             if (wrk != null) wrk.initShutdown();
         }
-        TpmonController.getInstance().terminateMonitoring();
+        TpmonController.getInstance().terminate();
     }
     
     

@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.common.util.PropertyMap;
 /**
  *
  * This reader is an alternative to the JMS reader. RabbitMQ
@@ -64,16 +65,16 @@ public class RabbitMqReader extends AbstractMonitoringLogReader {
     /** Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 */
     
     public void init(String initString) throws IllegalArgumentException {
-        super.initVarsFromInitString(initString); // throws IllegalArgumentException
+        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
 
-        rmqHostName = this.getInitProperty("rmqHostName", null);
-        rmqVirtualHost = this.getInitProperty("rmqVirtualHost", null);
-        rmqExchangeName = this.getInitProperty("rmqExchangeName", null);
-        rmqQueueName = this.getInitProperty("rmqQueueName", null);
-        rmqUserName =this.getInitProperty("rmqUserName", null);
-        rmqRoutingKey =this.getInitProperty("rmqRoutingKey", null);
-        rmqPassword = this.getInitProperty("rmqPassword", null);
-        rmqPortNumber = Integer.parseInt(this.getInitProperty("rmqPortNumber", null));
+        rmqHostName = propertyMap.getProperty("rmqHostName", null);
+        rmqVirtualHost = propertyMap.getProperty("rmqVirtualHost", null);
+        rmqExchangeName = propertyMap.getProperty("rmqExchangeName", null);
+        rmqQueueName = propertyMap.getProperty("rmqQueueName", null);
+        rmqUserName =propertyMap.getProperty("rmqUserName", null);
+        rmqRoutingKey =propertyMap.getProperty("rmqRoutingKey", null);
+        rmqPassword = propertyMap.getProperty("rmqPassword", null);
+        rmqPortNumber = Integer.parseInt(propertyMap.getProperty("rmqPortNumber", null));
          initInstanceFromArgs(rmqHostName, rmqVirtualHost, rmqExchangeName, rmqQueueName,
             rmqUserName, rmqRoutingKey, rmqPassword, rmqPortNumber);
     }

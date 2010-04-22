@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.tpmon.writer.IMonitoringLogWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -64,7 +64,7 @@ import org.apache.commons.logging.LogFactory;
  * 2006/12/20: Initial Prototype
  *
  */
-public final class SyncDbConnector extends AbstractMonitoringLogWriter {
+public final class SyncDbConnector implements IMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(SyncDbConnector.class);
     private Connection conn = null;
@@ -145,7 +145,7 @@ public final class SyncDbConnector extends AbstractMonitoringLogWriter {
      * file system. The storage mode is configured in the file
      * dbconnector.properties.
      */
-    public synchronized boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    public synchronized boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
         try {
             // connector only supports execution records so far
             OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;

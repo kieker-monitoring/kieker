@@ -7,9 +7,9 @@ import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.writer.IMonitoringLogWriter;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
 import org.apache.commons.logging.Log;
@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Matthias Rohr, Andre van Hoorn
  */
-public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
+public final class AsyncFsConnector implements IMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncFsConnector.class);
     //configuration parameter
@@ -121,7 +121,7 @@ public final class AsyncFsConnector extends AbstractMonitoringLogWriter {
     /**
      * This method is not synchronized.
      */
-    public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+    public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         try {
             blockingQueue.add(monitoringRecord); // tries to add immediately!
         } catch (Exception ex) {

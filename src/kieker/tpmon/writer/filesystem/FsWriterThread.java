@@ -102,7 +102,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
             // TODO: This is a dirty hack!
             // What we need is a listener interface!
             log.error("Will terminate monitoring!");
-            TpmonController.getInstance().terminateMonitoring();
+            TpmonController.getInstance().terminate();
         } finally {
             this.finished = true;
         }
@@ -153,7 +153,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
                 // TODO: This is a dirty hack!
                 // What we need is a listener interface!
                 log.error("Will terminate monitoring!");
-                TpmonController.getInstance().terminateMonitoring();
+                TpmonController.getInstance().terminate();
                 throw ex;
             }
         }

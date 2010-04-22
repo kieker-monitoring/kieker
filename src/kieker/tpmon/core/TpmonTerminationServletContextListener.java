@@ -19,7 +19,7 @@ public class TpmonTerminationServletContextListener implements ServletContextLis
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
 	 */
 	public void contextDestroyed(ServletContextEvent evt) {
-		TpmonController.getInstance().terminateMonitoring();
+		TpmonController.getInstance().terminate();
 		LOG.info("context destroyed");
 	}
 

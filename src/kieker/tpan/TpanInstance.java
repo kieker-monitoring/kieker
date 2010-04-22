@@ -17,7 +17,11 @@ package kieker.tpan;
  * limitations under the License.
  * ==================================================
  */
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Vector;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.IMonitoringLogReader;
 
@@ -50,10 +54,15 @@ public class TpanInstance {
     private IMonitoringLogReader logReader;
     // this are the consumers for data that are comming into kieker by readers (files or system under monitoring)
     private final Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
+    /** Contains all consumers which consume records of any type */
+    private final Collection<IMonitoringRecordConsumer> anyTypeConsumers =
+            new Vector<IMonitoringRecordConsumer>();
+    /** Contains mapping of record types to subscribed consumers */
+    private final HashMap<String, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
+            new HashMap<String, Collection<IMonitoringRecordConsumer>>();
 
     public void run() throws LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         for (IMonitoringRecordConsumer c : this.consumers) {
-            this.logReader.addRecordConsumer(c, c.getRecordTypeSubscriptionList());
             c.execute();
         }
         try {
@@ -61,6 +70,12 @@ public class TpanInstance {
                 log.error("Error: LogReader is missing - cannot execute run() without it!");
                 throw new LogReaderExecutionException(" LogReader is missing - cannot execute run() without it!");
             } else {
+                this.logReader.addRecordReceiver(new IMonitoringRecordReceiver() {
+
+                    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }
+                });
                 if (!this.logReader.read()) {
                     log.error("Calling execute() on logReader returned false");
                     throw new LogReaderExecutionException("Calling execute() on logReader returned false");
@@ -85,5 +100,37 @@ public class TpanInstance {
 
     public void addRecordConsumer(IMonitoringRecordConsumer consumer) {
         this.consumers.add(consumer);
+        final String[] recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
+        if (recordTypeSubscriptionList == null) {
+            this.anyTypeConsumers.add(consumer);
+        } else {
+            for (String recordTypeName : recordTypeSubscriptionList) {
+                Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(recordTypeName);
+                if (cList == null) {
+                    cList = new Vector<IMonitoringRecordConsumer>(0);
+                    this.specificTypeConsumers.put(recordTypeName, cList);
+                }
+                cList.add(consumer);
+            }
+        }
+    }
+
+    /**
+     * Delivers the given record to the consumers that are registered for this
+     * type of records.
+     *
+     * @param monitoringRecord the record
+     * @throws LogReaderExecutionException if an error occurs
+     */
+    private final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
+            for (IMonitoringRecordConsumer c : this.anyTypeConsumers) {
+                c.consumeMonitoringRecord(monitoringRecord);
+            }
+            Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(monitoringRecord.getClass().getName());
+            if (cList != null) {
+                for (IMonitoringRecordConsumer c : cList) {
+                    c.consumeMonitoringRecord(monitoringRecord);
+                }
+            }
     }
 }

@@ -64,7 +64,7 @@ public class FilesystemLogReplayer {
          * Force the controller to keep the original logging timestamps
          * of the monitoring records.
          */
-        ctrlInst.setReplayMode(this.keepOriginalLoggingTimestamps);
+        ctrlInst.setControllerMode(this.keepOriginalLoggingTimestamps?TpmonController.ControllerMode.REPLAY:TpmonController.ControllerMode.REALTIME);
 
         IMonitoringRecordConsumer logCons = new IMonitoringRecordConsumer() {
 
@@ -75,7 +75,7 @@ public class FilesystemLogReplayer {
             }
 
             public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-                ctrlInst.logMonitoringRecord(monitoringRecord);
+                ctrlInst.newMonitoringRecord(monitoringRecord);
             }
 
             public boolean execute() {

@@ -1,8 +1,5 @@
 package kieker.common.record;
 
-import kieker.tpan.consumer.*;
-import kieker.common.record.IMonitoringRecord;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -27,9 +24,12 @@ import kieker.common.record.IMonitoringRecord;
 public interface IMonitoringRecordReceiver {
     /**
      * Called for each new record.
+     * 
+     * Notice, that this method should not throw an exception,
+     * but indicate an error by the return value false.
      *
-     * @param monitoringRecord
-     * @throws MonitoringRecordConsumerExecutionException
+     * @param monitoringRecord the record.
+     * @return true on success; false in case of an error.
      */
-    public void newMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException;
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord);
 }

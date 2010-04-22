@@ -62,7 +62,7 @@ public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKieker
                         " eoi == " + execData.eoi +
                         " ess == " + execData.ess);
                 log.fatal("Terminating Tpmon!");
-                tpmonController.terminateMonitoring();
+                tpmonController.terminate();
             }
         } catch (Exception e) {
             throw e; // exceptions are forwarded
@@ -70,7 +70,7 @@ public class KiekerTpmonMethodInvocationInterceptorRemote extends AbstractKieker
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            tpmonController.logMonitoringRecord(execData);
+            tpmonController.newMonitoringRecord(execData);
             cfRegistry.storeThreadLocalESS(execData.ess);
         }
         return execData.retVal;

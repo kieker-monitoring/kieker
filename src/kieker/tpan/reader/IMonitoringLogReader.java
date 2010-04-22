@@ -1,6 +1,6 @@
 package kieker.tpan.reader;
 
-import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.common.record.IMonitoringRecordReceiver;
 
 /*
  * ==================LICENCE=========================
@@ -42,15 +42,12 @@ public interface IMonitoringLogReader {
     public void init(String initString) throws IllegalArgumentException;
 
     /**
-     * Adds the given consumer with the given subscription list to the reader's
-     * list of consumers.
-     *
-     * This method is called from the framework and should not be called manually.
+     * Adds the given record receiver.
      *
      * @param consumer the consumer
      * @param recordTypeSubscriptionList the subscription list
      */
-    public void addRecordConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList);
+    public void addRecordReceiver(IMonitoringRecordReceiver consumer);
 
     /**
      * Starts the reader. This method is intended to be a blocking operation,

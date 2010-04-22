@@ -1,21 +1,26 @@
 package kieker.tpmon.writer.filesystem;
 
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import kieker.tpmon.core.TpmonController;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
-import kieker.tpmon.writer.AbstractMonitoringLogWriter;
-import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tpmon.writer.IMonitoringLogWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.FileSystemWriter
+/*
  * 
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -32,7 +37,8 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+/**
  * Simple class to store monitoroing data in the file system. Although a
  * buffered writer is used, outliers (delays of 1000 ms) occur from time
  * to time if many monitoring events have to be writen. We believe that
@@ -63,7 +69,7 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public final class SyncFsWriter extends AbstractMonitoringLogWriter {
+public final class SyncFsWriter implements IMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(SyncFsWriter.class);
     // configuration parameters
@@ -158,7 +164,7 @@ public final class SyncFsWriter extends AbstractMonitoringLogWriter {
     }
 
     // TODO: keep track of record type ID mapping!
-    public synchronized boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    public synchronized boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
         if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
             log.info("Found END_OF_MONITORING_MARKER. Will terminate");
             return false;

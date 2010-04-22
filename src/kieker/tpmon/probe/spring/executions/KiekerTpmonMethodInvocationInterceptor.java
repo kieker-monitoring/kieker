@@ -59,7 +59,7 @@ public class KiekerTpmonMethodInvocationInterceptor extends AbstractKiekerTpmonM
             /* note that proceedAndMeasure(...) even sets the variable name
              * in case the execution of the joint point resulted in an
              * exception! */
-            tpmonController.logMonitoringRecord(execData);
+            tpmonController.newMonitoringRecord(execData);
         }
         return execData.retVal;
     }

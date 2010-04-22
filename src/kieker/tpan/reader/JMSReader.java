@@ -17,7 +17,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.MonitoringRecordTypeClassnameMapping;
+import kieker.common.util.PropertyMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -55,10 +55,10 @@ public class JMSReader extends AbstractMonitoringLogReader {
    /** Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 */
     
     public void init(String initString) throws IllegalArgumentException {
-        super.initVarsFromInitString(initString); // throws IllegalArgumentException
+        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
 
-        String jmsProviderUrlP = this.getInitProperty("jmsProviderUrl", null);
-        String jmsDestinationP = this.getInitProperty("jmsDestination", null);
+        String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
+        String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
         initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP); // throws IllegalArgumentException
     }
 

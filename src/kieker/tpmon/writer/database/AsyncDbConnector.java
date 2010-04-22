@@ -9,8 +9,8 @@ import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpmon.writer.AbstractMonitoringLogWriter;
 import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.writer.IMonitoringLogWriter;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
 import org.apache.commons.logging.Log;
@@ -61,7 +61,7 @@ import org.apache.commons.logging.LogFactory;
  *             which may be changed during runtime
  * 2007/07/30: Initial Prototype
  */
-public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
+public final class AsyncDbConnector implements IMonitoringLogWriter {
 
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. "
@@ -168,7 +168,7 @@ public final class AsyncDbConnector extends AbstractMonitoringLogWriter {
      * This method is not synchronized, in contrast to the insert method of the Dbconnector.java.
      * It uses several dbconnections in parallel using the consumer, producer pattern.
      */
-    public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
         try {
             // INSERT INTO `newSchema` ( `experimentid` , `operation` , `traceid` , `tin` , `tout` ) VALUES ( '0', '1231', '1231', '12312', '1221233' );
             /*

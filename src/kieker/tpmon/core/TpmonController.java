@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.tpmon.writer.database.AsyncDbConnector;
 import kieker.tpmon.writer.filesystem.AsyncFsConnector;
 import org.apache.commons.logging.Log;
@@ -77,7 +78,7 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public final class TpmonController {
+public final class TpmonController implements IMonitoringRecordReceiver {
 
     private static final Log log = LogFactory.getLog(TpmonController.class);
     private static final TpmonController ctrlInst = new TpmonController();
@@ -94,7 +95,19 @@ public final class TpmonController {
     private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
     private String dbTableName = "turbomon10";
 
-    private enum DebugModes {
+    public enum ControllerMode {
+        /**
+         * The loggingTimestamp is not set by the newMonitoringRecord method.
+         * This is required to replay recorded traces with the original
+         * timestamps.
+         */
+        REPLAY,
+
+        REALTIME
+    }
+    private ControllerMode controllerMode = ControllerMode.REALTIME;
+
+    private enum DebugMode {
 
         ENABLED, DISABLED;
 
@@ -106,14 +119,14 @@ public final class TpmonController {
         ;
     };
 
-    private enum ControllerStates {
+    private enum ControllerState {
         ENABLED, DISABLED, TERMINATED;
     }
     // The following variables are declared volatile since they are access by
     // multiple threads
-    private final AtomicReference<ControllerStates> controllerState =
-            new AtomicReference<ControllerStates>(ControllerStates.ENABLED);
-    private volatile DebugModes debugMode = DebugModes.DISABLED;
+    private final AtomicReference<ControllerState> controllerState =
+            new AtomicReference<ControllerState>(ControllerState.ENABLED);
+    private volatile DebugMode debugMode = DebugMode.DISABLED;
     private volatile String filenamePrefix = ""; // e.g. path "/tmp/"
     private volatile boolean storeInJavaIoTmpdir = true;
     private volatile String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
@@ -187,7 +200,7 @@ public final class TpmonController {
             log.info("Initialization completed.\n Connector Info: " + this.getConnectorInfo());
         } catch (Exception exc) {
             log.error("Disabling monitoring", exc);
-            this.terminateMonitoring();
+            this.terminate();
         }
     }
 
@@ -233,7 +246,7 @@ public final class TpmonController {
     private AtomicLong numberOfInserts = new AtomicLong(0);
 
     public final boolean isDebug() {
-        return this.debugMode.equals(DebugModes.ENABLED);
+        return this.debugMode.equals(DebugMode.ENABLED);
     }
 
     /**
@@ -245,11 +258,11 @@ public final class TpmonController {
     }
 
     public final boolean isMonitoringEnabled() {
-        return this.controllerState.get().equals(ControllerStates.ENABLED);
+        return this.controllerState.get().equals(ControllerState.ENABLED);
     }
 
     public final boolean isMonitoringPermanentlyTerminated() {
-        return this.controllerState.get().equals(ControllerStates.TERMINATED);
+        return this.controllerState.get().equals(ControllerState.TERMINATED);
     }
     private static final int DEFAULT_EXPERIMENTID = 0;
     private AtomicInteger experimentId = new AtomicInteger(DEFAULT_EXPERIMENTID);
@@ -272,15 +285,15 @@ public final class TpmonController {
      *
      * @throws IllegalStateException if controller has been terminated prior to call
      */
-    public final void enableMonitoring() {
+    public final void enable() {
         log.info("Enabling monitoring");
         synchronized (this.controllerState) {
-            if (this.controllerState.get().equals(ControllerStates.TERMINATED)) {
+            if (this.controllerState.get().equals(ControllerState.TERMINATED)) {
                 IllegalStateException ex = new IllegalStateException("Refused to enable monitoring because monitoring has been permanently terminated before");
                 log.error("Monitoring cannot be enabled", ex);
                 throw ex;
             }
-            this.controllerState.set(ControllerStates.ENABLED);
+            this.controllerState.set(ControllerState.ENABLED);
         }
     }
 
@@ -290,15 +303,15 @@ public final class TpmonController {
      *
      * @throws IllegalStateException if controller has been terminated prior to call
      */
-    public final void disableMonitoring() {
+    public final void disable() {
         log.info("Disabling monitoring");
         synchronized (this.controllerState) {
-            if (this.controllerState.get().equals(ControllerStates.TERMINATED)) {
+            if (this.controllerState.get().equals(ControllerState.TERMINATED)) {
                 IllegalStateException ex = new IllegalStateException("Refused to enable monitoring because monitoring has been permanently terminated before");
                 log.error("Monitoring cannot be enabled", ex);
                 throw ex;
             }
-            this.controllerState.set(ControllerStates.DISABLED);
+            this.controllerState.set(ControllerState.DISABLED);
         }
     }
 
@@ -306,23 +319,16 @@ public final class TpmonController {
      * Permanently terminates monitoring (e.g., due to a failure).
      * Subsequent tries to enable monitoring will be refused.
      */
-    public final synchronized void terminateMonitoring() {
+    public final synchronized void terminate() {
         log.info("Permanently terminating monitoring");
         synchronized (this.controllerState) {
             if (this.monitoringLogWriter != null) {
                 /* if the initialization of the writer failed, it is set to null*/
-                this.monitoringLogWriter.writeMonitoringRecord(END_OF_MONITORING_MARKER);
+                this.monitoringLogWriter.newMonitoringRecord(END_OF_MONITORING_MARKER);
             }
-            this.controllerState.set(ControllerStates.TERMINATED);
+            this.controllerState.set(ControllerState.TERMINATED);
         }
     }
-
-    /**
-     * If true, the loggingTimestamp is not set by the logMonitoringRecord
-     * method. This is required to replay recorded traces with the
-     * original timestamps.
-     */
-    private volatile boolean replayMode = false;
 
     /**
      * Enables or disables the replay mode (for monitoring the value should 
@@ -332,8 +338,8 @@ public final class TpmonController {
      *
      * @param replayMode
      */
-    public final void setReplayMode(final boolean replayMode) {
-        this.replayMode = replayMode;
+    public final void setControllerMode(final ControllerMode mode) {
+        this.controllerMode = mode;
     }
 
     /**
@@ -348,21 +354,21 @@ public final class TpmonController {
      * @return true if the record has been passed the writer successfully; false
      *         in case an error occured or the controller is not enabled.
      */
-    public final boolean logMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-        if (!this.controllerState.get().equals(ControllerStates.ENABLED)) {
+    public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+        if (!this.controllerState.get().equals(ControllerState.ENABLED)) {
             return false;
         }
 
         numberOfInserts.incrementAndGet();
 
-        if (!this.replayMode) {
+        if (this.controllerMode.equals(ControllerMode.REALTIME)) {
             monitoringRecord.setLoggingTimestamp(this.getTime());
         }
 
         // fail fast, e.g., terminates the controller if a writer's buffer is full
-        if (!this.monitoringLogWriter.writeMonitoringRecord(monitoringRecord)) {
+        if (!this.monitoringLogWriter.newMonitoringRecord(monitoringRecord)) {
             log.fatal("Error writing the monitoring data. Will terminate monitoring!");
-            this.terminateMonitoring();
+            this.terminate();
             return false;
         }
 
@@ -518,9 +524,9 @@ public final class TpmonController {
         if (debugProperty != null && debugProperty.length() != 0) {
             if (debugProperty.toLowerCase().equals("true") || debugProperty.toLowerCase().equals("false")) {
                 if (debugProperty.toLowerCase().equals("true")) {
-                    this.debugMode = DebugModes.ENABLED;
+                    this.debugMode = DebugMode.ENABLED;
                 } else {
-                    this.debugMode = DebugModes.DISABLED;
+                    this.debugMode = DebugMode.DISABLED;
                 }
             } else {
                 log.warn("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile
@@ -573,21 +579,21 @@ public final class TpmonController {
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
                 if (monitoringEnabledProperty.toLowerCase().equals("true")){
-                    this.controllerState.set(ControllerStates.ENABLED);
+                    this.controllerState.set(ControllerState.ENABLED);
                 } else {
-                    this.controllerState.set(ControllerStates.DISABLED);
+                    this.controllerState.set(ControllerState.DISABLED);
                 }
             } else {
                 log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in tpmonLTW.jar/" + configurationFile
-                        + ". Using default value " + this.controllerState.get().equals(ControllerStates.ENABLED));
+                        + ". Using default value " + this.controllerState.get().equals(ControllerState.ENABLED));
             }
 
         } else {
             log.warn("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile
-                    + ". Using default value " + this.controllerState.get().equals(ControllerStates.ENABLED));
+                    + ". Using default value " + this.controllerState.get().equals(ControllerState.ENABLED));
         }
 
-        if (!this.controllerState.get().equals(ControllerStates.ENABLED)) {
+        if (!this.controllerState.get().equals(ControllerState.ENABLED)) {
             log.info("Monitoring is not enabled");
         }
 
@@ -635,9 +641,9 @@ public final class TpmonController {
      */
     public final void setDebug(boolean debug) {
         if (debug) {
-            this.debugMode = DebugModes.ENABLED;
+            this.debugMode = DebugMode.ENABLED;
         } else {
-            this.debugMode = DebugModes.DISABLED;
+            this.debugMode = DebugMode.DISABLED;
         }
     }
 }

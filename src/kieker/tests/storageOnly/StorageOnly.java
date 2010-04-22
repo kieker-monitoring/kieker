@@ -57,7 +57,7 @@ public class StorageOnly {
             for (int i = 0; i < numberOfEvents; i++) {
                 OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L, ctrl.getVmName(),i,i);
                 record.vmName = vmName;
-                ctrl.logMonitoringRecord(record);
+                ctrl.newMonitoringRecord(record);
             }
             System.out.println("Sleeping for 8 seconds");
             Thread.sleep(8000);
@@ -65,12 +65,12 @@ public class StorageOnly {
             for (int i = 0; i < numberOfEvents; i++) {
                 OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,ctrl.getVmName(),i+10000,i);
                 record.vmName = vmName;
-                ctrl.logMonitoringRecord(record);
+                ctrl.newMonitoringRecord(record);
             }
             System.out.println("Calling system.exit(0)");
             System.out.println("Sleeping for 60 seconds");
             Thread.sleep(10000);
-            ctrl.terminateMonitoring();
+            ctrl.terminate();
         } catch (InterruptedException ex) {
             System.out.println("Exception:"+ex);
 			ex.printStackTrace();

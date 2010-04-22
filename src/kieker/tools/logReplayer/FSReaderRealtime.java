@@ -3,6 +3,7 @@ package kieker.tools.logReplayer;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.PropertyMap;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
@@ -71,8 +72,8 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
 
     /** Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN | numWorkers=XX */
     public void init(String initString) throws IllegalArgumentException {
-        super.initVarsFromInitString(initString);
-        String numWorkersString = this.getInitProperty(PROP_NAME_NUM_WORKERS);
+        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+        String numWorkersString = propertyMap.getProperty(PROP_NAME_NUM_WORKERS);
         int numWorkers = -1;
         if (numWorkersString == null) {
             throw new IllegalArgumentException("Missing init parameter '" + PROP_NAME_NUM_WORKERS + "'");
@@ -81,7 +82,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             numWorkers = Integer.parseInt(numWorkersString);
         } catch (NumberFormatException ex) { /* value of numWorkers remains -1 */ }
 
-        initInstanceFromArgs(inputDirNameListToArray(this.getInitProperty(PROP_NAME_INPUTDIRNAMES)), numWorkers);
+        initInstanceFromArgs(inputDirNameListToArray(propertyMap.getProperty(PROP_NAME_INPUTDIRNAMES)), numWorkers);
     }
 
     public FSReaderRealtime(final String[] inputDirNames, int numWorkers) {

@@ -153,17 +153,17 @@ public class ControlServlet extends HttpServlet {
              * action = enable
              */
             } else if (action.equals("enable")) {
-                ctrlInst.enableMonitoring();
+                ctrlInst.enable();
             /*
              * action = disable
              */
             } else if (action.equals("disable")) {
-                ctrlInst.disableMonitoring();
+                ctrlInst.disable();
             /*
              * action = terminate
              */
             } else if (action.equals("terminate")) {
-                ctrlInst.terminateMonitoring();
+                ctrlInst.terminate();
             /*
              * action = ...
              */
@@ -172,7 +172,7 @@ public class ControlServlet extends HttpServlet {
                 sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
                 cfRegistry.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.logMonitoringRecord(new OperationExecutionRecord("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), ctrlInst.getVmName(), i, i));
+                    ctrlInst.newMonitoringRecord(new OperationExecutionRecord("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), ctrlInst.getVmName(), i, i));
                 }
                 cfRegistry.unsetThreadLocalTraceId();
                 sessionRegistry.unsetThreadLocalSessionId();

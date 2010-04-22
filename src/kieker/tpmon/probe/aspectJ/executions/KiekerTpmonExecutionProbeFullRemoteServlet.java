@@ -74,7 +74,7 @@ public class KiekerTpmonExecutionProbeFullRemoteServlet extends AbstractKiekerTp
                         " eoi == " + eoi +
                         " ess == " + ess);
                 log.fatal("Terminating Tpmon!");
-                ctrlInst.terminateMonitoring();
+                ctrlInst.terminate();
             }
         } catch (Exception e) {
             throw e; // exceptions are forwarded
@@ -84,7 +84,7 @@ public class KiekerTpmonExecutionProbeFullRemoteServlet extends AbstractKiekerTp
              * exception! */
             execData.eoi = eoi;
             execData.ess = ess;
-            ctrlInst.logMonitoringRecord(execData);
+            ctrlInst.newMonitoringRecord(execData);
             if (execData.isEntryPoint) {
                 cfRegistry.unsetThreadLocalEOI();
                 cfRegistry.unsetThreadLocalESS();

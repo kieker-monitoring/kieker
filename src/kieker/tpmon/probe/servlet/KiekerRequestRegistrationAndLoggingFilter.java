@@ -122,7 +122,7 @@ public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKieke
                     //log.info("New sessionId? " + execData.sessionId);
                 }
                 // TOOD: ?only log record if cfRegistry.recallThreadLocalEOI > 0?
-                ctrlInst.logMonitoringRecord(execData);
+                ctrlInst.newMonitoringRecord(execData);
             }
             // since we are in an entry point:
             cfRegistry.unsetThreadLocalTraceId();

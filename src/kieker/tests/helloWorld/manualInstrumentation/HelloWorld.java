@@ -13,7 +13,7 @@ public class HelloWorld {
         doSomething();
         
         long endTime = System.nanoTime();
-        TpmonController.getInstance().logMonitoringRecord(new OperationExecutionRecord("kieker.component", "method", 1, startTime, endTime));
+        TpmonController.getInstance().newMonitoringRecord(new OperationExecutionRecord("kieker.component", "method", 1, startTime, endTime));
                 
         /* System.exit() called to initiate shutdown of 
          * the monitoring logic running in seperate threads */

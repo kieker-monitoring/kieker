@@ -10,10 +10,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.MonitoringRecordTypeRegistry;
 
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.common.util.PropertyMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,6 +52,8 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
 
     private static final String PROP_NAME_INPUTDIR = "inputDirName";
     private static final Log log = LogFactory.getLog(FSDirectoryReader.class);
+    private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry();
+
     private File inputDir = null;
 
     /** Constructor for FSDirectoryReader. Requires a subsequent call to the init
@@ -63,8 +67,8 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
 
     /** Valid key/value pair: inputDirName=INPUTDIRECTORY */
     public void init(String initString) throws IllegalArgumentException{
-        super.initVarsFromInitString(initString); // throws IllegalArgumentException
-        this.initInstanceFromArgs(this.getInitProperty(PROP_NAME_INPUTDIR)); // throws IllegalArgumentException
+        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+        this.initInstanceFromArgs(propertyMap.getProperty(PROP_NAME_INPUTDIR)); // throws IllegalArgumentException
     }
 
    private void initInstanceFromArgs(final String inputDirName) throws IllegalArgumentException {
@@ -136,7 +140,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                     // the leading $ is optional
                     Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr);
                     String classname = st.nextToken();
-                    super.registerRecordTypeIdMapping(id, classname);
+                    this.typeRegistry.registerRecordTypeIdMapping(id, classname);
                 } catch (Exception e) {
                     log.error(
                             "Failed to parse line: {" + line + "} from file " +
@@ -186,7 +190,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
 
                             Integer id = Integer.valueOf(token.substring(1));
                             // TODO: use IDs
-                            Class<? extends IMonitoringRecord> clazz = super.fetchClassForRecordTypeId(id);
+                            Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
                             rec = (IMonitoringRecord) clazz.newInstance();
                             token = st.nextToken();
                             //log.info("LoggingTimestamp: " + Long.valueOf(token) + " (" + token + ")");

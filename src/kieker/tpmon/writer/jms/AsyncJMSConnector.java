@@ -11,7 +11,8 @@ import java.util.concurrent.BlockingQueue;
 import kieker.tpmon.core.TpmonController;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpmon.writer.AbstractMonitoringLogWriter;
+import kieker.common.util.PropertyMap;
+import kieker.tpmon.writer.IMonitoringLogWriter;
 
 /*
  * ==================LICENCE=========================
@@ -34,7 +35,7 @@ import kieker.tpmon.writer.AbstractMonitoringLogWriter;
  *
  * @author Matthias Rohr, Andre van Hoorn
  */
-public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
+public final class AsyncJMSConnector implements IMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncJMSConnector.class);
     private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
@@ -75,14 +76,14 @@ public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
 
         boolean retVal = true;
         try {
-            super.initVarsFromInitString(initString);
-
-            this.contextFactoryType = super.getInitProperty("jmsContextFactoryType");
-            this.providerUrl = super.getInitProperty("jmsProviderUrl");
-            this.factoryLookupName = super.getInitProperty("jmsFactoryLookupName");
-            this.topic = super.getInitProperty("jmsTopic");
-            this.messageTimeToLive = Long.valueOf(super.getInitProperty("jmsMessageTimeToLive"));
-            this.asyncRecordQueueSize = Integer.valueOf(super.getInitProperty("asyncRecordQueueSize"));
+            final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
+            
+            this.contextFactoryType = propertyMap.getProperty("jmsContextFactoryType");
+            this.providerUrl = propertyMap.getProperty("jmsProviderUrl");
+            this.factoryLookupName = propertyMap.getProperty("jmsFactoryLookupName");
+            this.topic = propertyMap.getProperty("jmsTopic");
+            this.messageTimeToLive = Long.valueOf(propertyMap.getProperty("jmsMessageTimeToLive"));
+            this.asyncRecordQueueSize = Integer.valueOf(propertyMap.getProperty("asyncRecordQueueSize"));
 
 
             this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
@@ -116,7 +117,7 @@ public final class AsyncJMSConnector extends AbstractMonitoringLogWriter {
     }
 
     
-    public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
         try {
             if (monitoringRecord == TpmonController.END_OF_MONITORING_MARKER) {
                 // "translate" END_OF_MONITORING_MARKER

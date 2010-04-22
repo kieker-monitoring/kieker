@@ -1,7 +1,7 @@
 package kieker.tpmon.writer;
 
 import java.util.Vector;
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 
 /*
@@ -26,15 +26,7 @@ import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 /**
  * @author Andre van Hoorn
  */
-public interface IMonitoringLogWriter {
-
-    /**
-     * Writes the passed monitoring record.
-     *
-     * @return true iff the operation was successful.
-     */
-    public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord);
-
+public interface IMonitoringLogWriter extends IMonitoringRecordReceiver {
     /**
      * Initialize instance from passed initialization string which is typically
      * a list of separated parameter/values pairs.
@@ -46,7 +38,9 @@ public interface IMonitoringLogWriter {
      */
     public boolean init(String initString);
 
+    // TODO: try to remove the need for this method!
     /**
+     *
      * Returns a vector of workers, or null if none.
      */
     public Vector<AbstractWorkerThread> getWorkers();

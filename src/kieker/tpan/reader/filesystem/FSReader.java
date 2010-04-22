@@ -13,6 +13,8 @@ import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.common.util.PropertyMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,7 +62,7 @@ public class FSReader extends AbstractMonitoringLogReader {
      */
     private FSReaderCons concurrentConsumer;
 
-    private class FSReaderCons implements IMonitoringRecordConsumer {
+    private class FSReaderCons implements IMonitoringRecordReceiver {
 
         private final FSReader master;
         private final String[] inputDirs;
@@ -107,9 +109,10 @@ public class FSReader extends AbstractMonitoringLogReader {
          * buffer, notify the buffer consumer and block until they are granted
          * to read the next record.
          */
-        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
+        public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
             if (this.isTerminated.get()) {
-                throw new MonitoringRecordConsumerExecutionException("Consumer already terminated");
+                log.error("Consumer already terminated");
+                return false;
             }
 
             try {
@@ -124,7 +127,9 @@ public class FSReader extends AbstractMonitoringLogReader {
             } catch (InterruptedException ex) {
                 log.error("Reader thread has been interrupted.", ex);
                 this.errorOccured.set(true);
+                return false;
             }
+            return true;
         }
 
         public boolean execute() throws MonitoringRecordConsumerExecutionException {
@@ -132,13 +137,13 @@ public class FSReader extends AbstractMonitoringLogReader {
                 { // 1. init and start reader threads
                     for (int i = 0; i < inputDirs.length; i++) {
                         final FSDirectoryReader r = new FSDirectoryReader(this.inputDirs[i]);
-                        r.addRecordConsumer(this, null); // consume records of any type and pass to this
+                        r.addRecordReceiver(this); // consume records of any type and pass to this
                         final Thread t = new Thread(new Runnable() {
 
                             public void run() {
                                 try {
                                     r.read();
-                                    consumeMonitoringRecord(FS_READER_TERMINATION_MARKER); // signal termination
+                                    newMonitoringRecord(FS_READER_TERMINATION_MARKER); // signal termination
                                 } catch (Exception ex) {
                                     log.error(r, ex);
                                     reportReaderException(ex);
@@ -230,8 +235,8 @@ public class FSReader extends AbstractMonitoringLogReader {
      * @param initString List of input directories separated by semicolon
      */
     public void init(String initString) throws IllegalArgumentException {
-        super.initVarsFromInitString(initString);
-        String dirList = super.getInitProperty(PROP_NAME_INPUTDIRS);
+        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+        String dirList = propertyMap.getProperty(PROP_NAME_INPUTDIRS);
 
         if (dirList == null) {
             log.error("Missing value for property " + PROP_NAME_INPUTDIRS);
