@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.Vector;
+import kieker.common.util.LoggingTimestampConverter;
 import kieker.tools.traceAnalysis.TraceAnalysisTool;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -86,8 +87,8 @@ public class LoggingTimestampConverterTool {
         for (long tstamp : timestampsLong) {
             StringBuilder strB = new StringBuilder();
             strB.append(tstamp).append(": ")
-                    .append(convertLoggingTimestampToUTCString(tstamp))
-                    .append(" (").append(convertLoggingTimestampLocalTimeZoneString(tstamp))
+                    .append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(tstamp))
+                    .append(" (").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp))
                     .append(")");
             System.out.println(strB.toString());
         }
@@ -128,22 +129,5 @@ public class LoggingTimestampConverterTool {
         }
 
         return true;
-    }
-
-    private static final String dateFormatPattern = "EEE, d MMM yyyy HH:mm:ss Z";
-
-    public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
-        GregorianCalendar c = new GregorianCalendar();
-        c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-        DateFormat m_ISO8601UTC = new SimpleDateFormat(dateFormatPattern);
-        m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return m_ISO8601UTC.format(c.getTime()) + " (UTC)";
-    }
-
-    public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
-        GregorianCalendar c = new GregorianCalendar();
-        c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-        DateFormat m_ISO8601UTC = new SimpleDateFormat(dateFormatPattern);
-        return m_ISO8601UTC.format(c.getTime()) + " (local time)";
     }
 }

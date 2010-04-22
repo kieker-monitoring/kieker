@@ -6,9 +6,8 @@ import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
+import kieker.common.util.LoggingTimestampConverter;
 import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
-import kieker.tpan.datamodel.Message;
-import kieker.tools.LoggingTimestampConverter.LoggingTimestampConverterTool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -166,7 +165,7 @@ public class ExecutionTrace {
 
     @Override
     public String toString() {
-        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
+        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
         for (Execution e : this.set) {
             strBuild.append("<");
             strBuild.append(e.toString()).append(">\n");

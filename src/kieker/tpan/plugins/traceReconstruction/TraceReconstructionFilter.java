@@ -32,13 +32,12 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import kieker.tpan.TpanInstance;
+import kieker.common.util.LoggingTimestampConverter;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.consumer.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tpan.consumer.executionRecordTransformation.IExecutionListener;
-import kieker.tools.LoggingTimestampConverter.LoggingTimestampConverterTool;
 
 /**
  *
@@ -342,12 +341,12 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     public void printStatusMessage() {
         super.printStatusMessage();
         String minTinStr = new StringBuilder().append(this.minTin)
-                .append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.minTin))
-                .append(",").append(LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(this.minTin))
+                .append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin))
+                .append(",").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin))
                 .append(")").toString();
         String maxToutStr = new StringBuilder().append(this.highestTout)
-                .append(" (").append(LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(this.highestTout))
-                .append(",").append(LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(this.highestTout))
+                .append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.highestTout))
+                .append(",").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.highestTout))
                 .append(")").toString();
         System.out.println("First timestamp: " + minTinStr);
         System.out.println("Last timestamp: "  + maxToutStr);

@@ -35,6 +35,7 @@ import java.util.TimeZone;
 
 import java.util.TreeSet;
 import java.util.Vector;
+import kieker.common.util.LoggingTimestampConverter;
 import kieker.tpan.reader.LogReaderExecutionException;
 import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import kieker.tpan.TpanInstance;
@@ -372,12 +373,12 @@ public class TraceAnalysisTool {
                 val = maxTraceDurationMillis + " ms";
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE)) {
-                val = LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(ignoreRecordsBeforeTimestamp)
-                        + " (" + LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(ignoreRecordsBeforeTimestamp) + ")";
+                val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(ignoreRecordsBeforeTimestamp)
+                        + " (" + LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(ignoreRecordsBeforeTimestamp) + ")";
                 dumpedOp = true;
             } else if (longOpt.equals(CMD_OPT_NAME_IGNORERECORDSAFTERDATE)) {
-                val = LoggingTimestampConverterTool.convertLoggingTimestampToUTCString(ignoreRecordsAfterTimestamp)
-                        + " (" + LoggingTimestampConverterTool.convertLoggingTimestampLocalTimeZoneString(ignoreRecordsAfterTimestamp) + ")";
+                val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(ignoreRecordsAfterTimestamp)
+                        + " (" + LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(ignoreRecordsAfterTimestamp) + ")";
                 dumpedOp = true;
             } else {
                 val = cmdl.getOptionValues(longOpt).toString();
