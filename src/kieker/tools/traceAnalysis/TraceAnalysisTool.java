@@ -1,4 +1,4 @@
-package kieker.tpan.tools;
+package kieker.tools.traceAnalysis;
 
 /*
  * ==================LICENCE=========================
@@ -17,6 +17,7 @@ package kieker.tpan.tools;
  * limitations under the License.
  * ==================================================
  */
+import kieker.tools.LoggingTimestampConverter.LoggingTimestampConverterTool;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

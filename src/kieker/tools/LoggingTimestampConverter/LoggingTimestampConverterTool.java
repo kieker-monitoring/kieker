@@ -1,4 +1,4 @@
-package kieker.tpan.tools;
+package kieker.tools.LoggingTimestampConverter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.Vector;
-import kieker.tpan.TpanInstance;
+import kieker.tools.traceAnalysis.TraceAnalysisTool;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
