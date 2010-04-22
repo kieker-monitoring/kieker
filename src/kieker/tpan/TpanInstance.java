@@ -20,6 +20,8 @@ package kieker.tpan;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
@@ -73,7 +75,13 @@ public class TpanInstance {
                 this.logReader.addRecordReceiver(new IMonitoringRecordReceiver() {
 
                     public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
-                        throw new UnsupportedOperationException("Not supported yet.");
+                        try {
+                            deliverRecordToConsumers(monitoringRecord);
+                        } catch (MonitoringRecordConsumerExecutionException ex) {
+                            log.error("Caught MonitoringRecordConsumerExecutionException", ex);
+                            return false;
+                        }
+                        return true;
                     }
                 });
                 if (!this.logReader.read()) {
