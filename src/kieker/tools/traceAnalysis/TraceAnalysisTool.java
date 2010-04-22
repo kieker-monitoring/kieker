@@ -17,7 +17,7 @@ package kieker.tools.traceAnalysis;
  * limitations under the License.
  * ==================================================
  */
-import kieker.tools.LoggingTimestampConverter.LoggingTimestampConverterTool;
+import kieker.tools.loggingTimestampConverter.LoggingTimestampConverterTool;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

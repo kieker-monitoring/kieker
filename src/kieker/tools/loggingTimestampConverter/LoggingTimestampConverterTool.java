@@ -1,4 +1,4 @@
-package kieker.tools.LoggingTimestampConverter;
+package kieker.tools.loggingTimestampConverter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
