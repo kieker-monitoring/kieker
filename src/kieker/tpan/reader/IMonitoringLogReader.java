@@ -50,7 +50,7 @@ public interface IMonitoringLogReader {
      * @param consumer the consumer
      * @param recordTypeSubscriptionList the subscription list
      */
-    public void addConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList);
+    public void addRecordConsumer(IMonitoringRecordConsumer consumer, String[] recordTypeSubscriptionList);
 
     /**
      * Starts the reader. This method is intended to be a blocking operation,

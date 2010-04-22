@@ -53,7 +53,7 @@ public class TpanInstance {
 
     public void run() throws LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         for (IMonitoringRecordConsumer c : this.consumers) {
-            this.logReader.addConsumer(c, c.getRecordTypeSubscriptionList());
+            this.logReader.addRecordConsumer(c, c.getRecordTypeSubscriptionList());
             c.execute();
         }
         try {

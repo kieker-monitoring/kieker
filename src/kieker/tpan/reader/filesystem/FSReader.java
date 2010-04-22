@@ -132,7 +132,7 @@ public class FSReader extends AbstractMonitoringLogReader {
                 { // 1. init and start reader threads
                     for (int i = 0; i < inputDirs.length; i++) {
                         final FSDirectoryReader r = new FSDirectoryReader(this.inputDirs[i]);
-                        r.addConsumer(this, null); // consume records of any type and pass to this
+                        r.addRecordConsumer(this, null); // consume records of any type and pass to this
                         final Thread t = new Thread(new Runnable() {
 
                             public void run() {

@@ -106,7 +106,7 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
         initStringProcessed = true;
     }
 
-    public final void addConsumer(final IMonitoringRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
+    public final void addRecordConsumer(final IMonitoringRecordConsumer consumer, final String[] recordTypeSubscriptionList) {
         if (recordTypeSubscriptionList == null) {
             this.anyTypeConsumers.add(consumer);
         } else {
