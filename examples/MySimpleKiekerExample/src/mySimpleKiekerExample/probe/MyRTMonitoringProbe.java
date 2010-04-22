@@ -44,7 +44,7 @@ public class MyRTMonitoringProbe implements IKiekerMonitoringProbe {
             throw e;
         } finally {
             record.rt = CTRL.getTime() - tin;
-            CTRL.logMonitoringRecord(record);
+            CTRL.newMonitoringRecord(record);
         }
         return retval;
     }

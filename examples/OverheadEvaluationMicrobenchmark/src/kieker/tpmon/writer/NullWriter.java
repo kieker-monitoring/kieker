@@ -30,12 +30,12 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class NullWriter extends AbstractMonitoringLogWriter {
+public class NullWriter implements IMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(NullWriter.class);
 
     @Override
-    public boolean writeMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
         // do nothing
         return true;
     }
