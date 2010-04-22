@@ -8,7 +8,7 @@
 BINDIR=$(dirname $0)
 
 JAVAARGS="-Dlog4j.configuration=${BINDIR}/log4j.properties -Xms56m -Xmx1024m"
-MAINCLASSNAME=kieker.tpan.tools.TraceAnalysisTool
+MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisTool
 CLASSPATH=$(ls ${BINDIR}/../lib/*.jar | tr "\n" ":")$(ls ${BINDIR}/../dist/*.jar | tr "\n" ":")
 
 time java ${JAVAARGS} -cp "${CLASSPATH}" ${MAINCLASSNAME} $*

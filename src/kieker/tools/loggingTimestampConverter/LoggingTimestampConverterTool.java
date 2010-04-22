@@ -1,10 +1,6 @@
 package kieker.tools.loggingTimestampConverter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import java.util.Vector;
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.tools.traceAnalysis.TraceAnalysisTool;
