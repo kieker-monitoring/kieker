@@ -82,17 +82,17 @@ instance (Figure~\ref{fig:kieker:coreFrameworkComponents}). %
 \label{fig:kieker:coreFrameworkClassesAndInterfaces}%
 \end{figure}
 
-% 
-% \begin{figure*}\centering
-% \includegraphics[width=1\textwidth]{figures/kiekerCommunications-revisedReArranged-woMonitoringLog-bw}%
-% \caption{Communication among framework components %
-% %{\textcolor{red}{S\"{o}ren: Evtl. spezifischer angeben, welche Kommunikation gezeigt wird? Im Text ist vom Life-Cycle eines Monitoring-Records die Rede}}
-% for creating and writing a Monitoring Record in Kieker.Tpmon~(1.1--3) as well as %
-% reading and using this Monitoring~Record in Kieker.Tpan~(4.1,~4.2). %
-% }
-% \label{fig:kieker:communicationsAmongCoreFrameworkComponents}
-% \end{figure*}
-% 
+
+\begin{figure*}\centering
+\includegraphics[width=1\textwidth]{figures/kiekerCommunications-revisedReArranged-woMonitoringLog-bw}%
+\caption{Communication among framework components %
+%{\textcolor{red}{S\"{o}ren: Evtl. spezifischer angeben, welche Kommunikation gezeigt wird? Im Text ist vom Life-Cycle eines Monitoring-Records die Rede}}
+for creating and writing a Monitoring Record in Kieker.Tpmon~(1.1--3) as well as %
+reading and using this Monitoring~Record in Kieker.Tpan~(4.1,~4.2). %
+}
+\label{fig:kieker:communicationsAmongCoreFrameworkComponents}
+\end{figure*}
+
 Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces} shows the core
 % \WH{etwas Erl\"{a}uterung zu den Assoziationen?}
 % Anm. Andr\'{e}: Ja, hier koennte man noch mehr erklaeren ...
@@ -303,7 +303,7 @@ $\$$1=MyRTMonitoringRecord
 
 \noindent A \MonitoringLogReader{} is used to create \MonitoringRecord{} instances from %
 a \MonitoringLog{} written by a corresponding \MonitoringLogWriter{} (by
-calling a \MonitoringRecord{}'s \classname{init\+FromStringArray(..)} method), see Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces:record}. %%
+calling a \MonitoringRecord{}'s \classname{init\+FromArray(..)} method), see Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces:record}. %%
 As shown in Figure~\ref{fig:readers}, %
 % Monitoring log readers must extend the abstract class %
 % \classname{Abstract\+Kieker\+Monitoring\+Log\+Reader}. %
@@ -325,79 +325,79 @@ which can be used to replay \MonitoringRecords{} from a filesystem-based %
 continuously incoming monitoring data while developing online analysis components. %
 % %
 % 
-% \subsection{Monitoring Record Consumer}
+\subsection{Monitoring Record Consumer}
 % 
-% \begin{figure}\centering
-% % \subfigure[Kieker.Tpan class diagram]{%
-% % \includegraphics[width=0.75\textwidth]{figures/LogAnalysisMetaModel}%
-% % }
-% % \subfigure[UML Communication Diagram]{%
-% \includegraphics[width=\columnwidth]{figures/LogAnalysisCommunications-bw}%
-% % }
-% % \subfigure[Code example]{%
-% % \includegraphics[width=0.35\textwidth]{figures/logAnalysis-ctrlExample}
-% % }
-% \caption{Kieker.Tpan communication diagram}
-% \label{fig:tpanCommunicationDiagram}
-% \end{figure}
-% 
-% \noindent Analysis or visualization components are integrated into \KiekerTpan{} %
-% by implementing the \classname{IKiekerRecordConsumer} interface (see Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces}). %
-% A \MonitoringRecordConsumer{} is registered to the \TpanInstance{} as a subscriber
-% for \MonitoringRecords{} of selected or all \MonitoringRecord{} types %
-% (as returned by the \classname{getRecordTypeSubscriptionList()} method, see Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces}). %
-% The \TpanInstance{} delegates the subscription list to the \MonitoringLogReader{},
-% which directly delivers newly incoming records of interest to the consumers by calling their
-% \classname{consumeMonitoringRecord(..)} method, as illustrated in %
-% Figure~\ref{fig:tpanCommunicationDiagram}. %
-% 
-% Listing~\ref{lst:rtMonitor} shows an example response time monitor for %
-% \classname{MyRTMonitoringRecord} that we use as an  example in the present section. %
-% The monitor compares~(line~19) incoming response time values  with a threshold value %
-% stored in the object's variable \classname{rtSlo}~(response time service level objective), %
-% which is specified on object creation~(line~6). %
-% By returning the classname of the \MonitoringRecord{} type \classname{MyRTMonitoringRecord} %
-% in line~10, the monitor only receives \MonitoringRecords{} of this type. %
-% Please remind that Kieker allows to use
-% the same data structures~(\MonitoringRecords{}) in analysis components as used in the %
-% \MonitoringProbes{}, in this case the \MonitoringProbe{} measuring the response times %
-% (Listing~\ref{lst:aspectJRTMonitoringProbe}) and the \MonitoringRecordConsumer{} %
-% (Listing~\ref{lst:rtMonitor}) implementing the response time monitor.
-% 
-% 
-% \begin{lstlisting}[float,language=Java, caption=Example response time monitor, label=lst:rtMonitor,escapechar=\%]
-% public class RTMonitor
-%        implements IKiekerRecordConsumer {
-% 
-%  private final long rtSlo;
-%  public RTMonitor(long rtSlo) {
-%   this.rtSlo = rtSlo;
-%  }
-% 
-%  public%\,%String[]%\,%getRecordTypeSubscriptionList(){
-%   return new String[] {
-%    MyRTMonitoringRecord.class.getName()
-%   };
-%  }
-% 
-%  public void consumeMonitoringRecord
-%         (AbstractKiekerMonitoringRecord r) {
-%   MyRTMonitoringRecord rtRec =
-%                       (MyRTMonitoringRecord) r;
-%   if (rtRec.rt > this.rtSlo) {
-%     /* SLO violation! */
-%   }
-%  }
-% 
-%  public boolean execute() { return true; }
-%  public void terminate() { }
+\begin{figure}\centering
+% \subfigure[Kieker.Tpan class diagram]{%
+% \includegraphics[width=0.75\textwidth]{figures/LogAnalysisMetaModel}%
 % }
-% \end{lstlisting}
+% \subfigure[UML Communication Diagram]{%
+\includegraphics[width=\columnwidth]{figures/LogAnalysisCommunications-bw}%
+% }
+% \subfigure[Code example]{%
+% \includegraphics[width=0.35\textwidth]{figures/logAnalysis-ctrlExample}
+% }
+\caption{Kieker.Tpan communication diagram}
+\label{fig:tpanCommunicationDiagram}
+\end{figure}
 % 
-% When a \TpanInstance{} is started by calling its \classname{run()} method, the
-% \classname{execute()} methods of all registered \MonitoringRecordConsumers{} %
-% are called. %
-% This allows the implementation of an asynchronous event-based architecture,
-% which is particularly useful for online analysis components. %
-% Such an online analysis component spawns a thread in its \classname{execute()} %
-% method implementing the analysis tasks based on asyncronously incoming \MonitoringRecords{}. %
+\noindent Analysis or visualization components are integrated into \KiekerTpan{} %
+by implementing the \classname{IMonitoringRecordConsumer} interface (see Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces}). %
+A \MonitoringRecordConsumer{} is registered to the \TpanInstance{} as a subscriber
+for \MonitoringRecords{} of selected or all \MonitoringRecord{} types %
+(as returned by the \classname{getRecordTypeSubscriptionList()} method, see Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces}). %
+The \TpanInstance{} delegates the subscription list to the \MonitoringLogReader{},
+which directly delivers newly incoming records of interest to the consumers by calling their
+\classname{consumeMonitoringRecord(..)} method, as illustrated in %
+Figure~\ref{fig:tpanCommunicationDiagram}. %
+
+Listing~\ref{lst:rtMonitor} shows an example response time monitor for %
+\classname{MyRTMonitoringRecord} that we use as an  example in the present section. %
+The monitor compares~(line~19) incoming response time values  with a threshold value %
+stored in the object's variable \classname{rtSlo}~(response time service level objective), %
+which is specified on object creation~(line~6). %
+By returning the classname of the \MonitoringRecord{} type \classname{MyRTMonitoringRecord} %
+in line~10, the monitor only receives \MonitoringRecords{} of this type. %
+Please remind that Kieker allows to use
+the same data structures~(\MonitoringRecords{}) in analysis components as used in the %
+\MonitoringProbes{}, in this case the \MonitoringProbe{} measuring the response times %
+(Listing~\ref{lst:aspectJRTMonitoringProbe}) and the \MonitoringRecordConsumer{} %
+(Listing~\ref{lst:rtMonitor}) implementing the response time monitor.
+
+
+\begin{lstlisting}[float,language=Java, caption=Example response time monitor, label=lst:rtMonitor,escapechar=\%]
+public class RTMonitor
+       implements IKiekerRecordConsumer {
+
+ private final long rtSlo;
+ public RTMonitor(long rtSlo) {
+  this.rtSlo = rtSlo;
+ }
+
+ public%\,%String[]%\,%getRecordTypeSubscriptionList(){
+  return new String[] {
+   MyRTMonitoringRecord.class.getName()
+  };
+ }
+
+ public void consumeMonitoringRecord
+        (AbstractKiekerMonitoringRecord r) {
+  MyRTMonitoringRecord rtRec =
+                      (MyRTMonitoringRecord) r;
+  if (rtRec.rt > this.rtSlo) {
+    /* SLO violation! */
+  }
+ }
+
+ public boolean execute() { return true; }
+ public void terminate() { }
+}
+\end{lstlisting}
+
+When a \TpanInstance{} is started by calling its \classname{run()} method, the
+\classname{execute()} methods of all registered \MonitoringRecordConsumers{} %
+are called. %
+This allows the implementation of an asynchronous event-based architecture,
+which is particularly useful for online analysis components. %
+Such an online analysis component spawns a thread in its \classname{execute()} %
+method implementing the analysis tasks based on asyncronously incoming \MonitoringRecords{}. %
