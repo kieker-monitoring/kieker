@@ -5,7 +5,7 @@ import kieker.tpmon.probe.IKiekerMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord;
+import src.mySimpleKiekerExample.record.MyRTMonitoringRecord;
 
 /*
  * ==================LICENCE=========================

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mySimpleKiekerExample.recordConsumer;
+package src.mySimpleKiekerExample.consumer;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.logReplayer.FSReaderRealtime;
@@ -10,7 +10,7 @@ import kieker.tpan.TpanInstance;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import kieker.tpan.reader.LogReaderExecutionException;
-import mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord;
+import src.mySimpleKiekerExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,8 +27,8 @@ public class RTMonitor implements IMonitoringRecordConsumer {
         this.rtSloMs = rtSloMs;
     }
 
-    public String[] getRecordTypeSubscriptionList() {
-        return new String[]{MyRTMonitoringRecord.class.getName()};
+    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+        return new Class[]{MyRTMonitoringRecord.class};
     }
 
     public void consumeMonitoringRecord(IMonitoringRecord r) throws MonitoringRecordConsumerExecutionException {

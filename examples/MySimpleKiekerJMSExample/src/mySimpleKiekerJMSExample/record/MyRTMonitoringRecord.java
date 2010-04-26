@@ -1,4 +1,4 @@
-package mySimpleKiekerJMSExample.monitoringRecord;
+package src.mySimpleKiekerJMSExample.record;
 
 import kieker.common.record.AbstractMonitoringRecord;
 

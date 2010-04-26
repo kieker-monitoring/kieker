@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mySimpleKiekerJMSExample.recordConsumer;
+package src.mySimpleKiekerJMSExample.consumer;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
@@ -12,7 +12,7 @@ import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
 import kieker.tpan.reader.IMonitoringLogReader;
 import kieker.tpan.reader.JMSReader;
 import kieker.tpan.reader.LogReaderExecutionException;
-import mySimpleKiekerJMSExample.monitoringRecord.MyRTMonitoringRecord;
+import src.mySimpleKiekerJMSExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -29,10 +29,10 @@ public class OnlineMonitor implements IMonitoringRecordConsumer {
         this.rtSloMs = rtSloMs;
     }
 
-    public String[] getRecordTypeSubscriptionList() {
-        return new String[]{
-            MyRTMonitoringRecord.class.getName(),
-            OperationExecutionRecord.class.getName()
+    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+        return new Class[]{
+            MyRTMonitoringRecord.class,
+            OperationExecutionRecord.class
         };
     }
 
