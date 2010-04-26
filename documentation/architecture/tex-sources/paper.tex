@@ -150,32 +150,6 @@ Kieker team
 \ldots
 \end{abstract}
 
-\section{Kieker Architecture}
-
-At the 2010/03 Kieker Developer Meeting at University of Kiel the target Architecture for the next major releases of Kieker was defined. The architecture is outlined in Figures~\ref{OverviewArchitecture201003} and \ref{DetailedArchitecture201003}.
-
-\begin{figure}
- \centering
- \includegraphics[width=0.4\textwidth]{./figures/2010-03-09-TargetArchitectureOverview.jpg}
- % 2010-03-09-TargetArchitectureOverview.jpg: 800x827 pixel, 72dpi, 28.22x29.17 cm, bb=0 0 800 827
- \caption{Overview of the underlying design principle for the Kieker architecture.}\label{OverviewArchitecture201003}
-\end{figure}
-
-\begin{figure*}
- \centering
- \includegraphics[width=0.9\textwidth]{./figures/2010-03-09-TargetArchitectureDetail.jpg}
- % 2010-03-09-TargetArchitectureDetail.jpg: 2000x1161 pixel, 72dpi, 70.56x40.96 cm, bb=0 0 2000 1161
- \caption{Detailed Kieker Target Architecture}\label{DetailedArchitecture201003}
-\end{figure*}
-
-Basic architectural principles are:
-\begin{itemize}
- \item Event driven architecture with several publish/subscribe layers.
- \item Tpan has a common set of event publishers that refer to model objects that are in the ``model repository''. These common objects are for instance traces, operations, messages.
-\end{itemize}
-
-\clearpage
-
 \section{MonitoringRecord}
 
 \begin{figure}[h]\centering
@@ -213,11 +187,11 @@ occured and it is unsafe to proceed and the controller's state cannot be switche
 to enabled or disabled any more. Arbitrarily frequent transitions between enabled %
 and disabled are possible in both directions, 
 
-\subsection{KiekerMonitoringLogWriter}
+\subsection{Monitoring Log Writer}
 
 \begin{figure}[h]\centering
 \includegraphics[scale=0.65]{figures/model/kieker_KiekerMonitoringLogWriter}%
-\caption{KiekerMonitoringLogWriter}
+\caption{MonitoringLogWriter interface}
 \end{figure}
 
 \begin{figure}[h]\centering
@@ -237,21 +211,51 @@ and disabled are possible in both directions,
 \subsection{KiekerMonitoringLogReader}
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.65]{figures/model/kieker_KiekerMonitoringLogReader}%
+\includegraphics[scale=0.55]{figures/model/kieker_KiekerMonitoringLogReader}%
 \caption{KiekerMonitoringLogReader}
 \end{figure}
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.65]{figures/model/kieker_readerimpls}%
+\includegraphics[scale=0.55]{figures/model/kieker_readerimpls}%
 \caption{Implemented readers}
 \end{figure}
 
 \subsection{KiekerRecordConsumer}
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.65]{figures/model/kieker_RecordConsumer}%
+\includegraphics[scale=0.55]{figures/model/kieker_RecordConsumer}%
 \caption{KiekerRecordConsumer}
 \end{figure}
+
+\clearpage
+
+\appendix
+
+\section{Kieker Architecture}
+
+At the 2010/03 Kieker Developer Meeting at University of Kiel the target Architecture for the next major releases of Kieker was defined. The architecture is outlined in Figures~\ref{OverviewArchitecture201003} and \ref{DetailedArchitecture201003}.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.4\textwidth]{./figures/2010-03-09-TargetArchitectureOverview.jpg}
+ % 2010-03-09-TargetArchitectureOverview.jpg: 800x827 pixel, 72dpi, 28.22x29.17 cm, bb=0 0 800 827
+ \caption{Overview of the underlying design principle for the Kieker architecture.}\label{OverviewArchitecture201003}
+\end{figure}
+
+\begin{figure*}
+ \centering
+ \includegraphics[width=0.9\textwidth]{./figures/2010-03-09-TargetArchitectureDetail.jpg}
+ % 2010-03-09-TargetArchitectureDetail.jpg: 2000x1161 pixel, 72dpi, 70.56x40.96 cm, bb=0 0 2000 1161
+ \caption{Detailed Kieker Target Architecture}\label{DetailedArchitecture201003}
+\end{figure*}
+
+Basic architectural principles are:
+\begin{itemize}
+ \item Event driven architecture with several publish/subscribe layers.
+ \item Tpan has a common set of event publishers that refer to model objects that are in the ``model repository''. These common objects are for instance traces, operations, messages.
+\end{itemize}
+
+
 
 \nocite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework,RohrHoornMatevskaStoeverSommerGieseckeHasselbring2008KiekerContinuousMonitoringAndOnDemandVisualizationOfJavaSoftwareBehavior}
 \bibliographystyle{unsrtnat-abbrv} %abbrvnat, abbrvnatAvanhoorn % alpha
