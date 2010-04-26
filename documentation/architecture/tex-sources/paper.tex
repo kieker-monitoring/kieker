@@ -150,13 +150,17 @@ Kieker team
 \ldots
 \end{abstract}
 
+\section{Kieker Architecture} 
+
+\input{2_KiekerArchitecture.inc}
+
 \section{MonitoringRecord}
 
-\begin{figure}[h]\centering
-\includegraphics[scale=0.65]{figures/model/kieker_MonitoringRecord}%
-\caption{Monitoring record interface and abstract implementation}
-\label{fig:record:IMonitoringRecordAndAbstractMonitoringRecord}
-\end{figure}
+% \begin{figure}[h]\centering
+% \includegraphics[scale=0.65]{figures/model/kieker_MonitoringRecord}%
+% \caption{Monitoring record interface and abstract implementation}
+% \label{fig:record:IMonitoringRecordAndAbstractMonitoringRecord}
+% \end{figure}
 
 \begin{figure}[h]\centering
 \includegraphics[scale=0.65]{figures/model/kieker_IMonitoringRecordReceiver}%
@@ -171,10 +175,10 @@ Figure~\ref{fig:record:IMonitoringRecordAndAbstractMonitoringRecord} \dots
 
 \subsection{TpmonController}
 
-\begin{figure}[h]\centering
-\includegraphics[scale=0.65]{figures/model/kieker_TpmonController}%
-\caption{TpmonController}
-\end{figure}
+% \begin{figure}[h]\centering
+% \includegraphics[scale=0.65]{figures/model/kieker_TpmonController}%
+% \caption{TpmonController}
+% \end{figure}
 
 At any time, the controller is in either of the following states: %
 enabled, disabled, or terminated. Transitions between these states can be %
@@ -187,43 +191,43 @@ occured and it is unsafe to proceed and the controller's state cannot be switche
 to enabled or disabled any more. Arbitrarily frequent transitions between enabled %
 and disabled are possible in both directions, 
 
-\subsection{Monitoring Log Writer}
-
-\begin{figure}[h]\centering
-\includegraphics[scale=0.65]{figures/model/kieker_KiekerMonitoringLogWriter}%
-\caption{MonitoringLogWriter interface}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics[scale=0.65]{figures/model/kieker_writerimpls}%
-\caption{Implemented writers}
-\end{figure}
+% \subsection{Monitoring Log Writer}
+% 
+% \begin{figure}[h]\centering
+% \includegraphics[scale=0.65]{figures/model/kieker_KiekerMonitoringLogWriter}%
+% \caption{MonitoringLogWriter interface}
+% \end{figure}
+% 
+% \begin{figure}[h]\centering
+% \includegraphics[scale=0.65]{figures/model/kieker_writerimpls}%
+% \caption{Implemented writers}
+% \end{figure}
 
 \section{Tpan}
 
-\subsection{TpanInstance}
+% \subsection{TpanInstance}
+% 
+% \begin{figure}[h]\centering
+% \includegraphics[scale=0.55]{figures/model/kieker_TpanInstance}%
+% \caption{TpanInstance}
+% \end{figure}
 
-\begin{figure}[h]\centering
-\includegraphics[scale=0.55]{figures/model/kieker_TpanInstance}%
-\caption{TpanInstance}
-\end{figure}
-
-\subsection{KiekerMonitoringLogReader}
-
-\begin{figure}[h]\centering
-\includegraphics[scale=0.55]{figures/model/kieker_KiekerMonitoringLogReader}%
-\caption{KiekerMonitoringLogReader}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics[scale=0.55]{figures/model/kieker_readerimpls}%
-\caption{Implemented readers}
-\end{figure}
+% \subsection{KiekerMonitoringLogReader}
+% 
+% \begin{figure}[h]\centering
+% \includegraphics[scale=0.55]{figures/model/kieker_KiekerMonitoringLogReader}%
+% \caption{KiekerMonitoringLogReader}
+% \end{figure}
+% 
+% \begin{figure}[h]\centering
+% \includegraphics[scale=0.55]{figures/model/kieker_readerimpls}%
+% \caption{Implemented readers}
+% \end{figure}
 
 \subsection{KiekerRecordConsumer}
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.55]{figures/model/kieker_RecordConsumer}%
+\includegraphics[scale=0.55]{figures/model/kieker_recordConsumer}%
 \caption{KiekerRecordConsumer}
 \end{figure}
 
