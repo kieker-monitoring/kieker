@@ -55,7 +55,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             return true;
         }
 
-        public boolean invoke() throws MonitoringRecordConsumerException {
+        public boolean execute() throws MonitoringRecordConsumerException {
             /* do nothing */
             return true;
         }

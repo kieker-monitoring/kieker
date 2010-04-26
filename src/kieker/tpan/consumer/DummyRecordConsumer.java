@@ -24,7 +24,7 @@ public class DummyRecordConsumer implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public boolean invoke() throws MonitoringRecordConsumerException {
+    public boolean execute() throws MonitoringRecordConsumerException {
         System.out.println("DummyRecordConsumer.execute()");
         return true;
     }

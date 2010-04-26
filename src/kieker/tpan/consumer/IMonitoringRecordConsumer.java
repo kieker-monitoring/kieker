@@ -43,7 +43,7 @@ public interface IMonitoringRecordConsumer extends IMonitoringRecordReceiver {
      *
      * @return true on success; false otherwise.
      */
-    public boolean invoke() throws MonitoringRecordConsumerException;
+    public boolean execute() throws MonitoringRecordConsumerException;
 
     /**
      * Initiates a termination of the consumer. The value of the parameter

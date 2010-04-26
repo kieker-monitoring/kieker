@@ -112,7 +112,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public boolean invoke() {
+    public boolean execute() {
         return true;
     }
 

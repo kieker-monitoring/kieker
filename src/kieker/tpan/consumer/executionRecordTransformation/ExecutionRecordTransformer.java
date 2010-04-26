@@ -146,7 +146,7 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public boolean invoke() throws MonitoringRecordConsumerException {
+    public boolean execute() throws MonitoringRecordConsumerException {
         return true;
     }
 

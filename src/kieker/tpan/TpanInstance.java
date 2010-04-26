@@ -64,7 +64,7 @@ public class TpanInstance {
 
     public void run() throws MonitoringLogReaderException, MonitoringRecordConsumerException {
         for (IMonitoringRecordConsumer c : this.consumers) {
-            c.invoke();
+            c.execute();
         }
         try {
             if (logReader == null) {

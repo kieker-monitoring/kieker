@@ -50,7 +50,7 @@ public class RTMonitor implements IMonitoringRecordConsumer {
         return true;
     }
 
-    public boolean invoke() {
+    public boolean execute() {
         return true;
     }
 

@@ -79,7 +79,7 @@ public class FilesystemLogReplayer {
                 return ctrlInst.newMonitoringRecord(monitoringRecord);
             }
 
-            public boolean invoke() {
+            public boolean execute() {
                 // do nothing, we are synchronous
                 return true;
             }

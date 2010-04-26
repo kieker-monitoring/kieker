@@ -81,8 +81,8 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
 
     
 
-    public boolean invoke() throws MonitoringRecordConsumerException {
-        jfxRc.invoke();
+    public boolean execute() throws MonitoringRecordConsumerException {
+        jfxRc.execute();
         return true;
     }
 
