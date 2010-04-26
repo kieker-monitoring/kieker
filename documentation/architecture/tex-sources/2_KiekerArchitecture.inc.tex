@@ -73,6 +73,9 @@ instance (Figure~\ref{fig:kieker:coreFrameworkComponents}). %
 \includegraphics[scale=0.55]{figures/model/kieker_TpanInstance}%
 % TR: \includegraphics[scale=0.69]{figures/KiekerInterfaceOverviewReArranged-woMonitoringRecord-bw-tpan}%
 }
+\subfigure[Monitoring Record Receiver]{\label{fig:record:IMonitoringRecordReceiver}
+\includegraphics[scale=0.65]{figures/model/kieker_IMonitoringRecordReceiver}%
+}
 \caption{Classes and interfaces of the framework components %{\textcolor{red}{S\"{o}ren: Caption evtl. spezifischer?}}
 \subref{fig:kieker:coreFrameworkClassesAndInterfaces:tpmon}~Kieker.Tpmon and %
 \subref{fig:kieker:coreFrameworkClassesAndInterfaces:tpan}~Kieker.Tpmon. %
@@ -312,7 +315,7 @@ for the filesystem and for JMS queues. %
 % \WH{and databases ?}
 % Anm. Andr\'{e}: Nein, einen DB-reader haben wir in dieser Implementierung zur Zeit noch nicht.  %
 % A \classname{TpanInstance} instance uses exactly one monitoring log reader. %
-\MonitoringLogReaders{} extend the abstract class \classname{Abstract\+Kieker\+Monitoring\+Log\+Reader},
+\MonitoringLogReaders{} extend the abstract class \classname{Abstract\+Monitoring\+Log\+Reader}, %\classname{Abstract\+Kieker\+Monitoring\+Log\+Reader},
 which already provides convenient functionality for handling the subscription of %
 \MonitoringRecordConsumers{} to \MonitoringRecords{} of specific types as well as %
 the delivery of records to the subscribers. %
@@ -367,21 +370,24 @@ the same data structures~(\MonitoringRecords{}) in analysis components as used i
 
 \begin{lstlisting}[float,language=Java, caption=Example response time monitor, label=lst:rtMonitor,escapechar=\%]
 public class RTMonitor
-       implements IKiekerRecordConsumer {
+       implements IMonitoringRecordConsumer {
+ private static final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =
+   new ArrayList<Class<? extends IMonitoringRecord>>();
+ static {
+  recordTypeSubscriptionList.add(MyRTMonitoringRecord.class);
+ }
 
  private final long rtSlo;
  public RTMonitor(long rtSlo) {
   this.rtSlo = rtSlo;
  }
 
- public%\,%String[]%\,%getRecordTypeSubscriptionList(){
-  return new String[] {
-   MyRTMonitoringRecord.class.getName()
-  };
+ public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList(){
+   return recordTypeSubscriptionList;
  }
 
- public void consumeMonitoringRecord
-        (AbstractKiekerMonitoringRecord r) {
+ public void newMonitoringRecord
+        (IMonitoringRecord r) {
   MyRTMonitoringRecord rtRec =
                       (MyRTMonitoringRecord) r;
   if (rtRec.rt > this.rtSlo) {
