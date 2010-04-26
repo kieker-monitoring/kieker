@@ -22,11 +22,12 @@ import java.util.HashMap;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.reader.IMonitoringLogReader;
 
-import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.reader.MonitoringLogReaderException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -61,21 +62,21 @@ public class TpanInstance {
     private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
             new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>>();
 
-    public void run() throws LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
+    public void run() throws MonitoringLogReaderException, MonitoringRecordConsumerException {
         for (IMonitoringRecordConsumer c : this.consumers) {
-            c.execute();
+            c.invoke();
         }
         try {
             if (logReader == null) {
                 log.error("Error: LogReader is missing - cannot execute run() without it!");
-                throw new LogReaderExecutionException(" LogReader is missing - cannot execute run() without it!");
+                throw new MonitoringLogReaderException(" LogReader is missing - cannot execute run() without it!");
             } else {
                 this.logReader.addRecordReceiver(new IMonitoringRecordReceiver() {
 
                     public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
                         try {
                             deliverRecordToConsumers(monitoringRecord);
-                        } catch (MonitoringRecordConsumerExecutionException ex) {
+                        } catch (MonitoringRecordReceiverException ex) {
                             log.error("Caught MonitoringRecordConsumerExecutionException", ex);
                             return false;
                         }
@@ -84,10 +85,10 @@ public class TpanInstance {
                 });
                 if (!this.logReader.read()) {
                     log.error("Calling execute() on logReader returned false");
-                    throw new LogReaderExecutionException("Calling execute() on logReader returned false");
+                    throw new MonitoringLogReaderException("Calling execute() on logReader returned false");
                 }
             }
-        } catch (LogReaderExecutionException exc) {
+        } catch (MonitoringLogReaderException exc) {
             log.fatal("LogReaderException! Will terminate consumers.");
             for (IMonitoringRecordConsumer c : this.consumers) {
                 c.terminate(true); // terminate due to an error
@@ -106,7 +107,7 @@ public class TpanInstance {
 
     public void addRecordConsumer(IMonitoringRecordConsumer consumer) {
         this.consumers.add(consumer);
-        final Class<? extends IMonitoringRecord>[] recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
+        final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
         if (recordTypeSubscriptionList == null) {
             this.anyTypeConsumers.add(consumer);
         } else {
@@ -128,14 +129,14 @@ public class TpanInstance {
      * @param monitoringRecord the record
      * @throws LogReaderExecutionException if an error occurs
      */
-    private final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
+    private final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws MonitoringRecordReceiverException  {
             for (IMonitoringRecordConsumer c : this.anyTypeConsumers) {
-                c.consumeMonitoringRecord(monitoringRecord);
+                c.newMonitoringRecord(monitoringRecord);
             }
             Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(monitoringRecord.getClass().getName());
             if (cList != null) {
                 for (IMonitoringRecordConsumer c : cList) {
-                    c.consumeMonitoringRecord(monitoringRecord);
+                    c.newMonitoringRecord(monitoringRecord);
                 }
             }
     }

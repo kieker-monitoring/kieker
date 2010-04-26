@@ -9,8 +9,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
-import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.reader.MonitoringLogReaderException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -132,7 +132,7 @@ public class FSReader extends AbstractMonitoringLogReader {
             return true;
         }
 
-        public boolean execute() throws MonitoringRecordConsumerExecutionException {
+        public boolean execute() throws MonitoringRecordConsumerException {
             try {
                 { // 1. init and start reader threads
                     for (int i = 0; i < inputDirs.length; i++) {
@@ -165,7 +165,7 @@ public class FSReader extends AbstractMonitoringLogReader {
                             orderRecordBuffer.wait();
                             if (this.errorOccured.get()) {
                                 log.error("Found error flag set");
-                                throw new LogReaderExecutionException("An error occured");
+                                throw new MonitoringLogReaderException("An error occured");
                             }
                         }
 
@@ -191,7 +191,7 @@ public class FSReader extends AbstractMonitoringLogReader {
             } catch (Exception ex) {
                 log.error("Exception while reading. Terminating.", ex);
                 this.errorOccured.set(true);
-                throw new MonitoringRecordConsumerExecutionException("Error while reading. Terminating.", ex);
+                throw new MonitoringRecordConsumerException("Error while reading. Terminating.", ex);
             }
         }
 
@@ -217,14 +217,14 @@ public class FSReader extends AbstractMonitoringLogReader {
     }
 
     @Override
-    public boolean read() throws LogReaderExecutionException {
+    public boolean read() throws MonitoringLogReaderException {
         concurrentConsumer = new FSReaderCons(this, inputDirs);
         boolean success = false;
         try {
             success = concurrentConsumer.execute();
-        } catch (MonitoringRecordConsumerExecutionException ex) {
+        } catch (MonitoringRecordConsumerException ex) {
             log.error("RecordConsumerExecutionException occured", ex);
-            throw new LogReaderExecutionException("RecordConsumerExecutionException occured", ex);
+            throw new MonitoringLogReaderException("RecordConsumerExecutionException occured", ex);
         } finally {
             concurrentConsumer.terminate(success);
         }

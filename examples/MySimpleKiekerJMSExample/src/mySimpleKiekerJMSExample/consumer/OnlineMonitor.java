@@ -4,14 +4,16 @@
  */
 package src.mySimpleKiekerJMSExample.consumer;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.tpan.reader.IMonitoringLogReader;
 import kieker.tpan.reader.JMSReader;
-import kieker.tpan.reader.LogReaderExecutionException;
+import kieker.tpan.reader.MonitoringLogReaderException;
 import src.mySimpleKiekerJMSExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,18 +27,22 @@ public class OnlineMonitor implements IMonitoringRecordConsumer {
     private static final Log log = LogFactory.getLog(OnlineMonitor.class);
     private final long rtSloMs;
 
+    private static final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =
+            new ArrayList<Class<? extends IMonitoringRecord>>();
+    static {
+        recordTypeSubscriptionList.add(MyRTMonitoringRecord.class);
+        recordTypeSubscriptionList.add(OperationExecutionRecord.class);
+    }
+
     public OnlineMonitor(long rtSloMs) {
         this.rtSloMs = rtSloMs;
     }
 
-    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
-        return new Class[]{
-            MyRTMonitoringRecord.class,
-            OperationExecutionRecord.class
-        };
+    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+        return recordTypeSubscriptionList;
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord r) throws MonitoringRecordConsumerExecutionException {
+    public boolean newMonitoringRecord(IMonitoringRecord r) {
         if (r instanceof OperationExecutionRecord) {
             OperationExecutionRecord execRec = (OperationExecutionRecord) r;
             log.info("Received execution record:" + execRec);
@@ -49,9 +55,10 @@ public class OnlineMonitor implements IMonitoringRecordConsumer {
                 log.info("rtRec.rt (ms) <=this.rtSloMs: " + rtMs + "<=" + this.rtSloMs);
             }
         }
+        return true;
     }
 
-    public boolean execute() {
+    public boolean invoke() {
         return true;
     }
 
@@ -72,9 +79,9 @@ public class OnlineMonitor implements IMonitoringRecordConsumer {
 
         try {
             analysisInstance.run();
-        } catch (LogReaderExecutionException e) {
+        } catch (MonitoringLogReaderException e) {
             log.error("LogReaderExecutionException:", e);
-        } catch (MonitoringRecordConsumerExecutionException e) {
+        } catch (MonitoringRecordConsumerException e) {
             log.error("RecordConsumerExecutionException:", e);
         }
     }

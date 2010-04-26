@@ -7,7 +7,7 @@ import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.tpmon.probe.IKiekerMonitoringProbe;
+import kieker.tpmon.probe.IMonitoringProbe;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
 import org.apache.cxf.common.logging.LogUtils;
@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
 /**
  * @author Andre van Hoorn, Dennis Kieselhorst
  */
-public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements IKiekerMonitoringProbe {
+public class KiekerTpmonResponseInProbe extends SoapHeaderInterceptor implements IMonitoringProbe {
     // the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 
     private static final Logger LOG = LogUtils.getL7dLogger(KiekerTpmonResponseInProbe.class);

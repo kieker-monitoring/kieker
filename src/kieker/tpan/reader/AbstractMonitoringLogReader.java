@@ -47,16 +47,20 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
      * This method should be used by implementing classes.
      *
      * @param monitoringRecord the record
+     * @return true on success; false in case of an error.
      * @throws LogReaderExecutionException if an error occurs
      */
-    protected final void deliverRecord(final IMonitoringRecord record) throws LogReaderExecutionException {
+    protected final boolean deliverRecord(final IMonitoringRecord record) {
         try {
             for (IMonitoringRecordReceiver c : this.recordReceivers) {
-                c.newMonitoringRecord(record);
+                if (!c.newMonitoringRecord(record)){
+                    throw new MonitoringLogReaderException("Consumer returned with error");
+                }
             }
         } catch (Exception ex) {
             log.fatal("Caught Exception while delivering record", ex);
-            throw new LogReaderExecutionException("Caught Exception while delivering record", ex);
+            return false;
         }
+        return true;
     }
 }

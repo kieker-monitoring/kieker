@@ -18,6 +18,7 @@ package kieker.tools.logReplayer;
  * ==================================================
  * 
  */
+import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
@@ -70,15 +71,15 @@ public class FilesystemLogReplayer {
 
             /** Anonymous consumer class that simply passes all records to the
              *  controller */
-            public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+            public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
                 return null; // consume all types
             }
 
-            public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-                ctrlInst.newMonitoringRecord(monitoringRecord);
+            public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+                return ctrlInst.newMonitoringRecord(monitoringRecord);
             }
 
-            public boolean execute() {
+            public boolean invoke() {
                 // do nothing, we are synchronous
                 return true;
             }

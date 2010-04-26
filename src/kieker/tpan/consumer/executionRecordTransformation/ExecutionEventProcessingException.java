@@ -10,7 +10,7 @@ package kieker.tpan.consumer.executionRecordTransformation;
  * @author Andre van Hoorn
  */
 public class ExecutionEventProcessingException extends Exception {
-    public static final long serialVersionUID = 1136L;
+    private static final long serialVersionUID = 1136L;
     public ExecutionEventProcessingException (String msg){
         super(msg);
     }

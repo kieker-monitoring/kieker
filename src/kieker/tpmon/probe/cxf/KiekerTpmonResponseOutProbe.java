@@ -8,7 +8,7 @@ import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.tpmon.probe.IKiekerMonitoringProbe;
+import kieker.tpmon.probe.IMonitoringProbe;
 import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
@@ -47,7 +47,7 @@ import org.w3c.dom.Element;
  * 
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
-public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor implements IKiekerMonitoringProbe {
+public class KiekerTpmonResponseOutProbe extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
 
     private static final String componentName = KiekerTpmonResponseOutProbe.class.getName();
     private static final String opName = "handleMessage(SoapMessage msg)";

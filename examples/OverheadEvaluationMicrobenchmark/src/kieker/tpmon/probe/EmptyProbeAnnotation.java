@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 @Aspect
-public class EmptyProbeAnnotation implements IKiekerMonitoringProbe {
+public class EmptyProbeAnnotation implements IMonitoringProbe {
     private static final Log log = LogFactory.getLog(EmptyProbeAnnotation.class);
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();

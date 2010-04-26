@@ -24,7 +24,7 @@ public class DummyLogReader extends AbstractMonitoringLogReader{
     /**
      * It never finished to produce dummy data about each second
      */
-    public boolean read() throws LogReaderExecutionException {
+    public boolean read() throws MonitoringLogReaderException {
         while(true) {
             long startTime = System.nanoTime();
             

@@ -76,7 +76,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
     /**
      * A call to this method is a blocking call.
      */
-    public boolean read() throws LogReaderExecutionException {
+    public boolean read() throws MonitoringLogReaderException {
         boolean retVal = false;
         try {
             Hashtable<String, String> properties = new Hashtable<String, String>();
@@ -107,7 +107,10 @@ public class JMSReader extends AbstractMonitoringLogReader {
                             if (omo instanceof IMonitoringRecord) {
                                 IMonitoringRecord rec =
                                         (IMonitoringRecord) omo;
-                                deliverRecord(rec);
+                                if (!deliverRecord(rec)){
+                                    log.error("deliverRecord returned false");
+                                    throw new MonitoringLogReaderException("deliverRecord returned false");
+                                }
                             } else {
                                 log.info("Unknown type of message " + om);
                             }
@@ -115,7 +118,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
                             log.fatal("MessageFormatException:", em);
                         } catch (JMSException ex) {
                             log.fatal("JMSException ", ex);
-                        } catch (LogReaderExecutionException ex) {
+                        } catch (MonitoringLogReaderException ex) {
                             log.error("LogReaderExecutionException", ex);
                         } catch (Exception ex) {
                             log.error("Exception", ex);

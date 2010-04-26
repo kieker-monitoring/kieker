@@ -1,8 +1,11 @@
 package kieker.tools.logReplayer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,10 +32,12 @@ public class RealtimeReplayWorker implements Runnable {
     public void run() {
         if (this.monRec != null) {
             try {
-                cons.consumeMonitoringRecord(this.monRec);
-            } catch (MonitoringRecordConsumerExecutionException ex) {
-                // TODO: check what to do
-                log.error("Caught RecordConsumerExecutionException", ex);
+                if (!cons.newMonitoringRecord(this.monRec)) {
+                    // TODO: check what to do
+                    log.error("Consumer returned with error");
+                }
+            } catch (MonitoringRecordReceiverException ex) {
+                log.error("Caught MonitoringRecordReceiverException", ex);
             }
             this.rd.decreaseActive();
         }

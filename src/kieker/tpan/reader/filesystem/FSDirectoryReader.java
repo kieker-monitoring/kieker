@@ -13,7 +13,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MonitoringRecordTypeRegistry;
 
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.reader.LogReaderExecutionException;
+import kieker.tpan.reader.MonitoringLogReaderException;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.common.util.PropertyMap;
 
@@ -82,7 +82,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
     static final String filePostfix = ".dat";
 
     @Override
-    public boolean read() throws LogReaderExecutionException {
+    public boolean read() throws MonitoringLogReaderException {
         boolean retVal = false;
         try {
             File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
@@ -94,7 +94,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
             });
 
             if (inputFiles == null) {
-                throw new LogReaderExecutionException("Directory '" + this.inputDir + "' does not exist or an I/O error occured. No files starting with '"
+                throw new MonitoringLogReaderException("Directory '" + this.inputDir + "' does not exist or an I/O error occured. No files starting with '"
                         +filePrefix+"' and ending with '"+filePostfix+"' could be found.");
             } else {
                 retVal = true;
@@ -103,12 +103,12 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
             for (int i = 0; inputFiles != null && i < inputFiles.length; i++) {
                 this.processInputFile(inputFiles[i]);
             }            
-        } catch (LogReaderExecutionException e) {
+        } catch (MonitoringLogReaderException e) {
             log.error("Exception", e);
             throw e;
         } catch (Exception e2) {
-            if (!(e2 instanceof LogReaderExecutionException)) {
-                LogReaderExecutionException readerEx = new LogReaderExecutionException("An error occurred while parsing files from directory " +
+            if (!(e2 instanceof MonitoringLogReaderException)) {
+                MonitoringLogReaderException readerEx = new MonitoringLogReaderException("An error occurred while parsing files from directory " +
                         this.inputDir.getAbsolutePath() + ":", e2);
                 log.error("Exception", readerEx);
                 throw readerEx;
@@ -159,7 +159,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
         }
     }
 
-    private void processInputFile(final File input) throws IOException, LogReaderExecutionException {
+    private void processInputFile(final File input) throws IOException, MonitoringLogReaderException {
         log.info("< Loading " + input.getAbsolutePath());
 
         BufferedReader in = null;
@@ -219,7 +219,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                             "Failed to parse line: {" + line + "} from file " +
                             input.getAbsolutePath(), e);
                     log.error("Abort reading");
-                    throw new LogReaderExecutionException("LogReaderExecutionException ", e);
+                    throw new MonitoringLogReaderException("LogReaderExecutionException ", e);
                 }
             }
         } finally {

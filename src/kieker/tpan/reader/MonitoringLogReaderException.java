@@ -1,4 +1,6 @@
-package kieker.common.record;
+package kieker.tpan.reader;
+
+import kieker.common.record.MonitoringRecordReceiverException;
 
 /*
  * ==================LICENCE=========================
@@ -16,20 +18,26 @@ package kieker.common.record;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
+ *
+ * This reader allows one to read a folder or an single tpmon file and
+ * transforms it to monitoring events that are stored in the file system
+ * again, written to a database, or whatever tpmon is configured to do
+ * with the monitoring data.
  */
 
 /**
+ *
  * @author Andre van Hoorn
  */
-public interface IMonitoringRecordReceiver {
-    /**
-     * Called for each new record.
-     * 
-     * Notice, that this method should not throw an exception,
-     * but indicate an error by the return value false.
-     *
-     * @param record the record.
-     * @return true on success; false in case of an error.
-     */
-    public boolean newMonitoringRecord(IMonitoringRecord record) throws MonitoringRecordReceiverException;
+public class MonitoringLogReaderException extends MonitoringRecordReceiverException {
+
+    private static final long serialVersionUID = 14537L;
+
+    public MonitoringLogReaderException(String messString) {
+        super(messString);
+    }
+
+    public MonitoringLogReaderException(String messString, Throwable cause) {
+        super(messString, cause);
+    }
 }

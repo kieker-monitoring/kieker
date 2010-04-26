@@ -56,5 +56,5 @@ public interface IMonitoringLogReader {
      * @return true iff reading was successful
      * @throws LogReaderExecutionException if an error occured
      */
-    public boolean read() throws LogReaderExecutionException;
+    public boolean read() throws MonitoringLogReaderException;
 }

@@ -5,6 +5,7 @@
 
 package kieker.tpan.consumer;
 
+import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -14,15 +15,16 @@ import kieker.common.record.IMonitoringRecord;
 public class DummyRecordConsumer implements IMonitoringRecordConsumer {
 
 
-    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
         return null; // receive records of any type
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
         System.out.println("DummyRecordConsumer consumed "+monitoringRecord);
+        return true;
     }
 
-    public boolean execute() throws MonitoringRecordConsumerExecutionException {
+    public boolean invoke() throws MonitoringRecordConsumerException {
         System.out.println("DummyRecordConsumer.execute()");
         return true;
     }

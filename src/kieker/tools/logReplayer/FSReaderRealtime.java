@@ -1,5 +1,6 @@
 package kieker.tools.logReplayer;
 
+import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 import kieker.common.record.IMonitoringRecord;
@@ -7,8 +8,8 @@ import kieker.common.util.PropertyMap;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
-import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.reader.MonitoringLogReaderException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
 
 import kieker.tpan.reader.filesystem.FSReader;
 import org.apache.commons.logging.Log;
@@ -42,20 +43,19 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             this.master = master;
         }
 
-        public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+        public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
             return null;
         }
 
-        public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
-            try {
-                this.master.deliverRecord(monitoringRecord);
-            } catch (LogReaderExecutionException ex) {
-                log.error("LogReaderExecutionException", ex);
-                throw new MonitoringRecordConsumerExecutionException("LogReaderExecutionException", ex);
+        public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
+            if (!this.master.deliverRecord(monitoringRecord)){
+                log.error("LogReaderExecutionException");
+                return false;
             }
+            return true;
         }
 
-        public boolean execute() throws MonitoringRecordConsumerExecutionException {
+        public boolean invoke() throws MonitoringRecordConsumerException {
             /* do nothing */
             return true;
         }
@@ -130,14 +130,14 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
      * Replays the monitoring log in real-time and returns after the complete
      * log was being replayed.
      */
-    public boolean read() throws LogReaderExecutionException {
+    public boolean read() throws MonitoringLogReaderException {
         boolean success = true;
         try {
             this.tpanInstance.run();
             this.terminationLatch.await();
         } catch (Exception ex) {
             log.error("An error occured while reading", ex);
-            throw new LogReaderExecutionException("An error occured while reading", ex);
+            throw new MonitoringLogReaderException("An error occured while reading", ex);
         }
         return success;
     }

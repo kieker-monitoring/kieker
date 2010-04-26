@@ -1,6 +1,8 @@
 package kieker.tpan.consumer;
 
+import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
 
 /*
  * ==================LICENCE=========================
@@ -23,22 +25,14 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-public interface IMonitoringRecordConsumer {
+public interface IMonitoringRecordConsumer extends IMonitoringRecordReceiver {
 
     /**
      * Simply return null to get records of all types.
      * 
      * @return
      */
-    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList();
-
-    /**
-     * Called for each new record.
-     *
-     * @param monitoringRecord
-     * @throws MonitoringRecordConsumerExecutionException
-     */
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException;
+    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList();
 
     /**
      * Starts a record consumer.
@@ -49,7 +43,7 @@ public interface IMonitoringRecordConsumer {
      *
      * @return true on success; false otherwise.
      */
-    public boolean execute() throws MonitoringRecordConsumerExecutionException;
+    public boolean invoke() throws MonitoringRecordConsumerException;
 
     /**
      * Initiates a termination of the consumer. The value of the parameter

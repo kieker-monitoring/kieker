@@ -1,6 +1,7 @@
-package kieker.tpan.reader;
+package kieker.tpmon.probe;
 
 /*
+ *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -16,26 +17,12 @@ package kieker.tpan.reader;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * This reader allows one to read a folder or an single tpmon file and
- * transforms it to monitoring events that are stored in the file system
- * again, written to a database, or whatever tpmon is configured to do
- * with the monitoring data.
- */
 
 /**
+ * This is just a marker interface any Kieker monitoring probe should implement.
  *
  * @author Andre van Hoorn
  */
-public class LogReaderExecutionException extends Exception {
+public interface IMonitoringProbe {
 
-    public static final long serialVersionUID = 14537L;
-
-    public LogReaderExecutionException(String messString) {
-        super(messString);
-    }
-
-    public LogReaderExecutionException(String messString, Throwable cause) {
-        super(messString, cause);
-    }
 }

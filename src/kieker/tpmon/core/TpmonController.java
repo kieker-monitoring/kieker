@@ -1,6 +1,9 @@
 package kieker.tpmon.core;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.MonitoringRecordReceiverException;
 
 import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
@@ -327,8 +330,12 @@ public final class TpmonController implements IMonitoringRecordReceiver {
         log.info("Permanently terminating monitoring");
         synchronized (this.controllerState) {
             if (this.monitoringLogWriter != null) {
-                /* if the initialization of the writer failed, it is set to null*/
-                this.monitoringLogWriter.newMonitoringRecord(END_OF_MONITORING_MARKER);
+                try {
+                    /* if the initialization of the writer failed, it is set to null*/
+                    this.monitoringLogWriter.newMonitoringRecord(END_OF_MONITORING_MARKER);
+                } catch (MonitoringRecordReceiverException ex) {
+                    log.error("Failed to terminate writer", ex);
+                }
             }
             this.controllerState.set(ControllerState.TERMINATED);
         }
@@ -354,29 +361,32 @@ public final class TpmonController implements IMonitoringRecordReceiver {
      * already recorded log data), the logMonitoringRecord method does not set the logging
      * timestamp of the passed monitoring record.
      *
+     * Notice, that this method won't throw any exceptions.
+     *
      * @param monitoringRecord the record to be logged
      * @return true if the record has been passed the writer successfully; false
      *         in case an error occured or the controller is not enabled.
      */
-    public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-        if (!this.controllerState.get().equals(ControllerState.ENABLED)) {
-            return false;
+    public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+        try {
+            if (!this.controllerState.get().equals(ControllerState.ENABLED)) {
+                return false;
+            }
+            numberOfInserts.incrementAndGet();
+            if (this.controllerMode.equals(ControllerMode.REALTIME)) {
+                record.setLoggingTimestamp(this.getTime());
+            }
+            if (!this.monitoringLogWriter.newMonitoringRecord(record)) {
+                log.fatal("Error writing the monitoring data. Will terminate monitoring!");
+                this.terminate();
+                return false;
+            }
+            return true;
+        } catch (MonitoringRecordReceiverException ex) {
+            log.error("Caught an Exception. Will terminate monitoring", ex);
+                this.terminate();
+                return false;
         }
-
-        numberOfInserts.incrementAndGet();
-
-        if (this.controllerMode.equals(ControllerMode.REALTIME)) {
-            monitoringRecord.setLoggingTimestamp(this.getTime());
-        }
-
-        // fail fast, e.g., terminates the controller if a writer's buffer is full
-        if (!this.monitoringLogWriter.newMonitoringRecord(monitoringRecord)) {
-            log.fatal("Error writing the monitoring data. Will terminate monitoring!");
-            this.terminate();
-            return false;
-        }
-
-        return true;
     }
 
     /** Offset used to determine the number of nanoseconds since 1970-1-1.

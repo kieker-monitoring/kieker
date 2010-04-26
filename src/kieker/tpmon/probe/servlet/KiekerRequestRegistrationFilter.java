@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 
-import kieker.tpmon.probe.IKiekerMonitoringProbe;
+import kieker.tpmon.probe.IMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -46,7 +46,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Marco Luebcke
  */
-public class KiekerRequestRegistrationFilter implements Filter, IKiekerMonitoringProbe {
+public class KiekerRequestRegistrationFilter implements Filter, IMonitoringProbe {
 
     private static final Log log = LogFactory.getLog(KiekerRequestRegistrationFilter.class);
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();

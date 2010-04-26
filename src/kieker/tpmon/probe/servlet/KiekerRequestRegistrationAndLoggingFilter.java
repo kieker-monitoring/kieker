@@ -9,7 +9,7 @@ import kieker.tpmon.core.SessionRegistry;
 
 import kieker.tpmon.core.TpmonController;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.tpmon.probe.IKiekerMonitoringProbe;
+import kieker.tpmon.probe.IMonitoringProbe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Marco Luebcke
  */
-public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IKiekerMonitoringProbe {
+public class KiekerRequestRegistrationAndLoggingFilter implements Filter, IMonitoringProbe {
 
     private static final String componentName = KiekerRequestRegistrationAndLoggingFilter.class.getName();
     private static final String opName = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain)";

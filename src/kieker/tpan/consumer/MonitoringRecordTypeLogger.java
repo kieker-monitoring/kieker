@@ -18,6 +18,7 @@ package kieker.tpan.consumer;
  * ==================================================
  */
 
+import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,16 +30,17 @@ public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
 
     private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 
-    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
         return null; // receive records of any type
     }
 
-    public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+    public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         log.info("Consumed record:" + monitoringRecord.getClass().getName());
         log.info(monitoringRecord.toString());
+        return true;
     }
 
-    public boolean execute() {
+    public boolean invoke() {
         /* We consume synchronously */
         return true;
     }

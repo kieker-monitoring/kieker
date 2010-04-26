@@ -16,26 +16,21 @@ package kieker.tpan.consumer;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * This reader allows one to read a folder or an single tpmon file and
- * transforms it to monitoring events that are stored in the file system
- * again, written to a database, or whatever tpmon is configured to do
- * with the monitoring data.
  */
 
 /**
  *
  * @author Andre van Hoorn
  */
-public class MonitoringRecordConsumerExecutionException extends Exception {
+public class MonitoringRecordConsumerException extends Exception {
 
-    public static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    public MonitoringRecordConsumerExecutionException(String messString) {
+    public MonitoringRecordConsumerException(String messString) {
         super(messString);
     }
 
-    public MonitoringRecordConsumerExecutionException(String messString, Throwable cause) {
+    public MonitoringRecordConsumerException(String messString, Throwable cause) {
         super(messString, cause);
     }
 }

@@ -18,10 +18,11 @@
 package kieker.tpan.consumer.executionRecordTransformation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.StringTokenizer;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.tpan.datamodel.AllocationComponentInstance;
 import kieker.tpan.datamodel.AssemblyComponentInstance;
 import kieker.tpan.datamodel.ComponentType;
@@ -31,6 +32,8 @@ import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.common.record.OperationExecutionRecord;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Transforms KiekerExecutionRecords into Execution objects.
@@ -38,6 +41,8 @@ import kieker.common.record.OperationExecutionRecord;
  * @author Andre van Hoorn
  */
 public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
+
+    private static final Log log = LogFactory.getLog(ExecutionRecordTransformer.class);
 
     private final SystemEntityFactory systemFactory;
 
@@ -49,8 +54,14 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
         this.systemFactory = systemFactory;
     }
 
-    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
-        return new Class[]{OperationExecutionRecord.class};
+    private final static Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =
+                new ArrayList<Class<? extends IMonitoringRecord>>();
+    static {
+        recordTypeSubscriptionList.add(OperationExecutionRecord.class);
+    }
+
+    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+        return recordTypeSubscriptionList;
     }
 
     public void addListener (IExecutionListener l){
@@ -78,9 +89,9 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
         return new Signature(name, returnType, paramTypeList);
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
         if (!(monitoringRecord instanceof OperationExecutionRecord)) {
-            throw new MonitoringRecordConsumerExecutionException("Can only process records of type"
+            log.error("Can only process records of type"
                     + OperationExecutionRecord.class.getName() + " but received" + monitoringRecord.getClass().getName());
         }
         OperationExecutionRecord execRec = (OperationExecutionRecord) monitoringRecord;
@@ -128,12 +139,14 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
             try {
                 l.newExecutionEvent(execution);
             } catch (ExecutionEventProcessingException ex) {
-                throw new MonitoringRecordConsumerExecutionException("ExecutionEventProcessingException occured", ex);
+                log.error("ExecutionEventProcessingException occured", ex);
+                return false;
             }
         }
+        return true;
     }
 
-    public boolean execute() throws MonitoringRecordConsumerExecutionException {
+    public boolean invoke() throws MonitoringRecordConsumerException {
         return true;
     }
 

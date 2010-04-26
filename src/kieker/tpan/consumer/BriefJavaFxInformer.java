@@ -6,7 +6,9 @@
 
 package kieker.tpan.consumer;
 
+import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.plugins.traceReconstruction.IExecutionTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
@@ -40,17 +42,19 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
         OperationExecutionRecord.class.getName()
     };
 
-    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
         return null; // receive records of any type
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordReceiverException {
        // System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
         if (jfxRc == null) {
             System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");
+            return false;
         } else {
-            jfxRc.consumeMonitoringRecord(monitoringRecord);
+            jfxRc.newMonitoringRecord(monitoringRecord);
         }
+        return true;
     }
     // these variables represents access to the javafx window
     IMonitoringRecordConsumer jfxRc = null;
@@ -77,8 +81,8 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
 
     
 
-    public boolean execute() throws MonitoringRecordConsumerExecutionException {
-        jfxRc.execute();
+    public boolean invoke() throws MonitoringRecordConsumerException {
+        jfxRc.invoke();
         return true;
     }
 

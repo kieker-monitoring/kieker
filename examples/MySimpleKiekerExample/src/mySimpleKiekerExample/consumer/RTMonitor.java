@@ -4,12 +4,14 @@
  */
 package src.mySimpleKiekerExample.consumer;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.logReplayer.FSReaderRealtime;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
-import kieker.tpan.reader.LogReaderExecutionException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
+import kieker.tpan.reader.MonitoringLogReaderException;
 import src.mySimpleKiekerExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,11 +29,17 @@ public class RTMonitor implements IMonitoringRecordConsumer {
         this.rtSloMs = rtSloMs;
     }
 
-    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
-        return new Class[]{MyRTMonitoringRecord.class};
+   private static final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =
+            new ArrayList<Class<? extends IMonitoringRecord>>();
+    static {
+        recordTypeSubscriptionList.add(MyRTMonitoringRecord.class);
     }
 
-    public void consumeMonitoringRecord(IMonitoringRecord r) throws MonitoringRecordConsumerExecutionException {
+    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+        return recordTypeSubscriptionList;
+    }
+
+    public boolean newMonitoringRecord(IMonitoringRecord r) {
         MyRTMonitoringRecord rtRec = (MyRTMonitoringRecord) r;
         long rtMs = rtRec.rt/(1000*1000);
         if (rtMs > this.rtSloMs) {
@@ -39,9 +47,10 @@ public class RTMonitor implements IMonitoringRecordConsumer {
         } else {
             log.info("rtRec.rt (ms) <=this.rtSloMs: " + rtMs + "<=" + this.rtSloMs);
         }
+        return true;
     }
 
-    public boolean execute() {
+    public boolean invoke() {
         return true;
     }
 
@@ -72,9 +81,9 @@ public class RTMonitor implements IMonitoringRecordConsumer {
 
         try {
             analysisInstance.run();
-        } catch (LogReaderExecutionException e) {
+        } catch (MonitoringLogReaderException e) {
             log.error("LogReaderExecutionException:", e);
-        } catch (MonitoringRecordConsumerExecutionException e) {
+        } catch (MonitoringRecordConsumerException e) {
             log.error("RecordConsumerExecutionException:", e);
         }
     }

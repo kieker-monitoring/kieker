@@ -4,7 +4,7 @@ package kieker.tpmon.probe.cxf;
 import kieker.tpmon.core.ControlFlowRegistry;
 import kieker.tpmon.core.SessionRegistry;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.probe.IKiekerMonitoringProbe;
+import kieker.tpmon.probe.IMonitoringProbe;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
 import org.apache.cxf.headers.Header;
@@ -41,7 +41,7 @@ import org.w3c.dom.Element;
  *
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
-public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor implements IKiekerMonitoringProbe {
+public class KiekerTpmonRequestOutProbe extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
 
     private static final TpmonController ctrlInst = TpmonController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();

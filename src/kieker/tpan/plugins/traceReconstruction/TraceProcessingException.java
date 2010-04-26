@@ -10,7 +10,7 @@ package kieker.tpan.plugins.traceReconstruction;
  * @author Andre van Hoorn
  */
 public class TraceProcessingException extends Exception {
-    public static final long serialVersionUID = 189899L;
+    private static final long serialVersionUID = 189899L;
 
     public TraceProcessingException (String msg){
         super(msg);

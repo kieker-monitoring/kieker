@@ -35,8 +35,8 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.tpan.reader.LogReaderExecutionException;
-import kieker.tpan.consumer.MonitoringRecordConsumerExecutionException;
+import kieker.tpan.reader.MonitoringLogReaderException;
+import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.ExecutionTrace;
@@ -750,7 +750,7 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractTpanMessageTraceProcessingComponent task_createMessageTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, InvalidTraceException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
+    private static AbstractTpanMessageTraceProcessingComponent task_createMessageTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, InvalidTraceException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         final String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
         AbstractTpanMessageTraceProcessingComponent mtWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
@@ -788,7 +788,7 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
+    private static AbstractTpanExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         final String myOutputFn = new File(outputFn).getCanonicalPath();
         AbstractTpanExecutionTraceProcessingComponent etWriter = new AbstractTpanExecutionTraceProcessingComponent(name, systemEntityFactory) {
 
@@ -816,7 +816,7 @@ public class TraceAnalysisTool {
         return etWriter;
     }
 
-    private static boolean task_genTraceEquivalenceReportForTraceSet(final String outputFnPrefix, final TraceReconstructionFilter trf) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
+    private static boolean task_genTraceEquivalenceReportForTraceSet(final String outputFnPrefix, final TraceReconstructionFilter trf) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         boolean retVal = true;
         String outputFn = new File(outputFnPrefix + TRACE_EQUIV_CLASSES_FN_PREFIX + ".txt").getCanonicalPath();
         PrintStream ps = null;
@@ -848,7 +848,7 @@ public class TraceAnalysisTool {
         return retVal;
     }
 
-    private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
+    private static boolean task_initBasicJmsReader(String jmsProviderUrl, String jmsDestination) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         boolean retVal = true;
 
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);
@@ -870,7 +870,7 @@ public class TraceAnalysisTool {
         return retVal;
     }
 
-    private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
+    private static boolean task_initBasicJmsReaderJavaFx(String jmsProviderUrl, String jmsDestination) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         boolean retVal = true;
 
         log.info("Trying to start JMS Listener to " + jmsProviderUrl + " " + jmsDestination);
