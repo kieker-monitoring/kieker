@@ -34,7 +34,7 @@ public class DummyLogReader extends AbstractMonitoringLogReader{
                 Logger.getLogger(DummyLogReader.class.getName()).log(Level.SEVERE, null, ex);}
 
             OperationExecutionRecord testRecord = new OperationExecutionRecord("ComponentA", "OperationA", i, startTime, System.nanoTime());
-            deliverRecordToConsumers(testRecord);
+            deliverRecord(testRecord);
         }        
     }
 

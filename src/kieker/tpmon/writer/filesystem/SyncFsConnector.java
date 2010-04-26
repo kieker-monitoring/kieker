@@ -69,9 +69,9 @@ import org.apache.commons.logging.LogFactory;
  * 2007/03/13: Refactoring
  * 2006/12/20: Initial Prototype
  */
-public final class SyncFsWriter implements IMonitoringLogWriter {
+public final class SyncFsConnector implements IMonitoringLogWriter {
 
-    private static final Log log = LogFactory.getLog(SyncFsWriter.class);
+    private static final Log log = LogFactory.getLog(SyncFsConnector.class);
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
@@ -87,7 +87,7 @@ public final class SyncFsWriter implements IMonitoringLogWriter {
             + "Use the the constant " + TpmonController.WRITER_SYNCFS
             + " and the file system specific configuration properties.";
 
-    public SyncFsWriter() {
+    public SyncFsConnector() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
@@ -95,7 +95,7 @@ public final class SyncFsWriter implements IMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public SyncFsWriter(String storagePathBase) {
+    public SyncFsConnector(String storagePathBase) {
         log.info("storagePathBase :" + storagePathBase);
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {

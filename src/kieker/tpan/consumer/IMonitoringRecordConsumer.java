@@ -30,7 +30,7 @@ public interface IMonitoringRecordConsumer {
      * 
      * @return
      */
-    public String[] getRecordTypeSubscriptionList();
+    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList();
 
     /**
      * Called for each new record.

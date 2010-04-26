@@ -179,7 +179,7 @@ public class FSReader extends AbstractMonitoringLogReader {
                             if (this.orderRecordBuffer.remove(nextRecord) == null) { // now, well remove
                                 log.warn("failed to remove nextRecord " + nextRecord);
                             }
-                            this.master.deliverRecordToConsumers(nextRecord);
+                            this.master.deliverRecord(nextRecord);
                         }
                     } // release monitor
                     if (consumerLatch != null) { // wake up blocked thread (in consume...())

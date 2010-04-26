@@ -20,8 +20,6 @@ package kieker.tpan;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
@@ -60,8 +58,8 @@ public class TpanInstance {
     private final Collection<IMonitoringRecordConsumer> anyTypeConsumers =
             new Vector<IMonitoringRecordConsumer>();
     /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<String, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
-            new HashMap<String, Collection<IMonitoringRecordConsumer>>();
+    private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
+            new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>>();
 
     public void run() throws LogReaderExecutionException, MonitoringRecordConsumerExecutionException {
         for (IMonitoringRecordConsumer c : this.consumers) {
@@ -108,15 +106,15 @@ public class TpanInstance {
 
     public void addRecordConsumer(IMonitoringRecordConsumer consumer) {
         this.consumers.add(consumer);
-        final String[] recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
+        final Class<? extends IMonitoringRecord>[] recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
         if (recordTypeSubscriptionList == null) {
             this.anyTypeConsumers.add(consumer);
         } else {
-            for (String recordTypeName : recordTypeSubscriptionList) {
-                Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(recordTypeName);
+            for (Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
+                Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(recordType);
                 if (cList == null) {
                     cList = new Vector<IMonitoringRecordConsumer>(0);
-                    this.specificTypeConsumers.put(recordTypeName, cList);
+                    this.specificTypeConsumers.put(recordType, cList);
                 }
                 cList.add(consumer);
             }

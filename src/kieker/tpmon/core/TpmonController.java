@@ -6,7 +6,7 @@ import kieker.tpmon.writer.util.async.TpmonShutdownHook;
 import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import kieker.tpmon.writer.IMonitoringLogWriter;
 import kieker.tpmon.writer.database.SyncDbConnector;
-import kieker.tpmon.writer.filesystem.SyncFsWriter;
+import kieker.tpmon.writer.filesystem.SyncFsConnector;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -103,6 +103,10 @@ public final class TpmonController implements IMonitoringRecordReceiver {
          */
         REPLAY,
 
+        /**
+         * The controller sets the loggingTimestamp of incoming records
+         * according to the current time.
+         */
         REALTIME
     }
     private ControllerMode controllerMode = ControllerMode.REALTIME;
@@ -163,7 +167,7 @@ public final class TpmonController implements IMonitoringRecordReceiver {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringLogWriter = new SyncFsWriter(filenameBase);
+                this.monitoringLogWriter = new SyncFsConnector(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
                 this.monitoringLogWriter = new AsyncFsConnector(filenameBase, asyncRecordQueueSize);

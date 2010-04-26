@@ -38,6 +38,8 @@ public interface IMonitoringLogWriter extends IMonitoringRecordReceiver {
      */
     public boolean init(String initString);
 
+    // TODO: do we need an invoke(), or similar, method?
+
     // TODO: try to remove the need for this method!
     /**
      *

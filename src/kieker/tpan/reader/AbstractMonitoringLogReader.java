@@ -36,8 +36,8 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
 
     private final Vector<IMonitoringRecordReceiver> recordReceivers = new Vector<IMonitoringRecordReceiver>();
 
-    public final void addRecordReceiver(final IMonitoringRecordReceiver consumer) {
-        this.recordReceivers.add(consumer);
+    public final void addRecordReceiver(final IMonitoringRecordReceiver receiver) {
+        this.recordReceivers.add(receiver);
     }
 
     /**
@@ -49,10 +49,10 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
      * @param monitoringRecord the record
      * @throws LogReaderExecutionException if an error occurs
      */
-    protected final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws LogReaderExecutionException {
+    protected final void deliverRecord(final IMonitoringRecord record) throws LogReaderExecutionException {
         try {
             for (IMonitoringRecordReceiver c : this.recordReceivers) {
-                c.newMonitoringRecord(monitoringRecord);
+                c.newMonitoringRecord(record);
             }
         } catch (Exception ex) {
             log.fatal("Caught Exception while delivering record", ex);

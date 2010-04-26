@@ -14,8 +14,8 @@ import kieker.common.record.IMonitoringRecord;
 public class DummyRecordConsumer implements IMonitoringRecordConsumer {
 
 
-    public String[] getRecordTypeSubscriptionList() {
-        return null; // null gets it all
+    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+        return null; // receive records of any type
     }
 
     public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {

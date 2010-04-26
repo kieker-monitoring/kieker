@@ -44,10 +44,9 @@ public interface IMonitoringLogReader {
     /**
      * Adds the given record receiver.
      *
-     * @param consumer the consumer
-     * @param recordTypeSubscriptionList the subscription list
+     * @param receiver the receiver
      */
-    public void addRecordReceiver(IMonitoringRecordReceiver consumer);
+    public void addRecordReceiver(IMonitoringRecordReceiver receiver);
 
     /**
      * Starts the reader. This method is intended to be a blocking operation,

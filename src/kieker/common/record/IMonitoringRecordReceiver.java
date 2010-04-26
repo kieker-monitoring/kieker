@@ -28,8 +28,8 @@ public interface IMonitoringRecordReceiver {
      * Notice, that this method should not throw an exception,
      * but indicate an error by the return value false.
      *
-     * @param monitoringRecord the record.
+     * @param record the record.
      * @return true on success; false in case of an error.
      */
-    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord);
+    public boolean newMonitoringRecord(IMonitoringRecord record);
 }

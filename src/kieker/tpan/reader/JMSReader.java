@@ -107,7 +107,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
                             if (omo instanceof IMonitoringRecord) {
                                 IMonitoringRecord rec =
                                         (IMonitoringRecord) omo;
-                                deliverRecordToConsumers(rec);
+                                deliverRecord(rec);
                             } else {
                                 log.info("Unknown type of message " + om);
                             }

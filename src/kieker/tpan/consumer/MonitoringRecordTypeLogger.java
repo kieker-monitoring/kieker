@@ -28,11 +28,9 @@ import org.apache.commons.logging.LogFactory;
 public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer {
 
     private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
-    /** Consuming any records of any type */
-    private final static String[] recordTypeSubscriptionList = null;
 
-    public String[] getRecordTypeSubscriptionList() {
-        return recordTypeSubscriptionList;
+    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+        return null; // receive records of any type
     }
 
     public void consumeMonitoringRecord(final IMonitoringRecord monitoringRecord) {

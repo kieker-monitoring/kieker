@@ -213,7 +213,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                     // TODO: create typed array
                     Object[] typedArray = StringToTypedArray(vec, rec.getValueTypes());
                     rec.initFromArray(typedArray);
-                    this.deliverRecordToConsumers(rec);
+                    this.deliverRecord(rec);
                 } catch (Exception e) {
                     log.error(
                             "Failed to parse line: {" + line + "} from file " +

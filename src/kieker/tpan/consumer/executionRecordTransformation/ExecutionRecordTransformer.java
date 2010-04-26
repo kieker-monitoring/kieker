@@ -49,8 +49,8 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
         this.systemFactory = systemFactory;
     }
 
-    public String[] getRecordTypeSubscriptionList() {
-        return new String[]{OperationExecutionRecord.class.getName()};
+    public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
+        return new Class[]{OperationExecutionRecord.class};
     }
 
     public void addListener (IExecutionListener l){

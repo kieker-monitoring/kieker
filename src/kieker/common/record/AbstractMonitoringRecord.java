@@ -32,8 +32,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
         return this.loggingTimestamp;
     }
 
-    public final void setLoggingTimestamp(long loggingTimestamp) {
-        this.loggingTimestamp = loggingTimestamp;
+    public final void setLoggingTimestamp(final long timestamp) {
+        this.loggingTimestamp = timestamp;
     }
 
     /**

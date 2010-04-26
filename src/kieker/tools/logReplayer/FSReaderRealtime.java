@@ -42,13 +42,13 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             this.master = master;
         }
 
-        public String[] getRecordTypeSubscriptionList() {
+        public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
             return null;
         }
 
         public void consumeMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordConsumerExecutionException {
             try {
-                this.master.deliverRecordToConsumers(monitoringRecord);
+                this.master.deliverRecord(monitoringRecord);
             } catch (LogReaderExecutionException ex) {
                 log.error("LogReaderExecutionException", ex);
                 throw new MonitoringRecordConsumerExecutionException("LogReaderExecutionException", ex);

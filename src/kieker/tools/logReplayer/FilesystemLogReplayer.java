@@ -70,7 +70,7 @@ public class FilesystemLogReplayer {
 
             /** Anonymous consumer class that simply passes all records to the
              *  controller */
-            public String[] getRecordTypeSubscriptionList() {
+            public Class<? extends IMonitoringRecord>[] getRecordTypeSubscriptionList() {
                 return null; // consume all types
             }
 
