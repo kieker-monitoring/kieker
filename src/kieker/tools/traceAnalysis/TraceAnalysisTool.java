@@ -35,6 +35,8 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.common.util.LoggingTimestampConverter;
+import kieker.tpan.datamodel.InvalidExecutionTrace;
+import kieker.tpan.plugins.EventProcessingException;
 import kieker.tpan.reader.MonitoringLogReaderException;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.tpan.TpanInstance;
@@ -63,6 +65,7 @@ import kieker.tpan.consumer.BriefJavaFxInformer;
 import kieker.tpan.consumer.executionRecordTransformation.ExecutionRecordTransformer;
 
 import kieker.tpan.consumer.MonitoringRecordTypeLogger;
+import kieker.tpan.plugins.traceReconstruction.AbstractTpanInvalidExecutionTraceProcessingComponent;
 import kieker.tpan.reader.filesystem.FSReader;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -412,7 +415,7 @@ public class TraceAnalysisTool {
         try {
             List<AbstractTpanMessageTraceProcessingComponent> msgTraceProcessingComponents = new ArrayList<AbstractTpanMessageTraceProcessingComponent>();
             List<AbstractTpanExecutionTraceProcessingComponent> execTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
-            List<AbstractTpanExecutionTraceProcessingComponent> invalidTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
+            List<AbstractTpanInvalidExecutionTraceProcessingComponent> invalidTraceProcessingComponents = new ArrayList<AbstractTpanInvalidExecutionTraceProcessingComponent>();
             // fill list of msgTraceProcessingComponents:
             AbstractTpanMessageTraceProcessingComponent componentPrintMsgTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
@@ -430,11 +433,11 @@ public class TraceAnalysisTool {
                         outputDir + File.separator + outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt", false);
                 execTraceProcessingComponents.add(componentPrintExecTrace);
             }
-            AbstractTpanExecutionTraceProcessingComponent componentPrintInvalidTrace = null;
+            AbstractTpanInvalidExecutionTraceProcessingComponent componentPrintInvalidTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
                 numRequestedTasks++;
                 componentPrintInvalidTrace =
-                        task_createExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME,
+                        task_createInvalidExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME,
                         outputDir + File.separator + outputFnPrefix + INVALID_TRACES_FN_PREFIX + ".txt", true);
                 invalidTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
@@ -508,13 +511,13 @@ public class TraceAnalysisTool {
                     selectedTraces, ignoreRecordsBeforeTimestamp,
                     ignoreRecordsAfterTimestamp);
             for (AbstractTpanMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
-                mtReconstrFilter.addMessageTraceListener(c);
+                mtReconstrFilter.getMessageTraceEventProviderPort().addListener(c);
             }
             for (AbstractTpanExecutionTraceProcessingComponent c : execTraceProcessingComponents) {
-                mtReconstrFilter.addExecutionTraceListener(c);
+                mtReconstrFilter.getExecutionTraceEventProviderPort().addListener(c);
             }
-            for (AbstractTpanExecutionTraceProcessingComponent c : invalidTraceProcessingComponents) {
-                mtReconstrFilter.addInvalidExecutionTraceArtifactListener(c);
+            for (AbstractTpanInvalidExecutionTraceProcessingComponent c : invalidTraceProcessingComponents) {
+                mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(c);
             }
 
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
@@ -634,7 +637,7 @@ public class TraceAnalysisTool {
         final String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
         AbstractTpanMessageTraceProcessingComponent sqdWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
-            public void newTrace(MessageTrace t) throws TraceProcessingException {
+            public void newEvent(MessageTrace t) throws EventProcessingException {
                 try {
                     SequenceDiagramPlugin.writePicForMessageTrace(this.getSystemEntityFactory(), t, outputFnBase + "-" + t.getTraceId() + ".pic", shortLabels);
                     this.reportSuccess(t.getTraceId());
@@ -708,7 +711,7 @@ public class TraceAnalysisTool {
 
         AbstractTpanMessageTraceProcessingComponent ctWriter = new AbstractTpanMessageTraceProcessingComponent(name, systemEntityFactory) {
 
-            public void newTrace(MessageTrace t) throws TraceProcessingException {
+            public void newEvent(MessageTrace t) throws EventProcessingException {
                 try {
                     final TraceCallTreeNode rootNode =
                             new TraceCallTreeNode(AbstractSystemSubFactory.ROOT_ELEMENT_ID,
@@ -756,7 +759,7 @@ public class TraceAnalysisTool {
 
             PrintStream ps = new PrintStream(new FileOutputStream(outputFn));
 
-            public void newTrace(MessageTrace t) {
+            public void newEvent(MessageTrace t) throws EventProcessingException {
                 this.reportSuccess(t.getTraceId());
                 ps.println(t);
             }
@@ -794,9 +797,47 @@ public class TraceAnalysisTool {
 
             final PrintStream ps = new PrintStream(new FileOutputStream(myOutputFn));
 
-            public void newTrace(ExecutionTrace t) {
+            public void newEvent(ExecutionTrace t) throws EventProcessingException {
                 ps.println(t);
                 this.reportSuccess(t.getTraceId());
+            }
+
+            @Override
+            public void printStatusMessage() {
+                super.printStatusMessage();
+                int numTraces = this.getSuccessCount();
+                System.out.println("Wrote " + numTraces + " execution trace" + (artifactMode ? " artifact" : "") + (numTraces > 1 ? "s" : "") + " to file '" + myOutputFn + "'");
+            }
+
+            @Override
+            public void cleanup() {
+                if (ps != null) {
+                    ps.close();
+                }
+            }
+        };
+        return etWriter;
+    }
+
+   /**
+     * Reads the traces from the directory inputDirName and write the
+     * execution trace representation for traces with IDs given in traceSet
+     * to the directory outputFnPrefix.
+     * If  traceSet is null, an execution trace for each trace is generated.
+     *
+     * @param inputDirName
+     * @param outputFnPrefix
+     * @param traceSet
+     */
+    private static AbstractTpanInvalidExecutionTraceProcessingComponent task_createInvalidExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
+        final String myOutputFn = new File(outputFn).getCanonicalPath();
+        AbstractTpanInvalidExecutionTraceProcessingComponent etWriter = new AbstractTpanInvalidExecutionTraceProcessingComponent(name, systemEntityFactory) {
+
+            final PrintStream ps = new PrintStream(new FileOutputStream(myOutputFn));
+
+            public void newEvent(InvalidExecutionTrace t) throws EventProcessingException {
+                ps.println(t.getInvalidExecutionTrace());
+                this.reportSuccess(t.getInvalidExecutionTrace().getTraceId());
             }
 
             @Override
@@ -916,8 +957,8 @@ public class TraceAnalysisTool {
                 null, // selectedTraces, // null means all
                 ignoreRecordsBeforeTimestamp, // default Long.MIN
                 ignoreRecordsAfterTimestamp); // default Long.MAX
-        mtReconstrFilter.addMessageTraceListener(messageTraceListener);
-        mtReconstrFilter.addInvalidExecutionTraceArtifactListener(messageTraceListener.getJfxBrokenExecutionTraceReceiver());  // i know that its dirty
+        mtReconstrFilter.getMessageTraceEventProviderPort().addListener(messageTraceListener);
+        mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(messageTraceListener.getJfxBrokenExecutionTraceReceiver());  // i know that its dirty
 
         TraceReconstructionFilter uniqueMtReconstrFilter = null;
         uniqueMtReconstrFilter =

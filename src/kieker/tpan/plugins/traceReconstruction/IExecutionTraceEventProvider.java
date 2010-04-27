@@ -2,7 +2,7 @@ package kieker.tpan.plugins.traceReconstruction;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,13 @@ package kieker.tpan.plugins.traceReconstruction;
  * ==================================================
  */
 
-import kieker.tpan.plugins.EventProcessingException;
+import kieker.tpan.datamodel.ExecutionTrace;
+import kieker.tpan.plugins.IEventProvider;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public class TraceProcessingException extends EventProcessingException {
-    private static final long serialVersionUID = 189899L;
+public interface IExecutionTraceEventProvider extends IEventProvider<ExecutionTrace> {
 
-    public TraceProcessingException (String msg){
-        super(msg);
-    }
-
-    public TraceProcessingException (String msg, Throwable t){
-        super(msg, t);
-    }
 }

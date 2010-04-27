@@ -1,9 +1,8 @@
 package kieker.tpan.plugins.traceReconstruction;
 
-import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
-import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.IEventListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,10 +28,10 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class MessageTraceRepository implements IMessageTraceReceiver {
+public class MessageTraceRepository implements IEventListener<MessageTrace> {
 
     private static final Log log = LogFactory.getLog(MessageTraceRepository.class);
-    private Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
+    private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
 
     // TODO: handle equivalence classes
 
@@ -43,7 +42,7 @@ public class MessageTraceRepository implements IMessageTraceReceiver {
         return this.repo;
     }
 
-    public void newTrace(MessageTrace t) throws TraceProcessingException {
-        this.repo.put(t.getTraceId(), t);
+    public void newEvent(MessageTrace mt) throws TraceProcessingException {
+        this.repo.put(mt.getTraceId(), mt);
     }
 }

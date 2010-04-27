@@ -18,14 +18,13 @@ package kieker.tpan.plugins.traceReconstruction;
  * ==================================================
  */
 import kieker.tpan.datamodel.Execution;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import kieker.tpan.plugins.IEventListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,15 +36,22 @@ import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.consumer.executionRecordTransformation.ExecutionEventProcessingException;
-import kieker.tpan.plugins.IEventListener;
+import kieker.tpan.consumer.executionRecordTransformation.IExecutionEventListener;
+import kieker.tpan.datamodel.InvalidExecutionTrace;
+import kieker.tpan.plugins.EventProcessingException;
+import kieker.tpan.plugins.EventPublishSubscribeConnector;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IEventListener<Execution> {
+public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IExecutionEventListener {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
+    public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
+    public static final long MIN_TIMESTAMP = 0;
+    private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
+    public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
     /** TraceId x trace */
     private final Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
     /** Representative x # of equivalents */
@@ -53,10 +59,6 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             new HashMap<ExecutionTraceHashContainer, AtomicInteger>();
     /** We need to keep track of invalid trace's IDs */
     private final Set<Long> invalidTraces = new TreeSet<Long>();
-    public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
-    public static final long MIN_TIMESTAMP = 0;
-    private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
-    public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
     public Set<Long> getInvalidTraces() {
         return invalidTraces;
@@ -93,13 +95,62 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     private final TraceEquivalenceClassModes equivalenceMode;
     private final long ignoreRecordsBeforeTimestamp;
     private final long ignoreRecordsAfterTimestamp;
-    private final List<IMessageTraceReceiver> messageTraceListeners = new ArrayList<IMessageTraceReceiver>();
-    private final List<IExecutionTraceReceiver> executionTraceListeners = new ArrayList<IExecutionTraceReceiver>();
-    private final List<IExecutionTraceReceiver> invalidExecutionTraceArtifactListeners = new ArrayList<IExecutionTraceReceiver>();
+    private final EventPublishSubscribeConnector<MessageTrace> messageTracePublishingSystem =
+            new EventPublishSubscribeConnector<MessageTrace>(true); // do not fail fast
+    private final EventPublishSubscribeConnector<ExecutionTrace> executionTracePublishingSystem =
+            new EventPublishSubscribeConnector<ExecutionTrace>(true); // do not fail fast
+    private final EventPublishSubscribeConnector<InvalidExecutionTrace> invalidExecutionTracePublishingSystem =
+            new EventPublishSubscribeConnector<InvalidExecutionTrace>(true); // do not fail fast
     private final TreeSet<Long> selectedTraces;
     private final Execution rootExecution;
+    private final IMessageTraceEventProvider messageTraceEventProviderPort =
+            new IMessageTraceEventProvider() {
+
+                public void addListener(IEventListener<MessageTrace> listener) {
+                    messageTracePublishingSystem.addListener(listener);
+                }
+
+                public boolean removeListener(IEventListener<MessageTrace> listener) {
+                    return messageTracePublishingSystem.removeListener(listener);
+                }
+            };
+
+    public IMessageTraceEventProvider getMessageTraceEventProviderPort() {
+        return this.messageTraceEventProviderPort;
+    }
+    private final IExecutionTraceEventProvider executionTraceEventProviderPort =
+            new IExecutionTraceEventProvider() {
+
+                public void addListener(IEventListener<ExecutionTrace> listener) {
+                    executionTracePublishingSystem.addListener(listener);
+                }
+
+                public boolean removeListener(IEventListener<ExecutionTrace> listener) {
+                    return executionTracePublishingSystem.removeListener(listener);
+                }
+            };
+
+    public IExecutionTraceEventProvider getExecutionTraceEventProviderPort() {
+        return this.executionTraceEventProviderPort;
+    }
+    private final IInvalidExecutionTraceEventProvider invalidExecutionTraceEventPort =
+            new IInvalidExecutionTraceEventProvider() {
+
+                public void addListener(IEventListener<InvalidExecutionTrace> listener) {
+                    invalidExecutionTracePublishingSystem.addListener(listener);
+                }
+
+                public boolean removeListener(IEventListener<InvalidExecutionTrace> listener) {
+                    return invalidExecutionTracePublishingSystem.removeListener(listener);
+                }
+            };
+
+    public IInvalidExecutionTraceEventProvider getInvalidExecutionTraceEventPort() {
+        return this.invalidExecutionTraceEventPort;
+    }
 
     public enum TraceEquivalenceClassModes {
+
         DISABLED, ASSEMBLY, ALLOCATION
     };
 
@@ -145,7 +196,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             return;
         }
 
-        this.minTin = (this.minTin<0 || execution.getTin() < this.minTin) ? execution.getTin() : this.minTin;
+        this.minTin = (this.minTin < 0 || execution.getTin() < this.minTin) ? execution.getTin() : this.minTin;
         this.highestTout = execution.getTout() > this.highestTout ? execution.getTout() : this.highestTout;
         ExecutionTrace seq = pendingTraces.get(traceId);
         if (seq != null) { // create and add new sequence
@@ -201,23 +252,17 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                 }
 
                 if (mt != null) {
-                    for (IMessageTraceReceiver l : messageTraceListeners) {
-                        l.newTrace(mt);
-                    }
-                    for (IExecutionTraceReceiver l : executionTraceListeners) {
-                        l.newTrace(polledTrace);
-                    }
+                    this.messageTracePublishingSystem.publish(mt);
+                    this.executionTracePublishingSystem.publish(polledTrace);
                 }
                 this.reportSuccess(curTraceId);
             } catch (InvalidTraceException ex) {
-                for (IExecutionTraceReceiver l : invalidExecutionTraceArtifactListeners) {
-                    try {
-                        l.newTrace(polledTrace);
-                    } catch (TraceProcessingException ex1) {
-                        log.error("Trace processing exception (ID:" + curTraceId + ")", ex);
-                        this.reportError(curTraceId);
-                        throw new ExecutionEventProcessingException("Trace processing exception", ex);
-                    }
+                try {
+                    this.invalidExecutionTracePublishingSystem.publish(new InvalidExecutionTrace(polledTrace));
+                } catch (EventProcessingException ex1) {
+                    log.error("EventProcessingException for trace ID:" + curTraceId, ex1);
+                    this.reportError(curTraceId);
+                    throw new ExecutionEventProcessingException("EventProcessingException for trace ID:" + curTraceId, ex1);
                 }
                 if (!this.invalidTraces.contains(curTraceId)) {
                     // only once per traceID (otherwise, we would report all trace fragments)
@@ -228,24 +273,12 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                         throw new ExecutionEventProcessingException("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + polledTrace, ex);
                     }
                 }
-            } catch (TraceProcessingException ex) {
-                log.error("Trace processing exception (ID:" + curTraceId + ")", ex);
+            } catch (EventProcessingException ex) {
+                log.error("EventProcessingException for trace ID:" + curTraceId, ex);
                 this.reportError(curTraceId);
-                throw new ExecutionEventProcessingException("Trace processing exception", ex);
+                throw new ExecutionEventProcessingException("EventProcessingException for trace ID:" + curTraceId, ex);
             }
         }
-    }
-
-    public void addMessageTraceListener(IMessageTraceReceiver l) {
-        this.messageTraceListeners.add(l);
-    }
-
-    public void addExecutionTraceListener(IExecutionTraceReceiver l) {
-        this.executionTraceListeners.add(l);
-    }
-
-    public void addInvalidExecutionTraceArtifactListener(IExecutionTraceReceiver l) {
-        this.invalidExecutionTraceArtifactListeners.add(l);
     }
 
     public void terminate(final boolean error) {
@@ -305,7 +338,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             if (r1 == null || r2 == null) {
                 return false;
             }
-            boolean retVal = 
+            boolean retVal =
                     (((equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getId() == r2.getAllocationComponent().getId())
                     || ((equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) && r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId()))
                     && r1.getOperation().getId() == r2.getOperation().getId()
@@ -340,15 +373,9 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
     @Override
     public void printStatusMessage() {
         super.printStatusMessage();
-        String minTinStr = new StringBuilder().append(this.minTin)
-                .append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin))
-                .append(",").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin))
-                .append(")").toString();
-        String maxToutStr = new StringBuilder().append(this.highestTout)
-                .append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.highestTout))
-                .append(",").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.highestTout))
-                .append(")").toString();
+        String minTinStr = new StringBuilder().append(this.minTin).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(",").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
+        String maxToutStr = new StringBuilder().append(this.highestTout).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.highestTout)).append(",").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.highestTout)).append(")").toString();
         System.out.println("First timestamp: " + minTinStr);
-        System.out.println("Last timestamp: "  + maxToutStr);
+        System.out.println("Last timestamp: " + maxToutStr);
     }
 }

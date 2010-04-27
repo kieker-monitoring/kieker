@@ -1,13 +1,8 @@
-package kieker.tpan.plugins.traceReconstruction;
-
-import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
-import kieker.tpan.datamodel.ExecutionTrace;
+package kieker.tpan.consumer.executionRecordTransformation;
 
 /*
- * kieker.consumer.MonitoringRecordTypeLogger
- *
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +18,13 @@ import kieker.tpan.datamodel.ExecutionTrace;
  * ==================================================
  */
 
+import kieker.tpan.datamodel.Execution;
+import kieker.tpan.plugins.IEventProvider;
+
 /**
  *
  * @author Andre van Hoorn
  */
-public interface IExecutionTraceReceiver {
-    public void newTrace (ExecutionTrace t) throws TraceProcessingException;
+public interface IExecutionEventProvider extends IEventProvider<Execution> {
+
 }

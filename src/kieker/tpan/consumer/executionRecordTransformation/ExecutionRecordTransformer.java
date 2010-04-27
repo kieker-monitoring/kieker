@@ -20,8 +20,6 @@ package kieker.tpan.consumer.executionRecordTransformation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;

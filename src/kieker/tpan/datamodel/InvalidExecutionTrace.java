@@ -1,10 +1,6 @@
-package kieker.tpan.plugins.traceReconstruction;
-
-import kieker.tpan.datamodel.MessageTrace;
+package kieker.tpan.datamodel;
 
 /*
- * kieker.consumer.MonitoringRecordTypeLogger
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -23,9 +19,16 @@ import kieker.tpan.datamodel.MessageTrace;
  */
 
 /**
- *
  * @author Andre van Hoorn
  */
-public interface IMessageTraceReceiver {
-    public void newTrace (MessageTrace t) throws TraceProcessingException;
+public class InvalidExecutionTrace {
+    private final ExecutionTrace invalidExecutionTrace;
+
+    public ExecutionTrace getInvalidExecutionTrace() {
+        return invalidExecutionTrace;
+    }
+
+    public InvalidExecutionTrace(final ExecutionTrace invalidExecutionTrace){
+        this.invalidExecutionTrace = invalidExecutionTrace;
+    }
 }
