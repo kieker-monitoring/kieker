@@ -19,6 +19,7 @@ package kieker.tpan;
  */
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -53,7 +54,7 @@ public class TpanInstance {
 
     private static final Log log = LogFactory.getLog(TpanInstance.class);
     private IMonitoringLogReader logReader;
-    // this are the consumers for data that are comming into kieker by readers (files or system under monitoring)
+    /** this are the consumers for data that are comming into kieker by readers (files or system under monitoring)*/
     private final Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
     /** Contains all consumers which consume records of any type */
     private final Collection<IMonitoringRecordConsumer> anyTypeConsumers =
@@ -61,9 +62,14 @@ public class TpanInstance {
     /** Contains mapping of record types to subscribed consumers */
     private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
             new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>>();
+    private final Collection<ITpanControlledComponent> controlledComponents =
+            new Vector<ITpanControlledComponent>();
 
     public void run() throws MonitoringLogReaderException, MonitoringRecordConsumerException {
         for (IMonitoringRecordConsumer c : this.consumers) {
+            c.execute();
+        }
+        for (ITpanControlledComponent c : this.controlledComponents) {
             c.execute();
         }
         try {
@@ -93,11 +99,17 @@ public class TpanInstance {
             for (IMonitoringRecordConsumer c : this.consumers) {
                 c.terminate(true); // terminate due to an error
             }
+            for (ITpanControlledComponent c : this.controlledComponents) {
+                c.terminate(true); // terminate due to an error
+            }
             throw exc;
         }
         for (IMonitoringRecordConsumer c : this.consumers) {
             log.info("Terminating consumer " + c);
             c.terminate(false); // terminate after successful execution
+        }
+        for (ITpanControlledComponent c : this.controlledComponents) {
+            c.terminate(false); // terminate due to an error
         }
     }
 
@@ -122,6 +134,10 @@ public class TpanInstance {
         }
     }
 
+    public void addTpanControlledComponent(ITpanControlledComponent c) {
+        this.controlledComponents.add(c);
+    }
+
     /**
      * Delivers the given record to the consumers that are registered for this
      * type of records.
@@ -129,15 +145,16 @@ public class TpanInstance {
      * @param monitoringRecord the record
      * @throws LogReaderExecutionException if an error occurs
      */
-    private final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws MonitoringRecordReceiverException  {
-            for (IMonitoringRecordConsumer c : this.anyTypeConsumers) {
+    private final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws MonitoringRecordReceiverException {
+
+        for (IMonitoringRecordConsumer c : this.anyTypeConsumers) {
+            c.newMonitoringRecord(monitoringRecord);
+        }
+        Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(monitoringRecord.getClass());
+        if (cList != null) {
+            for (IMonitoringRecordConsumer c : cList) {
                 c.newMonitoringRecord(monitoringRecord);
             }
-            Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(monitoringRecord.getClass().getName());
-            if (cList != null) {
-                for (IMonitoringRecordConsumer c : cList) {
-                    c.newMonitoringRecord(monitoringRecord);
-                }
-            }
+        }
     }
 }

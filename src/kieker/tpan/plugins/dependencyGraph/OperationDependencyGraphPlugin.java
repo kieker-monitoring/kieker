@@ -212,4 +212,12 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         }
         this.reportSuccess(t.getTraceId());
     }
+
+    public boolean execute() {
+                return true; // no need to do anything here
+    }
+
+    public void terminate(boolean error) {
+// no need to do anything here
+    }
 }

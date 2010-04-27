@@ -32,6 +32,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.util.LoggingTimestampConverter;
+import kieker.tpan.ITpanControlledComponent;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
@@ -45,7 +46,7 @@ import kieker.tpan.plugins.EventPublishSubscribeConnector;
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IExecutionEventListener {
+public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IExecutionEventListener, ITpanControlledComponent {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
     public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
@@ -147,6 +148,10 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
 
     public IInvalidExecutionTraceProvider getInvalidExecutionTraceEventPort() {
         return this.invalidExecutionTraceEventPort;
+    }
+
+    public boolean execute() {
+        return true; // no need to do anything here
     }
 
     public enum TraceEquivalenceClassModes {
@@ -296,11 +301,6 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             map.put(entry.getKey().t, entry.getValue().intValue());
         }
         return map;
-    }
-
-    @Override
-    public void cleanup() {
-        // no need to do anything
     }
 
     private class ExecutionTraceHashContainer {

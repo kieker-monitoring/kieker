@@ -35,7 +35,6 @@ import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.plugins.EventProcessingException;
 import kieker.tpan.plugins.EventPublishSubscribeConnector;
 import kieker.tpan.plugins.IEventListener;
-import kieker.tpan.plugins.IEventProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformer implements IMonitoringRecordConsumer, IEventProvider<Execution> {
+public class ExecutionRecordTransformer implements IMonitoringRecordConsumer, IExecutionEventProvider {
 
     private static final Log log = LogFactory.getLog(ExecutionRecordTransformer.class);
     private final SystemEntityFactory systemFactory;

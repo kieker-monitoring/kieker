@@ -71,8 +71,11 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
         System.out.println("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : ""));
     }
 
-    @Override
-    public void cleanup() {
-        // no cleanup required
+    public boolean execute() {
+                return true; // no need to do anything here
+    }
+
+    public void terminate(boolean error) {
+                // no need to do anything here
     }
 }

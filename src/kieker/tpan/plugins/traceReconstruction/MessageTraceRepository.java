@@ -1,6 +1,7 @@
 package kieker.tpan.plugins.traceReconstruction;
 
 import java.util.Hashtable;
+import kieker.tpan.ITpanControlledComponent;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.plugins.IEventListener;
 
@@ -28,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class MessageTraceRepository implements IEventListener<MessageTrace> {
+public class MessageTraceRepository implements IMessageTraceReceiver, ITpanControlledComponent {
 
     private static final Log log = LogFactory.getLog(MessageTraceRepository.class);
     private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
@@ -44,5 +45,13 @@ public class MessageTraceRepository implements IEventListener<MessageTrace> {
 
     public void newEvent(MessageTrace mt) throws TraceProcessingException {
         this.repo.put(mt.getTraceId(), mt);
+    }
+
+    public boolean execute() {
+        return true; // no need to do anything here
+    }
+
+    public void terminate(boolean error) {
+        // no need to do anything here
     }
 }

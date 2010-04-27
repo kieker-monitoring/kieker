@@ -102,7 +102,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
             Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
             for (int i = 0; inputFiles != null && i < inputFiles.length; i++) {
                 this.processInputFile(inputFiles[i]);
-            }            
+            }
         } catch (MonitoringLogReaderException e) {
             log.error("Exception", e);
             throw e;

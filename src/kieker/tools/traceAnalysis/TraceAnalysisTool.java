@@ -35,6 +35,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.common.util.LoggingTimestampConverter;
+import kieker.tpan.ITpanControlledComponent;
 import kieker.tpan.datamodel.InvalidExecutionTrace;
 import kieker.tpan.plugins.EventProcessingException;
 import kieker.tpan.reader.MonitoringLogReaderException;
@@ -415,7 +416,7 @@ public class TraceAnalysisTool {
         try {
             List<AbstractTpanMessageTraceProcessingComponent> msgTraceProcessingComponents = new ArrayList<AbstractTpanMessageTraceProcessingComponent>();
             List<AbstractTpanExecutionTraceProcessingComponent> execTraceProcessingComponents = new ArrayList<AbstractTpanExecutionTraceProcessingComponent>();
-            List<AbstractTpanInvalidExecutionTraceProcessingComponent> invalidTraceProcessingComponents = new ArrayList<AbstractTpanInvalidExecutionTraceProcessingComponent>();
+            List<AbstractTpanInvalidExecutionTraceProcessingComponent> invalidExecTraceProcessingComponents = new ArrayList<AbstractTpanInvalidExecutionTraceProcessingComponent>();
             // fill list of msgTraceProcessingComponents:
             AbstractTpanMessageTraceProcessingComponent componentPrintMsgTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
@@ -439,7 +440,7 @@ public class TraceAnalysisTool {
                 componentPrintInvalidTrace =
                         task_createInvalidExecutionTraceDumpComponent(PRINTINVALIDEXECTRACE_COMPONENT_NAME,
                         outputDir + File.separator + outputFnPrefix + INVALID_TRACES_FN_PREFIX + ".txt", true);
-                invalidTraceProcessingComponents.add(componentPrintInvalidTrace);
+                invalidExecTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
             AbstractTpanMessageTraceProcessingComponent componentPlotSeqDiagr = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQDS)) {
@@ -500,7 +501,7 @@ public class TraceAnalysisTool {
             List<AbstractTpanTraceProcessingComponent> allTraceProcessingComponents = new ArrayList<AbstractTpanTraceProcessingComponent>();
             allTraceProcessingComponents.addAll(msgTraceProcessingComponents);
             allTraceProcessingComponents.addAll(execTraceProcessingComponents);
-            allTraceProcessingComponents.addAll(invalidTraceProcessingComponents);
+            allTraceProcessingComponents.addAll(invalidExecTraceProcessingComponents);
             TpanInstance analysisInstance = new TpanInstance();
             analysisInstance.setLogReader(new FSReader(inputDirs));
             //analysisInstance.setLogReader(new JMSReader("tcp://localhost:3035/","queue1"));
@@ -516,13 +517,18 @@ public class TraceAnalysisTool {
             for (AbstractTpanExecutionTraceProcessingComponent c : execTraceProcessingComponents) {
                 mtReconstrFilter.getExecutionTraceEventProviderPort().addListener(c);
             }
-            for (AbstractTpanInvalidExecutionTraceProcessingComponent c : invalidTraceProcessingComponents) {
+            for (AbstractTpanInvalidExecutionTraceProcessingComponent c : invalidExecTraceProcessingComponents) {
                 mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(c);
             }
 
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
             analysisInstance.addRecordConsumer(execRecTransformer);
+
+            for (ITpanControlledComponent c : allTraceProcessingComponents){
+                analysisInstance.addTpanControlledComponent(c);
+            }
+            analysisInstance.addTpanControlledComponent(mtReconstrFilter);
             // END test with new meta-model
 
             int numErrorCount = 0;
@@ -553,7 +559,6 @@ public class TraceAnalysisTool {
                 for (AbstractTpanTraceProcessingComponent c : allTraceProcessingComponents) {
                     numErrorCount += c.getErrorCount();
                     c.printStatusMessage();
-                    c.cleanup();
                 }
             }
 
@@ -657,9 +662,12 @@ public class TraceAnalysisTool {
                 System.out.println("Example: pic2plot -T svg " + outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".pic > " + outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg");
             }
 
-            @Override
-            public void cleanup() {
-                // nothing to do
+            public boolean execute() {
+                return true; // no need to do anything here
+            }
+
+            public void terminate(boolean error) {
+                // no need to do anything here
             }
         };
         return sqdWriter;
@@ -735,9 +743,12 @@ public class TraceAnalysisTool {
                 System.out.println("Example: dot -T svg " + outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " + outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg");
             }
 
-            @Override
-            public void cleanup() {
-                // nothing to do
+            public boolean execute() {
+                return true; // no need to do anything here
+            }
+
+            public void terminate(boolean error) {
+                // no need to do anything here
             }
         };
         return ctWriter;
@@ -772,10 +783,14 @@ public class TraceAnalysisTool {
             }
 
             @Override
-            public void cleanup() {
+            public void terminate(final boolean error) {
                 if (ps != null) {
                     ps.close();
                 }
+            }
+
+            public boolean execute() {
+                return true; // no need to do anything here
             }
         };
         return mtWriter;
@@ -810,10 +825,14 @@ public class TraceAnalysisTool {
             }
 
             @Override
-            public void cleanup() {
+            public void terminate(final boolean error) {
                 if (ps != null) {
                     ps.close();
                 }
+            }
+
+            public boolean execute() {
+                return true; // no need to do anything here
             }
         };
         return etWriter;
@@ -848,10 +867,14 @@ public class TraceAnalysisTool {
             }
 
             @Override
-            public void cleanup() {
+            public void terminate(final boolean error) {
                 if (ps != null) {
                     ps.close();
                 }
+            }
+
+            public boolean execute() {
+                return true; // no need to do anything here
             }
         };
         return etWriter;

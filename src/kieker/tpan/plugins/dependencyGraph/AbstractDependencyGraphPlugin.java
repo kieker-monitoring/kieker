@@ -121,9 +121,4 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
         super.printStatusMessage();
         System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : ""));
     }
-
-    @Override
-    public void cleanup() {
-        // no cleanup required
-    }
 }

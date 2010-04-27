@@ -206,9 +206,4 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
         saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights,
                 true, shortLabels); // includeEois
     }
-
-    @Override
-    public void cleanup() {
-        // no cleanup required
-    }
 }

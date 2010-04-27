@@ -37,7 +37,6 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.plugins.util.IntContainer;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
-
 /**
  * Plugin providing the creation of calling trees both for individual traces 
  * and an aggregated form mulitple traces.
@@ -51,7 +50,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
     private final boolean aggregated;
     private final SystemEntityFactory systemEntityFactory;
 
-    public CallTreePlugin(final String name, SystemEntityFactory systemEntityFactory, 
+    public CallTreePlugin(final String name, SystemEntityFactory systemEntityFactory,
             final boolean aggregated) {
         super(name, systemEntityFactory);
         this.systemEntityFactory = systemEntityFactory;
@@ -61,8 +60,8 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         this.aggregated = aggregated;
     }
 
-   private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels){
-        if (node.isRootNode()){
+    private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {
+        if (node.isRootNode()) {
             return "$";
         }
 
@@ -73,9 +72,8 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n")
-                .append(assemblyComponentName).append(":");
-        if (!shortLabels){
+        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
+        if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx);
         } else {
             strBuild.append("..");
@@ -92,10 +90,9 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
             IntContainer nextNodeId, PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, nextNodeId.i);
-        strBuild.append(nextNodeId.i++).append("[label =\"").append(nodeLabel(n, shortLabels))
-                .append("\",shape="+DotFactory.DOT_SHAPE_NONE
-                +",style="+DotFactory.DOT_STYLE_FILLED
-                +",fillcolor="+DotFactory.DOT_FILLCOLOR_WHITE+"];");
+        strBuild.append(nextNodeId.i++).append("[label =\"").append(nodeLabel(n, shortLabels)).append("\",shape=" + DotFactory.DOT_SHAPE_NONE
+                + ",style=" + DotFactory.DOT_STYLE_FILLED
+                + ",fillcolor=" + DotFactory.DOT_FILLCOLOR_WHITE + "];");
         ps.println(strBuild.toString());
         for (CallTreeNode child : n.getChildren()) {
             dotEdgesFromSubTree(systemEntityFactory, child, nodeIds, nextNodeId, ps, shortLabels);
@@ -157,7 +154,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
                 });
     }
 
-    private static void addTraceToTree(final CallTreeNode root, 
+    private static void addTraceToTree(final CallTreeNode root,
             final MessageTrace t, final boolean aggregated)
             throws TraceProcessingException {
         Stack<CallTreeNode> curStack = new Stack<CallTreeNode>();
@@ -169,7 +166,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
             if (m instanceof SynchronousCallMessage) {
                 curNode = curStack.peek();
                 CallTreeNode child;
-                if (aggregated){
+                if (aggregated) {
                     child = curNode.getChild(m.getReceivingExecution().getAllocationComponent(),
                             m.getReceivingExecution().getOperation());
                 } else {
@@ -216,8 +213,11 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         System.out.println("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : ""));
     }
 
-    @Override
-    public void cleanup() {
-        // no cleanup required
+    public boolean execute() {
+        return true; // no need to do anything here
+    }
+
+    public void terminate(boolean error) {
+        // no need to do anything here
     }
 }
