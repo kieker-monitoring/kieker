@@ -170,10 +170,10 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     }
 
     public boolean execute() {
-                return true; // no need to do anything here
+        return true; // no need to do anything here
     }
 
     public void terminate(boolean error) {
-                // no need to do anything here
+        // no need to do anything here
     }
 }

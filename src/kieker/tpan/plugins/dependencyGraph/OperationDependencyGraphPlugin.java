@@ -214,7 +214,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     }
 
     public boolean execute() {
-                return true; // no need to do anything here
+        return true; // no need to do anything here
     }
 
     public void terminate(boolean error) {

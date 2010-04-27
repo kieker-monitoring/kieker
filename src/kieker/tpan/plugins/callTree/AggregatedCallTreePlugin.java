@@ -30,8 +30,8 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
-    private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
 
+    private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
     private final AbstractAggregatedCallTreeNode<T> root;
 
     public AggregatedCallTreePlugin(final String name,
@@ -44,7 +44,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 
     public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException {
-        saveTreeToDotFile(super.getSystemEntityFactory(), this.root, 
+        saveTreeToDotFile(super.getSystemEntityFactory(), this.root,
                 outputFnBase, includeWeights, false, // do not include EOIs
                 shortLabels);
         this.numGraphsSaved++;
@@ -72,10 +72,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
     }
 
     public boolean execute() {
-                return true; // no need to do anything here
+        return true; // no need to do anything here
     }
 
     public void terminate(boolean error) {
-                // no need to do anything here
+        // no need to do anything here
     }
 }
