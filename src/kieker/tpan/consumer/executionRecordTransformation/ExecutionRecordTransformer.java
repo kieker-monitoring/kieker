@@ -1,3 +1,5 @@
+package kieker.tpan.consumer.executionRecordTransformation;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -15,11 +17,11 @@
  * limitations under the License.
  * ==================================================
  */
-package kieker.tpan.consumer.executionRecordTransformation;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
@@ -32,6 +34,10 @@ import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.tpan.plugins.EventProcessingException;
+import kieker.tpan.plugins.EventPublishSubscribeConnector;
+import kieker.tpan.plugins.IEventListener;
+import kieker.tpan.plugins.IEventProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -40,22 +46,20 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
+public class ExecutionRecordTransformer implements IMonitoringRecordConsumer, IEventProvider<Execution> {
 
     private static final Log log = LogFactory.getLog(ExecutionRecordTransformer.class);
-
     private final SystemEntityFactory systemFactory;
-
-    private ArrayList<IExecutionListener> listeners =
-            new ArrayList<IExecutionListener>();
+    private final EventPublishSubscribeConnector<Execution> executionPublishingSystem =
+            new EventPublishSubscribeConnector<Execution>(false); // do not fail fast
 
     public ExecutionRecordTransformer(
             final SystemEntityFactory systemFactory) {
         this.systemFactory = systemFactory;
     }
-
     private final static Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =
-                new ArrayList<Class<? extends IMonitoringRecord>>();
+            new ArrayList<Class<? extends IMonitoringRecord>>();
+
     static {
         recordTypeSubscriptionList.add(OperationExecutionRecord.class);
     }
@@ -64,24 +68,24 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
         return recordTypeSubscriptionList;
     }
 
-    public void addListener (IExecutionListener l){
-        this.listeners.add(l);
+    public void addListener(IEventListener<Execution> listener) {
+        this.executionPublishingSystem.addListener(listener);
     }
 
-    private Signature createSignature(final String operationSignatureStr){
+    private Signature createSignature(final String operationSignatureStr) {
         String returnType = "N/A";
         String name;
         String[] paramTypeList;
         int openParenIdx = operationSignatureStr.indexOf('(');
-        if (openParenIdx == -1){ // no parameter list
+        if (openParenIdx == -1) { // no parameter list
             paramTypeList = new String[]{};
             name = operationSignatureStr;
         } else {
             name = operationSignatureStr.substring(0, openParenIdx);
             StringTokenizer strTokenizer =
-                    new StringTokenizer(operationSignatureStr.substring(openParenIdx+1, operationSignatureStr.length()-1), ",");
+                    new StringTokenizer(operationSignatureStr.substring(openParenIdx + 1, operationSignatureStr.length() - 1), ",");
             paramTypeList = new String[strTokenizer.countTokens()];
-            for (int i=0; strTokenizer.hasMoreTokens(); i++){
+            for (int i = 0; strTokenizer.hasMoreTokens(); i++) {
                 paramTypeList[i] = strTokenizer.nextToken().trim();
             }
         }
@@ -97,7 +101,7 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
         OperationExecutionRecord execRec = (OperationExecutionRecord) monitoringRecord;
 
         String executionContainerName = execRec.vmName;
-                //(this.considerExecutionContainer) ? execRec.vmName : "DEFAULTCONTAINER";
+        //(this.considerExecutionContainer) ? execRec.vmName : "DEFAULTCONTAINER";
         String componentTypeName = execRec.componentName;
         String assemblyComponentName = componentTypeName;
         String allocationComponentName =
@@ -120,8 +124,8 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
                 assemblyComponent = this.systemFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(assemblyComponentName, componentType);
             }
             ExecutionContainer execContainer = this.systemFactory.getExecutionEnvironmentFactory().getExecutionContainerByFactoryIdentifier(executionContainerName);
-            if (execContainer == null){ /* doesn't exist, yet */
-               execContainer = systemFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
+            if (execContainer == null) { /* doesn't exist, yet */
+                execContainer = systemFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
             }
             allocInst = this.systemFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
         }
@@ -135,13 +139,11 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
 
         Execution execution = new Execution(op, allocInst, execRec.traceId,
                 execRec.sessionId, execRec.eoi, execRec.ess, execRec.tin, execRec.tout);
-        for (IExecutionListener l : this.listeners){
-            try {
-                l.newExecutionEvent(execution);
-            } catch (ExecutionEventProcessingException ex) {
-                log.error("ExecutionEventProcessingException occured", ex);
-                return false;
-            }
+        try {
+            this.executionPublishingSystem.publish(execution);
+        } catch (EventProcessingException ex) {
+            log.error("Failed to publish execution", ex);
+            return false;
         }
         return true;
     }
@@ -151,8 +153,12 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
     }
 
     public void terminate(final boolean error) {
-        for (IExecutionListener l : this.listeners){
-            l.terminate(error);
-        }
+//        for (IExecutionListener l : this.listeners){
+//            l.terminate(error);
+//        }
+    }
+
+    public boolean removeListener(IEventListener<Execution> listener) {
+        return this.executionPublishingSystem.removeListener(listener);
     }
 }

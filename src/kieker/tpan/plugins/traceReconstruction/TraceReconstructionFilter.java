@@ -37,13 +37,13 @@ import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.consumer.executionRecordTransformation.ExecutionEventProcessingException;
-import kieker.tpan.consumer.executionRecordTransformation.IExecutionListener;
+import kieker.tpan.plugins.IEventListener;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IExecutionListener {
+public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IEventListener<Execution> {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
     /** TraceId x trace */
@@ -132,7 +132,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
         this.ignoreRecordsAfterTimestamp = ignoreRecordsAfter;
     }
 
-    public void newExecutionEvent(Execution execution) throws ExecutionEventProcessingException {
+    public void newEvent(Execution execution) throws ExecutionEventProcessingException {
         if (execution.getTin() < this.ignoreRecordsBeforeTimestamp
                 || execution.getTout() > this.ignoreRecordsAfterTimestamp) {
             return;

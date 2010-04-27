@@ -1,6 +1,4 @@
-package kieker.tpan.consumer.executionRecordTransformation;
-
-import kieker.tpan.datamodel.Execution;
+package kieker.tpan.plugins;
 
 /*
  * ==================LICENCE=========================
@@ -24,9 +22,13 @@ import kieker.tpan.datamodel.Execution;
  *
  * @author Andre van Hoorn
  */
-public interface IExecutionListener {
-    public void newExecutionEvent (Execution execution)
-            throws ExecutionEventProcessingException;
+public class EventProcessingException extends Exception {
+    private static final long serialVersionUID = 345L;
+    public EventProcessingException (String msg){
+        super(msg);
+    }
 
-    public void terminate(final boolean error);
+    public EventProcessingException (String msg, Throwable t){
+        super(msg, t);
+    }
 }
