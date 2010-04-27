@@ -969,7 +969,7 @@ public class TraceAnalysisTool {
                 null, // selectedTraces, // null means all
                 ignoreRecordsBeforeTimestamp, // default Long.MIN
                 ignoreRecordsAfterTimestamp); // default Long.MAX
-        uniqueMtReconstrFilter.addMessageTraceListener(messageTraceListener.getJfxUniqueTr()); // i know that its dirty
+        uniqueMtReconstrFilter.getMessageTraceEventProviderPort().addListener(messageTraceListener.getJfxUniqueTr()); // i know that its dirty; i (andre) like it because it's basically a port
 
 
         ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);

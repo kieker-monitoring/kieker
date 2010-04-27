@@ -116,8 +116,6 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessa
                 });
     }
 
-    public abstract void newTrace(MessageTrace t);
-
     @Override
     public void printStatusMessage() {
         super.printStatusMessage();

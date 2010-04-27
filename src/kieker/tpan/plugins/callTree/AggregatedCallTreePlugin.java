@@ -55,7 +55,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
                 });
     }
 
-    public void newTrace(final MessageTrace t) throws TraceProcessingException {
+    public void newEvent(MessageTrace t) {
         try {
             addTraceToTree(root, t, true); // aggregated
             this.reportSuccess(t.getTraceId());

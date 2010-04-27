@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Map.Entry;
 import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.ExecutionContainer;
+import kieker.tpan.plugins.EventProcessingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.Message;
@@ -145,7 +146,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ps.println(strBuild.toString());
     }
 
-    public void newTrace(MessageTrace t) {
+    public void newEvent(MessageTrace t) throws EventProcessingException {
         for (Message m : t.getSequenceAsVector()) {
             if (m instanceof SynchronousReplyMessage) {
                 continue;

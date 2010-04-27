@@ -193,7 +193,7 @@
             <include name="kieker/tpmon/annotation/**"/>
             <include name="kieker/tpmon/core/**"/>
             <include name="kieker/tpmon/writer/**"/>
-            <include name="kieker/tpmon/probe/IKiekerMonitoringProbe.java"/>
+            <include name="kieker/tpmon/probe/IMonitoringProbe.java"/>
         </javac>
         <copy file="${tpmon.properties.example}" tofile="${build.tpmon.ctrl.dir}/META-INF/tpmon.properties.default"/>
         <!-- We want to include the sources in this jar -->

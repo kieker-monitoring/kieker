@@ -72,7 +72,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ps.println(strBuild.toString());
     }
 
-    public void newTrace(MessageTrace t) {
+    public void newEvent(MessageTrace t) {
         for (Message m : t.getSequenceAsVector()) {
             if (m instanceof SynchronousReplyMessage) {
                 continue;

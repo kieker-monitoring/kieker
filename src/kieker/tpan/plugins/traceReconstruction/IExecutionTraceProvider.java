@@ -25,6 +25,6 @@ import kieker.tpan.plugins.IEventProvider;
  *
  * @author Andre van Hoorn
  */
-public interface IExecutionTraceEventProvider extends IEventProvider<ExecutionTrace> {
+public interface IExecutionTraceProvider extends IEventProvider<ExecutionTrace> {
 
 }

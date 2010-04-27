@@ -190,7 +190,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
         }
     }
 
-    public void newTrace(final MessageTrace t) throws TraceProcessingException {
+    public void newEvent(MessageTrace t) {
         try {
             addTraceToTree(root, t, this.aggregated);
             this.reportSuccess(t.getTraceId());

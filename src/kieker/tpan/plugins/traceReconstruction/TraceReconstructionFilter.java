@@ -103,8 +103,8 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
             new EventPublishSubscribeConnector<InvalidExecutionTrace>(true); // do not fail fast
     private final TreeSet<Long> selectedTraces;
     private final Execution rootExecution;
-    private final IMessageTraceEventProvider messageTraceEventProviderPort =
-            new IMessageTraceEventProvider() {
+    private final IMessageTraceProvider messageTraceEventProviderPort =
+            new IMessageTraceProvider() {
 
                 public void addListener(IEventListener<MessageTrace> listener) {
                     messageTracePublishingSystem.addListener(listener);
@@ -115,11 +115,11 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                 }
             };
 
-    public IMessageTraceEventProvider getMessageTraceEventProviderPort() {
+    public IMessageTraceProvider getMessageTraceEventProviderPort() {
         return this.messageTraceEventProviderPort;
     }
-    private final IExecutionTraceEventProvider executionTraceEventProviderPort =
-            new IExecutionTraceEventProvider() {
+    private final IExecutionTraceProvider executionTraceEventProviderPort =
+            new IExecutionTraceProvider() {
 
                 public void addListener(IEventListener<ExecutionTrace> listener) {
                     executionTracePublishingSystem.addListener(listener);
@@ -130,11 +130,11 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                 }
             };
 
-    public IExecutionTraceEventProvider getExecutionTraceEventProviderPort() {
+    public IExecutionTraceProvider getExecutionTraceEventProviderPort() {
         return this.executionTraceEventProviderPort;
     }
-    private final IInvalidExecutionTraceEventProvider invalidExecutionTraceEventPort =
-            new IInvalidExecutionTraceEventProvider() {
+    private final IInvalidExecutionTraceProvider invalidExecutionTraceEventPort =
+            new IInvalidExecutionTraceProvider() {
 
                 public void addListener(IEventListener<InvalidExecutionTrace> listener) {
                     invalidExecutionTracePublishingSystem.addListener(listener);
@@ -145,7 +145,7 @@ public class TraceReconstructionFilter extends AbstractTpanTraceProcessingCompon
                 }
             };
 
-    public IInvalidExecutionTraceEventProvider getInvalidExecutionTraceEventPort() {
+    public IInvalidExecutionTraceProvider getInvalidExecutionTraceEventPort() {
         return this.invalidExecutionTraceEventPort;
     }
 

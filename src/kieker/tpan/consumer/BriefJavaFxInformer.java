@@ -10,9 +10,9 @@ import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.plugins.traceReconstruction.IExecutionTraceReceiver;
+import kieker.tpan.plugins.EventProcessingException;
+import kieker.tpan.plugins.traceReconstruction.IInvalidExecutionTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
-import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.common.record.OperationExecutionRecord;
 
 /**
@@ -60,7 +60,7 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
     IMonitoringRecordConsumer jfxRc = null;
     IMessageTraceReceiver jfxTr = null;
     IMessageTraceReceiver jfxUniqueTr = null;
-    IExecutionTraceReceiver jfxBrokenExecutionTraceReceiver = null;
+    IInvalidExecutionTraceReceiver jfxBrokenExecutionTraceReceiver = null;
 
 
     public void setUniqueTraceReceiver(IMessageTraceReceiver mtr){
@@ -71,11 +71,11 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
         return jfxUniqueTr;
     }
 
-    public IExecutionTraceReceiver getJfxBrokenExecutionTraceReceiver() {
+    public IInvalidExecutionTraceReceiver getJfxBrokenExecutionTraceReceiver() {
         return jfxBrokenExecutionTraceReceiver;
     }
 
-    public void setJfxBrokenExecutionTraceReceiver(IExecutionTraceReceiver jfxBrokenExecutionTraceReceiver) {
+    public void setJfxBrokenExecutionTraceReceiver(IInvalidExecutionTraceReceiver jfxBrokenExecutionTraceReceiver) {
         this.jfxBrokenExecutionTraceReceiver = jfxBrokenExecutionTraceReceiver;
     }
 
@@ -93,8 +93,8 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
         // nothing to do
     }
 
-    public void newTrace(MessageTrace t) throws TraceProcessingException {
+    public void newEvent(MessageTrace mt) throws EventProcessingException {
         //System.out.println("BJFX new Traces"+t.getTraceId());
-        jfxTr.newTrace(t);
+        jfxTr.newEvent(mt);
     }
 }

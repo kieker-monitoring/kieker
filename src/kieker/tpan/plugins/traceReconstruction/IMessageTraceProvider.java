@@ -18,13 +18,13 @@ package kieker.tpan.plugins.traceReconstruction;
  * ==================================================
  */
 
-import kieker.tpan.datamodel.InvalidExecutionTrace;
+import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.plugins.IEventProvider;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public interface IInvalidExecutionTraceEventProvider extends IEventProvider<InvalidExecutionTrace> {
+public interface IMessageTraceProvider extends IEventProvider<MessageTrace> {
 
 }
