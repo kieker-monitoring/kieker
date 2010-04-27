@@ -29,7 +29,7 @@ public class ExecutionContainer {
     private final int id;
     private final String name;
     private final ExecutionContainer parent;
-    private Collection<ExecutionContainer> childContainers = new ArrayList<ExecutionContainer>();
+    private final Collection<ExecutionContainer> childContainers = new ArrayList<ExecutionContainer>();
 
     private ExecutionContainer(){
         this.id = -1;

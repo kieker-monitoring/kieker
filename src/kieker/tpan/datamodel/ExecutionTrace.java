@@ -31,11 +31,10 @@ import org.apache.commons.logging.LogFactory;
  */
 /** @author Andre van Hoorn
  */
-public class ExecutionTrace {
+public class ExecutionTrace extends Trace {
 
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
-    private long traceId = -1; // convenience field. All executions have this traceId.
-    private SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
+    private final SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
 
         public int compare(Execution e1, Execution e2) {
             if (e1.getTraceId() == e2.getTraceId()) {
@@ -61,20 +60,13 @@ public class ExecutionTrace {
     private long maxTout = Long.MIN_VALUE;
     private int maxStackDepth = -1;
 
-    private ExecutionTrace() {
-    }
-
-    public ExecutionTrace(long traceId) {
-        this.traceId = traceId;
-    }
-
-    public long getTraceId() {
-        return traceId;
+    public ExecutionTrace(final long traceId) {
+        super(traceId);
     }
 
     public void add(Execution execution) throws InvalidTraceException {
-        if (this.traceId != execution.getTraceId()) {
-            throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.traceId + ")");
+        if (this.getTraceId() != execution.getTraceId()) {
+            throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
         }
         if (execution.getTin() < this.minTin) {
             this.minTin = execution.getTin();
@@ -152,7 +144,7 @@ public class ExecutionTrace {
             }
             prevE = curE; // prepair next loop
         }
-        return new MessageTrace(this.traceId, mSeq);
+        return new MessageTrace(this.getTraceId(), mSeq);
     }
 
     public final SortedSet<Execution> getTraceAsSortedSet() {
@@ -165,7 +157,7 @@ public class ExecutionTrace {
 
     @Override
     public String toString() {
-        StringBuilder strBuild = new StringBuilder("TraceId " + this.traceId).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
+        StringBuilder strBuild = new StringBuilder("TraceId " + this.getTraceId()).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
         for (Execution e : this.set) {
             strBuild.append("<");
             strBuild.append(e.toString()).append(">\n");

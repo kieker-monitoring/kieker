@@ -19,7 +19,7 @@ package kieker.tpan.datamodel;
  */
 /**
  *
- * @author avanhoorn
+ * @author Andre van Hoorn
  */
 public abstract class Message {
 

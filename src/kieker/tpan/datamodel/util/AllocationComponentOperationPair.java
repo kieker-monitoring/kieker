@@ -1,8 +1,6 @@
 package kieker.tpan.datamodel.util;
 
 import kieker.tpan.datamodel.AllocationComponent;
-import kieker.tpan.datamodel.AllocationComponent;
-import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Operation;
 
 /*

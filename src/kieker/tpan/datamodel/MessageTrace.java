@@ -23,14 +23,12 @@ import java.util.Vector;
 
 /** @author Andre van Hoorn
  */
-public class MessageTrace {
+public class MessageTrace extends Trace {
 
-    private long traceId = -1;
+    private final Vector<Message> set;
 
-    private Vector<Message> set = null;
-
-    public MessageTrace(long traceId, Vector<Message> seq) {
-        this.traceId = traceId;
+    public MessageTrace(final long traceId, final Vector<Message> seq) {
+        super(traceId);
         this.set = seq;
     }
 
@@ -41,7 +39,7 @@ public class MessageTrace {
     @Override
     public String toString() {
         StringBuilder strBuild =
-                new StringBuilder("Trace " + this.traceId + ":\n");
+                new StringBuilder("Trace " + this.getTraceId() + ":\n");
         Iterator<Message> it = set.iterator();
         while (it.hasNext()) {
             Message m = it.next();
@@ -51,9 +49,4 @@ public class MessageTrace {
         }
         return strBuild.toString();
     }
-
-    public final long getTraceId() {
-        return traceId;
-    }
-
 }
