@@ -55,9 +55,11 @@ four executions of three different \operations{} (\textit{getBook()} is called t
 \label{fig:kiekerTraceRepresentations}
 \end{figure}
 
+\subsubsection{Logging Trace Information with \KiekerTpmon{}}
+
 Kieker includes the \MonitoringRecord{} type \KiekerExecutionRecord{} which can %
 be used to write \execution{} information into the \MonitoringLog{}. %
-As shown in Figure~\ref{fig:kiekerTraceRepresentations}, a \KiekerExecutionRecord{} %
+As shown in Figure~\ref{fig:kiekerTraceRepresentations}, an \KiekerExecutionRecord{} %
 contains information about the executed \operation{}, the corresponding \component{}, 
 the hostname on which the \execution{} was performed, as well as timestamps, %
 typically with nanosecond resolution, for the start~(\textit{tin}) and end~(\textit{tout}) %
@@ -136,6 +138,13 @@ Note, that while an \eoiLong{} is unique within a \trace{}, an \essLong{} %
 value can, and usually does, occur more than once. %
 % Listing~\ref{lst:ExecutionRecordMonitoringLog} shows the filesystem representation %
 % of the \MonitoringLog{} for the example \trace{} of Figure~\ref{fig:exampleTraceTerminology}. %
+
+\subsubsection{Trace Reconstruction with \KiekerTpan{}}
+
+\begin{figure}\centering
+\includegraphics[scale=0.65]{figures/model/kieker_systemmodel-crop}
+\end{figure}
+
 
 In \KiekerTpan{}, two equivalent representations of \traces{} are used internally: %
 \executionTraces{} and \messageTraces{}. %
