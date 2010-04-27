@@ -27,7 +27,7 @@ import java.util.Stack;
 import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Operation;
@@ -66,7 +66,7 @@ public class CallTreePlugin extends AbstractTpanMessageTraceProcessingComponent 
             return "$";
         }
 
-        AllocationComponentInstance component = node.getAllocationComponent();
+        AllocationComponent component = node.getAllocationComponent();
         Operation operation = node.getOperation();
         String resourceContainerName = component.getExecutionContainer().getName();
         String assemblyComponentName = component.getAssemblyComponent().getName();

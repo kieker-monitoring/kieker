@@ -23,8 +23,8 @@ import java.util.StringTokenizer;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
-import kieker.tpan.datamodel.AllocationComponentInstance;
-import kieker.tpan.datamodel.AssemblyComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
+import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.ComponentType;
 import kieker.tpan.datamodel.Execution;
 import kieker.tpan.datamodel.ExecutionContainer;
@@ -106,9 +106,9 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer {
                 new StringBuilder(assemblyComponentName).append(".").append(execRec.opname).toString();
         String operationSignatureStr = execRec.opname;
 
-        AllocationComponentInstance allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);
+        AllocationComponent allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);
         if (allocInst == null) { /* Allocation component instance doesn't exist */
-            AssemblyComponentInstance assemblyComponent =
+            AssemblyComponent assemblyComponent =
                     this.systemFactory.getAssemblyFactory().getAssemblyComponentInstanceByFactoryIdentifier(assemblyComponentName);
             if (assemblyComponent == null) { // assembly instance doesn't exist
                 ComponentType componentType =

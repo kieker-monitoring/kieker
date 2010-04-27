@@ -2,7 +2,7 @@ package kieker.tpan.datamodel.factories;
 
 import java.util.Collection;
 import java.util.Hashtable;
-import kieker.tpan.datamodel.AssemblyComponentInstance;
+import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.ComponentType;
 
 /*
@@ -28,16 +28,16 @@ import kieker.tpan.datamodel.ComponentType;
  * @author Andre van Hoorn
  */
 public class AssemblyFactory extends AbstractSystemSubFactory{
-    private final Hashtable<String, AssemblyComponentInstance>
+    private final Hashtable<String, AssemblyComponent>
             assemblyComponentInstancesByName =
-            new Hashtable<String, AssemblyComponentInstance>();
-    private final Hashtable<Integer, AssemblyComponentInstance>
-            assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponentInstance>();
+            new Hashtable<String, AssemblyComponent>();
+    private final Hashtable<Integer, AssemblyComponent>
+            assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>();
 
-    public final AssemblyComponentInstance rootAssemblyComponent;
+    public final AssemblyComponent rootAssemblyComponent;
 
     public AssemblyFactory(final SystemEntityFactory systemFactory,
-            final AssemblyComponentInstance rootAssemblyComponent){
+            final AssemblyComponent rootAssemblyComponent){
         super(systemFactory);
         this.rootAssemblyComponent = rootAssemblyComponent;
     }
@@ -45,25 +45,25 @@ public class AssemblyFactory extends AbstractSystemSubFactory{
     /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final AssemblyComponentInstance getAssemblyComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
+    public final AssemblyComponent getAssemblyComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
         return this.assemblyComponentInstancesByName.get(factoryIdentifier);
     }
 
-    public final AssemblyComponentInstance createAndRegisterAssemblyComponentInstance(
+    public final AssemblyComponent createAndRegisterAssemblyComponentInstance(
             final String factoryIdentifier,
             final ComponentType componentType){
-            AssemblyComponentInstance newInst;
+            AssemblyComponent newInst;
             if (this.assemblyComponentInstancesByName.containsKey(factoryIdentifier)){
                 throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
-            newInst = new AssemblyComponentInstance(id, "@"+id, componentType);
+            newInst = new AssemblyComponent(id, "@"+id, componentType);
             this.assemblyComponentInstancesById.put(id, newInst);
             this.assemblyComponentInstancesByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
-    public final Collection<AssemblyComponentInstance> getAssemblyComponentInstances(){
+    public final Collection<AssemblyComponent> getAssemblyComponentInstances(){
         return this.assemblyComponentInstancesById.values();
     }
 }

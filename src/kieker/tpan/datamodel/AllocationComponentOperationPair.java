@@ -1,6 +1,6 @@
 package kieker.tpan.datamodel;
 
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.Operation;
 
 /*
@@ -29,7 +29,7 @@ public class AllocationComponentOperationPair {
     private final int id;
     private final Operation operation;
 
-    private final AllocationComponentInstance allocationComponent;
+    private final AllocationComponent allocationComponent;
 
     private AllocationComponentOperationPair (){
         this.id = -1;
@@ -38,7 +38,7 @@ public class AllocationComponentOperationPair {
     }
 
     public AllocationComponentOperationPair (
-            final int id, final Operation operation, final AllocationComponentInstance allocationComponent){
+            final int id, final Operation operation, final AllocationComponent allocationComponent){
         this.id = id;
         this.operation = operation;
         this.allocationComponent = allocationComponent;
@@ -48,7 +48,7 @@ public class AllocationComponentOperationPair {
         return this.id;
     }
 
-    public final AllocationComponentInstance getAllocationComponent() {
+    public final AllocationComponent getAllocationComponent() {
         return this.allocationComponent;
     }
 

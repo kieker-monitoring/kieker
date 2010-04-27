@@ -4,22 +4,22 @@ package kieker.tpan.datamodel;
  *
  * @author Andre van Hoorn
  */
-public class AllocationComponentInstance {
+public class AllocationComponent {
 
 
     private final int id;
-    private final AssemblyComponentInstance assemblyComponent;
+    private final AssemblyComponent assemblyComponent;
     private final ExecutionContainer executionContainer;
 
-    private AllocationComponentInstance(){
+    private AllocationComponent(){
         this.id = -1;
         this.assemblyComponent = null;
         this.executionContainer = null;
     }
 
-    public AllocationComponentInstance(
+    public AllocationComponent(
             final int id,
-            final AssemblyComponentInstance assemblyComponent,
+            final AssemblyComponent assemblyComponent,
             final ExecutionContainer executionContainer){
         this.id = id;
         this.assemblyComponent = assemblyComponent;
@@ -30,7 +30,7 @@ public class AllocationComponentInstance {
         return this.id;
     }
 
-    public final AssemblyComponentInstance getAssemblyComponent() {
+    public final AssemblyComponent getAssemblyComponent() {
         return this.assemblyComponent;
     }
 
@@ -53,10 +53,10 @@ public class AllocationComponentInstance {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof AllocationComponentInstance)){
+        if (!(obj instanceof AllocationComponent)){
             return false;
         }
-        AllocationComponentInstance other = (AllocationComponentInstance)obj;
+        AllocationComponent other = (AllocationComponent)obj;
         return other.id == this.id;
     }
 }

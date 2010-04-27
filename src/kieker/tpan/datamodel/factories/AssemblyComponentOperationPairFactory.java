@@ -3,7 +3,7 @@ package kieker.tpan.datamodel.factories;
 import kieker.tpan.datamodel.AssemblyComponentOperationPair;
 import java.util.Collection;
 import java.util.Hashtable;
-import kieker.tpan.datamodel.AssemblyComponentInstance;
+import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.Operation;
 
 /*
@@ -39,7 +39,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
     public AssemblyComponentOperationPairFactory(
             final SystemEntityFactory systemFactory){
         super(systemFactory);
-        AssemblyComponentInstance rootAssembly =
+        AssemblyComponent rootAssembly =
                 systemFactory.getAssemblyFactory().rootAssemblyComponent;
         Operation rootOperation =
                 systemFactory.getOperationFactory().rootOperation;
@@ -48,7 +48,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
 
     /** Returns a corresponding pair instance (existing or newly created) */
     public final AssemblyComponentOperationPair getPairInstanceByPair(
-            final AssemblyComponentInstance AssemblyComponent,
+            final AssemblyComponent AssemblyComponent,
             final Operation operation){
         AssemblyComponentOperationPair inst =
                 this.getPairByFactoryName(AssemblyComponent.getId()+"-"+operation.getId());
@@ -60,7 +60,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
 
     private final AssemblyComponentOperationPair createAndRegisterPair(
             final Operation operation,
-            final AssemblyComponentInstance AssemblyComponent){
+            final AssemblyComponent AssemblyComponent){
             return this.createAndRegisterPair(AssemblyComponent.getId()+"-"+operation.getId(),
                     operation, AssemblyComponent);
     }
@@ -82,7 +82,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
     private final AssemblyComponentOperationPair createAndRegisterPair(
             final String factoryIdentifier,
             final Operation operation,
-            final AssemblyComponentInstance AssemblyComponent){
+            final AssemblyComponent AssemblyComponent){
             AssemblyComponentOperationPair newInst;
             if (this.pairsByName.containsKey(factoryIdentifier)){
                 throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");

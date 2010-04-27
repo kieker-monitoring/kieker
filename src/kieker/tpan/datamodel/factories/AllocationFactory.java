@@ -2,8 +2,8 @@ package kieker.tpan.datamodel.factories;
 
 import java.util.Collection;
 import java.util.Hashtable;
-import kieker.tpan.datamodel.AllocationComponentInstance;
-import kieker.tpan.datamodel.AssemblyComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
+import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.ExecutionContainer;
 
 /*
@@ -29,16 +29,16 @@ import kieker.tpan.datamodel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class AllocationFactory extends AbstractSystemSubFactory {
-    private final Hashtable<String, AllocationComponentInstance>
+    private final Hashtable<String, AllocationComponent>
             allocationComponentInstancesByName =
-            new Hashtable<String, AllocationComponentInstance>();
-    private final Hashtable<Integer, AllocationComponentInstance>
-            allocationComponentInstancesById = new Hashtable<Integer, AllocationComponentInstance>();
+            new Hashtable<String, AllocationComponent>();
+    private final Hashtable<Integer, AllocationComponent>
+            allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>();
 
-    public final AllocationComponentInstance rootAllocationComponent;
+    public final AllocationComponent rootAllocationComponent;
 
     public AllocationFactory(final SystemEntityFactory systemFactory,
-            final AllocationComponentInstance rootAllocationComponent){
+            final AllocationComponent rootAllocationComponent){
         super(systemFactory);
         this.rootAllocationComponent = rootAllocationComponent;
     }
@@ -46,27 +46,27 @@ public class AllocationFactory extends AbstractSystemSubFactory {
     /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final AllocationComponentInstance getAllocationComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
+    public final AllocationComponent getAllocationComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
         return this.allocationComponentInstancesByName.get(factoryIdentifier);
     }
 
-    public final AllocationComponentInstance createAndRegisterAllocationComponentInstance(
+    public final AllocationComponent createAndRegisterAllocationComponentInstance(
             final String factoryIdentifier,
-            final AssemblyComponentInstance assemblyComponentInstance,
+            final AssemblyComponent assemblyComponentInstance,
             final ExecutionContainer executionContainer){
-            AllocationComponentInstance newInst;
+            AllocationComponent newInst;
             if (this.allocationComponentInstancesByName.containsKey(factoryIdentifier)){
                 throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
-            newInst = new AllocationComponentInstance(id,
+            newInst = new AllocationComponent(id,
                     assemblyComponentInstance, executionContainer);
             this.allocationComponentInstancesById.put(id, newInst);
             this.allocationComponentInstancesByName.put(factoryIdentifier, newInst);
             return newInst;
     }
 
-    public final Collection<AllocationComponentInstance> getAllocationComponentInstances(){
+    public final Collection<AllocationComponent> getAllocationComponentInstances(){
         return this.allocationComponentInstancesById.values();
     }
 }

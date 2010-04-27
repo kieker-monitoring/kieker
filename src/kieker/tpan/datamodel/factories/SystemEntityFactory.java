@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
-import kieker.tpan.datamodel.AllocationComponentInstance;
-import kieker.tpan.datamodel.AssemblyComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
+import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.ComponentType;
 import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Operation;
@@ -44,14 +44,14 @@ public class SystemEntityFactory {
         ComponentType rootComponentType =
                 new ComponentType(AbstractSystemSubFactory.ROOT_ELEMENT_ID, "$");
         this.typeRepositoryFactory = new TypeRepositoryFactory(this, rootComponentType);
-        AssemblyComponentInstance rootAssemblyComponentInstance =
-                new AssemblyComponentInstance(AbstractSystemSubFactory.ROOT_ELEMENT_ID, "$", rootComponentType);
+        AssemblyComponent rootAssemblyComponentInstance =
+                new AssemblyComponent(AbstractSystemSubFactory.ROOT_ELEMENT_ID, "$", rootComponentType);
         this.assemblyFactory = new AssemblyFactory(this, rootAssemblyComponentInstance);
         ExecutionContainer rootExecutionContainer =
                 new ExecutionContainer(AbstractSystemSubFactory.ROOT_ELEMENT_ID, null, "$");
         this.executionEnvironmentFactory = new ExecutionEnvironmentFactory(this, rootExecutionContainer);
-        AllocationComponentInstance rootAllocation =
-                new AllocationComponentInstance(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, rootExecutionContainer);
+        AllocationComponent rootAllocation =
+                new AllocationComponent(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, rootExecutionContainer);
         this.allocationFactory = new AllocationFactory(this, rootAllocation);
         Signature rootSignature = new Signature("$", "<>", new String[]{});
         Operation rootOperation = new Operation(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
@@ -179,8 +179,8 @@ public class SystemEntityFactory {
         printCloseHtmlTable(ps);
         ps.println("<h1>Assembled Components</h1>");
         printOpenHtmlTable(ps, new String[]{"ID", "name", "component type"});
-        Collection<AssemblyComponentInstance> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
-        for (AssemblyComponentInstance ac : assemblyComponents) {
+        Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
+        for (AssemblyComponent ac : assemblyComponents) {
             String[] cells = new String[]{
                 htmlEntityLabel(ac.getId(), ac.getId() + "", EntityType.ASSEMBLY_COMPONENT),
                 ac.getName(),
@@ -201,8 +201,8 @@ public class SystemEntityFactory {
         printCloseHtmlTable(ps);
         ps.println("<h1>Allocated Components</h1>");
         printOpenHtmlTable(ps, new String[]{"ID", "assembly component", "execution container"});
-        Collection<AllocationComponentInstance> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
-        for (AllocationComponentInstance allocationComponent : allocationComponentInstances) {
+        Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
+        for (AllocationComponent allocationComponent : allocationComponentInstances) {
             String[] cells = new String[]{
                 htmlEntityLabel(allocationComponent.getId(), allocationComponent.getId() + "", EntityType.ALLOCATION_COMPONENT),
                 htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(), EntityType.ALLOCATION_COMPONENT),

@@ -2,7 +2,7 @@ package kieker.tpan.datamodel.factories;
 
 import java.util.Collection;
 import java.util.Hashtable;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.AllocationComponentOperationPair;
 
@@ -38,7 +38,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
 
     public AllocationComponentOperationPairFactory(final SystemEntityFactory systemFactory){
         super(systemFactory);
-        AllocationComponentInstance rootAllocation =
+        AllocationComponent rootAllocation =
                 systemFactory.getAllocationFactory().rootAllocationComponent;
         Operation rootOperation =
                 systemFactory.getOperationFactory().rootOperation;
@@ -47,7 +47,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
 
     /** Returns a corresponding pair instance (existing or newly created) */
     public final AllocationComponentOperationPair getPairInstanceByPair(
-            final AllocationComponentInstance allocationComponent,
+            final AllocationComponent allocationComponent,
             final Operation operation){
         AllocationComponentOperationPair inst = 
                 this.getPairByFactoryName(allocationComponent.getId()+"-"+operation.getId());
@@ -59,7 +59,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
 
     private final AllocationComponentOperationPair createAndRegisterPair(
             final Operation operation,
-            final AllocationComponentInstance allocationComponent){
+            final AllocationComponent allocationComponent){
             return this.createAndRegisterPair(allocationComponent.getId()+"-"+operation.getId(),
                     operation, allocationComponent);
     }
@@ -81,7 +81,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
     private final AllocationComponentOperationPair createAndRegisterPair(
             final String factoryIdentifier,
             final Operation operation,
-            final AllocationComponentInstance allocationComponent){
+            final AllocationComponent allocationComponent){
             AllocationComponentOperationPair newInst;
             if (this.pairsByName.containsKey(factoryIdentifier)){
                 throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");

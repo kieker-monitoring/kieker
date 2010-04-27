@@ -17,7 +17,7 @@ package kieker.tpan.plugins.callTree;
  * limitations under the License.
  * ==================================================
  */
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.AllocationComponentOperationPair;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.SynchronousCallMessage;
@@ -58,7 +58,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 
     @Override
     public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(SynchronousCallMessage callMsg) {
-        AllocationComponentInstance allocationComponent =
+        AllocationComponent allocationComponent =
                 callMsg.getReceivingExecution().getAllocationComponent();
         Operation op = callMsg.getReceivingExecution().getOperation();
         AllocationComponentOperationPair destination = // will never be null!

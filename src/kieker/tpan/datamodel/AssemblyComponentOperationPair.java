@@ -26,7 +26,7 @@ public class AssemblyComponentOperationPair {
     private final int id;
     private final Operation operation;
 
-    private final AssemblyComponentInstance assemblyComponent;
+    private final AssemblyComponent assemblyComponent;
 
     private AssemblyComponentOperationPair (){
         this.id = -1;
@@ -35,7 +35,7 @@ public class AssemblyComponentOperationPair {
     }
 
     public AssemblyComponentOperationPair (
-            final int id, final Operation operation, final AssemblyComponentInstance AssemblyComponent){
+            final int id, final Operation operation, final AssemblyComponent AssemblyComponent){
         this.id = id;
         this.operation = operation;
         this.assemblyComponent = AssemblyComponent;
@@ -45,7 +45,7 @@ public class AssemblyComponentOperationPair {
         return this.id;
     }
 
-    public final AssemblyComponentInstance getAssemblyComponent() {
+    public final AssemblyComponent getAssemblyComponent() {
         return this.assemblyComponent;
     }
 

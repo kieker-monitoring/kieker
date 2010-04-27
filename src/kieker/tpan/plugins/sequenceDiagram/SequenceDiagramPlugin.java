@@ -22,7 +22,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.TreeSet;
 import java.util.Vector;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
@@ -45,7 +45,7 @@ public class SequenceDiagramPlugin {
     }
 
     private static String componentLabel(//final SystemEntityFactory systemEntityFactory,
-            final AllocationComponentInstance component, final boolean shortLabels) {
+            final AllocationComponent component, final boolean shortLabels) {
 //        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
 //            return "$";
 //        }
@@ -79,14 +79,14 @@ public class SequenceDiagramPlugin {
 
         TreeSet<Integer> plottedComponentIds = new TreeSet<Integer>();
 
-        final AllocationComponentInstance rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
+        final AllocationComponent rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
         final String rootDotId = "O" + rootAllocationComponent.getId();
         ps.println("actor(O" + rootAllocationComponent.getId()
                 + ",\"\");");
         plottedComponentIds.add(rootAllocationComponent.getId());
         for (Message me : messages) {
-            AllocationComponentInstance senderComponent = me.getSendingExecution().getAllocationComponent();
-            AllocationComponentInstance receiverComponent = me.getReceivingExecution().getAllocationComponent();
+            AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
+            AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
             if (!plottedComponentIds.contains(senderComponent.getId())) {
                 ps.println("object(O" + senderComponent.getId()
                         + ",\"" + senderComponent.getExecutionContainer().getName() +"::\",\"" + componentLabel(senderComponent, shortLabels) + "\");");
@@ -104,8 +104,8 @@ public class SequenceDiagramPlugin {
         //ps.println("step();");
         boolean first = true;
         for (Message me : messages) {
-            AllocationComponentInstance senderComponent = me.getSendingExecution().getAllocationComponent();
-            AllocationComponentInstance receiverComponent = me.getReceivingExecution().getAllocationComponent();
+            AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
+            AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
             String senderDotId = "O" + senderComponent.getId();
             String receiverDotId = "O" + receiverComponent.getId();
             if (me instanceof SynchronousCallMessage) {

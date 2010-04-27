@@ -19,7 +19,7 @@ package kieker.tpan.plugins.dependencyGraph;
  */
 import java.io.PrintStream;
 import java.util.Collection;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.ExecutionContainer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -77,8 +77,8 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             if (m instanceof SynchronousReplyMessage) {
                 continue;
             }
-            AllocationComponentInstance senderComponent = m.getSendingExecution().getAllocationComponent();
-            AllocationComponentInstance receiverComponent = m.getReceivingExecution().getAllocationComponent();
+            AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+            AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
             ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
             ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
             DependencyGraphNode<ExecutionContainer> senderNode = this.dependencyGraph.getNode(senderContainer.getId());

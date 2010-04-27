@@ -1,6 +1,6 @@
 package kieker.tpan.plugins.callTree;
 
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.Operation;
 
 /**
@@ -8,12 +8,12 @@ import kieker.tpan.datamodel.Operation;
  * @author Andre van Hoorn
  */
 public class CallTreeOperationHashKey {
-    private final AllocationComponentInstance allocationComponent;
+    private final AllocationComponent allocationComponent;
     private final Operation operation;
 
     private final int hashCode; // the final is computed once and never changes
 
-    public CallTreeOperationHashKey(final AllocationComponentInstance allocationComponent,
+    public CallTreeOperationHashKey(final AllocationComponent allocationComponent,
             final Operation operation) {
         this.allocationComponent = allocationComponent;
         this.operation = operation;
@@ -37,7 +37,7 @@ public class CallTreeOperationHashKey {
                 && this.operation.equals(k.operation);
     }
 
-    public final AllocationComponentInstance getAllocationComponent() {
+    public final AllocationComponent getAllocationComponent() {
         return this.allocationComponent;
     }
 

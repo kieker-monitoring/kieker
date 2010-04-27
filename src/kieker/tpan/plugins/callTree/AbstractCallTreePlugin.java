@@ -28,8 +28,8 @@ import java.util.Stack;
 import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.AllocationComponentInstance;
-import kieker.tpan.datamodel.AssemblyComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
+import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Operation;
@@ -57,7 +57,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
     private static final String assemblyComponentOperationPairNodeLabel(
             final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
        AssemblyComponentOperationPair p = node.getEntity();
-        AssemblyComponentInstance component = p.getAssemblyComponent();
+        AssemblyComponent component = p.getAssemblyComponent();
         Operation operation = p.getOperation();
         String assemblyComponentName = component.getName();
         String componentTypePackagePrefx = component.getType().getPackageName();
@@ -77,7 +77,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
     private static final String allocationComponentOperationPairNodeLabel(
             final AbstractCallTreeNode<AllocationComponentOperationPair> node, final boolean shortLabels) {
         AllocationComponentOperationPair p = node.getEntity();
-        AllocationComponentInstance component = p.getAllocationComponent();
+        AllocationComponent component = p.getAllocationComponent();
         Operation operation = p.getOperation();
         String resourceContainerName = component.getExecutionContainer().getName();
         String assemblyComponentName = component.getAssemblyComponent().getName();

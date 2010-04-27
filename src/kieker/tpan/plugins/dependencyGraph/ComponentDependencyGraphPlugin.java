@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map.Entry;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.ExecutionContainer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,7 +37,7 @@ import kieker.tpan.plugins.util.dot.DotFactory;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugin<AllocationComponentInstance> {
+public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugin<AllocationComponent> {
 
     private static final Log log = LogFactory.getLog(ComponentDependencyGraphPlugin.class);
     private final String CONTAINER_NODE_ID_PREFIX = "container";
@@ -45,14 +45,14 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     public ComponentDependencyGraphPlugin(final String name,
             final SystemEntityFactory systemEntityFactory) {
         super(name, systemEntityFactory,
-                new DependencyGraph<AllocationComponentInstance>(
+                new DependencyGraph<AllocationComponent>(
                 systemEntityFactory.getAllocationFactory().rootAllocationComponent.getId(),
                 systemEntityFactory.getAllocationFactory().rootAllocationComponent));
     }
 
-    private String componentNodeLabel(final DependencyGraphNode<AllocationComponentInstance> node,
+    private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node,
             final boolean shortLabels) {
-        AllocationComponentInstance component = node.getEntity();
+        AllocationComponent component = node.getEntity();
         if (component == super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent) {
             return "$";
         }
@@ -73,20 +73,20 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         return strBuild.toString();
     }
 
-    protected void dotEdges(Collection<DependencyGraphNode<AllocationComponentInstance>> nodes,
+    protected void dotEdges(Collection<DependencyGraphNode<AllocationComponent>> nodes,
             PrintStream ps, final boolean shortLabels) {
 
         /* Execution container ID x DependencyGraphNode  */
-        Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentInstance>>> component2containerMapping =
-                new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentInstance>>>();
+        Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping =
+                new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>>();
 
-        for (DependencyGraphNode<AllocationComponentInstance> node : nodes) {
+        for (DependencyGraphNode<AllocationComponent> node : nodes) {
             int containerId = node.getEntity().getExecutionContainer().getId();
-            Collection<DependencyGraphNode<AllocationComponentInstance>> containedComponents =
+            Collection<DependencyGraphNode<AllocationComponent>> containedComponents =
                     component2containerMapping.get(containerId);
             if (containedComponents == null) {
                 containedComponents =
-                        new ArrayList<DependencyGraphNode<AllocationComponentInstance>>();
+                        new ArrayList<DependencyGraphNode<AllocationComponent>>();
                 component2containerMapping.put(containerId, containedComponents);
             }
             containedComponents.add(node);
@@ -94,9 +94,9 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 
         ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
         int rootContainerId = rootContainer.getId();
-        AllocationComponentInstance rootComponent = this.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent;
+        AllocationComponent rootComponent = this.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent;
         StringBuilder strBuild = new StringBuilder();
-        for (Entry<Integer, Collection<DependencyGraphNode<AllocationComponentInstance>>> entry : component2containerMapping.entrySet()) {
+        for (Entry<Integer, Collection<DependencyGraphNode<AllocationComponent>>> entry : component2containerMapping.entrySet()) {
             int curContainerId = entry.getKey();
             ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getExecutionContainerByContainerId(curContainerId);
             if (curContainerId == rootContainerId) {
@@ -124,7 +124,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null));  // misc
                 // dot code for contained components
-                for (DependencyGraphNode<AllocationComponentInstance> node : entry.getValue()) {
+                for (DependencyGraphNode<AllocationComponent> node : entry.getValue()) {
                     strBuild.append(DotFactory.createNode("",
                             getNodeId(node),
                             componentNodeLabel(node, shortLabels),
@@ -150,16 +150,16 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             if (m instanceof SynchronousReplyMessage) {
                 continue;
             }
-            AllocationComponentInstance senderComponent = m.getSendingExecution().getAllocationComponent();
-            AllocationComponentInstance receiverComponent = m.getReceivingExecution().getAllocationComponent();
-            DependencyGraphNode<AllocationComponentInstance> senderNode = this.dependencyGraph.getNode(senderComponent.getId());
-            DependencyGraphNode<AllocationComponentInstance> receiverNode = this.dependencyGraph.getNode(receiverComponent.getId());
+            AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+            AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+            DependencyGraphNode<AllocationComponent> senderNode = this.dependencyGraph.getNode(senderComponent.getId());
+            DependencyGraphNode<AllocationComponent> receiverNode = this.dependencyGraph.getNode(receiverComponent.getId());
             if (senderNode == null) {
-                senderNode = new DependencyGraphNode<AllocationComponentInstance>(senderComponent.getId(), senderComponent);
+                senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent);
                 this.dependencyGraph.addNode(senderNode.getId(), senderNode);
             }
             if (receiverNode == null) {
-                receiverNode = new DependencyGraphNode<AllocationComponentInstance>(receiverComponent.getId(), receiverComponent);
+                receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent);
                 this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
             }
             senderNode.addOutgoingDependency(receiverNode);

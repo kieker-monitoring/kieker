@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map.Entry;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.ExecutionContainer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -62,7 +62,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         return String.format("%s\\n%s", STEREOTYPE_EXECUTION_CONTAINER, container.getName());
     }
 
-    private String componentNodeLabel(final AllocationComponentInstance component,
+    private String componentNodeLabel(final AllocationComponent component,
             final boolean shortLabels) {
         //String resourceContainerName = component.getExecutionContainer().getName();
         String assemblyComponentName = component.getAssemblyComponent().getName();
@@ -84,14 +84,14 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             PrintStream ps, final boolean shortLabels) {
 
         /* Execution container ID x contained components  */
-        Hashtable<Integer, Collection<AllocationComponentInstance>> containerId2componentMapping =
-                new Hashtable<Integer, Collection<AllocationComponentInstance>>();
+        Hashtable<Integer, Collection<AllocationComponent>> containerId2componentMapping =
+                new Hashtable<Integer, Collection<AllocationComponent>>();
         Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping =
                 new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>>();
 
         // Derive container / component / operation hieraŕchy
         for (DependencyGraphNode<AllocationComponentOperationPair> pairNode : nodes) {
-            AllocationComponentInstance curComponent = pairNode.getEntity().getAllocationComponent();
+            AllocationComponent curComponent = pairNode.getEntity().getAllocationComponent();
             ExecutionContainer curContainer = curComponent.getExecutionContainer();
             int componentId = curComponent.getId();
             int containerId = curContainer.getId();
@@ -103,10 +103,10 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                 containedPairs =
                         new ArrayList<DependencyGraphNode<AllocationComponentOperationPair>>();
                 componentId2pairMapping.put(componentId, containedPairs);
-                Collection<AllocationComponentInstance> containedComponents =
+                Collection<AllocationComponent> containedComponents =
                         containerId2componentMapping.get(containerId);
                 if (containedComponents == null) {
-                    containedComponents = new ArrayList<AllocationComponentInstance>();
+                    containedComponents = new ArrayList<AllocationComponent>();
                     containerId2componentMapping.put(containerId, containedComponents);
                 }
                 containedComponents.add(curComponent);
@@ -117,7 +117,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
         int rootContainerId = rootContainer.getId();
         StringBuilder strBuild = new StringBuilder();
-        for (Entry<Integer, Collection<AllocationComponentInstance>> containerComponentEntry : containerId2componentMapping.entrySet()) {
+        for (Entry<Integer, Collection<AllocationComponent>> containerComponentEntry : containerId2componentMapping.entrySet()) {
             int curContainerId = containerComponentEntry.getKey();
             ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getExecutionContainerByContainerId(curContainerId);
 
@@ -146,7 +146,7 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null));  // misc
                 // dot code for contained components
-                for (AllocationComponentInstance curComponent : containerComponentEntry.getValue()) {
+                for (AllocationComponent curComponent : containerComponentEntry.getValue()) {
                     int curComponentId = curComponent.getId();
                     strBuild.append(DotFactory.createCluster("",
                             COMPONENT_NODE_ID_PREFIX + curComponentId,
@@ -186,8 +186,8 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
             if (m instanceof SynchronousReplyMessage) {
                 continue;
             }
-            AllocationComponentInstance senderComponent = m.getSendingExecution().getAllocationComponent();
-            AllocationComponentInstance receiverComponent = m.getReceivingExecution().getAllocationComponent();
+            AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+            AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
             int rootOperationId = this.getSystemEntityFactory().getOperationFactory().rootOperation.getId();
             Operation senderOperation = m.getSendingExecution().getOperation();
             Operation receiverOperation = m.getReceivingExecution().getOperation();

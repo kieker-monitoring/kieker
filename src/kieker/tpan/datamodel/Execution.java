@@ -24,7 +24,7 @@ package kieker.tpan.datamodel;
  */
 public class Execution {
     private final Operation operation;
-    private final AllocationComponentInstance allocationComponent;
+    private final AllocationComponent allocationComponent;
     private long traceId;
     private String sessionId;
     private final int eoi;
@@ -43,7 +43,9 @@ public class Execution {
         this.tout = -1;
     }
 
-    public Execution(Operation op, AllocationComponentInstance allocationComponent, long traceId, String sessionId, int eoi, int ess, long tin, long tout) {
+    public Execution(final Operation op, final AllocationComponent allocationComponent,
+            final long traceId, final String sessionId, final int eoi, final int ess,
+            final long tin, final long tout) {
         this.operation = op;
         this.allocationComponent = allocationComponent;
         this.traceId = traceId;
@@ -54,7 +56,7 @@ public class Execution {
         this.tout = tout;
     }
 
-    public final AllocationComponentInstance getAllocationComponent() {
+    public final AllocationComponent getAllocationComponent() {
         return allocationComponent;
     }
 

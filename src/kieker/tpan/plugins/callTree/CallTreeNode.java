@@ -3,7 +3,7 @@ package kieker.tpan.plugins.callTree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import kieker.tpan.datamodel.AllocationComponentInstance;
+import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.Operation;
 
 public class CallTreeNode {
@@ -26,7 +26,7 @@ public class CallTreeNode {
     }
 
     /** Creates a new child and adds it to the nodes list of children */
-    public final CallTreeNode createNewChild(final AllocationComponentInstance allocationComponent,
+    public final CallTreeNode createNewChild(final AllocationComponent allocationComponent,
             final Operation operation) {
         CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
         CallTreeNode node = new CallTreeNode(this, k);
@@ -36,7 +36,7 @@ public class CallTreeNode {
 
     /** Returns the child node with given operation, name, and vmName.
      *  The node is created if it doesn't exist. */
-    public final CallTreeNode getChild(final AllocationComponentInstance allocationComponent,
+    public final CallTreeNode getChild(final AllocationComponent allocationComponent,
             final Operation operation) {
         CallTreeOperationHashKey k =
                 new CallTreeOperationHashKey(allocationComponent, operation);
@@ -53,7 +53,7 @@ public class CallTreeNode {
         return node;
     }
 
-    public final AllocationComponentInstance getAllocationComponent() {
+    public final AllocationComponent getAllocationComponent() {
         return opInfo.getAllocationComponent();
     }
 

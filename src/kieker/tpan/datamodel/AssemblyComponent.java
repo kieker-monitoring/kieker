@@ -22,18 +22,18 @@ package kieker.tpan.datamodel;
  *
  * @author Andre van Hoorn
  */
-public class AssemblyComponentInstance {
+public class AssemblyComponent {
     private final int id;
     private final String name;
     private final ComponentType type;
 
-    private AssemblyComponentInstance(){
+    private AssemblyComponent(){
         this.id = -1;
         this.name = null;
         this.type = null;
     }
 
-    public AssemblyComponentInstance(
+    public AssemblyComponent(
             final int id, final String name,
             final ComponentType type){
         this.id = id;
@@ -68,10 +68,10 @@ public class AssemblyComponentInstance {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof AssemblyComponentInstance)){
+        if (!(obj instanceof AssemblyComponent)){
             return false;
         }
-        AssemblyComponentInstance other = (AssemblyComponentInstance)obj;
+        AssemblyComponent other = (AssemblyComponent)obj;
         return other.id == this.id;
     }
 }
