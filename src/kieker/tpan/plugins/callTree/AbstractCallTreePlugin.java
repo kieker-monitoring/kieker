@@ -17,7 +17,7 @@ package kieker.tpan.plugins.callTree;
  * limitations under the License.
  * ==================================================
  */
-import kieker.tpan.datamodel.AssemblyComponentOperationPair;
+import kieker.tpan.datamodel.util.AssemblyComponentOperationPair;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
 import java.io.FileNotFoundException;
@@ -36,7 +36,7 @@ import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
-import kieker.tpan.datamodel.AllocationComponentOperationPair;
+import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 import kieker.tpan.plugins.util.IntContainer;
 import kieker.tpan.plugins.util.dot.DotFactory;
 

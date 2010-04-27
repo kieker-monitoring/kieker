@@ -1,6 +1,6 @@
 package kieker.tpan.datamodel.factories;
 
-import kieker.tpan.datamodel.AssemblyComponentOperationPair;
+import kieker.tpan.datamodel.util.AssemblyComponentOperationPair;
 import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.AssemblyComponent;

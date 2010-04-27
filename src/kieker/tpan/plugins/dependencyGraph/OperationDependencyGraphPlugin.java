@@ -17,7 +17,7 @@ package kieker.tpan.plugins.dependencyGraph;
  * limitations under the License.
  * ==================================================
  */
-import kieker.tpan.datamodel.AllocationComponentOperationPair;
+import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 import kieker.tpan.datamodel.factories.AllocationComponentOperationPairFactory;
 import java.io.PrintStream;
 import java.util.ArrayList;

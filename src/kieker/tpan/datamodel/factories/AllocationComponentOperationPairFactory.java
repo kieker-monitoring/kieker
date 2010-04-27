@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.Operation;
-import kieker.tpan.datamodel.AllocationComponentOperationPair;
+import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 
 /*
  * ==================LICENCE=========================

@@ -1,4 +1,9 @@
-package kieker.tpan.datamodel;
+package kieker.tpan.datamodel.util;
+
+import kieker.tpan.datamodel.AllocationComponent;
+import kieker.tpan.datamodel.AllocationComponent;
+import kieker.tpan.datamodel.Operation;
+import kieker.tpan.datamodel.Operation;
 
 /*
  * ==================LICENCE=========================
@@ -22,31 +27,31 @@ package kieker.tpan.datamodel;
  *
  * @author Andre van Hoorn
  */
-public class AssemblyComponentOperationPair {
+public class AllocationComponentOperationPair {
     private final int id;
     private final Operation operation;
 
-    private final AssemblyComponent assemblyComponent;
+    private final AllocationComponent allocationComponent;
 
-    private AssemblyComponentOperationPair (){
+    private AllocationComponentOperationPair (){
         this.id = -1;
         this.operation = null;
-        this.assemblyComponent = null;
+        this.allocationComponent = null;
     }
 
-    public AssemblyComponentOperationPair (
-            final int id, final Operation operation, final AssemblyComponent AssemblyComponent){
+    public AllocationComponentOperationPair (
+            final int id, final Operation operation, final AllocationComponent allocationComponent){
         this.id = id;
         this.operation = operation;
-        this.assemblyComponent = AssemblyComponent;
+        this.allocationComponent = allocationComponent;
     }
 
     public final int getId() {
         return this.id;
     }
 
-    public final AssemblyComponent getAssemblyComponent() {
-        return this.assemblyComponent;
+    public final AllocationComponent getAllocationComponent() {
+        return this.allocationComponent;
     }
 
     public final Operation getOperation() {
@@ -55,7 +60,7 @@ public class AssemblyComponentOperationPair {
 
     @Override
     public String toString() {
-        return  +  this.assemblyComponent.getId()+":"
+        return  +  this.allocationComponent.getId()+":"
                 + this.operation.getId()
                 + "@"+this.id + "";
     }

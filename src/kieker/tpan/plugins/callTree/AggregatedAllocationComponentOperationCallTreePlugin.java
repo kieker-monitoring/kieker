@@ -18,7 +18,7 @@ package kieker.tpan.plugins.callTree;
  * ==================================================
  */
 import kieker.tpan.datamodel.AllocationComponent;
-import kieker.tpan.datamodel.AllocationComponentOperationPair;
+import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
