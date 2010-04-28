@@ -19,7 +19,7 @@ package kieker.tpan.plugins.callTree;
  */
 import kieker.tpan.datamodel.util.AssemblyComponentOperationPair;
 import kieker.tpan.plugins.traceReconstruction.TraceProcessingException;
-import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
+import kieker.tpan.plugins.traceReconstruction.AbstractMessageTraceProcessingComponent;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -47,7 +47,7 @@ import kieker.tpan.plugins.util.dot.DotFactory;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTraceProcessingComponent {
+public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProcessingComponent {
 
     private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
 

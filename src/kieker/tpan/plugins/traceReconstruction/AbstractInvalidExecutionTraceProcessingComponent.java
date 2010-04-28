@@ -18,18 +18,19 @@
 
 package kieker.tpan.plugins.traceReconstruction;
 
-import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.InvalidExecutionTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.plugins.IEventListener;
+
 
 /**
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractTpanMessageTraceProcessingComponent 
-        extends AbstractTpanTraceProcessingComponent
-        implements IEventListener<MessageTrace> {
-    public AbstractTpanMessageTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
-        super (name, systemEntityFactory);
-    }
+public abstract class AbstractInvalidExecutionTraceProcessingComponent
+        extends AbstractTraceProcessingComponent
+        implements IEventListener<InvalidExecutionTrace> {
+        public AbstractInvalidExecutionTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
+            super(name, systemEntityFactory);
+        }
 }

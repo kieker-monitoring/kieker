@@ -17,7 +17,7 @@ package kieker.tpan.plugins.dependencyGraph;
  * limitations under the License.
  * ==================================================
  */
-import kieker.tpan.plugins.traceReconstruction.AbstractTpanMessageTraceProcessingComponent;
+import kieker.tpan.plugins.traceReconstruction.AbstractMessageTraceProcessingComponent;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -33,7 +33,7 @@ import kieker.tpan.plugins.util.dot.DotFactory;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public abstract class AbstractDependencyGraphPlugin<T> extends AbstractTpanMessageTraceProcessingComponent {
+public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTraceProcessingComponent {
 
     private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
     protected final DependencyGraph<T> dependencyGraph;

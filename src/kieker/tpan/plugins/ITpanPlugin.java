@@ -1,6 +1,8 @@
+package kieker.tpan.plugins;
+
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2010 Kieker Project
+ * Copyright 2006-2009 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +18,26 @@
  * ==================================================
  */
 
-package kieker.tpan.plugins.traceReconstruction;
-
-import kieker.tpan.datamodel.InvalidExecutionTrace;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
-import kieker.tpan.plugins.IEventListener;
-
-
 /**
- *
  * @author Andre van Hoorn
  */
-public abstract class AbstractTpanInvalidExecutionTraceProcessingComponent 
-        extends AbstractTpanTraceProcessingComponent
-        implements IEventListener<InvalidExecutionTrace> {
-        public AbstractTpanInvalidExecutionTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
-            super(name, systemEntityFactory);
-        }
+public interface ITpanPlugin {
+    /**
+     * Initiates the start of a component.
+     * This method is called once when a TpanInstance's run() method is called.
+     * This implementation must not be blocking!
+     * Asynchronous consumers would spawn (an) aynchronous thread(s) in this
+     * method.
+     *
+     * @return true on success; false otherwise.
+     */
+    public boolean execute();
+
+    /**
+     * Initiates a termination of the component. The value of the parameter
+     * error indicates whether an error occured.
+     *
+     * @param error true iff an error occured.
+     */
+    public void terminate(boolean error);
 }

@@ -27,10 +27,10 @@ import kieker.tpan.plugins.IEventListener;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractTpanExecutionTraceProcessingComponent 
-        extends AbstractTpanTraceProcessingComponent
+public abstract class AbstractExecutionTraceProcessingComponent
+        extends AbstractTraceProcessingComponent
         implements IEventListener<ExecutionTrace> {
-        public AbstractTpanExecutionTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
+        public AbstractExecutionTraceProcessingComponent (String name, SystemEntityFactory systemEntityFactory){
             super(name, systemEntityFactory);
         }
 }

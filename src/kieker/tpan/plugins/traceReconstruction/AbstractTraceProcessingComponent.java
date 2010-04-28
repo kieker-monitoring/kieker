@@ -18,14 +18,14 @@
 
 package kieker.tpan.plugins.traceReconstruction;
 
-import kieker.tpan.ITpanControlledComponent;
+import kieker.tpan.plugins.ITpanPlugin;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractTpanTraceProcessingComponent implements ITpanControlledComponent {
+public abstract class AbstractTraceProcessingComponent implements ITpanPlugin {
     private int numTracesProcessed = 0;
     private int numTracesSucceeded = 0;
     private int numTracesFailed = 0;
@@ -36,12 +36,12 @@ public abstract class AbstractTpanTraceProcessingComponent implements ITpanContr
     private final String name;
     private final SystemEntityFactory systemEntityFactory;
 
-    private AbstractTpanTraceProcessingComponent(){
+    private AbstractTraceProcessingComponent(){
         this.name = "no name";
         this.systemEntityFactory = null;
     }
 
-    public AbstractTpanTraceProcessingComponent (final String name, 
+    public AbstractTraceProcessingComponent (final String name,
             final SystemEntityFactory systemEntityFactory){
         this.systemEntityFactory = systemEntityFactory;
         this.name = name;

@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.tpan.ITpanControlledComponent;
+import kieker.tpan.plugins.ITpanPlugin;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
@@ -46,7 +46,7 @@ import kieker.tpan.plugins.EventPublishSubscribeConnector;
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionFilter extends AbstractTpanTraceProcessingComponent implements IExecutionEventListener, ITpanControlledComponent {
+public class TraceReconstructionFilter extends AbstractTraceProcessingComponent implements IExecutionEventListener, ITpanPlugin {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
     public static final long MAX_TIMESTAMP = Long.MAX_VALUE;

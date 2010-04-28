@@ -17,6 +17,7 @@ package kieker.tpan;
  * limitations under the License.
  * ==================================================
  */
+import kieker.tpan.plugins.ITpanPlugin;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -62,14 +63,14 @@ public class TpanInstance {
     /** Contains mapping of record types to subscribed consumers */
     private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
             new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>>();
-    private final Collection<ITpanControlledComponent> controlledComponents =
-            new Vector<ITpanControlledComponent>();
+    private final Collection<ITpanPlugin> controlledComponents =
+            new Vector<ITpanPlugin>();
 
     public void run() throws MonitoringLogReaderException, MonitoringRecordConsumerException {
         for (IMonitoringRecordConsumer c : this.consumers) {
             c.execute();
         }
-        for (ITpanControlledComponent c : this.controlledComponents) {
+        for (ITpanPlugin c : this.controlledComponents) {
             c.execute();
         }
         try {
@@ -99,7 +100,7 @@ public class TpanInstance {
             for (IMonitoringRecordConsumer c : this.consumers) {
                 c.terminate(true); // terminate due to an error
             }
-            for (ITpanControlledComponent c : this.controlledComponents) {
+            for (ITpanPlugin c : this.controlledComponents) {
                 c.terminate(true); // terminate due to an error
             }
             throw exc;
@@ -108,7 +109,7 @@ public class TpanInstance {
             log.info("Terminating consumer " + c);
             c.terminate(false); // terminate after successful execution
         }
-        for (ITpanControlledComponent c : this.controlledComponents) {
+        for (ITpanPlugin c : this.controlledComponents) {
             c.terminate(false); // terminate due to an error
         }
     }
@@ -134,7 +135,7 @@ public class TpanInstance {
         }
     }
 
-    public void addTpanControlledComponent(ITpanControlledComponent c) {
+    public void addTpanControlledComponent(ITpanPlugin c) {
         this.controlledComponents.add(c);
     }
 
