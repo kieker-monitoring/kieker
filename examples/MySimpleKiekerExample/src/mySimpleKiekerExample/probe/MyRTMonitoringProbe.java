@@ -1,12 +1,5 @@
 package mySimpleKiekerExample.probe;
 
-import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.probe.IMonitoringProbe;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import src.mySimpleKiekerExample.record.MyRTMonitoringRecord;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -23,8 +16,16 @@ import src.mySimpleKiekerExample.record.MyRTMonitoringRecord;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * @author Andre van Hoorn
+ */
+
+import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.probe.IMonitoringProbe;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import mySimpleKiekerExample.record.MyRTMonitoringRecord;
+
+/** @author Andre van Hoorn
  */
 @Aspect
 public class MyRTMonitoringProbe implements IMonitoringProbe {

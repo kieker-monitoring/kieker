@@ -523,7 +523,6 @@ public class TraceAnalysisTool {
 
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
-            analysisInstance.addRecordConsumer(execRecTransformer);
             analysisInstance.registerPlugin(execRecTransformer);
 
             for (IAnalysisPlugin c : allTraceProcessingComponents){
@@ -922,7 +921,6 @@ public class TraceAnalysisTool {
         analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
 
         MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
-        analysisInstance.addRecordConsumer(recordTypeLogger);
         analysisInstance.registerPlugin(recordTypeLogger);
 
         //MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
@@ -945,7 +943,6 @@ public class TraceAnalysisTool {
         analysisInstance.setLogReader(new JMSReader(jmsProviderUrl, jmsDestination));
 
         MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
-        analysisInstance.addRecordConsumer(recordTypeLogger);
         analysisInstance.registerPlugin(recordTypeLogger);
 
         //MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
@@ -953,7 +950,6 @@ public class TraceAnalysisTool {
 
         /*@Matthias: Deactivated this, since the ant task didn't run (Andre) */
         BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
-        analysisInstance.addRecordConsumer(bjfx);
 
         analysisInstance.run();
         return retVal;
@@ -1001,7 +997,6 @@ public class TraceAnalysisTool {
         ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
         execRecTransformer.addListener(mtReconstrFilter);
         execRecTransformer.addListener(uniqueMtReconstrFilter);
-        tpanInstance.addRecordConsumer(execRecTransformer);
         tpanInstance.registerPlugin(execRecTransformer);
         System.out.println("MessageTraceListener registered");
     }

@@ -1,21 +1,35 @@
+package mySimpleKiekerJMSExample.consumer;
+
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
  */
-package src.mySimpleKiekerJMSExample.consumer;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.TpanInstance;
-import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
-import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.reader.IMonitoringLogReader;
 import kieker.tpan.reader.JMSReader;
 import kieker.tpan.reader.MonitoringLogReaderException;
-import src.mySimpleKiekerJMSExample.record.MyRTMonitoringRecord;
+import mySimpleKiekerJMSExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class OnlineMonitor implements IMonitoringRecordConsumer, IAnalysisPlugin {
+public class OnlineMonitor implements IMonitoringRecordConsumerPlugin {
 
     private static final Log log = LogFactory.getLog(OnlineMonitor.class);
     private final long rtSloMs;
@@ -76,7 +90,6 @@ public class OnlineMonitor implements IMonitoringRecordConsumer, IAnalysisPlugin
 
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(logReader);
-        analysisInstance.addRecordConsumer(rtMonitor);
         analysisInstance.registerPlugin(rtMonitor);
 
         try {

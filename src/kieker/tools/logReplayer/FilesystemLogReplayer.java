@@ -22,7 +22,7 @@ import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.reader.filesystem.FSReader;
 import kieker.tpmon.core.TpmonController;
 import org.apache.commons.logging.Log;
@@ -67,7 +67,7 @@ public class FilesystemLogReplayer {
          */
         ctrlInst.setControllerMode(this.keepOriginalLoggingTimestamps?TpmonController.ControllerMode.REPLAY:TpmonController.ControllerMode.REALTIME);
 
-        IMonitoringRecordConsumer logCons = new IMonitoringRecordConsumer() {
+        IMonitoringRecordConsumerPlugin logCons = new IMonitoringRecordConsumerPlugin() {
 
             /** Anonymous consumer class that simply passes all records to the
              *  controller */
@@ -78,6 +78,14 @@ public class FilesystemLogReplayer {
             public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
                 return ctrlInst.newMonitoringRecord(monitoringRecord);
             }
+
+            public boolean execute() {
+                return true; // no need to do anything
+            }
+
+            public void terminate(boolean error) {
+                // no need to do anything
+            }
         };
         AbstractMonitoringLogReader fsReader;
         if (realtimeMode) {
@@ -87,7 +95,7 @@ public class FilesystemLogReplayer {
         }
         TpanInstance tpanInstance = new TpanInstance();
         tpanInstance.setLogReader(fsReader);
-        tpanInstance.addRecordConsumer(logCons);
+        tpanInstance.registerPlugin(logCons);
         try {
             tpanInstance.run();
             success = true;

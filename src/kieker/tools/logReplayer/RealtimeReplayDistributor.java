@@ -1,13 +1,31 @@
 package kieker.tools.logReplayer;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ */
+
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
-import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.plugins.IAnalysisPlugin;
 
 import kieker.tpmon.core.TpmonController;
 
@@ -15,17 +33,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * IMonitoringRecordConsumer that distributes the log records to the worker
+ * IMonitoringRecordConsumerPlugin that distributes the log records to the worker
  * thread for "real time" replays.
  *
  * @author Robert von Massow
  *
  */
-public class RealtimeReplayDistributor implements IMonitoringRecordConsumer, IAnalysisPlugin {
+public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugin {
 
     private static final Log log = LogFactory.getLog(RealtimeReplayDistributor.class);
     public final int numWorkers;
-    private final IMonitoringRecordConsumer cons;
+    private final IMonitoringRecordConsumerPlugin cons;
     private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
     private final ScheduledThreadPoolExecutor executor;
     private long lTime;
@@ -50,7 +68,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumer, IAn
      * @param cons the consumer
      * @param terminationLatch will be decremented after the last record was replayed
      */
-    public RealtimeReplayDistributor(final int numWorkers, final IMonitoringRecordConsumer cons, final CountDownLatch terminationLatch) {
+    public RealtimeReplayDistributor(final int numWorkers, final IMonitoringRecordConsumerPlugin cons, final CountDownLatch terminationLatch) {
         this.numWorkers = numWorkers;
         this.cons = cons;
         this.maxQueueSize = numWorkers * 1000;

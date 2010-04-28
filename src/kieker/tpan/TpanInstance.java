@@ -24,7 +24,7 @@ import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.MonitoringRecordReceiverException;
-import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.reader.IMonitoringLogReader;
 
 import kieker.tpan.reader.MonitoringLogReaderException;
@@ -55,13 +55,13 @@ public class TpanInstance {
     private static final Log log = LogFactory.getLog(TpanInstance.class);
     private IMonitoringLogReader logReader;
     /** this are the consumers for data that are comming into kieker by readers (files or system under monitoring)*/
-    private final Vector<IMonitoringRecordConsumer> consumers = new Vector<IMonitoringRecordConsumer>();
+    private final Vector<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
     /** Contains all consumers which consume records of any type */
-    private final Collection<IMonitoringRecordConsumer> anyTypeConsumers =
-            new Vector<IMonitoringRecordConsumer>();
+    private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers =
+            new Vector<IMonitoringRecordConsumerPlugin>();
     /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
-            new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>>();
+    private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers =
+            new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
     private final Collection<IAnalysisPlugin> controlledComponents =
             new Vector<IAnalysisPlugin>();
 
@@ -107,16 +107,16 @@ public class TpanInstance {
         this.logReader = reader;
     }
 
-    public void addRecordConsumer(IMonitoringRecordConsumer consumer) {
+    private void addRecordConsumer(IMonitoringRecordConsumerPlugin consumer) {
         this.consumers.add(consumer);
         final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
         if (recordTypeSubscriptionList == null) {
             this.anyTypeConsumers.add(consumer);
         } else {
             for (Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
-                Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(recordType);
+                Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(recordType);
                 if (cList == null) {
-                    cList = new Vector<IMonitoringRecordConsumer>(0);
+                    cList = new Vector<IMonitoringRecordConsumerPlugin>(0);
                     this.specificTypeConsumers.put(recordType, cList);
                 }
                 cList.add(consumer);
@@ -124,8 +124,19 @@ public class TpanInstance {
         }
     }
 
+    /**
+     * Registers the passed plugin <i>c<i>. If <i>c</i> is an
+     * instance of the interface <i>IMonitoringRecordConsumerPlugin</i>
+     * it is also registered as a record consumer.
+     */
     public void registerPlugin(IAnalysisPlugin c) {
         this.controlledComponents.add(c);
+        log.info("Registered plugin " + c);
+
+        if (c instanceof IMonitoringRecordConsumerPlugin){
+            log.info("Plugin " + c + " also registered as record consumer");
+            this.addRecordConsumer((IMonitoringRecordConsumerPlugin)c);
+        }
     }
 
     /**
@@ -137,12 +148,12 @@ public class TpanInstance {
      */
     private final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws MonitoringRecordReceiverException {
 
-        for (IMonitoringRecordConsumer c : this.anyTypeConsumers) {
+        for (IMonitoringRecordConsumerPlugin c : this.anyTypeConsumers) {
             c.newMonitoringRecord(monitoringRecord);
         }
-        Collection<IMonitoringRecordConsumer> cList = this.specificTypeConsumers.get(monitoringRecord.getClass());
+        Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(monitoringRecord.getClass());
         if (cList != null) {
-            for (IMonitoringRecordConsumer c : cList) {
+            for (IMonitoringRecordConsumerPlugin c : cList) {
                 c.newMonitoringRecord(monitoringRecord);
             }
         }

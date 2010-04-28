@@ -3,6 +3,7 @@ package kieker.tpan.consumer;
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.tpan.plugins.IAnalysisPlugin;
 
 /*
  * ==================LICENCE=========================
@@ -25,7 +26,7 @@ import kieker.common.record.IMonitoringRecordReceiver;
 /**
  * @author Andre van Hoorn
  */
-public interface IMonitoringRecordConsumer extends IMonitoringRecordReceiver {
+public interface IMonitoringRecordConsumerPlugin extends IMonitoringRecordReceiver, IAnalysisPlugin {
 
     /**
      * Simply return null to get records of all types.

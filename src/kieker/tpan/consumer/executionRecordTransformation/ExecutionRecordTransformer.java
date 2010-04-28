@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.AssemblyComponent;
@@ -34,7 +34,6 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.plugins.EventProcessingException;
 import kieker.tpan.plugins.EventPublishSubscribeConnector;
-import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.plugins.IEventListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformer implements IMonitoringRecordConsumer, IExecutionEventProvider, IAnalysisPlugin {
+public class ExecutionRecordTransformer implements IMonitoringRecordConsumerPlugin, IExecutionEventProvider {
 
     private static final Log log = LogFactory.getLog(ExecutionRecordTransformer.class);
     private final SystemEntityFactory systemFactory;

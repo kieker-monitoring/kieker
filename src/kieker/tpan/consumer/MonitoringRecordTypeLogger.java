@@ -20,14 +20,13 @@ package kieker.tpan.consumer;
 
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.plugins.IAnalysisPlugin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn
  */
-public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumer, IAnalysisPlugin {
+public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumerPlugin {
 
     private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 

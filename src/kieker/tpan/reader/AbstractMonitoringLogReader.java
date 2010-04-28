@@ -37,7 +37,6 @@ public abstract class AbstractMonitoringLogReader implements IMonitoringLogReade
     private final Vector<IMonitoringRecordReceiver> recordReceivers = new Vector<IMonitoringRecordReceiver>();
 
     public final void addRecordReceiver(final IMonitoringRecordReceiver receiver) {
-        log.info("ADDING RECEIVER" + receiver);
         this.recordReceivers.add(receiver);
     }
 

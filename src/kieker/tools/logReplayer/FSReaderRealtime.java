@@ -1,5 +1,24 @@
 package kieker.tools.logReplayer;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2009 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ */
+
 import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
@@ -7,9 +26,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.consumer.IMonitoringRecordConsumer;
+import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.reader.MonitoringLogReaderException;
-import kieker.tpan.consumer.MonitoringRecordConsumerException;
 
 import kieker.tpan.reader.filesystem.FSReader;
 import org.apache.commons.logging.Log;
@@ -35,7 +53,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
      * Acts as a consumer to the rtDistributor and delegates incoming records
      * to the FSReaderRealtime instance.
      */
-    private class FSReaderRealtimeCons implements IMonitoringRecordConsumer {
+    private class FSReaderRealtimeCons implements IMonitoringRecordConsumerPlugin {
 
         private final FSReaderRealtime master;
 
@@ -55,7 +73,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
             return true;
         }
 
-        public boolean execute() throws MonitoringRecordConsumerException {
+        public boolean execute() {
             /* do nothing */
             return true;
         }
@@ -119,11 +137,10 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
         }
 
         final AbstractMonitoringLogReader fsReader = new FSReader(inputDirNames);
-        final IMonitoringRecordConsumer rtCons = new FSReaderRealtimeCons(this);
+        final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
         rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, terminationLatch);
         //fsReader.addConsumer(rtDistributor, null);
         this.tpanInstance.setLogReader(fsReader);
-        this.tpanInstance.addRecordConsumer(rtDistributor);
         this.tpanInstance.registerPlugin(rtDistributor);
     }
 
