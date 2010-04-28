@@ -7,7 +7,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.tpan.plugins.traceReconstruction.InvalidTraceException;
+import kieker.tpan.plugins.traceReconstructionPlugin.InvalidTraceException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
