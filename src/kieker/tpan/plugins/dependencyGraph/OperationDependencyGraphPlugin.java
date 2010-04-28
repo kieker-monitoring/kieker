@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Operation;
+import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
@@ -160,9 +161,17 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
                             null // misc
                             ));
                     for (DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) {
+                        Signature sig = curPair.getEntity().getOperation().getSignature();
+                        StringBuilder opLabel = new StringBuilder(sig.getName());
+                        opLabel.append("(");
+                        String[] paramList = sig.getParamTypeList();
+                        if (paramList != null && paramList.length > 0) {
+                            opLabel.append("..");
+                        }
+                        opLabel.append(")");
                         strBuild.append(DotFactory.createNode("",
                                 getNodeId(curPair),
-                                curPair.getEntity().getOperation().getSignature().getName().toString(),
+                                opLabel.toString(),
                                 DotFactory.DOT_SHAPE_OVAL,
                                 DotFactory.DOT_STYLE_FILLED, // style
                                 null, // framecolor
