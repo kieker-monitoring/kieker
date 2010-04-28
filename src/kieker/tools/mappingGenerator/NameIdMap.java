@@ -1,4 +1,4 @@
-package kieker.tools.mappingGeneratorTool;
+package kieker.tools.mappingGenerator;
 
 import java.io.BufferedReader;
 import java.io.File;
