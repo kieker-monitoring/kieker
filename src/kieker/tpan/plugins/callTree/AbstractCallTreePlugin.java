@@ -33,6 +33,7 @@ import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Operation;
+import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
@@ -70,7 +71,17 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             strBuild.append("..");
         }
         strBuild.append(componentTypeIdentifier).append("\\n.");
-        strBuild.append(operation.getSignature().getName());
+
+        Signature sig = operation.getSignature();
+        StringBuilder opLabel = new StringBuilder(sig.getName());
+        opLabel.append("(");
+        String[] paramList = sig.getParamTypeList();
+        if (paramList != null && paramList.length > 0) {
+            opLabel.append("..");
+        }
+        opLabel.append(")");
+
+        strBuild.append(opLabel.toString());
         return strBuild.toString();
     }
 
@@ -91,7 +102,18 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractTpanMessageTrace
             strBuild.append("..");
         }
         strBuild.append(componentTypeIdentifier).append("\\n.");
-        strBuild.append(operation.getSignature().getName());
+
+        Signature sig = operation.getSignature();
+        StringBuilder opLabel = new StringBuilder(sig.getName());
+        opLabel.append("(");
+        String[] paramList = sig.getParamTypeList();
+        if (paramList != null && paramList.length > 0) {
+            opLabel.append("..");
+        }
+        opLabel.append(")");
+
+        strBuild.append(opLabel.toString());
+        
         return strBuild.toString();
     }
 

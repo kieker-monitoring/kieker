@@ -90,12 +90,12 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumer, IE
         return new Signature(name, returnType, paramTypeList);
     }
 
-    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
-        if (!(monitoringRecord instanceof OperationExecutionRecord)) {
+    public boolean newMonitoringRecord(IMonitoringRecord record) {
+        if (!(record instanceof OperationExecutionRecord)) {
             log.error("Can only process records of type"
-                    + OperationExecutionRecord.class.getName() + " but received" + monitoringRecord.getClass().getName());
+                    + OperationExecutionRecord.class.getName() + " but received" + record.getClass().getName());
         }
-        OperationExecutionRecord execRec = (OperationExecutionRecord) monitoringRecord;
+        OperationExecutionRecord execRec = (OperationExecutionRecord) record;
 
         String executionContainerName = execRec.vmName;
         //(this.considerExecutionContainer) ? execRec.vmName : "DEFAULTCONTAINER";

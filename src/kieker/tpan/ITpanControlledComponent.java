@@ -1,10 +1,5 @@
 package kieker.tpan;
 
-import kieker.tpan.consumer.*;
-import java.util.Collection;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
