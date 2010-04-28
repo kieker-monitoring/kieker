@@ -54,6 +54,8 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
     private static final Log log = LogFactory.getLog(FSDirectoryReader.class);
     private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry();
 
+    private volatile boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
+
     private File inputDir = null;
 
     /** Constructor for FSDirectoryReader. Requires a subsequent call to the init
@@ -163,7 +165,6 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
         log.info("< Loading " + input.getAbsolutePath());
 
         BufferedReader in = null;
-        boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
         StringTokenizer st = null;
 
         try {

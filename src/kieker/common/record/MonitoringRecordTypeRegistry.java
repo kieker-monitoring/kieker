@@ -35,7 +35,7 @@ public class MonitoringRecordTypeRegistry {
     private final Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
 
         /**
-     * Registers a mapping if the given record type recordTypeId to the corresponding classname.
+     * Registers a mapping of the given record type recordTypeId to the corresponding classname.
      *
      * This method should be used by implementing classes.
      *

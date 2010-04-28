@@ -23,9 +23,9 @@ import java.io.PrintStream;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.tpan.datamodel.AllocationComponent;
-import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
@@ -109,7 +109,15 @@ public class SequenceDiagramPlugin {
             String senderDotId = "O" + senderComponent.getId();
             String receiverDotId = "O" + receiverComponent.getId();
             if (me instanceof SynchronousCallMessage) {
-                String method = me.getReceivingExecution().getOperation().getSignature().getName();
+                Signature sig = me.getReceivingExecution().getOperation().getSignature();
+                StringBuilder msgLabel = new StringBuilder(sig.getName());
+                msgLabel.append("(");
+                String[] paramList = sig.getParamTypeList();
+                if (paramList != null && paramList.length > 0){
+                    msgLabel.append("..");
+                }
+                msgLabel.append(")");
+
                 //if (method.indexOf('(') != -1) {
                 //    method = me.receiver.opname;
                 //}
@@ -122,7 +130,7 @@ public class SequenceDiagramPlugin {
                 }
                 ps.println("message(" + senderDotId
                         + "," + receiverDotId
-                        + ", \"" + method
+                        + ", \"" + msgLabel.toString()
                         + "\");");
                 ps.println("active(" + receiverDotId + ");");
                 ps.println("step();");
