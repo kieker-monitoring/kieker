@@ -7,6 +7,7 @@ import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tpan.plugins.IAnalysisPlugin;
 
 import kieker.tpmon.core.TpmonController;
 
@@ -20,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Robert von Massow
  *
  */
-public class RealtimeReplayDistributor implements IMonitoringRecordConsumer {
+public class RealtimeReplayDistributor implements IMonitoringRecordConsumer, IAnalysisPlugin {
 
     private static final Log log = LogFactory.getLog(RealtimeReplayDistributor.class);
     public final int numWorkers;

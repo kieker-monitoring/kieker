@@ -35,7 +35,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.tpan.plugins.ITpanPlugin;
+import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.datamodel.InvalidExecutionTrace;
 import kieker.tpan.plugins.EventProcessingException;
 import kieker.tpan.reader.MonitoringLogReaderException;
@@ -524,11 +524,12 @@ public class TraceAnalysisTool {
             ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
             analysisInstance.addRecordConsumer(execRecTransformer);
+            analysisInstance.registerPlugin(execRecTransformer);
 
-            for (ITpanPlugin c : allTraceProcessingComponents){
-                analysisInstance.addTpanControlledComponent(c);
+            for (IAnalysisPlugin c : allTraceProcessingComponents){
+                analysisInstance.registerPlugin(c);
             }
-            analysisInstance.addTpanControlledComponent(mtReconstrFilter);
+            analysisInstance.registerPlugin(mtReconstrFilter);
             // END test with new meta-model
 
             int numErrorCount = 0;
@@ -922,6 +923,7 @@ public class TraceAnalysisTool {
 
         MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
         analysisInstance.addRecordConsumer(recordTypeLogger);
+        analysisInstance.registerPlugin(recordTypeLogger);
 
         //MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
         //analysisInstance.addRecordConsumer(seqRepConsumer);
@@ -944,6 +946,7 @@ public class TraceAnalysisTool {
 
         MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
         analysisInstance.addRecordConsumer(recordTypeLogger);
+        analysisInstance.registerPlugin(recordTypeLogger);
 
         //MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
         //analysisInstance.addRecordConsumer(seqRepConsumer);
@@ -999,6 +1002,7 @@ public class TraceAnalysisTool {
         execRecTransformer.addListener(mtReconstrFilter);
         execRecTransformer.addListener(uniqueMtReconstrFilter);
         tpanInstance.addRecordConsumer(execRecTransformer);
+        tpanInstance.registerPlugin(execRecTransformer);
         System.out.println("MessageTraceListener registered");
     }
 }

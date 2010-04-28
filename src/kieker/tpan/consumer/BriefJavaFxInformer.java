@@ -14,12 +14,13 @@ import kieker.tpan.plugins.EventProcessingException;
 import kieker.tpan.plugins.traceReconstruction.IInvalidExecutionTraceReceiver;
 import kieker.tpan.plugins.traceReconstruction.IMessageTraceReceiver;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.tpan.plugins.IAnalysisPlugin;
 
 /**
  *
  * @author matthias
  */
-public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageTraceReceiver {
+public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageTraceReceiver, IAnalysisPlugin {
 
     public BriefJavaFxInformer() {
         try {
@@ -81,14 +82,14 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumer, IMessageT
 
     
 
-    public boolean execute() throws MonitoringRecordConsumerException {
-        jfxRc.execute();
+    public boolean execute() {
+        //jfxRc.execute();
         return true;
     }
 
     public void terminate(final boolean error) {
         try{
-        jfxRc.terminate(error);
+        //jfxRc.terminate(error);
         } catch(Exception e){}
         // nothing to do
     }

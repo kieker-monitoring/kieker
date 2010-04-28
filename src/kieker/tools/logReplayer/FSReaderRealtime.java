@@ -124,6 +124,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
         //fsReader.addConsumer(rtDistributor, null);
         this.tpanInstance.setLogReader(fsReader);
         this.tpanInstance.addRecordConsumer(rtDistributor);
+        this.tpanInstance.registerPlugin(rtDistributor);
     }
 
     /**

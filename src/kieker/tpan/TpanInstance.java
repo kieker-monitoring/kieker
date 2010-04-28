@@ -17,10 +17,9 @@ package kieker.tpan;
  * limitations under the License.
  * ==================================================
  */
-import kieker.tpan.plugins.ITpanPlugin;
+import kieker.tpan.plugins.IAnalysisPlugin;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -63,14 +62,11 @@ public class TpanInstance {
     /** Contains mapping of record types to subscribed consumers */
     private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>> specificTypeConsumers =
             new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumer>>();
-    private final Collection<ITpanPlugin> controlledComponents =
-            new Vector<ITpanPlugin>();
+    private final Collection<IAnalysisPlugin> controlledComponents =
+            new Vector<IAnalysisPlugin>();
 
     public void run() throws MonitoringLogReaderException, MonitoringRecordConsumerException {
-        for (IMonitoringRecordConsumer c : this.consumers) {
-            c.execute();
-        }
-        for (ITpanPlugin c : this.controlledComponents) {
+        for (IAnalysisPlugin c : this.controlledComponents) {
             c.execute();
         }
         try {
@@ -97,19 +93,12 @@ public class TpanInstance {
             }
         } catch (MonitoringLogReaderException exc) {
             log.fatal("LogReaderException! Will terminate consumers.");
-            for (IMonitoringRecordConsumer c : this.consumers) {
-                c.terminate(true); // terminate due to an error
-            }
-            for (ITpanPlugin c : this.controlledComponents) {
+            for (IAnalysisPlugin c : this.controlledComponents) {
                 c.terminate(true); // terminate due to an error
             }
             throw exc;
         }
-        for (IMonitoringRecordConsumer c : this.consumers) {
-            log.info("Terminating consumer " + c);
-            c.terminate(false); // terminate after successful execution
-        }
-        for (ITpanPlugin c : this.controlledComponents) {
+        for (IAnalysisPlugin c : this.controlledComponents) {
             c.terminate(false); // terminate due to an error
         }
     }
@@ -135,7 +124,7 @@ public class TpanInstance {
         }
     }
 
-    public void addTpanControlledComponent(ITpanPlugin c) {
+    public void registerPlugin(IAnalysisPlugin c) {
         this.controlledComponents.add(c);
     }
 

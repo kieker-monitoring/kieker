@@ -78,14 +78,6 @@ public class FilesystemLogReplayer {
             public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
                 return ctrlInst.newMonitoringRecord(monitoringRecord);
             }
-
-            public boolean execute() {
-                // do nothing, we are synchronous
-                return true;
-            }
-
-            public void terminate(final boolean error) {
-            }
         };
         AbstractMonitoringLogReader fsReader;
         if (realtimeMode) {

@@ -11,6 +11,7 @@ import kieker.tools.logReplayer.FSReaderRealtime;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
+import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.reader.MonitoringLogReaderException;
 import src.mySimpleKiekerExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
@@ -20,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class RTMonitor implements IMonitoringRecordConsumer {
+public class RTMonitor implements IMonitoringRecordConsumer, IAnalysisPlugin {
 
     private static final Log log = LogFactory.getLog(RTMonitor.class);
     private final long rtSloMs;
@@ -78,6 +79,7 @@ public class RTMonitor implements IMonitoringRecordConsumer {
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(fsReaderRealtime);
         analysisInstance.addRecordConsumer(rtMonitor);
+        analysisInstance.registerPlugin(rtMonitor);
 
         try {
             analysisInstance.run();

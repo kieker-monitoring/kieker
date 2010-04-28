@@ -1,7 +1,7 @@
 package kieker.tpan.plugins.traceReconstruction;
 
 import java.util.Hashtable;
-import kieker.tpan.plugins.ITpanPlugin;
+import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.datamodel.MessageTrace;
 
 import org.apache.commons.logging.Log;
@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class MessageTraceRepository implements IMessageTraceReceiver, ITpanPlugin {
+public class MessageTraceRepository implements IMessageTraceReceiver, IAnalysisPlugin {
 
     private static final Log log = LogFactory.getLog(MessageTraceRepository.class);
     private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();

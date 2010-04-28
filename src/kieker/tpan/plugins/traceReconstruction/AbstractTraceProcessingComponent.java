@@ -18,14 +18,14 @@
 
 package kieker.tpan.plugins.traceReconstruction;
 
-import kieker.tpan.plugins.ITpanPlugin;
+import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractTraceProcessingComponent implements ITpanPlugin {
+public abstract class AbstractTraceProcessingComponent implements IAnalysisPlugin {
     private int numTracesProcessed = 0;
     private int numTracesSucceeded = 0;
     private int numTracesFailed = 0;

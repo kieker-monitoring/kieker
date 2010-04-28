@@ -11,6 +11,7 @@ import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.TpanInstance;
 import kieker.tpan.consumer.IMonitoringRecordConsumer;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
+import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.reader.IMonitoringLogReader;
 import kieker.tpan.reader.JMSReader;
 import kieker.tpan.reader.MonitoringLogReaderException;
@@ -22,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class OnlineMonitor implements IMonitoringRecordConsumer {
+public class OnlineMonitor implements IMonitoringRecordConsumer, IAnalysisPlugin {
 
     private static final Log log = LogFactory.getLog(OnlineMonitor.class);
     private final long rtSloMs;
@@ -76,6 +77,7 @@ public class OnlineMonitor implements IMonitoringRecordConsumer {
         TpanInstance analysisInstance = new TpanInstance();
         analysisInstance.setLogReader(logReader);
         analysisInstance.addRecordConsumer(rtMonitor);
+        analysisInstance.registerPlugin(rtMonitor);
 
         try {
             analysisInstance.run();
