@@ -24,8 +24,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.plugins.util.event.EventProcessingException;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.IInvalidExecutionTraceReceiver;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.IMessageTraceReceiver;
+import kieker.tpan.plugin.traceAnalysis.IInvalidExecutionTraceReceiver;
+import kieker.tpan.plugin.traceAnalysis.IMessageTraceReceiver;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 

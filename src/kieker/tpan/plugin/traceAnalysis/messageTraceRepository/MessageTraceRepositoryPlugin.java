@@ -1,8 +1,11 @@
-package kieker.tpan.plugin.traceAnalysis.traceReconstruction;
+package kieker.tpan.plugin.traceAnalysis.messageTraceRepository;
 
 import java.util.Hashtable;
 import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,14 +31,15 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class MessageTraceRepository implements IMessageTraceReceiver, IAnalysisPlugin {
+public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
 
-    private static final Log log = LogFactory.getLog(MessageTraceRepository.class);
+    private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
     private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
 
     // TODO: handle equivalence classes
 
-    public MessageTraceRepository() {
+    public MessageTraceRepositoryPlugin(final String name, final SystemEntityFactory systemEntityFactory) {
+        super(name, systemEntityFactory);
     }
 
     public Hashtable<Long, MessageTrace> getMessageTraceRepository() {

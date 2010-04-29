@@ -16,16 +16,15 @@
  * ==================================================
  */
 
-package kieker.tpan.plugin.traceAnalysis.traceReconstruction;
+package kieker.tpan.plugin.traceAnalysis;
 
-import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractTraceProcessingPlugin implements IAnalysisPlugin {
+public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysisPlugin {
     private int numTracesProcessed = 0;
     private int numTracesSucceeded = 0;
     private int numTracesFailed = 0;
@@ -33,18 +32,9 @@ public abstract class AbstractTraceProcessingPlugin implements IAnalysisPlugin {
     private long lastTraceIdSuccess = -1;
     private long lastTraceIdError = -1;
 
-    private final String name;
-    private final SystemEntityFactory systemEntityFactory;
-
-    private AbstractTraceProcessingPlugin(){
-        this.name = "no name";
-        this.systemEntityFactory = null;
-    }
-
     public AbstractTraceProcessingPlugin (final String name,
             final SystemEntityFactory systemEntityFactory){
-        this.systemEntityFactory = systemEntityFactory;
-        this.name = name;
+        super(name, systemEntityFactory);
     }
 
     protected final void reportSuccess(final long traceId){
@@ -79,15 +69,6 @@ public abstract class AbstractTraceProcessingPlugin implements IAnalysisPlugin {
         return lastTraceIdSuccess;
     }
 
-    protected void printMessage(final String[] lines){
-        System.out.println("");
-        System.out.println("#");
-        System.out.println("# Plugin: " + this.name);
-        for (String l : lines){
-            System.out.println(l);
-        }
-    }
-
     public void printStatusMessage(){
         this.printMessage(new String[] {
             "Trace processing summary: "
@@ -95,9 +76,5 @@ public abstract class AbstractTraceProcessingPlugin implements IAnalysisPlugin {
                     + this.numTracesSucceeded + " succeeded; "
                     + this.numTracesFailed + " failed."
         });
-    }
-
-   protected final SystemEntityFactory getSystemEntityFactory() {
-        return this.systemEntityFactory;
     }
 }

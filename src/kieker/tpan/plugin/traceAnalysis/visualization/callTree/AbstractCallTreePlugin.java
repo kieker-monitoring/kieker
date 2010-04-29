@@ -19,7 +19,7 @@ package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
  */
 import kieker.tpan.datamodel.util.AssemblyComponentOperationPair;
 import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractMessageTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;

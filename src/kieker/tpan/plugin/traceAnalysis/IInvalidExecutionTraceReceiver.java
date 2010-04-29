@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.traceAnalysis.traceReconstruction;
+package kieker.tpan.plugin.traceAnalysis;
 
 /*
  * ==================LICENCE=========================
@@ -19,12 +19,12 @@ package kieker.tpan.plugin.traceAnalysis.traceReconstruction;
  */
 
 import kieker.tpan.datamodel.InvalidExecutionTrace;
-import kieker.tpan.plugins.util.event.IEventProvider;
+import kieker.tpan.plugins.util.event.IEventListener;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public interface IInvalidExecutionTraceProvider extends IEventProvider<InvalidExecutionTrace> {
+public interface IInvalidExecutionTraceReceiver extends IEventListener<InvalidExecutionTrace> {
 
 }

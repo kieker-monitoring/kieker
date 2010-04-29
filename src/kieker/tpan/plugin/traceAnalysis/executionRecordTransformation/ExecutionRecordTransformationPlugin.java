@@ -31,6 +31,7 @@ import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.tpan.plugin.traceAnalysis.AbstractTraceAnalysisPlugin;
 import kieker.tpan.plugins.util.event.EventProcessingException;
 import kieker.tpan.plugins.util.event.EventPublishSubscribeConnector;
 import kieker.tpan.plugins.util.event.IEventListener;
@@ -42,16 +43,16 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformer implements IMonitoringRecordConsumerPlugin, IExecutionEventProvider {
+public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin, IExecutionEventProvider {
 
-    private static final Log log = LogFactory.getLog(ExecutionRecordTransformer.class);
-    private final SystemEntityFactory systemFactory;
+    private static final Log log = LogFactory.getLog(ExecutionRecordTransformationPlugin.class);
     private final EventPublishSubscribeConnector<Execution> executionPublishingSystem =
             new EventPublishSubscribeConnector<Execution>(false); // do not fail fast
 
-    public ExecutionRecordTransformer(
+    public ExecutionRecordTransformationPlugin(
+            final String name,
             final SystemEntityFactory systemFactory) {
-        this.systemFactory = systemFactory;
+        super(name, systemFactory);
     }
     private final static Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =
             new ArrayList<Class<? extends IMonitoringRecord>>();
@@ -106,30 +107,30 @@ public class ExecutionRecordTransformer implements IMonitoringRecordConsumerPlug
                 new StringBuilder(assemblyComponentName).append(".").append(execRec.opname).toString();
         String operationSignatureStr = execRec.opname;
 
-        AllocationComponent allocInst = this.systemFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);
+        AllocationComponent allocInst = this.getSystemEntityFactory().getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(allocationComponentName);
         if (allocInst == null) { /* Allocation component instance doesn't exist */
             AssemblyComponent assemblyComponent =
-                    this.systemFactory.getAssemblyFactory().getAssemblyComponentInstanceByFactoryIdentifier(assemblyComponentName);
+                    this.getSystemEntityFactory().getAssemblyFactory().getAssemblyComponentInstanceByFactoryIdentifier(assemblyComponentName);
             if (assemblyComponent == null) { // assembly instance doesn't exist
                 ComponentType componentType =
-                        this.systemFactory.getTypeRepositoryFactory().getComponentTypeByFactoryIdentifier(componentTypeName);
+                        this.getSystemEntityFactory().getTypeRepositoryFactory().getComponentTypeByFactoryIdentifier(componentTypeName);
                 if (componentType == null) {
                     /* Component type doesn't exist */
-                    componentType = this.systemFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
+                    componentType = this.getSystemEntityFactory().getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
                 }
-                assemblyComponent = this.systemFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(assemblyComponentName, componentType);
+                assemblyComponent = this.getSystemEntityFactory().getAssemblyFactory().createAndRegisterAssemblyComponentInstance(assemblyComponentName, componentType);
             }
-            ExecutionContainer execContainer = this.systemFactory.getExecutionEnvironmentFactory().getExecutionContainerByFactoryIdentifier(executionContainerName);
+            ExecutionContainer execContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getExecutionContainerByFactoryIdentifier(executionContainerName);
             if (execContainer == null) { /* doesn't exist, yet */
-                execContainer = systemFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
+                execContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
             }
-            allocInst = this.systemFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
+            allocInst = this.getSystemEntityFactory().getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
         }
 
-        Operation op = this.systemFactory.getOperationFactory().getOperationByFactoryIdentifier(operationFactoryName);
+        Operation op = this.getSystemEntityFactory().getOperationFactory().getOperationByFactoryIdentifier(operationFactoryName);
         if (op == null) { /* Operation doesn't exist */
             Signature signature = createSignature(operationSignatureStr);
-            op = this.systemFactory.getOperationFactory().createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
+            op = this.getSystemEntityFactory().getOperationFactory().createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
             allocInst.getAssemblyComponent().getType().addOperation(op);
         }
 

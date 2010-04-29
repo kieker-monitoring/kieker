@@ -17,6 +17,10 @@ package kieker.tpan.plugin.traceAnalysis.traceReconstruction;
  * limitations under the License.
  * ==================================================
  */
+import kieker.tpan.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.IExecutionTraceProvider;
+import kieker.tpan.plugin.traceAnalysis.IInvalidExecutionTraceProvider;
+import kieker.tpan.plugin.traceAnalysis.IMessageTraceProvider;
 import kieker.tpan.datamodel.Execution;
 import java.util.Comparator;
 import java.util.HashMap;

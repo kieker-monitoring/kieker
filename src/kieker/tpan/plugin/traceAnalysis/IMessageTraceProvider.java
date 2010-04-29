@@ -1,3 +1,5 @@
+package kieker.tpan.plugin.traceAnalysis;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -16,21 +18,13 @@
  * ==================================================
  */
 
-package kieker.tpan.plugin.traceAnalysis.traceReconstruction;
-
-import kieker.tpan.datamodel.InvalidExecutionTrace;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
-import kieker.tpan.plugins.util.event.IEventListener;
-
+import kieker.tpan.datamodel.MessageTrace;
+import kieker.tpan.plugins.util.event.IEventProvider;
 
 /**
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractInvalidExecutionTraceProcessingPlugin
-        extends AbstractTraceProcessingPlugin
-        implements IEventListener<InvalidExecutionTrace> {
-        public AbstractInvalidExecutionTraceProcessingPlugin (String name, SystemEntityFactory systemEntityFactory){
-            super(name, systemEntityFactory);
-        }
+public interface IMessageTraceProvider extends IEventProvider<MessageTrace> {
+
 }

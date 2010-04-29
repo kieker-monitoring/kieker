@@ -51,9 +51,9 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.reader.JMSReader;
 import kieker.tpan.plugin.traceAnalysis.visualization.callTree.AbstractCallTreePlugin;
 import kieker.tpan.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractExecutionTraceProcessingPlugin;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractMessageTraceProcessingPlugin;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.tpan.plugin.traceAnalysis.visualization.callTree.TraceCallTreeNode;
 import kieker.tpan.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPlugin;
 import kieker.tpan.plugin.traceAnalysis.visualization.dependencyGraph.ContainerDependencyGraphPlugin;
@@ -63,10 +63,10 @@ import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceProcessingExcep
 import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
 import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
 import kieker.tpan.plugins.javaFx.BriefJavaFxInformer;
-import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformer;
+import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
 
 import kieker.tpan.plugins.util.MonitoringRecordTypeLogger;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractInvalidExecutionTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.tpan.reader.filesystem.FSReader;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -394,6 +394,7 @@ public class TraceAnalysisTool {
         }
     }
     // this was moved to here from the inside of dispathTasks()
+    private static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
     private static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
     private static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
     private static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
@@ -521,7 +522,8 @@ public class TraceAnalysisTool {
                 mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(c);
             }
 
-            ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
+            ExecutionRecordTransformationPlugin execRecTransformer =
+                    new ExecutionRecordTransformationPlugin(EXEC_TRACE_RECONSTR_COMPONENT_NAME, systemEntityFactory);
             execRecTransformer.addListener(mtReconstrFilter);
             analysisInstance.registerPlugin(execRecTransformer);
 
@@ -994,7 +996,8 @@ public class TraceAnalysisTool {
         uniqueMtReconstrFilter.getMessageTraceEventProviderPort().addListener(messageTraceListener.getJfxUniqueTr()); // i know that its dirty; i (andre) like it because it's basically a port
 
 
-        ExecutionRecordTransformer execRecTransformer = new ExecutionRecordTransformer(systemEntityFactory);
+        ExecutionRecordTransformationPlugin execRecTransformer =
+                new ExecutionRecordTransformationPlugin(EXEC_TRACE_RECONSTR_COMPONENT_NAME, systemEntityFactory);
         execRecTransformer.addListener(mtReconstrFilter);
         execRecTransformer.addListener(uniqueMtReconstrFilter);
         tpanInstance.registerPlugin(execRecTransformer);
