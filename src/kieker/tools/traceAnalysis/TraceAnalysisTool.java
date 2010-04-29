@@ -41,7 +41,7 @@ import kieker.tpan.plugins.util.event.EventProcessingException;
 import kieker.tpan.reader.MonitoringLogReaderException;
 import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.tpan.TpanInstance;
-import kieker.tpan.plugins.traceReconstructionPlugin.InvalidTraceException;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
@@ -49,24 +49,24 @@ import kieker.tpan.datamodel.factories.AllocationComponentOperationPairFactory;
 import kieker.tpan.datamodel.factories.AssemblyComponentOperationPairFactory;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
 import kieker.tpan.reader.JMSReader;
-import kieker.tpan.plugins.callTreePlugin.AbstractCallTreePlugin;
-import kieker.tpan.plugins.callTreePlugin.AggregatedAllocationComponentOperationCallTreePlugin;
-import kieker.tpan.plugins.traceReconstructionPlugin.AbstractExecutionTraceProcessingComponent;
-import kieker.tpan.plugins.traceReconstructionPlugin.AbstractMessageTraceProcessingComponent;
-import kieker.tpan.plugins.traceReconstructionPlugin.AbstractTraceProcessingComponent;
-import kieker.tpan.plugins.callTreePlugin.TraceCallTreeNode;
-import kieker.tpan.plugins.dependencyGraphPlugin.ComponentDependencyGraphPlugin;
-import kieker.tpan.plugins.dependencyGraphPlugin.ContainerDependencyGraphPlugin;
-import kieker.tpan.plugins.dependencyGraphPlugin.OperationDependencyGraphPlugin;
-import kieker.tpan.plugins.sequenceDiagramPlugin.SequenceDiagramPlugin;
-import kieker.tpan.plugins.traceReconstructionPlugin.TraceProcessingException;
-import kieker.tpan.plugins.traceReconstructionPlugin.TraceReconstructionFilter;
-import kieker.tpan.plugins.traceReconstructionPlugin.TraceReconstructionFilter.TraceEquivalenceClassModes;
+import kieker.tpan.plugin.callTree.AbstractCallTreePlugin;
+import kieker.tpan.plugin.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractExecutionTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractMessageTraceProcessingPlugin;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractTraceProcessingPlugin;
+import kieker.tpan.plugin.callTree.TraceCallTreeNode;
+import kieker.tpan.plugin.dependencyGraph.ComponentDependencyGraphPlugin;
+import kieker.tpan.plugin.dependencyGraph.ContainerDependencyGraphPlugin;
+import kieker.tpan.plugin.dependencyGraph.OperationDependencyGraphPlugin;
+import kieker.tpan.plugin.sequenceDiagram.SequenceDiagramPlugin;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
 import kieker.tpan.plugins.javaFx.BriefJavaFxInformer;
-import kieker.tpan.plugins.executionRecordTransformationPlugin.ExecutionRecordTransformer;
+import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformer;
 
 import kieker.tpan.plugins.util.MonitoringRecordTypeLogger;
-import kieker.tpan.plugins.traceReconstructionPlugin.AbstractInvalidExecutionTraceProcessingComponent;
+import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.tpan.reader.filesystem.FSReader;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -130,9 +130,9 @@ public class TraceAnalysisTool {
     private static boolean shortLabels = true;
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
-    private static int maxTraceDurationMillis = TraceReconstructionFilter.MAX_DURATION_MILLIS; // infinite
-    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionFilter.MIN_TIMESTAMP;
-    private static long ignoreRecordsAfterTimestamp = TraceReconstructionFilter.MAX_TIMESTAMP;
+    private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
+    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin.MIN_TIMESTAMP;
+    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin.MAX_TIMESTAMP;
     private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
     private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
     private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
@@ -412,13 +412,13 @@ public class TraceAnalysisTool {
 
 
 
-        TraceReconstructionFilter mtReconstrFilter = null;
+        TraceReconstructionPlugin mtReconstrFilter = null;
         try {
-            List<AbstractMessageTraceProcessingComponent> msgTraceProcessingComponents = new ArrayList<AbstractMessageTraceProcessingComponent>();
-            List<AbstractExecutionTraceProcessingComponent> execTraceProcessingComponents = new ArrayList<AbstractExecutionTraceProcessingComponent>();
-            List<AbstractInvalidExecutionTraceProcessingComponent> invalidExecTraceProcessingComponents = new ArrayList<AbstractInvalidExecutionTraceProcessingComponent>();
+            List<AbstractMessageTraceProcessingPlugin> msgTraceProcessingComponents = new ArrayList<AbstractMessageTraceProcessingPlugin>();
+            List<AbstractExecutionTraceProcessingPlugin> execTraceProcessingComponents = new ArrayList<AbstractExecutionTraceProcessingPlugin>();
+            List<AbstractInvalidExecutionTraceProcessingPlugin> invalidExecTraceProcessingComponents = new ArrayList<AbstractInvalidExecutionTraceProcessingPlugin>();
             // fill list of msgTraceProcessingComponents:
-            AbstractMessageTraceProcessingComponent componentPrintMsgTrace = null;
+            AbstractMessageTraceProcessingPlugin componentPrintMsgTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
                 numRequestedTasks++;
                 componentPrintMsgTrace =
@@ -426,7 +426,7 @@ public class TraceAnalysisTool {
                         outputDir + File.separator + outputFnPrefix);
                 msgTraceProcessingComponents.add(componentPrintMsgTrace);
             }
-            AbstractExecutionTraceProcessingComponent componentPrintExecTrace = null;
+            AbstractExecutionTraceProcessingPlugin componentPrintExecTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
                 numRequestedTasks++;
                 componentPrintExecTrace =
@@ -434,7 +434,7 @@ public class TraceAnalysisTool {
                         outputDir + File.separator + outputFnPrefix + EXECUTION_TRACES_FN_PREFIX + ".txt", false);
                 execTraceProcessingComponents.add(componentPrintExecTrace);
             }
-            AbstractInvalidExecutionTraceProcessingComponent componentPrintInvalidTrace = null;
+            AbstractInvalidExecutionTraceProcessingPlugin componentPrintInvalidTrace = null;
             if (cmdl.hasOption(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
                 numRequestedTasks++;
                 componentPrintInvalidTrace =
@@ -442,7 +442,7 @@ public class TraceAnalysisTool {
                         outputDir + File.separator + outputFnPrefix + INVALID_TRACES_FN_PREFIX + ".txt", true);
                 invalidExecTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
-            AbstractMessageTraceProcessingComponent componentPlotSeqDiagr = null;
+            AbstractMessageTraceProcessingPlugin componentPlotSeqDiagr = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTSEQDS)) {
                 numRequestedTasks++;
                 componentPlotSeqDiagr =
@@ -471,7 +471,7 @@ public class TraceAnalysisTool {
                         task_createOperationDependencyGraphPlotComponent(PLOTOPERATIONDEPGRAPH_COMPONENT_NAME);
                 msgTraceProcessingComponents.add(componentPlotOperationDepGraph);
             }
-            AbstractMessageTraceProcessingComponent componentPlotCallTrees = null;
+            AbstractMessageTraceProcessingPlugin componentPlotCallTrees = null;
             if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
                 numRequestedTasks++;
                 componentPlotCallTrees =
@@ -498,7 +498,7 @@ public class TraceAnalysisTool {
                 return false;
             }
 
-            List<AbstractTraceProcessingComponent> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingComponent>();
+            List<AbstractTraceProcessingPlugin> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingPlugin>();
             allTraceProcessingComponents.addAll(msgTraceProcessingComponents);
             allTraceProcessingComponents.addAll(execTraceProcessingComponents);
             allTraceProcessingComponents.addAll(invalidExecTraceProcessingComponents);
@@ -507,17 +507,17 @@ public class TraceAnalysisTool {
             //analysisInstance.setLogReader(new JMSReader("tcp://localhost:3035/","queue1"));
 
             mtReconstrFilter =
-                    new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
+                    new TraceReconstructionPlugin(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
                     maxTraceDurationMillis, ignoreInvalidTraces, traceEquivalenceClassMode,
                     selectedTraces, ignoreRecordsBeforeTimestamp,
                     ignoreRecordsAfterTimestamp);
-            for (AbstractMessageTraceProcessingComponent c : msgTraceProcessingComponents) {
+            for (AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
                 mtReconstrFilter.getMessageTraceEventProviderPort().addListener(c);
             }
-            for (AbstractExecutionTraceProcessingComponent c : execTraceProcessingComponents) {
+            for (AbstractExecutionTraceProcessingPlugin c : execTraceProcessingComponents) {
                 mtReconstrFilter.getExecutionTraceEventProviderPort().addListener(c);
             }
-            for (AbstractInvalidExecutionTraceProcessingComponent c : invalidExecTraceProcessingComponents) {
+            for (AbstractInvalidExecutionTraceProcessingPlugin c : invalidExecTraceProcessingComponents) {
                 mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(c);
             }
 
@@ -556,7 +556,7 @@ public class TraceAnalysisTool {
                 log.error("Error occured while running analysis", exc);
                 throw new Exception("Error occured while running analysis", exc);
             } finally {
-                for (AbstractTraceProcessingComponent c : allTraceProcessingComponents) {
+                for (AbstractTraceProcessingPlugin c : allTraceProcessingComponents) {
                     numErrorCount += c.getErrorCount();
                     c.printStatusMessage();
                 }
@@ -638,9 +638,9 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractMessageTraceProcessingComponent task_createSequenceDiagramPlotComponent(final String name, final String outputFnPrefix) throws IOException {
+    private static AbstractMessageTraceProcessingPlugin task_createSequenceDiagramPlotComponent(final String name, final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix + SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
-        AbstractMessageTraceProcessingComponent sqdWriter = new AbstractMessageTraceProcessingComponent(name, systemEntityFactory) {
+        AbstractMessageTraceProcessingPlugin sqdWriter = new AbstractMessageTraceProcessingPlugin(name, systemEntityFactory) {
 
             public void newEvent(MessageTrace t) throws EventProcessingException {
                 try {
@@ -714,10 +714,10 @@ public class TraceAnalysisTool {
         return callTree;
     }
 
-    private static AbstractMessageTraceProcessingComponent task_createCallTreesPlotComponent(final String name, final String outputFnPrefix) throws IOException {
+    private static AbstractMessageTraceProcessingPlugin task_createCallTreesPlotComponent(final String name, final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix + CALL_TREE_FN_PREFIX).getCanonicalPath();
 
-        AbstractMessageTraceProcessingComponent ctWriter = new AbstractMessageTraceProcessingComponent(name, systemEntityFactory) {
+        AbstractMessageTraceProcessingPlugin ctWriter = new AbstractMessageTraceProcessingPlugin(name, systemEntityFactory) {
 
             public void newEvent(MessageTrace t) throws EventProcessingException {
                 try {
@@ -764,9 +764,9 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractMessageTraceProcessingComponent task_createMessageTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, InvalidTraceException, MonitoringLogReaderException, MonitoringRecordConsumerException {
+    private static AbstractMessageTraceProcessingPlugin task_createMessageTraceDumpComponent(final String name, String outputFnPrefix) throws IOException, InvalidTraceException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         final String outputFn = new File(outputFnPrefix + MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
-        AbstractMessageTraceProcessingComponent mtWriter = new AbstractMessageTraceProcessingComponent(name, systemEntityFactory) {
+        AbstractMessageTraceProcessingPlugin mtWriter = new AbstractMessageTraceProcessingPlugin(name, systemEntityFactory) {
 
             PrintStream ps = new PrintStream(new FileOutputStream(outputFn));
 
@@ -806,9 +806,9 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractExecutionTraceProcessingComponent task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
+    private static AbstractExecutionTraceProcessingPlugin task_createExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         final String myOutputFn = new File(outputFn).getCanonicalPath();
-        AbstractExecutionTraceProcessingComponent etWriter = new AbstractExecutionTraceProcessingComponent(name, systemEntityFactory) {
+        AbstractExecutionTraceProcessingPlugin etWriter = new AbstractExecutionTraceProcessingPlugin(name, systemEntityFactory) {
 
             final PrintStream ps = new PrintStream(new FileOutputStream(myOutputFn));
 
@@ -848,9 +848,9 @@ public class TraceAnalysisTool {
      * @param outputFnPrefix
      * @param traceSet
      */
-    private static AbstractInvalidExecutionTraceProcessingComponent task_createInvalidExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
+    private static AbstractInvalidExecutionTraceProcessingPlugin task_createInvalidExecutionTraceDumpComponent(final String name, final String outputFn, final boolean artifactMode) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         final String myOutputFn = new File(outputFn).getCanonicalPath();
-        AbstractInvalidExecutionTraceProcessingComponent etWriter = new AbstractInvalidExecutionTraceProcessingComponent(name, systemEntityFactory) {
+        AbstractInvalidExecutionTraceProcessingPlugin etWriter = new AbstractInvalidExecutionTraceProcessingPlugin(name, systemEntityFactory) {
 
             final PrintStream ps = new PrintStream(new FileOutputStream(myOutputFn));
 
@@ -880,7 +880,7 @@ public class TraceAnalysisTool {
         return etWriter;
     }
 
-    private static boolean task_genTraceEquivalenceReportForTraceSet(final String outputFnPrefix, final TraceReconstructionFilter trf) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
+    private static boolean task_genTraceEquivalenceReportForTraceSet(final String outputFnPrefix, final TraceReconstructionPlugin trf) throws IOException, MonitoringLogReaderException, MonitoringRecordConsumerException {
         boolean retVal = true;
         String outputFn = new File(outputFnPrefix + TRACE_EQUIV_CLASSES_FN_PREFIX + ".txt").getCanonicalPath();
         PrintStream ps = null;
@@ -970,9 +970,9 @@ public class TraceAnalysisTool {
             tpanInstance = new TpanInstance();
         }
 
-        TraceReconstructionFilter mtReconstrFilter = null;
+        TraceReconstructionPlugin mtReconstrFilter = null;
         mtReconstrFilter =
-                new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
+                new TraceReconstructionPlugin(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
                 60 * 1000, // maxTraceDurationMillis,
                 true, //ignoreInvalidTraces,
                 TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes
@@ -982,9 +982,9 @@ public class TraceAnalysisTool {
         mtReconstrFilter.getMessageTraceEventProviderPort().addListener(messageTraceListener);
         mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(messageTraceListener.getJfxBrokenExecutionTraceReceiver());  // i know that its dirty
 
-        TraceReconstructionFilter uniqueMtReconstrFilter = null;
+        TraceReconstructionPlugin uniqueMtReconstrFilter = null;
         uniqueMtReconstrFilter =
-                new TraceReconstructionFilter(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
+                new TraceReconstructionPlugin(TRACERECONSTR_COMPONENT_NAME, systemEntityFactory,
                 60 * 1000, // maxTraceDurationMillis,
                 true, //ignoreInvalidTraces,
                 TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode, // = every trace passes, not only unique trace classes

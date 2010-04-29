@@ -62,11 +62,11 @@ public class TpanInstance {
     /** Contains mapping of record types to subscribed consumers */
     private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers =
             new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
-    private final Collection<IAnalysisPlugin> controlledComponents =
+    private final Collection<IAnalysisPlugin> plugins =
             new Vector<IAnalysisPlugin>();
 
     public void run() throws MonitoringLogReaderException, MonitoringRecordConsumerException {
-        for (IAnalysisPlugin c : this.controlledComponents) {
+        for (IAnalysisPlugin c : this.plugins) {
             c.execute();
         }
         try {
@@ -93,12 +93,12 @@ public class TpanInstance {
             }
         } catch (MonitoringLogReaderException exc) {
             log.fatal("LogReaderException! Will terminate consumers.");
-            for (IAnalysisPlugin c : this.controlledComponents) {
+            for (IAnalysisPlugin c : this.plugins) {
                 c.terminate(true); // terminate due to an error
             }
             throw exc;
         }
-        for (IAnalysisPlugin c : this.controlledComponents) {
+        for (IAnalysisPlugin c : this.plugins) {
             c.terminate(false); // terminate due to an error
         }
     }
@@ -129,13 +129,13 @@ public class TpanInstance {
      * instance of the interface <i>IMonitoringRecordConsumerPlugin</i>
      * it is also registered as a record consumer.
      */
-    public void registerPlugin(IAnalysisPlugin c) {
-        this.controlledComponents.add(c);
-        log.info("Registered plugin " + c);
+    public void registerPlugin(IAnalysisPlugin plugin) {
+        this.plugins.add(plugin);
+        log.info("Registered plugin " + plugin);
 
-        if (c instanceof IMonitoringRecordConsumerPlugin){
-            log.info("Plugin " + c + " also registered as record consumer");
-            this.addRecordConsumer((IMonitoringRecordConsumerPlugin)c);
+        if (plugin instanceof IMonitoringRecordConsumerPlugin){
+            log.info("Plugin " + plugin + " also registered as record consumer");
+            this.addRecordConsumer((IMonitoringRecordConsumerPlugin)plugin);
         }
     }
 
