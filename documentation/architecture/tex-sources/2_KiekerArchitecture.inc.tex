@@ -368,41 +368,35 @@ the same data structures~(\MonitoringRecords{}) in analysis components as used i
 public class RTMonitor
   implements IMonitoringRecordConsumerPlugin {
 
- private static final 
-  Collection<Class<? extends IMonitoringRecord>> 
-  recordTypeSubscriptionList =
-  new ArrayList<Class<? extends IMonitoringRecord>>();
-  static {
-   recordTypeSubscriptionList
-   .add(MyRTMonitoringRecord.class);
-  }
-
+ /* Response time objective */
  private final long rtSlo;
 
  public RTMonitor(long rtSlo) {
   this.rtSlo = rtSlo;
  }
 
+ /* Only interested in MyRTMonitoringRecord */
  public 
  Collection<Class<? extends IMonitoringRecord>>
  getRecordTypeSubscriptionList()
  {
-   return recordTypeSubscriptionList;
+  Collection<..> c = new ArrayList<..>>(); 
+  c.add(MyRTMonitoringRecord.class);
+  return c;
  }
 
+ /* Handle incoming records */
  public 
  void 
  newMonitoringRecord (IMonitoringRecord r) 
  {
-  MyRTMonitoringRecord rtRec =
-                      (MyRTMonitoringRecord) r;
-  if (rtRec.rt > this.rtSlo) {
-    /* SLO violation! */
-  }
+  if (((MyRTMonitoringRecord)r).rt>this.rtSlo) 
+   { /* SLO violation! */ }
  }
 
+ /* Framework methods for start/termination */
  public boolean execute() { return true; }
- public void terminate() { }
+ public void terminate(final boolean error) { }
 }
 \end{lstlisting}
 
