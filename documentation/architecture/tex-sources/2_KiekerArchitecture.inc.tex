@@ -62,32 +62,28 @@ instance (Figure~\ref{fig:kieker:coreFrameworkComponents}). %
 \label{fig:kieker:coreFrameworkClassesAndInterfaces:record}
 \end{figure}
 
-
 \begin{figure}\centering
-% \vspace{0.4cm}
-\subfigure[Kieker.Tpmon]{\label{fig:kieker:coreFrameworkClassesAndInterfaces:tpmon}%
-\includegraphics[scale=0.65]{figures/model/kieker_TpmonController}% 
-% TR: \includegraphics[scale=0.69]{figures/KiekerInterfaceOverviewReArranged-woMonitoringRecord-bw-tpmon}%
-}
-\subfigure[Kieker.Tpan]{\label{fig:kieker:coreFrameworkClassesAndInterfaces:tpan}%
-\includegraphics[scale=0.55]{figures/model/kieker_TpanInstance}%
-% TR: \includegraphics[scale=0.69]{figures/KiekerInterfaceOverviewReArranged-woMonitoringRecord-bw-tpan}%
-}
-\subfigure[Monitoring Record Receiver]{\label{fig:record:IMonitoringRecordReceiver}
-\includegraphics[scale=0.65]{figures/model/kieker_IMonitoringRecordReceiver}%
-}
-\caption{Classes and interfaces of the framework components %{\textcolor{red}{S\"{o}ren: Caption evtl. spezifischer?}}
-\subref{fig:kieker:coreFrameworkClassesAndInterfaces:tpmon}~Kieker.Tpmon and %
-\subref{fig:kieker:coreFrameworkClassesAndInterfaces:tpan}~Kieker.Tpmon. %
-% Customized components can be added to the framework %
-% by implementing/extending the interfaces and abstract classes. %
-}
-\label{fig:kieker:coreFrameworkClassesAndInterfaces}%
+\includegraphics[scale=0.65]{figures/model/kieker_IMonitoringRecordReceiver}
+\caption{Monitoring Record Receiver}
+\label{fig:record:IMonitoringRecordReceiver}
 \end{figure}
 
+\begin{figure}\centering
+\includegraphics[scale=0.65]{figures/model/kieker_TpmonController}% 
+% TR: \includegraphics[scale=0.69]{figures/KiekerInterfaceOverviewReArranged-woMonitoringRecord-bw-tpmon}%
+\caption{Kieker.Tpmon}
+\label{fig:kieker:coreFrameworkClassesAndInterfaces:tpmon}
+\end{figure}
+
+\begin{figure}\centering
+\includegraphics[scale=0.65]{figures/model/kieker_TpanInstance}%
+% TR: \includegraphics[scale=0.69]{figures/KiekerInterfaceOverviewReArranged-woMonitoringRecord-bw-tpan}%
+\caption{Kieker.Tpan}
+\label{fig:kieker:coreFrameworkClassesAndInterfaces:tpan}
+\end{figure}
 
 \begin{figure*}\centering
-\includegraphics[width=1\textwidth]{figures/kiekerCommunications-revisedReArranged-woMonitoringLog-bw}%
+\includegraphics[width=0.8\textwidth]{figures/kiekerCommunications-revisedReArranged-woMonitoringLog-bw}%
 \caption{Communication among framework components %
 %{\textcolor{red}{S\"{o}ren: Evtl. spezifischer angeben, welche Kommunikation gezeigt wird? Im Text ist vom Life-Cycle eines Monitoring-Records die Rede}}
 for creating and writing a Monitoring Record in Kieker.Tpmon~(1.1--3) as well as %
@@ -245,7 +241,7 @@ instance~(line~23).
 % TR: \includegraphics[scale=0.8]{figures/tpmon-writers-refined-bw}%
 }\qquad
 \subfigure[Implemented readers]{\label{fig:readers}%
-\includegraphics[scale=0.55]{figures/model/kieker_readerimpls}%
+\includegraphics[scale=0.65]{figures/model/kieker_readerimpls}%
 %TR: \includegraphics[scale=0.8]{figures/tpmon-readers-refined-bw}%
 }
 \caption{Implemented monitoring log writers and readers. %The abstract classes have been introduced in Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces}.
@@ -330,19 +326,19 @@ continuously incoming monitoring data while developing online analysis component
 % 
 \subsection{Monitoring Record Consumer}
 % 
-\begin{figure}\centering
-% \subfigure[Kieker.Tpan class diagram]{%
-% \includegraphics[width=0.75\textwidth]{figures/LogAnalysisMetaModel}%
-% }
-% \subfigure[UML Communication Diagram]{%
-\includegraphics[width=\columnwidth]{figures/LogAnalysisCommunications-bw}%
-% }
-% \subfigure[Code example]{%
-% \includegraphics[width=0.35\textwidth]{figures/logAnalysis-ctrlExample}
-% }
-\caption{Kieker.Tpan communication diagram}
-\label{fig:tpanCommunicationDiagram}
-\end{figure}
+% \begin{figure}\centering
+% % \subfigure[Kieker.Tpan class diagram]{%
+% % \includegraphics[width=0.75\textwidth]{figures/LogAnalysisMetaModel}%
+% % }
+% % \subfigure[UML Communication Diagram]{%
+% \includegraphics[width=\columnwidth]{figures/LogAnalysisCommunications-bw}%
+% % }
+% % \subfigure[Code example]{%
+% % \includegraphics[width=0.35\textwidth]{figures/logAnalysis-ctrlExample}
+% % }
+% \caption{Kieker.Tpan communication diagram}
+% \label{fig:tpanCommunicationDiagram}
+% \end{figure}
 % 
 \noindent Analysis or visualization components are integrated into \KiekerTpan{} %
 by implementing the \classname{IMonitoringRecordConsumer} interface (see Figure~\ref{fig:kieker:coreFrameworkClassesAndInterfaces}). %

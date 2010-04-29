@@ -236,8 +236,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="172.66891"
-     inkscape:cy="27.797008"
+     inkscape:cx="303.60718"
+     inkscape:cy="36.88869"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -876,7 +876,7 @@
          id="tspan2520">*</tspan>
     </text>
     <rect
-       transform="matrix(0.9375,0,0,0.9375,139.30933,-2.574357)"
+       transform="matrix(0.96896836,0,0,0.93685005,105.74069,-2.4575281)"
        x="843"
        y="171"
        clip-path="url(#clipPath1)"
@@ -885,7 +885,7 @@
        id="rect81"
        style="font-size:11px;fill:#b2b2b2;stroke:none" />
     <g
-       transform="matrix(0.9375,0,0,0.9375,139.30933,-2.574357)"
+       transform="matrix(0.96896836,0,0,0.93685005,105.74069,-2.4575281)"
        style="font-size:11px;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
        id="g85"
        font-size="11"
@@ -906,8 +906,8 @@
        clip-path="url(#clipPath1)"
        id="text91"
        style="font-size:12.80000019px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.9375,0,0,0.9375,140.99683,-1.941914)"
-       sodipodi:linespacing="125%">: IMonitoringRecordConsumer</text>
+       transform="matrix(0.9375,0,0,0.9375,119.9254,-1.941914)"
+       sodipodi:linespacing="125%">: IMonitoringRecordConsumerPlugin</text>
     <rect
        x="220"
        y="143"
