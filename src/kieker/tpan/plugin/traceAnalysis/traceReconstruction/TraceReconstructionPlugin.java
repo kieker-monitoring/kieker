@@ -39,7 +39,7 @@ import kieker.common.util.LoggingTimestampConverter;
 import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.IExecutionEventListener;
 import kieker.tpan.datamodel.InvalidExecutionTrace;
@@ -164,7 +164,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin imp
     };
 
     public TraceReconstructionPlugin(final String name,
-            final SystemEntityFactory systemEntityFactory,
+            final SystemModelRepository systemEntityFactory,
             final long maxTraceDurationMillis,
             final boolean ignoreInvalidTraces,
             //final boolean onlyEquivClasses,

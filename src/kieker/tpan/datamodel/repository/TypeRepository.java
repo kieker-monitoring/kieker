@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.factories;
+package kieker.tpan.datamodel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
@@ -25,7 +25,7 @@ import kieker.tpan.datamodel.ComponentType;
  *
  * @author Andre van Hoorn
  */
-public class TypeRepositoryFactory extends AbstractSystemSubFactory {
+public class TypeRepository extends AbstractSystemSubRepository {
 
     private final Hashtable<String, ComponentType> componentTypesByName =
             new Hashtable<String, ComponentType>();
@@ -33,7 +33,7 @@ public class TypeRepositoryFactory extends AbstractSystemSubFactory {
 
     public final ComponentType rootComponent;
 
-    public TypeRepositoryFactory(final SystemEntityFactory systemFactory,
+    public TypeRepository(final SystemModelRepository systemFactory,
             final ComponentType rootComponent) {
         super(systemFactory);
         this.rootComponent = rootComponent;

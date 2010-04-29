@@ -2,7 +2,7 @@ package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
 
 import java.util.TreeMap;
 import kieker.tpan.datamodel.SynchronousCallMessage;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 
 /*
  * ==================LICENCE=========================
@@ -34,7 +34,7 @@ public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTree
 
     public AbstractAggregatedCallTreeNode(
             final int id,
-            final SystemEntityFactory systemEntityFactory,
+            final SystemModelRepository systemEntityFactory,
             final T entity,
             final boolean rootNode) {
         super(id, systemEntityFactory, entity, rootNode);

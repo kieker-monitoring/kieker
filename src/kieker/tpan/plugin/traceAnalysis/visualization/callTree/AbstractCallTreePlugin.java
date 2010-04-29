@@ -36,7 +36,7 @@ import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 import kieker.tpan.plugins.util.IntContainer;
 import kieker.tpan.plugins.util.dot.DotFactory;
@@ -51,7 +51,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 
     private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
 
-    public AbstractCallTreePlugin(final String name, SystemEntityFactory systemEntityFactory) {
+    public AbstractCallTreePlugin(final String name, SystemModelRepository systemEntityFactory) {
         super(name, systemEntityFactory);
     }
 
@@ -130,7 +130,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
     }
 
     /** Traverse tree recursively and generate dot code for edges. */
-    private static void dotEdgesFromSubTree(final SystemEntityFactory systemEntityFactory,
+    private static void dotEdgesFromSubTree(final SystemModelRepository systemEntityFactory,
             AbstractCallTreeNode<?> n,
             Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds,
             IntContainer nextNodeId, PrintStream ps, final boolean shortLabels) {
@@ -166,7 +166,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
         }
     }
 
-    private static void dotFromCallingTree(final SystemEntityFactory systemEntityFactory,
+    private static void dotFromCallingTree(final SystemModelRepository systemEntityFactory,
             final AbstractCallTreeNode<?> root, final PrintStream ps,
             final boolean includeWeights,
             final boolean includeEois,
@@ -184,7 +184,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
         ps.println("}");
     }
 
-    protected static void saveTreeToDotFile(final SystemEntityFactory systemEntityFactory,
+    protected static void saveTreeToDotFile(final SystemModelRepository systemEntityFactory,
             final AbstractCallTreeNode<?> root, final String outputFnBase, final boolean includeWeights,
             final boolean includeEois, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
@@ -220,7 +220,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
         }
     }
 
-    public static void writeDotForMessageTrace(final SystemEntityFactory systemEntityFactory,
+    public static void writeDotForMessageTrace(final SystemModelRepository systemEntityFactory,
             final AbstractCallTreeNode root,
             final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {

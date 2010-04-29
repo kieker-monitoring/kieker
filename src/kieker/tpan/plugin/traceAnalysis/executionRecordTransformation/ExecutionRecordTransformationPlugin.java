@@ -29,7 +29,7 @@ import kieker.tpan.datamodel.Execution;
 import kieker.tpan.datamodel.ExecutionContainer;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tpan.plugin.traceAnalysis.AbstractTraceAnalysisPlugin;
 import kieker.tpan.plugins.util.event.EventProcessingException;
@@ -51,7 +51,7 @@ public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPl
 
     public ExecutionRecordTransformationPlugin(
             final String name,
-            final SystemEntityFactory systemFactory) {
+            final SystemModelRepository systemFactory) {
         super(name, systemFactory);
     }
     private final static Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =

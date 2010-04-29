@@ -2,8 +2,8 @@ package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
 
 import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 import kieker.tpan.datamodel.SynchronousCallMessage;
-import kieker.tpan.datamodel.factories.AllocationComponentOperationPairFactory;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.AllocationComponentOperationPairFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 
 /*
  * ==================LICENCE=========================
@@ -33,7 +33,7 @@ public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentO
 
     public TraceCallTreeNode(
             final int id,
-            final SystemEntityFactory systemEntityFactory,
+            final SystemModelRepository systemEntityFactory,
             final AllocationComponentOperationPairFactory pairFactory,
             final AllocationComponentOperationPair entity,
             final boolean rootNode) {

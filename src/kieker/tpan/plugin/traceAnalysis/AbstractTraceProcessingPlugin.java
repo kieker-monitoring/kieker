@@ -18,7 +18,7 @@
 
 package kieker.tpan.plugin.traceAnalysis;
 
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 
 /**
  *
@@ -33,7 +33,7 @@ public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysi
     private long lastTraceIdError = -1;
 
     public AbstractTraceProcessingPlugin (final String name,
-            final SystemEntityFactory systemEntityFactory){
+            final SystemModelRepository systemEntityFactory){
         super(name, systemEntityFactory);
     }
 

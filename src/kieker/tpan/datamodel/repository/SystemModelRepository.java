@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.factories;
+package kieker.tpan.datamodel.repository;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,49 +32,49 @@ import kieker.tpan.datamodel.Signature;
  *
  * @author Andre van Hoorn
  */
-public class SystemEntityFactory {
+public class SystemModelRepository {
 
-    private final TypeRepositoryFactory typeRepositoryFactory;
-    private final AssemblyFactory assemblyFactory;
-    private final ExecutionEnvironmentFactory executionEnvironmentFactory;
-    private final AllocationFactory allocationFactory;
-    private final OperationFactory operationFactory;
+    private final TypeRepository typeRepositoryFactory;
+    private final AssemblyRepository assemblyFactory;
+    private final ExecutionEnvironmentRepository executionEnvironmentFactory;
+    private final AllocationRepository allocationFactory;
+    private final OperationRepository operationFactory;
 
-    public SystemEntityFactory() {
+    public SystemModelRepository() {
         ComponentType rootComponentType =
-                new ComponentType(AbstractSystemSubFactory.ROOT_ELEMENT_ID, "$");
-        this.typeRepositoryFactory = new TypeRepositoryFactory(this, rootComponentType);
+                new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$");
+        this.typeRepositoryFactory = new TypeRepository(this, rootComponentType);
         AssemblyComponent rootAssemblyComponentInstance =
-                new AssemblyComponent(AbstractSystemSubFactory.ROOT_ELEMENT_ID, "$", rootComponentType);
-        this.assemblyFactory = new AssemblyFactory(this, rootAssemblyComponentInstance);
+                new AssemblyComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$", rootComponentType);
+        this.assemblyFactory = new AssemblyRepository(this, rootAssemblyComponentInstance);
         ExecutionContainer rootExecutionContainer =
-                new ExecutionContainer(AbstractSystemSubFactory.ROOT_ELEMENT_ID, null, "$");
-        this.executionEnvironmentFactory = new ExecutionEnvironmentFactory(this, rootExecutionContainer);
+                new ExecutionContainer(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, "$");
+        this.executionEnvironmentFactory = new ExecutionEnvironmentRepository(this, rootExecutionContainer);
         AllocationComponent rootAllocation =
-                new AllocationComponent(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, rootExecutionContainer);
-        this.allocationFactory = new AllocationFactory(this, rootAllocation);
+                new AllocationComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, rootExecutionContainer);
+        this.allocationFactory = new AllocationRepository(this, rootAllocation);
         Signature rootSignature = new Signature("$", "<>", new String[]{});
-        Operation rootOperation = new Operation(AbstractSystemSubFactory.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
-        this.operationFactory = new OperationFactory(this, rootOperation);
+        Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
+        this.operationFactory = new OperationRepository(this, rootOperation);
     }
 
-    public final AllocationFactory getAllocationFactory() {
+    public final AllocationRepository getAllocationFactory() {
         return this.allocationFactory;
     }
 
-    public final AssemblyFactory getAssemblyFactory() {
+    public final AssemblyRepository getAssemblyFactory() {
         return this.assemblyFactory;
     }
 
-    public final ExecutionEnvironmentFactory getExecutionEnvironmentFactory() {
+    public final ExecutionEnvironmentRepository getExecutionEnvironmentFactory() {
         return this.executionEnvironmentFactory;
     }
 
-    public final OperationFactory getOperationFactory() {
+    public final OperationRepository getOperationFactory() {
         return this.operationFactory;
     }
 
-    public final TypeRepositoryFactory getTypeRepositoryFactory() {
+    public final TypeRepository getTypeRepositoryFactory() {
         return this.typeRepositoryFactory;
     }
 

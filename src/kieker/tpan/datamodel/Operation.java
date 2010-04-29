@@ -1,6 +1,6 @@
 package kieker.tpan.datamodel;
 
-import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
+import kieker.tpan.datamodel.repository.AbstractSystemSubRepository;
 
 /*
  * ==================LICENCE=========================
@@ -25,7 +25,7 @@ import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
  * @author Andre van Hoorn
  */
 public class Operation {
-    public static final int ROOT_OPERATION_ID = AbstractSystemSubFactory.ROOT_ELEMENT_ID;
+    public static final int ROOT_OPERATION_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
     private final int id;
     private final ComponentType componentType;
     private final Signature signature;

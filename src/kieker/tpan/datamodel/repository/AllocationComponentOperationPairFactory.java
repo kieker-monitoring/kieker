@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.factories;
+package kieker.tpan.datamodel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
@@ -28,7 +28,7 @@ import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
  *
  * @author Andre van Hoorn
  */
-public class AllocationComponentOperationPairFactory extends AbstractSystemSubFactory {
+public class AllocationComponentOperationPairFactory extends AbstractSystemSubRepository {
     private final Hashtable<String, AllocationComponentOperationPair> pairsByName =
             new Hashtable<String, AllocationComponentOperationPair>();
     private final Hashtable<Integer, AllocationComponentOperationPair> pairsById =
@@ -36,7 +36,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubFa
 
     public final AllocationComponentOperationPair rootPair;
 
-    public AllocationComponentOperationPairFactory(final SystemEntityFactory systemFactory){
+    public AllocationComponentOperationPairFactory(final SystemModelRepository systemFactory){
         super(systemFactory);
         AllocationComponent rootAllocation =
                 systemFactory.getAllocationFactory().rootAllocationComponent;

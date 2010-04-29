@@ -19,7 +19,7 @@
 package kieker.tpan.plugin.traceAnalysis;
 
 import kieker.tpan.plugins.IAnalysisPlugin;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 
 /**
  *
@@ -27,7 +27,7 @@ import kieker.tpan.datamodel.factories.SystemEntityFactory;
  */
 public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
     private final String name;
-    private final SystemEntityFactory systemEntityFactory;
+    private final SystemModelRepository systemEntityFactory;
 
     private AbstractTraceAnalysisPlugin(){
         this.name = "no name";
@@ -35,7 +35,7 @@ public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
     }
 
     public AbstractTraceAnalysisPlugin (final String name,
-            final SystemEntityFactory systemEntityFactory){
+            final SystemModelRepository systemEntityFactory){
         this.systemEntityFactory = systemEntityFactory;
         this.name = name;
     }
@@ -49,7 +49,7 @@ public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
         }
     }
 
-   protected final SystemEntityFactory getSystemEntityFactory() {
+   protected final SystemModelRepository getSystemEntityFactory() {
         return this.systemEntityFactory;
     }
 }

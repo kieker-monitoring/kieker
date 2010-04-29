@@ -18,7 +18,7 @@ package kieker.tpan.plugin.traceAnalysis.visualization.dependencyGraph;
  * ==================================================
  */
 import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
-import kieker.tpan.datamodel.factories.AllocationComponentOperationPairFactory;
+import kieker.tpan.datamodel.repository.AllocationComponentOperationPairFactory;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,8 +33,8 @@ import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
-import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.AbstractSystemSubRepository;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
 /**
@@ -50,11 +50,11 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     private final String CONTAINER_NODE_ID_PREFIX = "container_";
 
     public OperationDependencyGraphPlugin(final String name,
-            final SystemEntityFactory systemEntityFactory) {
+            final SystemModelRepository systemEntityFactory) {
         super(name, systemEntityFactory,
                 new DependencyGraph<AllocationComponentOperationPair>(
-                AbstractSystemSubFactory.ROOT_ELEMENT_ID,
-                new AllocationComponentOperationPair(AbstractSystemSubFactory.ROOT_ELEMENT_ID,
+                AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+                new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
                 systemEntityFactory.getOperationFactory().rootOperation, systemEntityFactory.getAllocationFactory().rootAllocationComponent)));
         this.pairFactory = new AllocationComponentOperationPairFactory(systemEntityFactory);
     }

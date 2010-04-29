@@ -19,7 +19,7 @@ package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
 
 import java.io.FileNotFoundException;
 import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
 
 import org.apache.commons.logging.Log;
@@ -35,7 +35,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
     private final AbstractAggregatedCallTreeNode<T> root;
 
     public AggregatedCallTreePlugin(final String name,
-            SystemEntityFactory systemEntityFactory,
+            SystemModelRepository systemEntityFactory,
             AbstractAggregatedCallTreeNode<T> root) {
         super(name, systemEntityFactory);
         this.root = root;

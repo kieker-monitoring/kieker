@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.factories;
+package kieker.tpan.datamodel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
@@ -28,7 +28,7 @@ import kieker.tpan.datamodel.Signature;
  *
  * @author Andre van Hoorn
  */
-public class OperationFactory extends AbstractSystemSubFactory {
+public class OperationRepository extends AbstractSystemSubRepository {
     private final Hashtable<String, Operation> operationsByName =
             new Hashtable<String, Operation>();
     private final Hashtable<Integer, Operation> operationsById =
@@ -36,7 +36,7 @@ public class OperationFactory extends AbstractSystemSubFactory {
 
     public final Operation rootOperation;
 
-    public OperationFactory(final SystemEntityFactory systemFactory,
+    public OperationRepository(final SystemModelRepository systemFactory,
             final Operation rootOperation){
         super(systemFactory);
         this.rootOperation = rootOperation;

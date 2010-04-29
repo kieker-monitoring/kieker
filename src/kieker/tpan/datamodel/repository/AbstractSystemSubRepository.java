@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.factories;
+package kieker.tpan.datamodel.repository;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -27,18 +27,18 @@ import kieker.tpan.datamodel.AllocationComponent;
  *
  * @author Andre van Hoorn
  */
-public abstract class AbstractSystemSubFactory {
+public abstract class AbstractSystemSubRepository {
     public final static int ROOT_ELEMENT_ID = 0;
 
     private final AtomicInteger nextId = new AtomicInteger(ROOT_ELEMENT_ID+1);
 
-    private final SystemEntityFactory systemFactory;
+    private final SystemModelRepository systemFactory;
 
-    private AbstractSystemSubFactory(){
+    private AbstractSystemSubRepository(){
         this.systemFactory = null;
     }
 
-    public AbstractSystemSubFactory(SystemEntityFactory systemFactory){
+    public AbstractSystemSubRepository(SystemModelRepository systemFactory){
         this.systemFactory = systemFactory;
     }
 
@@ -46,7 +46,7 @@ public abstract class AbstractSystemSubFactory {
         return this.nextId.getAndIncrement();
     }
 
-    protected final SystemEntityFactory getSystemFactory() {
+    protected final SystemModelRepository getSystemFactory() {
         return systemFactory;
     }
 }

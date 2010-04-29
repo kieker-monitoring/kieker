@@ -25,7 +25,7 @@ import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
 /**
@@ -44,7 +44,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
     private static final String NODE_PREFIX="depNode_";
 
     public AbstractDependencyGraphPlugin(final String name,
-            final SystemEntityFactory systemEntityFactory, 
+            final SystemModelRepository systemEntityFactory,
             final DependencyGraph<T> dependencyGraph){
         super(name, systemEntityFactory);
         this.dependencyGraph = dependencyGraph;

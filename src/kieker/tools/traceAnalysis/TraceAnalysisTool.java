@@ -44,10 +44,10 @@ import kieker.tpan.TpanInstance;
 import kieker.tpan.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
-import kieker.tpan.datamodel.factories.AllocationComponentOperationPairFactory;
-import kieker.tpan.datamodel.factories.AssemblyComponentOperationPairFactory;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.AbstractSystemSubRepository;
+import kieker.tpan.datamodel.repository.AllocationComponentOperationPairFactory;
+import kieker.tpan.datamodel.repository.AssemblyComponentOperationPairFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.reader.JMSReader;
 import kieker.tpan.plugin.traceAnalysis.visualization.callTree.AbstractCallTreePlugin;
 import kieker.tpan.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
@@ -100,7 +100,7 @@ import org.apache.commons.logging.LogFactory;
 public class TraceAnalysisTool {
 
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
-    private static final SystemEntityFactory systemEntityFactory = new SystemEntityFactory();
+    private static final SystemModelRepository systemEntityFactory = new SystemModelRepository();
     private static final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory =
             new AllocationComponentOperationPairFactory(systemEntityFactory);
     private static final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory =
@@ -724,7 +724,7 @@ public class TraceAnalysisTool {
             public void newEvent(MessageTrace t) throws EventProcessingException {
                 try {
                     final TraceCallTreeNode rootNode =
-                            new TraceCallTreeNode(AbstractSystemSubFactory.ROOT_ELEMENT_ID,
+                            new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
                             systemEntityFactory, allocationComponentOperationPairFactory,
                             allocationComponentOperationPairFactory.rootPair, true); // rootNode
                     AbstractCallTreePlugin.writeDotForMessageTrace(systemEntityFactory, rootNode, t, outputFnBase + "-" + t.getTraceId(), false, shortLabels); // no weights

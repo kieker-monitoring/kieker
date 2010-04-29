@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import kieker.tpan.datamodel.SynchronousCallMessage;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 
 /*
  * ==================LICENCE=========================
@@ -32,7 +32,7 @@ public abstract class AbstractCallTreeNode<T> {
 
     private final T entity;
     private final int id;
-    private final SystemEntityFactory systemEntityFactory;
+    private final SystemModelRepository systemEntityFactory;
 
     private final boolean rootNode;
 
@@ -41,7 +41,7 @@ public abstract class AbstractCallTreeNode<T> {
 
     public AbstractCallTreeNode(
             final int id,
-            final SystemEntityFactory systemEntityFactory,
+            final SystemModelRepository systemEntityFactory,
             final T entity,
             final boolean rootNode) {
         this.id = id;
@@ -73,7 +73,7 @@ public abstract class AbstractCallTreeNode<T> {
         return this.rootNode;
     }
 
-    protected final SystemEntityFactory getSystemEntityFactory() {
+    protected final SystemModelRepository getSystemEntityFactory() {
         return systemEntityFactory;
     }
 }

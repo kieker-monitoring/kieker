@@ -21,9 +21,9 @@ import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 import kieker.tpan.datamodel.Operation;
 import kieker.tpan.datamodel.SynchronousCallMessage;
-import kieker.tpan.datamodel.factories.AbstractSystemSubFactory;
-import kieker.tpan.datamodel.factories.AllocationComponentOperationPairFactory;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.AbstractSystemSubRepository;
+import kieker.tpan.datamodel.repository.AllocationComponentOperationPairFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 
 /**
  *
@@ -35,10 +35,10 @@ public class AggregatedAllocationComponentOperationCallTreePlugin
     public AggregatedAllocationComponentOperationCallTreePlugin(
             final String name,
             AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
-            SystemEntityFactory systemEntityFactory) {
+            SystemModelRepository systemEntityFactory) {
         super(name, systemEntityFactory,
                 new AggregatedAllocationComponentOperationCallTreeNode(
-                AbstractSystemSubFactory.ROOT_ELEMENT_ID, systemEntityFactory,
+                AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory,
                 allocationComponentOperationPairFactory, allocationComponentOperationPairFactory.rootPair, true));
     }
 }
@@ -48,7 +48,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
     private final AllocationComponentOperationPairFactory pairFactory;
 
     public AggregatedAllocationComponentOperationCallTreeNode(final int id,
-            final SystemEntityFactory systemEntityFactory,
+            final SystemModelRepository systemEntityFactory,
             final AllocationComponentOperationPairFactory pairFactory,
             final AllocationComponentOperationPair entity,
             final boolean rootNode) {

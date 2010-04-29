@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
 /**
@@ -44,7 +44,7 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     private final String CONTAINER_NODE_ID_PREFIX = "container";
 
     public ComponentDependencyGraphPlugin(final String name,
-            final SystemEntityFactory systemEntityFactory) {
+            final SystemModelRepository systemEntityFactory) {
         super(name, systemEntityFactory,
                 new DependencyGraph<AllocationComponent>(
                 systemEntityFactory.getAllocationFactory().rootAllocationComponent.getId(),

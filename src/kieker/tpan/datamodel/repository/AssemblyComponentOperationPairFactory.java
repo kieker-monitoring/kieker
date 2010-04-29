@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.factories;
+package kieker.tpan.datamodel.repository;
 
 import kieker.tpan.datamodel.util.AssemblyComponentOperationPair;
 import java.util.Collection;
@@ -28,7 +28,7 @@ import kieker.tpan.datamodel.Operation;
  *
  * @author Andre van Hoorn
  */
-public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFactory {
+public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
     private final Hashtable<String, AssemblyComponentOperationPair> pairsByName =
             new Hashtable<String, AssemblyComponentOperationPair>();
     private final Hashtable<Integer, AssemblyComponentOperationPair> pairsById =
@@ -37,7 +37,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubFact
     public final AssemblyComponentOperationPair rootPair;
 
     public AssemblyComponentOperationPairFactory(
-            final SystemEntityFactory systemFactory){
+            final SystemModelRepository systemFactory){
         super(systemFactory);
         AssemblyComponent rootAssembly =
                 systemFactory.getAssemblyFactory().rootAssemblyComponent;

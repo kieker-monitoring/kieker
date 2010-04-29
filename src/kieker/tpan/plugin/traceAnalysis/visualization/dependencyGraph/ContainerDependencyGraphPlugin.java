@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
 /**
@@ -39,7 +39,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     private static final Log log = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
 
     public ContainerDependencyGraphPlugin(final String name,
-            final SystemEntityFactory systemEntityFactory) {
+            final SystemModelRepository systemEntityFactory) {
         super(name, systemEntityFactory,
                 new DependencyGraph<ExecutionContainer>(
                 systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer.getId(),

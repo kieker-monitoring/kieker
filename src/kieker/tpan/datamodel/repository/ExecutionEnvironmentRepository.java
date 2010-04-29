@@ -1,4 +1,4 @@
-package kieker.tpan.datamodel.factories;
+package kieker.tpan.datamodel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
@@ -26,7 +26,7 @@ import kieker.tpan.datamodel.ExecutionContainer;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
+public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
     private final Hashtable<String, ExecutionContainer> executionContainersByName =
             new Hashtable<String, ExecutionContainer>();
     private final Hashtable<Integer, ExecutionContainer> executionContainersById =
@@ -34,7 +34,7 @@ public class ExecutionEnvironmentFactory extends AbstractSystemSubFactory {
 
     public final ExecutionContainer rootExecutionContainer;
 
-    public ExecutionEnvironmentFactory(final SystemEntityFactory systemFactory,
+    public ExecutionEnvironmentRepository(final SystemModelRepository systemFactory,
             final ExecutionContainer rootExecutionContainer){
         super(systemFactory);
         this.rootExecutionContainer = rootExecutionContainer;

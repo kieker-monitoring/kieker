@@ -19,7 +19,7 @@
 package kieker.tpan.plugin.traceAnalysis;
 
 import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugins.util.event.IEventListener;
 
 /**
@@ -29,7 +29,7 @@ import kieker.tpan.plugins.util.event.IEventListener;
 public abstract class AbstractMessageTraceProcessingPlugin
         extends AbstractTraceProcessingPlugin
         implements IEventListener<MessageTrace> {
-    public AbstractMessageTraceProcessingPlugin (String name, SystemEntityFactory systemEntityFactory){
+    public AbstractMessageTraceProcessingPlugin (String name, SystemModelRepository systemEntityFactory){
         super (name, systemEntityFactory);
     }
 }

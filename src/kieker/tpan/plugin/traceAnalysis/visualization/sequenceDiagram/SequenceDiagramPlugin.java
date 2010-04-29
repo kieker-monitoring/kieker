@@ -28,7 +28,7 @@ import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
-import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.repository.SystemModelRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -66,7 +66,7 @@ public class SequenceDiagramPlugin {
         return strBuild.toString();
     }
 
-    private static void picFromMessageTrace(final SystemEntityFactory systemEntityFactory,
+    private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory,
             final MessageTrace messageTrace, final PrintStream ps, 
             final boolean shortLabels) {
         // dot node ID x component instance
@@ -156,7 +156,7 @@ public class SequenceDiagramPlugin {
         ps.println(".PE");
     }
 
-    public static void writePicForMessageTrace(final SystemEntityFactory systemEntityFactory,
+    public static void writePicForMessageTrace(final SystemModelRepository systemEntityFactory,
             MessageTrace msgTrace, String outputFilename, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
         picFromMessageTrace(systemEntityFactory, msgTrace, ps, shortLabels);
