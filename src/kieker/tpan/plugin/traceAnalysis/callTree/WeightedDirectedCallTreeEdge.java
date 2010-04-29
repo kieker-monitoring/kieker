@@ -1,4 +1,5 @@
-package kieker.tpan.plugin.dependencyGraph;
+package kieker.tpan.plugin.traceAnalysis.callTree;
+
 
 /*
  * ==================LICENCE=========================
@@ -17,41 +18,35 @@ package kieker.tpan.plugin.dependencyGraph;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  *
  * @author Andre van Hoorn
  */
-public class WeightedBidirectionalDependencyGraphEdge<T> {
-    private DependencyGraphNode<T> source;
-    private DependencyGraphNode<T> destination;
+public class WeightedDirectedCallTreeEdge<T> {
 
-    public WeightedBidirectionalDependencyGraphEdge() { };
+    private AbstractCallTreeNode<T> source;
+    private AbstractCallTreeNode<T> destination;
 
-    public WeightedBidirectionalDependencyGraphEdge (
-            final DependencyGraphNode<T> source,
-            final DependencyGraphNode<T> destination){
+    private WeightedDirectedCallTreeEdge() {
+    }
+
+    ;
+
+    public WeightedDirectedCallTreeEdge(
+            final AbstractCallTreeNode<T> source,
+            final AbstractCallTreeNode<T> destination) {
         this.source = source;
         this.destination = destination;
     }
 
-    public final DependencyGraphNode<T> getDestination() {
+    public final AbstractCallTreeNode<T> getDestination() {
         return this.destination;
     }
 
-    public final DependencyGraphNode<T> getSource() {
+    public final AbstractCallTreeNode<T> getSource() {
         return this.source;
     }
-
-    public final void setDestination(DependencyGraphNode<T> destination) {
-        this.destination = destination;
-    }
-
-    public final void setSource(DependencyGraphNode<T> source) {
-        this.source = source;
-    }
-
-        private int outgoingWeight = 0;
+    private int outgoingWeight = 0;
     private int incomingWeight = 0;
 
     public final int getIncomingWeight() {

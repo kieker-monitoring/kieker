@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.callTree;
+package kieker.tpan.plugin.traceAnalysis.callTree;
 
 import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.Operation;

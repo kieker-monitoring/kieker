@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.callTree;
+package kieker.tpan.plugin.traceAnalysis.callTree;
 
 import java.util.ArrayList;
 import java.util.Collection;

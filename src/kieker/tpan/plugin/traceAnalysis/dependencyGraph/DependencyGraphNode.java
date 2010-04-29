@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.dependencyGraph;
+package kieker.tpan.plugin.traceAnalysis.dependencyGraph;
 
 import java.util.Collection;
 import java.util.TreeMap;

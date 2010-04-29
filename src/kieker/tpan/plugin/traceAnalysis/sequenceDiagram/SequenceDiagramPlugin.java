@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.sequenceDiagram;
+package kieker.tpan.plugin.traceAnalysis.sequenceDiagram;
 
 /*
  * ==================LICENCE=========================
