@@ -59,7 +59,7 @@ Three methods are instrumented with the annotation
      $1;1258621800867105743;0;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();NULL;4807451864729649153;1258621800805892068;1258621800867059802;pc-vanhoorn;0;0
    - tpmon.dat which contains the mapping between monitoring record type 
      and implementing class:
-     $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
+     $1=kieker.common.record.OperationExecutionRecord
 
 3. We will now use the Kieker.Tpan-based TraceAnalysisTool to generate sequence 
    diagrams and a dependency graph for this monitoring log. Please change to 
@@ -116,7 +116,7 @@ in src/mySimpleKiekerExample/<annotation/|probe/|monitoringRecord/>.
       $2;1258624662952569355;mySimpleKiekerExample.bookstoreDifferentRecordTypes.Catalog;getBook;2083622
    - The .map file contains the mapping of the identifier to the 
      class implementing the monitoring record type:
-      $1=kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord
+      $1=kieker.common.record.OperationExecutionRecord
       $2=mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord
    
 SCENARIO 3:
