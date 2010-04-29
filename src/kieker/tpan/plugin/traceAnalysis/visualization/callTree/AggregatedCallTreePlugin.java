@@ -15,7 +15,7 @@
  * limitations under the License.
  * ==================================================
  */
-package kieker.tpan.plugin.traceAnalysis.callTree;
+package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
 
 import java.io.FileNotFoundException;
 import kieker.tpan.datamodel.MessageTrace;

@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.traceAnalysis.callTree;
+package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
 
 /*
  * ==================LICENCE=========================

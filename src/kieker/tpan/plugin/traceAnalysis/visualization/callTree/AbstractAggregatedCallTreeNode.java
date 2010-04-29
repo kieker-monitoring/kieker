@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.traceAnalysis.callTree;
+package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
 
 import java.util.TreeMap;
 import kieker.tpan.datamodel.SynchronousCallMessage;

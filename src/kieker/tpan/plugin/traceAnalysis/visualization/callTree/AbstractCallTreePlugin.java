@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.traceAnalysis.callTree;
+package kieker.tpan.plugin.traceAnalysis.visualization.callTree;
 
 /*
  * ==================LICENCE=========================
@@ -17,6 +17,7 @@ package kieker.tpan.plugin.traceAnalysis.callTree;
  * limitations under the License.
  * ==================================================
  */
+import kieker.tpan.datamodel.util.AssemblyComponentOperationPair;
 import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
 import kieker.tpan.plugin.traceAnalysis.traceReconstruction.AbstractMessageTraceProcessingPlugin;
 import java.io.FileNotFoundException;
@@ -28,6 +29,7 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.AllocationComponent;
+import kieker.tpan.datamodel.AssemblyComponent;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.Operation;
@@ -35,6 +37,7 @@ import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.factories.SystemEntityFactory;
+import kieker.tpan.datamodel.util.AllocationComponentOperationPair;
 import kieker.tpan.plugins.util.IntContainer;
 import kieker.tpan.plugins.util.dot.DotFactory;
 
@@ -44,42 +47,30 @@ import kieker.tpan.plugins.util.dot.DotFactory;
  *
  * @author Andre van Hoorn
  */
-public class CallTreePlugin extends AbstractMessageTraceProcessingPlugin {
+public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProcessingPlugin {
 
-    private static final Log log = LogFactory.getLog(CallTreePlugin.class);
-    private final CallTreeNode root;
-    private final boolean aggregated;
-    private final SystemEntityFactory systemEntityFactory;
+    private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
 
-    public CallTreePlugin(final String name, SystemEntityFactory systemEntityFactory,
-            final boolean aggregated) {
+    public AbstractCallTreePlugin(final String name, SystemEntityFactory systemEntityFactory) {
         super(name, systemEntityFactory);
-        this.systemEntityFactory = systemEntityFactory;
-        root = new CallTreeNode(null,
-                new CallTreeOperationHashKey(this.systemEntityFactory.getAllocationFactory().rootAllocationComponent,
-                this.systemEntityFactory.getOperationFactory().rootOperation));
-        this.aggregated = aggregated;
     }
 
-    private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {
-        if (node.isRootNode()) {
-            return "$";
-        }
+    private static final String assemblyComponentOperationPairNodeLabel(
+            final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
+       AssemblyComponentOperationPair p = node.getEntity();
+        AssemblyComponent component = p.getAssemblyComponent();
+        Operation operation = p.getOperation();
+        String assemblyComponentName = component.getName();
+        String componentTypePackagePrefx = component.getType().getPackageName();
+        String componentTypeIdentifier = component.getType().getTypeName();
 
-        AllocationComponent component = node.getAllocationComponent();
-        Operation operation = node.getOperation();
-        String resourceContainerName = component.getExecutionContainer().getName();
-        String assemblyComponentName = component.getAssemblyComponent().getName();
-        String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
-        String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
-
-        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
+        StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
         if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx);
         } else {
             strBuild.append("..");
         }
-        strBuild.append(componentTypeIdentifier).append(".");
+        strBuild.append(componentTypeIdentifier).append("\\n.");
 
         Signature sig = operation.getSignature();
         StringBuilder opLabel = new StringBuilder(sig.getName());
@@ -94,96 +85,127 @@ public class CallTreePlugin extends AbstractMessageTraceProcessingPlugin {
         return strBuild.toString();
     }
 
+    private static final String allocationComponentOperationPairNodeLabel(
+            final AbstractCallTreeNode<AllocationComponentOperationPair> node, final boolean shortLabels) {
+        AllocationComponentOperationPair p = node.getEntity();
+        AllocationComponent component = p.getAllocationComponent();
+        Operation operation = p.getOperation();
+        String resourceContainerName = component.getExecutionContainer().getName();
+        String assemblyComponentName = component.getAssemblyComponent().getName();
+        String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
+        String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
+
+        StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
+        if (!shortLabels) {
+            strBuild.append(componentTypePackagePrefx);
+        } else {
+            strBuild.append("..");
+        }
+        strBuild.append(componentTypeIdentifier).append("\\n.");
+
+        Signature sig = operation.getSignature();
+        StringBuilder opLabel = new StringBuilder(sig.getName());
+        opLabel.append("(");
+        String[] paramList = sig.getParamTypeList();
+        if (paramList != null && paramList.length > 0) {
+            opLabel.append("..");
+        }
+        opLabel.append(")");
+
+        strBuild.append(opLabel.toString());
+        
+        return strBuild.toString();
+    }
+
+    protected static final String nodeLabel(
+            final AbstractCallTreeNode node, final boolean shortLabels) {
+        if (node.getEntity() instanceof AllocationComponentOperationPair) {
+            return allocationComponentOperationPairNodeLabel((AbstractCallTreeNode<AllocationComponentOperationPair>)node, shortLabels);
+        } else if (node.getEntity() instanceof AssemblyComponentOperationPair) {
+            return assemblyComponentOperationPairNodeLabel((AbstractCallTreeNode<AssemblyComponentOperationPair>)node, shortLabels);
+        } else {
+            throw new UnsupportedOperationException("Node type not supported: " +
+                    node.getEntity().getClass().getName());
+        }
+    }
+
     /** Traverse tree recursively and generate dot code for edges. */
     private static void dotEdgesFromSubTree(final SystemEntityFactory systemEntityFactory,
-            CallTreeNode n,
-            Hashtable<CallTreeNode, Integer> nodeIds,
+            AbstractCallTreeNode<?> n,
+            Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds,
             IntContainer nextNodeId, PrintStream ps, final boolean shortLabels) {
         StringBuilder strBuild = new StringBuilder();
         nodeIds.put(n, nextNodeId.i);
-        strBuild.append(nextNodeId.i++).append("[label =\"").append(nodeLabel(n, shortLabels)).append("\",shape=" + DotFactory.DOT_SHAPE_NONE
-                + ",style=" + DotFactory.DOT_STYLE_FILLED
-                + ",fillcolor=" + DotFactory.DOT_FILLCOLOR_WHITE + "];");
+        strBuild.append(nextNodeId.i++).append("[label =\"")
+                .append(n.isRootNode()? "$" : nodeLabel(n, shortLabels))
+                .append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
         ps.println(strBuild.toString());
-        for (CallTreeNode child : n.getChildren()) {
-            dotEdgesFromSubTree(systemEntityFactory, child, nodeIds, nextNodeId, ps, shortLabels);
+        for (WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
+            dotEdgesFromSubTree(systemEntityFactory, child.getDestination(), nodeIds, nextNodeId, ps, shortLabels);
         }
     }
 
     /** Traverse tree recursively and generate dot code for vertices. */
-    private static void dotVerticesFromSubTree(final CallTreeNode n,
-            final Hashtable<CallTreeNode, Integer> nodeIds,
+    private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n,
+            final IntContainer eoiCounter,
+            final Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds,
             final PrintStream ps, final boolean includeWeights) {
         int thisId = nodeIds.get(n);
-        for (CallTreeNode child : n.getChildren()) {
+        for (WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
             StringBuilder strBuild = new StringBuilder();
-            int childId = nodeIds.get(child);
+            int childId = nodeIds.get(child.getDestination());
             strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
             if (includeWeights) {
-                strBuild.append(",label = ").append("").append(", weight =").append("");
+                strBuild.append(",label=\"").append(child.getOutgoingWeight()).append("\"");
+            } else if (eoiCounter != null){
+                strBuild.append(",label=\"").append(eoiCounter.i++).append(".\"");
             }
             strBuild.append(" ]");
             ps.println(strBuild.toString());
-            dotVerticesFromSubTree(child, nodeIds, ps, includeWeights);
+            dotVerticesFromSubTree(child.getDestination(), eoiCounter, nodeIds, ps, includeWeights);
         }
     }
 
     private static void dotFromCallingTree(final SystemEntityFactory systemEntityFactory,
-            final CallTreeNode root, final PrintStream ps,
-            final boolean includeWeights, final boolean shortLabels) {
+            final AbstractCallTreeNode<?> root, final PrintStream ps,
+            final boolean includeWeights,
+            final boolean includeEois,
+            final boolean shortLabels) {
         // preamble:
         ps.println("digraph G {");
         StringBuilder edgestringBuilder = new StringBuilder();
 
-        Hashtable<CallTreeNode, Integer> nodeIds = new Hashtable<CallTreeNode, Integer>();
+        Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>();
 
         dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
-        dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);
+        dotVerticesFromSubTree(root, includeEois?new IntContainer(1):null, nodeIds, ps, includeWeights);
 
         ps.println(edgestringBuilder.toString());
         ps.println("}");
     }
-    private int numGraphsSaved = 0;
 
-    private static void saveTreeToDotFile(final SystemEntityFactory systemEntityFactory,
-            final CallTreeNode root, final String outputFnBase, final boolean includeWeights,
-            final boolean shortLabels) throws FileNotFoundException {
+    protected static void saveTreeToDotFile(final SystemEntityFactory systemEntityFactory,
+            final AbstractCallTreeNode<?> root, final String outputFnBase, final boolean includeWeights,
+            final boolean includeEois, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
-        dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, shortLabels);
+        dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, includeEois, shortLabels);
         ps.flush();
         ps.close();
     }
 
-    public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights,
-            final boolean shortLabels) throws FileNotFoundException {
-        saveTreeToDotFile(this.systemEntityFactory, this.root, outputFnBase, includeWeights, shortLabels);
-        this.numGraphsSaved++;
-        this.printMessage(new String[]{
-                    "Wrote call tree to file '" + outputFnBase + ".dot" + "'",
-                    "Dot file can be converted using the dot tool",
-                    "Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg"
-                });
-    }
-
-    private static void addTraceToTree(final CallTreeNode root,
+    protected static void addTraceToTree(final AbstractCallTreeNode<?> root,
             final MessageTrace t, final boolean aggregated)
             throws TraceProcessingException {
-        Stack<CallTreeNode> curStack = new Stack<CallTreeNode>();
+        Stack<AbstractCallTreeNode<?>> curStack = new Stack<AbstractCallTreeNode<?>>();
 
         Vector<Message> msgTraceVec = t.getSequenceAsVector();
-        CallTreeNode curNode = root;
+        AbstractCallTreeNode curNode = root;
         curStack.push(curNode);
         for (final Message m : msgTraceVec) {
             if (m instanceof SynchronousCallMessage) {
                 curNode = curStack.peek();
-                CallTreeNode child;
-                if (aggregated) {
-                    child = curNode.getChild(m.getReceivingExecution().getAllocationComponent(),
-                            m.getReceivingExecution().getOperation());
-                } else {
-                    child = curNode.createNewChild(m.getReceivingExecution().getAllocationComponent(),
-                            m.getReceivingExecution().getOperation());
-                }
+                AbstractCallTreeNode<?> child;
+                child = curNode.newCall((SynchronousCallMessage) m);
                 curNode = child;
                 curStack.push(curNode);
             } else if (m instanceof SynchronousReplyMessage) {
@@ -198,37 +220,12 @@ public class CallTreePlugin extends AbstractMessageTraceProcessingPlugin {
         }
     }
 
-    public void newEvent(MessageTrace t) {
-        try {
-            addTraceToTree(root, t, this.aggregated);
-            this.reportSuccess(t.getTraceId());
-        } catch (TraceProcessingException ex) {
-            log.error("TraceProcessingException", ex);
-            this.reportError(t.getTraceId());
-        }
-    }
-
     public static void writeDotForMessageTrace(final SystemEntityFactory systemEntityFactory,
+            final AbstractCallTreeNode root,
             final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
-        final CallTreeNode root = new CallTreeNode(null,
-                new CallTreeOperationHashKey(systemEntityFactory.getAllocationFactory().rootAllocationComponent,
-                systemEntityFactory.getOperationFactory().rootOperation));
         addTraceToTree(root, msgTrace, false); // false: no aggregation
-        saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, shortLabels);
-    }
-
-    @Override
-    public void printStatusMessage() {
-        super.printStatusMessage();
-        System.out.println("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : ""));
-    }
-
-    public boolean execute() {
-        return true; // no need to do anything here
-    }
-
-    public void terminate(boolean error) {
-        // no need to do anything here
+        saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights,
+                true, shortLabels); // includeEois
     }
 }

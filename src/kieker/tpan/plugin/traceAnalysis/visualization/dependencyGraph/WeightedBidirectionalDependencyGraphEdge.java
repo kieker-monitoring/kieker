@@ -1,4 +1,4 @@
-package kieker.tpan.plugin.traceAnalysis.dependencyGraph;
+package kieker.tpan.plugin.traceAnalysis.visualization.dependencyGraph;
 
 /*
  * ==================LICENCE=========================
