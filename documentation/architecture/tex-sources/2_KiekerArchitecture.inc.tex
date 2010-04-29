@@ -366,24 +366,34 @@ the same data structures~(\MonitoringRecords{}) in analysis components as used i
 
 \begin{lstlisting}[float,language=Java, caption=Example response time monitor, label=lst:rtMonitor,escapechar=\%]
 public class RTMonitor
-       implements IMonitoringRecordConsumer {
- private static final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList =
-   new ArrayList<Class<? extends IMonitoringRecord>>();
- static {
-  recordTypeSubscriptionList.add(MyRTMonitoringRecord.class);
- }
+  implements IMonitoringRecordConsumerPlugin {
+
+ private static final 
+  Collection<Class<? extends IMonitoringRecord>> 
+  recordTypeSubscriptionList =
+  new ArrayList<Class<? extends IMonitoringRecord>>();
+  static {
+   recordTypeSubscriptionList
+   .add(MyRTMonitoringRecord.class);
+  }
 
  private final long rtSlo;
+
  public RTMonitor(long rtSlo) {
   this.rtSlo = rtSlo;
  }
 
- public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList(){
+ public 
+ Collection<Class<? extends IMonitoringRecord>>
+ getRecordTypeSubscriptionList()
+ {
    return recordTypeSubscriptionList;
  }
 
- public void newMonitoringRecord
-        (IMonitoringRecord r) {
+ public 
+ void 
+ newMonitoringRecord (IMonitoringRecord r) 
+ {
   MyRTMonitoringRecord rtRec =
                       (MyRTMonitoringRecord) r;
   if (rtRec.rt > this.rtSlo) {
