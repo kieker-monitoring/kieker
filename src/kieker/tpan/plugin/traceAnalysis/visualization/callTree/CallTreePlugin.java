@@ -35,8 +35,8 @@ import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousCallMessage;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
-import kieker.tpan.plugins.util.IntContainer;
-import kieker.tpan.plugins.util.dot.DotFactory;
+import kieker.tpan.plugin.util.IntContainer;
+import kieker.tpan.plugin.util.dot.DotFactory;
 
 /**
  * Plugin providing the creation of calling trees both for individual traces 

@@ -1,4 +1,4 @@
-package kieker.tpan.plugins.util.event;
+package kieker.tpan.plugin.util.event;
 
 /*
  * ==================LICENCE=========================

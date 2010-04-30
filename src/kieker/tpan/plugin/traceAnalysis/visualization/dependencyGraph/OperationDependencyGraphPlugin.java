@@ -35,7 +35,7 @@ import kieker.tpan.datamodel.Signature;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.repository.AbstractSystemSubRepository;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
-import kieker.tpan.plugins.util.dot.DotFactory;
+import kieker.tpan.plugin.util.dot.DotFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool

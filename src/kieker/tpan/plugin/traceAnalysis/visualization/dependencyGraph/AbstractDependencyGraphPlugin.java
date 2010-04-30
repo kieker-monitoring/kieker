@@ -24,9 +24,8 @@ import java.io.PrintStream;
 import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
-import kieker.tpan.plugins.util.dot.DotFactory;
+import kieker.tpan.plugin.util.dot.DotFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool

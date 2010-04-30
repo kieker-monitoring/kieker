@@ -1,11 +1,8 @@
 package kieker.tools.logReplayer;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MonitoringRecordReceiverException;
-import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
-import kieker.tpan.consumer.MonitoringRecordConsumerException;
+import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

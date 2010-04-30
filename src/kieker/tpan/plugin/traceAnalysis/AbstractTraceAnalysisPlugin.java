@@ -18,7 +18,7 @@
 
 package kieker.tpan.plugin.traceAnalysis;
 
-import kieker.tpan.plugins.IAnalysisPlugin;
+import kieker.tpan.plugin.IAnalysisPlugin;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
 
 /**

@@ -8,13 +8,12 @@ import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.reader.MonitoringLogReaderException;
-import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.util.PropertyMap;
+import kieker.tpan.plugin.MonitoringRecordConsumerException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

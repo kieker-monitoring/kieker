@@ -1,9 +1,8 @@
-package kieker.tpan.consumer;
+package kieker.tpan.plugin;
 
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.tpan.plugins.IAnalysisPlugin;
 
 /*
  * ==================LICENCE=========================

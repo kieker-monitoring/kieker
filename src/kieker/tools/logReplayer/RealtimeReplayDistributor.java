@@ -21,11 +21,11 @@ package kieker.tools.logReplayer;
 
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
-import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
-import kieker.tpan.consumer.MonitoringRecordConsumerException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.tpan.plugin.MonitoringRecordConsumerException;
 
 import kieker.tpmon.core.TpmonController;
 

@@ -24,14 +24,14 @@ import java.util.Hashtable;
 import java.util.Map.Entry;
 import kieker.tpan.datamodel.AllocationComponent;
 import kieker.tpan.datamodel.ExecutionContainer;
-import kieker.tpan.plugins.util.event.EventProcessingException;
+import kieker.tpan.plugin.util.event.EventProcessingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
-import kieker.tpan.plugins.util.dot.DotFactory;
+import kieker.tpan.plugin.util.dot.DotFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool

@@ -28,7 +28,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
-import kieker.tpan.plugins.util.event.IEventListener;
+import kieker.tpan.plugin.util.event.IEventListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,15 +36,15 @@ import org.apache.commons.logging.LogFactory;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.tpan.plugins.IAnalysisPlugin;
+import kieker.tpan.plugin.IAnalysisPlugin;
 import kieker.tpan.datamodel.ExecutionTrace;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.IExecutionEventListener;
 import kieker.tpan.datamodel.InvalidExecutionTrace;
-import kieker.tpan.plugins.util.event.EventProcessingException;
-import kieker.tpan.plugins.util.event.EventPublishSubscribeConnector;
+import kieker.tpan.plugin.util.event.EventProcessingException;
+import kieker.tpan.plugin.util.event.EventPublishSubscribeConnector;
 
 /**
  *

@@ -1,4 +1,4 @@
-package kieker.tpan.plugins.util.dot;
+package kieker.tpan.plugin.util.dot;
 
 import java.awt.Color;
 

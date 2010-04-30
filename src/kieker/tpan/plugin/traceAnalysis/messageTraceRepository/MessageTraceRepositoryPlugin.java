@@ -1,7 +1,6 @@
 package kieker.tpan.plugin.traceAnalysis.messageTraceRepository;
 
 import java.util.Hashtable;
-import kieker.tpan.plugins.IAnalysisPlugin;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
 import kieker.tpan.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;

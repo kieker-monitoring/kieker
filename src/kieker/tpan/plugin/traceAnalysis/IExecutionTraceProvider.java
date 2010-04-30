@@ -19,7 +19,7 @@ package kieker.tpan.plugin.traceAnalysis;
  */
 
 import kieker.tpan.datamodel.ExecutionTrace;
-import kieker.tpan.plugins.util.event.IEventProvider;
+import kieker.tpan.plugin.util.event.IEventProvider;
 
 /**
  *

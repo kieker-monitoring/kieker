@@ -17,18 +17,18 @@ package kieker.tpan;
  * limitations under the License.
  * ==================================================
  */
-import kieker.tpan.plugins.IAnalysisPlugin;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.MonitoringRecordReceiverException;
-import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.reader.IMonitoringLogReader;
 
 import kieker.tpan.reader.MonitoringLogReaderException;
-import kieker.tpan.consumer.MonitoringRecordConsumerException;
+import kieker.tpan.plugin.IAnalysisPlugin;
+import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.tpan.plugin.MonitoringRecordConsumerException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

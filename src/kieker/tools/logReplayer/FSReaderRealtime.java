@@ -25,8 +25,8 @@ import java.util.concurrent.CountDownLatch;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
 import kieker.tpan.TpanInstance;
+import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
 import kieker.tpan.reader.MonitoringLogReaderException;
 
 import kieker.tpan.reader.filesystem.FSReader;

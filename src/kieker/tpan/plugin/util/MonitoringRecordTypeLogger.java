@@ -1,4 +1,4 @@
-package kieker.tpan.plugins.util;
+package kieker.tpan.plugin.util;
 
 /*
  * ==================LICENCE=========================
@@ -20,7 +20,7 @@ package kieker.tpan.plugins.util;
 
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
+import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

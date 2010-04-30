@@ -1,4 +1,4 @@
-package kieker.tpan.consumer;
+package kieker.tpan.plugin;
 
 /*
  * ==================LICENCE=========================

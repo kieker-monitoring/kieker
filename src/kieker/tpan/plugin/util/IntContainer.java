@@ -1,4 +1,4 @@
-package kieker.tpan.plugins.util;
+package kieker.tpan.plugin.util;
 
 /*
  * ==================LICENCE=========================

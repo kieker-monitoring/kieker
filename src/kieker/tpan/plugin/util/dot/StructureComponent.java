@@ -1,4 +1,4 @@
-package kieker.tpan.plugins.util.dot;
+package kieker.tpan.plugin.util.dot;
 
 /**
  * This class implements unique functionality for components,

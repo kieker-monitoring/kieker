@@ -18,7 +18,7 @@ package kieker.tpan.plugin.traceAnalysis.traceReconstruction;
  * ==================================================
  */
 
-import kieker.tpan.plugins.util.event.EventProcessingException;
+import kieker.tpan.plugin.util.event.EventProcessingException;
 
 /**
  *

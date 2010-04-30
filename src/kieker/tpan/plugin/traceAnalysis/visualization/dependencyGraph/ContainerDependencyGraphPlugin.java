@@ -27,7 +27,7 @@ import kieker.tpan.datamodel.Message;
 import kieker.tpan.datamodel.MessageTrace;
 import kieker.tpan.datamodel.SynchronousReplyMessage;
 import kieker.tpan.datamodel.repository.SystemModelRepository;
-import kieker.tpan.plugins.util.dot.DotFactory;
+import kieker.tpan.plugin.util.dot.DotFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool

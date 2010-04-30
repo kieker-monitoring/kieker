@@ -1,4 +1,4 @@
-package kieker.tpan.plugins.javaFx;
+package kieker.tpan.plugin.javaFx;
 
 /*
  * ==================LICENCE=========================
@@ -23,11 +23,11 @@ import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.plugins.util.event.EventProcessingException;
+import kieker.tpan.plugin.util.event.EventProcessingException;
 import kieker.tpan.plugin.traceAnalysis.IInvalidExecutionTraceReceiver;
 import kieker.tpan.plugin.traceAnalysis.IMessageTraceReceiver;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.tpan.consumer.IMonitoringRecordConsumerPlugin;
+import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
 
 /**
  *

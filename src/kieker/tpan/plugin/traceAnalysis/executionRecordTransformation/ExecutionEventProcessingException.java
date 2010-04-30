@@ -5,7 +5,7 @@
 
 package kieker.tpan.plugin.traceAnalysis.executionRecordTransformation;
 
-import kieker.tpan.plugins.util.event.EventProcessingException;
+import kieker.tpan.plugin.util.event.EventProcessingException;
 
 /**
  *

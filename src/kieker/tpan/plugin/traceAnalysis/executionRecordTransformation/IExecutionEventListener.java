@@ -19,7 +19,7 @@ package kieker.tpan.plugin.traceAnalysis.executionRecordTransformation;
  */
 
 import kieker.tpan.datamodel.Execution;
-import kieker.tpan.plugins.util.event.IEventListener;
+import kieker.tpan.plugin.util.event.IEventListener;
 
 /**
  *
