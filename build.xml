@@ -435,7 +435,7 @@
             <include name="examples/MySimpleKiekerExample/build.xml"/>
             <include name="examples/MySimpleKiekerExample/build.properties"/>
             <include name="examples/MySimpleKiekerExample/lib/"/>
-            <include name="examples/MySimpleKiekerExample/tpmon-testdata/"/>
+            <include name="examples/MySimpleKiekerExample/tpmon-testdata/**"/>
             <exclude name="examples/MySimpleKiekerExample/lib/*.jar"/>
             <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTs.aop.xml"/>
             <include name="examples/MySimpleKiekerExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
