@@ -1103,7 +1103,7 @@
             <layoutConstraint xmi:type="notation:Location" xmi:id="_eWfXJVExEd-0qrGWPo3-Jg" y="1195"/>
           </children>
           <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_eWcT0VExEd-0qrGWPo3-Jg" fontName="Arial" fontHeight="10" routing="Rectilinear" lineColor="0" lineWidth="1" showStereotype="Text"/>
-          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_eWcT0lExEd-0qrGWPo3-Jg" points="[2599, 939, 533, -5754]$[2599, 5963, 533, -730]"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_eWcT0lExEd-0qrGWPo3-Jg" points="[2476, 987, 645, -5696]$[2476, 5915, 645, -768]"/>
         </edges>
         <edges xmi:id="_YHYdoFE-Ed-ULIx_3ef1Lw" element="_EXTkMFEkEd-0qrGWPo3-Jg" source="_a0G1gFExEd-0qrGWPo3-Jg" target="_YHVaUFE-Ed-ULIx_3ef1Lw">
           <children xmi:id="_YHZEsFE-Ed-ULIx_3ef1Lw" type="NameLabel">
@@ -1225,7 +1225,7 @@
     </eAnnotations>
     <packagedElement xmi:type="uml:Class" xmi:id="_hxLhcDHZEd-Dw_r6qZDmjQ" name="TpanInstance">
       <ownedAttribute xmi:id="_D69bcDHgEd-Dw_r6qZDmjQ" name="consumers" visibility="private" type="_Vg6s4DHdEd-Dw_r6qZDmjQ" aggregation="shared" association="_D680YDHgEd-Dw_r6qZDmjQ">
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_D6-CgTHgEd-Dw_r6qZDmjQ" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_D6-CgTHgEd-Dw_r6qZDmjQ" value="*"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_D6-CgDHgEd-Dw_r6qZDmjQ" value="1"/>
       </ownedAttribute>
       <ownedAttribute xmi:id="_NRwLsDHgEd-Dw_r6qZDmjQ" name="reader" visibility="private" type="_H8qlEDHaEd-Dw_r6qZDmjQ" aggregation="shared" association="_NRvkoDHgEd-Dw_r6qZDmjQ">
@@ -1233,7 +1233,7 @@
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NRwywDHgEd-Dw_r6qZDmjQ" value="1"/>
       </ownedAttribute>
       <ownedAttribute xmi:id="_4Xh1wFNjEd-tEpGCj3XtXg" name="plugins" visibility="private" type="_FM0Q8FLGEd-YbPw1JbK5qA" aggregation="shared" association="_4XZS4FNjEd-tEpGCj3XtXg">
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4Xjq8VNjEd-tEpGCj3XtXg" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4Xjq8VNjEd-tEpGCj3XtXg" value="*"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4Xjq8FNjEd-tEpGCj3XtXg" value="1"/>
       </ownedAttribute>
       <ownedOperation xmi:id="_p5K8QDHZEd-Dw_r6qZDmjQ" name="run"/>
