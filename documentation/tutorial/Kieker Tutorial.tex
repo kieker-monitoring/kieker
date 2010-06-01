@@ -1,20 +1,9 @@
 \documentclass[a4paper, oneside, 11pt]{scrartcl}
 
-% Packages
-\usepackage[english]{babel}
-\usepackage[utf8]{inputenc}
-% For the sourcecode parts.
-\usepackage{listings}
-% For the links etc.
-\usepackage{hyperref}
-% For some graphics.
-\usepackage{graphicx}
-% The steamroller tactics to fix figures and so on.
-\usepackage{float}
-
-% Just some new commands.
-\newcommand{\Kieker}{\textit{Kieker}}
-\newcommand{\home}{$\sim$}
+% Get the necessary Packages
+\input{Packages}
+% Only some new commands.
+\input{Macros}
 
 % Set title and everything.
 \title{Tutorial for \Kieker:\\ Monitoring and Analysis of Software Behavior}
@@ -27,11 +16,11 @@
 \newpage
 
 \section{Overview}
-\subsection{What is Kieker?}
+\subsection{What is \Kieker?}
 \subsection{What ist the purpose of this tutorial?}
 
 \section{Quickstart}
-\subsection{Downloading and installing Kieker}
+\subsection{Downloading and installing \Kieker}
 \subsection{Monitoring}
 \subsection{Analysis}
 
@@ -49,6 +38,7 @@
 \subsection{Example logs}
 \subsection{Shortcut via ant}
 \subsection{Libraries}
+\input{Libraries}
 \subsection{Troubleshooting}
 \end{document}
  
