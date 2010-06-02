@@ -46,20 +46,43 @@ That is already enough for the ``installation'' of \Kieker.
 \subsection{Monitoring}
 Now for the creation of a simple example for the use of the \Kieker\ framework. It is recommended to create a new working directory (e.g. $\sim$/example) with the following subdirectories:
 \begin{itemize}
-\item src (For the sourcecode files)
-\item lib (For the libraries and needed jar-files)
-\item META-INF (For the configuration files of \Kieker)
-\item build (For the builded class files of Java)
+  \item src (For the sourcecode files)
+  \item lib (For the libraries and needed jar-files)
+  \item META-INF (For the configuration files of \Kieker)
+  \item build (For the builded class files of Java)
 \end{itemize}
 Before we start with the sourcedoe, we need to copy some files from the \Kieker\ directory to our own working directory\footnote{It would be possible to access the required files within the \Kieker\ directory, but the copying will make the compiling much more comfortable.}.
 \begin{itemize}
-\item $\sim$/kieker/dist/kieker-tpmon-\version\_ctrl.jar to $\sim$/example/lib/kieker-tpmon-\version\_ctrl.jar
-\item $\sim$/kieker/dist/kieker-common-\version.jar to $\sim$/example/lib/kieker-common-\version.jar
-\item $\sim$/kieker/lib/commons-logging-\version.jar to $\sim$/example/lib/commons-logging-\version.jar
-\item $\sim$/kieker/META-INF/tpmon.properties.example to $\sim$/META-INF/\textbf{tpmon.properties}
-\item $\sim$/kieker/META-INF/log4j.properties.example to $\sim$/META-INF/\textbf{log4j.properties}
+  \item $\sim$/kieker/dist/kieker-tpmon-\version\_ctrl.jar to $\sim$/example/lib/kieker-tpmon-\version\_ctrl.jar
+  \item $\sim$/kieker/dist/kieker-common-\version.jar to $\sim$/example/lib/kieker-common-\version.jar
+  \item $\sim$/kieker/lib/commons-logging-\version.jar to $\sim$/example/lib/commons-logging-\version.jar
+  \item $\sim$/kieker/META-INF/tpmon.properties.example to $\sim$/META-INF/\textbf{tpmon.properties}
+  \item $\sim$/kieker/META-INF/log4j.properties.example to $\sim$/META-INF/\textbf{log4j.properties}
 \end{itemize}
-The last two files are configuration files. For a quick start they are already configurated correctly. 
+The last two files are configuration files, but for a quick start they are already configurated correctly.\\
+
+We start with creating two directories for our packages:
+\begin{itemize}
+  \item $\sim$/example/src/mySimpleKiekerExample
+  \item $\sim$/example/src/mySimpleKiekerExample/bookstoreTracing
+\end{itemize}
+In the last directory, we create three files: 
+\begin{itemize}
+  \item CRM.java
+  \item Catalog.java
+  \item Bookstore.java
+\end{itemize}
+The file ``Bookstore.java'' should contain of the lines showed in listing \ref{listing:Bookstore.java}.
+
+\setJavaCodeListing
+
+\lstset{caption=Bookstore.java, label=listing:Bookstore.java}
+\lstinputlisting{source-example/Bookstore.java}
+Listing \ref{listing:Catalog.java} shows the content of ``Catalog.java'' and listing \ref{listing:CRM.java} the content of ``CRM.java''.
+\lstset{caption=Catalog.java, label=listing:Catalog.java}
+\lstinputlisting{source-example/Catalog.java}
+\lstset{caption=CRM.java, label=listing:CRM.java}
+\lstinputlisting{source-example/CRM.java}
 
 \subsection{Analysis}
 
