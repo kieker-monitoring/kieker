@@ -1,6 +1,9 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
 import java.util.Vector;
+import kieker.tpmon.core.TpmonController;
+import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
 
 public class Bookstore extends Thread {
 
@@ -36,7 +39,11 @@ public class Bookstore extends Thread {
 
     public static void searchBook() {
         for (int i = 0; i < 1; i++) {
-            Catalog.getBook(false);
+	    long tin = System.currentTimeMillis();
+	    Catalog.getBook(false);
+	    long tout = System.currentTimeMillis();
+	    AbstractKiekerMonitoringRecord e = KiekerExecutionRecord.getInstance("Bookstore", "getBook", 0, tin, tout);
+	    TpmonController.getInstance().logMonitoringRecord(e);
             CRM.getOffers();
         }
     }
