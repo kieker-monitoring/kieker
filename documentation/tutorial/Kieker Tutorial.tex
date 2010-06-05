@@ -44,7 +44,7 @@ For the monitoring and analysis of the source code, it is necessary to download 
 That is already enough for the ``installation'' of \Kieker.
 
 \subsection{Monitoring}
-Now for the creation of a simple example for the use of the \Kieker\ framework. It is recommended to create a new working directory (e.g. $\sim$/example) with the following subdirectories:
+Now for the creation of a simple example for the use of the \Kieker\ framework (note: The example is available on the website of \Kieker). It is recommended to create a new working directory (e.g. $\sim$/example) with the following subdirectories:
 \begin{itemize}
   \item src (For the sourcecode files)
   \item lib (For the libraries and needed jar-files)
@@ -77,12 +77,50 @@ The file ``Bookstore.java'' should contain of the lines showed in listing \ref{l
 \setJavaCodeListing
 
 \lstset{caption=Bookstore.java, label=listing:Bookstore.java}
-\lstinputlisting{source-example/Bookstore.java}
+\lstinputlisting{source-example/src/Bookstore.java}
 Listing \ref{listing:Catalog.java} shows the content of ``Catalog.java'' and listing \ref{listing:CRM.java} the content of ``CRM.java''.
 \lstset{caption=Catalog.java, label=listing:Catalog.java}
-\lstinputlisting{source-example/Catalog.java}
+\lstinputlisting{source-example/src/Catalog.java}
 \lstset{caption=CRM.java, label=listing:CRM.java}
-\lstinputlisting{source-example/CRM.java}
+\lstinputlisting{source-example/src/CRM.java}
+
+The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start.
+\lstset{caption=Cutting from Bookstore.java, label=listing:cuttingBookstore}
+\begin{lstlisting}
+long tin = TpmonController.getInstance().getTime();
+Bookstore.searchBook();
+long tout = TpmonController.getInstance().getTime();
+
+KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Bookstore", "searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
+TpmonController.getInstance().logMonitoringRecord(e);
+\end{lstlisting}
+In listing \ref{listing:cuttingBookstore} can be seen, how the monitoring itself is done. We use the \textit{TpmonController} to get the current time in nano seconds and remember the time before and after a specific method call (in this case: \textit{searchBook()})\footnote{The code between the timekeeping does not need to be a method call of course. It can be ``plain'' code or more than one method call as well.}. These informations are stored in the so called execution record. It gets:
+\begin{itemize}
+ \item The component (the class) in which the called method is.
+ \item The called method.
+ \item The session id. In this case we can use any string.
+ \item The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
+ \item The time before the sourcecode which should be measured.
+ \item The time after the sourcecode which should be measured.
+ \item The name of the current host. This is not very important in this case, because we have only one host. The name can be choosen freely.
+ \item The eoi (execution order index). This tells \Kieker\ later the sequence of the different calls. It should be of course unique within a trace.
+ \item The ess (execution stack size). This number tells \Kieker\ that the execution was started when the calling stack of the corresponding trace was just the ess.
+\end{itemize}
+For the moment we have to choose the eoi and ess manually. These numbers can be choosen later automaticaly by \Kieker\ of course.\\
+Once this is done, we should be able to compile and execute the sourcecode:
+\setBashListing
+\begin{lstlisting}
+nils@Laptop:~/example$ javac ./src/Bookstore.java ./src/Catalog.java ./src/CRM.java -classpath ./lib/kieker-tpmon-1.1_ctrl.jar -d ./build
+nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -classpath ./build/:./lib/kieker-tpmon-1.1_ctrl.jar:./lib/kieker-common-1.1.jar:./lib/commons-logging-1.1.1.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
+\end{lstlisting}
+If everything worked correctly, there should now be a new directory named ``tpmon-20100605-115948636-UTC'' (just with other numbers) in the default temporary directory (under Linux this should be ``/tmp''). In this directory, there should be a file with the extension ``.dat'' with a content similar to the following:
+\begin{lstlisting}
+$1;1275745883934593403;-1;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(false);sessionID;0;1275745883931011663;1275745883933424540;vnName;1;1
+$1;1275745883937096236;-1;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(false);sessionID;0;1275745883935003302;1275745883937075214;vnName;3;2
+$1;1275745883937119354;-1;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();sessionID;0;1275745883934661568;1275745883937111043;vnName;2;1
+$1;1275745883937128922;-1;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();sessionID;0;1275745883931007961;1275745883937123824;vnName;0;0 
+\end{lstlisting}
+These are the recorded informations from our sourcecode. This data can now be visualized with the help of \Kieker.
 
 \subsection{Analysis}
 
