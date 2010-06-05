@@ -8,13 +8,12 @@ public class Catalog {
         if (complexQuery) {
             Bookstore.waitabit(20);
         } else {
-	    long tin = System.currentTimeMillis();
+	    long tin = TpmonController.getInstance().getTime();
+	    Bookstore.waitabit(2);
+	    long tout = TpmonController.getInstance().getTime();
 
-            Bookstore.waitabit(2);
 
-	    long tout = System.currentTimeMillis();
-
-	    KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Bookstore", "waitabit(2)", 0, tin, tout);
+	    KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Bookstore", "waitabit(long)", 1, tin, tout);
 	    TpmonController.getInstance().logMonitoringRecord(e);
         }
     }

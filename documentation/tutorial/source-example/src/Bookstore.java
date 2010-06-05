@@ -25,11 +25,19 @@ public class Bookstore extends Thread {
                 bookstoreScenarios.wait();
             }
         }
+	System.exit(0);
     }
 
     @Override
     public void run() {
+	long tin = TpmonController.getInstance().getTime();
         Bookstore.searchBook();
+	long tout = TpmonController.getInstance().getTime();
+
+
+	KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Bookstore", "searchBook()", "sessionID", 1, tin, tout, "vnName", 1, 1);
+	TpmonController.getInstance().logMonitoringRecord(e);
+
         synchronized (bookstoreScenarios) {
             bookstoreScenarios.remove(this);
             bookstoreScenarios.notify();
@@ -39,17 +47,18 @@ public class Bookstore extends Thread {
     public static void searchBook() {
         for (int i = 0; i < 1; i++) {
 
-	    long tin = System.currentTimeMillis();
+	    long tin = TpmonController.getInstance().getTime();
 	    Catalog.getBook(false);
-	    long tout = System.currentTimeMillis();
+	    long tout = TpmonController.getInstance().getTime();
 
-	    KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(false)", 0, tin, tout);
+	    KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(boolean)", 1, tin, tout);
 	    TpmonController.getInstance().logMonitoringRecord(e);
 
-	    tin = System.currentTimeMillis();
+	    tin = TpmonController.getInstance().getTime();
             CRM.getOffers();
-	    tout = System.currentTimeMillis();
-	    e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.CRM", "getOffers", 0, tin, tout);
+	    tout = TpmonController.getInstance().getTime();
+
+	    e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.CRM", "getOffers()", 0, tin, tout);
 	    TpmonController.getInstance().logMonitoringRecord(e);  
         }
     }
