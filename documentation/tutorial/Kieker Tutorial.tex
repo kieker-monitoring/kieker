@@ -123,11 +123,33 @@ $1;1275745883937128922;-1;mySimpleKiekerExample.bookstoreTracing.Bookstore.searc
 These are the recorded informations from our sourcecode. This data can now be visualized with the help of \Kieker.
 
 \subsection{Analysis}
+Assume that we already have our recorded informations saved in a ``.dat''-file somewhere for example the in ``tmp``-directory, we can now start with converting these informations into graphs. For the first, we change into our \Kieker\-directory ($\sim$/kieker). It is necessary to create a new directory for the graphs first:
+\begin{lstlisting}
+nils@Laptop:~/kieker$ mkdir /tmp/graphs
+\end{lstlisting}
+The shell-script ''./bin/trace-analysis.sh`` will now do most of the job.
+\begin{lstlisting}
+nils@Laptop:~/kieker$ ./bin/trace-analysis.sh --plot-Sequence-Diagrams --short-labels -i /tmp/tpmon-20100606-112536844-UTC/ -o /tmp/graphs/
+\end{lstlisting}
+The command ''--plot-Sequence-Diagrams`` tells the shell script to convert our data into a sequence diagram (other diagrams and graphs can be plot of course as well); with ''--short-labels`` we make sure that the components get a shorter name and the directories after ''-i`` and ''-o`` are the input- and the output-directories. If everything went well, \Kieker\ converted the data into files, which can now converted directly into visual graphs:
+\begin{lstlisting}
+nils@Laptop:~/kieker$ ./bin/dotPic-fileConverter.sh /tmp/graphs/ svg
+\end{lstlisting}
+The shell script ''./bin/dotPic-fileConverter.sh`` gets the directory with the files and the desired file extension (e.g. svg or png). The resulting graphs should now be available in ''/tmp/graphs`` and should look like the following:
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=1.0\textwidth]{sequenceDiagram.pdf}
+		\label{image:sequencediagram}
+		\caption{The resulting sequence diagram}
+	\end{center}
+\end{figure}
+We are now able to monitor sourcecode in a simple way and to visualize these recorded informations.
 
 \section{\KiekerMonitoring}
 \subsection{Configuration}
 \subsection{Probes}
 \subsection{Writers}
+The so called monitoring log writers are the parts of \Kieker\ which are responsible for writing the recorded and monitored informations in a serialized way into monitoring logs. The data can be written and stored into files, databases and so on. The already implemented writers are derived from the class \textit{AbstractKiekerMonitoringLogWriter}. These classes are for example the synchrone/asynchrone file writer or the synchrone/asynchrone database writer. As the quick start part already showed it, every monitoring record is sent to the \textit{TpmonController} where the writer is called and used. That means as well, that it is of course possible to implement an own writer class.
 
 \section{\KiekerAnalysis}
 \subsection{Configuration}
