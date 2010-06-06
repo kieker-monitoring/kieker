@@ -14,20 +14,20 @@ public class OwnWriter extends AbstractKiekerMonitoringLogWriter {
 
     @TpmonInternal()
     public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
-      String arr[] = monitoringRecord.toStringArray();
-      int len = arr.length;
-      if (len > 0) {
-	for (int i = 0; i < len - 1; i++) {
-	  System.out.print(arr[i] + ", ");
-	}
-	System.out.println(arr[len-1]);
-      }
-      return true;
+        String arr[] = monitoringRecord.toStringArray();
+        int len = arr.length;
+        if (len > 0) {
+            for (int i = 0; i < len - 1; i++) {
+                System.out.print(arr[i] + ", ");
+            }
+            System.out.println(arr[len - 1]);
+        }
+        return true;
     }
 
     @TpmonInternal()
     public boolean init(String initString) {
-      return true;
+        return true;
     }
 
     /**
@@ -35,11 +35,11 @@ public class OwnWriter extends AbstractKiekerMonitoringLogWriter {
      */
     @TpmonInternal()
     public Vector<AbstractWorkerThread> getWorkers() {
-      return null;
+        return null;
     }
 
     @TpmonInternal()
     public String getInfoString() {
-      return null;
+        return null;
     }
 } 

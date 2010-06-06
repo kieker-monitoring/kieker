@@ -156,12 +156,12 @@ To implement an own writer class, the following steps has to be performed:
  \item The new writer has to extend \textit{kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter}.
  \item All methods from the interface \textit{kieker.tpmon.writer.IKiekerMonitoringLogWriter} which has not been implemented yet by the class must be implemented (listing \ref{listing:OwnWriter.java}).
  \item The entry \textit{monitoringDataWriter} has to be changed in the configuration file ''tpmon.properties`` to the entire classname.
- \item The configuration file has to be stored as well in the ''.jar`` file and \Kieker\ has to be informed of the properties file\footnote{This is done by supply java with an additional parameter. If the properties are stored in the file ''tpmon.properties'' then the parameter is ''-Dtpmon.configuration=META-INF/tpmon.properties``}.
+ \item The configuration file has to be stored as well in the ''.jar`` file and \Kieker\ has to be informed of the properties file\footnote{This is done by supplying java with an additional parameter. If the properties are stored in the file ''tpmon.properties'' then the parameter is ''-Dtpmon.configuration=META-INF/tpmon.properties``}.
 \end{enumerate}
 \setJavaCodeListing
 \lstset{caption=OwnWriter.java, label=listing:OwnWriter.java}
 \lstinputlisting{source-example/manual-monitoring-with-own-writer/src/OwnWriter.java}
-
+The example writer in listing \ref{listing:OwnWriter.java} takes the informations from the record and shows them just on the screen.
 
 \section{\KiekerAnalysis}
 \subsection{Configuration}
