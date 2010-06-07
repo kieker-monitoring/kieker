@@ -5,3 +5,12 @@
 // The descriptions themself can contain tex-code but should be in one line.
 derby.jar	This library contains the necessary drivers for the Apache Derby database.
 mysql-connector-java-$-bin.jar	The library to connect to an existing MySQL database.
+spring.jar	The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.
+spring-web.jar	This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.
+commons-cli-$.jar	Commons CLI provides a simple API for working with the command line arguments and options.
+commons-io-$.jar	Commons-IO contains utility classes, stream implementations, file filters, and endian classes.
+commons-logging-$.jar	Commons Logging is a thin adapter allowing configurable bridging to other, well known logging systems.
+servlet.jar	This package contains different classes for the work with servlets.
+jmc.jar	This library contains the Java Media Components which can be used for example for playing video content in Swing applications.
+Scenario.jar	This package provides scene graph functionality for java.
+openjms-$.jar	OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification

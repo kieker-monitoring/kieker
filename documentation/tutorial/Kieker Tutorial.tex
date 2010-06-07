@@ -138,7 +138,7 @@ nils@Laptop:~/kieker$ ./bin/dotPic-fileConverter.sh /tmp/graphs/ svg
 The shell script ''./bin/dotPic-fileConverter.sh`` gets the directory with the files and the desired file extension (e.g. svg or png). The resulting graphs should now be available in ''/tmp/graphs`` and should look like the following:
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=1.0\textwidth]{sequenceDiagram.pdf}
+		\includegraphics[width=0.5\textwidth]{sequenceDiagram.pdf}
 		\label{image:sequencediagram}
 		\caption{The resulting sequence diagram}
 	\end{center}
@@ -153,23 +153,37 @@ We are now able to monitor sourcecode in a simple way and to visualize these rec
 \subsection{Probes}
 \subsection{Writers}
 \hypertarget{monitoringlogwriters}
-The so called \textit{monitoring log writers} (as can be seen in figure \ref{image:componentdiagram}) are the parts of \Kieker\ which are responsible for writing and serializing the recorded informations into files, databases and so on. There are already some writers implemented, like the synchrone/asynchrone file writer oder the synchrone/asynchrone database writer. These classes themselves are derived from the class \textit{AbstractKiekerMonitoringLogWriter} which itself implements the interface \textit{IKiekerMonitoringLogWriter}.\\
-As the quick start part already showed it, every monitored record is sent to the \textit{TpmonController} which itself calls the current writer. The writer uses for example the \textit{toStringArray()} method of the record to get the informations stored by the record as handable string array. The writer is then able to write these strings for example into a file.\\
+The so called \textit{monitoring log writers} (they can be seen as well in figure \ref{image:componentdiagram}) are the parts of \Kieker\ which are responsible for writing and serializing the recorded informations into files, databases and so on. In other words: They get an instance of \textit{AbstractKiekerMonitoringRecord} and produce an output of any nature whatsoever.\\
+As can be seen in figure \ref{image:writers} there are already some writers implemented.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{kieker_writerimpls.pdf}
+		\label{image:writers}
+		\caption{The inheritance hierarchy of the current implemented monitoring log writers}
+	\end{center}
+\end{figure}
+As the quick start part already showed it, every monitored record is sent to the \textit{TpmonController} which itself calls the current writer. The writer uses for example the \textit{toArray()} method of the record to get the informations stored by the record as handable array. The writer is then able to write these objects for example into a file. The used writer can be changed in the configuration file of \KiekerMonitoring.\\
 To implement an own writer class, the following steps has to be performed:
 \begin{enumerate}
- \item The new writer has to extend \textit{kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter}.
- \item All methods from the interface \textit{kieker.tpmon.writer.IKiekerMonitoringLogWriter} which has not been implemented yet by the class must be implemented (listing \ref{listing:OwnWriter.java}).
+ \item The new writer has to implement \textit{kieker.tpmon.writer.IMonitoringLogWriter}.
+ \item All methods from the interfaces \textit{kieker.tpmon.writer.IMonitoringLogWriter} and \textit{kieker.common.record.IMonitoringRecordReceiver} has to be implemented.
  \item The entry \textit{monitoringDataWriter} has to be changed in the configuration file ''tpmon.properties`` to the entire classname.
- \item The configuration file has to be stored as well in the ''.jar`` file and \Kieker\ has to be informed of the properties file\footnote{This is done by supplying java with an additional parameter. If the properties are stored in the file ''tpmon.properties'' then the parameter is ''-Dtpmon.configuration=META-INF/tpmon.properties``}.
 \end{enumerate}
+The following example writer takes the informations from the given record and shows them just on the screen.
 \setJavaCodeListing
 \lstset{caption=OwnWriter.java, label=listing:OwnWriter.java}
 \lstinputlisting{source-example/manual-monitoring-with-own-writer/src/OwnWriter.java}
-The example writer in listing \ref{listing:OwnWriter.java} takes the informations from the record and shows them just on the screen.
 
 \section{\KiekerAnalysis}
 \subsection{Configuration}
 \subsection{Readers}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{kieker_readerimpls.pdf}
+		\label{image:readers}
+		\caption{}
+	\end{center}
+\end{figure}
 The \textit{monitoring log readers} (their position can be found in figure \ref{image:componentdiagram}) are the counterpart to the \hyperlink{monitoringlogwriters}{\textit{monitoring log writers}}. While the writers get a record and write them in files or somewhere else, the readers take the writen data (from files, databases and so on) and convert them into an \textit{AbstractKiekerMonitoringRecord}. That means, that whenever we are implementing a new writer, we should also implement a corresponding reader. If we want for example save our recorded informations in a database, we have to be capable of reading these stored informations from the database again. The implementing of an own reader is nearly the same as the implementing of the writer.
 \begin{enumerate}
  \item The new reader has to extend \textit{kieker.common.logReader.AbstractKiekerMonitoringLogReader}.

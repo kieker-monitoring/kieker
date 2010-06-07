@@ -1,44 +1,60 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
-import kieker.tpmon.writer.AbstractKiekerMonitoringLogWriter;
-import kieker.tpmon.monitoringRecord.AbstractKiekerMonitoringRecord;
-import kieker.tpmon.annotation.TpmonInternal;
-import kieker.tpmon.writer.util.async.AbstractWorkerThread;
 import java.util.Vector;
+import kieker.tpmon.writer.IMonitoringLogWriter;
+import kieker.tpmon.writer.util.async.AbstractWorkerThread;
+import kieker.common.record.*;
 
-public class OwnWriter extends AbstractKiekerMonitoringLogWriter {
+public class OwnWriter implements IMonitoringLogWriter {
 
-    @TpmonInternal()
-    public void registerMonitoringRecordType(int id, String className) {
+    /**
+     * Initialize instance from passed initialization string which is typically
+     * a list of separated parameter/values pairs.
+     * The implementing class AbstractMonitoringLogWriter includes convenient
+     * methods to extract configuration values from an initString.
+     *
+     * @param initString the initialization string
+     * @return true iff the initialiation was successful
+     */
+    public boolean init(String initString) {
+        return true;
     }
 
-    @TpmonInternal()
-    public boolean writeMonitoringRecord(AbstractKiekerMonitoringRecord monitoringRecord) {
-        String arr[] = monitoringRecord.toStringArray();
+    /**
+     * Called for each new record.
+     * 
+     * Notice, that this method should not throw an exception,
+     * but indicate an error by the return value false.
+     *
+     * @param record the record.
+     * @return true on success; false in case of an error.
+     */
+    public boolean newMonitoringRecord(IMonitoringRecord record) throws MonitoringRecordReceiverException {
+        Object arr[] = record.toArray();
         int len = arr.length;
         if (len > 0) {
             for (int i = 0; i < len - 1; i++) {
-                System.out.print(arr[i] + ", ");
+                System.out.print(arr[i].toString() + ", ");
             }
             System.out.println(arr[len - 1]);
         }
         return true;
     }
 
-    @TpmonInternal()
-    public boolean init(String initString) {
-        return true;
-    }
-
     /**
+     *
      * Returns a vector of workers, or null if none.
      */
-    @TpmonInternal()
     public Vector<AbstractWorkerThread> getWorkers() {
         return null;
     }
 
-    @TpmonInternal()
+    /**
+     * Returns a human-readable information string about the writer's
+     * configuration and state.
+     *
+     * @return the information string.
+     */
     public String getInfoString() {
         return null;
     }

@@ -2,14 +2,14 @@ package mySimpleKiekerExample.bookstoreTracing;
 
 import java.util.Vector;
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 
 public class Bookstore extends Thread {
 
     static int numberOfRequests = 1;
     static int interRequestTime = 5;
     static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
- 
+
     public static void main(String[] args) throws InterruptedException {
         for (int i = 0; i < numberOfRequests; i++) {
             System.out.println("Bookstore.main: Starting request " + i);
@@ -25,17 +25,17 @@ public class Bookstore extends Thread {
                 bookstoreScenarios.wait();
             }
         }
-	System.exit(0);
+        System.exit(0);
     }
 
     @Override
     public void run() {
-	long tin = TpmonController.getInstance().getTime();
+        long tin = TpmonController.getInstance().getTime();
         Bookstore.searchBook();
-	long tout = TpmonController.getInstance().getTime();
+        long tout = TpmonController.getInstance().getTime();
 
-	KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Bookstore", "searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
-	TpmonController.getInstance().logMonitoringRecord(e);
+        OperationExecutionRecord e = new OperationExecutionRecord("mySimpleKiekerExample.bookstoreTracing.Bookstore", "searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
+        TpmonController.getInstance().newMonitoringRecord(e);
 
         synchronized (bookstoreScenarios) {
             bookstoreScenarios.remove(this);
@@ -46,19 +46,19 @@ public class Bookstore extends Thread {
     public static void searchBook() {
         for (int i = 0; i < 1; i++) {
 
-	    long tin = TpmonController.getInstance().getTime();
-	    Catalog.getBook(false);
-	    long tout = TpmonController.getInstance().getTime();
+            long tin = TpmonController.getInstance().getTime();
+            Catalog.getBook(false);
+            long tout = TpmonController.getInstance().getTime();
 
-	    KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(false)", "sessionID", 0, tin, tout, "vnName", 1, 1);
-	    TpmonController.getInstance().logMonitoringRecord(e);
+            OperationExecutionRecord e = new OperationExecutionRecord("mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(false)", "sessionID", 0, tin, tout, "vnName", 1, 1);
+            TpmonController.getInstance().newMonitoringRecord(e);
 
-	    tin = TpmonController.getInstance().getTime();
+            tin = TpmonController.getInstance().getTime();
             CRM.getOffers();
-	    tout = TpmonController.getInstance().getTime();
+            tout = TpmonController.getInstance().getTime();
 
-	    e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.CRM", "getOffers()", "sessionID", 0, tin, tout, "vnName", 2, 1);
-	    TpmonController.getInstance().logMonitoringRecord(e);  
+            e = new OperationExecutionRecord("mySimpleKiekerExample.bookstoreTracing.CRM", "getOffers()", "sessionID", 0, tin, tout, "vnName", 2, 1);
+            TpmonController.getInstance().newMonitoringRecord(e);
         }
     }
 
