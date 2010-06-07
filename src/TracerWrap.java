@@ -7,6 +7,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/**
+ * Build classpath and run trace analysis tool. Simple convinience class.
+ * 
+ * @author Robert von Massow
+ * 
+ */
 public class TracerWrap {
 
 	/**

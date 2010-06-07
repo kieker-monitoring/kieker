@@ -1,5 +1,11 @@
 package kieker.tools.traceAnalysis;
 
+/**
+ * Externalized Strings from {@link TraceAnalysisTool}
+ * 
+ * @author Robert von Massow
+ * 
+ */
 public class Constants {
 
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";

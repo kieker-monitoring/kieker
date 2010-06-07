@@ -1,3 +1,5 @@
+package kieker.tools.traceAnalysis;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -32,9 +34,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import kieker.tools.traceAnalysis.Constants;
-import kieker.tools.traceAnalysis.TraceAnalysisTool;
-
+/**
+ * Simple frontend to {@link TraceAnalysisTool}.
+ * 
+ * @author Robert von Massow
+ * 
+ */
 public class TraceAnalGui extends JFrame implements ActionListener {
 
 	private final JFrame frame;
