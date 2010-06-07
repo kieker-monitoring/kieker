@@ -3,5 +3,5 @@
 // The filename and the descriptions should be seperated with a single tab. 
 // Lines that start with double slash will be ignored.
 // The descriptions themself can contain tex-code but should be in one line.
-derby.jar	Drivers for the Apache Derby database.
-mysql-connector-java-$-bin.jar	The library to connect to a MySQL database.
+derby.jar	This library contains the necessary drivers for the Apache Derby database.
+mysql-connector-java-$-bin.jar	The library to connect to an existing MySQL database.
