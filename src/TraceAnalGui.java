@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -28,6 +31,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.TraceAnalysisTool;
 
 public class TraceAnalGui extends JFrame implements ActionListener {
 
@@ -50,7 +56,9 @@ public class TraceAnalGui extends JFrame implements ActionListener {
 			allocation = new JRadioButton(), assembly = new JRadioButton();
 	private final ButtonGroup bg = new ButtonGroup();
 	private final JTextField from = new JTextField("-1", 8),
-			to = new JTextField("-1", 8), before = new JTextField("-1", 8);
+			to = new JTextField("-1", 8), duration = new JTextField("-1", 8);
+	private final JCheckBox shrtlbls = new JCheckBox();
+	private final JCheckBox ignInvalid = new JCheckBox();
 
 	/*
 	 * [--plot-Component-Dependency-Graph] [--plot-Container-Dependency-Graph]
@@ -64,7 +72,7 @@ public class TraceAnalGui extends JFrame implements ActionListener {
 		final JPanel p = (JPanel) this.getContentPane();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		p.setLayout(new GridBagLayout());
-		final JLabel label = new JLabel("Input:");
+		JLabel label = new JLabel("Input:");
 
 		final GridBagConstraints gc = new GridBagConstraints();
 		gc.fill = GridBagConstraints.HORIZONTAL;
@@ -148,18 +156,34 @@ public class TraceAnalGui extends JFrame implements ActionListener {
 		p.add(new JSeparator(SwingConstants.HORIZONTAL), gc);
 
 		gc.insets = new Insets(8, 8, 8, 8);
-
-		gc.anchor = GridBagConstraints.WEST;
 		{
-
-			p.add(new JLabel("Operations:"), gc);
-			gc.gridx = 0;
+			gc.anchor = GridBagConstraints.WEST;
 			gc.gridwidth = 4;
-			gc.weightx = 0;
-			p.add(new JLabel("Plot Sequence Diagrams"), gc);
+			p.add(new JLabel("Operations:"), gc);
 			gc.gridx = 4;
+			gc.gridwidth = 1;
+			gc.anchor = GridBagConstraints.LINE_END;
+			label = new JLabel("Shrt Lbls");
+			label.setToolTipText("Short Labels");
+			p.add(label, gc);
+			gc.gridwidth = 1;
+			gc.gridx = 5;
+			gc.weightx = 0;
+			p.add(this.shrtlbls, gc);
+			gc.gridx = 0;
 			gc.gridwidth = 2;
+			gc.weightx = 1;
+			p.add(new JLabel("Plot Sequence Diagrams"), gc);
+			gc.gridx = 3;
+			gc.gridwidth = 1;
 			p.add(this.plotSq, gc);
+			gc.gridx = 4;
+			gc.gridwidth = 1;
+			gc.weightx = 1;
+			p.add(new JLabel("Ignore invalid traces"), gc);
+			gc.gridwidth = 1;
+			gc.gridx = 5;
+			p.add(this.ignInvalid, gc);
 			gc.gridwidth = 6;
 			gc.gridx = 0;
 			p.add(this.plotDiags(), gc);
@@ -170,24 +194,13 @@ public class TraceAnalGui extends JFrame implements ActionListener {
 		}
 
 		this.run = new JButton();
+		this.run.addActionListener(this);
 		this.run.setText("Run");
 		gc.fill = GridBagConstraints.BOTH;
 		gc.weightx = gc.weighty = 1;
 		gc.gridx = 7;
 		gc.gridheight = 17;
 		p.add(this.run, gc);
-		/*
-		 * usage: [--plot-Sequence-Diagrams] [--plot-Component-Dependency-Graph]
-		 * [--plot-Container-Dependency-Graph]
-		 * [--plot-Operation-Dependency-Graph] [--plot-Aggregated-Call-Tree]
-		 * [--plot-Call-Trees] [--print-Message-Traces]
-		 * [--print-Execution-Traces] [--print-invalid-Execution-Traces]
-		 * [--print-Equivalence-Classes] [--select-traces <id0 ... idn>]
-		 * [--trace-equivalence-mode <allocation|assembly|disabled>]
-		 * [--ignore-invalid-traces] [--max-trace-duration <duration in ms>]
-		 * [--ignore-records-before-date <yyyyMMdd-HHmmss>]
-		 * [--ignore-records-after-date <yyyyMMdd-HHmmss>] [--short-labels]
-		 */
 
 		this.pack();
 		this.setVisible(true);
@@ -205,16 +218,18 @@ public class TraceAnalGui extends JFrame implements ActionListener {
 		g.anchor = GridBagConstraints.NORTH;
 		g.gridheight = 1;
 		ign.add(new JLabel("Select Traces between"), g);
-		this.from.setToolTipText("[yyyyMMdd-HHmmss] or -1 to disable filter");
-		this.to.setToolTipText("[yyyyMMdd-HHmmss] or -1 to disable filter");
+		this.from.setToolTipText(Constants.DATE_FORMAT_PATTERN
+				+ " or -1 to disable filter");
+		this.to.setToolTipText(Constants.DATE_FORMAT_PATTERN
+				+ " or -1 to disable filter");
 		g.gridheight = 1;
 		ign.add(this.from, g);
 		ign.add(new JLabel("and"), g);
 		ign.add(this.to, g);
 
-		this.before.setToolTipText("in ms, -1 to disable filter");
+		this.duration.setToolTipText("in ms, -1 to disable filter");
 		ign.add(new JLabel("Max. trace duration"));
-		ign.add(this.before);
+		ign.add(this.duration);
 		ign.setBorder(b);
 		return ign;
 	}
@@ -338,6 +353,7 @@ public class TraceAnalGui extends JFrame implements ActionListener {
 		final TraceAnalGui frame = new TraceAnalGui();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.addB) {
@@ -356,7 +372,146 @@ public class TraceAnalGui extends JFrame implements ActionListener {
 			if (this.lm.getSize() > 0) {
 				this.lm.remove(this.l.getSelectedIndex());
 			}
+		} else if (e.getSource() == this.run) {
+			final Vector<String> b = new Vector<String>();
+			this.appendCmd(Constants.CMD_OPT_NAME_INPUTDIRS, b);
+			for (final Object s : new IterableEnumeration(this.lm.elements())) {
+				this.appendStr(s.toString(), b);
+			}
+			this.appendCmd(Constants.CMD_OPT_NAME_OUTPUTDIR, b);
+			this.appendStr(this.outdir.getText(), b);
+			if (this.prefix.getText().matches("\\w")) {
+				this.appendCmd(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, b);
+				this.appendStr(this.prefix.getText(), b);
+			}
+			if (this.plotSq.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTSEQDS, b);
+			}
+			if (this.plotComp.isSelected()) {
+				this
+						.appendCmd(
+								Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG,
+								b);
+			}
+			if (this.plotCont.isSelected()) {
+				this
+						.appendCmd(
+								Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG,
+								b);
+			}
+			if (this.plotOp.isSelected()) {
+				this
+						.appendCmd(
+								Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG,
+								b);
+			}
+			if (this.plotAgg.isSelected()) {
+				this.appendCmd(
+						Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE, b);
+			}
+			if (this.plotCall.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES, b);
+			}
+			if (this.printMsg.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES, b);
+			}
+			if (this.printExe.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES, b);
+			}
+			if (this.printInv.isSelected()) {
+				this.appendCmd(
+						Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES, b);
+			}
+			if (this.printEquiv.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT, b);
+			}
+			if (this.allocation.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
+				this.appendStr(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION,
+						b);
+			} else if (this.assembly.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
+				this
+						.appendStr(
+								Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY,
+								b);
+			}
+			if (this.traces.getText().matches("\\d")) {
+				this.appendCmd(Constants.CMD_OPT_NAME_SELECTTRACES, b)
+
+				;
+				this.appendStr(this.traces.getText(), b);
+			}
+			if (!this.from.getText().matches("^-1")) {
+				this.appendCmd(Constants.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE,
+						b);
+				this.from.getText();
+			}
+			if (!this.to.getText().matches("^-1")) {
+				this
+						.appendCmd(
+								Constants.CMD_OPT_NAME_IGNORERECORDSAFTERDATE,
+								b);
+				this.appendStr(this.to.getText(), b);
+			}
+			if (!this.duration.getText().matches("^-1")) {
+				this.appendCmd(Constants.CMD_OPT_NAME_MAXTRACEDURATION, b);
+				this.appendStr(this.duration.getText(), b);
+			}
+			if (this.shrtlbls.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_SHORTLABELS, b);
+			}
+			if (this.ignInvalid.isSelected()) {
+				this.appendCmd(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES, b);
+			}
+			TraceAnalysisTool.main(b.toArray(new String[] {}));
+			/*
+			 * usage: [--plot-Sequence-Diagrams]
+			 * [--plot-Component-Dependency-Graph]
+			 * [--plot-Container-Dependency-Graph]
+			 * [--plot-Operation-Dependency-Graph] [--plot-Aggregated-Call-Tree]
+			 * [--plot-Call-Trees] [--print-Message-Traces]
+			 * [--print-Execution-Traces] [--print-invalid-Execution-Traces]
+			 * [--print-Equivalence-Classes] [--select-traces <id0 ... idn>]
+			 * [--trace-equivalence-mode <allocation|assembly|disabled>]
+			 * [--ignore-invalid-traces] [--max-trace-duration <duration in ms>]
+			 * [--ignore-records-before-date <yyyyMMdd-HHmmss>]
+			 * [--ignore-records-after-date <yyyyMMdd-HHmmss>] [--short-labels]
+			 */
+
 		}
 	}
 
+	private void appendCmd(final String cmdName, final Vector<String> b) {
+		b.add("--" + cmdName);
+	}
+
+	private void appendStr(final String str, final Vector<String> b) {
+		b.add(str);
+	}
+
+}
+
+class IterableEnumeration<T> implements Iterable<T>, Iterator<T> {
+	private final Enumeration<T> enumeration;
+
+	public IterableEnumeration(final Enumeration<T> enumeration) {
+		this.enumeration = enumeration;
+	}
+
+	public Iterator<T> iterator() {
+		return this;
+	}
+
+	public boolean hasNext() {
+		return this.enumeration.hasMoreElements();
+	}
+
+	public T next() {
+		return this.enumeration.nextElement();
+	}
+
+	public void remove() {
+		throw new UnsupportedOperationException();
+	}
 }
