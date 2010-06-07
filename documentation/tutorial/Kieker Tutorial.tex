@@ -16,29 +16,32 @@
 \newpage
 
 \section{Overview}
+
 \subsection{What is \Kieker?}
 \Kieker\ is a framework\footnote{A framework is sort of a library which provides specific and extended functionality} which allows programmers and software engineers the monitoring and analysis of program flows and the runtime behavior of java applications. Normal (``plain'') java applications can be arranged with the framework as well as server based java web applications. The framework itself aims to provide an easy managable and maintanable piece of software, which can be included uncomplicated into existing software projects. While \Kieker\ analyzes the own sourcecode reliably, it causes itself only very less overhead during monitoring.\\
 \Kieker\ can be used to put whole method calls on a watch, but single statements (e.g. a = a + 1) as well.
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[width=1.0\textwidth]{kiekerComponentDiagram.pdf}
-		\label{image:componentdiagram}
-		\caption{\Kieker\ component diagram}
-	\end{center}
+  \begin{center}
+    \includegraphics[width=1.0\textwidth]{kiekerComponentDiagram.pdf}
+    \label{image:componentdiagram}
+    \caption{\Kieker\ component diagram}
+  \end{center}
 \end{figure}
 As can be seen in figure \ref{image:componentdiagram}, the framework consists mainly of two big parts:
 \begin{itemize}
-\item \textbf{\KiekerMonitoring}\\
-This is the part which is responsible for the logging and the recording of the program behavior. The result of this component are the recorded informations which can then be written into different output streams, like for example into files or into a database.
-\item \textbf{\KiekerAnalysis}\\
-This part is responsible for the evaluation and visualization of the recorded information. It uses the files (or general any collected data which is available as monitoring records) for the analysis and to produce graphs (e.g. Component-Dependency-Graph).
+  \item \textbf{\KiekerMonitoring}\\
+    This is the part which is responsible for the logging and the recording of the program behavior. The result of this component are the recorded informations which can then be written into different output streams, like for example into files or into a database.
+  \item \textbf{\KiekerAnalysis}\\
+    This part is responsible for the evaluation and visualization of the recorded information. It uses the files (or general any collected data which is available as monitoring records) for the analysis and to produce graphs (e.g. Component-Dependency-Graph).
 \end{itemize}
 
 \subsection{What ist the purpose of this tutorial?}
 In this tutorial, we will take a closer look at both, the \textbf{\KiekerMonitoring}- and the \textbf{\KiekerAnalysis}-part. That means, we will describe on the one hand how \KiekerMonitoring\ can be used to mark parts of the own sourcecode for \Kieker\ and to let them execute under surveilance, so that the recorded information can be saved in files. On the other hand we will use \KiekerAnalysis\ to visualize our recorded data.\\
 We will show how to create and execute a simple example before we go deeper into the parts of the framework.
 
+
 \section{Quickstart}
+
 \subsection{Downloading and installing \Kieker}
 For the monitoring and analysis of the source code, it is necessary to download the \Kieker\ binaries from \KiekerDownloadUrl\ first. Once that is done, the content of the zip- respectively the tar.gz-file should be extracted to any directory, for example ``$\sim$/kieker'' (under Linux) or ``c:$\backslash$program files$\backslash$kieker'' (under Windows).\\
 That is already enough for the ``installation'' of \Kieker.
@@ -137,16 +140,32 @@ nils@Laptop:~/kieker$ ./bin/dotPic-fileConverter.sh /tmp/graphs/ svg
 \end{lstlisting}
 The shell script ''./bin/dotPic-fileConverter.sh`` gets the directory with the files and the desired file extension (e.g. svg or png). The resulting graphs should now be available in ''/tmp/graphs`` and should look like the following:
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[width=0.5\textwidth]{sequenceDiagram.pdf}
-		\label{image:sequencediagram}
-		\caption{The resulting sequence diagram}
-	\end{center}
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{sequenceDiagram.pdf}
+    \label{image:sequencediagram}
+    \caption{The resulting sequence diagram}
+  \end{center}
 \end{figure}
 We are now able to monitor sourcecode in a simple way and to visualize these recorded informations.
 
 \subsection{Using annotations}
+Now we want to monitor whole methods without surrounding the method calls with a block where we keep the time manually. We will now use so called annotations to mark the methods we want to monitor. As can be seen in the following listing we write the annotation \textit{kieker.tpmon.annotation.TpmonExecutionMonitoringProbe} above the methods to be monitored. 
+\setJavaCodeListing
+\lstset{caption=Bookstore.java, label=listing:Bookstore2.java}
+\lstinputlisting{source-example/annotation-monitoring/src/Bookstore.java}
+To make sure that the sourcecode is monitored, we need now aspectJ. Therefore we copy the file ''META-INF/aop.xml.example`` from our \Kieker\ directory to our working directory to ''META-INF/aop.xml``. In this file it is written which parts of the sourcecode will be monitored. To make sure that every method in our program which is annotated will be monitored, we have to write the following into the file:
+\setXMLListing 
+\begin{lstlisting}
+<aspectj>
+	<!-- turn verbose on to check which files are instrumented -->
+	<!-- <weaver options="-verbose"/> -->
+	<weaver options="">
+	
+	<!-- The following line is the important one -->
+	<include within="*"/> 
 
+	<!-- uncomment following to instrument sun jpetstore -->
+\end{lstlisting}
 
 \section{\KiekerMonitoring}
 \subsection{Configuration}
