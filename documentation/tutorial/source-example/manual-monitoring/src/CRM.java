@@ -1,7 +1,7 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
 import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord;
+import kieker.common.record.OperationExecutionRecord;
 
 public class CRM {
 
@@ -10,7 +10,7 @@ public class CRM {
 	    Catalog.getBook(false);
 	    long tout = TpmonController.getInstance().getTime();
 
-	    KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(false)", "sessionID", 0, tin, tout, "vnName", 3, 2);
-	    TpmonController.getInstance().logMonitoringRecord(e);
+	    OperationExecutionRecord e = new OperationExecutionRecord("mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(false)", "sessionID", 0, tin, tout, "vnName", 3, 2);
+	    TpmonController.getInstance().newMonitoringRecord(e);
     }
 }
