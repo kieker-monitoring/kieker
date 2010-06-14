@@ -1,6 +1,6 @@
 package kieker.tests.storageOnly;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.tpmon.core.TpmonController;
+import kieker.monitoring.core.MonitoringController;
 
 
 /**
@@ -48,7 +48,7 @@ import kieker.tpmon.core.TpmonController;
 
 public class StorageOnly { 
     private static final int numberOfEvents = 1000;
-    private static final TpmonController ctrl = TpmonController.getInstance();
+    private static final MonitoringController ctrl = MonitoringController.getInstance();
     private static final String vmName = ctrl.getVmName();
     
     public static void main(String args[]) {

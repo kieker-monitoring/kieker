@@ -19,7 +19,7 @@ package kieker.tools.logReplayer;
  *
  */
 
-import kieker.tpmon.core.TpmonController;
+import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -53,7 +53,7 @@ public class FilesystemLogReplayerStarter {
         cmdlOpts.addOption(OptionBuilder.withArgName("num").hasArg().withLongOpt(CMD_OPT_NAME_NUM_REALTIME_WORKERS).isRequired(false).withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
     }
     private static final Log log = LogFactory.getLog(FilesystemLogReplayerStarter.class);
-    private static TpmonController ctrlInst = null;
+    private static MonitoringController ctrlInst = null;
     private static String[] inputDirs = null;
     private static boolean keepOriginalLoggingTimestamps;
     private static boolean realtimeMode = false;
@@ -150,7 +150,7 @@ public class FilesystemLogReplayerStarter {
             log.info("Replaying log data in non-real time");
         }
 
-        System.out.println(TpmonController.getInstance().getConnectorInfo());
+        System.out.println(MonitoringController.getInstance().getConnectorInfo());
 
         FilesystemLogReplayer player = new FilesystemLogReplayer(inputDirs, keepOriginalLoggingTimestamps, realtimeMode, numRealtimeWorkerThreads);
 

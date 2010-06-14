@@ -24,12 +24,12 @@ import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
-import kieker.tpan.TpanInstance;
-import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.reader.MonitoringLogReaderException;
+import kieker.analysis.AnalysisInstance;
+import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.reader.MonitoringLogReaderException;
 
-import kieker.tpan.reader.filesystem.FSReader;
+import kieker.analysis.reader.filesystem.FSReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,7 +42,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
     /* manages the lifecycle of the reader and consumers */
-    private final TpanInstance tpanInstance = new TpanInstance();
+    private final AnalysisInstance tpanInstance = new AnalysisInstance();
     private RealtimeReplayDistributor rtDistributor = null;
     private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
     private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";

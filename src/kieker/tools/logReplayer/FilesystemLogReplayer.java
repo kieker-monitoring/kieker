@@ -20,11 +20,11 @@ package kieker.tools.logReplayer;
  */
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.TpanInstance;
-import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.tpan.reader.AbstractMonitoringLogReader;
-import kieker.tpan.reader.filesystem.FSReader;
-import kieker.tpmon.core.TpmonController;
+import kieker.analysis.AnalysisInstance;
+import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.reader.filesystem.FSReader;
+import kieker.monitoring.core.MonitoringController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public class FilesystemLogReplayer {
 
     private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
-    private static final TpmonController ctrlInst = TpmonController.getInstance();
+    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
     private String[] inputDirs = null;
     private volatile boolean realtimeMode = false;
     private boolean keepOriginalLoggingTimestamps = true;
@@ -65,7 +65,7 @@ public class FilesystemLogReplayer {
          * Force the controller to keep the original logging timestamps
          * of the monitoring records.
          */
-        ctrlInst.setControllerMode(this.keepOriginalLoggingTimestamps?TpmonController.ControllerMode.REPLAY:TpmonController.ControllerMode.REALTIME);
+        ctrlInst.setControllerMode(this.keepOriginalLoggingTimestamps?MonitoringController.ControllerMode.REPLAY:MonitoringController.ControllerMode.REALTIME);
 
         IMonitoringRecordConsumerPlugin logCons = new IMonitoringRecordConsumerPlugin() {
 
@@ -93,7 +93,7 @@ public class FilesystemLogReplayer {
         } else {
             fsReader = new FSReader(inputDirs);
         }
-        TpanInstance tpanInstance = new TpanInstance();
+        AnalysisInstance tpanInstance = new AnalysisInstance();
         tpanInstance.setLogReader(fsReader);
         tpanInstance.registerPlugin(logCons);
         try {

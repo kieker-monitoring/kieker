@@ -24,10 +24,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.tpan.plugin.MonitoringRecordConsumerException;
+import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.MonitoringRecordConsumerException;
 
-import kieker.tpmon.core.TpmonController;
+import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,7 +47,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
     private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
     private final ScheduledThreadPoolExecutor executor;
     private long lTime;
-    private static final TpmonController ctrlnst = TpmonController.getInstance();
+    private static final MonitoringController ctrlnst = MonitoringController.getInstance();
     private volatile int active;
     private final int maxQueueSize;
     private final CountDownLatch terminationLatch;

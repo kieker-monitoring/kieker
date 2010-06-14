@@ -35,38 +35,38 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.tpan.TpanInstance;
-import kieker.tpan.datamodel.ExecutionTrace;
-import kieker.tpan.datamodel.InvalidExecutionTrace;
-import kieker.tpan.datamodel.MessageTrace;
-import kieker.tpan.datamodel.repository.AbstractSystemSubRepository;
-import kieker.tpan.datamodel.repository.AllocationComponentOperationPairFactory;
-import kieker.tpan.datamodel.repository.AssemblyComponentOperationPairFactory;
-import kieker.tpan.datamodel.repository.SystemModelRepository;
-import kieker.tpan.plugin.IAnalysisPlugin;
-import kieker.tpan.plugin.MonitoringRecordConsumerException;
-import kieker.tpan.plugin.javaFx.BriefJavaFxInformer;
-import kieker.tpan.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlugin;
-import kieker.tpan.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
-import kieker.tpan.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
-import kieker.tpan.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
-import kieker.tpan.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
-import kieker.tpan.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
-import kieker.tpan.plugin.traceAnalysis.visualization.callTree.AbstractCallTreePlugin;
-import kieker.tpan.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
-import kieker.tpan.plugin.traceAnalysis.visualization.callTree.TraceCallTreeNode;
-import kieker.tpan.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPlugin;
-import kieker.tpan.plugin.traceAnalysis.visualization.dependencyGraph.ContainerDependencyGraphPlugin;
-import kieker.tpan.plugin.traceAnalysis.visualization.dependencyGraph.OperationDependencyGraphPlugin;
-import kieker.tpan.plugin.traceAnalysis.visualization.sequenceDiagram.SequenceDiagramPlugin;
-import kieker.tpan.plugin.util.MonitoringRecordTypeLogger;
-import kieker.tpan.plugin.util.event.EventProcessingException;
-import kieker.tpan.reader.JMSReader;
-import kieker.tpan.reader.MonitoringLogReaderException;
-import kieker.tpan.reader.filesystem.FSReader;
+import kieker.analysis.AnalysisInstance;
+import kieker.analysis.datamodel.ExecutionTrace;
+import kieker.analysis.datamodel.InvalidExecutionTrace;
+import kieker.analysis.datamodel.MessageTrace;
+import kieker.analysis.datamodel.repository.AbstractSystemSubRepository;
+import kieker.analysis.datamodel.repository.AllocationComponentOperationPairFactory;
+import kieker.analysis.datamodel.repository.AssemblyComponentOperationPairFactory;
+import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.analysis.plugin.IAnalysisPlugin;
+import kieker.analysis.plugin.MonitoringRecordConsumerException;
+import kieker.analysis.plugin.javaFx.BriefJavaFxInformer;
+import kieker.analysis.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlugin;
+import kieker.analysis.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
+import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
+import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
+import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
+import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AbstractCallTreePlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.callTree.TraceCallTreeNode;
+import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ContainerDependencyGraphPlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.OperationDependencyGraphPlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.sequenceDiagram.SequenceDiagramPlugin;
+import kieker.analysis.plugin.util.MonitoringRecordTypeLogger;
+import kieker.analysis.plugin.util.event.EventProcessingException;
+import kieker.analysis.reader.JMSReader;
+import kieker.analysis.reader.MonitoringLogReaderException;
+import kieker.analysis.reader.filesystem.FSReader;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -725,7 +725,7 @@ public class TraceAnalysisTool {
 			allTraceProcessingComponents.addAll(execTraceProcessingComponents);
 			allTraceProcessingComponents
 					.addAll(invalidExecTraceProcessingComponents);
-			final TpanInstance analysisInstance = new TpanInstance();
+			final AnalysisInstance analysisInstance = new AnalysisInstance();
 			analysisInstance.setLogReader(new FSReader(
 					TraceAnalysisTool.inputDirs));
 			// analysisInstance.setLogReader(new
@@ -1276,7 +1276,7 @@ public class TraceAnalysisTool {
 		TraceAnalysisTool.log.info("Trying to start JMS Listener to "
 				+ jmsProviderUrl + " " + jmsDestination);
 		/* Read log data and collect execution traces */
-		final TpanInstance analysisInstance = new TpanInstance();
+		final AnalysisInstance analysisInstance = new AnalysisInstance();
 		analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
 				jmsDestination));
 
@@ -1303,7 +1303,7 @@ public class TraceAnalysisTool {
 		TraceAnalysisTool.log.info("Trying to start JMS Listener to "
 				+ jmsProviderUrl + " " + jmsDestination);
 		/* Read log data and collect execution traces */
-		final TpanInstance analysisInstance = new TpanInstance();
+		final AnalysisInstance analysisInstance = new AnalysisInstance();
 		analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
 				jmsDestination));
 
@@ -1332,10 +1332,10 @@ public class TraceAnalysisTool {
 	 * You'll need a tpanInstance (with a reader) before invoking this method.
 	 */
 	public static void createMessageTraceFiltersAndRegisterMessageTraceListener(
-			TpanInstance tpanInstance,
+			AnalysisInstance tpanInstance,
 			final BriefJavaFxInformer messageTraceListener) {
 		if (tpanInstance == null) {
-			tpanInstance = new TpanInstance();
+			tpanInstance = new AnalysisInstance();
 		}
 
 		TraceReconstructionPlugin mtReconstrFilter = null;
