@@ -4,7 +4,7 @@ import com.ibatis.dao.client.DaoManager;
 import com.ibatis.jpetstore.domain.Account;
 import com.ibatis.jpetstore.persistence.iface.AccountDao;
 import com.ibatis.jpetstore.persistence.DaoConfig;
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 public class AccountService {
 

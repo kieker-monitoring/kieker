@@ -8,7 +8,7 @@ import org.apache.struts.beanaction.ActionContext;
 
 import java.util.Iterator;
 import java.util.Map;
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 public class CartBean extends AbstractBean {
 

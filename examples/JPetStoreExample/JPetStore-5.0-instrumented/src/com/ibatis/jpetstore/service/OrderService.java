@@ -8,7 +8,7 @@ import com.ibatis.jpetstore.persistence.DaoConfig;
 import com.ibatis.jpetstore.persistence.iface.ItemDao;
 import com.ibatis.jpetstore.persistence.iface.OrderDao;
 import com.ibatis.jpetstore.persistence.iface.SequenceDao;
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 public class OrderService {
 

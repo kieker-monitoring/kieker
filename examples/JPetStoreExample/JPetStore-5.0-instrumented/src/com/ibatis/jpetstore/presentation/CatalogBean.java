@@ -5,7 +5,7 @@ import com.ibatis.jpetstore.domain.Category;
 import com.ibatis.jpetstore.domain.Item;
 import com.ibatis.jpetstore.domain.Product;
 import com.ibatis.jpetstore.service.CatalogService;
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 public class CatalogBean extends AbstractBean {
 
