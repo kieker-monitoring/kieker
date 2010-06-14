@@ -18,8 +18,8 @@ package mySimpleKiekerExample.probe;
  * ==================================================
  */
 
-import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.probe.IMonitoringProbe;
+import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.probe.IMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -30,7 +30,7 @@ import mySimpleKiekerExample.record.MyRTMonitoringRecord;
 @Aspect
 public class MyRTMonitoringProbe implements IMonitoringProbe {
 
-    protected static final TpmonController CTRL = TpmonController.getInstance();
+    protected static final MonitoringController CTRL = MonitoringController.getInstance();
 
     @Around(value = "execution(@mySimpleKiekerExample.annotation.MyRTProbe * *.*(..))")
     public Object probe(ProceedingJoinPoint j) throws Throwable {

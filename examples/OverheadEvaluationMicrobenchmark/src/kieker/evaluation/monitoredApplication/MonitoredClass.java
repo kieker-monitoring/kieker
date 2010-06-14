@@ -1,7 +1,7 @@
 package kieker.evaluation.monitoredApplication;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
-import kieker.tpmon.annotation.BenchmarkProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.BenchmarkProbe;
 
 /**
  * @author Jan Waller

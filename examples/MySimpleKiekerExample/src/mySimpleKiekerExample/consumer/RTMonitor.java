@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.logReplayer.FSReaderRealtime;
-import kieker.tpan.TpanInstance;
-import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.tpan.plugin.MonitoringRecordConsumerException;
-import kieker.tpan.reader.MonitoringLogReaderException;
+import kieker.analysis.AnalysisInstance;
+import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.MonitoringRecordConsumerException;
+import kieker.analysis.reader.MonitoringLogReaderException;
 import mySimpleKiekerExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -89,7 +89,7 @@ public class RTMonitor implements IMonitoringRecordConsumerPlugin {
 
         FSReaderRealtime fsReaderRealtime =
                 new FSReaderRealtime(new String[]{inputDir}, 7);
-        TpanInstance analysisInstance = new TpanInstance();
+        AnalysisInstance analysisInstance = new AnalysisInstance();
         analysisInstance.setLogReader(fsReaderRealtime);
         analysisInstance.registerPlugin(rtMonitor);
 

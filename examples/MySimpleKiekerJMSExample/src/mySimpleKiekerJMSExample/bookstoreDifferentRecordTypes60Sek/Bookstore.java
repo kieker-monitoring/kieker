@@ -1,6 +1,6 @@
 package mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 import mySimpleKiekerJMSExample.annotation.MyRTProbe;
 

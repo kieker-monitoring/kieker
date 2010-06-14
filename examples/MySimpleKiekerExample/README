@@ -1,5 +1,5 @@
 This examples demonstrate 
-1. how to use Kieker.Tpmon to instrument a simple 
+1. how to use Kieker.Monitoring to instrument a simple 
    Java application and how to log 
    monitoring data
 2. and how to use Kieker.Tpan for 
@@ -17,9 +17,9 @@ Initially, the following steps are required:
 2.Copy the following files from the binary distribution 
   to the lib/ directory of this example:
   * dist/kieker-common-<version>.jar
-  * dist/kieker-tpan-<version>_ctrl.jar
-  * dist/kieker-tpmon-<version>_ctrl.jar
-  * dist/kieker-tpmon-<version>_ltw.jar
+  * dist/kieker-analysis-<version>_ctrl.jar
+  * dist/kieker-monitoring-<version>_ctrl.jar
+  * dist/kieker-monitoring-<version>_ltw.jar
   * dist/kieker-tools-<version>.jar
   * lib/aspectjrt-<version>.jar
   * lib/aspectjtools-<version>.jar
@@ -27,10 +27,10 @@ Initially, the following steps are required:
   * lib/commons-cli-<version>.jar
   * lib/commons-logging-<version>.jar
   * lib/log4j-<version>.jar
-3.Copy META-INF/tpmon.properties.example to 
-   META-INF/tpmon.properties and modify this configuration file
+3.Copy META-INF/kieker.monitoring.properties.example to 
+   META-INF/kieker.monitoring.properties and modify this configuration file
   according to your needs. 
-  NOTE: There's no need to change tpmon.properties to run the 
+  NOTE: There's no need to change kieker.monitoring.properties to run the 
         example with the default configuration.
 4. You should check whether you installed ant (http://ant.apache.org/), 
    since the execution of all examples described in this 
@@ -61,7 +61,7 @@ Three methods are instrumented with the annotation
      and implementing class:
      $1=kieker.common.record.OperationExecutionRecord
 
-3. We will now use the Kieker.Tpan-based TraceAnalysisTool to generate sequence 
+3. We will now use the Kieker.Analysis-based TraceAnalysisTool to generate sequence 
    diagrams and a dependency graph for this monitoring log. Please change to 
    the base directory of Kieker's binary release. The tool can be invoked using 
    the wrapper script bin/trace-analysis.sh (it may be necessary to chmod +x /bin/*.sh).
@@ -94,7 +94,7 @@ Three methods are instrumented with the annotation
      (The script bin/dotPic-fileConverter.sh can be used to convert all 
       files contained in a directory to any output format supported by
       pic2plot.)
- 3.3 The directory tpmon-testdata/ contains two monitoring logs of this
+ 3.3 The directory kieker-testdata/ contains two monitoring logs of this
      scenario and of a slightly extended example with 333 traces (of three
      different trace types)
      

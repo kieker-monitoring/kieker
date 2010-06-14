@@ -1,6 +1,7 @@
-package kieker.tpmon.probe;
+package kieker.monitoring.probe;
 
-import kieker.tpmon.core.TpmonController;
+import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.probe.IMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public class EmptyProbeAnnotation implements IMonitoringProbe {
     private static final Log log = LogFactory.getLog(EmptyProbeAnnotation.class);
 
-    private static final TpmonController ctrlInst = TpmonController.getInstance();
+    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
 
     @Pointcut("execution(@kieker.tpmon.annotation.BenchmarkProbe * *.*(..)) && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
     public void monitoredMethod() {

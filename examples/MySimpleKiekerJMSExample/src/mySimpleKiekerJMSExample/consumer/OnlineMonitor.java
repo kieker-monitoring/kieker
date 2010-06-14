@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.tpan.TpanInstance;
-import kieker.tpan.reader.IMonitoringLogReader;
-import kieker.tpan.reader.JMSReader;
-import kieker.tpan.reader.MonitoringLogReaderException;
-import kieker.tpan.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.tpan.plugin.MonitoringRecordConsumerException;
+import kieker.analysis.AnalysisInstance;
+import kieker.analysis.reader.IMonitoringLogReader;
+import kieker.analysis.reader.JMSReader;
+import kieker.analysis.reader.MonitoringLogReaderException;
+import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import mySimpleKiekerJMSExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -88,7 +88,7 @@ public class OnlineMonitor implements IMonitoringRecordConsumerPlugin {
         IMonitoringLogReader logReader;
         logReader = new JMSReader("tcp://127.0.0.1:3035/", "queue1");
 
-        TpanInstance analysisInstance = new TpanInstance();
+        AnalysisInstance analysisInstance = new AnalysisInstance();
         analysisInstance.setLogReader(logReader);
         analysisInstance.registerPlugin(rtMonitor);
 

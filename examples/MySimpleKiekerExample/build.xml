@@ -19,21 +19,21 @@
         <pathelement location="${build.dir}/"/>
     </path>
 
-    <condition property="no.tpmon.properties">
+    <condition property="no.kieker.monitoring.properties">
         <not>
-            <available file="${tpmon.properties}"/>
+            <available file="${kieker.monitoring.properties}"/>
         </not>
     </condition>
 
-    <target name="init-tpmon-properties" if="no.tpmon.properties">
-        <!-- if no tpmon.properties, copy example file automatically  -->
-        <echo message="${tpmon.properties} not existing.
+    <target name="init-kieker.monitoring-properties" if="no.kieker.monitoring.properties">
+        <!-- if no kieker.monitoring.properties, copy example file automatically  -->
+        <echo message="${kieker.monitoring.properties} not existing.
                        Creating default file."/>
-        <copy file="${tpmon.properties.example}" tofile="${tpmon.properties}"/>
+        <copy file="${kieker.monitoring.properties.example}" tofile="${kieker.monitoring.properties}"/>
     </target>
 
     <target name="init-properties"
-            depends="init-tpmon-properties">
+            depends="init-kieker.monitoring-properties">
     </target>
 
     <target name="init" depends="init-properties">
@@ -77,9 +77,9 @@
               fork="true"
               classname="mySimpleKiekerExample.bookstoreDifferentRecordTypes.Bookstore"
               classpathref="run.classpath">
-            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
-            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
+            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
@@ -97,9 +97,9 @@
               fork="true"
               classname="mySimpleKiekerExample.bookstore30SekDelayed.Bookstore"
               classpathref="run.classpath">
-            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
-            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
+            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
@@ -117,9 +117,9 @@
               fork="true"
               classname="mySimpleKiekerExample.bookstoreTracing.Bookstore"
               classpathref="run.classpath">
-            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
-            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
+            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
@@ -137,9 +137,9 @@
               fork="true"
               classname="mySimpleKiekerExample.bookstoreTracingManyProbabilistic.Bookstore"
               classpathref="run.classpath">
-            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
-            <jvmarg value="-Dtpmon.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dtpmon.customStoragePath=${tests.storagepath}"/>
+            <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
+            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
@@ -153,7 +153,7 @@
               fork="true"
               classname="mySimpleKiekerExample.consumer.RTMonitor"
               classpathref="run.classpath">
-            <jvmarg value="-Dtpmon.configuration=${tpmon.properties}"/>
+            <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>

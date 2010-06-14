@@ -1,8 +1,9 @@
-package kieker.tpmon.writer;
+package kieker.monitoring.writer;
 
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tpmon.writer.util.async.AbstractWorkerThread;
+import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
