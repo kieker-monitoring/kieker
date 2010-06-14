@@ -8,8 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 
-/**
- * kieker.tpmon.aspects.springAspectJ.KiekerTpmonRequestRegistrationInterceptor
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -26,7 +25,9 @@ import org.springframework.web.context.request.WebRequestInterceptor;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
 public class KiekerTpmonRequestRegistrationInterceptor implements WebRequestInterceptor {

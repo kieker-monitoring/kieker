@@ -4,7 +4,7 @@
 
   <groupId>net.sf.kieker</groupId>
   <artifactId>tpmon-ltw</artifactId>
-  <name>Kieker Tpmon LTW</name>
+  <name>Kieker Monitoring LTW</name>
   <description>Load time weaving components</description>
   <packaging>jar</packaging>
   <parent>

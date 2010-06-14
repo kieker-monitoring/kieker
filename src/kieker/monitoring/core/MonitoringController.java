@@ -1,7 +1,5 @@
 package kieker.monitoring.core;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.MonitoringRecordReceiverException;
 
@@ -140,7 +138,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     private volatile int asyncRecordQueueSize = 8000;
     private volatile IMonitoringLogWriter monitoringLogWriter = null;
     private volatile String vmName = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
-    // database only configuration configuration values that are overwritten by tpmon.properties included in the tpmon library
+    // database only configuration configuration values that are overwritten by kieker.monitoring.properties included in the kieker.monitoring library
     private volatile boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some
 
     /** Returns the singleton instance. */
@@ -212,13 +210,13 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     }
 
     /**
-     * The vmName which defaults to the hostname, and may be set by tpmon-control-servlet.
+     * The vmName which defaults to the hostname, and may be set by the control-servlet.
      * The vmName will be part of the monitoring data and allows to assing observations
      * in cases where the software system is deployed on more than one host.
      * 
      * When you want to distinguish multiple Virtual Machines on one host,
-     * you have to set the vmName manually (e.g., via the tpmon-control-servlet,
-     * or by directly implementing a call to TpmonController.setVmname(...).
+     * you have to set the vmName manually (e.g., via the control-servlet,
+     * or by directly implementing a call to MonitoringController.setVmname(...).
      */
     public final String getVmName() {
         return this.vmName;
@@ -227,13 +225,13 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     /**
      * Allows to set an own vmName, a field in the monitoring data to distinguish
      * multiple hosts / vms in a system. This method is for instance used by
-     * the tpmon control servlet. 
+     * the Kieker.Monitoring control servlet.
      * 
      * The vmName defaults to the hostname.
      * 
      * When you want to distinguish multiple Virtual Machines on one host,
-     * you have to set the vmName manually (e.g., via the tpmon-control-servlet,
-     * or by directly implementing a call to TpmonController.setVmname(...).
+     * you have to set the vmName manually (e.g., via the control-servlet,
+     * or by directly implementing a call to MonitoringController.setVmname(...).
      * 
      * @param newVmname
      */
@@ -411,33 +409,33 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
         Properties prop = new Properties();
         String configurationFile = null;
         try {
-            if (System.getProperty("tpmon.configuration") != null) { // we use the present virtual machine parameter value
-                configurationFile = System.getProperty("tpmon.configuration");
-                log.info("Tpmon: Loading properties JVM-specified path '" + configurationFile + "'");
+            if (System.getProperty("kieker.monitoring.configuration") != null) { // we use the present virtual machine parameter value
+                configurationFile = System.getProperty("kieker.monitoring.configuration");
+                log.info("Loading properties JVM-specified path '" + configurationFile + "'");
                 is = new FileInputStream(configurationFile);
             } else {
                 // no system property.
 
                 // Trying to find configuration file in classpath
-                configurationFile = "META-INF/tpmon.properties";
+                configurationFile = "META-INF/kieker.monitoring.properties";
                 is = MonitoringController.class.getClassLoader().getResourceAsStream(configurationFile);
                 if (is != null) { // success
-                    log.info("Tpmon: Loading properties from properties file in classpath: " + configurationFile);
-                    log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                    log.info("Loading properties from properties file in classpath: " + configurationFile);
+                    log.info("You can specify an alternative properties file using the property 'kieker.monitoring.configuration'");
                 } else { // default file in jar as fall-back
-                    configurationFile = "META-INF/tpmon.properties.default";
-                    log.info("Tpmon: Loading properties from tpmon library jar!" + configurationFile);
-                    log.info("You can specify an alternative properties file using the property 'tpmon.configuration'");
+                    configurationFile = "META-INF/kieker.monitoring.properties.default";
+                    log.info("Loading properties from Kieker.Monitoring library jar!" + configurationFile);
+                    log.info("You can specify an alternative properties file using the property 'kieker.monitoring.configuration'");
                     is = MonitoringController.class.getClassLoader().getResourceAsStream(configurationFile);
                 }
             }
-            // TODO: the fall-back file in the tpmon library should be renamed to
-            //       META-INF/tpmon.properties.default or alike, in order to
+            // TODO: the fall-back file in the Kieker.Monitoring library should be renamed to
+            //       META-INF/kieker.monitoring.properties.default or alike, in order to
             //       avoid strange behavior caused by the order of jars being
             //       being loaded by the classloader.
             prop.load(is);
         } catch (Exception ex) {
-            log.error("Error loading tpmon.properties file '" + configurationFile + "'", ex);
+            log.error("Error loading kieker.monitoring.properties file '" + configurationFile + "'", ex);
             // TODO: introduce static variable 'terminated' or alike
         } finally {
             try {
@@ -450,69 +448,69 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
         monitoringDataWriterInitString = prop.getProperty("monitoringDataWriterInitString");
 
         String dbDriverClassnameProperty;
-        if (System.getProperty("tpmon.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
-            dbDriverClassnameProperty = System.getProperty("tpmon.dbDriverClassname");
+        if (System.getProperty("kieker.monitoring.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
+            dbDriverClassnameProperty = System.getProperty("kieker.monitoring.dbDriverClassname");
         } else { // we use the parameter in the properties file
             dbDriverClassnameProperty = prop.getProperty("dbDriverClassname");
         }
         if (dbDriverClassnameProperty != null && dbDriverClassnameProperty.length() != 0) {
             dbDriverClassname = dbDriverClassnameProperty;
         } else {
-            log.info("No dbDriverClassname parameter found in tpmonLTW.jar/" + configurationFile
+            log.info("No dbDriverClassname parameter found in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + dbDriverClassname + ".");
         }
 
         // load property "dbConnectionAddress"
         String dbConnectionAddressProperty;
-        if (System.getProperty("tpmon.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
-            dbConnectionAddressProperty = System.getProperty("tpmon.dbConnectionAddress");
+        if (System.getProperty("kieker.monitoring.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
+            dbConnectionAddressProperty = System.getProperty("kieker.monitoring.dbConnectionAddress");
         } else { // we use the parameter in the properties file
             dbConnectionAddressProperty = prop.getProperty("dbConnectionAddress");
         }
         if (dbConnectionAddressProperty != null && dbConnectionAddressProperty.length() != 0) {
             dbConnectionAddress = dbConnectionAddressProperty;
         } else {
-            log.warn("No dbConnectionAddress parameter found in tpmonLTW.jar/" + configurationFile
+            log.warn("No dbConnectionAddress parameter found in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + dbConnectionAddress + ".");
         }
 
-// the filenamePrefix (folder where tpmon stores its data) 
-// for monitoring data depends on the properties tpmon.storeInJavaIoTmpdir 
-// and tpmon.customStoragePath         
+// the filenamePrefix (folder where Kieker.Monitoring stores its data)
+// for monitoring data depends on the properties kieker.monitoring.storeInJavaIoTmpdir
+// and kieker.monitoring.customStoragePath
 // these both parameters may be provided (with higher priority) as java command line parameters as well (example in the properties file)
         String storeInJavaIoTmpdirProperty;
-        if (System.getProperty("tpmon.storeInJavaIoTmpdir") != null) { // we use the present virtual machine parameter value
-            storeInJavaIoTmpdirProperty = System.getProperty("tpmon.storeInJavaIoTmpdir");
+        if (System.getProperty("kieker.monitoring.storeInJavaIoTmpdir") != null) { // we use the present virtual machine parameter value
+            storeInJavaIoTmpdirProperty = System.getProperty("kieker.monitoring.storeInJavaIoTmpdir");
         } else { // we use the parameter in the properties file
-            storeInJavaIoTmpdirProperty = prop.getProperty("tpmon.storeInJavaIoTmpdir");
+            storeInJavaIoTmpdirProperty = prop.getProperty("kieker.monitoring.storeInJavaIoTmpdir");
         }
 
         if (storeInJavaIoTmpdirProperty != null && storeInJavaIoTmpdirProperty.length() != 0) {
             if (storeInJavaIoTmpdirProperty.toLowerCase().equals("true") || storeInJavaIoTmpdirProperty.toLowerCase().equals("false")) {
                 storeInJavaIoTmpdir = storeInJavaIoTmpdirProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for tpmon.storeInJavaIoTmpdir (or provided via command line) parameter (" + storeInJavaIoTmpdirProperty + ") in tpmonLTW.jar/" + configurationFile
+                log.warn("Bad value for kieker.monitoring.storeInJavaIoTmpdir (or provided via command line) parameter (" + storeInJavaIoTmpdirProperty + ") in monitoringLTW.jar/" + configurationFile
                         + ". Using default value " + storeInJavaIoTmpdir);
             }
         } else {
-            log.warn("No tpmon.storeInJavaIoTmpdir parameter found in tpmonLTW.jar/" + configurationFile
+            log.warn("No kieker.monitoring.storeInJavaIoTmpdir parameter found in monitoringLTW.jar/" + configurationFile
                     + " (or provided via command line). Using default value '" + storeInJavaIoTmpdir + "'.");
         }
 
         if (storeInJavaIoTmpdir) {
             filenamePrefix = System.getProperty("java.io.tmpdir");
-        } else { // only now we consider tpmon.customStoragePath
+        } else { // only now we consider kieker.monitoring.customStoragePath
             String customStoragePathProperty;
-            if (System.getProperty("tpmon.customStoragePath") != null) { // we use the present virtual machine parameter value
-                customStoragePathProperty = System.getProperty("tpmon.customStoragePath");
+            if (System.getProperty("kieker.monitoring.customStoragePath") != null) { // we use the present virtual machine parameter value
+                customStoragePathProperty = System.getProperty("kieker.monitoring.customStoragePath");
             } else { // we use the parameter in the properties file
-                customStoragePathProperty = prop.getProperty("tpmon.customStoragePath");
+                customStoragePathProperty = prop.getProperty("kieker.monitoring.customStoragePath");
             }
 
             if (customStoragePathProperty != null && customStoragePathProperty.length() != 0) {
                 filenamePrefix = customStoragePathProperty;
             } else {
-                log.warn("No tpmon.customStoragePath parameter found in tpmonLTW.jar/" + configurationFile
+                log.warn("No kieker.monitoring.customStoragePath parameter found in monitoringLTW.jar/" + configurationFile
                         + " (or provided via command line). Using default value '" + customStoragePath + "'.");
                 filenamePrefix =
                         customStoragePath;
@@ -521,15 +519,15 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
 
         // load property "dbTableNameProperty"
         String dbTableNameProperty;
-        if (System.getProperty("tpmon.dbTableName") != null) { // we use the present virtual machine parameter value
-            dbTableNameProperty = System.getProperty("tpmon.dbTableName");
+        if (System.getProperty("kieker.monitoring.dbTableName") != null) { // we use the present virtual machine parameter value
+            dbTableNameProperty = System.getProperty("kieker.monitoring.dbTableName");
         } else { // we use the parameter in the properties file
             dbTableNameProperty = prop.getProperty("dbTableName");
         }
         if (dbTableNameProperty != null && dbTableNameProperty.length() != 0) {
             dbTableName = dbTableNameProperty;
         } else {
-            log.warn("No dbTableName  parameter found in tpmonLTW.jar/" + configurationFile
+            log.warn("No dbTableName  parameter found in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + dbTableName + ".");
         }
 
@@ -543,11 +541,11 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                     this.debugMode = DebugMode.DISABLED;
                 }
             } else {
-                log.warn("Bad value for debug parameter (" + debugProperty + ") in tpmonLTW.jar/" + configurationFile
+                log.warn("Bad value for debug parameter (" + debugProperty + ") in monitoringLTW.jar/" + configurationFile
                         + ". Using default value " + this.debugMode.isDebugEnabled());
             }
         } else {
-            log.warn("Could not find debug parameter in tpmonLTW.jar/" + configurationFile
+            log.warn("Could not find debug parameter in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + this.debugMode.isDebugEnabled());
         }
 
@@ -557,18 +555,18 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
             if (setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true") || setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("false")) {
                 setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for setInitialExperimentIdBasedOnLastId parameter (" + setInitialExperimentIdBasedOnLastIdProperty + ") in tpmonLTW.jar/" + configurationFile
+                log.warn("Bad value for setInitialExperimentIdBasedOnLastId parameter (" + setInitialExperimentIdBasedOnLastIdProperty + ") in monitoringLTW.jar/" + configurationFile
                         + ". Using default value " + setInitialExperimentIdBasedOnLastId);
             }
         } else {
-            log.warn("Could not find setInitialExperimentIdBasedOnLastId parameter in tpmonLTW.jar/" + configurationFile
+            log.warn("Could not find setInitialExperimentIdBasedOnLastId parameter in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + setInitialExperimentIdBasedOnLastId);
         }
 
         // load property "asyncRecordQueueSize"
         String asyncRecordQueueSizeProperty = null;
-        if (System.getProperty("tpmon.asyncRecordQueueSize") != null) { // we use the present virtual machine parameter value
-            asyncRecordQueueSizeProperty = System.getProperty("tpmon.asyncRecordQueueSize");
+        if (System.getProperty("kieker.monitoring.asyncRecordQueueSize") != null) { // we use the present virtual machine parameter value
+            asyncRecordQueueSizeProperty = System.getProperty("kieker.monitoring.asyncRecordQueueSize");
         } else { // we use the parameter in the properties file
             asyncRecordQueueSizeProperty = prop.getProperty("asyncRecordQueueSize");
         }
@@ -581,11 +579,11 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
             if (asyncRecordQueueSizeValue >= 0) {
                 asyncRecordQueueSize = asyncRecordQueueSizeValue;
             } else {
-                log.warn("Bad value for asyncRecordQueueSize parameter (" + asyncRecordQueueSizeProperty + ") in tpmonLTW.jar/" + configurationFile
+                log.warn("Bad value for asyncRecordQueueSize parameter (" + asyncRecordQueueSizeProperty + ") in monitoringLTW.jar/" + configurationFile
                         + ". Using default value " + asyncRecordQueueSize);
             }
         } else {
-            log.warn("Could not find asyncRecordQueueSize parameter in tpmonLTW.jar/" + configurationFile
+            log.warn("Could not find asyncRecordQueueSize parameter in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + asyncRecordQueueSize);
         }
 
@@ -598,12 +596,12 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                     this.controllerState.set(ControllerState.DISABLED);
                 }
             } else {
-                log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in tpmonLTW.jar/" + configurationFile
+                log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in monitoringLTW.jar/" + configurationFile
                         + ". Using default value " + this.controllerState.get().equals(ControllerState.ENABLED));
             }
 
         } else {
-            log.warn("Could not find monitoringEnabled parameter in tpmonLTW.jar/" + configurationFile
+            log.warn("Could not find monitoringEnabled parameter in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + this.controllerState.get().equals(ControllerState.ENABLED));
         }
 

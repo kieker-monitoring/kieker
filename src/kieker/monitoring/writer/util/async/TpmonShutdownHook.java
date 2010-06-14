@@ -1,16 +1,12 @@
 package kieker.monitoring.writer.util.async;
 
 import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.*;
 import java.util.Vector;
 
-//import kieker.tpmon.AbstractWorkerThread;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * kieker.tpmon.TpmonShutdownHook
- * 
+/* 
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
  *

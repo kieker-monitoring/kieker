@@ -2,8 +2,7 @@ package kieker.monitoring.core;
 
 
 
-/**
- * kieker.tpmon.core.TpmonVersion
+/*
  * 
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
  *
@@ -21,12 +20,13 @@ package kieker.monitoring.core;
  * 
  * This class provides the method getVersion which returns the version number 
  * set during build (String replacement task within build.xml).
- *
- * @author Andre van Hoorn
+ */
+
+/** @author Andre van Hoorn
  */
 public class Version {
 
-    public static final String ANNOTATIONS_PGK="kieker.tpmon.annotations";
+    public static final String ANNOTATIONS_PGK="kieker.monitoring.annotations";
 
 	/*
 	 * The VERSION string is updated by the Ant build file, which looks for the

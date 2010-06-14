@@ -4,7 +4,7 @@
 
   <groupId>net.sf.kieker</groupId>
   <artifactId>tpmon-ctrl</artifactId>
-  <name>Kieker Tpmon Controller</name>
+  <name>Kieker Monitoring Controller</name>
   <packaging>jar</packaging>
   <parent>
   	<artifactId>base</artifactId>

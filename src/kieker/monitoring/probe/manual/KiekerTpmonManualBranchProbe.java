@@ -1,8 +1,6 @@
 package kieker.monitoring.probe.manual;
 
 /*
- * kieker.tpmon.KiekerTpmonManualBranchProbe
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *

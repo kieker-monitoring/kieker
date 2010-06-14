@@ -1,8 +1,6 @@
 package kieker.common.record;
 
-/**
- * kieker.tpmon.DummyMonitoringRecord
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *

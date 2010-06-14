@@ -2,15 +2,13 @@ package kieker.monitoring.probe.aspectJ.executions;
 
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.*;
 
 import kieker.monitoring.core.ControlFlowRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
-/**
- * kieker.tpmon.aspects.AbstractKiekerTpmonExecutionProbe
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -27,7 +25,9 @@ import org.aspectj.lang.annotation.Aspect;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
 @Aspect

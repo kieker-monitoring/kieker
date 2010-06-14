@@ -12,8 +12,7 @@ import kieker.common.record.OperationExecutionRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.asyncDbconnector.DbWriterThread
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -30,7 +29,9 @@ import org.apache.commons.logging.LogFactory;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- * 
+ */
+
+/**
  * @author Matthias Rohr
  */
 public class DbWriterThread extends AbstractWorkerThread {
@@ -48,7 +49,7 @@ public class DbWriterThread extends AbstractWorkerThread {
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
-        log.info("New Tpmon - DbWriter thread created");
+        log.info("New DbWriter thread created");
     }
 
     
@@ -124,7 +125,7 @@ public class DbWriterThread extends AbstractWorkerThread {
             psInsertMonitoringData.execute();
 
         } catch (SQLException ex) {
-            log.error("Tpmon DbWriter Error during database statement preparation: ", ex);
+            log.error("DbWriter Error during database statement preparation: ", ex);
             throw ex;
         }
     }

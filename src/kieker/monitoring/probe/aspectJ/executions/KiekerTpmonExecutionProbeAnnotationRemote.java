@@ -9,7 +9,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /*
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *
@@ -35,7 +34,7 @@ public class KiekerTpmonExecutionProbeAnnotationRemote extends AbstractKiekerTpm
 
     private static final Log log = LogFactory.getLog(KiekerTpmonExecutionProbeAnnotationRemote.class);
 
-    @Pointcut("execution(@kieker.tpmon.annotation.TpmonExecutionMonitoringProbe * *.*(..))")
+    @Pointcut("execution(@kieker.monitoring.annotation.TpmonExecutionMonitoringProbe * *.*(..))")
     public void monitoredMethod() {
     }
 

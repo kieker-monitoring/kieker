@@ -67,7 +67,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
         this.filenamePrefix = filenamePrefix;
         this.writeQueue = writeQueue;
         this.mappingFileWriter = mappingFileWriter;
-        log.info("New Tpmon - FsWriter thread created ");
+        log.info("New FsWriter thread created ");
     }
     static boolean passed = false;
 
@@ -147,9 +147,9 @@ public final class FsWriterThread extends AbstractWorkerThread {
                 pos = new PrintWriter(dos);
                 pos.flush();
             } catch (FileNotFoundException ex) {
-                //log.fatal(">Kieker-Tpmon: Error creating the file: " + filename + " \n " + ex.getMessage());
+                //log.fatal("Error creating the file: " + filename + " \n " + ex.getMessage());
                 // TODO: this error should be signalled to the controller
-                // e.g. using a listener (do not add a reference to TpmonController!)
+                // e.g. using a listener (do not add a reference to MonitoringController!)
                 // TODO: This is a dirty hack!
                 // What we need is a listener interface!
                 log.error("Will terminate monitoring!");

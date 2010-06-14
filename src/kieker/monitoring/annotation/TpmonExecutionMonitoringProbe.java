@@ -5,8 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * kieker.tpmon.annotations.TpmonExecutionMonitoringProbe
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -23,8 +22,9 @@ import java.lang.annotation.Target;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * @author Matthias Rohr, Thilo Focke
+ */
+
+/** @author Matthias Rohr, Thilo Focke
  *
  * History:
  * 2008/01/14: Refactoring for the first release of

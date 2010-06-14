@@ -28,9 +28,9 @@
         <property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
         <property name="kieker.monitoring.dist.name"
-                  value="${kieker.kieker.monitoring.packagenamebase}-${kieker.version}"/>
+                  value="${kieker.monitoring.packagenamebase}-${kieker.version}"/>
         <property name="kieker.analysis.dist.name"
-                  value="${kieker.kieker.analysis.packagenamebase}-${kieker.version}"/>
+                  value="${kieker.analysis.packagenamebase}-${kieker.version}"/>
         <property name="common.dist.name"
                   value="${kieker.common.packagenamebase}-${kieker.version}"/>
         <property name="tools.dist.name"

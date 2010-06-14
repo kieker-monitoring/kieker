@@ -12,8 +12,7 @@ import kieker.monitoring.core.SessionRegistry;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.MonitoringController;
 
-/**
- * kieker.tpmonControlServlet.ControlServlet
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -30,7 +29,9 @@ import kieker.monitoring.core.MonitoringController;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Matthias Rohr, Andre van Hoorn
  *
  * History:
@@ -71,7 +72,7 @@ public class ControlServlet extends HttpServlet {
         try {
             hostname = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception e) { /* ignore */ }
-        System.out.println("TpmonControlServlet initializes.");
+        System.out.println("ControlServlet initializes.");
         initialized = true;
     }
 
@@ -96,11 +97,11 @@ public class ControlServlet extends HttpServlet {
 
         out.println("<html>");
         out.println("<head>");
-        out.println("<title>Kieker's tpmonControlServlet</title>");
+        out.println("<title>Kieker's ControlServlet</title>");
         out.println("</head>");
         out.println("<body>");
         printHeader(out);
-        out.println("<h2>TpmonControlServlet</h2>");
+        out.println("<h2>ControlServlet</h2>");
         out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ctrlInst.getTime() + "<br>");
         out.println("Host:\"" + hostname + "\"<br>");
         out.println("Vmname:\"" + ctrlInst.getVmName() + "\"<br>");
@@ -172,7 +173,7 @@ public class ControlServlet extends HttpServlet {
                 sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
                 cfRegistry.getAndStoreUniqueThreadLocalTraceId();
                 for (int i = 0; i < 12; i++) {
-                    ctrlInst.newMonitoringRecord(new OperationExecutionRecord("kieker.tpmonControlServlet.TpmonControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), ctrlInst.getVmName(), i, i));
+                    ctrlInst.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet","processRequest(HttpServletRequest,HttpServletResponse)", sessionRegistry.recallThreadLocalSessionId(), cfRegistry.recallThreadLocalTraceId(), ctrlInst.getTime(), ctrlInst.getTime(), ctrlInst.getVmName(), i, i));
                 }
                 cfRegistry.unsetThreadLocalTraceId();
                 sessionRegistry.unsetThreadLocalSessionId();
@@ -257,8 +258,8 @@ public class ControlServlet extends HttpServlet {
         bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
         bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ctrlInst.getVmName() + "\"/>");
         bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
-        bu.append(" Create 12 fake entries into the log (operation kieker.tpmonControlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
-        bu.append(" Tpmon monitoring events since last execution environment restart = "+ctrlInst.getNumberOfInserts()+" <br>");
+        bu.append(" Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
+        bu.append(" Kieker monitoring events since last execution environment restart = "+ctrlInst.getNumberOfInserts()+" <br>");
 		bu.append(" java.vm.name = "+System.getProperty("java.vm.name")+" <br>");
 		try {
             String youngGC  = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
@@ -306,6 +307,6 @@ public class ControlServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "TpmonControlServlet";
+        return "Kieker ControlServlet";
     }
 }

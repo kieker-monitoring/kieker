@@ -45,16 +45,16 @@
 
 
         <!-- don't weave all packages of kieker and some packages of sun -->
-        <exclude within="kieker.tpmon..*"/>
+        <exclude within="kieker.monitoring..*"/>
 	<exclude within="java..*,com.sun.corba..*,com.sun.enterprise..*,com.sun.appserv..*"/>
 </weaver>
 
 <aspects>        
      <!-- here you usually want to use only ONE aspect. -->
      <!-- Put the remaining in a comment -->
-     <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullRemote"/>-->
-     <!--<aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullRemoteServlet"/>-->
+     <aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>
+     <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
+     <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullRemote"/>-->
+     <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullRemoteServlet"/>-->
 </aspects>
 </aspectj>

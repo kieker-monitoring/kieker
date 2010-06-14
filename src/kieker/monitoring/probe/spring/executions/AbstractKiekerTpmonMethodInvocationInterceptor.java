@@ -11,9 +11,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * kieker.tpmon.aspects.springAspectJ.KiekerTpmonMethodInvocationInterceptor
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
  *
@@ -37,7 +35,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * It provides the boolean property useRuntimeClassname to select whether
  * to use the declaring or the runtime classname of the instrumented methods.
- *
+ */
+
+/**
  * @author Andre van Hoorn
  * @author Marco Luebcke
  */

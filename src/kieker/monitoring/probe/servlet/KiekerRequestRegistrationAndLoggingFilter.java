@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * <filter>
  * <filter-name>sessionRegistrationFilter</filter-name>
- * <filter-class>kieker.tpmon.probe.tomcat.KiekerTraceRegistrationFilter</filter-class>
+ * <filter-class>kieker.monitoring.probe.servlet.KiekerTraceRegistrationFilter</filter-class>
  * </filter>
  * <filter-mapping>
  * <filter-name>sessionRegistrationFilter</filter-name>

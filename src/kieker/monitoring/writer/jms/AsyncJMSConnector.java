@@ -69,7 +69,7 @@ public final class AsyncJMSConnector implements IMonitoringLogWriter {
      */
     public boolean init(String initString) {
         if (initString == null || initString.length() == 0) {
-            log.error("Invalid initString. Valid example for tpmon.properties:\n"
+            log.error("Invalid initString. Valid example for kieker.monitoring.properties:\n"
                     + "monitoringDataWriterInitString=jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000");
             return false;
         }
@@ -95,7 +95,7 @@ public final class AsyncJMSConnector implements IMonitoringLogWriter {
                 recordWriter.setDaemon(true);
                 recordWriter.start();
             }
-            log.info(">Kieker-Tpmon: (" + numberOfJmsWriters + " threads) will send to the JMS server topic");
+            log.info("(" + numberOfJmsWriters + " threads) will send to the JMS server topic");
         } catch (Exception exc) {
             log.fatal("Error initiliazing JMS Connector", exc);
             retVal = false;
@@ -129,7 +129,7 @@ public final class AsyncJMSConnector implements IMonitoringLogWriter {
             }
             //int currentQueueSize = recordQueue.size();
         } catch (Exception ex) {
-            log.error(">Kieker-Tpmon: " + System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
+            log.error(System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
             return false;
         }
         return true;

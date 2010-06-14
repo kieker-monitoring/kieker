@@ -2,8 +2,7 @@ package kieker.monitoring.probe.cxf;
 
 import javax.xml.namespace.QName;
 
-/**
- * kieker.tpmon.cxf.KiekerTpmonSOAPHeaderConstants
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -22,7 +21,9 @@ import javax.xml.namespace.QName;
  * ==================================================
  * 
  * Constants for the sessionIdentifier soap header.
- * 
+ */
+
+/**
  * @author Dennis Kieselhorst
  */
 public interface KiekerTpmonSOAPHeaderConstants {

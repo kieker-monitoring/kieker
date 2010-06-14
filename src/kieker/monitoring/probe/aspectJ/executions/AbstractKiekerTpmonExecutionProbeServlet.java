@@ -6,8 +6,7 @@ import kieker.monitoring.core.SessionRegistry;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 
-/**
- * kieker.tpmon.aspects.AbstractKiekerTpmonExecutionProbeServlet
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -24,7 +23,9 @@ import org.aspectj.lang.annotation.Aspect;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
+ */
+
+/**
  * @author Andre van Hoorn
  */
 @Aspect

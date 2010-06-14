@@ -4,7 +4,7 @@
 
   <groupId>net.sf.kieker</groupId>
   <artifactId>tpmon-ctw</artifactId>
-  <name>Kieker Tpmon CTW</name>
+  <name>Kieker Monitoring CTW</name>
   <description>Compile time weaving components</description>
   <packaging>jar</packaging>
   <parent>
