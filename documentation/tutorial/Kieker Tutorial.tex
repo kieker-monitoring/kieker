@@ -153,7 +153,8 @@ Now we want to monitor whole methods without surrounding the method calls with a
 \setJavaCodeListing
 \lstset{caption=Bookstore.java, label=listing:Bookstore2.java}
 \lstinputlisting{source-example/annotation-monitoring/src/Bookstore.java}
-To make sure that the sourcecode is monitored, we need now aspectJ. Therefore we copy the file ''META-INF/aop.xml.example`` from our \Kieker\ directory to our working directory to ''META-INF/aop.xml``. In this file it is written which parts of the sourcecode will be monitored. To make sure that every method in our program which is annotated will be monitored, we have to write the following into the file:
+To make sure that the sourcecode is monitored, we need now aspectJ. Therefore we copy the file ''META-INF/aop.xml.example`` from our \Kieker\ directory to our working directory to ''META-INF/aop.xml``. In this file it is written which parts of the sourcecode will be monitored.  And we need another libarary as well. We copy $\sim$/kieker/dist/kieker-tpmon-\version\_ctw.jar to $\sim$/example/lib/kieker-tpmon-\version\_ctw.jar\\
+To make sure that every method in our program which is annotated will be monitored, we have to write the following into the file:
 \setXMLListing 
 \begin{lstlisting}
 <aspectj>
@@ -166,6 +167,13 @@ To make sure that the sourcecode is monitored, we need now aspectJ. Therefore we
 
 	<!-- uncomment following to instrument sun jpetstore -->
 \end{lstlisting}
+The compiling is pretty much the same as before, but in order to run the program, we have to copy the configuration files into the build-directory.
+\begin{lstlisting}
+nils@Laptop:~/example$ javac ./src/Bookstore.java ./src/Catalog.java ./src/CRM.java -classpath ./lib/kieker-tpmon-1.1_ctrl.jar -d ./build
+nils@Laptop:~/example$ cp -r ./META-INF/ ./build/META-INF
+nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -Dtpmon.configuration=META-INF/tpmon.properties -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=true -Daj.weaving.verbose=true -classpath ./build/:./lib/kieker-tpmon-1.1_ctrl.jar:./lib/kieker-common-1.1.jar:./lib/commons-logging-1.1.1.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
+\end{lstlisting}
+
 
 \section{\KiekerMonitoring}
 \subsection{Configuration}
