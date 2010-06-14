@@ -13,7 +13,6 @@ import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.MonitoringController;
 
 /*
- *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
  *

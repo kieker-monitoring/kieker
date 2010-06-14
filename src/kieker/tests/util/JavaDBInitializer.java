@@ -75,9 +75,9 @@ public class JavaDBInitializer {
     }
 
     private static boolean readProperties(){
-       dbConnectionAddress = System.getProperty("tpmon.dbConnectionAddress");
-       dbDriverClassname = System.getProperty("tpmon.dbDriverClassname");
-       dbTableName = System.getProperty("tpmon.dbTableName");
+       dbConnectionAddress = System.getProperty("kieker.monitoring.dbConnectionAddress");
+       dbDriverClassname = System.getProperty("kieker.monitoring.dbDriverClassname");
+       dbTableName = System.getProperty("kieker.monitoring.dbTableName");
        return dbConnectionAddress != null && dbDriverClassname != null 
                && dbTableName != null;
     }
