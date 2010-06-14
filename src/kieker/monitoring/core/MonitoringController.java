@@ -151,6 +151,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
         try {
             vmName = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception ex) {
+            log.warn("Failed to get hostname", ex);
         } // nothing to do -- vmName will be "unknown"
 
         log.info("The VM has the name " + vmName + " Thread:"
