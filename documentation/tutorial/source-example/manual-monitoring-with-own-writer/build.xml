@@ -6,7 +6,7 @@
   <property name="jar.file" value="example.jar"/>
   <property name="main-class" value="mySimpleKiekerExample.bookstoreTracing.Bookstore"/>
   <property name="meta.dir" value="META-INF"/>
-  <property name="properties.file" value="tpmon.properties"/>
+  <property name="properties.file" value="kieker.monitoring.properties"/>
   <property name="log4jproperties.file" value="log4j.properties"/>
   
   <path id="classpath">
