@@ -1,13 +1,29 @@
+% If the name ``Kieker'' (or the design of the name in the tutorial) should be replaced sometime.
 \newcommand{\Kieker}{\textit{Kieker}}
+% If the names for the parts of Kieker change.
 \newcommand{\KiekerMonitoring}{Tpmon}
 \newcommand{\KiekerAnalysis}{Tpan}
+% The complete url where to download Kieker.
 \newcommand{\KiekerDownloadUrl}{\url{http://sourceforge.net/projects/kieker/files}}
-\newcommand{\version}{1.1}
 
-\newcommand{\setJavaCodeListing}{
+% The current version-string.
+\newcommand{\version}{1.1-refactoring-branch}
+
+% The name of the .jar-files from Kieker.
+\newcommand{\analysisCtrlJar}{kieker-analysis-\version\_ctrl.jar}
+\newcommand{\monitoringCtrlJar}{kieker-monitoring-\version\_ctrl.jar}
+\newcommand{\monitoringLtwJar}{kieker-monitoring-\version\_ltw.jar}
+\newcommand{\commonJar}{kieker-common-\version.jar  }
+\newcommand{\toolsjar}{kieker-tools-\version.jar}
+\newcommand{\monitoringCtwJar}{kieker-monitoring-\version\_ctw.jar}
+\newcommand{\monitoringControlServletWar}{kieker-monitoring-\version\_controlServlet.war}
+
+% The following commands set the listings for the different (programming) languages correctly.
+% For the first they use all the same settings.
+\newcommand{\setListing}[1]{
 \lstset{
-language=Java,                
-basicstyle=\tiny,       % the size of the fonts that are used for the code
+language=#1,                
+basicstyle=\tiny,       	% the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
 showtabs=false,                 % show tabs within strings adding particular underscores
@@ -19,35 +35,6 @@ breakatwhitespace=false,        % sets if automatic breaks should only happen at
 title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
 }
-
-\newcommand{\setBashListing}{
-\lstset{
-language=Bash,                
-basicstyle=\tiny,       % the size of the fonts that are used for the code
-showspaces=false,               % show spaces adding particular underscores
-showstringspaces=false,         % underline spaces within strings
-showtabs=false,                 % show tabs within strings adding particular underscores
-frame=single,	                % adds a frame around the code
-tabsize=2,	                % sets default tabsize to 2 spaces
-captionpos=b,                   % sets the caption-position to bottom
-breaklines=true,                % sets automatic line breaking
-breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
-title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
-}
-}
-
-\newcommand{\setXMLListing}{
-\lstset{
-language=XML,                
-basicstyle=\tiny,       % the size of the fonts that are used for the code
-showspaces=false,               % show spaces adding particular underscores
-showstringspaces=false,         % underline spaces within strings
-showtabs=false,                 % show tabs within strings adding particular underscores
-frame=single,	                % adds a frame around the code
-tabsize=2,	                % sets default tabsize to 2 spaces
-captionpos=b,                   % sets the caption-position to bottom
-breaklines=true,                % sets automatic line breaking
-breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
-title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
-}
-}
+\newcommand{\setJavaCodeListing}{\setListing{Java}}
+\newcommand{\setBashListing}{\setListing{Bash}}
+\newcommand{\setXMLListing}{\setListing{XML}}
