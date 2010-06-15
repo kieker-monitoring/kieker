@@ -57,7 +57,7 @@ Before we start with the sourcedoe, we need to copy some files from the \Kieker\
 \begin{itemize}
   \item $\sim$/kieker/dist/kieker-tpmon-\version\_ctrl.jar to $\sim$/example/lib/kieker-tpmon-\version\_ctrl.jar
   \item $\sim$/kieker/dist/kieker-common-\version.jar to $\sim$/example/lib/kieker-common-\version.jar
-  \item $\sim$/kieker/lib/commons-logging-\version.jar to $\sim$/example/lib/commons-logging-\version.jar
+  \item $\sim$/kieker/lib/commons-logging-1.1.1.jar to $\sim$/example/lib/commons-logging-1.1.1.jar
   \item $\sim$/kieker/META-INF/tpmon.properties.example to $\sim$/META-INF/\textbf{tpmon.properties}
   \item $\sim$/kieker/META-INF/log4j.properties.example to $\sim$/META-INF/\textbf{log4j.properties}
 \end{itemize}
@@ -176,7 +176,9 @@ nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -Dtp
 
 \section{\KiekerMonitoring}
 \subsection{Configuration}
+The configuration possibilties of \KiekerMonitoring can be done in the configuration file named ''\monitoringPropertiesFile``. It is possible to activate/deactivate the monitoring and the debugging, set the target of the recorded informations or the path for the temporary paths of \Kieker. Most of the variables are self-explanatory.  
 \subsection{Probes}
+The probes (figure \ref{image:componentdiagram} shows them as well) decide which (and where) information should be recorded. To create own probes can for example be necessary if we want to record only specific data, or only every second method call and so on.
 \subsection{Writers}
 \hypertarget{monitoringlogwriters}
 The so called \textit{monitoring log writers} (they can be seen as well in figure \ref{image:componentdiagram}) are the parts of \Kieker\ which are responsible for writing and serializing the recorded informations into files, databases and so on. In other words: They get an instance of \textit{AbstractKiekerMonitoringRecord} and produce an output of any nature whatsoever.\\
@@ -202,6 +204,7 @@ The following example writer takes the informations from the given record and sh
 
 \section{\KiekerAnalysis}
 \subsection{Configuration}
+The configuration of \KiekerAnalysis is possible in the file ''\analysisPropertiesFile``.
 \subsection{Readers}
 \begin{figure}[H]
 	\begin{center}
@@ -217,7 +220,7 @@ The \textit{monitoring log readers} (their position can be found in figure \ref{
 \end{enumerate}
 
 \subsection{Consumers}
-
+The consumer is the part of \Kieker\ which decides what to do with the stored informations. 
 \section{Appendix}
 \subsection{Example logs}
 \subsection{Shortcut via ant}
