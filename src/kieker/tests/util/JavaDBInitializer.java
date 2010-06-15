@@ -21,13 +21,11 @@ package kieker.tests.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
@@ -73,12 +71,13 @@ public class JavaDBInitializer {
             log.error(ex);
             System.exit(1);
         }
+        log.info(JavaDBInitializer.class.getName()+".main(..) done");
     }
 
     private static boolean readProperties(){
-       dbConnectionAddress = System.getProperty("tpmon.dbConnectionAddress");
-       dbDriverClassname = System.getProperty("tpmon.dbDriverClassname");
-       dbTableName = System.getProperty("tpmon.dbTableName");
+       dbConnectionAddress = System.getProperty("kieker.monitoring.dbConnectionAddress");
+       dbDriverClassname = System.getProperty("kieker.monitoring.dbDriverClassname");
+       dbTableName = System.getProperty("kieker.monitoring.dbTableName");
        return dbConnectionAddress != null && dbDriverClassname != null 
                && dbTableName != null;
     }

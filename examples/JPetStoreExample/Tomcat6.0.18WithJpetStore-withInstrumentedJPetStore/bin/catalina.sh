@@ -70,9 +70,9 @@
 # $Id: catalina.sh 656834 2008-05-15 21:04:04Z markt $
 # -----------------------------------------------------------------------------
 
-#JAVA_OPTS=" -Dtpmon.storeInJavaIoTmpdir=false -Dtpmon.customStoragePath=/home/voorn/tmp/"
-JAVA_OPTS=" -Dtpmon.storeInJavaIoTmpdir=true -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVA_OPTS="${JAVA_OPTS} -Dtpmon.configuration=$(dirname $0)/../lib/META-INF/tpmon.properties"
+#JAVA_OPTS=" -Dkieker.monitoring.storeInJavaIoTmpdir=false -Dkieker.monitoring.customStoragePath=/home/voorn/tmp/"
+JAVA_OPTS=" -Dkieker.monitoring.storeInJavaIoTmpdir=true -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$(dirname $0)/../lib/META-INF/kieker.monitoring.properties"
 
 HEAPSIZEINIT_DEFAULT=256m
 HEAPSIZEMAX_DEFAULT=384m

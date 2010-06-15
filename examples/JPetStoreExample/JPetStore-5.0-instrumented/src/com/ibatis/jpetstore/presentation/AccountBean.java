@@ -9,7 +9,7 @@ import org.apache.struts.beanaction.BeanActionException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 public class AccountBean extends AbstractBean {
 

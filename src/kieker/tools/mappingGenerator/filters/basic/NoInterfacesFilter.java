@@ -1,0 +1,18 @@
+package kieker.tools.mappingGenerator.filters.basic;
+
+import java.lang.reflect.Method;
+import kieker.tools.mappingGenerator.MethodFilter;
+
+/**
+ * Excludes Interface methods from output
+ * 
+ * @author skomp
+ * 
+ */
+public class NoInterfacesFilter implements MethodFilter {
+
+	public boolean accept(final Method m, final Class<?> c) {
+		return !c.isInterface();
+	}
+
+}

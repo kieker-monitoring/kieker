@@ -1,10 +1,9 @@
 package mySimpleKiekerExample.bookstoreDifferentRecordTypes;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import mySimpleKiekerExample.annotation.MyRTProbe;
 
-/**
- * kieker.tests.bookstore.Catalog.java
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -28,6 +27,9 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
  *
+ */
+
+/**
  * @author Matthias Rohr, Andre van Hoorn
  * History:
  * 2009/06/23: Adapted for "different record type test"

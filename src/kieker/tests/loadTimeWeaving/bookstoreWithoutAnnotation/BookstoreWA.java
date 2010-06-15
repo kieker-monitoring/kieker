@@ -40,6 +40,8 @@ public class BookstoreWA extends Thread{
     static int numberOfRequests = 100;
     static int interRequestTime = 5;
 
+    public static final Vector<BookstoreWA> bookstoreScenarios = new Vector<BookstoreWA>();
+
     /**
      *
      * main is the load driver for the Bookstore. It creates 
@@ -53,10 +55,7 @@ public class BookstoreWA extends Thread{
      * (default: 100 requests; interRequestTime 5 (millisecs))
      * 
      */
-    public static void main(String[] args) {
-	
-	Vector<BookstoreWA> bookstoreScenarios = new Vector<BookstoreWA>();
-	
+    public static void main(String[] args) throws InterruptedException {
 	for (int i = 0; i < numberOfRequests; i++) {
     		System.out.println("BookstoreWA.main: Starting request "+i);
 		BookstoreWA newBookstore = new BookstoreWA();
@@ -64,14 +63,21 @@ public class BookstoreWA extends Thread{
 		newBookstore.start();
 		BookstoreWA.waitabit(interRequestTime);
 	}
-    	System.out.println("BookstoreWA.main: Finished with starting all requests.");
-    	System.out.println("BookstoreWA.main: Waiting 5 secs before calling system.exit");
-		waitabit(5000);
-		System.exit(0);
+       System.out.println("Bookstore.main: Finished with starting all requests.");
+        System.out.println("Bookstore.main: Waiting for threads to terminate");
+        synchronized (bookstoreScenarios) {
+            while (!bookstoreScenarios.isEmpty()) {
+                bookstoreScenarios.wait();
+            }
+        }
     }
 
     public void run() {
     	BookstoreWA.searchBook();
+        synchronized (bookstoreScenarios) {
+            bookstoreScenarios.remove(this);
+            bookstoreScenarios.notify();
+        }
     }
 
     public static void searchBook() {

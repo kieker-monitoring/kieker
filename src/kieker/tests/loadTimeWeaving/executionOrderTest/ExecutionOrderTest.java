@@ -1,6 +1,6 @@
 package kieker.tests.loadTimeWeaving.executionOrderTest;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  *  kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest.java
@@ -61,7 +61,6 @@ public class ExecutionOrderTest {
         a(true);
         a(false);        
 		d1();
-        System.exit(0);
     }
 
 

@@ -11,7 +11,7 @@ import com.ibatis.jpetstore.persistence.iface.ProductDao;
 import com.ibatis.jpetstore.persistence.DaoConfig;
 
 import java.util.List;
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 public class CatalogService {
 

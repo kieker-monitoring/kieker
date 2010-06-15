@@ -1,11 +1,10 @@
 package mySimpleKiekerExample.bookstoreDifferentRecordTypes;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 import mySimpleKiekerExample.annotation.MyRTProbe;
 
-/**
- * kieker.tests.bookstore.Bookstore.java
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -28,8 +27,9 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  * monitoring component tpmon. See the kieker tutorial 
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
- *
- * @author Matthias Rohr
+ */
+
+/** @author Matthias Rohr
  * History:
  * 2008/01/09: Refactoring for the first release of
  *             Kieker and publication under an open source licence

@@ -1,7 +1,7 @@
 This example demonstrates 
-1. how to use Kieker.Tpan to instrument a Java application 
+1. how to use Kieker.Monitoring to instrument a Java application 
    running in a Java EE container (session and trace information)
-2. how to use Kieker.Tpan for visualizing the recorded monitoring
+2. how to use Kieker.Analysis for visualizing the recorded monitoring
    data.
 
 All experiments employ AspectJ for weaving the monitoring 
@@ -18,18 +18,18 @@ directory Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/lib/:
 2. Copy the following files from the binary distribution 
    to the lib/ directory:
    * dist/kieker-common-<version>.jar
-   * dist/kieker-tpmon-<version>_ctrl.jar
-   * dist/kieker-tpmon-<version>_ltw.jar
+   * dist/kieker-monitoring-<version>_ctrl.jar
+   * dist/kieker-monitoring-<version>_ltw.jar
    * lib/aspectjrt-<version>.jar
    * lib/aspectjtools-<version>.jar
    * lib/aspectjweaver-<version>.jar
    * lib/commons-logging-<version>.jar
-3. Copy lib/META-INF/tpmon.properties.example to 
-   lib/META-INF/tpmon.properties and modify this configuration file
+3. Copy lib/META-INF/kieker.monitoring.properties.example to 
+   lib/META-INF/kieker.monitoring.properties and modify this configuration file
    according to your needs. 
-   NOTE: There's no need to change tpmon.properties to run the 
+   NOTE: There's no need to change kieker.monitoring.properties to run the 
          example with the default configuration.
-4. Copy the file dist/kieker-tpmon-<version>_controlServlet.war
+4. Copy the file dist/kieker-monitoring-<version>_controlServlet.war
    from the binary distribution to the webapps/ directory
 5. A prepared jpetstore.war file is already located in the 
    webapps/ directory. If you want to rebuild the sources, 
@@ -38,10 +38,10 @@ directory Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/lib/:
 
 SCENARIO
 In this example, the tomcat Java EE Servlet container is started and
-some monitoring data is generated employing the Kieker.Tpmon 
+some monitoring data is generated employing the Kieker.Monitoring 
 instrumentation by manually accessing the JPetStore web application. 
 Finally, visualizations (sequence diagrams and a dependency graph) are 
-generated from the monitoring data employing Kieker.Tpan.
+generated from the monitoring data employing Kieker.Analysis.
 
 1. Start the tomcat server using the bin/startup.sh script in the 
    tomcat's bin/ directory (you may have to "chmod +x bin/*.sh" in 
@@ -60,9 +60,9 @@ generated from the monitoring data employing Kieker.Tpan.
    - tpmon-<DATE-TIME>-Thread-<Y>.dat which contains the monitoring records.
    - tpmon.dat which contains the mapping between monitoring record type 
      and implementing class.
-4. Kieker includes a control servlet to check the status of Kieker.Tpmon.
-   It can be accessed via: http://localhost:8080/kieker-tpmon-<version>_controlServlet/
-5. We will now use Kieker.Tpan to generate sequence diagrams and dependency 
+4. Kieker includes a control servlet to check the status of Kieker.Monitoring.
+   It can be accessed via: http://localhost:8080/kieker-monitoring-<version>_controlServlet/
+5. We will now use Kieker.Analysis to generate sequence diagrams and dependency 
    graphs for this monitoring log. Please change to the base directory of Kieker's 
    binary release. The tool can be invoked using the wrapper script bin/trace-analysis.sh 
   (it may be necessary to chmod +x /bin/*.sh).  
@@ -79,7 +79,7 @@ generated from the monitoring data employing Kieker.Tpan.
      --plot-Container-Dependency-Graph --short-labels  
    - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
      directory tmp/. 
-     Kieker.Tpan's output gives further instructions how to convert this 
+     Kieker.Analysis's output gives further instructions how to convert this 
      file to graphic formats like svg and png using graphviz's pic2plot tool.
      (The script bin/dotPic-fileConverter.sh can be used to convert all 
       files contained in a directory to any output format supported by dot.)
@@ -88,19 +88,19 @@ generated from the monitoring data employing Kieker.Tpan.
        --plot-Sequence-Diagrams --short-labels
    - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
      directory tmp/. 
-     Kieker.Tpan's output gives further instructions how to convert this 
+     Kieker.Analysis's output gives further instructions how to convert this 
      file to graphic formats like svg and png using plotutil's pic2plot tool.
     (The script bin/dotPic-fileConverter.sh can be used to convert all 
       files contained in a directory to any output format supported by
       pic2plot.)
- 5.3 The directory tpmon-testdata/ contains a monitoring log which can also be 
+ 5.3 The directory kieker-testdata/ contains a monitoring log which can also be 
      used as an input directory to generate diagrams.
 
 APPENDIX
 
 In order to rebuild the JPetStore sources (located in JPetStore-5.0-instrumented/), 
 the following steps are required:
- - copy the file kieker-tpmon-<version>_ctrl.jar from Kieker's
+ - copy the file kieker-monitoring-<version>_ctrl.jar from Kieker's
    binary distribution to the JPetStore's devlib/ directory.
    (includes the Java annotation @TpmonExecutionMonitoringProbe used 
     for the instrumentation)

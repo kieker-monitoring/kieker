@@ -1,7 +1,7 @@
 package kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
-import kieker.tpmon.probe.manual.KiekerTpmonManualBranchProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.probe.manual.KiekerTpmonManualBranchProbe;
 
 
 /**

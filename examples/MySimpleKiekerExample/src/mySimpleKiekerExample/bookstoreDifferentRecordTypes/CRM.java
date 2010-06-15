@@ -1,11 +1,9 @@
 package mySimpleKiekerExample.bookstoreDifferentRecordTypes;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import mySimpleKiekerExample.annotation.MyRTProbe;
 
-/**
- * kieker.tests.bookstore.CRM.java
- *
+/*
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
  *
@@ -28,6 +26,9 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
  *
+ */
+
+/**
  * @author Matthias Rohr
  * History:
  * 2008/01/09: Refactoring for the first release of

@@ -1,6 +1,6 @@
 package kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 
 /*

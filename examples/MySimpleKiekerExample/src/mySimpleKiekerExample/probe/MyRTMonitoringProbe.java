@@ -1,12 +1,5 @@
 package mySimpleKiekerExample.probe;
 
-import kieker.tpmon.core.TpmonController;
-import kieker.tpmon.probe.IKiekerMonitoringProbe;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -23,17 +16,25 @@ import mySimpleKiekerExample.monitoringRecord.MyRTMonitoringRecord;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- * @author Andre van Hoorn
+ */
+
+import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.probe.IMonitoringProbe;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import mySimpleKiekerExample.record.MyRTMonitoringRecord;
+
+/** @author Andre van Hoorn
  */
 @Aspect
-public class MyRTMonitoringProbe implements IKiekerMonitoringProbe {
+public class MyRTMonitoringProbe implements IMonitoringProbe {
 
-    protected static final TpmonController CTRL = TpmonController.getInstance();
+    protected static final MonitoringController CTRL = MonitoringController.getInstance();
 
     @Around(value = "execution(@mySimpleKiekerExample.annotation.MyRTProbe * *.*(..))")
     public Object probe(ProceedingJoinPoint j) throws Throwable {
-        MyRTMonitoringRecord record = (MyRTMonitoringRecord)MyRTMonitoringRecord.getInstance();
+        MyRTMonitoringRecord record = new MyRTMonitoringRecord();
         record.component = j.getSignature().getDeclaringTypeName();
         record.service = j.getSignature().getName();
         Object retval; 
@@ -44,7 +45,7 @@ public class MyRTMonitoringProbe implements IKiekerMonitoringProbe {
             throw e;
         } finally {
             record.rt = CTRL.getTime() - tin;
-            CTRL.logMonitoringRecord(record);
+            CTRL.newMonitoringRecord(record);
         }
         return retval;
     }

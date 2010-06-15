@@ -1,6 +1,6 @@
 package kieker.tests.exceptions;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 
 /**
  * kieker.tests.exceptions.Main.java

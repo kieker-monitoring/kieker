@@ -1,7 +1,7 @@
 package kieker.tests.compileTimeWeaving.bookstore.synchron;
 
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 
 /**
@@ -44,6 +44,8 @@ import java.util.Vector;
  */
 
 public class Bookstore extends Thread{
+    public static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+
     static int numberOfRequests = 5000;
     static int interRequestTime = 5;
 
@@ -63,10 +65,7 @@ public class Bookstore extends Thread{
      * TpmonExecutionMonitoringProbe() annotation.
      */
     @TpmonExecutionMonitoringProbe()
-    public static void main(String[] args) {
-	
-	Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
-	
+    public static void main(String[] args) throws InterruptedException {
 	for (int i = 0; i < numberOfRequests; i++) {
     		System.out.println("Bookstore.main: Starting request "+i);
 		Bookstore newBookstore = new Bookstore();
@@ -74,14 +73,21 @@ public class Bookstore extends Thread{
 		newBookstore.start();
 		Bookstore.waitabit(interRequestTime);
 	}
-    	System.out.println("Bookstore.main: Finished with starting all requests.");
-    	System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-		waitabit(5000);
-		System.exit(0);
+        System.out.println("Bookstore.main: Finished with starting all requests.");
+        System.out.println("Bookstore.main: Waiting for threads to terminate");
+        synchronized (bookstoreScenarios) {
+            while (!bookstoreScenarios.isEmpty()) {
+                bookstoreScenarios.wait();
+            }
+        }
     }
 
     public void run() {
     	Bookstore.searchBook();
+        synchronized (bookstoreScenarios) {
+            bookstoreScenarios.remove(this);
+            bookstoreScenarios.notify();
+        }
     }
 
     @TpmonExecutionMonitoringProbe()

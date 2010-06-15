@@ -1,16 +1,15 @@
 package kieker.tests.compileTimeWeaving.bookstoreBenchmark;
 
-import kieker.tpmon.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * kieker.tests.compileTimeWeaving.bookstore.Bookstore.java
+/*
  *
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2008 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- *
+ */
+/**
  * A simple test and demonstration scenario for Kieker's 
  * monitoring component tpmon. See the kieker tutorial 
  * for more information 
