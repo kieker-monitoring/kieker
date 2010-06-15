@@ -33,10 +33,19 @@ As can be seen in figure \ref{image:componentdiagram}, the framework consists ma
   \item \textbf{\KiekerAnalysis}\\
     This part is responsible for the evaluation and visualization of the recorded information. It uses the files (or general any collected data which is available as monitoring records) for the analysis and to produce graphs (e.g. Component-Dependency-Graph).
 \end{itemize}
+The both parts consist themselves consist each of three subparts which can be both used and extended with own classes. The rough interaction between the different components is described by the following figure.
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1.0\textwidth]{kiekerCommunications-revisedReArranged-woMonitoringLog-bw.pdf}
+    \caption{Interaction between components of \Kieker}
+  \end{center}
+\end{figure}
+The monitoring probes create either the monitoring records directly or by calling the monitoring controller. The monitoring controller uses the monitoring log writers to persist the given record. The persisted informations can later be read by a monitoring log reader who creates a monitoring record again which can then be used in some way by a consumer.\\
+The more detailed informations about the components will be described later in this tutorial.
 
 \subsection{What ist the purpose of this tutorial?}
 In this tutorial, we will take a closer look at both, the \textbf{\KiekerMonitoring}- and the \textbf{\KiekerAnalysis}-part. That means, we will describe on the one hand how \KiekerMonitoring\ can be used to mark parts of the own sourcecode for \Kieker\ and to let them execute under surveilance, so that the recorded information can be saved in files. On the other hand we will use \KiekerAnalysis\ to visualize our recorded data.\\
-We will show how to create and execute a simple example before we go deeper into the parts of the framework.
+We will show how to create and execute a simple example before we go deeper into the single parts of the framework.
 
 
 \section{Quickstart}
@@ -55,13 +64,11 @@ Now for the creation of a simple example for the use of the \Kieker\ framework (
 \end{itemize}
 Before we start with the sourcedoe, we need to copy some files from the \Kieker\ directory to our own working directory\footnote{It would be possible to access the required files within the \Kieker\ directory, but the copying will make the compiling much more comfortable.}.
 \begin{itemize}
-  \item $\sim$/kieker/dist/kieker-tpmon-\version\_ctrl.jar to $\sim$/example/lib/kieker-tpmon-\version\_ctrl.jar
-  \item $\sim$/kieker/dist/kieker-common-\version.jar to $\sim$/example/lib/kieker-common-\version.jar
+  \item $\sim$/kieker/dist/\monitoringCtrlJar\ to $\sim$/example/lib/\monitoringCtrlJar
   \item $\sim$/kieker/lib/commons-logging-1.1.1.jar to $\sim$/example/lib/commons-logging-1.1.1.jar
-  \item $\sim$/kieker/META-INF/tpmon.properties.example to $\sim$/META-INF/\textbf{tpmon.properties}
   \item $\sim$/kieker/META-INF/log4j.properties.example to $\sim$/META-INF/\textbf{log4j.properties}
 \end{itemize}
-The last two files are configuration files, but for a quick start they are already configurated correctly.\\
+The last file is a configuration file, but for a quick start it is already configurated correctly.\\
 
 We start with creating two directories for our packages:
 \begin{itemize}
@@ -79,12 +86,12 @@ The file ``Bookstore.java'' should contain of the lines showed in listing \ref{l
 \setJavaCodeListing
 
 \lstset{caption=Bookstore.java, label=listing:Bookstore.java}
-\lstinputlisting{source-example/manual-monitoring/src/Bookstore.java}
+\lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java}
 Listing \ref{listing:Catalog.java} shows the content of ``Catalog.java'' and listing \ref{listing:CRM.java} the content of ``CRM.java''.
 \lstset{caption=Catalog.java, label=listing:Catalog.java}
-\lstinputlisting{source-example/manual-monitoring/src/Catalog.java}
+\lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Catalog.java}
 \lstset{caption=CRM.java, label=listing:CRM.java}
-\lstinputlisting{source-example/manual-monitoring/src/CRM.java}
+\lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/CRM.java}
 
 The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start.
 \lstset{caption=Cutting from Bookstore.java, label=listing:cuttingBookstore}
@@ -151,7 +158,7 @@ We are now able to monitor sourcecode in a simple way and to visualize these rec
 Now we want to monitor whole methods without surrounding the method calls with a block where we keep the time manually. We will now use so called annotations to mark the methods we want to monitor. As can be seen in the following listing we write the annotation \textit{kieker.tpmon.annotation.TpmonExecutionMonitoringProbe} above the methods to be monitored. 
 \setJavaCodeListing
 \lstset{caption=Bookstore.java, label=listing:Bookstore2.java}
-\lstinputlisting{source-example/annotation-monitoring/src/Bookstore.java}
+\lstinputlisting{source-example/annotation-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java}
 To make sure that the sourcecode is monitored, we need now aspectJ. Therefore we copy the file ''META-INF/aop.xml.example`` from our \Kieker\ directory to our working directory to ''META-INF/aop.xml``. In this file it is written which parts of the sourcecode will be monitored.  And we need another libarary as well. We copy $\sim$/kieker/dist/kieker-tpmon-\version\_ctw.jar to $\sim$/example/lib/kieker-tpmon-\version\_ctw.jar\\
 To make sure that every method in our program which is annotated will be monitored, we have to write the following into the file:
 \setXMLListing 
@@ -200,7 +207,7 @@ To implement an own writer class, the following steps has to be performed:
 The following example writer takes the informations from the given record and shows them just on the screen.
 \setJavaCodeListing
 \lstset{caption=OwnWriter.java, label=listing:OwnWriter.java}
-\lstinputlisting{source-example/manual-monitoring-with-own-writer/src/OwnWriter.java}
+\lstinputlisting{source-example/manual-monitoring-with-own-writer/src/mySimpleKiekerExample/bookstoreTracing/MyWriter.java}
 
 \section{\KiekerAnalysis}
 \subsection{Configuration}
