@@ -5,6 +5,8 @@
   <property name="src.dir" value="src"/>
   <property name="jar.file" value="example.jar"/>
   <property name="main-class" value="mySimpleKiekerExample.bookstoreTracing.Bookstore"/>
+  <property name="meta.dir" value="META-INF"/>
+  <property name="log4jproperties.file" value="log4j.properties"/>
   
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="**/*.jar"/>
@@ -16,7 +18,7 @@
 	<path refid="classpath"/>
 	<path location="${jar.file}"/>
       </classpath>
-      <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/>
+      <jvmarg value="-Dlog4j.configuration=${meta.dir}/${log4jproperties.file}"/>
     </java>
   </target>
   
@@ -26,10 +28,12 @@
 	<attribute name="Main-Class" value="${main-class}"/>
       </manifest>
     </jar>
+    <delete dir="${build.dir}"/>
   </target>
   
   <target name="compile" depends="init">
       <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath"/>
+      <mkdir dir="${build.dir}/${meta.dir}"/>
   </target>
   
   <target name="init">
