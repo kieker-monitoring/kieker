@@ -60,7 +60,7 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin, IMe
         return null; // receive records of any type
     }
 
-    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) throws MonitoringRecordReceiverException {
+    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
        // System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
         if (jfxRc == null) {
             System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");

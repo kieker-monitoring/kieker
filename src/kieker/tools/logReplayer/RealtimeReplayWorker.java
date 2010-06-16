@@ -28,14 +28,10 @@ public class RealtimeReplayWorker implements Runnable {
 
     public void run() {
         if (this.monRec != null) {
-            try {
                 if (!cons.newMonitoringRecord(this.monRec)) {
                     // TODO: check what to do
                     log.error("Consumer returned with error");
                 }
-            } catch (MonitoringRecordReceiverException ex) {
-                log.error("Caught MonitoringRecordReceiverException", ex);
-            }
             this.rd.decreaseActive();
         }
     }

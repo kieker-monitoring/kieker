@@ -31,5 +31,5 @@ public interface IMonitoringRecordReceiver {
      * @param record the record.
      * @return true on success; false in case of an error.
      */
-    public boolean newMonitoringRecord(IMonitoringRecord record) throws MonitoringRecordReceiverException;
+    public boolean newMonitoringRecord(IMonitoringRecord record);
 }

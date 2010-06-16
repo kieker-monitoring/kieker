@@ -97,13 +97,13 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     private String dbTableName = "turbomon10";
 
     public enum ControllerMode {
+
         /**
          * The loggingTimestamp is not set by the newMonitoringRecord method.
          * This is required to replay recorded traces with the original
          * timestamps.
          */
         REPLAY,
-
         /**
          * The controller sets the loggingTimestamp of incoming records
          * according to the current time.
@@ -125,6 +125,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     };
 
     private enum ControllerState {
+
         ENABLED, DISABLED, TERMINATED;
     }
     // The following variables are declared volatile since they are access by
@@ -329,11 +330,9 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
         log.info("Permanently terminating monitoring");
         synchronized (this.controllerState) {
             if (this.monitoringLogWriter != null) {
-                try {
-                    /* if the initialization of the writer failed, it is set to null*/
-                    this.monitoringLogWriter.newMonitoringRecord(END_OF_MONITORING_MARKER);
-                } catch (MonitoringRecordReceiverException ex) {
-                    log.error("Failed to terminate writer", ex);
+                /* if the initialization of the writer failed, it is set to null*/
+                if (!this.monitoringLogWriter.newMonitoringRecord(END_OF_MONITORING_MARKER)) {
+                    log.error("Failed to terminate writer");
                 }
             }
             this.controllerState.set(ControllerState.TERMINATED);
@@ -381,13 +380,12 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                 return false;
             }
             return true;
-        } catch (MonitoringRecordReceiverException ex) {
+        } catch (Exception ex) {
             log.error("Caught an Exception. Will terminate monitoring", ex);
-                this.terminate();
-                return false;
+            this.terminate();
+            return false;
         }
     }
-
     /** Offset used to determine the number of nanoseconds since 1970-1-1.
      *  This is necessary since System.nanoTime() returns the elapsed nanoseconds
      *  since *some* fixed but arbitrary time.)
@@ -591,7 +589,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
-                if (monitoringEnabledProperty.toLowerCase().equals("true")){
+                if (monitoringEnabledProperty.toLowerCase().equals("true")) {
                     this.controllerState.set(ControllerState.ENABLED);
                 } else {
                     this.controllerState.set(ControllerState.DISABLED);
