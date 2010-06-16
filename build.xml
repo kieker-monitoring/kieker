@@ -24,7 +24,7 @@
         <!-- Names of the kieker.monitoring runtime libraries that will be created
 	     by the build process: -->
         <property name="kieker.version"
-                  value="1.1-refactoring-branch"/> <!-- -20090716-1022 -->
+                  value="1.5-trunk"/> <!-- -20090716-1022 -->
         <property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
         <property name="kieker.monitoring.dist.name"

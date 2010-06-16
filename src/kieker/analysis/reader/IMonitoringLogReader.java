@@ -43,6 +43,8 @@ public interface IMonitoringLogReader {
 
     /**
      * Adds the given record receiver.
+     * This method is only used by the framework and should not be called
+     * manually to register a receiver. Use an AnalysisInstance instead.
      *
      * @param receiver the receiver
      */
