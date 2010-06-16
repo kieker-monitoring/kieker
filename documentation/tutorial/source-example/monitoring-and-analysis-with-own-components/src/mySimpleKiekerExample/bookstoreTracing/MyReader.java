@@ -3,13 +3,14 @@ package mySimpleKiekerExample.bookstoreTracing;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.IMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.common.record.OperationExecutionRecord;
 
-public class MyReader implements IMonitoringLogReader {
+public class MyReader extends AbstractMonitoringLogReader {
 
 	ArrayList<IMonitoringRecordReceiver> receivers = new ArrayList<IMonitoringRecordReceiver>();
 

@@ -1,61 +1,61 @@
 \documentclass[a4paper, oneside, 11pt]{scrartcl}
 
-% Get the necessary Packages
+% Get the necessary packages for the document.
 \input{Packages}
-% Only some new commands.
+% Get the new commands we defined for this document.
 \input{Macros}
 
-% Set title and everything.
+% Set the title and everything.
 \title{Tutorial for \Kieker:\\ Monitoring and Analysis of Software Behavior}
 
 % Here we go.
 \begin{document}
-\maketitle
-\tableofcontents
+  % We want a table of contents seperated from the rest of the text.
+  \maketitle
+  \tableofcontents
+  \newpage
 
-\newpage
+  \section{Overview}
+    \subsection{What is \Kieker?}
+      \Kieker\ is a framework\footnote{A framework is sort of a library or code fragment which provides specific and extended functionality.} which allows both programmers and software engineers the monitoring and analysis of program flows and the runtime behavior of java applications. Normal (``plain'') java applications can be arranged with the framework as well as server based java web applications. The framework itself aims to provide an easy managable and maintanable piece of software, which can be included uncomplicated into existing software projects. While \Kieker\ analyzes the own sourcecode reliably, it causes itself only very less overhead during monitoring. \Kieker\ can thereto put whole method calls on a watch, but single statements (e.g. a = a + 1) as well.\\
+      Nearly every component of the framework can be extended and adjusted easily to the very own necessities.
+      % This is the diagram which shows the single parts of Kieker as one component diagram (the 'satellite').
+      \begin{figure}[H]
+	\begin{center}
+	  \includegraphics[width=1.0\textwidth]{kiekerComponentDiagram.pdf}
+	  \label{image:kiekercomponentdiagram}
+	  \caption{The component diagram of \Kieker}
+	\end{center}
+      \end{figure}
+      As can be seen in figure \ref{image:kiekercomponentdiagram}, the framework consists mainly of two big parts:
+      \begin{itemize}
+	\item \textbf{\KiekerMonitoring}\\
+	  This is the part which is responsible for the logging and the recording of the program behavior. The result of this component are the recorded informations which can then be written into different output streams, like for example into files or into a database.
+	\item \textbf{\KiekerAnalysis}\\
+	  This part is responsible for the evaluation and visualization of the recorded information. It uses the files (or general any collected data which is available as monitoring records) for the analysis and to produce graphs (e.g. Component-Dependency-Graph).
+      \end{itemize}
+      Both parts are composed each of three subcomponents which can be used or extended as well with own classes. The rough interaction between the different components is described by the following figure but will be explained furthermore in the course of this tutorial.
+      % This is the diagram which shows the interaction between the components and when which component get what kind of input.
+      \begin{figure}[H]
+	\begin{center}
+	  \includegraphics[width=1.0\textwidth]{kiekerCommunications-revisedReArranged-woMonitoringLog-bw.pdf}
+	  \caption{Interaction between the components of \Kieker}
+	\end{center}
+      \end{figure}
+      The monitoring probes create either the monitoring records manually or by calling the monitoring controller. The monitoring controller uses the monitoring log writers to persist the given records which can then be later read by a monitoring log reader who creates a monitoring record again. This monitoring recors can then be used by the consumer in nearly every way.
 
-\section{Overview}
-\subsection{What is \Kieker?}
-\Kieker\ is a framework\footnote{A framework is sort of a library which provides specific and extended functionality} which allows programmers and software engineers the monitoring and analysis of program flows and the runtime behavior of java applications. Normal (``plain'') java applications can be arranged with the framework as well as server based java web applications. The framework itself aims to provide an easy managable and maintanable piece of software, which can be included uncomplicated into existing software projects. While \Kieker\ analyzes the own sourcecode reliably, it causes itself only very less overhead during monitoring.\\
-\Kieker\ can be used to put whole method calls on a watch, but single statements (e.g. a = a + 1) as well.
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[width=1.0\textwidth]{kiekerComponentDiagram.pdf}
-    \label{image:componentdiagram}
-    \caption{\Kieker\ component diagram}
-  \end{center}
-\end{figure}
-As can be seen in figure \ref{image:componentdiagram}, the framework consists mainly of two big parts:
-\begin{itemize}
-  \item \textbf{\KiekerMonitoring}\\
-    This is the part which is responsible for the logging and the recording of the program behavior. The result of this component are the recorded informations which can then be written into different output streams, like for example into files or into a database.
-  \item \textbf{\KiekerAnalysis}\\
-    This part is responsible for the evaluation and visualization of the recorded information. It uses the files (or general any collected data which is available as monitoring records) for the analysis and to produce graphs (e.g. Component-Dependency-Graph).
-\end{itemize}
-The both parts consist themselves consist each of three subparts which can be both used and extended with own classes. The rough interaction between the different components is described by the following figure.
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[width=1.0\textwidth]{kiekerCommunications-revisedReArranged-woMonitoringLog-bw.pdf}
-    \caption{Interaction between components of \Kieker}
-  \end{center}
-\end{figure}
-The monitoring probes create either the monitoring records directly or by calling the monitoring controller. The monitoring controller uses the monitoring log writers to persist the given record. The persisted informations can later be read by a monitoring log reader who creates a monitoring record again which can then be used in some way by a consumer.\\
-The more detailed informations about the components will be described later in this tutorial.
+    \subsection{What ist the purpose of this tutorial?}
+      In this tutorial, we will take a closer look at both, the \textbf{\KiekerMonitoring}- and the \textbf{\KiekerAnalysis}-part. That means, we will describe on the one hand how \KiekerMonitoring\ can be used to mark parts of the own sourcecode for \Kieker\ and to let them execute under surveilance, so that the recorded information can be saved somewhere and on the other hand we will use \KiekerAnalysis\ to process (for example visualize) our recorded data.\\
+      We will show how to create and execute a simple example before we go deeper into the single parts of the framework.
 
-\subsection{What ist the purpose of this tutorial?}
-In this tutorial, we will take a closer look at both, the \textbf{\KiekerMonitoring}- and the \textbf{\KiekerAnalysis}-part. That means, we will describe on the one hand how \KiekerMonitoring\ can be used to mark parts of the own sourcecode for \Kieker\ and to let them execute under surveilance, so that the recorded information can be saved in files. On the other hand we will use \KiekerAnalysis\ to visualize our recorded data.\\
-We will show how to create and execute a simple example before we go deeper into the single parts of the framework.
+  \section{Quickstart}
+    \subsection{Downloading and installing \Kieker}
+      For the monitoring and analysis of the source code, it is necessary to download the \Kieker\ binaries from \KiekerDownloadUrl\ first. Once that is done, the content of the zip- respectively the tar.gz-file should be extracted to any directory, for example ``$\sim$/kieker'' (under Linux) or ``c:$\backslash$program files$\backslash$kieker'' (under Windows).\\
+      That is already enough for the ``installation'' of \Kieker. If desired, the new created path can of course be assigned to an easy remindable environment variable 
+      % Note: Maybe it should be described how to do this.
 
-
-\section{Quickstart}
-
-\subsection{Downloading and installing \Kieker}
-For the monitoring and analysis of the source code, it is necessary to download the \Kieker\ binaries from \KiekerDownloadUrl\ first. Once that is done, the content of the zip- respectively the tar.gz-file should be extracted to any directory, for example ``$\sim$/kieker'' (under Linux) or ``c:$\backslash$program files$\backslash$kieker'' (under Windows).\\
-That is already enough for the ``installation'' of \Kieker.
-
-\subsection{Monitoring}
-Now for the creation of a simple example for the use of the \Kieker\ framework (note: The example is available on the website of \Kieker). It is recommended to create a new working directory (e.g. $\sim$/example) with the following subdirectories:
+    \subsection{Monitoring}
+      Now for the creation of a simple example for the use of the \Kieker\ framework (note: The example is available on the website of \Kieker). It is recommended to create a new working directory (e.g. $\sim$/example) with the following subdirectories:
 \begin{itemize}
   \item src (For the sourcecode files)
   \item lib (For the libraries and needed jar-files)
@@ -206,12 +206,20 @@ To implement an own writer class, the following steps has to be performed:
 \end{enumerate}
 The following example writer takes the informations from the given record and shows them just on the screen.
 \setJavaCodeListing
-\lstset{caption=OwnWriter.java, label=listing:OwnWriter.java}
-\lstinputlisting{source-example/manual-monitoring-with-own-writer/src/mySimpleKiekerExample/bookstoreTracing/MyWriter.java}
+%\lstset{caption=OwnWriter.java, label=listing:OwnWriter.java}
+%\lstinputlisting{source-example/manual-monitoring-with-own-writer/src/mySimpleKiekerExample/bookstoreTracing/MyWriter.java}
 
 \section{\KiekerAnalysis}
+The part of \Kieker\ which is responsible for the analysis consist of the reader, the consumer and the analysis instance itself. After we stored somewhere our records, we need to read them again somehow. This is task of the reader. Whatever we want to do with these informations is task of the consumers. They can for example evaluate, process or visualize the data. The analysis instance concerns about the lifetime and registration of the other parts.\\
+The analysis consists roughly of the following steps:
+\begin{enumerate}
+ \item Create one (or more) analysis instance.
+ \item Set the reader of this instance and line it with the necessary informations to read the stored records.
+ \item Register the consumers who should do something with the recorded data.
+ \item Start the analysis instance.
+\end{enumerate}
 \subsection{Configuration}
-The configuration of \KiekerAnalysis is possible in the file ''\analysisPropertiesFile``.
+The configuration of \KiekerAnalysis\ will later be possible in the file ''\analysisPropertiesFile``. At the moment it is not necessary to set any properties due to the fact, that we concern about the analysis ourselves. 
 \subsection{Readers}
 \begin{figure}[H]
 	\begin{center}
@@ -220,7 +228,7 @@ The configuration of \KiekerAnalysis is possible in the file ''\analysisProperti
 		\caption{}
 	\end{center}
 \end{figure}
-The \textit{monitoring log readers} (their position can be found in figure \ref{image:componentdiagram}) are the counterpart to the \hyperlink{monitoringlogwriters}{\textit{monitoring log writers}}. While the writers get a record and write them in files or somewhere else, the readers take the writen data (from files, databases and so on) and convert them into an \textit{AbstractKiekerMonitoringRecord}. That means, that whenever we are implementing a new writer, we should also implement a corresponding reader. If we want for example save our recorded informations in a database, we have to be capable of reading these stored informations from the database again. The implementing of an own reader is nearly the same as the implementing of the writer.
+The \textit{monitoring log readers} (their position can be found in figure \ref{image:componentdiagram}) are the counterpart to the \hyperlink{monitoringlogwriters}{\textit{monitoring log writers}}. While the writers get a record and write them in files or somewhere else, the readers take the writen data (from files, databases and so on) and convert them into an \textit{AbstractKiekerMonitoringRecord}. That means, that whenever we are implementing a new writer, we should also implement a corresponding reader. If we want for example save our recorded informations in a database, we have to be capable of reading these stored informations from the database again. The implementing of an own reader is nearly the same as the implementing of the writer, but to keep things simple, it is recommended to extend the already implemented AbstractKiekerMonitoringLogReader, because otherwise it would be necessary to implement the used observer pattern of the reader. 
 \begin{enumerate}
  \item The new reader has to extend \textit{kieker.common.logReader.AbstractKiekerMonitoringLogReader}.
  \item All methods from the interface  \textit{kieker.common.logReader.IKiekerMonitoringLogReader} which has not been implemented yet by the class must be implemented.

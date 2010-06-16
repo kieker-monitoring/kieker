@@ -20,7 +20,7 @@
 	<path location="${jar.file}"/>
       </classpath>
       <jvmarg value="-Dlog4j.configuration=${meta.dir}/${log4jproperties.file}"/>
-      <jvmarg value="-Dtpmon.configuration=${meta.dir}/${properties.file}"/>
+      <jvmarg value="-Dkieker.monitoring.properties=${meta.dir}/${properties.file}"/>
     </java>
   </target>
   
