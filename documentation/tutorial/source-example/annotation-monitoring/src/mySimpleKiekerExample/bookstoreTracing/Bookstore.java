@@ -3,6 +3,7 @@ package mySimpleKiekerExample.bookstoreTracing;
 import java.util.Vector;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import kieker.monitoring.core.MonitoringController;
 
 public class Bookstore extends Thread {
@@ -28,6 +29,7 @@ public class Bookstore extends Thread {
 			}
 		}
 		System.exit(0);
+		
 	}
 
 	@Override
@@ -50,6 +52,7 @@ public class Bookstore extends Thread {
 		}
 	}
 
+	@TpmonExecutionMonitoringProbe
 	public static void searchBook() {
 		for (int i = 0; i < 1; i++) {
 			/* Call getBook() and remember the runtime of the call. */

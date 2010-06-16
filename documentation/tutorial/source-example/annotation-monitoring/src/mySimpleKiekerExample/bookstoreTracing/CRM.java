@@ -1,10 +1,11 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import kieker.monitoring.core.MonitoringController;
 
 public class CRM {
-
+	@TpmonExecutionMonitoringProbe
 	public static void getOffers() {
 		/* Call getTime() and remember the runtime of the call. */
 		long tin = MonitoringController.getInstance().getTime();
