@@ -36,6 +36,9 @@ public interface IMonitoringLogReader {
      * The implementing class AbstractMonitoringLogWriter includes convenient
      * methods to extract configuration values from an initString.
      *
+     * TODO: make signature of this init method and the writer's init method
+     *       (returns boolean and doesn't throw exception) consistent.
+     *
      * @param initString the initialization string
      * @throws IllegalArgumentException if an error occured
      */
