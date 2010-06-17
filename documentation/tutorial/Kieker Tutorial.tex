@@ -126,8 +126,8 @@
       \setBashListing
       % Note: A little bit long...and the name of the libaries have to be changed manually.
       \begin{lstlisting}
-	nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.1-refactoring-branch_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
-	nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -classpath ./build/:./lib/kieker-monitoring-1.1-refactoring-branch_ctrl.jar:./lib/commons-logging-1.1.1.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
+	nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
+	nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -classpath ./build/:./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
       \end{lstlisting}
       If everything worked correctly, there should now be a new directory named ``tpmon-20100605-115948636-UTC'' (just with other numbers) in the default temporary directory (under Linux this should be ``/tmp''). In this directory, there should be a file with the extension ``.dat'' with a content similar to the following:
       % Note: We don't have a suitable listing for 'plain' text. We use the bash listing for the moment.
@@ -186,9 +186,9 @@
       \end{lstlisting}
 The compiling is pretty much the same as before, but in order to run the program, we have to copy the configuration files into the build-directory.
 \begin{lstlisting}
-nils@Laptop:~/example$ javac ./src/Bookstore.java ./src/Catalog.java ./src/CRM.java -classpath ./lib/kieker-tpmon-1.1_ctrl.jar -d ./build
+nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
 nils@Laptop:~/example$ cp -r ./META-INF/ ./build/META-INF
-nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -Dtpmon.configuration=META-INF/tpmon.properties -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=true -Daj.weaving.verbose=true -classpath ./build/:./lib/kieker-tpmon-1.1_ctrl.jar:./lib/kieker-common-1.1.jar:./lib/commons-logging-1.1.1.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
+nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -Dkieker.monitoring.properties=META-INF/kieker.monitoring.properties -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=true -Daj.weaving.verbose=true -classpath ./build/:./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar:./lib/kieker-monitoring-1.5-trunk_ctw.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
 \end{lstlisting}
 
 
