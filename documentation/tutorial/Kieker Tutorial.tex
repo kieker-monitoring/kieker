@@ -42,7 +42,7 @@
 	  \caption{Interaction between the components of \Kieker}
 	\end{center}
       \end{figure}
-      The monitoring probes create either the monitoring records manually or by calling the monitoring controller. The monitoring controller uses the monitoring log writers to persist the given records which can then be later read by a monitoring log reader who creates a monitoring record again. This monitoring recors can then be used by the consumer in nearly every way.
+      The monitoring probes create either the monitoring records manually or by calling the monitoring controller. The monitoring controller uses the monitoring log writers to persist the given records which can then be later read by a monitoring log reader who creates a monitoring record again. This monitoring records can then be used by the consumer in nearly every way.
 
     \subsection{What ist the purpose of this tutorial?}
       In this tutorial, we will take a closer look at both, the \textbf{\KiekerMonitoring}- and the \textbf{\KiekerAnalysis}-part. That means, we will describe on the one hand how \KiekerMonitoring\ can be used to mark parts of the own sourcecode for \Kieker\ and to let them execute under surveilance, so that the recorded information can be saved somewhere and on the other hand we will use \KiekerAnalysis\ to process (for example visualize) our recorded data.\\
@@ -184,74 +184,136 @@
 
 	  <!-- uncomment following to instrument sun jpetstore -->
       \end{lstlisting}
-The compiling is pretty much the same as before, but in order to run the program, we have to copy the configuration files into the build-directory.
-\begin{lstlisting}
-nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
-nils@Laptop:~/example$ cp -r ./META-INF/ ./build/META-INF
-nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -Dkieker.monitoring.properties=META-INF/kieker.monitoring.properties -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=true -Daj.weaving.verbose=true -classpath ./build/:./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar:./lib/kieker-monitoring-1.5-trunk_ctw.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
-\end{lstlisting}
+      The compiling is pretty much the same as before (except for some more libraries), but in order to run the program, we have to copy the configuration files into the build-directory.
+      % Same as before. If the libraries change, this has to be modified as well.
+      \begin{lstlisting}
+	nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
+	nils@Laptop:~/example$ cp -r ./META-INF/ ./build/META-INF
+	nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=true -Daj.weaving.verbose=true -classpath ./build/:./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar:./lib/kieker-monitoring-1.5-trunk_ctw.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
+      \end{lstlisting}
 
 
-\section{\KiekerMonitoring}
-\subsection{Configuration}
-The configuration possibilties of \KiekerMonitoring can be done in the configuration file named ''\monitoringPropertiesFile``. It is possible to activate/deactivate the monitoring and the debugging, set the target of the recorded informations or the path for the temporary paths of \Kieker. Most of the variables are self-explanatory.  
-\subsection{Probes}
-The probes (figure \ref{image:componentdiagram} shows them as well) decide which (and where) information should be recorded. To create own probes can for example be necessary if we want to record only specific data, or only every second method call and so on.
-\subsection{Writers}
-\hypertarget{monitoringlogwriters}
-The so called \textit{monitoring log writers} (they can be seen as well in figure \ref{image:componentdiagram}) are the parts of \Kieker\ which are responsible for writing and serializing the recorded informations into files, databases and so on. In other words: They get an instance of \textit{AbstractKiekerMonitoringRecord} and produce an output of any nature whatsoever.\\
-As can be seen in figure \ref{image:writers} there are already some writers implemented.
-\begin{figure}[H]
+  \section{\KiekerMonitoring}
+    \subsection{Configuration}
+      The monitoring part of \Kieker\ can be configured using the configuration file named ''\monitoringPropertiesFile``. This file should be copied for use to the directory ''META-INF`` of the own project and should - like the ''aop.xml`` - be copied during compiling. In order to inform \Kieker\ about this file, the following parameter should be used for the JVM:
+      \begin{lstlisting}
+	-Dkieker.monitoring.properties=META-INF/kieker.monitoring.properties
+      \end{lstlisting}
+      Most of the variables are self-explanatory and some of them will be explained in the following.
+
+    \subsection{Records}
+      % They are not really only part of the monitoring components, but they have to be mentioned somehow.
+      As we already saw, the records are the objects which store the monitored informations somehow. They are not really part of \KiekerMonitoring\ but in order to the use in the following, we will examine them.\\
+      If we want to implement an own record, it should be extend the already existing class \textit{kieker.common.record.AbstractMonitoringRecord}. The record should be able to put his complete content into an array (of Object] so that the other components of \Kieker\ are able to persist and load the data and should of course provide a method to restore the content from an array. The following listing shows a simple record implementation which has fields for the class and the method that is called.
+      \setJavaCodeListing
+      \lstset{caption=MyRecord.java}
+      \lstinputlisting{source-example/monitoring-and-analysis-with-own-components/src/mySimpleKiekerExample/bookstoreTracing/MyRecord.java}
+
+    \subsection{Probes}
+      The probes are responsible for the decision which (and where) informations should be recorded. Technically we already implemented them by surrounding the method calls with the correct statements to clock, to produce the records and to deliver these records to the monitoring controller. Other specific controller could for example record only the amount of delivered bytes between methods or record only every second method call as well.\\
+      We already used the annotations to make the monitoring much more comfortable and could also implement own annotations for AspectJ, but this won't be explained in this tutorial, because it would simply go beyond the scope.
+
+    \subsection{Writers}
+      \hypertarget{monitoringlogwriters} 
+      The so called \textit{monitoring log writers} (they can be seen as well in figure \ref{image:kiekercomponentdiagram}) are the parts of \Kieker\ which are responsible for writing and serializing the recorded informations into files, databases and so on. In other words: They get an instance of \textit{AbstractKiekerMonitoringRecord} and produce an output of any nature whatsoever.\\
+      Of course there are already some writers implemented, as can be seen in figure \ref{image:writers}.
+      % This is the diagram with the different types of writers.
+      \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=0.5\textwidth]{kieker_writerimpls.pdf}
-		\label{image:writers}
-		\caption{The inheritance hierarchy of the current implemented monitoring log writers}
+	  \includegraphics[width=0.5\textwidth]{kieker_writerimpls.pdf}
+	  \caption{The inheritance hierarchy of the current implemented monitoring log writers}
+	  \label{image:writers}
 	\end{center}
-\end{figure}
-As the quick start part already showed it, every monitored record is sent to the \textit{TpmonController} which itself calls the current writer. The writer uses for example the \textit{toArray()} method of the record to get the informations stored by the record as handable array. The writer is then able to write these objects for example into a file. The used writer can be changed in the configuration file of \KiekerMonitoring.\\
-To implement an own writer class, the following steps has to be performed:
-\begin{enumerate}
- \item The new writer has to implement \textit{kieker.tpmon.writer.IMonitoringLogWriter}.
- \item All methods from the interfaces \textit{kieker.tpmon.writer.IMonitoringLogWriter} and \textit{kieker.common.record.IMonitoringRecordReceiver} has to be implemented.
- \item The entry \textit{monitoringDataWriter} has to be changed in the configuration file ''tpmon.properties`` to the entire classname.
-\end{enumerate}
-The following example writer takes the informations from the given record and shows them just on the screen.
-\setJavaCodeListing
-%\lstset{caption=OwnWriter.java, label=listing:OwnWriter.java}
-%\lstinputlisting{source-example/manual-monitoring-with-own-writer/src/mySimpleKiekerExample/bookstoreTracing/MyWriter.java}
+      \end{figure}
+      As the quick start part already showed it, every monitored record is sent to the \textit{TpmonController} which itself calls the current writer. The writer uses for example the \textit{toArray()} method of the record to get the informations stored by the record as handable array. The writer is then able to write these objects for example into a file.\\
+      The implementation of an own writer class is quiet simple and can be done by implementing the interface \textit{kieker.monitoring.writer.IMonitoringLogWriter}. The following listing shows an example writer which uses a named pipe\footnote{The class \textit{MyNamedPipeManager} will be shown in the appendix of this tutorial.} to write the given records directly into the memory.
+      \setJavaCodeListing
+      \lstset{caption=MyWriter.java}
+      \lstinputlisting{source-example/monitoring-and-analysis-with-own-components/src/mySimpleKiekerExample/bookstoreTracing/MyWriter.java}
+      It is necessary to tell \KiekerMonitoring\ which writer should be used. This can be done in the already mentioned file ''\monitoringPropertiesFile``:
+      \setBashListing
+      \begin{lstlisting}
+	monitoringDataWriter=mySimpleKiekerExample.bookstoreTracing.MyWriter
+	monitoringDataWriterInitString=somePipe
 
-\section{\KiekerAnalysis}
-The part of \Kieker\ which is responsible for the analysis consist of the reader, the consumer and the analysis instance itself. After we stored somewhere our records, we need to read them again somehow. This is task of the reader. Whatever we want to do with these informations is task of the consumers. They can for example evaluate, process or visualize the data. The analysis instance concerns about the lifetime and registration of the other parts.\\
-The analysis consists roughly of the following steps:
-\begin{enumerate}
- \item Create one (or more) analysis instance.
- \item Set the reader of this instance and line it with the necessary informations to read the stored records.
- \item Register the consumers who should do something with the recorded data.
- \item Start the analysis instance.
-\end{enumerate}
-\subsection{Configuration}
-The configuration of \KiekerAnalysis\ will later be possible in the file ''\analysisPropertiesFile``. At the moment it is not necessary to set any properties due to the fact, that we concern about the analysis ourselves. 
-\subsection{Readers}
-\begin{figure}[H]
-	\begin{center}
-		\includegraphics[width=0.5\textwidth]{kieker_readerimpls.pdf}
-		\label{image:readers}
-		\caption{}
-	\end{center}
-\end{figure}
-The \textit{monitoring log readers} (their position can be found in figure \ref{image:componentdiagram}) are the counterpart to the \hyperlink{monitoringlogwriters}{\textit{monitoring log writers}}. While the writers get a record and write them in files or somewhere else, the readers take the writen data (from files, databases and so on) and convert them into an \textit{AbstractKiekerMonitoringRecord}. That means, that whenever we are implementing a new writer, we should also implement a corresponding reader. If we want for example save our recorded informations in a database, we have to be capable of reading these stored informations from the database again. The implementing of an own reader is nearly the same as the implementing of the writer, but to keep things simple, it is recommended to extend the already implemented AbstractKiekerMonitoringLogReader, because otherwise it would be necessary to implement the used observer pattern of the reader. 
-\begin{enumerate}
- \item The new reader has to extend \textit{kieker.common.logReader.AbstractKiekerMonitoringLogReader}.
- \item All methods from the interface  \textit{kieker.common.logReader.IKiekerMonitoringLogReader} which has not been implemented yet by the class must be implemented.
-\end{enumerate}
+	# 1.1.5 [property has been removed:] Use monitoring record type IDs
 
-\subsection{Consumers}
-The consumer is the part of \Kieker\ which decides what to do with the stored informations. 
-\section{Appendix}
-\subsection{Example logs}
-\subsection{Shortcut via ant}
-\subsection{Libraries}
-\input{Libraries}
-\subsection{Troubleshooting}
+	# 1.1.6 Queue Size used to store Monitoring Records
+	# Asyncronous Writers need to store Monitoring Records in an internal Queue.
+	# This parameter defines the Number of Records cached. If this number is exceeded
+	# Kieker will terminate with a Queue Full Exception!
+	#
+	asyncRecordQueueSize=8000
+      \end{lstlisting}
+      The first property decides which writer should be used. If we don't use any of the already implemented writers, we have to deliver the whole name of the class of the writer. The second property is an init string which can be used to initialize the writer in any way. In this case we use this parameter to tell the writer which pipe should be used. The third property is just important for asyncronous writers. It must be pointed out that the resulting init string our writer gets is of the form ''somePipe $|$ asyncRecordQueueSize=8000``. 
+
+
+    \section{\KiekerAnalysis}
+      % The analysis works a little bit different, that is why we explain it here.
+      \KiekerAnalysis\ is the part of \Kieker\ which is responsible for the analysis, consisting of the reader, the consumer and the analysis instance itself. After we stored somewhere our records, we need to read them again somehow. This is task of the reader. Whatever we want to do with these informations is task of the consumers. They can for example evaluate, process or visualize the data. The analysis instance concerns about the lifetime and registration of the other parts.\\
+      The analysis consists roughly of the following steps:
+      \begin{enumerate}
+	\item Create one (or more) analysis instance.
+	\item Set the reader of this instance and line it with the necessary informations to read the stored records.
+	\item Register the consumers who should do something with the recorded data.
+	\item Start the analysis instance.
+      \end{enumerate}
+      % For the moment we don't have ANY configuration for the analysis part. This has to be done in the program.
+      % \subsection{Configuration}
+
+      \subsection{Readers}
+	The \textit{monitoring log readers} (their position can be found in figure \ref{image:kiekercomponentdiagram}) are the direct counterpart to the \hyperlink{monitoringlogwriters}{\textit{monitoring log writers}}. While the writers get a record and write them in files or somewhere else, the readers take the writen data (from files, databases and so on) and convert them into a suitable instance of \textit{AbstractKiekerMonitoringRecord}. That means, that whenever we are implementing a new writer, we should also implement a corresponding reader. If we want for example save our recorded informations in a database, we have to be capable of reading these stored informations from the database again.\\
+	Again there are some readers already implemented in \Kieker\ but we can implement an own reader as well. The following diagram shows the rough hierarchy.
+	% This is the diagram with a simple reader hierarchy.
+	\begin{figure}[H]
+	  \begin{center}
+	    \includegraphics[width=0.5\textwidth]{kieker_readerimpls.pdf}
+	    \caption{The simple inheritance hierarchy of some currently implemented monitoring log readers}
+	    \label{image:readers}
+	  \end{center}
+	\end{figure}
+	The implementing of an own reader is nearly the same as the implementing of the writer, but to keep things simple, it is recommended to extend the already implemented AbstractKiekerMonitoringLogReader, because otherwise it would be necessary to implement the used observer pattern of the reader. By using the methods of the abstract class \textit{kieker.analysis.reader.AbstractMonitoringLogReader}, the task of delivering a new record to the consumers can be delegated to the super class.\\
+	The following listing shows a simple reader which reads a stored record from the pipe. If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
+	\setJavaCodeListing
+	\lstset{caption=MyReader.java}
+	\lstinputlisting{source-example/monitoring-and-analysis-with-own-components/src/mySimpleKiekerExample/bookstoreTracing/MyReader.java}
+
+      \subsection{Consumers}
+	The consumers are the parts of \Kieker\ which work with the records that have been loaded by the reader. There can be (theoretically) an infinite number of consumers which produce any kind of output. A consumer can be programmed by implementing the interface \textit{kieker.analysis.plugin.IMonitoringRecordConsumerPlugin} and implementing the necessary methods. Our following example consumer takes the given record and writes the content to the default output stream.
+	\setJavaCodeListing
+	\lstset{caption=MyConsumer.java}
+	\lstinputlisting{source-example/monitoring-and-analysis-with-own-components/src/mySimpleKiekerExample/bookstoreTracing/MyConsumer.java}
+
+      \subsection{The analysis}
+	To put everything together, the following listing shows how to use the above-mentioned components.
+	% It is not necessary to show the whole method.
+	\setJavaCodeListing
+	\begin{lstlisting}
+	  AnalysisInstance ai = new AnalysisInstance();
+	  MyReader reader = new MyReader();
+	  reader.init("somePipe");
+	  ai.setLogReader(reader);
+	  ai.registerPlugin(new MyConsumer());
+	  ai.run();
+	\end{lstlisting}
+
+  \section{Appendix}
+    \subsection{Used classes}
+      \subsubsection{MyNamedPipeManager and MyPipe}
+	\setJavaCodeListing
+	\lstset{caption=MyNamedPipeManager.java}
+	\lstinputlisting{source-example/monitoring-and-analysis-with-own-components/src/mySimpleKiekerExample/bookstoreTracing/MyNamedPipeManager.java}
+
+	\setJavaCodeListing
+	\lstset{caption=MyPipe.java}
+	\lstinputlisting{source-example/monitoring-and-analysis-with-own-components/src/mySimpleKiekerExample/bookstoreTracing/MyPipe.java}
+
+    \subsection{Example logs}
+    \subsection{Shortcut via ant}
+    \subsection{Libraries}
+      The following tables shows all libraries which are used by \Kieker\ and explains them in short words.
+      \input{Libraries}
+    \subsection{Troubleshooting}
+
 \end{document}
  

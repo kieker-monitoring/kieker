@@ -12,5 +12,9 @@ commons-io-$.jar	Commons-IO contains utility classes, stream implementations, fi
 commons-logging-$.jar	Commons Logging is a thin adapter allowing configurable bridging to other, well known logging systems.
 servlet.jar	This package contains different classes for the work with servlets.
 jmc.jar	This library contains the Java Media Components which can be used for example for playing video content in Swing applications.
-Scenario.jar	This package provides scene graph functionality for java.
+Scenario.jar	This package provides scene graph functionality for Java.
 openjms-$.jar	OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification
+log4j-$.jar	log4j is a framework for the logging of messages in Java.
+rabbitmq-client.jar	This library contains the client for the RabbitMQ messaging system.
+jndi-$.jar	The Java Naming and Directory Interface is an API which provides methods for multiple naming and directory services. It can be used for example to register disposed files in a network and to allow other part of a Java program to use them for RMI calls.
+concurrent-$.jar	This package contains different thread-safe classes.

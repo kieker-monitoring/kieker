@@ -33,7 +33,7 @@ public class Bookstore extends Thread {
 
 		AnalysisInstance ai = new AnalysisInstance();
 		MyReader reader = new MyReader();
-		reader.init("somePipe | asyncRecordQueueSize=8000");
+		reader.init("somePipe");
 		ai.setLogReader(reader);
 		ai.registerPlugin(new MyConsumer());
 		ai.run();

@@ -17,6 +17,7 @@ public class MyWriter implements IMonitoringLogWriter {
 
 	@Override
 	public Vector<AbstractWorkerThread> getWorkers() {
+		/* We don't have any worker threads, so we return just null. */
 		return null;
 	}
 
@@ -24,6 +25,13 @@ public class MyWriter implements IMonitoringLogWriter {
 	public boolean init(String initString) {
 		boolean result;
 		try {
+			/*
+			 * The init string should have the form
+			 * "pipename | asyncRecordQueueSize=8000" or something similar. We
+			 * are only interested in the name of the pipe.
+			 */
+			initString = initString.substring(0, initString.indexOf('|') - 1);
+			/* Try to get the pipe via name. */
 			pipe = MyNamedPipeManager.getInstance().acquirePipe(initString);
 			result = true;
 		} catch (IllegalArgumentException ex) {
@@ -36,6 +44,7 @@ public class MyWriter implements IMonitoringLogWriter {
 	public boolean newMonitoringRecord(IMonitoringRecord record) {
 		boolean result;
 		try {
+			/* Just write the content of the record into the pipe. */
 			pipe.put(record.toArray());
 			result = true;
 		} catch (InterruptedException e) {

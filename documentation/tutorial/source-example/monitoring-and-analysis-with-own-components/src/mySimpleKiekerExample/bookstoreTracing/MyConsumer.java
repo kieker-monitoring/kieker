@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.MonitoringRecordReceiverException;
 
 public class MyConsumer implements IMonitoringRecordConsumerPlugin {
 
@@ -15,8 +14,10 @@ public class MyConsumer implements IMonitoringRecordConsumerPlugin {
 
 	@Override
 	public boolean newMonitoringRecord(IMonitoringRecord record) {
+		/* Has the record the correct form? */
 		boolean result = (record instanceof MyRecord);
 		if (result) {
+			/* Seems like yes. Write the content to the default output. */
 			MyRecord myRecord = (MyRecord) record;
 			System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
 					+ ": " + myRecord.component + ", " + myRecord.service
