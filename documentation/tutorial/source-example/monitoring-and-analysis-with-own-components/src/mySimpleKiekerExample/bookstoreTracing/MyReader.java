@@ -1,45 +1,30 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import kieker.analysis.reader.AbstractMonitoringLogReader;
-import kieker.analysis.reader.IMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
-import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.common.record.MonitoringRecordReceiverException;
-import kieker.common.record.OperationExecutionRecord;
 
 public class MyReader extends AbstractMonitoringLogReader {
-
-	ArrayList<IMonitoringRecordReceiver> receivers = new ArrayList<IMonitoringRecordReceiver>();
-
-	@Override
-	public void addRecordReceiver(IMonitoringRecordReceiver receiver) {
-		receivers.add(receiver);
-	}
+	private MyPipe pipe;
 
 	@Override
 	public void init(String initString) throws IllegalArgumentException {
-
+		pipe = MyNamedPipeManager.getInstance().acquirePipe(initString);
 	}
 
 	@Override
 	public boolean read() throws MonitoringLogReaderException {
-		Iterator<Object[]> iterator = Storage.container.iterator();
-
-		while (iterator.hasNext()) {
-			OperationExecutionRecord record = new OperationExecutionRecord();
-			record.initFromArray(iterator.next());
-			for (IMonitoringRecordReceiver receiver : receivers) {
-				try {
-					receiver.newMonitoringRecord(record);
-				} catch (MonitoringRecordReceiverException ex) {
-				}
+		boolean result;
+		try {
+			Object[] obj;
+			while ((obj = pipe.poll(4)) != null) {
+				MyRecord record = new MyRecord();
+				record.initFromArray(obj);
+				deliverRecord(record);
 			}
+			result = true;
+		} catch (InterruptedException e) {
+			result = false;
 		}
-
-		return true;
+		return result;
 	}
-
 }

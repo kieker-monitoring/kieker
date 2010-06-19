@@ -14,10 +14,15 @@ public class MyConsumer implements IMonitoringRecordConsumerPlugin {
 	}
 
 	@Override
-	public boolean newMonitoringRecord(IMonitoringRecord arg0)
-			throws MonitoringRecordReceiverException {
-		System.out.println(arg0.toString());
-		return true;
+	public boolean newMonitoringRecord(IMonitoringRecord record) {
+		boolean result = (record instanceof MyRecord);
+		if (result) {
+			MyRecord myRecord = (MyRecord) record;
+			System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
+					+ ": " + myRecord.component + ", " + myRecord.service
+					+ ", " + myRecord.rt);
+		}
+		return result;
 	}
 
 	@Override

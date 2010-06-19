@@ -5,7 +5,6 @@ import java.util.Vector;
 import kieker.analysis.AnalysisInstance;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.MonitoringLogReaderException;
-import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.MonitoringController;
 
 public class Bookstore extends Thread {
@@ -33,7 +32,9 @@ public class Bookstore extends Thread {
 		}
 
 		AnalysisInstance ai = new AnalysisInstance();
-		ai.setLogReader(new MyReader());
+		MyReader reader = new MyReader();
+		reader.init("somePipe | asyncRecordQueueSize=8000");
+		ai.setLogReader(reader);
 		ai.registerPlugin(new MyConsumer());
 		ai.run();
 
@@ -42,15 +43,11 @@ public class Bookstore extends Thread {
 
 	@Override
 	public void run() {
-		/* Call searchBook() and remember the runtime of the call. */
-		long tin = MonitoringController.getInstance().getTime();
 		Bookstore.searchBook();
-		long tout = MonitoringController.getInstance().getTime();
-
-		/* Create a new record with the remembered values. */
-		OperationExecutionRecord e = new OperationExecutionRecord(
-				"mySimpleKiekerExample.bookstoreTracing.Bookstore",
-				"searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
+		/* Create a new record */
+		MyRecord e = new MyRecord();
+		e.component = "mySimpleKiekerExample.bookstoreTracing.Bookstore";
+		e.service = "searchBook()";
 		/* Make sure that the record will somehow be persisted. */
 		MonitoringController.getInstance().newMonitoringRecord(e);
 
@@ -62,28 +59,21 @@ public class Bookstore extends Thread {
 
 	public static void searchBook() {
 		for (int i = 0; i < 1; i++) {
-			/* Call getBook() and remember the runtime of the call. */
-			long tin = MonitoringController.getInstance().getTime();
 			Catalog.getBook(false);
-			long tout = MonitoringController.getInstance().getTime();
-
-			/* Create a new record with the remembered values. */
-			OperationExecutionRecord e = new OperationExecutionRecord(
-					"mySimpleKiekerExample.bookstoreTracing.Catalog",
-					"getBook(false)", "sessionID", 0, tin, tout, "vnName", 1, 1);
+			
+			/* Create a new record */
+			MyRecord e = new MyRecord();
+			e.component = "mySimpleKiekerExample.bookstoreTracing.Catalog";
+			e.service = "getBook(false)";
 			/* Make sure that the record will somehow be persisted. */
 			MonitoringController.getInstance().newMonitoringRecord(e);
 
-			/* Call getOffers() and remember the runtime of the call. */
-			tin = MonitoringController.getInstance().getTime();
 			CRM.getOffers();
-			tout = MonitoringController.getInstance().getTime();
-
-			/* Create a new record with the remembered values. */
-			e = new OperationExecutionRecord(
-					"mySimpleKiekerExample.bookstoreTracing.CRM",
-					"getOffers()", "sessionID", 0, tin, tout, "vnName", 2, 1);
-			/* Make sure that the< record will somehow be persisted. */
+			/* Create a new record */
+			e = new MyRecord();
+			e.component = "mySimpleKiekerExample.bookstoreTracing.CRM";
+			e.service = "getOffers()";
+			/* Make sure that the record will somehow be persisted. */
 			MonitoringController.getInstance().newMonitoringRecord(e);
 		}
 	}
