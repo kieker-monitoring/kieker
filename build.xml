@@ -889,7 +889,7 @@
     
     <target name="mvn-deploy-ctw" depends="build-kieker.monitoring-ctw, mvn-deploy-base">
       	<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
-        <artifact:pom id="mavenproject" file="pom_ant_kieker.monitoring-ctw.xml" />
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-monitoring-ctw.xml" />
         <artifact:deploy file="${dist.dir}/${dist.kieker.monitoring.ctw}">
             <pom refid="mavenproject"/>
         </artifact:deploy>
@@ -897,7 +897,7 @@
     
     <target name="mvn-deploy-ltw" depends="build-kieker.monitoring-ltw, mvn-deploy-base">
       	<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
-        <artifact:pom id="mavenproject" file="pom_ant_kieker.monitoring-ltw.xml" />
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-monitoring-ltw.xml" />
         <artifact:deploy file="${dist.dir}/${dist.kieker.monitoring.ltw}">
             <pom refid="mavenproject"/>
         </artifact:deploy>

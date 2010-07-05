@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.sf.kieker</groupId>
-  <artifactId>tpmon-ctw</artifactId>
+  <artifactId>monitoring-ctw</artifactId>
   <name>Kieker Monitoring CTW</name>
   <description>Compile time weaving components</description>
   <packaging>jar</packaging>

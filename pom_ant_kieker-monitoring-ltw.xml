@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.sf.kieker</groupId>
-  <artifactId>tpmon-ltw</artifactId>
+  <artifactId>monitoring-ltw</artifactId>
   <name>Kieker Monitoring LTW</name>
   <description>Load time weaving components</description>
   <packaging>jar</packaging>
