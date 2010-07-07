@@ -1,0 +1,145 @@
+  \chapter{Example}
+    This chapter will show how to develop a simple example by installing \Kieker\ before marking some code lines for the monitoring. After the necessary data has been collected, they will be analyzed by an own developed component.\\
+    The example itself is available on the website of \Kieker.
+    \section{Download and Installation}
+      \Kieker\ can be downloaded from \KiekerDownloadUrl. The content of the zip- respectively the tar.gz-file should be extracted to any directory, which we will call ``\KiekerDir`` within this tutorial. The installation of \Kieker\ is completed.\\
+      If desired, the new created path can of course be assigned to an easy remindable environment variable. 
+      % Note: Maybe it should be described how to do this.
+
+    \section{Monitoring}
+      For the creation of the example it is recommended to create a new working directory (e.g. ''example'') of the following structure:\\
+
+        + example/
+
+      \ \ + build/
+
+      \ \ + lib/
+
+      \ \ + src/\\
+      
+      The build-directory will later contain the compiled class files for Java; the src-directory will contain the sourcecode files and the lib-directory the libraries and needed jar-files.\\
+      Some files from the \Kieker\ directory have to be copied to the current working directory.
+      \begin{itemize}
+	\item \KiekerDir/dist/\monitoringCtrlJar\ to /example/lib/\monitoringCtrlJar
+	\item \KiekerDir/lib/commons-logging-1.1.1.jar to /example/lib/commons-logging-1.1.1.jar
+      \end{itemize}
+      Two directories should be created for our packages:
+      % Note: This wouldn't be really necessary, but the package belonging is better visible.
+      \begin{itemize}
+	\item example/src/mySimpleKiekerExample
+	\item example/src/mySimpleKiekerExample/bookstoreTracing
+      \end{itemize}
+      In the last directory, we create three files: 
+      \begin{itemize}
+	\item CRM.java
+	\item Catalog.java
+	\item Bookstore.java
+      \end{itemize}
+      The file ``Bookstore.java'' should contain of the lines showed in listing \ref{listing:Bookstore.java}.
+      % It isn't necessary to do this every time but it makes sure that the listing has the correct format.
+      \setJavaCodeListing
+      % This will give the code a caption and - more important - a label which we can refer to.
+      \lstset{caption=Bookstore.java, label=listing:Bookstore.java}
+      % Careful! We load the file directly from the source directory. 
+      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java}
+      Listing \ref{listing:Catalog.java} shows the content of ``Catalog.java'' and listing \ref{listing:CRM.java} the content of ``CRM.java''.
+      \lstset{caption=Catalog.java, label=listing:Catalog.java}
+      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Catalog.java}
+      \lstset{caption=CRM.java, label=listing:CRM.java}
+      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/CRM.java}
+      The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start.
+      % It would be a waste of time to extract the part from the source-file. we do it manually.
+      \lstset{caption=Cutting from Bookstore.java, label=listing:cuttingBookstore}
+      \begin{lstlisting}
+	long tin = TpmonController.getInstance().getTime();
+	Bookstore.searchBook();
+	long tout = TpmonController.getInstance().getTime();
+
+	KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Bookstore", "searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
+	TpmonController.getInstance().logMonitoringRecord(e);
+      \end{lstlisting}
+      In this listing can be seen, how the monitoring itself is done. We use the \textit{TpmonController} to get the current time in nano seconds and remember the time before and after a specific method call (in this case: \textit{searchBook()})\footnote{The code between the timekeeping does not need to be a method call of course. It can be ``plain'' code or more than one method call as well.}. These informations are stored in the so called execution record. It gets:
+      % I am afraid it's a little bit complicate with the eoi and ess.
+      \begin{itemize}
+	\item The component (the class) in which the called method is.
+	\item The called method.
+	\item The session id. In this case we can use any string.
+	\item The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
+	\item The time before the sourcecode which should be measured.
+	\item The time after the sourcecode which should be measured.
+	\item The name of the current host. This is not very important in this case, because we have only one host. The name can be choosen freely.
+	\item The eoi (execution order index). This tells \Kieker\ later the sequence of the different calls. It should be of course unique within a trace.
+	\item The ess (execution stack size). This number tells \Kieker\ that the execution was started when the calling stack of the corresponding trace was just the                
+              ess.
+      \end{itemize}
+      For the moment we have to choose the eoi and ess manually. These numbers can be choosen later automaticaly by \Kieker\ of course.\\
+      Once the writing is done, we should be able to compile and execute the sourcecode:
+      % We need something like the ouput from the bash.
+      \setBashListing
+      % Note: A little bit long...and the name of the libaries have to be changed manually.
+      \begin{lstlisting}
+	nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
+	nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -classpath ./build/:./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
+      \end{lstlisting}
+      If everything worked correctly, there should now be a new directory named ``tpmon-20100605-115948636-UTC'' (just with other numbers) in the default temporary directory (under Linux this should be ``/tmp''). In this directory, there should be a file with the extension ``.dat'' with a content similar to the following:
+      % Note: We don't have a suitable listing for 'plain' text. We use the bash listing for the moment.
+      \begin{lstlisting}
+	$1;1275745883934593403;-1;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(false);sessionID;0;1275745883931011663;1275745883933424540;vnName;1;1
+	$1;1275745883937096236;-1;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(false);sessionID;0;1275745883935003302;1275745883937075214;vnName;3;2
+	$1;1275745883937119354;-1;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();sessionID;0;1275745883934661568;1275745883937111043;vnName;2;1
+	$1;1275745883937128922;-1;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();sessionID;0;1275745883931007961;1275745883937123824;vnName;0;0 
+      \end{lstlisting}
+      These are the recorded informations from our source code. This data can now be visualized with the help of \Kieker.
+
+\section{Analysis}
+      % Here we go...we have to inform the user of the programs he need for the converting. And that means as well, that a window user cannot do this part.
+      For the visualization via \Kieker\ we need the both tools graphviz (\url{www.graphviz.org/}) and plotutils (\url{www.gnu.org/software/plotutils/}).\\
+      Assume that we already have our recorded informations saved in a ``.dat''-file somewhere for example in the ``tmp``-directory, we can now start with converting these informations into graphs. For the first, we change into our \Kieker\-directory ($\sim$/kieker). It is recommended to create a new directory for the graphs first:
+      \begin{lstlisting}
+	nils@Laptop:~/kieker$ mkdir /tmp/graphs
+      \end{lstlisting}
+      The shell-script ''./bin/trace-analysis.sh`` will now do most of the job. It starts the analysis and uses the above-mentioned tools to convert to files into graphs and diagrams.
+      \begin{lstlisting}
+	nils@Laptop:~/kieker$ ./bin/trace-analysis.sh --plot-Sequence-Diagrams --short-labels -i /tmp/tpmon-20100606-112536844-UTC/ -o /tmp/graphs/
+      \end{lstlisting}
+	The command ''--plot-Sequence-Diagrams`` tells the shell script to convert our data into a sequence diagram\footnote{Other diagrams and graphs can be plot of course as well. Start trace-analysis.sh without any parameters to see the possible commands.}; with ''--short-labels`` we make sure that the components get a shorter name and the directories after ''-i`` and ''-o`` are the input- and the output-directories. If everything went well, \Kieker\ converted the data into files, which can now converted directly into visual graphs:
+	\begin{lstlisting}
+	  nils@Laptop:~/kieker$ ./bin/dotPic-fileConverter.sh /tmp/graphs/ svg
+	\end{lstlisting}
+	The shell script ''./bin/dotPic-fileConverter.sh`` gets the directory with the files and the desired file extension (e.g. svg or png). The resulting graphs should now be available in ''/tmp/graphs`` and should look like figure \ref{image:sequencediagram}
+	% This is the simple sequence diagram which results by running the bookstore example; of course without showing the traces etc.
+	\begin{figure}[H]
+	  \begin{center}
+	    \includegraphics[width=0.7\textwidth]{sequenceDiagram.pdf}
+            \caption{The resulting sequence diagram}
+	    \label{image:sequencediagram}
+	  \end{center}
+	\end{figure}
+	We are now able to monitor source code and to visualize these recorded informations in a simple way.
+
+    \section{Using annotations}
+      Now we want to monitor whole methods without surrounding the method calls with a block where we keep the time manually. We will now use so called annotations to mark the methods we want to monitor\footnote{To be more precisely: We use annotations which will then be used by the aspect-oriented Java extension named AspectJ to surround the method calls with code blocks which are similar to these, we already used manually.}. As can be seen in the following listing we write the annotation \textit{kieker.monitoring.annotation.TpmonExecutionMonitoringProbe} above the methods to be monitored. 
+      \setJavaCodeListing
+      \lstset{caption=Bookstore.java, label=listing:Bookstore2.java}
+      \lstinputlisting{source-example/annotation-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java}
+      Due to the use of AspectJ we need now to copy the file ''META-INF/aop.xml.example`` from our \Kieker\ directory to our working directory to ''META-INF/aop.xml``. This file tells AspectJ which parts of our source code should be monitored. To inform AspectJ about our own annotations, we need another libarary as well. We copy $\sim$/kieker/dist/kieker-tpmon-\version\_ctw.jar to our own example project in $\sim$/example/lib/kieker-tpmon-\version\_ctw.jar\\
+      To make sure that every method in our program which is annotated will be monitored, we have to write the following into the ''aop.xml``:
+      \setXMLListing 
+      \begin{lstlisting}
+	<aspectj>
+	  <!-- turn verbose on to check which files are instrumented -->
+	  <!-- <weaver options="-verbose"/> -->
+	  <weaver options="">
+	      
+	  <!-- The following line is the important one -->
+	  <include within="*"/> 
+
+	  <!-- uncomment following to instrument sun jpetstore -->
+      \end{lstlisting}
+      The compiling is pretty much the same as before (except for some more libraries), but in order to run the program, we have to copy the configuration files into the build-directory.
+      % Same as before. If the libraries change, this has to be modified as well.
+      \begin{lstlisting}
+	nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
+	nils@Laptop:~/example$ cp -r ./META-INF/ ./build/META-INF
+	nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=true -Daj.weaving.verbose=true -classpath ./build/:./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar:./lib/kieker-monitoring-1.5-trunk_ctw.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
+      \end{lstlisting}
