@@ -2,14 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.ibatis.jpetstore.web;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 import org.apache.struts.action.ActionServlet;
 
 /**
@@ -18,19 +17,19 @@ import org.apache.struts.action.ActionServlet;
  */
 public class DispatcherServlet extends ActionServlet {
 
-    @TpmonExecutionMonitoringProbe
+    @OperationExecutionMonitoringProbe
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doGet(request, response);
         //System.out.println("doGet");
     }
 
-    @TpmonExecutionMonitoringProbe
+    @OperationExecutionMonitoringProbe
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doPost(request, response);
         //System.out.println("doPost");
     }
 
-    @TpmonExecutionMonitoringProbe
+    @OperationExecutionMonitoringProbe
     protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.process(request, response);
         //System.out.println("process");

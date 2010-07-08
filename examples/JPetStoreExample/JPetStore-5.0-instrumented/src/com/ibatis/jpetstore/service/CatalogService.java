@@ -11,7 +11,7 @@ import com.ibatis.jpetstore.persistence.iface.ProductDao;
 import com.ibatis.jpetstore.persistence.DaoConfig;
 
 import java.util.List;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class CatalogService {
 
@@ -32,42 +32,42 @@ public class CatalogService {
     this.productDao = productDao;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public List getCategoryList() {
     return categoryDao.getCategoryList();
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public Category getCategory(String categoryId) {
     return categoryDao.getCategory(categoryId);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public Product getProduct(String productId) {
     return productDao.getProduct(productId);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public PaginatedList getProductListByCategory(String categoryId) {
     return productDao.getProductListByCategory(categoryId);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public PaginatedList searchProductList(String keywords) {
     return productDao.searchProductList(keywords);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public PaginatedList getItemListByProduct(String productId) {
     return itemDao.getItemListByProduct(productId);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public Item getItem(String itemId) {
     return itemDao.getItem(itemId);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public boolean isItemInStock(String itemId) {
     return itemDao.isItemInStock(itemId);
   }

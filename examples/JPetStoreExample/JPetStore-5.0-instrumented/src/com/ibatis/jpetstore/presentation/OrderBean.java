@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class OrderBean extends AbstractBean {
 
@@ -94,7 +94,7 @@ public class OrderBean extends AbstractBean {
     return orderList;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String listOrders() {
     Map sessionMap = ActionContext.getActionContext().getSessionMap();
     AccountBean accountBean = (AccountBean) sessionMap.get("accountBean");
@@ -102,7 +102,7 @@ public class OrderBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String switchOrderPage() {
     if ("next".equals(pageDirection)) {
       orderList.nextPage();
@@ -112,7 +112,7 @@ public class OrderBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String newOrderForm() {
     Map sessionMap = ActionContext.getActionContext().getSessionMap();
     AccountBean accountBean = (AccountBean) sessionMap.get("accountBean");
@@ -131,7 +131,7 @@ public class OrderBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String newOrder() {
     Map sessionMap = ActionContext.getActionContext().getSessionMap();
 
@@ -156,7 +156,7 @@ public class OrderBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String viewOrder() {
     Map sessionMap = ActionContext.getActionContext().getSessionMap();
     AccountBean accountBean = (AccountBean) sessionMap.get("accountBean");

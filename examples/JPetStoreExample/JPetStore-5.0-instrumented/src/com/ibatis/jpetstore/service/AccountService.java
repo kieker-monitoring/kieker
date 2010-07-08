@@ -4,7 +4,7 @@ import com.ibatis.dao.client.DaoManager;
 import com.ibatis.jpetstore.domain.Account;
 import com.ibatis.jpetstore.persistence.iface.AccountDao;
 import com.ibatis.jpetstore.persistence.DaoConfig;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class AccountService {
 
@@ -19,22 +19,22 @@ public class AccountService {
     this.accountDao = accountDao;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public Account getAccount(String username) {
     return accountDao.getAccount(username);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public Account getAccount(String username, String password) {
     return accountDao.getAccount(username, password);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public void insertAccount(Account account) {
     accountDao.insertAccount(account);
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public void updateAccount(Account account) {
     accountDao.updateAccount(account);
   }

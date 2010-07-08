@@ -1,12 +1,10 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
-/**
- * kieker.tests.bookstore.CRM.java
- *
+/*
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project
+ * Copyright 2006-2010 the Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +24,9 @@ import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
  * monitoring component tpmon. See the kieker tutorial 
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
- *
+ */
+
+/**
  * @author Matthias Rohr
  * History:
  * 2008/01/09: Refactoring for the first release of
@@ -40,7 +40,7 @@ public class CRM {
     /**
      * This method will be monitored, since it has an annotation.
      */
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     public static void getOffers(){
 	Catalog.getBook(true);
     }

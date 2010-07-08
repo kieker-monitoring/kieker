@@ -18,12 +18,9 @@ directory Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/lib/:
 2. Copy the following files from the binary distribution 
    to the lib/ directory:
    * dist/kieker-common-<version>.jar
-   * dist/kieker-monitoring-<version>_ctrl.jar
-   * dist/kieker-monitoring-<version>_ltw.jar
-   * lib/aspectjrt-<version>.jar
-   * lib/aspectjtools-<version>.jar
+   * dist/kieker-monitoring-<version>.jar
    * lib/aspectjweaver-<version>.jar
-   * lib/commons-logging-<version>.jar
+
 3. Copy lib/META-INF/kieker.monitoring.properties.example to 
    lib/META-INF/kieker.monitoring.properties and modify this configuration file
    according to your needs. 
@@ -61,7 +58,7 @@ generated from the monitoring data employing Kieker.Analysis.
    - tpmon.dat which contains the mapping between monitoring record type 
      and implementing class.
 4. Kieker includes a control servlet to check the status of Kieker.Monitoring.
-   It can be accessed via: http://localhost:8080/kieker-monitoring-<version>_controlServlet/
+   It can be accessed via: http://localhost:8080/kieker-monitoring-servlet-<version>/
 5. We will now use Kieker.Analysis to generate sequence diagrams and dependency 
    graphs for this monitoring log. Please change to the base directory of Kieker's 
    binary release. The tool can be invoked using the wrapper script bin/trace-analysis.sh 

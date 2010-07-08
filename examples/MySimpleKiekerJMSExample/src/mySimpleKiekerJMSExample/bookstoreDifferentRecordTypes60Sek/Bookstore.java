@@ -1,7 +1,7 @@
 package mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import java.util.Vector;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 import mySimpleKiekerJMSExample.annotation.MyRTProbe;
 
 /*
@@ -76,7 +76,7 @@ public class Bookstore extends Thread {
     }
 
     @MyRTProbe()
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     public static void searchBook() {
         for (int i = 0; i < 1; i++) {
             Catalog.getBook(false);

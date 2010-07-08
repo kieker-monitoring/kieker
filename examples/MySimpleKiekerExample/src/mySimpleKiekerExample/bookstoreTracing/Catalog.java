@@ -1,9 +1,8 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
-/**
- * kieker.tests.bookstore.Catalog.java
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -26,8 +25,9 @@ import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
  * monitoring component tpmon. See the kieker tutorial 
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
- *
- * @author Matthias Rohr, Andre van Hoorn
+ */
+
+/** @author Matthias Rohr, Andre van Hoorn
  * History:
  * 2009/06/23: Adapted for "different record type test"
  * 2008/01/09: Refactoring for the first release of
@@ -36,7 +36,7 @@ import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
  *
  */
 public class Catalog {
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     public static void getBook(boolean complexQuery) {
         if (complexQuery) {
             //KiekerTpmonManualBranchProbe.monitorBranch(1,0);

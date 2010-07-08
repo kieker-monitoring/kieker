@@ -2,22 +2,9 @@
 <project name="KiekerMyJMSExample" default="build-all" basedir=".">
     <property file="build.properties"/>
 
-    <path id="classpath.libs">
-        <pathelement path="${classpath}"/>
-        <fileset dir="lib">
-            <include name="**/*.jar"/>
-        </fileset>
-        <pathelement location="."/>
-    </path>
-
     <target name="build-all"
             depends="clean,init,compile-all">
     </target>
-
-    <path id="run.classpath">
-        <path refid="classpath.libs"/>
-        <pathelement location="${build.dir}/"/>
-    </path>
 
     <condition property="no.kieker.monitoring.properties">
         <not>
@@ -54,10 +41,21 @@
 
     <target name="compile-all"
 	    depends="clean,init">
+        <path id="compile-classpath">
+            <fileset dir="lib/">
+                <include name="aspectjrt-*.jar"/>
+                <include name="commons-logging-*.jar"/>
+                <include name="kieker-common-*.jar"/>
+                <include name="kieker-monitoring-*.jar"/>
+                <include name="kieker-analysis-*.jar"/>
+                <include name="kieker-tools-*.jar"/>
+            </fileset>
+        </path>
+
         <javac source="1.5" target="1.5"
                destDir="${build.dir}"
                debug="true"
-               classpathref="classpath.libs"
+               classpathref="compile-classpath"
                srcdir="src">
         </javac>
     </target>
@@ -69,6 +67,17 @@
 
     <target name="run-tests-loadTimeWeaving-bookstore-60Sek"
             depends="compile-all">
+        <path id="run-classpath">
+            <pathelement location="build/"/>
+            <fileset dir="lib/">
+                <include name="commons-logging-*.jar"/>
+                <include name="jms-*.jar"/>
+                <include name="kieker-common-*.jar"/>
+                <include name="kieker-monitoring-*.jar"/>
+                <include name="openjms-*.jar"/>
+            </fileset>
+        </path>
+
         <copy file="${tests.log4j.properties}"
               tofile="${build.dir}/tests.log4j.properties"/>
         <copy file="${aop.xml.ltwtestsRTsExecutions}"
@@ -76,7 +85,7 @@
         <java dir="."
               fork="true"
               classname="mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek.Bookstore"
-              classpathref="run.classpath">
+              classpathref="run-classpath">
             <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
@@ -88,11 +97,22 @@
     </target>
 
     <target name="run-JMSMonitor" depends="compile-all">
+      <path id="run-classpath">
+            <pathelement location="build/"/>
+            <fileset dir="lib/">
+                <include name="commons-logging-*.jar"/>
+                <include name="jms-*.jar"/>
+                <include name="kieker-common-*.jar"/>
+                <include name="kieker-analysis-*.jar"/>
+                <include name="openjms-*.jar"/>
+            </fileset>
+        </path>
+
         <copy file="${tests.log4j.properties}" tofile="${build.dir}/tests.log4j.properties"/>
         <java dir="."
               fork="true"
               classname="mySimpleKiekerJMSExample.consumer.OnlineMonitor"
-              classpathref="run.classpath">
+              classpathref="run-classpath">
             <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
             <jvmarg value="-DinputDir=${inputDir}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>

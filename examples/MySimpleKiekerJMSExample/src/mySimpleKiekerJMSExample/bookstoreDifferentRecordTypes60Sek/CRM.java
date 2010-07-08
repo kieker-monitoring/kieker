@@ -1,6 +1,6 @@
 package mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 import mySimpleKiekerJMSExample.annotation.MyRTProbe;
 
 /**
@@ -42,7 +42,7 @@ public class CRM {
      * This method will be monitored, since it has an annotation.
      */
     @MyRTProbe()
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     public static void getOffers(){
 	Catalog.getBook(true);
     }

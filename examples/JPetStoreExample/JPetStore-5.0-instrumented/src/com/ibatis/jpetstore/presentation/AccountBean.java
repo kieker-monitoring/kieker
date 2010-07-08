@@ -9,7 +9,7 @@ import org.apache.struts.beanaction.BeanActionException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class AccountBean extends AbstractBean {
 
@@ -116,7 +116,7 @@ public class AccountBean extends AbstractBean {
     this.validation = validation;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String newAccount() {
     try {
       accountService.insertAccount(account);
@@ -130,7 +130,7 @@ public class AccountBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String editAccountForm() {
     try {
       account = accountService.getAccount(account.getUsername());
@@ -140,7 +140,7 @@ public class AccountBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String editAccount() {
     try {
       accountService.updateAccount(account);
@@ -152,7 +152,7 @@ public class AccountBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String switchMyListPage () {
     if ("next".equals(pageDirection)) {
       myList.nextPage();
@@ -162,7 +162,7 @@ public class AccountBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String signon() {
 
     account = accountService.getAccount(account.getUsername(), account.getPassword());
@@ -183,7 +183,7 @@ public class AccountBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String signoff() {
     //ActionContext.getActionContext().getRequest().getSession().invalidate();
     clear();

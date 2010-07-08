@@ -5,7 +5,7 @@ import com.ibatis.jpetstore.domain.Category;
 import com.ibatis.jpetstore.domain.Item;
 import com.ibatis.jpetstore.domain.Product;
 import com.ibatis.jpetstore.service.CatalogService;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class CatalogBean extends AbstractBean {
 
@@ -122,7 +122,7 @@ public class CatalogBean extends AbstractBean {
     this.itemList = itemList;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String viewCategory() {
     if (categoryId != null) {
       productList = catalogService.getProductListByCategory(categoryId);
@@ -131,7 +131,7 @@ public class CatalogBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String viewProduct() {
     if (productId != null) {
       itemList = catalogService.getItemListByProduct(productId);
@@ -140,14 +140,14 @@ public class CatalogBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String viewItem() {
     item = catalogService.getItem(itemId);
     product = item.getProduct();
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String searchProducts() {
     if (keyword == null || keyword.length() < 1) {
       setMessage("Please enter a keyword to search for, then press the search button.");
@@ -158,7 +158,7 @@ public class CatalogBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String switchProductListPage() {
     if ("next".equals(pageDirection)) {
       productList.nextPage();
@@ -168,7 +168,7 @@ public class CatalogBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String switchItemListPage() {
     if ("next".equals(pageDirection)) {
       itemList.nextPage();

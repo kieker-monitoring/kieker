@@ -1,14 +1,14 @@
 package kieker.evaluation.monitoredApplication;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
 import kieker.monitoring.annotation.BenchmarkProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
  * @author Jan Waller
  */
 public class MonitoredClass {
 
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     @BenchmarkProbe()
     public long monitoredMethod(final long methodTime) {
         final long exitTime = System.nanoTime() + methodTime;
@@ -19,7 +19,7 @@ public class MonitoredClass {
         return currentTime;
     }
 
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     @BenchmarkProbe()
     public long monitoredRecursiveMethod(long methodTime, final int recDepth) {
         if (recDepth > 1) {

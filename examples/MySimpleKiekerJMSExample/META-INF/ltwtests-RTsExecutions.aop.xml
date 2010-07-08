@@ -1,62 +1,44 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
 
-<!-- In the aop.xml you have to specify the packages that 
-     can be instrumented. This is done by using "include" 
-     and "exclude" lists. 
-
-     Additionally, one instrumentation mode has to be selected.
-     The standard mode is the TpmonMonitorInstrumentationAspect,
-     which activates monitoring for all java methods that belong 
-     to classes within the includes but not in the exludes, 
-     and are annotated with a  @TpmonMonitoringProbe() java 
-     annotation placed before the java method. 
-     
-     If you want to monitor ALL methods of a java program:
-     1. add an matching "include" tag, 
-     2. uncomment the aspect (in the aspects section) 
-     TpmonMonitorFullInstServlet and put the others in a comment.
-     
-     Mode details and are in the Kieker tutorial
-     -->
-
-
 <aspectj>
-	<!-- turn verbose on to check which files are instrumented -->
-	<!-- <weaver options="-verbose"/> -->
-	<weaver options="">
-	
-        <!-- <include within="*"/> -->
+    <weaver options=""> <!-- options="-verbose" -->
 
-	<!-- uncomment following to instrument sun jpetstore -->
+        <!-- Use the exclude/include directives to specify which classes
+             are (not) to be considered for weaving.
+             Some examples are given below.
+        -->
+
+        <include within="mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek..*"/>
+
+        <!-- instrument the kieker.tests -->
+        <!--<include within="kieker.tests..*"/>-->
+
+        <!-- Use * to consider all classes.
+             In this case, you typically need some additional excludes. -->
+        <!-- <include within="*"/> -->
+        <!-- don't weave all packages of kieker and some packages of sun -->
+	<!--<exclude within="java..*,com.sun.corba..*,com.sun.enterprise..*,com.sun.appserv..*"/>-->
+
+	<!-- Example instrumentation for the iBATIS JPetStore -->
+	<!--<include within="com.ibatis.jpetstore..*"/>-->
+	<!--<include within="org.apache.struts.action.ActionServlet" />-->
+
+	<!-- Example instrumentation for Sun's Java Pet Store -->
 	<!-- <include within="com.sun.j2ee.blueprints..*"/> -->
 	<!-- <exclude within="java..*,com.sun.corba..*,com.sun.enterprise..*,com.sun.appserv..*"/> -->
 	<!-- <exclude within="com.sun.j2ee.blueprints.waf.controller.web.EventMapping,com.sun.j2ee.blueprints.waf.processmanager..*"/> -->
 
-	<!-- uncomment following to instrument dacapo eclipse benchmark -->
+	<!-- Instrumentation of the dacapo eclipse benchmark -->
 	<!-- <include within="org.eclipse..*"/> -->
+    </weaver>
 
-	<!-- uncomment following to instrument ibatis jpetstore -->
-	<include within="com.ibatis.jpetstore..*"/>
-	<include within="org.apache.struts.action.ActionServlet" />
+    <aspects>
+      <!-- Use the aspect directives to specify the aspect(s) to use -->
 
-
-	<!-- instrument the kieker.tests -->
-	<!--<include within="kieker.tests..*"/>-->
-	<include within="mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek..*"/>
-
-        <!-- don't weave all packages of kieker and some packages of sun -->
-        <exclude within="kieker.monitoring..*"/>
-	<exclude within="java..*,com.sun.corba..*,com.sun.enterprise..*,com.sun.appserv..*"/>
-</weaver>
-
-<aspects>        
-     <!-- here you usually want to use only ONE aspect. -->
-     <!-- Put the remaining in a comment -->
-     <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotation"/>-->
-     <aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>
-     <aspect name="mySimpleKiekerJMSExample.probe.MyRTMonitoringProbe"/>
-     <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemoteServlet"/>-->
-     <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeFull"/>-->
-     <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.KiekerTpmonExecutionProbeFullServlet"/>-->
-</aspects>
+      <aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>
+      <aspect name="mySimpleKiekerJMSExample.probe.MyRTMonitoringProbe"/>
+      <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotationServlet"/>-->
+      <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>-->
+      <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFullServlet"/>-->
+    </aspects>
 </aspectj>

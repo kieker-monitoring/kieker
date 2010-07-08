@@ -8,7 +8,7 @@ import org.apache.struts.beanaction.ActionContext;
 
 import java.util.Iterator;
 import java.util.Map;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class CartBean extends AbstractBean {
 
@@ -50,7 +50,7 @@ public class CartBean extends AbstractBean {
     this.pageDirection = pageDirection;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String addItemToCart() {
     if (cart.containsItemId(workingItemId)) {
       cart.incrementQuantityByItemId(workingItemId);
@@ -66,7 +66,7 @@ public class CartBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String removeItemFromCart() {
 
     Item item = cart.removeItemById(workingItemId);
@@ -79,7 +79,7 @@ public class CartBean extends AbstractBean {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String updateCartQuantities() {
     Map parameterMap = ActionContext.getActionContext().getParameterMap();
 
@@ -101,7 +101,7 @@ public class CartBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String switchCartPage() {
     if ("next".equals(pageDirection)) {
       cart.getCartItemList().nextPage();
@@ -111,7 +111,7 @@ public class CartBean extends AbstractBean {
     return SUCCESS;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public String viewCart() {
     return SUCCESS;
   }

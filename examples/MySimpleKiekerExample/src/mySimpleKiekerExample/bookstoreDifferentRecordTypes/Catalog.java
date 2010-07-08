@@ -1,6 +1,6 @@
 package mySimpleKiekerExample.bookstoreDifferentRecordTypes;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 import mySimpleKiekerExample.annotation.MyRTProbe;
 
 /*
@@ -40,7 +40,7 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  */
 public class Catalog {
     @MyRTProbe()
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     public static void getBook(boolean complexQuery) {
         if (complexQuery) {
             //KiekerTpmonManualBranchProbe.monitorBranch(1,0);

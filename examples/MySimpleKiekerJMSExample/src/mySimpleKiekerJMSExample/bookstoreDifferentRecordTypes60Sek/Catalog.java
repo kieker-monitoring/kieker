@@ -1,10 +1,9 @@
 package mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 import mySimpleKiekerJMSExample.annotation.MyRTProbe;
 
-/**
- * kieker.tests.bookstore.Catalog.java
+/*
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -28,7 +27,9 @@ import mySimpleKiekerJMSExample.annotation.MyRTProbe;
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
  *
- * @author Matthias Rohr, Andre van Hoorn
+ */
+
+/** @author Matthias Rohr, Andre van Hoorn
  * History:
  * 2009/06/23: Adapted for "different record type test"
  * 2008/01/09: Refactoring for the first release of
@@ -38,7 +39,7 @@ import mySimpleKiekerJMSExample.annotation.MyRTProbe;
  */
 public class Catalog {
     @MyRTProbe()
-    @TpmonExecutionMonitoringProbe()
+    @OperationExecutionMonitoringProbe()
     public static void getBook(boolean complexQuery) {
         if (complexQuery) {
             //KiekerTpmonManualBranchProbe.monitorBranch(1,0);

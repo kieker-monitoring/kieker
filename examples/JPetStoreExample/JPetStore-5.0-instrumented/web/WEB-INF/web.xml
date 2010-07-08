@@ -30,7 +30,7 @@
 
 <filter>
  <filter-name>sessionRegistrationFilter</filter-name>
-<filter-class>kieker.monitoring.probe.servlet.KiekerRequestRegistrationAndLoggingFilter</filter-class>
+<filter-class>kieker.monitoring.probe.servlet.OperationExecutionRegistrationAndLoggingFilter</filter-class>
  </filter>
  <filter-mapping>
  <filter-name>sessionRegistrationFilter</filter-name>

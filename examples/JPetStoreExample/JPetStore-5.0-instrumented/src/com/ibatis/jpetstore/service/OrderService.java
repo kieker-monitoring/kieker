@@ -8,7 +8,7 @@ import com.ibatis.jpetstore.persistence.DaoConfig;
 import com.ibatis.jpetstore.persistence.iface.ItemDao;
 import com.ibatis.jpetstore.persistence.iface.OrderDao;
 import com.ibatis.jpetstore.persistence.iface.SequenceDao;
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class OrderService {
 
@@ -32,7 +32,7 @@ public class OrderService {
     this.sequenceDao = sequenceDao;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public void insertOrder(Order order) {
     try {
       // Get the next id within a separate transaction
@@ -49,7 +49,7 @@ public class OrderService {
     }
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public Order getOrder(int orderId) {
     Order order = null;
 
@@ -71,7 +71,7 @@ public class OrderService {
     return order;
   }
 
-  @TpmonExecutionMonitoringProbe
+  @OperationExecutionMonitoringProbe
   public PaginatedList getOrdersByUsername(String username) {
     return orderDao.getOrdersByUsername(username);
   }
