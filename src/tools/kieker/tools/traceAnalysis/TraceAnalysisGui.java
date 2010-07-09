@@ -40,7 +40,7 @@ import javax.swing.border.TitledBorder;
  * @author Robert von Massow
  * 
  */
-public class TraceAnalGui extends JFrame implements ActionListener {
+public class TraceAnalysisGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 11333L;
     private final JFrame frame;
@@ -71,7 +71,7 @@ public class TraceAnalGui extends JFrame implements ActionListener {
      * [--plot-Call-Trees] [--print-Message-Traces] [--print-Execution-Traces]
      * [--print-invalid-Execution-Traces] [--print-Equivalence-Classes]
      */
-    public TraceAnalGui() {
+    public TraceAnalysisGui() {
         this.frame = this;
         this.setResizable(false);
         final JPanel p = (JPanel) this.getContentPane();
@@ -124,9 +124,9 @@ public class TraceAnalGui extends JFrame implements ActionListener {
                 final JFileChooser fc = new JFileChooser();
                 fc.setMultiSelectionEnabled(false);
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                final int ret = fc.showOpenDialog(TraceAnalGui.this.frame);
+                final int ret = fc.showOpenDialog(TraceAnalysisGui.this.frame);
                 if (JFileChooser.APPROVE_OPTION == ret) {
-                    TraceAnalGui.this.outdir.setText(fc.getSelectedFile().getAbsolutePath().toString());
+                    TraceAnalysisGui.this.outdir.setText(fc.getSelectedFile().getAbsolutePath().toString());
                 }
             }
         });
@@ -353,7 +353,7 @@ public class TraceAnalGui extends JFrame implements ActionListener {
      * @param args
      */
     public static void main(final String[] args) {
-        final TraceAnalGui frame = new TraceAnalGui();
+        final TraceAnalysisGui frame = new TraceAnalysisGui();
     }
 
     @SuppressWarnings("unchecked")
