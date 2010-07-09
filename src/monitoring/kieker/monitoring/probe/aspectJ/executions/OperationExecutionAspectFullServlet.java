@@ -37,7 +37,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 
     private static final Log log = LogFactory.getLog(OperationExecutionAspectAnnotation.class);
 
-    @Pointcut("execution(* *.do*(..)) && args(request,response) ")
+    @Pointcut("execution(* *.do*(..)) && args(request,response) && notWithinKieker()")
     public void monitoredServletEntry(HttpServletRequest request, HttpServletResponse response) {
     }
 
@@ -46,7 +46,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
         return super.doServletEntryProfiling(thisJoinPoint);
     }
 
-    @Pointcut("execution(* *.*(..)) && !within(kieker.monitoring..*) && !within(kieker.common..*)")
+    @Pointcut("execution(* *.*(..)) && !within(kieker.monitoring..*) && notWithinKieker()")
     public void monitoredMethod() {
     }
 

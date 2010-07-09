@@ -34,7 +34,7 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 
     private static final Log log = LogFactory.getLog(OperationExecutionAspectAnnotation.class);
 
-    @Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..))")
+    @Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..)) && notWithinKieker()")
     public void monitoredMethod() {
     }
 

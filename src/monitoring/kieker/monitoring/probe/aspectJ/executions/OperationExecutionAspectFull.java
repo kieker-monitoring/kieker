@@ -35,7 +35,7 @@ public class OperationExecutionAspectFull extends AbstractOperationExecutionAspe
 
     private static final Log log = LogFactory.getLog(OperationExecutionAspectFull.class);
 
-    @Pointcut("execution(* *.*(..)) && !within(kieker.monitoring..*) && !within(kieker.common..*)")
+    @Pointcut("execution(* *.*(..)) && !within(kieker.monitoring..*) && notWithinKieker()")
     public void monitoredMethod() {
     }
 
