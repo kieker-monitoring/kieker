@@ -45,7 +45,6 @@
 
     <target name="update-version" unless="version.noupdate"
             depends="init-version">
-        <echo>Updating version string</echo>
         <replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java"
                        match="VERSION = &quot;.*?&quot;"
                        replace="VERSION = &quot;${kieker.version}-${DSTAMP}&quot;"/>
@@ -121,7 +120,6 @@
         <delete dir="${build.kieker.common.dir}"/>
         <mkdir  dir="${build.kieker.common.dir}"/>
         <!--<mkdir  dir="${build.kieker.common.dir}/META-INF"/>-->
-        <echo message="Creating the library of kieker.common (${dist.kieker.common.jar})."/>
         <javac destDir="${build.kieker.common.dir}"
                source="1.5" target="1.5"
                srcdir="${src.kieker.common.dir}"
@@ -166,7 +164,6 @@
         <delete dir="${build.kieker.monitoring.dir}"/>
         <mkdir  dir="${build.kieker.monitoring.dir}"/>
         <mkdir  dir="${build.kieker.monitoring.dir}/META-INF"/>
-        <echo message="Creating the library of kieker.monitoring (${dist.kieker.monitoring.jar}) that is supposed for direct invocations - it doesn't contain the AOP instrumentation mechanisms."/>
         <javac destDir="${build.kieker.monitoring.dir}"
                source="1.5"
                target="1.5"
@@ -233,7 +230,6 @@
         <delete dir="${build.kieker.analysis.dir}"/>
         <mkdir  dir="${build.kieker.analysis.dir}"/>
         <mkdir  dir="${build.kieker.analysis.dir}/META-INF"/>
-        <echo message="Creating the library of kieker.analysis (${dist.kieker.analysis.jar})."/>
         <javac destDir="${build.kieker.analysis.dir}"
                source="1.5" target="1.5"
                srcdir="${src.kieker.analysis.dir}"
@@ -262,7 +258,6 @@
 
         <delete dir="${build.kieker.tools.dir}"/>
         <mkdir  dir="${build.kieker.tools.dir}"/>
-        <echo message="Creating the library of kieker.tools (${dist.kieker.tools.jar})."/>
         <javac destDir="${build.kieker.tools.dir}"
                source="1.5" target="1.5"
                srcdir="${src.kieker.tools.dir}"
@@ -341,7 +336,6 @@
     </target>
 
     <target name="build-example-MySimpleKiekerExample" depends="init">
-        <echo message="${dist.dir}/${dist.kieker.example.myexample}"/>
         <patternset id="dist_myExample_files">
             <include name="examples/MySimpleKiekerExample/README"/>
             <include name="examples/MySimpleKiekerExample/build.xml"/>
@@ -374,7 +368,6 @@
     </target>
 
     <target name="build-example-MySimpleKiekerJMSExample" depends="init">
-        <echo message="${dist.dir}/${dist.kieker.example.myjmsexample}"/>
         <patternset id="dist_myJMSExample_files">
             <include name="examples/MySimpleKiekerJMSExample/README"/>
             <include name="examples/MySimpleKiekerJMSExample/build.xml"/>
@@ -407,7 +400,6 @@
     <target name="build-example-JPetStoreExample" depends="init">
         <property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
         <property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
-        <echo message="${dist.dir}/${dist.kieker.example.jpetstore}"/>
         <patternset id="dist_jpetstoreExample_files">
             <include name="examples/JPetStoreExample/README"/>
             <include name="examples/JPetStoreExample/kieker-testdata/**"/>
@@ -449,7 +441,6 @@
 
     <target name="build-example-microbenchmark" depends="init">
         <property name="microbenchmark.dir" value="OverheadEvaluationMicrobenchmark/"/>
-        <echo message="${dist.dir}/${dist.kieker.example.microbenchmark}"/>
         <patternset id="dist_microbenchmarkExample_files">
             <include name="examples/${microbenchmark.dir}/**"/>
             <exclude name="examples/${microbenchmark.dir}/results/**/*"/>
