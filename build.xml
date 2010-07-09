@@ -616,7 +616,7 @@
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
-            <jvmarg value="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop.xml"/>
+            <!--<jvmarg value="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop.xml"/>-->
             <jvmarg value="-Daj.weaving.verbose=true"/>
         </java>
     </target>
