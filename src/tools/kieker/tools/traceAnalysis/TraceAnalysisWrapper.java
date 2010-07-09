@@ -15,7 +15,7 @@ import java.net.URLClassLoader;
  * @author Robert von Massow
  * 
  */
-public class TracerWrap {
+public class TraceAnalysisWrapper {
     /**
      * @param args
      */
@@ -70,7 +70,7 @@ public class TracerWrap {
 
         try {
             final URLClassLoader cl = URLClassLoader.newInstance(urls,
-                    TracerWrap.class.getClassLoader());
+                    TraceAnalysisWrapper.class.getClassLoader());
             for (final URL u : cl.getURLs()) {
                 System.out.println(u);
             }
