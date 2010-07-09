@@ -137,7 +137,6 @@
     <target name="build-kieker.monitoring" depends="init,build-kieker.common">
         <path id="kieker.monitoring-compile-classpath">
             <fileset dir="${lib.dir}">
-                <include name="aspectjrt-*.jar"/>
                 <include name="commons-logging-*.jar"/>
                 <include name="cxf-api-*.jar"/>
                 <include name="cxf-common-utilities-*.jar"/>
@@ -152,6 +151,17 @@
                 <include name="${dist.kieker.common.jar}"/>
             </fileset>
         </path>
+        <path id="kieker.monitoring-ajc-compile-classpath">
+            <fileset dir="${lib.dir}">
+                <include name="aspectjrt-*.jar"/>
+                <include name="commons-logging-*.jar"/>
+                <include name="servlet-api.jar"/>
+            </fileset>
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.common.jar}"/>
+            </fileset>
+            <pathelement location="${build.kieker.monitoring.dir}"/>
+        </path>
 
         <delete dir="${build.kieker.monitoring.dir}"/>
         <mkdir  dir="${build.kieker.monitoring.dir}"/>
@@ -162,9 +172,20 @@
                target="1.5"
                srcdir="${src.kieker.monitoring.dir}"
                debug="true"
+               excludes="kieker/monitoring/probe/aspectJ/"
                classpathref="kieker.monitoring-compile-classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
+        <!-- WORKAROUND!!! -->
+        <iajc destdir="${build.kieker.monitoring.dir}"
+              source="1.5"
+              target="1.5"
+              debug="true"
+              classpathref="kieker.monitoring-ajc-compile-classpath">
+            <sourceroots>
+              <pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/"/>
+            </sourceroots>
+        </iajc>
         <copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
         <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
             <fileset dir="${build.kieker.monitoring.dir}"/>

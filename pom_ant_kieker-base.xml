@@ -5,7 +5,7 @@
   <groupId>net.sf.kieker</groupId>
   <artifactId>base</artifactId>
   <name>Kieker Base</name>
-  <version>1.5-trunk-20100708</version>
+  <version>1.5-trunk-20100709</version>
   <url>http://kieker.sf.net</url>
   <packaging>pom</packaging>
   
@@ -93,12 +93,12 @@
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
-                <version>1.6.6</version>
+                <version>1.6.9</version>
             </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
-                <version>1.6.6</version>
+                <version>1.6.9</version>
             </dependency>
             <dependency><!-- TODO use spring module jars (not the big one) -->
                 <groupId>org.springframework</groupId>
