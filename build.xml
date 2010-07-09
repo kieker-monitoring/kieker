@@ -262,7 +262,7 @@
             <include name="${aop.xml.ltwtests.full}"/>
             <include name="src/**/*.java"/>
             <include name="test/**/*.java"/>
-            <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/web.xml"/>
+            <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**"/>
             <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**"/>
             <include name="lib/**"/>
             <include name="build.xml"/>
