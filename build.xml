@@ -180,6 +180,7 @@
         <iajc destdir="${build.kieker.monitoring.dir}"
               source="1.5"
               target="1.5"
+              Xlint="ignore"
               debug="true"
               classpathref="kieker.monitoring-ajc-compile-classpath">
             <sourceroots>
