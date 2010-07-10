@@ -22,6 +22,6 @@ package kieker.analysis.datamodel;
  *
  * @author Andre van Hoorn
  */
-public class IAnalysisEvent {
+public interface IAnalysisEvent {
 
 }

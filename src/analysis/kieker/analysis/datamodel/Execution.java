@@ -22,7 +22,7 @@ package kieker.analysis.datamodel;
  *
  * @author Andre van Hoorn
  */
-public class Execution {
+public class Execution implements IAnalysisEvent {
     private final Operation operation;
     private final AllocationComponent allocationComponent;
     private long traceId;

@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.datamodel.Execution;
@@ -33,6 +35,8 @@ import kieker.analysis.datamodel.InvalidExecutionTrace;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.IAnalysisPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.IExecutionTraceProvider;
 import kieker.analysis.plugin.traceAnalysis.IInvalidExecutionTraceProvider;
@@ -50,10 +54,10 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
-        implements IExecutionEventListener, IAnalysisPlugin {
+public class TraceReconstructionPlugin1 extends AbstractTraceProcessingPlugin
+        implements IAnalysisPlugin {
 
-    private static final Log log = LogFactory.getLog(TraceReconstructionPlugin.class);
+    private static final Log log = LogFactory.getLog(TraceReconstructionPlugin1.class);
     public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
     public static final long MIN_TIMESTAMP = 0;
     private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
@@ -117,12 +121,12 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
     private final IMessageTraceProvider messageTraceEventProviderPort = new IMessageTraceProvider() {
 
         public void addListener(final IEventListener<MessageTrace> listener) {
-            TraceReconstructionPlugin.this.messageTracePublishingSystem.addListener(listener);
+            TraceReconstructionPlugin1.this.messageTracePublishingSystem.addListener(listener);
         }
 
         public boolean removeListener(
                 final IEventListener<MessageTrace> listener) {
-            return TraceReconstructionPlugin.this.messageTracePublishingSystem.removeListener(listener);
+            return TraceReconstructionPlugin1.this.messageTracePublishingSystem.removeListener(listener);
         }
     };
 
@@ -132,12 +136,12 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
     private final IExecutionTraceProvider executionTraceEventProviderPort = new IExecutionTraceProvider() {
 
         public void addListener(final IEventListener<ExecutionTrace> listener) {
-            TraceReconstructionPlugin.this.executionTracePublishingSystem.addListener(listener);
+            TraceReconstructionPlugin1.this.executionTracePublishingSystem.addListener(listener);
         }
 
         public boolean removeListener(
                 final IEventListener<ExecutionTrace> listener) {
-            return TraceReconstructionPlugin.this.executionTracePublishingSystem.removeListener(listener);
+            return TraceReconstructionPlugin1.this.executionTracePublishingSystem.removeListener(listener);
         }
     };
 
@@ -148,12 +152,12 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
 
         public void addListener(
                 final IEventListener<InvalidExecutionTrace> listener) {
-            TraceReconstructionPlugin.this.invalidExecutionTracePublishingSystem.addListener(listener);
+            TraceReconstructionPlugin1.this.invalidExecutionTracePublishingSystem.addListener(listener);
         }
 
         public boolean removeListener(
                 final IEventListener<InvalidExecutionTrace> listener) {
-            return TraceReconstructionPlugin.this.invalidExecutionTracePublishingSystem.removeListener(listener);
+            return TraceReconstructionPlugin1.this.invalidExecutionTracePublishingSystem.removeListener(listener);
         }
     };
 
@@ -165,7 +169,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
         return true; // no need to do anything here
     }
 
-    public TraceReconstructionPlugin(
+    public TraceReconstructionPlugin1(
             final String name,
             final SystemModelRepository systemEntityFactory,
             final long maxTraceDurationMillis,
@@ -184,8 +188,8 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
                     "value maxTraceDurationMillis must not be negative (found: "
                     + maxTraceDurationMillis + ")");
         }
-        if (maxTraceDurationMillis == TraceReconstructionPlugin.MAX_DURATION_MILLIS) {
-            this.maxTraceDurationNanos = TraceReconstructionPlugin.MAX_DURATION_NANOS;
+        if (maxTraceDurationMillis == TraceReconstructionPlugin1.MAX_DURATION_MILLIS) {
+            this.maxTraceDurationNanos = TraceReconstructionPlugin1.MAX_DURATION_NANOS;
         } else {
             this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000);
         }
@@ -197,8 +201,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
         this.ignoreRecordsAfterTimestamp = ignoreRecordsAfter;
     }
 
-    public void newEvent(final Execution execution)
-            throws ExecutionEventProcessingException {
+    private void newExecution(final Execution execution) {
         if (execution.getTin() < this.ignoreRecordsBeforeTimestamp
                 || execution.getTout() > this.ignoreRecordsAfterTimestamp) {
             return;
@@ -219,7 +222,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
         if (seq != null) { // create and add new sequence
             if (!this.timeoutMap.remove(seq)) { // remove from timeoutMap. Will
                 // be re-added below
-                TraceReconstructionPlugin.log.error("Missing entry for trace in timeoutMap: " + seq);
+                TraceReconstructionPlugin1.log.error("Missing entry for trace in timeoutMap: " + seq);
             }
         } else {
             seq = new ExecutionTrace(traceId);
@@ -228,16 +231,17 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
         try {
             seq.add(execution);
         } catch (final InvalidTraceException ex) { // this would be a bug!
-            TraceReconstructionPlugin.log.fatal(
+            log.fatal(
                     "Attempt to add record to wrong trace", ex);
-            throw new ExecutionEventProcessingException(
-                    "Attempt to add record to wrong trace");
         }
         if (!this.timeoutMap.add(seq)) { // (re-)add trace to timeoutMap
-            TraceReconstructionPlugin.log.error("Equal entry existed in timeout already:" + seq);
+            TraceReconstructionPlugin1.log.error("Equal entry existed in timeout already:" + seq);
         }
-
-        this.processQueue();
+        try {
+            this.processQueue();
+        } catch (ExecutionEventProcessingException ex) {
+            log.error("ExecutionEventProcessingException occured", ex);
+        }
     }
 
     private void processQueue() throws ExecutionEventProcessingException {
@@ -282,7 +286,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
                 try {
                     this.invalidExecutionTracePublishingSystem.publish(new InvalidExecutionTrace(polledTrace));
                 } catch (final EventProcessingException ex1) {
-                    TraceReconstructionPlugin.log.error(
+                    log.error(
                             "EventProcessingException for trace ID:"
                             + curTraceId, ex1);
                     this.reportError(curTraceId);
@@ -296,7 +300,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
                     this.reportError(curTraceId);
                     this.invalidTraces.add(curTraceId);
                     if (!this.ignoreInvalidTraces) {
-                        TraceReconstructionPlugin.log.error(
+                        TraceReconstructionPlugin1.log.error(
                                 "Failed to transform execution trace to message trace (ID:"
                                 + curTraceId + "): " + polledTrace, ex);
                         throw new ExecutionEventProcessingException(
@@ -305,7 +309,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
                     }
                 }
             } catch (final EventProcessingException ex) {
-                TraceReconstructionPlugin.log.error(
+                TraceReconstructionPlugin1.log.error(
                         "EventProcessingException for trace ID:" + curTraceId,
                         ex);
                 this.reportError(curTraceId);
@@ -316,12 +320,13 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
         }
     }
 
+    @Override
     public void terminate(final boolean error) {
         try {
             this.terminate = true;
             this.processQueue();
         } catch (final ExecutionEventProcessingException ex) {
-            TraceReconstructionPlugin.log.error("Error prossessing queue", ex);
+            TraceReconstructionPlugin1.log.error("Error prossessing queue", ex);
         }
     }
 
@@ -345,9 +350,9 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
             // MD5)
             for (final Execution r : t.getTraceAsSortedSet()) {
                 h ^= r.getOperation().getId();
-                if (TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
+                if (TraceReconstructionPlugin1.this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
                     h ^= r.getAllocationComponent().getId();
-                } else if (TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) {
+                } else if (TraceReconstructionPlugin1.this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) {
                     h ^= r.getAllocationComponent().getAssemblyComponent().getId();
                 }
                 h ^= r.getEoi();
@@ -369,7 +374,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
             if (r1 == null || r2 == null) {
                 return false;
             }
-            final boolean retVal = (((TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getId() == r2.getAllocationComponent().getId()) || ((TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) && r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId()))
+            final boolean retVal = (((TraceReconstructionPlugin1.this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getId() == r2.getAllocationComponent().getId()) || ((TraceReconstructionPlugin1.this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) && r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId()))
                     && r1.getOperation().getId() == r2.getOperation().getId()
                     && r1.getEoi() == r2.getEoi() && r1.getEss() == r2.getEss();
             return retVal;
@@ -409,5 +414,16 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
                 LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.highestTout)).append(")").toString();
         System.out.println("First timestamp: " + minTinStr);
         System.out.println("Last timestamp: " + maxToutStr);
+    }
+
+    private final IInputPort<Execution> executionInputPort =
+            new AbstractInputPort<Execution>("Execution input"){
+        public void newEvent(Execution event) {
+            newExecution(event);
+        }
+    };
+
+    public IInputPort<Execution> getExecutionInputPort(){
+        return this.executionInputPort;
     }
 }
