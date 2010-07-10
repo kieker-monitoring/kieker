@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.bookstoreTracing;
+package mySimpleKiekerExampleManual;
 
 public class Catalog {
 	public static void getBook(boolean complexQuery) {

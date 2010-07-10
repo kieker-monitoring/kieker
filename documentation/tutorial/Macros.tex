@@ -9,11 +9,11 @@
 \newcommand{\KiekerDir}{$<$KIEKER-DIR$>$}
 
 % The current version-string.
-\newcommand{\version}{1.5}
+\newcommand{\version}{1.5-trunk}
 
 % The name of the .jar-files from Kieker.
 \newcommand{\analysisCtrlJar}{kieker-analysis-\version\_ctrl.jar}
-\newcommand{\monitoringCtrlJar}{kieker-monitoring-\version\_ctrl.jar}
+\newcommand{\monitoringCtrlJar}{kieker-monitoring-\version.jar}
 \newcommand{\monitoringLtwJar}{kieker-monitoring-\version\_ltw.jar}
 \newcommand{\commonJar}{kieker-common-\version.jar  }
 \newcommand{\toolsjar}{kieker-tools-\version.jar}
@@ -30,17 +30,18 @@
 \newcommand{\analysisPropertiesFileBefore}{kieker.analysis.properties}
 \newcommand{\logFourJPropertiesFileBefore}{log4j.properties.example}
 \newcommand{\aopFileBefore}{aop.xml.example}
-
 % The following commands set the listings for the different (programming) languages correctly.
 % For the first they use all the same settings.
-\newcommand{\setListing}[1]{
+\newcommand{\setListing}[2]{
 \lstset{
-language=#1,                
+language=#1,              
+numbers=#2,
 basicstyle=\tiny,       	% the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
 showtabs=false,                 % show tabs within strings adding particular underscores
-frame=single,	                % adds a frame around the code
+frame=shadowbox,	                % adds a frame around the code
+rulesepcolor=\color{black},
 tabsize=2,	                % sets default tabsize to 2 spaces
 captionpos=b,                   % sets the caption-position to bottom
 breaklines=true,                % sets automatic line breaking
@@ -48,6 +49,6 @@ breakatwhitespace=false,        % sets if automatic breaks should only happen at
 title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
 }
-\newcommand{\setJavaCodeListing}{\setListing{Java}}
-\newcommand{\setBashListing}{\setListing{Bash}}
-\newcommand{\setXMLListing}{\setListing{XML}}
+\newcommand{\setJavaCodeListing}{\setListing{Java}{left}}
+\newcommand{\setBashListing}{\setListing{Bash}{none}}
+\newcommand{\setXMLListing}{\setListing{XML}{none}}

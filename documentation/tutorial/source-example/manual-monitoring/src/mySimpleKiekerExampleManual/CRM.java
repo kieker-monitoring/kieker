@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.bookstoreTracing;
+package mySimpleKiekerExampleManual;
 
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.MonitoringController;
@@ -13,7 +13,7 @@ public class CRM {
 
 		/* Create a new record with the remembered values. */
 		OperationExecutionRecord e = new OperationExecutionRecord(
-				"mySimpleKiekerExample.bookstoreTracing.Catalog",
+				"mySimpleKiekerExampleManual.Catalog",
 				"getBook(false)", "sessionID", 0, tin, tout, "vnName", 3, 2);
 		/* Make sure that the record will somehow be persisted. */
 		MonitoringController.getInstance().newMonitoringRecord(e);

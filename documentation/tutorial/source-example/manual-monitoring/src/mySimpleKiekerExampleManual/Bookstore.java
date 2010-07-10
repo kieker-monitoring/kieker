@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.bookstoreTracing;
+package mySimpleKiekerExampleManual;
 
 import java.util.Vector;
 
@@ -39,7 +39,7 @@ public class Bookstore extends Thread {
 
 		/* Create a new record with the remembered values. */
 		OperationExecutionRecord e = new OperationExecutionRecord(
-				"mySimpleKiekerExample.bookstoreTracing.Bookstore",
+				"mySimpleKiekerExampleManual.Bookstore",
 				"searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
 		/* Make sure that the record will somehow be persisted. */
 		MonitoringController.getInstance().newMonitoringRecord(e);
@@ -59,7 +59,7 @@ public class Bookstore extends Thread {
 
 			/* Create a new record with the remembered values. */
 			OperationExecutionRecord e = new OperationExecutionRecord(
-					"mySimpleKiekerExample.bookstoreTracing.Catalog",
+					"mySimpleKiekerExampleManual.Catalog",
 					"getBook(false)", "sessionID", 0, tin, tout, "vnName", 1, 1);
 			/* Make sure that the record will somehow be persisted. */
 			MonitoringController.getInstance().newMonitoringRecord(e);
@@ -71,7 +71,7 @@ public class Bookstore extends Thread {
 
 			/* Create a new record with the remembered values. */
 			e = new OperationExecutionRecord(
-					"mySimpleKiekerExample.bookstoreTracing.CRM",
+					"mySimpleKiekerExampleManual.CRM",
 					"getOffers()", "sessionID", 0, tin, tout, "vnName", 2, 1);
 			/* Make sure that the record will somehow be persisted. */
 			MonitoringController.getInstance().newMonitoringRecord(e);
