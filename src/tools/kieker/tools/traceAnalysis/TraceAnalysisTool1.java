@@ -54,8 +54,8 @@ import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.Execut
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin1;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin1;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin1.TraceEquivalenceClassModes;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AbstractCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.TraceCallTreeNode;
@@ -117,9 +117,9 @@ public class TraceAnalysisTool1 {
     private static boolean shortLabels = true;
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
-    private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
-    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin.MIN_TIMESTAMP;
-    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin.MAX_TIMESTAMP;
+    private static int maxTraceDurationMillis = TraceReconstructionPlugin1.MAX_DURATION_MILLIS; // infinite
+    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin1.MIN_TIMESTAMP;
+    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin1.MAX_TIMESTAMP;
     public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADER =
     // "init-basic-JMS-reader";
@@ -460,7 +460,7 @@ public class TraceAnalysisTool1 {
         boolean retVal = true;
         int numRequestedTasks = 0;
 
-        TraceReconstructionPlugin mtReconstrFilter = null;
+        TraceReconstructionPlugin1 mtReconstrFilter = null;
         try {
             final List<AbstractMessageTraceProcessingPlugin> msgTraceProcessingComponents = new ArrayList<AbstractMessageTraceProcessingPlugin>();
             final List<AbstractExecutionTraceProcessingPlugin> execTraceProcessingComponents = new ArrayList<AbstractExecutionTraceProcessingPlugin>();
@@ -567,7 +567,7 @@ public class TraceAnalysisTool1 {
             // analysisInstance.setLogReader(new
             // JMSReader("tcp://localhost:3035/","queue1"));
 
-            mtReconstrFilter = new TraceReconstructionPlugin(
+            mtReconstrFilter = new TraceReconstructionPlugin1(
                     TraceAnalysisTool1.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool1.systemEntityFactory,
                     TraceAnalysisTool1.maxTraceDurationMillis,
@@ -589,7 +589,7 @@ public class TraceAnalysisTool1 {
             final ExecutionRecordTransformationPlugin1 execRecTransformer = new ExecutionRecordTransformationPlugin1(
                     TraceAnalysisTool1.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool1.systemEntityFactory);
-            execRecTransformer.addListener(mtReconstrFilter);
+            execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
             analysisInstance.registerPlugin(execRecTransformer);
 
             for (final IAnalysisPlugin c : allTraceProcessingComponents) {
@@ -1049,7 +1049,7 @@ public class TraceAnalysisTool1 {
     }
 
     private static boolean task_genTraceEquivalenceReportForTraceSet(
-            final String outputFnPrefix, final TraceReconstructionPlugin trf)
+            final String outputFnPrefix, final TraceReconstructionPlugin1 trf)
             throws IOException, MonitoringLogReaderException,
             MonitoringRecordConsumerException {
         boolean retVal = true;
@@ -1155,8 +1155,8 @@ public class TraceAnalysisTool1 {
             tpanInstance = new AnalysisInstance();
         }
 
-        TraceReconstructionPlugin mtReconstrFilter = null;
-        mtReconstrFilter = new TraceReconstructionPlugin(
+        TraceReconstructionPlugin1 mtReconstrFilter = null;
+        mtReconstrFilter = new TraceReconstructionPlugin1(
                 TraceAnalysisTool1.TRACERECONSTR_COMPONENT_NAME,
                 TraceAnalysisTool1.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
                 true, // ignoreInvalidTraces,
@@ -1178,8 +1178,8 @@ public class TraceAnalysisTool1 {
         // its
         // dirty
 
-        TraceReconstructionPlugin uniqueMtReconstrFilter = null;
-        uniqueMtReconstrFilter = new TraceReconstructionPlugin(
+        TraceReconstructionPlugin1 uniqueMtReconstrFilter = null;
+        uniqueMtReconstrFilter = new TraceReconstructionPlugin1(
                 TraceAnalysisTool1.TRACERECONSTR_COMPONENT_NAME,
                 TraceAnalysisTool1.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
                 true, // ignoreInvalidTraces,
@@ -1198,11 +1198,11 @@ public class TraceAnalysisTool1 {
         // it because it's
         // basically a port
 
-        final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
+        final ExecutionRecordTransformationPlugin1 execRecTransformer = new ExecutionRecordTransformationPlugin1(
                 TraceAnalysisTool1.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                 TraceAnalysisTool1.systemEntityFactory);
-        execRecTransformer.addListener(mtReconstrFilter);
-        execRecTransformer.addListener(uniqueMtReconstrFilter);
+        execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
+        execRecTransformer.getExecutionOutputPort().subsribe(uniqueMtReconstrFilter.getExecutionInputPort());
         tpanInstance.registerPlugin(execRecTransformer);
         System.out.println("MessageTraceListener registered");
     }
