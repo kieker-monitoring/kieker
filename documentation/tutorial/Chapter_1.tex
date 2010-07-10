@@ -28,6 +28,8 @@
     \end{figure}
     The monitoring probes create either the monitoring records manually or by calling the monitoring controller. The monitoring controller uses the monitoring log writers to persist the given records which can then be later read by a monitoring log reader who creates a monitoring record again. This monitoring records can then be used by the consumer in nearly every way.
 
+  \section{Features}
+
   \section{What ist the purpose of this tutorial?}
     In this tutorial, we will take a closer look at both, the \textbf{\KiekerMonitoring}- and the \textbf{\KiekerAnalysis}-part. That means, we will describe on the one hand how \KiekerMonitoring\ can be used to mark parts of the own sourcecode for \Kieker\ and to let them execute under surveilance, so that the recorded information can be saved somewhere and on the other hand we will use \KiekerAnalysis\ to process (for example visualize) our recorded data.\\
     We will show how to create and execute a simple example before we go deeper into the single parts of the framework.

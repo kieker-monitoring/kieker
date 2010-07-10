@@ -1,4 +1,4 @@
-  \chapter{\KiekerMonitoring}
+  \chapter{\Kieker\ Monitoring Component}
     \section{Configuration}
       The monitoring part of \Kieker\ can be configured using the configuration file named ''\monitoringPropertiesFile``. This file should be copied for use to the directory ''META-INF`` of the own project and should - like the ''aop.xml`` - be copied during compiling. In order to inform \Kieker\ about this file, the following parameter should be used for the JVM:
       \begin{lstlisting}
@@ -6,7 +6,7 @@
       \end{lstlisting}
       Most of the variables are self-explanatory and some of them will be explained in the following.
 
-    \section{Records}
+    \section{Monitoring Records}
       % They are not really only part of the monitoring components, but they have to be mentioned somehow.
       As we already saw, the records are the objects which store the monitored informations somehow. They are not really part of \KiekerMonitoring\ but in order to the use in the following, we will examine them.\\
       If we want to implement an own record, it should be extend the already existing class \textit{kieker.common.record.AbstractMonitoringRecord}. The record should be able to put his complete content into an array (of Object] so that the other components of \Kieker\ are able to persist and load the data and should of course provide a method to restore the content from an array. The following listing shows a simple record implementation which has fields for the class and the method that is called.
@@ -14,11 +14,11 @@
       \lstset{caption=MyRecord.java}
       \lstinputlisting{source-example/monitoring-and-analysis-with-own-components/src/mySimpleKiekerExample/bookstoreTracing/MyRecord.java}
 
-    \section{Probes}
+    \section{Monitoring Probes}
       The probes are responsible for the decision which (and where) informations should be recorded. Technically we already implemented them by surrounding the method calls with the correct statements to clock, to produce the records and to deliver these records to the monitoring controller. Other specific controller could for example record only the amount of delivered bytes between methods or record only every second method call as well.\\
       We already used the annotations to make the monitoring much more comfortable and could also implement own annotations for AspectJ, but this won't be explained in this tutorial, because it would simply go beyond the scope.
 
-    \section{Writers}
+    \section{Monitoring Log Writers}
       \hypertarget{monitoringlogwriters} 
       The so called \textit{monitoring log writers} (they can be seen as well in figure \ref{image:kiekercomponentdiagram}) are the parts of \Kieker\ which are responsible for writing and serializing the recorded informations into files, databases and so on. In other words: They get an instance of \textit{AbstractKiekerMonitoringRecord} and produce an output of any nature whatsoever.\\
       Of course there are already some writers implemented, as can be seen in figure \ref{image:writers}.

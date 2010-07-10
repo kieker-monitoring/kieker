@@ -7,46 +7,41 @@
       % Note: Maybe it should be described how to do this.
 
     \section{Monitoring}
-      For the creation of the example it is recommended to create a new working directory (e.g. ''example'') of the following structure:\\
-
-        + example/
-
-      \ \ + build/
-
-      \ \ + lib/
-
-      \ \ + src/\\
-      
-      The build-directory will later contain the compiled class files for Java; the src-directory will contain the sourcecode files and the lib-directory the libraries and needed jar-files.\\
-      Some files from the \Kieker\ directory have to be copied to the current working directory.
+      For the creation of the example it is recommended to create a new working directory (e.g. ''example'') of the following structure:
+      \begin{center}
+      \dirtree{%
+      .1 example\DTcomment{The root directory of the project}.
+      .2 build\DTcomment{The directory for the compiled class files for Java}.
+      .2 lib\DTcomment{The directory for the libraries and needed jar-files}.
+      .3 \monitoringCtrlJar\DTcomment{}.
+      .3 commons-logging-1.1.1.jar\DTcomment{}.
+      .2 src\DTcomment{The directory for the sourcecode files}.
+      .3 mySimpleKiekerExampleManual\DTcomment{The directory for the new package}.
+      .4 CRM.java\DTcomment{One of the sourcecode files}.
+      .4 Catalog.java\DTcomment{One of the sourcecode files}.
+      .4 Bookstore.java\DTcomment{One of the sourcecode files}.
+      }      
+      \end{center}
+      The listed jar-files must be copied from the \Kieker\ directory:
       \begin{itemize}
-	\item \KiekerDir/dist/\monitoringCtrlJar\ to /example/lib/\monitoringCtrlJar
-	\item \KiekerDir/lib/commons-logging-1.1.1.jar to /example/lib/commons-logging-1.1.1.jar
+	\item \KiekerDir/dist/\monitoringCtrlJar\
+	\item \KiekerDir/lib/commons-logging-1.1.1.jar
       \end{itemize}
-      Two directories should be created for our packages:
-      % Note: This wouldn't be really necessary, but the package belonging is better visible.
-      \begin{itemize}
-	\item example/src/mySimpleKiekerExample
-	\item example/src/mySimpleKiekerExample/bookstoreTracing
-      \end{itemize}
-      In the last directory, we create three files: 
-      \begin{itemize}
-	\item CRM.java
-	\item Catalog.java
-	\item Bookstore.java
-      \end{itemize}
-      The file ``Bookstore.java'' should contain of the lines showed in listing \ref{listing:Bookstore.java}.
-      % It isn't necessary to do this every time but it makes sure that the listing has the correct format.
-      \setJavaCodeListing
-      % This will give the code a caption and - more important - a label which we can refer to.
-      \lstset{caption=Bookstore.java, label=listing:Bookstore.java}
-      % Careful! We load the file directly from the source directory. 
-      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java}
-      Listing \ref{listing:Catalog.java} shows the content of ``Catalog.java'' and listing \ref{listing:CRM.java} the content of ``CRM.java''.
-      \lstset{caption=Catalog.java, label=listing:Catalog.java}
-      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Catalog.java}
-      \lstset{caption=CRM.java, label=listing:CRM.java}
-      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/CRM.java}
+      The whole sourcecode of the example can be found in the appendix of this tutorial. Therefore we will show only the important parts of the files here.
+      % Marked all the sourcecode files as comments for the first!
+
+%       The file ``Bookstore.java'' should contain of the lines showed in listing \ref{listing:Bookstore.java}.
+%       % It isn't necessary to do this every time but it makes sure that the listing has the correct format.
+       \setJavaCodeListing
+%       % This will give the code a caption and - more important - a label which we can refer to.
+%       \lstset{caption=Bookstore.java, label=listing:Bookstore.java}
+%       % Careful! We load the file directly from the source directory. 
+%       \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java}
+%       Listing \ref{listing:Catalog.java} shows the content of ``Catalog.java'' and listing \ref{listing:CRM.java} the content of ``CRM.java''.
+%       \lstset{caption=Catalog.java, label=listing:Catalog.java}
+%       \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Catalog.java}
+%       \lstset{caption=CRM.java, label=listing:CRM.java}
+%       \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/CRM.java}
       The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start.
       % It would be a waste of time to extract the part from the source-file. we do it manually.
       \lstset{caption=Cutting from Bookstore.java, label=listing:cuttingBookstore}
@@ -117,7 +112,7 @@
 	\end{figure}
 	We are now able to monitor source code and to visualize these recorded informations in a simple way.
 
-    \section{Using annotations}
+    \section{Using AOP}
       Now we want to monitor whole methods without surrounding the method calls with a block where we keep the time manually. We will now use so called annotations to mark the methods we want to monitor\footnote{To be more precisely: We use annotations which will then be used by the aspect-oriented Java extension named AspectJ to surround the method calls with code blocks which are similar to these, we already used manually.}. As can be seen in the following listing we write the annotation \textit{kieker.monitoring.annotation.TpmonExecutionMonitoringProbe} above the methods to be monitored. 
       \setJavaCodeListing
       \lstset{caption=Bookstore.java, label=listing:Bookstore2.java}
