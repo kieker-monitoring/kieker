@@ -43,7 +43,8 @@ import kieker.analysis.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlug
 import kieker.analysis.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
-import kieker.analysis.plugin.traceAnalysis.executionFilter.ExecutionFilter;
+import kieker.analysis.plugin.traceAnalysis.executionFilter.ExecutionFilterByTraceId;
+import kieker.analysis.plugin.traceAnalysis.executionFilter.ExecutionTimestampFilter;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
@@ -100,8 +101,8 @@ public class TraceAnalysisTool {
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
     private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
-    private static long ignoreExecutionsBeforeTimestamp = ExecutionFilter.MIN_TIMESTAMP;
-    private static long ignoreExecutionsAfterTimestamp = ExecutionFilter.MAX_TIMESTAMP;
+    private static long ignoreExecutionsBeforeTimestamp = ExecutionTimestampFilter.MIN_TIMESTAMP;
+    private static long ignoreExecutionsAfterTimestamp = ExecutionTimestampFilter.MAX_TIMESTAMP;
     public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADER =
     // "init-basic-JMS-reader";
@@ -434,17 +435,18 @@ public class TraceAnalysisTool {
             // analysisInstance.setLogReader(new
             // JMSReader("tcp://localhost:3035/","queue1"));
 
-            ExecutionFilter executionFilter =
-                    new ExecutionFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
+            ExecutionTimestampFilter executionFilterByTimestamp =
+                    new ExecutionTimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
                     TraceAnalysisTool.ignoreExecutionsAfterTimestamp);
+            ExecutionFilterByTraceId executionFilterByTraceId =
+                    new ExecutionFilterByTraceId(TraceAnalysisTool.selectedTraces);
 
             mtReconstrFilter = new TraceReconstructionPlugin(
                     Constants.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory,
                     TraceAnalysisTool.maxTraceDurationMillis,
                     TraceAnalysisTool.ignoreInvalidTraces,
-                    TraceAnalysisTool.traceEquivalenceClassMode,
-                    TraceAnalysisTool.selectedTraces);
+                    TraceAnalysisTool.traceEquivalenceClassMode);
             for (final AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(c.getMessageTraceInputPort());
             }
@@ -458,10 +460,12 @@ public class TraceAnalysisTool {
             final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
                     Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory);
-            execRecTransformer.getExecutionOutputPort().subscribe(executionFilter.getExecutionInputPort());
-            executionFilter.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
+            execRecTransformer.getExecutionOutputPort().subscribe(executionFilterByTimestamp.getExecutionInputPort());
+            executionFilterByTimestamp.getExecutionOutputPort().subscribe(executionFilterByTraceId.getExecutionInputPort());
+            executionFilterByTraceId.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
             analysisInstance.registerPlugin(execRecTransformer);
-            analysisInstance.registerPlugin(executionFilter);
+            analysisInstance.registerPlugin(executionFilterByTraceId);
+            analysisInstance.registerPlugin(executionFilterByTimestamp);
             analysisInstance.registerPlugin(mtReconstrFilter);
             for (final IAnalysisPlugin c : allTraceProcessingComponents) {
                 analysisInstance.registerPlugin(c);

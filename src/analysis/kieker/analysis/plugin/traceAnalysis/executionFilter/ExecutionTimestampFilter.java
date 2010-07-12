@@ -29,7 +29,7 @@ import kieker.analysis.plugin.configuration.OutputPort;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionFilter implements IAnalysisPlugin {
+public class ExecutionTimestampFilter implements IAnalysisPlugin {
 
     public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
     public static final long MIN_TIMESTAMP = 0;
@@ -37,7 +37,7 @@ public class ExecutionFilter implements IAnalysisPlugin {
     private final long ignoreRecordsBeforeTimestamp;
     private final long ignoreRecordsAfterTimestamp;
 
-    public ExecutionFilter(final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
+    public ExecutionTimestampFilter(final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
         this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
         this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
     }

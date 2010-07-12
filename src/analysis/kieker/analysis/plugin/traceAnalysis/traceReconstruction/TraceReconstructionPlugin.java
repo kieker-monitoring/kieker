@@ -100,7 +100,6 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
     // private final boolean onlyEquivClasses;
     private final TraceEquivalenceClassModes equivalenceMode;
 
-    private final TreeSet<Long> selectedTraces;
     private final Execution rootExecution;
 
     public boolean execute() {
@@ -113,8 +112,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
             final long maxTraceDurationMillis,
             final boolean ignoreInvalidTraces,
             // final boolean onlyEquivClasses,
-            final TraceEquivalenceClassModes traceEquivalenceCallMode,
-            final TreeSet<Long> selectedTraces) {
+            final TraceEquivalenceClassModes traceEquivalenceCallMode) {
         super(name, systemEntityFactory);
         this.rootExecution = new Execution(
                 super.getSystemEntityFactory().getOperationFactory().rootOperation,
@@ -133,17 +131,10 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
         this.ignoreInvalidTraces = ignoreInvalidTraces;
         // this.onlyEquivClasses = onlyEquivClasses;
         this.equivalenceMode = traceEquivalenceCallMode;
-        this.selectedTraces = selectedTraces;
     }
 
     private void newExecution(final Execution execution) {
         final long traceId = execution.getTraceId();
-
-        if (this.selectedTraces != null
-                && !this.selectedTraces.contains(traceId)) {
-            // not interested in this trace
-            return;
-        }
 
         this.minTin = (this.minTin < 0 || execution.getTin() < this.minTin) ? execution.getTin()
                 : this.minTin;
