@@ -1,16 +1,5 @@
 package kieker.analysis.datamodel;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.Stack;
-import java.util.TreeSet;
-import java.util.Vector;
-import kieker.common.util.LoggingTimestampConverter;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /*
  *
  * ==================LICENCE=========================
@@ -29,13 +18,30 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-/** @author Andre van Hoorn
+
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.Stack;
+import java.util.TreeSet;
+import java.util.Vector;
+import java.util.concurrent.atomic.AtomicReference;
+import kieker.common.util.LoggingTimestampConverter;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+
+/**
+ * @author Andre van Hoorn
  */
 public class ExecutionTrace extends Trace {
 
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
-    private final SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
 
+    private final AtomicReference<MessageTrace> messageTrace = new AtomicReference<MessageTrace>();
+
+    private final SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
         public int compare(Execution e1, Execution e2) {
             if (e1.getTraceId() == e2.getTraceId()) {
                 if (e1.getEoi() < e2.getEoi()) {
@@ -80,8 +86,19 @@ public class ExecutionTrace extends Trace {
         this.set.add(execution);
     }
 
-    public MessageTrace toMessageTrace(final Execution rootExecution)
+    /**
+     * Returns the message trace representation for this trace.
+     * The transformation to a message trace is only computed during the
+     * first execution od this method. After this, the stored reference
+     * is returned.
+     */
+    public synchronized MessageTrace toMessageTrace(final Execution rootExecution)
             throws InvalidTraceException {
+        MessageTrace mt = this.messageTrace.get();
+        if (mt != null){
+            return mt;
+        }
+
         Vector<Message> mSeq = new Vector<Message>();
         Stack<Message> curStack = new Stack<Message>();
         Iterator<Execution> eSeqIt = this.set.iterator();
@@ -144,7 +161,8 @@ public class ExecutionTrace extends Trace {
             }
             prevE = curE; // prepair next loop
         }
-        return new MessageTrace(this.getTraceId(), mSeq);
+        mt = new MessageTrace(this.getTraceId(), mSeq);
+        return mt;
     }
 
     public final SortedSet<Execution> getTraceAsSortedSet() {
