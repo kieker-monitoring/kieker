@@ -30,7 +30,7 @@ import kieker.analysis.plugin.configuration.OutputPort;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionFilterByTraceId implements IAnalysisPlugin {
+public class TraceIdFilter implements IAnalysisPlugin {
 
     private final TreeSet<Long> selectedTraces;
 
@@ -38,7 +38,7 @@ public class ExecutionFilterByTraceId implements IAnalysisPlugin {
      *
      * @param selectedTraces 
      */
-    public ExecutionFilterByTraceId(final TreeSet<Long> selectedTraces) {
+    public TraceIdFilter(final TreeSet<Long> selectedTraces) {
         this.selectedTraces = selectedTraces;
     }
 

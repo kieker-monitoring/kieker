@@ -43,8 +43,8 @@ import kieker.analysis.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlug
 import kieker.analysis.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
-import kieker.analysis.plugin.traceAnalysis.executionFilter.ExecutionFilterByTraceId;
-import kieker.analysis.plugin.traceAnalysis.executionFilter.ExecutionTimestampFilter;
+import kieker.analysis.plugin.traceAnalysis.executionFilter.TraceIdFilter;
+import kieker.analysis.plugin.traceAnalysis.executionFilter.TimestampFilter;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
@@ -101,8 +101,8 @@ public class TraceAnalysisTool {
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
     private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
-    private static long ignoreExecutionsBeforeTimestamp = ExecutionTimestampFilter.MIN_TIMESTAMP;
-    private static long ignoreExecutionsAfterTimestamp = ExecutionTimestampFilter.MAX_TIMESTAMP;
+    private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.MIN_TIMESTAMP;
+    private static long ignoreExecutionsAfterTimestamp = TimestampFilter.MAX_TIMESTAMP;
     public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADER =
     // "init-basic-JMS-reader";
@@ -435,11 +435,11 @@ public class TraceAnalysisTool {
             // analysisInstance.setLogReader(new
             // JMSReader("tcp://localhost:3035/","queue1"));
 
-            ExecutionTimestampFilter executionFilterByTimestamp =
-                    new ExecutionTimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
+            TimestampFilter executionFilterByTimestamp =
+                    new TimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
                     TraceAnalysisTool.ignoreExecutionsAfterTimestamp);
-            ExecutionFilterByTraceId executionFilterByTraceId =
-                    new ExecutionFilterByTraceId(TraceAnalysisTool.selectedTraces);
+            TraceIdFilter executionFilterByTraceId =
+                    new TraceIdFilter(TraceAnalysisTool.selectedTraces);
 
             mtReconstrFilter = new TraceReconstructionPlugin(
                     Constants.TRACERECONSTR_COMPONENT_NAME,
