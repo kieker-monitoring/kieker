@@ -49,7 +49,7 @@ public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
         }
     }
 
-    public synchronized void subsribe(IInputPort<T> subscriber) {
+    public synchronized void subscribe(IInputPort<T> subscriber) {
         this.subscriber.add(subscriber);
     }
 

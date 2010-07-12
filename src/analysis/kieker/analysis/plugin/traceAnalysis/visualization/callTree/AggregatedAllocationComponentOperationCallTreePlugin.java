@@ -34,8 +34,8 @@ public class AggregatedAllocationComponentOperationCallTreePlugin
 
     public AggregatedAllocationComponentOperationCallTreePlugin(
             final String name,
-            AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
-            SystemModelRepository systemEntityFactory) {
+            final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
+            final SystemModelRepository systemEntityFactory) {
         super(name, systemEntityFactory,
                 new AggregatedAllocationComponentOperationCallTreeNode(
                 AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory,

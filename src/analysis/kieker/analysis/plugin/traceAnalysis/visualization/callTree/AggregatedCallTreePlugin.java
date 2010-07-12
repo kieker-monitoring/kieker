@@ -1,3 +1,5 @@
+package kieker.analysis.plugin.traceAnalysis.visualization.callTree;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -15,7 +17,6 @@
  * limitations under the License.
  * ==================================================
  */
-package kieker.analysis.plugin.traceAnalysis.visualization.callTree;
 
 import java.io.FileNotFoundException;
 import kieker.analysis.datamodel.MessageTrace;

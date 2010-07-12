@@ -31,10 +31,9 @@ import kieker.analysis.datamodel.Signature;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.configuration.IOutputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceAnalysisPlugin;
-import kieker.analysis.plugin.util.event.EventProcessingException;
-import kieker.analysis.plugin.util.event.EventPublishSubscribeConnector;
-import kieker.analysis.plugin.util.event.IEventListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -43,11 +42,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin, IExecutionEventProvider {
+public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
 
     private static final Log log = LogFactory.getLog(ExecutionRecordTransformationPlugin.class);
-    private final EventPublishSubscribeConnector<Execution> executionPublishingSystem =
-            new EventPublishSubscribeConnector<Execution>(false); // do not fail fast
 
     public ExecutionRecordTransformationPlugin(
             final String name,
@@ -63,10 +60,6 @@ public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPl
 
     public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
         return recordTypeSubscriptionList;
-    }
-
-    public void addListener(IEventListener<Execution> listener) {
-        this.executionPublishingSystem.addListener(listener);
     }
 
     private Signature createSignature(final String operationSignatureStr) {
@@ -90,6 +83,7 @@ public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPl
         return new Signature(name, returnType, paramTypeList);
     }
 
+    @Override
     public boolean newMonitoringRecord(IMonitoringRecord record) {
         if (!(record instanceof OperationExecutionRecord)) {
             log.error("Can only process records of type"
@@ -136,26 +130,26 @@ public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPl
 
         Execution execution = new Execution(op, allocInst, execRec.traceId,
                 execRec.sessionId, execRec.eoi, execRec.ess, execRec.tin, execRec.tout);
-        try {
-            this.executionPublishingSystem.publish(execution);
-        } catch (EventProcessingException ex) {
-            log.error("Failed to publish execution", ex);
-            return false;
-        }
+        this.executionOutputPort.deliver(execution);
         return true;
     }
 
+    @Override
     public boolean execute() {
         return true;
     }
 
+    @Override
     public void terminate(final boolean error) {
 //        for (IExecutionListener l : this.listeners){
 //            l.terminate(error);
 //        }
     }
 
-    public boolean removeListener(IEventListener<Execution> listener) {
-        return this.executionPublishingSystem.removeListener(listener);
+    private final OutputPort<Execution> executionOutputPort =
+            new OutputPort<Execution>("Execution output stream");
+
+    public IOutputPort<Execution> getExecutionOutputPort(){
+        return this.executionOutputPort;
     }
 }

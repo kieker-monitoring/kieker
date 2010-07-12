@@ -25,6 +25,6 @@ import kieker.analysis.datamodel.IAnalysisEvent;
  * @author Andre van Hoorn
  */
 public interface IOutputPort<T extends IAnalysisEvent> extends IPort<T>{
-    public void subsribe(IInputPort<T> subscriber);
+    public void subscribe(IInputPort<T> subscriber);
     public void unsubscribe(IInputPort<T> subscriber);
 }

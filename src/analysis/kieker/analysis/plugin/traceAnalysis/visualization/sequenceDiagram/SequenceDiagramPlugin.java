@@ -29,6 +29,9 @@ import kieker.analysis.datamodel.Signature;
 import kieker.analysis.datamodel.SynchronousCallMessage;
 import kieker.analysis.datamodel.SynchronousReplyMessage;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,12 +40,68 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Nils Sommer
  */
-public class SequenceDiagramPlugin {
+public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin {
 
     private static final Log log = LogFactory.getLog(SequenceDiagramPlugin.class);
+    private final String outputFnBase;
+    private final boolean shortLabels;
 
-    private SequenceDiagramPlugin() {
+    public SequenceDiagramPlugin(final String name, final SystemModelRepository systemEntityFactory,
+            final String outputFnBase, final boolean shortLabels) {
+        super(name, systemEntityFactory);
+        this.outputFnBase = outputFnBase;
+        this.shortLabels = shortLabels;
     }
+
+    @Override
+    public void printStatusMessage() {
+        super.printStatusMessage();
+        final int numPlots = this.getSuccessCount();
+        final long lastSuccessTracesId = this.getLastTraceIdSuccess();
+        System.out.println("Wrote " + numPlots + " sequence diagram"
+                + (numPlots > 1 ? "s" : "") + " to file"
+                + (numPlots > 1 ? "s" : "") + " with name pattern '"
+                + outputFnBase + "-<traceId>.pic'");
+        System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
+        System.out.println("Example: pic2plot -T svg " + outputFnBase
+                + "-"
+                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
+                + ".pic > " + outputFnBase + "-"
+                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
+                + ".svg");
+    }
+
+    @Override
+    public boolean execute() {
+        return true; // no need to do anything here
+    }
+
+    @Override
+    public void terminate(final boolean error) {
+        // no need to do anything here
+    }
+
+    @Override
+    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+        return this.messageTraceInputPort;
+    }
+    private final IInputPort<MessageTrace> messageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Message traces") {
+
+                @Override
+                public void newEvent(MessageTrace mt) {
+                    try {
+                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt, outputFnBase + "-"
+                                + mt.getTraceId() + ".pic",
+                                shortLabels);
+                        reportSuccess(mt.getTraceId());
+                    } catch (final FileNotFoundException ex) {
+                        reportError(mt.getTraceId());
+                        log.error("File not found", ex);
+                        //throw new TraceProcessingException("File not found", ex);
+                    }
+                }
+            };
 
     private static String componentLabel(//final SystemEntityFactory systemEntityFactory,
             final AllocationComponent component, final boolean shortLabels) {
@@ -67,7 +126,7 @@ public class SequenceDiagramPlugin {
     }
 
     private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory,
-            final MessageTrace messageTrace, final PrintStream ps, 
+            final MessageTrace messageTrace, final PrintStream ps,
             final boolean shortLabels) {
         // dot node ID x component instance
         Vector<Message> messages = messageTrace.getSequenceAsVector();
@@ -89,12 +148,12 @@ public class SequenceDiagramPlugin {
             AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
             if (!plottedComponentIds.contains(senderComponent.getId())) {
                 ps.println("object(O" + senderComponent.getId()
-                        + ",\"" + senderComponent.getExecutionContainer().getName() +"::\",\"" + componentLabel(senderComponent, shortLabels) + "\");");
+                        + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\"" + componentLabel(senderComponent, shortLabels) + "\");");
                 plottedComponentIds.add(senderComponent.getId());
             }
             if (!plottedComponentIds.contains(receiverComponent.getId())) {
                 ps.println("object(O" + receiverComponent.getId()
-                        + ",\"" + receiverComponent.getExecutionContainer().getName() +"::\",\"" + componentLabel(receiverComponent, shortLabels) + "\");");
+                        + ",\"" + receiverComponent.getExecutionContainer().getName() + "::\",\"" + componentLabel(receiverComponent, shortLabels) + "\");");
                 plottedComponentIds.add(receiverComponent.getId());
             }
         }
@@ -113,7 +172,7 @@ public class SequenceDiagramPlugin {
                 StringBuilder msgLabel = new StringBuilder(sig.getName());
                 msgLabel.append("(");
                 String[] paramList = sig.getParamTypeList();
-                if (paramList != null && paramList.length > 0){
+                if (paramList != null && paramList.length > 0) {
                     msgLabel.append("..");
                 }
                 msgLabel.append(")");

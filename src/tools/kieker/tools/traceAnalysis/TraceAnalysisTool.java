@@ -25,7 +25,6 @@ import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,51 +32,35 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.Map.Entry;
-import kieker.analysis.plugin.configuration.IInputPort;
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.AnalysisInstance;
 import kieker.analysis.datamodel.ExecutionTrace;
-import kieker.analysis.datamodel.InvalidExecutionTrace;
-import kieker.analysis.datamodel.MessageTrace;
-import kieker.analysis.datamodel.repository.AbstractSystemSubRepository;
 import kieker.analysis.datamodel.repository.AllocationComponentOperationPairFactory;
-import kieker.analysis.datamodel.repository.AssemblyComponentOperationPairFactory;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.IAnalysisPlugin;
-import kieker.analysis.plugin.MonitoringRecordConsumerException;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.javaFx.BriefJavaFxInformer;
 import kieker.analysis.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
-import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin1;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin1;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin1.TraceEquivalenceClassModes;
-import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AbstractCallTreePlugin;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
+import kieker.analysis.plugin.traceAnalysis.traceWriter.ExecutionTraceWriterPlugin;
+import kieker.analysis.plugin.traceAnalysis.traceWriter.InvalidExecutionTraceWriterPlugin;
+import kieker.analysis.plugin.traceAnalysis.traceWriter.MessageTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
-import kieker.analysis.plugin.traceAnalysis.visualization.callTree.TraceCallTreeNode;
+import kieker.analysis.plugin.traceAnalysis.visualization.callTree.TraceCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ContainerDependencyGraphPlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.OperationDependencyGraphPlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.sequenceDiagram.SequenceDiagramPlugin;
-import kieker.analysis.plugin.util.MonitoringRecordTypeLogger;
-import kieker.analysis.plugin.util.event.EventProcessingException;
-import kieker.analysis.reader.JMSReader;
-import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.analysis.reader.filesystem.FSReader;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -105,12 +88,8 @@ public class TraceAnalysisTool {
     private static final SystemModelRepository systemEntityFactory = new SystemModelRepository();
     private static final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory = new AllocationComponentOperationPairFactory(
             TraceAnalysisTool.systemEntityFactory);
-    private static final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory = new AssemblyComponentOperationPairFactory(
-            TraceAnalysisTool.systemEntityFactory);
     private static CommandLine cmdl = null;
     private static final CommandLineParser cmdlParser = new BasicParser();
-    private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
-    private static final Options cmdlOpts = new Options();
     private static String[] inputDirs = null;
     private static String outputDir = null;
     private static String outputFnPrefix = null;
@@ -119,119 +98,19 @@ public class TraceAnalysisTool {
     private static boolean shortLabels = true;
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
-    private static int maxTraceDurationMillis = TraceReconstructionPlugin1.MAX_DURATION_MILLIS; // infinite
-    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin1.MIN_TIMESTAMP;
-    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin1.MAX_TIMESTAMP;
+    private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
+    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin.MIN_TIMESTAMP;
+    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin.MAX_TIMESTAMP;
     public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADER =
     // "init-basic-JMS-reader";
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX =
     // "init-basic-JMS-readerJavaFx";
-    private static final Vector<Option> options = new Vector<Option>();
-
-    static {
-        // TODO: OptionGroups?
-
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(true).withDescription(
-                "Log directories to read data from").withValueSeparator('=').create("i"));
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_OUTPUTDIR).withArgName("dir").hasArg(
-                true).isRequired(true).withDescription(
-                "Directory for the generated file(s)").withValueSeparator('=').create("o"));
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("prefix").hasArg(true).isRequired(false).withDescription(
-                "Prefix for output filenames\n").withValueSeparator('=').create("p"));
-
-        // OptionGroup cmdlOptGroupTask = new OptionGroup();
-        // cmdlOptGroupTask.isRequired();
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription(
-                "Generate and store sequence diagrams (.pic files)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG).hasArg(false).withDescription(
-                "Generate and store a component dependency graph (.dot file)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG).hasArg(false).withDescription(
-                "Generate and store a container dependency graph (.dot file)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG).hasArg(false).withDescription(
-                "Generate and store an operation dependency graph (.dot file)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE).hasArg(
-                false).withDescription(
-                "Generate and store an aggregated call tree (.dot files)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES).hasArg(false).withDescription(
-                "Generate and store call trees for the selected traces (.dot files)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription(
-                "Save message trace representations of valid traces (.txt files)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false).withDescription(
-                "Save execution trace representations of valid traces (.txt files)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false).withDescription(
-                "Save a execution trace representations of invalid trace artifacts (.txt files)").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT).hasArg(false).withDescription(
-                "Output an overview about the trace equivalence classes").create());
-
-        /*
-         * These tasks should be moved to a dedicated tool, since this tool
-         * covers trace analysis
-         */
-        // cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADER).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
-        // cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADERJFX).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
-
-        // cmdlOpts.addOptionGroup(cmdlOptGroupTask);
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false).withDescription(
-                "Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE).withArgName(
-                String.format(
-                "%s|%s|%s",
-                Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION,
-                Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY,
-                Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED)).hasArg(true).isRequired(false).withDescription(
-                "If selected, the selected tasks are performed on representatives of the equivalence classes only.").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription(
-                "If selected, the execution aborts on the occurence of an invalid trace.").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription(
-                "Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE).withArgName(
-                TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription(
-                "Records logged before this date (UTC timezone) are ignored.").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_IGNORERECORDSAFTERDATE).withArgName(
-                TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription(
-                "Records logged after this date (UTC timezone) are ignored.").create());
-        TraceAnalysisTool.options.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_SHORTLABELS).hasArg(false).isRequired(false).withDescription(
-                "If selected, the hostnames of the executions are NOT considered.").create());
-        for (final Option o : TraceAnalysisTool.options) {
-            TraceAnalysisTool.cmdlOpts.addOption(o);
-        }
-        TraceAnalysisTool.cmdHelpFormatter.setOptionComparator(new Comparator() {
-
-            public int compare(final Object o1, final Object o2) {
-                if (o1 == o2) {
-                    return 0;
-                }
-                final int posO1 = TraceAnalysisTool.options.indexOf(o1);
-                final int posO2 = TraceAnalysisTool.options.indexOf(o2);
-                if (posO1 < posO2) {
-                    return -1;
-                }
-                if (posO1 > posO2) {
-                    return 1;
-                }
-                return 0;
-            }
-        });
-    }
-
+ 
     private static boolean parseArgs(final String[] args) {
         try {
             TraceAnalysisTool.cmdl = TraceAnalysisTool.cmdlParser.parse(
-                    TraceAnalysisTool.cmdlOpts, args);
+                    Constants.CMDL_OPTIONS, args);
         } catch (final ParseException e) {
             TraceAnalysisTool.printUsage();
             System.err.println("\nError parsing arguments: " + e.getMessage());
@@ -241,9 +120,9 @@ public class TraceAnalysisTool {
     }
 
     private static void printUsage() {
-        TraceAnalysisTool.cmdHelpFormatter.printHelp(80,
+        Constants.CMD_HELP_FORMATTER.printHelp(80,
                 TraceAnalysisTool.class.getName(), "",
-                TraceAnalysisTool.cmdlOpts, "", true);
+                Constants.CMDL_OPTIONS, "", true);
     }
 
     private static boolean initFromArgs() {
@@ -350,32 +229,18 @@ public class TraceAnalysisTool {
         return true;
     }
 
-    private static String stringArrToStringList(final String[] strs) {
-        final StringBuilder strB = new StringBuilder();
-        boolean first = true;
-        for (final String s : strs) {
-            if (!first) {
-                strB.append(", ");
-            } else {
-                first = false;
-            }
-            strB.append(s);
-        }
-        return strB.toString();
-    }
-
     private static void dumpConfiguration() {
-        final Vector<Option> myOpts = new Vector<Option>(
-                TraceAnalysisTool.options);
+        final List<Option> myOpts =
+                new Vector<Option>(Constants.SORTED_OPTION_LIST);
 
         System.out.println("#");
         System.out.println("# Configuration");
-        for (final Option o : TraceAnalysisTool.options) {
+        for (final Option o : Constants.SORTED_OPTION_LIST) {
             final String longOpt = o.getLongOpt();
             String val = "<null>";
             boolean dumpedOp = false;
             if (longOpt.equals(Constants.CMD_OPT_NAME_INPUTDIRS)) {
-                val = TraceAnalysisTool.stringArrToStringList(TraceAnalysisTool.inputDirs);
+                val = Constants.stringArrToStringList(TraceAnalysisTool.inputDirs);
                 dumpedOp = true;
             } else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTDIR)) {
                 val = TraceAnalysisTool.outputDir;
@@ -445,24 +310,12 @@ public class TraceAnalysisTool {
             }
         }
     }
-    // this was moved to here from the inside of dispathTasks()
-    private static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
-    private static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
-    private static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
-    private static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
-    private static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-    private static final String PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph";
-    private static final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
-    private static final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
-    private static final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
-    private static final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
-    private static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
-
+ 
     private static boolean dispatchTasks() {
         boolean retVal = true;
         int numRequestedTasks = 0;
 
-        TraceReconstructionPlugin1 mtReconstrFilter = null;
+        TraceReconstructionPlugin mtReconstrFilter = null;
         try {
             final List<AbstractMessageTraceProcessingPlugin> msgTraceProcessingComponents = new ArrayList<AbstractMessageTraceProcessingPlugin>();
             final List<AbstractExecutionTraceProcessingPlugin> execTraceProcessingComponents = new ArrayList<AbstractExecutionTraceProcessingPlugin>();
@@ -471,80 +324,91 @@ public class TraceAnalysisTool {
             AbstractMessageTraceProcessingPlugin componentPrintMsgTrace = null;
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
                 numRequestedTasks++;
-                componentPrintMsgTrace = TraceAnalysisTool.task_createMessageTraceDumpComponent(
-                        TraceAnalysisTool.PRINTMSGTRACE_COMPONENT_NAME,
-                        TraceAnalysisTool.outputDir + File.separator
-                        + TraceAnalysisTool.outputFnPrefix);
+                componentPrintMsgTrace =
+                        new MessageTraceWriterPlugin(
+                        Constants.PRINTMSGTRACE_COMPONENT_NAME,
+                        TraceAnalysisTool.systemEntityFactory,
+                        new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
                 msgTraceProcessingComponents.add(componentPrintMsgTrace);
             }
             AbstractExecutionTraceProcessingPlugin componentPrintExecTrace = null;
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
                 numRequestedTasks++;
-                componentPrintExecTrace = TraceAnalysisTool.task_createExecutionTraceDumpComponent(
-                        TraceAnalysisTool.PRINTEXECTRACE_COMPONENT_NAME,
-                        TraceAnalysisTool.outputDir + File.separator
-                        + TraceAnalysisTool.outputFnPrefix
-                        + Constants.EXECUTION_TRACES_FN_PREFIX
-                        + ".txt", false);
+                componentPrintExecTrace =
+                        new ExecutionTraceWriterPlugin(
+                        Constants.PRINTEXECTRACE_COMPONENT_NAME,
+                        TraceAnalysisTool.systemEntityFactory,
+                        new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
                 execTraceProcessingComponents.add(componentPrintExecTrace);
             }
             AbstractInvalidExecutionTraceProcessingPlugin componentPrintInvalidTrace = null;
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
                 numRequestedTasks++;
-                componentPrintInvalidTrace = TraceAnalysisTool.task_createInvalidExecutionTraceDumpComponent(
-                        TraceAnalysisTool.PRINTINVALIDEXECTRACE_COMPONENT_NAME,
-                        TraceAnalysisTool.outputDir + File.separator
-                        + TraceAnalysisTool.outputFnPrefix
-                        + Constants.INVALID_TRACES_FN_PREFIX
-                        + ".txt", true);
+                componentPrintInvalidTrace =
+                        new InvalidExecutionTraceWriterPlugin(
+                        Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME,
+                        TraceAnalysisTool.systemEntityFactory,
+                        new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.INVALID_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
                 invalidExecTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
             AbstractMessageTraceProcessingPlugin componentPlotSeqDiagr = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTSEQDS)) {
                 numRequestedTasks++;
-                componentPlotSeqDiagr = TraceAnalysisTool.task_createSequenceDiagramPlotComponent(
-                        TraceAnalysisTool.PLOTSEQDIAGR_COMPONENT_NAME,
-                        TraceAnalysisTool.outputDir + File.separator
-                        + TraceAnalysisTool.outputFnPrefix);
+                componentPlotSeqDiagr = new SequenceDiagramPlugin(
+                        Constants.PLOTSEQDIAGR_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory,
+                        new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(), shortLabels);
                 msgTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
             ComponentDependencyGraphPlugin componentPlotComponentDepGraph = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG)) {
                 numRequestedTasks++;
-                componentPlotComponentDepGraph = TraceAnalysisTool.task_createComponentDependencyGraphPlotComponent(TraceAnalysisTool.PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME);
+                componentPlotComponentDepGraph =
+                        new ComponentDependencyGraphPlugin(
+                        Constants.PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory);
                 msgTraceProcessingComponents.add(componentPlotComponentDepGraph);
             }
             ContainerDependencyGraphPlugin componentPlotContainerDepGraph = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
                 numRequestedTasks++;
-                componentPlotContainerDepGraph = TraceAnalysisTool.task_createContainerDependencyGraphPlotComponent(TraceAnalysisTool.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
+                componentPlotContainerDepGraph =
+                        new ContainerDependencyGraphPlugin(Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory);
                 msgTraceProcessingComponents.add(componentPlotContainerDepGraph);
             }
             OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)) {
                 numRequestedTasks++;
-                componentPlotOperationDepGraph = TraceAnalysisTool.task_createOperationDependencyGraphPlotComponent(TraceAnalysisTool.PLOTOPERATIONDEPGRAPH_COMPONENT_NAME);
+                componentPlotOperationDepGraph =
+                        new OperationDependencyGraphPlugin(Constants.PLOTOPERATIONDEPGRAPH_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory);
                 msgTraceProcessingComponents.add(componentPlotOperationDepGraph);
             }
-            AbstractMessageTraceProcessingPlugin componentPlotCallTrees = null;
+            AbstractMessageTraceProcessingPlugin componentPlotTraceCallTrees = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
                 numRequestedTasks++;
-                componentPlotCallTrees = TraceAnalysisTool.task_createCallTreesPlotComponent(
-                        TraceAnalysisTool.PLOTCALLTREE_COMPONENT_NAME,
-                        TraceAnalysisTool.outputDir + File.separator
-                        + TraceAnalysisTool.outputFnPrefix);
-                msgTraceProcessingComponents.add(componentPlotCallTrees);
+                componentPlotTraceCallTrees =
+                        new TraceCallTreePlugin(
+                        Constants.PLOTCALLTREE_COMPONENT_NAME,
+                        TraceAnalysisTool.allocationComponentOperationPairFactory,
+                        TraceAnalysisTool.systemEntityFactory,
+                        new File(TraceAnalysisTool.outputDir + File.separator
+                        + TraceAnalysisTool.outputFnPrefix
+                        + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
+                        shortLabels);
+                msgTraceProcessingComponents.add(componentPlotTraceCallTrees);
             }
             AggregatedAllocationComponentOperationCallTreePlugin componentPlotAggregatedCallTree = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)) {
                 numRequestedTasks++;
-                componentPlotAggregatedCallTree = TraceAnalysisTool.task_createAggregatedCallTreePlotComponent(TraceAnalysisTool.PLOTAGGREGATEDCALLTREE_COMPONENT_NAME);
+                componentPlotAggregatedCallTree =
+                        new AggregatedAllocationComponentOperationCallTreePlugin(
+                        Constants.PLOTAGGREGATEDCALLTREE_COMPONENT_NAME,
+                        TraceAnalysisTool.allocationComponentOperationPairFactory,
+                        TraceAnalysisTool.systemEntityFactory);
                 msgTraceProcessingComponents.add(componentPlotAggregatedCallTree);
             }
             if (retVal
@@ -569,8 +433,8 @@ public class TraceAnalysisTool {
             // analysisInstance.setLogReader(new
             // JMSReader("tcp://localhost:3035/","queue1"));
 
-            mtReconstrFilter = new TraceReconstructionPlugin1(
-                    TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
+            mtReconstrFilter = new TraceReconstructionPlugin(
+                    Constants.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory,
                     TraceAnalysisTool.maxTraceDurationMillis,
                     TraceAnalysisTool.ignoreInvalidTraces,
@@ -579,25 +443,24 @@ public class TraceAnalysisTool {
                     TraceAnalysisTool.ignoreRecordsBeforeTimestamp,
                     TraceAnalysisTool.ignoreRecordsAfterTimestamp);
             for (final AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
-                mtReconstrFilter.getMessageTraceOutputPort().subsribe(c.getMessageTraceInputPort());
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(c.getMessageTraceInputPort());
             }
             for (final AbstractExecutionTraceProcessingPlugin c : execTraceProcessingComponents) {
-                mtReconstrFilter.getExecutionTraceOutputPort().subsribe(c.getExecutionTraceInputPort());
+                mtReconstrFilter.getExecutionTraceOutputPort().subscribe(c.getExecutionTraceInputPort());
             }
             for (final AbstractInvalidExecutionTraceProcessingPlugin c : invalidExecTraceProcessingComponents) {
-                mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(c.getInvalidExecutionTraceInputPort());
+                mtReconstrFilter.getInvalidExecutionTraceOutputPort().subscribe(c.getInvalidExecutionTraceInputPort());
             }
 
-            final ExecutionRecordTransformationPlugin1 execRecTransformer = new ExecutionRecordTransformationPlugin1(
-                    TraceAnalysisTool.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
+            final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
+                    Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory);
-            execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
+            execRecTransformer.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
             analysisInstance.registerPlugin(execRecTransformer);
-
+            analysisInstance.registerPlugin(mtReconstrFilter);
             for (final IAnalysisPlugin c : allTraceProcessingComponents) {
                 analysisInstance.registerPlugin(c);
             }
-            analysisInstance.registerPlugin(mtReconstrFilter);
             // END test with new meta-model
 
             int numErrorCount = 0;
@@ -665,7 +528,7 @@ public class TraceAnalysisTool {
 
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
-                retVal = TraceAnalysisTool.task_genTraceEquivalenceReportForTraceSet(
+                retVal = TraceAnalysisTool.writeTraceEquivalenceReport(
                         TraceAnalysisTool.outputDir + File.separator
                         + TraceAnalysisTool.outputFnPrefix,
                         mtReconstrFilter);
@@ -735,384 +598,9 @@ public class TraceAnalysisTool {
         }
     }
 
-    /**
-     * Reads the traces from the directory inputDirName and write the sequence
-     * diagrams for traces with IDs given in traceSet to the directory
-     * outputFnPrefix. If traceSet is null, a sequence diagram for each trace is
-     * generated.
-     *
-     * @param inputDirName
-     * @param outputFnPrefix
-     * @param traceSet
-     */
-    private static AbstractMessageTraceProcessingPlugin task_createSequenceDiagramPlotComponent(
-            final String name, final String outputFnPrefix) throws IOException {
-        final String outputFnBase = new File(outputFnPrefix
-                + Constants.SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
-        final AbstractMessageTraceProcessingPlugin sqdWriter =
-                new AbstractMessageTraceProcessingPlugin(
-                name, TraceAnalysisTool.systemEntityFactory) {
-
-                    @Override
-                    public void printStatusMessage() {
-                        super.printStatusMessage();
-                        final int numPlots = this.getSuccessCount();
-                        final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-                        System.out.println("Wrote " + numPlots + " sequence diagram"
-                                + (numPlots > 1 ? "s" : "") + " to file"
-                                + (numPlots > 1 ? "s" : "") + " with name pattern '"
-                                + outputFnBase + "-<traceId>.pic'");
-                        System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-                        System.out.println("Example: pic2plot -T svg " + outputFnBase
-                                + "-"
-                                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                                + ".pic > " + outputFnBase + "-"
-                                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                                + ".svg");
-                    }
-
-                    @Override
-                    public boolean execute() {
-                        return true; // no need to do anything here
-                    }
-
-                    @Override
-                    public void terminate(final boolean error) {
-                        // no need to do anything here
-                    }
-                    private final IInputPort<MessageTrace> messageTraceInputPort =
-                            new AbstractInputPort<MessageTrace>("Message traces") {
-
-                                @Override
-                                public void newEvent(MessageTrace mt) {
-                                    try {
-                                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt, outputFnBase + "-"
-                                                + mt.getTraceId() + ".pic",
-                                                TraceAnalysisTool.shortLabels);
-                                        reportSuccess(mt.getTraceId());
-                                    } catch (final FileNotFoundException ex) {
-                                        reportError(mt.getTraceId());
-                                        log.error("File not found", ex);
-                                        //throw new TraceProcessingException("File not found", ex);
-                                    }
-                                }
-                            };
-
-                    @Override
-                    public IInputPort<MessageTrace> getMessageTraceInputPort() {
-                        return this.messageTraceInputPort;
-                    }
-                };
-        return sqdWriter;
-    }
-
-    /**
-     * Reads the traces from the directory inputDirName and write the dependency
-     * graph to the directory outputFnPrefix. If traceSet is null, a dependency
-     * graph containing the information of all traces is generated.
-     *
-     * @param inputDirName
-     * @param outputFnPrefix
-     * @param traceSet
-     */
-    private static ComponentDependencyGraphPlugin task_createComponentDependencyGraphPlotComponent(
-            final String name) {
-        final ComponentDependencyGraphPlugin depGraph = new ComponentDependencyGraphPlugin(
-                name, TraceAnalysisTool.systemEntityFactory);
-        return depGraph;
-    }
-
-    private static ContainerDependencyGraphPlugin task_createContainerDependencyGraphPlotComponent(
-            final String name) {
-        final ContainerDependencyGraphPlugin depGraph = new ContainerDependencyGraphPlugin(
-                name, TraceAnalysisTool.systemEntityFactory);
-        return depGraph;
-    }
-
-    private static OperationDependencyGraphPlugin task_createOperationDependencyGraphPlotComponent(
-            final String name) {
-        final OperationDependencyGraphPlugin depGraph = new OperationDependencyGraphPlugin(
-                name, TraceAnalysisTool.systemEntityFactory);
-        return depGraph;
-    }
-
-    /**
-     * Reads the traces from the directory inputDirName and write the call tree
-     * for traces to the directory outputFnPrefix. If traceSet is null, a call
-     * tree containing the information of all traces is generated.
-     *
-     * @param inputDirName
-     * @param outputFnPrefix
-     * @param traceSet
-     */
-    private static AggregatedAllocationComponentOperationCallTreePlugin task_createAggregatedCallTreePlotComponent(
-            final String name) {
-        final AggregatedAllocationComponentOperationCallTreePlugin callTree = new AggregatedAllocationComponentOperationCallTreePlugin(
-                name,
-                TraceAnalysisTool.allocationComponentOperationPairFactory,
-                TraceAnalysisTool.systemEntityFactory);
-        return callTree;
-    }
-
-    private static AbstractMessageTraceProcessingPlugin task_createCallTreesPlotComponent(
-            final String name, final String outputFnPrefix) throws IOException {
-        final String outputFnBase = new File(outputFnPrefix
-                + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath();
-
-        final AbstractMessageTraceProcessingPlugin ctWriter = new AbstractMessageTraceProcessingPlugin(
-                name, TraceAnalysisTool.systemEntityFactory) {
-
-            @Override
-            public void printStatusMessage() {
-                super.printStatusMessage();
-                final int numPlots = this.getSuccessCount();
-                final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-                System.out.println("Wrote " + numPlots + " call tree"
-                        + (numPlots > 1 ? "s" : "") + " to file"
-                        + (numPlots > 1 ? "s" : "") + " with name pattern '"
-                        + outputFnBase + "-<traceId>.dot'");
-                System.out.println("Dot files can be converted using the dot tool");
-                System.out.println("Example: dot -T svg " + outputFnBase + "-"
-                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                        + ".dot > " + outputFnBase + "-"
-                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                        + ".svg");
-            }
-
-            @Override
-            public boolean execute() {
-                return true; // no need to do anything here
-            }
-
-            @Override
-            public void terminate(final boolean error) {
-                // no need to do anything here
-            }
-            private final IInputPort<MessageTrace> messageTraceInputPort =
-                    new AbstractInputPort<MessageTrace>("Message traces") {
-
-                        @Override
-                        public void newEvent(MessageTrace mt) {
-                            try {
-                                final TraceCallTreeNode rootNode = new TraceCallTreeNode(
-                                        AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-                                        TraceAnalysisTool.systemEntityFactory,
-                                        TraceAnalysisTool.allocationComponentOperationPairFactory,
-                                        TraceAnalysisTool.allocationComponentOperationPairFactory.rootPair,
-                                        true); // rootNode
-                                AbstractCallTreePlugin.writeDotForMessageTrace(
-                                        TraceAnalysisTool.systemEntityFactory, rootNode, mt,
-                                        outputFnBase + "-" + mt.getTraceId(), false,
-                                        TraceAnalysisTool.shortLabels); // no weights
-                                reportSuccess(mt.getTraceId());
-                            } catch (final TraceProcessingException ex) {
-                                reportError(mt.getTraceId());
-                                log.error("TraceProcessingException", ex);
-                            } catch (final FileNotFoundException ex) {
-                                reportError(mt.getTraceId());
-                                log.error("File not found", ex);
-                            }
-                        }
-                    };
-
-            @Override
-            public IInputPort<MessageTrace> getMessageTraceInputPort() {
-                return this.messageTraceInputPort;
-            }
-        };
-        return ctWriter;
-    }
-
-    /**
-     * Reads the traces from the directory inputDirName and write the message
-     * trace representation for traces with IDs given in traceSet to the
-     * directory outputFnPrefix. If traceSet is null, a message trace for each
-     * trace is generated.
-     *
-     * @param inputDirName
-     * @param outputFnPrefix
-     * @param traceSet
-     */
-    private static AbstractMessageTraceProcessingPlugin task_createMessageTraceDumpComponent(
-            final String name, final String outputFnPrefix) throws IOException,
-            InvalidTraceException, MonitoringLogReaderException,
-            MonitoringRecordConsumerException {
-        final String outputFn = new File(outputFnPrefix
-                + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath();
-        final AbstractMessageTraceProcessingPlugin mtWriter = new AbstractMessageTraceProcessingPlugin(
-                name, TraceAnalysisTool.systemEntityFactory) {
-
-            PrintStream ps = new PrintStream(new FileOutputStream(outputFn));
-
-            @Override
-            public void printStatusMessage() {
-                super.printStatusMessage();
-                final int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " message trace"
-                        + (numTraces > 1 ? "s" : "") + " to file '" + outputFn
-                        + "'");
-            }
-
-            @Override
-            public void terminate(final boolean error) {
-                if (this.ps != null) {
-                    this.ps.close();
-                }
-            }
-
-            @Override
-            public boolean execute() {
-                return true; // no need to do anything here
-            }
-            private final IInputPort<MessageTrace> messageTraceInputPort =
-                    new AbstractInputPort<MessageTrace>("Message traces") {
-
-                        @Override
-                        public void newEvent(MessageTrace mt) {
-                            reportSuccess(mt.getTraceId());
-                            ps.println(mt);
-                        }
-                    };
-
-            @Override
-            public IInputPort<MessageTrace> getMessageTraceInputPort() {
-                return this.messageTraceInputPort;
-            }
-        };
-        return mtWriter;
-    }
-
-    /**
-     * Reads the traces from the directory inputDirName and write the execution
-     * trace representation for traces with IDs given in traceSet to the
-     * directory outputFnPrefix. If traceSet is null, an execution trace for
-     * each trace is generated.
-     *
-     * @param inputDirName
-     * @param outputFnPrefix
-     * @param traceSet
-     */
-    private static AbstractExecutionTraceProcessingPlugin task_createExecutionTraceDumpComponent(
-            final String name, final String outputFn, final boolean artifactMode)
-            throws IOException, MonitoringLogReaderException,
-            MonitoringRecordConsumerException {
-        final String myOutputFn = new File(outputFn).getCanonicalPath();
-        final AbstractExecutionTraceProcessingPlugin etWriter = new AbstractExecutionTraceProcessingPlugin(
-                name, TraceAnalysisTool.systemEntityFactory) {
-
-            final PrintStream ps = new PrintStream(new FileOutputStream(
-                    myOutputFn));
-
-            public void newEvent(final ExecutionTrace t)
-                    throws EventProcessingException {
-                this.ps.println(t);
-                this.reportSuccess(t.getTraceId());
-            }
-
-            @Override
-            public void printStatusMessage() {
-                super.printStatusMessage();
-                final int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " execution trace"
-                        + (artifactMode ? " artifact" : "")
-                        + (numTraces > 1 ? "s" : "") + " to file '"
-                        + myOutputFn + "'");
-            }
-
-            @Override
-            public void terminate(final boolean error) {
-                if (this.ps != null) {
-                    this.ps.close();
-                }
-            }
-
-            @Override
-            public boolean execute() {
-                return true; // no need to do anything here
-            }
-            private final IInputPort<ExecutionTrace> executionTraceInputPort =
-                    new AbstractInputPort<ExecutionTrace>("Execution traces") {
-
-                        @Override
-                        public void newEvent(ExecutionTrace et) {
-                            ps.println(et);
-                            reportSuccess(et.getTraceId());
-                        }
-                    };
-
-            @Override
-            public IInputPort<ExecutionTrace> getExecutionTraceInputPort() {
-                return this.executionTraceInputPort;
-            }
-        };
-        return etWriter;
-    }
-
-    /**
-     * Reads the traces from the directory inputDirName and write the execution
-     * trace representation for traces with IDs given in traceSet to the
-     * directory outputFnPrefix. If traceSet is null, an execution trace for
-     * each trace is generated.
-     *
-     * @param inputDirName
-     * @param outputFnPrefix
-     * @param traceSet
-     */
-    private static AbstractInvalidExecutionTraceProcessingPlugin task_createInvalidExecutionTraceDumpComponent(
-            final String name, final String outputFn, final boolean artifactMode)
-            throws IOException, MonitoringLogReaderException,
-            MonitoringRecordConsumerException {
-        final String myOutputFn = new File(outputFn).getCanonicalPath();
-        final AbstractInvalidExecutionTraceProcessingPlugin etWriter = new AbstractInvalidExecutionTraceProcessingPlugin(
-                name, TraceAnalysisTool.systemEntityFactory) {
-
-            final PrintStream ps = new PrintStream(new FileOutputStream(
-                    myOutputFn));
-
-            @Override
-            public void printStatusMessage() {
-                super.printStatusMessage();
-                final int numTraces = this.getSuccessCount();
-                System.out.println("Wrote " + numTraces + " execution trace"
-                        + (artifactMode ? " artifact" : "")
-                        + (numTraces > 1 ? "s" : "") + " to file '"
-                        + myOutputFn + "'");
-            }
-
-            @Override
-            public void terminate(final boolean error) {
-                if (this.ps != null) {
-                    this.ps.close();
-                }
-            }
-
-            @Override
-            public boolean execute() {
-                return true; // no need to do anything here
-            }
-
-            private final IInputPort<InvalidExecutionTrace> invalidExecutionTraceInputPort =
-                    new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
-
-                        @Override
-                        public void newEvent(InvalidExecutionTrace et) {
-                ps.println(et.getInvalidExecutionTrace());
-                reportSuccess(et.getInvalidExecutionTrace().getTraceId());
-                        }
-                    };
-
-            @Override
-            public IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort() {
-                return this.invalidExecutionTraceInputPort;
-            }
-        };
-        return etWriter;
-    }
-
-    private static boolean task_genTraceEquivalenceReportForTraceSet(
-            final String outputFnPrefix, final TraceReconstructionPlugin1 trf)
-            throws IOException, MonitoringLogReaderException,
-            MonitoringRecordConsumerException {
+    private static boolean writeTraceEquivalenceReport(
+            final String outputFnPrefix, final TraceReconstructionPlugin trf)
+            throws IOException {
         boolean retVal = true;
         final String outputFn = new File(outputFnPrefix
                 + Constants.TRACE_EQUIV_CLASSES_FN_PREFIX + ".txt").getCanonicalPath();
@@ -1145,59 +633,56 @@ public class TraceAnalysisTool {
 
         return retVal;
     }
-
-    private static boolean task_initBasicJmsReader(final String jmsProviderUrl,
-            final String jmsDestination) throws IOException,
-            MonitoringLogReaderException, MonitoringRecordConsumerException {
-        final boolean retVal = true;
-
-        TraceAnalysisTool.log.info("Trying to start JMS Listener to "
-                + jmsProviderUrl + " " + jmsDestination);
-        /* Read log data and collect execution traces */
-        final AnalysisInstance analysisInstance = new AnalysisInstance();
-        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
-                jmsDestination));
-
-        final MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
-        analysisInstance.registerPlugin(recordTypeLogger);
-
-        // MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
-        // analysisInstance.addRecordConsumer(seqRepConsumer);
-
-        /* @Matthias: Deactivated this, since the ant task didn't run (Andre) */
-        // BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
-        // analysisInstance.addRecordConsumer(bjfx);
-
-        analysisInstance.run();
-        return retVal;
-    }
-
-    private static boolean task_initBasicJmsReaderJavaFx(
-            final String jmsProviderUrl, final String jmsDestination)
-            throws IOException, MonitoringLogReaderException,
-            MonitoringRecordConsumerException {
-        final boolean retVal = true;
-
-        TraceAnalysisTool.log.info("Trying to start JMS Listener to "
-                + jmsProviderUrl + " " + jmsDestination);
-        /* Read log data and collect execution traces */
-        final AnalysisInstance analysisInstance = new AnalysisInstance();
-        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
-                jmsDestination));
-
-        final MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
-        analysisInstance.registerPlugin(recordTypeLogger);
-
-        // MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
-        // analysisInstance.addRecordConsumer(seqRepConsumer);
-
-        /* @Matthias: Deactivated this, since the ant task didn't run (Andre) */
-        final BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
-
-        analysisInstance.run();
-        return retVal;
-    }
-
+//    private static boolean task_initBasicJmsReader(final String jmsProviderUrl,
+//            final String jmsDestination) throws IOException,
+//            MonitoringLogReaderException, MonitoringRecordConsumerException {
+//        final boolean retVal = true;
+//
+//        TraceAnalysisTool.log.info("Trying to start JMS Listener to "
+//                + jmsProviderUrl + " " + jmsDestination);
+//        /* Read log data and collect execution traces */
+//        final AnalysisInstance analysisInstance = new AnalysisInstance();
+//        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
+//                jmsDestination));
+//
+//        final MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
+//        analysisInstance.registerPlugin(recordTypeLogger);
+//
+//        // MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
+//        // analysisInstance.addRecordConsumer(seqRepConsumer);
+//
+//        /* @Matthias: Deactivated this, since the ant task didn't run (Andre) */
+//        // BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
+//        // analysisInstance.addRecordConsumer(bjfx);
+//
+//        analysisInstance.run();
+//        return retVal;
+//    }
+//    private static boolean task_initBasicJmsReaderJavaFx(
+//            final String jmsProviderUrl, final String jmsDestination)
+//            throws IOException, MonitoringLogReaderException,
+//            MonitoringRecordConsumerException {
+//        final boolean retVal = true;
+//
+//        TraceAnalysisTool.log.info("Trying to start JMS Listener to "
+//                + jmsProviderUrl + " " + jmsDestination);
+//        /* Read log data and collect execution traces */
+//        final AnalysisInstance analysisInstance = new AnalysisInstance();
+//        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
+//                jmsDestination));
+//
+//        final MonitoringRecordTypeLogger recordTypeLogger = new MonitoringRecordTypeLogger();
+//        analysisInstance.registerPlugin(recordTypeLogger);
+//
+//        // MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
+//        // analysisInstance.addRecordConsumer(seqRepConsumer);
+//
+//        /* @Matthias: Deactivated this, since the ant task didn't run (Andre) */
+//        final BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
+//
+//        analysisInstance.run();
+//        return retVal;
+//    }
     /**
      * This method is used to initialize a typical set of filters, required for
      * message trace analysis. Every new trace object is passed to the
@@ -1209,59 +694,59 @@ public class TraceAnalysisTool {
      *
      * You'll need a tpanInstance (with a reader) before invoking this method.
      */
-    public static void createMessageTraceFiltersAndRegisterMessageTraceListener(
-            AnalysisInstance tpanInstance,
-            final BriefJavaFxInformer messageTraceListener) {
-        if (tpanInstance == null) {
-            tpanInstance = new AnalysisInstance();
-        }
-
-        TraceReconstructionPlugin1 mtReconstrFilter = null;
-        mtReconstrFilter = new TraceReconstructionPlugin1(
-                TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
-                TraceAnalysisTool.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
-                true, // ignoreInvalidTraces,
-                TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode,
-                // // = every trace
-                // passes, not only
-                // unique trace classes
-                null, // selectedTraces, // null means all
-                TraceAnalysisTool.ignoreRecordsBeforeTimestamp, // default
-                // Long.MIN
-                TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
-        // Long.MAX
-        mtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getMessageTraceInputPort());
-        mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(messageTraceListener.getJfxBrokenExecutionTraceInputPort()); // i
-        // know
-        // that
-        // its
-        // dirty
-
-        TraceReconstructionPlugin1 uniqueMtReconstrFilter = null;
-        uniqueMtReconstrFilter = new TraceReconstructionPlugin1(
-                TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
-                TraceAnalysisTool.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
-                true, // ignoreInvalidTraces,
-                TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode,
-                // // = every trace
-                // passes, not only
-                // unique trace classes
-                null, // selectedTraces, // null means all
-                TraceAnalysisTool.ignoreRecordsBeforeTimestamp, // default
-                // Long.MIN
-                TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
-        // Long.MAX
-        uniqueMtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getJfxUniqueMessageTraceInputPort()); // i know that its
-        // dirty; i (andre) like
-        // it because it's
-        // basically a port
-
-        final ExecutionRecordTransformationPlugin1 execRecTransformer = new ExecutionRecordTransformationPlugin1(
-                TraceAnalysisTool.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
-                TraceAnalysisTool.systemEntityFactory);
-        execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
-        execRecTransformer.getExecutionOutputPort().subsribe(uniqueMtReconstrFilter.getExecutionInputPort());
-        tpanInstance.registerPlugin(execRecTransformer);
-        System.out.println("MessageTraceListener registered");
-    }
+//    public static void createMessageTraceFiltersAndRegisterMessageTraceListener(
+//            AnalysisInstance tpanInstance,
+//            final BriefJavaFxInformer messageTraceListener) {
+//        if (tpanInstance == null) {
+//            tpanInstance = new AnalysisInstance();
+//        }
+//
+//        TraceReconstructionPlugin mtReconstrFilter = null;
+//        mtReconstrFilter = new TraceReconstructionPlugin(
+//                TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
+//                TraceAnalysisTool.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
+//                true, // ignoreInvalidTraces,
+//                TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode,
+//                // // = every trace
+//                // passes, not only
+//                // unique trace classes
+//                null, // selectedTraces, // null means all
+//                TraceAnalysisTool.ignoreRecordsBeforeTimestamp, // default
+//                // Long.MIN
+//                TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
+//        // Long.MAX
+//        mtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getMessageTraceInputPort());
+//        mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(messageTraceListener.getJfxBrokenExecutionTraceInputPort()); // i
+//        // know
+//        // that
+//        // its
+//        // dirty
+//
+//        TraceReconstructionPlugin uniqueMtReconstrFilter = null;
+//        uniqueMtReconstrFilter = new TraceReconstructionPlugin(
+//                TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
+//                TraceAnalysisTool.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
+//                true, // ignoreInvalidTraces,
+//                TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode,
+//                // // = every trace
+//                // passes, not only
+//                // unique trace classes
+//                null, // selectedTraces, // null means all
+//                TraceAnalysisTool.ignoreRecordsBeforeTimestamp, // default
+//                // Long.MIN
+//                TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
+//        // Long.MAX
+//        uniqueMtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getJfxUniqueMessageTraceInputPort()); // i know that its
+//        // dirty; i (andre) like
+//        // it because it's
+//        // basically a port
+//
+//        final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
+//                TraceAnalysisTool.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
+//                TraceAnalysisTool.systemEntityFactory);
+//        execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
+//        execRecTransformer.getExecutionOutputPort().subsribe(uniqueMtReconstrFilter.getExecutionInputPort());
+//        tpanInstance.registerPlugin(execRecTransformer);
+//        System.out.println("MessageTraceListener registered");
+//    }
 }
