@@ -52,6 +52,7 @@ public class Constants {
     public static final String TRACE_EQUIVALENCE_MODE_STR_ALLOCATION = "allocation";
     public static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
     public static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
+    public static final String TRACEEEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter";
     public static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
     public static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
     public static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";

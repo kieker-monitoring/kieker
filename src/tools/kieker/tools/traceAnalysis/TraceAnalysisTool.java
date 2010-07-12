@@ -35,6 +35,7 @@ import java.util.Map.Entry;
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.AnalysisInstance;
+import kieker.analysis.datamodel.Execution;
 import kieker.analysis.datamodel.ExecutionTrace;
 import kieker.analysis.datamodel.repository.AllocationComponentOperationPairFactory;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
@@ -46,8 +47,9 @@ import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TraceIdFilter;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TimestampFilter;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
+import kieker.analysis.plugin.traceAnalysis.traceFilter.TraceEquivalenceClassFilter;
+import kieker.analysis.plugin.traceAnalysis.traceFilter.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
 import kieker.analysis.plugin.traceAnalysis.traceWriter.ExecutionTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceWriter.InvalidExecutionTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceWriter.MessageTraceWriterPlugin;
@@ -441,12 +443,26 @@ public class TraceAnalysisTool {
             TraceIdFilter executionFilterByTraceId =
                     new TraceIdFilter(TraceAnalysisTool.selectedTraces);
 
+            Execution rootExecution =
+            new Execution(
+                TraceAnalysisTool.systemEntityFactory.getOperationFactory().rootOperation,
+                TraceAnalysisTool.systemEntityFactory.getAllocationFactory().rootAllocationComponent,
+                -1, "-1", -1, -1, -1, -1);
+
             mtReconstrFilter = new TraceReconstructionPlugin(
                     Constants.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory,
+                    rootExecution,
                     TraceAnalysisTool.maxTraceDurationMillis,
-                    TraceAnalysisTool.ignoreInvalidTraces,
-                    TraceAnalysisTool.traceEquivalenceClassMode);
+                    TraceAnalysisTool.ignoreInvalidTraces);
+
+            TraceEquivalenceClassFilter traceEquivClassFilter =
+                    new TraceEquivalenceClassFilter(
+                    Constants.TRACEEEQUIVCLASS_COMPONENT_NAME,
+                    systemEntityFactory,
+                    rootExecution,
+                    traceEquivalenceClassMode);
+
             for (final AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(c.getMessageTraceInputPort());
             }
@@ -540,7 +556,7 @@ public class TraceAnalysisTool {
                 retVal = TraceAnalysisTool.writeTraceEquivalenceReport(
                         TraceAnalysisTool.outputDir + File.separator
                         + TraceAnalysisTool.outputFnPrefix,
-                        mtReconstrFilter);
+                        traceEquivClassFilter);
             }
 
             final String systemEntitiesHtmlFn = new File(
@@ -608,7 +624,7 @@ public class TraceAnalysisTool {
     }
 
     private static boolean writeTraceEquivalenceReport(
-            final String outputFnPrefix, final TraceReconstructionPlugin trf)
+            final String outputFnPrefix, final TraceEquivalenceClassFilter traceEquivFilter)
             throws IOException {
         boolean retVal = true;
         final String outputFn = new File(outputFnPrefix
@@ -617,7 +633,7 @@ public class TraceAnalysisTool {
         try {
             ps = new PrintStream(new FileOutputStream(outputFn));
             int numClasses = 0;
-            final HashMap<ExecutionTrace, Integer> classMap = trf.getEquivalenceClassMap();
+            final HashMap<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap();
             for (final Entry<ExecutionTrace, Integer> e : classMap.entrySet()) {
                 final ExecutionTrace t = e.getKey();
                 ps.println("Class " + numClasses++ + " ; cardinality: "

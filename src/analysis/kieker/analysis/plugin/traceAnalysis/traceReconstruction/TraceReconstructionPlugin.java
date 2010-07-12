@@ -18,13 +18,10 @@ package kieker.analysis.plugin.traceAnalysis.traceReconstruction;
  * ==================================================
  */
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.datamodel.Execution;
@@ -38,7 +35,6 @@ import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionEventProcessingException;
-
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,14 +50,8 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
     private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
     public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
-    public enum TraceEquivalenceClassModes {
-
-        DISABLED, ASSEMBLY, ALLOCATION
-    }
     /** TraceId x trace */
     private final Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
-    /** Representative x # of equivalents */
-    private final HashMap<ExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<ExecutionTraceHashContainer, AtomicInteger>();
     /** We need to keep track of invalid trace's IDs */
     private final Set<Long> invalidTraces = new TreeSet<Long>();
 
@@ -98,7 +88,6 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
     private volatile boolean terminate = false;
     private final boolean ignoreInvalidTraces;
     // private final boolean onlyEquivClasses;
-    private final TraceEquivalenceClassModes equivalenceMode;
 
     private final Execution rootExecution;
 
@@ -109,15 +98,13 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
     public TraceReconstructionPlugin(
             final String name,
             final SystemModelRepository systemEntityFactory,
+            final Execution rootExecution,
             final long maxTraceDurationMillis,
-            final boolean ignoreInvalidTraces,
+            final boolean ignoreInvalidTraces
             // final boolean onlyEquivClasses,
-            final TraceEquivalenceClassModes traceEquivalenceCallMode) {
+            ) {
         super(name, systemEntityFactory);
-        this.rootExecution = new Execution(
-                super.getSystemEntityFactory().getOperationFactory().rootOperation,
-                super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent,
-                -1, "-1", -1, -1, -1, -1);
+        this.rootExecution = rootExecution;
         if (maxTraceDurationMillis < 0) {
             throw new IllegalArgumentException(
                     "value maxTraceDurationMillis must not be negative (found: "
@@ -130,7 +117,6 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
         }
         this.ignoreInvalidTraces = ignoreInvalidTraces;
         // this.onlyEquivClasses = onlyEquivClasses;
-        this.equivalenceMode = traceEquivalenceCallMode;
     }
 
     private void newExecution(final Execution execution) {
@@ -178,26 +164,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
                 // toMesageTrace
                 // throws an exception
                 final MessageTrace mt = polledTrace.toMessageTrace(this.rootExecution);
-                boolean isNewTrace = true;
-                // if (this.onlyEquivClasses) {
-                if (this.equivalenceMode != TraceEquivalenceClassModes.DISABLED) {
-                    final ExecutionTraceHashContainer polledTraceHashContainer = new ExecutionTraceHashContainer(
-                            polledTrace);
-                    AtomicInteger numOccurences = this.eTracesEquivClassesMap.get(polledTraceHashContainer);
-                    if (numOccurences == null) {
-                        numOccurences = new AtomicInteger(1);
-                        this.eTracesEquivClassesMap.put(
-                                polledTraceHashContainer, numOccurences);
-                    } else {
-                        isNewTrace = false;
-                        numOccurences.incrementAndGet();
-                    }
-                }
-
-                if (!isNewTrace) {
-                    continue;
-                }
-
+ 
                 if (mt != null) {
                     this.messageTraceOutputPort.deliver(mt);
                     this.executionTraceOutputPort.deliver(polledTrace);
@@ -249,79 +216,6 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
             this.processQueue();
         } catch (final ExecutionEventProcessingException ex) {
             TraceReconstructionPlugin.log.error("Error processing queue", ex);
-        }
-    }
-
-    public HashMap<ExecutionTrace, Integer> getEquivalenceClassMap() {
-        final HashMap<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>();
-        for (final Entry<ExecutionTraceHashContainer, AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()) {
-            map.put(entry.getKey().t, entry.getValue().intValue());
-        }
-        return map;
-    }
-
-    private class ExecutionTraceHashContainer {
-
-        private final ExecutionTrace t;
-        private final int hashCode;
-
-        public ExecutionTraceHashContainer(final ExecutionTrace t) {
-            this.t = t;
-            int h = 0;
-            // TODO: need a better hash function considering the order (e.g.,
-            // MD5)
-            for (final Execution r : t.getTraceAsSortedSet()) {
-                h ^= r.getOperation().getId();
-                if (TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
-                    h ^= r.getAllocationComponent().getId();
-                } else if (TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) {
-                    h ^= r.getAllocationComponent().getAssemblyComponent().getId();
-                }
-                h ^= r.getEoi();
-                h ^= r.getEss();
-            }
-            //
-            this.hashCode = h;
-        }
-
-        @Override
-        public int hashCode() {
-            return this.hashCode;
-        }
-
-        private boolean executionsEqual(final Execution r1, final Execution r2) {
-            if (r1 == r2) {
-                return true;
-            }
-            if (r1 == null || r2 == null) {
-                return false;
-            }
-            final boolean retVal = (((TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) && r1.getAllocationComponent().getId() == r2.getAllocationComponent().getId()) || ((TraceReconstructionPlugin.this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) && r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId()))
-                    && r1.getOperation().getId() == r2.getOperation().getId()
-                    && r1.getEoi() == r2.getEoi() && r1.getEss() == r2.getEss();
-            return retVal;
-        }
-
-        @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null || !(obj instanceof ExecutionTraceHashContainer)) {
-                return false;
-            }
-            final ExecutionTrace otherTrace = ((ExecutionTraceHashContainer) obj).t;
-            if (this.t.getLength() != otherTrace.getLength()) {
-                return false;
-            }
-            final Iterator<Execution> otherIterator = otherTrace.getTraceAsSortedSet().iterator();
-            for (final Execution r1 : this.t.getTraceAsSortedSet()) {
-                final Execution r2 = otherIterator.next();
-                if (!this.executionsEqual(r1, r2)) {
-                    return false;
-                }
-            }
-            return true;
         }
     }
 
