@@ -440,13 +440,13 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
                 this.appendStr(this.traces.getText(), b);
             }
             if (!this.from.getText().matches("^-1")) {
-                this.appendCmd(Constants.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE,
+                this.appendCmd(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE,
                         b);
                 this.from.getText();
             }
             if (!this.to.getText().matches("^-1")) {
                 this.appendCmd(
-                        Constants.CMD_OPT_NAME_IGNORERECORDSAFTERDATE,
+                        Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE,
                         b);
                 this.appendStr(this.to.getText(), b);
             }

@@ -43,6 +43,7 @@ import kieker.analysis.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlug
 import kieker.analysis.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
+import kieker.analysis.plugin.traceAnalysis.executionFilter.ExecutionFilter;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
@@ -99,14 +100,14 @@ public class TraceAnalysisTool {
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
     private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
-    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin.MIN_TIMESTAMP;
-    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin.MAX_TIMESTAMP;
+    private static long ignoreExecutionsBeforeTimestamp = ExecutionFilter.MIN_TIMESTAMP;
+    private static long ignoreExecutionsAfterTimestamp = ExecutionFilter.MAX_TIMESTAMP;
     public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADER =
     // "init-basic-JMS-reader";
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX =
     // "init-basic-JMS-readerJavaFx";
- 
+
     private static boolean parseArgs(final String[] args) {
         try {
             TraceAnalysisTool.cmdl = TraceAnalysisTool.cmdlParser.parse(
@@ -197,25 +198,25 @@ public class TraceAnalysisTool {
 
         try {
             final String ignoreRecordsBeforeTimestampString = TraceAnalysisTool.cmdl.getOptionValue(
-                    Constants.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE,
+                    Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE,
                     null);
             final String ignoreRecordsAfterTimestampString = TraceAnalysisTool.cmdl.getOptionValue(
-                    Constants.CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
+                    Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
             if (ignoreRecordsBeforeTimestampString != null) {
                 final Date ignoreBeforeDate = m_ISO8601UTC.parse(ignoreRecordsBeforeTimestampString);
-                TraceAnalysisTool.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime()
+                TraceAnalysisTool.ignoreExecutionsBeforeTimestamp = ignoreBeforeDate.getTime()
                         * (1000 * 1000);
                 TraceAnalysisTool.log.info("Ignoring records before "
                         + m_ISO8601UTC.format(ignoreBeforeDate) + " ("
-                        + TraceAnalysisTool.ignoreRecordsBeforeTimestamp + ")");
+                        + TraceAnalysisTool.ignoreExecutionsBeforeTimestamp + ")");
             }
             if (ignoreRecordsAfterTimestampString != null) {
                 final Date ignoreAfterDate = m_ISO8601UTC.parse(ignoreRecordsAfterTimestampString);
-                TraceAnalysisTool.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime()
+                TraceAnalysisTool.ignoreExecutionsAfterTimestamp = ignoreAfterDate.getTime()
                         * (1000 * 1000);
                 TraceAnalysisTool.log.info("Ignoring records after "
                         + m_ISO8601UTC.format(ignoreAfterDate) + " ("
-                        + TraceAnalysisTool.ignoreRecordsAfterTimestamp + ")");
+                        + TraceAnalysisTool.ignoreExecutionsAfterTimestamp + ")");
             }
         } catch (final java.text.ParseException ex) {
             System.err.println("Error parsing date/time string. Please use the following pattern: "
@@ -287,16 +288,16 @@ public class TraceAnalysisTool {
             } else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
                 val = TraceAnalysisTool.maxTraceDurationMillis + " ms";
                 dumpedOp = true;
-            } else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE)) {
-                val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreRecordsBeforeTimestamp)
+            } else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
+                val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp)
                         + " ("
-                        + LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreRecordsBeforeTimestamp)
+                        + LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp)
                         + ")";
                 dumpedOp = true;
-            } else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNORERECORDSAFTERDATE)) {
-                val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreRecordsAfterTimestamp)
+            } else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
+                val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp)
                         + " ("
-                        + LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreRecordsAfterTimestamp)
+                        + LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp)
                         + ")";
                 dumpedOp = true;
             } else {
@@ -310,7 +311,7 @@ public class TraceAnalysisTool {
             }
         }
     }
- 
+
     private static boolean dispatchTasks() {
         boolean retVal = true;
         int numRequestedTasks = 0;
@@ -433,15 +434,17 @@ public class TraceAnalysisTool {
             // analysisInstance.setLogReader(new
             // JMSReader("tcp://localhost:3035/","queue1"));
 
+            ExecutionFilter executionFilter =
+                    new ExecutionFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
+                    TraceAnalysisTool.ignoreExecutionsAfterTimestamp);
+
             mtReconstrFilter = new TraceReconstructionPlugin(
                     Constants.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory,
                     TraceAnalysisTool.maxTraceDurationMillis,
                     TraceAnalysisTool.ignoreInvalidTraces,
                     TraceAnalysisTool.traceEquivalenceClassMode,
-                    TraceAnalysisTool.selectedTraces,
-                    TraceAnalysisTool.ignoreRecordsBeforeTimestamp,
-                    TraceAnalysisTool.ignoreRecordsAfterTimestamp);
+                    TraceAnalysisTool.selectedTraces);
             for (final AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(c.getMessageTraceInputPort());
             }
@@ -455,13 +458,15 @@ public class TraceAnalysisTool {
             final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
                     Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory);
-            execRecTransformer.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
+            execRecTransformer.getExecutionOutputPort().subscribe(executionFilter.getExecutionInputPort());
+            executionFilter.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
             analysisInstance.registerPlugin(execRecTransformer);
+            analysisInstance.registerPlugin(executionFilter);
             analysisInstance.registerPlugin(mtReconstrFilter);
             for (final IAnalysisPlugin c : allTraceProcessingComponents) {
                 analysisInstance.registerPlugin(c);
             }
-            // END test with new meta-model
+
 
             int numErrorCount = 0;
             try {

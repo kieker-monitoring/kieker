@@ -34,8 +34,8 @@ public class Constants {
     public static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
     public static final String CMD_OPT_NAME_TASK_EQUIVCLASSREPORT = "print-Equivalence-Classes";
     public static final String CMD_OPT_NAME_MAXTRACEDURATION = "max-trace-duration";
-    public static final String CMD_OPT_NAME_IGNORERECORDSBEFOREDATE = "ignore-records-before-date";
-    public static final String CMD_OPT_NAME_IGNORERECORDSAFTERDATE = "ignore-records-after-date";
+    public static final String CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE = "ignore-executions-before-date";
+    public static final String CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE = "ignore-executions-after-date";
     public static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
     public static final String COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "componentDependencyGraph";
     public static final String CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX = "containerDependencyGraph";
@@ -131,13 +131,13 @@ public class Constants {
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription(
                 "Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE).withArgName(
+                Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE).withArgName(
                 TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription(
-                "Records logged before this date (UTC timezone) are ignored.").create());
+                "Executions starting before this date (UTC timezone) are ignored.").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_IGNORERECORDSAFTERDATE).withArgName(
+                Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE).withArgName(
                 TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription(
-                "Records logged after this date (UTC timezone) are ignored.").create());
+                "Executions ending after this date (UTC timezone) are ignored.").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_SHORTLABELS).hasArg(false).isRequired(false).withDescription(
                 "If selected, the hostnames of the executions are NOT considered.").create());
 

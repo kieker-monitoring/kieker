@@ -32,7 +32,6 @@ import kieker.analysis.datamodel.ExecutionTrace;
 import kieker.analysis.datamodel.InvalidExecutionTrace;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
-import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.analysis.plugin.configuration.IOutputPort;
@@ -48,12 +47,10 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
-        implements IAnalysisPlugin {
+public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionPlugin.class);
-    public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
-    public static final long MIN_TIMESTAMP = 0;
+
     private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
     public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
@@ -102,8 +99,6 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
     private final boolean ignoreInvalidTraces;
     // private final boolean onlyEquivClasses;
     private final TraceEquivalenceClassModes equivalenceMode;
-    private final long ignoreRecordsBeforeTimestamp;
-    private final long ignoreRecordsAfterTimestamp;
 
     private final TreeSet<Long> selectedTraces;
     private final Execution rootExecution;
@@ -119,8 +114,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
             final boolean ignoreInvalidTraces,
             // final boolean onlyEquivClasses,
             final TraceEquivalenceClassModes traceEquivalenceCallMode,
-            final TreeSet<Long> selectedTraces, final long ignoreRecordsBefore,
-            final long ignoreRecordsAfter) {
+            final TreeSet<Long> selectedTraces) {
         super(name, systemEntityFactory);
         this.rootExecution = new Execution(
                 super.getSystemEntityFactory().getOperationFactory().rootOperation,
@@ -140,16 +134,9 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin
         // this.onlyEquivClasses = onlyEquivClasses;
         this.equivalenceMode = traceEquivalenceCallMode;
         this.selectedTraces = selectedTraces;
-        this.ignoreRecordsBeforeTimestamp = ignoreRecordsBefore;
-        this.ignoreRecordsAfterTimestamp = ignoreRecordsAfter;
     }
 
     private void newExecution(final Execution execution) {
-        if (execution.getTin() < this.ignoreRecordsBeforeTimestamp
-                || execution.getTout() > this.ignoreRecordsAfterTimestamp) {
-            return;
-        }
-
         final long traceId = execution.getTraceId();
 
         if (this.selectedTraces != null
