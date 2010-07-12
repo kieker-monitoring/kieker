@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.Map.Entry;
+import kieker.analysis.plugin.configuration.IInputPort;
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.AnalysisInstance;
@@ -45,16 +46,18 @@ import kieker.analysis.datamodel.repository.AssemblyComponentOperationPairFactor
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.javaFx.BriefJavaFxInformer;
 import kieker.analysis.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
+import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin1;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin.TraceEquivalenceClassModes;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin1;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin1.TraceEquivalenceClassModes;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AbstractCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.TraceCallTreeNode;
@@ -80,20 +83,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 
+ *
  * This is the main class to start Tpan - the model synthesis and analysis
  * server to process the monitoring data that comes from the instrumented
  * system, or from a file that contains Kieker monitoring data. Tpan can produce
  * output such as sequence diagrams, dependency graphs on demand. Alternatively
  * it can be used continuously for online performance analysis, anomaly
  * detection or live visualization of system behavior.
- * 
+ *
  * A Tpan is started via ant-script or command line. Visualization and output
  * should be implemented as plugins. These plugins must be implemented to be
  * loaded at runtime (Class.forName...) in order to keep compile-time
  * dependencies low.
- * 
- * 
+ *
+ *
  * @author Andre van Hoorn, Matthias Rohr
  */
 public class TraceAnalysisTool {
@@ -116,9 +119,9 @@ public class TraceAnalysisTool {
     private static boolean shortLabels = true;
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
-    private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
-    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin.MIN_TIMESTAMP;
-    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin.MAX_TIMESTAMP;
+    private static int maxTraceDurationMillis = TraceReconstructionPlugin1.MAX_DURATION_MILLIS; // infinite
+    private static long ignoreRecordsBeforeTimestamp = TraceReconstructionPlugin1.MIN_TIMESTAMP;
+    private static long ignoreRecordsAfterTimestamp = TraceReconstructionPlugin1.MAX_TIMESTAMP;
     public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
     // private static final String CMD_OPT_NAME_TASK_INITJMSREADER =
     // "init-basic-JMS-reader";
@@ -459,7 +462,7 @@ public class TraceAnalysisTool {
         boolean retVal = true;
         int numRequestedTasks = 0;
 
-        TraceReconstructionPlugin mtReconstrFilter = null;
+        TraceReconstructionPlugin1 mtReconstrFilter = null;
         try {
             final List<AbstractMessageTraceProcessingPlugin> msgTraceProcessingComponents = new ArrayList<AbstractMessageTraceProcessingPlugin>();
             final List<AbstractExecutionTraceProcessingPlugin> execTraceProcessingComponents = new ArrayList<AbstractExecutionTraceProcessingPlugin>();
@@ -566,7 +569,7 @@ public class TraceAnalysisTool {
             // analysisInstance.setLogReader(new
             // JMSReader("tcp://localhost:3035/","queue1"));
 
-            mtReconstrFilter = new TraceReconstructionPlugin(
+            mtReconstrFilter = new TraceReconstructionPlugin1(
                     TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory,
                     TraceAnalysisTool.maxTraceDurationMillis,
@@ -576,19 +579,19 @@ public class TraceAnalysisTool {
                     TraceAnalysisTool.ignoreRecordsBeforeTimestamp,
                     TraceAnalysisTool.ignoreRecordsAfterTimestamp);
             for (final AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
-                mtReconstrFilter.getMessageTraceEventProviderPort().addListener(c);
+                mtReconstrFilter.getMessageTraceOutputPort().subsribe(c.getMessageTraceInputPort());
             }
             for (final AbstractExecutionTraceProcessingPlugin c : execTraceProcessingComponents) {
-                mtReconstrFilter.getExecutionTraceEventProviderPort().addListener(c);
+                mtReconstrFilter.getExecutionTraceOutputPort().subsribe(c.getExecutionTraceInputPort());
             }
             for (final AbstractInvalidExecutionTraceProcessingPlugin c : invalidExecTraceProcessingComponents) {
-                mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(c);
+                mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(c.getInvalidExecutionTraceInputPort());
             }
 
-            final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
+            final ExecutionRecordTransformationPlugin1 execRecTransformer = new ExecutionRecordTransformationPlugin1(
                     TraceAnalysisTool.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory);
-            execRecTransformer.addListener(mtReconstrFilter);
+            execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
             analysisInstance.registerPlugin(execRecTransformer);
 
             for (final IAnalysisPlugin c : allTraceProcessingComponents) {
@@ -746,48 +749,60 @@ public class TraceAnalysisTool {
             final String name, final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix
                 + Constants.SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
-        final AbstractMessageTraceProcessingPlugin sqdWriter = new AbstractMessageTraceProcessingPlugin(
+        final AbstractMessageTraceProcessingPlugin sqdWriter =
+                new AbstractMessageTraceProcessingPlugin(
                 name, TraceAnalysisTool.systemEntityFactory) {
 
-            public void newEvent(final MessageTrace t)
-                    throws EventProcessingException {
-                try {
-                    SequenceDiagramPlugin.writePicForMessageTrace(this.getSystemEntityFactory(), t, outputFnBase + "-"
-                            + t.getTraceId() + ".pic",
-                            TraceAnalysisTool.shortLabels);
-                    this.reportSuccess(t.getTraceId());
-                } catch (final FileNotFoundException ex) {
-                    this.reportError(t.getTraceId());
-                    throw new TraceProcessingException("File not found", ex);
-                }
-            }
+                    @Override
+                    public void printStatusMessage() {
+                        super.printStatusMessage();
+                        final int numPlots = this.getSuccessCount();
+                        final long lastSuccessTracesId = this.getLastTraceIdSuccess();
+                        System.out.println("Wrote " + numPlots + " sequence diagram"
+                                + (numPlots > 1 ? "s" : "") + " to file"
+                                + (numPlots > 1 ? "s" : "") + " with name pattern '"
+                                + outputFnBase + "-<traceId>.pic'");
+                        System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
+                        System.out.println("Example: pic2plot -T svg " + outputFnBase
+                                + "-"
+                                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
+                                + ".pic > " + outputFnBase + "-"
+                                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
+                                + ".svg");
+                    }
 
-            @Override
-            public void printStatusMessage() {
-                super.printStatusMessage();
-                final int numPlots = this.getSuccessCount();
-                final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-                System.out.println("Wrote " + numPlots + " sequence diagram"
-                        + (numPlots > 1 ? "s" : "") + " to file"
-                        + (numPlots > 1 ? "s" : "") + " with name pattern '"
-                        + outputFnBase + "-<traceId>.pic'");
-                System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-                System.out.println("Example: pic2plot -T svg " + outputFnBase
-                        + "-"
-                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                        + ".pic > " + outputFnBase + "-"
-                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                        + ".svg");
-            }
+                    @Override
+                    public boolean execute() {
+                        return true; // no need to do anything here
+                    }
 
-            public boolean execute() {
-                return true; // no need to do anything here
-            }
+                    @Override
+                    public void terminate(final boolean error) {
+                        // no need to do anything here
+                    }
+                    private final IInputPort<MessageTrace> messageTraceInputPort =
+                            new AbstractInputPort<MessageTrace>("Message traces") {
 
-            public void terminate(final boolean error) {
-                // no need to do anything here
-            }
-        };
+                                @Override
+                                public void newEvent(MessageTrace mt) {
+                                    try {
+                                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt, outputFnBase + "-"
+                                                + mt.getTraceId() + ".pic",
+                                                TraceAnalysisTool.shortLabels);
+                                        reportSuccess(mt.getTraceId());
+                                    } catch (final FileNotFoundException ex) {
+                                        reportError(mt.getTraceId());
+                                        log.error("File not found", ex);
+                                        //throw new TraceProcessingException("File not found", ex);
+                                    }
+                                }
+                            };
+
+                    @Override
+                    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+                        return this.messageTraceInputPort;
+                    }
+                };
         return sqdWriter;
     }
 
@@ -847,26 +862,6 @@ public class TraceAnalysisTool {
         final AbstractMessageTraceProcessingPlugin ctWriter = new AbstractMessageTraceProcessingPlugin(
                 name, TraceAnalysisTool.systemEntityFactory) {
 
-            public void newEvent(final MessageTrace t)
-                    throws EventProcessingException {
-                try {
-                    final TraceCallTreeNode rootNode = new TraceCallTreeNode(
-                            AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-                            TraceAnalysisTool.systemEntityFactory,
-                            TraceAnalysisTool.allocationComponentOperationPairFactory,
-                            TraceAnalysisTool.allocationComponentOperationPairFactory.rootPair,
-                            true); // rootNode
-                    AbstractCallTreePlugin.writeDotForMessageTrace(
-                            TraceAnalysisTool.systemEntityFactory, rootNode, t,
-                            outputFnBase + "-" + t.getTraceId(), false,
-                            TraceAnalysisTool.shortLabels); // no weights
-                    this.reportSuccess(t.getTraceId());
-                } catch (final FileNotFoundException ex) {
-                    this.reportError(t.getTraceId());
-                    throw new TraceProcessingException("File not found", ex);
-                }
-            }
-
             @Override
             public void printStatusMessage() {
                 super.printStatusMessage();
@@ -884,12 +879,45 @@ public class TraceAnalysisTool {
                         + ".svg");
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
             }
 
+            @Override
             public void terminate(final boolean error) {
                 // no need to do anything here
+            }
+            private final IInputPort<MessageTrace> messageTraceInputPort =
+                    new AbstractInputPort<MessageTrace>("Message traces") {
+
+                        @Override
+                        public void newEvent(MessageTrace mt) {
+                            try {
+                                final TraceCallTreeNode rootNode = new TraceCallTreeNode(
+                                        AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+                                        TraceAnalysisTool.systemEntityFactory,
+                                        TraceAnalysisTool.allocationComponentOperationPairFactory,
+                                        TraceAnalysisTool.allocationComponentOperationPairFactory.rootPair,
+                                        true); // rootNode
+                                AbstractCallTreePlugin.writeDotForMessageTrace(
+                                        TraceAnalysisTool.systemEntityFactory, rootNode, mt,
+                                        outputFnBase + "-" + mt.getTraceId(), false,
+                                        TraceAnalysisTool.shortLabels); // no weights
+                                reportSuccess(mt.getTraceId());
+                            } catch (final TraceProcessingException ex) {
+                                reportError(mt.getTraceId());
+                                log.error("TraceProcessingException", ex);
+                            } catch (final FileNotFoundException ex) {
+                                reportError(mt.getTraceId());
+                                log.error("File not found", ex);
+                            }
+                        }
+                    };
+
+            @Override
+            public IInputPort<MessageTrace> getMessageTraceInputPort() {
+                return this.messageTraceInputPort;
             }
         };
         return ctWriter;
@@ -916,12 +944,6 @@ public class TraceAnalysisTool {
 
             PrintStream ps = new PrintStream(new FileOutputStream(outputFn));
 
-            public void newEvent(final MessageTrace t)
-                    throws EventProcessingException {
-                this.reportSuccess(t.getTraceId());
-                this.ps.println(t);
-            }
-
             @Override
             public void printStatusMessage() {
                 super.printStatusMessage();
@@ -938,8 +960,23 @@ public class TraceAnalysisTool {
                 }
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
+            }
+            private final IInputPort<MessageTrace> messageTraceInputPort =
+                    new AbstractInputPort<MessageTrace>("Message traces") {
+
+                        @Override
+                        public void newEvent(MessageTrace mt) {
+                            reportSuccess(mt.getTraceId());
+                            ps.println(mt);
+                        }
+                    };
+
+            @Override
+            public IInputPort<MessageTrace> getMessageTraceInputPort() {
+                return this.messageTraceInputPort;
             }
         };
         return mtWriter;
@@ -989,8 +1026,23 @@ public class TraceAnalysisTool {
                 }
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
+            }
+            private final IInputPort<ExecutionTrace> executionTraceInputPort =
+                    new AbstractInputPort<ExecutionTrace>("Execution traces") {
+
+                        @Override
+                        public void newEvent(ExecutionTrace et) {
+                            ps.println(et);
+                            reportSuccess(et.getTraceId());
+                        }
+                    };
+
+            @Override
+            public IInputPort<ExecutionTrace> getExecutionTraceInputPort() {
+                return this.executionTraceInputPort;
             }
         };
         return etWriter;
@@ -1017,12 +1069,6 @@ public class TraceAnalysisTool {
             final PrintStream ps = new PrintStream(new FileOutputStream(
                     myOutputFn));
 
-            public void newEvent(final InvalidExecutionTrace t)
-                    throws EventProcessingException {
-                this.ps.println(t.getInvalidExecutionTrace());
-                this.reportSuccess(t.getInvalidExecutionTrace().getTraceId());
-            }
-
             @Override
             public void printStatusMessage() {
                 super.printStatusMessage();
@@ -1040,15 +1086,31 @@ public class TraceAnalysisTool {
                 }
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
+            }
+
+            private final IInputPort<InvalidExecutionTrace> invalidExecutionTraceInputPort =
+                    new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
+
+                        @Override
+                        public void newEvent(InvalidExecutionTrace et) {
+                ps.println(et.getInvalidExecutionTrace());
+                reportSuccess(et.getInvalidExecutionTrace().getTraceId());
+                        }
+                    };
+
+            @Override
+            public IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort() {
+                return this.invalidExecutionTraceInputPort;
             }
         };
         return etWriter;
     }
 
     private static boolean task_genTraceEquivalenceReportForTraceSet(
-            final String outputFnPrefix, final TraceReconstructionPlugin trf)
+            final String outputFnPrefix, final TraceReconstructionPlugin1 trf)
             throws IOException, MonitoringLogReaderException,
             MonitoringRecordConsumerException {
         boolean retVal = true;
@@ -1154,8 +1216,8 @@ public class TraceAnalysisTool {
             tpanInstance = new AnalysisInstance();
         }
 
-        TraceReconstructionPlugin mtReconstrFilter = null;
-        mtReconstrFilter = new TraceReconstructionPlugin(
+        TraceReconstructionPlugin1 mtReconstrFilter = null;
+        mtReconstrFilter = new TraceReconstructionPlugin1(
                 TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
                 TraceAnalysisTool.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
                 true, // ignoreInvalidTraces,
@@ -1168,17 +1230,15 @@ public class TraceAnalysisTool {
                 // Long.MIN
                 TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
         // Long.MAX
-        mtReconstrFilter.getMessageTraceEventProviderPort().addListener(
-                messageTraceListener);
-        mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(
-                messageTraceListener.getJfxBrokenExecutionTraceReceiver()); // i
+        mtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getMessageTraceInputPort());
+        mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(messageTraceListener.getJfxBrokenExecutionTraceInputPort()); // i
         // know
         // that
         // its
         // dirty
 
-        TraceReconstructionPlugin uniqueMtReconstrFilter = null;
-        uniqueMtReconstrFilter = new TraceReconstructionPlugin(
+        TraceReconstructionPlugin1 uniqueMtReconstrFilter = null;
+        uniqueMtReconstrFilter = new TraceReconstructionPlugin1(
                 TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
                 TraceAnalysisTool.systemEntityFactory, 60 * 1000, // maxTraceDurationMillis,
                 true, // ignoreInvalidTraces,
@@ -1191,17 +1251,16 @@ public class TraceAnalysisTool {
                 // Long.MIN
                 TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
         // Long.MAX
-        uniqueMtReconstrFilter.getMessageTraceEventProviderPort().addListener(
-                messageTraceListener.getJfxUniqueTr()); // i know that its
+        uniqueMtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getJfxUniqueMessageTraceInputPort()); // i know that its
         // dirty; i (andre) like
         // it because it's
         // basically a port
 
-        final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
+        final ExecutionRecordTransformationPlugin1 execRecTransformer = new ExecutionRecordTransformationPlugin1(
                 TraceAnalysisTool.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                 TraceAnalysisTool.systemEntityFactory);
-        execRecTransformer.addListener(mtReconstrFilter);
-        execRecTransformer.addListener(uniqueMtReconstrFilter);
+        execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
+        execRecTransformer.getExecutionOutputPort().subsribe(uniqueMtReconstrFilter.getExecutionInputPort());
         tpanInstance.registerPlugin(execRecTransformer);
         System.out.println("MessageTraceListener registered");
     }

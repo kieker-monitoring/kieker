@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.Map.Entry;
+import kieker.analysis.plugin.configuration.IInputPort;
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.AnalysisInstance;
@@ -45,6 +46,7 @@ import kieker.analysis.datamodel.repository.AssemblyComponentOperationPairFactor
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.javaFx.BriefJavaFxInformer;
 import kieker.analysis.plugin.traceAnalysis.AbstractExecutionTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.AbstractInvalidExecutionTraceProcessingPlugin;
@@ -577,13 +579,13 @@ public class TraceAnalysisTool1 {
                     TraceAnalysisTool1.ignoreRecordsBeforeTimestamp,
                     TraceAnalysisTool1.ignoreRecordsAfterTimestamp);
             for (final AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
-                mtReconstrFilter.getMessageTraceEventProviderPort().addListener(c);
+                mtReconstrFilter.getMessageTraceOutputPort().subsribe(c.getMessageTraceInputPort());
             }
             for (final AbstractExecutionTraceProcessingPlugin c : execTraceProcessingComponents) {
-                mtReconstrFilter.getExecutionTraceEventProviderPort().addListener(c);
+                mtReconstrFilter.getExecutionTraceOutputPort().subsribe(c.getExecutionTraceInputPort());
             }
             for (final AbstractInvalidExecutionTraceProcessingPlugin c : invalidExecTraceProcessingComponents) {
-                mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(c);
+                mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(c.getInvalidExecutionTraceInputPort());
             }
 
             final ExecutionRecordTransformationPlugin1 execRecTransformer = new ExecutionRecordTransformationPlugin1(
@@ -747,48 +749,60 @@ public class TraceAnalysisTool1 {
             final String name, final String outputFnPrefix) throws IOException {
         final String outputFnBase = new File(outputFnPrefix
                 + Constants.SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath();
-        final AbstractMessageTraceProcessingPlugin sqdWriter = new AbstractMessageTraceProcessingPlugin(
+        final AbstractMessageTraceProcessingPlugin sqdWriter =
+                new AbstractMessageTraceProcessingPlugin(
                 name, TraceAnalysisTool1.systemEntityFactory) {
 
-            public void newEvent(final MessageTrace t)
-                    throws EventProcessingException {
-                try {
-                    SequenceDiagramPlugin.writePicForMessageTrace(this.getSystemEntityFactory(), t, outputFnBase + "-"
-                            + t.getTraceId() + ".pic",
-                            TraceAnalysisTool1.shortLabels);
-                    this.reportSuccess(t.getTraceId());
-                } catch (final FileNotFoundException ex) {
-                    this.reportError(t.getTraceId());
-                    throw new TraceProcessingException("File not found", ex);
-                }
-            }
+                    @Override
+                    public void printStatusMessage() {
+                        super.printStatusMessage();
+                        final int numPlots = this.getSuccessCount();
+                        final long lastSuccessTracesId = this.getLastTraceIdSuccess();
+                        System.out.println("Wrote " + numPlots + " sequence diagram"
+                                + (numPlots > 1 ? "s" : "") + " to file"
+                                + (numPlots > 1 ? "s" : "") + " with name pattern '"
+                                + outputFnBase + "-<traceId>.pic'");
+                        System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
+                        System.out.println("Example: pic2plot -T svg " + outputFnBase
+                                + "-"
+                                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
+                                + ".pic > " + outputFnBase + "-"
+                                + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
+                                + ".svg");
+                    }
 
-            @Override
-            public void printStatusMessage() {
-                super.printStatusMessage();
-                final int numPlots = this.getSuccessCount();
-                final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-                System.out.println("Wrote " + numPlots + " sequence diagram"
-                        + (numPlots > 1 ? "s" : "") + " to file"
-                        + (numPlots > 1 ? "s" : "") + " with name pattern '"
-                        + outputFnBase + "-<traceId>.pic'");
-                System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-                System.out.println("Example: pic2plot -T svg " + outputFnBase
-                        + "-"
-                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                        + ".pic > " + outputFnBase + "-"
-                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>")
-                        + ".svg");
-            }
+                    @Override
+                    public boolean execute() {
+                        return true; // no need to do anything here
+                    }
 
-            public boolean execute() {
-                return true; // no need to do anything here
-            }
+                    @Override
+                    public void terminate(final boolean error) {
+                        // no need to do anything here
+                    }
+                    private final IInputPort<MessageTrace> messageTraceInputPort =
+                            new AbstractInputPort<MessageTrace>("Message traces") {
 
-            public void terminate(final boolean error) {
-                // no need to do anything here
-            }
-        };
+                                @Override
+                                public void newEvent(MessageTrace mt) {
+                                    try {
+                                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt, outputFnBase + "-"
+                                                + mt.getTraceId() + ".pic",
+                                                TraceAnalysisTool1.shortLabels);
+                                        reportSuccess(mt.getTraceId());
+                                    } catch (final FileNotFoundException ex) {
+                                        reportError(mt.getTraceId());
+                                        log.error("File not found", ex);
+                                        //throw new TraceProcessingException("File not found", ex);
+                                    }
+                                }
+                            };
+
+                    @Override
+                    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+                        return this.messageTraceInputPort;
+                    }
+                };
         return sqdWriter;
     }
 
@@ -848,26 +862,6 @@ public class TraceAnalysisTool1 {
         final AbstractMessageTraceProcessingPlugin ctWriter = new AbstractMessageTraceProcessingPlugin(
                 name, TraceAnalysisTool1.systemEntityFactory) {
 
-            public void newEvent(final MessageTrace t)
-                    throws EventProcessingException {
-                try {
-                    final TraceCallTreeNode rootNode = new TraceCallTreeNode(
-                            AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-                            TraceAnalysisTool1.systemEntityFactory,
-                            TraceAnalysisTool1.allocationComponentOperationPairFactory,
-                            TraceAnalysisTool1.allocationComponentOperationPairFactory.rootPair,
-                            true); // rootNode
-                    AbstractCallTreePlugin.writeDotForMessageTrace(
-                            TraceAnalysisTool1.systemEntityFactory, rootNode, t,
-                            outputFnBase + "-" + t.getTraceId(), false,
-                            TraceAnalysisTool1.shortLabels); // no weights
-                    this.reportSuccess(t.getTraceId());
-                } catch (final FileNotFoundException ex) {
-                    this.reportError(t.getTraceId());
-                    throw new TraceProcessingException("File not found", ex);
-                }
-            }
-
             @Override
             public void printStatusMessage() {
                 super.printStatusMessage();
@@ -885,12 +879,45 @@ public class TraceAnalysisTool1 {
                         + ".svg");
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
             }
 
+            @Override
             public void terminate(final boolean error) {
                 // no need to do anything here
+            }
+            private final IInputPort<MessageTrace> messageTraceInputPort =
+                    new AbstractInputPort<MessageTrace>("Message traces") {
+
+                        @Override
+                        public void newEvent(MessageTrace mt) {
+                            try {
+                                final TraceCallTreeNode rootNode = new TraceCallTreeNode(
+                                        AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+                                        TraceAnalysisTool1.systemEntityFactory,
+                                        TraceAnalysisTool1.allocationComponentOperationPairFactory,
+                                        TraceAnalysisTool1.allocationComponentOperationPairFactory.rootPair,
+                                        true); // rootNode
+                                AbstractCallTreePlugin.writeDotForMessageTrace(
+                                        TraceAnalysisTool1.systemEntityFactory, rootNode, mt,
+                                        outputFnBase + "-" + mt.getTraceId(), false,
+                                        TraceAnalysisTool1.shortLabels); // no weights
+                                reportSuccess(mt.getTraceId());
+                            } catch (final TraceProcessingException ex) {
+                                reportError(mt.getTraceId());
+                                log.error("TraceProcessingException", ex);
+                            } catch (final FileNotFoundException ex) {
+                                reportError(mt.getTraceId());
+                                log.error("File not found", ex);
+                            }
+                        }
+                    };
+
+            @Override
+            public IInputPort<MessageTrace> getMessageTraceInputPort() {
+                return this.messageTraceInputPort;
             }
         };
         return ctWriter;
@@ -917,12 +944,6 @@ public class TraceAnalysisTool1 {
 
             PrintStream ps = new PrintStream(new FileOutputStream(outputFn));
 
-            public void newEvent(final MessageTrace t)
-                    throws EventProcessingException {
-                this.reportSuccess(t.getTraceId());
-                this.ps.println(t);
-            }
-
             @Override
             public void printStatusMessage() {
                 super.printStatusMessage();
@@ -939,8 +960,23 @@ public class TraceAnalysisTool1 {
                 }
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
+            }
+            private final IInputPort<MessageTrace> messageTraceInputPort =
+                    new AbstractInputPort<MessageTrace>("Message traces") {
+
+                        @Override
+                        public void newEvent(MessageTrace mt) {
+                            reportSuccess(mt.getTraceId());
+                            ps.println(mt);
+                        }
+                    };
+
+            @Override
+            public IInputPort<MessageTrace> getMessageTraceInputPort() {
+                return this.messageTraceInputPort;
             }
         };
         return mtWriter;
@@ -990,8 +1026,23 @@ public class TraceAnalysisTool1 {
                 }
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
+            }
+            private final IInputPort<ExecutionTrace> executionTraceInputPort =
+                    new AbstractInputPort<ExecutionTrace>("Execution traces") {
+
+                        @Override
+                        public void newEvent(ExecutionTrace et) {
+                            ps.println(et);
+                            reportSuccess(et.getTraceId());
+                        }
+                    };
+
+            @Override
+            public IInputPort<ExecutionTrace> getExecutionTraceInputPort() {
+                return this.executionTraceInputPort;
             }
         };
         return etWriter;
@@ -1018,12 +1069,6 @@ public class TraceAnalysisTool1 {
             final PrintStream ps = new PrintStream(new FileOutputStream(
                     myOutputFn));
 
-            public void newEvent(final InvalidExecutionTrace t)
-                    throws EventProcessingException {
-                this.ps.println(t.getInvalidExecutionTrace());
-                this.reportSuccess(t.getInvalidExecutionTrace().getTraceId());
-            }
-
             @Override
             public void printStatusMessage() {
                 super.printStatusMessage();
@@ -1041,8 +1086,24 @@ public class TraceAnalysisTool1 {
                 }
             }
 
+            @Override
             public boolean execute() {
                 return true; // no need to do anything here
+            }
+
+            private final IInputPort<InvalidExecutionTrace> invalidExecutionTraceInputPort =
+                    new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
+
+                        @Override
+                        public void newEvent(InvalidExecutionTrace et) {
+                ps.println(et.getInvalidExecutionTrace());
+                reportSuccess(et.getInvalidExecutionTrace().getTraceId());
+                        }
+                    };
+
+            @Override
+            public IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort() {
+                return this.invalidExecutionTraceInputPort;
             }
         };
         return etWriter;
@@ -1169,10 +1230,8 @@ public class TraceAnalysisTool1 {
                 // Long.MIN
                 TraceAnalysisTool1.ignoreRecordsAfterTimestamp); // default
         // Long.MAX
-        mtReconstrFilter.getMessageTraceEventProviderPort().addListener(
-                messageTraceListener);
-        mtReconstrFilter.getInvalidExecutionTraceEventPort().addListener(
-                messageTraceListener.getJfxBrokenExecutionTraceReceiver()); // i
+        mtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getMessageTraceInputPort());
+        mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(messageTraceListener.getJfxBrokenExecutionTraceInputPort()); // i
         // know
         // that
         // its
@@ -1192,8 +1251,7 @@ public class TraceAnalysisTool1 {
                 // Long.MIN
                 TraceAnalysisTool1.ignoreRecordsAfterTimestamp); // default
         // Long.MAX
-        uniqueMtReconstrFilter.getMessageTraceEventProviderPort().addListener(
-                messageTraceListener.getJfxUniqueTr()); // i know that its
+        uniqueMtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getJfxUniqueMessageTraceInputPort()); // i know that its
         // dirty; i (andre) like
         // it because it's
         // basically a port

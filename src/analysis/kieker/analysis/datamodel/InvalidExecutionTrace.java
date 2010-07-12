@@ -21,7 +21,7 @@ package kieker.analysis.datamodel;
 /**
  * @author Andre van Hoorn
  */
-public class InvalidExecutionTrace {
+public class InvalidExecutionTrace implements IAnalysisEvent {
     private final ExecutionTrace invalidExecutionTrace;
 
     public ExecutionTrace getInvalidExecutionTrace() {

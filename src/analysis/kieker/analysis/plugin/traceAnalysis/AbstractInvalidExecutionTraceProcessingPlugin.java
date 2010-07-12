@@ -20,7 +20,7 @@ package kieker.analysis.plugin.traceAnalysis;
 
 import kieker.analysis.datamodel.InvalidExecutionTrace;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
-import kieker.analysis.plugin.util.event.IEventListener;
+import kieker.analysis.plugin.configuration.IInputPort;
 
 
 /**
@@ -28,9 +28,10 @@ import kieker.analysis.plugin.util.event.IEventListener;
  * @author Andre van Hoorn
  */
 public abstract class AbstractInvalidExecutionTraceProcessingPlugin
-        extends AbstractTraceProcessingPlugin
-        implements IEventListener<InvalidExecutionTrace> {
+        extends AbstractTraceProcessingPlugin {
         public AbstractInvalidExecutionTraceProcessingPlugin (String name, SystemModelRepository systemEntityFactory){
             super(name, systemEntityFactory);
         }
+
+        public abstract IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort();
 }

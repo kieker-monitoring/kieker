@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Map.Entry;
 import kieker.analysis.datamodel.AllocationComponent;
 import kieker.analysis.datamodel.ExecutionContainer;
+import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.analysis.plugin.util.event.EventProcessingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +32,7 @@ import kieker.analysis.datamodel.Message;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.SynchronousReplyMessage;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.util.dot.DotFactory;
 
 /**
@@ -146,34 +148,45 @@ public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ps.println(strBuild.toString());
     }
 
-    public void newEvent(MessageTrace t) throws EventProcessingException {
-        for (Message m : t.getSequenceAsVector()) {
-            if (m instanceof SynchronousReplyMessage) {
-                continue;
-            }
-            AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-            AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-            DependencyGraphNode<AllocationComponent> senderNode = this.dependencyGraph.getNode(senderComponent.getId());
-            DependencyGraphNode<AllocationComponent> receiverNode = this.dependencyGraph.getNode(receiverComponent.getId());
-            if (senderNode == null) {
-                senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent);
-                this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-            }
-            if (receiverNode == null) {
-                receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent);
-                this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-            }
-            senderNode.addOutgoingDependency(receiverNode);
-            receiverNode.addIncomingDependency(senderNode);
-        }
-        this.reportSuccess(t.getTraceId());
-    }
-
+    @Override
     public boolean execute() {
         return true; // no need to do anything here
     }
 
+    @Override
     public void terminate(boolean error) {
         // no need to do anything here
+    }
+    private final IInputPort<MessageTrace> messageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Message traces") {
+
+                @Override
+                public void newEvent(MessageTrace t) {
+                    for (Message m : t.getSequenceAsVector()) {
+                        if (m instanceof SynchronousReplyMessage) {
+                            continue;
+                        }
+                        AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+                        AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+                        DependencyGraphNode<AllocationComponent> senderNode = dependencyGraph.getNode(senderComponent.getId());
+                        DependencyGraphNode<AllocationComponent> receiverNode = dependencyGraph.getNode(receiverComponent.getId());
+                        if (senderNode == null) {
+                            senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent);
+                            dependencyGraph.addNode(senderNode.getId(), senderNode);
+                        }
+                        if (receiverNode == null) {
+                            receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent);
+                            dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+                        }
+                        senderNode.addOutgoingDependency(receiverNode);
+                        receiverNode.addIncomingDependency(senderNode);
+                    }
+                    reportSuccess(t.getTraceId());
+                }
+            };
+
+    @Override
+    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+        return this.messageTraceInputPort;
     }
 }

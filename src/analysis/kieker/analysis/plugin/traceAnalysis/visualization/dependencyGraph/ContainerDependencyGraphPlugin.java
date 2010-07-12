@@ -21,12 +21,14 @@ import java.io.PrintStream;
 import java.util.Collection;
 import kieker.analysis.datamodel.AllocationComponent;
 import kieker.analysis.datamodel.ExecutionContainer;
+import kieker.analysis.plugin.configuration.IInputPort;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import kieker.analysis.datamodel.Message;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.SynchronousReplyMessage;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.util.dot.DotFactory;
 
 /**
@@ -72,37 +74,49 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         ps.println(strBuild.toString());
     }
 
-    public void newEvent(MessageTrace t) {
-        for (Message m : t.getSequenceAsVector()) {
-            if (m instanceof SynchronousReplyMessage) {
-                continue;
-            }
-            AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-            AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-            ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
-            ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
-            DependencyGraphNode<ExecutionContainer> senderNode = this.dependencyGraph.getNode(senderContainer.getId());
-            DependencyGraphNode<ExecutionContainer> receiverNode = this.dependencyGraph.getNode(receiverContainer.getId());
-
-            if (senderNode == null) {
-                senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
-                this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
-            }
-            if (receiverNode == null) {
-                receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
-                this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
-            }
-            senderNode.addOutgoingDependency(receiverNode);
-            receiverNode.addIncomingDependency(senderNode);
-        }
-        this.reportSuccess(t.getTraceId());
-    }
-
+    @Override
     public boolean execute() {
         return true; // no need to do anything here
     }
 
+    @Override
     public void terminate(boolean error) {
         // no need to do anything here
+    }
+    
+    private final IInputPort<MessageTrace> messageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Message traces") {
+
+                @Override
+                public void newEvent(MessageTrace t) {
+                    for (Message m : t.getSequenceAsVector()) {
+                        if (m instanceof SynchronousReplyMessage) {
+                            continue;
+                        }
+                        AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+                        AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+                        ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
+                        ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
+                        DependencyGraphNode<ExecutionContainer> senderNode = dependencyGraph.getNode(senderContainer.getId());
+                        DependencyGraphNode<ExecutionContainer> receiverNode = dependencyGraph.getNode(receiverContainer.getId());
+
+                        if (senderNode == null) {
+                            senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
+                            dependencyGraph.addNode(senderContainer.getId(), senderNode);
+                        }
+                        if (receiverNode == null) {
+                            receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
+                            dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
+                        }
+                        senderNode.addOutgoingDependency(receiverNode);
+                        receiverNode.addIncomingDependency(senderNode);
+                    }
+                    reportSuccess(t.getTraceId());
+                }
+            };
+
+    @Override
+    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+        return this.messageTraceInputPort;
     }
 }

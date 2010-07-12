@@ -21,7 +21,7 @@ package kieker.analysis.datamodel;
 
 /** @author Andre van Hoorn
  */
-public abstract class Trace {
+public abstract class Trace implements IAnalysisEvent {
 
     private final long traceId; // convenience field. All executions have this traceId.
 

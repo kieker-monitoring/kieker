@@ -3,6 +3,8 @@ package kieker.analysis.plugin.traceAnalysis.messageTraceRepository;
 import java.util.Hashtable;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
 
@@ -45,14 +47,26 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
         return this.repo;
     }
 
-    public void newEvent(MessageTrace mt) throws TraceProcessingException {
-        this.repo.put(mt.getTraceId(), mt);
+    private final IInputPort<MessageTrace> messageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Message traces"){
+
+        @Override
+        public void newEvent(MessageTrace mt) {
+            repo.put(mt.getTraceId(), mt);
+        }
+    };
+
+    @Override
+    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+        return this.messageTraceInputPort;
     }
 
+    @Override
     public boolean execute() {
         return true; // no need to do anything here
     }
 
+    @Override
     public void terminate(boolean error) {
         // no need to do anything here
     }

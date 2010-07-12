@@ -25,8 +25,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.datamodel.Execution;
@@ -37,15 +35,11 @@ import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.configuration.IOutputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
-import kieker.analysis.plugin.traceAnalysis.IExecutionTraceProvider;
-import kieker.analysis.plugin.traceAnalysis.IInvalidExecutionTraceProvider;
-import kieker.analysis.plugin.traceAnalysis.IMessageTraceProvider;
 import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionEventProcessingException;
-import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.IExecutionEventListener;
 import kieker.analysis.plugin.util.event.EventProcessingException;
-import kieker.analysis.plugin.util.event.EventPublishSubscribeConnector;
-import kieker.analysis.plugin.util.event.IEventListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -110,60 +104,9 @@ public class TraceReconstructionPlugin1 extends AbstractTraceProcessingPlugin
     private final TraceEquivalenceClassModes equivalenceMode;
     private final long ignoreRecordsBeforeTimestamp;
     private final long ignoreRecordsAfterTimestamp;
-    private final EventPublishSubscribeConnector<MessageTrace> messageTracePublishingSystem = new EventPublishSubscribeConnector<MessageTrace>(
-            true); // do not fail fast
-    private final EventPublishSubscribeConnector<ExecutionTrace> executionTracePublishingSystem = new EventPublishSubscribeConnector<ExecutionTrace>(
-            true); // do not fail fast
-    private final EventPublishSubscribeConnector<InvalidExecutionTrace> invalidExecutionTracePublishingSystem = new EventPublishSubscribeConnector<InvalidExecutionTrace>(
-            true); // do not fail fast
+
     private final TreeSet<Long> selectedTraces;
     private final Execution rootExecution;
-    private final IMessageTraceProvider messageTraceEventProviderPort = new IMessageTraceProvider() {
-
-        public void addListener(final IEventListener<MessageTrace> listener) {
-            TraceReconstructionPlugin1.this.messageTracePublishingSystem.addListener(listener);
-        }
-
-        public boolean removeListener(
-                final IEventListener<MessageTrace> listener) {
-            return TraceReconstructionPlugin1.this.messageTracePublishingSystem.removeListener(listener);
-        }
-    };
-
-    public IMessageTraceProvider getMessageTraceEventProviderPort() {
-        return this.messageTraceEventProviderPort;
-    }
-    private final IExecutionTraceProvider executionTraceEventProviderPort = new IExecutionTraceProvider() {
-
-        public void addListener(final IEventListener<ExecutionTrace> listener) {
-            TraceReconstructionPlugin1.this.executionTracePublishingSystem.addListener(listener);
-        }
-
-        public boolean removeListener(
-                final IEventListener<ExecutionTrace> listener) {
-            return TraceReconstructionPlugin1.this.executionTracePublishingSystem.removeListener(listener);
-        }
-    };
-
-    public IExecutionTraceProvider getExecutionTraceEventProviderPort() {
-        return this.executionTraceEventProviderPort;
-    }
-    private final IInvalidExecutionTraceProvider invalidExecutionTraceEventPort = new IInvalidExecutionTraceProvider() {
-
-        public void addListener(
-                final IEventListener<InvalidExecutionTrace> listener) {
-            TraceReconstructionPlugin1.this.invalidExecutionTracePublishingSystem.addListener(listener);
-        }
-
-        public boolean removeListener(
-                final IEventListener<InvalidExecutionTrace> listener) {
-            return TraceReconstructionPlugin1.this.invalidExecutionTracePublishingSystem.removeListener(listener);
-        }
-    };
-
-    public IInvalidExecutionTraceProvider getInvalidExecutionTraceEventPort() {
-        return this.invalidExecutionTraceEventPort;
-    }
 
     public boolean execute() {
         return true; // no need to do anything here
@@ -278,22 +221,22 @@ public class TraceReconstructionPlugin1 extends AbstractTraceProcessingPlugin
                 }
 
                 if (mt != null) {
-                    this.messageTracePublishingSystem.publish(mt);
-                    this.executionTracePublishingSystem.publish(polledTrace);
+                    this.messageTraceOutputPort.deliver(mt);
+                    this.executionTraceOutputPort.deliver(polledTrace);
                 }
                 this.reportSuccess(curTraceId);
             } catch (final InvalidTraceException ex) {
-                try {
-                    this.invalidExecutionTracePublishingSystem.publish(new InvalidExecutionTrace(polledTrace));
-                } catch (final EventProcessingException ex1) {
-                    log.error(
-                            "EventProcessingException for trace ID:"
-                            + curTraceId, ex1);
-                    this.reportError(curTraceId);
-                    throw new ExecutionEventProcessingException(
-                            "EventProcessingException for trace ID:"
-                            + curTraceId, ex1);
-                }
+//                try {
+                    this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(polledTrace));
+//                } catch (final EventProcessingException ex1) {
+//                    log.error(
+//                            "EventProcessingException for trace ID:"
+//                            + curTraceId, ex1);
+//                    this.reportError(curTraceId);
+//                    throw new ExecutionEventProcessingException(
+//                            "EventProcessingException for trace ID:"
+//                            + curTraceId, ex1);
+//                }
                 if (!this.invalidTraces.contains(curTraceId)) {
                     // only once per traceID (otherwise, we would report all
                     // trace fragments)
@@ -308,15 +251,16 @@ public class TraceReconstructionPlugin1 extends AbstractTraceProcessingPlugin
                                 + curTraceId + "): " + polledTrace, ex);
                     }
                 }
-            } catch (final EventProcessingException ex) {
-                TraceReconstructionPlugin1.log.error(
-                        "EventProcessingException for trace ID:" + curTraceId,
-                        ex);
-                this.reportError(curTraceId);
-                throw new ExecutionEventProcessingException(
-                        "EventProcessingException for trace ID:" + curTraceId,
-                        ex);
             }
+//            catch (final EventProcessingException ex) {
+//                TraceReconstructionPlugin1.log.error(
+//                        "EventProcessingException for trace ID:" + curTraceId,
+//                        ex);
+//                this.reportError(curTraceId);
+//                throw new ExecutionEventProcessingException(
+//                        "EventProcessingException for trace ID:" + curTraceId,
+//                        ex);
+//            }
         }
     }
 
@@ -425,5 +369,26 @@ public class TraceReconstructionPlugin1 extends AbstractTraceProcessingPlugin
 
     public IInputPort<Execution> getExecutionInputPort(){
         return this.executionInputPort;
+    }
+
+    private final OutputPort<MessageTrace> messageTraceOutputPort =
+            new OutputPort<MessageTrace>("Reconstructed Message Traces");
+
+    public IOutputPort<MessageTrace> getMessageTraceOutputPort(){
+        return this.messageTraceOutputPort;
+    }
+
+    private final OutputPort<ExecutionTrace> executionTraceOutputPort =
+            new OutputPort<ExecutionTrace>("Reconstructed Execution Traces");
+
+    public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort(){
+        return this.executionTraceOutputPort;
+    }
+
+    private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort =
+            new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
+
+    public IOutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort(){
+        return this.invalidExecutionTraceOutputPort;
     }
 }

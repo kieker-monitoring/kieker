@@ -20,6 +20,8 @@ package kieker.analysis.plugin.traceAnalysis.visualization.callTree;
 import java.io.FileNotFoundException;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
 
 import org.apache.commons.logging.Log;
@@ -55,27 +57,39 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
                 });
     }
 
-    public void newEvent(MessageTrace t) {
-        try {
-            addTraceToTree(root, t, true); // aggregated
-            this.reportSuccess(t.getTraceId());
-        } catch (TraceProcessingException ex) {
-            log.error("TraceProcessingException", ex);
-            this.reportError(t.getTraceId());
-        }
-    }
-
     @Override
     public void printStatusMessage() {
         super.printStatusMessage();
         System.out.println("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : ""));
     }
 
+    @Override
     public boolean execute() {
         return true; // no need to do anything here
     }
 
+    @Override
     public void terminate(boolean error) {
         // no need to do anything here
+    }
+
+    private final IInputPort<MessageTrace> messageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Message traces") {
+
+                @Override
+                public void newEvent(MessageTrace t) {
+                    try {
+                        addTraceToTree(root, t, true); // aggregated
+                        reportSuccess(t.getTraceId());
+                    } catch (TraceProcessingException ex) {
+                        log.error("TraceProcessingException", ex);
+                        reportError(t.getTraceId());
+                    }
+                }
+            };
+
+    @Override
+    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+        return this.messageTraceInputPort;
     }
 }

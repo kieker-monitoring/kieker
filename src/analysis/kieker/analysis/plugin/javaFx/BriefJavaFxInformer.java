@@ -20,20 +20,29 @@ package kieker.analysis.plugin.javaFx;
  */
 
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import kieker.analysis.datamodel.InvalidExecutionTrace;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.plugin.util.event.EventProcessingException;
 import kieker.analysis.plugin.traceAnalysis.IInvalidExecutionTraceReceiver;
 import kieker.analysis.plugin.traceAnalysis.IMessageTraceReceiver;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.IInputPort;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author matthias
  */
-public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin, IMessageTraceReceiver {
+public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin {
+
+    private static final Log log = LogFactory.getLog(BriefJavaFxInformer.class);
 
     public BriefJavaFxInformer() {
         try {
@@ -92,14 +101,14 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin, IMe
     public void setJfxBrokenExecutionTraceReceiver(IInvalidExecutionTraceReceiver jfxBrokenExecutionTraceReceiver) {
         this.jfxBrokenExecutionTraceReceiver = jfxBrokenExecutionTraceReceiver;
     }
-
     
-
+    @Override
     public boolean execute() {
         //jfxRc.execute();
         return true;
     }
 
+    @Override
     public void terminate(final boolean error) {
         try{
         //jfxRc.terminate(error);
@@ -107,8 +116,55 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin, IMe
         // nothing to do
     }
 
-    public void newEvent(MessageTrace mt) throws EventProcessingException {
-        //System.out.println("BJFX new Traces"+t.getTraceId());
-        jfxTr.newEvent(mt);
+    private final IInputPort<MessageTrace> jfxUniqueMessageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Broken execution traces") {
+
+        @Override
+        public void newEvent(MessageTrace et) {
+            try {
+                jfxUniqueTr.newEvent(et);
+            } catch (EventProcessingException ex) {
+                log.error("EventProcessingException", ex);
+            }
+        }
+    };
+
+    public IInputPort<MessageTrace> getJfxUniqueMessageTraceInputPort(){
+        return this.jfxUniqueMessageTraceInputPort;
+    }
+
+    private final IInputPort<InvalidExecutionTrace> jfxBrokenExecutionTraceInputPort =
+            new AbstractInputPort<InvalidExecutionTrace>("Broken execution traces") {
+
+        @Override
+        public void newEvent(InvalidExecutionTrace et) {
+            try {
+                jfxBrokenExecutionTraceReceiver.newEvent(et);
+            } catch (EventProcessingException ex) {
+                log.error("EventProcessingException", ex);
+            }
+        }
+    };
+
+    public IInputPort<InvalidExecutionTrace> getJfxBrokenExecutionTraceInputPort(){
+        return this.jfxBrokenExecutionTraceInputPort;
+    }
+
+    private final IInputPort<MessageTrace> messageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Message traces") {
+
+        @Override
+        public void newEvent(MessageTrace mt) {
+            try {
+                //System.out.println("BJFX new Traces"+t.getTraceId());
+                jfxTr.newEvent(mt);
+            } catch (EventProcessingException ex) {
+                log.error("EventProcessingException", ex);
+            }
+        }
+    };
+
+    public IInputPort<MessageTrace> getMessageTraceInputPort(){
+        return this.messageTraceInputPort;
     }
 }

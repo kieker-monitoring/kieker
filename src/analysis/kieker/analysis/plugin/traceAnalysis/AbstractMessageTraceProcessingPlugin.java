@@ -20,16 +20,17 @@ package kieker.analysis.plugin.traceAnalysis;
 
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
-import kieker.analysis.plugin.util.event.IEventListener;
+import kieker.analysis.plugin.configuration.IInputPort;
 
 /**
  *
  * @author Andre van Hoorn
  */
 public abstract class AbstractMessageTraceProcessingPlugin
-        extends AbstractTraceProcessingPlugin
-        implements IEventListener<MessageTrace> {
+        extends AbstractTraceProcessingPlugin {
     public AbstractMessageTraceProcessingPlugin (String name, SystemModelRepository systemEntityFactory){
         super (name, systemEntityFactory);
     }
+
+    public abstract IInputPort<MessageTrace> getMessageTraceInputPort();
 }

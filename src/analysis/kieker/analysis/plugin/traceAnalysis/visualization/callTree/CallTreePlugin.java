@@ -17,6 +17,7 @@ package kieker.analysis.plugin.traceAnalysis.visualization.callTree;
  * limitations under the License.
  * ==================================================
  */
+import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceProcessingException;
 import kieker.analysis.plugin.traceAnalysis.AbstractMessageTraceProcessingPlugin;
 import java.io.FileNotFoundException;
@@ -35,6 +36,7 @@ import kieker.analysis.datamodel.Signature;
 import kieker.analysis.datamodel.SynchronousCallMessage;
 import kieker.analysis.datamodel.SynchronousReplyMessage;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.util.IntContainer;
 import kieker.analysis.plugin.util.dot.DotFactory;
 
@@ -198,16 +200,6 @@ public class CallTreePlugin extends AbstractMessageTraceProcessingPlugin {
         }
     }
 
-    public void newEvent(MessageTrace t) {
-        try {
-            addTraceToTree(root, t, this.aggregated);
-            this.reportSuccess(t.getTraceId());
-        } catch (TraceProcessingException ex) {
-            log.error("TraceProcessingException", ex);
-            this.reportError(t.getTraceId());
-        }
-    }
-
     public static void writeDotForMessageTrace(final SystemModelRepository systemEntityFactory,
             final MessageTrace msgTrace, final String outputFilename, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
@@ -224,11 +216,33 @@ public class CallTreePlugin extends AbstractMessageTraceProcessingPlugin {
         System.out.println("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : ""));
     }
 
+    @Override
     public boolean execute() {
         return true; // no need to do anything here
     }
 
+    @Override
     public void terminate(boolean error) {
         // no need to do anything here
+    }
+    
+    private final IInputPort<MessageTrace> messageTraceInputPort =
+            new AbstractInputPort<MessageTrace>("Message traces") {
+
+                @Override
+                public void newEvent(MessageTrace t) {
+                    try {
+                        addTraceToTree(root, t, aggregated);
+                        reportSuccess(t.getTraceId());
+                    } catch (TraceProcessingException ex) {
+                        log.error("TraceProcessingException", ex);
+                        reportError(t.getTraceId());
+                    }
+                }
+            };
+
+    @Override
+    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+        return this.messageTraceInputPort;
     }
 }
