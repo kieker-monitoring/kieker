@@ -17,6 +17,8 @@ package kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph;
  * limitations under the License.
  * ==================================================
  */
+import java.io.File;
+import java.io.IOException;
 import kieker.analysis.datamodel.util.AllocationComponentOperationPair;
 import kieker.analysis.datamodel.repository.AllocationComponentOperationPairFactory;
 import java.io.PrintStream;
@@ -50,15 +52,28 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
     private final AllocationComponentOperationPairFactory pairFactory;
     private final String COMPONENT_NODE_ID_PREFIX = "component_";
     private final String CONTAINER_NODE_ID_PREFIX = "container_";
+    private final File dotOutputFile;
+    private final boolean includeWeights;
+    private final boolean shortLabels;
+    private final boolean includeSelfLoops;
 
-    public OperationDependencyGraphPlugin(final String name,
-            final SystemModelRepository systemEntityFactory) {
+    public OperationDependencyGraphPlugin(
+            final String name,
+            final SystemModelRepository systemEntityFactory,
+            final File dotOutputFile,
+            final boolean includeWeights,
+            final boolean shortLabels,
+            final boolean includeSelfLoops) {
         super(name, systemEntityFactory,
                 new DependencyGraph<AllocationComponentOperationPair>(
                 AbstractSystemSubRepository.ROOT_ELEMENT_ID,
                 new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
                 systemEntityFactory.getOperationFactory().rootOperation, systemEntityFactory.getAllocationFactory().rootAllocationComponent)));
         this.pairFactory = new AllocationComponentOperationPairFactory(systemEntityFactory);
+        this.dotOutputFile = dotOutputFile;
+        this.includeWeights = includeWeights;
+        this.shortLabels = shortLabels;
+        this.includeSelfLoops = includeSelfLoops;
     }
 
     private String containerNodeLabel(final ExecutionContainer container) {
@@ -197,45 +212,59 @@ public class OperationDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         return true; // no need to do anything here
     }
 
+    /**
+     * Saves the dependency graph to the dot file if error is not true.
+     *
+     * @param error
+     */
     @Override
     public void terminate(boolean error) {
-// no need to do anything here
+        if (!error) {
+            try {
+                this.saveToDotFile(
+                        this.dotOutputFile.getCanonicalPath(),
+                        this.includeWeights,
+                        this.shortLabels,
+                        this.includeSelfLoops);
+            } catch (IOException ex) {
+                log.error("IOException", ex);
+            }
+        }
     }
-
-   private final IInputPort<MessageTrace> messageTraceInputPort =
+    private final IInputPort<MessageTrace> messageTraceInputPort =
             new AbstractInputPort<MessageTrace>("Message traces") {
 
                 @Override
                 public void newEvent(MessageTrace t) {
-        for (Message m : t.getSequenceAsVector()) {
-            if (m instanceof SynchronousReplyMessage) {
-                continue;
-            }
-            AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-            AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-            int rootOperationId = getSystemEntityFactory().getOperationFactory().rootOperation.getId();
-            Operation senderOperation = m.getSendingExecution().getOperation();
-            Operation receiverOperation = m.getReceivingExecution().getOperation();
-            /* The following two get-calls to the factory return s.th. in either case */
-            AllocationComponentOperationPair senderPair =
-                    (senderOperation.getId() == rootOperationId) ? dependencyGraph.getRootNode().getEntity() : pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
-            AllocationComponentOperationPair receiverPair =
-                    (receiverOperation.getId() == rootOperationId) ? dependencyGraph.getRootNode().getEntity() : pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
+                    for (Message m : t.getSequenceAsVector()) {
+                        if (m instanceof SynchronousReplyMessage) {
+                            continue;
+                        }
+                        AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+                        AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+                        int rootOperationId = getSystemEntityFactory().getOperationFactory().rootOperation.getId();
+                        Operation senderOperation = m.getSendingExecution().getOperation();
+                        Operation receiverOperation = m.getReceivingExecution().getOperation();
+                        /* The following two get-calls to the factory return s.th. in either case */
+                        AllocationComponentOperationPair senderPair =
+                                (senderOperation.getId() == rootOperationId) ? dependencyGraph.getRootNode().getEntity() : pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+                        AllocationComponentOperationPair receiverPair =
+                                (receiverOperation.getId() == rootOperationId) ? dependencyGraph.getRootNode().getEntity() : pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
-            DependencyGraphNode<AllocationComponentOperationPair> senderNode = dependencyGraph.getNode(senderPair.getId());
-            DependencyGraphNode<AllocationComponentOperationPair> receiverNode = dependencyGraph.getNode(receiverPair.getId());
-            if (senderNode == null) {
-                senderNode = new DependencyGraphNode<AllocationComponentOperationPair>(senderPair.getId(), senderPair);
-                dependencyGraph.addNode(senderNode.getId(), senderNode);
-            }
-            if (receiverNode == null) {
-                receiverNode = new DependencyGraphNode<AllocationComponentOperationPair>(receiverPair.getId(), receiverPair);
-                dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-            }
-            senderNode.addOutgoingDependency(receiverNode);
-            receiverNode.addIncomingDependency(senderNode);
-        }
-        reportSuccess(t.getTraceId());
+                        DependencyGraphNode<AllocationComponentOperationPair> senderNode = dependencyGraph.getNode(senderPair.getId());
+                        DependencyGraphNode<AllocationComponentOperationPair> receiverNode = dependencyGraph.getNode(receiverPair.getId());
+                        if (senderNode == null) {
+                            senderNode = new DependencyGraphNode<AllocationComponentOperationPair>(senderPair.getId(), senderPair);
+                            dependencyGraph.addNode(senderNode.getId(), senderNode);
+                        }
+                        if (receiverNode == null) {
+                            receiverNode = new DependencyGraphNode<AllocationComponentOperationPair>(receiverPair.getId(), receiverPair);
+                            dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+                        }
+                        senderNode.addOutgoingDependency(receiverNode);
+                        receiverNode.addIncomingDependency(senderNode);
+                    }
+                    reportSuccess(t.getTraceId());
                 }
             };
 

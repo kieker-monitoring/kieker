@@ -17,8 +17,9 @@ package kieker.analysis.plugin.traceAnalysis.visualization.callTree;
  * limitations under the License.
  * ==================================================
  */
-
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -36,12 +37,21 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 
     private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
     private final AbstractAggregatedCallTreeNode<T> root;
+    private final File dotOutputFile;
+    private final boolean includeWeights;
+    private final boolean shortLabels;
 
     public AggregatedCallTreePlugin(final String name,
             SystemModelRepository systemEntityFactory,
-            AbstractAggregatedCallTreeNode<T> root) {
+            AbstractAggregatedCallTreeNode<T> root,
+            final File dotOutputFile,
+            final boolean includeWeights,
+            final boolean shortLabels) {
         super(name, systemEntityFactory);
         this.root = root;
+       this.dotOutputFile = dotOutputFile;
+        this.includeWeights = includeWeights;
+        this.shortLabels = shortLabels;
     }
     private int numGraphsSaved = 0;
 
@@ -69,9 +79,28 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
         return true; // no need to do anything here
     }
 
+    /**
+     * Saves the call tree to the dot file if error is not true.
+     *
+     * @param error
+     */
     @Override
     public void terminate(boolean error) {
-        // no need to do anything here
+        if (!error){
+            try {
+                this.saveTreeToDotFile(
+                        this.dotOutputFile.getCanonicalPath(),
+                        this.includeWeights,
+                        this.shortLabels);
+            } catch (IOException ex) {
+               log.error("IOException", ex);
+            }
+        }
+    }
+
+    @Override
+    public IInputPort<MessageTrace> getMessageTraceInputPort() {
+        return this.messageTraceInputPort;
     }
 
     private final IInputPort<MessageTrace> messageTraceInputPort =
@@ -88,9 +117,4 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
                     }
                 }
             };
-
-    @Override
-    public IInputPort<MessageTrace> getMessageTraceInputPort() {
-        return this.messageTraceInputPort;
-    }
 }

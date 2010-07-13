@@ -17,6 +17,7 @@ package kieker.analysis.plugin.traceAnalysis.visualization.callTree;
  * limitations under the License.
  * ==================================================
  */
+import java.io.File;
 import kieker.analysis.datamodel.AssemblyComponent;
 import kieker.analysis.datamodel.util.AssemblyComponentOperationPair;
 import kieker.analysis.datamodel.Operation;
@@ -35,11 +36,17 @@ public class AggregatedAssemblyComponentOperationCallTreePlugin
     public AggregatedAssemblyComponentOperationCallTreePlugin(
             final String name,
             final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory,
-            final SystemModelRepository systemEntityFactory) {
-       super(name, systemEntityFactory,
+            final SystemModelRepository systemEntityFactory,
+            final File dotOutputFile,
+            final boolean includeWeights,
+            final boolean shortLabels) {
+        super(name, systemEntityFactory,
                 new AggregatedAssemblyComponentOperationCallTreeNode(
                 AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory,
-                assemblyComponentOperationPairFactory, assemblyComponentOperationPairFactory.rootPair, true));
+                assemblyComponentOperationPairFactory, assemblyComponentOperationPairFactory.rootPair, true), // root node
+                dotOutputFile,
+                includeWeights,
+                shortLabels);
     }
 }
 

@@ -17,6 +17,8 @@ package kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph;
  * limitations under the License.
  * ==================================================
  */
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 import kieker.analysis.datamodel.AllocationComponent;
@@ -40,12 +42,25 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 
     private static final Log log = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
 
+    private final File dotOutputFile;
+    private final boolean includeWeights;
+    private final boolean shortLabels;
+    private final boolean includeSelfLoops;
+
     public ContainerDependencyGraphPlugin(final String name,
-            final SystemModelRepository systemEntityFactory) {
+            final SystemModelRepository systemEntityFactory,
+            final File dotOutputFile,
+            final boolean includeWeights,
+            final boolean shortLabels,
+            final boolean includeSelfLoops) {
         super(name, systemEntityFactory,
                 new DependencyGraph<ExecutionContainer>(
                 systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer.getId(),
                 systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer));
+        this.dotOutputFile = dotOutputFile;
+        this.includeWeights = includeWeights;
+        this.shortLabels = shortLabels;
+        this.includeSelfLoops = includeSelfLoops;
     }
 
     protected void dotEdges(Collection<DependencyGraphNode<ExecutionContainer>> nodes,
@@ -79,9 +94,24 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
         return true; // no need to do anything here
     }
 
+    /**
+     * Saves the dependency graph to the dot file if error is not true.
+     *
+     * @param error
+     */
     @Override
     public void terminate(boolean error) {
-        // no need to do anything here
+        if (!error){
+            try {
+                this.saveToDotFile(
+                        this.dotOutputFile.getCanonicalPath(),
+                        this.includeWeights,
+                        this.shortLabels,
+                        this.includeSelfLoops);
+            } catch (IOException ex) {
+               log.error("IOException", ex);
+            }
+        }
     }
     
     private final IInputPort<MessageTrace> messageTraceInputPort =
