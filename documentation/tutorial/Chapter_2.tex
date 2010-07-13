@@ -1,77 +1,72 @@
-  \chapter{Example}
-    This chapter will show how to develop a simple example by installing \Kieker\ before marking some code lines for the monitoring. After the necessary data has been collected, they will be analyzed by an own developed component.\\
-    The example itself is available on the website of \Kieker.
-    \section{Download and Installation}
+\chapter{Example}
+	% A little explanation beforehand
+    This chapter will show how to develop a simple example by installing \Kieker\ before marking some code lines for the monitoring. After the necessary data has been collected, they will be analyzed by an own developed component. The example itself is available on the website of \Kieker.
+	
+	\section{Download and Installation}
       \Kieker\ can be downloaded from \KiekerDownloadUrl. The content of the zip- respectively the tar.gz-file should be extracted to any directory, which we will call ``\KiekerDir`` within this tutorial. The installation of \Kieker\ is completed.\\
       If desired, the new created path can of course be assigned to an easy remindable environment variable. 
-      % Note: Maybe it should be described how to do this.
-
+ 
     \section{Monitoring}
       For the creation of the example it is recommended to create a new working directory (e.g. ''example'') of the following structure:
       \begin{center}
-      \dirtree{%
-      .1 example\DTcomment{The root directory of the project}.
-      .2 build\DTcomment{The directory for the compiled class files for Java}.
-      .2 lib\DTcomment{The directory for the libraries and needed jar-files}.
-      .3 \monitoringCtrlJar\DTcomment{}.
-      .3 \commonJar\DTcomment{}.
-      .3 commons-logging-1.1.1.jar\DTcomment{}.
-      .2 src\DTcomment{The directory for the sourcecode files}.
-      .3 mySimpleKiekerExampleManual\DTcomment{The directory for the new package}.
-      .4 CRM.java\DTcomment{One of the sourcecode files}.
-      .4 Catalog.java\DTcomment{One of the sourcecode files}.
-      .4 Bookstore.java\DTcomment{One of the sourcecode files}.
-      .4 BookstoreStarter.java\DTcomment{One of the sourcecode files}.
-      }      
+		  \dirtree{%
+		  .1 example\DTcomment{The root directory of the project}.
+		  .2 build\DTcomment{The directory for the compiled class files for Java}.
+		  .2 lib\DTcomment{The directory for the libraries and needed jar-files}.
+		  .3 \monitoringCtrlJar\DTcomment{}.
+		  .3 \commonJar\DTcomment{}.
+		  .3 commons-logging-1.1.1.jar\DTcomment{}.
+		  .2 src\DTcomment{The directory for the sourcecode files}.
+		  .3 mySimpleKiekerExampleManual\DTcomment{The directory for the new package}.
+		  .4 CRM.java\DTcomment{One of the sourcecode files}.
+		  .4 Catalog.java\DTcomment{One of the sourcecode files}.
+		  .4 Bookstore.java\DTcomment{One of the sourcecode files}.
+		  .4 BookstoreStarter.java\DTcomment{One of the sourcecode files}.
+		  }      
       \end{center}
-      The listed jar-files must be copied from the \Kieker\ directory:
+	  The listed jar-files must be copied from the \Kieker\ directory:
       \begin{itemize}
-	\item \KiekerDir/dist/\commonJar\
-	\item \KiekerDir/dist/\monitoringCtrlJar\
-	\item \KiekerDir/lib/commons-logging-1.1.1.jar
+		\item \KiekerDir/dist/\commonJar\
+		\item \KiekerDir/dist/\monitoringCtrlJar\
+		\item \KiekerDir/lib/commons-logging-1.1.1.jar
       \end{itemize}
       The sourcecode files consist of the following lines:
       % It isn't necessary to do this every time but it makes sure that the listing has the correct format.
       \setJavaCodeListing
 
-      \lstset{caption=Bookstore.java}
-      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+	  % If the Path to the examples changes, then they have to be changed here AS WELL!!
+      \lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
 
-      \lstset{caption=CRM.java}
-      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+      \lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
 
-      \lstset{caption=Catalog.java}
-      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
-      The whole sourcecode of the example can be found in the appendix of this tutorial. Therefore we will show only the important parts of the files here.
+      \lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
+	  
       The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start.
-      % It would be a waste of time to extract the part from the source-file. we do it manually.
-      \lstset{caption=Cutting from Bookstore.java, label=listing:cuttingBookstore}
-      \begin{lstlisting}
-	long tin = System.currentTimeMillis();
-	Bookstore.searchBook();
-	long tout = System.currentTimeMillis();
-
-	OperationExecutionRecord e = new OperationExecutionRecord(
-			"mySimpleKiekerExampleManual.Bookstore", "searchBook()", 0,
-			tin, tout);
-
-	MonitoringController.getInstance().newMonitoringRecord(e);
-      \end{lstlisting}
-      In this listing can be seen, how the monitoring itself is done. We remember the time before and after a specific method call (in this case: \textit{searchBook()}). These informations are stored in the so called execution record. It gets:
-      % I am afraid it's a little bit complicate with the eoi and ess.
-      \begin{itemize}
-	\item The component (the class) in which the called method is.
-	\item The called method.
-	\item The session id. In this case we can use any string.
-	\item The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
-	\item The time before the sourcecode which should be measured.
-	\item The time after the sourcecode which should be measured.
-	\item The name of the current host. This is not very important in this case, because we have only one host. The name can be choosen freely.
-	\item The eoi (execution order index). This tells \Kieker\ later the sequence of the different calls. It should be of course unique within a trace.
-	\item The ess (execution stack size). This number tells \Kieker\ that the execution was started when the calling stack of the corresponding trace was just the                
-              ess.
-      \end{itemize}
-      For the moment we have to choose the eoi and ess manually. These numbers can be choosen later automaticaly by \Kieker\ of course.\\
+	  
+      % Make sure that this listing will be modified, once the sourcecode changes!!! 
+	  % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
+      \lstinputlisting[firstline=20, lastline=29, caption=Cutting from Bookstore.java, label=listing:cuttingBookstore]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+	  
+      In Listing \ref{listing:cuttingBookstore} can be seen, how the monitoring itself is done. We remember the time before and after a specific method call (in this case: \textit{searchBook()}). These informations are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{image:operationexecutionrecordclassdiagram}.
+	  
+	  % This figure contains the short class diagram of the operation execution record.
+	  \begin{figure}[H]
+		\begin{center}
+		%\includegraphics[width=1.0\textwidth]{}
+		\caption{The class diagram of the operation execution record}
+		\label{image:operationexecutionrecordclassdiagram}
+      \end{center}
+    \end{figure}
+	  
+	The important attributes are:
+	\begin{itemize}
+		\item The component (the class) in which the called method is.
+		\item The called method.
+		\item The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
+		\item The time before the sourcecode which should be measured.
+		\item The time after the sourcecode which should be measured.
+    \end{itemize}
+      
       Once the writing is done, we should be able to compile and execute the sourcecode:
       % We need something like the ouput from the bash.
       \setBashListing
