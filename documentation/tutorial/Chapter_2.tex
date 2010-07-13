@@ -21,6 +21,7 @@
       .4 CRM.java\DTcomment{One of the sourcecode files}.
       .4 Catalog.java\DTcomment{One of the sourcecode files}.
       .4 Bookstore.java\DTcomment{One of the sourcecode files}.
+      .4 BookstoreStarter.java\DTcomment{One of the sourcecode files}.
       }      
       \end{center}
       The listed jar-files must be copied from the \Kieker\ directory:
@@ -29,33 +30,34 @@
 	\item \KiekerDir/dist/\monitoringCtrlJar\
 	\item \KiekerDir/lib/commons-logging-1.1.1.jar
       \end{itemize}
-      The whole sourcecode of the example can be found in the appendix of this tutorial. Therefore we will show only the important parts of the files here.
-      % Marked all the sourcecode files as comments for the first!
+      The sourcecode files consist of the following lines:
+      % It isn't necessary to do this every time but it makes sure that the listing has the correct format.
+      \setJavaCodeListing
 
-%       The file ``Bookstore.java'' should contain of the lines showed in listing \ref{listing:Bookstore.java}.
-%       % It isn't necessary to do this every time but it makes sure that the listing has the correct format.
-       \setJavaCodeListing
-%       % This will give the code a caption and - more important - a label which we can refer to.
-%       \lstset{caption=Bookstore.java, label=listing:Bookstore.java}
-%       % Careful! We load the file directly from the source directory. 
-%       \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java}
-%       Listing \ref{listing:Catalog.java} shows the content of ``Catalog.java'' and listing \ref{listing:CRM.java} the content of ``CRM.java''.
-%       \lstset{caption=Catalog.java, label=listing:Catalog.java}
-%       \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/Catalog.java}
-%       \lstset{caption=CRM.java, label=listing:CRM.java}
-%       \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExample/bookstoreTracing/CRM.java}
+      \lstset{caption=Bookstore.java}
+      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+
+      \lstset{caption=CRM.java}
+      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+
+      \lstset{caption=Catalog.java}
+      \lstinputlisting{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
+      The whole sourcecode of the example can be found in the appendix of this tutorial. Therefore we will show only the important parts of the files here.
       The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start.
       % It would be a waste of time to extract the part from the source-file. we do it manually.
       \lstset{caption=Cutting from Bookstore.java, label=listing:cuttingBookstore}
       \begin{lstlisting}
-	long tin = TpmonController.getInstance().getTime();
+	long tin = System.currentTimeMillis();
 	Bookstore.searchBook();
-	long tout = TpmonController.getInstance().getTime();
+	long tout = System.currentTimeMillis();
 
-	KiekerExecutionRecord e = KiekerExecutionRecord.getInstance("mySimpleKiekerExample.bookstoreTracing.Bookstore", "searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
-	TpmonController.getInstance().logMonitoringRecord(e);
+	OperationExecutionRecord e = new OperationExecutionRecord(
+			"mySimpleKiekerExampleManual.Bookstore", "searchBook()", 0,
+			tin, tout);
+
+	MonitoringController.getInstance().newMonitoringRecord(e);
       \end{lstlisting}
-      In this listing can be seen, how the monitoring itself is done. We use the \textit{TpmonController} to get the current time in nano seconds and remember the time before and after a specific method call (in this case: \textit{searchBook()})\footnote{The code between the timekeeping does not need to be a method call of course. It can be ``plain'' code or more than one method call as well.}. These informations are stored in the so called execution record. It gets:
+      In this listing can be seen, how the monitoring itself is done. We remember the time before and after a specific method call (in this case: \textit{searchBook()}). These informations are stored in the so called execution record. It gets:
       % I am afraid it's a little bit complicate with the eoi and ess.
       \begin{itemize}
 	\item The component (the class) in which the called method is.
