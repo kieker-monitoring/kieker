@@ -1,81 +1,58 @@
 package mySimpleKiekerExampleManual;
 
-import java.util.Vector;
-
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.MonitoringController;
 
-public class Bookstore extends Thread {
+public class Bookstore {
 
-	static int numberOfRequests = 1;
-	static int interRequestTime = 5;
-	static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+	static int numberOfRequests = 5;
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void startBookstoreRequests() {
 		for (int i = 0; i < numberOfRequests; i++) {
 			System.out.println("Bookstore.main: Starting request " + i);
 			Bookstore newBookstore = new Bookstore();
-			bookstoreScenarios.add(newBookstore);
-			newBookstore.start();
-			Bookstore.waitabit(interRequestTime);
+			newBookstore.startBookstore();
 		}
-		System.out
-				.println("Bookstore.main: Finished with starting all requests.");
-		System.out.println("Bookstore.main: Waiting for threads to terminate");
-		synchronized (bookstoreScenarios) {
-			while (!bookstoreScenarios.isEmpty()) {
-				bookstoreScenarios.wait();
-			}
-		}
-		System.exit(0);
 	}
 
-	@Override
-	public void run() {
+	public void startBookstore() {
 		/* Call searchBook() and remember the runtime of the call. */
-		long tin = MonitoringController.getInstance().getTime();
+		long tin = System.currentTimeMillis();
 		Bookstore.searchBook();
-		long tout = MonitoringController.getInstance().getTime();
+		long tout = System.currentTimeMillis();
 
 		/* Create a new record with the remembered values. */
 		OperationExecutionRecord e = new OperationExecutionRecord(
-				"mySimpleKiekerExampleManual.Bookstore",
-				"searchBook()", "sessionID", 0, tin, tout, "vnName", 0, 0);
+				"mySimpleKiekerExampleManual.Bookstore", "searchBook()", 0,
+				tin, tout);
 		/* Make sure that the record will somehow be persisted. */
 		MonitoringController.getInstance().newMonitoringRecord(e);
-
-		synchronized (bookstoreScenarios) {
-			bookstoreScenarios.remove(this);
-			bookstoreScenarios.notify();
-		}
 	}
 
 	public static void searchBook() {
-		for (int i = 0; i < 1; i++) {
-			/* Call getBook() and remember the runtime of the call. */
-			long tin = MonitoringController.getInstance().getTime();
-			Catalog.getBook(false);
-			long tout = MonitoringController.getInstance().getTime();
+		/* Call getBook() and remember the runtime of the call. */
+		long tin = System.currentTimeMillis();
+		Catalog.getBook(false);
+		long tout = System.currentTimeMillis();
 
-			/* Create a new record with the remembered values. */
-			OperationExecutionRecord e = new OperationExecutionRecord(
-					"mySimpleKiekerExampleManual.Catalog",
-					"getBook(false)", "sessionID", 0, tin, tout, "vnName", 1, 1);
-			/* Make sure that the record will somehow be persisted. */
-			MonitoringController.getInstance().newMonitoringRecord(e);
+		/* Create a new record with the remembered values. */
+		OperationExecutionRecord e = new OperationExecutionRecord(
+				"mySimpleKiekerExampleManual.Catalog", "getBook()", 0,
+				tin, tout);
+		/* Make sure that the record will somehow be persisted. */
+		MonitoringController.getInstance().newMonitoringRecord(e);
 
-			/* Call getOffers() and remember the runtime of the call. */
-			tin = MonitoringController.getInstance().getTime();
-			CRM.getOffers();
-			tout = MonitoringController.getInstance().getTime();
+		/* Call getOffers() and remember the runtime of the call. */
+		tin = System.currentTimeMillis();
+		CRM.getOffers();
+		tout = System.currentTimeMillis();
 
-			/* Create a new record with the remembered values. */
-			e = new OperationExecutionRecord(
-					"mySimpleKiekerExampleManual.CRM",
-					"getOffers()", "sessionID", 0, tin, tout, "vnName", 2, 1);
-			/* Make sure that the record will somehow be persisted. */
-			MonitoringController.getInstance().newMonitoringRecord(e);
-		}
+		/* Create a new record with the remembered values. */
+		e = new OperationExecutionRecord(
+				"mySimpleKiekerExampleManual.CRM", "getOffers()", 0,
+				tin, tout);
+		/* Make sure that the record will somehow be persisted. */
+		MonitoringController.getInstance().newMonitoringRecord(e);
 	}
 
 	public static void waitabit(long waittime) {

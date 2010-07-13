@@ -4,7 +4,7 @@
   <property name="build.dir" value="build"/>
   <property name="src.dir" value="src"/>
   <property name="jar.file" value="example.jar"/>
-  <property name="main-class" value="mySimpleKiekerExampleManual.Bookstore"/>
+  <property name="main-class" value="mySimpleKiekerExampleManual.BookstoreStarter"/>
   <property name="meta.dir" value="META-INF"/>
   <property name="log4jproperties.file" value="log4j.properties"/>
   
