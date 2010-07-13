@@ -321,11 +321,55 @@ public class TraceAnalysisTool {
 
         TraceReconstructionPlugin mtReconstrFilter = null;
         try {
-            final List<AbstractMessageTraceProcessingPlugin> msgTraceProcessingComponents = new ArrayList<AbstractMessageTraceProcessingPlugin>();
-            final List<AbstractExecutionTraceProcessingPlugin> execTraceProcessingComponents = new ArrayList<AbstractExecutionTraceProcessingPlugin>();
-            final List<AbstractInvalidExecutionTraceProcessingPlugin> invalidExecTraceProcessingComponents = new ArrayList<AbstractInvalidExecutionTraceProcessingPlugin>();
+            Execution rootExecution =
+            new Execution(
+                TraceAnalysisTool.systemEntityFactory.getOperationFactory().rootOperation,
+                TraceAnalysisTool.systemEntityFactory.getAllocationFactory().rootAllocationComponent,
+                -1, "-1", -1, -1, -1, -1);
+
+            final AnalysisInstance analysisInstance = new AnalysisInstance();
+            analysisInstance.setLogReader(new FSReader(
+                    TraceAnalysisTool.inputDirs));
+
+            final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
+                    Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
+                    TraceAnalysisTool.systemEntityFactory);
+            analysisInstance.registerPlugin(execRecTransformer);
+
+            final TimestampFilter executionFilterByTimestamp =
+                    new TimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
+                    TraceAnalysisTool.ignoreExecutionsAfterTimestamp);
+            execRecTransformer.getExecutionOutputPort().subscribe(executionFilterByTimestamp.getExecutionInputPort());
+            analysisInstance.registerPlugin(executionFilterByTimestamp);
+
+            final TraceIdFilter executionFilterByTraceId =
+                    new TraceIdFilter(TraceAnalysisTool.selectedTraces);
+            executionFilterByTimestamp.getExecutionOutputPort().subscribe(executionFilterByTraceId.getExecutionInputPort());
+            analysisInstance.registerPlugin(executionFilterByTraceId);
+
+            mtReconstrFilter = new TraceReconstructionPlugin(
+                    Constants.TRACERECONSTR_COMPONENT_NAME,
+                    TraceAnalysisTool.systemEntityFactory,
+                    rootExecution,
+                    TraceAnalysisTool.maxTraceDurationMillis,
+                    TraceAnalysisTool.ignoreInvalidTraces);
+            executionFilterByTraceId.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
+            analysisInstance.registerPlugin(mtReconstrFilter);
+
+            final List<AbstractTraceProcessingPlugin> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingPlugin>();
+
+            final TraceEquivalenceClassFilter traceEquivClassFilter =
+                    new TraceEquivalenceClassFilter(
+                    Constants.TRACEEEQUIVCLASS_COMPONENT_NAME,
+                    systemEntityFactory,
+                    rootExecution,
+                    traceEquivalenceClassMode);
+            mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceEquivClassFilter.getExecutionTraceInputPort());
+            analysisInstance.registerPlugin(traceEquivClassFilter);
+            allTraceProcessingComponents.add(traceEquivClassFilter);
+
             // fill list of msgTraceProcessingComponents:
-            AbstractMessageTraceProcessingPlugin componentPrintMsgTrace = null;
+            MessageTraceWriterPlugin componentPrintMsgTrace = null;
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
                 numRequestedTasks++;
                 componentPrintMsgTrace =
@@ -333,9 +377,11 @@ public class TraceAnalysisTool {
                         Constants.PRINTMSGTRACE_COMPONENT_NAME,
                         TraceAnalysisTool.systemEntityFactory,
                         new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-                msgTraceProcessingComponents.add(componentPrintMsgTrace);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPrintMsgTrace.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPrintMsgTrace);
+                allTraceProcessingComponents.add(componentPrintMsgTrace);
             }
-            AbstractExecutionTraceProcessingPlugin componentPrintExecTrace = null;
+            ExecutionTraceWriterPlugin componentPrintExecTrace = null;
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
                 numRequestedTasks++;
                 componentPrintExecTrace =
@@ -343,9 +389,11 @@ public class TraceAnalysisTool {
                         Constants.PRINTEXECTRACE_COMPONENT_NAME,
                         TraceAnalysisTool.systemEntityFactory,
                         new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-                execTraceProcessingComponents.add(componentPrintExecTrace);
+                mtReconstrFilter.getExecutionTraceOutputPort().subscribe(componentPrintExecTrace.getExecutionTraceInputPort());
+                analysisInstance.registerPlugin(componentPrintExecTrace);
+                allTraceProcessingComponents.add(componentPrintExecTrace);
             }
-            AbstractInvalidExecutionTraceProcessingPlugin componentPrintInvalidTrace = null;
+            InvalidExecutionTraceWriterPlugin componentPrintInvalidTrace = null;
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
                 numRequestedTasks++;
                 componentPrintInvalidTrace =
@@ -353,16 +401,20 @@ public class TraceAnalysisTool {
                         Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME,
                         TraceAnalysisTool.systemEntityFactory,
                         new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.INVALID_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-                invalidExecTraceProcessingComponents.add(componentPrintInvalidTrace);
+                mtReconstrFilter.getInvalidExecutionTraceOutputPort().subscribe(componentPrintInvalidTrace.getInvalidExecutionTraceInputPort());
+                analysisInstance.registerPlugin(componentPrintInvalidTrace);
+                allTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
-            AbstractMessageTraceProcessingPlugin componentPlotSeqDiagr = null;
+            SequenceDiagramPlugin componentPlotSeqDiagr = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTSEQDS)) {
                 numRequestedTasks++;
                 componentPlotSeqDiagr = new SequenceDiagramPlugin(
                         Constants.PLOTSEQDIAGR_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory,
                         new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(), shortLabels);
-                msgTraceProcessingComponents.add(componentPlotSeqDiagr);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotSeqDiagr.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotSeqDiagr);
+                allTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
             ComponentDependencyGraphPlugin componentPlotComponentDepGraph = null;
             if (retVal
@@ -371,7 +423,9 @@ public class TraceAnalysisTool {
                 componentPlotComponentDepGraph =
                         new ComponentDependencyGraphPlugin(
                         Constants.PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory);
-                msgTraceProcessingComponents.add(componentPlotComponentDepGraph);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotComponentDepGraph.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotComponentDepGraph);
+                allTraceProcessingComponents.add(componentPlotComponentDepGraph);
             }
             ContainerDependencyGraphPlugin componentPlotContainerDepGraph = null;
             if (retVal
@@ -379,7 +433,9 @@ public class TraceAnalysisTool {
                 numRequestedTasks++;
                 componentPlotContainerDepGraph =
                         new ContainerDependencyGraphPlugin(Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory);
-                msgTraceProcessingComponents.add(componentPlotContainerDepGraph);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotContainerDepGraph.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotContainerDepGraph);
+                allTraceProcessingComponents.add(componentPlotContainerDepGraph);
             }
             OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
             if (retVal
@@ -387,9 +443,11 @@ public class TraceAnalysisTool {
                 numRequestedTasks++;
                 componentPlotOperationDepGraph =
                         new OperationDependencyGraphPlugin(Constants.PLOTOPERATIONDEPGRAPH_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory);
-                msgTraceProcessingComponents.add(componentPlotOperationDepGraph);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotOperationDepGraph.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotOperationDepGraph);
+                allTraceProcessingComponents.add(componentPlotOperationDepGraph);
             }
-            AbstractMessageTraceProcessingPlugin componentPlotTraceCallTrees = null;
+            TraceCallTreePlugin componentPlotTraceCallTrees = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
                 numRequestedTasks++;
@@ -402,7 +460,9 @@ public class TraceAnalysisTool {
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
                         shortLabels);
-                msgTraceProcessingComponents.add(componentPlotTraceCallTrees);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotTraceCallTrees.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotTraceCallTrees);
+                allTraceProcessingComponents.add(componentPlotTraceCallTrees);
             }
             AggregatedAllocationComponentOperationCallTreePlugin componentPlotAggregatedCallTree = null;
             if (retVal
@@ -413,7 +473,9 @@ public class TraceAnalysisTool {
                         Constants.PLOTAGGREGATEDCALLTREE_COMPONENT_NAME,
                         TraceAnalysisTool.allocationComponentOperationPairFactory,
                         TraceAnalysisTool.systemEntityFactory);
-                msgTraceProcessingComponents.add(componentPlotAggregatedCallTree);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAggregatedCallTree.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotAggregatedCallTree);
+                allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
             }
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
@@ -427,71 +489,11 @@ public class TraceAnalysisTool {
                 return false;
             }
 
-            final List<AbstractTraceProcessingPlugin> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingPlugin>();
-            allTraceProcessingComponents.addAll(msgTraceProcessingComponents);
-            allTraceProcessingComponents.addAll(execTraceProcessingComponents);
-            allTraceProcessingComponents.addAll(invalidExecTraceProcessingComponents);
-            final AnalysisInstance analysisInstance = new AnalysisInstance();
-            analysisInstance.setLogReader(new FSReader(
-                    TraceAnalysisTool.inputDirs));
-            // analysisInstance.setLogReader(new
-            // JMSReader("tcp://localhost:3035/","queue1"));
-
-            TimestampFilter executionFilterByTimestamp =
-                    new TimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
-                    TraceAnalysisTool.ignoreExecutionsAfterTimestamp);
-            TraceIdFilter executionFilterByTraceId =
-                    new TraceIdFilter(TraceAnalysisTool.selectedTraces);
-
-            Execution rootExecution =
-            new Execution(
-                TraceAnalysisTool.systemEntityFactory.getOperationFactory().rootOperation,
-                TraceAnalysisTool.systemEntityFactory.getAllocationFactory().rootAllocationComponent,
-                -1, "-1", -1, -1, -1, -1);
-
-            mtReconstrFilter = new TraceReconstructionPlugin(
-                    Constants.TRACERECONSTR_COMPONENT_NAME,
-                    TraceAnalysisTool.systemEntityFactory,
-                    rootExecution,
-                    TraceAnalysisTool.maxTraceDurationMillis,
-                    TraceAnalysisTool.ignoreInvalidTraces);
-
-            TraceEquivalenceClassFilter traceEquivClassFilter =
-                    new TraceEquivalenceClassFilter(
-                    Constants.TRACEEEQUIVCLASS_COMPONENT_NAME,
-                    systemEntityFactory,
-                    rootExecution,
-                    traceEquivalenceClassMode);
-
-            for (final AbstractMessageTraceProcessingPlugin c : msgTraceProcessingComponents) {
-                mtReconstrFilter.getMessageTraceOutputPort().subscribe(c.getMessageTraceInputPort());
-            }
-            for (final AbstractExecutionTraceProcessingPlugin c : execTraceProcessingComponents) {
-                mtReconstrFilter.getExecutionTraceOutputPort().subscribe(c.getExecutionTraceInputPort());
-            }
-            for (final AbstractInvalidExecutionTraceProcessingPlugin c : invalidExecTraceProcessingComponents) {
-                mtReconstrFilter.getInvalidExecutionTraceOutputPort().subscribe(c.getInvalidExecutionTraceInputPort());
-            }
-
-            final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
-                    Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
-                    TraceAnalysisTool.systemEntityFactory);
-            execRecTransformer.getExecutionOutputPort().subscribe(executionFilterByTimestamp.getExecutionInputPort());
-            executionFilterByTimestamp.getExecutionOutputPort().subscribe(executionFilterByTraceId.getExecutionInputPort());
-            executionFilterByTraceId.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
-            analysisInstance.registerPlugin(execRecTransformer);
-            analysisInstance.registerPlugin(executionFilterByTraceId);
-            analysisInstance.registerPlugin(executionFilterByTimestamp);
-            analysisInstance.registerPlugin(mtReconstrFilter);
-            for (final IAnalysisPlugin c : allTraceProcessingComponents) {
-                analysisInstance.registerPlugin(c);
-            }
-
-
             int numErrorCount = 0;
             try {
                 analysisInstance.run();
 
+                // TODO: move the following code to the plugin's terminate methods.
                 if (componentPlotComponentDepGraph != null) {
                     componentPlotComponentDepGraph.saveToDotFile(
                             new File(
@@ -559,6 +561,7 @@ public class TraceAnalysisTool {
                         traceEquivClassFilter);
             }
 
+            // TODO: turn into plugin with output code in terminate method
             final String systemEntitiesHtmlFn = new File(
                     TraceAnalysisTool.outputDir + File.separator
                     + TraceAnalysisTool.outputFnPrefix
