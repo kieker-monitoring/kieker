@@ -388,7 +388,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
                 this.appendStr(this.prefix.getText(), b);
             }
             if (this.plotSq.isSelected()) {
-                this.appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTSEQDS, b);
+                this.appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS, b);
             }
             if (this.plotComp.isSelected()) {
                 this.appendCmd(

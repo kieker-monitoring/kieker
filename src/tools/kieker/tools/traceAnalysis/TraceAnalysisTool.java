@@ -251,7 +251,8 @@ public class TraceAnalysisTool {
                 val = TraceAnalysisTool.outputFnPrefix;
                 dumpedOp = true;
             } else if (longOpt.equals(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
-                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTSEQDS)
+                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
+                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
@@ -405,16 +406,33 @@ public class TraceAnalysisTool {
                 analysisInstance.registerPlugin(componentPrintInvalidTrace);
                 allTraceProcessingComponents.add(componentPrintInvalidTrace);
             }
-            SequenceDiagramPlugin componentPlotSeqDiagr = null;
+            SequenceDiagramPlugin componentPlotAllocationSeqDiagr = null;
             if (retVal
-                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTSEQDS)) {
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)) {
                 numRequestedTasks++;
-                componentPlotSeqDiagr = new SequenceDiagramPlugin(
-                        Constants.PLOTSEQDIAGR_COMPONENT_NAME, TraceAnalysisTool.systemEntityFactory,
-                        new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(), shortLabels);
-                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotSeqDiagr.getMessageTraceInputPort());
-                analysisInstance.registerPlugin(componentPlotSeqDiagr);
-                allTraceProcessingComponents.add(componentPlotSeqDiagr);
+                componentPlotAllocationSeqDiagr = new SequenceDiagramPlugin(
+                        Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME,
+                        TraceAnalysisTool.systemEntityFactory,
+                        SequenceDiagramPlugin.SDModes.ALLOCATION,
+                        new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(),
+                        shortLabels);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAllocationSeqDiagr.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotAllocationSeqDiagr);
+                allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
+            }
+            SequenceDiagramPlugin componentPlotAssemblySeqDiagr = null;
+            if (retVal
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS)) {
+                numRequestedTasks++;
+                componentPlotAssemblySeqDiagr = new SequenceDiagramPlugin(
+                        Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME,
+                        TraceAnalysisTool.systemEntityFactory,
+                        SequenceDiagramPlugin.SDModes.ASSEMBLY,
+                        new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(),
+                        shortLabels);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblySeqDiagr.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotAssemblySeqDiagr);
+                allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
             }
             ComponentDependencyGraphPluginAllocation componentPlotAllocationComponentDepGraph = null;
             if (retVal

@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.util.TreeSet;
 import java.util.Vector;
 import kieker.analysis.datamodel.AllocationComponent;
+import kieker.analysis.datamodel.AssemblyComponent;
 import kieker.analysis.datamodel.Message;
 import kieker.analysis.datamodel.MessageTrace;
 import kieker.analysis.datamodel.Signature;
@@ -46,9 +47,17 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
     private final String outputFnBase;
     private final boolean shortLabels;
 
+    public enum SDModes {
+
+        ASSEMBLY, ALLOCATION
+    }
+    private final SDModes sdmode;
+
     public SequenceDiagramPlugin(final String name, final SystemModelRepository systemEntityFactory,
+            final SDModes sdmode,
             final String outputFnBase, final boolean shortLabels) {
         super(name, systemEntityFactory);
+        this.sdmode = sdmode;
         this.outputFnBase = outputFnBase;
         this.shortLabels = shortLabels;
     }
@@ -91,7 +100,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                 @Override
                 public void newEvent(MessageTrace mt) {
                     try {
-                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt, outputFnBase + "-"
+                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt, 
+                                sdmode,
+                                outputFnBase + "-"
                                 + mt.getTraceId() + ".pic",
                                 shortLabels);
                         reportSuccess(mt.getTraceId());
@@ -103,7 +114,29 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                 }
             };
 
-    private static String componentLabel(//final SystemEntityFactory systemEntityFactory,
+    private static String assemblyComponentLabel(//final SystemEntityFactory systemEntityFactory,
+            final AssemblyComponent component, final boolean shortLabels) {
+//        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
+//            return "$";
+//        }
+
+//        String resourceContainerName = component.getExecutionContainer().getName();
+        String assemblyComponentName = component.getName();
+        String componentTypePackagePrefx = component.getType().getPackageName();
+        String componentTypeIdentifier = component.getType().getTypeName();
+
+        StringBuilder strBuild = //new StringBuilder(resourceContainerName).append("::").
+                new StringBuilder(assemblyComponentName).append(":");
+        if (!shortLabels) {
+            strBuild.append(componentTypePackagePrefx);
+        } else {
+            strBuild.append("..");
+        }
+        strBuild.append(componentTypeIdentifier);
+        return strBuild.toString();
+    }
+
+    private static String allocationComponentLabel(//final SystemEntityFactory systemEntityFactory,
             final AllocationComponent component, final boolean shortLabels) {
 //        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
 //            return "$";
@@ -126,7 +159,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
     }
 
     private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory,
-            final MessageTrace messageTrace, final PrintStream ps,
+            final MessageTrace messageTrace, final SDModes sdMode, final PrintStream ps,
             final boolean shortLabels) {
         // dot node ID x component instance
         Vector<Message> messages = messageTrace.getSequenceAsVector();
@@ -143,30 +176,65 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
         ps.println("actor(O" + rootAllocationComponent.getId()
                 + ",\"\");");
         plottedComponentIds.add(rootAllocationComponent.getId());
-        for (Message me : messages) {
-            AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
-            AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
-            if (!plottedComponentIds.contains(senderComponent.getId())) {
-                ps.println("object(O" + senderComponent.getId()
-                        + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\"" + componentLabel(senderComponent, shortLabels) + "\");");
-                plottedComponentIds.add(senderComponent.getId());
+
+        if (sdMode == SDModes.ALLOCATION) {
+            for (Message me : messages) {
+                AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
+                AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
+                if (!plottedComponentIds.contains(senderComponent.getId())) {
+                    ps.println("object(O" + senderComponent.getId()
+                            + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\"" + allocationComponentLabel(senderComponent, shortLabels) + "\");");
+                    plottedComponentIds.add(senderComponent.getId());
+                }
+                if (!plottedComponentIds.contains(receiverComponent.getId())) {
+                    ps.println("object(O" + receiverComponent.getId()
+                            + ",\"" + receiverComponent.getExecutionContainer().getName() + "::\",\"" + allocationComponentLabel(receiverComponent, shortLabels) + "\");");
+                    plottedComponentIds.add(receiverComponent.getId());
+                }
             }
-            if (!plottedComponentIds.contains(receiverComponent.getId())) {
-                ps.println("object(O" + receiverComponent.getId()
-                        + ",\"" + receiverComponent.getExecutionContainer().getName() + "::\",\"" + componentLabel(receiverComponent, shortLabels) + "\");");
-                plottedComponentIds.add(receiverComponent.getId());
+        } else if (sdMode == SDModes.ASSEMBLY) {
+            for (Message me : messages) {
+                AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+                AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+                if (!plottedComponentIds.contains(senderComponent.getId())) {
+                    ps.println("object(O" + senderComponent.getId()
+                            + ",\"\",\"" + assemblyComponentLabel(senderComponent, shortLabels) + "\");");
+                    plottedComponentIds.add(senderComponent.getId());
+                }
+                if (!plottedComponentIds.contains(receiverComponent.getId())) {
+                    ps.println("object(O" + receiverComponent.getId()
+                            + ",\"\",\"" + assemblyComponentLabel(receiverComponent, shortLabels) + "\");");
+                    plottedComponentIds.add(receiverComponent.getId());
+                }
             }
+        } else { // needs to be adjusted if a new mode is introduced
+            log.error("Invalid mode: " + sdMode);
         }
+
+
         //ps.println("step()");
         ps.println("step()");
         ps.println("active(" + rootDotId + ");");
         //ps.println("step();");
         boolean first = true;
         for (Message me : messages) {
-            AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
-            AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
-            String senderDotId = "O" + senderComponent.getId();
-            String receiverDotId = "O" + receiverComponent.getId();
+            String senderDotId = "-1";
+            String receiverDotId = "-1";
+
+            if (sdMode == SDModes.ALLOCATION) {
+                AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
+                AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
+                senderDotId = "O" + senderComponent.getId();
+                receiverDotId = "O" + receiverComponent.getId();
+            } else if (sdMode == SDModes.ASSEMBLY) {
+                AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+                AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+                senderDotId = "O" + senderComponent.getId();
+                receiverDotId = "O" + receiverComponent.getId();
+            } else { // needs to be adjusted if a new mode is introduced
+                log.error("Invalid mode: " + sdMode);
+            }
+
             if (me instanceof SynchronousCallMessage) {
                 Signature sig = me.getReceivingExecution().getOperation().getSignature();
                 StringBuilder msgLabel = new StringBuilder(sig.getName());
@@ -216,9 +284,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
     }
 
     public static void writePicForMessageTrace(final SystemModelRepository systemEntityFactory,
-            MessageTrace msgTrace, String outputFilename, final boolean shortLabels) throws FileNotFoundException {
+            MessageTrace msgTrace, final SDModes sdMode, String outputFilename, final boolean shortLabels) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
-        picFromMessageTrace(systemEntityFactory, msgTrace, ps, shortLabels);
+        picFromMessageTrace(systemEntityFactory, msgTrace, sdMode, ps, shortLabels);
         ps.flush();
         ps.close();
     }
