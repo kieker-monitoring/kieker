@@ -514,7 +514,10 @@ public class TraceAnalysisTool {
             }
 
             if (numRequestedTasks == 0) {
+                System.err.println("");
                 System.err.println("No task requested");
+                log.warn("No task requested");
+                System.err.println("");
                 TraceAnalysisTool.printUsage();
                 return false;
             }
@@ -584,7 +587,7 @@ public class TraceAnalysisTool {
             TraceAnalysisTool.log.error("Exception", ex);
             retVal = false;
         } finally {
-            if (mtReconstrFilter != null) {
+            if (mtReconstrFilter != null && numRequestedTasks > 0) {
                 mtReconstrFilter.printStatusMessage();
             }
             System.out.println("");

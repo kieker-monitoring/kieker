@@ -64,17 +64,17 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
     private void newExecutionTrace(ExecutionTrace et) {
         try {
-            if (this.equivalenceMode != TraceEquivalenceClassModes.DISABLED) {
+            if (this.equivalenceMode == TraceEquivalenceClassModes.DISABLED) {
                 this.executionTraceOutputPort.deliver(et);
                 this.messageTraceOutputPort.deliver(et.toMessageTrace(this.rootExecution));
-            } else {
+            } else { // mode is ASSEMBLY or ALLOCATION
                 final AbstractExecutionTraceHashContainer polledTraceHashContainer;
                 if (equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY){
                     polledTraceHashContainer = new ExecutionTraceHashContainerAssemblyEquivalence(et);
                 } else if (equivalenceMode == TraceEquivalenceClassModes.ALLOCATION){
                     polledTraceHashContainer = new ExecutionTraceHashContainerAllocationEquivalence(et);
-                } else {
-                    log.error("Invalid trace equivalence mode" + equivalenceMode);
+                } else { // just to make sure
+                    log.error("Invalid trace equivalence mode: " + equivalenceMode);
                     reportError(et.getTraceId());
                     return;
                 }
