@@ -42,6 +42,15 @@ public class AssemblyRepository extends AbstractSystemSubRepository{
         this.rootAssemblyComponent = rootAssemblyComponent;
     }
 
+   /**
+    * Returns the instance for the passed ID; null if no instance
+     *  with this ID.
+     */
+    public final AssemblyComponent getAssemblyComponentById(
+            final int containerId){
+        return this.assemblyComponentInstancesById.get(containerId);
+    }
+
     /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */

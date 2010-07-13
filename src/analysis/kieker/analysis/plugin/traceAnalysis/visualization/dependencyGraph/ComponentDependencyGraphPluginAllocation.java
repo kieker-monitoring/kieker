@@ -41,16 +41,16 @@ import kieker.analysis.plugin.util.dot.DotFactory;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-public class ComponentDependencyGraphPlugin extends AbstractDependencyGraphPlugin<AllocationComponent> {
+public class ComponentDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponent> {
 
-    private static final Log log = LogFactory.getLog(ComponentDependencyGraphPlugin.class);
+    private static final Log log = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
     private final String CONTAINER_NODE_ID_PREFIX = "container";
     private final File dotOutputFile;
     private final boolean includeWeights;
     private final boolean shortLabels;
     private final boolean includeSelfLoops;
 
-    public ComponentDependencyGraphPlugin(
+    public ComponentDependencyGraphPluginAllocation(
             final String name,
             final SystemModelRepository systemEntityFactory,
             final File dotOutputFile,

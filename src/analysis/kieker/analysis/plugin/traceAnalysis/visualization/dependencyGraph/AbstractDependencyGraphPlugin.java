@@ -37,8 +37,9 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
     private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
     protected final DependencyGraph<T> dependencyGraph;
 
-    public static final String STEREOTYPE_EXECUTION_CONTAINER="<<node>>";
-    public static final String STEREOTYPE_ALLOCATION_COMPONENT="<<component>>";
+    public static final String STEREOTYPE_EXECUTION_CONTAINER="<<execution container>>";
+    public static final String STEREOTYPE_ASSEMBLY_COMPONENT="<<assembly component>>";
+    public static final String STEREOTYPE_ALLOCATION_COMPONENT="<<allocation component>>";
 
     private static final String NODE_PREFIX="depNode_";
 

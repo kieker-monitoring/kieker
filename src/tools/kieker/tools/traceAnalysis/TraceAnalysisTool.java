@@ -51,9 +51,11 @@ import kieker.analysis.plugin.traceAnalysis.traceWriter.InvalidExecutionTraceWri
 import kieker.analysis.plugin.traceAnalysis.traceWriter.MessageTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.TraceCallTreePlugin;
-import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPluginAllocation;
+import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPluginAssembly;
 import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ContainerDependencyGraphPlugin;
-import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.OperationDependencyGraphPlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.OperationDependencyGraphPluginAllocation;
+import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.OperationDependencyGraphPluginAssembly;
 import kieker.analysis.plugin.traceAnalysis.visualization.sequenceDiagram.SequenceDiagramPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 
@@ -251,8 +253,10 @@ public class TraceAnalysisTool {
             } else if (longOpt.equals(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTSEQDS)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG)
+                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)
+                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)
@@ -412,12 +416,12 @@ public class TraceAnalysisTool {
                 analysisInstance.registerPlugin(componentPlotSeqDiagr);
                 allTraceProcessingComponents.add(componentPlotSeqDiagr);
             }
-            ComponentDependencyGraphPlugin componentPlotComponentDepGraph = null;
+            ComponentDependencyGraphPluginAllocation componentPlotComponentDepGraph = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG)) {
                 numRequestedTasks++;
                 componentPlotComponentDepGraph =
-                        new ComponentDependencyGraphPlugin(
+                        new ComponentDependencyGraphPluginAllocation(
                         Constants.PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME,
                         TraceAnalysisTool.systemEntityFactory,
                         new File(
@@ -431,6 +435,26 @@ public class TraceAnalysisTool {
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotComponentDepGraph.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotComponentDepGraph);
                 allTraceProcessingComponents.add(componentPlotComponentDepGraph);
+            }
+            ComponentDependencyGraphPluginAssembly componentPlotAssemblyComponentDepGraph = null;
+            if (retVal
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG)) {
+                numRequestedTasks++;
+                componentPlotAssemblyComponentDepGraph =
+                        new ComponentDependencyGraphPluginAssembly(
+                        Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME,
+                        TraceAnalysisTool.systemEntityFactory,
+                        new File(
+                        TraceAnalysisTool.outputDir
+                        + File.separator
+                        + TraceAnalysisTool.outputFnPrefix
+                        + Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX),
+                        true, // includeWeights,
+                        shortLabels,
+                        includeSelfLoops);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblyComponentDepGraph.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotAssemblyComponentDepGraph);
+                allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
             }
             ContainerDependencyGraphPlugin componentPlotContainerDepGraph = null;
             if (retVal
@@ -452,12 +476,12 @@ public class TraceAnalysisTool {
                 analysisInstance.registerPlugin(componentPlotContainerDepGraph);
                 allTraceProcessingComponents.add(componentPlotContainerDepGraph);
             }
-            OperationDependencyGraphPlugin componentPlotOperationDepGraph = null;
+            OperationDependencyGraphPluginAllocation componentPlotOperationDepGraph = null;
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)) {
                 numRequestedTasks++;
                 componentPlotOperationDepGraph =
-                        new OperationDependencyGraphPlugin(
+                        new OperationDependencyGraphPluginAllocation(
                         Constants.PLOTOPERATIONDEPGRAPH_COMPONENT_NAME,
                         TraceAnalysisTool.systemEntityFactory,
                         new File(
@@ -471,6 +495,26 @@ public class TraceAnalysisTool {
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotOperationDepGraph.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotOperationDepGraph);
                 allTraceProcessingComponents.add(componentPlotOperationDepGraph);
+            }
+            OperationDependencyGraphPluginAssembly componentPlotAssemblyOperationDepGraph = null;
+            if (retVal
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG)) {
+                numRequestedTasks++;
+                componentPlotAssemblyOperationDepGraph =
+                        new OperationDependencyGraphPluginAssembly(
+                        Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME,
+                        TraceAnalysisTool.systemEntityFactory,
+                        new File(
+                        TraceAnalysisTool.outputDir
+                        + File.separator
+                        + TraceAnalysisTool.outputFnPrefix
+                        + Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX),
+                        true, // includeWeights,
+                        shortLabels,
+                        includeSelfLoops);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblyOperationDepGraph.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotAssemblyOperationDepGraph);
+                allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
             }
             TraceCallTreePlugin componentPlotTraceCallTrees = null;
             if (retVal
