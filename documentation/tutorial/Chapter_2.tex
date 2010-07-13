@@ -37,6 +37,23 @@
 	  % If the Path to the examples changes, then they have to be changed here AS WELL!!
       \lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
 
+	  % Due to this package we have to write the important part manually...
+	  \begin{lstlisting}[caption=BookstoreStarter.java]
+		package mySimpleKiekerExampleManual;
+
+		import kieker.analysis.plugin.MonitoringRecordConsumerException;
+		import kieker.analysis.reader.MonitoringLogReaderException;
+
+		public class BookstoreStarter {
+			public static void main(String[] args) throws MonitoringLogReaderException,
+				MonitoringRecordConsumerException {
+				/* Start the monitoring */
+				Bookstore.startBookstoreRequests();
+			}
+
+		}
+	  \end{lstlisting}
+	  
       \lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
 
       \lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
@@ -50,42 +67,51 @@
       In Listing \ref{listing:cuttingBookstore} can be seen, how the monitoring itself is done. We remember the time before and after a specific method call (in this case: \textit{searchBook()}). These informations are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{image:operationexecutionrecordclassdiagram}.
 	  
 	  % This figure contains the short class diagram of the operation execution record.
-	  \begin{figure}[H]
-		\begin{center}
-		%\includegraphics[width=1.0\textwidth]{}
-		\caption{The class diagram of the operation execution record}
-		\label{image:operationexecutionrecordclassdiagram}
-      \end{center}
-    \end{figure}
+		\begin{figure}[H]
+			\begin{center}
+				%\includegraphics[width=1.0\textwidth]{}
+				\caption{The class diagram of the operation execution record}
+				\label{image:operationexecutionrecordclassdiagram}
+			\end{center}
+		\end{figure}
 	  
-	The important attributes are:
-	\begin{itemize}
-		\item The component (the class) in which the called method is.
-		\item The called method.
-		\item The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
-		\item The time before the sourcecode which should be measured.
-		\item The time after the sourcecode which should be measured.
-    \end{itemize}
-      
-      Once the writing is done, we should be able to compile and execute the sourcecode:
-      % We need something like the ouput from the bash.
-      \setBashListing
-      % Note: A little bit long...and the name of the libaries have to be changed manually.
-      \begin{lstlisting}
-	nils@Laptop:~/example$ javac ./src/mySimpleKiekerExample/bookstoreTracing/Bookstore.java ./src/mySimpleKiekerExample/bookstoreTracing/Catalog.java ./src/mySimpleKiekerExample/bookstoreTracing/CRM.java -classpath ./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar -d build/
-	nils@Laptop:~/example$ java -Dlog4j.configuration=META-INF/log4j.properties -classpath ./build/:./lib/kieker-monitoring-1.5-trunk_ctrl.jar:./lib/commons-logging-1.1.1.jar mySimpleKiekerExample.bookstoreTracing.Bookstore
-      \end{lstlisting}
-      If everything worked correctly, there should now be a new directory named ``tpmon-20100605-115948636-UTC'' (just with other numbers) in the default temporary directory (under Linux this should be ``/tmp''). In this directory, there should be a file with the extension ``.dat'' with a content similar to the following:
-      % Note: We don't have a suitable listing for 'plain' text. We use the bash listing for the moment.
-      \begin{lstlisting}
-	$1;1275745883934593403;-1;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(false);sessionID;0;1275745883931011663;1275745883933424540;vnName;1;1
-	$1;1275745883937096236;-1;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(false);sessionID;0;1275745883935003302;1275745883937075214;vnName;3;2
-	$1;1275745883937119354;-1;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();sessionID;0;1275745883934661568;1275745883937111043;vnName;2;1
-	$1;1275745883937128922;-1;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();sessionID;0;1275745883931007961;1275745883937123824;vnName;0;0 
-      \end{lstlisting}
-      These are the recorded informations from our source code. This data can now be visualized with the help of \Kieker.
+		The important attributes are:
+		\begin{itemize}
+			\item The component (the class) in which the called method is.
+			\item The called method.
+			\item The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
+			\item The time before the sourcecode which should be measured.
+			\item The time after the sourcecode which should be measured.
+		\end{itemize}
+		  
+		The sourcecode should now be compilable and executable:
+		
+		% We need something like the ouput from the bash.
+		
+		\setBashListing
+		% Note: This is different under Windows and Linux!!
+		% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!!
+		% We cannot put a latex-macro within the listing!
+		\begin{lstlisting}
+			nils@Laptop:~/example$ javac src/mySimpleKiekerExampleManual/*.java\
+			-classpath\
+			./lib/kieker-common-1.5-trunk.jar:\
+			./lib/kieker-monitoring-1.5-trunk.jar:\
+			-d build
 
-\section{Analysis}
+			nils@Laptop:~/example$ java -Dlog4j.configuration=$<$KIEKER-DIR$>$/META-INF/log4j.properties\
+			-classpath\
+			./build/:\
+			./lib/kieker-common-1.5-trunk.jar:\
+			./lib/kieker-monitoring-1.5-trunk.jar:\
+			./lib/commons-logging-1.1.1.jar\
+			mySimpleKiekerExampleManual.BookstoreStarter
+		\end{lstlisting}
+		If the sourcecode should be compiled and executed under Windows, the paths have do be sepereated with semicolons instead of colons. Furthermore it is not possible to wrap the single parts of the commands with a backslash.\\
+		If everything worked correctly, there should now be a new directory named ``tpmon-20100605-115948636-UTC'' (just with other numbers) in the default temporary directory (under Linux this should be ``/tmp''; under Windows ``C:/temp''). In this directory, there should be a file with the extension ``.dat'' which contains the recorded informations from the source code. A possible content of this file can be found in the appendix of this tutorial.\\
+		Now we take a closer look at the analysis.
+
+	\section{Analysis}
       % Here we go...we have to inform the user of the programs he need for the converting. And that means as well, that a window user cannot do this part.
       For the visualization via \Kieker\ we need the both tools graphviz (\url{www.graphviz.org/}) and plotutils (\url{www.gnu.org/software/plotutils/}).\\
       Assume that we already have our recorded informations saved in a ``.dat''-file somewhere for example in the ``tmp``-directory, we can now start with converting these informations into graphs. For the first, we change into our \Kieker\-directory ($\sim$/kieker). It is recommended to create a new directory for the graphs first:
