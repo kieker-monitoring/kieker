@@ -423,18 +423,18 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
                         Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES, b);
             }
             if (this.printEquiv.isSelected()) {
-                this.appendCmd(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT, b);
+                this.appendCmd(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT, b);
             }
-            if (this.allocation.isSelected()) {
-                this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
-                this.appendStr(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION,
-                        b);
-            } else if (this.assembly.isSelected()) {
-                this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
-                this.appendStr(
-                        Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY,
-                        b);
-            }
+//            if (this.allocation.isSelected()) {
+//                this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
+//                this.appendStr(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION,
+//                        b);
+//            } else if (this.assembly.isSelected()) {
+//                this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
+//                this.appendStr(
+//                        Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY,
+//                        b);
+//            }
             if (this.traces.getText().matches("\\d")) {
                 this.appendCmd(Constants.CMD_OPT_NAME_SELECTTRACES, b);
                 this.appendStr(this.traces.getText(), b);

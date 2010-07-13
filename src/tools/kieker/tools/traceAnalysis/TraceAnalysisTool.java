@@ -96,7 +96,7 @@ public class TraceAnalysisTool {
     private static String outputDir = null;
     private static String outputFnPrefix = null;
     private static TreeSet<Long> selectedTraces = null; // null means select all
-    private static TraceEquivalenceClassModes traceEquivalenceClassMode = TraceEquivalenceClassModes.DISABLED;
+    //private static TraceEquivalenceClassModes traceEquivalenceClassMode = TraceEquivalenceClassModes.DISABLED;
     private static boolean shortLabels = true;
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
@@ -159,23 +159,23 @@ public class TraceAnalysisTool {
         TraceAnalysisTool.shortLabels = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
         TraceAnalysisTool.ignoreInvalidTraces = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 
-        final String traceEquivClassModeStr = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE,
-                null);
-        if (traceEquivClassModeStr == null
-                || traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED)) {
-            TraceAnalysisTool.traceEquivalenceClassMode = TraceEquivalenceClassModes.DISABLED;
-        } else {
-            if (traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION)) {
-                TraceAnalysisTool.traceEquivalenceClassMode = TraceEquivalenceClassModes.ALLOCATION;
-            } else if (traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY)) {
-                TraceAnalysisTool.traceEquivalenceClassMode = TraceEquivalenceClassModes.ASSEMBLY;
-            } else {
-                TraceAnalysisTool.log.error("Invalid value for property "
-                        + Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE + ":"
-                        + traceEquivClassModeStr);
-                return false;
-            }
-        }
+        //final String traceEquivClassModeStr = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE,
+        //        null);
+        //if (traceEquivClassModeStr == null
+        //        || traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED)) {
+        //    TraceAnalysisTool.traceEquivalenceClassMode = TraceEquivalenceClassModes.DISABLED;
+        //} else {
+        //    if (traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION)) {
+        //        TraceAnalysisTool.traceEquivalenceClassMode = TraceEquivalenceClassModes.ALLOCATION;
+        //    } else if (traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY)) {
+        //        TraceAnalysisTool.traceEquivalenceClassMode = TraceEquivalenceClassModes.ASSEMBLY;
+        //    } else {
+        //        TraceAnalysisTool.log.error("Invalid value for property "
+        //                + Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE + ":"
+        //                + traceEquivClassModeStr);
+        //        return false;
+        //    }
+        //}
 
         final String maxTraceDurationStr = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
                 TraceAnalysisTool.maxTraceDurationMillis + "");
@@ -250,7 +250,8 @@ public class TraceAnalysisTool {
             } else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
                 val = TraceAnalysisTool.outputFnPrefix;
                 dumpedOp = true;
-            } else if (longOpt.equals(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)
+            } else if (longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
+                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
@@ -274,15 +275,15 @@ public class TraceAnalysisTool {
                 }
 
                 dumpedOp = true;
-            } else if (longOpt.equals(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE)) {
-                if (TraceAnalysisTool.traceEquivalenceClassMode == TraceEquivalenceClassModes.ALLOCATION) {
-                    val = Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION;
-                } else if (TraceAnalysisTool.traceEquivalenceClassMode == TraceEquivalenceClassModes.ASSEMBLY) {
-                    val = Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY;
-                } else if (TraceAnalysisTool.traceEquivalenceClassMode == TraceEquivalenceClassModes.DISABLED) {
-                    val = Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED;
-                }
-                dumpedOp = true;
+                //} else if (longOpt.equals(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE)) {
+                //    if (TraceAnalysisTool.traceEquivalenceClassMode == TraceEquivalenceClassModes.ALLOCATION) {
+                //        val = Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION;
+                //    } else if (TraceAnalysisTool.traceEquivalenceClassMode == TraceEquivalenceClassModes.ASSEMBLY) {
+                //        val = Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY;
+                //    } else if (TraceAnalysisTool.traceEquivalenceClassMode == TraceEquivalenceClassModes.DISABLED) {
+                //        val = Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED;
+                //    }
+                //    dumpedOp = true;
             } else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
                 val = TraceAnalysisTool.shortLabels ? "true" : "false";
                 dumpedOp = true;
@@ -359,15 +360,25 @@ public class TraceAnalysisTool {
 
             final List<AbstractTraceProcessingPlugin> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingPlugin>();
 
-            final TraceEquivalenceClassFilter traceEquivClassFilter =
+            final TraceEquivalenceClassFilter traceAllocationEquivClassFilter =
                     new TraceEquivalenceClassFilter(
-                    Constants.TRACEEEQUIVCLASS_COMPONENT_NAME,
+                    Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME,
                     systemEntityFactory,
                     rootExecution,
-                    traceEquivalenceClassMode);
-            mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceEquivClassFilter.getExecutionTraceInputPort());
-            analysisInstance.registerPlugin(traceEquivClassFilter);
-            allTraceProcessingComponents.add(traceEquivClassFilter);
+                    TraceEquivalenceClassModes.ALLOCATION);
+            mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAllocationEquivClassFilter.getExecutionTraceInputPort());
+            analysisInstance.registerPlugin(traceAllocationEquivClassFilter);
+            allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
+
+            final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter =
+                    new TraceEquivalenceClassFilter(
+                    Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME,
+                    systemEntityFactory,
+                    rootExecution,
+                    TraceEquivalenceClassModes.ASSEMBLY);
+            mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAssemblyEquivClassFilter.getExecutionTraceInputPort());
+            analysisInstance.registerPlugin(traceAssemblyEquivClassFilter);
+            allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
 
             // fill list of msgTraceProcessingComponents:
             MessageTraceWriterPlugin componentPrintMsgTrace = null;
@@ -570,7 +581,7 @@ public class TraceAnalysisTool {
                 allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
             }
             if (retVal
-                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
                 numRequestedTasks++;
                 // the actual execution of the task is performed below
             }
@@ -606,11 +617,19 @@ public class TraceAnalysisTool {
             }
 
             if (retVal
-                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_EQUIVCLASSREPORT)) {
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
                 retVal = TraceAnalysisTool.writeTraceEquivalenceReport(
                         TraceAnalysisTool.outputDir + File.separator
-                        + TraceAnalysisTool.outputFnPrefix,
-                        traceEquivClassFilter);
+                        + TraceAnalysisTool.outputFnPrefix + Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + ".txt",
+                        traceAllocationEquivClassFilter);
+            }
+
+           if (retVal
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
+                retVal = TraceAnalysisTool.writeTraceEquivalenceReport(
+                        TraceAnalysisTool.outputDir + File.separator
+                        + TraceAnalysisTool.outputFnPrefix + Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + ".txt",
+                        traceAssemblyEquivClassFilter);
             }
 
             // TODO: turn into plugin with output code in terminate(..) method
@@ -682,8 +701,7 @@ public class TraceAnalysisTool {
             final String outputFnPrefix, final TraceEquivalenceClassFilter traceEquivFilter)
             throws IOException {
         boolean retVal = true;
-        final String outputFn = new File(outputFnPrefix
-                + Constants.TRACE_EQUIV_CLASSES_FN_PREFIX + ".txt").getCanonicalPath();
+        final String outputFn = new File(outputFnPrefix).getCanonicalPath();
         PrintStream ps = null;
         try {
             ps = new PrintStream(new FileOutputStream(outputFn));
@@ -713,6 +731,7 @@ public class TraceAnalysisTool {
 
         return retVal;
     }
+
 //    private static boolean task_initBasicJmsReader(final String jmsProviderUrl,
 //            final String jmsDestination) throws IOException,
 //            MonitoringLogReaderException, MonitoringRecordConsumerException {
