@@ -392,7 +392,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
             }
             if (this.plotComp.isSelected()) {
                 this.appendCmd(
-                        Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG,
+                        Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG,
                         b);
             }
             if (this.plotCont.isSelected()) {
@@ -402,7 +402,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
             }
             if (this.plotOp.isSelected()) {
                 this.appendCmd(
-                        Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG,
+                        Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG,
                         b);
             }
             if (this.plotAgg.isSelected()) {

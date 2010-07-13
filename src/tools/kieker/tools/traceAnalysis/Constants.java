@@ -24,10 +24,10 @@ public class Constants {
     public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
     public static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
     public static final String CMD_OPT_NAME_TASK_PLOTSEQDS = "plot-Sequence-Diagrams";
-    public static final String CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG = "plot-Component-Dependency-Graph";
+    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG = "plot-Allocation-Component-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG = "plot-Assembly-Component-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG = "plot-Container-Dependency-Graph";
-    public static final String CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG = "plot-Operation-Dependency-Graph";
+    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG = "plot-Allocation-Operation-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG = "plot-Assembly-Operation-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE = "plot-Aggregated-Call-Tree";
     public static final String CMD_OPT_NAME_TASK_PLOTCALLTREES = "plot-Call-Trees";
@@ -39,10 +39,10 @@ public class Constants {
     public static final String CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE = "ignore-executions-before-date";
     public static final String CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE = "ignore-executions-after-date";
     public static final String SEQUENCE_DIAGRAM_FN_PREFIX = "sequenceDiagram";
-    public static final String COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "componentDependencyGraph";
+    public static final String ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "allocationComponentDependencyGraph";
     public static final String ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyComponentDependencyGraph";
     public static final String CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX = "containerDependencyGraph";
-    public static final String OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "operationDependencyGraph";
+    public static final String ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "allocationOperationDependencyGraph";
     public static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyOperationDependencyGraph";
     public static final String AGGREGATED_CALL_TREE_FN_PREFIX = "aggregatedCallTree";
     public static final String CALL_TREE_FN_PREFIX = "callTree";
@@ -60,10 +60,10 @@ public class Constants {
     public static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
     public static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
     public static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-    public static final String PLOTCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph";
-    public static final String PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME = "component dependency graph (assembly level)";
+    public static final String PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph (allocation level)";
+    public static final String PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph (assembly level)";
     public static final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
-    public static final String PLOTOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph";
+    public static final String PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (allocation level)";
     public static final String PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (assembly level)";
     public static final String PLOTSEQDIAGR_COMPONENT_NAME = "Sequence diagrams";
     public static final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
@@ -90,7 +90,7 @@ public class Constants {
                 Constants.CMD_OPT_NAME_TASK_PLOTSEQDS).hasArg(false).withDescription(
                 "Generate and store sequence diagrams (.pic files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTCOMPONENTDEPG).hasArg(false).withDescription(
+                Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG).hasArg(false).withDescription(
                 "Generate and store an allocation-level component dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG).hasArg(false).withDescription(
@@ -99,7 +99,7 @@ public class Constants {
                 Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG).hasArg(false).withDescription(
                 "Generate and store a container dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTOPERATIONDEPG).hasArg(false).withDescription(
+                Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG).hasArg(false).withDescription(
                 "Generate and store an allocation-level operation dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG).hasArg(false).withDescription(
