@@ -38,6 +38,7 @@ import kieker.analysis.AnalysisInstance;
 import kieker.analysis.datamodel.Execution;
 import kieker.analysis.datamodel.ExecutionTrace;
 import kieker.analysis.datamodel.repository.AllocationComponentOperationPairFactory;
+import kieker.analysis.datamodel.repository.AssemblyComponentOperationPairFactory;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TraceIdFilter;
@@ -50,6 +51,7 @@ import kieker.analysis.plugin.traceAnalysis.traceWriter.ExecutionTraceWriterPlug
 import kieker.analysis.plugin.traceAnalysis.traceWriter.InvalidExecutionTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceWriter.MessageTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
+import kieker.analysis.plugin.traceAnalysis.visualization.callTree.AggregatedAssemblyComponentOperationCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.callTree.TraceCallTreePlugin;
 import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPluginAllocation;
 import kieker.analysis.plugin.traceAnalysis.visualization.dependencyGraph.ComponentDependencyGraphPluginAssembly;
@@ -89,6 +91,8 @@ public class TraceAnalysisTool {
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
     private static final SystemModelRepository systemEntityFactory = new SystemModelRepository();
     private static final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory = new AllocationComponentOperationPairFactory(
+            TraceAnalysisTool.systemEntityFactory);
+    private static final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory = new AssemblyComponentOperationPairFactory(
             TraceAnalysisTool.systemEntityFactory);
     private static CommandLine cmdl = null;
     private static final CommandLineParser cmdlParser = new BasicParser();
@@ -259,7 +263,8 @@ public class TraceAnalysisTool {
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
-                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)
+                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)
+                    || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)
                     || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
@@ -366,9 +371,13 @@ public class TraceAnalysisTool {
                     systemEntityFactory,
                     rootExecution,
                     TraceEquivalenceClassModes.ALLOCATION);
-            mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAllocationEquivClassFilter.getExecutionTraceInputPort());
-            analysisInstance.registerPlugin(traceAllocationEquivClassFilter);
-            allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
+            if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
+                /** Currently, this filter is only used to print  an equivalence report.
+                 *  That's why we only activate it in case this options is requested. */
+                mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAllocationEquivClassFilter.getExecutionTraceInputPort());
+                analysisInstance.registerPlugin(traceAllocationEquivClassFilter);
+                allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
+            }
 
             final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter =
                     new TraceEquivalenceClassFilter(
@@ -376,9 +385,13 @@ public class TraceAnalysisTool {
                     systemEntityFactory,
                     rootExecution,
                     TraceEquivalenceClassModes.ASSEMBLY);
-            mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAssemblyEquivClassFilter.getExecutionTraceInputPort());
-            analysisInstance.registerPlugin(traceAssemblyEquivClassFilter);
-            allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
+            if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
+                /** Currently, this filter is only used to print  an equivalence report.
+                 *  That's why we only activate it in case this options is requested. */
+                mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAssemblyEquivClassFilter.getExecutionTraceInputPort());
+                analysisInstance.registerPlugin(traceAssemblyEquivClassFilter);
+                allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
+            }
 
             // fill list of msgTraceProcessingComponents:
             MessageTraceWriterPlugin componentPrintMsgTrace = null;
@@ -564,21 +577,39 @@ public class TraceAnalysisTool {
             }
             AggregatedAllocationComponentOperationCallTreePlugin componentPlotAggregatedCallTree = null;
             if (retVal
-                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE)) {
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)) {
                 numRequestedTasks++;
                 componentPlotAggregatedCallTree =
                         new AggregatedAllocationComponentOperationCallTreePlugin(
-                        Constants.PLOTAGGREGATEDCALLTREE_COMPONENT_NAME,
+                        Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME,
                         TraceAnalysisTool.allocationComponentOperationPairFactory,
                         TraceAnalysisTool.systemEntityFactory,
                         new File(
                         TraceAnalysisTool.outputDir + File.separator
                         + TraceAnalysisTool.outputFnPrefix
-                        + Constants.AGGREGATED_CALL_TREE_FN_PREFIX),
+                        + Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX),
                         true, shortLabels);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAggregatedCallTree.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAggregatedCallTree);
                 allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
+            }
+            AggregatedAssemblyComponentOperationCallTreePlugin componentPlotAssemblyCallTree = null;
+            if (retVal
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)) {
+                numRequestedTasks++;
+                componentPlotAssemblyCallTree =
+                        new AggregatedAssemblyComponentOperationCallTreePlugin(
+                        Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME,
+                        TraceAnalysisTool.assemblyComponentOperationPairFactory,
+                        TraceAnalysisTool.systemEntityFactory,
+                        new File(
+                        TraceAnalysisTool.outputDir + File.separator
+                        + TraceAnalysisTool.outputFnPrefix
+                        + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX),
+                        true, shortLabels);
+                mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblyCallTree.getMessageTraceInputPort());
+                analysisInstance.registerPlugin(componentPlotAssemblyCallTree);
+                allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
             }
             if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
@@ -624,7 +655,7 @@ public class TraceAnalysisTool {
                         traceAllocationEquivClassFilter);
             }
 
-           if (retVal
+            if (retVal
                     && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
                 retVal = TraceAnalysisTool.writeTraceEquivalenceReport(
                         TraceAnalysisTool.outputDir + File.separator
@@ -731,7 +762,6 @@ public class TraceAnalysisTool {
 
         return retVal;
     }
-
 //    private static boolean task_initBasicJmsReader(final String jmsProviderUrl,
 //            final String jmsDestination) throws IOException,
 //            MonitoringLogReaderException, MonitoringRecordConsumerException {

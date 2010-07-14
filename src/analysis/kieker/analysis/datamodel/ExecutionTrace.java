@@ -89,7 +89,7 @@ public class ExecutionTrace extends Trace {
     /**
      * Returns the message trace representation for this trace.
      * The transformation to a message trace is only computed during the
-     * first execution od this method. After this, the stored reference
+     * first execution of this method. After this, the stored reference
      * is returned.
      */
     public synchronized MessageTrace toMessageTrace(final Execution rootExecution)
@@ -142,10 +142,16 @@ public class ExecutionTrace extends Trace {
                 Message m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
                 mSeq.add(m);
                 curStack.push(m);
-            } else if (prevE.getEss() < curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
+            } else if (prevE.getEss()+1 == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
                 Message m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
                 mSeq.add(m);
                 curStack.push(m);
+            } else if (prevE.getEss() < curE.getEss()){ // detect ess incrementation by > 1
+                InvalidTraceException ex =
+                        new InvalidTraceException("Ess are only allowed to increment by 1 --"
+                        + "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
+                log.fatal("Found invalid trace", ex);
+                throw ex;
             }
             if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
                 Execution curReturnReceiver; // receiverComponentName of return message

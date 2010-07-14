@@ -117,8 +117,9 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
         return strBuild.toString();
     }
 
+    @SuppressWarnings("unchecked") // javac reports unchecked casts
     protected static final String nodeLabel(
-            final AbstractCallTreeNode node, final boolean shortLabels) {
+            final AbstractCallTreeNode<?> node, final boolean shortLabels) {
         if (node.getEntity() instanceof AllocationComponentOperationPair) {
             return allocationComponentOperationPairNodeLabel((AbstractCallTreeNode<AllocationComponentOperationPair>)node, shortLabels);
         } else if (node.getEntity() instanceof AssemblyComponentOperationPair) {

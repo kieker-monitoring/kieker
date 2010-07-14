@@ -30,7 +30,8 @@ public class Constants {
     public static final String CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG = "plot-Container-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG = "plot-Allocation-Operation-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG = "plot-Assembly-Operation-Dependency-Graph";
-    public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE = "plot-Aggregated-Call-Tree";
+    public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE = "plot-Aggregated-Allocation-Call-Tree";
+    public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE = "plot-Aggregated-Assembly-Call-Tree";
     public static final String CMD_OPT_NAME_TASK_PLOTCALLTREES = "plot-Call-Trees";
     public static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
     public static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
@@ -47,7 +48,8 @@ public class Constants {
     public static final String CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX = "containerDependencyGraph";
     public static final String ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "allocationOperationDependencyGraph";
     public static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyOperationDependencyGraph";
-    public static final String AGGREGATED_CALL_TREE_FN_PREFIX = "aggregatedCallTree";
+    public static final String AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX = "aggregatedAllocationCallTree";
+    public static final String AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX = "aggregatedAssemblyCallTree";
     public static final String CALL_TREE_FN_PREFIX = "callTree";
     public static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
     public static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
@@ -72,7 +74,8 @@ public class Constants {
     public static final String PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (assembly level)";
     public static final String PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME = "Sequence diagrams (allocation level)";
     public static final String PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME = "Sequence diagrams (assembly level)";
-    public static final String PLOTAGGREGATEDCALLTREE_COMPONENT_NAME = "Aggregated call tree";
+    public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (allocation level)";
+    public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
     public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
     public static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
     public static final Options CMDL_OPTIONS = new Options();
@@ -114,9 +117,13 @@ public class Constants {
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG).hasArg(false).withDescription(
                 "Generate and store an assembly-level operation dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
-                Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE).hasArg(
+                Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE).hasArg(
                 false).withDescription(
-                "Generate and store an aggregated call tree (.dot files)").create());
+                "Generate and store an aggregated allocation-level call tree (.dot files)").create());
+        SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
+                Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE).hasArg(
+                false).withDescription(
+                "Generate and store an aggregated assembly-level call tree (.dot files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES).hasArg(false).withDescription(
                 "Generate and store call trees for the selected traces (.dot files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false).withDescription(

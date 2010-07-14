@@ -407,7 +407,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
             }
             if (this.plotAgg.isSelected()) {
                 this.appendCmd(
-                        Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDCALLTREE, b);
+                        Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE, b);
             }
             if (this.plotCall.isSelected()) {
                 this.appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES, b);
