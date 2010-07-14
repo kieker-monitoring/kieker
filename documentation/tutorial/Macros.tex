@@ -1,42 +1,45 @@
-% If the name ``Kieker'' (or the design of the name in the tutorial) should be replaced sometime.
+% The name of Kieker, just for the case that the design of this should change.
 \newcommand{\Kieker}{\textit{Kieker}}
-% If the names for the parts of Kieker change.
-\newcommand{\KiekerMonitoring}{Kieker.Monitoring}
-\newcommand{\KiekerAnalysis}{Kieker.Analysis}
-% The complete url where to download Kieker.
-\newcommand{\KiekerDownloadUrl}{\url{http://sourceforge.net/projects/kieker/files}}
-% This is how we call the kieker directory.
-\newcommand{\KiekerDir}{$<$KIEKER-DIR$>$}
 
 % The current version-string.
 \newcommand{\version}{1.5-trunk}
 
-% The name of the .jar-files from Kieker.
-\newcommand{\analysisCtrlJar}{kieker-analysis-\version\_ctrl.jar}
-\newcommand{\monitoringCtrlJar}{kieker-monitoring-\version.jar}
-\newcommand{\monitoringLtwJar}{kieker-monitoring-\version\_ltw.jar}
+% The single parts of Kieker and some files.
+\newcommand{\KiekerMonitoringPart}{Kieker.Monitoring}
+\newcommand{\KiekerAnalysisPart}{Kieker.Analysis}
+\newcommand{\analysisJar}{kieker-analysis-\version.jar}
+\newcommand{\monitoringJar}{kieker-monitoring-\version.jar}
 \newcommand{\commonJar}{kieker-common-\version.jar  }
-\newcommand{\toolsjar}{kieker-tools-\version.jar}
-\newcommand{\monitoringCtwJar}{kieker-monitoring-\version\_ctw.jar}
-\newcommand{\monitoringControlServletWar}{kieker-monitoring-\version\_controlServlet.war}
-
-% The name of other files from Kieker (e.g. configuration files)
 \newcommand{\monitoringPropertiesFile}{kieker.monitoring.properties}
 \newcommand{\analysisPropertiesFile}{kieker.analysis.properties}
 \newcommand{\logFourJPropertiesFile}{log4j.properties}
 \newcommand{\aopFile}{aop.xml}
-% We need to know the names of these files when they are delivered. It is possible that there are some of these files marked with an .example at the end of the filename.
-\newcommand{\monitoringPropertiesFileBefore}{kieker.monitoring.properties}
-\newcommand{\analysisPropertiesFileBefore}{kieker.analysis.properties}
-\newcommand{\logFourJPropertiesFileBefore}{log4j.properties.example}
-\newcommand{\aopFileBefore}{aop.xml.example}
+
+% The complete url where to find Kieker.
+\newcommand{\KiekerURL}{\url{http://sourceforge.net/projects/kieker/files}}
+
+% This is how we call the kieker directory.
+\newcommand{\KiekerDir}{$<$KIEKER-DIR$>$}
+
+% These commands are necessary to mark classes, methods and files within the document.
+\newcommand{\class}[1]{\textit{#1}}
+\newcommand{\method}[1]{\textit{#1}}
+\newcommand{\dir}[1]{\texttt{#1}}
+
+
+% These commands are for notifying the reader about something important.
+\newcommand{\marginbox}[1]{\todo[noline]{#1}}
+\newcommand{\notify}{\marginbox{\huge{\rightpointleft}}}
+\newcommand{\warning}{\marginbox{\huge{\Stopsign}}}
+
+
 % The following commands set the listings for the different (programming) languages correctly.
-% For the first they use all the same settings.
-\newcommand{\setListing}[2]{
+% For the first they use all nearly the same settings.
+\newcommand{\setListing}[3]{
 \lstset{
-language=#1,              
+language=#1,          
 numbers=#2,
-basicstyle=\tiny,       	% the size of the fonts that are used for the code
+basicstyle=#3,       	% the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
 showtabs=false,                 % show tabs within strings adding particular underscores
@@ -49,6 +52,6 @@ breakatwhitespace=false,        % sets if automatic breaks should only happen at
 title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
 }
-\newcommand{\setJavaCodeListing}{\setListing{Java}{left}}
-\newcommand{\setBashListing}{\setListing{Bash}{none}}
-\newcommand{\setXMLListing}{\setListing{XML}{none}}
+\newcommand{\setJavaCodeListing}{\setListing{Java}{left}{\tiny}}
+\newcommand{\setBashListing}{\setListing{Bash}{none}{\small}}
+\newcommand{\setXMLListing}{\setListing{XML}{none}{\tiny}}
