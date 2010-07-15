@@ -7,7 +7,7 @@ This document summarizes changes made in all releases starting with 0.90.
   - internal meta-model, on-the-fly trace reconstruction, ...
   - Analysis features: Output of reconstructed system model, computation 
     of trace equivalence classes, ...
-  - Enhaced visualitation features, e.g.,
+  - Enhaced visualization features, e.g.,
     - hierarchical dependency graphs (operation-, component-, container-level), 
     - call graphs
 

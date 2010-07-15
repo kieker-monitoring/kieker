@@ -127,6 +127,7 @@
                classpathref="kieker.common-compile-classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
+        <copy file="LICENSE" todir="${build.kieker.common.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.common.jar}">
             <fileset dir="${build.kieker.common.dir}"/>
         </jar>
@@ -185,6 +186,7 @@
             </sourceroots>
         </iajc>
         <copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
+        <copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
             <fileset dir="${build.kieker.monitoring.dir}"/>
         </jar>
@@ -212,6 +214,7 @@
         <war destfile="${dist.dir}/${dist.kieker.monitoring.servlet.war}" webxml="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/web.xml">
             <classes dir="${build.kieker.monitoring.servlet.dir}"/>
             <zipfileset dir="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images" prefix="images"/>
+            <zipfileset file="LICENSE" prefix=""/>
         </war>
     </target>
 
@@ -238,6 +241,7 @@
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
         <copy file="${kieker.analysis.properties}" todir="${build.kieker.analysis.dir}/META-INF"/>
+        <copy file="LICENSE" todir="${build.kieker.analysis.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.analysis.jar}">
             <fileset dir="${build.kieker.analysis.dir}"/>
         </jar>
@@ -265,6 +269,7 @@
                classpathref="kieker.tools-compile-classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
+        <copy file="LICENSE" todir="${build.kieker.tools.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.tools.jar}">
             <fileset dir="${build.kieker.tools.dir}"/>
         </jar>
@@ -284,9 +289,9 @@
             <include name="lib/**"/>
             <include name="build.xml"/>
             <include name="build.properties"/>
-            <include name="RELEASENOTES"/>
             <include name="ISSUES"/>
             <include name="HISTORY"/>
+            <include name="LICENSE"/>
             <include name="pom_ant_kieker-*.xml"/>
         </patternset>
 
@@ -314,9 +319,9 @@
             <include name="dist/*.war"/>
             <include name="META-INF/*.example"/>
             <include name="lib/**"/>
-            <include name="RELEASENOTES"/>
             <include name="ISSUES"/>
             <include name="HISTORY"/>
+            <include name="LICENSE"/>
         </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
@@ -338,6 +343,7 @@
     <target name="build-example-MySimpleKiekerExample" depends="init">
         <patternset id="dist_myExample_files">
             <include name="examples/MySimpleKiekerExample/README"/>
+            <include name="examples/MySimpleKiekerExample/LICENSE"/>
             <include name="examples/MySimpleKiekerExample/build.xml"/>
             <include name="examples/MySimpleKiekerExample/build.properties"/>
             <include name="examples/MySimpleKiekerExample/lib/"/>
@@ -370,6 +376,7 @@
     <target name="build-example-MySimpleKiekerJMSExample" depends="init">
         <patternset id="dist_myJMSExample_files">
             <include name="examples/MySimpleKiekerJMSExample/README"/>
+            <include name="examples/MySimpleKiekerJMSExample/LICENSE"/>
             <include name="examples/MySimpleKiekerJMSExample/build.xml"/>
             <include name="examples/MySimpleKiekerJMSExample/build.properties"/>
             <include name="examples/MySimpleKiekerJMSExample/lib/"/>
@@ -402,6 +409,7 @@
         <property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
         <patternset id="dist_jpetstoreExample_files">
             <include name="examples/JPetStoreExample/README"/>
+            <include name="examples/JPetStoreExample/LICENSE"/>
             <include name="examples/JPetStoreExample/kieker-testdata/**"/>
             <include name="examples/JPetStoreExample/${tomcat.dir}/**"/>
             <include name="examples/JPetStoreExample/${jpetstore.dir}/**"/>
@@ -891,6 +899,71 @@
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
         </java>
+    </target>
+
+    <target name="compile-tests-junit"
+	        depends="build-kieker.monitoring">
+        <path id="kieker.test-junit-compile-classpath">
+            <fileset dir="${lib.dir}">
+                <include name="junit-*.jar"/>
+            </fileset>
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.common.jar}"/>
+                <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>
+        </path>
+
+        <javac source="1.5" target="1.5"
+               destDir="${build.tests.dir}"
+               classpathref="kieker.test-junit-compile-classpath"
+               srcdir="test/kieker/tests/junit/">
+        </javac>
+    </target>
+
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+
+    <target name="run-tests-junit" depends="compile-tests-junit">
+        <path id="kieker.test-junit-run-classpath">
+            <fileset dir="${lib.dir}">
+                <include name="commons-logging-*.jar"/>
+                <include name="junit-*.jar"/>
+            </fileset>
+            <pathelement location="${build.tests.dir}/"/>
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.common.jar}"/>
+                <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>
+        </path>
+
+        <junit printsummary="yes" haltonfailure="no">
+            <classpath refid="kieker.test-junit-run-classpath"/>
+
+            <formatter type="xml"/>
+
+            <batchtest fork="yes" todir="tmp/">
+                <fileset dir="${build.tests.dir}/">
+                    <include name="**/*Test*.class"/>
+                    <exclude name="**/AllTests.class"/>
+                </fileset>
+            </batchtest>
+            <!--<batchtest fork="yes" todir="tmp/">
+                <fileset dir="test/kieker/tests/junit/">
+                    <include name="**/*Test*.java"/>
+                    <exclude name="**/AllTests.java"/>
+                </fileset>
+            </batchtest>-->
+        </junit>
+
+        <antcall target="test.junit.report"/>
+    </target>
+
+    <target name="test.junit.report" depends="" >
+        <junitreport todir="tmp/">
+            <fileset dir="tmp/">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="tmp/"/>
+        </junitreport>
     </target>
 
     <!--

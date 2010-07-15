@@ -1,1 +1,0 @@
-The roadmap can be found in documentation/tutorial/roadmap.pdf .

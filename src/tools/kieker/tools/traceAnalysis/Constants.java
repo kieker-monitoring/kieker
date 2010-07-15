@@ -171,7 +171,7 @@ public class Constants {
                 TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription(
                 "Executions ending after this date (UTC timezone) are ignored.").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_SHORTLABELS).hasArg(false).isRequired(false).withDescription(
-                "If selected, the hostnames of the executions are NOT considered.").create());
+                "If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 
         for (final Option o : SORTED_OPTION_LIST) {
             CMDL_OPTIONS.addOption(o);

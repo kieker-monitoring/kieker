@@ -17,19 +17,29 @@ package kieker.common.record;
  * limitations under the License.
  * ==================================================
  */
-/** 
- *@author Andre van Hoorn
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * None of the String variables must be null.
+ *
+ * @author Andre van Hoorn
  */
-public class OperationExecutionRecord extends AbstractMonitoringRecord implements Comparable<OperationExecutionRecord> {
+public class OperationExecutionRecord extends AbstractMonitoringRecord {
+
+   private static final Log log = LogFactory.getLog(OperationExecutionRecord.class);
+
+    private static final String DEFAULT_VALUE="N/A";
 
     private static final long serialVersionUID = 117L;
     /** Used to identify the type of CSV records */
     private static final int numRecordFields = 9;
     public int experimentId = -1;
-    public String vmName = null;
-    public String componentName = null;
-    public String opname = null;
-    public String sessionId = null;
+    public String vmName = DEFAULT_VALUE;
+    public String componentName = DEFAULT_VALUE;
+    public String opname = DEFAULT_VALUE;
+    public String sessionId = DEFAULT_VALUE;
     public long traceId = -1;
     public long tin = -1;
     public long tout = -1;
@@ -39,10 +49,9 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
     public Object retVal = null;
 
     /**
-     * Returns an instance of KiekerExecutionRecord.
+     * Returns an instance of OperationExecutionRecord.
      * The member variables are initialized that way that only actually
      * used variables must be updated.
-     * Do not set unused member variables to dummy values such as -1 etc.!
      */
     public OperationExecutionRecord() {
     }
@@ -152,30 +161,41 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
     }
 
     /**
-     * If the passed object has the same traceId, the comparison is performed
-     * based on the eio and ess values. Otherwise the comparison is based on
-     * the tin value.
+     * Compares two records. 
+     * 
+     * If one of the records contains null values for its variables,
+     * false is returned.
      *
      * @param o
-     * @return
+     * @return true iff the compared records are equal.
      */
-    public int compareTo(OperationExecutionRecord o) {
-        if (this.traceId == o.traceId) {
-            if (this.eoi < o.eoi) {
-                return -1;
-            }
-            if (this.eoi > o.eoi) {
-                return 1;
-            }
-            return 0;
-        } else {
-            if (this.tin < o.tin) {
-                return -1;
-            }
-            if (this.tin > o.tin) {
-                return 1;
-            }
-            return 0;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (! (o instanceof OperationExecutionRecord)){
+            return false;
+        }
+        
+        OperationExecutionRecord ro = (OperationExecutionRecord) o;
+
+        try {
+        return
+                this.componentName.equals(ro.componentName) &&
+                this.eoi == ro.eoi &&
+                this.ess == ro.ess &&
+                //this.experimentId == ro.experimentId &&
+                this.opname.equals(ro.opname) &&
+                this.sessionId.equals(ro.sessionId) &&
+                this.tin == ro.tin &&
+                this.tout == ro.tout &&
+                this.traceId == ro.traceId &&
+                this.vmName.equals(ro.vmName);
+        } catch (NullPointerException ex){
+            log.error(ex);
+            return false;
         }
     }
 }
