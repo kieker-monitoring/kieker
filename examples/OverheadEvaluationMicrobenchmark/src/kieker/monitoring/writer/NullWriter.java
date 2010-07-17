@@ -2,7 +2,6 @@ package kieker.monitoring.writer;
 
 import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
 import org.apache.commons.logging.Log;
