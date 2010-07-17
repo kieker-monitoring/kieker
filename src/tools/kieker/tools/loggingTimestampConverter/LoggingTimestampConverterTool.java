@@ -1,21 +1,5 @@
 package kieker.tools.loggingTimestampConverter;
 
-import java.util.Comparator;
-import java.util.Vector;
-import kieker.common.util.LoggingTimestampConverter;
-import kieker.tools.traceAnalysis.TraceAnalysisTool;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -33,6 +17,23 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
+
+import java.util.Comparator;
+import java.util.Vector;
+import kieker.common.util.LoggingTimestampConverter;
+import kieker.tools.traceAnalysis.TraceAnalysisTool;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  * @author Andre van Hoorn

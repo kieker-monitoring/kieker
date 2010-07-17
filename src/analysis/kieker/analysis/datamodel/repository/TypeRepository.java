@@ -1,9 +1,5 @@
 package kieker.analysis.datamodel.repository;
 
-import java.util.Collection;
-import java.util.Hashtable;
-import kieker.analysis.datamodel.ComponentType;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -21,6 +17,11 @@ import kieker.analysis.datamodel.ComponentType;
  * limitations under the License.
  * ==================================================
  */
+
+import java.util.Collection;
+import java.util.Hashtable;
+import kieker.analysis.datamodel.ComponentType;
+
 /**
  *
  * @author Andre van Hoorn
@@ -29,7 +30,8 @@ public class TypeRepository extends AbstractSystemSubRepository {
 
     private final Hashtable<String, ComponentType> componentTypesByName =
             new Hashtable<String, ComponentType>();
-    private final Hashtable<Integer,ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>();
+    private final Hashtable<Integer,ComponentType> componentTypesById =
+            new Hashtable<Integer, ComponentType>();
 
     public final ComponentType rootComponent;
 
@@ -39,7 +41,8 @@ public class TypeRepository extends AbstractSystemSubRepository {
         this.rootComponent = rootComponent;
     }
 
-    /** Returns the instance for the passed factoryIdentifier; null if no instance
+    /**
+     * Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
     public final ComponentType getComponentTypeByFactoryIdentifier(final String factoryIdentifier) {

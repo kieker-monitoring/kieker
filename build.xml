@@ -902,14 +902,16 @@
     </target>
 
     <target name="compile-tests-junit"
-	        depends="build-kieker.monitoring">
+	        depends="build-kieker.monitoring,build-kieker.analysis">
         <path id="kieker.test-junit-compile-classpath">
             <fileset dir="${lib.dir}">
+                <include name="commons-logging-*.jar"/>
                 <include name="junit-*.jar"/>
             </fileset>
             <fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+                <include name="${dist.kieker.analysis.jar}"/>
             </fileset>
         </path>
 
@@ -932,6 +934,7 @@
             <fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+                <include name="${dist.kieker.analysis.jar}"/>
             </fileset>
         </path>
 
@@ -944,6 +947,7 @@
                 <fileset dir="${build.tests.dir}/">
                     <include name="**/*Test*.class"/>
                     <exclude name="**/AllTests.class"/>
+                    <exclude name="**/*$*.class"/>
                 </fileset>
             </batchtest>
             <!--<batchtest fork="yes" todir="tmp/">

@@ -28,7 +28,7 @@ public final class Version {
      * pattern: VERSION = <quote>.*<quote>
      */
 
-    private static final String VERSION = "1.5-trunk-20100714";
+    private static final String VERSION = "1.5-trunk-20100716";
     private static final String COPYRIGHT = "Copyright (c) 2006-2010 Kieker Project";
 
     /**

@@ -1,11 +1,8 @@
 package kieker.tests.junit.common.record;
 
-import junit.framework.TestCase;
-import kieker.common.record.OperationExecutionRecord;
-
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +17,9 @@ import kieker.common.record.OperationExecutionRecord;
  * limitations under the License.
  * ==================================================
  */
+
+import junit.framework.TestCase;
+import kieker.common.record.OperationExecutionRecord;
 
 /**
  *@author Andre van Hoorn

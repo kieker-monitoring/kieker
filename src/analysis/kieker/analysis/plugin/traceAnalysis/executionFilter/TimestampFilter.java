@@ -1,3 +1,5 @@
+package kieker.analysis.plugin.traceAnalysis.executionFilter;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -16,8 +18,6 @@
  * ==================================================
  */
 
-package kieker.analysis.plugin.traceAnalysis.executionFilter;
-
 import kieker.analysis.datamodel.Execution;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -34,12 +34,14 @@ public class TimestampFilter implements IAnalysisPlugin {
     public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
     public static final long MIN_TIMESTAMP = 0;
 
-    private final long ignoreRecordsBeforeTimestamp;
-    private final long ignoreRecordsAfterTimestamp;
+    private final long ignoreExecutionsBeforeTimestamp;
+    private final long ignorExecutionsAfterTimestamp;
 
-    public TimestampFilter(final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
-        this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
-        this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
+    public TimestampFilter(
+            final long ignoreExecutionsBeforeTimestamp,
+            final long ignoreExecutionsAfterTimestamp) {
+        this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
+        this.ignorExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
     }
 
 
@@ -62,8 +64,8 @@ public class TimestampFilter implements IAnalysisPlugin {
             new OutputPort<Execution>("Execution output");
 
     private void newExecution(Execution execution){
-        if (execution.getTin() < this.ignoreRecordsBeforeTimestamp
-                || execution.getTout() > this.ignoreRecordsAfterTimestamp) {
+        if (execution.getTin() < this.ignoreExecutionsBeforeTimestamp
+                || execution.getTout() > this.ignorExecutionsAfterTimestamp) {
             return;
         }
         this.executionOutputPort.deliver(execution);
