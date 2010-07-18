@@ -56,11 +56,14 @@ public class Operation {
         return signature;
     }
 
-    @Override
-    public int hashCode() {
-        return this.id;
-    }
 
+
+    /**
+     * Two Operation objects are equal iff their ids are equal.
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Operation)){
@@ -68,6 +71,13 @@ public class Operation {
         }
         Operation other = (Operation)obj;
         return other.id == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 17 * hash + this.id;
+        return hash;
     }
 
     @Override

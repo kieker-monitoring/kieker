@@ -1,3 +1,5 @@
+package kieker.analysis.plugin.traceAnalysis.executionFilter;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -16,8 +18,6 @@
  * ==================================================
  */
 
-package kieker.analysis.plugin.traceAnalysis.executionFilter;
-
 import java.util.TreeSet;
 import kieker.analysis.datamodel.Execution;
 import kieker.analysis.plugin.IAnalysisPlugin;
@@ -27,6 +27,7 @@ import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 
 /**
+ * Allows to filter Execution objects based on their traceId.
  *
  * @author Andre van Hoorn
  */
@@ -35,6 +36,8 @@ public class TraceIdFilter implements IAnalysisPlugin {
     private final TreeSet<Long> selectedTraces;
 
     /**
+     * Creates a filter instance that only passes Execution objects <i>e</i>
+     * whose traceId (<i>e.traceId</i>) is element of the set <i>selectedTraces</i>.
      *
      * @param selectedTraces 
      */

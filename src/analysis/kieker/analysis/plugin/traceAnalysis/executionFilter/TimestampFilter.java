@@ -26,6 +26,7 @@ import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 
 /**
+ * Allows to filter Execution objects based on their tin and tout timestamps.
  *
  * @author Andre van Hoorn
  */
@@ -37,6 +38,14 @@ public class TimestampFilter implements IAnalysisPlugin {
     private final long ignoreExecutionsBeforeTimestamp;
     private final long ignorExecutionsAfterTimestamp;
 
+    /**
+     * Creates a filter instance that only passes Execution objects <i>e</i>
+     * with the property <i>e.tin &gt;= ignoreExecutionsBeforeTimestamp</i> and
+     * <i>e.tout &lt;= ignoreExecutionsAfterTimestamp</i>.
+     *
+     * @param ignoreExecutionsBeforeTimestamp
+     * @param ignoreExecutionsAfterTimestamp
+     */
     public TimestampFilter(
             final long ignoreExecutionsBeforeTimestamp,
             final long ignoreExecutionsAfterTimestamp) {

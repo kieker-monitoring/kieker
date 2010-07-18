@@ -19,16 +19,11 @@ package kieker.tests.junit.analysis.plugins.traceAnalysis;
  */
 import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.TestCase;
-import kieker.analysis.datamodel.AllocationComponent;
-import kieker.analysis.datamodel.AssemblyComponent;
-import kieker.analysis.datamodel.ComponentType;
 import kieker.analysis.datamodel.Execution;
-import kieker.analysis.datamodel.ExecutionContainer;
-import kieker.analysis.datamodel.Operation;
-import kieker.analysis.datamodel.Signature;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TimestampFilter;
+import kieker.tests.junit.analysis.plugins.traceAnalysis.util.ExecutionFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,17 +38,22 @@ public class TestTimestampFilter extends TestCase {
     private volatile long IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = 50;
     private volatile long IGNORE_EXECUTIONS_AFTER_TIMESTAMP = 100;
 
-    private final static String DEFAULT_STRING = "N/A";
-
     private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+    private final ExecutionFactory eFactory = new ExecutionFactory(systemEntityFactory);
 
+    /**
+     * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
+     * assert that a record <i>r</i> with <i>r.tin &lt; a</i> and <i>r.tout
+     * &gt; a </i>, <i>r.tout &lt; b</i> does not pass the filter.
+     */
     public void testRecordTinBeforeToutWithinIgnored() {
         TimestampFilter filter =
                 new TimestampFilter(
                 IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
                 IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 
-        Execution exec = genExecution(
+        Execution exec = eFactory.genExecution(
+                77, // traceId (value not important)
                 IGNORE_EXECUTIONS_BEFORE_TIMESTAMP-1, // tin
                 IGNORE_EXECUTIONS_AFTER_TIMESTAMP-1,  // tout
                 0, 0); // eoi, ess
@@ -72,41 +72,118 @@ public class TestTimestampFilter extends TestCase {
         });
         filter.getExecutionInputPort().newEvent(exec);
         assertFalse("Filter passed execution " + exec
-            + " although timestamp before" + IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+            + " although tin timestamp before" + IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
             filterPassedRecord.get());
     }
 
-    private Execution genExecution(
-            final long tin,
-            final long tout,
-            final int eoi,
-            final int ess){
-        ComponentType componentTypeA =
-                this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(
-                DEFAULT_STRING, DEFAULT_STRING);
-        Operation operationAa =
-                this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
-                DEFAULT_STRING,
-                componentTypeA,
-                new Signature(
-                DEFAULT_STRING,
-                DEFAULT_STRING,
-                new String[] {DEFAULT_STRING}));
-        componentTypeA.addOperation(operationAa);
-        AssemblyComponent assemblyComponentA =
-                this.systemEntityFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(
-                DEFAULT_STRING,
-                componentTypeA);
-        ExecutionContainer containerC =
-                this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(
-                DEFAULT_STRING, DEFAULT_STRING);
-        AllocationComponent allocationComponentA =
-                this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(
-                DEFAULT_STRING,
-                assemblyComponentA,
-                containerC);
-        return new Execution(
-                operationAa, allocationComponentA, 1,
-                DEFAULT_STRING, eoi, ess, tin, tout);
+    /**
+     * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
+     * assert that a record <i>r</i> with <i>r.tin &gt; a</i>, <i>r.tin
+     * &lt; b</i> and <i>r.tout &gt; b </i> does not pass the filter.
+     */
+    public void testRecordTinWithinToutAfterIgnored() {
+        TimestampFilter filter =
+                new TimestampFilter(
+                IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+                IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+
+        Execution exec = eFactory.genExecution(
+                15, // traceId (value not important)
+                IGNORE_EXECUTIONS_BEFORE_TIMESTAMP+1, // tin
+                IGNORE_EXECUTIONS_AFTER_TIMESTAMP+1,  // tout
+                0, 0); // eoi, ess
+
+        final AtomicReference<Boolean> filterPassedRecord =
+                new AtomicReference<Boolean>(Boolean.FALSE);
+
+        filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+
+            /**
+             * In this test, this method should not be called.
+             */
+            public void newEvent(Execution event) {
+                filterPassedRecord.set(Boolean.TRUE);
+            }
+        });
+        filter.getExecutionInputPort().newEvent(exec);
+        assertFalse("Filter passed execution " + exec
+            + " although tout timestamp after" + IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+            filterPassedRecord.get());
+    }
+
+    /**
+     * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
+     * assert that a record <i>r</i> with <i>r.tin == a</i> and <i>r.tout == b </i>
+     * does pass the filter.
+     */
+    public void testRecordTinToutOnBordersPassed() {
+        TimestampFilter filter =
+                new TimestampFilter(
+                IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+                IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+
+        final Execution exec = eFactory.genExecution(
+                159, // traceId (value not important)
+                IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, // tin
+                IGNORE_EXECUTIONS_AFTER_TIMESTAMP,  // tout
+                0, 0); // eoi, ess
+
+        final AtomicReference<Boolean> filterPassedRecord =
+                new AtomicReference<Boolean>(Boolean.FALSE);
+
+        filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+
+            /**
+             * In this test, this method MUST be called exactly once.
+             */
+            public void newEvent(Execution event) {
+                filterPassedRecord.set(Boolean.TRUE);
+                assertSame(event, exec);
+            }
+        });
+        filter.getExecutionInputPort().newEvent(exec);
+        assertTrue("Filter didn't pass execution " + exec
+            + " although timestamps within range [" +
+            IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + "," +
+            IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]",
+            filterPassedRecord.get());
+    }
+
+    /**
+     * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
+     * assert that a record <i>r</i> with <i>r.tin &gt; a</i>, <i>r.tin &lt; b</i>
+     * and <i>r.tout &lt; b </i>, <i>r.tout &gt; a </i>  does pass the filter.
+     */
+    public void testRecordTinToutWithinRangePassed() {
+        TimestampFilter filter =
+                new TimestampFilter(
+                IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+                IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+
+        final Execution exec = eFactory.genExecution(
+                159, // traceId (value not important)
+                IGNORE_EXECUTIONS_BEFORE_TIMESTAMP+1, // tin
+                IGNORE_EXECUTIONS_AFTER_TIMESTAMP-1,  // tout
+                0, 0); // eoi, ess
+
+        final AtomicReference<Boolean> filterPassedRecord =
+                new AtomicReference<Boolean>(Boolean.FALSE);
+
+        filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+
+            /**
+             * In this test, this method MUST be called exactly once.
+             */
+            public void newEvent(Execution event) {
+                filterPassedRecord.set(Boolean.TRUE);
+                assertSame(event, exec);
+            }
+        });
+        filter.getExecutionInputPort().newEvent(exec);
+        assertTrue("Filter didn't pass execution " + exec
+            + " although timestamps within range [" +
+            IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + "," +
+            IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]",
+            filterPassedRecord.get());
     }
 }
