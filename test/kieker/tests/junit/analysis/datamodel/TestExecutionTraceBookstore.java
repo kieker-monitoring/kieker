@@ -45,6 +45,8 @@ public class TestExecutionTraceBookstore extends TestCase {
     private final long minTin = 1;
     private final long maxTout = 10;
     private int numExecutions = 0;
+
+    /* Executions of a valid trace */
     private final Execution exec0_0__bookstore_searchBook;
     private final Execution exec1_1__catalog_getBook;
     private final Execution exec2_1__crm_getOrders;
@@ -202,5 +204,103 @@ public class TestExecutionTraceBookstore extends TestCase {
                     return2_1___crm_getOrders__bookstore_searchBook.getTimestamp(),
                     exec2_1__crm_getOrders.getTout());
         }
+    }
+
+    /**
+     * Assert that the transformation of a broken execution trace version of the
+     * "well-known" Bookstore trace leads to an exception.
+     *
+     * The trace is broken in that the eoi/ess values of an execution with eoi/ess
+     * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
+     * increment/decrement by 1, this test must lead to an exception.
+     */
+    public void testMessageTraceTransformationBrokenTraceEssSkip() {
+        /*
+         * Create an Execution Trace and add Executions in
+         * arbitrary order
+         */
+        final ExecutionTrace executionTrace =
+                new ExecutionTrace(traceId);
+        final Execution exec1_1__catalog_getBook__broken =
+                eFactory.genExecution(
+                "Catalog", "catalog", "getBook",
+                traceId,
+                2, // tin
+                4, // tout
+                1, 3);  // eoi, ess
+        assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(exec1_1__catalog_getBook));
+
+        try {
+            executionTrace.add(exec3_2__catalog_getBook);
+            executionTrace.add(exec2_1__crm_getOrders);
+            executionTrace.add(exec0_0__bookstore_searchBook);
+            executionTrace.add(exec1_1__catalog_getBook__broken);
+
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail(ex.getMessage());
+            return;
+        }
+
+        /**
+         * Transform Execution Trace to Message Trace representation
+         */
+        try {
+            /* The following call must throw an Exception in this test case */
+            executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            fail("An invalid execution has been transformed to a message trace");
+        } catch (InvalidTraceException ex) {
+            /* we wanted this exception to happen */
+        }
+
+    }
+
+    /**
+     * Assert that the transformation of a broken execution trace version of the
+     * "well-known" Bookstore trace leads to an exception.
+     *
+     * The trace is broken in that the eoi/ess values of an execution with eoi/ess
+     * [3,2] are replaced by the eoi/ess values [4,2]. Since eoi values must only
+     * increment by 1, this test must lead to an exception.
+     */
+    public void testMessageTraceTransformationBrokenTraceEoiSkip() {
+        /*
+         * Create an Execution Trace and add Executions in
+         * arbitrary order
+         */
+        final ExecutionTrace executionTrace =
+                new ExecutionTrace(traceId);
+        final Execution exec3_2__catalog_getBook__broken = eFactory.genExecution(
+                "Catalog", "catalog", "getBook",
+                traceId,
+                6, // tin
+                7, // tout
+                4, 2);  // eoi, ess
+        assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(exec3_2__catalog_getBook));
+
+        try {
+            //executionTrace.add(exec3_2__catalog_getBook);
+            executionTrace.add(exec3_2__catalog_getBook__broken);
+            executionTrace.add(exec2_1__crm_getOrders);
+            executionTrace.add(exec0_0__bookstore_searchBook);
+            executionTrace.add(exec1_1__catalog_getBook);
+
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail(ex.getMessage());
+            return;
+        }
+
+        /**
+         * Transform Execution Trace to Message Trace representation
+         */
+        try {
+            /* The following call must throw an Exception in this test case */
+            executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            fail("An invalid execution has been transformed to a message trace");
+        } catch (InvalidTraceException ex) {
+            /* we wanted this exception to happen */
+        }
+
     }
 }
