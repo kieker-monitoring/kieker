@@ -85,23 +85,28 @@ public class TestExecutionTraceBookstore extends TestCase {
                 3, 2);  // eoi, ess
     }
 
-    /**
-     * Tests whether the "well-known" Bookstore trace gets correctly
-     * represented as an Execution Trace and subsequently transformed
-     * into a Message Trace representation.
-     */
-    public void testMessageTraceTransformationValidTrace() {
+    private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
         /*
          * Create an Execution Trace and add Executions in
          * arbitrary order
          */
-        final ExecutionTrace executionTrace =
-                new ExecutionTrace(traceId);
+        ExecutionTrace executionTrace = new ExecutionTrace(traceId);
+
+        executionTrace.add(exec3_2__catalog_getBook);
+        executionTrace.add(exec2_1__crm_getOrders);
+        executionTrace.add(exec0_0__bookstore_searchBook);
+        executionTrace.add(exec1_1__catalog_getBook);
+
+        return executionTrace;
+    }
+
+    /**
+     * Tests whether the "well-known" Bookstore trace gets correctly
+     * represented as an Execution Trace.
+     */
+    public void testValidExecutionTrace() {
         try {
-            executionTrace.add(exec3_2__catalog_getBook);
-            executionTrace.add(exec2_1__crm_getOrders);
-            executionTrace.add(exec0_0__bookstore_searchBook);
-            executionTrace.add(exec1_1__catalog_getBook);
+            ExecutionTrace executionTrace = genValidBookstoreTrace();
             /* Perform some validity checks on the execution trace object */
             assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), numExecutions);
             assertEquals("Invalid maximum stack depth", executionTrace.getMaxStackDepth(), 2);
@@ -113,8 +118,24 @@ public class TestExecutionTraceBookstore extends TestCase {
             fail(ex.getMessage());
             return;
         }
+    }
 
-        /**
+    /**
+     * Tests whether the "well-known" Bookstore trace can be correctly transformed
+     * from an Execution Trace representation into a Message Trace representation.
+     */
+    public void testMessageTraceTransformationValidTrace() {
+
+        ExecutionTrace executionTrace;
+        try {
+            executionTrace = genValidBookstoreTrace();
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail(ex.getMessage());
+            return;
+        }
+
+        /*
          * Transform Execution Trace to Message Trace representation
          */
         MessageTrace messageTrace;
@@ -126,7 +147,7 @@ public class TestExecutionTraceBookstore extends TestCase {
             return;
         }
 
-        /**
+        /*
          * Validate Message Trace representation.
          */
         assertEquals("Invalid traceId", messageTrace.getTraceId(), traceId);
@@ -203,6 +224,28 @@ public class TestExecutionTraceBookstore extends TestCase {
             assertEquals("Message has wrong timestamp",
                     return2_1___crm_getOrders__bookstore_searchBook.getTimestamp(),
                     exec2_1__crm_getOrders.getTout());
+        }
+    }
+
+    /**
+     * Make sure that the transformation from an Execution Trace to a Message
+     * Trace is performed only once.
+     */
+    public void testMessageTraceTransformationOnlyOnce() {
+        try {
+            ExecutionTrace executionTrace = genValidBookstoreTrace();
+            /*
+             * Transform Execution Trace to Message Trace representation (twice)
+             * and make sure, that the instances are the same.
+             */
+            MessageTrace messageTrace1, messageTrace2;
+            messageTrace1 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            messageTrace2 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            assertSame(messageTrace1, messageTrace2);
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail(ex.getMessage());
+            return;
         }
     }
 

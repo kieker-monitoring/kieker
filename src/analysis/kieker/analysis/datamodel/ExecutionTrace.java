@@ -175,6 +175,7 @@ public class ExecutionTrace extends Trace {
             prevE = curE; // prepair next loop
         }
         mt = new MessageTrace(this.getTraceId(), mSeq);
+        this.messageTrace.set(mt);
         return mt;
     }
 
