@@ -60,28 +60,28 @@ public class TestExecutionTrace extends TestCase {
         numExecutions++;
         final long minTin = 1;
         final long maxTout = 10;
-        final Execution exec0_0 = eFactory.genExecution(
+        final Execution exec0_0__bookstore_searchBook = eFactory.genExecution(
                 "Bookstore", "bookstore", "searchBook",
                 traceId,
                 minTin,      // tin
                 maxTout,     // tout
                 0, 0);  // eoi, ess
         numExecutions++;
-        final Execution exec1_1 = eFactory.genExecution(
+        final Execution exec1_1__catalog_getBook = eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
                 traceId,
                 2,      // tin
                 4,     // tout
                 1, 1);  // eoi, ess
         numExecutions++;
-        final Execution exec2_1 = eFactory.genExecution(
+        final Execution exec2_1__crm_getOrders = eFactory.genExecution(
                 "CRM", "crm", "getOrders",
                 traceId,
                 5,      // tin
                 8,     // tout
                 2, 1);  // eoi, ess
         numExecutions++;
-        final Execution exec3_2 = eFactory.genExecution(
+        final Execution exec3_2__catalog_getBook = eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
                 traceId,
                 6,      // tin
@@ -94,10 +94,10 @@ public class TestExecutionTrace extends TestCase {
         final ExecutionTrace executionTrace =
                 new ExecutionTrace(traceId);
         try {
-            executionTrace.add(exec3_2);
-            executionTrace.add(exec2_1);
-            executionTrace.add(exec0_0);
-            executionTrace.add(exec1_1);
+            executionTrace.add(exec3_2__catalog_getBook);
+            executionTrace.add(exec2_1__crm_getOrders);
+            executionTrace.add(exec0_0__bookstore_searchBook);
+            executionTrace.add(exec1_1__catalog_getBook);
             /* Perform some validity checks on the execution trace object */
             assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), numExecutions);
             assertEquals("Invalid maximum stack depth", executionTrace.getMaxStackDepth(), 2);
@@ -129,7 +129,14 @@ public class TestExecutionTrace extends TestCase {
         Vector<Message> msgVector = messageTrace.getSequenceAsVector();
         assertEquals("Invalid number of messages in trace", msgVector.size(), numExecutions*2);
         Message[] msgArray = msgVector.toArray(new Message[0]);
+        assertEquals(msgArray.length, numExecutions*2);
 
-        fail("Test incomplete ---");
+        /* 1. $->bookstore.search */
+        int curIdx = 0;
+        Message call0_0___root__bookstore_searchBook
+                = msgArray[curIdx++];
+        assertEquals("Sending execution is not root execution",
+                call0_0___root__bookstore_searchBook.getSendingExecution(), this.systemEntityFactory.getRootExecution());
+        assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
     }
 }

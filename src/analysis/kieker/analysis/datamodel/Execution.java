@@ -141,7 +141,7 @@ public class Execution implements IAnalysisEvent {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Operation)){
+        if (!(obj instanceof Execution)){
             return false;
         }
         if (this == obj) {

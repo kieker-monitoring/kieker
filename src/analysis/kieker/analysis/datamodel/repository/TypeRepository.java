@@ -45,11 +45,20 @@ public class TypeRepository extends AbstractSystemSubRepository {
      * Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final ComponentType getComponentTypeByFactoryIdentifier(final String factoryIdentifier) {
+    public synchronized final ComponentType getComponentTypeByFactoryIdentifier(final String factoryIdentifier) {
         return this.componentTypesByName.get(factoryIdentifier);
     }
 
-    public final ComponentType createAndRegisterComponentType(
+    /**
+     * Creates and registers a component type that has not been registered yet.
+     *
+     * @param factoryIdentifier
+     * @param fullqualifiedName
+     * @return
+     * @throws IllegalArgumentException if a component type with the given 
+     * factoryIdentifier has already been registered
+     */
+    public synchronized final ComponentType createAndRegisterComponentType(
             final String factoryIdentifier,
             final String fullqualifiedName) {
         ComponentType newInst;
@@ -63,7 +72,12 @@ public class TypeRepository extends AbstractSystemSubRepository {
         return newInst;
     }
 
-    public final Collection<ComponentType> getComponentTypes(){
+    /**
+     * Returns a collection of all registered component types.
+     *
+     * @return
+     */
+    public synchronized  final Collection<ComponentType> getComponentTypes(){
         return this.componentTypesById.values();
     }
 }

@@ -26,21 +26,20 @@ import kieker.analysis.datamodel.repository.SystemModelRepository;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  *
  * @author Andre van Hoorn
  */
 public class ExecutionFactory {
-    private final static String DEFAULT_STRING = "N/A";
 
+    private final static String DEFAULT_STRING = "N/A";
     private final SystemModelRepository systemEntityFactory;
-    
-    private ExecutionFactory (){
+
+    private ExecutionFactory() {
         this.systemEntityFactory = null;
     }
 
-    public ExecutionFactory (final SystemModelRepository systemEntityFactory){
+    public ExecutionFactory(final SystemModelRepository systemEntityFactory) {
         this.systemEntityFactory = systemEntityFactory;
     }
 
@@ -68,37 +67,67 @@ public class ExecutionFactory {
             final long tin,
             final long tout,
             final int eoi,
-            final int ess){
+            final int ess) {
         if (componentTypeName == null
                 || componentInstanceName == null
-                || operationName == null){
+                || operationName == null) {
             throw new NullPointerException("None of the String args must be null.");
         }
 
+        /* Register component type (if it hasn't been registered before) */
         ComponentType componentTypeA =
-                this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(
-                componentTypeName, componentTypeName);
+                this.systemEntityFactory.getTypeRepositoryFactory().getComponentTypeByFactoryIdentifier(componentTypeName);
+        if (componentTypeA == null) {
+            componentTypeA =
+                    this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
+        }
+        /* Register operation (if it hasn't been registered before) */
         Operation operationAa =
-                this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
-                operationName,
-                componentTypeA,
-                new Signature(
-                operationName,
-                DEFAULT_STRING,
-                new String[] {DEFAULT_STRING}));
-        componentTypeA.addOperation(operationAa);
+                this.systemEntityFactory.getOperationFactory().getOperationByFactoryIdentifier(operationName);
+        if (operationAa == null) {
+            operationAa =
+                    this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
+                    operationName,
+                    componentTypeA,
+                    new Signature(
+                    operationName,
+                    DEFAULT_STRING,
+                    new String[]{DEFAULT_STRING}));
+        }
+        if (componentTypeA.getOperations().contains(operationAa)) {
+            componentTypeA.addOperation(operationAa);
+        }
+
+        /* Register assembly component (if it hasn't been registered before) */
         AssemblyComponent assemblyComponentA =
-                this.systemEntityFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(
-                componentInstanceName,
-                componentTypeA);
+                this.systemEntityFactory.getAssemblyFactory().getAssemblyComponentInstanceByFactoryIdentifier(componentInstanceName);
+        if (assemblyComponentA == null) {
+            assemblyComponentA =
+                    this.systemEntityFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(
+                    componentInstanceName,
+                    componentTypeA);
+        }
+
+        /* Register execution container (if it hasn't been registered before) */
         ExecutionContainer containerC =
-                this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(
-                DEFAULT_STRING, DEFAULT_STRING);
+                this.systemEntityFactory.getExecutionEnvironmentFactory().getExecutionContainerByFactoryIdentifier(DEFAULT_STRING);
+        if (containerC == null) {
+            containerC =
+                    this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(
+                    DEFAULT_STRING, DEFAULT_STRING);
+        }
+
+        /* Register allocation container (if it hasn't been registered before) */
         AllocationComponent allocationComponentA =
+                this.systemEntityFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(DEFAULT_STRING);
+        if (allocationComponentA == null){
+            allocationComponentA =
                 this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(
                 DEFAULT_STRING,
                 assemblyComponentA,
                 containerC);
+        }
+
         return new Execution(
                 operationAa, allocationComponentA, traceId,
                 DEFAULT_STRING, eoi, ess, tin, tout);
@@ -121,7 +150,7 @@ public class ExecutionFactory {
             final long tin,
             final long tout,
             final int eoi,
-            final int ess){
+            final int ess) {
         return this.genExecution(
                 DEFAULT_STRING, // component type
                 DEFAULT_STRING, // component instance
