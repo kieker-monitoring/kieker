@@ -138,5 +138,6 @@ public class TestExecutionTrace extends TestCase {
         assertEquals("Sending execution is not root execution",
                 call0_0___root__bookstore_searchBook.getSendingExecution(), this.systemEntityFactory.getRootExecution());
         assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
+        assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), exec0_0__bookstore_searchBook.getTin());
     }
 }
