@@ -77,7 +77,7 @@ public class ExecutionTrace extends Trace {
      * @throws InvalidTraceException if the traceId of the passed Execution
      *         object is not the same as the traceId of this ExecutionTrace object.
      */
-    public void add(Execution execution) throws InvalidTraceException {
+    public synchronized void add(Execution execution) throws InvalidTraceException {
         if (this.getTraceId() != execution.getTraceId()) {
             throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
         }
@@ -91,13 +91,16 @@ public class ExecutionTrace extends Trace {
             this.maxStackDepth = execution.getEss();
         }
         this.set.add(execution);
+        /* Invalidate the current message trace representation */
+        this.messageTrace.set(null);
     }
 
     /**
      * Returns the message trace representation for this trace.
+     *
      * The transformation to a message trace is only computed during the
      * first execution of this method. After this, the stored reference
-     * is returned.
+     * is returned --- unless executions are added to the trace afterwards.
      */
     public synchronized MessageTrace toMessageTrace(final Execution rootExecution)
             throws InvalidTraceException {
@@ -179,7 +182,12 @@ public class ExecutionTrace extends Trace {
         return mt;
     }
 
-    public final SortedSet<Execution> getTraceAsSortedSet() {
+    /**
+     * TODO: It's not a good idea to return the internal data structure.
+     *
+     * @return
+     */
+    public synchronized final SortedSet<Execution> getTraceAsSortedSet() {
         return this.set;
     }
 
@@ -189,12 +197,12 @@ public class ExecutionTrace extends Trace {
      *
      * @return
      */
-    public final int getLength() {
+    public synchronized final int getLength() {
         return this.set.size();
     }
 
     @Override
-    public String toString() {
+    public synchronized  String toString() {
         StringBuilder strBuild = new StringBuilder("TraceId " + this.getTraceId()).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
         for (Execution e : this.set) {
             strBuild.append("<");
@@ -208,7 +216,7 @@ public class ExecutionTrace extends Trace {
      *
      * @return
      */
-    public int getMaxStackDepth() {
+    public synchronized int getMaxStackDepth() {
         return this.maxStackDepth;
     }
 
@@ -220,7 +228,7 @@ public class ExecutionTrace extends Trace {
      *
      * @return
      */
-    public long getMaxTout() {
+    public synchronized long getMaxTout() {
         return this.maxTout;
     }
 
@@ -232,7 +240,7 @@ public class ExecutionTrace extends Trace {
      *
      * @return
      */
-    public long getMinTin() {
+    public synchronized long getMinTin() {
         return this.minTin;
     }
 }

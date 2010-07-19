@@ -44,7 +44,7 @@ public class TestExecutionTraceBookstore extends TestCase {
     private final long traceId = 69898l;
     private final long minTin = 1;
     private final long maxTout = 10;
-    private int numExecutions = 0;
+    private final int numExecutions;
 
     /* Executions of a valid trace */
     private final Execution exec0_0__bookstore_searchBook;
@@ -53,8 +53,10 @@ public class TestExecutionTraceBookstore extends TestCase {
     private final Execution exec3_2__catalog_getBook;
 
     public TestExecutionTraceBookstore() {
+        int numExecutions_l = 0;
+
         /* Manually create Executions for a trace */
-        numExecutions++;
+        numExecutions_l++;
         exec0_0__bookstore_searchBook = eFactory.genExecution(
                 "Bookstore", "bookstore", "searchBook",
                 traceId,
@@ -62,27 +64,28 @@ public class TestExecutionTraceBookstore extends TestCase {
                 maxTout, // tout
                 0, 0);  // eoi, ess
 
-        numExecutions++;
+        numExecutions_l++;
         exec1_1__catalog_getBook = eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
                 traceId,
                 2, // tin
                 4, // tout
                 1, 1);  // eoi, ess
-        numExecutions++;
+        numExecutions_l++;
         exec2_1__crm_getOrders = eFactory.genExecution(
                 "CRM", "crm", "getOrders",
                 traceId,
                 5, // tin
                 8, // tout
                 2, 1);  // eoi, ess
-        numExecutions++;
+        numExecutions_l++;
         exec3_2__catalog_getBook = eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
                 traceId,
                 6, // tin
                 7, // tout
                 3, 2);  // eoi, ess
+        this.numExecutions = numExecutions_l;
     }
 
     private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
@@ -238,10 +241,34 @@ public class TestExecutionTraceBookstore extends TestCase {
              * Transform Execution Trace to Message Trace representation (twice)
              * and make sure, that the instances are the same.
              */
-            MessageTrace messageTrace1, messageTrace2;
-            messageTrace1 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
-            messageTrace2 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            MessageTrace messageTrace1 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            MessageTrace messageTrace2 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
             assertSame(messageTrace1, messageTrace2);
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail(ex.getMessage());
+            return;
+        }
+    }
+
+    /**
+     * Make sure that the transformation from an Execution Trace to a Message
+     * Trace is performed only once.
+     */
+    public void testMessageTraceTransformationTwiceOnChange() {
+        try {
+            ExecutionTrace executionTrace = genValidBookstoreTrace();
+
+            final Execution exec4_1__catalog_getBook = eFactory.genExecution(
+                    "Catalog", "catalog", "getBook",
+                    traceId,
+                    9, // tin
+                    10, // tout
+                    4, 1);  // eoi, ess
+            MessageTrace messageTrace1 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            executionTrace.add(exec4_1__catalog_getBook);
+            MessageTrace messageTrace2 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            assertNotSame(messageTrace1, messageTrace2);
         } catch (InvalidTraceException ex) {
             log.error("InvalidTraceException", ex);
             fail(ex.getMessage());
