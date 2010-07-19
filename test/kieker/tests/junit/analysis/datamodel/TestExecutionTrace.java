@@ -27,6 +27,8 @@ import kieker.analysis.datamodel.Execution;
 import kieker.analysis.datamodel.ExecutionTrace;
 import kieker.analysis.datamodel.Message;
 import kieker.analysis.datamodel.MessageTrace;
+import kieker.analysis.datamodel.SynchronousCallMessage;
+import kieker.analysis.datamodel.SynchronousReplyMessage;
 import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TraceIdFilter;
@@ -131,13 +133,78 @@ public class TestExecutionTrace extends TestCase {
         Message[] msgArray = msgVector.toArray(new Message[0]);
         assertEquals(msgArray.length, numExecutions*2);
 
-        /* 1. $->bookstore.search */
         int curIdx = 0;
+        { /* 1.: [0,0].Call $->bookstore.searchBook(..) */
         Message call0_0___root__bookstore_searchBook
                 = msgArray[curIdx++];
+        assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
         assertEquals("Sending execution is not root execution",
                 call0_0___root__bookstore_searchBook.getSendingExecution(), this.systemEntityFactory.getRootExecution());
         assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
         assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), exec0_0__bookstore_searchBook.getTin());
+        }
+        { /* 2.: [1,1].Call bookstore.searchBook(..)->catalog.getBook(..) */
+        Message call1_1___bookstore_searchBook_catalog_getBook
+                = msgArray[curIdx++];
+        assertTrue("Message is not a call",
+                call1_1___bookstore_searchBook_catalog_getBook instanceof SynchronousCallMessage);
+        assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getSendingExecution(), exec0_0__bookstore_searchBook);
+        assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getReceivingExecution(), exec1_1__catalog_getBook);
+        assertEquals("Message has wrong timestamp", 
+                call1_1___bookstore_searchBook_catalog_getBook.getTimestamp(),
+                exec1_1__catalog_getBook.getTin());
+        }
+        { /* 2.: [1,1].Return catalog.getBook(..)->bookstore.searchBook(..) */
+        Message return1_1___catalog_getBook__bookstore_searchBook
+                = msgArray[curIdx++];
+        assertTrue("Message is not a reply",
+                return1_1___catalog_getBook__bookstore_searchBook instanceof SynchronousReplyMessage);
+        assertEquals(return1_1___catalog_getBook__bookstore_searchBook.getSendingExecution(), exec1_1__catalog_getBook);
+        assertEquals(return1_1___catalog_getBook__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
+        assertEquals("Message has wrong timestamp",
+                return1_1___catalog_getBook__bookstore_searchBook.getTimestamp(),
+                exec1_1__catalog_getBook.getTout());
+        }
+        { /* 3.: [2,1].Call bookstore.searchBook(..)->crm.getOrders(..) */
+        Message call2_1___bookstore_searchBook__crm_getOrders
+                = msgArray[curIdx++];
+        assertTrue("Message is not a call",
+                call2_1___bookstore_searchBook__crm_getOrders instanceof SynchronousCallMessage);
+        assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getSendingExecution(), exec0_0__bookstore_searchBook);
+        assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getReceivingExecution(), exec2_1__crm_getOrders);
+        assertEquals("Message has wrong timestamp",
+                call2_1___bookstore_searchBook__crm_getOrders.getTimestamp(),
+                exec2_1__crm_getOrders.getTin());
+        }
+        { /* 4.: [3,2].Call crm.getOrders(..)->catalog.getBook(..) */
+            Message call3_2___bookstore_searchBook__catalog_getBook = msgArray[curIdx++];
+            assertTrue("Message is not a call",
+                    call3_2___bookstore_searchBook__catalog_getBook instanceof SynchronousCallMessage);
+            assertEquals(call3_2___bookstore_searchBook__catalog_getBook.getSendingExecution(), exec2_1__crm_getOrders);
+            assertEquals(call3_2___bookstore_searchBook__catalog_getBook.getReceivingExecution(), exec3_2__catalog_getBook);
+            assertEquals("Message has wrong timestamp",
+                    call3_2___bookstore_searchBook__catalog_getBook.getTimestamp(),
+                    exec3_2__catalog_getBook.getTin());
+        }
+        { /* 5.: [3,2].Return catalog.getBook(..)->crm.getOrders(..) */
+            Message return3_2___catalog_getBook__crm_getOrders = msgArray[curIdx++];
+            assertTrue("Message is not a reply",
+                    return3_2___catalog_getBook__crm_getOrders instanceof SynchronousReplyMessage);
+            assertEquals(return3_2___catalog_getBook__crm_getOrders.getSendingExecution(), exec3_2__catalog_getBook);
+            assertEquals(return3_2___catalog_getBook__crm_getOrders.getReceivingExecution(), exec2_1__crm_getOrders);
+            assertEquals("Message has wrong timestamp",
+                    return3_2___catalog_getBook__crm_getOrders.getTimestamp(),
+                    exec3_2__catalog_getBook.getTout());
+        }
+       { /* 6.: [2,1].Return crm.getOrders(..)->bookstore.searchBook */
+            Message return2_1___crm_getOrders__bookstore_searchBook = msgArray[curIdx++];
+            assertTrue("Message is not a reply",
+                    return2_1___crm_getOrders__bookstore_searchBook instanceof SynchronousReplyMessage);
+            assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getSendingExecution(), exec2_1__crm_getOrders);
+            assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
+            assertEquals("Message has wrong timestamp",
+                    return2_1___crm_getOrders__bookstore_searchBook.getTimestamp(),
+                    exec2_1__crm_getOrders.getTout());
+        }
     }
 }

@@ -120,12 +120,12 @@ public class ExecutionFactory {
         /* Register allocation container (if it hasn't been registered before) */
         AllocationComponent allocationComponentA =
                 this.systemEntityFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(DEFAULT_STRING);
-        if (allocationComponentA == null){
+        if (allocationComponentA == null) {
             allocationComponentA =
-                this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(
-                DEFAULT_STRING,
-                assemblyComponentA,
-                containerC);
+                    this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(
+                    DEFAULT_STRING,
+                    assemblyComponentA,
+                    containerC);
         }
 
         return new Execution(
