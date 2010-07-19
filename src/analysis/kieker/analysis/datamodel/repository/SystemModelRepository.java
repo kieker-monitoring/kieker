@@ -7,6 +7,7 @@ import java.util.Collection;
 import kieker.analysis.datamodel.AllocationComponent;
 import kieker.analysis.datamodel.AssemblyComponent;
 import kieker.analysis.datamodel.ComponentType;
+import kieker.analysis.datamodel.Execution;
 import kieker.analysis.datamodel.ExecutionContainer;
 import kieker.analysis.datamodel.Operation;
 import kieker.analysis.datamodel.Signature;
@@ -39,6 +40,11 @@ public class SystemModelRepository {
     private final ExecutionEnvironmentRepository executionEnvironmentFactory;
     private final AllocationRepository allocationFactory;
     private final OperationRepository operationFactory;
+    private final Execution rootExecution;
+
+    public Execution getRootExecution() {
+        return this.rootExecution;
+    }
 
     public SystemModelRepository() {
         ComponentType rootComponentType =
@@ -56,6 +62,10 @@ public class SystemModelRepository {
         Signature rootSignature = new Signature("$", "<>", new String[]{});
         Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
         this.operationFactory = new OperationRepository(this, rootOperation);
+        this.rootExecution = new Execution(
+                operationFactory.rootOperation,
+                allocationFactory.rootAllocationComponent,
+                -1, "-1", -1, -1, -1, -1);
     }
 
     public final AllocationRepository getAllocationFactory() {

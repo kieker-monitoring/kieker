@@ -328,11 +328,7 @@ public class TraceAnalysisTool {
 
         TraceReconstructionPlugin mtReconstrFilter = null;
         try {
-            Execution rootExecution =
-                    new Execution(
-                    TraceAnalysisTool.systemEntityFactory.getOperationFactory().rootOperation,
-                    TraceAnalysisTool.systemEntityFactory.getAllocationFactory().rootAllocationComponent,
-                    -1, "-1", -1, -1, -1, -1);
+            Execution rootExecution = systemEntityFactory.getRootExecution();
 
             final AnalysisInstance analysisInstance = new AnalysisInstance();
             analysisInstance.setLogReader(new FSReader(

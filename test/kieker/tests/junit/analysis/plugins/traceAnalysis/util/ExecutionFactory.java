@@ -44,27 +44,52 @@ public class ExecutionFactory {
         this.systemEntityFactory = systemEntityFactory;
     }
 
+    /**
+     * Creates an Execution object initialized with the passed values.
+     * The remaining values of the Execution object are assigned default
+     * values.
+     *
+     * @param componentTypeName
+     * @param componentInstanceName
+     * @param operationName
+     * @param traceId
+     * @param tin
+     * @param tout
+     * @param eoi
+     * @param ess
+     * @throws NullPointerException iff one of the String args has the value null.
+     * @return
+     */
     public Execution genExecution(
+            final String componentTypeName,
+            final String componentInstanceName,
+            final String operationName,
             final long traceId,
             final long tin,
             final long tout,
             final int eoi,
             final int ess){
+        if (componentTypeName == null
+                || componentInstanceName == null
+                || operationName == null){
+            throw new NullPointerException("None of the String args must be null.");
+        }
+
         ComponentType componentTypeA =
                 this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(
-                DEFAULT_STRING, DEFAULT_STRING);
+                componentTypeName, componentTypeName);
         Operation operationAa =
                 this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
-                DEFAULT_STRING,
+                operationName,
                 componentTypeA,
                 new Signature(
-                DEFAULT_STRING,
+                operationName,
                 DEFAULT_STRING,
                 new String[] {DEFAULT_STRING}));
         componentTypeA.addOperation(operationAa);
         AssemblyComponent assemblyComponentA =
                 this.systemEntityFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(
-                DEFAULT_STRING,
+                componentInstanceName,
                 componentTypeA);
         ExecutionContainer containerC =
                 this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(
@@ -77,5 +102,30 @@ public class ExecutionFactory {
         return new Execution(
                 operationAa, allocationComponentA, traceId,
                 DEFAULT_STRING, eoi, ess, tin, tout);
+    }
+
+    /**
+     * Creates an Execution object initialized with the passed values.
+     * The remaining values of the Execution object are assigned default
+     * values.
+     *
+     * @param traceId
+     * @param tin
+     * @param tout
+     * @param eoi
+     * @param ess
+     * @return
+     */
+    public Execution genExecution(
+            final long traceId,
+            final long tin,
+            final long tout,
+            final int eoi,
+            final int ess){
+        return this.genExecution(
+                DEFAULT_STRING, // component type
+                DEFAULT_STRING, // component instance
+                DEFAULT_STRING, // operation name
+                traceId, tin, tout, eoi, ess);
     }
 }

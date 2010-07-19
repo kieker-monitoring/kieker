@@ -70,6 +70,13 @@ public class ExecutionTrace extends Trace {
         super(traceId);
     }
 
+    /**
+     * Adds an execution to the trace.
+     *
+     * @param execution
+     * @throws InvalidTraceException if the traceId of the passed Execution
+     *         object is not the same as the traceId of this ExecutionTrace object.
+     */
     public void add(Execution execution) throws InvalidTraceException {
         if (this.getTraceId() != execution.getTraceId()) {
             throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
@@ -175,6 +182,12 @@ public class ExecutionTrace extends Trace {
         return this.set;
     }
 
+    /**
+     * Returns the length of this trace in terms of the number of contained
+     * executions.
+     *
+     * @return
+     */
     public final int getLength() {
         return this.set.size();
     }
@@ -189,14 +202,35 @@ public class ExecutionTrace extends Trace {
         return strBuild.toString();
     }
 
+    /**
+     * Returns the maximum step depth within the trace.
+     *
+     * @return
+     */
     public int getMaxStackDepth() {
         return this.maxStackDepth;
     }
 
+    /**
+     * Returns the maximum timestamp value of an execution return in this trace.
+     *
+     * Notice that you should need use this value to reason about the
+     * control flow --- particularly in distributed scenarios.
+     *
+     * @return
+     */
     public long getMaxTout() {
         return this.maxTout;
     }
 
+    /**
+     * Returns the minimum timestamp of an execution start in this trace.
+     *
+     * Notice that you should need use this value to reason about the
+     * control flow --- particularly in distributed scenarios.
+     *
+     * @return
+     */
     public long getMinTin() {
         return this.minTin;
     }
