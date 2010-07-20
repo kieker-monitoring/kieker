@@ -58,7 +58,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     private final boolean ignoreInvalidTraces;
     private final Execution rootExecution;
     private final long maxTraceDurationNanos;
-
     /** Timestamp of most recent execution x trace */
     private final TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(
             new Comparator<ExecutionTrace>() {
@@ -215,7 +214,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     private void processTimeoutQueue() throws ExecutionEventProcessingException {
         synchronized (this.timeoutMap) {
             while (!this.timeoutMap.isEmpty()
-                    && (this.terminate || (this.timeoutMap.first().getMinTin() + this.maxTraceDurationNanos > this.maxTout ))) {
+                    && (this.terminate || (this.maxTout - this.timeoutMap.first().getMinTin() > this.maxTraceDurationNanos))) {
                 final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
                 final long curTraceId = polledTrace.getTraceId();
                 this.pendingTraces.remove(curTraceId);
@@ -226,7 +225,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
     /**
      * Return the number of nanoseconds after which a pending trace is 
-     * considered have timed out
+     * considered to have timed out
      * 
      * @return
      */

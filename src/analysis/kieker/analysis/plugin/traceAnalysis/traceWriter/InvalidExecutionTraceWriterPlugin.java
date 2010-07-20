@@ -87,10 +87,10 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
                 @Override
                 public void newEvent(InvalidExecutionTrace et) {
                     try {
-                        ps.append(et.getInvalidExecutionTrace().toString());
-                        reportSuccess(et.getInvalidExecutionTrace().getTraceId());
+                        ps.append(et.getInvalidExecutionTraceArtifacts().toString());
+                        reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
                     } catch (IOException ex) {
-                        reportError(et.getInvalidExecutionTrace().getTraceId());
+                        reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
                         log.error(ex, ex);
                     }
                 }

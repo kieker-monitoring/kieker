@@ -48,8 +48,6 @@ public class TestTraceReconstructionFilter extends TestCase {
     private final Execution exec2_1__crm_getOrders;
     private final Execution exec3_2__catalog_getBook;
     private final long traceId = 62298l;
-    private final long minTin;
-    private final long maxTout;
 
     public TestTraceReconstructionFilter() {
         /* Manually create Executions for a trace */
@@ -59,8 +57,6 @@ public class TestTraceReconstructionFilter extends TestCase {
                 1 * (1000 * 1000), // tin
                 10 * (1000 * 1000), // tout
                 0, 0);  // eoi, ess
-        this.minTin = exec0_0__bookstore_searchBook.getTin();
-        this.maxTout = exec0_0__bookstore_searchBook.getTout();
 
         exec1_1__catalog_getBook = eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
@@ -318,11 +314,11 @@ public class TestTraceReconstructionFilter extends TestCase {
         filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort<InvalidExecutionTrace>("Invalid execution trace") {
 
             public void newEvent(InvalidExecutionTrace event) {
-                if (event.getInvalidExecutionTrace().equals(invalidExecutionTrace)) {
+                if (event.getInvalidExecutionTraceArtifacts().equals(invalidExecutionTrace)) {
                     receivedTheInvalidExecutionTrace.set(Boolean.TRUE);
                 }
                 assertEquals("Unexpected invalid execution trace",
-                        invalidExecutionTrace, event.getInvalidExecutionTrace());
+                        invalidExecutionTrace, event.getInvalidExecutionTraceArtifacts());
             }
         });
 
@@ -398,27 +394,18 @@ public class TestTraceReconstructionFilter extends TestCase {
             return;
         }
 
-        final int TIMEOUT_MARGIN_MILLIS = 1;
-        TraceReconstructionFilter filter =
-                new TraceReconstructionFilter(
-                "TraceReconstructionFilter",
-                systemEntityFactory,
-                (incompleteExecutionTrace.getDurationInNanos() / (1000 * 1000)) + TIMEOUT_MARGIN_MILLIS, // maxTraceDurationMillis
-                true); // ignoreInvalidTraces
-        assertTrue("Test invalid (trace duration "+incompleteExecutionTrace.getDurationInNanos()+
-                " <= filter timeout "+filter.getMaxTraceDurationNanos()+")",
-                incompleteExecutionTrace.getDurationInNanos() > filter.getMaxTraceDurationNanos());
-
         /*
          * We will use this execution to trigger the timeout check for
          * pending traces within the filter.
          */
+        final int TRIGGER_TRACE_LENGTH_MILLIS = 1;
         final long triggerTraceId = traceId + 1;
-        final Execution exec0_0__bookstore_searchBook__trigger = eFactory.genExecution(
+        final Execution exec0_0__bookstore_searchBook__trigger =
+                eFactory.genExecution(
                 "Bookstore", "bookstore", "searchBook",
                 triggerTraceId,
-                incompleteExecutionTrace.getMinTin(), // tin
-                incompleteExecutionTrace.getMaxTout() + (TIMEOUT_MARGIN_MILLIS * (1000 * 1000)), // tout
+                incompleteExecutionTrace.getMaxTout(), // tin
+                incompleteExecutionTrace.getMaxTout() + TRIGGER_TRACE_LENGTH_MILLIS * (1000 * 1000), // tout
                 0, 0);  // eoi, ess
         final ExecutionTrace triggerExecutionTrace =
                 new ExecutionTrace(triggerTraceId);
@@ -431,6 +418,22 @@ public class TestTraceReconstructionFilter extends TestCase {
             fail("InvalidTraceException" + ex);
             return;
         }
+
+        /**
+         * Instantiate reconstruction filter with timeout.
+         */
+        TraceReconstructionFilter filter =
+                new TraceReconstructionFilter(
+                "TraceReconstructionFilter",
+                systemEntityFactory,
+                /* set maxTraceDurationMillis to trace duration + trace duration of trigger trace */
+                incompleteExecutionTrace.getDurationInNanos() / (1000 * 1000) + TRIGGER_TRACE_LENGTH_MILLIS, // maxTraceDurationMillis
+                true); // ignoreInvalidTraces
+
+        assertTrue("Test invalid: NOT (filter.getMaxTraceDurationNanos() > incompleteExecutionTrace.getDurationInNanos())\n"
+                + "filter.getMaxTraceDurationNanos(): " + filter.getMaxTraceDurationNanos() + "\n"
+                + "incompleteExecutionTrace.getDurationInNanos(): " + incompleteExecutionTrace.getDurationInNanos(),
+                filter.getMaxTraceDurationNanos() > incompleteExecutionTrace.getDurationInNanos());
 
         /*
          * Register a handler for reconstructed (valid) execution traces.
@@ -471,10 +474,10 @@ public class TestTraceReconstructionFilter extends TestCase {
         filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort<InvalidExecutionTrace>("Invalid execution trace") {
 
             public void newEvent(InvalidExecutionTrace event) {
-                if (event.getInvalidExecutionTrace().equals(incompleteExecutionTrace)) {
+                if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) {
                     receivedTheIncompleteExecutionTrace.set(Boolean.TRUE);
                 } else {
-                    fail("Received an unexpected invalid execution trace " + event);
+                    fail("Received an unexpected invalid execution trace: " + event);
                 }
             }
         });
@@ -488,9 +491,6 @@ public class TestTraceReconstructionFilter extends TestCase {
          * Pass the executions of the incomplete trace intended to time out
          */
         for (Execution curExec : incompleteExecutionTrace.getTraceAsSortedExecutionSet()) {
-            if (curExec.equals(exec0_0__bookstore_searchBook)) {
-                continue; // skip this execution to have a chance to add our "trigger execution"
-            }
             filter.getExecutionInputPort().newEvent(curExec);
         }
         /**
@@ -498,17 +498,20 @@ public class TestTraceReconstructionFilter extends TestCase {
          */
         filter.getExecutionInputPort().newEvent(exec0_0__bookstore_searchBook__trigger);
 
-        filter.terminate(false);
+        /**
+         * Terminate the filter
+         */
+        filter.terminate(false); // no error
 
         /* Analyse result of test case execution */
         if (!receivedTheValidTriggerExecutionTrace.get()) {
-            fail("A valid execution trace passed the filter");
+            fail("Valid execution trace didn't pass the filter");
         }
         if (!receivedTheValidTriggerMessageTrace.get()) {
-            fail("A message trace passed the filter");
+            fail("Message trace didn't pass the filter");
         }
         if (!receivedTheIncompleteExecutionTrace.get()) {
-            fail("Invalid trace didn't pass the filter");
+            fail("Incomplete trace didn't pass the filter");
         }
     }
 }
