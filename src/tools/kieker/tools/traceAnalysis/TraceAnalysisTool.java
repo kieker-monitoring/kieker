@@ -353,7 +353,6 @@ public class TraceAnalysisTool {
             mtReconstrFilter = new TraceReconstructionFilter(
                     Constants.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory,
-                    rootExecution,
                     TraceAnalysisTool.maxTraceDurationMillis,
                     TraceAnalysisTool.ignoreInvalidTraces);
             executionFilterByTraceId.getExecutionOutputPort().subscribe(mtReconstrFilter.getExecutionInputPort());
