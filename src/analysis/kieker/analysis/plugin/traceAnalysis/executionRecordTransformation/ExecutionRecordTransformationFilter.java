@@ -42,11 +42,11 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformationPlugin extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
+public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
 
-    private static final Log log = LogFactory.getLog(ExecutionRecordTransformationPlugin.class);
+    private static final Log log = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-    public ExecutionRecordTransformationPlugin(
+    public ExecutionRecordTransformationFilter(
             final String name,
             final SystemModelRepository systemFactory) {
         super(name, systemFactory);

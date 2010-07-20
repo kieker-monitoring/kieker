@@ -43,9 +43,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
+public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
-    private static final Log log = LogFactory.getLog(TraceReconstructionPlugin.class);
+    private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
 
     private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
     public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
@@ -95,7 +95,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
         return true; // no need to do anything here
     }
 
-    public TraceReconstructionPlugin(
+    public TraceReconstructionFilter(
             final String name,
             final SystemModelRepository systemEntityFactory,
             final Execution rootExecution,
@@ -110,8 +110,8 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
                     "value maxTraceDurationMillis must not be negative (found: "
                     + maxTraceDurationMillis + ")");
         }
-        if (maxTraceDurationMillis == TraceReconstructionPlugin.MAX_DURATION_MILLIS) {
-            this.maxTraceDurationNanos = TraceReconstructionPlugin.MAX_DURATION_NANOS;
+        if (maxTraceDurationMillis == TraceReconstructionFilter.MAX_DURATION_MILLIS) {
+            this.maxTraceDurationNanos = TraceReconstructionFilter.MAX_DURATION_NANOS;
         } else {
             this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000);
         }
@@ -129,7 +129,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
         if (seq != null) { // create and add new sequence
             if (!this.timeoutMap.remove(seq)) { // remove from timeoutMap. Will
                 // be re-added below
-                TraceReconstructionPlugin.log.error("Missing entry for trace in timeoutMap: " + seq);
+                TraceReconstructionFilter.log.error("Missing entry for trace in timeoutMap: " + seq);
             }
         } else {
             seq = new ExecutionTrace(traceId);
@@ -142,7 +142,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
                     "Attempt to add record to wrong trace", ex);
         }
         if (!this.timeoutMap.add(seq)) { // (re-)add trace to timeoutMap
-            TraceReconstructionPlugin.log.error("Equal entry existed in timeout already:" + seq);
+            TraceReconstructionFilter.log.error("Equal entry existed in timeout already:" + seq);
         }
         try {
             this.processQueue();
@@ -188,7 +188,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
                     this.reportError(curTraceId);
                     this.invalidTraces.add(curTraceId);
                     if (!this.ignoreInvalidTraces) {
-                        TraceReconstructionPlugin.log.error(
+                        TraceReconstructionFilter.log.error(
                                 "Failed to transform execution trace to message trace (ID:"
                                 + curTraceId + "): " + polledTrace, ex);
                         throw new ExecutionEventProcessingException(
@@ -215,7 +215,7 @@ public class TraceReconstructionPlugin extends AbstractTraceProcessingPlugin {
             this.terminate = true;
             this.processQueue();
         } catch (final ExecutionEventProcessingException ex) {
-            TraceReconstructionPlugin.log.error("Error processing queue", ex);
+            TraceReconstructionFilter.log.error("Error processing queue", ex);
         }
     }
 

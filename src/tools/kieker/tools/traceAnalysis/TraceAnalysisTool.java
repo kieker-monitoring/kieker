@@ -43,10 +43,10 @@ import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.traceAnalysis.AbstractTraceProcessingPlugin;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TraceIdFilter;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TimestampFilter;
-import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationPlugin;
+import kieker.analysis.plugin.traceAnalysis.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.analysis.plugin.traceAnalysis.traceFilter.TraceEquivalenceClassFilter;
 import kieker.analysis.plugin.traceAnalysis.traceFilter.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionPlugin;
+import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionFilter;
 import kieker.analysis.plugin.traceAnalysis.traceWriter.ExecutionTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceWriter.InvalidExecutionTraceWriterPlugin;
 import kieker.analysis.plugin.traceAnalysis.traceWriter.MessageTraceWriterPlugin;
@@ -104,7 +104,7 @@ public class TraceAnalysisTool {
     private static boolean shortLabels = true;
     private static boolean includeSelfLoops = false;
     private static boolean ignoreInvalidTraces = false;
-    private static int maxTraceDurationMillis = TraceReconstructionPlugin.MAX_DURATION_MILLIS; // infinite
+    private static int maxTraceDurationMillis = TraceReconstructionFilter.MAX_DURATION_MILLIS; // infinite
     private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.MIN_TIMESTAMP;
     private static long ignoreExecutionsAfterTimestamp = TimestampFilter.MAX_TIMESTAMP;
     public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
@@ -326,7 +326,7 @@ public class TraceAnalysisTool {
         boolean retVal = true;
         int numRequestedTasks = 0;
 
-        TraceReconstructionPlugin mtReconstrFilter = null;
+        TraceReconstructionFilter mtReconstrFilter = null;
         try {
             Execution rootExecution = systemEntityFactory.getRootExecution();
 
@@ -334,7 +334,7 @@ public class TraceAnalysisTool {
             analysisInstance.setLogReader(new FSReader(
                     TraceAnalysisTool.inputDirs));
 
-            final ExecutionRecordTransformationPlugin execRecTransformer = new ExecutionRecordTransformationPlugin(
+            final ExecutionRecordTransformationFilter execRecTransformer = new ExecutionRecordTransformationFilter(
                     Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory);
             analysisInstance.registerPlugin(execRecTransformer);
@@ -350,7 +350,7 @@ public class TraceAnalysisTool {
             executionFilterByTimestamp.getExecutionOutputPort().subscribe(executionFilterByTraceId.getExecutionInputPort());
             analysisInstance.registerPlugin(executionFilterByTraceId);
 
-            mtReconstrFilter = new TraceReconstructionPlugin(
+            mtReconstrFilter = new TraceReconstructionFilter(
                     Constants.TRACERECONSTR_COMPONENT_NAME,
                     TraceAnalysisTool.systemEntityFactory,
                     rootExecution,
