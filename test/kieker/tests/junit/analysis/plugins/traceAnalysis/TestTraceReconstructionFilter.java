@@ -371,9 +371,10 @@ public class TestTraceReconstructionFilter extends TestCase {
     }
 
     /**
-     * Tests the timeout of pending traces.
+     * Tests the timeout of pending (incomplete) traces.
+     * A corresponding test for a valid trace is not required.
      */
-    public void testBrokenTraceDueToTimeout() {
+    public void testIncompleteTraceDueToTimeout() {
 
         final AtomicReference<Boolean> receivedTheValidTriggerExecutionTrace =
                 new AtomicReference<Boolean>(Boolean.FALSE);
@@ -383,7 +384,7 @@ public class TestTraceReconstructionFilter extends TestCase {
                 new AtomicReference<Boolean>(Boolean.FALSE);
 
         /*
-         * This trace is incomplete and timeout.
+         * This trace is incomplete.
          */
         final ExecutionTrace incompleteExecutionTrace;
         try {
