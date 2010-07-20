@@ -1,4 +1,4 @@
-package kieker.tests.junit.analysis.plugins.traceAnalysis.util;
+package kieker.tests.junit.analysis.util;
 
 import kieker.analysis.datamodel.AllocationComponent;
 import kieker.analysis.datamodel.AssemblyComponent;

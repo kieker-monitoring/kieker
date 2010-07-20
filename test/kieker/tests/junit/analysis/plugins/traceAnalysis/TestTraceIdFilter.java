@@ -25,7 +25,7 @@ import kieker.analysis.datamodel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TimestampFilter;
 import kieker.analysis.plugin.traceAnalysis.executionFilter.TraceIdFilter;
-import kieker.tests.junit.analysis.plugins.traceAnalysis.util.ExecutionFactory;
+import kieker.tests.junit.analysis.util.ExecutionFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
