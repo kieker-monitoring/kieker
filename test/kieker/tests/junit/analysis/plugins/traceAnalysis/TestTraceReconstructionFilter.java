@@ -395,7 +395,7 @@ public class TestTraceReconstructionFilter extends TestCase {
                 new TraceReconstructionFilter(
                 "TraceReconstructionFilter",
                 systemEntityFactory,
-                (invalidExecutionTrace.getDurationInNanos() / (1000 * 1000)) + TIMEOUT_MARGIN_MILLIS, // maxTraceDurationMillis
+                (invalidExecutionTrace.getDurationInNanos() / (1000 * 1000)) - TIMEOUT_MARGIN_MILLIS, // maxTraceDurationMillis
                 true); // ignoreInvalidTraces
          assertTrue("Test invalid",
                  invalidExecutionTrace.getDurationInNanos()>filter.getMaxTraceDurationNanos());
