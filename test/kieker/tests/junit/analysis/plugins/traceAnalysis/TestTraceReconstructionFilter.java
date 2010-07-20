@@ -282,7 +282,6 @@ public class TestTraceReconstructionFilter extends TestCase {
         assertTrue("Test invalid since trace length smaller than filter timeout",
                 invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
-
         /*
          * Register a handler for reconstructed (valid) execution traces.
          * This handler MUST not be invoked.
@@ -494,6 +493,7 @@ public class TestTraceReconstructionFilter extends TestCase {
         for (Execution curExec : incompleteExecutionTrace.getTraceAsSortedExecutionSet()) {
             filter.getExecutionInputPort().newEvent(curExec);
         }
+
         /**
          * Pass the timeout "trigger execution"
          */
