@@ -55,10 +55,9 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
     public TraceEquivalenceClassFilter(final String name,
             final SystemModelRepository systemEntityFactory,
-            final Execution rootExecution,
             final TraceEquivalenceClassModes traceEquivalenceCallMode) {
         super(name, systemEntityFactory);
-        this.rootExecution = rootExecution;
+        this.rootExecution = systemEntityFactory.getRootExecution();
         this.equivalenceMode = traceEquivalenceCallMode;
     }
 

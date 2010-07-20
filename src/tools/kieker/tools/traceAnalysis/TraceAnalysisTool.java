@@ -328,8 +328,6 @@ public class TraceAnalysisTool {
 
         TraceReconstructionFilter mtReconstrFilter = null;
         try {
-            Execution rootExecution = systemEntityFactory.getRootExecution();
-
             final AnalysisInstance analysisInstance = new AnalysisInstance();
             analysisInstance.setLogReader(new FSReader(
                     TraceAnalysisTool.inputDirs));
@@ -364,7 +362,6 @@ public class TraceAnalysisTool {
                     new TraceEquivalenceClassFilter(
                     Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME,
                     systemEntityFactory,
-                    rootExecution,
                     TraceEquivalenceClassModes.ALLOCATION);
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
                 /** Currently, this filter is only used to print  an equivalence report.
@@ -378,7 +375,6 @@ public class TraceAnalysisTool {
                     new TraceEquivalenceClassFilter(
                     Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME,
                     systemEntityFactory,
-                    rootExecution,
                     TraceEquivalenceClassModes.ASSEMBLY);
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
                 /** Currently, this filter is only used to print  an equivalence report.
