@@ -33,4 +33,19 @@ public class SynchronousCallMessage extends Message {
             final Execution receivingExecution){
         super(timestamp, sendingExecution, receivingExecution);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SynchronousCallMessage)){
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        SynchronousCallMessage other = (SynchronousCallMessage)obj;
+
+        return this.getTimestamp() == other.getTimestamp()
+                && this.getSendingExecution().equals(other.getSendingExecution())
+                && this.getReceivingExecution().equals(other.getReceivingExecution());
+    }
 }

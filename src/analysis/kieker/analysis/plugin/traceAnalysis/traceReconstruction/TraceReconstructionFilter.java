@@ -46,18 +46,19 @@ import org.apache.commons.logging.LogFactory;
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
     private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
-
     private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
     public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
-
     /** TraceId x trace */
     private final Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
     /** We need to keep track of invalid trace's IDs */
     private final Set<Long> invalidTraces = new TreeSet<Long>();
+    private volatile long minTin = -1;
+    private volatile long maxTout = -1;
+    private volatile boolean terminate = false;
+    private final boolean ignoreInvalidTraces;
+    private final Execution rootExecution;
+    private final long maxTraceDurationNanos;
 
-    public Set<Long> getInvalidTraces() {
-        return this.invalidTraces;
-    }
     /** Timestamp of most recent execution x trace */
     private final TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(
             new Comparator<ExecutionTrace>() {
@@ -68,43 +69,19 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
                     if (t1 == t2) {
                         return 0;
                     }
-                    final long t1LowestTin = t1.getTraceAsSortedSet().first().getTin();
-                    final long t2LowestTin = t2.getTraceAsSortedSet().first().getTin();
+                    final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
+                    final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
                     return t1LowestTin < t2LowestTin ? -1 : 1;
                 }
             });
-    private final long maxTraceDurationNanos;
-    private long minTin = -1;
-
-    public final long getFirstTimestamp() {
-        return this.minTin;
-    }
-    private long highestTout = -1;
-
-    /** Return latest timestamp */
-    public final long getLastTimestamp() {
-        return this.highestTout;
-    }
-    private volatile boolean terminate = false;
-    private final boolean ignoreInvalidTraces;
-    // private final boolean onlyEquivClasses;
-
-    private final Execution rootExecution;
-
-    public boolean execute() {
-        return true; // no need to do anything here
-    }
 
     public TraceReconstructionFilter(
             final String name,
             final SystemModelRepository systemEntityFactory,
-            final Execution rootExecution,
             final long maxTraceDurationMillis,
-            final boolean ignoreInvalidTraces
-            // final boolean onlyEquivClasses,
-            ) {
+            final boolean ignoreInvalidTraces) {
         super(name, systemEntityFactory);
-        this.rootExecution = rootExecution;
+        this.rootExecution = systemEntityFactory.getRootExecution();
         if (maxTraceDurationMillis < 0) {
             throw new IllegalArgumentException(
                     "value maxTraceDurationMillis must not be negative (found: "
@@ -116,104 +93,157 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
             this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000);
         }
         this.ignoreInvalidTraces = ignoreInvalidTraces;
-        // this.onlyEquivClasses = onlyEquivClasses;
+    }
+
+    /**
+     * Returns a set of the invalid traces.
+     *
+     * @return
+     */
+    public Set<Long> getInvalidTraces() {
+        return this.invalidTraces;
+    }
+
+    /**
+     * Returns the minimum tin timestamp of a processed execution.
+     *
+     * @return
+     */
+    public final long getMinTin() {
+        return this.minTin;
+    }
+
+    /**
+     * Returns the maximum tout timestamp of a processed execution.
+     *
+     * @return
+     */
+    public final long getMaxTout() {
+        return this.maxTout;
+    }
+
+    public boolean execute() {
+        return true; // no need to do anything here
     }
 
     private void newExecution(final Execution execution) {
         final long traceId = execution.getTraceId();
 
-        this.minTin = (this.minTin < 0 || execution.getTin() < this.minTin) ? execution.getTin()
+        this.minTin =
+                (this.minTin < 0 || execution.getTin() < this.minTin)
+                ? execution.getTin()
                 : this.minTin;
-        this.highestTout = execution.getTout() > this.highestTout ? execution.getTout() : this.highestTout;
-        ExecutionTrace seq = this.pendingTraces.get(traceId);
-        if (seq != null) { // create and add new sequence
-            if (!this.timeoutMap.remove(seq)) { // remove from timeoutMap. Will
-                // be re-added below
-                TraceReconstructionFilter.log.error("Missing entry for trace in timeoutMap: " + seq);
+        this.maxTout =
+                execution.getTout() > this.maxTout
+                ? execution.getTout()
+                : this.maxTout;
+
+        ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
+        if (executionTrace != null) { /* trace (artifacts) exists already; */
+            if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
+                TraceReconstructionFilter.log.error("Missing entry for trace in timeoutMap: " + executionTrace);
             }
-        } else {
-            seq = new ExecutionTrace(traceId);
-            this.pendingTraces.put(traceId, seq);
+        } else { /* create and add new trace */
+            executionTrace = new ExecutionTrace(traceId);
+            this.pendingTraces.put(traceId, executionTrace);
         }
         try {
-            seq.add(execution);
+            executionTrace.add(execution);
+            if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
+                TraceReconstructionFilter.log.error("Equal entry existed in timeout already:" + executionTrace);
+            }
+            this.processTimeoutQueue();
         } catch (final InvalidTraceException ex) { // this would be a bug!
             log.fatal(
                     "Attempt to add record to wrong trace", ex);
-        }
-        if (!this.timeoutMap.add(seq)) { // (re-)add trace to timeoutMap
-            TraceReconstructionFilter.log.error("Equal entry existed in timeout already:" + seq);
-        }
-        try {
-            this.processQueue();
         } catch (ExecutionEventProcessingException ex) {
-            log.error("ExecutionEventProcessingException occured", ex);
+            log.error("ExecutionEventProcessingException occured while processing "
+                    + "the timeout queue. ", ex);
         }
     }
 
-    private void processQueue() throws ExecutionEventProcessingException {
-        while (!this.timeoutMap.isEmpty()
-                && (this.terminate || (this.timeoutMap.first().getTraceAsSortedSet().first().getTin() < (this.highestTout - this.maxTraceDurationNanos)))) {
-            final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
-            final long curTraceId = polledTrace.getTraceId();
-            this.pendingTraces.remove(curTraceId);
-            // log.info("Removed pending trace (ID:" + curTraceId + "):" +
-            // polledTrace);
-            try {
-                // if the polled trace is invalid, the following method
-                // toMesageTrace
-                // throws an exception
-                final MessageTrace mt = polledTrace.toMessageTrace(this.rootExecution);
- 
-                if (mt != null) {
-                    this.messageTraceOutputPort.deliver(mt);
-                    this.executionTraceOutputPort.deliver(polledTrace);
-                }
-                this.reportSuccess(curTraceId);
-            } catch (final InvalidTraceException ex) {
-//                try {
-                    this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(polledTrace));
-//                } catch (final EventProcessingException ex1) {
-//                    log.error(
-//                            "EventProcessingException for trace ID:"
-//                            + curTraceId, ex1);
-//                    this.reportError(curTraceId);
-//                    throw new ExecutionEventProcessingException(
-//                            "EventProcessingException for trace ID:"
-//                            + curTraceId, ex1);
-//                }
-                if (!this.invalidTraces.contains(curTraceId)) {
-                    // only once per traceID (otherwise, we would report all
-                    // trace fragments)
-                    this.reportError(curTraceId);
-                    this.invalidTraces.add(curTraceId);
-                    if (!this.ignoreInvalidTraces) {
-                        TraceReconstructionFilter.log.error(
-                                "Failed to transform execution trace to message trace (ID:"
-                                + curTraceId + "): " + polledTrace, ex);
-                        throw new ExecutionEventProcessingException(
-                                "Failed to transform execution trace to message trace (ID:"
-                                + curTraceId + "): " + polledTrace, ex);
-                    }
+    /**
+     * Transforms the execution trace is delivers the trace to the output ports
+     * of this filter (message trace and execution trace output ports, or invalid
+     * execution trace output port respectively).
+     *
+     * @param executionTrace
+     * @throws ExecutionEventProcessingException if the passed execution trace is
+     * invalid and this filter is configured to fail on the occurence of invalid
+     * traces.
+     */
+    private void processExecutionTrace(final ExecutionTrace executionTrace)
+            throws ExecutionEventProcessingException {
+        final long curTraceId = executionTrace.getTraceId();
+        try {
+            /* If the polled trace is invalid, the following method
+             * toMessageTrace(..) throws an exception */
+            final MessageTrace mt = executionTrace.toMessageTrace(this.rootExecution);
+
+            if (mt != null) {
+                /* Transformation successful (i.e., trace valid) */
+                this.messageTraceOutputPort.deliver(mt);
+                this.executionTraceOutputPort.deliver(executionTrace);
+            }
+            this.reportSuccess(curTraceId);
+        } catch (final InvalidTraceException ex) {
+            /* Transformation failed (i.e., trace invalid) */
+            this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
+            if (!this.invalidTraces.contains(curTraceId)) {
+                // only once per traceID (otherwise, we would report all
+                // trace fragments)
+                this.reportError(curTraceId);
+                this.invalidTraces.add(curTraceId);
+                if (!this.ignoreInvalidTraces) {
+                    TraceReconstructionFilter.log.error(
+                            "Failed to transform execution trace to message trace (ID:"
+                            + curTraceId + "): " + executionTrace, ex);
+                    throw new ExecutionEventProcessingException(
+                            "Failed to transform execution trace to message trace (ID:"
+                            + curTraceId + "): " + executionTrace, ex);
                 }
             }
-//            catch (final EventProcessingException ex) {
-//                TraceReconstructionPlugin.log.error(
-//                        "EventProcessingException for trace ID:" + curTraceId,
-//                        ex);
-//                this.reportError(curTraceId);
-//                throw new ExecutionEventProcessingException(
-//                        "EventProcessingException for trace ID:" + curTraceId,
-//                        ex);
-//            }
         }
     }
 
+    /**
+     * Processes the pending traces in the timeout queue: Either those, 
+     * that timed out are all, if the filte was requested to terminate.
+     *
+     * @throws ExecutionEventProcessingException
+     */
+    private void processTimeoutQueue() throws ExecutionEventProcessingException {
+        synchronized (this.timeoutMap) {
+            while (!this.timeoutMap.isEmpty()
+                    && (this.terminate || (this.timeoutMap.first().getMinTin() + this.maxTraceDurationNanos > this.maxTout ))) {
+                final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
+                final long curTraceId = polledTrace.getTraceId();
+                this.pendingTraces.remove(curTraceId);
+                this.processExecutionTrace(polledTrace);
+            }
+        }
+    }
+
+    /**
+     * Return the number of nanoseconds after which a pending trace is 
+     * considered have timed out
+     * 
+     * @return
+     */
+    public final long getMaxTraceDurationNanos() {
+        return maxTraceDurationNanos;
+    }
+
+    /**
+     * Terminates the filter (internally, all pending traces are processed).
+     *
+     * @param error
+     */
     @Override
     public void terminate(final boolean error) {
         try {
             this.terminate = true;
-            this.processQueue();
+            this.processTimeoutQueue();
         } catch (final ExecutionEventProcessingException ex) {
             TraceReconstructionFilter.log.error("Error processing queue", ex);
         }
@@ -225,42 +255,39 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
         final String minTinStr = new StringBuilder().append(this.minTin).append(" (").append(
                 LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(",").append(
                 LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
-        final String maxToutStr = new StringBuilder().append(this.highestTout).append(" (").append(
-                LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.highestTout)).append(",").append(
-                LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.highestTout)).append(")").toString();
+        final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (").append(
+                LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(",").append(
+                LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
         System.out.println("First timestamp: " + minTinStr);
         System.out.println("Last timestamp: " + maxToutStr);
     }
 
-    private final IInputPort<Execution> executionInputPort =
-            new AbstractInputPort<Execution>("Execution input"){
-        public void newEvent(Execution event) {
-            newExecution(event);
-        }
-    };
-
-    public IInputPort<Execution> getExecutionInputPort(){
+    public IInputPort<Execution> getExecutionInputPort() {
         return this.executionInputPort;
     }
+    private final IInputPort<Execution> executionInputPort =
+            new AbstractInputPort<Execution>("Execution input") {
 
+                public void newEvent(Execution event) {
+                    newExecution(event);
+                }
+            };
+
+    public IOutputPort<MessageTrace> getMessageTraceOutputPort() {
+        return this.messageTraceOutputPort;
+    }
     private final OutputPort<MessageTrace> messageTraceOutputPort =
             new OutputPort<MessageTrace>("Reconstructed Message Traces");
 
-    public IOutputPort<MessageTrace> getMessageTraceOutputPort(){
-        return this.messageTraceOutputPort;
+    public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
+        return this.executionTraceOutputPort;
     }
-
     private final OutputPort<ExecutionTrace> executionTraceOutputPort =
             new OutputPort<ExecutionTrace>("Reconstructed Execution Traces");
 
-    public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort(){
-        return this.executionTraceOutputPort;
-    }
-
-    private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort =
-            new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
-
-    public IOutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort(){
+    public IOutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort() {
         return this.invalidExecutionTraceOutputPort;
     }
+    private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort =
+            new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
 }

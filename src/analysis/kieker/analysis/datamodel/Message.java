@@ -77,4 +77,7 @@ public abstract class Message {
         }
         return strBuild.toString();
     }
+
+    @Override
+    public abstract boolean equals(Object obj);
 }

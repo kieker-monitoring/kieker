@@ -35,7 +35,7 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
         int h = 0;
         // TODO: need a better hash function considering the order (e.g.,
         // MD5)
-        for (final Execution r : t.getTraceAsSortedSet()) {
+        for (final Execution r : t.getTraceAsSortedExecutionSet()) {
             h ^= r.getOperation().getId();
             h ^= r.getAllocationComponent().getAssemblyComponent().getId();
             h ^= r.getEoi();
@@ -74,8 +74,8 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
         if (super.getExecutionTrace().getLength() != otherTrace.getLength()) {
             return false;
         }
-        final Iterator<Execution> otherIterator = otherTrace.getTraceAsSortedSet().iterator();
-        for (final Execution r1 : super.getExecutionTrace().getTraceAsSortedSet()) {
+        final Iterator<Execution> otherIterator = otherTrace.getTraceAsSortedExecutionSet().iterator();
+        for (final Execution r1 : super.getExecutionTrace().getTraceAsSortedExecutionSet()) {
             final Execution r2 = otherIterator.next();
             if (!this.executionsEqual(r1, r2)) {
                 return false;

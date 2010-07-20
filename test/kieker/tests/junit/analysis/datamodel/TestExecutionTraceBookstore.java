@@ -42,8 +42,8 @@ public class TestExecutionTraceBookstore extends TestCase {
     private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
     private final ExecutionFactory eFactory = new ExecutionFactory(systemEntityFactory);
     private final long traceId = 69898l;
-    private final long minTin = 1;
-    private final long maxTout = 10;
+    private final long minTin;
+    private final long maxTout;
     private final int numExecutions;
 
     /* Executions of a valid trace */
@@ -60,9 +60,11 @@ public class TestExecutionTraceBookstore extends TestCase {
         exec0_0__bookstore_searchBook = eFactory.genExecution(
                 "Bookstore", "bookstore", "searchBook",
                 traceId,
-                minTin, // tin
-                maxTout, // tout
+                1, // tin
+                10, // tout
                 0, 0);  // eoi, ess
+        this.minTin = exec0_0__bookstore_searchBook.getTin();
+        this.maxTout = exec0_0__bookstore_searchBook.getTout();
 
         numExecutions_l++;
         exec1_1__catalog_getBook = eFactory.genExecution(
@@ -112,10 +114,42 @@ public class TestExecutionTraceBookstore extends TestCase {
             ExecutionTrace executionTrace = genValidBookstoreTrace();
             /* Perform some validity checks on the execution trace object */
             assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), numExecutions);
-            assertEquals("Invalid maximum stack depth", executionTrace.getMaxStackDepth(), 2);
+            assertEquals("Invalid maximum stack depth", executionTrace.getMaxEss(), 2);
             assertEquals("Invalid minimum tin timestamp", executionTrace.getMinTin(), minTin);
             assertEquals("Invalid maximum tout timestamp", executionTrace.getMaxTout(), maxTout);
 
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail(ex.getMessage());
+            return;
+        }
+    }
+
+    /**
+     * Tests the equals method of the ExecutionTrace class with two equal
+     * traces.
+     */
+    public void testEqualMethodEqualTraces() {
+        try {
+            ExecutionTrace execTrace1 = genValidBookstoreTrace();
+            ExecutionTrace execTrace2 = genValidBookstoreTrace();
+            assertEquals(execTrace1, execTrace2);
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail(ex.getMessage());
+            return;
+        }
+    }
+
+    /**
+     * Tests the equals method of the ExecutionTrace class with two different
+     * traces.
+     */
+    public void testEqualMethodDifferentTraces() {
+        try {
+            ExecutionTrace execTrace1 = genValidBookstoreTrace();
+            ExecutionTrace execTrace2 = genBrokenBookstoreTraceEoiSkip();
+            assertFalse(execTrace1.equals(execTrace2));
         } catch (InvalidTraceException ex) {
             log.error("InvalidTraceException", ex);
             fail(ex.getMessage());
@@ -277,14 +311,17 @@ public class TestExecutionTraceBookstore extends TestCase {
     }
 
     /**
-     * Assert that the transformation of a broken execution trace version of the
-     * "well-known" Bookstore trace leads to an exception.
+     * Creates a broken execution trace version of the "well-known" Bookstore
+     * trace leads to an exception.
      *
      * The trace is broken in that the eoi/ess values of an execution with eoi/ess
      * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
      * increment/decrement by 1, this test must lead to an exception.
+     *
+     * @return
+     * @throws InvalidTraceException
      */
-    public void testMessageTraceTransformationBrokenTraceEssSkip() {
+    private ExecutionTrace genBrokenBookstoreTraceEssSkip() throws InvalidTraceException {
         /*
          * Create an Execution Trace and add Executions in
          * arbitrary order
@@ -300,12 +337,26 @@ public class TestExecutionTraceBookstore extends TestCase {
                 1, 3);  // eoi, ess
         assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(exec1_1__catalog_getBook));
 
-        try {
-            executionTrace.add(exec3_2__catalog_getBook);
-            executionTrace.add(exec2_1__crm_getOrders);
-            executionTrace.add(exec0_0__bookstore_searchBook);
-            executionTrace.add(exec1_1__catalog_getBook__broken);
+        executionTrace.add(exec3_2__catalog_getBook);
+        executionTrace.add(exec2_1__crm_getOrders);
+        executionTrace.add(exec0_0__bookstore_searchBook);
+        executionTrace.add(exec1_1__catalog_getBook__broken);
 
+        return executionTrace;
+    }
+
+    /**
+     * Assert that the transformation of a broken execution trace version of the
+     * "well-known" Bookstore trace leads to an exception.
+     *
+     * The trace is broken in that the eoi/ess values of an execution with eoi/ess
+     * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
+     * increment/decrement by 1, this test must lead to an exception.
+     */
+    public void testMessageTraceTransformationBrokenTraceEssSkip() {
+        final ExecutionTrace executionTrace;
+        try {
+            executionTrace = genBrokenBookstoreTraceEssSkip();
         } catch (InvalidTraceException ex) {
             log.error("InvalidTraceException", ex);
             fail(ex.getMessage());
@@ -325,15 +376,18 @@ public class TestExecutionTraceBookstore extends TestCase {
 
     }
 
-    /**
-     * Assert that the transformation of a broken execution trace version of the
-     * "well-known" Bookstore trace leads to an exception.
+   /**
+     * Creates a broken execution trace version of the "well-known" Bookstore
+     * trace leads to an exception.
      *
      * The trace is broken in that the eoi/ess values of an execution with eoi/ess
      * [3,2] are replaced by the eoi/ess values [4,2]. Since eoi values must only
      * increment by 1, this test must lead to an exception.
+     *
+     * @return
+     * @throws InvalidTraceException
      */
-    public void testMessageTraceTransformationBrokenTraceEoiSkip() {
+    private ExecutionTrace genBrokenBookstoreTraceEoiSkip() throws InvalidTraceException {
         /*
          * Create an Execution Trace and add Executions in
          * arbitrary order
@@ -348,13 +402,31 @@ public class TestExecutionTraceBookstore extends TestCase {
                 4, 2);  // eoi, ess
         assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(exec3_2__catalog_getBook));
 
-        try {
-            //executionTrace.add(exec3_2__catalog_getBook);
-            executionTrace.add(exec3_2__catalog_getBook__broken);
-            executionTrace.add(exec2_1__crm_getOrders);
-            executionTrace.add(exec0_0__bookstore_searchBook);
-            executionTrace.add(exec1_1__catalog_getBook);
+        //executionTrace.add(exec3_2__catalog_getBook);
+        executionTrace.add(exec3_2__catalog_getBook__broken);
+        executionTrace.add(exec2_1__crm_getOrders);
+        executionTrace.add(exec0_0__bookstore_searchBook);
+        executionTrace.add(exec1_1__catalog_getBook);
 
+        return executionTrace;
+    }
+
+    /**
+     * Assert that the transformation of a broken execution trace version of the
+     * "well-known" Bookstore trace leads to an exception.
+     *
+     * The trace is broken in that the eoi/ess values of an execution with eoi/ess
+     * [3,2] are replaced by the eoi/ess values [4,2]. Since eoi values must only
+     * increment by 1, this test must lead to an exception.
+     */
+    public void testMessageTraceTransformationBrokenTraceEoiSkip() {
+        /*
+         * Create an Execution Trace and add Executions in
+         * arbitrary order
+         */
+        final ExecutionTrace executionTrace;
+        try {
+            executionTrace = genBrokenBookstoreTraceEoiSkip();
         } catch (InvalidTraceException ex) {
             log.error("InvalidTraceException", ex);
             fail(ex.getMessage());

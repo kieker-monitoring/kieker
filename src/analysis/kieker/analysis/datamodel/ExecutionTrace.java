@@ -18,7 +18,6 @@ package kieker.analysis.datamodel;
  * limitations under the License.
  * ==================================================
  */
-
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -31,17 +30,20 @@ import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceExce
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 /**
  * @author Andre van Hoorn
  */
 public class ExecutionTrace extends Trace {
 
     private static final Log log = LogFactory.getLog(ExecutionTrace.class);
-
     private final AtomicReference<MessageTrace> messageTrace = new AtomicReference<MessageTrace>();
-
+    private int minEoi = -1;
+    private int maxEoi = -1;
+    private long minTin = -1;
+    private long maxTout = -1;
+    private int maxEss = -1;
     private final SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
+
         public int compare(Execution e1, Execution e2) {
             if (e1.getTraceId() == e2.getTraceId()) {
                 if (e1.getEoi() < e2.getEoi()) {
@@ -62,9 +64,6 @@ public class ExecutionTrace extends Trace {
             }
         }
     });
-    private long minTin = Long.MAX_VALUE;
-    private long maxTout = Long.MIN_VALUE;
-    private int maxStackDepth = -1;
 
     public ExecutionTrace(final long traceId) {
         super(traceId);
@@ -81,14 +80,20 @@ public class ExecutionTrace extends Trace {
         if (this.getTraceId() != execution.getTraceId()) {
             throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
         }
-        if (execution.getTin() < this.minTin) {
+        if (this.minTin < 0 || execution.getTin() < this.minTin) {
             this.minTin = execution.getTin();
         }
-        if (execution.getTout() > this.maxTout) {
+        if (this.maxTout < 0 || execution.getTout() > this.maxTout) {
             this.maxTout = execution.getTout();
         }
-        if (execution.getEss() > this.maxStackDepth) {
-            this.maxStackDepth = execution.getEss();
+        if (this.minEoi < 0 || execution.getEoi() < this.minEoi) {
+            this.minEoi = execution.getEoi();
+        }
+        if (this.maxEoi < 0 || execution.getEoi() > this.maxEoi) {
+            this.maxEoi = execution.getEoi();
+        }
+        if (execution.getEss() > this.maxEss) {
+            this.maxEss = execution.getEss();
         }
         this.set.add(execution);
         /* Invalidate the current message trace representation */
@@ -105,7 +110,7 @@ public class ExecutionTrace extends Trace {
     public synchronized MessageTrace toMessageTrace(final Execution rootExecution)
             throws InvalidTraceException {
         MessageTrace mt = this.messageTrace.get();
-        if (mt != null){
+        if (mt != null) {
             return mt;
         }
 
@@ -152,11 +157,11 @@ public class ExecutionTrace extends Trace {
                 Message m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
                 mSeq.add(m);
                 curStack.push(m);
-            } else if (prevE.getEss()+1 == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
+            } else if (prevE.getEss() + 1 == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
                 Message m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
                 mSeq.add(m);
                 curStack.push(m);
-            } else if (prevE.getEss() < curE.getEss()){ // detect ess incrementation by > 1
+            } else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
                 InvalidTraceException ex =
                         new InvalidTraceException("Ess are only allowed to increment by 1 --"
                         + "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
@@ -187,7 +192,7 @@ public class ExecutionTrace extends Trace {
      *
      * @return
      */
-    public synchronized final SortedSet<Execution> getTraceAsSortedSet() {
+    public synchronized final SortedSet<Execution> getTraceAsSortedExecutionSet() {
         return this.set;
     }
 
@@ -202,8 +207,8 @@ public class ExecutionTrace extends Trace {
     }
 
     @Override
-    public synchronized  String toString() {
-        StringBuilder strBuild = new StringBuilder("TraceId " + this.getTraceId()).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxStackDepth).append("):\n");
+    public synchronized String toString() {
+        StringBuilder strBuild = new StringBuilder("TraceId " + this.getTraceId()).append(" (minTin=").append(this.minTin).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout).append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxStackDepth=").append(this.maxEss).append("):\n");
         for (Execution e : this.set) {
             strBuild.append("<");
             strBuild.append(e.toString()).append(">\n");
@@ -212,12 +217,42 @@ public class ExecutionTrace extends Trace {
     }
 
     /**
-     * Returns the maximum step depth within the trace.
+     * Returns the maximum execution stack size (ess) value, i.e., the maximum
+     * stack depth, within the trace.
      *
+     * @return the maximum ess; -1 if the trace contains no executions.
+     */
+    public synchronized int getMaxEss() {
+        return this.maxEss;
+    }
+
+    /**
+     * Returns the maximum execution order index (eoi) value within the trace.
+     *
+     * @return the maximum eoi; -1 if the trace contains no executions.
+     */
+    public int getMaxEoi() {
+        return maxEoi;
+    }
+
+    /**
+     * Returns the minimum execution order index (eoi) value within the trace.
+     *
+     * @return the minimum eoi; -1 if the trace contains no executions.
+     */
+    public int getMinEoi() {
+        return minEoi;
+    }
+
+    /**
+     * Returns the duration of this (possible incomplete) trace in nanoseconds.
+     * This value is the difference between the maximum tout and the minimum
+     * tin value. 
+     * 
      * @return
      */
-    public synchronized int getMaxStackDepth() {
-        return this.maxStackDepth;
+    public synchronized long getDurationInNanos(){
+        return this.getMaxTout() - this.minTin;
     }
 
     /**
@@ -226,7 +261,7 @@ public class ExecutionTrace extends Trace {
      * Notice that you should need use this value to reason about the
      * control flow --- particularly in distributed scenarios.
      *
-     * @return
+     * @return the maxmum timestamp value; -1 if the trace contains no executions.
      */
     public synchronized long getMaxTout() {
         return this.maxTout;
@@ -238,9 +273,30 @@ public class ExecutionTrace extends Trace {
      * Notice that you should need use this value to reason about the
      * control flow --- particularly in distributed scenarios.
      *
-     * @return
+     * @return the minimum timestamp value; -1 if the trace contains no executions.
      */
     public synchronized long getMinTin() {
         return this.minTin;
+    }
+
+    /**
+     * Returns whether this Execution Trace and the passed Object are equal.
+     * Two execution traces are equal iff the set of contained executions is
+     * equal.
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public synchronized boolean equals(Object obj) {
+        if (!(obj instanceof ExecutionTrace)){
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        ExecutionTrace other = (ExecutionTrace)obj;
+
+        return this.set.equals(other.set);
     }
 }

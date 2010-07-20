@@ -739,7 +739,7 @@ public class TraceAnalysisTool {
                 ps.println("Class " + numClasses++ + " ; cardinality: "
                         + e.getValue() + "; # executions: " + t.getLength()
                         + "; representative: " + t.getTraceId()
-                        + "; max. stack depth: " + t.getMaxStackDepth());
+                        + "; max. stack depth: " + t.getMaxEss());
             }
             System.out.println("");
             System.out.println("#");

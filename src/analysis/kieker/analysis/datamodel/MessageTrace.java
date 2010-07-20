@@ -21,7 +21,8 @@ import java.util.Vector;
  * ==================================================
  */
 
-/** @author Andre van Hoorn
+/**
+ * @author Andre van Hoorn
  */
 public class MessageTrace extends Trace {
 
@@ -48,5 +49,18 @@ public class MessageTrace extends Trace {
             strBuild.append(">\n");
         }
         return strBuild.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof MessageTrace)){
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        MessageTrace other = (MessageTrace)obj;
+
+        return this.set.equals(other.set);
     }
 }
