@@ -26,7 +26,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-import kieker.tools.traceAnalysis.analysisPlugins.traceReconstruction.InvalidTraceException;
+import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tests.junit.analysis.util.ExecutionFactory;
 
 import org.apache.commons.logging.Log;

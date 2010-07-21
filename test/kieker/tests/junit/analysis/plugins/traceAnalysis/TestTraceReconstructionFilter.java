@@ -25,8 +25,8 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.tools.traceAnalysis.analysisPlugins.traceReconstruction.InvalidTraceException;
-import kieker.tools.traceAnalysis.analysisPlugins.traceReconstruction.TraceReconstructionFilter;
+import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
+import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tests.junit.analysis.util.ExecutionFactory;
 
 import org.apache.commons.logging.Log;
