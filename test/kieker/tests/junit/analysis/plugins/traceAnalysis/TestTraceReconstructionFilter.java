@@ -379,7 +379,9 @@ public class TestTraceReconstructionFilter extends TestCase {
                 new AtomicReference<Boolean>(Boolean.FALSE);
         final AtomicReference<Boolean> receivedTheValidTriggerMessageTrace =
                 new AtomicReference<Boolean>(Boolean.FALSE);
-        final AtomicReference<Boolean> receivedTheIncompleteExecutionTrace =
+        final AtomicReference<Boolean> receivedTheIncompleteExecutionTraceArtifact =
+                new AtomicReference<Boolean>(Boolean.FALSE);
+        final AtomicReference<Boolean> receivedTheCompletingExecutionTraceArtifact =
                 new AtomicReference<Boolean>(Boolean.FALSE);
 
         /*
@@ -388,6 +390,24 @@ public class TestTraceReconstructionFilter extends TestCase {
         final ExecutionTrace incompleteExecutionTrace;
         try {
             incompleteExecutionTrace = genBookstoreTraceWithoutEntryExecution();
+        } catch (InvalidTraceException ex) {
+            log.error("InvalidTraceException", ex);
+            fail("InvalidTraceException" + ex);
+            return;
+        }
+
+        /**
+         * We will now create a trace that contains an execution which
+         * would make the incomplete trace complete.
+         *
+         * But: Then, it would exceed the maximum trace duration.
+         */
+        final ExecutionTrace completingExecutionTrace =
+                new ExecutionTrace(incompleteExecutionTrace.getTraceId());
+        assertTrue("Test invalid (traceIds not matching)",
+                exec0_0__bookstore_searchBook.getTraceId() == completingExecutionTrace.getTraceId());
+        try {
+            completingExecutionTrace.add(exec0_0__bookstore_searchBook);
         } catch (InvalidTraceException ex) {
             log.error("InvalidTraceException", ex);
             fail("InvalidTraceException" + ex);
@@ -426,14 +446,15 @@ public class TestTraceReconstructionFilter extends TestCase {
                 new TraceReconstructionFilter(
                 "TraceReconstructionFilter",
                 systemEntityFactory,
-                /* set maxTraceDurationMillis to trace duration + trace duration of trigger trace */
-                incompleteExecutionTrace.getDurationInNanos() / (1000 * 1000) + TRIGGER_TRACE_LENGTH_MILLIS, // maxTraceDurationMillis
+                /* Force timeout on reception of trigger execution */
+                (triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000) - 1, // maxTraceDurationMillis
                 true); // ignoreInvalidTraces
 
-        assertTrue("Test invalid: NOT (filter.getMaxTraceDurationNanos() > incompleteExecutionTrace.getDurationInNanos())\n"
-                + "filter.getMaxTraceDurationNanos(): " + filter.getMaxTraceDurationNanos() + "\n"
-                + "incompleteExecutionTrace.getDurationInNanos(): " + incompleteExecutionTrace.getDurationInNanos(),
-                filter.getMaxTraceDurationNanos() > incompleteExecutionTrace.getDurationInNanos());
+        assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n"
+                + "triggerExecutionTrace.getMaxTout()" + triggerExecutionTrace.getMaxTout() + "\n"
+                + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
+                + "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDurationNanos(),
+                triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin() > filter.getMaxTraceDurationNanos());
 
         /*
          * Register a handler for reconstructed (valid) execution traces.
@@ -475,7 +496,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 
             public void newEvent(InvalidExecutionTrace event) {
                 if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) {
-                    receivedTheIncompleteExecutionTrace.set(Boolean.TRUE);
+                    receivedTheIncompleteExecutionTraceArtifact.set(Boolean.TRUE);
+                } else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) {
+                    receivedTheCompletingExecutionTraceArtifact.set(Boolean.TRUE);
                 } else {
                     fail("Received an unexpected invalid execution trace: " + event);
                 }
@@ -500,6 +523,15 @@ public class TestTraceReconstructionFilter extends TestCase {
         filter.getExecutionInputPort().newEvent(exec0_0__bookstore_searchBook__trigger);
 
         /**
+         * Now, will pass the execution that would make the incomplete trace
+         * complete. But that incomplete trace should have been considered
+         * to be timeout already. Thus, the completing execution trace should
+         * appear as a single incomplete execution trace.
+         */
+        filter.getExecutionInputPort().newEvent(exec0_0__bookstore_searchBook);
+
+
+        /**
          * Terminate the filter
          */
         filter.terminate(false); // no error
@@ -511,8 +543,11 @@ public class TestTraceReconstructionFilter extends TestCase {
         if (!receivedTheValidTriggerMessageTrace.get()) {
             fail("Message trace didn't pass the filter");
         }
-        if (!receivedTheIncompleteExecutionTrace.get()) {
+        if (!receivedTheIncompleteExecutionTraceArtifact.get()) {
             fail("Incomplete trace didn't pass the filter");
+        }
+        if (!receivedTheCompletingExecutionTraceArtifact.get()) {
+            fail("Completing trace didn't pass the filter");
         }
     }
 }

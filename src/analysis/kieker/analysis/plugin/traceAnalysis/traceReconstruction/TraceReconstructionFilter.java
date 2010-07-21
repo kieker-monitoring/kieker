@@ -95,7 +95,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     }
 
     /**
-     * Returns a set of the invalid traces.
+     * Returns a set of the IDs of invalid traces.
      *
      * @return
      */
@@ -180,11 +180,26 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
             final MessageTrace mt = executionTrace.toMessageTrace(this.rootExecution);
 
             if (mt != null) {
-                /* Transformation successful (i.e., trace valid) */
-                this.messageTraceOutputPort.deliver(mt);
-                this.executionTraceOutputPort.deliver(executionTrace);
+                /* Transformation successful und the trace is for itself valid. 
+                 * Howeever, this trace may actually contain the [0,0] execution
+                 * and thus complete a trace that has timed out before and has 
+                 * thus been considered an invalid trace.
+                 */
+                if (!this.invalidTraces.contains(mt.getTraceId())) {
+                    /* Not completing part of an invalid trace */
+                    this.messageTraceOutputPort.deliver(mt);
+                    this.executionTraceOutputPort.deliver(executionTrace);
+                    this.reportSuccess(curTraceId);
+                } else {
+                    /* mt is the completing part of an invalid trace */
+                    this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
+                    // the statistics have been updated on the first
+                    // occurence of artifacts of this trace
+                }
+            } else {
+                log.error("mt == null but no exception was thrown");
+                this.reportError(curTraceId);
             }
-            this.reportSuccess(curTraceId);
         } catch (final InvalidTraceException ex) {
             /* Transformation failed (i.e., trace invalid) */
             this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
