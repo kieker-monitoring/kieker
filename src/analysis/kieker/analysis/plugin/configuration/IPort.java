@@ -1,6 +1,6 @@
 package kieker.analysis.plugin.configuration;
 
-import kieker.analysis.datamodel.IAnalysisEvent;
+import kieker.analysis.plugin.IAnalysisEvent;
 
 /*
  * ==================LICENCE=========================

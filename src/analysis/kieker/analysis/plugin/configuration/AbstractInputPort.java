@@ -2,7 +2,7 @@ package kieker.analysis.plugin.configuration;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import kieker.analysis.datamodel.IAnalysisEvent;
+import kieker.analysis.plugin.IAnalysisEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

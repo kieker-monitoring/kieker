@@ -19,14 +19,14 @@ package kieker.tests.junit.analysis.datamodel;
  */
 import java.util.Vector;
 import junit.framework.TestCase;
-import kieker.analysis.datamodel.Execution;
-import kieker.analysis.datamodel.ExecutionTrace;
-import kieker.analysis.datamodel.Message;
-import kieker.analysis.datamodel.MessageTrace;
-import kieker.analysis.datamodel.SynchronousCallMessage;
-import kieker.analysis.datamodel.SynchronousReplyMessage;
-import kieker.analysis.datamodel.repository.SystemModelRepository;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
+import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.Message;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
+import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.traceAnalysis.analysisPlugins.traceReconstruction.InvalidTraceException;
 import kieker.tests.junit.analysis.util.ExecutionFactory;
 
 import org.apache.commons.logging.Log;

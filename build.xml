@@ -902,7 +902,7 @@
     </target>
 
     <target name="compile-tests-junit"
-	        depends="build-kieker.monitoring,build-kieker.analysis">
+	        depends="build-kieker.monitoring,build-kieker.analysis,build-kieker.tools">
         <path id="kieker.test-junit-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
@@ -912,6 +912,7 @@
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
+                <include name="${dist.kieker.tools.jar}"/>
             </fileset>
         </path>
 
@@ -935,6 +936,7 @@
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
+                <include name="${dist.kieker.tools.jar}"/>
             </fileset>
         </path>
 

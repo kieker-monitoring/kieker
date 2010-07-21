@@ -19,14 +19,14 @@ package kieker.tests.junit.analysis.plugins.traceAnalysis;
  */
 import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.TestCase;
-import kieker.analysis.datamodel.Execution;
-import kieker.analysis.datamodel.ExecutionTrace;
-import kieker.analysis.datamodel.InvalidExecutionTrace;
-import kieker.analysis.datamodel.MessageTrace;
-import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.InvalidTraceException;
-import kieker.analysis.plugin.traceAnalysis.traceReconstruction.TraceReconstructionFilter;
+import kieker.tools.traceAnalysis.analysisPlugins.traceReconstruction.InvalidTraceException;
+import kieker.tools.traceAnalysis.analysisPlugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tests.junit.analysis.util.ExecutionFactory;
 
 import org.apache.commons.logging.Log;

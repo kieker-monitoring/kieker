@@ -1,13 +1,13 @@
 package kieker.tests.junit.analysis.util;
 
-import kieker.analysis.datamodel.AllocationComponent;
-import kieker.analysis.datamodel.AssemblyComponent;
-import kieker.analysis.datamodel.ComponentType;
-import kieker.analysis.datamodel.Execution;
-import kieker.analysis.datamodel.ExecutionContainer;
-import kieker.analysis.datamodel.Operation;
-import kieker.analysis.datamodel.Signature;
-import kieker.analysis.datamodel.repository.SystemModelRepository;
+import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
+import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
+import kieker.tools.traceAnalysis.systemModel.ComponentType;
+import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kieker.tools.traceAnalysis.systemModel.Operation;
+import kieker.tools.traceAnalysis.systemModel.Signature;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /*
  * ==================LICENCE=========================
