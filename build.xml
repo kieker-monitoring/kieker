@@ -60,24 +60,7 @@
             depends="clean,init,build-kieker.monitoring,build-kieker.monitoring-servlet,build-kieker.common,build-kieker.analysis,build-kieker.tools">
     </target>
 
-    <condition property="no.kieker.monitoring.properties">
-        <not>
-            <available file="${kieker.monitoring.properties}"/>
-        </not>
-    </condition>
-
-    <target name="init-kieker.monitoring-properties" if="no.kieker.monitoring.properties">
-        <!-- if no kieker.monitoring.properties, copy example file automatically  -->
-        <echo message="${kieker.monitoring.properties} not existing.
-                       Creating default file."/>
-        <copy file="${kieker.monitoring.properties.example}" tofile="${kieker.monitoring.properties}"/>
-    </target>
-
-    <target name="init-properties"
-            depends="init-kieker.monitoring-properties">
-    </target>
-
-    <target name="init" depends="update-version,init-properties">
+    <target name="init" depends="update-version">
         <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
         <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
         <fail message="Critical error: AspectJ library not found
