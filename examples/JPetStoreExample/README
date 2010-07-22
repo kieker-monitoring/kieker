@@ -6,8 +6,8 @@ This example demonstrates
 
 All experiments employ AspectJ for weaving the monitoring 
 probes into the application. Two different AspectJ configuration 
-files are used for the examples (to be found in lib/META-INF/, 
-the configuration file used is aop.xml).
+files are used for the examples (to be found in lib/META-INF/ of the
+Tomcat server; the configuration file used is aop.xml).
 The Java methods to be instrumented are selected using Java 
 annotations.
 
@@ -26,7 +26,7 @@ directory Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/lib/:
    according to your needs. 
    NOTE: There's no need to change kieker.monitoring.properties to run the 
          example with the default configuration.
-4. Copy the file dist/kieker-monitoring-<version>_controlServlet.war
+4. Copy the file kieker-monitoring-servlet-<version>.war
    from the binary distribution to the webapps/ directory
 5. A prepared jpetstore.war file is already located in the 
    webapps/ directory. If you want to rebuild the sources, 
@@ -72,7 +72,8 @@ generated from the monitoring data employing Kieker.Analysis.
 
  5.1 Dependendy graphs
    - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/ 
-     --plot-Operation-Dependency-Graph --plot-Component-Dependency-Graph
+     --plot-Allocation-Operation-Dependency-Graph 
+     --plot-Allocation-Component-Dependency-Graph
      --plot-Container-Dependency-Graph --short-labels  
    - A .dot-file with the prefix 'FOO' containing the diagram is created in the 
      directory tmp/. 
@@ -82,7 +83,7 @@ generated from the monitoring data employing Kieker.Analysis.
       files contained in a directory to any output format supported by dot.)
  5.2 Sequence diagram
    - $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ 
-       --plot-Sequence-Diagrams --short-labels
+       --plot-Allocation-Sequence-Diagrams --short-labels
    - A .pic-file with the prefix 'BAR' containing the diagram is created in the 
      directory tmp/. 
      Kieker.Analysis's output gives further instructions how to convert this 
@@ -97,9 +98,9 @@ APPENDIX
 
 In order to rebuild the JPetStore sources (located in JPetStore-5.0-instrumented/), 
 the following steps are required:
- - copy the file kieker-monitoring-<version>_ctrl.jar from Kieker's
+ - copy the file kieker-monitoring-1.5-trunk.jar from Kieker's
    binary distribution to the JPetStore's devlib/ directory.
-   (includes the Java annotation @TpmonExecutionMonitoringProbe used 
+   (includes the Java annotation @OperationExecutionMonitoringProbe used 
     for the instrumentation)
  - build the JPetStore with build.xml in the build/ directory:
    $ ant

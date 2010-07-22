@@ -71,7 +71,7 @@
 # -----------------------------------------------------------------------------
 
 #JAVA_OPTS=" -Dkieker.monitoring.storeInJavaIoTmpdir=false -Dkieker.monitoring.customStoragePath=/home/voorn/tmp/"
-JAVA_OPTS=" -Dkieker.monitoring.storeInJavaIoTmpdir=true -javaagent:lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVA_OPTS=" -Dkieker.monitoring.storeInJavaIoTmpdir=true -javaagent:lib/aspectjweaver-1.6.9.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$(dirname $0)/../lib/META-INF/kieker.monitoring.properties"
 
 HEAPSIZEINIT_DEFAULT=256m
