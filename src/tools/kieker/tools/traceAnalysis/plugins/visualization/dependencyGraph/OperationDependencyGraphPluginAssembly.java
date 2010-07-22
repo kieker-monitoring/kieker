@@ -53,7 +53,6 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
     private static final Log log = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
     private final AssemblyComponentOperationPairFactory pairFactory;
     private final String COMPONENT_NODE_ID_PREFIX = "component_";
-    private final String CONTAINER_NODE_ID_PREFIX = "container_";
     private final File dotOutputFile;
     private final boolean includeWeights;
     private final boolean shortLabels;

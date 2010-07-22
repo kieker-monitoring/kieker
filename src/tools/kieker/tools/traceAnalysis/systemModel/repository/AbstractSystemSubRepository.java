@@ -1,9 +1,6 @@
 package kieker.tools.traceAnalysis.systemModel.repository;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicInteger;
-import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 
 /*
  * ==================LICENCE=========================
