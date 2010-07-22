@@ -51,14 +51,14 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
             final AssemblyComponent AssemblyComponent,
             final Operation operation){
         AssemblyComponentOperationPair inst =
-                this.getPairByFactoryName(AssemblyComponent.getId()+"-"+operation.getId());
+                this.getPairByNamedIdentifier(AssemblyComponent.getId()+"-"+operation.getId());
         if (inst == null){
             return this.createAndRegisterPair(operation, AssemblyComponent);
         }
         return inst;
     }
 
-    private final AssemblyComponentOperationPair createAndRegisterPair(
+    private AssemblyComponentOperationPair createAndRegisterPair(
             final Operation operation,
             final AssemblyComponent AssemblyComponent){
             return this.createAndRegisterPair(AssemblyComponent.getId()+"-"+operation.getId(),
@@ -68,8 +68,8 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
     /** Returns the instance for the passed factory name; null if no instance
      *  with this factory name.
      */
-    private final AssemblyComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
-        return this.pairsByName.get(factoryIdentifier);
+    private AssemblyComponentOperationPair getPairByNamedIdentifier(final String namedIdentifier){
+        return this.pairsByName.get(namedIdentifier);
     }
 
     /** Returns the instance for the passed ID; null if no instance
@@ -79,19 +79,19 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
         return this.pairsById.get(id);
     }
 
-    private final AssemblyComponentOperationPair createAndRegisterPair(
-            final String factoryIdentifier,
+    private AssemblyComponentOperationPair createAndRegisterPair(
+            final String namedIdentifier,
             final Operation operation,
             final AssemblyComponent AssemblyComponent){
             AssemblyComponentOperationPair newInst;
-            if (this.pairsByName.containsKey(factoryIdentifier)){
-                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
+            if (this.pairsByName.containsKey(namedIdentifier)){
+                throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new AssemblyComponentOperationPair(id,
                     operation, AssemblyComponent);
             this.pairsById.put(id, newInst);
-            this.pairsByName.put(factoryIdentifier, newInst);
+            this.pairsByName.put(namedIdentifier, newInst);
             return newInst;
     }
 

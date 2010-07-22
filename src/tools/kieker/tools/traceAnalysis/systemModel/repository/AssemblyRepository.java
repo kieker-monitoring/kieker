@@ -54,21 +54,21 @@ public class AssemblyRepository extends AbstractSystemSubRepository{
     /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final AssemblyComponent getAssemblyComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
-        return this.assemblyComponentInstancesByName.get(factoryIdentifier);
+    public final AssemblyComponent getAssemblyComponentInstanceByNamedIdentifier(final String namedIdentifier){
+        return this.assemblyComponentInstancesByName.get(namedIdentifier);
     }
 
     public final AssemblyComponent createAndRegisterAssemblyComponentInstance(
-            final String factoryIdentifier,
+            final String namedIdentifier,
             final ComponentType componentType){
             AssemblyComponent newInst;
-            if (this.assemblyComponentInstancesByName.containsKey(factoryIdentifier)){
-                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
+            if (this.assemblyComponentInstancesByName.containsKey(namedIdentifier)){
+                throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new AssemblyComponent(id, "@"+id, componentType);
             this.assemblyComponentInstancesById.put(id, newInst);
-            this.assemblyComponentInstancesByName.put(factoryIdentifier, newInst);
+            this.assemblyComponentInstancesByName.put(namedIdentifier, newInst);
             return newInst;
     }
 

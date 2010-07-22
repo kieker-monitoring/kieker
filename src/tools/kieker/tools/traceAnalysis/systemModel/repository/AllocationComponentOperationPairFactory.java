@@ -50,7 +50,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
             final AllocationComponent allocationComponent,
             final Operation operation){
         AllocationComponentOperationPair inst = 
-                this.getPairByFactoryName(allocationComponent.getId()+"-"+operation.getId());
+                this.getPairByNamedIdentifier(allocationComponent.getId()+"-"+operation.getId());
         if (inst == null){
             return this.createAndRegisterPair(operation, allocationComponent);
         }
@@ -67,8 +67,8 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
     /** Returns the instance for the passed factory name; null if no instance
      *  with this factory name.
      */
-    private final AllocationComponentOperationPair getPairByFactoryName(final String factoryIdentifier){
-        return this.pairsByName.get(factoryIdentifier);
+    private final AllocationComponentOperationPair getPairByNamedIdentifier(final String namedIdentifier){
+        return this.pairsByName.get(namedIdentifier);
     }
 
     /** Returns the instance for the passed ID; null if no instance
@@ -79,18 +79,18 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
     }
 
     private final AllocationComponentOperationPair createAndRegisterPair(
-            final String factoryIdentifier,
+            final String namedIdentifier,
             final Operation operation,
             final AllocationComponent allocationComponent){
             AllocationComponentOperationPair newInst;
-            if (this.pairsByName.containsKey(factoryIdentifier)){
-                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
+            if (this.pairsByName.containsKey(namedIdentifier)){
+                throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new AllocationComponentOperationPair(id,
                     operation, allocationComponent);
             this.pairsById.put(id, newInst);
-            this.pairsByName.put(factoryIdentifier, newInst);
+            this.pairsByName.put(namedIdentifier, newInst);
             return newInst;
     }
 

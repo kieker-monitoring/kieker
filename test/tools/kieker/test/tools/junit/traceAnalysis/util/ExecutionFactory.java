@@ -76,14 +76,14 @@ public class ExecutionFactory {
 
         /* Register component type (if it hasn't been registered before) */
         ComponentType componentTypeA =
-                this.systemEntityFactory.getTypeRepositoryFactory().getComponentTypeByFactoryIdentifier(componentTypeName);
+                this.systemEntityFactory.getTypeRepositoryFactory().getComponentTypeByNamedIdentifier(componentTypeName);
         if (componentTypeA == null) {
             componentTypeA =
                     this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
         }
         /* Register operation (if it hasn't been registered before) */
         Operation operationAa =
-                this.systemEntityFactory.getOperationFactory().getOperationByFactoryIdentifier(operationName);
+                this.systemEntityFactory.getOperationFactory().getOperationByNamedIdentifier(operationName);
         if (operationAa == null) {
             operationAa =
                     this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
@@ -100,7 +100,7 @@ public class ExecutionFactory {
 
         /* Register assembly component (if it hasn't been registered before) */
         AssemblyComponent assemblyComponentA =
-                this.systemEntityFactory.getAssemblyFactory().getAssemblyComponentInstanceByFactoryIdentifier(componentInstanceName);
+                this.systemEntityFactory.getAssemblyFactory().getAssemblyComponentInstanceByNamedIdentifier(componentInstanceName);
         if (assemblyComponentA == null) {
             assemblyComponentA =
                     this.systemEntityFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(
@@ -110,7 +110,7 @@ public class ExecutionFactory {
 
         /* Register execution container (if it hasn't been registered before) */
         ExecutionContainer containerC =
-                this.systemEntityFactory.getExecutionEnvironmentFactory().getExecutionContainerByFactoryIdentifier(DEFAULT_STRING);
+                this.systemEntityFactory.getExecutionEnvironmentFactory().getExecutionContainerByNamedIdentifier(DEFAULT_STRING);
         if (containerC == null) {
             containerC =
                     this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(
@@ -119,7 +119,7 @@ public class ExecutionFactory {
 
         /* Register allocation container (if it hasn't been registered before) */
         AllocationComponent allocationComponentA =
-                this.systemEntityFactory.getAllocationFactory().getAllocationComponentInstanceByFactoryIdentifier(DEFAULT_STRING);
+                this.systemEntityFactory.getAllocationFactory().getAllocationComponentInstanceByNamedIdentifier(DEFAULT_STRING);
         if (allocationComponentA == null) {
             allocationComponentA =
                     this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(

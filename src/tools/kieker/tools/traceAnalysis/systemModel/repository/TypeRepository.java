@@ -42,33 +42,33 @@ public class TypeRepository extends AbstractSystemSubRepository {
     }
 
     /**
-     * Returns the instance for the passed factoryIdentifier; null if no instance
-     *  with this factoryIdentifier.
+     * Returns the instance for the passed namedIdentifier; null if no instance
+     *  with this namedIdentifier.
      */
-    public synchronized final ComponentType getComponentTypeByFactoryIdentifier(final String factoryIdentifier) {
-        return this.componentTypesByName.get(factoryIdentifier);
+    public synchronized final ComponentType getComponentTypeByNamedIdentifier(final String namedIdentifier) {
+        return this.componentTypesByName.get(namedIdentifier);
     }
 
     /**
      * Creates and registers a component type that has not been registered yet.
      *
-     * @param factoryIdentifier
+     * @param namedIdentifier
      * @param fullqualifiedName
      * @return
      * @throws IllegalArgumentException if a component type with the given 
-     * factoryIdentifier has already been registered
+     * namedIdentifier has already been registered
      */
     public synchronized final ComponentType createAndRegisterComponentType(
-            final String factoryIdentifier,
+            final String namedIdentifier,
             final String fullqualifiedName) {
         ComponentType newInst;
-        if (this.componentTypesByName.containsKey(factoryIdentifier)) {
-            throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
+        if (this.componentTypesByName.containsKey(namedIdentifier)) {
+            throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
         }
         int id = this.getAndIncrementNextId();
         newInst = new ComponentType(id, fullqualifiedName);
         this.componentTypesById.put(id, newInst);
-        this.componentTypesByName.put(factoryIdentifier, newInst);
+        this.componentTypesByName.put(namedIdentifier, newInst);
         return newInst;
     }
 

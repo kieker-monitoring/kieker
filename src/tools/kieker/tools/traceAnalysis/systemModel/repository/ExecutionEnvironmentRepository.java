@@ -42,12 +42,12 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
         //        rootExecutionContainer);
     }
 
-   /** Returns the instance for the passed factoryIdentifier; null if no instance
-     *  with this factoryIdentifier.
+   /** Returns the instance for the passed namedIdentifier; null if no instance
+     *  with this namedIdentifier.
      */
-    public final ExecutionContainer getExecutionContainerByFactoryIdentifier(
-            final String factoryIdentifier){
-        return this.executionContainersByName.get(factoryIdentifier);
+    public final ExecutionContainer getExecutionContainerByNamedIdentifier(
+            final String namedIdentifier){
+        return this.executionContainersByName.get(namedIdentifier);
     }
 
    /** Returns the instance for the passed container ID; null if no instance
@@ -59,16 +59,16 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
     }
 
     public final ExecutionContainer createAndRegisterExecutionContainer(
-            final String factoryIdentifier,
+            final String namedIdentifier,
             final String name){
             ExecutionContainer newInst;
-            if (this.executionContainersByName.containsKey(factoryIdentifier)){
-                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
+            if (this.executionContainersByName.containsKey(namedIdentifier)){
+                throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new ExecutionContainer(id, null, name);
             this.executionContainersById.put(id, newInst);
-            this.executionContainersByName.put(factoryIdentifier, newInst);
+            this.executionContainersByName.put(namedIdentifier, newInst);
             return newInst;
     }
 

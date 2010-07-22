@@ -42,26 +42,26 @@ public class OperationRepository extends AbstractSystemSubRepository {
         this.rootOperation = rootOperation;
     }
 
-    /** Returns the instance for the passed factoryIdentifier; null if no instance
-     *  with this factoryIdentifier.
+    /** Returns the instance for the passed namedIdentifier; null if no instance
+     *  with this namedIdentifier.
      */
-    public final Operation getOperationByFactoryIdentifier(final String factoryIdentifier){
-        return this.operationsByName.get(factoryIdentifier);
+    public final Operation getOperationByNamedIdentifier(final String namedIdentifier){
+        return this.operationsByName.get(namedIdentifier);
     }
 
     public final Operation createAndRegisterOperation(
-            final String factoryIdentifier,
+            final String namedIdentifier,
             final ComponentType componentType,
             final Signature signature){
             Operation newInst;
-            if (this.operationsByName.containsKey(factoryIdentifier)){
-                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
+            if (this.operationsByName.containsKey(namedIdentifier)){
+                throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new Operation(id,
                     componentType, signature);
             this.operationsById.put(id, newInst);
-            this.operationsByName.put(factoryIdentifier, newInst);
+            this.operationsByName.put(namedIdentifier, newInst);
             return newInst;
     }
 

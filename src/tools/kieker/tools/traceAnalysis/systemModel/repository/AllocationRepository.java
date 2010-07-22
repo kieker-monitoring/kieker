@@ -46,23 +46,23 @@ public class AllocationRepository extends AbstractSystemSubRepository {
     /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final AllocationComponent getAllocationComponentInstanceByFactoryIdentifier(final String factoryIdentifier){
-        return this.allocationComponentInstancesByName.get(factoryIdentifier);
+    public final AllocationComponent getAllocationComponentInstanceByNamedIdentifier(final String namedIdentifier){
+        return this.allocationComponentInstancesByName.get(namedIdentifier);
     }
 
     public final AllocationComponent createAndRegisterAllocationComponentInstance(
-            final String factoryIdentifier,
+            final String namedIdentifier,
             final AssemblyComponent assemblyComponentInstance,
             final ExecutionContainer executionContainer){
             AllocationComponent newInst;
-            if (this.allocationComponentInstancesByName.containsKey(factoryIdentifier)){
-                throw new IllegalArgumentException("Element with name " + factoryIdentifier + "exists already");
+            if (this.allocationComponentInstancesByName.containsKey(namedIdentifier)){
+                throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
             }
             int id = this.getAndIncrementNextId();
             newInst = new AllocationComponent(id,
                     assemblyComponentInstance, executionContainer);
             this.allocationComponentInstancesById.put(id, newInst);
-            this.allocationComponentInstancesByName.put(factoryIdentifier, newInst);
+            this.allocationComponentInstancesByName.put(namedIdentifier, newInst);
             return newInst;
     }
 
