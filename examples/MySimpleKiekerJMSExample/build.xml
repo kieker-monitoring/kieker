@@ -68,7 +68,7 @@
     <target name="run-tests-loadTimeWeaving-bookstore-60Sek"
             depends="compile-all">
         <path id="run-classpath">
-            <pathelement location="build/"/>
+            <pathelement location="${build.dir}"/>
             <fileset dir="lib/">
                 <include name="commons-logging-*.jar"/>
                 <include name="jms-*.jar"/>
@@ -90,7 +90,7 @@
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=tests.log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
         </java>
@@ -115,7 +115,7 @@
               classpathref="run-classpath">
             <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
             <jvmarg value="-DinputDir=${inputDir}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=tests.log4j.properties"/>
         </java>
         <delete file="${build.dir}/log4j.properties"/>
     </target>

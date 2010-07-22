@@ -60,7 +60,7 @@ in the Kieker framework and @MyRTProbe() defined in this example archive.
 
 1. First, you need to start the JMS server (you may have to set your JAVA_HOME variable first):
    ($ export JAVA_HOME=PATH-TO-YOUR-JVM)
-   $ openjms-0.7.7-beta-1/bin/startup.sh
+   $ openjms-<version>/bin/startup.sh
 2. Now, we start the analysis part (in a new terminal):
    $ ant run-JMSMonitor
 3. Now, start the instrumented application (in another terminal):

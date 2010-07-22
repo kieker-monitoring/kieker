@@ -10,6 +10,9 @@
 
         <include within="mySimpleKiekerJMSExample.bookstoreDifferentRecordTypes60Sek..*"/>
 
+	<!-- the aspect itself must also be included! -->
+	<include within="mySimpleKiekerJMSExample.probe..*"/>
+
         <!-- instrument the kieker.tests -->
         <!--<include within="kieker.tests..*"/>-->
 
