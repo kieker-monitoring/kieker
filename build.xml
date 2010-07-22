@@ -244,8 +244,7 @@
     </target>
 
     <target name="build-kieker-sources" depends="init">
-        <patternset id="dist_src_files">
-            <include name="bin/*.sh"/>
+        <patternset id="dist_src_files-nonbinmode">
             <include name="bin/log4j.properties"/>
             <include name="${aop.xml.example}"/>
             <include name="${kieker.monitoring.properties.example}"/>
@@ -263,10 +262,16 @@
             <include name="LICENSE"/>
             <include name="pom_ant_kieker-*.xml"/>
         </patternset>
+        <patternset id="dist_src_files-binmode">
+            <include name="bin/*.sh"/>
+        </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_src_files"/>
+                <patternset refid="dist_src_files-nonbinmode"/>
+            </tarfileset> 
+            <tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+                <patternset refid="dist_src_files-binmode"/>
             </tarfileset>
         </tar>
         <gzip zipfile="${release.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${release.dir}/${dist.kieker.srcBaseName}.tar" />
@@ -275,14 +280,16 @@
 
         <zip  zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
             <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_src_files"/>
+                <patternset refid="dist_src_files-nonbinmode"/>
+            </zipfileset>
+            <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+                <patternset refid="dist_src_files-binmode"/>
             </zipfileset>
         </zip>
     </target>
 
     <target name="build-kieker-binaries" depends="build-all">
-        <patternset id="dist_bin_files">
-            <include name="bin/*.sh"/>
+        <patternset id="dist_bin_files-nonbinmode">
             <include name="bin/log4j.properties"/>
             <include name="dist/*.jar"/>
             <include name="dist/*.war"/>
@@ -293,10 +300,16 @@
             <include name="HISTORY"/>
             <include name="LICENSE"/>
         </patternset>
+        <patternset id="dist_bin_files-binmode">
+            <include name="bin/*.sh"/>
+        </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_bin_files"/>
+                <patternset refid="dist_bin_files-nonbinmode"/>
+            </tarfileset>
+            <tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+                <patternset refid="dist_bin_files-binmode"/>
             </tarfileset>
         </tar>
         <gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
@@ -305,7 +318,10 @@
 
         <zip  zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
             <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_bin_files"/>
+                <patternset refid="dist_bin_files-nonbinmode"/>
+            </zipfileset>
+            <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755"  defaultexcludes="yes">
+                <patternset refid="dist_bin_files-binmode"/>
             </zipfileset>
         </zip>
     </target>
@@ -377,11 +393,12 @@
     <target name="build-example-JPetStoreExample" depends="init">
         <property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
         <property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
-        <patternset id="dist_jpetstoreExample_files">
+        <patternset id="dist_jpetstoreExample_files-nonbinmode">
             <include name="examples/JPetStoreExample/README"/>
             <include name="examples/JPetStoreExample/LICENSE"/>
             <include name="examples/JPetStoreExample/kieker-testdata/**"/>
             <include name="examples/JPetStoreExample/${tomcat.dir}/**"/>
+            <exclude name="examples/JPetStoreExample/${tomcat.dir}/bin/*.sh"/>
             <include name="examples/JPetStoreExample/${jpetstore.dir}/**"/>
             <exclude name="examples/JPetStoreExample/${jpetstore.dir}/devlib/kieker*.jar"/>
             <exclude name="examples/JPetStoreExample/${jpetstore.dir}/nbproject/**"/>
@@ -400,10 +417,16 @@
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/commons-logging*.jar"/>
             <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>
         </patternset>
+       <patternset id="dist_jpetstoreExample_files-binmode">
+            <include name="examples/JPetStoreExample/${tomcat.dir}/bin/*.sh"/>
+        </patternset>
 
         <tar destfile="${release.dir}/${dist.kieker.example.jpetstore}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_jpetstoreExample_files"/>
+                <patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
+            </tarfileset>
+            <tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+                <patternset refid="dist_jpetstoreExample_files-binmode"/>
             </tarfileset>
         </tar>
         <gzip zipfile="${release.dir}/${dist.kieker.example.jpetstore}.tar.gz" src="${release.dir}/${dist.kieker.example.jpetstore}.tar" />
@@ -412,7 +435,10 @@
 
         <zip  zipfile="${release.dir}/${dist.kieker.example.jpetstore}.zip">
             <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_jpetstoreExample_files"/>
+                <patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
+            </zipfileset>
+            <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+                <patternset refid="dist_jpetstoreExample_files-binmode"/>
             </zipfileset>
         </zip>
     </target>
