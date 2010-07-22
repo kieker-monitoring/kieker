@@ -60,19 +60,6 @@
             depends="clean,init,build-kieker.monitoring,build-kieker.monitoring-servlet,build-kieker.common,build-kieker.analysis,build-kieker.tools">
     </target>
 
-    <condition property="no.kieker.analysis.properties">
-        <not>
-            <available file="${kieker.analysis.properties}"/>
-        </not>
-    </condition>
-
-    <target name="init-kieker.analysis-properties" if="no.kieker.analysis.properties">
-        <!-- if no kieker.analysis.properties, copy example file automatically  -->
-        <echo message="${kieker.analysis.properties} not existing.
-                       Creating default file."/>
-        <copy file="${kieker.analysis.properties.example}" tofile="${kieker.analysis.properties}"/>
-    </target>
-
     <condition property="no.kieker.monitoring.properties">
         <not>
             <available file="${kieker.monitoring.properties}"/>
@@ -87,7 +74,7 @@
     </target>
 
     <target name="init-properties"
-            depends="init-kieker.monitoring-properties,init-kieker.analysis-properties,init-log4-properties-tests">
+            depends="init-kieker.monitoring-properties">
     </target>
 
     <target name="init" depends="update-version,init-properties">
@@ -232,7 +219,6 @@
 
         <delete dir="${build.kieker.analysis.dir}"/>
         <mkdir  dir="${build.kieker.analysis.dir}"/>
-        <mkdir  dir="${build.kieker.analysis.dir}/META-INF"/>
         <javac destDir="${build.kieker.analysis.dir}"
                source="1.5" target="1.5"
                srcdir="${src.kieker.analysis.dir}"
@@ -240,7 +226,6 @@
                classpathref="kieker.analysis-compile-classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
-        <copy file="${kieker.analysis.properties}" todir="${build.kieker.analysis.dir}/META-INF"/>
         <copy file="LICENSE" todir="${build.kieker.analysis.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.analysis.jar}">
             <fileset dir="${build.kieker.analysis.dir}"/>
@@ -472,11 +457,13 @@
         </zip>
     </target>
 
-    <target name="build-examples" depends="init,build-example-MySimpleKiekerExample,build-example-MySimpleKiekerJMSExample,build-example-JPetStoreExample,build-example-microbenchmark">
+    <target name="build-examples"
+            depends="init,build-example-MySimpleKiekerExample,build-example-MySimpleKiekerJMSExample,build-example-JPetStoreExample,build-example-microbenchmark">
 
     </target>
 
-    <target name="release" depends="build-all,build-kieker-sources,build-kieker-binaries,build-examples">
+    <target name="release"
+            depends="build-all,build-kieker-sources,build-kieker-binaries,build-examples">
         <echo message="Sourceforge release instructions can be found at:"/>
         <echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease"/>
         <echo message="scp dist/release/kieker-VERSION_* USER@frs.sourceforge.net:uploads"/>
@@ -487,9 +474,6 @@
         <delete dir="${dist.dir}"/>
         <delete dir="${release.dir}"/>
         <delete dir="${build.dir}"/>
-        <delete dir="src/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/aspects/"/>
-        <delete dir="src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/aspects/"/>
-        <delete dir="src/kieker/tests/compileTimeWeaving/bookstore/aspects/"/>
     </target>
 
     <target name="run-test-storage" depends="build-kieker.monitoring">
@@ -546,7 +530,7 @@
             fork="true"
             classname="kieker.tests.storageOnly.StorageOnly"
             classpathref="kieker.test-storage-run-classpath">
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
@@ -556,61 +540,86 @@
         </java>
     </target>
 
-    <condition property="no.log4j.properties.tests">
-        <not>
-            <available file="${tests.log4j.properties}"/>
-        </not>
-    </condition>
-
-    <target name="init-log4-properties-tests" if="no.log4j.properties.tests">
-        <!-- if no aop.xml, copy example file automatically  -->
-        <echo message="${no.log4j.properties.tests} not existing.
-                       Creating default file."/>
-        <copy file="${log4j.properties.example}" tofile="${tests.log4j.properties}"/>
-    </target>
-
-    <target name="compile-tests-loadTimeWeaving"
-	    depends="build-kieker.monitoring">
-        <path id="kieker.test-loadTimeWeaving-compile-classpath">
-            <!--<fileset dir="${lib.dir}">
-                <include name="commons-cli-*.jar"/>
+    <target name="compile-tests-common"
+	    depends="build-kieker.common">
+        <path id="common-test-compile-classpath">
+            <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
-            </fileset>-->
+                <include name="junit-*.jar"/>
+            </fileset>
             <fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>
         </path>
         <javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
-               classpathref="kieker.test-loadTimeWeaving-compile-classpath"
-               srcdir="test"
-               includes="kieker/tests/loadTimeWeaving/"
-               excludes="kieker/tests/loadTimeWeaving/bookstoreDifferentRecordTypes/">
+               classpathref="common-test-compile-classpath"
+               srcdir="${test.kieker.common.dir}">
         </javac>
     </target>
 
-    <target name="compile-tests-loadTimeWeavingDifferentRecordTypes"
-	        depends="build-kieker.monitoring">
-        <path id="kieker.test-loadTimeWeavingDifferentRecordTypes-compile-classpath">
-            <!--<fileset dir="${lib.dir}">
+    <target name="compile-tests-monitoring"
+	    depends="build-kieker.monitoring">
+        <path id="monitoring-test-compile-classpath">
+            <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
-            </fileset>-->
+                <include name="junit-*.jar"/>
+            </fileset>
             <fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>
         </path>
-
         <javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
-               classpathref="kieker.test-loadTimeWeavingDifferentRecordTypes-compile-classpath"
-               srcdir="test/kieker/tests/loadTimeWeaving/">
+               classpathref="monitoring-test-compile-classpath"
+               srcdir="${test.kieker.monitoring.dir}"
+               excludes="kieker/test/monitoring/aspectJ/compileTimeWeaving/">
+        </javac>
+    </target>
+
+    <target name="compile-tests-analysis"
+	    depends="build-kieker.analysis">
+        <path id="analysis-test-compile-classpath">
+            <fileset dir="${lib.dir}">
+                <include name="commons-logging-*.jar"/>
+                <include name="junit-*.jar"/>
+            </fileset>
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.common.jar}"/>
+                <include name="${dist.kieker.analysis.jar}"/>
+            </fileset>
+        </path>
+        <javac source="1.5" target="1.5"
+               destDir="${build.tests.dir}"
+               classpathref="analysis-test-compile-classpath"
+               srcdir="${test.kieker.analysis.dir}">
+        </javac>
+    </target>
+
+    <target name="compile-tests-tools"
+	    depends="build-kieker.tools">
+        <path id="tools-test-compile-classpath">
+            <fileset dir="${lib.dir}">
+                <include name="commons-logging-*.jar"/>
+                <include name="junit-*.jar"/>
+            </fileset>
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.common.jar}"/>
+                <include name="${dist.kieker.analysis.jar}"/>
+                <include name="${dist.kieker.monitoring.jar}"/>
+                <include name="${dist.kieker.tools.jar}"/>
+            </fileset>
+        </path>
+        <javac source="1.5" target="1.5"
+               destDir="${build.tests.dir}"
+               classpathref="tools-test-compile-classpath"
+               srcdir="${test.kieker.tools.dir}">
         </javac>
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes"
-            depends="compile-tests-loadTimeWeavingDifferentRecordTypes">
+            depends="compile-tests-monitoring">
         <path id="kieker.test-loadTimeWeaving-run-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
@@ -623,19 +632,19 @@
         </path>
 
         <copy file="${tests.log4j.properties}"
-              tofile="${build.dir}/tests.log4j.properties"/>
+              tofile="${build.dir}/log4j.properties"/>
         <copy file="${aop.xml.ltwtests.annotation}"
 	      tofile="${build.tests.dir}/META-INF/aop.xml"
               overwrite="true"/>
         <java dir="."
               fork="true"              
-              classname="kieker.tests.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore"
+              classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore"
               classpathref="kieker.test-loadTimeWeaving-run-classpath">
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-Dkieker.monitoring.debug=false"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <!--<jvmarg value="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop.xml"/>-->
             <jvmarg value="-Daj.weaving.verbose=true"/>
@@ -643,7 +652,7 @@
     </target>
     
     <target name="run-tests-loadTimeWeaving-bookstoreFullInstrumentation"
-            depends="compile-tests-loadTimeWeaving">
+            depends="compile-tests-monitoring">
         <path id="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
@@ -655,26 +664,26 @@
             </fileset>
         </path>
 
-        <copy file="${tests.log4j.properties}"
-              tofile="${build.dir}/tests.log4j.properties"/>
+        <copy file="${log4j.properties}"
+              tofile="${build.dir}/log4j.properties"/>
         <copy file="${aop.xml.ltwtests.full}"
 	      tofile="${build.tests.dir}/META-INF/aop.xml"
               overwrite="true"/>
         <java dir="."
               fork="true"              
-              classname="kieker.tests.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
+              classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
               classpathref="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
         </java>
     </target>
 
     <target name="run-tests-loadTimeWeaving-executionOrderTest"
-            depends="compile-tests-loadTimeWeaving">
+            depends="compile-tests-monitoring">
         <path id="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
@@ -687,24 +696,25 @@
         </path>
 
         <copy file="${tests.log4j.properties}"
-              tofile="${build.dir}/tests.log4j.properties"/>
+              tofile="${build.dir}/log4j.properties"/>
         <copy file="${aop.xml.ltwtests.full}"
 	      tofile="${build.tests.dir}/META-INF/aop.xml"
               overwrite="true"/>
         <java dir="."
               fork="true"
-              classname="kieker.tests.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
+              classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
               classpathref="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
             <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
             <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
             <jvmarg value="-Daj.weaving.verbose=true"/>
         </java>
     </target>
 
-    <target name="compile-tests-compileTimeWeaving-bookstore" depends="build-kieker.monitoring">
+    <target name="compile-tests-compileTimeWeaving-bookstore"
+            depends="build-kieker.monitoring">
         <path id="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="aspectjrt-*.jar"/>
@@ -727,17 +737,18 @@
         <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/${TestAspect}"
               todir="tmp/aspects/"/>
         <copy file="${tests.log4j.properties}"
-              tofile="${build.dir}/tests.log4j.properties"/>
+              tofile="${build.dir}/log4j.properties"/>
         <iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
               classpathref="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
             <sourceroots>
-                <pathelement location="test/kieker/tests/compileTimeWeaving/bookstore/"/>
+                <pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/bookstore/"/>
                 <pathelement location="tmp/aspects/"/>
             </sourceroots>
         </iajc>
     </target>
 
-    <target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="build-kieker.monitoring,init-log4-properties-tests">
+    <target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample"
+            depends="build-kieker.monitoring">
         <path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="aspectjrt-*.jar"/>
@@ -760,38 +771,18 @@
         <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/${TestAspect}"
               todir="tmp/aspects/"/>
         <copy file="${tests.log4j.properties}"
-              tofile="${build.dir}/tests.log4j.properties"/>
+              tofile="${build.dir}/log4j.properties"/>
         <iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
               classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
             <sourceroots>
-                <pathelement location="test/kieker/tests/compileTimeWeaving/twoConcurrentMethodsExample/"/>
+                <pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/twoConcurrentMethodsExample/"/>
                 <pathelement location="tmp/aspects/"/>
             </sourceroots>
         </iajc>
     </target>
     
-    <target name="compile-tests-compileTimeWeaving-bookstoreDB" depends="compile-tests-compileTimeWeaving-bookstore">
-        <path id="kieker.test-compileTimeWeaving-bookstoreDB-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>-->
-        </path>
-        <javac destDir="${build.tests.dir}"
-               source="1.5" target="1.5"
-               verbose="off"
-               srcdir="test/kieker/tests/util/"
-               debug="true"
-               classpathref="kieker.test-compileTimeWeaving-bookstoreDB-compile-classpath">
-            <compilerarg value="-Xlint:all,-path"/>
-        </javac>
-    </target>
-
-    <target name="run-tests-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstore">
+    <target name="run-tests-compileTimeWeaving-bookstore"
+            depends="compile-tests-compileTimeWeaving-bookstore">
         <path id="kieker.test-compileTimeWeaving-bookstore-run-classpath">
             <fileset dir="${lib.dir}">
                 <include name="aspectjweaver-*.jar"/>
@@ -806,15 +797,16 @@
 
         <java dir="."
               fork="true"
-              classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
+              classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.Bookstore"
               classpathref="kieker.test-compileTimeWeaving-bookstore-run-classpath">
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
         </java>
     </target>
 
-    <target name="run-tests-compileTimeWeaving-bookstoreDB" depends="compile-tests-compileTimeWeaving-bookstoreDB">
+    <target name="run-tests-compileTimeWeaving-bookstoreDB" 
+            depends="compile-all-tests,compile-tests-compileTimeWeaving-bookstore">
         <path id="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
             <fileset dir="${lib.dir}">
                 <include name="aspectjweaver-*.jar"/>
@@ -833,27 +825,28 @@
         <java dir="."
               fork="true"
               classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath"
-              classname="kieker.tests.util.JavaDBInitializer">
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+              classname="kieker.test.monitoring.util.JavaDBInitializer">
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
             <jvmarg value="-Dkieker.monitoring.dbDriverClassname="/>
             <jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:${tests.javadb.kiekerdb.path};user=DBUSER;password=DBPASS"/>
             <jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata"/>
         </java>
         <java dir="."
               fork="true"
-              classname="kieker.tests.compileTimeWeaving.bookstore.Bookstore"
+              classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.Bookstore"
               classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
             <jvmarg value="-Dkieker.monitoring.configuration=${tests.db.kieker.monitoring.properties}"/>
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
             <jvmarg value="-Dkieker.monitoring.dbDriverClassname="/>
             <jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
             <jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata"/>
         </java>
     </target>
 
-    <target name="run-tests-compileTimeWeaving-bookstore-synchronized" depends="compile-tests-compileTimeWeaving-bookstore">
+    <target name="run-tests-compileTimeWeaving-bookstore-synchronized"
+            depends="compile-tests-compileTimeWeaving-bookstore">
         <echo message="Using Bookstore variant with synchronized Catalog.getBooks (is slower)."/>
 
         <path id="kieker.test-compileTimeWeaving-bookstore-synchronized-run-classpath">
@@ -870,11 +863,11 @@
 
         <java dir="."
               fork="true"
-              classname="kieker.tests.compileTimeWeaving.bookstore.synchron.Bookstore"
+              classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.synchron.Bookstore"
               classpathref="kieker.test-compileTimeWeaving-bookstore-synchronized-run-classpath">
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
         </java>
     </target>
 
@@ -893,39 +886,20 @@
 
         <java dir="."
               fork="true"
-              classname="kieker.tests.compileTimeWeaving.twoConcurrentMethodsExample.Starter"
+              classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.twoConcurrentMethodsExample.Starter"
               classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-run-classpath">
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
             <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
+            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
         </java>
-    </target>
-
-    <target name="compile-tests-junit"
-	        depends="build-kieker.monitoring,build-kieker.analysis,build-kieker.tools">
-        <path id="kieker.test-junit-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="junit-*.jar"/>
-            </fileset>
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-                <include name="${dist.kieker.analysis.jar}"/>
-                <include name="${dist.kieker.tools.jar}"/>
-            </fileset>
-        </path>
-
-        <javac source="1.5" target="1.5"
-               destDir="${build.tests.dir}"
-               classpathref="kieker.test-junit-compile-classpath"
-               srcdir="test/kieker/tests/junit/">
-        </javac>
     </target>
 
     <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
 
-    <target name="run-tests-junit" depends="compile-tests-junit">
+    <target name="compile-all-tests"
+            depends="compile-tests-common,compile-tests-monitoring,compile-tests-analysis,compile-tests-tools"/>
+
+    <target name="run-tests-junit" depends="compile-all-tests">
         <path id="kieker.test-junit-run-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
@@ -940,57 +914,36 @@
             </fileset>
         </path>
 
+        <delete dir="${tests.junit-results.dir}"/>
+        <mkdir  dir="${tests.junit-results.dir}"/>
+
         <junit printsummary="yes" haltonfailure="no">
             <classpath refid="kieker.test-junit-run-classpath"/>
 
             <formatter type="xml"/>
 
-            <batchtest fork="yes" todir="tmp/">
+            <batchtest fork="yes" todir="${tests.junit-results.dir}">
                 <fileset dir="${build.tests.dir}/">
-                    <include name="**/*Test*.class"/>
-                    <exclude name="**/AllTests.class"/>
+                    <include name="**/junit/**/*Test*.class"/>
                     <exclude name="**/*$*.class"/>
                 </fileset>
             </batchtest>
-            <!--<batchtest fork="yes" todir="tmp/">
-                <fileset dir="test/kieker/tests/junit/">
-                    <include name="**/*Test*.java"/>
-                    <exclude name="**/AllTests.java"/>
-                </fileset>
-            </batchtest>-->
         </junit>
 
         <antcall target="test.junit.report"/>
     </target>
 
     <target name="test.junit.report" depends="" >
-        <junitreport todir="tmp/">
-            <fileset dir="tmp/">
+        <junitreport todir="${tests.junit-results.dir}">
+            <fileset dir="${tests.junit-results.dir}">
                 <include name="TEST-*.xml"/>
             </fileset>
-            <report format="frames" todir="tmp/"/>
+            <report format="frames" todir="${tests.junit-results.dir}"/>
         </junitreport>
+
+        <echo message="To see the test report, open ${tests.junit-results.dir}/index.html in your Web browser."/>
     </target>
 
-    <!--
-    <target name="run-benchmark-compileTimeWeaving-bookstore" depends="compile-tests-compileTimeWeaving-bookstoreBenchmark">
-        <java dir="."
-              fork="true"
-              classname="kieker.tests.compileTimeWeaving.bookstoreBenchmark.Bookstore"              
-	          classpathref="run.tests.classpath">
-            <jvmarg value="-server"/>
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/tests.log4j.properties"/>
-        </java>
-        <exec command="bash -c &quot;echo 'opname resp_ns' &gt; tmp/benchmark-tpmon-cur.dat&quot;" failonerror="true"/>
-        <exec command="bash -c &quot;awk -F';' '{ print $2 , ($6-$5) }' tmp/tpmon-*/*.dat | sed s/'kieker.tests.compileTimeWeaving.bookstoreBenchmark.'/''/g >> tmp/benchmark-tpmon-cur.dat&quot;"
-        	failonerror="true" />
-        <exec command="bash -c &quot;R -vanilla &lt; ./src/kieker/tests/compileTimeWeaving/bookstoreBenchmark/gen-results.r&quot;"/>
-        <exec command="okular tmp/benchmark-results.pdf" spawn="true" />
-    </target>
-    -->
-   
     <target name="pmd">
         <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
         <pmd shortFilenames="true">
