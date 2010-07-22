@@ -20,6 +20,7 @@ package mySimpleKiekerExample.probe;
 
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.probe.IMonitoringProbe;
+import mySimpleKiekerExample.annotation.MyRTProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

@@ -83,7 +83,7 @@ Three methods are instrumented with the annotation
       files contained in a directory to any output format supported by dot.)
  3.2 Sequence diagrams
    - $ bin/trace-analysis -i <FULL-PATH-TO-LOG-DIRECTORY> -p BAR -o tmp/ 
-       --plot-Sequence-Diagrams --short-labels
+       --plot-Allocation-Sequence-Diagrams --short-labels
    - For each diagram, a .pic-file with the prefix 'BAR' is created in the directory 
      tmp/. 
      The console output gives further instructions how to convert these 

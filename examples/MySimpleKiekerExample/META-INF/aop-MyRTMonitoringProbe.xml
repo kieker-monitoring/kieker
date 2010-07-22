@@ -12,6 +12,9 @@
         <include within="mySimpleKiekerExample.bookstoreDifferentRecordTypes..*"/>
         <include within="mySimpleKiekerExample.bookstoreTracing..*"/>
 
+	<!-- the aspect itself must also be included! -->
+	<include within="mySimpleKiekerExample.probe..*"/>
+
         <!-- instrument the kieker.tests -->
         <!--<include within="kieker.tests..*"/>-->
 
