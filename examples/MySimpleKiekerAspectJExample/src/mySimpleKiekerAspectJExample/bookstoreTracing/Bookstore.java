@@ -1,13 +1,12 @@
-package mySimpleKiekerExample.bookstore30SekDelayed;
+package mySimpleKiekerAspectJExample.bookstoreTracing;
 
 import java.util.Vector;
-import mySimpleKiekerExample.annotation.MyRTProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
-/**
- * kieker.tests.bookstore.Bookstore.java
+/*
  *
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +20,12 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
- *
+ */
+
+/**
  * A simple test and demonstration scenario for Kieker's 
  * monitoring component tpmon. See the kieker tutorial 
  * for more information 
- * (http://www.matthias-rohr.com/kieker/tutorial.html)
  *
  * @author Matthias Rohr
  * History:
@@ -37,11 +36,9 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  */
 public class Bookstore extends Thread {
 
-    static int numberOfRequests = 30;
-    static int interRequestTime = 1000;
-
+    static int numberOfRequests = 1;
+    static int interRequestTime = 5;
     static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
-
     /**
      *
      * main is the load driver for the Bookstore. It creates 
@@ -65,7 +62,7 @@ public class Bookstore extends Thread {
             newBookstore.start();
             Bookstore.waitabit(interRequestTime);
         }
-         System.out.println("Bookstore.main: Finished with starting all requests.");
+        System.out.println("Bookstore.main: Finished with starting all requests.");
         System.out.println("Bookstore.main: Waiting for threads to terminate");
         synchronized (bookstoreScenarios) {
             while (!bookstoreScenarios.isEmpty()) {
@@ -83,7 +80,7 @@ public class Bookstore extends Thread {
         }
     }
 
-    @MyRTProbe()
+    @OperationExecutionMonitoringProbe()
     public static void searchBook() {
         for (int i = 0; i < 1; i++) {
             Catalog.getBook(false);

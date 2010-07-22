@@ -1,9 +1,10 @@
-package mySimpleKiekerExample.bookstore30SekDelayed;
+package mySimpleKiekerAspectJExample.bookstore30SekDelayed;
 
-import mySimpleKiekerExample.annotation.MyRTProbe;
+import java.util.Random;
+import mySimpleKiekerAspectJExample.annotation.MyRTProbe;
 
 /**
- * kieker.tests.bookstore.CRM.java
+ * kieker.tests.bookstore.Catalog.java
  *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
@@ -27,21 +28,25 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
  *
- * @author Matthias Rohr
+ * @author Matthias Rohr, Andre van Hoorn
  * History:
+ * 2009/06/23: Adapted for "different record type test"
  * 2008/01/09: Refactoring for the first release of
  *             Kieker and publication under an open source licence
  * 2007-04-18: Initial version
  *
  */
+public class Catalog {
+    private static final Random rnd = new Random(200);
 
-public class CRM {
- 
-    /**
-     * This method will be monitored, since it has an annotation.
-     */
     @MyRTProbe()
-    public static void getOffers(){
-	Catalog.getBook(true);
+    public static void getBook(boolean complexQuery) {
+        if (complexQuery) {
+            //KiekerTpmonManualBranchProbe.monitorBranch(1,0);
+            Bookstore.waitabit(1000+rnd.nextInt(1000));
+        } else {
+            //KiekerTpmonManualBranchProbe.monitorBranch(1,1);
+            Bookstore.waitabit(2);
+        }
     }
 }

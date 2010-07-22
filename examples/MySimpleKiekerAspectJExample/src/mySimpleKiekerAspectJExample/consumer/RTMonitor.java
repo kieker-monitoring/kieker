@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.consumer;
+package mySimpleKiekerAspectJExample.consumer;
 
 /*
  * ==================LICENCE=========================
@@ -26,7 +26,7 @@ import kieker.analysis.AnalysisInstance;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.MonitoringLogReaderException;
-import mySimpleKiekerExample.record.MyRTMonitoringRecord;
+import mySimpleKiekerAspectJExample.record.MyRTMonitoringRecord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

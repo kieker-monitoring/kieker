@@ -1,10 +1,10 @@
-package mySimpleKiekerExample.bookstoreDifferentRecordTypes;
+package mySimpleKiekerAspectJExample.bookstore30SekDelayed;
 
 import java.util.Vector;
-import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-import mySimpleKiekerExample.annotation.MyRTProbe;
+import mySimpleKiekerAspectJExample.annotation.MyRTProbe;
 
-/*
+/**
+ * kieker.tests.bookstore.Bookstore.java
  *
  * ==================LICENCE=========================
  * Copyright 2006-2009 Kieker Project
@@ -27,9 +27,8 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  * monitoring component tpmon. See the kieker tutorial 
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
- */
-
-/** @author Matthias Rohr
+ *
+ * @author Matthias Rohr
  * History:
  * 2008/01/09: Refactoring for the first release of
  *             Kieker and publication under an open source licence
@@ -38,8 +37,10 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  */
 public class Bookstore extends Thread {
 
-    static int numberOfRequests = 2;
-    static int interRequestTime = 5;
+    static int numberOfRequests = 30;
+    static int interRequestTime = 1000;
+
+    static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
 
     /**
      *
@@ -56,10 +57,7 @@ public class Bookstore extends Thread {
      * This will be monitored by Tpmon, since it has the
      * TpmonExecutionMonitoringProbe() annotation.
      */
-    public static void main(String[] args) {
-
-        Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
-
+    public static void main(String[] args) throws InterruptedException {
         for (int i = 0; i < numberOfRequests; i++) {
             System.out.println("Bookstore.main: Starting request " + i);
             Bookstore newBookstore = new Bookstore();
@@ -67,18 +65,25 @@ public class Bookstore extends Thread {
             newBookstore.start();
             Bookstore.waitabit(interRequestTime);
         }
-        System.out.println("Bookstore.main: Finished with starting all requests.");
-        System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-        waitabit(5000);
-        System.exit(0);
+         System.out.println("Bookstore.main: Finished with starting all requests.");
+        System.out.println("Bookstore.main: Waiting for threads to terminate");
+        synchronized (bookstoreScenarios) {
+            while (!bookstoreScenarios.isEmpty()) {
+                bookstoreScenarios.wait();
+            }
+        }
     }
 
+    @Override
     public void run() {
         Bookstore.searchBook();
+        synchronized (bookstoreScenarios) {
+            bookstoreScenarios.remove(this);
+            bookstoreScenarios.notify();
+        }
     }
 
     @MyRTProbe()
-    @OperationExecutionMonitoringProbe()
     public static void searchBook() {
         for (int i = 0; i < 1; i++) {
             Catalog.getBook(false);

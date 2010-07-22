@@ -1,9 +1,9 @@
-package mySimpleKiekerExample.bookstoreDifferentRecordTypes;
+package mySimpleKiekerAspectJExample.bookstoreTracing;
 
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-import mySimpleKiekerExample.annotation.MyRTProbe;
 
 /*
+ *
  * ==================LICENCE=========================
  * Copyright 2006-2008 Matthias Rohr and the Kieker Project
  *
@@ -25,26 +25,25 @@ import mySimpleKiekerExample.annotation.MyRTProbe;
  * monitoring component tpmon. See the kieker tutorial 
  * for more information 
  * (http://www.matthias-rohr.com/kieker/tutorial.html)
- *
  */
 
-/**
- * @author Matthias Rohr
+/** @author Matthias Rohr, Andre van Hoorn
  * History:
+ * 2009/06/23: Adapted for "different record type test"
  * 2008/01/09: Refactoring for the first release of
  *             Kieker and publication under an open source licence
  * 2007-04-18: Initial version
  *
  */
-
-public class CRM {
- 
-    /**
-     * This method will be monitored, since it has an annotation.
-     */
-    @MyRTProbe()
+public class Catalog {
     @OperationExecutionMonitoringProbe()
-    public static void getOffers(){
-	Catalog.getBook(true);
+    public static void getBook(boolean complexQuery) {
+        if (complexQuery) {
+            //KiekerTpmonManualBranchProbe.monitorBranch(1,0);
+            Bookstore.waitabit(20);
+        } else {
+            //KiekerTpmonManualBranchProbe.monitorBranch(1,1);
+            Bookstore.waitabit(2);
+        }
     }
 }

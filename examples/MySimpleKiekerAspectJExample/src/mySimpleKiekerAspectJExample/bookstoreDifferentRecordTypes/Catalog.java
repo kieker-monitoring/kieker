@@ -1,7 +1,7 @@
-package mySimpleKiekerExample.bookstoreDifferentRecordTypes;
+package mySimpleKiekerAspectJExample.bookstoreDifferentRecordTypes;
 
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-import mySimpleKiekerExample.annotation.MyRTProbe;
+import mySimpleKiekerAspectJExample.annotation.MyRTProbe;
 
 /*
  *

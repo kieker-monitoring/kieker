@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.bookstoreTracing;
+package mySimpleKiekerAspectJExample.bookstoreTracing;
 
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 

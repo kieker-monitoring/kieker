@@ -71,7 +71,7 @@
 	      tofile="${build.dir}/META-INF/aop.xml"/>
         <java dir="."
               fork="true"
-              classname="mySimpleKiekerExample.bookstoreTracing.Bookstore"
+              classname="mySimpleKiekerAspectJExample.bookstoreTracing.Bookstore"
               classpathref="run-classpath">
             <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
@@ -101,7 +101,7 @@
 	      tofile="${build.dir}/META-INF/aop.xml"/>
         <java dir="."
               fork="true"
-              classname="mySimpleKiekerExample.bookstoreDifferentRecordTypes.Bookstore"
+              classname="mySimpleKiekerAspectJExample.bookstoreDifferentRecordTypes.Bookstore"
               classpathref="run-classpath">
             <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
@@ -130,7 +130,7 @@
 	      tofile="${build.dir}/META-INF/aop.xml"/>
         <java dir="."
               fork="true"
-              classname="mySimpleKiekerExample.bookstore30SekDelayed.Bookstore"
+              classname="mySimpleKiekerAspectJExample.bookstore30SekDelayed.Bookstore"
               classpathref="run-classpath">
             <jvmarg value="-Dkieker.monitoring.configuration=${kieker.monitoring.properties}"/>
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>

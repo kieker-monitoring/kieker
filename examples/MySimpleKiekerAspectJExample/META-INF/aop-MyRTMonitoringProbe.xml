@@ -8,13 +8,16 @@
              Some examples are given below.
         -->
 
-        <include within="mySimpleKiekerExample.bookstore30SekDelayed..*"/>
-        <include within="mySimpleKiekerExample.bookstoreDifferentRecordTypes..*"/>
-        <include within="mySimpleKiekerExample.bookstoreTracing..*"/>
+        <include within="mySimpleKiekerAspectJExample.bookstore30SekDelayed..*"/>
+        <include within="mySimpleKiekerAspectJExample.bookstoreDifferentRecordTypes..*"/>
+        <include within="mySimpleKiekerAspectJExample.bookstoreTracing..*"/>
+
+	<!-- the aspect itself must also be included! -->
+	<include within="mySimpleKiekerAspectJExample.probe..*"/>
 
         <!-- instrument the kieker.tests -->
         <!--<include within="kieker.tests..*"/>-->
-	
+
         <!-- Use * to consider all classes.
              In this case, you typically need some additional excludes. -->
         <!-- <include within="*"/> -->
@@ -35,9 +38,10 @@
     </weaver>
 
     <aspects>
-      <!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
+      <!-- Use the aspect directives to specify the aspect(s) to use -->
 
-      <aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>
+      <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>-->
+      <aspect name="mySimpleKiekerAspectJExample.probe.MyRTMonitoringProbe"/>
       <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotationServlet"/>-->
       <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>-->
       <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFullServlet"/>-->

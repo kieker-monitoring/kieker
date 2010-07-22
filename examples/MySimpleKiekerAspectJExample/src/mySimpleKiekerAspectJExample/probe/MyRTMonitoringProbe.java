@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.probe;
+package mySimpleKiekerAspectJExample.probe;
 
 /*
  * ==================LICENCE=========================
@@ -20,11 +20,11 @@ package mySimpleKiekerExample.probe;
 
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.probe.IMonitoringProbe;
-import mySimpleKiekerExample.annotation.MyRTProbe;
+import mySimpleKiekerAspectJExample.annotation.MyRTProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import mySimpleKiekerExample.record.MyRTMonitoringRecord;
+import mySimpleKiekerAspectJExample.record.MyRTMonitoringRecord;
 
 /** @author Andre van Hoorn
  */
@@ -33,7 +33,7 @@ public class MyRTMonitoringProbe implements IMonitoringProbe {
 
     protected static final MonitoringController CTRL = MonitoringController.getInstance();
 
-    @Around(value = "execution(@mySimpleKiekerExample.annotation.MyRTProbe * *.*(..))")
+    @Around(value = "execution(@mySimpleKiekerAspectJExample.annotation.MyRTProbe * *.*(..))")
     public Object probe(ProceedingJoinPoint j) throws Throwable {
         MyRTMonitoringRecord record = new MyRTMonitoringRecord();
         record.component = j.getSignature().getDeclaringTypeName();
