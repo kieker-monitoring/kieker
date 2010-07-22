@@ -288,7 +288,7 @@
             <include name="dist/*.war"/>
             <include name="${aop.xml.example}"/>
             <include name="${kieker.monitoring.properties.example}"/>
-            <include name="lib/**"/>
+            <include name="lib/*"/>
             <include name="ISSUES"/>
             <include name="HISTORY"/>
             <include name="LICENSE"/>

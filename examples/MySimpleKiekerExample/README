@@ -1,12 +1,11 @@
 This examples demonstrate 
 1. how to use Kieker.Monitoring to instrument a simple 
-   Java application and how to log 
-   monitoring data
+   Java application and how to log monitoring data
 2. and how to use Kieker.Analysis for 
    analyzing/visualizing the recorded monitoring data
 
 All experiments employ AspectJ for weaving the monitoring 
-probes into the application. Two different AspectJ configuration 
+probes into the application. Three different AspectJ configuration 
 files are used for the examples (to be found in META-INF).
 The Java methods to be instrumented are selected using Java 
 annotations.
@@ -50,10 +49,10 @@ Three methods are instrumented with the annotation
    The directory contains two files: 
    - tpmon-<DATE-TIME>-Thread-<Y>.dat which contains the monitoring records.
      Despite of the timestamps, the file should look like this:
-     $1;1258621800818383199;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800816269391;1258621800818365517;pc-vanhoorn;1;1
-     $1;1258621800866920181;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);NULL;4807451864729649153;1258621800846767436;1258621800866898602;pc-vanhoorn;3;2
-     $1;1258621800867048415;0;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();NULL;4807451864729649153;1258621800846723537;1258621800867045091;pc-vanhoorn;2;1
-     $1;1258621800867105743;0;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();NULL;4807451864729649153;1258621800805892068;1258621800867059802;pc-vanhoorn;0;0
+     $1;1258621800818383199;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);N/A;4807451864729649153;1258621800816269391;1258621800818365517;pc-vanhoorn;1;1
+     $1;1258621800866920181;0;mySimpleKiekerExample.bookstoreTracing.Catalog.getBook(boolean);N/A;4807451864729649153;1258621800846767436;1258621800866898602;pc-vanhoorn;3;2
+     $1;1258621800867048415;0;mySimpleKiekerExample.bookstoreTracing.CRM.getOffers();N/A;4807451864729649153;1258621800846723537;1258621800867045091;pc-vanhoorn;2;1
+     $1;1258621800867105743;0;mySimpleKiekerExample.bookstoreTracing.Bookstore.searchBook();N/A;4807451864729649153;1258621800805892068;1258621800867059802;pc-vanhoorn;0;0
    - tpmon.dat which contains the mapping between monitoring record type 
      and implementing class:
      $1=kieker.common.record.OperationExecutionRecord
@@ -73,8 +72,9 @@ Three methods are instrumented with the annotation
    three abstraction levels: operation, component, container. 
     - The following call generates graphs for all three levels:
       $ bin/trace-analysis.sh -i <FULL-PATH-TO-LOG-DIRECTORY> -p FOO -o tmp/
-	--plot-Operation-Dependency-Graph  --plot-Component-Dependency-Graph
-	--plot-Container-Dependency-Graph  --short-labels   
+        --plot-Allocation-Operation-Dependency-Graph  
+        --plot-Allocation-Component-Dependency-Graph 
+        --plot-Container-Dependency-Graph --short-labels   
    - .dot-files with the prefix 'FOO' containing the diagrams are created in the 
      directory tmp/. 
      The console output gives further instructions how to convert this 

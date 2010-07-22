@@ -194,11 +194,13 @@ public class FSReader extends AbstractMonitoringLogReader {
             }
         }
 
-        private synchronized void reportReaderException(Exception ex) {
+        private void reportReaderException(Exception ex) {
             Thread t = Thread.currentThread();
             log.error("FSReader thread '" + t.getName() + "' reports exception", ex);
             this.errorOccured.set(true);
-            this.notifyAll();
+            synchronized (this.orderRecordBuffer) {
+                this.orderRecordBuffer.notifyAll(); // notify main thread of new record
+            }
         }
 
         public void terminate(final boolean error) {
@@ -208,9 +210,6 @@ public class FSReader extends AbstractMonitoringLogReader {
             synchronized (this.orderRecordBuffer) {
                 this.orderRecordBuffer.put(FS_READER_TERMINATION_MARKER, null);
                 this.orderRecordBuffer.notifyAll(); // notify main thread of new record
-            }
-            synchronized (this) {
-                this.notifyAll();
             }
         }
     }

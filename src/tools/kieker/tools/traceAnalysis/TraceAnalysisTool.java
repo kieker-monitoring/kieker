@@ -35,7 +35,6 @@ import java.util.Map.Entry;
 
 import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.AnalysisInstance;
-import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
@@ -471,7 +470,7 @@ public class TraceAnalysisTool {
             }
             ComponentDependencyGraphPluginAssembly componentPlotAssemblyComponentDepGraph = null;
             if (retVal
-                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)) {
                 numRequestedTasks++;
                 componentPlotAssemblyComponentDepGraph =
                         new ComponentDependencyGraphPluginAssembly(
@@ -531,7 +530,7 @@ public class TraceAnalysisTool {
             }
             OperationDependencyGraphPluginAssembly componentPlotAssemblyOperationDepGraph = null;
             if (retVal
-                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)) {
+                    && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)) {
                 numRequestedTasks++;
                 componentPlotAssemblyOperationDepGraph =
                         new OperationDependencyGraphPluginAssembly(

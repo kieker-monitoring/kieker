@@ -5,10 +5,10 @@
 #
 # @author Andre van Hoorn
 
-BINDIR=$(dirname $0)
+BINDIR=$(cd $(dirname $0); pwd)/
 
-JAVAARGS="-Dlog4j.configuration=${BINDIR}/log4j.properties -Xms56m -Xmx1024m"
+JAVAARGS="-Dlog4j.configuration=./log4j.properties -Xms56m -Xmx1024m"
 MAINCLASSNAME=kieker.tools.loggingTimestampConverter.LoggingTimestampConverterTool
-CLASSPATH=$(ls lib/*.jar | tr "\n" ":")$(ls dist/*.jar | tr "\n" ":")
+CLASSPATH=$(ls ${BINDIR}/../lib/*.jar | tr "\n" ":")$(ls ${BINDIR}/../dist/*.jar | tr "\n" ":")${BINDIR}
 
 java ${JAVAARGS} -cp "${CLASSPATH}" ${MAINCLASSNAME} $*
