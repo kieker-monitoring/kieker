@@ -14,7 +14,7 @@ public class BookstoreStarter {
         /* Start the monitoring */
         for (int i = 0; i < 5; i++) {
             System.out.println("Bookstore.main: Starting request " + i);
-		bookstore.searchBook();
+            bookstore.searchBook();
         }
 
         /* Prepare the analysis */
