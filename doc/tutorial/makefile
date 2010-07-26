@@ -5,6 +5,7 @@ DOCBASEFN=Kieker\ Tutorial
 doitall: clean document
 
 document:
+	java -jar make-libraries.jar libraries_descriptions ../../lib/ Libraries.tex
 	pdflatex $(DOCBASEFN)
 #	makeindex $(DOCBASEFN)
 #	bibtex $(DOCBASEFN)
