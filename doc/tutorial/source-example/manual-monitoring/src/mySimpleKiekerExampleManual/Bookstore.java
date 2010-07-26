@@ -12,8 +12,8 @@ public class Bookstore {
             MonitoringController.getInstance();
 
     public void searchBook() {
-        /* 1. Call the Catalog component's getBook() method
-         *    and log its entry and exit using Kieker. */
+        /* 1.) Call the Catalog component's getBook() method
+         *     and log its entry and exit using Kieker. */
         long tin = MONITORING_CONTROLLER.getTime();
         catalog.getBook(false);
         long tout = MONITORING_CONTROLLER.getTime();
@@ -23,8 +23,8 @@ public class Bookstore {
                 tin, tout);
         MONITORING_CONTROLLER.newMonitoringRecord(e);
 
-        /* 2. Call the CRM catalog's getOffers() method
-         *    (without monitoring). */
+        /* 2.) Call the CRM catalog's getOffers() method
+         *     (without monitoring). */
         crm.getOffers();
     }
 }
