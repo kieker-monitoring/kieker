@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.bookstoreTracing;
+package mySimpleKiekerExample;
 
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;

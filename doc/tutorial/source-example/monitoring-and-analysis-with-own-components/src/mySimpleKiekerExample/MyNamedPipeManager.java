@@ -1,4 +1,4 @@
-package mySimpleKiekerExample.bookstoreTracing;
+package mySimpleKiekerExample;
 
 import java.util.HashMap;
 

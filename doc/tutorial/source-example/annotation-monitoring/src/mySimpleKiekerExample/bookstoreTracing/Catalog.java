@@ -1,9 +1,9 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class Catalog {
-	@TpmonExecutionMonitoringProbe
+	@OperationExecutionMonitoringProbe
 	public static void getBook(boolean complexQuery) {
 		if (complexQuery) {
 			Bookstore.waitabit(20);

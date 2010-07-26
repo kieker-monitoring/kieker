@@ -1,8 +1,7 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
 import java.util.Vector;
-
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class Bookstore extends Thread {
 
@@ -39,7 +38,7 @@ public class Bookstore extends Thread {
 		}
 	}
 
-	@TpmonExecutionMonitoringProbe
+	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		for (int i = 0; i < 1; i++) {
 			Catalog.getBook(false);

@@ -1,9 +1,9 @@
 package mySimpleKiekerExample.bookstoreTracing;
 
-import kieker.monitoring.annotation.TpmonExecutionMonitoringProbe;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class CRM {
-	@TpmonExecutionMonitoringProbe
+	@OperationExecutionMonitoringProbe
 	public static void getOffers() {
 		Catalog.getBook(false);
 	}

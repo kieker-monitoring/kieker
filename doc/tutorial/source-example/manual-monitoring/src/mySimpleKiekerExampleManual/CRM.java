@@ -1,8 +1,13 @@
 package mySimpleKiekerExampleManual;
 
 public class CRM {
+    private final Catalog catalog;
 
-	public static void getOffers() {
-		Catalog.getBook(false);
-	}
+    public CRM(final Catalog catalog) {
+        this.catalog = catalog;
+    }
+
+    public void getOffers() {
+        this.catalog.getBook(false);
+    }
 }
