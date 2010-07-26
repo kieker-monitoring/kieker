@@ -13,7 +13,7 @@ public class Bookstore {
 
     public void searchBook() {
         /* 1.) Call the Catalog component's getBook() method
-         *     and log its entry and exit using Kieker. */
+         *     and log its entry and exit timestamp using Kieker. */
         long tin = MONITORING_CONTROLLER.getTime();
         catalog.getBook(false);
         long tout = MONITORING_CONTROLLER.getTime();
