@@ -36,21 +36,7 @@
 		The following listings show the content of the sourcecode files:
 		\setJavaCodeListing       
 		\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
-
-		\begin{lstlisting}[caption=BookstoreStarter.java] 
-			package mySimpleKiekerExampleManual;
-
-			import kieker.analysis.plugin.MonitoringRecordConsumerException; 
-			import kieker.analysis.reader.MonitoringLogReaderException;
-
-			public class BookstoreStarter { 
-			  public static void main(String[] args) { 
-				/* Start the monitoring */ 
-				Bookstore.startBookstoreRequests(); 
-			  }
-			} 
-		\end{lstlisting}
-
+		\input{Chapter_2_BookstoreStarter_OnlyMonitoring}
 		\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
 
 		\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
@@ -85,22 +71,7 @@
 		% Note: This is different under Windows and Linux!! 		
 		% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
 		% We cannot put a latex-macro within the listing!
-		\begin{lstlisting} 			
-			nils@Laptop:~/example$ javac src/mySimpleKiekerExampleManual/*.java\
-			-classpath\ 		
-			./lib/kieker-common-1.5-trunk.jar:\
-			./lib/kieker-monitoring-1.5-trunk.jar:\
-			-d build
-
-			nils@Laptop:~/example$ java\
-			-Dlog4j.configuration=$<$KIEKER-DIR$>$/META-INF/log4j.properties\
-			-classpath\ 	
-			./build/:\
-			./lib/kieker-common-1.5-trunk.jar:\
-			./lib/kieker-monitoring-1.5-trunk.jar:\
-			./lib/commons-logging-1.1.1.jar\
-			mySimpleKiekerExampleManual.BookstoreStarter 
-		\end{lstlisting}			
+		\input{Chapter_2_Compile_Run_Example_1}			
 
 		% warning-tag because windows has to be handled different.
 		\warning If the sourcecode should be compiled and executed under Windows, the paths have do be sepereated with semicolons instead of colons. Furthermore it is not possible to wrap the single parts of the commands with a backslash.\\
@@ -152,23 +123,6 @@
 		% Note: This is different under Windows and Linux!! 		
 		% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
 		% We cannot put a latex-macro within the listing!
-		\begin{lstlisting} 			
-			nils@Laptop:~/example$ javac src/mySimpleKiekerExampleManual/*.java\
-			-classpath\ 		
-			./lib/kieker-common-1.5-trunk.jar:\
-			./lib/kieker-monitoring-1.5-trunk.jar:\
-			./lib/kieker-analysis-1.5-trunk.jar:\
-			-d build
-
-			nils@Laptop:~/example$ java\
-			-Dlog4j.configuration=$<$KIEKER-DIR$>$/META-INF/log4j.properties\
-			-classpath\ 	
-			./build/:\
-			./lib/kieker-common-1.5-trunk.jar:\
-			./lib/kieker-monitoring-1.5-trunk.jar:\
-			./lib/kieker-analysis-1.5-trunk.jar:\
-			./lib/commons-logging-1.1.1.jar\
-			mySimpleKiekerExampleManual.BookstoreStarter 
-		\end{lstlisting}			
+		\input{Chapter_2_Compile_Run_Example_2}		
 
 		If everything worked correctly, the consumer should write something on the outputstream for every record it gets. A possible display of the run can be found in the appendix of this tutorial. 

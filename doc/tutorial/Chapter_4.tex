@@ -42,10 +42,4 @@
 		To put everything together, Listing \ref{listing:AnalysisInstance} shows how to use the above-mentioned components.
 
 		\setJavaCodeListing
-		\begin{lstlisting}[label=listing:AnalysisInstance]
-			AnalysisInstance ai = new AnalysisInstance();
-			MyReader reader = new MyReader(); 
-			reader.init("somePipe"); 
-			ai.setLogReader(reader); 	  ai.registerPlugin(new MyConsumer());
-			ai.run();
-		\end{lstlisting}
+		\input{Chapter_4_Analysis_Part}

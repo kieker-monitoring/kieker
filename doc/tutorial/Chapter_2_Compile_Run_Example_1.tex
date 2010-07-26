@@ -1,0 +1,16 @@
+\begin{lstlisting} 			
+nils@Laptop:~/example$ javac src/mySimpleKiekerExampleManual/*.java\
+-classpath\ 		
+./lib/kieker-common-1.5-trunk.jar:\
+./lib/kieker-monitoring-1.5-trunk.jar:\
+-d build
+
+nils@Laptop:~/example$ java\
+-Dlog4j.configuration=$<$KIEKER-DIR$>$/META-INF/log4j.properties\
+-classpath\ 	
+./build/:\
+./lib/kieker-common-1.5-trunk.jar:\
+./lib/kieker-monitoring-1.5-trunk.jar:\
+./lib/commons-logging-1.1.1.jar\
+mySimpleKiekerExampleManual.BookstoreStarter 
+\end{lstlisting}
