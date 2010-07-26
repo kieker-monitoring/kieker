@@ -72,6 +72,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
         this.tin = tin;
         this.tout = tout;
     }
+	
+	public OperationExecutionRecord(
+            String componentName, String opName,
+            long tin, long tout) {
+        this(componentName, opName, -1, tin, tout);
+    }
 
     public OperationExecutionRecord(
             String componentName, String opName,
