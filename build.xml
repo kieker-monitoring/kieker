@@ -473,6 +473,13 @@
 
     </target>
 
+    <target name="tutorial">
+       <exec executable="make">
+            <arg value="-C"/>
+            <arg value="doc/tutorial/"/>
+        </exec>
+    </target>
+
     <target name="release"
             depends="build-all,build-kieker-sources,build-kieker-binaries,build-examples">
         <echo message="Sourceforge release instructions can be found at:"/>

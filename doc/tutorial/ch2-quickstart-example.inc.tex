@@ -90,7 +90,7 @@ The following listings show the content of the source code files:
 
 The example can now be compiled and executed as follows:
 
-\setBashListing 		
+\setBashListing
 % Note: This is different under Windows and Linux!! 		
 % If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
 % We cannot put a latex-macro within the listing!
@@ -140,9 +140,34 @@ The instrumented example can now be compiled and executed as follows:
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}			
 
 % warning-tag because windows has to be handled different.
-\warning If the source code should be compiled and executed under Windows, the paths have do be seperated with semicolons instead of colons. Furthermore it is not possible to wrap the single parts of the commands with a backslash.\\
-If everything worked correctly, there should now be a new directory with the name \dir{tpmon-20100605-115948636-UTC} (just with other numbers) in the default temporary directory (under Linux this should be \dir{/tmp}; under Windows \dir{C:/temp}). In this directory, there should be a file with the extension \dir{.dat} which contains the recorded information from the source code. A possible content of this file can be found in the appendix of this tutorial.\\
-We take now a closer look at the analysis.
+\warning If the source code should be compiled and executed under Windows, the %
+paths have do be seperated with semicolons instead of colons. Furthermore it is %
+not possible to wrap the single parts of the commands with a backslash.\\
+If everything worked correctly, there should now be a new directory with the %
+name \dir{tpmon-20100727-181422131-UTC} (just with another timestamp) in the default %
+temporary directory (under Linux this should be \dir{/tmp}; under Windows %
+\dir{C:/temp}). In this directory, there should be a file with the extension %
+\dir{.dat} which contains the recorded information from the source code and %
+a file named \dir{tpmon.map} which contains information about the types of the %
+monitoring records. %
+The Listings~\ref{listing:exampledat} and \ref{listing:examplemap} list example %
+contents. 
+% A possible content of this file can be found in the appendix of this tutorial.
+% We take now a closer look at the analysis.
+
+\dirtree{%
+.1 /tmp/.
+.2 tpmon-20100727-181422131-UTC/.
+.3 tpmon.map.
+.3 tpmon-20100727-181422234-UTC-Thread-2.dat.
+}
+
+\setBashListing
+\lstinputlisting[caption=tpmon-20100727-181422234-UTC-Thread-2.dat (excerpt), firstline=1, lastline=3, label=listing:exampledat]%
+{ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon-20100727-181422234-UTC-Thread-2.dat}
+
+\lstinputlisting[caption=tpmon.map, label=listing:examplemap]%
+{ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon.map}
 
 \section{Analysis}\label{sec:example:analysis}
 As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:

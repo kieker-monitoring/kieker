@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-DOCBASEFN=Kieker\ Tutorial
+DOCBASEFN=kieker-userguide
 
 doitall: clean document
 
