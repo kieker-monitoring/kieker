@@ -65,13 +65,13 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
     protected void proceedAndMeasure(ProceedingJoinPoint thisJoinPoint,
             OperationExecutionRecord execData) throws Throwable {
-        execData.tin = ctrlInst.getTime(); // startint stopwatch    
+        execData.tin = ctrlInst.currentTimeNanos(); // startint stopwatch
         try {
             execData.retVal = thisJoinPoint.proceed();
         } catch (Exception e) {
             throw e; // exceptions are forwarded
         } finally {
-            execData.tout = ctrlInst.getTime();
+            execData.tout = ctrlInst.currentTimeNanos();
             if (execData.isEntryPoint) {
                 cfRegistry.unsetThreadLocalTraceId();
             }

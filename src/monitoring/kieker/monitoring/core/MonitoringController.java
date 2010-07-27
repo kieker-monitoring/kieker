@@ -2,7 +2,6 @@ package kieker.monitoring.core;
 
 import kieker.common.util.Version;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.MonitoringRecordReceiverException;
 
 import kieker.monitoring.writer.util.async.TpmonShutdownHook;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
@@ -144,7 +143,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     private volatile boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some
 
     /** Returns the singleton instance. */
-    public final static MonitoringController getInstance() {
+    public static MonitoringController getInstance() {
         return MonitoringController.ctrlInst;
     }
 
@@ -373,7 +372,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
             }
             numberOfInserts.incrementAndGet();
             if (this.controllerMode.equals(ControllerMode.REALTIME)) {
-                record.setLoggingTimestamp(this.getTime());
+                record.setLoggingTimestamp(this.currentTimeNanos());
             }
             if (!this.monitoringLogWriter.newMonitoringRecord(record)) {
                 log.fatal("Error writing the monitoring data. Will terminate monitoring!");
@@ -397,7 +396,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
      * Returns the timestamp for the current time.
      * The value corresponds to the number of nano seconds elapsed  Jan 1, 1970 UTC.
      */
-    public final long getTime() {
+    public final long currentTimeNanos() {
         return System.nanoTime() + offsetA;
     }
 

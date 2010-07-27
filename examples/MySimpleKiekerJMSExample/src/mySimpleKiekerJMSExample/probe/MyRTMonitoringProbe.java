@@ -37,13 +37,13 @@ public class MyRTMonitoringProbe implements IMonitoringProbe {
         record.component = j.getSignature().getDeclaringTypeName();
         record.service = j.getSignature().getName();
         Object retval; 
-        long tin = CTRL.getTime();
+        long tin = CTRL.currentTimeNanos();
         try {
             retval = j.proceed();
         } catch (Exception e) {
             throw e;
         } finally {
-            record.rt = CTRL.getTime() - tin;
+            record.rt = CTRL.currentTimeNanos() - tin;
             CTRL.newMonitoringRecord(record);
         }
         return retval;

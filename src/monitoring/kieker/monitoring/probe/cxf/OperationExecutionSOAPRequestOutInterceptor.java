@@ -59,7 +59,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
         /* Store entry time tin for this trace.
         This value will be used by the corresponding invocation of the
         KiekerTpmonResponseOutProbe. */
-        long tin = ctrlInst.getTime();
+        long tin = ctrlInst.currentTimeNanos();
         boolean isEntryCall = false; // set true below if is entry call
 
         if (traceId == -1) {

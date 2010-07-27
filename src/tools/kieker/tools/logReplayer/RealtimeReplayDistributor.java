@@ -91,7 +91,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             //}
             this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance
             this.offset = (2 * 1000 * 1000 * 1000) - firstLoggingTimestamp;
-            this.startTime = ctrlnst.getTime();
+            this.startTime = ctrlnst.currentTimeNanos();
             //log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);
             //log.info("offset: " + this.offset);
             //log.info("startTime" + this.startTime);
@@ -102,10 +102,10 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             return false;
         }
         long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
-                - (ctrlnst.getTime() - this.startTime); // substract elapsed time
+                - (ctrlnst.currentTimeNanos() - this.startTime); // substract elapsed time
         //ps.println("curT.record: " + monitoringRecord.getLoggingTimestamp());ps.flush();
-        //ps.println("curT.ctrl: " + ctrlnst.getTime());ps.flush();
-        //ps.println("elapsedT (nsec): " + (ctrlnst.getTime() - this.startTime));
+        //ps.println("curT.ctrl: " + ctrlnst.currentTimeNanos());ps.flush();
+        //ps.println("elapsedT (nsec): " + (ctrlnst.currentTimeNanos() - this.startTime));
         //ps.println("schedTime (nsec): " + schedTime);
         if (schedTime < 0) {
             MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
@@ -148,7 +148,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
     }
 
     public void terminate(final boolean error) {
-        long terminationDelay = (this.lTime + this.offset) - (ctrlnst.getTime() - this.startTime) + 100000000;
+        long terminationDelay = (this.lTime + this.offset) - (ctrlnst.currentTimeNanos() - this.startTime) + 100000000;
         log.info("Will terminate in " + terminationDelay + "nsecs from now");
         this.executor.schedule(new Runnable() {
 

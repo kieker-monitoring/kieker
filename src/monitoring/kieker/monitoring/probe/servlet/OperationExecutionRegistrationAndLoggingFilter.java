@@ -113,13 +113,13 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
             cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
             execData.vmName = vmName;
             execData.experimentId = ctrlInst.getExperimentId();
-            execData.tin = ctrlInst.getTime();
+            execData.tin = ctrlInst.currentTimeNanos();
         }
         try {
             chain.doFilter(request, response);
         } finally {
             if (execData != null) {
-                execData.tout = ctrlInst.getTime();
+                execData.tout = ctrlInst.currentTimeNanos();
                 execData.eoi = eoi;
                 execData.ess = ess;
                 //if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)

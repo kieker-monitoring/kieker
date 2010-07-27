@@ -139,7 +139,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
             //int random = (new Random()).nextInt(100);
             String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
 
-            //log.info("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
+            //log.info("** " + java.util.Calendar.getInstance().currentTimeNanos().toString() + " new filename: " + filename);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
