@@ -20,15 +20,15 @@ overhead during the monitoring.
 \label{Figure:KiekerComponentDiagram}
 \end{figure}
 		
-\noindent Figure \ref{Figure:KiekerComponentDiagram} shows that the framework is structured %
-into the main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}:
+\noindent Figure \ref{Figure:KiekerComponentDiagram} shows that the framework %
+is structured into two main components:% \KiekerMonitoringPart{} and \KiekerAnalysisPart{}:
 \begin{itemize}
  % Both items get notify-tags because of the important information in here.
 \item \KiekerMonitoringPart\\
 This is the part which is responsible for the program instrumentation, data %
 collection and logging.  Its core is the singleton class \class{MonitoringController} %
-\notify which receives the monitoring data in so-called records from probes and %
-writes the records into the configured monitoring log which can, for example, %
+\notify which receives the monitoring data in so-called records and %
+writes these records into the configured monitoring log which can, for example, %
 be located in a filesystem or in a database.
 \item \KiekerAnalysisPart\\
 This part is responsible for the evalution and possible visualization of the %
