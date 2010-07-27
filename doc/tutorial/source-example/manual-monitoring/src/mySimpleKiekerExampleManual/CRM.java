@@ -21,7 +21,7 @@ public class CRM {
         long tout = MONITORING_CONTROLLER.getTime();
         OperationExecutionRecord e =
                 new OperationExecutionRecord(
-                "mySimpleKiekerExampleManual.Catalog", "getBook()", 0,
+                "mySimpleKiekerExampleManual.Catalog", "getBook()",
                 tin, tout);
         MONITORING_CONTROLLER.newMonitoringRecord(e);
     }
