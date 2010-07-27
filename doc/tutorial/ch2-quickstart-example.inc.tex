@@ -8,22 +8,43 @@ and analyis. %
 % Notify-tag because this could be interesting for the reader.
 \notify The presented Java sources are included in the \Kieker{} release.
 
-	\section{Download and Installation}\label{sec:example:downloadInstall}
-		\Kieker\  can be downloaded from \KiekerURL. The content of the zip- respectively the tar.gz-file can be extracted to any directory, which we will call ``\KiekerDir'' within this tutorial. The installation of \Kieker\ is completed.\\
-		If desired, the new created directory can be assigned to an easy remindable environment variable.
+\section{Download and Installation}\label{sec:example:downloadInstall}
+
+The \Kieker{} release distribution can be downloaded from \KiekerURL. The web %
+site provides zip/tar.gz archives of the \Kieker{} binary distribution as well %
+as the corresponding \Kieker{} source code archives.
+
+For this chapter, it is required to download and extract an archive containing %
+Kieker's binary distribution, e.g., \file{kieker-\version{}\_binaries.zip}.
+The extracted content should have the following directory structure:
+
+\vspace{1ex}
+\dirtree{%  
+.1 kieker-\version{}/.
+.2 bin/\DTcomment{Some wrapper scripts for \Kieker{} tools}. 
+.2 dist/\DTcomment{The \Kieker{} libraries required for monitoring and analysis}.
+.3 \analysisJar\DTcomment{}.
+.3 \commonJar\DTcomment{}.
+.3 \monitoringJar\DTcomment{}.
+.3 \toolsJar\DTcomment{}.
+.2 lib/\DTcomment{Libraries required by Kieker}.
+.2 META-INF/\DTcomment{Example configuration files}.
+} 
+% Linebreak because the text would be to close to the directory tree. 		
 
 
+% If desired, the new created directory can be assigned to an easy remindable environment variable.
 	\section{Monitoring}\label{sec:example:monitoring}
 		For the creation of the example is is recommended to create a new working directory (e.g. \dir{example}) of the following structure:
 		\dirtree{%  
-		.1 example\DTcomment{The root directory of the project}.
-		.2 build\DTcomment{The directory for the compiled class files for Java}. 
-		.2 lib\DTcomment{The directory for the libraries and needed jar-files}.
+		.1 example/\DTcomment{The root directory of the project}.
+		.2 build/\DTcomment{The directory for the compiled class files for Java}. 
+		.2 lib/\DTcomment{The directory for the libraries and needed jar-files}.
 		.3 \monitoringJar\DTcomment{}.
 		.3 \commonJar\DTcomment{}.
 		.3 commons-logging-1.1.1.jar\DTcomment{}.
-		.2 src\DTcomment{The directory for the sourcecode files}.
-		.3 mySimpleKiekerExampleManual\DTcomment{The directory for the new package}.
+		.2 src/\DTcomment{The directory for the sourcecode files}.
+		.3 mySimpleKiekerExampleManual/\DTcomment{The directory for the new package}.
 		.4 CRM.java\DTcomment{One of the sourcecode files}.  
 		.4 Catalog.java\DTcomment{One of the sourcecode files}.
 		.4 Bookstore.java\DTcomment{One of the sourcecode files}.
