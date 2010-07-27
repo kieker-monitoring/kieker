@@ -1,10 +1,12 @@
-<project name="Tutorial-Example" basedir="." default="run">
+<project name="Tutorial-Example" basedir="." default="run-monitoring">
 
   <property name="lib.dir" value="lib"/>
   <property name="build.dir" value="build"/>
   <property name="src.dir" value="src"/>
-  <property name="jar.file" value="example.jar"/>
-  <property name="main-class" value="mySimpleKiekerExampleManual.BookstoreStarter"/>
+  <property name="jar.file.monitoring" value="example-monitoring.jar"/>
+  <property name="jar.file.analysis" value="example-analysis.jar"/>
+  <property name="main-class-monitoring" value="mySimpleKiekerExampleManual.BookstoreMonitoringStarter"/>
+  <property name="main-class-analysis" value="mySimpleKiekerExampleManual.BookstoreAnalysisStarter"/>
   <property name="meta.dir" value="META-INF"/>
   <property name="log4jproperties.file" value="log4j.properties"/>
   
@@ -12,20 +14,29 @@
     <fileset dir="${lib.dir}" includes="**/*.jar"/>
   </path>
   
-  <target name="run" depends="build-jar">
-    <java fork="true" classname="${main-class}">
+  <target name="run-monitoring" depends="build-jar-monitoring">
+    <java fork="true" classname="${main-class-monitoring}">
       <classpath>
 	<path refid="classpath"/>
-	<path location="${jar.file}"/>
+	<path location="${jar.file.monitoring}"/>
       </classpath>
       <jvmarg value="-Dlog4j.configuration=${meta.dir}/${log4jproperties.file}"/>
     </java>
   </target>
   
-  <target name="build-jar" depends="compile">
-    <jar destfile="${jar.file}" basedir="${build.dir}">
+  <target name="build-jar-monitoring" depends="compile">
+    <jar destfile="${jar.file.monitoring}" basedir="${build.dir}">
       <manifest>
-	<attribute name="Main-Class" value="${main-class}"/>
+	<attribute name="Main-Class" value="${main-class-monitoring}"/>
+      </manifest>
+    </jar>
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="build-jar-analysis" depends="compile">
+    <jar destfile="${jar.file.analysis}" basedir="${build.dir}">
+      <manifest>
+	<attribute name="Main-Class" value="${main-class-analysis}"/>
       </manifest>
     </jar>
     <delete dir="${build.dir}"/>
