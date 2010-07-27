@@ -88,6 +88,14 @@ The following listings show the content of the source code files:
 \lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
 \input{ch2-quickstart-example_BookstoreStarter-OnlyMonitoring.inc.tex}
 
+The example can now be compiled and executed as follows:
+
+\setBashListing 		
+% Note: This is different under Windows and Linux!! 		
+% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
+% We cannot put a latex-macro within the listing!
+\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
+
 \subsection{Bookstore Example with Monitoring Instrumentation}
 
 \begin{figure}[H]
@@ -121,7 +129,7 @@ In Listing \ref{listing:cuttingBookstore}  can be seen, how the monitoring itsel
 \lstinputlisting[firstline=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
 {source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
 
-The source code should now be compileable and executable:
+The instrumented example can now be compiled and executed as follows:
 
 \setBashListing 		
 % Note: This is different under Windows and Linux!! 		
@@ -137,6 +145,7 @@ We take now a closer look at the analysis.
 \section{Analysis}\label{sec:example:analysis}
 As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:
 
+\vspace{1ex}
 \dirtree{%  
 .1 example.
 .2 build. 
@@ -152,7 +161,8 @@ As mentioned in the beginning of this chapter, it is shown how a simple consumer
 .4 Bookstore.java.
 .4 BookstoreStarter.java.
 .4 \color{red}Consumer.java.
-}      
+}
+\vspace{1ex}
 		
 The new jar-file can again be found in \dir{\KiekerDir/dist}. Listing \ref{listing:Consumer} shows the content of the new created \dir{Consumer.java}. It implements the \class{IMonitoringRecordConsumerPlugin} and overrides the necessary methods so that it can later be used by the analysis component of \Kieker. In this case the component gets a maximal response time within the constructor which will later be used to check whether a recorded method call replied fast enough or not. If the method call needed more time to response that the maximal allowed response time, it will be written directly to the error stream.\\
 The methods \method{terminate} and \method{execute} don't do anything due to the fact that the consumer doesn't need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
