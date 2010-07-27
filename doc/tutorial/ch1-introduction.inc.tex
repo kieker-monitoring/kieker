@@ -44,19 +44,28 @@ but will be explained furthermore in the course of this tutorial. %
 
 % This image shows the communication diagram of the different components.
 \begin{figure}[H]\centering
-\includegraphics[width=1\textwidth]{images/kiekerCommunications-revisedReArranged-woMonitoringLog-bw}
-\caption{The communication diagram of \Kieker}
+\includegraphics[width=1\textwidth]{images/kiekerCommunications-revisedReArranged-woMonitoringLog-bw-newNames}
+\caption{Communication among \Kieker{} framework components}
 \label{Figure:KiekerCommunicationDiagram}
 \end{figure}
 		
 % Notify-tag because it is explained how Kieker works.
-\noindent\notify The monitoring probes create the monitoring records and deliver them to the monitoring controller. The monitoring controller uses the monitoring log writers to persist the given records which can later be read by a monitoring log reader who creates a monitoring record again. These records can then be used by the consumers in nearly every way.
+\noindent\notify The monitoring probes create the monitoring records and deliver %
+them to the monitoring controller. The monitoring controller uses the monitoring %
+log writers to persist the given records which can later be read by a monitoring %
+log reader who creates a monitoring record again. These records can then be used %
+by the consumers in nearly every way.
 
 \section{Features}
 % This part has to be filled!
 	
 \section{The purpose of this tutorial}
 % Short explanation what the tutorial will show now.
-This tutorial will take a closer look at both, the \KiekerMonitoringPart - and the \KiekerAnalysisPart-part. It will be described on the one hand how \KiekerMonitoringPart  can be used to mark parts of the own sourcecode for \Kieker\  and to let them run under surveilance, so that the recorded informations can be persisted somewhere and on the other hand \KiekerAnalysisPart will be used for processing the recorded data.
+This tutorial will take a closer look at both, the \KiekerMonitoringPart{}- and %
+the \KiekerAnalysisPart-part. It will be described on the one hand how %
+\KiekerMonitoringPart{}  can be used to instrument parts of the own sourcecode %
+for \Kieker\  and to let them run under surveilance, so that the recorded %
+information can be persisted somewhere and on the other hand \KiekerAnalysisPart{} %
+will be used for processing the recorded data.
 
 Before this tutorial goes deeper into the single parts of the framework, it shows how to create and execute a simple example.
