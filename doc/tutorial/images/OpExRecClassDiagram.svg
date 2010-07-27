@@ -10,8 +10,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1272.5547"
-   height="770.65729"
+   width="744.49457"
+   height="431.26407"
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
@@ -68,9 +68,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.68234209"
-     inkscape:cx="636.27737"
-     inkscape:cy="385.32865"
+     inkscape:zoom="1.1672348"
+     inkscape:cx="372.24729"
+     inkscape:cy="215.63203"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -87,7 +87,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -95,27 +95,27 @@
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-137.19127,-163.29076)">
+     transform="translate(-136.69127,-163.29076)">
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.00000012;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect5170"
-       width="1271.5547"
-       height="769.65729"
-       x="137.69127"
+       width="742.91034"
+       height="430.26407"
+       x="137.4834"
        y="163.79076" />
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="533.64441"
-       y="209.50504"
+       x="274.24374"
+       y="210.97058"
        id="text2816"><tspan
          sodipodi:role="line"
          id="tspan2818"
-         x="533.64441"
-         y="209.50504">OperationExecutionRecord</tspan><tspan
+         x="274.24374"
+         y="210.97058">OperationExecutionRecord</tspan><tspan
          sodipodi:role="line"
-         x="533.64441"
-         y="259.50504"
+         x="274.24374"
+         y="260.97058"
          id="tspan2822" /></text>
     <text
        xml:space="preserve"
@@ -126,7 +126,7 @@
          y="289.50504"
          x="134.28571"
          sodipodi:role="line"
-         id="tspan2828"></tspan></text>
+         id="tspan2828" /></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -147,7 +147,7 @@
            height="117.14286"
            x="8.5714283"
            y="249.50504" /></flowRegion><flowPara
-         id="flowPara2840"></flowPara></flowRoot>    <text
+         id="flowPara2840" /></flowRoot>    <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
        x="148.57143"
@@ -161,71 +161,46 @@
          sodipodi:role="line"
          x="148.57143"
          y="368.07648"
-         id="tspan2846"
+         id="tspan2848"
          style="fill:#000000;fill-opacity:1;stroke:none">+ opName: String</tspan><tspan
          sodipodi:role="line"
          x="148.57143"
          y="418.07648"
-         id="tspan2848"
-         style="fill:#000000;fill-opacity:1;stroke:none">+ traceId: long</tspan><tspan
-         sodipodi:role="line"
-         x="148.57143"
-         y="468.07648"
          id="tspan2850"
          style="fill:#000000;fill-opacity:1;stroke:none">+ tin: long</tspan><tspan
          sodipodi:role="line"
          x="148.57143"
-         y="518.07648"
+         y="468.07648"
          id="tspan2852"
          style="fill:#000000;fill-opacity:1;stroke:none">+ tout: long</tspan><tspan
          sodipodi:role="line"
          x="148.57143"
-         y="568.07648"
+         y="518.07648"
          id="tspan2854"
          style="fill:#000000;fill-opacity:1;stroke:none">...</tspan><tspan
          sodipodi:role="line"
          x="148.57143"
-         y="618.07648"
-         id="tspan2856"
-         style="fill:#000000;fill-opacity:1;stroke:none" /><tspan
-         sodipodi:role="line"
-         x="148.57143"
-         y="668.07648"
-         id="tspan2858"
-         style="fill:#000000;fill-opacity:1;stroke:none">&lt;&lt;constructor&gt; + OperationExecutionRecord(componentName: String, </tspan><tspan
-         sodipodi:role="line"
-         x="148.57143"
-         y="718.07648"
-         id="tspan2862"
-         style="fill:#000000;fill-opacity:1;stroke:none">                                                                         opName: String, </tspan><tspan
-         sodipodi:role="line"
-         x="148.57143"
-         y="768.07648"
-         id="tspan2864"
-         style="fill:#000000;fill-opacity:1;stroke:none">                                                                         traceId: long, </tspan><tspan
-         sodipodi:role="line"
-         x="148.57143"
-         y="818.07648"
-         id="tspan2866"
-         style="fill:#000000;fill-opacity:1;stroke:none">                                                                         tin: long,</tspan><tspan
-         sodipodi:role="line"
-         x="148.57143"
-         y="868.07648"
-         id="tspan2868"
-         style="fill:#000000;fill-opacity:1;stroke:none">                                                                         tout: long)</tspan><tspan
-         sodipodi:role="line"
-         x="148.57143"
-         y="918.07648"
+         y="568.07648"
          id="tspan2860"
          style="fill:#000000;fill-opacity:1;stroke:none">...</tspan></text>
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 0,75.072159 1272.5547,0"
-       id="path5226"
-       transform="translate(137.19127,163.29076)" />
+       style="fill:none;stroke:#000000;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 137.19127,238.36292 743.49458,0"
+       id="path5226" />
     <path
        id="path5250"
-       d="m 137.19127,604.36292 1272.55473,0"
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-  </g>
+       d="m 137.19127,539.66271 743.49459,0"
+       style="fill:none;stroke:#000000;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2846"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(137.19127,163.29076)"><flowRegion
+         id="flowRegion2848"><rect
+           id="rect2850"
+           width="791.39191"
+           height="159.74393"
+           x="208.10675"
+           y="542.03296" /></flowRegion><flowPara
+         id="flowPara2852"></flowPara></flowRoot>  </g>
 </svg>
