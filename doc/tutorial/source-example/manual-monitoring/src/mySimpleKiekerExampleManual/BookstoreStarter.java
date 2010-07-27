@@ -11,7 +11,6 @@ public class BookstoreStarter {
     public static void main(String[] args)
             throws MonitoringLogReaderException, MonitoringRecordConsumerException {
         Bookstore bookstore = new Bookstore();
-        /* Start the monitoring */
         for (int i = 0; i < 5; i++) {
             System.out.println("Bookstore.main: Starting request " + i);
             bookstore.searchBook();

@@ -18,10 +18,6 @@ For this chapter, it is required to download and extract an archive containing %
 Kieker's binary distribution, e.g., \file{kieker-\version{}\_binaries.zip}.
 The extracted content has the following directory structure:
 
-
-\renewcommand*\DTstylecomment{\small\it\sffamily}
-\renewcommand*\DTstyle{\small\ttfamily}
-
 \vspace{1ex}
 
 \dirtree{%  
@@ -60,10 +56,10 @@ For the creation of the example is is recommended to create a new working direct
 .3 commons-logging-1.1.1.jar.
 .2 src/\DTcomment{The directory for the source code files}.
 .3 mySimpleKiekerExampleManual/.
-.4 CRM.java.  
-.4 Catalog.java.
 .4 Bookstore.java.
 .4 BookstoreStarter.java.
+.4 Catalog.java.
+.4 CRM.java.  
 }
 % Linebreak because the text would be to close to the directory tree. 		
 \vspace{1ex}
@@ -82,98 +78,107 @@ and can also be copied from there.
 
 \subsection{Bookstore Example}
 
+The following listings show the content of the source code files:
+
+\TODO{Source code of all example classes without instrumentation}
+
+\setJavaCodeListing
+\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
+\input{ch2-quickstart-example_BookstoreStarter-OnlyMonitoring.inc.tex}
+
 \subsection{Bookstore Example with Monitoring Instrumentation}
 
-The following listings show the content of the source code files:
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[width=0.4\textwidth]{images/OpExRecClassDiagram}
+\caption{The class diagram of the operation execution record}
+\label{Figure:OperationExecutionRecordClassDiagram}
+\end{centering}
+\end{figure}
+
+The important attributes for now are:
+\begin{itemize}
+\item componentName: The component (the class) in which the called method is.
+\item opName: The called method.
+% \item traceId: The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
+\item tin: The time before the source code which should be measured.
+\item tout: The time after the source code which should be measured.
+\end{itemize}
+
+The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start. 
+
+% Make sure that this listing will be modified, once the sourcecode changes!!!
+% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
+\setJavaCodeListing
+\lstinputlisting[firstline=14, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
+{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+		
+In Listing \ref{listing:cuttingBookstore}  can be seen, how the monitoring itself is done. The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
+
+\setJavaCodeListing
+\lstinputlisting[firstline=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
+{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+
+The source code should now be compileable and executable:
+
+\setBashListing 		
+% Note: This is different under Windows and Linux!! 		
+% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
+% We cannot put a latex-macro within the listing!
+\input{ch2-quickstart-example_Compile_Run_Example_1.inc}			
+
+% warning-tag because windows has to be handled different.
+\warning If the source code should be compiled and executed under Windows, the paths have do be seperated with semicolons instead of colons. Furthermore it is not possible to wrap the single parts of the commands with a backslash.\\
+If everything worked correctly, there should now be a new directory with the name \dir{tpmon-20100605-115948636-UTC} (just with other numbers) in the default temporary directory (under Linux this should be \dir{/tmp}; under Windows \dir{C:/temp}). In this directory, there should be a file with the extension \dir{.dat} which contains the recorded information from the source code. A possible content of this file can be found in the appendix of this tutorial.\\
+We take now a closer look at the analysis.
+
+\section{Analysis}\label{sec:example:analysis}
+As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:
+
+\dirtree{%  
+.1 example.
+.2 build. 
+.2 lib.
+.3 \monitoringJar.
+.3 \color{red}\analysisJar.
+.3 \commonJar.
+.3 commons-logging-1.1.1.jar.
+.2 src.
+.3 mySimpleKiekerExampleManual.
+.4 CRM.java.  
+.4 Catalog.java.
+.4 Bookstore.java.
+.4 BookstoreStarter.java.
+.4 \color{red}Consumer.java.
+}      
+		
+The new jar-file can again be found in \dir{\KiekerDir/dist}. Listing \ref{listing:Consumer} shows the content of the new created \dir{Consumer.java}. It implements the \class{IMonitoringRecordConsumerPlugin} and overrides the necessary methods so that it can later be used by the analysis component of \Kieker. In this case the component gets a maximal response time within the constructor which will later be used to check whether a recorded method call replied fast enough or not. If the method call needed more time to response that the maximal allowed response time, it will be written directly to the error stream.\\
+The methods \method{terminate} and \method{execute} don't do anything due to the fact that the consumer doesn't need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
+
 \setJavaCodeListing       
-\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
-\input{ch2-quickstart-example_BookstoreStarter-OnlyMonitoring.inc.tex}
-\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+\lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Consumer.java}
 
-\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
+We have now to extend the file \dir{BookstoreStarter.java} to analyze our recorded information.
 
-		The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start. 
+\setJavaCodeListing       
+\lstinputlisting[caption=BookstoreStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreStarter.java}
 
-		% Make sure that this listing will be modified, once the sourcecode changes!!!
-		% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-		\lstinputlisting[firstline=20, lastline=29, caption=Cutting from Bookstore.java, label=listing:cuttingBookstore]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
-		
-		In Listing \ref{listing:cuttingBookstore}  can be seen, how the monitoring itself is done. The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
+% notify-tag because this is a description how the analysis works.
+\notify The analysis consists of the following steps:
+\begin{itemize}
+\item Create a new instance (or more) of the class \class{AnalysisInstance}.
+\item Register the plugins which should evaluate the records.
+\item Register exactly one reader to read the stored information.
+\item Start the analysis instance.
+\end{itemize}
+The source code can now be executed:
 
-		\begin{figure}[H]
-			\begin{centering}
-				\includegraphics[width=0.4\textwidth]{images/OpExRecClassDiagram}
-				\caption{The class diagram of the operation execution record}
-				\label{Figure:OperationExecutionRecordClassDiagram}
-			\end{centering}
-		\end{figure}
+\setBashListing 		
+% Note: This is different under Windows and Linux!! 		
+% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
+% We cannot put a latex-macro within the listing!
+\input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}		
 
-		The important attributes for now are:
-		\begin{itemize}
-			\item componentName: The component (the class) in which the called method is.
-			\item opName: The called method.
-			\item traceId: The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
-			\item tin: The time before the source code which should be measured.
-			\item tout: The time after the source code which should be measured.
-		\end{itemize}
-		The source code should now be compileable and executable:
-
-		\setBashListing 		
-		% Note: This is different under Windows and Linux!! 		
-		% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
-		% We cannot put a latex-macro within the listing!
-		\input{ch2-quickstart-example_Compile_Run_Example_1.inc}			
-
-		% warning-tag because windows has to be handled different.
-		\warning If the source code should be compiled and executed under Windows, the paths have do be sepereated with semicolons instead of colons. Furthermore it is not possible to wrap the single parts of the commands with a backslash.\\
-		If everything worked correctly, there should now be a new directory with the name \dir{tpmon-20100605-115948636-UTC} (just with other numbers) in the default temporary directory (under Linux this should be \dir{/tmp}; under Windows \dir{C:/temp}). In this directory, there should be a file with the extension \dir{.dat} which contains the recorded information from the source code. A possible content of this file can be found in the appendix of this tutorial.\\
-		We take now a closer look at the analysis.
-
-	\section{Analysis}\label{sec:example:analysis}
-		As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:
-
-		\dirtree{%  
-		.1 example.
-		.2 build. 
-		.2 lib.
-		.3 \monitoringJar.
-		.3 \color{red}\analysisJar.
-		.3 \commonJar.
-		.3 commons-logging-1.1.1.jar.
-		.2 src.
-		.3 mySimpleKiekerExampleManual.
-		.4 CRM.java.  
-		.4 Catalog.java.
-		.4 Bookstore.java.
-		.4 BookstoreStarter.java.
-		.4 \color{red}Consumer.java.
-		}      
-		
-		The new jar-file can again be found in \dir{\KiekerDir/dist}. Listing \ref{listing:Consumer} shows the content of the new created \dir{Consumer.java}. It implements the \class{IMonitoringRecordConsumerPlugin} and overrides the necessary methods so that it can later be used by the analysis component of \Kieker. In this case the component gets a maximal response time within the constructor which will later be used to check whether a recorded method call replied fast enough or not. If the method call needed more time to response that the maximal allowed response time, it will be written directly to the error stream.\\
-		The methods \method{terminate} and \method{execute} don't do anything due to the fact that the consumer doesn't need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
-
-		\setJavaCodeListing       
-		\lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Consumer.java}
-
-		We have now to extend the file \dir{BookstoreStarter.java} to analyze our recorded information.
-
-		\setJavaCodeListing       
-		\lstinputlisting[caption=BookstoreStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreStarter.java}
-
-		% notify-tag because this is a description how the analysis works.
-		\notify The analysis consists of the following steps:
-		\begin{itemize}
-			\item Create a new instance (or more) of the class \class{AnalysisInstance}.
-			\item Register the plugins which should evaluate the records.
-			\item Register exactly one reader to read the stored information.
-			\item Start the analysis instance.
-		\end{itemize}
-		The sourccode can now be executed:
-
-		\setBashListing 		
-		% Note: This is different under Windows and Linux!! 		
-		% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
-		% We cannot put a latex-macro within the listing!
-		\input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}		
-
-		If everything worked correctly, the consumer should write something on the outputstream for every record it gets. A possible display of the run can be found in the appendix of this tutorial. 
+If everything worked correctly, the consumer should write something on the outputstream for every record it gets. A possible display of the run can be found in the appendix of this tutorial. 

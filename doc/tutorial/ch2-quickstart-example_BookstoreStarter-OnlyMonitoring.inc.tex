@@ -1,13 +1,15 @@
 \begin{lstlisting}[caption=BookstoreStarter.java] 
 package mySimpleKiekerExampleManual;
 
-import kieker.analysis.plugin.MonitoringRecordConsumerException; 
-import kieker.analysis.reader.MonitoringLogReaderException;
+import kieker.monitoring.core.MonitoringController;
 
-public class BookstoreStarter { 
-  public static void main(String[] args) { 
-	/* Start the monitoring */ 
-	Bookstore.startBookstoreRequests(); 
-  }
-} 
+public class BookstoreStarter {
+
+    public static void main(String[] args) {
+        Bookstore bookstore = new Bookstore();
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Bookstore.main: Starting request " + i);
+            bookstore.searchBook();
+        }
+}
 \end{lstlisting}
