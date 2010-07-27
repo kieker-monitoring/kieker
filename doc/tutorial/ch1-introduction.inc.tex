@@ -15,32 +15,33 @@ overhead during the monitoring.
 
 % This is the component diagram of Kieker (the satellite).
 \begin{figure}[H]\centering
-\includegraphics[width=0.75\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames}
+\includegraphics[width=0.73\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames}
 \caption{Overview of the framework components}
 \label{Figure:KiekerComponentDiagram}
 \end{figure}
 		
 \noindent Figure \ref{Figure:KiekerComponentDiagram} shows that the framework %
 is structured into two main components:% \KiekerMonitoringPart{} and \KiekerAnalysisPart{}:
-\begin{itemize}
+\begin{description}
  % Both items get notify-tags because of the important information in here.
-\item \KiekerMonitoringPart\\
-This is the part which is responsible for the program instrumentation, data %
+\item[\KiekerMonitoringPart]
+is responsible for the program instrumentation, data %
 collection and logging.  Its core is the singleton class \class{MonitoringController} %
 \notify which receives the monitoring data in so-called records and %
 writes these records into the configured monitoring log which can, for example, %
 be located in a filesystem or in a database.
-\item \KiekerAnalysisPart\\
-This part is responsible for the evalution and possible visualization of the %
+\item[\KiekerAnalysisPart]
+is responsible for the evalution and possible visualization of the %
 recorded information. Its core is the class \class{AnalysisInstance} \notify %
 which manages the lifecycle of the readers and all plugins which shoud analyze %
-the stored informations.
-\end{itemize}
+the stored information.
+\end{description}
+
 
 \noindent Both parts are composed of subcomponents which can just be used or %
-replaced by customized implementations. The important interaction patterns among %
+replaced by customized implementations. The important interaction pattern among %
 the components is illustrated in Figure \ref{Figure:KiekerCommunicationDiagram} %
-but will be explained furthermore in the course of this tutorial. %
+but will be explained furthermore throughout the course of this tutorial. %
 
 % This image shows the communication diagram of the different components.
 \begin{figure}[H]\centering
@@ -63,9 +64,10 @@ by the consumers in nearly every way.
 % Short explanation what the tutorial will show now.
 This tutorial will take a closer look at both, the \KiekerMonitoringPart{}- and %
 the \KiekerAnalysisPart-part. It will be described on the one hand how %
-\KiekerMonitoringPart{}  can be used to instrument parts of the own sourcecode %
-for \Kieker\  and to let them run under surveilance, so that the recorded %
-information can be persisted somewhere and on the other hand \KiekerAnalysisPart{} %
+\KiekerMonitoringPart{}  can be used to instrument Java programs %
+with \Kieker\ and to let them execute under monitoring, so that the recorded %
+information can be persisted and on the other hand \KiekerAnalysisPart{} %
 will be used for processing the recorded data.
 
-Before this tutorial goes deeper into the single parts of the framework, it shows how to create and execute a simple example.
+Before this tutorial goes deeper into the single parts of the framework, it %
+shows how to create and execute a simple example.
