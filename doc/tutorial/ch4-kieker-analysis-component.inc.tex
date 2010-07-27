@@ -2,12 +2,12 @@
 	
 	% Notify-tag; this is more or less a reminding.
 	\class{\KiekerAnalysisPart} is the part of \Kieker\  which is responsible for the analysis, consisting of the reader, the consumer and the analysis instance itself. To read the stored records again is task of the readers. Whatever is done with these informations is task of the consumers. They can evaluate, process or visualize the data for example. The analysis instance concerns about the lifetime and registration of the other parts. As explained in the example chapter, the analysis consists\notify  of the following steps:
-	\begin{itemize}
+	\begin{enumerate}
 		\item Create a new instance (or more) of the class \class{AnalysisInstance}.
 		\item Register the plugins which should evaluate the records.
 		\item Register exactly one reader to read the stored informations.
 		\item Start the analysis instance.
-	\end{itemize}
+	\end{enumerate}
 
 	\section{Monitoring Log Readers}
 
