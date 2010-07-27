@@ -19,9 +19,11 @@ Kieker's binary distribution, e.g., \file{kieker-\version{}\_binaries.zip}.
 The extracted content has the following directory structure:
 
 
-\renewcommand*\DTstylecomment{\sffamily}
+\renewcommand*\DTstylecomment{\small\it\sffamily}
+\renewcommand*\DTstyle{\small\ttfamily}
 
 \vspace{1ex}
+
 \dirtree{%  
 .1 \KiekerDir/.
 .2 bin/\DTcomment{Wrapper scripts for \Kieker{} tools}. 
@@ -39,7 +41,7 @@ The extracted content has the following directory structure:
 .3 \ldots.
 .2 META-INF/\DTcomment{Example configuration files}.
 .3 \ldots.
-} 
+}
 % Linebreak because the text would be to close to the directory tree. 		
 
 
@@ -49,27 +51,27 @@ For the creation of the example is is recommended to create a new working direct
 (e.g. \dir{example/}) of the following structure:
 
 \vspace{1ex}
-\dirtree{%  
+\dirtree{%
 .1 example/. %\DTcomment{The root directory of the project}.
 .2 build/\DTcomment{Directory for the Java class files}. 
 .2 lib/\DTcomment{Directory for the required libraries}.
-.3 \monitoringJar\DTcomment{}.
-.3 \commonJar\DTcomment{}.
-.3 commons-logging-1.1.1.jar\DTcomment{}.
+.3 \monitoringJar.
+.3 \commonJar.
+.3 commons-logging-1.1.1.jar.
 .2 src/\DTcomment{The directory for the source code files}.
 .3 mySimpleKiekerExampleManual/.
 .4 CRM.java.  
 .4 Catalog.java.
 .4 Bookstore.java.
 .4 BookstoreStarter.java.
-} 
+}
 % Linebreak because the text would be to close to the directory tree. 		
 \vspace{1ex}
 
 The \Kieker{} jar-files must be copied from the \dir{\KiekerDir/dist/} directory %
 of the \Kieker{} release, as described in Section~\ref{sec:example:downloadInstall}. %
 The file \file{commons-logging-1.1.1.jar} is included in \dir{\KiekerDir/lib/} %
-and must also be copied from there.
+and can also be copied from there.
 
 % The listed jar-files must be copied from the \Kieker\  directory:
 % \begin{itemize}
