@@ -1,15 +1,19 @@
-\chapter{Example}
-	% Again a short introduction.
-	In this chapter a simple example will be developed by installing \Kieker\ before marking some code lines for the monitoring. After the necessary data has been collected, they will be analyzed by an own developed component.\\
-	% Notify-tag because this could be interesting for the reader.
-	\notify Most of the examples in this tutorial are available on the website of \Kieker.
+\chapter{Quick Start Example}
+% Again a short introduction.
+This chapter starts with some instructions on how to download and install Kieker %
+in Section~\ref{sec:example:downloadInstall}. %
+Using a simple Java example, the following Sections~\ref{sec:example:monitoring} %
+and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring %
+and analyis. %
+% Notify-tag because this could be interesting for the reader.
+\notify The presented Java sources are included in the \Kieker{} release.
 
-	\section{Download and Installation}
+	\section{Download and Installation}\label{sec:example:downloadInstall}
 		\Kieker\  can be downloaded from \KiekerURL. The content of the zip- respectively the tar.gz-file can be extracted to any directory, which we will call ``\KiekerDir'' within this tutorial. The installation of \Kieker\ is completed.\\
 		If desired, the new created directory can be assigned to an easy remindable environment variable.
 
 
-	\section{Monitoring}
+	\section{Monitoring}\label{sec:example:monitoring}
 		For the creation of the example is is recommended to create a new working directory (e.g. \dir{example}) of the following structure:
 		\dirtree{%  
 		.1 example\DTcomment{The root directory of the project}.
@@ -78,7 +82,7 @@
 		If everything worked correctly, there should now be a new directory with the name \dir{tpmon-20100605-115948636-UTC} (just with other numbers) in the default temporary directory (under Linux this should be \dir{/tmp}; under Windows \dir{C:/temp}). In this directory, there should be a file with the extension \dir{.dat} which contains the recorded informations from the source code. A possible content of this file can be found in the appendix of this tutorial.\\
 		We take now a closer look at the analysis.
 
-	\section{Analysis}
+	\section{Analysis}\label{sec:example:analysis}
 		As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:
 
 		\dirtree{%  
