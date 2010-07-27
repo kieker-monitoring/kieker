@@ -1,12 +1,12 @@
 % The name of Kieker, just for the case that the design of this should change.
-\newcommand{\Kieker}{\textit{Kieker}}
+\newcommand{\Kieker}{\textsf{Kieker}}
 
 % The current version-string.
 \newcommand{\version}{1.5-trunk}
 
 % The single parts of Kieker and some files.
-\newcommand{\KiekerMonitoringPart}{Kieker.Monitoring}
-\newcommand{\KiekerAnalysisPart}{Kieker.Analysis}
+\newcommand{\KiekerMonitoringPart}{\textsf{Kieker.Monitoring}}
+\newcommand{\KiekerAnalysisPart}{\textsf{Kieker.Analysis}}
 \newcommand{\analysisJar}{kieker-analysis-\version.jar}
 \newcommand{\monitoringJar}{kieker-monitoring-\version.jar}
 \newcommand{\commonJar}{kieker-common-\version.jar  }
@@ -43,10 +43,11 @@ basicstyle=#3,       	% the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
 showtabs=false,                 % show tabs within strings adding particular underscores
-frame=shadowbox,	                % adds a frame around the code
+%frame=shadowbox,	                % adds a frame around the code
+frame=lrtb,
 rulesepcolor=\color{black},
 tabsize=2,	                % sets default tabsize to 2 spaces
-captionpos=b,                   % sets the caption-position to bottom
+captionpos=t,                   % sets the caption-position to bottom
 breaklines=true,                % sets automatic line breaking
 breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
 title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title

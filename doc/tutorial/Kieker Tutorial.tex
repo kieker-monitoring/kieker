@@ -5,23 +5,29 @@
 % Get the new commands we defined for this document.
 \input{Macros}
 
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\ifoot[\hrule\sffamily Kieker \version{} User Guide]{\sffamily Kieker \version{} User Guide}
+\ofoot[\hrule\sffamily\pagemark]{\sffamily\pagemark} 
+
 % Set the title and everything.
 \titlehead{
 	\begin{center}
-		\includegraphics[height=25mm]{./images/kieker-logo} \\
-		Technische Fakultät \\
-		Institut für Informatik \\
-		Arbeitsgruppe Software Engineering
+		\includegraphics[height=25mm]{./images/kieker-logo}\\
+\href{http://kieker.sourceforge.net}{\sffamily\Large http://kieker.sourceforge.net}
 	\end{center}
 }
 
-\title{\Kieker\ Framework\\ \Large{Continuous Monitoring and Analysis of Java Software Behavior}}
-\subtitle{-- Tutorial --}
-\author{Nils Ehmke}
-\date{\today}
-\publishers{
+\title{%
+\Huge\Kieker{} \version{} User Guide%\\[0.5ex] \Large{Continuous Monitoring and Analysis of Java Software Behavior}%
+}
+% \subtitle{---User Guide---}
+\author{\sffamily Nils Ehmke, Andr\'e van Hoorn, Reiner Jung, and contributors}
+\date{\sffamily\today}
+\publishers{\normalsize\sffamily
 %\flushleft
-\includegraphics[height=1cm]{./images/cau-sw}
+\includegraphics[height=2.5cm]{./images/caulogo}\\[0.5ex]
+Software Engineering Group\\ University of Kiel, Germany
 }
 
 % Here we go.
@@ -31,11 +37,11 @@
   \tableofcontents
 
   % Insert the other parts of the document.
-  \input{Chapter_1}
-  \input{Chapter_2}
-  \input{Chapter_3}
-  \input{Chapter_4}
-  \input{Chapter_5}
+  \input{ch1-introduction.inc}
+  \input{ch2-quickstart-example.inc}
+  \input{ch3-kieker-monitoring-component.inc.tex}
+  \input{ch4-kieker-analysis-component.inc.tex}
+  \input{ch5-trace-analysis.inc.tex}
   \input{Appendix}
 
 \end{document}
