@@ -23,7 +23,7 @@ The extracted content has the following directory structure:
 
 \vspace{1ex}
 \dirtree{%  
-.1 kieker-\version{}/.
+.1 \KiekerDir/.
 .2 bin/\DTcomment{Wrapper scripts for \Kieker{} tools}. 
 .3 \ldots.
 .2 doc/\DTcomment{}. 
@@ -44,37 +44,51 @@ The extracted content has the following directory structure:
 
 
 % If desired, the new created directory can be assigned to an easy remindable environment variable.
-	\section{Monitoring}\label{sec:example:monitoring}
-		For the creation of the example is is recommended to create a new working directory (e.g. \dir{example}) of the following structure:
-		\dirtree{%  
-		.1 example/\DTcomment{The root directory of the project}.
-		.2 build/\DTcomment{The directory for the compiled class files for Java}. 
-		.2 lib/\DTcomment{The directory for the libraries and needed jar-files}.
-		.3 \monitoringJar\DTcomment{}.
-		.3 \commonJar\DTcomment{}.
-		.3 commons-logging-1.1.1.jar\DTcomment{}.
-		.2 src/\DTcomment{The directory for the sourcecode files}.
-		.3 mySimpleKiekerExampleManual/\DTcomment{The directory for the new package}.
-		.4 CRM.java\DTcomment{One of the sourcecode files}.  
-		.4 Catalog.java\DTcomment{One of the sourcecode files}.
-		.4 Bookstore.java\DTcomment{One of the sourcecode files}.
-		.4 BookstoreStarter.java\DTcomment{One of the sourcecode files}.
-		} 
-		% Linebreak because the text would be to close to the directory tree. 		
+\section{Monitoring}\label{sec:example:monitoring}
+For the creation of the example is is recommended to create a new working directory %
+(e.g. \dir{example/}) of the following structure:
 
-		The listed jar-files must be copied from the \Kieker\  directory:
-		\begin{itemize}
-			\item \dir{\KiekerDir/dist/\commonJar}
-			\item \dir{\KiekerDir/dist/\monitoringJar}
-			\item \dir{\KiekerDir/dist/commons-logging-1.1.1.jar}
-		\end{itemize}
-		The following listings show the content of the sourcecode files:
-		\setJavaCodeListing       
-		\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
-		\input{ch2-quickstart-example_BookstoreStarter-OnlyMonitoring.inc.tex}
-		\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+\vspace{1ex}
+\dirtree{%  
+.1 example/. %\DTcomment{The root directory of the project}.
+.2 build/\DTcomment{Directory for the Java class files}. 
+.2 lib/\DTcomment{Directory for the required libraries}.
+.3 \monitoringJar\DTcomment{}.
+.3 \commonJar\DTcomment{}.
+.3 commons-logging-1.1.1.jar\DTcomment{}.
+.2 src/\DTcomment{The directory for the source code files}.
+.3 mySimpleKiekerExampleManual/.
+.4 CRM.java.  
+.4 Catalog.java.
+.4 Bookstore.java.
+.4 BookstoreStarter.java.
+} 
+% Linebreak because the text would be to close to the directory tree. 		
+\vspace{1ex}
 
-		\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
+The \Kieker{} jar-files must be copied from the \dir{\KiekerDir/dist/} directory %
+of the \Kieker{} release, as described in Section~\ref{sec:example:downloadInstall}. %
+The file \file{commons-logging-1.1.1.jar} is included in \dir{\KiekerDir/lib/} %
+and must also be copied from there.
+
+% The listed jar-files must be copied from the \Kieker\  directory:
+% \begin{itemize}
+% \item \dir{\KiekerDir/dist/\commonJar}
+% \item \dir{\KiekerDir/dist/\monitoringJar}
+% \item \dir{\KiekerDir/dist/commons-logging-1.1.1.jar}
+% \end{itemize}
+
+\subsection{Bookstore Example}
+
+\subsection{Bookstore Example with Monitoring Instrumentation}
+
+The following listings show the content of the source code files:
+\setJavaCodeListing       
+\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+\input{ch2-quickstart-example_BookstoreStarter-OnlyMonitoring.inc.tex}
+\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+
+\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
 
 		The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start. 
 
@@ -82,7 +96,7 @@ The extracted content has the following directory structure:
 		% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 		\lstinputlisting[firstline=20, lastline=29, caption=Cutting from Bookstore.java, label=listing:cuttingBookstore]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
 		
-		In Listing \ref{listing:cuttingBookstore}  can be seen, how the monitoring itself is done. The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These informations are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
+		In Listing \ref{listing:cuttingBookstore}  can be seen, how the monitoring itself is done. The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
 
 		\begin{figure}[H]
 			\begin{centering}
@@ -97,10 +111,10 @@ The extracted content has the following directory structure:
 			\item componentName: The component (the class) in which the called method is.
 			\item opName: The called method.
 			\item traceId: The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
-			\item tin: The time before the sourcecode which should be measured.
-			\item tout: The time after the sourcecode which should be measured.
+			\item tin: The time before the source code which should be measured.
+			\item tout: The time after the source code which should be measured.
 		\end{itemize}
-		The sourcecode should now be compileable and executable:
+		The source code should now be compileable and executable:
 
 		\setBashListing 		
 		% Note: This is different under Windows and Linux!! 		
@@ -109,8 +123,8 @@ The extracted content has the following directory structure:
 		\input{ch2-quickstart-example_Compile_Run_Example_1.inc}			
 
 		% warning-tag because windows has to be handled different.
-		\warning If the sourcecode should be compiled and executed under Windows, the paths have do be sepereated with semicolons instead of colons. Furthermore it is not possible to wrap the single parts of the commands with a backslash.\\
-		If everything worked correctly, there should now be a new directory with the name \dir{tpmon-20100605-115948636-UTC} (just with other numbers) in the default temporary directory (under Linux this should be \dir{/tmp}; under Windows \dir{C:/temp}). In this directory, there should be a file with the extension \dir{.dat} which contains the recorded informations from the source code. A possible content of this file can be found in the appendix of this tutorial.\\
+		\warning If the source code should be compiled and executed under Windows, the paths have do be sepereated with semicolons instead of colons. Furthermore it is not possible to wrap the single parts of the commands with a backslash.\\
+		If everything worked correctly, there should now be a new directory with the name \dir{tpmon-20100605-115948636-UTC} (just with other numbers) in the default temporary directory (under Linux this should be \dir{/tmp}; under Windows \dir{C:/temp}). In this directory, there should be a file with the extension \dir{.dat} which contains the recorded information from the source code. A possible content of this file can be found in the appendix of this tutorial.\\
 		We take now a closer look at the analysis.
 
 	\section{Analysis}\label{sec:example:analysis}
@@ -139,7 +153,7 @@ The extracted content has the following directory structure:
 		\setJavaCodeListing       
 		\lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Consumer.java}
 
-		We have now to extend the file \dir{BookstoreStarter.java} to analyze our recorded informations.
+		We have now to extend the file \dir{BookstoreStarter.java} to analyze our recorded information.
 
 		\setJavaCodeListing       
 		\lstinputlisting[caption=BookstoreStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreStarter.java}
@@ -149,7 +163,7 @@ The extracted content has the following directory structure:
 		\begin{itemize}
 			\item Create a new instance (or more) of the class \class{AnalysisInstance}.
 			\item Register the plugins which should evaluate the records.
-			\item Register exactly one reader to read the stored informations.
+			\item Register exactly one reader to read the stored information.
 			\item Start the analysis instance.
 		\end{itemize}
 		The sourccode can now be executed:
