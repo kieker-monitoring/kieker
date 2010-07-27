@@ -57,7 +57,7 @@ For the creation of the example is is recommended to create a new working direct
 .2 src/\DTcomment{The directory for the source code files}.
 .3 mySimpleKiekerExampleManual/.
 .4 Bookstore.java.
-.4 BookstoreStarter.java.
+.4 BookstoreMonitoringStarter.java.
 .4 Catalog.java.
 .4 CRM.java.  
 }
@@ -86,7 +86,7 @@ The following listings show the content of the source code files:
 \lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
 \lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
 \lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
-\input{ch2-quickstart-example_BookstoreStarter-OnlyMonitoring.inc.tex}
+\lstinputlisting[caption=BookstoreMonitoringStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreMonitoringStarter.java}
 
 The example can now be compiled and executed as follows:
 
@@ -161,7 +161,8 @@ As mentioned in the beginning of this chapter, it is shown how a simple consumer
 .4 CRM.java.  
 .4 Catalog.java.
 .4 Bookstore.java.
-.4 BookstoreStarter.java.
+.4 BookstoreMonitoringStarter.java.
+.4 \color{red}BookstoreAnalysisStarter.java.
 .4 \color{red}Consumer.java.
 }
 \vspace{1ex}
@@ -172,11 +173,11 @@ The methods \method{terminate} and \method{execute} don't do anything due to the
 \setJavaCodeListing       
 \lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Consumer.java}
 
-We have now to extend the file \dir{BookstoreStarter.java} to analyze our recorded information.
+We have now to create the file \dir{BookstoreAnalysisStarter.java} to analyze our recorded information.
 
 \setJavaCodeListing       
-\lstinputlisting[caption=BookstoreStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreStarter.java}
-
+\lstinputlisting[caption=BookstoreAnalysisStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreAnalysisStarter.java}
+\TODO{Dem Programm die notwendigen Dateien manuell geben.}
 % notify-tag because this is a description how the analysis works.
 \notify The analysis consists of the following steps:
 \begin{enumerate}
