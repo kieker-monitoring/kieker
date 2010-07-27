@@ -17,21 +17,21 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		/* We want only receive records of one type */
-		ArrayList<Class<? extends IMonitoringRecord>> result = new ArrayList<Class<? extends IMonitoringRecord>>();
-		result.add(OperationExecutionRecord.class);
-		return result;
+		return null;
 	}
 
 	@Override
 	public boolean newMonitoringRecord(IMonitoringRecord arg0) {
+		if (!(arg0 instanceof OperationExecutionRecord)) {
+			return true;
+		}
 		OperationExecutionRecord rec = (OperationExecutionRecord) arg0;
 		/* Get the response time from the record. */
 		long time = rec.tout - rec.tin;
 		/* Now check with the maximal allowed response time. */
 		if (time > maxResponseTime) {
 			System.err.println("maximal response time exceeded by "
-					+ (time - maxResponseTime) + " ms: " + rec.componentName
+					+ (time - maxResponseTime) + " ns: " + rec.componentName
 					+ "." + rec.opname);
 		} else {
 			System.out.println("response time accepted: " + rec.componentName
