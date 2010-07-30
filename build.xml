@@ -343,7 +343,7 @@
         </zip>
     </target>
 
-    <target name="dist-kieker-binaries" depends="build-all">
+    <target name="dist-kieker-binaries" depends="build-all,build-tutorial">
         <patternset id="dist_bin_files-nonbinmode">
             <include name="bin/log4j.properties"/>
             <include name="dist/*.jar"/>
@@ -354,6 +354,23 @@
             <include name="ISSUES"/>
             <include name="HISTORY"/>
             <include name="LICENSE"/>
+            <include name="${src.tutorial.pdf}"/>
+            <include name="${src.tutorial.example.manual.dir}/build.xml"/>
+            <include name="${src.tutorial.example.manual.dir}/lib/"/>
+            <exclude name="${src.tutorial.example.manual.dir}/lib/*"/>
+            <include name="${src.tutorial.example.manual.dir}/src/**/*.java"/>
+            <!--<include name="${src.tutorial.example.manual.dir}/META-INF/*"/>-->
+            <include name="${src.tutorial.example.extended.dir}/build.xml"/>
+            <include name="${src.tutorial.example.extended.dir}/lib/"/>
+            <exclude name="${src.tutorial.example.extended.dir}/lib/*"/>
+            <include name="${src.tutorial.example.extended.dir}/src/**/*.java"/>
+            <include name="${src.tutorial.example.manual.dir}/META-INF/kieker.monitoring.properties"/>
+            <include name="${src.tutorial.example.aspectj.dir}/build.xml"/>
+            <include name="${src.tutorial.example.aspectj.dir}/lib/"/>
+            <exclude name="${src.tutorial.example.aspectj.dir}/lib/*"/>
+            <include name="${src.tutorial.example.aspectj.dir}/src/**/*.java"/>
+            <include name="${src.tutorial.example.aspectj.dir}/META-INF/aop.xml"/>
+            <include name="${src.tutorial.example.aspectj.dir}/META-INF/kieker.monitoring.properties"/>
         </patternset>
         <patternset id="dist_bin_files-binmode">
             <include name="bin/*.sh"/>
@@ -527,10 +544,10 @@
             depends="init,build-example-MySimpleKiekerAspectJExample,build-example-MySimpleKiekerJMSExample,build-example-JPetStoreExample,build-example-microbenchmark">
     </target>
 
-    <target name="tutorial">
+    <target name="build-tutorial">
         <exec executable="make">
             <arg value="-C"/>
-            <arg value="doc/tutorial/"/>
+            <arg value="${src.tutorial.dir}"/>
         </exec>
     </target>
 
