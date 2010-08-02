@@ -40,7 +40,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 
     private static final Log log = LogFactory.getLog(TestTraceReconstructionFilter.class);
     private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
-    private final ExecutionFactory eFactory = new ExecutionFactory(systemEntityFactory);
+    private final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
 
     /* Executions of a valid trace */
     private final Execution exec0_0__bookstore_searchBook;
@@ -51,26 +51,26 @@ public class TestTraceReconstructionFilter extends TestCase {
 
     public TestTraceReconstructionFilter() {
         /* Manually create Executions for a trace */
-        exec0_0__bookstore_searchBook = eFactory.genExecution(
+        exec0_0__bookstore_searchBook = executionFactory.genExecution(
                 "Bookstore", "bookstore", "searchBook",
                 traceId,
                 1 * (1000 * 1000), // tin
                 10 * (1000 * 1000), // tout
                 0, 0);  // eoi, ess
 
-        exec1_1__catalog_getBook = eFactory.genExecution(
+        exec1_1__catalog_getBook = executionFactory.genExecution(
                 "Catalog", "catalog", "getBook",
                 traceId,
                 2 * (1000 * 1000), // tin
                 4 * (1000 * 1000), // tout
                 1, 1);  // eoi, ess
-        exec2_1__crm_getOrders = eFactory.genExecution(
+        exec2_1__crm_getOrders = executionFactory.genExecution(
                 "CRM", "crm", "getOrders",
                 traceId,
                 5 * (1000 * 1000), // tin
                 8 * (1000 * 1000), // tout
                 2, 1);  // eoi, ess
-        exec3_2__catalog_getBook = eFactory.genExecution(
+        exec3_2__catalog_getBook = executionFactory.genExecution(
                 "Catalog", "catalog", "getBook",
                 traceId,
                 6 * (1000 * 1000), // tin
@@ -215,7 +215,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 
     /**
      * Creates a broken execution trace version of the "well-known" Bookstore
-     * trace leads to an exception.
+     * trace.
      *
      * The trace is broken in that the eoi/ess values of an execution with eoi/ess
      * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
@@ -232,7 +232,7 @@ public class TestTraceReconstructionFilter extends TestCase {
         final ExecutionTrace executionTrace =
                 new ExecutionTrace(traceId);
         final Execution exec1_1__catalog_getBook__broken =
-                eFactory.genExecution(
+                executionFactory.genExecution(
                 "Catalog", "catalog", "getBook",
                 traceId,
                 2 * (1000 * 1000), // tin
@@ -350,7 +350,7 @@ public class TestTraceReconstructionFilter extends TestCase {
     /**
      * Generates an incomplete execution trace representation of the "well-known"
      * bookstore trace. The outer bookstore.searchBook(..) execution with eoi/ess
-     * 0/0 is
+     * 0/0 is missing.
      *
      * @return
      * @throws InvalidTraceException
@@ -421,7 +421,7 @@ public class TestTraceReconstructionFilter extends TestCase {
         final int TRIGGER_TRACE_LENGTH_MILLIS = 1;
         final long triggerTraceId = traceId + 1;
         final Execution exec0_0__bookstore_searchBook__trigger =
-                eFactory.genExecution(
+                executionFactory.genExecution(
                 "Bookstore", "bookstore", "searchBook",
                 triggerTraceId,
                 incompleteExecutionTrace.getMaxTout(), // tin

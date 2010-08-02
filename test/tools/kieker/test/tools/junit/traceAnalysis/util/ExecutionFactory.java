@@ -1,14 +1,5 @@
 package kieker.test.tools.junit.traceAnalysis.util;
 
-import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
-import kieker.tools.traceAnalysis.systemModel.ComponentType;
-import kieker.tools.traceAnalysis.systemModel.Execution;
-import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.tools.traceAnalysis.systemModel.Operation;
-import kieker.tools.traceAnalysis.systemModel.Signature;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -26,6 +17,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * limitations under the License.
  * ==================================================
  */
+
+import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
+import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
+import kieker.tools.traceAnalysis.systemModel.ComponentType;
+import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kieker.tools.traceAnalysis.systemModel.Operation;
+import kieker.tools.traceAnalysis.systemModel.Signature;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+
 /**
  *
  * @author Andre van Hoorn

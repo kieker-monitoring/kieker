@@ -23,7 +23,6 @@ import junit.framework.TestCase;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 
