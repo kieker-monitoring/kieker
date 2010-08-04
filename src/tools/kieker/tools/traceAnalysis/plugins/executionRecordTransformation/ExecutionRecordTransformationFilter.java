@@ -141,9 +141,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
     @Override
     public void terminate(final boolean error) {
-//        for (IExecutionListener l : this.listeners){
-//            l.terminate(error);
-//        }
     }
 
     private final OutputPort<Execution> executionOutputPort =
