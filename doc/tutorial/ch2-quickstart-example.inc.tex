@@ -1,10 +1,15 @@
 \chapter{Quick Start Example}
-% Again a short introduction.
-This chapter starts with some instructions on how to download and install Kieker %
-in Section~\ref{sec:example:downloadInstall}. %
-Using a simple Java example, the following Sections~\ref{sec:example:monitoring} %
+
+This chapter provides a brief introduction to Kieker based on %
+a simple Bookstore application. %
+
+Section~\ref{sec:example:downloadInstall} explains how to download and install %
+Kieker. % 
+The Bookstore application is introduced in Section~\ref{sec:example:bookstore}. %
+The following Sections~\ref{sec:example:monitoring} %
 and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring %
-and analyis. %
+and analyzing the monitoring data. %
+
 % Notify-tag because this could be interesting for the reader.
 \notify The presented Java sources are included in the \Kieker{} release.
 
@@ -40,6 +45,31 @@ The extracted content has the following directory structure:
 }
 % Linebreak because the text would be to close to the directory tree. 		
 
+\section{A Simple Bookstore Application}\label{sec:example:bookstore}
+
+The Bookstore application is a small sample application resembling a simple
+bookstore where a user can search for books in an online catalog.
+
+The following listings show the content of the source code files:
+
+\TODO{Source code of all example classes without instrumentation}
+\TODO{Ist auch die Frage, ob wir wirklich den Source-Code aller Klassen zeigen %
+oder nur von den Klassen, die in Abschnitt~\ref{sec:example:monitoring} instrumentiert %
+werden --- den kompletten Quelltext dann in den Anhang.}
+
+\setJavaCodeListing
+\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
+\lstinputlisting[caption=BookstoreMonitoringStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreMonitoringStarter.java}
+
+The example can now be compiled and executed as follows:
+
+\setBashListing
+% Note: This is different under Windows and Linux!! 		
+% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
+% We cannot put a latex-macro within the listing!
+\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
 
 % If desired, the new created directory can be assigned to an easy remindable environment variable.
 \section{Monitoring}\label{sec:example:monitoring}
@@ -75,28 +105,6 @@ and can also be copied from there.
 % \item \dir{\KiekerDir/dist/\monitoringJar}
 % \item \dir{\KiekerDir/dist/commons-logging-1.1.1.jar}
 % \end{itemize}
-
-\subsection{Bookstore Example}
-
-The following listings show the content of the source code files:
-
-\TODO{Source code of all example classes without instrumentation}
-
-\setJavaCodeListing
-\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
-\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
-\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Catalog.java}
-\lstinputlisting[caption=BookstoreMonitoringStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreMonitoringStarter.java}
-
-The example can now be compiled and executed as follows:
-
-\setBashListing
-% Note: This is different under Windows and Linux!! 		
-% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
-% We cannot put a latex-macro within the listing!
-\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
-
-\subsection{Bookstore Example with Monitoring Instrumentation}
 
 \TODO{Erz\"ahlen, was wir nun vorhaben}
 
