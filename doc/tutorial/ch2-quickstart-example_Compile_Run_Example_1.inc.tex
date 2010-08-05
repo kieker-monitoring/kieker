@@ -1,16 +1,10 @@
-\begin{lstlisting} 			
+\begin{lstlisting}
 nils@Laptop:~/example$ javac src/mySimpleKiekerExampleManual/*.java\
--classpath\ 		
-./lib/°\commonJar°:\
-./lib/°\monitoringJar°:\
--d build
+ -classpath ./lib/°\commonJar°:./lib/°\monitoringJar°:\
+ -d build
 
 nils@Laptop:~/example$ java\
--Dlog4j.configuration=$<$KIEKER-DIR$>$/META-INF/°\logFourJPropertiesFile°\
--classpath\ 	
-./build/:\
-./lib/°\commonJar°:\
-./lib/°\monitoringJar°:\
-./lib/°\commonsLoggingJar°\
+-classpath ./build/:\
+./lib/°\commonJar°:./lib/°\monitoringJar°:./lib/°\commonsLoggingJar°\
 mySimpleKiekerExampleManual.BookstoreMonitoringStarter 
 \end{lstlisting}
