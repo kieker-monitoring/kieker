@@ -1,6 +1,6 @@
 package mySimpleKiekerExampleManual;
 
-public class BookstoreMonitoringStarter {
+public class BookstoreStarter {
 
     public static void main(String[] args) {
         Bookstore bookstore = new Bookstore();
