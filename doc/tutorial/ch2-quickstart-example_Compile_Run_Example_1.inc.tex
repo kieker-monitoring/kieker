@@ -1,10 +1,11 @@
 \begin{lstlisting}
-nils@Laptop:~/example$ javac src/mySimpleKiekerExampleManual/*.java\
- -classpath ./lib/§\commonJar§:./lib/§\monitoringJar§:\
- -d build
+> javac src/bookstoreApplication/*.java
+        -classpath ./lib/§\commonJar§:./lib/§\monitoringJar§:
+        -d build
 
-nils@Laptop:~/example$ java\
--classpath ./build/:\
-./lib/§\commonJar§:./lib/§\monitoringJar§:./lib/§\commonsLoggingJar§\
-mySimpleKiekerExampleManual.BookstoreMonitoringStarter 
+> java -classpath ./build/:
+       ./lib/§\commonJar§:
+       ./lib/§\monitoringJar§:
+       ./lib/§\commonsLoggingJar§
+       bookstoreApplication.BookstoreStarter 
 \end{lstlisting}

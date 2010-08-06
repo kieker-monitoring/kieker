@@ -1,6 +1,5 @@
-\begin{lstlisting}
-nils@Laptop:~/example/$ javac src/mySimpleKiekerExampleManual/*.java -d build
+\begin{lstlisting}[caption=Compile and run under Linux]
+> javac src/bookstoreApplication/*.java -d build
 
-nils@Laptop:~/example/$ java -classpath ./build/:./lib/§\commonsLoggingJar§\
-                        mySimpleKiekerExampleManual.BookstoreMonitoringStarter 
+> java -classpath build bookstoreApplication.BookstoreStarter 
 \end{lstlisting}

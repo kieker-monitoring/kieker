@@ -53,12 +53,29 @@ The extracted content has the following directory structure:
 The Bookstore application is a small sample application resembling a simple
 bookstore where a user can search for books in an online catalog.
 
+Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the ``plain'' application without any monitoring- or analysis-code.
+
+\begin{figure}[H]
+\vspace{1ex}
+
+\dirtree{%
+.1 example/. %\DTcomment{The root directory of the project}.
+.2 build/\DTcomment{Directory for the Java class files}. 
+.2 src/\DTcomment{The directory for the source code files}.
+.3 bookstoreApplication/.
+.4 Bookstore.java.
+.4 BookstoreStarter.java.
+.4 Catalog.java.
+.4 CRM.java.  
+}
+
+\caption{The directory structure of the Bookstore application}
+\label{Figure:PlainBookstoreExample}
+\end{figure}
+
 The following listings show the content of the source code files:
 
-\TODO{Source code of all example classes without instrumentation}
-\TODO{Ist auch die Frage, ob wir wirklich den Source-Code aller Klassen zeigen %
-oder nur von den Klassen, die in Abschnitt~\ref{sec:example:monitoring} instrumentiert %
-werden --- den kompletten Quelltext dann in den Anhang.}
+\TODO{Bessere Methode, als die Quellcodedateien so "plain" zu nutzen.}
 
 \setJavaCodeListing
 \lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/bookstoreApplication/Bookstore.java}
@@ -66,50 +83,47 @@ werden --- den kompletten Quelltext dann in den Anhang.}
 \lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/bookstoreApplication/Catalog.java}
 \lstinputlisting[caption=BookstoreStarter.java]{source-example/manual-monitoring/src/bookstoreApplication/BookstoreStarter.java}
 
-The example can now be compiled and executed as follows:
-
+The example can be compiled and executed as follows:
 \setBashListing
-% Note: This is different under Windows and Linux!! 		
-% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
-% We cannot put a latex-macro within the listing!
 \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
+\warning The default command-line interpreter of Windows doesn't support automatic file expansion. Therefore every single sourcefile has to be passed:
+\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr-win.inc}
+Following listing shows an example run of the application:
+\input{ch2-quickstart-example_Example_Run_Example_1-noinstr.inc}
 
-% If desired, the new created directory can be assigned to an easy remindable environment variable.
 \section{Monitoring}\label{sec:example:monitoring}
-For the creation of the example is is recommended to create a new working directory %
-(e.g. \dir{example/}) of the following structure:
+For the monitoring it is necessary to add some libraries from the \Kieker-framework to the example directory:
+\begin{figure}[H]
 
 \vspace{1ex}
 \dirtree{%
 .1 example/. %\DTcomment{The root directory of the project}.
 .2 build/\DTcomment{Directory for the Java class files}. 
-.2 lib/\DTcomment{Directory for the required libraries}.
-.3 \monitoringJar.
-.3 \commonJar.
-.3 commons-logging-1.1.1.jar.
+.2 \color{blue}lib/\DTcomment{Directory for the required libraries}.
+.3 \color{blue}\monitoringJar.
+.3 \color{blue}\commonJar.
+.3 \color{blue}\commonsLoggingJar.
 .2 src/\DTcomment{The directory for the source code files}.
-.3 mySimpleKiekerExampleManual/.
-.4 Bookstore.java.
-.4 BookstoreMonitoringStarter.java.
-.4 Catalog.java.
-.4 CRM.java.  
+.3 \ldots.
 }
 % Linebreak because the text would be to close to the directory tree. 		
 \vspace{1ex}
+\end{figure}
 
 The \Kieker{} jar-files must be copied from the \dir{\KiekerDir/dist/} directory %
 of the \Kieker{} release, as described in Section~\ref{sec:example:downloadInstall}. %
 The file \file{commons-logging-1.1.1.jar} is included in \dir{\KiekerDir/lib/} %
 and can also be copied from there.
 
-% The listed jar-files must be copied from the \Kieker\  directory:
-% \begin{itemize}
-% \item \dir{\KiekerDir/dist/\commonJar}
-% \item \dir{\KiekerDir/dist/\monitoringJar}
-% \item \dir{\KiekerDir/dist/commons-logging-1.1.1.jar}
-% \end{itemize}
+The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start. Following listing shows how a method call is monitored:
 
-\TODO{Erz\"ahlen, was wir nun vorhaben}
+% Make sure that this listing will be modified, once the sourcecode changes!!!
+% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
+\setJavaCodeListing
+\lstinputlisting[firstline=11, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
+{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+ 
+The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
 
 \begin{figure}[H]
 \begin{centering}
@@ -128,15 +142,7 @@ The important attributes for now are:
 \item tout: The time after the source code which should be measured.
 \end{itemize}
 
-The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start. 
-
-% Make sure that this listing will be modified, once the sourcecode changes!!!
-% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-\setJavaCodeListing
-\lstinputlisting[firstline=14, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
-{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
-		
-In Listing \ref{listing:cuttingBookstore}  can be seen, how the monitoring itself is done. The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
+As an example another method in \file{CRM.java} is monitored as well:
 
 \setJavaCodeListing
 \lstinputlisting[firstline=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
