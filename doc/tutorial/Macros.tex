@@ -38,6 +38,8 @@
 \newcommand{\notify}{\marginbox{\huge{\rightpointleft}}}
 \newcommand{\warning}{\marginbox{\huge{\Stopsign}}}
 
+% This color will be used as backgroundcolor for the listings.
+\definecolor{verylightgray}{gray}{.95}
 
 % The following commands set the listings for the different (programming) languages correctly.
 % For the first they use all nearly the same settings.
@@ -57,9 +59,12 @@ captionpos=t,                   % sets the caption-position to bottom
 breaklines=true,                % sets automatic line breaking
 breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
 title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
-escapechar={#4}
+escapechar={#4},
+backgroundcolor=\color{verylightgray}
 }
 }
-\newcommand{\setJavaCodeListing}{\setListing{Java}{left}{\sffamily\scriptsize}{}}
-\newcommand{\setBashListing}{\setListing{Bash}{none}{\sffamily\scriptsize}{°}}
+\newcommand{\setJavaCodeListing}{
+\setListing{Java}{left}{\sffamily\scriptsize}{}
+}
+\newcommand{\setBashListing}{\setListing{Bash}{none}{\sffamily\scriptsize}{§}}
 \newcommand{\setXMLListing}{\setListing{XML}{none}{\sffamily\scriptsize}{}}

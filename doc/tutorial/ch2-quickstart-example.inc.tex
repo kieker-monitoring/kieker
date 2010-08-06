@@ -22,29 +22,32 @@ as the corresponding \Kieker{} source code archives.
 For this chapter, it is required to download and extract an archive containing %
 Kieker's binary distribution, e.g., \file{\binaryFileForDownload}.
 The extracted content has the following directory structure:
-
+\begin{figure}[H]
 \vspace{1ex}
 
 \dirtree{%  
-.1 \KiekerDir/.
+.1 \KiekerDir/. 
 .2 bin/\DTcomment{Wrapper scripts for \Kieker{} tools}. 
-.3 \ldots.
+.3 \ldots. 
 .2 doc/\DTcomment{}. 
-.3 tutorial/.
-.4 userguide.pdf\DTcomment{PDF file of this document}.
-.4 source-example/\DTcomment{Source code of the examples in this document}.
-.2 dist/\DTcomment{The \Kieker{} framework libraries}.
-.3 \analysisJar.
-.3 \commonJar.
-.3 \monitoringJar.
-.3 \toolsJar.
-.2 lib/\DTcomment{Libraries required by Kieker}.
-.3 \ldots.
-.2 META-INF/\DTcomment{Example configuration files}.
-.3 \ldots.
+.3 tutorial/. 
+.4 userguide.pdf\DTcomment{PDF file of this document}. 
+.4 source-example/\DTcomment{Source code of the examples in this document}. 
+.2 dist/\DTcomment{The \Kieker{} framework libraries}. 
+.3 \analysisJar. 
+.3 \commonJar. 
+.3 \monitoringJar. 
+.3 \toolsJar. 
+.2 lib/\DTcomment{Libraries required by Kieker}. 
+.3 \ldots. 
+.2 META-INF/\DTcomment{Example configuration files}. 
+.3 \ldots. 
 }
-% Linebreak because the text would be to close to the directory tree. 		
+% Linebreak because the text would be to close to the directory tree. 	
 
+\caption{The resulting directory structure}
+
+\end{figure}
 \section{A Simple Bookstore Application}\label{sec:example:bookstore}
 
 The Bookstore application is a small sample application resembling a simple
