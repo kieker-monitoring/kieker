@@ -1,4 +1,4 @@
-package mySimpleKiekerExampleManual;
+package bookstoreApplication;
 
 import java.util.ArrayList;
 import java.util.Collection;

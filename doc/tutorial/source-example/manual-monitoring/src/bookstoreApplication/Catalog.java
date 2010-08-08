@@ -1,4 +1,4 @@
-package mySimpleKiekerExampleManual;
+package bookstoreApplication;
 
 public class Catalog {
 

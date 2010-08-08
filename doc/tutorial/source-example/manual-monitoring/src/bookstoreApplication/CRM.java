@@ -1,4 +1,4 @@
-package mySimpleKiekerExampleManual;
+package bookstoreApplication;
 
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.MonitoringController;
@@ -21,7 +21,7 @@ public class CRM {
         long tout = MONITORING_CONTROLLER.currentTimeNanos();
         OperationExecutionRecord e =
                 new OperationExecutionRecord(
-                "mySimpleKiekerExampleManual.Catalog", "getBook()",
+                "bookstoreApplication.Catalog", "getBook()",
                 tin, tout);
         MONITORING_CONTROLLER.newMonitoringRecord(e);
     }

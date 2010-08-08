@@ -119,7 +119,7 @@ The monitoring itself is done manually. Although this is not the strength of \Ki
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 \setJavaCodeListing
 \lstinputlisting[firstline=11, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
-{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Bookstore.java}
+{source-example/manual-monitoring/src/bookstoreApplication/Bookstore.java}
  
 The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
 
@@ -144,7 +144,7 @@ As an example another method in \file{CRM.java} is monitored as well:
 
 \setJavaCodeListing
 \lstinputlisting[firstline=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
-{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
+{source-example/manual-monitoring/src/bookstoreApplication/CRM.java}
 The instrumented example can now be compiled and executed as follows:
 
 \setBashListing 		
@@ -199,13 +199,14 @@ The new jar-file can again be found in \dir{\KiekerDir/dist}. Listing \ref{listi
 The methods \method{terminate} and \method{execute} don't do anything due to the fact that the consumer doesn't need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
 
 \setJavaCodeListing       
-\lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/Consumer.java}
+\lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/bookstoreApplication/Consumer.java}
 
 We have now to create the file \dir{BookstoreAnalysisStarter.java} to analyze our recorded information.
 
 \setJavaCodeListing       
-\lstinputlisting[caption=BookstoreAnalysisStarter.java]{source-example/manual-monitoring/src/mySimpleKiekerExampleManual/BookstoreAnalysisStarter.java}
+\lstinputlisting[caption=BookstoreAnalysisStarter.java]{source-example/manual-monitoring/src/bookstoreApplication/BookstoreAnalysisStarter.java}
 \TODO{Dem Programm die notwendigen Dateien manuell geben.}
+\TODO{Das Kompilieren/Ablaufen lassen nochmal fuer Windowsnutzer zeigen.}
 % notify-tag because this is a description how the analysis works.
 \notify The analysis consists of the following steps:
 \begin{enumerate}

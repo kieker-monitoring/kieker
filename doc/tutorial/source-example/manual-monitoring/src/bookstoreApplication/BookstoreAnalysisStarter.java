@@ -1,4 +1,4 @@
-package mySimpleKiekerExampleManual;
+package bookstoreApplication;
 
 import kieker.analysis.AnalysisInstance;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
