@@ -23,8 +23,7 @@ For this chapter, it is required to download and extract an archive containing %
 Kieker's binary distribution, e.g., \file{\binaryFileForDownload}.
 The extracted content has the following directory structure:
 \begin{figure}[H]
-\vspace{1ex}
-
+\begin{graybox}
 \dirtree{%  
 .1 \KiekerDir/. 
 .2 bin/\DTcomment{Wrapper scripts for \Kieker{} tools}. 
@@ -43,8 +42,7 @@ The extracted content has the following directory structure:
 .2 META-INF/\DTcomment{Example configuration files}. 
 .3 \ldots. 
 }
-% Linebreak because the text would be to close to the directory tree. 	
-
+\end{graybox}
 \caption{The resulting directory structure}
 
 \end{figure}
@@ -56,8 +54,7 @@ bookstore where a user can search for books in an online catalog.
 Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the ``plain'' application without any monitoring- or analysis-code.
 
 \begin{figure}[H]
-\vspace{1ex}
-
+\begin{graybox}
 \dirtree{%
 .1 example/. %\DTcomment{The root directory of the project}.
 .2 build/\DTcomment{Directory for the Java class files}. 
@@ -68,6 +65,7 @@ Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the `
 .4 Catalog.java.
 .4 CRM.java.  
 }
+\end{graybox}
 
 \caption{The directory structure of the Bookstore application}
 \label{Figure:PlainBookstoreExample}
@@ -92,8 +90,7 @@ Following listing shows an example run of the application:
 \section{Monitoring}\label{sec:example:monitoring}
 For the monitoring it is necessary to add some libraries from the \Kieker-framework to the example directory:
 \begin{figure}[H]
-
-\vspace{1ex}
+\begin{graybox}
 \dirtree{%
 .1 example/. %\DTcomment{The root directory of the project}.
 .2 build/\DTcomment{Directory for the Java class files}. 
@@ -104,8 +101,7 @@ For the monitoring it is necessary to add some libraries from the \Kieker-framew
 .2 src/\DTcomment{The directory for the source code files}.
 .3 \ldots.
 }
-% Linebreak because the text would be to close to the directory tree. 		
-\vspace{1ex}
+\end{graybox}
 \end{figure}
 
 The \Kieker{} jar-files must be copied from the \dir{\KiekerDir/dist/} directory %
@@ -160,13 +156,16 @@ a file named \dir{tpmon.map} which contains information about the types of the %
 monitoring records. %
 The Listings~\ref{listing:exampledat} and \ref{listing:examplemap} show example %
 contents. 
-
+\begin{figure}[H]
+\begin{graybox}
 \dirtree{%
 .1 /tmp/.
 .2 tpmon-20100727-181422131-UTC/.
 .3 tpmon.map.
 .3 tpmon-20100727-181422234-UTC-Thread-2.dat.
 }
+\end{graybox}
+\end{figure}
 
 \setBashListing
 \lstinputlisting[caption=tpmon-20100727-181422234-UTC-Thread-2.dat (excerpt), firstline=1, lastline=3, label=listing:exampledat]%
@@ -179,22 +178,23 @@ The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \
 
 \section{Analysis}\label{sec:example:analysis}
 As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:
-
-\vspace{1ex}
+\begin{figure}[H]
+\begin{graybox}
 \dirtree{%  
-.1 example.
-.2 build. 
-.2 lib.
+.1 example/. 
+.2 build/\DTcomment{Directory for the Java class files}. 
+.2 lib/\DTcomment{Directory for the required libraries}.
 .3 \ldots. 
 .3 \newFilesDirTreeFormat \analysisJar.
-.2 src.
+.2 src/\DTcomment{The directory for the source code files}.
 .3 bookstoreApplication.
 .4 \ldots. 
 .4 \newFilesDirTreeFormat BookstoreAnalysisStarter.java.
 .4 \newFilesDirTreeFormat Consumer.java.
 }
-\vspace{1ex}
-		
+\end{graybox}
+\end{figure}
+
 The new jar-file can again be found in \dir{\KiekerDir/dist}. Listing \ref{listing:Consumer} shows the content of the new created \dir{Consumer.java}. It implements the \class{IMonitoringRecordConsumerPlugin} and overrides the necessary methods so that it can later be used by the analysis component of \Kieker. In this case the component gets a maximal response time within the constructor which will later be used to check whether a recorded method call replied fast enough or not. If the method call needed more time to response that the maximal allowed response time, it will be written directly to the error stream.\\
 The methods \method{terminate} and \method{execute} don't do anything due to the fact that the consumer doesn't need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
 

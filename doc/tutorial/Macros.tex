@@ -71,3 +71,9 @@ backgroundcolor=\color{verylightgray}
 }
 \newcommand{\setBashListing}{\setListing{Bash}{none}{\sffamily\scriptsize}{§}}
 \newcommand{\setXMLListing}{\setListing{XML}{none}{\sffamily\scriptsize}{}}
+
+% This is the definition for the environment, that can be used for the background of the dirtrees.
+\makeatletter\newenvironment{graybox}{%
+   \begin{lrbox}{\@tempboxa}\begin{minipage}{\columnwidth}}{\end{minipage}\end{lrbox}%
+   \fcolorbox{black}{verylightgray}{\usebox{\@tempboxa}}
+}\makeatother
