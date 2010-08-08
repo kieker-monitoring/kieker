@@ -75,13 +75,11 @@ Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the `
 
 The following listings show the content of the source code files:
 
-\TODO{Bessere Methode, als die Quellcodedateien so "plain" zu nutzen.}
-
 \setJavaCodeListing
-\lstinputlisting[caption=Bookstore.java]{source-example/manual-monitoring/src/bookstoreApplication/Bookstore.java}
-\lstinputlisting[caption=CRM.java]{source-example/manual-monitoring/src/bookstoreApplication/CRM.java}
-\lstinputlisting[caption=Catalog.java]{source-example/manual-monitoring/src/bookstoreApplication/Catalog.java}
-\lstinputlisting[caption=BookstoreStarter.java]{source-example/manual-monitoring/src/bookstoreApplication/BookstoreStarter.java}
+\lstinputlisting[caption=Bookstore.java]{source-example/plain-example/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[caption=CRM.java]{source-example/plain-example/src/bookstoreApplication/CRM.java}
+\lstinputlisting[caption=Catalog.java]{source-example/plain-example/src/bookstoreApplication/Catalog.java}
+\lstinputlisting[caption=BookstoreStarter.java]{source-example/plain-example/src/bookstoreApplication/BookstoreStarter.java}
 
 The example can be compiled and executed as follows:
 \setBashListing
@@ -99,10 +97,10 @@ For the monitoring it is necessary to add some libraries from the \Kieker-framew
 \dirtree{%
 .1 example/. %\DTcomment{The root directory of the project}.
 .2 build/\DTcomment{Directory for the Java class files}. 
-.2 \color{blue}lib/\DTcomment{Directory for the required libraries}.
-.3 \color{blue}\monitoringJar.
-.3 \color{blue}\commonJar.
-.3 \color{blue}\commonsLoggingJar.
+.2 \newFilesDirTreeFormat lib/\DTcomment{Directory for the required libraries}.
+.3 \newFilesDirTreeFormat \monitoringJar.
+.3 \newFilesDirTreeFormat \commonJar.
+.3 \newFilesDirTreeFormat \commonsLoggingJar.
 .2 src/\DTcomment{The directory for the source code files}.
 .3 \ldots.
 }
@@ -147,19 +145,12 @@ As an example another method in \file{CRM.java} is monitored as well:
 \setJavaCodeListing
 \lstinputlisting[firstline=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
 {source-example/manual-monitoring/src/mySimpleKiekerExampleManual/CRM.java}
-\TODO{Erneuter Hinweis, dass unter Windows die Quelldateien ausgeschrieben werden muessen.}
 The instrumented example can now be compiled and executed as follows:
 
 \setBashListing 		
-% Note: This is different under Windows and Linux!! 		
-% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
-% We cannot put a latex-macro within the listing!
-\input{ch2-quickstart-example_Compile_Run_Example_1.inc}			
+\input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
+\input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}				
 
-% warning-tag because windows has to be handled different.
-\warning If the source code should be compiled and executed under Windows, the %
-paths have do be seperated with semicolons instead of colons. Furthermore it is %
-not possible to wrap the single parts of the commands with a backslash.\\
 If everything worked correctly, there should now be a new directory with the %
 name \dir{tpmon-20100727-181422131-UTC} (just with another timestamp) in the default %
 temporary directory (under Linux this should be \dir{/tmp}; under Windows %
@@ -167,10 +158,8 @@ temporary directory (under Linux this should be \dir{/tmp}; under Windows %
 \dir{.dat} which contains the recorded information from the source code and %
 a file named \dir{tpmon.map} which contains information about the types of the %
 monitoring records. %
-The Listings~\ref{listing:exampledat} and \ref{listing:examplemap} list example %
+The Listings~\ref{listing:exampledat} and \ref{listing:examplemap} show example %
 contents. 
-% A possible content of this file can be found in the appendix of this tutorial.
-% We take now a closer look at the analysis.
 
 \dirtree{%
 .1 /tmp/.
@@ -186,9 +175,7 @@ contents.
 \lstinputlisting[caption=tpmon.map, label=listing:examplemap]%
 {ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon.map}
 
-\TODO{Die Daten dieser CSV-Datei k\"onnte man nun schon mittels Excel \& Co. %
-visualisieren. In Abschnitt~\ref{sec:example:analysis} erz\"ahlen wir, wie diese %
-Datein durch Kieker.Analysis eingelesen und verarbeitet werden k\"onnen.}
+The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues), meaning that in can be opened with Microsoft Excel or OpenOffice.org Calc. It would be possible to visualize the stored data with the help of these programs, but we will show in Section \ref{sec:example:analysis} how to use \KiekerAnalysisPart\ to read and process the files.
 
 \section{Analysis}\label{sec:example:analysis}
 As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:
@@ -198,18 +185,13 @@ As mentioned in the beginning of this chapter, it is shown how a simple consumer
 .1 example.
 .2 build. 
 .2 lib.
-.3 \monitoringJar.
-.3 \color{red}\analysisJar.
-.3 \commonJar.
-.3 commons-logging-1.1.1.jar.
+.3 \ldots. 
+.3 \newFilesDirTreeFormat \analysisJar.
 .2 src.
-.3 mySimpleKiekerExampleManual.
-.4 CRM.java.  
-.4 Catalog.java.
-.4 Bookstore.java.
-.4 BookstoreMonitoringStarter.java.
-.4 \color{red}BookstoreAnalysisStarter.java.
-.4 \color{red}Consumer.java.
+.3 bookstoreApplication.
+.4 \ldots. 
+.4 \newFilesDirTreeFormat BookstoreAnalysisStarter.java.
+.4 \newFilesDirTreeFormat Consumer.java.
 }
 \vspace{1ex}
 		

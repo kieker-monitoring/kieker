@@ -1,0 +1,14 @@
+\begin{lstlisting}[caption=Compile and run under Windows]
+> javac src/bookstoreApplication/Bookstore.java 
+        src/bookstoreApplication/BookstoreStarter.java 
+        src/bookstoreApplication/Catalog.java 
+        src/bookstoreApplication/CRM.java 
+        -classpath ./lib/§\commonJar§;./lib/§\monitoringJar§
+        -d build
+
+> java -classpath ./build/;
+       ./lib/§\commonJar§;
+       ./lib/§\monitoringJar§;
+       ./lib/§\commonsLoggingJar§
+       bookstoreApplication.BookstoreStarter 
+\end{lstlisting}
