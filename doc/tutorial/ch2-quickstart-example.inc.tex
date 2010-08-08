@@ -201,26 +201,22 @@ The methods \method{terminate} and \method{execute} don't do anything due to the
 \setJavaCodeListing       
 \lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/bookstoreApplication/Consumer.java}
 
-We have now to create the file \dir{BookstoreAnalysisStarter.java} to analyze our recorded information.
+We have now to create the file \dir{BookstoreAnalysisStarter.java} to analyze our recorded information. 
 
-\setJavaCodeListing       
-\lstinputlisting[caption=BookstoreAnalysisStarter.java]{source-example/manual-monitoring/src/bookstoreApplication/BookstoreAnalysisStarter.java}
-\TODO{Dem Programm die notwendigen Dateien manuell geben.}
-\TODO{Das Kompilieren/Ablaufen lassen nochmal fuer Windowsnutzer zeigen.}
-% notify-tag because this is a description how the analysis works.
-\notify The analysis consists of the following steps:
+\notify The analysis consists thereby of the following steps:
 \begin{enumerate}
 \item Create a new instance (or more) of the class \class{AnalysisInstance}.
 \item Register the plugins which should evaluate the records.
 \item Register exactly one reader to read the stored information.
 \item Start the analysis instance.
 \end{enumerate}
-The source code can now be executed:
 
+\setJavaCodeListing       
+\lstinputlisting[caption=BookstoreAnalysisStarter.java]{source-example/manual-monitoring/src/bookstoreApplication/BookstoreAnalysisStarter.java}
+As can be seen, the application expects the output directory from the earlier monitoring run (see Section \ref{sec:example:monitoring}) as argument, which must be passed manually. Following listings show again the course of action:
 \setBashListing 		
-% Note: This is different under Windows and Linux!! 		
-% If the Kieker-Dir for the tutorial is changed, make sure that this is done here as well!! 		
-% We cannot put a latex-macro within the listing!
-\input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}		
+\input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}	
+\input{ch2-quickstart-example_Compile_Run_Example_2.inc-win.tex}	
+It should be ensured that the application gets the correct path from the monitoring run. 
 
 If everything worked correctly, the consumer should write something on the outputstream for every record it gets. A possible display of the run can be found in the appendix of this tutorial. 

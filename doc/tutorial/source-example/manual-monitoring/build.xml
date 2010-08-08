@@ -1,12 +1,12 @@
-<project name="Tutorial-Example" basedir="." default="run-monitoring">
+<project name="Bookstore-Application" basedir="." default="run-monitoring">
 
   <property name="lib.dir" value="lib"/>
   <property name="build.dir" value="build"/>
   <property name="src.dir" value="src"/>
-  <property name="jar.file.monitoring" value="example-monitoring.jar"/>
-  <property name="jar.file.analysis" value="example-analysis.jar"/>
-  <property name="main-class-monitoring" value="mySimpleKiekerExampleManual.BookstoreMonitoringStarter"/>
-  <property name="main-class-analysis" value="mySimpleKiekerExampleManual.BookstoreAnalysisStarter"/>
+  <property name="jar.file.monitoring" value="BookstoreMonitoring.jar"/>
+  <property name="jar.file.analysis" value="BookstoreAnalysis.jar"/>
+  <property name="main-class-monitoring" value="bookstoreApplication.BookstoreStarter"/>
+  <property name="main-class-analysis" value="bookstoreApplication.BookstoreAnalysisStarter"/>
   <property name="meta.dir" value="META-INF"/>
   <property name="log4jproperties.file" value="log4j.properties"/>
   
@@ -19,6 +19,17 @@
       <classpath>
 	<path refid="classpath"/>
 	<path location="${jar.file.monitoring}"/>
+      </classpath>
+      <jvmarg value="-Dlog4j.configuration=${meta.dir}/${log4jproperties.file}"/>
+    </java>
+  </target>
+  
+  <target name="run-analysis" depends="build-jar-analysis">
+    <java fork="true" classname="${main-class-analysis}">
+	  <arg line="${ananalysis.directory}"/>
+      <classpath>
+	    <path refid="classpath"/>
+	    <path location="${jar.file.analysis}"/>
       </classpath>
       <jvmarg value="-Dlog4j.configuration=${meta.dir}/${log4jproperties.file}"/>
     </java>
