@@ -1,56 +1,46 @@
 \chapter{Quick Start Example}
 
-This chapter provides a brief introduction to Kieker based on %
-a simple Bookstore application. %
+This chapter provides a brief introduction to \Kieker{} based on a simple Bookstore example application.
 
-Section~\ref{sec:example:downloadInstall} explains how to download and install %
-Kieker. % 
-The Bookstore application is introduced in Section~\ref{sec:example:bookstore}. %
-The following Sections~\ref{sec:example:monitoring} %
-and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring %
-and analyzing the monitoring data. %
+Section \ref{sec:example:downloadInstall} explains how to download and install \Kieker{}. The Bookstore application itself is introduced in Section \ref{sec:example:bookstore}, while the following Sections \ref{sec:example:monitoring} and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring and analyzing the resulting monitoring data.
 
 % Notify-tag because this could be interesting for the reader.
-\notify The presented Java sources are included in the \Kieker{} release.
+\notify The Java sources presented in this user guide are included in the \Kieker{} release archive (see Section \ref{sec:example:downloadInstall}).
 
 \section{Download and Installation}\label{sec:example:downloadInstall}
 
-\Kieker{} can be downloaded from \KiekerURL. The web %
-site provides zip/tar.gz archives of the \Kieker{} binary distribution as well %
-as the corresponding \Kieker{} source code archives.
+\Kieker{} can be downloaded from \KiekerURL. The web site provides zip/tar.gz archives of the \Kieker{} binary distribution as well as the corresponding \Kieker{} source code archives.
 
-For this chapter, it is required to download and extract an archive containing %
-Kieker's binary distribution, e.g., \file{\binaryFileForDownload}.
-The extracted content has the following directory structure:
+For this chapter, it is required to download and extract an archive containing \Kieker's binary distribution, e.g., \file{\binaryFileForDownload}. The extracted content has roughly the following directory structure:
+% Note: The indention is not really necessary, but the tree is easier to understand in the tex-source.
 \begin{figure}[H]
-\begin{graybox}
-\dirtree{%  
-.1 \KiekerDir/. 
-.2 bin/\DTcomment{Wrapper scripts for \Kieker{} tools}. 
-.3 \ldots. 
-.2 doc/\DTcomment{}. 
-.3 tutorial/. 
-.4 userguide.pdf\DTcomment{PDF file of this document}. 
-.4 source-example/\DTcomment{Source code of the examples in this document}. 
-.2 dist/\DTcomment{The \Kieker{} framework libraries}. 
-.3 \analysisJar. 
-.3 \commonJar. 
-.3 \monitoringJar. 
-.3 \toolsJar. 
-.2 lib/\DTcomment{Libraries required by Kieker}. 
-.3 \ldots. 
-.2 META-INF/\DTcomment{Example configuration files}. 
-.3 \ldots. 
-}
-\end{graybox}
-
+	\begin{graybox}
+		\dirtree{%  
+			.1 \KiekerDir/. 
+				.2 bin/\DTcomment{Wrapper scripts for \Kieker{} tools}. 
+					.3 \ldots. 
+				.2 doc/\DTcomment{}. 
+					.3 tutorial/. 
+						.4 userguide.pdf\DTcomment{PDF file of this document}. 
+						.4 source-example/\DTcomment{Source code of the examples in this document}. 
+				.2 dist/\DTcomment{The \Kieker{} framework libraries}. 
+					.3 \analysisJar. 
+					.3 \commonJar. 
+					.3 \monitoringJar. 
+					.3 \toolsJar. 
+				.2 lib/\DTcomment{Libraries required by Kieker}. 
+					.3 \ldots. 
+				.2 META-INF/\DTcomment{Example configuration files}. 
+					.3 \ldots. 
+		}
+	\end{graybox}
 \end{figure}
+
 \section{A Simple Bookstore Application}\label{sec:example:bookstore}
 
-The Bookstore application is a small sample application resembling a simple
-bookstore where a user can search for books in an online catalog.
+The Bookstore application is a small sample application resembling a simple bookstore where a user can search for books in an online catalog.
 
-Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the ``plain'' application without any monitoring- or analysis-code.
+Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the ``plain'' application neither with monitoring- nor with analysis-code.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -144,6 +134,7 @@ The instrumented example can now be compiled and executed as follows:
 
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
+\warning Under Windows it is also necessary to seperate the different paths for the classpath with a semicolon instead of a colon.
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}				
 
 If everything worked correctly, there should now be a new directory with the %
@@ -173,7 +164,7 @@ contents.
 \lstinputlisting[caption=tpmon.map, label=listing:examplemap]%
 {ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon.map}
 
-The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues), meaning that in can be opened with Microsoft Excel or OpenOffice.org Calc. It would be possible to visualize the stored data with the help of these programs, but we will show in Section \ref{sec:example:analysis} how to use \KiekerAnalysisPart\ to read and process the files.
+The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues), meaning that it can be opened with Microsoft Excel or OpenOffice.org Calc. It would be possible to visualize the stored data with the help of these programs, but we will show in Section \ref{sec:example:analysis} how to use \KiekerAnalysisPart\ to read and process the files.
 
 \section{Analysis}\label{sec:example:analysis}
 As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:

@@ -3,20 +3,20 @@
         src/bookstoreApplication/BookstoreAnalysisStarter.java 
         src/bookstoreApplication/Catalog.java 
         src/bookstoreApplication/CRM.java 
-		src/bookstoreApplication/Consumer.java
-		-classpath
-		./lib/§\commonJar§:
-		./lib/§\monitoringJar§:
-		./lib/§\analysisJar§:
-		-d build
+        src/bookstoreApplication/Consumer.java
+        -classpath
+        lib/§\commonJar§:
+        lib/§\monitoringJar§:
+        lib/§\analysisJar§:
+        -d build
 
 > java -Dlog4j.configuration=$<$KIEKER-DIR$>$/META-INF/§\logFourJPropertiesFile§
        -classpath
-       ./build/;
-       ./lib/§\commonJar§;
-       ./lib/§\monitoringJar§;
-       ./lib/§\analysisJar§;
-       ./lib/§\commonsLoggingJar§
+       build;
+       lib/§\commonJar§;
+       lib/§\monitoringJar§;
+       lib/§\analysisJar§;
+       lib/§\commonsLoggingJar§
        mySimpleKiekerExampleManual.BookstoreAnalysisStarter 
        C:\Temp\tpmon-20100808-092252697-UTC
 \end{lstlisting}	
