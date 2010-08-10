@@ -33,9 +33,15 @@ For this chapter, it is required to download and extract an archive containing \
 \caption{Directory structure and contents of \Kieker{}'s binary distribution}
 \end{figure}
 
-\section{A Simple Bookstore Application}\label{sec:example:bookstore}
+\section{Bookstore Example Application}\label{sec:example:bookstore}
 
 The Bookstore application is a small sample application resembling a simple bookstore where a user can search for books in an online catalog.
+
+\begin{figure}[h]\centering
+\includegraphics[scale=0.9]{images/kieker_bookstoreclassdiagram}
+\includegraphics[scale=0.9]{images/kieker_bookstoresequencediagram}
+\end{figure}
+
 
 Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the application.
 
@@ -97,11 +103,11 @@ The file \file{commons-logging-1.1.1.jar} is included in \dir{\KiekerDir/lib/} %
 and can also be copied from there.
 
 The monitoring itself is done manually. Although this is not the strength of \Kieker\ it is pretty good for a quick start. Following listing shows how a method call is monitored:
-\TODO{Imports?!}
+\TODO{Imports?!\\ --- avh: ja, evtl. mit linerange, aber er bl\"oderweise nummeriert er so durch}
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 \setJavaCodeListing
-\lstinputlisting[firstline=11, firstnumber=11, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
+\lstinputlisting[linerange={11-29}, firstnumber=11, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
 {source-example/manual-monitoring/src/bookstoreApplication/Bookstore.java}
  
 \noindent The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
