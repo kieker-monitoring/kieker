@@ -57,10 +57,10 @@ showtabs=false,                 % show tabs within strings adding particular und
 %frame=shadowbox,	                % adds a frame around the code
 % frame=lrtb,
 rulesepcolor=\color{black},
-linewidth=\columnwidth,
-xleftmargin=0.7cm,
+linewidth=0.98\columnwidth,
+xleftmargin=1cm,
 tabsize=2,	                % sets default tabsize to 2 spaces
-captionpos=t,                   % sets the caption-position to bottom
+captionpos=b,                   % sets the caption-position to bottom
 breaklines=true,                % sets automatic line breaking
 breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
 title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
@@ -76,6 +76,6 @@ backgroundcolor=\color{verylightgray}
 
 % This is the definition for the environment, that can be used for the background of the dirtrees.
 \makeatletter\newenvironment{graybox}{%
-   \begin{lrbox}{\@tempboxa}\begin{minipage}{0.985\columnwidth}}{\end{minipage}\end{lrbox}%
+   \begin{lrbox}{\@tempboxa}\begin{minipage}{0.965\columnwidth}}{\end{minipage}\end{lrbox}%
    \fcolorbox{white}{verylightgray}{\usebox{\@tempboxa}}
 }\makeatother

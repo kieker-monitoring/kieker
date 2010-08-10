@@ -30,6 +30,7 @@ For this chapter, it is required to download and extract an archive containing \
 			.3 \ldots. 
 }
 \end{graybox}
+\caption{Directory structure and contents of \Kieker{}'s binary distribution}
 \end{figure}
 
 \section{A Simple Bookstore Application}\label{sec:example:bookstore}
@@ -56,7 +57,7 @@ Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the `
 \label{Figure:PlainBookstoreExample}
 \end{figure}
 
-The following listings show the content of the source code files:
+\noindent The following listings show the content of the source code files:
 
 \setJavaCodeListing
 \lstinputlisting[caption=Bookstore.java]{source-example/plain-example/src/bookstoreApplication/Bookstore.java}
@@ -64,7 +65,7 @@ The following listings show the content of the source code files:
 \lstinputlisting[caption=Catalog.java]{source-example/plain-example/src/bookstoreApplication/Catalog.java}
 \lstinputlisting[caption=BookstoreStarter.java]{source-example/plain-example/src/bookstoreApplication/BookstoreStarter.java}
 
-The example can be compiled and executed as follows:
+\noindent The example can be compiled and executed as follows:
 \setBashListing
 \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
 \warning The default command-line interpreter of Windows doesn't support automatic file expansion. Therefore every single sourcefile has to be passed:
@@ -89,7 +90,7 @@ For the monitoring it is necessary to add some libraries from the \Kieker{}-fram
 \end{graybox}
 \end{figure}
 
-The \Kieker{} jar-files must be copied from the \dir{\KiekerDir/dist/} directory %
+\noindent The \Kieker{} jar-files must be copied from the \dir{\KiekerDir/dist/} directory %
 of the \Kieker{} release, as described in Section~\ref{sec:example:downloadInstall}. %
 The file \file{commons-logging-1.1.1.jar} is included in \dir{\KiekerDir/lib/} %
 and can also be copied from there.
@@ -102,7 +103,7 @@ The monitoring itself is done manually. Although this is not the strength of \Ki
 \lstinputlisting[firstline=11, firstnumber=11, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
 {source-example/manual-monitoring/src/bookstoreApplication/Bookstore.java}
  
-The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
+\noindent The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
 
 \begin{figure}[H]
 \begin{centering}
@@ -112,16 +113,18 @@ The time before and after a specific method call (in this case: \method{searchBo
 \end{centering}
 \end{figure}
 
-The important attributes for now are:
-\begin{itemize}
-\item componentName: The component (the class) in which the called method is.
-\item opName: The called method.
+\noindent The important attributes for now are:
+\begin{compactitem}
+\item \class{componentName:} The component (the class) in which the called method is.
+\item \class{opName:} The called method.
 % \item traceId: The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
-\item tin: The time before the source code which should be measured.
-\item tout: The time after the source code which should be measured.
-\end{itemize}
+\item \class{tin:} The time before the source code which should be measured.
+\item \class{tout:} The time after the source code which should be measured.
+\end{compactitem}
 
-As an example another method in \file{CRM.java} is monitored as well:
+\quad\\
+
+\noindent As an example, another method in \file{CRM.java} is monitored as well:
 
 \setJavaCodeListing
 \lstinputlisting[firstline=16, firstnumber=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
