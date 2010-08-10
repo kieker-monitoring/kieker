@@ -12,21 +12,21 @@ For this chapter, it is required to download and extract an archive containing \
 \begin{figure}[H]
 \begin{graybox}
 \dirtree{%  
-	.1 \KiekerDir/. 
-		.2 bin/\DTcomment{Call scripts for \Kieker{} tools}. 
+	.1 \DirInDirTree{\KiekerDir/}.
+		.2 \DirInDirTree{bin/}\DTcomment{Call scripts for \Kieker{} tools}. 
 			.3 \ldots. 
-		.2 doc/\DTcomment{}. 
-			.3 tutorial/. 
+		.2 \DirInDirTree{doc/}\DTcomment{}. 
+			.3 \DirInDirTree{tutorial/}. 
 				.4 userguide.pdf\DTcomment{PDF file of this document}. 
 				.4 source-example/\DTcomment{Source code of the examples in this document}. 
-		.2 dist/\DTcomment{The \Kieker{} framework libraries}. 
+		.2 \DirInDirTree{dist/}\DTcomment{The \Kieker{} framework libraries}. 
 			.3 \analysisJar. 
 			.3 \commonJar. 
 			.3 \monitoringJar. 
 			.3 \toolsJar. 
-		.2 lib/\DTcomment{Libraries required by \Kieker{}}. 
+		.2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}. 
 			.3 \ldots. 
-		.2 META-INF/\DTcomment{Example configuration files}. 
+		.2 \DirInDirTree{META-INF/}\DTcomment{Example configuration files}. 
 			.3 \ldots. 
 }
 \end{graybox}
@@ -37,15 +37,15 @@ For this chapter, it is required to download and extract an archive containing \
 
 The Bookstore application is a small sample application resembling a simple bookstore where a user can search for books in an online catalog.
 
-Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the ``plain'' application neither with monitoring- nor with analysis-code.
+Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the application.
 
 \begin{figure}[H]
 \begin{graybox}
 \dirtree{%
-.1 example/. %\DTcomment{The root directory of the project}.
-.2 build/\DTcomment{Directory for the Java class files}. 
-.2 src/\DTcomment{The directory for the source code files}.
-.3 bookstoreApplication/.
+.1 \DirInDirTree{example/}. %\DTcomment{The root directory of the project}.
+.2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}. 
+.2 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
+.3 \DirInDirTree{bookstoreApplication/}.
 .4 Bookstore.java.
 .4 BookstoreStarter.java.
 .4 Catalog.java.
@@ -78,13 +78,13 @@ For the monitoring it is necessary to add some libraries from the \Kieker{}-fram
 \begin{figure}[H]
 \begin{graybox}
 \dirtree{%
-.1 example/. %\DTcomment{The root directory of the project}.
-.2 build/\DTcomment{Directory for the Java class files}. 
-.2 \newFilesDirTreeFormat lib/\DTcomment{Directory for the required libraries}.
+.1 \DirInDirTree{example/}. %\DTcomment{The root directory of the project}.
+.2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}. 
+.2 \newFilesDirTreeFormat \DirInDirTree{lib/}\DTcomment{Directory for the required libraries}.
 .3 \newFilesDirTreeFormat \monitoringJar.
 .3 \newFilesDirTreeFormat \commonJar.
 .3 \newFilesDirTreeFormat \commonsLoggingJar.
-.2 src/\DTcomment{The directory for the source code files}.
+.2 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
 .3 \ldots.
 }
 \end{graybox}
@@ -148,8 +148,8 @@ contents.
 \begin{figure}[H]
 \begin{graybox}
 \dirtree{%
-.1 /tmp/.
-.2 tpmon-20100727-181422131-UTC/.
+.1 \DirInDirTree{/tmp/}.
+.2 \DirInDirTree{tpmon-20100727-181422131-UTC/}.
 .3 tpmon.map.
 .3 tpmon-20100727-181422234-UTC-Thread-2.dat.
 }
@@ -170,12 +170,12 @@ As mentioned in the beginning of this chapter, it is shown how a simple consumer
 \begin{figure}[H]
 \begin{graybox}
 \dirtree{%  
-.1 example/. 
-.2 build/\DTcomment{Directory for the Java class files}. 
-.2 lib/\DTcomment{Directory for the required libraries}.
+.1 \DirInDirTree{example/}. 
+.2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}. 
+.2 \DirInDirTree{lib/}\DTcomment{Directory for the required libraries}.
 .3 \ldots. 
 .3 \newFilesDirTreeFormat \analysisJar.
-.2 src/\DTcomment{The directory for the source code files}.
+.2 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
 .3 bookstoreApplication.
 .4 \ldots. 
 .4 \newFilesDirTreeFormat BookstoreAnalysisStarter.java.
