@@ -1,11 +1,7 @@
 \chapter{Quick Start Example}
 
-This chapter provides a brief introduction to \Kieker{} based on a simple Bookstore example application.
-
+This chapter provides a brief introduction to \Kieker{} based on a simple Bookstore example application. %
 Section \ref{sec:example:downloadInstall} explains how to download and install \Kieker{}. The Bookstore application itself is introduced in Section \ref{sec:example:bookstore}, while the following Sections \ref{sec:example:monitoring} and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring and analyzing the resulting monitoring data.
-
-% Notify-tag because this could be interesting for the reader.
-\notify The Java sources presented in this user guide are included in the \Kieker{} release archive (see Section \ref{sec:example:downloadInstall}).
 
 \section{Download and Installation}\label{sec:example:downloadInstall}
 
@@ -14,26 +10,26 @@ Section \ref{sec:example:downloadInstall} explains how to download and install \
 For this chapter, it is required to download and extract an archive containing \Kieker's binary distribution, e.g., \file{\binaryFileForDownload}. The extracted content has roughly the following directory structure:
 % Note: The indention is not really necessary, but the tree is easier to understand in the tex-source.
 \begin{figure}[H]
-	\begin{graybox}
-		\dirtree{%  
-			.1 \KiekerDir/. 
-				.2 bin/\DTcomment{Wrapper scripts for \Kieker{} tools}. 
-					.3 \ldots. 
-				.2 doc/\DTcomment{}. 
-					.3 tutorial/. 
-						.4 userguide.pdf\DTcomment{PDF file of this document}. 
-						.4 source-example/\DTcomment{Source code of the examples in this document}. 
-				.2 dist/\DTcomment{The \Kieker{} framework libraries}. 
-					.3 \analysisJar. 
-					.3 \commonJar. 
-					.3 \monitoringJar. 
-					.3 \toolsJar. 
-				.2 lib/\DTcomment{Libraries required by Kieker}. 
-					.3 \ldots. 
-				.2 META-INF/\DTcomment{Example configuration files}. 
-					.3 \ldots. 
-		}
-	\end{graybox}
+\begin{graybox}
+\dirtree{%  
+	.1 \KiekerDir/. 
+		.2 bin/\DTcomment{Call scripts for \Kieker{} tools}. 
+			.3 \ldots. 
+		.2 doc/\DTcomment{}. 
+			.3 tutorial/. 
+				.4 userguide.pdf\DTcomment{PDF file of this document}. 
+				.4 source-example/\DTcomment{Source code of the examples in this document}. 
+		.2 dist/\DTcomment{The \Kieker{} framework libraries}. 
+			.3 \analysisJar. 
+			.3 \commonJar. 
+			.3 \monitoringJar. 
+			.3 \toolsJar. 
+		.2 lib/\DTcomment{Libraries required by \Kieker{}}. 
+			.3 \ldots. 
+		.2 META-INF/\DTcomment{Example configuration files}. 
+			.3 \ldots. 
+}
+\end{graybox}
 \end{figure}
 
 \section{A Simple Bookstore Application}\label{sec:example:bookstore}
@@ -77,7 +73,7 @@ Following listing shows an example run of the application:
 \input{ch2-quickstart-example_Example_Run_Example_1-noinstr.inc}
 
 \section{Monitoring}\label{sec:example:monitoring}
-For the monitoring it is necessary to add some libraries from the \Kieker-framework to the example directory:
+For the monitoring it is necessary to add some libraries from the \Kieker{}-framework to the example directory:
 \begin{figure}[H]
 \begin{graybox}
 \dirtree{%
@@ -103,7 +99,7 @@ The monitoring itself is done manually. Although this is not the strength of \Ki
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 \setJavaCodeListing
-\lstinputlisting[firstline=11, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
+\lstinputlisting[firstline=11, firstnumber=11, lastline=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
 {source-example/manual-monitoring/src/bookstoreApplication/Bookstore.java}
  
 The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
@@ -128,7 +124,7 @@ The important attributes for now are:
 As an example another method in \file{CRM.java} is monitored as well:
 
 \setJavaCodeListing
-\lstinputlisting[firstline=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
+\lstinputlisting[firstline=16, firstnumber=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
 {source-example/manual-monitoring/src/bookstoreApplication/CRM.java}
 The instrumented example can now be compiled and executed as follows:
 

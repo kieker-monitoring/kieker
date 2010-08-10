@@ -24,16 +24,17 @@ overhead during the monitoring.
 is structured into two main components:% \KiekerMonitoringPart{} and \KiekerAnalysisPart{}:
 \begin{description}
  % Both items get notify-tags because of the important information in here.
+ % avh: Removed them because we shouldn't use them "inflationaryly"
 \item[\KiekerMonitoringPart]
 is responsible for the program instrumentation, data %
 collection and logging.  Its core is the singleton class \class{MonitoringController} %
-\notify which receives the monitoring data in so-called records and %
+which receives the monitoring data in so-called records and %
 writes these records into the configured monitoring log which can, for example, %
 be located in a filesystem or in a database.
 \item[\KiekerAnalysisPart]
-is responsible for the evalution and possible visualization of the %
-recorded information. Its core is the class \class{AnalysisInstance} \notify %
-which manages the lifecycle of the readers and all plugins which shoud analyze %
+is responsible for the evaluation and possible visualization of the %
+recorded information. Its core is the class \class{AnalysisInstance} %
+which manages the life-cycle of the readers and all plugins which should analyze %
 the stored information.
 \end{description}
 
@@ -51,7 +52,8 @@ but will be explained furthermore throughout the course of this tutorial. %
 \end{figure}
 		
 % Notify-tag because it is explained how Kieker works.
-\noindent\notify The monitoring probes create the monitoring records and deliver %
+% avh: removed
+\noindent The monitoring probes create the monitoring records and deliver %
 them to the monitoring controller. The monitoring controller uses the monitoring %
 log writers to persist the given records which can later be read by a monitoring %
 log reader who creates a monitoring record again. These records can then be used %
@@ -71,3 +73,10 @@ will be used for processing the recorded data.
 
 Before this tutorial goes deeper into the single parts of the framework, it %
 shows how to create and execute a simple example.
+
+% Notify-tag because this could be interesting for the reader.
+\notify The Java sources presented in this user guide are included in the %
+\file{doc/tutorial/source-example/} directory of the \Kieker{} distribution (see %
+Section \ref{sec:example:downloadInstall}).
+
+\TODO{Point to Web site for additional examples, TR, \ldots}
