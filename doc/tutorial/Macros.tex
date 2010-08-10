@@ -34,13 +34,32 @@
 \newcommand{\newFilesDirTreeFormat}{\color{blue}}
 \newcommand{\DirInDirTree}[1]{\textbf{#1}}
 
-% TODO command for our document
-\newcommand{\TODO}[1]{\todo[inline,color=green!40]{TODO: #1}}
-
 % These commands are for notifying the reader about something important.
 \newcommand{\marginbox}[1]{\todo[noline]{#1}}
 \newcommand{\notify}{\marginbox{\huge{\rightpointleft}}}
 \newcommand{\warning}{\marginbox{\huge{\Stopsign}}}
+
+% TODO command for our document
+\newcommand{\TODO}[1]{\todo[inline,color=green!40]{TODO: #1}}
+
+\makeatletter
+\newcommand{\SYMBOLBOX}[2]{%
+\begin{lrbox}{\@tempboxa}
+\begin{minipage}[t]{0.1\textwidth}\vspace{1pt}
+\begin{center}
+\huge#1
+\end{center}
+\end{minipage}
+\begin{minipage}[t]{0.8\textwidth}
+#2%
+\end{minipage}
+\end{lrbox}
+\todo[inline,bordercolor=black]{\usebox{\@tempboxa}}
+}
+\makeatother
+
+\newcommand{\NOTIFYBOX}[1]{\SYMBOLBOX{\leftpointright}{#1}}
+\newcommand{\WARNBOX}[1]{\SYMBOLBOX{\Stopsign}{#1}}
 
 % This color will be used as backgroundcolor for the listings.
 \definecolor{verylightgray}{gray}{.95}
@@ -70,9 +89,9 @@ backgroundcolor=\color{verylightgray}
 }
 }
 \newcommand{\setJavaCodeListing}{
-\setListing{Java}{left}{\sffamily\scriptsize}{Â§}
+\setListing{Java}{left}{\sffamily\scriptsize}{ÃÂ§}
 }
-\newcommand{\setBashListing}{\setListing{Bash}{none}{\sffamily\scriptsize}{Â§}}
+\newcommand{\setBashListing}{\setListing{Bash}{none}{\sffamily\scriptsize}{ÃÂ§}}
 \newcommand{\setXMLListing}{\setListing{XML}{none}{\sffamily\scriptsize}{}}
 
 % This is the definition for the environment, that can be used for the background of the dirtrees.
