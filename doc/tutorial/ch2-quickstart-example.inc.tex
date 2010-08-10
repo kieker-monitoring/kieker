@@ -134,8 +134,9 @@ The instrumented example can now be compiled and executed as follows:
 
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
-\warning Under Windows it is also necessary to seperate the different paths for the classpath with a semicolon instead of a colon.
-\input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}				
+
+\WARNBOX{Under Windows it is also necessary to seperate the different paths for the classpath with a semicolon instead of a colon.
+\input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}}
 
 If everything worked correctly, there should now be a new directory with the %
 name \dir{tpmon-20100727-181422131-UTC} (just with another timestamp) in the default %
@@ -193,13 +194,13 @@ The methods \method{terminate} and \method{execute} don't do anything due to the
 
 We have now to create the file \dir{BookstoreAnalysisStarter.java} to analyze our recorded information. 
 
-\notify The analysis consists thereby of the following steps:
-\begin{enumerate}
+The analysis consists thereby of the following steps:
+\begin{compactenum}
 \item Create a new instance (or more) of the class \class{AnalysisInstance}.
 \item Register the plugins which should evaluate the records.
 \item Register exactly one reader to read the stored information.
 \item Start the analysis instance.
-\end{enumerate}
+\end{compactenum}
 
 \setJavaCodeListing       
 \lstinputlisting[caption=BookstoreAnalysisStarter.java]{source-example/manual-monitoring/src/bookstoreApplication/BookstoreAnalysisStarter.java}
