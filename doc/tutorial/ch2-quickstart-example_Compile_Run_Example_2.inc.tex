@@ -1,18 +1,17 @@
 \begin{lstlisting}[caption=Compile and run under Linux] 			
 > javac src/mySimpleKiekerExampleManual/*.java
         -classpath	
-        lib/§\commonJar§:
-        lib/§\monitoringJar§:
-        lib/§\analysisJar§:
+        lib/#\commonJar#:
+        lib/#\monitoringJar#:
+        lib/#\analysisJar#:
         -d build
 
-> java -Dlog4j.configuration=$<$KIEKER-DIR$>$/META-INF/§\logFourJPropertiesFile§
-       -classpath
+> java -classpath
        build:
-       lib/§\commonJar§:
-       lib/§\monitoringJar§:
-       lib/§\analysisJar§:
-       lib/§\commonsLoggingJar§
+       lib/#\commonJar#:
+       lib/#\monitoringJar#:
+       lib/#\analysisJar#:
+       lib/#\commonsLoggingJar#
        mySimpleKiekerExampleManual.BookstoreAnalysisStarter 
-       \tmp\tpmon-20100808-092252697-UTC
+       /tmp/tpmon-20100808-092252697-UTC
 \end{lstlisting}	

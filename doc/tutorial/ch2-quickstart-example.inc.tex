@@ -35,15 +35,24 @@ For this chapter, it is required to download and extract an archive containing \
 
 \section{Bookstore Example Application}\label{sec:example:bookstore}
 
-The Bookstore application is a small sample application resembling a simple bookstore where a user can search for books in an online catalog.
+The Bookstore application is a small sample application resembling a simple %
+bookstore where a user can search for books in an online catalog. %
+Figure~\ref{fig:bookstore:classAndSequenceDiagrams} \ldots
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.9]{images/kieker_bookstoreclassdiagram}
-\includegraphics[scale=0.9]{images/kieker_bookstoresequencediagram}
+\subfigure[]{\label{fig:boostore:classdiagram}%
+\includegraphics[scale=0.65]{images/kieker_bookstoreclassdiagram}%
+}%
+\subfigure[]{\label{fig:boostore:sequencediagram}%
+\includegraphics[scale=0.65]{images/kieker_SequenceDiagram-manually-changed}%
+}
+\caption{UML class diagram~\subref{fig:boostore:classdiagram} and %
+sequence diagram~\subref{fig:boostore:classdiagram} of the Bookstore application}
+\label{fig:bookstore:classAndSequenceDiagrams}
 \end{figure}
 
 
-Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the application.
+\noindent Figure~\ref{Figure:PlainBookstoreExample} shows the directory structure of the application.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -73,9 +82,10 @@ Figure \ref{Figure:PlainBookstoreExample} shows the directory structure of the a
 
 \noindent The example can be compiled and executed as follows:
 \setBashListing
-\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
-\WARNBOX{The default command-line interpreter of Windows doesn't support automatic file expansion. Therefore every single sourcefile has to be passed:
-\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr-win.inc}}
+% \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
+% \WARNBOX{The default command-line interpreter of Windows doesn't support automatic file expansion. Therefore every single sourcefile has to be passed:
+\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr-win.inc}%
+%}
 
 \noindent The following listing shows an example run of the application:
 \input{ch2-quickstart-example_Example_Run_Example_1-noinstr.inc}
@@ -141,13 +151,19 @@ The instrumented example can now be compiled and executed as follows:
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
 
-\WARNBOX{Under Windows it is also necessary to seperate the different paths for the classpath with a semicolon instead of a colon.
-\input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}}
+\input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}
+
+\WARNBOX{%
+The default command-line interpreter of Windows doesn't support automatic %
+file expansion. Therefore every single source file has to be passed, as %
+shown in Listing~\ref{lst:bookstoreStarterWin}. %
+Also, it is necessary to separate the different elements of the classpath with %
+a semicolon instead of a colon.}
 
 If everything worked correctly, there should now be a new directory with the %
-name \dir{tpmon-20100727-181422131-UTC} (just with another timestamp) in the default %
-temporary directory (under Linux this should be \dir{/tmp}; under Windows %
-\dir{C:/temp}). In this directory, there should be a file with the extension %
+name \dir{tpmon-20100727-181422131-UTC/} (just with another timestamp) in the default %
+temporary directory (under Linux this should be \dir{/tmp/}; under Windows %
+\dir{C:\textbackslash{}temp\textbackslash{}}). In this directory, there should be a file with the extension %
 \dir{.dat} which contains the recorded information from the source code and %
 a file named \dir{tpmon.map} which contains information about the types of the %
 monitoring records. %
@@ -171,7 +187,7 @@ contents.
 \lstinputlisting[caption=tpmon.map, label=listing:examplemap]%
 {ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon.map}
 
-The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues), meaning that it can be opened with Microsoft Excel or OpenOffice.org Calc. It would be possible to visualize the stored data with the help of these programs, but we will show in Section \ref{sec:example:analysis} how to use \KiekerAnalysisPart\ to read and process the files.
+\noindent The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues), meaning that it can be opened with Microsoft Excel or OpenOffice.org Calc. It would be possible to visualize the stored data with the help of these programs, but we will show in Section \ref{sec:example:analysis} how to use \KiekerAnalysisPart\ to read and process the files.
 
 \section{Analysis}\label{sec:example:analysis}
 As mentioned in the beginning of this chapter, it is shown how a simple consumer is programmed before starting the analysis. Therefore we need some new files:
