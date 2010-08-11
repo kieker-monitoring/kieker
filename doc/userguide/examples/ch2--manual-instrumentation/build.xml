@@ -2,29 +2,46 @@
 
   <property file="build.properties"/>
   
+  <taskdef name="if" classname="ise.antelope.tasks.IfTask"/>
+  
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="**/*.jar"/>
   </path>
-  
-  <target name="run-monitoring" depends="build-jar-monitoring">
-    <java fork="true" classname="${main-class-monitoring}">
-      <classpath>
-	<path refid="classpath"/>
-	<path location="${jar.file.monitoring}"/>
-      </classpath>
-      <jvmarg value="-Dlog4j.configuration=${meta.dir}/${log4jproperties.file}"/>
-    </java>
+	
+  <target name="check-files">
+    <if>
+	  <bool> 
+	    <and>
+		  <available file="${lib.dir}/${jar.file.libA}"/>
+		  <available file="${lib.dir}/${jar.file.libB}"/>
+		  <available file="${lib.dir}/${jar.file.libC}"/>
+		  <available file="${lib.dir}/${jar.file.libD}"/>
+        </and>
+      </bool>
+	  <else>
+	  <fail message="${msg.filesNotFound}"/>
+    </else>
+    </if>
   </target>
   
-  <target name="run-analysis" depends="build-jar-analysis">
-    <java fork="true" classname="${main-class-analysis}">
-	  <arg line="${ananalysis.directory}"/>
-      <classpath>
-	    <path refid="classpath"/>
-	    <path location="${jar.file.analysis}"/>
-      </classpath>
-      <jvmarg value="-Dlog4j.configuration=${meta.dir}/${log4jproperties.file}"/>
+  <target name="run-monitoring" depends="check-files, build-jar-monitoring">
+	  <java fork="true" classname="${main-class-monitoring}">
+        <classpath>
+	      <path refid="classpath"/>
+	      <path location="${jar.file.monitoring}"/>
+        </classpath>
     </java>
+
+  </target>
+  
+  <target name="run-analysis" depends="check-files, build-jar-analysis">
+	  <java fork="true" classname="${main-class-analysis}">
+	    <arg line="${ananalysis.directory}"/>
+        <classpath>
+	      <path refid="classpath"/>
+	      <path location="${jar.file.analysis}"/>
+        </classpath>
+      </java>
   </target>
   
   <target name="build-jar-monitoring" depends="compile">
