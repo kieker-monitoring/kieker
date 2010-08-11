@@ -64,11 +64,12 @@
 % This color will be used as backgroundcolor for the listings.
 \definecolor{verylightgray}{gray}{.95}
 
+
 % The following commands set the listings for the different (programming) languages correctly.
 % For the first they use all nearly the same settings.
 \newcommand{\setListing}[4]{
 \lstset{
-language=#1,          
+style=#1,          
 numbers=#2,
 basicstyle=#3,       	% the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
@@ -88,11 +89,24 @@ escapechar={#4},
 backgroundcolor=\color{verylightgray}
 }
 }
-\newcommand{\setJavaCodeListing}{
-\setListing{Java}{left}{\sffamily\scriptsize}{\#}
+
+\lstdefinestyle{javaStyle}{
+language=Java
 }
-\newcommand{\setBashListing}{\setListing{Bash}{none}{\sffamily\scriptsize}{\#}}
-\newcommand{\setXMLListing}{\setListing{XML}{none}{\sffamily\scriptsize}{}}
+\lstdefinestyle{bashStyle}{
+language=Bash,
+alsoletter={.,-}, % sonst auch 'java' in ClassName.java highlighted
+morekeywords={java,javac,-classpath,-d,-jar} 
+% emphstyle=\bfseries
+}
+\lstdefinestyle{xmlStyle}{
+language=XML
+}
+
+\newcommand{\lstHighlight}{\bfseries}
+\newcommand{\setJavaCodeListing}{\setListing{javaStyle}{left}{\sffamily\scriptsize}{\#}}
+\newcommand{\setBashListing}{\setListing{bashStyle}{none}{\sffamily\scriptsize}{\#}}
+\newcommand{\setXMLListing}{\setListing{xmlStyle}{none}{\sffamily\scriptsize}{}}
 
 % This is the definition for the environment, that can be used for the background of the dirtrees.
 \makeatletter\newenvironment{graybox}{%
