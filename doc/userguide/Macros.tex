@@ -70,8 +70,7 @@
 % The following commands set the listings for the different (programming) languages correctly.
 % For the first they use all nearly the same settings.
 \newcommand{\setListing}[4]{
-\lstset{
-style=#1,          
+\lstset{    
 numbers=#2,
 basicstyle=#3,       	% the size of the fonts that are used for the code
 showspaces=false,               % show spaces adding particular underscores
@@ -81,6 +80,7 @@ showtabs=false,                 % show tabs within strings adding particular und
 % frame=lrtb,
 rulesepcolor=\color{black},
 linewidth=0.98\columnwidth,
+columns=[c]flexible, % default is [c]fixed
 xleftmargin=1cm,
 tabsize=2,	                % sets default tabsize to 2 spaces
 captionpos=b,                   % sets the caption-position to bottom
@@ -88,7 +88,8 @@ breaklines=true,                % sets automatic line breaking
 breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
 title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
 escapechar={#4},
-backgroundcolor=\color{verylightgray}
+backgroundcolor=\color{verylightgray},
+style=#1, % they style may override one or more of the above settings
 }
 }
 
@@ -98,7 +99,8 @@ language=Java
 \lstdefinestyle{bashStyle}{
 language=Bash,
 alsoletter={.,-}, % sonst auch 'java' in ClassName.java highlighted
-morekeywords={java,javac,-classpath,-d,-jar} 
+morekeywords={java,javac,-classpath,-d,-jar},
+% showspaces=true
 % emphstyle=\bfseries
 }
 \lstdefinestyle{xmlStyle}{
@@ -106,9 +108,9 @@ language=XML
 }
 
 \newcommand{\lstHighlight}{\bfseries}
-\newcommand{\setJavaCodeListing}{\setListing{javaStyle}{left}{\sffamily\scriptsize}{\#}}
-\newcommand{\setBashListing}{\setListing{bashStyle}{none}{\sffamily\scriptsize}{\#}}
-\newcommand{\setXMLListing}{\setListing{xmlStyle}{none}{\sffamily\scriptsize}{}}
+\newcommand{\setJavaCodeListing}{\setListing{javaStyle}{left}{\sffamily\footnotesize}{\#}}
+\newcommand{\setBashListing}{\setListing{bashStyle}{none}{\sffamily\footnotesize}{\#}}
+\newcommand{\setXMLListing}{\setListing{xmlStyle}{none}{\sffamily\footnotesize}{}}
 
 % This is the definition for the environment, that can be used for the background of the dirtrees.
 \makeatletter\newenvironment{graybox}{%
