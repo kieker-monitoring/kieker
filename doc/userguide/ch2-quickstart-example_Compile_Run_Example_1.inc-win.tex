@@ -1,12 +1,12 @@
 \begin{lstlisting}[caption=Command to compile and run the instrumented Bookstore under Windows,label=lst:bookstoreStarterWin]
-> javac src/bookstoreApplication/Bookstore.java 
+#\lstshellprompt{}# javac src/bookstoreApplication/Bookstore.java 
         src/bookstoreApplication/BookstoreStarter.java 
         src/bookstoreApplication/Catalog.java 
         src/bookstoreApplication/CRM.java 
         -classpath lib/#\commonJar#;lib/#\monitoringJar#
         -d build/
 
-> java -classpath build/;
+#\lstshellprompt{}# java -classpath build/;
        lib/#\commonJar#;
        lib/#\monitoringJar#;
        lib/#\commonsLoggingJar#
