@@ -2,7 +2,7 @@ Introduction:
 
 This document summarizes changes made in all releases starting with 0.90.
 
-* 1.1 (March 04, 2001)
+* 1.1 (March 04, 2010)
 - Improved implementation of trace analysis tool
   - internal meta-model, on-the-fly trace reconstruction, ...
   - Analysis features: Output of reconstructed system model, computation 

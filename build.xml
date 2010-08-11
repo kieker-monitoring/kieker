@@ -301,18 +301,16 @@
     <target name="dist-kieker-sources" depends="init">
         <patternset id="dist_src_files-nonbinmode">
             <include name="bin/log4j.properties"/>
-            <include name="${aop.xml.example}"/>
-            <include name="${kieker.monitoring.properties.example}"/>
-            <include name="${aop.xml.ltwtests.annotation}"/>
-            <include name="${aop.xml.ltwtests.full}"/>
+            <include name="WEB-INF/*"/>
             <include name="src/**/*.java"/>
             <include name="test/**/*.java"/>
+            <include name="test/META-INF/*"/>
             <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**"/>
             <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**"/>
             <include name="lib/**"/>
             <include name="build.xml"/>
             <include name="build.properties"/>
-            <include name="ISSUES"/>
+            <!--<include name="ISSUES"/>-->
             <include name="HISTORY"/>
             <include name="LICENSE"/>
             <include name="pom_ant_kieker-*.xml"/>
@@ -344,14 +342,17 @@
     </target>
 
     <target name="dist-kieker-binaries" depends="build-all,build-userguide">
+        <echo message="${src.userguide.pdf}"/>
+
         <patternset id="dist_bin_files-nonbinmode">
             <include name="bin/log4j.properties"/>
             <include name="dist/*.jar"/>
             <include name="dist/*.war"/>
-            <include name="${aop.xml.example}"/>
-            <include name="${kieker.monitoring.properties.example}"/>
+            <include name="META-INF/*"/>
             <include name="lib/*"/>
-            <include name="ISSUES"/>
+            <exclude name="lib/maven/"/>
+            <exclude name="lib/pmd/"/>
+            <!--<include name="ISSUES"/>-->
             <include name="HISTORY"/>
             <include name="LICENSE"/>
             <include name="${src.userguide.pdf}"/>
