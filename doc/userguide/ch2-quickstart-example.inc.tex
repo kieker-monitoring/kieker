@@ -97,10 +97,10 @@ For the monitoring it is necessary to add some libraries from the \Kieker{}-fram
 \dirtree{%
 .1 \DirInDirTree{example/}. %\DTcomment{The root directory of the project}.
 .2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}. 
-.2 \newFilesDirTreeFormat \DirInDirTree{lib/}\DTcomment{Directory for the required libraries}.
-.3 \newFilesDirTreeFormat \monitoringJar.
-.3 \newFilesDirTreeFormat \commonJar.
-.3 \newFilesDirTreeFormat \commonsLoggingJar.
+.2 \newFileDirInDirTree{\DirInDirTree{lib/}}\DTcomment{Directory for the required libraries}.
+.3 \newFileDirInDirTree{\monitoringJar}.
+.3 \newFileDirInDirTree{\commonJar}.
+.3 \newFileDirInDirTree{\commonsLoggingJar}.
 .2 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
 .3 \ldots.
 }
@@ -198,12 +198,12 @@ As mentioned in the beginning of this chapter, it is shown how a simple consumer
 .2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}. 
 .2 \DirInDirTree{lib/}\DTcomment{Directory for the required libraries}.
 .3 \ldots. 
-.3 \newFilesDirTreeFormat \analysisJar.
+.3 \newFileDirInDirTree{\analysisJar}.
 .2 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
-.3 bookstoreApplication.
+.3 \DirInDirTree{bookstoreApplication/}.
 .4 \ldots. 
-.4 \newFilesDirTreeFormat BookstoreAnalysisStarter.java.
-.4 \newFilesDirTreeFormat Consumer.java.
+.4 \newFileDirInDirTree{BookstoreAnalysisStarter.java}.
+.4 \newFileDirInDirTree{Consumer.java}.
 }
 \end{graybox}
 \end{figure}
