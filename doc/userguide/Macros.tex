@@ -66,6 +66,8 @@
 % This color will be used as backgroundcolor for the listings.
 \definecolor{verylightgray}{gray}{.95}
 
+% workaround for the listing's commentstyle
+\newcommand{\textrmit}[1]{\textit{\textrm{#1}}}
 
 % The following commands set the listings for the different (programming) languages correctly.
 % For the first they use all nearly the same settings.
@@ -73,6 +75,7 @@
 \lstset{    
 numbers=#2,
 basicstyle=#3,       	% the size of the fonts that are used for the code
+commentstyle={\textrmit},
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
 showtabs=false,                 % show tabs within strings adding particular underscores
