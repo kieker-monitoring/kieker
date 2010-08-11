@@ -46,7 +46,7 @@ public class AllocationRepository extends AbstractSystemSubRepository {
     /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final AllocationComponent getAllocationComponentInstanceByNamedIdentifier(final String namedIdentifier){
+    public final AllocationComponent lookupAllocationComponentInstanceByNamedIdentifier(final String namedIdentifier){
         return this.allocationComponentInstancesByName.get(namedIdentifier);
     }
 

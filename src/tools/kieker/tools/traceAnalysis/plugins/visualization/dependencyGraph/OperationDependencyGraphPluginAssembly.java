@@ -127,7 +127,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
         StringBuilder strBuild = new StringBuilder();
         for (Entry<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentOperationEntry : componentId2pairMapping.entrySet()) {
             int curComponentId = componentOperationEntry.getKey();
-            AssemblyComponent curComponent = this.getSystemEntityFactory().getAssemblyFactory().getAssemblyComponentById(curComponentId);
+            AssemblyComponent curComponent = this.getSystemEntityFactory().getAssemblyFactory().lookupAssemblyComponentById(curComponentId);
 
             if (curComponentId == rootComponentId) {
                 strBuild.append(DotFactory.createNode("",

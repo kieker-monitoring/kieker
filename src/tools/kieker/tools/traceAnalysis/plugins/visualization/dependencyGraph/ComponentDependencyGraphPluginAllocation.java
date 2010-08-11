@@ -115,7 +115,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
         StringBuilder strBuild = new StringBuilder();
         for (Entry<Integer, Collection<DependencyGraphNode<AllocationComponent>>> entry : component2containerMapping.entrySet()) {
             int curContainerId = entry.getKey();
-            ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getExecutionContainerByContainerId(curContainerId);
+            ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().lookupExecutionContainerByContainerId(curContainerId);
             if (curContainerId == rootContainerId) {
                 strBuild.append(DotFactory.createNode("",
                         getNodeId(this.dependencyGraph.getRootNode()),

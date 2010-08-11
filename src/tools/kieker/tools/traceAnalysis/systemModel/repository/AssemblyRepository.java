@@ -46,7 +46,7 @@ public class AssemblyRepository extends AbstractSystemSubRepository{
     * Returns the instance for the passed ID; null if no instance
      *  with this ID.
      */
-    public final AssemblyComponent getAssemblyComponentById(
+    public final AssemblyComponent lookupAssemblyComponentById(
             final int containerId){
         return this.assemblyComponentInstancesById.get(containerId);
     }
@@ -54,7 +54,7 @@ public class AssemblyRepository extends AbstractSystemSubRepository{
     /** Returns the instance for the passed factoryIdentifier; null if no instance
      *  with this factoryIdentifier.
      */
-    public final AssemblyComponent getAssemblyComponentInstanceByNamedIdentifier(final String namedIdentifier){
+    public final AssemblyComponent lookupAssemblyComponentInstanceByNamedIdentifier(final String namedIdentifier){
         return this.assemblyComponentInstancesByName.get(namedIdentifier);
     }
 

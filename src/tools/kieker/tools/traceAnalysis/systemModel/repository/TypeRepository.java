@@ -45,7 +45,7 @@ public class TypeRepository extends AbstractSystemSubRepository {
      * Returns the instance for the passed namedIdentifier; null if no instance
      *  with this namedIdentifier.
      */
-    public synchronized final ComponentType getComponentTypeByNamedIdentifier(final String namedIdentifier) {
+    public synchronized final ComponentType lookupComponentTypeByNamedIdentifier(final String namedIdentifier) {
         return this.componentTypesByName.get(namedIdentifier);
     }
 

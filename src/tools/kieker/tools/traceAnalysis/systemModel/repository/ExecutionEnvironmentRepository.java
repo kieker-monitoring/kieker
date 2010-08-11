@@ -45,7 +45,7 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
    /** Returns the instance for the passed namedIdentifier; null if no instance
      *  with this namedIdentifier.
      */
-    public final ExecutionContainer getExecutionContainerByNamedIdentifier(
+    public final ExecutionContainer lookupExecutionContainerByNamedIdentifier(
             final String namedIdentifier){
         return this.executionContainersByName.get(namedIdentifier);
     }
@@ -53,7 +53,7 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
    /** Returns the instance for the passed container ID; null if no instance
      *  with this ID.
      */
-    public final ExecutionContainer getExecutionContainerByContainerId(
+    public final ExecutionContainer lookupExecutionContainerByContainerId(
             final int containerId){
         return this.executionContainersById.get(containerId);
     }
