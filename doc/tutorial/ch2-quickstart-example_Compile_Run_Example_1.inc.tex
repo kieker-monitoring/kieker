@@ -1,9 +1,9 @@
 \begin{lstlisting}[caption=Command to compile and run the instrumented Bookstore under Linux]
 > javac src/bookstoreApplication/*.java
         -classpath lib/#\commonJar#:lib/#\monitoringJar#
-        -d build
+        -d build/
 
-> java -classpath build:
+> java -classpath build/:
        lib/#\commonJar#:
        lib/#\monitoringJar#:
        lib/#\commonsLoggingJar#
