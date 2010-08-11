@@ -1,14 +1,6 @@
 <project name="Bookstore-Application" basedir="." default="run-monitoring">
 
-  <property name="lib.dir" value="lib"/>
-  <property name="build.dir" value="build"/>
-  <property name="src.dir" value="src"/>
-  <property name="jar.file.monitoring" value="BookstoreMonitoring.jar"/>
-  <property name="jar.file.analysis" value="BookstoreAnalysis.jar"/>
-  <property name="main-class-monitoring" value="bookstoreApplication.BookstoreStarter"/>
-  <property name="main-class-analysis" value="bookstoreApplication.BookstoreAnalysisStarter"/>
-  <property name="meta.dir" value="META-INF"/>
-  <property name="log4jproperties.file" value="log4j.properties"/>
+  <property file="build.properties"/>
   
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="**/*.jar"/>

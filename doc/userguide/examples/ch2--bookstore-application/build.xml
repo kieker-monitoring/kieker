@@ -1,10 +1,7 @@
 <project name="Bookstore-Application" basedir="." default="run-jar">
 
-  <property name="build.dir" value="build"/>
-  <property name="src.dir" value="src"/>
-  <property name="jar.file" value="BookstoreApplication.jar"/>
-  <property name="main-class" value="bookstoreApplication.BookstoreStarter"/>
-  
+  <property file="build.properties"/>
+
   <target name="run-jar" depends="build-jar">
     <java fork="true" classname="${main-class}">
 	  <classpath>
