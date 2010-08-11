@@ -75,10 +75,10 @@ sequence diagram~\subref{fig:boostore:classdiagram} of the Bookstore application
 \noindent The following listings show the content of the source code files:
 
 \setJavaCodeListing
-\lstinputlisting[caption=Bookstore.java]{source-example/plain-example/src/bookstoreApplication/Bookstore.java}
-\lstinputlisting[caption=CRM.java]{source-example/plain-example/src/bookstoreApplication/CRM.java}
-\lstinputlisting[caption=Catalog.java]{source-example/plain-example/src/bookstoreApplication/Catalog.java}
-\lstinputlisting[caption=BookstoreStarter.java]{source-example/plain-example/src/bookstoreApplication/BookstoreStarter.java}
+\lstinputlisting[caption=Bookstore.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[caption=CRM.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
+\lstinputlisting[caption=Catalog.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
+\lstinputlisting[caption=BookstoreStarter.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/BookstoreStarter.java}
 
 \noindent The example can be compiled and executed as follows:
 \setBashListing
@@ -118,7 +118,7 @@ The monitoring itself is done manually. Although this is not the strength of \Ki
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 \setJavaCodeListing
 \lstinputlisting[linerange={11-29}, firstnumber=11, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=listing:cuttingBookstore]%
-{source-example/manual-monitoring/src/bookstoreApplication/Bookstore.java}
+{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
  
 \noindent The time before and after a specific method call (in this case: \method{searchBook()}) is remembered. These information are stored in the so called operation execution record. Its (partially) layout can be seen in Figure \ref{Figure:OperationExecutionRecordClassDiagram}.
 
@@ -145,7 +145,7 @@ The monitoring itself is done manually. Although this is not the strength of \Ki
 
 \setJavaCodeListing
 \lstinputlisting[firstline=16, firstnumber=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=listing:cuttingCRM]%
-{source-example/manual-monitoring/src/bookstoreApplication/CRM.java}
+{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
 The instrumented example can now be compiled and executed as follows:
 
 \setBashListing 		
@@ -212,7 +212,7 @@ As mentioned in the beginning of this chapter, it is shown how a simple consumer
 The methods \method{terminate} and \method{execute} don't do anything due to the fact that the consumer doesn't need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
 
 \setJavaCodeListing       
-\lstinputlisting[caption=Consumer.java, label=listing:Consumer]{source-example/manual-monitoring/src/bookstoreApplication/Consumer.java}
+\lstinputlisting[caption=Consumer.java, label=listing:Consumer]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Consumer.java}
 
 \noindent Now, we have to create the file \dir{BookstoreAnalysisStarter.java} to analyze our recorded information. 
 
@@ -225,7 +225,7 @@ The analysis consists thereby of the following steps:
 \end{compactenum}
 
 \setJavaCodeListing       
-\lstinputlisting[caption=BookstoreAnalysisStarter.java]{source-example/manual-monitoring/src/bookstoreApplication/BookstoreAnalysisStarter.java}
+\lstinputlisting[caption=BookstoreAnalysisStarter.java]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/BookstoreAnalysisStarter.java}
 As can be seen, the application expects the output directory from the earlier monitoring run (see Section \ref{sec:example:monitoring}) as argument, which must be passed manually. Following listings show again the course of action:
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}	
