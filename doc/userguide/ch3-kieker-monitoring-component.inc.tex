@@ -19,7 +19,7 @@
 		As can be seen in the example chapter, the records are the objects which store the monitored informations somehow. To be more precisely, they are not really part of \KiekerMonitoringPart\, but in order to use them in this chapter, they will be examined now.\\ To implement an own record, the easiest way is to extend the already existing abstract class \class{kieker.common.record.AbstractMonitoringRecord}. The implementation of a record has to provide methods to put the whole content of the record into an array (of Object) so that the other components of \Kieker\  are able to persist the data. Due to the fact that the data has to be read again, the records have to provide methods to restore the content from an array as well. Listing \ref{listing:MyRecord} shows a simple record implementation which stores informations about the called class and method.
 
 		\setJavaCodeListing
-		\lstinputlisting[caption=MyRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/mySimpleKiekerExample/MyRecord.java}
+		\lstinputlisting[caption=MyRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyRecord.java}
 
 
 	\section{Monitoring Probes}
@@ -51,13 +51,13 @@
 		The implementation of an own writer is quite simple and can be done by implementing the interface \class{kieker.monitoring.writer.IMonitoringLogWriter}. Listing \ref{listing:MyWriter} shows an example writer which uses a named pipe to write the given records directly into the memory. The class \class{MyPipe} is descriped in the appendix of the tutorial. 
 
 		\setJavaCodeListing
-		\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter]{\customComponentsBookstoreApplicationDir/src/mySimpleKiekerExample/MyWriter.java}
+		\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyWriter.java}
 
 		Making sure that \Kieker\  uses the new writer is done by modifying the above mentioned configuration file \dir{\monitoringPropertiesFile}.
 
 		\setBashListing       
 		\begin{lstlisting}
-			monitoringDataWriter=mySimpleKiekerExample.MyWriter
+			monitoringDataWriter=bookstoreTracing.MyWriter
 			monitoringDataWriterInitString=somePipe
 		\end{lstlisting}
 

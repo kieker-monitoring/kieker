@@ -28,14 +28,14 @@
 		The Listing \ref{listing:MyReader} shows a simple reader which reads a stored record from the pipe. If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
 
 		\setJavaCodeListing
-		\lstinputlisting[caption=MyReader.java, label=listing:MyReader]{\customComponentsBookstoreApplicationDir/src/mySimpleKiekerExample/MyReader.java}
+		\lstinputlisting[caption=MyReader.java, label=listing:MyReader]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyReader.java}
 
 	\section{Record Consumer Plugins}
 
 		The consumers are the parts of Kieker which work with the records that have been loaded by the reader. There can be (theoretically) an infinite number of consumers which produce any kind of output. A consumer can be programmed by implementing the interface \class{kieker.analysis.plugin.IMonitoringRecordConsumerPlugin} and writing the necessary methods. Following example consumer takes the given record and writes the content to the default output stream.
 
 		\setJavaCodeListing
-		\lstinputlisting[caption=MyConsumer.java]{\customComponentsBookstoreApplicationDir/src/mySimpleKiekerExample/MyConsumer.java}
+		\lstinputlisting[caption=MyConsumer.java]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyConsumer.java}
 
 	\section{Analysis Instance}
 
