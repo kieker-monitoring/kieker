@@ -14,7 +14,7 @@
     <target name="init-version">
         <tstamp/>
         <property name="kieker.version"
-                  value="1.5-trunk"/> <!-- -20090716-1022 -->
+                  value="1.2-SNAPSHOT"/> <!-- -20090716-1022 -->
         <property name="year"
                   value="2010"/>
         <property name="copyright"
@@ -312,7 +312,21 @@
         </jar>
     </target>
 
-    <target name="dist-kieker-javadoc" depends="init"
+    <target name="dist-kieker-javadoc" depends="init,javadoc"
+            description="Create Javadoc API documentation">
+        <tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
+            <tarfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
+        </tar>
+        <gzip zipfile="${release.dir}/${dist.kieker.apiBaseName}.tar.gz" src="${release.dir}/${dist.kieker.apiBaseName}.tar" />
+        <!-- tar file no longer needed -->
+        <delete file="${release.dir}/${dist.kieker.apiBaseName}.tar"/>
+
+        <zip  zipfile="${release.dir}/${dist.kieker.apiBaseName}.zip">
+            <zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
+        </zip>
+    </target>
+
+    <target name="javadoc" depends="init"
             description="Create Javadoc API documentation">
         <delete dir="${build.api.dir}"/>
         <mkdir dir="${build.api.dir}"/>
@@ -344,17 +358,6 @@
             <classpath refid="kieker.tools-compile-classpath"/>
             <link href="http://download.oracle.com/javase/6/docs/api/"/>
         </javadoc>
-
-        <tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
-            <tarfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.apiBaseName}.tar.gz" src="${release.dir}/${dist.kieker.apiBaseName}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.apiBaseName}.tar"/>
-
-        <zip  zipfile="${release.dir}/${dist.kieker.apiBaseName}.zip">
-            <zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
-        </zip>
     </target>
 
     <target name="dist-kieker-sources" depends="init">
