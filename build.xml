@@ -201,6 +201,12 @@
         </iajc>
         <copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
         <copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
+        <!-- We want to include the sources in this jar -->
+        <copy todir="${build.kieker.monitoring.dir}/src/">
+            <fileset dir="${src.kieker.monitoring.dir}">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
         <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
             <fileset dir="${build.kieker.monitoring.dir}"/>
         </jar>

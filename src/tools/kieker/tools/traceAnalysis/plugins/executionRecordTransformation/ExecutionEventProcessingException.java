@@ -5,7 +5,7 @@
 
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
-import kieker.analysis.plugin.util.event.EventProcessingException;
+import kieker.analysis.plugin.EventProcessingException;
 
 /**
  *

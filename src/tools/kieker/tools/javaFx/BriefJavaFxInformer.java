@@ -27,7 +27,6 @@ import kieker.common.record.OperationExecutionRecord;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.util.event.EventProcessingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

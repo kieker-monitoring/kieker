@@ -43,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  */
 /**
- * Simple class to store monitoroing data in the file system. Although a
+ * Simple class to store monitoring data in the file system. Although a
  * buffered writer is used, outliers (delays of 1000 ms) occur from time
  * to time if many monitoring events have to be writen. We believe that
  * outliers result from a flush on the buffer of the writer. 

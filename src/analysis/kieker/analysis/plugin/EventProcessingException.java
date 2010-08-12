@@ -1,4 +1,4 @@
-package kieker.analysis.plugin.util.event;
+package kieker.analysis.plugin;
 
 /*
  * ==================LICENCE=========================
