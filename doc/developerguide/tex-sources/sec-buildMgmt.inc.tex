@@ -1,3 +1,38 @@
+\section{Ant Build}
+
+Ant is used as the build tool for Kieker. %
+The important ant targets included in the \texttt{build.xml} file are:
+
+\begin{itemize}
+\item \textbf{build-all:} This is the default target that compiles the Kieker %
+artifacts and creates the following jar/war files in the \texttt{dist/} directory:
+\begin{compactitem}
+\item \texttt{kieker-analysis-1.5-trunk.jar} 
+\item \texttt{kieker-common-1.5-trunk.jar}
+\item \texttt{kieker-monitoring-1.5-trunk.jar}
+\item \texttt{kieker-monitoring-servlet-1.5-trunk.war}
+\item \texttt{kieker-tools-1.5-trunk.jar}
+\end{compactitem}
+\item \textbf{javadoc:} Executes Javadoc to create the API documentation in HTML. %
+After a successful execution, open \texttt{build/javadoc/index.html} in your %
+Web browser.
+\item \textbf{run-tests-junit:} Runs the JUnit tests and creates a HTML report %
+of the results. 
+\item \textbf{run-test$[$s$]$-*:} Additional regression tests mostly employing %
+AspectJ for instrumentation. 
+\item \textbf{release:} Creates the following Kieker release files in the %
+\texttt{dist/release/} directory:
+\begin{compactitem}
+\item \texttt{kieker-<version>\_javadoc.(zip|tar.gz)}
+\item \texttt{kieker-<version>\_binaries.(zip|tar.gz)}
+\item \texttt{kieker-<version>\_sources.(zip|tar.gz)}
+\item \texttt{kieker-<version>\_examples-JPetStoreExample.(zip|tar.gz)}
+\item \texttt{kieker-<version>\_examples-MySimpleKiekerAspectJExample.(zip|tar.gz)}
+\item \texttt{kieker-<version>\_examples-MySimpleKiekerJMSExample.(zip|tar.gz)}
+\item \texttt{kieker-<version>\_examples-OverheadEvaluationMicrobenchmark.(zip|tar.gz)}
+\end{compactitem}
+\end{itemize}
+
 \section{IDE-Specific Project Configuration}
 
 This section describes how to create a project for developing with the 
