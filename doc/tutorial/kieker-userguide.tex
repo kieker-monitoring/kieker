@@ -1,0 +1,49 @@
+\documentclass[a4paper, oneside, 11pt, pointlessnumbers, headsepline]{scrbook}
+
+% Get the necessary packages for the document.
+\input{Packages}
+% Get the new commands we defined for this document.
+\input{Macros}
+
+\pagestyle{scrheadings}
+\clearscrheadfoot
+
+\ifoot[\hrule\sffamily Kieker \version{} User Guide]{\hrule\sffamily Kieker \version{} User Guide}
+\ofoot[\hrule\sffamily\pagemark]{\hrule\sffamily\pagemark} 
+
+% Set the title and everything.
+\titlehead{
+	\begin{center}
+		\includegraphics[height=25mm]{./images/kieker-logo}\\
+\href{http://kieker.sourceforge.net}{\sffamily\Large http://kieker.sourceforge.net}
+	\end{center}
+}
+
+\title{%
+\Huge\Kieker{} \version{} User Guide%\\[0.5ex] \Large{Continuous Monitoring and Analysis of Java Software Behavior}%
+}
+% \subtitle{---User Guide---}
+\author{\sffamily Nils Ehmke, Andr\'e van Hoorn, Reiner Jung, and contributors}
+\date{\sffamily\today}
+\publishers{\normalsize\sffamily
+%\flushleft
+\includegraphics[height=2.5cm]{./images/caulogo}\\[0.5ex]
+Software Engineering Group\\ University of Kiel, Germany
+}
+
+% Here we go.
+\begin{document}
+  % We want a table of contents seperated from the rest of the text.
+  \maketitle
+  \tableofcontents
+
+  % Insert the other parts of the document.
+  \input{ch1-introduction.inc}
+  \input{ch2-quickstart-example.inc}
+  \input{ch3-kieker-monitoring-component.inc.tex}
+  \input{ch4-kieker-analysis-component.inc.tex}
+  \input{ch5-trace-analysis.inc.tex}
+  \input{Appendix}
+
+\end{document}
+ 

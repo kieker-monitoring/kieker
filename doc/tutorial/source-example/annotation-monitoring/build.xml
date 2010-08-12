@@ -1,0 +1,48 @@
+<project name="Tutorial-Example" basedir="." default="run">
+
+  <property name="lib.dir" value="lib"/>
+  <property name="build.dir" value="build"/>
+  <property name="src.dir" value="src"/>
+  <property name="jar.file" value="example.jar"/>
+  <property name="main-class" value="mySimpleKiekerExample.bookstoreTracing.Bookstore"/>
+  
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+  
+  <target name="run" depends="build-jar">
+    <java fork="true" classname="${main-class}">
+      <classpath>
+	<path refid="classpath"/>
+	<path location="${jar.file}"/>
+      </classpath>
+      <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/>
+      <jvmarg value="-Dkieker.monitoring.properties=META-INF/kieker/monitoring.properties"/>
+      <jvmarg value="-javaagent:${lib.dir}/aspectjweaver-1.6.6.jar"/>
+      <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+      <jvmarg value="-Daj.weaving.verbose=true"/>
+    </java>
+  </target>
+  
+  <target name="build-jar" depends="compile">
+    <copy file="META-INF/aop.xml" tofile="${build.dir}/META-INF/aop.xml"/>
+    <copy file="META-INF/log4j.properties" tofile="${build.dir}/META-INF/log4j.properties"/>
+    <copy file="META-INF/kieker.monitoring.properties" tofile="${build.dir}/META-INF/kieker.monitoring.properties"/>
+    <jar destfile="${jar.file}" basedir="${build.dir}">
+      <manifest>
+	<attribute name="Main-Class" value="${main-class}"/>
+      </manifest>
+    </jar>
+    <delete dir="${build.dir}"/>
+  </target>
+  
+  <target name="compile" depends="init">
+      <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath"/>
+  </target>
+  
+  <target name="init">
+    <delete dir="${build.dir}"/>
+    <mkdir dir="${build.dir}"/>
+  </target>
+  
+</project>

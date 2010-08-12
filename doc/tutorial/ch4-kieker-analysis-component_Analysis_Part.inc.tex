@@ -1,0 +1,7 @@
+\begin{lstlisting}[label=listing:AnalysisInstance]
+AnalysisInstance ai = new AnalysisInstance();
+MyReader reader = new MyReader(); 
+reader.init("somePipe"); 
+ai.setLogReader(reader); 	  ai.registerPlugin(new MyConsumer());
+ai.run();
+\end{lstlisting}

@@ -1,0 +1,31 @@
+<project name="Make-Library" default="build-all">
+
+  <property name="src.dir" value="src"/>
+  <property name="build.dir" value="build"/>
+  <property name="jar.file" value="make-libraries.jar"/>
+  <property name="mainclass" value="main.Main"/>
+  
+  <target name="-init">
+    <mkdir dir="${build.dir}"/>
+  </target>
+  
+  <target name="-clean">
+    <delete dir="${build.dir}"/>
+  </target>
+  
+  <target name="-build" depends="-init">
+    <javac srcdir="${src.dir}" destdir="${build.dir}" />
+  </target>
+  
+  <target name="-build-jar" depends="-build">
+    <jar basedir="${build.dir}" destfile="${jar.file}">
+      <manifest>
+	<attribute name="Main-Class" value="${mainclass}"/>
+      </manifest>
+    </jar>
+  </target>
+  
+  <target name="build-all" depends="-build, -build-jar, -clean">
+  </target>
+  
+</project>
