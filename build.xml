@@ -287,14 +287,14 @@
         </javadoc>
 
         <tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
-            <tarfileset dir="${build.api.dir}" prefix="${kieker.dist.name}/docs/api" defaultexcludes="yes"/>
+            <tarfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
         </tar>
         <gzip zipfile="${release.dir}/${dist.kieker.apiBaseName}.tar.gz" src="${release.dir}/${dist.kieker.apiBaseName}.tar" />
         <!-- tar file no longer needed -->
         <delete file="${release.dir}/${dist.kieker.apiBaseName}.tar"/>
 
         <zip  zipfile="${release.dir}/${dist.kieker.apiBaseName}.zip">
-            <zipfileset dir="${build.api.dir}" prefix="${kieker.dist.name}/docs/api" defaultexcludes="yes"/>
+            <zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
         </zip>
     </target>
 
