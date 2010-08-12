@@ -1,4 +1,4 @@
-package mySimpleKiekerExample;
+package bookstoreTracing;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
