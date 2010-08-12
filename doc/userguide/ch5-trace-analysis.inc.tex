@@ -1,1 +1,67 @@
-\chapter{Trace Analysis and Monitoring}
+\chapter{Trace Analysis and Monitoring via AspectJ}
+
+This chapter will show in Section \ref{sec:aspectJ:annotation} how
+to use AspectJ to mark methods to be monitored with a simple annotation
+in order to avoid the manual monitoring as seen in Chapter \ref{chap:example}
+and \ref{chap:components}. Once the methods are marked, the AspectJ-Weaver-Agent
+will surround the calls with the necessary code during runtime, similar
+to the hardcoded code used in Section \ref{sec:example:monitoring}.
+An alternative solution will be shown as well in Section \ref{sec:aspectJ:fullweaving}
+in which everything will be monitored - without exceptions. Both solutions
+can be used to reconstruct the architecture and to perform a trace
+analysis. The result of both will be diagrams similar to Figure \ref{fig:bookstore:classAndSequenceDiagrams}.
+
+The idea of weaving the monitoring-code into the ``plain'' code
+during compile-time seems to suggest itself, but in this chapter it
+is only shown how to perform the so called load-time-weaving - the
+weaving during runtime, which is way more flexible than the compile-time-weaving.
+
+\section{AspectJ Annotations}\label{sec:aspectJ:annotation}
+
+To weave the code via AspectJ with the \Kieker{}-Framework,
+some new files are required, including the AspectJ-Agent and a configuration
+file for AspectJ. Following figure shows the resulting directory tree
+with the necessary files, based on the BookstoreApplication shown
+in Chapter \ref{chap:example}.
+
+\begin{figure}[H]
+\begin{graybox}
+\dirtree{%
+.1 \DirInDirTree{example/}. %\DTcomment{The root directory of the project}.
+.2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}.
+.2 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
+.3 \aopConfigFile. 
+.2 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
+.3 \monitoringJar.
+.3 \commonJar.
+.3 \commonsLoggingJar.
+.3 \aspectJWeaverJar.  
+.2 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
+.3 \DirInDirTree{bookstoreApplication/}.
+.4 Bookstore.java.
+.4 BookstoreStarter.java.
+.4 Catalog.java.
+.4 CRM.java.  
+}
+\end{graybox}
+
+\caption{The new directory structure of the Bookstore application}
+\end{figure}
+
+The new jar-file \file{aspectjweaver-1.6.9.jar} can again be found
+in the \dir{lib}-dir from the \Kieker{}-binaries, as well as the
+configuration file \file{\aopConfigFile} can be found in the directory \dir{META-INF}.
+
+Once the necessary file has been copied to the example-directory,
+the sourcecode can be instrumented with the annotation \class{OperationExecutionMonitoringProbe}.
+Listing \ref{listing:BookstoreAspectJ} shows how the annotation is
+used.
+
+\setJavaCodeListing
+\lstinputlisting[caption=Bookstore.java, label=listing:BookstoreAspectJ]{\aspectJBookstoreApplicationDir/src/bookstoreTracing/Bookstore.java}
+
+As an example all methods within the four sourcecode-files will be
+annotated. It is possible to mark nearly every method with the annotation
+- except constructors.
+
+\section{Full Monitoring}\label{sec:aspectJ:monitoring}
