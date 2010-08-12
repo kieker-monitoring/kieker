@@ -14,11 +14,11 @@ follow the wizard and answer the dialogs as follows:
 \begin{compactenum}
 \item \textbf{Name and Location (Fig.~\ref{fig:nb:location}):} %
 
-Select Kieker's trunk/ directory as the project location and th wizard will %
-complete the missing information based on the existing build.xml file.
+Select Kieker's \texttt{trunk/} directory as the project location and th wizard will %
+complete the missing information based on the existing \texttt{build.xml} file.
 
 \begin{figure}[H]\centering
-\includegraphics[scale=0.5]{figures/netbeans-NameAndLocation}
+\includegraphics[scale=0.4]{figures/netbeans-NameAndLocation}
 \caption{}
 \label{fig:nb:location}
 \end{figure}
@@ -28,18 +28,20 @@ complete the missing information based on the existing build.xml file.
 Complete the information as shown in Fig.~\ref{fig:nb:buildRun}.
 
 \begin{figure}[H]\centering
-\includegraphics[scale=0.5]{figures/netbeans-BuildAndRun}
+\includegraphics[scale=0.4]{figures/netbeans-BuildAndRun}
 \caption{}
 \label{fig:nb:buildRun}
 \end{figure}
 
 \item \textbf{Source Package Folders (Fig.~\ref{fig:nb:sourcePackageFolders}):} %
 
-\textbf{Add} alls subdirectories of src/ and all subdirectories of test/ (except META-INF/) to 
-the list of \textit{Source Package Folders}. \textbf{Remove all \textit{Test Package Folders} entries.}
+\textbf{Add} alls subdirectories of \texttt{src/} and all subdirectories of %
+\texttt{ test/} (except for \texttt{test/META-INF/}) to the list of %
+\textit{Source Package Folders}. %
+\textbf{Remove all \textit{Test Package Folders} entries.}
 
 \begin{figure}[H]\centering
-\includegraphics[scale=0.5]{figures/netbeans-SourcePackageFolders}
+\includegraphics[scale=0.4]{figures/netbeans-SourcePackageFolders}
 \caption{}
 \label{fig:nb:sourcePackageFolders}
 \end{figure}
@@ -47,17 +49,82 @@ the list of \textit{Source Package Folders}. \textbf{Remove all \textit{Test Pac
 \item \textbf{Java Sources Classpath (Fig.~\ref{fig:nb:sourcesclasspath}):} %
 
 \textbf{\underline{Un}check} the option \textit{Separate Classpath for Each Source Package Folder} and %
-\textbf{add} all .jar files included in he lib/ directory.
+\textbf{add} all .jar files included in the \texttt{lib/} directory.
 
 \begin{figure}[H]\centering
-\includegraphics[scale=0.5]{figures/netbeans-SourcesClasspath}
+\includegraphics[scale=0.4]{figures/netbeans-SourcesClasspath}
 \caption{}
 \label{fig:nb:sourcesclasspath}
+\end{figure}
+
+\item \textbf{Project Output (Fig.~\ref{fig:nb:projectOutput})} %
+
+Simply skip this dialog without any changes and finish the wizard by clicking %
+on the \textbf{Finish} button.
+
+\begin{figure}[H]\centering
+\includegraphics[scale=0.4]{figures/netbeans-ProjectOutput}
+\caption{}
+\label{fig:nb:projectOutput}
+\end{figure}
+
+\item Kieker should now appear in the list of projects, as shown in Fig.~\ref{fig:nb:projectTree}.  
+
+\begin{figure}[H]\centering
+\includegraphics[scale=0.4]{figures/netbeans-ProjectTree}
+\caption{}
+\label{fig:nb:projectTree}
+\end{figure}
+\end{compactenum}
+\end{compactenum}
+
+\subsection{Eclipse}
+
+You create an Eclipse project for the Kieker trunk as follows:
+
+\begin{compactenum}
+\item Kieker includes two sample files to create an Kieker Eclipse project: %
+\begin{compactitem}
+\item \texttt{eclipse-classpath.sample}
+\item \texttt{eclipse-project.sample} 
+\end{compactitem}
+
+\noindent \textbf{Copy} these files to \texttt{.classpath} and \texttt{.project} respectively.
+
+\item Open the Java project creation wizard by selecting File->New->Java Project.
+\begin{compactenum}
+\item \textbf{Create a Java Project (Fig.~\ref{fig:eclipse:newProject}):} %
+
+\textbf{\underline{Un}check} \textit{Use default location} and select Kieker's %
+\texttt{trunk/} directory from your filesystem. Rename the project to ``Kieker''. 
+
+\begin{figure}[H]\centering
+\includegraphics[scale=0.4]{figures/eclipse-NewProject}
+\caption{}
+\label{fig:eclipse:newProject}
+\end{figure}
+
+\item \textbf{Java Settings (Fig.~\ref{fig:eclipse:javaSettings}):} %
+
+All settings in this dialog should be imported correctly from the \texttt{.project} %
+and \texttt{.classpath} files. Simply skip this dialog without any changes and finish the wizard by clicking %
+on the \textbf{Finish} button.
+
+\begin{figure}[H]\centering
+\includegraphics[scale=0.4]{figures/eclipse-JavaSettings}
+\caption{}
+\label{fig:eclipse:javaSettings}
+\end{figure}
+
+\item Kieker should now appear in the list of projects, as shown in Fig.~\ref{fig:eclipse:projectTree}.  
+
+\begin{figure}[H]\centering
+\includegraphics[scale=0.4]{figures/eclipse-ProjectTree}
+\caption{}
+\label{fig:eclipse:projectTree}
 \end{figure}
 
 \end{compactenum}
 \end{compactenum}
 
 
-
-\subsection{Eclipse}
