@@ -11,13 +11,25 @@
 	
   \chapter{Shortcut via ant}
     \section{ant-script for the manual instrumentated example}
-      Following listings will show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application shown in Chapter \ref{chap:example}.
-     \setXMLListing
-     \lstinputlisting[caption=build.xml]{\manualInstrumentedBookstoreApplicationDir/build.xml}
-     \lstinputlisting[caption=build.properties]{\manualInstrumentedBookstoreApplicationDir/build.properties}
-     In order to run the analysis of the application, it is still necessary to supply the program with the path to the output directory of the monitoring. This is done via the parameter "analysis.directory", e.g.:
-     \setBashListing
-     \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
+      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application shown in Chapter \ref{chap:example}.
+      \setXMLListing
+      \lstinputlisting[caption=build.xml]{\manualInstrumentedBookstoreApplicationDir/build.xml}
+      \lstinputlisting[caption=build.properties]{\manualInstrumentedBookstoreApplicationDir/build.properties}
+      In order to run the analysis of the application, it is still necessary to supply the program with the path to the output directory of the monitoring. This is done via the parameter "analysis.directory", e.g.:
+      \setBashListing
+      \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
+
+    \section{ant-script for the example with the own components}
+      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application with the own components shown in Chapter \ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis}.
+      \setXMLListing
+      \lstinputlisting[caption=build.xml]{\customComponentsBookstoreApplicationDir/build.xml}
+      \lstinputlisting[caption=build.properties]{\customComponentsBookstoreApplicationDir/build.properties}
+
+    \section{ant-script for the example with AspectJ}
+      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the Bookstore Application instrumentated with AspectJ shown in Chapter \ref{chap:aspectJ}.
+      \setXMLListing
+      \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
+      \lstinputlisting[caption=build.properties]{\aspectJBookstoreApplicationDir/build.properties}     
 
   \chapter{Libraries}
     The following tables shows all libraries which are used by \Kieker\ and explains them in short words.
