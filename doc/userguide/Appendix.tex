@@ -2,14 +2,22 @@
 \chapter{Used classes}
       \section{MyNamedPipeManager and MyPipe}
 	\setJavaCodeListing
-	\lstset{caption=MyNamedPipeManager.java}
-	\lstinputlisting{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyNamedPipeManager.java}
+	\lstinputlisting[caption=MyNamedPipeManager.java]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyNamedPipeManager.java}
 
 	\setJavaCodeListing
-	\lstset{caption=MyPipe.java}
-	\lstinputlisting{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyPipe.java}
+	\lstinputlisting[caption=MyPipe.java]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyPipe.java}
 
 \chapter{Example logs}
+\section{Execute the manual instrumentated example}
+Following listings will show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application shown in Chapter \ref{chap:example}.
+\setXMLListing
+\lstinputlisting[caption=build.xml]{\manualInstrumentedBookstoreApplicationDir/build.xml}
+\lstinputlisting[caption=build.properties]{\manualInstrumentedBookstoreApplicationDir/build.properties}
+In order to run the analysis of the application, it is still necessary to supply the program with the path to the output directory of the monitoring. This is done via the parameter "analysis.directory", e.g.:
+\setBashListing
+\input{ch5-trace-analysis_Compile_Run_Example_1.inc}
+
+	
 \chapter{Shortcut via ant}
 \chapter{Libraries}
       The following tables shows all libraries which are used by \Kieker\ and explains them in short words.
