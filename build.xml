@@ -367,6 +367,8 @@
             <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**"/>
             <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**"/>
             <include name="lib/**"/>
+            <include name="${eclipse-classpath.sample}"/>
+            <include name="${eclipse-project.sample}"/>
             <include name="build.xml"/>
             <include name="build.properties"/>
             <!--<include name="ISSUES"/>-->
