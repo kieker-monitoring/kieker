@@ -1,0 +1,29 @@
+digraph G {
+ rankdir=LR;
+subgraph "cluster_container1" {
+ label = "<<node>>\npc-vanhoorn";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_1" [label="<<component>>\n@1:..DispatcherServlet",shape="box",style="filled",fillcolor="white"]
+"depNode_2" [label="<<component>>\n@2:..CatalogService",shape="box",style="filled",fillcolor="white"]
+"depNode_3" [label="<<component>>\n@3:..CatalogBean",shape="box",style="filled",fillcolor="white"]
+"depNode_4" [label="<<component>>\n@4:..CartBean",shape="box",style="filled",fillcolor="white"]
+"depNode_5" [label="<<component>>\n@5:..AccountService",shape="box",style="filled",fillcolor="white"]
+"depNode_6" [label="<<component>>\n@6:..AccountBean",shape="box",style="filled",fillcolor="white"]
+"depNode_7" [label="<<component>>\n@7:..OrderBean",shape="box",style="filled",fillcolor="white"]
+"depNode_8" [label="<<component>>\n@8:..OrderService",shape="box",style="filled",fillcolor="white"]
+}
+"depNode_0" [label="$",shape="none"]
+
+depNode_0->depNode_1[label=236719, style="dashed", arrowhead="open"]
+depNode_1->depNode_3[label=154231, style="dashed", arrowhead="open"]
+depNode_1->depNode_4[label=21117, style="dashed", arrowhead="open"]
+depNode_1->depNode_6[label=12151, style="dashed", arrowhead="open"]
+depNode_1->depNode_7[label=23009, style="dashed", arrowhead="open"]
+depNode_3->depNode_2[label=272184, style="dashed", arrowhead="open"]
+depNode_4->depNode_2[label=25048, style="dashed", arrowhead="open"]
+depNode_6->depNode_2[label=6410, style="dashed", arrowhead="open"]
+depNode_6->depNode_5[label=6410, style="dashed", arrowhead="open"]
+depNode_7->depNode_8[label=5744, style="dashed", arrowhead="open"]
+}

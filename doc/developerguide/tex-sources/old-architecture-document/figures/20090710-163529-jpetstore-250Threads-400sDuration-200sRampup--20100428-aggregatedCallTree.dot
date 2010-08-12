@@ -1,0 +1,40 @@
+digraph G {
+0[label ="$",shape=none];
+1[label ="pc-vanhoorn::\n@1:..DispatcherServlet\n.doGet(..)",shape=none];
+2[label ="pc-vanhoorn::\n@1:..DispatcherServlet\n.process(..)",shape=none];
+3[label ="pc-vanhoorn::\n@3:..CatalogBean\n.viewCategory()",shape=none];
+4[label ="pc-vanhoorn::\n@2:..CatalogService\n.getProductListByCategory(..)",shape=none];
+5[label ="pc-vanhoorn::\n@2:..CatalogService\n.getCategory(..)",shape=none];
+6[label ="pc-vanhoorn::\n@1:..DispatcherServlet\n.doPost(..)",shape=none];
+7[label ="pc-vanhoorn::\n@1:..DispatcherServlet\n.process(..)",shape=none];
+8[label ="pc-vanhoorn::\n@6:..AccountBean\n.signon()",shape=none];
+9[label ="pc-vanhoorn::\n@5:..AccountService\n.getAccount(..)",shape=none];
+10[label ="pc-vanhoorn::\n@2:..CatalogService\n.getProductListByCategory(..)",shape=none];
+11[label ="pc-vanhoorn::\n@1:..DispatcherServlet\n.doPost(..)",shape=none];
+12[label ="pc-vanhoorn::\n@1:..DispatcherServlet\n.process(..)",shape=none];
+
+0->1[style=solid,arrowhead=none,label="7" ]
+
+1->2[style=solid,arrowhead=none,label="7" ]
+
+2->3[style=solid,arrowhead=none,label="5" ]
+
+3->4[style=solid,arrowhead=none,label="5" ]
+
+3->5[style=solid,arrowhead=none,label="5" ]
+
+0->6[style=solid,arrowhead=none,label="1" ]
+
+6->7[style=solid,arrowhead=none,label="1" ]
+
+7->8[style=solid,arrowhead=none,label="1" ]
+
+8->9[style=solid,arrowhead=none,label="1" ]
+
+8->10[style=solid,arrowhead=none,label="1" ]
+
+7->11[style=solid,arrowhead=none,label="1" ]
+
+11->12[style=solid,arrowhead=none,label="1" ]
+
+}
