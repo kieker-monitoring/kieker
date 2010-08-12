@@ -9,14 +9,14 @@
 \chapter{Quick Start Example}\label{chap:example}
 
 The quick start example provides a brief introduction to \Kieker{} based on a simple Bookstore example application. 
-Section \ref{sec:example:downloadInstall} explains how to download and install \Kieker{}. The Bookstore application itself is introduced in Section \ref{sec:example:bookstore}, while the following Sections \ref{sec:example:monitoring} and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring and analyzing the resulting monitoring data.
+Section~\ref{sec:example:downloadInstall} explains how to download and install \Kieker{}. The Bookstore application itself is introduced in Section~\ref{sec:example:bookstore}, while the following Sections~\ref{sec:example:monitoring} and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring and analyzing the resulting monitoring data.
 
 %%
 \section{Download and Installation}\label{sec:example:downloadInstall}
 
 \Kieker{} is available on \KiekerURL{} in binary and source code archives. For convenience, the archives are available in tar.gz and zip format.
 
-For this quick start guide the binary distribution of \Kieker{} is required and must be downloaded, e.g., \file{\binaryFileForDownload}. For this quick start guide, the archive should be extracted in a convenient place. Extracted files and directory should roughly follow structure shown in figure \ref{fig:binary-layout}.
+For this quick start guide the binary distribution of \Kieker{} is required and must be downloaded, e.g., \file{\binaryFileForDownload}. For this quick start guide, the archive should be extracted in a convenient place. Extracted files and directory should roughly follow structure shown in Figure~\ref{fig:binary-layout}.
 
 % Note: The indention is not really necessary, but the tree is easier to understand in the tex-source.
 \begin{figure}[H]
@@ -28,7 +28,7 @@ For this quick start guide the binary distribution of \Kieker{} is required and 
 		.2 \DirInDirTree{doc/}\DTcomment{}. 
 			.3 \DirInDirTree{tutorial/}. 
 				.4 userguide.pdf\DTcomment{PDF file of this document}. 
-				.4 source-example/\DTcomment{Source code of the examples in this document}. 
+				.4 \DirInDirTree{\exampleDir/}\DTcomment{Source code of the examples in this document}. 
 		.2 \DirInDirTree{dist/}\DTcomment{The \Kieker{} framework libraries}. 
 			.3 \analysisJar. 
 			.3 \commonJar. 
@@ -63,7 +63,7 @@ sequence diagram~\subref{fig:boostore:classdiagram} of the Bookstore application
 
 \noindent The bookstore contains a catalog for books and a customer relationship database. The application has four distinct operations which provide the functionality of the application. In this example the methods implementing the operations are merely stubs. However, for the illustration of \Kieker{} they are sufficient.
 
-The directory structure of this Bookstore example is shown in figure~\ref{fig:PlainBookstoreExample}. The application comprises four class files in the \dir{example/src/bookstoreApplication/} directory which are explained in detail below.
+The directory structure of this Bookstore example is shown in Figure~\ref{fig:PlainBookstoreExample}. The application comprises four class files in the \dir{example/src/bookstoreApplication/} directory which are explained in detail below.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -87,28 +87,23 @@ The directory structure of this Bookstore example is shown in figure~\ref{fig:Pl
 
 \setJavaCodeListing
 
-\lstinputlisting[caption=BookstoreStarter.java,label=lst:class:BookstoreStarter]{source-example/plain-example/src/bookstoreApplication/BookstoreStarter.java}
-\TODO{FIX IT}
-\lstinputlisting[caption=Bookstore.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
-\lstinputlisting[caption=CRM.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
-\lstinputlisting[caption=Catalog.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
-\lstinputlisting[caption=BookstoreStarter.java]{\plainBookstoreApplicationDir/src/bookstoreApplication/BookstoreStarter.java}
+\lstinputlisting[caption=BookstoreStarter.java,label=lst:class:BookstoreStarter]{\plainBookstoreApplicationDir/src/bookstoreApplication/BookstoreStarter.java}
 
-\noindent The \verb!Bookstore!, shown in listing~\ref{lst:class:Bookstore}, contains a catalog and a CRM object, representing the catalog of the bookstore and a customer relationship management system which can provide offers for a book out of the catalog. The business method of the bookstore is \method{searchBook()} which will first check the catalog for books and then check for offers.
+\noindent The \verb!Bookstore!, shown in Listing~\ref{lst:class:Bookstore}, contains a catalog and a CRM object, representing the catalog of the bookstore and a customer relationship management system which can provide offers for a book out of the catalog. The business method of the bookstore is \method{searchBook()} which will first check the catalog for books and then check for offers.
 
 In a real application these methods would pass objects to ensure the results of the catalog search will be available to the offer collecting method. However, for our example we omitted such code. 
 
-\lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore]{source-example/plain-example/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore]{\plainBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
-\noindent The customer relationship management for this application is modeled in the \verb!CRM! class shown in listing~\ref{lst:class:CRM} . It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
+\noindent The customer relationship management for this application is modeled in the \verb!CRM! class shown in Listing~\ref{lst:class:CRM} . It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
 
-\lstinputlisting[caption=CRM.java,label=lst:class:CRM]{source-example/plain-example/src/bookstoreApplication/CRM.java}
+\lstinputlisting[caption=CRM.java,label=lst:class:CRM]{\plainBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
 
-\noindent The final class is \verb!Catalog! shown in listing~\ref{lst:class:Catalog}. It resembles the catalog component in the application.
+\noindent The final class is \verb!Catalog! shown in Listing~\ref{lst:class:Catalog}. It resembles the catalog component in the application.
 
-\lstinputlisting[caption=Catalog.java,label=lst:class:Catalog]{source-example/plain-example/src/bookstoreApplication/Catalog.java}
+\lstinputlisting[caption=Catalog.java,label=lst:class:Catalog]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
 
-\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader entered the in \dir{example/} directory.
+\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader entered the in \dir{example/} directory.
 
 \setBashListing
 % \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
@@ -116,20 +111,20 @@ In a real application these methods would pass objects to ensure the results of 
 \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr-win.inc}%
 %}
 
-\noindent The first command compiles the application and places the resulting four class files in the \dir{build/} directory. To verify the build process, the \dir{build/} directory can be inspected. The second command loads the bookstore application and produces the output shown in listing~\ref{lst:result-noinstr}.
+\noindent The first command compiles the application and places the resulting four class files in the \dir{build/} directory. To verify the build process, the \dir{build/} directory can be inspected. The second command loads the bookstore application and produces the output shown in Listing~\ref{lst:result-noinstr}.
 
 \input{ch2-quickstart-example_Example_Run_Example_1-noinstr.inc}
 
-In this section the \Kieker{} example application was introduced and when everything went well, the bookstore is a runnable program. Furthermore the composition of the application and its function should now be present. In the next section, the monitoring of the example application is introduced were the classes are extended by instrumentation code.
+\noindent In this section the \Kieker{} example application was introduced and when everything went well, the bookstore is a runnable program. Furthermore the composition of the application and its function should now be present. In the next section, the monitoring of the example application is introduced were the classes are extended by instrumentation code.
 
 %%
 \section{Monitoring}\label{sec:example:monitoring}
 
 In the previous sections the \Kieker{} installation and the example application have been introduced. In this section the preparations for application monitoring, the instrumentation of the application and the monitoring are explained.
 
-The first step is to copy the \Kieker{} jar-files \file{\monitoringJar} and \file{\commonJar} to the \dir{lib/} directory of the example directory. The two files are located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive as described in section~\ref{sec:example:downloadInstall}.
+The first step is to copy the \Kieker{} jar-files \file{\monitoringJar} and \file{\commonJar} to the \dir{lib/} directory of the example directory. The two files are located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive as described in Section~\ref{sec:example:downloadInstall}.
 
-The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied in the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in figure \ref{fig:KiekerBookstoreExample}.
+The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied in the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -160,9 +155,9 @@ Listing~\ref{lst:cuttingBookstore} shows instrumentation of \verb!Bookstore! cla
 \lstinputlisting[linerange={11-29}, firstnumber=11, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
 {\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
  
-\noindent The lines 17 and 19 are used to determine the time in nanoseconds before and after the \method{getBook()} call. In lines 20 to 23, a record for this measurement is created and initialized with the two time values. In addition the record has an attribute for the involved class \verb!Catalog! and the called method \method{getBook()}. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. There are different writers available which is explained in detail in section \ref{sec:monitoring-log-writers}.
+\noindent The lines 17 and 19 are used to determine the time in nanoseconds before and after the \method{getBook()} call. In lines 20 to 23, a record for this measurement is created and initialized with the two time values. In addition the record has an attribute for the involved class \verb!Catalog! and the called method \method{getBook()}. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. There are different writers available which is explained in detail in Section~\ref{sec:monitoring-log-writers}.
 
-\Kieker{} can log different kinds of record structures. The record type in this example is an \textit{operation execution record}. Figure \ref{fig:OperationExecutionRecordClassDiagram} shows some of the attributes of an operation execution record. The complete definition can be found in \file{\KiekerDir/src/common/kieker/common/record/OperationExecutionRecord.java}.
+\Kieker{} can log different kinds of record structures. The record type in this example is an \textit{operation execution record}. Figure~\ref{fig:OperationExecutionRecordClassDiagram} shows some of the attributes of an operation execution record. The complete definition can be found in \file{\KiekerDir/src/common/kieker/common/record/OperationExecutionRecord.java}.
 
 \begin{figure}[H]
 \begin{centering}
@@ -182,7 +177,7 @@ Listing~\ref{lst:cuttingBookstore} shows instrumentation of \verb!Bookstore! cla
 \item[\hskip1em\class{tout:}] The time after the method returned
 \end{itemize}
 
-\noindent In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method in class \class{CRM} is instrumented as well. Similar to listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of \method{getBook()} of the \object{catalog} object as shown in listing~\ref{lst:cuttingCRM} in the lines 19 and 21. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in listing~\ref{lst:cuttingBookstore}. 
+\noindent In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method in class \class{CRM} is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of \method{getBook()} of the \object{catalog} object as shown in Listing~\ref{lst:cuttingCRM} in the lines 19 and 21. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. 
 
 \setJavaCodeListing
 \lstinputlisting[firstline=16, firstnumber=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
@@ -190,7 +185,7 @@ Listing~\ref{lst:cuttingBookstore} shows instrumentation of \verb!Bookstore! cla
 
 \noindent Finally a record is created and stored by calling the monitoring controller.
 
-The next step after instrumenting the code is running the instrumented application. Listing \ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application in Linux or any other Unix-like system. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
+The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application in Linux or any other Unix-like system. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
 
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
@@ -204,7 +199,7 @@ shown in Listing~\ref{lst:bookstoreStarterWin}. %
 Also, it is necessary to separate the different elements of the classpath with %
 a semicolon instead of a colon.}
 
-If everything worked correctly, a new directory for the monitoring data with the name \dir{tpmon-20100727-181422131-UTC/} is created in the default temporary directory (see listing \ref{fig:logtree}). The numbers in the directory name represent the time and date of the monitoring. Therefore they will be different numbers for every run.
+If everything worked correctly, a new directory for the monitoring data with the name \dir{tpmon-20100727-181422131-UTC/} is created in the default temporary directory (see Listing \ref{fig:logtree}). The numbers in the directory name represent the time and date of the monitoring. Therefore they will be different numbers for every run.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -221,13 +216,13 @@ If everything worked correctly, a new directory for the monitoring data with the
 
 \noindent The log directory can be found in the default temporary directory which is in Linux \dir{/tmp/} and in Windows \dir{C:\textbackslash{}temp\textbackslash{}}). The monitoring directory contains two files. One file with the extension \dir{.dat} holding all recorded information from the application run and a second file named \dir{tpmon.map} which contains information on the types of the monitoring records. 
 
-The listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example content for these to files. The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues). It is a little irony that the separation character is a semicolon. To understand the \file{.dat}-file structure the semantics have to be explained. The first value \verb!$1!] indicates the record type. The second value \ldots \ldots The fourth value holds the name of the monitored method. \ldots
+The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example content for these to files. The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues). It is a little irony that the separation character is a semicolon. To understand the \file{.dat}-file structure the semantics have to be explained. The first value \verb!$1!] indicates the record type. The second value \ldots \ldots The fourth value holds the name of the monitored method. \ldots
 
 \setBashListing
 \lstinputlisting[caption=tpmon-20100727-181422234-UTC-Thread-2.dat (excerpt), firstline=1, lastline=3, label=lst:exampledat]%
 {ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon-20100727-181422234-UTC-Thread-2.dat}
 
-\noindent The second file is a simple mapping file referencing keys to monitoring record types. In listing~\ref{lst:examplemap} the key \verb!$1! is mapped to the type of operation execution records which were used in the monitoring. The key value corresponds to the key values in the \file{.dat}-file.
+\noindent The second file is a simple mapping file referencing keys to monitoring record types. In Listing~\ref{lst:examplemap} the key \verb!$1! is mapped to the type of operation execution records which were used in the monitoring. The key value corresponds to the key values in the \file{.dat}-file.
 
 \lstinputlisting[caption=tpmon.map, label=lst:examplemap]%
 {ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon.map}
@@ -241,7 +236,7 @@ The last task of a successful application monitoring is the analysis of the coll
 
 For this quick example guide, the analysis tool is very simple and does not show the full potential of \Kieker{}. For more detail read chapter \ref:{cpt:trace-analysis-and-monitoring} which uses the trace analysis tool of the \Kieker{}-package.
 
-Before any analysis can take place, the \file{\analysisJar} has to be copied from the \dir{\KiekerDir/dist/} directory and placed in the \dir{lib/} directory of the example as shown in listing~\ref{lst:analysisExampleLayout}. 
+Before any analysis can take place, the \file{\analysisJar} has to be copied from the \dir{\KiekerDir/dist/} directory and placed in the \dir{lib/} directory of the example as shown in Listing~\ref{lst:analysisExampleLayout}. 
 
 \begin{figure}[H]
 \begin{graybox}
@@ -264,7 +259,7 @@ Before any analysis can take place, the \file{\analysisJar} has to be copied fro
 
 \noindent The analysis application itself comprises the files \file{Consumer.java} and \file{BookstoreAnalysisStarter.java} which can be found in the example directory. 
 
-Listing \ref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{}-monitoring-records. If the term consumer is unclear at this point, please read section \ref{sec:kieker}.
+Listing \ref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{}-monitoring-records. If the term consumer is unclear at this point, please read Section~\ref{sec:kieker}.
 
 \setJavaCodeListing       
 
@@ -276,20 +271,20 @@ For the data evaluation the \method{newMonitoringRecord()} (see lines 24--41) is
 
 The methods \method{terminate} and \method{execute} don't do anything due to the fact that this consumer does not need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
 
-After implementing a consumer, the application's main class has to be created. In this case the main program is located in the \file{BookstoreAnalysisStarter.java} file shown in listing~\ref{lst:BookstoreAnalysisStarter}.
+After implementing a consumer, the application's main class has to be created. In this case the main program is located in the \file{BookstoreAnalysisStarter.java} file shown in Listing~\ref{lst:BookstoreAnalysisStarter}.
 
 \setJavaCodeListing       
 \lstinputlisting[caption=BookstoreAnalysisStarter.java,label=lst:BookstoreAnalysisStarter]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/BookstoreAnalysisStarter.java}
 
-\noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each analysis tool has to create at least one \class{AnalysisInstance} which can be seen in listing~\ref{lst:BookstoreAnalysisStarter} in line 19. Then the consumers are registered with the analysis instance. In this case the previously described \class{Consumer} is instantiated and the maximal response time is set to 3 nanoseconds. 
+\noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each analysis tool has to create at least one \class{AnalysisInstance} which can be seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line 19. Then the consumers are registered with the analysis instance. In this case the previously described \class{Consumer} is instantiated and the maximal response time is set to 3 nanoseconds. 
 
 After preparing the analysis itself, the in- and outputs have to be set. This is done in line 24 were the output directory is set. Line 26 initializes an array of input directories. In this example the output directory is also used as an input directory. This might not be too wise in a real application. However, for this example it will suffice. In the next line (line 27) the log reader of the analysis instance is set. In this particular case a file system reader is used.
 
-To set the whole analysis in motion, the analysis instance has to be started. This is done in line 30 of listing~\ref{lst:BookstoreAnalysisStarter}.
+To set the whole analysis in motion, the analysis instance has to be started. This is done in line 30 of Listing~\ref{lst:BookstoreAnalysisStarter}.
 
-As it can be seen, the application expects the output directory from the earlier monitoring run (see section \ref{sec:example:monitoring}) as argument, which must be passed manually. 
+As it can be seen, the application expects the output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) as argument, which must be passed manually. 
 
-The listings \ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} describe how the analysis application can be compiled and run under Linux or other Unix-like systems and Windows.
+The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} describe how the analysis application can be compiled and run under Linux or other Unix-like systems and Windows.
 
 \setBashListing 		
 
