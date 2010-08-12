@@ -1,22 +1,36 @@
 <project name="Tutorial-Example" basedir="." default="run">
 
-  <property name="lib.dir" value="lib"/>
-  <property name="build.dir" value="build"/>
-  <property name="src.dir" value="src"/>
-  <property name="jar.file" value="example.jar"/>
-  <property name="main-class" value="bookstoreTracing.BookstoreStarter"/>
+  <property file="build.properties"/>
+  
+  <taskdef name="if" classname="ise.antelope.tasks.IfTask"/>
   
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="**/*.jar"/>
   </path>
   
-  <target name="run" depends="build-jar">
+  <target name="check-files">
+    <if>
+	  <bool> 
+	    <and>
+		  <available file="${lib.dir}/${jar.file.libA}"/>
+		  <available file="${lib.dir}/${jar.file.libB}"/>
+		  <available file="${lib.dir}/${jar.file.libC}"/>
+		  <available file="${lib.dir}/${jar.file.libD}"/>
+        </and>
+      </bool>
+	  <else>
+	  <fail message="${msg.filesNotFound}"/>
+    </else>
+    </if>
+  </target>
+  
+  <target name="run" depends="check-files, build-jar">
     <java fork="true" classname="${main-class}">
       <classpath>
 	<path refid="classpath"/>
 	<path location="${jar.file}"/>
       </classpath>
-      <jvmarg value="-javaagent:${lib.dir}/aspectjweaver-1.6.9.jar"/>
+      <jvmarg value="-javaagent:${lib.dir}/${jar.file.libB}"/>
       <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
       <jvmarg value="-Daj.weaving.verbose=true"/>
     </java>
