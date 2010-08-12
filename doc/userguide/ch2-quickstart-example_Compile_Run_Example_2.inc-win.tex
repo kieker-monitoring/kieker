@@ -4,17 +4,12 @@
         src/bookstoreApplication/Catalog.java 
         src/bookstoreApplication/CRM.java 
         src/bookstoreApplication/Consumer.java
-        -classpath
-        lib/#\commonJar#:
-        lib/#\monitoringJar#:
-        lib/#\analysisJar#:
+        -classpath lib/#\mainJar#
         -d build/
 
 #\lstshellprompt{}# java -classpath 
        build/;
-       lib/#\commonJar#;
-       lib/#\monitoringJar#;
-       lib/#\analysisJar#;
+       lib/#\mainJar#;
        lib/#\commonsLoggingJar#
        mySimpleKiekerExampleManual.BookstoreAnalysisStarter 
        C:\Temp\tpmon-20100808-092252697-UTC

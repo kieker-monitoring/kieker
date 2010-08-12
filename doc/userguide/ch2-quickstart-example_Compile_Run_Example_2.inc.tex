@@ -1,16 +1,11 @@
 \begin{lstlisting}[caption=Compile and run under Linux,label=lst:bookstoreAnalysisStarterLinux] 			
 #\lstshellprompt{}# javac src/mySimpleKiekerExampleManual/*.java
-        -classpath	
-        lib/#\commonJar#:
-        lib/#\monitoringJar#:
-        lib/#\analysisJar#:
+        -classpath lib/#\mainJar#
         -d build/
 
 #\lstshellprompt{}# java -classpath
        build/:
-       lib/#\commonJar#:
-       lib/#\monitoringJar#:
-       lib/#\analysisJar#:
+       lib/#\mainJar#:
        lib/#\commonsLoggingJar#
        mySimpleKiekerExampleManual.BookstoreAnalysisStarter 
        /tmp/tpmon-20100808-092252697-UTC

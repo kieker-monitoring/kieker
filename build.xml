@@ -19,16 +19,18 @@
                   value="2010"/>
         <property name="copyright"
                   value="the Kieker Project"/>
-        <property name="dist.kieker.monitoring.jar"
-                  value="${kieker.monitoring.packagenamebase}-${kieker.version}.jar"/>
+        <!--<property name="dist.kieker.monitoring.jar"
+                  value="${kieker.monitoring.packagenamebase}-${kieker.version}.jar"/>-->
         <property name="dist.kieker.monitoring.servlet.war"
                   value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war"/>
-        <property name="dist.kieker.common.jar"
+        <!--<property name="dist.kieker.common.jar"
                   value="${kieker.common.packagenamebase}-${kieker.version}.jar"/>
         <property name="dist.kieker.tools.jar"
                   value="${kieker.tools.packagenamebase}-${kieker.version}.jar"/>
         <property name="dist.kieker.analysis.jar"
-                  value="${kieker.analysis.packagenamebase}-${kieker.version}.jar"/>
+                  value="${kieker.analysis.packagenamebase}-${kieker.version}.jar"/>-->
+        <property name="dist.kieker.main.jar"
+                  value="${kieker.main.packagenamebase}-${kieker.version}.jar"/>
 
         <property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
@@ -63,7 +65,7 @@
     </target>
 
     <target name="build-all"
-            depends="clean,init,build-kieker.monitoring,build-kieker.monitoring-servlet,build-kieker.common,build-kieker.analysis,build-kieker.tools,create-eclipse-sample-files">
+            depends="clean,init,build-kieker.main,compile-kieker.monitoring-servlet,create-eclipse-sample-files">
     </target>
 
     <target name="init" depends="update-version,init-compile-classpaths">
@@ -98,10 +100,12 @@
                 <include name="commons-logging-*.jar"/>
                 <include name="servlet-api.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>
+            </fileset>-->
+            <pathelement location="${build.kieker.common.dir}/"/>
+            <pathelement location="${build.kieker.monitoring.dir}/"/>
         </path>
 
         <path id="kieker.monitoring-compile-classpath">
@@ -116,9 +120,10 @@
                 <include name="spring.jar"/>
                 <include name="spring-web.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
-            </fileset>
+            </fileset>-->
+            <pathelement location="${build.kieker.common.dir}/"/>
         </path>
 
         <path id="kieker.monitoring-ajc-compile-classpath">
@@ -127,9 +132,10 @@
                 <include name="commons-logging-*.jar"/>
                 <include name="servlet-api.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
-            </fileset>
+            </fileset>-->
+            <pathelement location="${build.kieker.common.dir}/"/>
             <pathelement location="${build.kieker.monitoring.dir}"/>
         </path>
 
@@ -139,9 +145,10 @@
                 <include name="rabbitmq-client.jar"/>
                 <include name="jms-1.1.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
-            </fileset>
+            </fileset>-->
+            <pathelement location="${build.kieker.common.dir}/"/>
         </path>
 
         <path id="kieker.tools-compile-classpath">
@@ -149,11 +156,14 @@
                 <include name="commons-cli-*.jar"/>
                 <include name="commons-logging-*.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
-            </fileset>
+            </fileset>-->
+            <pathelement location="${build.kieker.common.dir}/"/>
+            <pathelement location="${build.kieker.monitoring.dir}/"/>
+            <pathelement location="${build.kieker.analysis.dir}/"/>
         </path>
 
         <path id="all-external-jars">
@@ -163,55 +173,8 @@
         </path>
     </target>
 
-    <!-- Generates sample files for .classpath and .project Eclipse files -->
-    <target name="create-eclipse-sample-files" depends="init">
-        <pathconvert property="eclipse.entries" refid="all-external-jars"
- pathsep="&quot;/&gt;&#10;    &lt;classpathentry kind=&quot;lib&quot; path=&quot;">
-            <map from="${user.dir}/" to=""/>
-        </pathconvert>
-
-        <echo file="${eclipse-classpath.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-        <!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
-        <classpath>
-            <classpathentry kind="src" path="${src.kieker.common.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.analysis.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.monitoring.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.monitoring-servlet.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.tools.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.common.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.tools.dir}"/>
-            <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-            <classpathentry kind="lib" path="${eclipse.entries}"/>
-            <classpathentry kind="output" path="build-eclipse"/>
-        </classpath>
-        ]]>
-        </echo>
-        <echo file="${eclipse-project.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-        <!-- Sample eclipse .project file. Copy this file to ".project". -->
-        <projectDescription>
-            <name>Kieker</name>
-            <comment></comment>
-            <projects>
-            </projects>
-            <buildSpec>
-                    <buildCommand>
-                            <name>org.eclipse.jdt.core.javabuilder</name>
-                            <arguments>
-                            </arguments>
-                    </buildCommand>
-            </buildSpec>
-            <natures>
-                    <nature>org.eclipse.jdt.core.javanature</nature>
-            </natures>
-        </projectDescription>
-        ]]>
-        </echo>
-    </target>
-
     <!-- Build kieker.common  -->
-    <target name="build-kieker.common" depends="init">
+    <target name="compile-kieker.common" depends="init">
         <delete dir="${build.kieker.common.dir}"/>
         <mkdir  dir="${build.kieker.common.dir}"/>
         <!--<mkdir  dir="${build.kieker.common.dir}/META-INF"/>-->
@@ -222,13 +185,13 @@
                classpathref="kieker.common-compile-classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
-        <copy file="LICENSE" todir="${build.kieker.common.dir}/"/>
+        <!--<copy file="LICENSE" todir="${build.kieker.common.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.common.jar}">
             <fileset dir="${build.kieker.common.dir}"/>
-        </jar>
+        </jar>-->
     </target>
 
-    <target name="build-kieker.monitoring" depends="init,build-kieker.common">
+    <target name="compile-kieker.monitoring" depends="init,compile-kieker.common">
         <delete dir="${build.kieker.monitoring.dir}"/>
         <mkdir  dir="${build.kieker.monitoring.dir}"/>
         <mkdir  dir="${build.kieker.monitoring.dir}/META-INF"/>
@@ -253,19 +216,13 @@
             </sourceroots>
         </iajc>
         <copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
-        <copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
-        <!-- We want to include the sources in this jar -->
-        <copy todir="${build.kieker.monitoring.dir}/src/">
-            <fileset dir="${src.kieker.monitoring.dir}">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
+        <!--<copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
             <fileset dir="${build.kieker.monitoring.dir}"/>
-        </jar>
+        </jar>-->
     </target>
 
-    <target name="build-kieker.monitoring-servlet" depends="init,build-kieker.common,build-kieker.monitoring">
+    <target name="compile-kieker.monitoring-servlet" depends="init,compile-kieker.common,compile-kieker.monitoring">
         <delete dir="${build.kieker.monitoring.servlet.dir}"/>
         <mkdir dir="${build.kieker.monitoring.servlet.dir}"/>
         <javac source="1.5" target="1.5"
@@ -280,7 +237,7 @@
         </war>
     </target>
 
-    <target name="build-kieker.analysis" depends="init,build-kieker.common">
+    <target name="compile-kieker.analysis" depends="init,compile-kieker.common">
         <delete dir="${build.kieker.analysis.dir}"/>
         <mkdir  dir="${build.kieker.analysis.dir}"/>
         <javac destDir="${build.kieker.analysis.dir}"
@@ -290,13 +247,13 @@
                classpathref="kieker.analysis-compile-classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
-        <copy file="LICENSE" todir="${build.kieker.analysis.dir}/"/>
+        <!--<copy file="LICENSE" todir="${build.kieker.analysis.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.analysis.jar}">
             <fileset dir="${build.kieker.analysis.dir}"/>
-        </jar>
+        </jar>-->
     </target>
 
-    <target name="build-kieker.tools" depends="init,build-kieker.common,build-kieker.monitoring,build-kieker.analysis">
+    <target name="compile-kieker.tools" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis">
         <delete dir="${build.kieker.tools.dir}"/>
         <mkdir  dir="${build.kieker.tools.dir}"/>
         <javac destDir="${build.kieker.tools.dir}"
@@ -306,9 +263,19 @@
                classpathref="kieker.tools-compile-classpath">
             <compilerarg value="-Xlint:all,-path"/>
         </javac>
-        <copy file="LICENSE" todir="${build.kieker.tools.dir}/"/>
+        <!--<copy file="LICENSE" todir="${build.kieker.tools.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.tools.jar}">
             <fileset dir="${build.kieker.tools.dir}"/>
+        </jar>-->
+    </target>
+
+    <target name="build-kieker.main" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis,compile-kieker.tools">
+        <jar destfile="${dist.dir}/${dist.kieker.main.jar}">
+            <fileset dir="${build.kieker.common.dir}"/>
+            <fileset dir="${build.kieker.analysis.dir}"/>
+            <fileset dir="${build.kieker.monitoring.dir}"/>
+            <fileset dir="${build.kieker.tools.dir}"/>
+            <fileset dir="." includes="LICENSE" />
         </jar>
     </target>
 
@@ -635,7 +602,7 @@
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="run-test-storage" depends="build-kieker.monitoring">
+    <target name="run-test-storage" depends="compile-kieker.monitoring">
         <echo>
             This is a small test for the part of Tpmon that
             stores monitoring data. Tpmon's monitoring API
@@ -658,10 +625,12 @@
                 <include name="commons-cli-*.jar"/>
                 <include name="commons-logging-*.jar"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>
+            </fileset>-->
+            <pathelement location="${build.kieker.common.dir}/"/>
+            <pathelement location="${build.kieker.monitoring.dir}/"/>
         </path>
 
         <javac source="1.5" target="1.5"
@@ -679,10 +648,12 @@
                 <!--<include name="log4j-*.jar"/>-->
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>
+            </fileset>-->
+            <pathelement location="${build.kieker.common.dir}/"/>
+            <pathelement location="${build.kieker.monitoring.dir}/"/>
         </path>
         <java
             dir="."
@@ -700,14 +671,17 @@
     </target>
 
     <target name="compile-tests-common"
-            depends="build-kieker.common">
+            depends="build-kieker.main">
         <path id="common-test-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
                 <include name="junit-*.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
         <javac source="1.5" target="1.5"
@@ -718,15 +692,18 @@
     </target>
 
     <target name="compile-tests-monitoring"
-            depends="build-kieker.monitoring">
+            depends="build-kieker.main">
         <path id="monitoring-test-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
                 <include name="junit-*.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
         <javac source="1.5" target="1.5"
@@ -738,15 +715,18 @@
     </target>
 
     <target name="compile-tests-analysis"
-            depends="build-kieker.analysis">
+            depends="build-kieker.main">
         <path id="analysis-test-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
                 <include name="junit-*.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+           <!-- <fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
         <javac source="1.5" target="1.5"
@@ -757,17 +737,20 @@
     </target>
 
     <target name="compile-tests-tools"
-            depends="build-kieker.tools">
+            depends="build-kieker.main">
         <path id="tools-test-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
                 <include name="junit-*.jar"/>
             </fileset>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.tools.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
         <javac source="1.5" target="1.5"
@@ -784,9 +767,12 @@
                 <include name="commons-logging-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -817,9 +803,12 @@
                 <include name="commons-logging-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -848,9 +837,12 @@
                 <include name="commons-logging-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -873,7 +865,7 @@
     </target>
 
     <target name="compile-tests-compileTimeWeaving-bookstore"
-            depends="build-kieker.monitoring">
+            depends="compile-kieker.monitoring">
         <path id="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="aspectjrt-*.jar"/>
@@ -881,9 +873,12 @@
                 <include name="servlet-api.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -907,7 +902,7 @@
     </target>
 
     <target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample"
-            depends="build-kieker.monitoring">
+            depends="compile-kieker.monitoring">
         <path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
             <fileset dir="${lib.dir}">
                 <include name="aspectjrt-*.jar"/>
@@ -915,9 +910,12 @@
                 <include name="servlet-api.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -948,9 +946,12 @@
                 <include name="commons-logging-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -974,9 +975,12 @@
                 <include name="commons-logging-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -1014,9 +1018,12 @@
                 <include name="commons-logging-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -1037,9 +1044,12 @@
                 <include name="commons-logging-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -1065,11 +1075,14 @@
                 <include name="junit-*.jar"/>
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
-            <fileset dir="${dist.dir}">
+            <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
                 <include name="${dist.kieker.tools.jar}"/>
+            </fileset>-->
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
             </fileset>
         </path>
 
@@ -1103,6 +1116,53 @@
         <echo message="To see the test report, open ${tests.junit-results.dir}/index.html in your Web browser."/>
     </target>
 
+    <!-- Generates sample files for .classpath and .project Eclipse files -->
+    <target name="create-eclipse-sample-files" depends="init">
+        <pathconvert property="eclipse.entries" refid="all-external-jars"
+                     pathsep="&quot;/&gt;&#10;    &lt;classpathentry kind=&quot;lib&quot; path=&quot;">
+            <map from="${user.dir}/" to=""/> <!-- change absolute path back to relative path -->
+        </pathconvert>
+
+        <echo file="${eclipse-classpath.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+        <!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
+        <classpath>
+            <classpathentry kind="src" path="${src.kieker.common.dir}"/>
+            <classpathentry kind="src" path="${src.kieker.analysis.dir}"/>
+            <classpathentry kind="src" path="${src.kieker.monitoring.dir}"/>
+            <classpathentry kind="src" path="${src.kieker.monitoring-servlet.dir}"/>
+            <classpathentry kind="src" path="${src.kieker.tools.dir}"/>
+            <classpathentry kind="src" path="${test.kieker.common.dir}"/>
+            <classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
+            <classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
+            <classpathentry kind="src" path="${test.kieker.tools.dir}"/>
+            <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+            <classpathentry kind="lib" path="${eclipse.entries}"/>
+            <classpathentry kind="output" path="build-eclipse"/>
+        </classpath>
+        ]]>
+        </echo>
+        <echo file="${eclipse-project.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+        <!-- Sample eclipse .project file. Copy this file to ".project". -->
+        <projectDescription>
+            <name>Kieker</name>
+            <comment></comment>
+            <projects>
+            </projects>
+            <buildSpec>
+                    <buildCommand>
+                            <name>org.eclipse.jdt.core.javabuilder</name>
+                            <arguments>
+                            </arguments>
+                    </buildCommand>
+            </buildSpec>
+            <natures>
+                    <nature>org.eclipse.jdt.core.javanature</nature>
+            </natures>
+        </projectDescription>
+        ]]>
+        </echo>
+    </target>
+
     <target name="pmd">
         <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
         <pmd shortFilenames="true">
@@ -1122,10 +1182,10 @@
 
     <target name="mvn-deploy" depends="mvn-init, mvn-deploy-base, mvn-deploy-monitoring" />
 
-    <target name="mvn-deploy-monitoring" depends="build-kieker.monitoring, mvn-deploy-base">
+    <target name="mvn-deploy-monitoring" depends="compile-kieker.monitoring, mvn-deploy-base">
         <artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
         <artifact:pom id="mavenproject" file="pom_ant_kieker-monitoring.xml" />
-        <artifact:deploy file="${dist.dir}/${dist.kieker.monitoring.jar}">
+        <artifact:deploy file="${dist.dir}/${dist.kieker.main.jar}">
             <pom refid="mavenproject"/>
         </artifact:deploy>
     </target>
