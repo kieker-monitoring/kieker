@@ -1,70 +1,70 @@
 <project name="Bookstore-Application" basedir="." default="run-monitoring">
 
-  <property file="build.properties"/>
-  
-  <path id="classpath">
-    <fileset dir="${lib.dir}" includes="**/*.jar"/>
-  </path>
-	
-  <condition property="not-all-files-available">
-    <not>
-      <and>
-        <available file="${lib.dir}/${jar.file.libA}"/>
-        <available file="${lib.dir}/${jar.file.libB}"/>
-      </and>
-    </not>
-  </condition>
+	<property file="build.properties" />
 
-  <target name="-check-files" if="not-all-files-available">
-    <fail message="${msg.filesNotFound}"/>
-  </target>
-  
-  <target name="run-monitoring" depends="-check-files, -build-jar-monitoring">
-	  <java fork="true" classname="${main-class-monitoring}">
-        <classpath>
-	      <path refid="classpath"/>
-	      <path location="${jar.file.monitoring}"/>
-        </classpath>
-    </java>
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
 
-  </target>
-  
-  <target name="run-analysis" depends="-check-files, -build-jar-analysis">
-	  <java fork="true" classname="${main-class-analysis}">
-	    <arg line="${analysis.directory}"/>
-        <classpath>
-	      <path refid="classpath"/>
-	      <path location="${jar.file.analysis}"/>
-        </classpath>
-      </java>
-  </target>
-  
-  <target name="-build-jar-monitoring" depends="-compile">
-    <jar destfile="${jar.file.monitoring}" basedir="${build.dir}">
-      <manifest>
-	<attribute name="Main-Class" value="${main-class-monitoring}"/>
-      </manifest>
-    </jar>
-    <delete dir="${build.dir}"/>
-  </target>
+	<condition property="not-all-files-available">
+		<not>
+			<and>
+				<available file="${lib.dir}/${jar.file.libA}" />
+				<available file="${lib.dir}/${jar.file.libB}" />
+			</and>
+		</not>
+	</condition>
 
-  <target name="-build-jar-analysis" depends="-compile">
-    <jar destfile="${jar.file.analysis}" basedir="${build.dir}">
-      <manifest>
-	<attribute name="Main-Class" value="${main-class-analysis}"/>
-      </manifest>
-    </jar>
-    <delete dir="${build.dir}"/>
-  </target>
-  
-  <target name="-compile" depends="-init">
-      <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath"/>
-      <mkdir dir="${build.dir}/${meta.dir}"/>
-  </target>
-  
-  <target name="-init">
-    <delete dir="${build.dir}"/>
-    <mkdir dir="${build.dir}"/>
-  </target>
-  
+	<target name="-check-files" if="not-all-files-available">
+		<fail message="${msg.filesNotFound}" />
+	</target>
+
+	<target name="run-monitoring" depends="-check-files, -build-jar-monitoring">
+		<java fork="true" classname="${main-class-monitoring}">
+			<classpath>
+				<path refid="classpath" />
+				<path location="${jar.file.monitoring}" />
+			</classpath>
+		</java>
+
+	</target>
+
+	<target name="run-analysis" depends="-check-files, -build-jar-analysis">
+		<java fork="true" classname="${main-class-analysis}">
+			<arg line="${analysis.directory}" />
+			<classpath>
+				<path refid="classpath" />
+				<path location="${jar.file.analysis}" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="-build-jar-monitoring" depends="-compile">
+		<jar destfile="${jar.file.monitoring}" basedir="${build.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class-monitoring}" />
+			</manifest>
+		</jar>
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="-build-jar-analysis" depends="-compile">
+		<jar destfile="${jar.file.analysis}" basedir="${build.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class-analysis}" />
+			</manifest>
+		</jar>
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="-compile" depends="-init">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" />
+		<mkdir dir="${build.dir}/${meta.dir}" />
+	</target>
+
+	<target name="-init">
+		<delete dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
 </project>
