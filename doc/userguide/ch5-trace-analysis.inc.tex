@@ -29,6 +29,7 @@ in Chapter \ref{chap:example}.
 \dirtree{%
 .1 \DirInDirTree{example/}. %\DTcomment{The root directory of the project}.
 .2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}.
+.3 \DirInDirTree{META-INF/}
 .2 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
 .3 \aopConfigFile. 
 .2 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
@@ -71,5 +72,9 @@ with which AspectJ knows that the classes to be weaved are inside the package \c
 \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>$ which informs AspectJ about the aspect to be used.
 
 \TODO{Something is missing, I know...}
+\setBashListing
+\input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
+\input{ch5-trace-analysis_Compile_Run_Example_1.inc}
+
 \section{Full Monitoring}\label{sec:aspectJ:fullweaving}
 \TODO{Still missing something...}
