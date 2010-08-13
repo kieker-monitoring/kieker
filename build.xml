@@ -330,7 +330,7 @@
     <target name="dist-kieker-sources" depends="init">
         <patternset id="dist_src_files-nonbinmode">
             <include name="bin/log4j.properties"/>
-            <include name="WEB-INF/*"/>
+            <include name="META-INF/*"/>
             <include name="src/**/*.java"/>
             <include name="test/**/*.java"/>
             <include name="test/META-INF/*"/>
@@ -1066,7 +1066,7 @@
     <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
 
     <target name="compile-all-tests"
-            depends="compile-tests-common,compile-tests-monitoring,compile-tests-analysis,compile-tests-tools"/>
+            depends="compile-tests-common,compile-tests-analysis,compile-tests-monitoring,compile-tests-tools"/>
 
     <target name="run-tests-junit" depends="compile-all-tests">
         <path id="kieker.test-junit-run-classpath">
