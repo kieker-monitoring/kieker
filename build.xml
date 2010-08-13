@@ -216,6 +216,7 @@
             </sourceroots>
         </iajc>
         <copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
+        <copy file="${sequence.pic}" tofile="${build.kieker.monitoring.dir}/META-INF/sequence.pic"/>
         <!--<copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
             <fileset dir="${build.kieker.monitoring.dir}"/>

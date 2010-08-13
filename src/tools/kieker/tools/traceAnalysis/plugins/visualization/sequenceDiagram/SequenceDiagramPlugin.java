@@ -17,11 +17,19 @@ package kieker.tools.traceAnalysis.plugins.visualization.sequenceDiagram;
  * limitations under the License.
  * ==================================================
  */
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.Message;
@@ -46,6 +54,43 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
     private static final Log log = LogFactory.getLog(SequenceDiagramPlugin.class);
     private final String outputFnBase;
     private final boolean shortLabels;
+    /** Path to the sequence.pic macros used to plot UML sequence diagrams.
+     * The file must be in the classpath -- typically inside the jar. */
+    private final static String sequencePicPath = "META-INF/sequence.pic";
+    private final static String sequencePicContent;
+
+    /* Read Spinellis' UML macros from file META-INF/sequence.pic to the
+     * String variable sequencePicContent. This contents are copied to
+     * every sequence diagram .pic file */
+    static {
+        InputStream is =
+                SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(sequencePicPath);
+        StringBuilder sb = new StringBuilder();
+        String line;
+        boolean error = true;
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            error = false;
+        } catch (IOException exc) {
+            log.error("Error while reading " + sequencePicPath, exc);
+        } finally {
+            if (error) {
+                /* sequence.pic must be provided on execution of pic2plot */
+                sequencePicContent = "copy \"sequence.pic\";";
+            } else {
+                sequencePicContent = sb.toString();
+            }
+            try {
+                is.close();
+            } catch (IOException ex) {
+                log.error("Failed to close input stream", ex);
+            }
+        }
+    }
 
     public enum SDModes {
 
@@ -100,7 +145,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                 @Override
                 public void newEvent(MessageTrace mt) {
                     try {
-                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt, 
+                        SequenceDiagramPlugin.writePicForMessageTrace(getSystemEntityFactory(), mt,
                                 sdmode,
                                 outputFnBase + "-"
                                 + mt.getTraceId() + ".pic",
@@ -165,7 +210,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
         Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
         ps.println(".PS");
-        ps.println("copy \"lib/sequence.pic\";");
+        //ps.println("copy \"lib/sequence.pic\";");
+        ps.println(sequencePicContent);
         ps.println("boxwid = 1.1;");
         ps.println("movewid = 0.5;");
 
