@@ -58,7 +58,7 @@ in Chapter \ref{chap:example}.
 
 The new jar-file \file{aspectjweaver-1.6.9.jar} can again be found
 in the \dir{lib}-dir from the \Kieker{}-binaries, as well as the
-configuration file \file{\aopConfigFile} can be found in the directory \dir{META-INF}.
+configuration file \file{\aopConfigFile} can be found in the directory \dir{META-INF/}.
 
 Once the necessary files has been copied to the example-directory,
 the sourcecode can be instrumented with the annotation \class{OperationExecutionMonitoringProbe}.
@@ -80,9 +80,9 @@ with which AspectJ knows that the classes to be weaved are inside the package \c
 \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>$ which informs AspectJ about the aspect to be used.
 
 \TODO{Explanation of the aspect.}
-Listings \ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1} show how to compile and run the annotated Bookstore Application manually. It must be pointed out that it is necessary to copy the configuration file for AspectJ into the \dir{META-INF}-directory within the \dir{build}-directory to offer the AspectJ-Weaver an easy access.
+Listings \ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1} show how to compile and run the annotated Bookstore Application manually. It must be pointed out that it is necessary to copy the configuration file for AspectJ into the \dir{META-INF/} directory within the \dir{build/} directory to offer the AspectJ-Weaver an easy access.
 
-The AspectJ-Weaver itself has to be loaded by the JVM as a so called javaagent. In simple terms an agent is just a specific class which is loaded before the \method{main}-method of the application and executed in the same JVM. It has therefore access to the same context as the main application. In this specific case the agent is loaded to weave the monitoring code into the ``plain'' java-code of the Bookstore Application.
+The AspectJ-Weaver itself has to be loaded by the JVM as a so called javaagent. In simple terms an agent is just a specific class which is loaded before the \method{main} method of the application and executed in the same JVM. It has therefore access to the same context as the main application. In this specific case the agent is loaded to weave the monitoring code into the ``plain'' java-code of the Bookstore Application.
 
 \setBashListing
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
