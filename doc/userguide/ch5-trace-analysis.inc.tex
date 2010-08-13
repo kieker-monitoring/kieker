@@ -115,3 +115,5 @@ The full monitoring without using any annotations is quite simple. It is only ne
 The old aspect has been deactivated by uncommenting it, while the new aspect \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>$ has been activated. As the name already reveals, the new aspect makes sure that every method within the included classes/packages will be monitored. The exact behaviour can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. Listing \ref{lst:aopConfigFileFull} shows for example how to make sure that only the methods within the class \class{BookstoreStarter} will be monitored.
 
 The commands to compile and run the sourcecode arejust the same as in the Listings \ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1}. The only thing changing is that the annotations within the sourcecode are no longer necessary.
+
+An example log of a complete run can be found in the appendix.
