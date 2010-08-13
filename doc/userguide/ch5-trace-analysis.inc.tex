@@ -71,10 +71,17 @@ with which AspectJ knows that the classes to be weaved are inside the package \c
 \lstinline$<include within="bookstoreTracing.Bookstore*"/>$. The second important line is 
 \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>$ which informs AspectJ about the aspect to be used.
 
-\TODO{Explanation why to copy the config-file. Explanation of the aspect. Explanation JavaAgent?}
+\TODO{Explanation of the aspect.}
+Listings \ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1} show how to compile and run the annotated Bookstore Application manually. It must be pointed out that it is necessary to copy the configuration file for AspectJ into the \dir{META-INF}-directory within the \dir{build}-directory to offer the AspectJ-Weaver an easy access.
+
+The AspectJ-Weaver itself has to be loaded by the JVM as a so called javaagent. In simple terms an agent is just a specific class which is loaded before the \method{main}-method of the application and executed in the same JVM. It has therefore access to the same context as the main application. In this specific case the agent is loaded to weave the monitoring code into the ``plain'' java-code of the Bookstore Application.
+
 \setBashListing
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
+
+After a complete run of the application, the monitoring files should appear in the same way as mentioned in Section \ref{sec:example:monitoring}, just with some more informations. These stored informations will now be visualized with the help of the trace-analysis-tool which can be found in the \Kieker{}-binaries as well.
+
 \TODO{Something is missing, I know...}
 \section{Full Monitoring}\label{sec:aspectJ:fullweaving}
 \TODO{Still missing something...}
