@@ -4,11 +4,11 @@
         src/bookstoreTracing/Catalog.java 
         src/bookstoreTracing/BookstoreStarter.java 
         -d build/ 
-        -classpath lib/kieker-1.2-SNAPSHOT.jar;lib/commons-logging-1.1.1.jar
+        -classpath lib/#\mainJar{}#;lib/#\commonsLoggingJar{}#
 
 #\lstshellprompt{}# copy META-INF\aop.xml build\META-INF\
 
-#\lstshellprompt{}# java -javaagent:lib/aspectjweaver-1.6.9.jar 
-        -classpath build/;lib/kieker-1.2-SNAPSHOT.jar;lib/commons-logging-1.1.1.jar 
+#\lstshellprompt{}# java -#\textbf{javaagent:}#lib/#\aspectJWeaverJar{}# 
+       -classpath build/;lib/#\mainJar{}#;lib/#\commonsLoggingJar{}# 
         bookstoreTracing.BookstoreStarter
 \end{lstlisting}
