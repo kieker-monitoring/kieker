@@ -36,7 +36,7 @@ in Chapter \ref{chap:example}.
 .3 \commonsLoggingJar.
 .3 \aspectJWeaverJar.  
 .2 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
-.3 \DirInDirTree{bookstoreApplication/}.
+.3 \DirInDirTree{bookstoreTracing/}.
 .4 Bookstore.java.
 .4 BookstoreStarter.java.
 .4 Catalog.java.
@@ -51,17 +51,25 @@ The new jar-file \file{aspectjweaver-1.6.9.jar} can again be found
 in the \dir{lib}-dir from the \Kieker{}-binaries, as well as the
 configuration file \file{\aopConfigFile} can be found in the directory \dir{META-INF}.
 
-Once the necessary file has been copied to the example-directory,
+Once the necessary files has been copied to the example-directory,
 the sourcecode can be instrumented with the annotation \class{OperationExecutionMonitoringProbe}.
-Listing \ref{listing:BookstoreAspectJ} shows how the annotation is
+Listing \ref{lst:BookstoreAspectJ} shows how the annotation is
 used.
 
 \setJavaCodeListing
-\lstinputlisting[caption=Bookstore.java, label=listing:BookstoreAspectJ]{\aspectJBookstoreApplicationDir/src/bookstoreTracing/Bookstore.java}
+\lstinputlisting[caption=Bookstore.java, label=lst:BookstoreAspectJ]{\aspectJBookstoreApplicationDir/src/bookstoreTracing/Bookstore.java}
 
 As an example all methods within the four sourcecode-files will be
 annotated. It is possible to mark nearly every method with the annotation
-- except constructors.
+- except constructors. Now the configuration file has to be modified to inform AspectJ about the classes we want to weave. Listing \ref{lst:aopConfigFileAnnotations} shows the modified configuration file.
+\setXMLListing
+\lstinputlisting[caption=aop.xml, label=lst:aopConfigFileAnnotations]{\aspectJBookstoreApplicationDir/META-INF/aop.xml}
+Normally the configuration file consists of much more lines, but most of them are uncommented anyway. The first important line ist 
+\lstinline$<include within="bookstoreTracing..*"/>$
+with which AspectJ knows that the classes to be weaved are inside the package \class{bookstoreTracing}. It is of course possible to weave only classes instead of whole packages by using for example 
+\lstinline$<include within="bookstoreTracing.Bookstore*"/>$. The second important line is 
+\lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>$ which informs AspectJ about the aspect to be used.
+
 \TODO{Something is missing, I know...}
 \section{Full Monitoring}\label{sec:aspectJ:fullweaving}
 \TODO{Still missing something...}
