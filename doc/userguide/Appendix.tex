@@ -1,18 +1,22 @@
 \appendix
-  \chapter{Used classes}
-    \section{MyNamedPipeManager and MyPipe}
+\chapter{Appendix}
+
+  \section{Additional Source Code Listings}
+    \subsection{MyNamedPipeManager and MyPipe}
       \setJavaCodeListing
       \lstinputlisting[caption=MyNamedPipeManager.java]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyNamedPipeManager.java}
 
       \setJavaCodeListing
       \lstinputlisting[caption=MyPipe.java]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyPipe.java}
 
-  \chapter{Example logs}
+\newpage
+  \section{Example File System Monitoring Logs}
     \TODO{Search for promised logs and put them here}
-	
-  \chapter{Shortcut via ant}
-    \section{ant-script for the manual instrumentated example}
-      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application shown in Chapter \ref{chap:example}.
+
+\newpage
+  \section{Ant Scripts}
+    \subsection{Ant script for the manual instrumentation example}
+      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application shown in Chapter~\ref{chap:example}.
       \setXMLListing
       \lstinputlisting[caption=build.xml]{\manualInstrumentedBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\manualInstrumentedBookstoreApplicationDir/build.properties}
@@ -20,20 +24,21 @@
       \setBashListing
       \input{appendix_Compile_Run_Example_1.inc}
 
-    \section{ant-script for the example with the own components}
-      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application with the own components shown in Chapter \ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis}.
+    \subsection{Ant script for the example with the own components}
+      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manually instrumentated Bookstore Application with the own components shown in Chapter~\ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis}.
       \setXMLListing
       \lstinputlisting[caption=build.xml]{\customComponentsBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\customComponentsBookstoreApplicationDir/build.properties}
 
-    \section{ant-script for the example with AspectJ}
-      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the Bookstore Application instrumentated with AspectJ shown in Chapter \ref{chap:aspectJ}.
+    \subsection{Ant script for the AspectJ example}
+      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the Bookstore Application instrumentated with AspectJ shown in Chapter~\ref{chap:aspectJ}.
       \setXMLListing
       \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\aspectJBookstoreApplicationDir/build.properties}     
 
-  \chapter{Libraries}
+\newpage
+  \section{Libraries}
     The following tables shows all libraries which are used by \Kieker\ and explains them in short words.
     \input{Libraries}
 
-\chapter{Troubleshooting}
+% \chapter{Troubleshooting}
