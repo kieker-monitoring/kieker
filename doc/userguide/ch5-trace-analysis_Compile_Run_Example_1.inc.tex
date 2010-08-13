@@ -1,7 +1,11 @@
-\begin{lstlisting}[caption=Command to compile and run the instrumented Bookstore under Linux]
-#\lstshellprompt{}# javac src/bookstoreTracing/Bookstore.java src/bookstoreTracing/CRM.java src/bookstoreTracing/Catalog.java src/bookstoreTracing/BookstoreStarter.java -d build/ -classpath lib/kieker-1.2-SNAPSHOT.jar:lib/commons-logging-1.1.1.jar
+\begin{lstlisting}[caption=Command to compile and run the annotated Bookstore under Linux]
+#\lstshellprompt{}# javac src/bookstoreTracing/*.java
+        -d build/ 
+        -classpath lib/kieker-1.2-SNAPSHOT.jar:lib/commons-logging-1.1.1.jar
 
-#\lstshellprompt{}# cp -r META-INF/aop.xml build/META-INF/aop.xml
+#\lstshellprompt{}# cp META-INF/aop.xml build/META-INF/aop.xml
 
-#\lstshellprompt{}# java -javaagent:lib/aspectjweaver-1.6.9.jar -classpath build/:lib/kieker-1.2-SNAPSHOT.jar:lib/commons-logging-1.1.1.jar bookstoreTracing.BookstoreStarter
+#\lstshellprompt{}# java -javaagent:lib/aspectjweaver-1.6.9.jar 
+        -classpath build/:lib/kieker-1.2-SNAPSHOT.jar:lib/commons-logging-1.1.1.jar
+        bookstoreTracing.BookstoreStarter
 \end{lstlisting}
