@@ -1,0 +1,7 @@
+\begin{lstlisting}[caption=Command to compile and run the instrumented Bookstore under Windows]
+#\lstshellprompt{}# javac src/bookstoreTracing/Bookstore.java src/bookstoreTracing/CRM.java src/bookstoreTracing/Catalog.java src/bookstoreTracing/BookstoreStarter.java -d build/ -classpath lib/kieker-1.2-SNAPSHOT.jar;lib/commons-logging-1.1.1.jar
+
+#\lstshellprompt{}# copy META-INF\aop.xml build\META-INF\
+
+#\lstshellprompt{}# java -javaagent:lib/aspectjweaver-1.6.9.jar -classpath build/;lib/kieker-1.2-SNAPSHOT.jar;lib/commons-logging-1.1.1.jar bookstoreTracing.BookstoreStarter
+\end{lstlisting}
