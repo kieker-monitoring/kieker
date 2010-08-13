@@ -24,8 +24,8 @@ fi
 DIRNAME="$1"
 shift
 
-PIC_FILES=$(find ${DIRNAME} -name "*.pic")
-DOT_FILES=$(find ${DIRNAME} -name "*.dot")
+PIC_FILES=$(find "${DIRNAME}" -name "*.pic")
+DOT_FILES=$(find "${DIRNAME}" -name "*.dot")
 
 PIC_COUNTER=0
 DOT_COUNTER=0
@@ -39,14 +39,14 @@ for f in ${PIC_FILES}; do
     fi
     for ext in ${EXTS}; do 
 	if !(echo "${ext}" | grep -q pdf); then
-	    pic2plot -T ${ext} $f > ${BASENAME}.${ext} ;  
+	    pic2plot -T ${ext} "$f" > "${BASENAME}.${ext}" ;  
 	fi
     done; 
     if (echo "${EXTS}" | grep -q pdf); then
-	ps2pdf ${BASENAME}.ps ${BASENAME}.pdf \
-	    && (pdfcrop ${BASENAME}.pdf > /dev/null) \
-	    && rm ${BASENAME}.pdf \
-	    && mv ${BASENAME}-crop.pdf ${BASENAME}.pdf
+	ps2pdf "${BASENAME}.ps" "${BASENAME}.pdf" \
+	    && (pdfcrop "${BASENAME}.pdf" > /dev/null) \
+	    && rm "${BASENAME}.pdf" \
+	    && mv "${BASENAME}-crop.pdf" "${BASENAME}.pdf"
     fi
     PIC_COUNTER=$((${PIC_COUNTER}+1))
 done
@@ -55,11 +55,11 @@ if [ ! -z "${DOT_FILES}" ]; then
     for f in ${DOT_FILES}; do 
 	BASENAME=$(echo $f | sed -E s/'\.[[:alnum:]]+$'//g); 
 	for ext in ${EXTS}; do 
-	    dot -T ${ext} ${f} > ${BASENAME}.${ext} ; 
+	    dot -T ${ext} "${f}" > "${BASENAME}.${ext}" ; 
 	    if (echo "${ext}" | grep -q pdf); then
-		(pdfcrop ${BASENAME}.pdf > /dev/null) \
-		    && rm ${BASENAME}.pdf \
-		    && mv ${BASENAME}-crop.pdf ${BASENAME}.pdf
+		(pdfcrop "${BASENAME}.pdf" > /dev/null) \
+		    && rm "${BASENAME}.pdf" \
+		    && mv "${BASENAME}-crop.pdf" "${BASENAME}.pdf"
 	    fi
 	done; 
 	DOT_COUNTER=$((${DOT_COUNTER}+1))
