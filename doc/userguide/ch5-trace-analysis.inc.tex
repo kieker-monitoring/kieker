@@ -90,6 +90,20 @@ The AspectJ-Weaver itself has to be loaded by the JVM as a so called javaagent. 
 
 After a complete run of the application, the monitoring files should appear in the same way as mentioned in Section \ref{sec:example:monitoring}, just with some more informations. These stored informations will now be visualized with the help of the trace-analysis-tool which can be found in the \Kieker{}-binaries as well.
 
-\TODO{Something is missing, I know...}
+In order to use this tool, it is necessary to install two other programs:
+\begin{enumerate}
+\item \textbf{Graphviz} A graph visualization software which can be downloaded from \url{http://www.graphviz.org/}. 
+\item \textbf{GNU PlotUtils} A set of tools for generating 2D plot graphics which can be downloaded from \url{http://www.gnu.org/software/plotutils/} (for Linux) and from \url{http://gnuwin32.sourceforge.net/packages/plotutils.htm} (for Windows).
+\end{enumerate}
+Once both has been installed, the trace-analysis-tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} in the \dir{bin}-directory. A non-parameterized call of the script prints all possible options on the screen.
+
+Assume the monitored data within the directory \dir{/tmp/tpmon-20100813-121041532-UTC} should be analyzed by the tool to produce a sequence diagram which should then be written to an existing directory named \dir{out}. The calls would be the following:
+\setBashListing
+\input{ch5-trace-analysis_Produce_Sequence_Diagram.inc}
+\TODO{Possible problems with the wrapper scripts / Complete new wrapper script?}
+The first call produces the sequence diagram and the second one converts the data with the help of another wrapper script to the easier readable \file{png}-format. The result should be a sequence diagram very similar to the one seen in Figure \ref{fig:bookstore:classAndSequenceDiagrams}.
+
+It is possible to create other diagrams as well with the help of the visualization tool like for example aggregated call trees or component dependency diagrams. 
+
 \section{Full Monitoring}\label{sec:aspectJ:fullweaving}
 \TODO{Still missing something...}
