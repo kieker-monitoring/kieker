@@ -20,3 +20,11 @@ jndi-$.jar	The Java Naming and Directory Interface is an API which provides meth
 concurrent-$.jar	This package contains different thread-safe classes.
 aspectjweaver-$.jar	This jar contains the weaver-agent for the aspect-oriented-extension for Java named AspectJ.
 junit-$.jar	This jar-file contains the necessary classes for the JUnit-tests.
+aspectjrt-$.jar	This jar-file contains the runtime library for AspectJ programs.
+aspectjtools-$.jar	This package contains the tools (the AspectJ Compiler and Browser) for AspectJ.
+commons-pool-$.jar	Pool is an Object-pooling API supplying different interfaces and classes to create modular object pools.
+cxf-api-$.jar	Apache CXF is an open source services framework.  
+cxf-rt-core-$.jar	This library contains the Apache CXF Runtime Core. 
+jms-$.jar	Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
+servlet-api.jar	The Java Servlet API supplies protocols to let applications respond for example to HTTP requests.
+spice-jndikit-$.jar	The JNDI Kit is a toolkit for the easy use of the so called Java Naming and Directory Interface (JNDI). This API can be used for name and directory service.
