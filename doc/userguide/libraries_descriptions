@@ -1,30 +1,49 @@
 // The following files will be listed in the table in the tex-file if they exist in the given directory as well.
 // Wildcards are marked with the $ character.
-// The filename and the descriptions should be seperated with a single tab. 
+// The filename and the descriptions must be seperated with a single tab. 
 // Lines that start with double slash will be ignored.
 // The descriptions themself can contain tex-code but should be in one line.
-derby.jar	This library contains the necessary drivers for the Apache Derby database.
-mysql-connector-java-$-bin.jar	The library to connect to an existing MySQL database.
-spring.jar	The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.
-spring-web.jar	This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.
-commons-cli-$.jar	Commons CLI provides a simple API for working with the command line arguments and options.
-commons-io-$.jar	Commons-IO contains utility classes, stream implementations, file filters, and endian classes.
-commons-logging-$.jar	Commons Logging is a thin adapter allowing configurable bridging to other, well known logging systems.
-servlet.jar	This package contains different classes for the work with servlets.
-jmc.jar	This library contains the Java Media Components which can be used for example for playing video content in Swing applications.
-Scenario.jar	This package provides scene graph functionality for Java.
-openjms-$.jar	OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification
-log4j-$.jar	log4j is a framework for the logging of messages in Java.
-rabbitmq-client.jar	This library contains the client for the RabbitMQ messaging system.
-jndi-$.jar	The Java Naming and Directory Interface is an API which provides methods for multiple naming and directory services. It can be used for example to register disposed files in a network and to allow other part of a Java program to use them for RMI calls.
-concurrent-$.jar	This package contains different thread-safe classes.
+
+derby.jar	Apache Derby is a lightweight database written in Java which can also be used as an embedded database. This library contains the necessary drivers for the database as well as the database managment system itself.
+
+mysql-connector-java-$-bin.jar	This library contains the drivers to connect from a Java application to a MySQL database system.
+
+log4j-$.jar	Apache log4j is a framework for the logging of messages, errors and exceptions in Java applications.
+
+junit-$.jar	This jar-file contains the necessary classes for the JUnit-tests, which can be used to test automatically Java classes.
+
+concurrent-$.jar	This library supplies different thread-safe classes for the enhanced development of multithreaded Java applications.
+
+commons-cli-$.jar	Apache Commons CLI provides a simple API for working with the command line arguments and options.
+commons-io-$.jar	Apache Commons-IO contains utility classes, stream implementations, file filters, and endian classes.
+commons-logging-$.jar	Apache Commons Logging is a thin adapter allowing configurable bridging to other, well known logging systems.
+commons-pool-$.jar	Apache Commons Pool is an Object-pooling API supplying different interfaces and classes to create modular object pools.
+
 aspectjweaver-$.jar	This jar contains the weaver-agent for the aspect-oriented-extension for Java named AspectJ.
-junit-$.jar	This jar-file contains the necessary classes for the JUnit-tests.
 aspectjrt-$.jar	This jar-file contains the runtime library for AspectJ programs.
 aspectjtools-$.jar	This package contains the tools (the AspectJ Compiler and Browser) for AspectJ.
-commons-pool-$.jar	Pool is an Object-pooling API supplying different interfaces and classes to create modular object pools.
+
+spring.jar	The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.
+spring-web.jar	This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.
+
+servlet.jar	This package contains different classes for the work with servlets.
+servlet-api.jar	The Java Servlet API supplies protocols to let applications respond for example to HTTP requests.
+
+jmc.jar	This library contains the Java Media Components which can be used for example for playing video content in Swing applications.
+
+Scenario.jar	This package provides scene graph functionality for Java.
+
+openjms-$.jar	OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification
+
+rabbitmq-client.jar	This library contains the client for the RabbitMQ messaging system.
+
+jndi-$.jar	The Java Naming and Directory Interface is an API which provides methods for multiple naming and directory services. It can be used for example to register disposed files in a network and to allow other part of a Java program to use them for RMI calls.
+spice-jndikit-$.jar	The JNDI Kit is a toolkit for the easy use of the so called Java Naming and Directory Interface.
+
 cxf-api-$.jar	Apache CXF is an open source services framework.  
 cxf-rt-core-$.jar	This library contains the Apache CXF Runtime Core. 
+
 jms-$.jar	Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
-servlet-api.jar	The Java Servlet API supplies protocols to let applications respond for example to HTTP requests.
-spice-jndikit-$.jar	The JNDI Kit is a toolkit for the easy use of the so called Java Naming and Directory Interface (JNDI). This API can be used for name and directory service.
+
+cxf-common-utilities-$.jar	This package contains different classes for Apache CXF.
+cxf-rt-bindings-soap-$.jar	This package contains necessary files to use Apache CXF as well with the Simple Object Access Protocol (SOAP).
