@@ -22,7 +22,7 @@
 		appendix.
 
 
-	\section{Monitoring Records}
+	\section{Monitoring Records}\label{sec:componentsMonitoring:monitoringRecords}
 
 		As can be seen in the example chapter, the records are the objects which store the monitored informations somehow. To be more precisely, they are not really part of \KiekerMonitoringPart\, but in order to use them in this chapter, they will be examined now.\\ To implement an own record, the easiest way is to extend the already existing abstract class \class{kieker.common.record.AbstractMonitoringRecord}. The implementation of a record has to provide methods to put the whole content of the record into an array (of Object) so that the other components of \Kieker\  are able to persist the data. Due to the fact that the data has to be read again, the records have to provide methods to restore the content from an array as well. Listing \ref{listing:MyRecord} shows a simple record implementation which stores informations about the called class and method.
 

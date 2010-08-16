@@ -60,7 +60,7 @@ The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and %
 A Servlet-based Web application, provided in \file{\servletWar}, can be used %
 to view and control the status of \KiekerMonitoringPart{} in Java~EE %
 environments. The \file{\kiekerMonitoringProperties{}} is a sample configuration %
-file for \KiekerMonitoringPart{}, as detailed in Section~\ref{chap:componentsMonitoring}. %
+file for \KiekerMonitoringPart{}, as detailed in Chapter~\ref{chap:componentsMonitoring}. %
 Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} %
 as a logging interface, the file \file{\commonsLoggingJar} is the only dependency %
 to a third-party library which is needed by \Kieker{} in every case. 
@@ -164,6 +164,16 @@ to monitor this example application employing \KiekerMonitoringPart{} using manu
 
 In the previous Sections~\ref{sec:example:downloadInstall} and \ref{sec:example:bookstore}, the \Kieker{} installation and the example application have been introduced. In this section, the preparations for application monitoring, the instrumentation of the application, and the monitoring are explained.
 
+\quad\
+
+\WARNBOX{In this example, the instrumentation is done manually. %
+This means that the monitoring probe is implemented by mixing monitoring logic %
+with business logic, which is often not desired since the resulting code is %
+hardly maintainable. \Kieker{} includes probes %
+based on AOP (aspect-oriented programming, \cite{Kiczales1997}) %
+technology, as covered by Chapter~\ref{chap:aspectJ}. However, to illustrate the %
+instrumentation in detail, the quick start example uses manual instrumentation.}
+
 The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
 The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied to the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
@@ -188,27 +198,13 @@ this section can be found in the \file{\manualInstrumentedBookstoreApplicationDi
 
 \quad\
 
-\noindent In this example, the instrumentation in this example is done manually. %
-This means that the monitoring probe is implemented by mixing monitoring logic %
-with business logic, which is often not desired since the resulting code is %
-hardly maintainable. \Kieker{} includes probes %
-based on AOP (aspect-oriented programming, \cite{Kiczales1997}) %
-technology, as covered by Section~\ref{chap:aspectJ}. However, to illustrate the %
-instrumentation in detail, the quick start example uses manual instrumentation.
-
-Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines 11 and 12, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
-
-% \TODO{Imports?!\\ --- avh: ja, evtl. mit linerange, aber er bl\"oderweise nummeriert er so durch}
-% Make sure that this listing will be modified, once the sourcecode changes!!!
-% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-
-\setJavaCodeListing
-\lstinputlisting[linerange={11-29}, firstnumber=11, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
-{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
- 
-\noindent The lines 17 and 19 are used to determine the time in nanoseconds before and after the \method{getBook()} call. In lines 20 to 23, a record for this measurement is created and initialized with the two time values. In addition the record has an attribute for the involved class \verb!Catalog! and the called method \method{getBook()}. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. There are different writers available which is explained in detail in Section~\ref{sec:monitoring-log-writers}.
-
-\Kieker{} can log different kinds of record structures. The record type in this example is an \textit{operation execution record}. Figure~\ref{fig:OperationExecutionRecordClassDiagram} shows some of the attributes of an operation execution record. The complete definition can be found in \file{\KiekerDir/src/common/kieker/ common/record/OperationExecutionRecord.java}.
+\noindent \Kieker{} logs monitoring data provided by so-called monitoring records. %
+Section~\ref{sec:componentsMonitoring:monitoringRecords} describes how to define and use custom monitoring record types. %
+The record type used in this example is an \textit{operation execution record} which %
+is included in the \Kieker{} distribution. %
+Figure~\ref{fig:OperationExecutionRecordClassDiagram} shows the %
+attributes which  are relevant to this example. %
+The record type will be detailed in Chapter~\ref{chap:aspectJ} .
 
 \begin{figure}[H]
 \begin{centering}
@@ -228,7 +224,20 @@ Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Books
 \item[\hskip1em\class{tout:}] The time after the method returned
 \end{itemize}
 
-\noindent In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of \method{getBook()} of the \object{catalog} object as shown in Listing~\ref{lst:cuttingCRM} in the lines 19 and 21. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. And the complete example files can be found in the samples directory.
+\noindent Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines 11 and 12, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
+
+% \TODO{Imports?!\\ --- avh: ja, evtl. mit linerange, aber er bl\"oderweise nummeriert er so durch}
+% Make sure that this listing will be modified, once the sourcecode changes!!!
+% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
+
+\setJavaCodeListing
+\lstinputlisting[linerange={11-29}, firstnumber=11, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
+{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+ 
+\noindent The lines 17 and 19 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 20 to 23, a monitoring record for this measurement is created and initialized with the two time values. Additionally, the record has an attribute for the involved class \verb!Catalog! and the called method \method{getBook()}. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. %
+There are different writers available, as detailed in Section~\ref{sec:monitoring-log-writers}.
+
+In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of \method{getBook()} of the \object{catalog} object as shown in Listing~\ref{lst:cuttingCRM} in the lines 19 and 21. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. And the complete example files can be found in the samples directory.
 
 \setJavaCodeListing
 \lstinputlisting[firstline=16, firstnumber=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
@@ -285,7 +294,7 @@ The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example content 
 
 The last task of a successful application monitoring is the analysis of the collected information. In this section the data recorded in the monitoring task of the previous section is analyzed with the \KiekerAnalysisPart{}-package. At first the \Kieker{}-analysis library has to be added to the example. The second step is to write a suitable analyzer. And finally the analyzer is used to aggregate the information in a sensible way.
 
-For this quick example guide, the analysis tool is very simple and does not show the full potential of \Kieker{}. For more detail read chapter \ref{chap:aspectJ} which uses the trace analysis tool of the \Kieker{}-package.
+For this quick example guide, the analysis tool is very simple and does not show the full potential of \Kieker{}. For more detail read Chapter~\ref{chap:aspectJ} which uses the trace analysis tool of the \Kieker{}-package.
 
 \begin{figure}[H]
 \begin{graybox}
