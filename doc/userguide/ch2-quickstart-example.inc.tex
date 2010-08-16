@@ -217,11 +217,12 @@ The record type will be detailed in Chapter~\ref{chap:aspectJ} .
 \noindent The important attributes for the quick start guide are:
 
 \begin{itemize}
-\item[\hskip1em\class{componentName:}] The components name of the called method
+\item[\hskip1em\class{componentName:}] In this case, the name of the class %
+providing the called method
 \item[\hskip1em\class{opName:}] The name of the called method
 % \item traceId: The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
-\item[\hskip1em\class{tin:}] The time before calling the method
-\item[\hskip1em\class{tout:}] The time after the method returned
+\item[\hskip1em\class{tin:}] The timestamp before calling the method
+\item[\hskip1em\class{tout:}] The timestamp after the method returned
 \end{itemize}
 
 \noindent Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines 11 and 12, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
