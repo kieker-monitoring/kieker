@@ -8,12 +8,12 @@
 
 \chapter{Introduction}
 
-\TODO{Introductional text}
+% \TODO{Introductional text}
 
 %%
 \section{What is \Kieker?}\label{sec:kieker}
 
-The \Kieker{} framework allows to monitor and to analyze the runtime behavior %
+The \Kieker{} framework allows to monitor and to analyze runtime behavior %
 of Java applications. Examples of runtime behavior are application-internal %
 control flows and response times of method executions. %
 % Normal ({}``plain) Java applications can be arranged with the framework as well %
@@ -39,20 +39,19 @@ is structured into two main components:% \KiekerMonitoringPart{} and \KiekerAnal
  % avh: Removed them because we shouldn't use them "inflationaryly"
 \item[\KiekerMonitoringPart]
 is responsible for the program instrumentation, data %
-collection and logging.  Its core is the singleton class \class{MonitoringController} %
-which receives the monitoring data in so-called records and %
-writes these records into the configured monitoring log which can, for example, %
-be located in a filesystem or in a database.
+collection and logging. Its core is the class \class{MonitoringController} %
+which receives the monitoring data in so-called monitoring records and %
+writes these monitoring records into the configured monitoring log---e.g., %
+located in a filesystem or in a database.
 \item[\KiekerAnalysisPart]
-is responsible for the evaluation and possible visualization of the %
-recorded information. Its core is the class \class{AnalysisInstance} %
-which manages the life-cycle of the readers and all plugins which should analyze %
-the stored information.
+is responsible for the analysis and possible visualization of the %
+monitoring data. Its core is the class \class{AnalysisInstance} %
+which manages the life-cycle of the monitoring log reader and all analysis plugins.
 \end{description}
 
 
-\noindent Both parts are composed of subcomponents which can just be used or %
-replaced by customized implementations. The important interaction pattern among %
+\noindent Both parts are composed of subcomponents---those included in the %
+Kieker distribution and/or custom implementations. The important interaction pattern among %
 the components is illustrated in Figure \ref{Figure:KiekerCommunicationDiagram} %
 but will be explained furthermore throughout the course of this tutorial. %
 
@@ -65,34 +64,51 @@ but will be explained furthermore throughout the course of this tutorial. %
 		
 % Notify-tag because it is explained how Kieker works.
 % avh: removed
-\noindent The monitoring probes create the monitoring records and deliver %
-them to the monitoring controller. The monitoring controller uses the monitoring %
-log writers to persist the given records which can later be read by a monitoring %
-log reader who creates a monitoring record again. These records can then be used %
-by the consumers in nearly every way.
+\noindent The monitoring probes create the monitoring records included the %
+monitoring data and deliver them to the monitoring controller. %
+The monitoring controller employs the monitoring log writers to write these %
+monitoring records to the monitoring log. %
+For analysis, a monitoring log reader reads the records from the monitoring log, 
+which are then passed  who creates a monitoring record again. These records can %
+then be further processed by the analysis plugins.
 
 %%
-\section{Features}
+% \section{Features}
 
-\TODO{The features-part has yet to be filled.}
+Kieker includes monitoring log writers and readers for filesystems, SQL %
+databases, and the Java Messaging Service~(JMS)~\cite{JMS-WebSite}. %
+A special feature of Kieker is the ability to monitor and analyze (distributed) %
+traces of method executions and corresponding timing information. %
+For this purpose, Kieker includes monitoring probes employing %
+AspectJ~\cite{AspectJ-WebSite}, %
+Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
+Spring~\cite{Spring-WebSite}, and %
+Apache~CXF~\cite{CXF-WebSite} technology. %
+The \KiekerTraceAnalysis{} tool allows to reconstruct and visualize %
+architectural models of the monitored systems, e.g., as sequence and %
+dependency diagrams.
 
 %%	
-\section{About this User Guide}
+\section{Structure of this User Guide}
 
-% Short explanation what the tutorial will show now.
-This tutorial will take a closer look at both, the \KiekerMonitoringPart{}- and %
-the \KiekerAnalysisPart-part. It will be described on the one hand how %
-\KiekerMonitoringPart{}  can be used to instrument Java programs %
-with \Kieker\ and to let them execute under monitoring, so that the recorded %
-information can be persisted and on the other hand \KiekerAnalysisPart{} %
-will be used for processing the recorded data.
+Based on a simple example, Chapter~\ref{chap:example} demonstrates %
+how to manually instrument Java programs with \KiekerMonitoringPart{} %
+in order to monitor timing information of method executions, and %
+how to use \KiekerAnalysisPart{} to analyze the monitored data. %
+Chapter~\ref{chap:componentsMonitoring} provides a more detailed %
+description of \KiekerMonitoringPart{} and shows how to implement and %
+use custom monitoring records, monitoring probes, and monitoring log writers. %
+A more detailed description of \KiekerAnalysisPart{} and how to implement and use %
+custom monitoring log readers, and analysis plugins follows in %
+Chapter~\ref{chap:componentsAnalysis}. %
+Chapter~\ref{chap:aspectJ} demonstrates how to use \KiekerTraceAnalysis{} %
+for monitoring and analyzing/visualizing traces. %
 
-Before this tutorial goes deeper into the single parts of the framework, it %
-shows how to create and execute a simple example.
+\quad\\
 
 % Notify-tag because this could be interesting for the reader.
 \NOTIFYBOX{The Java sources presented in this user guide are included in the %
-\file{doc/tutorial/source-example/} directory of the \Kieker{} distribution (see %
+\file{\exampleDirFull/} directory of the \Kieker{} distribution (see %
 Section \ref{sec:example:downloadInstall}).}
 
-\TODO{Point to Web site for additional examples, TR, \ldots}
+% \TODO{Point to Web site for additional examples, TR, \ldots}

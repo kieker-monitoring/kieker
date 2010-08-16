@@ -1,6 +1,8 @@
 SHELL=/bin/bash
 
 DOCBASEFN=kieker-userguide
+BIBGEN_SH=../../../../../../phd_vanhoorn/bin/bibs-gen.sh
+
 
 doitall: clean document
 
@@ -8,7 +10,8 @@ document:
 	java -jar make-libraries.jar libraries_descriptions ../../lib/ Libraries.tex
 	pdflatex $(DOCBASEFN)
 #	makeindex $(DOCBASEFN)
-#	bibtex $(DOCBASEFN)
+	if [ -x "$(BIBGEN_SH)" ]; then $(BIBGEN_SH) $$(find -name "*.aux")  > bibliography.bib; fi
+	bibtex $(DOCBASEFN)
 #	makeindex -s sprmindx.sty $(DOCBASEFN).idx
 #	makeindex $(DOCBASEFN).nlo -s nomencl.ist -o $(DOCBASEFN).nls
 #	makeindex $(DOCBASEFN).idx

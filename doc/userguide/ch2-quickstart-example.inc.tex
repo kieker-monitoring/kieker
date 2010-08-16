@@ -8,17 +8,27 @@
 
 \chapter{Quick Start Example}\label{chap:example}
 
-This \emph{quick start example} provides a brief introduction to \Kieker{} based on a simple Bookstore example application. Section~\ref{sec:example:downloadInstall} explains how to download and install \Kieker{}. The Bookstore application itself is introduced in Section~\ref{sec:example:bookstore}, while the following Sections~\ref{sec:example:monitoring} and \ref{sec:example:analysis} demonstrate how to use \Kieker{} for monitoring and analyzing the resulting monitoring data.
+This chapter provides a brief introduction to \Kieker{} based on a simple %
+Bookstore example application. Section~\ref{sec:example:downloadInstall} %
+explains how to download and install \Kieker{}. The Bookstore application itself %
+is introduced in Section~\ref{sec:example:bookstore}, while the following %
+sections and demonstrate %
+how to use \Kieker{} for monitoring~(Section~\ref{sec:example:monitoring}) and %
+analyzing~(Section~\ref{sec:example:analysis}) the resulting monitoring data. %
 
 %%
 \section{Download and Installation}\label{sec:example:downloadInstall}
 
-\Kieker{} is available on \KiekerURL{} in binary and source code archives. For convenience, the archives are available in tar.gz and zip format.
-
-For this quick start guide the binary distribution of \Kieker{} is required and must be downloaded, e.g., \file{\binaryFileForDownload}. The downloaded archive should be extracted in a convenient place and the directory tree should follow roughly the structure shown in Figure~\ref{fig:binary-layout}.
+The Kieker download site\footnote{\KiekerDownloadURL{}} provides archives %
+of the binary and source distribution, the Javadoc~API, as well %
+as additional examples. %The archives are available in tar.gz and zip format.
+For this quick start guide the \Kieker{}'s binary distribution, e.g., %
+\file{\binaryFileForDownload}, is required and must be downloaded. %
+After having extracted the archive, you'll find the directory structure and %
+contents shown in Figure~\ref{fig:binary-layout}.
 
 % Note: The indention is not really necessary, but the tree is easier to understand in the tex-source.
-\begin{figure}[H]
+\begin{figure}%[H]
 \begin{graybox}
 \dirtree{%  
 	.1 \DirInDirTree{\KiekerDir/}.
@@ -32,8 +42,10 @@ For this quick start guide the binary distribution of \Kieker{} is required and 
 			.3 \mainJar. 
 			.3 \servletWar. 
 		.2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}. 
+			.3 \commonsLoggingJar.
 			.3 \ldots. 
 		.2 \DirInDirTree{META-INF/}\DTcomment{Example configuration files}. 
+			.3 \kiekerMonitoringProperties{}.
 			.3 \ldots. 
 }
 \end{graybox}
@@ -41,10 +53,27 @@ For this quick start guide the binary distribution of \Kieker{} is required and 
 \label{fig:binary-layout}
 \end{figure}
 
+This document as well as the Java sources of the included examples %
+can be found in the directory~\dir{\userGuideDir{}/}. %
+The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and %
+\KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. %
+A Servlet-based Web application, provided in \file{\servletWar}, can be used %
+to view and control the status of \KiekerMonitoringPart{} in Java~EE %
+environments. The \file{\kiekerMonitoringProperties{}} is a sample configuration %
+file for \KiekerMonitoringPart{}, as detailed in Section~\ref{chap:componentsMonitoring}. %
+Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} %
+as a logging interface, the file \file{\commonsLoggingJar} is the only dependency %
+to a third-party library which is needed by \Kieker{} in every case. 
+
 %%
 \section{Bookstore Example Application}\label{sec:example:bookstore}
 
-The Bookstore application is a small sample application resembling a simple bookstore with a marketplace facility where user can search for books in an online catalog and subsequently get offers from different book sellers. Figure~\ref{fig:bookstore:classAndSequenceDiagrams} shows on the left side a class diagram describing the static make up of the bookstore and on the right side a sequence diagram illustrating the dynamic of the application. 
+The Bookstore application is a small sample application resembling a simple %
+bookstore with a marketplace facility where user can search for books in an %
+online catalog and subsequently get offers from different book sellers. %
+Figure~\ref{fig:bookstore:classAndSequenceDiagrams} shows %on the left side 
+a class diagram describing the structure of the bookstore and %on the right side 
+a sequence diagram illustrating the dynamics of the application. 
 
 \begin{figure}[h]\centering
 \subfigure[]{\label{fig:boostore:classdiagram}%
@@ -58,9 +87,16 @@ sequence diagram~\subref{fig:boostore:sequencediagram} of the Bookstore applicat
 \label{fig:bookstore:classAndSequenceDiagrams}
 \end{figure}
 
-\noindent The bookstore contains a catalog for books and a customer relationship database for the book sellers. To provide this service the different classes provide operations to initialize the application, search for books and get offers for a searched books. In this example the methods implementing these operations are merely stubs. However, for the illustration of \Kieker{} they are sufficient and the inclined reader may extend the application into a real bookstore. 
+The bookstore contains a catalog for books and a customer relationship %
+management system~(CRM) for the book sellers. To provide this service, the different classes %
+provide operations to initialize the application, search for books and get offers %
+for searched books. In this example, the methods implementing these operations are %
+merely stubs. However, for the illustration of \Kieker{} they are sufficient and the %
+inclined reader may extend the application into a real bookstore. 
 
-The directory structure of this Bookstore example is shown in Figure~\ref{fig:PlainBookstoreExample} and comprises four class files in \dir{example/src/bookstoreApplication/} which are explained in detail below.
+The directory structure of the Bookstore example is shown in %
+Figure~\ref{fig:PlainBookstoreExample} and comprises four Java classes in %
+\dir{example/src/bookstoreApplication/} which are detailed below.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -80,7 +116,14 @@ The directory structure of this Bookstore example is shown in Figure~\ref{fig:Pl
 \label{fig:PlainBookstoreExample}
 \end{figure}
 
-\noindent Listing~\ref{lst:class:BookstoreStarter} contains the main method, meaning the programs start routine. It initializes the \class{Bookstore} and issues five search requests to the \object{bookstore} object.
+\NOTIFYBOX{The Java sources of the uninstrumented bookstore described in this section %
+can be found in the \file{\plainBookstoreApplicationDir{}/} directory.}
+
+\quad\
+
+\noindent The class \class{BookstoreStarter}, shown in Listing~\ref{lst:class:BookstoreStarter}, %
+contains the application's \method{main} method, i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by %
+calling the \method{searchBook} method of the \object{bookstore} object.
 
 \setJavaCodeListing
 
@@ -92,7 +135,7 @@ In a real application these methods would pass objects to ensure the results of 
 
 \lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore]{\plainBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
-\noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM} . It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
+\noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM}. It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
 
 \lstinputlisting[caption=CRM.java,label=lst:class:CRM]{\plainBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
 
@@ -100,7 +143,7 @@ In a real application these methods would pass objects to ensure the results of 
 
 \lstinputlisting[caption=Catalog.java,label=lst:class:Catalog]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
 
-\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader entered the in \dir{example/} directory.
+\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader entered the commands in the \dir{example/} directory.
 
 \setBashListing
 % \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
@@ -112,16 +155,17 @@ In a real application these methods would pass objects to ensure the results of 
 
 \input{ch2-quickstart-example_Example_Run_Example_1-noinstr.inc}
 
-\noindent In this section the \Kieker{} example application was introduced and when everything went well, the bookstore is a runnable program. Furthermore the composition of the application and its function should now be present. In the next section, the monitoring of the example application is introduced were the classes are extended by instrumentation code.
+\noindent In this section, the \Kieker{} example application was introduced and when everything went well, the bookstore is a runnable program. Furthermore, the composition of the application and its function should now be present. %
+The next Section~\ref{sec:example:monitoring} will demonstrate how %
+to monitor this example application employing \KiekerMonitoringPart{} using manual instrumentation.
 
 %%
 \section{Monitoring}\label{sec:example:monitoring}
 
-In the previous sections the \Kieker{} installation and the example application have been introduced. In this section the preparations for application monitoring, the instrumentation of the application and the monitoring are explained.
+In the previous Sections~\ref{sec:example:downloadInstall} and \ref{sec:example:bookstore}, the \Kieker{} installation and the example application have been introduced. In this section, the preparations for application monitoring, the instrumentation of the application, and the monitoring are explained.
 
-The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory. The file is located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive as described in Section~\ref{sec:example:downloadInstall}.
-
-The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied in the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
+The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
+The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied to the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -139,11 +183,22 @@ The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory
 \label{fig:KiekerBookstoreExample}
 \end{figure}
 
-\noindent The instrumentation in this example is done manually. \Kieker{} is able to use aspectJ for instrumentation. However, to illustrate the instrumentation in detail, the quick start example uses manual instrumentation.
+\NOTIFYBOX{The Java sources of the manually instrumented Bookstore application described in %
+this section can be found in the \file{\manualInstrumentedBookstoreApplicationDir{}/} directory.}
 
-Listing~\ref{lst:cuttingBookstore} shows instrumentation of \class{Bookstore} class and its method \method{searchBook()}. In the lines 11 and 12, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
+\quad\
 
-\TODO{Imports?!\\ --- avh: ja, evtl. mit linerange, aber er bl\"oderweise nummeriert er so durch}
+\noindent In this example, the instrumentation in this example is done manually. %
+This means that the monitoring probe is implemented by mixing monitoring logic %
+with business logic, which is often not desired since the resulting code is %
+hardly maintainable. \Kieker{} includes probes %
+based on AOP (aspect-oriented programming, \cite{Kiczales1997}) %
+technology, as covered by Section~\ref{chap:aspectJ}. However, to illustrate the %
+instrumentation in detail, the quick start example uses manual instrumentation.
+
+Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines 11 and 12, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
+
+% \TODO{Imports?!\\ --- avh: ja, evtl. mit linerange, aber er bl\"oderweise nummeriert er so durch}
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 
