@@ -63,7 +63,7 @@ environments. The \file{\kiekerMonitoringProperties{}} is a sample configuration
 file for \KiekerMonitoringPart{}, as detailed in Chapter~\ref{chap:componentsMonitoring}. %
 Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} %
 as a logging interface, the file \file{\commonsLoggingJar} is the only dependency %
-to a third-party library which is needed by \Kieker{} in every case. 
+to a third-party library which is needed by \Kieker{} in any case. 
 
 %%
 \section{Bookstore Example Application}\label{sec:example:bookstore}
@@ -96,7 +96,7 @@ inclined reader may extend the application into a real bookstore.
 
 The directory structure of the Bookstore example is shown in %
 Figure~\ref{fig:PlainBookstoreExample} and comprises four Java classes in %
-\dir{example/src/bookstoreApplication/} which are detailed below.
+\dir{example/src/bookstoreApplication/} which are explained in detail below.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -143,7 +143,7 @@ In a real application these methods would pass objects to ensure the results of 
 
 \lstinputlisting[caption=Catalog.java,label=lst:class:Catalog]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
 
-\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader entered the commands in the \dir{example/} directory.
+\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader enters the commands in the \dir{example/} directory.
 
 \setBashListing
 % \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
@@ -174,7 +174,7 @@ based on AOP (aspect-oriented programming, \cite{Kiczales1997}) %
 technology, as covered by Chapter~\ref{chap:aspectJ}. However, to illustrate the %
 instrumentation in detail, the quick start example uses manual instrumentation.}
 
-The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
+\noindent The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
 The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied to the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
 \begin{figure}[H]
@@ -220,7 +220,6 @@ The record type will be detailed in Chapter~\ref{chap:aspectJ} .
 \item[\hskip1em\class{componentName:}] In this case, the name of the class %
 providing the called method
 \item[\hskip1em\class{opName:}] The name of the called method
-% \item traceId: The trace id of the current trace we want to record. Due to the fact, that we follow only one trace, this is zero in all recordings.
 \item[\hskip1em\class{tin:}] The timestamp before calling the method
 \item[\hskip1em\class{tout:}] The timestamp after the method returned
 \end{itemize}
@@ -331,7 +330,7 @@ For this quick example guide, the analysis tool is very simple and does not show
 
 \noindent The analysis application itself comprises the files \file{Consumer.java} and \file{BookstoreAnalysisStarter.java} (as shown in Figure~\ref{lst:analysisExampleLayout}) which can be found in the example directory. 
 
-Listing \ref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{}-monitoring-records. If the term consumer is unclear at this point, please read Section~\ref{sec:kieker}.
+Listing \ref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{}-monitoring-records. The consumer is part of the \KiekerAnalysisPart{} component. It reads records from the logging facility (see Chapter~\ref{chap:introduction} for details on the composition of the \Kieker{} framework).
 
 \setJavaCodeListing       
 

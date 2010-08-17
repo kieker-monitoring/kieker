@@ -6,60 +6,32 @@
 % $Author$
 
 
-\chapter{Introduction}
+\chapter{Introduction}\label{chap:introduction}
 
-% \TODO{Introductional text}
+Modern software application are often complex and have to fulfill a large set of functional and non-functional properties. The behavior of such large systems cannot easily be determined on the basis of the source code. Even more, existing applications often lack sufficient documentation which makes it cumbersome to extend and change them for future needs. A solution to these problems can be monitoring, which allows to log the behavior of the application and to discover the application-internal control flows and response times of method executions.
 
-%%
-\section{What is \Kieker?}\label{sec:kieker}
+The monitoring of the behavior can help in detecting performance problems, faulty behavior, intrusion detection, capacity planning and many other areas. The \Kieker{} framework provides the necessary monitoring capabilities and comes with tools and libraries for the analysis of monitored data. Even more, the framework supports monitoring at runtime with a very low overhead for the measurements, and offline evaluation of monitored data for a deeper inspection of the applications composition. 
 
-The \Kieker{} framework allows to monitor and to analyze runtime behavior %
-of Java applications. Examples of runtime behavior are application-internal %
-control flows and response times of method executions. %
-% Normal ({}``plain) Java applications can be arranged with the framework as well %
-% as server based Java web applications. 
-% The framework itself has been developed with regard to providing an easy manageable, %
-% maintainable piece of software, which can be included uncomplicated into both, %
-% new and existing software projects. 
-Kieker has been designed for continuous operation, inducing only a very low %
-overhead during the monitoring. 
-% Kieker can probe whole method calls as well as single statements (e.g. a = a + 1).\\ 
+The present version of the \Kieker{} framework allows to monitor and to analyze behavior of Java applications. However, it is possible to extend it for other languages and platforms. Figure \ref{fig:KiekerComponentDiagram} shows the framework's main composition based on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. 
 
 % This is the component diagram of Kieker (the satellite).
 \begin{figure}[H]\centering
 \includegraphics[width=0.73\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames}
 \caption{Overview of the framework components}
-\label{Figure:KiekerComponentDiagram}
+\label{fig:KiekerComponentDiagram}
 \end{figure}
 		
-\noindent Figure \ref{Figure:KiekerComponentDiagram} shows that the framework %
-is structured into two main components:% \KiekerMonitoringPart{} and \KiekerAnalysisPart{}:
-\begin{description}
- % Both items get notify-tags because of the important information in here.
- % avh: Removed them because we shouldn't use them "inflationaryly"
-\item[\KiekerMonitoringPart]
-is responsible for the program instrumentation, data %
-collection and logging. Its core is the class \class{MonitoringController} %
-which receives the monitoring data in so-called monitoring records and %
-writes these monitoring records into the configured monitoring log---e.g., %
-located in a filesystem or in a database.
-\item[\KiekerAnalysisPart]
-is responsible for the analysis and possible visualization of the %
-monitoring data. Its core is the class \class{AnalysisInstance} %
-which manages the life-cycle of the monitoring log reader and all analysis plugins.
-\end{description}
+\noindent The \KiekerMonitoringPart{} component is responsible for the program instrumentation, data collection and logging. Its core is the class \class{MonitoringController} which receives the monitoring data in so-called monitoring records and writes these monitoring records into the configured monitoring log. 
 
+The component \KiekerAnalysisPart{} is responsible for the analysis and possible visualization of the monitoring data. Its core is the class \class{AnalysisInstance} which manages the life-cycle of the monitoring log reader and all analysis plugins.
 
-\noindent Both parts are composed of subcomponents---those included in the %
-Kieker distribution and/or custom implementations. The important interaction pattern among %
-the components is illustrated in Figure \ref{Figure:KiekerCommunicationDiagram} %
-but will be explained furthermore throughout the course of this tutorial. %
+The monitoring and analysis parts of the \Kieker{} framework are composed of subcomponents which represent the different functionalities of the monitoring and analysis tasks. The important interaction pattern among the components is illustrated in Figure~\ref{fig:KiekerCommunicationDiagram} but will be explained furthermore throughout the course of this tutorial. 
 
 % This image shows the communication diagram of the different components.
 \begin{figure}[H]\centering
 \includegraphics[width=1\textwidth]{images/kiekerCommunications-revisedReArranged-woMonitoringLog-bw-newNames}
 \caption{Communication among \Kieker{} framework components}
-\label{Figure:KiekerCommunicationDiagram}
+\label{fig:KiekerCommunicationDiagram}
 \end{figure}
 		
 % Notify-tag because it is explained how Kieker works.
@@ -89,7 +61,7 @@ architectural models of the monitored systems, e.g., as sequence and %
 dependency diagrams.
 
 %%	
-\section{Structure of this User Guide}
+% \section{Structure of this User Guide}
 
 Based on a simple example, Chapter~\ref{chap:example} demonstrates %
 how to manually instrument Java programs with \KiekerMonitoringPart{} %
