@@ -35,12 +35,12 @@ contents shown in Figure~\ref{fig:binary-layout}.
 		.2 \DirInDirTree{bin/}\DTcomment{Call scripts for \Kieker{} tools}. 
 			.3 \ldots. 
 		.2 \DirInDirTree{doc/}\DTcomment{}. 
-			.3 \DirInDirTree{tutorial/}. 
-				.4 userguide.pdf\DTcomment{PDF file of this document}. 
-				.4 \DirInDirTree{\exampleDir/}\DTcomment{Source code of the examples in this document}. 
+			.3 kieker-userguide.pdf\DTcomment{PDF file of this document}. 
 		.2 \DirInDirTree{dist/}\DTcomment{The \Kieker{} framework libraries}. 
 			.3 \mainJar. 
 			.3 \servletWar. 
+		.2 \DirInDirTree{examples/}.
+			.3 \DirInDirTree{userguide/}\DTcomment{Source code of the examples in this document}.
 		.2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}. 
 			.3 \commonsLoggingJar.
 			.3 \ldots. 
@@ -117,7 +117,7 @@ Figure~\ref{fig:PlainBookstoreExample} and comprises four Java classes in %
 \end{figure}
 
 \NOTIFYBOX{The Java sources of the uninstrumented bookstore described in this section %
-can be found in the \file{\plainBookstoreApplicationDir{}/} directory.}
+can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
 
 \quad\
 
@@ -194,7 +194,7 @@ The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory
 \end{figure}
 
 \NOTIFYBOX{The Java sources of the manually instrumented Bookstore application described in %
-this section can be found in the \file{\manualInstrumentedBookstoreApplicationDir{}/} directory.}
+this section can be found in the \file{\manualInstrumentedBookstoreApplicationDirDistro{}/} directory.}
 
 \quad\
 
@@ -247,7 +247,7 @@ Finally, a record is created (see lines 22--25) and stored by calling the monito
 {\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
 
 \noindent %
-The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application in Linux or any other Unix-like system. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
+The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
 
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
@@ -305,9 +305,13 @@ this monitoring data with \KiekerAnalysisPart{}.
 %%
 \section{Analysis}\label{sec:example:analysis}
 
-The last task of a successful application monitoring is the analysis of the collected information. In this section the data recorded in the monitoring task of the previous section is analyzed with the \KiekerAnalysisPart{}-package. At first the \Kieker{}-analysis library has to be added to the example. The second step is to write a suitable analyzer. And finally the analyzer is used to aggregate the information in a sensible way.
-
-For this quick example guide, the analysis tool is very simple and does not show the full potential of \Kieker{}. For more detail read Chapter~\ref{chap:aspectJ} which uses the trace analysis tool of the \Kieker{}-package.
+%The last task of a successful application monitoring is the analysis of the collected information.
+In this section, the monitoring data recorded in the previous section is %
+analyzed with \KiekerAnalysisPart{}. %
+% The second step is to write a suitable analyzer. And finally the analyzer is used to aggregate the information in a sensible way.
+For this quick example guide, the analysis tool is very simple and does not show %
+the full potential of \Kieker{}. For more detail read Chapter~\ref{chap:aspectJ} %
+which uses \KiekerTraceAnalysis{}.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -328,34 +332,39 @@ For this quick example guide, the analysis tool is very simple and does not show
 \label{lst:analysisExampleLayout}
 \end{figure}
 
-\noindent The analysis application itself comprises the files \file{Consumer.java} and \file{BookstoreAnalysisStarter.java} (as shown in Figure~\ref{lst:analysisExampleLayout}) which can be found in the example directory. 
+\noindent The analysis application developed in this section comprises the files %
+\file{Consumer.java} and \file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
+These files can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDir{}/}. 
 
-Listing \ref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{}-monitoring-records. The consumer is part of the \KiekerAnalysisPart{} component. It reads records from the logging facility (see Chapter~\ref{chap:introduction} for details on the composition of the \Kieker{} framework).
+Listing \ref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{} monitoring records. The consumer is part of the \KiekerAnalysisPart{} component. It processes records provided by the monitoring log readers (see Chapter~\ref{chap:introduction}). %For details on the composition of the \Kieker{} framework).
 
 \setJavaCodeListing       
 
 \lstinputlisting[caption=Consumer.java, label=lst:Consumer]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Consumer.java}
 
-\noindent The herein described consumer checks if each call of the \method{getBook()} method responded inside the given time boundaries. Meaning the maximal response time has not been exceeded. The maximal response time is set at instantiation of the \class{Consumer} class (see lines 14--16). 
+\noindent The consumer checks if the response time of each method call, in this case \method{getBook()}, is below %
+a specified threshold value. %Meaning the maximal response time has not been exceeded. 
+This threshold is set during construction of the \class{Consumer} class (see lines 14--16). 
 
-For the data evaluation the \method{newMonitoringRecord()} (see lines 24--41) is used. This method is called for every monitoring record. At first the method tests if the monitoring record are really \class{OperationExecutionRecord} instances, as these are the only record types it can process. Then the methods calculates the execution time of one recorded \method{getBook()} call. If the method call takes longer than specified, a message is written directly to the error stream.
+For the data analysis the \method{newMonitoringRecord()} (see lines 24--41) is used. This method is called for every monitoring record. At first the method tests if the monitoring record are really \class{OperationExecutionRecord} instances, as these are the only record types it can process. Then the methods calculates the execution time of one recorded \method{getBook()} call. If the method call takes longer than specified, a message is written directly to the error stream.
 
-The methods \method{terminate} and \method{execute} don't do anything due to the fact that this consumer does not need any initialization. If the consumer would for example use threads then these methods would be the correct location to start and stop them.
+The framework methods \method{terminate} and \method{execute} don't do anything %
+in this example, due to the fact that this consumer does not need any initialization. If the consumer would, for example, use threads then these methods would be the correct location to start and stop them.
 
 After implementing a consumer, the application's main class has to be created. In this case the main program is located in the \file{BookstoreAnalysisStarter.java} file shown in Listing~\ref{lst:BookstoreAnalysisStarter}.
 
 \setJavaCodeListing       
 \lstinputlisting[caption=BookstoreAnalysisStarter.java,label=lst:BookstoreAnalysisStarter]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/BookstoreAnalysisStarter.java}
 
-\noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each analysis tool has to create at least one \class{AnalysisInstance} which can be seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line 19. Then the consumers are registered with the analysis instance. In this case the previously described \class{Consumer} is instantiated and the maximal response time is set to 3 nanoseconds. 
+\noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each analysis tool has to create at least one \class{AnalysisInstance} which can be seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line 19. Then the consumers are registered with the analysis instance. In this case, the previously described \class{Consumer} is instantiated and the maximum response time is set to 3 nanoseconds. %
+Line~27 sets the file system monitoring log reader which is initialized with the first %
+command-line argument value as the input directory. The application expects the %
+output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) %
+as the only argument value, which must be passed manually. %
+The analysis started by calling its \method{run} method (line 30). %
 
-After preparing the analysis itself, the in- and outputs have to be set. This is done in line 24 were the output directory is set. Line 26 initializes an array of input directories. In this example the output directory is also used as an input directory. This might not be too wise in a real application. However, for this example it will suffice. In the next line (line 27) the log reader of the analysis instance is set. In this particular case a file system reader is used.
-
-To set the whole analysis in motion, the analysis instance has to be started. This is done in line 30 of Listing~\ref{lst:BookstoreAnalysisStarter}.
-
-As it can be seen, the application expects the output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) as argument, which must be passed manually. 
-
-The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} describe how the analysis application can be compiled and run under Linux or other Unix-like systems and Windows.
+The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} %
+describe how the analysis application can be compiled and executed under \UnixLikeSystems{} and Windows.
 
 \setBashListing 		
 

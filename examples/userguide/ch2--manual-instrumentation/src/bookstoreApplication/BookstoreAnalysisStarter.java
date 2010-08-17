@@ -15,18 +15,16 @@ public class BookstoreAnalysisStarter {
 		  return;
 		}
 
-        /* Prepare the analysis */
+        /* Create Kieker.Analysis instance */
         AnalysisInstance analysisInstance = new AnalysisInstance();
         /* Register our own consumer. */
         analysisInstance.registerPlugin(new Consumer(3));
 
-        /* Get the output directory from the given argument. */
-        String outputDir = args[0];
-        /* ...and use it as input directory for our analysis */
-        String inputDirs[] = {outputDir};
+        /* Set filesystem monitoring log input directory for our analysis */
+        String inputDirs[] = {args[0]};
         analysisInstance.setLogReader(new FSReader(inputDirs));
 
-        /* Now start the analysis */
+        /* Start the analysis */
         analysisInstance.run();
     }
 }

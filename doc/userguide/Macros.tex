@@ -29,12 +29,16 @@
 
 % Some directories for the examples
 \newcommand{\userGuideDir}{doc/userguide}
-\newcommand{\exampleDir}{examples}
-\newcommand{\exampleDirFull}{\userGuideDir/\exampleDir}
-\newcommand{\plainBookstoreApplicationDir}{\exampleDir/ch2--bookstore-application}
-\newcommand{\manualInstrumentedBookstoreApplicationDir}{\exampleDir/ch2--manual-instrumentation}
-\newcommand{\customComponentsBookstoreApplicationDir}{\exampleDir/ch3-4--custom-components}
-\newcommand{\aspectJBookstoreApplicationDir}{\exampleDir/ch5--aspectj-instrumentation}
+\newcommand{\exampleDir}{examples/userguide}
+\newcommand{\exampleDirRelativePath}{../../\exampleDir}
+\newcommand{\plainBookstoreApplicationDir}{\exampleDirRelativePath/ch2--bookstore-application}
+\newcommand{\plainBookstoreApplicationDirDistro}{\exampleDir/ch2--bookstore-application}
+\newcommand{\manualInstrumentedBookstoreApplicationDir}{\exampleDirRelativePath/ch2--manual-instrumentation}
+\newcommand{\manualInstrumentedBookstoreApplicationDirDistro}{\exampleDir/ch2--manual-instrumentation}
+\newcommand{\customComponentsBookstoreApplicationDir}{\exampleDirRelativePath/ch3-4--custom-components}
+\newcommand{\customComponentsBookstoreApplicationDirDistro}{\exampleDir/ch3-4--custom-components}
+\newcommand{\aspectJBookstoreApplicationDir}{\exampleDirRelativePath/ch5--aspectj-instrumentation}
+\newcommand{\aspectJBookstoreApplicationDirDistro}{\exampleDir/ch5--aspectj-instrumentation}
 
 % The complete url where to find Kieker.
 \newcommand{\KiekerURL}{\url{http://kieker.sourceforge.net}}
@@ -130,8 +134,8 @@ morekeywords={java,javac,-classpath,-d,-jar,-javaagent:,copy,cp},
 language=XML
 }
 
-\newcommand{\UnixLikeSystem}{Unix-like system}
-\newcommand{\UnixLikeSystems}{Unix-like systems}
+\newcommand{\UnixLikeSystem}{UNIX-like system}
+\newcommand{\UnixLikeSystems}{UNIX-like systems}
 \newcommand{\lstshellprompt}{$\triangleright$}
 \newcommand{\lstHighlight}{\bfseries}
 \newcommand{\setJavaCodeListing}{\setListing{javaStyle}{left}{\sffamily\footnotesize}{\#}}

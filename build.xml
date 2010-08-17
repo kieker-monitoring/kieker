@@ -376,6 +376,8 @@
     <target name="dist-kieker-binaries" depends="build-all,build-userguide">
         <echo message="${src.userguide.pdf}"/>
 
+        <copy file="${src.userguide.pdf}" tofile="${src.userguide.dist.pdf}"/>
+
         <patternset id="dist_bin_files-nonbinmode">
             <include name="bin/log4j.properties"/>
             <include name="dist/*.jar"/>
@@ -387,7 +389,7 @@
             <!--<include name="ISSUES"/>-->
             <include name="HISTORY"/>
             <include name="LICENSE"/>
-            <include name="${src.userguide.pdf}"/>
+            <include name="${src.userguide.dist.pdf}"/>
             <include name="${src.userguide.example.bookstore.dir}/build.xml"/>
             <include name="${src.userguide.example.bookstore.dir}/build.properties"/>
             <include name="${src.userguide.example.bookstore.dir}/src/**/*.java"/>
