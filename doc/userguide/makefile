@@ -10,7 +10,7 @@ document:
 	java -jar make-libraries.jar libraries_descriptions ../../lib/ Libraries.tex
 	pdflatex $(DOCBASEFN)
 #	makeindex $(DOCBASEFN)
-	if [ -x "$(BIBGEN_SH)" ]; then $(BIBGEN_SH) $$(find -name "*.aux")  > bibliography.bib; fi
+#	if [ -x "$(BIBGEN_SH)" ]; then $(BIBGEN_SH) $$(find -name "*.aux")  > bibliography.bib; fi
 	bibtex $(DOCBASEFN)
 #	makeindex -s sprmindx.sty $(DOCBASEFN).idx
 #	makeindex $(DOCBASEFN).nlo -s nomencl.ist -o $(DOCBASEFN).nls

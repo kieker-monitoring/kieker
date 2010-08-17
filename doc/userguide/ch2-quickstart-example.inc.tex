@@ -294,7 +294,14 @@ The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example file con
 \lstinputlisting[caption=tpmon.map, label=lst:examplemap]%
 {ch2-quickstart-example/tpmon-20100727-181422131-UTC/tpmon.map}
 
-\noindent By the end of this section, two Java classes have been manually instrumented and at least one run of the instrumented application has been performed. As the recorded data can be viewed in spreadsheets or other applications which can process CSV-files, the next task is to use the \KiekerAnalysisPart{}-package as a sophisticated monitoring data analyzer. 
+\noindent By the end of this section, two Java classes of the Bookstore application %
+have been manually instrumented using \KiekerMonitoringPart{} and at least one %
+run of the instrumented application has been performed. %
+The resulting monitoring log, written to the \file{.dat}-file in CSV format, could %
+already been used for analysis or visualization by any spreadsheet or %
+statistical tool. %
+The following Section~\ref{sec:example:analysis} will show how to process %
+this monitoring data with \KiekerAnalysisPart{}. 
 
 %%
 \section{Analysis}\label{sec:example:analysis}
