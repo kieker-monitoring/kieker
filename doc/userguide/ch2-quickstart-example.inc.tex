@@ -198,9 +198,9 @@ this section can be found in the \file{\manualInstrumentedBookstoreApplicationDi
 
 \quad\
 
-\noindent \Kieker{} logs monitoring data provided by so-called monitoring records. %
+\noindent \Kieker{} maintains monitoring data as  so-called monitoring records. %
 Section~\ref{sec:componentsMonitoring:monitoringRecords} describes how to define and use custom monitoring record types. %
-The record type used in this example is an \textit{operation execution record} which %
+The monitoring record type used in this example is an \textit{operation execution record} which %
 is included in the \Kieker{} distribution. %
 Figure~\ref{fig:OperationExecutionRecordClassDiagram} shows the %
 attributes which  are relevant to this example. %
@@ -236,16 +236,18 @@ providing the called method
 {\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
  
 \noindent The lines 17 and 19 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 20 to 23, a monitoring record for this measurement is created and initialized with the two time values. Additionally, the record has an attribute for the involved class \verb!Catalog! and the called method \method{getBook()}. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. %
-There are different writers available, as detailed in Section~\ref{sec:monitoring-log-writers}.
+In this example, the filesystem writer is used---\Kieker{} uses this writer by default when no other writer is specified, %
+as detailed in Section~\ref{sec:monitoring-log-writers}. %.
 
-In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of \method{getBook()} of the \object{catalog} object as shown in Listing~\ref{lst:cuttingCRM} in the lines 19 and 21. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. And the complete example files can be found in the samples directory.
+In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method of the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of the \object{catalog}'s \method{getBook()} method, as shown in %
+lines~19 and~21 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
+Finally, a record is created (see lines 22--25) and stored by calling the monitoring controller (see line 26).
 
 \setJavaCodeListing
 \lstinputlisting[firstline=16, firstnumber=16, lastline=27, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
 {\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
 
-\noindent Finally a record is created (see lines 22--25) and stored by calling the monitoring controller (see line 26).
-
+\noindent %
 The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application in Linux or any other Unix-like system. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
 
 \setBashListing 		
@@ -253,14 +255,18 @@ The next step after instrumenting the code is running the instrumented applicati
 
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}
 
+\quad\
+
 \WARNBOX{%
-The default command-line interpreter of Windows doesn't support automatic %
+Windows' default command-line interpreter doesn't support automatic %
 file expansion. Therefore every single source file has to be passed, as %
 shown in Listing~\ref{lst:bookstoreStarterWin}. %
-Also, it is necessary to separate the different elements of the classpath with %
+Also, it is necessary to separate the classpath elements by %
 a semicolon instead of a colon.}
 
-If everything worked correctly, a new directory for the monitoring data with the name \dir{tpmon-20100727-181422131-UTC/} is created in the default temporary directory (see Listing \ref{fig:logtree}). The numbers in the directory name represent the time and date of the monitoring. Therefore they will be different numbers for every run.
+\quad\
+
+\noindent If everything worked correctly, a new directory for the monitoring data with the name \dir{tpmon-20100727-181422131-UTC/} is created in the default temporary directory (see Listing \ref{fig:logtree}). The numbers in the directory name represent the time and date of the monitoring. Thus, they will be different numbers for every run.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -275,9 +281,9 @@ If everything worked correctly, a new directory for the monitoring data with the
 \label{fig:logtree}
 \end{figure}
 
-\noindent The log directory can be found in the default temporary directory which is in Linux \dir{/tmp/} and in Windows \dir{C:\textbackslash{}temp\textbackslash{}}). The monitoring directory contains two files. One file with the extension \dir{.dat} holding all recorded information from the application run and a second file named \dir{tpmon.map} which contains information on the types of the monitoring records. 
+\noindent In \Kieker's default configuration, the log directory can be found in the default temporary directory: \dir{/tmp/} under \UnixLikeSystems{} and \dir{C:\textbackslash{}temp\textbackslash{}} under Windows. The monitoring directory contains two types of files. Files with the extension \dir{.dat} containing text representations of the monitoring records and a single file named \dir{tpmon.map} which contains information on the types of the monitoring records used. 
 
-The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example content for these to files. The \file{.dat}-file is saved as a CSV-file (\textbf{C}omma \textbf{S}eparated \textbf{V}alues). It is a little irony that the separation character is a semicolon. To understand the \file{.dat}-file structure the semantics have to be explained. For this quick start example only some of the values are relevant. The first value \verb!$1! indicates the record type. The forth value indicates the class and method which has been called. And the seventh and eighth value are the start and end time of the execution of the called method.
+The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example file contents. The \file{.dat}-file is saved in CSV format (\textbf{C}omma \textbf{S}eparated \textbf{V}alues)---in this case, the values of a monitoring record are separated by semicolons. To understand the \file{.dat}-file structure the semantics have to be explained. For this quick start example only some of the values are relevant. The first value \verb!$1! indicates the record type. The forth value indicates the class and method which has been called. And the seventh and eighth value are the start and end time of the execution of the called method.
 
 \setBashListing
 \lstinputlisting[caption=tpmon-20100727-181422234-UTC-Thread-2.dat (excerpt), firstline=1, lastline=3, label=lst:exampledat]%
