@@ -257,7 +257,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     public void terminate(final boolean error) {
         try {
             this.terminate = true;
-            this.processTimeoutQueue();
+            if (!error) {
+                log.info("terminate called with error flag set; won't process timeoutqueue any more.");
+                this.processTimeoutQueue();
+            }
         } catch (final ExecutionEventProcessingException ex) {
             TraceReconstructionFilter.log.error("Error processing queue", ex);
         }

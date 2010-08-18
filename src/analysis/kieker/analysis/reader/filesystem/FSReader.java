@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.common.record.DummyMonitoringRecord;
@@ -72,25 +73,69 @@ public class FSReader extends AbstractMonitoringLogReader {
         private final Collection<Thread> readerThreads = new ArrayList<Thread>();
         //private final List<Thread> activeReaders = new ArrayList<Thread>();
         private final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
-        // guarded by recordListLock
-        private final TreeMap<IMonitoringRecord, CountDownLatch> orderRecordBuffer = new TreeMap<IMonitoringRecord, CountDownLatch>(new Comparator<IMonitoringRecord>() {
 
-            public int compare(IMonitoringRecord t, IMonitoringRecord t1) {
+        private final AtomicLong nextOrderRecordBufferElementId =
+                new AtomicLong(0);
+        private final class OrderRecordBufferElement {
+            private final long elementId = nextOrderRecordBufferElementId.getAndIncrement();
+
+            private final IMonitoringRecord record;
+
+            private OrderRecordBufferElement() {
+                this.record = null;
+            }
+
+            public OrderRecordBufferElement (IMonitoringRecord record){
+                this.record = record;
+            }
+
+            public long getElementId() {
+                return this.elementId;
+            }
+
+            public IMonitoringRecord getRecord() {
+                return this.record;
+            }
+        }
+
+        private final TreeMap<OrderRecordBufferElement, CountDownLatch> orderRecordBuffer = new TreeMap<OrderRecordBufferElement, CountDownLatch>(new Comparator<OrderRecordBufferElement>() {
+
+            @Override
+            public int compare(OrderRecordBufferElement e, OrderRecordBufferElement e1) {
+                IMonitoringRecord t = e.getRecord();
+                IMonitoringRecord t1 = e1.getRecord();
+
                 if (t == FS_READER_TERMINATION_MARKER) {
+                        if (t.getLoggingTimestamp() == 1269110550923163000l && t1.getLoggingTimestamp() == 1269110550923163000l) {
+                            log.info("cmp result 1 (TERMINATION): " + t + " and " + t1);
+                        }
                     return 1;
                 }
                 if (t1 == FS_READER_TERMINATION_MARKER) {
+                        if (t.getLoggingTimestamp() == 1269110550923163000l && t1.getLoggingTimestamp() == 1269110550923163000l) {
+                            log.info("cmp result -1 (TERMINATION): " + t + " and " + t1);
+                        }
                     return -1;
                 }
-                /* Only return 0 (equal) iff the objects are identical */
+                /* Only return 0 (equal) iff the objects are identical, i.e., the same */
                 if (t == t1) {
+                        if (t.getLoggingTimestamp() == 1269110550923163000l && t1.getLoggingTimestamp() == 1269110550923163000l) {
+                            log.info("cmp result 0: " + t + " and " + t1);
+                        }
                     return 0;
                 }
-                if (t.getLoggingTimestamp() < t1.getLoggingTimestamp()) {
-                    return -1;
-                } else {
-                    return 1;
+
+                if (t.getLoggingTimestamp() == t1.getLoggingTimestamp()){
+                    /* Here, two records have an equal timestamp but they are not
+                     * the same and thus, we must not return 0!
+                     * We use the id of the wrapping element to order these two
+                     * elements in a deterministic way. */
+                    log.info("Elements have equal timestamp; ordering by wrapper id.");
+                    return (e.getElementId() < e1.getElementId()) ? -1 : 1;
                 }
+
+                /* In every case, the timestamps are different at this place! */
+                return t.getLoggingTimestamp() < t1.getLoggingTimestamp() ? -1 : 1;
             }
         });
 
@@ -118,7 +163,7 @@ public class FSReader extends AbstractMonitoringLogReader {
             try {
                 final CountDownLatch myLatch = new CountDownLatch(1);
                 synchronized (this.orderRecordBuffer) {
-                    this.orderRecordBuffer.put(monitoringRecord, myLatch);
+                    this.orderRecordBuffer.put(new OrderRecordBufferElement(monitoringRecord), myLatch);
                     this.orderRecordBuffer.notifyAll(); // notify main thread of new record
                 }
                 if (monitoringRecord != FS_READER_TERMINATION_MARKER) {
@@ -169,15 +214,22 @@ public class FSReader extends AbstractMonitoringLogReader {
                             }
                         }
 
-                        nextRecord = this.orderRecordBuffer.firstKey(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+                        OrderRecordBufferElement nextBufferElement = this.orderRecordBuffer.firstKey(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
+                        nextRecord = nextBufferElement.getRecord();
+                        if (nextRecord.getLoggingTimestamp() == 1269110550923163000l) {
+                            log.info("Found 1269110550923163000l Record: " + nextRecord);
+                        }
                         //1.5 un-compatibility: firstEntry = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
                         if (nextRecord == FS_READER_TERMINATION_MARKER) {
                             log.info("All reader threads provided FS_READER_TERMINATION_MARKER");
                             return true; // we're done
                         } else {
-                            consumerLatch = this.orderRecordBuffer.get(nextRecord);
-                            if (this.orderRecordBuffer.remove(nextRecord) == null) { // now, well remove
-                                log.warn("failed to remove nextRecord " + nextRecord);
+                            consumerLatch = this.orderRecordBuffer.get(nextBufferElement);
+                            if (this.orderRecordBuffer.remove(nextBufferElement) == null) { // now, we'll remove
+                                log.warn("failed to remove nextRecord " + nextRecord + "\n" +
+                                        "consumerLatch: " + consumerLatch +"\n" +
+                                        "first key: " + this.orderRecordBuffer.firstKey());
+                                throw new MonitoringRecordConsumerException("failed to remove nextRecord " + nextRecord);
                             }
                             this.master.deliverRecord(nextRecord);
                         }
@@ -209,7 +261,7 @@ public class FSReader extends AbstractMonitoringLogReader {
                 this.errorOccured.set(true);
             }
             synchronized (this.orderRecordBuffer) {
-                this.orderRecordBuffer.put(FS_READER_TERMINATION_MARKER, null);
+                this.orderRecordBuffer.put(new OrderRecordBufferElement(FS_READER_TERMINATION_MARKER), null);
                 this.orderRecordBuffer.notifyAll(); // notify main thread of new record
             }
         }
