@@ -608,11 +608,11 @@ public class TraceAnalysisTool {
             }
 
             if (numRequestedTasks == 0) {
+                log.warn("No task requested");
+                TraceAnalysisTool.printUsage();
                 System.err.println("");
                 System.err.println("No task requested");
-                log.warn("No task requested");
                 System.err.println("");
-                TraceAnalysisTool.printUsage();
                 return false;
             }
 

@@ -108,6 +108,7 @@ public class FSReader extends AbstractMonitoringLogReader {
          * buffer, notify the buffer consumer and block until they are granted
          * to read the next record.
          */
+        @Override
         public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
             if (this.isTerminated.get()) {
                 log.error("Consumer already terminated");

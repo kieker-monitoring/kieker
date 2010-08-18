@@ -52,7 +52,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
 
     private static final String PROP_NAME_INPUTDIR = "inputDirName";
     private static final Log log = LogFactory.getLog(FSDirectoryReader.class);
-    private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry();
+    private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(true); // compatibility mode
 
     private volatile boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
 
@@ -234,7 +234,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
         }
     }
 
-    private final Object[] StringToTypedArray(String[] vec, Class[] valueTypes)
+    private Object[] StringToTypedArray(String[] vec, Class[] valueTypes)
     throws IllegalArgumentException{
         final Object[] typedArray = new Object[vec.length];
         int curIdx = -1;
