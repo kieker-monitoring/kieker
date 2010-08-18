@@ -10,14 +10,22 @@
 #
 # @author Andre van Hoorn
 
+function print_usage {
+    echo 
+    echo "Usage: $(basename "$0") <output-directory> <file-type-1 ... file-type-N>"
+    echo 
+    echo "Example: $(basename "$0") /tmp/ pdf png ps"
+}
 
 if [ ! -d "$1" ]; then
     echo "'$1' is not a directory"
+    print_usage
     exit 1
 fi
 
 if [ -z "$2" ]; then
     echo "Missing file extensions"
+    print_usage
     exit 1
 fi
 
