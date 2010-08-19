@@ -54,7 +54,7 @@ for f in ${PIC_FILES}; do
 	ps2pdf "${BASENAME}.ps" "${BASENAME}.pdf" \
 	    && (pdfcrop "${BASENAME}.pdf" > /dev/null) \
 	    && rm "${BASENAME}.pdf" \
-	    && mv "${BASENAME}-crop.pdf" "${BASENAME}.pdf"
+	    && mv "${BASENAME}-crop.pdf" "${BASENAME}".pdf
     fi
     PIC_COUNTER=$((${PIC_COUNTER}+1))
 done
@@ -63,11 +63,11 @@ if [ ! -z "${DOT_FILES}" ]; then
     for f in ${DOT_FILES}; do 
 	BASENAME=$(echo $f | sed -E s/'\.[[:alnum:]]+$'//g); 
 	for ext in ${EXTS}; do 
-	    dot -T ${ext} "${f}" > "${BASENAME}.${ext}" ; 
+	    dot -T ${ext} "${f}" > "${BASENAME}".${ext} ; 
 	    if (echo "${ext}" | grep -q pdf); then
 		(pdfcrop "${BASENAME}.pdf" > /dev/null) \
 		    && rm "${BASENAME}.pdf" \
-		    && mv "${BASENAME}-crop.pdf" "${BASENAME}.pdf"
+		    && mv "${BASENAME}-crop.pdf" "${BASENAME}".pdf
 	    fi
 	done; 
 	DOT_COUNTER=$((${DOT_COUNTER}+1))
