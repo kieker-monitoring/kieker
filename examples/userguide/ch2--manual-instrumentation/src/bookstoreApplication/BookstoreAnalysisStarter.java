@@ -17,8 +17,8 @@ public class BookstoreAnalysisStarter {
 
         /* Create Kieker.Analysis instance */
         AnalysisInstance analysisInstance = new AnalysisInstance();
-        /* Register our own consumer. */
-        analysisInstance.registerPlugin(new Consumer(3));
+        /* Register our own consumer; set the max. response time to 1.9 ms */
+        analysisInstance.registerPlugin(new Consumer(1900000));
 
         /* Set filesystem monitoring log input directory for our analysis */
         String inputDirs[] = {args[0]};
