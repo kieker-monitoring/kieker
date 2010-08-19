@@ -9,18 +9,18 @@
 \chapter{Kieker Analysis Component}\label{chap:componentsAnalysis}
 	
 	% Notify-tag; this is more or less a reminding.
-	\class{\KiekerAnalysisPart} is the part of \Kieker\  which is responsible for the analysis, consisting of the reader, the consumer and the analysis instance itself. To read the stored records again is task of the readers. Whatever is done with these informations is task of the consumers. They can evaluate, process or visualize the data for example. The analysis instance concerns about the lifetime and registration of the other parts. As explained in the example chapter, the analysis consists\notify  of the following steps:
+	\class{\KiekerAnalysisPart} is the part of \Kieker\  which is responsible for the analysis, consisting of the reader, the consumer and the analysis instance itself. To read the stored records again is task of the readers. Whatever is done with these informations is task of the consumers. They can evaluate, process or visualize the data for example. The analysis instance concerns about the lifetime and registration of the other parts. \NOTIFYBOX{As explained in the example chapter, the analysis consists  of the following steps:
 	\begin{enumerate}
 		\item Create a new instance (or more) of the class \class{AnalysisInstance}.
 		\item Register the plugins which should evaluate the records.
 		\item Register exactly one reader to read the stored informations.
 		\item Start the analysis instance.
-	\end{enumerate}
+	\end{enumerate}}
 
 	\section{Monitoring Log Readers}
 
 		% Warning-tag for the reader-writer-thing
-		The monitoring log readers are the direct counterpart to the monitoring log writers. While a writer gets a record and writes it into files or somewhere else, the reader takes the written data and converts it into a suitable instance of \class{AbstractKiekerMonitoringRecord}. \warning This means that whenever a new writer is implemented, a corresponding reader has to be implemented as well. If one want for example to store the recorded informations in a database, one should be capable of reading these saved informations from the database again.\\
+		The monitoring log readers are the direct counterpart to the monitoring log writers. While a writer gets a record and writes it into files or somewhere else, the reader takes the written data and converts it into a suitable instance of \class{AbstractKiekerMonitoringRecord}.\WARNBOX{This means that whenever a new writer is implemented, a corresponding reader has to be implemented as well. If one want for example to store the recorded informations in a database, one should be capable of reading these saved informations from the database again.}
 		There are already some readers implemented in \Kieker\  as can be seen in the hierarchy diagram in Figure \ref{Figure:ReaderHierarchy}.
 
 		% This image shows the reader hierarchy.

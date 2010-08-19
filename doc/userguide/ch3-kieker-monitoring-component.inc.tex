@@ -11,7 +11,7 @@
 
 	\section{Configuration}
 
-		\notify The monitoring part of \Kieker\ can easily configured and adjusted using the configuration file named \dir{\monitoringPropertiesFile}. By default, the configuration file within \dir{\mainJar} will be used. If a modified file should be used, the configuration file within \dir{\KiekerDir/META-INF} can be used as a base. To inform \Kieker\  about this, following parameter has to be add while calling the JVM:
+		\NOTIFYBOX{The monitoring part of \Kieker\ can easily configured and adjusted using the configuration file named \dir{\monitoringPropertiesFile}.} By default, the configuration file within \dir{\mainJar} will be used. If a modified file should be used, the configuration file within \dir{\KiekerDir/META-INF} can be used as a base. To inform \Kieker\  about this, following parameter has to be add while calling the JVM:
 
 		\setBashListing
 		\begin{lstlisting} 
@@ -70,4 +70,4 @@
 		\end{lstlisting}
 
 		The first property decides which writer should be used. If none of the already implemented writers is used, the whole name of the class of the writer has to be delivered. The second property is an init string which can be used to initialize the writer in any way. In this case the parameter is used to tell the writer the name of the pipe to be used.\\
-		\warning It is important that every implemented writer class has a corresponding reader class, so that the persisted data can be loaded again.
+		\WARNBOX{ It is important that every implemented writer class has a corresponding reader class, so that the persisted data can be loaded again.}
