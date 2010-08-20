@@ -165,7 +165,7 @@ public class ExecutionTrace extends Trace {
                 InvalidTraceException ex =
                         new InvalidTraceException("Ess are only allowed to increment by 1 --"
                         + "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
-                log.fatal("Found invalid trace", ex);
+                log.fatal("Found invalid trace" + ex.getMessage()); // don't need the stack trace here
                 throw ex;
             }
             if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
