@@ -126,14 +126,14 @@ public class ExecutionTrace extends Trace {
                 InvalidTraceException ex =
                         new InvalidTraceException("First execution must have ess "
                         + "0 (found " + curE.getEss() + ")\n Causing execution: " + curE);
-                log.fatal("Found invalid trace", ex);
+                log.fatal("Found invalid trace" + ex.getMessage()); // don't need the stack trace here
                 throw ex;
             }
             if (prevEoi != curE.getEoi() - 1) {
                 InvalidTraceException ex =
                         new InvalidTraceException("Eois must increment by 1 --"
                         + "but found sequence <" + prevEoi + "," + curE.getEoi() + ">" + "(Execution: " + curE + ")");
-                log.fatal("Found invalid trace", ex);
+                log.fatal("Found invalid trace" + ex.getMessage()); // don't need the stack trace here
                 throw ex;
             }
             prevEoi = curE.getEoi();
