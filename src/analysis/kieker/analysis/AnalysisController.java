@@ -50,9 +50,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn, Matthias Rohr
  */
-public class AnalysisInstance {
+public class AnalysisController {
 
-    private static final Log log = LogFactory.getLog(AnalysisInstance.class);
+    private static final Log log = LogFactory.getLog(AnalysisController.class);
     private IMonitoringLogReader logReader;
     /** this are the consumers for data that are comming into kieker by readers (files or system under monitoring)*/
     private final Vector<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();

@@ -9,7 +9,7 @@ public class CRM {
         this.catalog = catalog;
     }
 
-	@OperationExecutionMonitoringProbe
+    @OperationExecutionMonitoringProbe
     public void getOffers() {
         catalog.getBook(false);
     }

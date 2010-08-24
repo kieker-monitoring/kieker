@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.logReplayer.FSReaderRealtime;
-import kieker.analysis.AnalysisInstance;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.MonitoringLogReaderException;
@@ -89,7 +89,7 @@ public class RTMonitor implements IMonitoringRecordConsumerPlugin {
 
         FSReaderRealtime fsReaderRealtime =
                 new FSReaderRealtime(new String[]{inputDir}, 7);
-        AnalysisInstance analysisInstance = new AnalysisInstance();
+        AnalysisController analysisInstance = new AnalysisController();
         analysisInstance.setLogReader(fsReaderRealtime);
         analysisInstance.registerPlugin(rtMonitor);
 

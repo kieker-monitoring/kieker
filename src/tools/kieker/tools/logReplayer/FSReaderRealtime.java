@@ -24,7 +24,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
-import kieker.analysis.AnalysisInstance;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
@@ -42,7 +42,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
     /* manages the lifecycle of the reader and consumers */
-    private final AnalysisInstance tpanInstance = new AnalysisInstance();
+    private final AnalysisController tpanInstance = new AnalysisController();
     private RealtimeReplayDistributor rtDistributor = null;
     private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
     private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";

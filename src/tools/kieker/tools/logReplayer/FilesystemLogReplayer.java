@@ -20,7 +20,7 @@ package kieker.tools.logReplayer;
  */
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
-import kieker.analysis.AnalysisInstance;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.filesystem.FSReader;
@@ -93,7 +93,7 @@ public class FilesystemLogReplayer {
         } else {
             fsReader = new FSReader(inputDirs);
         }
-        AnalysisInstance tpanInstance = new AnalysisInstance();
+        AnalysisController tpanInstance = new AnalysisController();
         tpanInstance.setLogReader(fsReader);
         tpanInstance.registerPlugin(logCons);
         try {

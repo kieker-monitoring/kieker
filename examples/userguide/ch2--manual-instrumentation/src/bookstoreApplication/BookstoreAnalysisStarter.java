@@ -1,6 +1,6 @@
 package bookstoreApplication;
 
-import kieker.analysis.AnalysisInstance;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.analysis.reader.filesystem.FSReader;
@@ -16,7 +16,7 @@ public class BookstoreAnalysisStarter {
 		}
 
         /* Create Kieker.Analysis instance */
-        AnalysisInstance analysisInstance = new AnalysisInstance();
+        AnalysisController analysisInstance = new AnalysisController();
         /* Register our own consumer; set the max. response time to 1.9 ms */
         analysisInstance.registerPlugin(new Consumer(1900000));
 

@@ -34,7 +34,7 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.analysis.AnalysisInstance;
+import kieker.analysis.AnalysisController;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
@@ -327,7 +327,7 @@ public class TraceAnalysisTool {
 
         TraceReconstructionFilter mtReconstrFilter = null;
         try {
-            final AnalysisInstance analysisInstance = new AnalysisInstance();
+            final AnalysisController analysisInstance = new AnalysisController();
             analysisInstance.setLogReader(new FSReader(
                     TraceAnalysisTool.inputDirs));
 
@@ -760,7 +760,7 @@ public class TraceAnalysisTool {
 //        TraceAnalysisTool.log.info("Trying to start JMS Listener to "
 //                + jmsProviderUrl + " " + jmsDestination);
 //        /* Read log data and collect execution traces */
-//        final AnalysisInstance analysisInstance = new AnalysisInstance();
+//        final AnalysisController analysisInstance = new AnalysisController();
 //        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
 //                jmsDestination));
 //
@@ -786,7 +786,7 @@ public class TraceAnalysisTool {
 //        TraceAnalysisTool.log.info("Trying to start JMS Listener to "
 //                + jmsProviderUrl + " " + jmsDestination);
 //        /* Read log data and collect execution traces */
-//        final AnalysisInstance analysisInstance = new AnalysisInstance();
+//        final AnalysisController analysisInstance = new AnalysisController();
 //        analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
 //                jmsDestination));
 //
@@ -814,10 +814,10 @@ public class TraceAnalysisTool {
      * You'll need a tpanInstance (with a reader) before invoking this method.
      */
 //    public static void createMessageTraceFiltersAndRegisterMessageTraceListener(
-//            AnalysisInstance tpanInstance,
+//            AnalysisController tpanInstance,
 //            final BriefJavaFxInformer messageTraceListener) {
 //        if (tpanInstance == null) {
-//            tpanInstance = new AnalysisInstance();
+//            tpanInstance = new AnalysisController();
 //        }
 //
 //        TraceReconstructionPlugin mtReconstrFilter = null;
