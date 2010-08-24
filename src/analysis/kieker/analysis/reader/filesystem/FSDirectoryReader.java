@@ -190,8 +190,11 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
 //                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
 
                             Integer id = Integer.valueOf(token.substring(1));
-                            // TODO: use IDs
                             Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
+                            if (clazz == null) {
+                                log.fatal("Missing classname mapping for record type id " + "'" +id+ "'");
+                                throw new IllegalStateException("Missing classname mapping for record type id " + "'" +id+ "'");
+                            }
                             rec = (IMonitoringRecord) clazz.newInstance();
                             token = st.nextToken();
                             //log.info("LoggingTimestamp: " + Long.valueOf(token) + " (" + token + ")");
@@ -217,7 +220,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                     this.deliverRecord(rec);
                 } catch (Exception e) {
                     log.error(
-                            "Failed to parse line: {" + line + "} from file " +
+                            "Failed to process line: {" + line + "} from file " +
                             input.getAbsolutePath(), e);
                     log.error("Abort reading");
                     throw new MonitoringLogReaderException("LogReaderExecutionException ", e);
