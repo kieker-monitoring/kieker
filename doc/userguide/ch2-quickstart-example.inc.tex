@@ -41,6 +41,7 @@ contents shown in Figure~\ref{fig:binary-layout}.
 			.3 \servletWar. 
 		.2 \DirInDirTree{examples/}.
 			.3 \DirInDirTree{userguide/}\DTcomment{Source code of the examples in this document}.
+                        .4 \ldots.
 		.2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}. 
 			.3 \commonsLoggingJar.
 			.3 \ldots. 
@@ -53,13 +54,13 @@ contents shown in Figure~\ref{fig:binary-layout}.
 \label{fig:binary-layout}
 \end{figure}
 
-This document as well as the Java sources of the included examples %
-can be found in the directory~\dir{\userGuideDir{}/}. %
+The Java sources presented in this user guide are included in the %
+\file{\exampleDir/} directory. %
 The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and %
 \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. %
 A Servlet-based Web application, provided in \file{\servletWar}, can be used %
-to view and control the status of \KiekerMonitoringPart{} in Java~EE %
-environments. The \file{\kiekerMonitoringProperties{}} is a sample configuration %
+to control the status of \KiekerMonitoringPart{} in Java~EE %
+environments. The file \file{\kiekerMonitoringProperties{}} is a sample configuration %
 file for \KiekerMonitoringPart{}, as detailed in Chapter~\ref{chap:componentsMonitoring}. %
 Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} %
 as a logging interface, the file \file{\commonsLoggingJar} is the only dependency %

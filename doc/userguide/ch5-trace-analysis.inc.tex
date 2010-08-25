@@ -12,11 +12,12 @@ to use AspectJ to mark methods to be monitored with a simple annotation
 in order to avoid the manual monitoring as seen in Chapter~\ref{chap:example}
 and \ref{chap:componentsMonitoring}. Once the methods are marked, the AspectJ-Weaver-Agent
 will surround the calls with the necessary code during runtime, similar
-to the hardcoded code used in Section \ref{sec:example:monitoring}.
-An alternative solution will be shown as well in Section~\ref{sec:aspectJ:fullweaving}
-in which everything will be monitored --- without exceptions. Both solutions
-can be used to reconstruct the architecture and to perform a trace
-analysis. The result of both will be diagrams similar to Figure~\ref{fig:bookstore:classAndSequenceDiagrams}.
+to the manually inserted instrumentation code used in Section~\ref{sec:example:monitoring}.
+An alternative solution will be shown as well in Section~\ref{sec:aspectJ:fullweaving}, %
+where the methods to be instrumented are specified using an external configuration file %
+without requiring source code modifications. Both solutions
+can be used to reconstruct architectural views and to perform trace
+analyses. The result of both will be diagrams similar to Figure~\ref{fig:bookstore:classAndSequenceDiagrams}.
 
 The idea of weaving the monitoring-code into the ``plain'' code
 during compile-time seems to suggest itself, but in this chapter it
@@ -87,8 +88,8 @@ Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysis
 The AspectJ-Weaver itself has to be loaded by the JVM as a so-called javaagent. In simple terms an agent is just a specific class which is loaded before the \method{main} method of the application and executed in the same JVM. It has therefore access to the same context as the main application. In this specific case the agent is loaded to weave the monitoring code into the ``plain'' java-code of the Bookstore Application.
 
 \setBashListing
-\input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
+\input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
 
 After a complete run of the application, the monitoring files should appear in the same way as mentioned in Section~\ref{sec:example:monitoring}, just with some more informations. These stored informations will now be visualized with the help of the trace-analysis-tool which can be found in the \Kieker{}-binaries as well.\\
 
@@ -98,12 +99,14 @@ In order to use this tool, it is necessary to install two other programs:
 \item \textbf{Graphviz} A graph visualization software which can be downloaded from \url{http://www.graphviz.org/}. 
 \item \textbf{GNU PlotUtils} A set of tools for generating 2D plot graphics which can be downloaded from \url{http://www.gnu.org/software/plotutils/} (for Linux) and from \url{http://gnuwin32.sourceforge.net/packages/plotutils.htm} (for Windows).
 \end{enumerate}
-Under Windows it is recommended to add the \dir{bin}-directories of both tools to the ``path'' environment variable.
+Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
 } \vspace{3mm}
 
-Once both has been installed, the trace-analysis-tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} in the \dir{bin}-directory. A non-parameterized call of the script prints all possible options on the screen.
+\noindent Once both have been installed, the trace-analysis-tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} in the \dir{bin/} directory. A non-parameterized call of the script prints all possible options on the screen.
 
-Assume the monitored data within the directory \dir{/tmp/tpmon-20100813-121041532-UTC} should be analyzed by the tool to produce a sequence diagram which should then be written to an existing directory named \dir{out}. The calls would be the following:
+Assume the monitored data within the directory \dir{/tmp/tpmon-20100813-121041532-UTC} should be analyzed by the tool to produce a sequence diagram which should then be written to an existing directory named \dir{out/}. %
+The calls are shown in Listing~\ref{lst:traceAnalysis:sequenceDiagram}.
+
 \setBashListing
 \input{ch5-trace-analysis_Produce_Sequence_Diagram.inc}
 \TODO{Wrapper script for Windows?}
@@ -126,11 +129,13 @@ It is possible to create other diagrams as well with the help of the visualizati
 \end{figure}
 
 \section{Full Monitoring}\label{sec:aspectJ:fullweaving}
-The full monitoring without using any annotations is quite simple. It is only necessary to modify the corresponding configuration-file of AspectJ, as can be seen in Listing \ref{lst:aopConfigFileFull}.
+The full monitoring without using any annotations is quite simple. It is only necessary to modify the corresponding configuration-file of AspectJ, as can be seen in Listing~\ref{lst:aopConfigFileFull}.
+
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{ch5-trace-analysis_FullMonitoring-aop.xml}
-The old aspect has been deactivated by uncommenting it, while the new aspect \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>$ has been activated. As the name already reveals, the new aspect makes sure that every method within the included classes/packages will be monitored. The exact behavior can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. Listing \ref{lst:aopConfigFileFull} shows for example how to make sure that only the methods within the class \class{BookstoreStarter} will be monitored.
 
-The commands to compile and run the sourcecode arejust the same as in the Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1}. The only thing changing is that the annotations within the sourcecode are no longer necessary.
+\noindent The old aspect has been deactivated by uncommenting it, while the new aspect \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>$ has been activated. As the name already reveals, the new aspect makes sure that every method within the included classes/packages will be monitored. The exact behavior can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. Listing \ref{lst:aopConfigFileFull} shows for example how to make sure that only the methods within the class \class{BookstoreStarter} will be monitored.
+
+The commands to compile and run the source code are just the same as in the Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1}. The only thing changing is that the annotations within the source code are no longer necessary.
 
 An example log of a complete run can be found in the appendix.
