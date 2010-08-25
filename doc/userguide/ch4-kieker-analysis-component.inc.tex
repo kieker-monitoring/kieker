@@ -9,7 +9,7 @@
 \chapter{Kieker Analysis Component}\label{chap:componentsAnalysis}
 	
 	% Notify-tag; this is more or less a reminding.
-	\class{\KiekerAnalysisPart} is the part of \Kieker\  which is responsible for the analysis, consisting of the reader, the consumer and the analysis instance itself. To read the stored records again is task of the readers. Whatever is done with these informations is task of the consumers. They can evaluate, process or visualize the data for example. The analysis instance concerns about the lifetime and registration of the other parts.
+	\class{\KiekerAnalysisPart} is the part of \Kieker\  which is responsible for the analysis, consisting of the reader, the consumer and the analysis controller itself. To read the stored records again is task of the readers. Whatever is done with these informations is task of the consumers. They can evaluate, process or visualize the data for example. The analysis instance concerns about the lifetime and registration of the other parts.
 
 \
 
@@ -43,8 +43,8 @@
 			\end{centering}
 		\end{figure}
 
-		\noindent The implementing of an own reader is nearly the same as the implementing of the writer, but to keep things simple, it is recommended to extend the already implemented AbstractKiekerMonitoringLogReader, because otherwise it would be necessary to implement the used observer pattern of the reader. By using the methods of the abstract class \class{kieker.analysis.reader.AbstractMonitoringLogReader}, the task of delivering a new record to the consumers can be delegated to the super class.\\
-		The Listing \ref{listing:MyReader} shows a simple reader which reads a stored record from the pipe. If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
+		\noindent The implementation of an own reader is nearly the same as the implementation of the writer, but to keep things simple, it is recommended to extend the already implemented AbstractKiekerMonitoringLogReader, because otherwise it would be necessary to implement the employed observer pattern of the reader. By using the methods of the abstract class \class{kieker.analysis.reader.AbstractMonitoringLogReader}, the task of delivering a new record to the consumers can be delegated to the super class.\\
+		Listing~\ref{listing:MyReader} shows a simple reader which reads a stored record from the pipe. If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
 
 		\setJavaCodeListing
 		\lstinputlisting[caption=MyReader.java, label=listing:MyReader]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyReader.java}
@@ -56,7 +56,7 @@
 		\setJavaCodeListing
 		\lstinputlisting[caption=MyConsumer.java]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyConsumer.java}
 
-	\section{Analysis Instance}
+	\section{Analysis Controller}
 
 		To put everything together, Listing \ref{listing:AnalysisController} shows how to use the above-mentioned components.
 

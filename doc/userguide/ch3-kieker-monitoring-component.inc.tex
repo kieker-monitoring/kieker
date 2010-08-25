@@ -51,7 +51,8 @@ shown in Listing~\ref{listing:cuttingBookstore}. %
 
 	\section{Monitoring Log Writers}\label{sec:monitoring-log-writers}
 
-		The so called monitoring log writers serialize and persist the recorded informations into files, databases and so on. In other words: They get an instance of an \class{IMonitoringRecord} and produce and output of any nature whatsoever.\\
+		The so called monitoring log writers serialize and persist the recorded informations into files, databases etc. %
+%In other words: They get an instance of an \class{IMonitoringRecord} and produce and output of any nature whatsoever.
 		Some writers are already implemented, as can be seen in their hierarchy in Figure \ref{figure:monitoringLogWritersHierarchy}.
 
 		% This is the diagram with the hierarchy of the writers.
@@ -64,7 +65,7 @@ shown in Listing~\ref{listing:cuttingBookstore}. %
 		\end{figure}
 
 
-		\noindent As the example chapter already showed it, every monitoring record is sent to the \class{MonitoringController} which itself calls the current writer. The writer uses normally the \method{toArray()} method of the record to get the stored informations from the record as handable array. The writer writes these objects for example into a file.\\
+		\noindent As the example chapter already showed it, each monitoring record is sent to the \class{MonitoringController} which itself calls the current writer. The writer uses the \method{toArray()} method of the record to get the stored information from the record as handable array. The writer writes these objects for example into a CSV file.\\
 		The implementation of an own writer is quite simple and can be done by implementing the interface \class{kieker.monitoring.writer.IMonitoringLogWriter}. Listing \ref{listing:MyWriter} shows an example writer which uses a named pipe to write the given records directly into the memory. The class \class{MyPipe} is descriped in the appendix of the tutorial. 
 
 		\setJavaCodeListing
