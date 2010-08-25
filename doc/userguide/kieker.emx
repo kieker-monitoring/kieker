@@ -757,62 +757,7 @@
           <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="_Oyx_gqUhEd-O9v5GGkzICw"/>
           <element xsi:nil="true"/>
         </contents>
-        <contents xmi:type="notation:Diagram" xmi:id="_53SpwKUwEd-O9v5GGkzICw" type="Class" name="OperationExecutionRecord">
-          <children xmi:id="_53SpwaUwEd-O9v5GGkzICw" element="_3MC-wKUgEd-O9v5GGkzICw">
-            <children xmi:id="_53SpwqUwEd-O9v5GGkzICw" type="ImageCompartment">
-              <layoutConstraint xmi:type="notation:Size" xmi:id="_53Spw6UwEd-O9v5GGkzICw" width="1320" height="1320"/>
-            </children>
-            <children xmi:id="_53SpxKUwEd-O9v5GGkzICw" type="Stereotype"/>
-            <children xmi:id="_53SpxaUwEd-O9v5GGkzICw" type="Name"/>
-            <children xmi:id="_53SpxqUwEd-O9v5GGkzICw" type="Parent"/>
-            <children xmi:id="_53Spx6UwEd-O9v5GGkzICw" type="AttributeCompartment">
-              <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_53SpyKUwEd-O9v5GGkzICw"/>
-            </children>
-            <children xmi:id="_53SpyaUwEd-O9v5GGkzICw" visible="false" type="OperationCompartment">
-              <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_53SpyqUwEd-O9v5GGkzICw"/>
-            </children>
-            <children xmi:id="_53Spy6UwEd-O9v5GGkzICw" visible="false" type="SignalCompartment">
-              <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_53SpzKUwEd-O9v5GGkzICw"/>
-            </children>
-            <children xmi:id="_53SpzaUwEd-O9v5GGkzICw" visible="false" type="StructureCompartment">
-              <styles xmi:type="umlnotation:UMLShapeCompartmentStyle" xmi:id="_53SpzqUwEd-O9v5GGkzICw"/>
-            </children>
-            <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_53Spz6UwEd-O9v5GGkzICw" fontName="Arial" showListVisibility="Text" lineColor="0" showParent="QualifiedName" showStereotype="Text"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_53Sp0KUwEd-O9v5GGkzICw" x="7250" y="3375"/>
-          </children>
-          <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="_53Sp0aUwEd-O9v5GGkzICw"/>
-          <element xsi:nil="true"/>
-        </contents>
       </eAnnotations>
-      <packagedElement xmi:type="uml:Class" xmi:id="_3MC-wKUgEd-O9v5GGkzICw" name="OperationExecutionRecord">
-        <ownedAttribute xmi:id="_mmGDsKUhEd-O9v5GGkzICw" name="experimentId" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_5KgPgKUgEd-O9v5GGkzICw" name="componentName" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_7jGekKUgEd-O9v5GGkzICw" name="opName" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_09AXgKUkEd-O9v5GGkzICw" name="sessionId" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_h5AEoKUwEd-O9v5GGkzICw" name="traceId" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_-TF58KUgEd-O9v5GGkzICw" name="tin" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_AYhVYKUhEd-O9v5GGkzICw" name="tout" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_noFuYKUwEd-O9v5GGkzICw" name="eoi" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
-        </ownedAttribute>
-        <ownedAttribute xmi:id="_r1m3sKUwEd-O9v5GGkzICw" name="ess" visibility="public">
-          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
-        </ownedAttribute>
-      </packagedElement>
     </packagedElement>
   </packagedElement>
   <profileApplication xmi:id="_FMONNqSQEd-O9v5GGkzICw">
