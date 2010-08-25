@@ -8,9 +8,11 @@
 
 \chapter{Introduction}\label{chap:introduction}
 
-Modern software application are often complex and have to fulfill a large set of functional and non-functional properties. The behavior of such large systems cannot easily be determined on the basis of the source code. Even more, existing applications often lack sufficient documentation which makes it cumbersome to extend and change them for future needs. A solution to these problems can be monitoring, which allows to log the behavior of the application and to discover the application-internal control flows and response times of method executions.
+Modern software application are often complex and have to fulfill a large set of functional and non-functional properties. The behavior of such large systems cannot easily be determined on the basis of the source code. Furthermore, existing applications often lack sufficient documentation which makes it cumbersome to extend and change them for future needs. A solution to these problems can be monitoring, which allows to log the behavior of the application and to discover the application-internal control flows and response times of method executions.
 
-The monitoring of the behavior can help in detecting performance problems, faulty behavior, intrusion detection, capacity planning and many other areas. The \Kieker{} framework provides the necessary monitoring capabilities and comes with tools and libraries for the analysis of monitored data. Even more, the framework supports monitoring at runtime with a very low overhead for the measurements, and offline evaluation of monitored data for a deeper inspection of the applications composition. 
+The monitoring of the behavior can help in detecting performance problems, faulty behavior, intrusion detection, capacity planning and many other areas. The \Kieker{} framework provides the necessary monitoring capabilities and comes with tools and libraries for the analysis of monitored data. \Kieker{} was designed for %
+continuous monitoring in production systems inducing only a very low overhead. 
+%, and offline evaluation of monitored data for a deeper inspection of the application's behavior and runtime architecture. 
 
 %%
 \section{What is \Kieker?}\label{sec:kieker}
@@ -19,7 +21,7 @@ The present version of \Kieker{} is a monitoring and analysis framework for Java
 
 % This is the component diagram of Kieker (the satellite).
 \begin{figure}[H]\centering
-\includegraphics[width=0.73\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames}
+\includegraphics[width=0.95\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis}
 \caption{Overview of the framework components}
 \label{fig:KiekerComponentDiagram}
 \end{figure}
