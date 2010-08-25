@@ -356,7 +356,7 @@ After implementing a consumer, the application's main class has to be created. I
 \setJavaCodeListing       
 \lstinputlisting[caption=BookstoreAnalysisStarter.java,label=lst:BookstoreAnalysisStarter]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/BookstoreAnalysisStarter.java}
 
-\noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each analysis tool has to create at least one \class{AnalysisInstance} which can be seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line 19. Then the consumers are registered with the analysis instance. In this case, the previously described \class{Consumer} is instantiated and the maximum response time is set to 3 nanoseconds. %
+\noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each analysis tool has to create at least one \class{AnalysisController} which can be seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line 19. Then the consumers are registered with the analysis instance. In this case, the previously described \class{Consumer} is instantiated and the maximum response time is set to 3 nanoseconds. %
 Line~27 sets the file system monitoring log reader which is initialized with the first %
 command-line argument value as the input directory. The application expects the %
 output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) %

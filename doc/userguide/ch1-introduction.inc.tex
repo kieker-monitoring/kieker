@@ -17,7 +17,8 @@ continuous monitoring in production systems inducing only a very low overhead.
 %%
 \section{What is \Kieker?}\label{sec:kieker}
 
-The present version of \Kieker{} is a monitoring and analysis framework for Java applications. Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. 
+The present version of \Kieker{} is a monitoring and analysis framework for Java applications. Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
+We plan to provide support for other, such as .NET-based, platforms.
 
 % This is the component diagram of Kieker (the satellite).
 \begin{figure}[H]\centering
@@ -26,9 +27,9 @@ The present version of \Kieker{} is a monitoring and analysis framework for Java
 \label{fig:KiekerComponentDiagram}
 \end{figure}
 		
-\noindent The \KiekerMonitoringPart{} component is responsible for the program instrumentation, data collection and logging. Its core is the class \class{MonitoringController} which receives the monitoring data in so-called monitoring records and writes these monitoring records into the configured monitoring log. 
+\noindent The \KiekerMonitoringPart{} component is responsible for program instrumentation, data collection and logging. Its core is the class \class{MonitoringController} which receives the monitoring data in so-called monitoring records and writes these monitoring records into the configured monitoring log. 
 
-The component \KiekerAnalysisPart{} is responsible for the analysis and possible visualization of the monitoring data. Its core is the class \class{AnalysisInstance} which manages the life-cycle of the monitoring log reader and all analysis plugins.
+The component \KiekerAnalysisPart{} is responsible for the analysis and visualization of the monitoring data. Its core is the class \class{AnalysisController} which manages the life-cycle of the monitoring log reader and all analysis plugins.
 
 The monitoring and analysis parts of the \Kieker{} framework are composed of subcomponents which represent the different functionalities of the monitoring and analysis tasks. The important interaction pattern among the components is illustrated in Figure~\ref{fig:KiekerCommunicationDiagram} but will be explained furthermore throughout the course of this tutorial. 
 
@@ -41,13 +42,12 @@ The monitoring and analysis parts of the \Kieker{} framework are composed of sub
 		
 % Notify-tag because it is explained how Kieker works.
 % avh: removed
-\noindent The monitoring probes create the monitoring records included the %
+\noindent The monitoring probes create the monitoring records containing the %
 monitoring data and deliver them to the monitoring controller. %
 The monitoring controller employs the monitoring log writers to write these %
 monitoring records to the monitoring log. %
-For analysis, a monitoring log reader reads the records from the monitoring log, 
-which are then passed  who creates a monitoring record again. These records can %
-then be further processed by the analysis plugins.
+For analysis, a monitoring log reader reads the records from the monitoring log, %
+These records can then be further processed by the analysis plugins.
 
 %%
 % \section{Features}
@@ -61,9 +61,9 @@ AspectJ~\cite{AspectJ-WebSite}, %
 Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
 Spring~\cite{Spring-WebSite}, and %
 Apache~CXF~\cite{CXF-WebSite} technology. %
-The \KiekerTraceAnalysis{} tool allows to reconstruct and visualize %
-architectural models of the monitored systems, e.g., as sequence and %
-dependency diagrams.
+The \KiekerTraceAnalysis{} tool, itself implemented as a \KiekerAnalysisPart{} %
+plugin (Figure~\ref{fig:KiekerComponentDiagram}), allows to reconstruct and visualize architectural models of the monitored %
+systems, e.g., as sequence and dependency diagrams.
 
 %%	
 \section{Structure of this User Guide}
