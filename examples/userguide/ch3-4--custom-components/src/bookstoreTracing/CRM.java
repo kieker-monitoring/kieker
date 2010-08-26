@@ -14,9 +14,9 @@ public class CRM {
         catalog.getBook(false);
 		
 	/* Create a new record */
-	MyRecord e = new MyRecord();
-	e.component = "mySimpleKiekerExample.bookstoreTracing.Catalog";
-	e.service = "getBook(false)";
+	MyResponseTimeRecord e = new MyResponseTimeRecord();
+	e.className = "mySimpleKiekerExample.bookstoreTracing.Catalog";
+	e.methodName = "getBook(false)";
 	/* Make sure that the record will somehow be persisted. */
 	MonitoringController.getInstance().newMonitoringRecord(e);
     }

@@ -20,7 +20,7 @@ public class MyReader extends AbstractMonitoringLogReader {
 			/* Wait 4 seconds at maximum for the next data. */
 			while ((obj = pipe.poll(4)) != null) {
 				/* Try to create a new record out of it... */
-				MyRecord record = new MyRecord();
+				MyResponseTimeRecord record = new MyResponseTimeRecord();
 				record.initFromArray(obj);
 				/* ...and delegate the task of delivering to the super class. */
 				deliverRecord(record);

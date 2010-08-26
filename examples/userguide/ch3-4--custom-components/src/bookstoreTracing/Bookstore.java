@@ -46,9 +46,9 @@ public class Bookstore extends Thread {
     public void run() {
         this.searchBook();
         /* Create a new record */
-        MyRecord e = new MyRecord();
-        e.component = "mySimpleKiekerExample.bookstoreTracing.Bookstore";
-        e.service = "searchBook()";
+        MyResponseTimeRecord e = new MyResponseTimeRecord();
+        e.className = "mySimpleKiekerExample.bookstoreTracing.Bookstore";
+        e.methodName = "searchBook()";
         /* Make sure that the record will somehow be persisted. */
         MonitoringController.getInstance().newMonitoringRecord(e);
 
@@ -63,17 +63,17 @@ public class Bookstore extends Thread {
             catalog.getBook(false);
 
             /* Create a new record */
-            MyRecord e = new MyRecord();
-            e.component = "mySimpleKiekerExample.bookstoreTracing.Catalog";
-            e.service = "getBook(false)";
+            MyResponseTimeRecord e = new MyResponseTimeRecord();
+            e.className = "mySimpleKiekerExample.bookstoreTracing.Catalog";
+            e.methodName = "getBook(false)";
             /* Make sure that the record will somehow be persisted. */
             MonitoringController.getInstance().newMonitoringRecord(e);
 
             crm.getOffers();
             /* Create a new record */
-            e = new MyRecord();
-            e.component = "mySimpleKiekerExample.bookstoreTracing.CRM";
-            e.service = "getOffers()";
+            e = new MyResponseTimeRecord();
+            e.className = "mySimpleKiekerExample.bookstoreTracing.CRM";
+            e.methodName = "getOffers()";
             /* Make sure that the record will somehow be persisted. */
             MonitoringController.getInstance().newMonitoringRecord(e);
         }

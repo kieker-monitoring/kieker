@@ -21,17 +21,17 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 	}
 
 	@Override
-	public boolean newMonitoringRecord(IMonitoringRecord arg0) {
-		if (!(arg0 instanceof OperationExecutionRecord)) {
+	public boolean newMonitoringRecord(IMonitoringRecord record) {
+		if (!(record instanceof OperationExecutionRecord)) {
 			return true;
 		}
-		OperationExecutionRecord rec = (OperationExecutionRecord) arg0;
-		/* Get the response time from the record. */
-		long time = rec.tout - rec.tin;
-		/* Now check with the maximal allowed response time. */
-		if (time > maxResponseTime) {
-			System.err.println("maximal response time exceeded by "
-					+ (time - maxResponseTime) + " ns: " + rec.componentName
+		OperationExecutionRecord rec = (OperationExecutionRecord) record;
+		/* Get the response responseTime from the record. */
+		long responseTime = rec.tout - rec.tin;
+		/* Now check compare with the response responseTime threshold: */
+		if (responseTime > maxResponseTime) {
+			System.err.println("maximum response time exceeded by "
+					+ (responseTime - maxResponseTime) + " ns: " + rec.componentName
 					+ "." + rec.opname);
 		} else {
 			System.out.println("response time accepted: " + rec.componentName
