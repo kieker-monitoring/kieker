@@ -1,4 +1,4 @@
-package bookstoreTracing;
+package bookstoreApplication;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;

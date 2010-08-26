@@ -1,4 +1,4 @@
-package bookstoreTracing;
+package bookstoreApplication;
 
 import java.util.Vector;
 
@@ -6,7 +6,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
-public class MyWriter implements IMonitoringLogWriter {
+public class MyPipeWriter implements IMonitoringLogWriter {
 
 	private MyPipe pipe;
 

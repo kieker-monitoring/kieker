@@ -6,8 +6,8 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.monitoring.writer.util.async.TpmonShutdownHook;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 import kieker.monitoring.writer.IMonitoringLogWriter;
-import kieker.monitoring.writer.database.SyncDbConnector;
-import kieker.monitoring.writer.filesystem.SyncFsConnector;
+import kieker.monitoring.writer.database.SyncDbWriter;
+import kieker.monitoring.writer.filesystem.SyncFsWriter;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -20,8 +20,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.writer.database.AsyncDbConnector;
-import kieker.monitoring.writer.filesystem.AsyncFsConnector;
+import kieker.monitoring.writer.database.AsyncDbWriter;
+import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -170,17 +170,17 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringLogWriter = new SyncFsConnector(filenameBase);
+                this.monitoringLogWriter = new SyncFsWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringLogWriter = new AsyncFsConnector(filenameBase, asyncRecordQueueSize);
+                this.monitoringLogWriter = new AsyncFsWriter(filenameBase, asyncRecordQueueSize);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
-                this.monitoringLogWriter = new SyncDbConnector(
+                this.monitoringLogWriter = new SyncDbWriter(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCDB)) {
-                this.monitoringLogWriter = new AsyncDbConnector(
+                this.monitoringLogWriter = new AsyncDbWriter(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
                         setInitialExperimentIdBasedOnLastId, asyncRecordQueueSize);

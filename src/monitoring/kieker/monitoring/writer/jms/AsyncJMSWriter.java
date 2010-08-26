@@ -35,9 +35,9 @@ import kieker.monitoring.writer.IMonitoringLogWriter;
  *
  * @author Matthias Rohr, Andre van Hoorn
  */
-public final class AsyncJMSConnector implements IMonitoringLogWriter {
+public final class AsyncJMSWriter implements IMonitoringLogWriter {
 
-    private static final Log log = LogFactory.getLog(AsyncJMSConnector.class);
+    private static final Log log = LogFactory.getLog(AsyncJMSWriter.class);
     private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
     private static final MonitoringRecordTypeClassnameMapping TYPE_WRITER_END_OF_MONITORING_MARKER = new MonitoringRecordTypeClassnameMapping(-1, null);
     private static final IMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
@@ -90,7 +90,7 @@ public final class AsyncJMSConnector implements IMonitoringLogWriter {
             this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(asyncTypeQueueSize);
             for (int i = 1; i <= numberOfJmsWriters; i++) {
                 JMSWriterThread<IMonitoringRecord> recordWriter =
-                        new JMSWriterThread<IMonitoringRecord>(recordQueue, AsyncJMSConnector.RECORD_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
+                        new JMSWriterThread<IMonitoringRecord>(recordQueue, AsyncJMSWriter.RECORD_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
                 typeWriterAndRecordWriters.add(recordWriter);
                 recordWriter.setDaemon(true);
                 recordWriter.start();
@@ -122,8 +122,8 @@ public final class AsyncJMSConnector implements IMonitoringLogWriter {
             if (monitoringRecord == MonitoringController.END_OF_MONITORING_MARKER) {
                 // "translate" END_OF_MONITORING_MARKER
                 log.info("Found END_OF_MONITORING_MARKER. Notifying type and record writers");
-                this.typeQueue.add(AsyncJMSConnector.TYPE_WRITER_END_OF_MONITORING_MARKER);
-                this.recordQueue.add(AsyncJMSConnector.RECORD_WRITER_END_OF_MONITORING_MARKER);
+                this.typeQueue.add(AsyncJMSWriter.TYPE_WRITER_END_OF_MONITORING_MARKER);
+                this.recordQueue.add(AsyncJMSWriter.RECORD_WRITER_END_OF_MONITORING_MARKER);
             } else {
                 recordQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
             }

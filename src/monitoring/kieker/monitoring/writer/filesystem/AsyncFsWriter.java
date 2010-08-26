@@ -37,9 +37,9 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Matthias Rohr, Andre van Hoorn
  */
-public final class AsyncFsConnector implements IMonitoringLogWriter {
+public final class AsyncFsWriter implements IMonitoringLogWriter {
 
-    private static final Log log = LogFactory.getLog(AsyncFsConnector.class);
+    private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
     //configuration parameter
     private static final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
@@ -54,11 +54,11 @@ public final class AsyncFsConnector implements IMonitoringLogWriter {
             "Use the the constant " + MonitoringController.WRITER_ASYNCFS +
             " and the file system specific configuration properties.";
 
-    public AsyncFsConnector() {
+    public AsyncFsWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    
+    @Override
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
@@ -68,7 +68,7 @@ public final class AsyncFsConnector implements IMonitoringLogWriter {
         return workers;
     }
 
-    public AsyncFsConnector(String storagePathBase, int asyncRecordQueueSize) {
+    public AsyncFsWriter(String storagePathBase, int asyncRecordQueueSize) {
         this.storagePathBase = storagePathBase;
         this.asyncRecordQueueSize = asyncRecordQueueSize;
         this.init();
@@ -121,6 +121,7 @@ public final class AsyncFsConnector implements IMonitoringLogWriter {
     /**
      * This method is not synchronized.
      */
+    @Override
     public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         try {
             blockingQueue.add(monitoringRecord); // tries to add immediately!

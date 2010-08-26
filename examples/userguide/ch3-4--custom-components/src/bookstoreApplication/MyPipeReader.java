@@ -1,9 +1,9 @@
-package bookstoreTracing;
+package bookstoreApplication;
 
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
 
-public class MyReader extends AbstractMonitoringLogReader {
+public class MyPipeReader extends AbstractMonitoringLogReader {
 	private MyPipe pipe;
 
 	@Override

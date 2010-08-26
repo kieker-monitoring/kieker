@@ -64,9 +64,9 @@ import org.apache.commons.logging.LogFactory;
  * 2006/12/20: Initial Prototype
  *
  */
-public final class SyncDbConnector implements IMonitoringLogWriter {
+public final class SyncDbWriter implements IMonitoringLogWriter {
 
-    private static final Log log = LogFactory.getLog(SyncDbConnector.class);
+    private static final Log log = LogFactory.getLog(SyncDbWriter.class);
     private Connection conn = null;
     private PreparedStatement psInsertMonitoringData;
     private String dbDriverClassname;
@@ -80,7 +80,7 @@ public final class SyncDbConnector implements IMonitoringLogWriter {
             + "Use the the constant " + MonitoringController.WRITER_SYNCDB
             + " and the file system specific configuration properties.";
 
-    public SyncDbConnector() {
+    public SyncDbWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
@@ -88,7 +88,7 @@ public final class SyncDbConnector implements IMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public SyncDbConnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
+    public SyncDbWriter(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId) {
         this.dbDriverClassname = dbDriverClassname;
         this.dbConnectionAddress = dbConnectionAddress;

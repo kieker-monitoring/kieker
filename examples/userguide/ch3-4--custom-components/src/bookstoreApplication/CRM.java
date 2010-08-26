@@ -1,4 +1,4 @@
-package bookstoreTracing;
+package bookstoreApplication;
 
 import kieker.monitoring.core.MonitoringController;
 

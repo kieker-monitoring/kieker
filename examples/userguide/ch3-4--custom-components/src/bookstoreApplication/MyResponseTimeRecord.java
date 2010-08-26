@@ -1,4 +1,4 @@
-package bookstoreTracing;
+package bookstoreApplication;
 
 import kieker.common.record.AbstractMonitoringRecord;
 

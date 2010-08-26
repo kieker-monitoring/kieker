@@ -61,21 +61,21 @@ import org.apache.commons.logging.LogFactory;
  *             which may be changed during runtime
  * 2007/07/30: Initial Prototype
  */
-public final class AsyncDbConnector implements IMonitoringLogWriter {
+public final class AsyncDbWriter implements IMonitoringLogWriter {
 
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. "
             + "Use the the constant " + MonitoringController.WRITER_ASYNCDB
             + " and the file system specific configuration properties.";
 
-    public AsyncDbConnector() {
+    public AsyncDbWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
     public boolean init(String initString) {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
-    private static final Log log = LogFactory.getLog(AsyncDbConnector.class);
+    private static final Log log = LogFactory.getLog(AsyncDbWriter.class);
     private Connection conn = null;
     private BlockingQueue<IMonitoringRecord> blockingQueue;
     private String dbDriverClassname = "com.mysql.jdbc.Driver";
@@ -86,7 +86,7 @@ public final class AsyncDbConnector implements IMonitoringLogWriter {
     private int experimentId = -1;
     private int asyncRecordQueueSize = 8000;
 
-    public AsyncDbConnector(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
+    public AsyncDbWriter(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
             boolean setInitialExperimentIdBasedOnLastId, int asyncRecordQueueSize) {
         this.dbDriverClassname = dbDriverClassname;
         this.dbConnectionAddress = dbConnectionAddress;

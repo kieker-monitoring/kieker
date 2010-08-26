@@ -1,4 +1,4 @@
-package bookstoreTracing;
+package bookstoreApplication;
 
 import java.util.Vector;
 
@@ -35,7 +35,7 @@ public class Bookstore extends Thread {
         }
 
         AnalysisController ai = new AnalysisController();
-        MyReader reader = new MyReader();
+        MyPipeReader reader = new MyPipeReader();
         reader.init("somePipe");
         ai.setLogReader(reader);
         ai.registerPlugin(new MyConsumer());
