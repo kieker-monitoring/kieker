@@ -7,8 +7,9 @@
 
 
 \appendix
-\chapter{Appendix}
-
+\renewcommand{\thesection}{\Alph{section}} \setcounter{section}{0}
+\chapter*{Appendix}
+\addcontentsline{toc}{chapter}{Appendix}
   \section{\KiekerMonitoringPart{} Configuration File}\label{sec:appdx:monitoringproperties}
 
 This is the file \file{\monitoringPropertiesFile} from the binary release and 
