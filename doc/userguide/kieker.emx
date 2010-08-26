@@ -299,7 +299,7 @@
         <children xmi:id="_XblOsrEREd-Eb8Wg-FPmGw" type="Stereotype"/>
         <children xmi:id="_XblOs7EREd-Eb8Wg-FPmGw" type="Name"/>
         <children xmi:id="_Xbl1wLEREd-Eb8Wg-FPmGw" type="Parent"/>
-        <children xmi:id="_Xbl1wbEREd-Eb8Wg-FPmGw" type="AttributeCompartment">
+        <children xmi:id="_Xbl1wbEREd-Eb8Wg-FPmGw" visible="false" type="AttributeCompartment">
           <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbl1wrEREd-Eb8Wg-FPmGw"/>
         </children>
         <children xmi:id="_Xbmc0LEREd-Eb8Wg-FPmGw" type="OperationCompartment">
@@ -311,9 +311,9 @@
         <children xmi:id="_XbnD4LEREd-Eb8Wg-FPmGw" visible="false" type="StructureCompartment">
           <styles xmi:type="umlnotation:UMLShapeCompartmentStyle" xmi:id="_XbnD4bEREd-Eb8Wg-FPmGw"/>
         </children>
-        <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_XbiycbEREd-Eb8Wg-FPmGw" fontName="Arial" showListVisibility="Text" lineColor="0" showParent="QualifiedName" showStereotype="Text"/>
+        <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_XbiycbEREd-Eb8Wg-FPmGw" fontName="Arial" showListVisibility="Text" showListSignature="true" lineColor="0" showParent="QualifiedName" showStereotype="Text"/>
         <element xmi:type="uml:Class" href="platform:/resource/Kieker-Developerguide/model-project/kieker.emx#_4hIpADHKEd-Dw_r6qZDmjQ?kieker/common/record/AbstractMonitoringRecord?"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XbiycrEREd-Eb8Wg-FPmGw" x="7250" y="750"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XbiycrEREd-Eb8Wg-FPmGw" x="8875" y="750"/>
       </children>
       <children xmi:id="_Xbnq8LEREd-Eb8Wg-FPmGw">
         <children xmi:id="_XboSALEREd-Eb8Wg-FPmGw" type="ImageCompartment">
@@ -332,9 +332,31 @@
         <children xmi:id="_Xbo5FLEREd-Eb8Wg-FPmGw" visible="false" type="SignalCompartment">
           <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbo5FbEREd-Eb8Wg-FPmGw"/>
         </children>
-        <styles xmi:type="umlnotation:UMLClassifierStyle" xmi:id="_Xbnq8bEREd-Eb8Wg-FPmGw" fontName="Arial" showListVisibility="Text" lineColor="0" showParent="QualifiedName" showStereotype="Text" useClassifierShape="true"/>
+        <styles xmi:type="umlnotation:UMLClassifierStyle" xmi:id="_Xbnq8bEREd-Eb8Wg-FPmGw" fontName="Arial" showListVisibility="Text" showListSignature="true" lineColor="0" showParent="QualifiedName" showStereotype="Text" useClassifierShape="true"/>
         <element xmi:type="uml:Interface" href="platform:/resource/Kieker-Developerguide/model-project/kieker.emx#_Zg22cEu2Ed-_k5NmN0Xc4Q?kieker/common/record/IMonitoringRecord?"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Xbnq8rEREd-Eb8Wg-FPmGw" x="750" y="750"/>
+      </children>
+      <children xmi:id="_jC8TYLEREd-Eb8Wg-FPmGw" element="_jC3a4LEREd-Eb8Wg-FPmGw">
+        <children xmi:id="_jC86cLEREd-Eb8Wg-FPmGw" type="ImageCompartment">
+          <layoutConstraint xmi:type="notation:Size" xmi:id="_jC86cbEREd-Eb8Wg-FPmGw" width="1320" height="1320"/>
+        </children>
+        <children xmi:id="_jC86crEREd-Eb8Wg-FPmGw" type="Stereotype"/>
+        <children xmi:id="_jC86c7EREd-Eb8Wg-FPmGw" type="Name"/>
+        <children xmi:id="_jC86dLEREd-Eb8Wg-FPmGw" type="Parent"/>
+        <children xmi:id="_jC86dbEREd-Eb8Wg-FPmGw" type="AttributeCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_jC86drEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_jC9hgLEREd-Eb8Wg-FPmGw" type="OperationCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_jC9hgbEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_jC9hgrEREd-Eb8Wg-FPmGw" visible="false" type="SignalCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_jC9hg7EREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_jC9hhLEREd-Eb8Wg-FPmGw" visible="false" type="StructureCompartment">
+          <styles xmi:type="umlnotation:UMLShapeCompartmentStyle" xmi:id="_jC9hhbEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_jC8TYbEREd-Eb8Wg-FPmGw" fontName="Arial" showListVisibility="Text" showListSignature="true" lineColor="0" showStereotype="Text"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jC8TYrEREd-Eb8Wg-FPmGw" x="9424" y="3500"/>
       </children>
       <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="_RJry0bEREd-Eb8Wg-FPmGw"/>
       <element xsi:nil="true"/>
@@ -349,6 +371,15 @@
         <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_XbzRIrEREd-Eb8Wg-FPmGw" points="[-2256, 513, 4682, 638]$[-3045, 693, 3893, 818]$[-4743, 336, 2195, 461]"/>
         <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Xec8gLEREd-Eb8Wg-FPmGw" id="(0.49989,0.0)"/>
         <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_XedjkLEREd-Eb8Wg-FPmGw" id="(0.49988684,1.0)"/>
+      </edges>
+      <edges xmi:id="_mmNecLEUEd-Eb8Wg-FPmGw" element="_mmLCMLEUEd-Eb8Wg-FPmGw" source="_jC8TYLEREd-Eb8Wg-FPmGw" target="_XbiycLEREd-Eb8Wg-FPmGw">
+        <children xmi:id="_mmOFgLEUEd-Eb8Wg-FPmGw" type="NameLabel">
+          <children xmi:id="_mmOFgrEUEd-Eb8Wg-FPmGw" type="Stereotype"/>
+          <children xmi:id="_mmOFg7EUEd-Eb8Wg-FPmGw" type="Name"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mmOFgbEUEd-Eb8Wg-FPmGw" y="-220"/>
+        </children>
+        <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_mmNecbEUEd-Eb8Wg-FPmGw" fontName="Arial" routing="Rectilinear" lineColor="0" lineWidth="1" showStereotype="Text"/>
+        <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_mmNecrEUEd-Eb8Wg-FPmGw" points="[-2, -26, -4, 89]$[-26, -79, -28, 36]"/>
       </edges>
     </contents>
   </eAnnotations>
@@ -804,6 +835,41 @@
     <ownedAttribute xmi:id="_yjPbUKSWEd-O9v5GGkzICw" name="crm" type="_WRE08KSQEd-O9v5GGkzICw"/>
   </packagedElement>
   <packagedElement xmi:type="uml:Actor" xmi:id="_ml7UwKSWEd-O9v5GGkzICw" name="Actor1"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_jC3a4LEREd-Eb8Wg-FPmGw" name="MyResponseTimeRecord">
+    <generalization xmi:id="_mmLCMLEUEd-Eb8Wg-FPmGw">
+      <general xmi:type="uml:Class" href="platform:/resource/Kieker-Developerguide/model-project/kieker.emx#_4hIpADHKEd-Dw_r6qZDmjQ?kieker/common/record/AbstractMonitoringRecord?"/>
+    </generalization>
+    <ownedAttribute xmi:id="_1Lr6ELEUEd-Eb8Wg-FPmGw" name="className" visibility="public">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_2eha8LEUEd-Eb8Wg-FPmGw" name="methodName" visibility="public">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_wG2uQLEUEd-Eb8Wg-FPmGw" name="responseTimeNanos" visibility="public">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+    </ownedAttribute>
+    <ownedOperation xmi:id="_AJRpALEVEd-Eb8Wg-FPmGw" name="initFromArray">
+      <ownedParameter xmi:id="_GFfIwLEVEd-Eb8Wg-FPmGw" name="values">
+        <type xmi:type="uml:Class" href="pathmap://ROSE_LIBRARIES/RoseJavaDatatypes.emx#_Q6H0BQddEdm1Sa24K-Ukow?RoseJavaDatatypes/java/lang/Object?"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Nz0tcbEVEd-Eb8Wg-FPmGw" value="3"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Nz0tcLEVEd-Eb8Wg-FPmGw" value="3"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_CmbA4LEVEd-Eb8Wg-FPmGw" name="toArray">
+      <ownedParameter xmi:id="_TTHAoLEVEd-Eb8Wg-FPmGw" name="Parameter1" direction="return">
+        <type xmi:type="uml:Class" href="pathmap://ROSE_LIBRARIES/RoseJavaDatatypes.emx#_Q6H0BQddEdm1Sa24K-Ukow?RoseJavaDatatypes/java/lang/Object?"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Wi-18bEVEd-Eb8Wg-FPmGw" value="3"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Wi-18LEVEd-Eb8Wg-FPmGw" value="3"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_DuSA0LEVEd-Eb8Wg-FPmGw" name="getValueTypes">
+      <ownedParameter xmi:id="_XdzfcLEVEd-Eb8Wg-FPmGw" name="Parameter1" type="_R_tUgLEUEd-Eb8Wg-FPmGw" direction="return">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bXREULEVEd-Eb8Wg-FPmGw" value="3"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bXQdQLEVEd-Eb8Wg-FPmGw" value="3"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_R_tUgLEUEd-Eb8Wg-FPmGw" name="Class"/>
   <profileApplication xmi:id="_FMONNqSQEd-O9v5GGkzICw">
     <eAnnotations xmi:id="_FMONN6SQEd-O9v5GGkzICw" source="http://www.eclipse.org/uml2/2.0.0/UML">
       <references xmi:type="ecore:EPackage" href="pathmap://UML_PROFILES/Standard.profile.uml#_yzU58YinEdqtvbnfB2L_5w"/>

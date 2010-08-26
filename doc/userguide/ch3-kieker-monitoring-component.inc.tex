@@ -53,32 +53,53 @@ file, as described in Section~\ref{sec:monitoring:configuration}.
 
 \section{Monitoring Records}\label{sec:componentsMonitoring:monitoringRecords}
 
-As mentioned in the previous chapters, monitoring records are the objects that %
-contain the monitoring data. Typically, an instance of a monitoring record is %
+Monitoring records are objects that contain the monitoring data, as mentioned %
+in the previous chapters, Typically, an instance of a monitoring record is %
 constructed in a monitoring probe (Section~\ref{sec:monitoring:probe}), %
 passed to the monitoring controller (Section~\ref{sec:componentsMonitoring:monitoringController}), %
-serialized and deserialized by monitoring a %
+serialized and deserialized by a monitoring %
 monitoring log writer (Section~\ref{sec:monitoring-log-writers}) and a
-monitoring log reader (sec:analysis:writer) and provided to the %
+monitoring log reader (Section~\ref{sec:analysis:writer}), and provided to the %
 analyis plugins (Section~\ref{sec:analysis:consumer}) %
-by the analyis controller (Section~\ref{sec:analysis:controller}). %
+by the analysis controller (Section~\ref{sec:analysis:controller}). %
 Figure~\ref{fig:KiekerCommunicationDiagram} illustrates this life cycle of a monitoring %
 record. %
 
 In Chapter~\ref{chap:example}, we've already introduced and used the monitoring %
 record type \class{OperationExecutionRecord}. \Kieker{} allows to use custom %
 monitoring record types. Corresponding classes must implement the %
-Interface \class{IMonitoringRecord}, shown in Figure~\ref:{todo}. %
+interface \class{IMonitoringRecord} shown in Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}. %
+The methods \method{initFromArray}, \method{toArray}, \method{getValueTypes} %
+are use for serialization and deserialization of the monitoring data contained %
+in the record. The method \method{setLoggingTimestamp} is used by the monitoring controller to %
+store the date and time when a record is received by the controller in the %
+record. The \method{getLoggingTimestamp} can be used during analysis to retrieve %
+this value. \KiekerMonitoringPart{} provides the abstract class %
+\class{AbstractMonitoringRecord} (Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}) %
+which already implements the methods to maintain the logging timestamp. 
 
-\KiekerMonitoringPart{} provides the abstract class \class{AbstractMonitoringRecord} %
-which eases the implementation of own record types. 
+\begin{figure}[h]\centering
+\includegraphics[scale=0.7]{images/kieker_MyRTRecord-modified}
+\caption{Class diagram with the \class{IMonitoringRecord} interface, the abstract %
+class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
+\class{MyResponseTimeRecord}}
+\label{sec:monitoringrecord:interfacesAndImplementingClasses}
+\end{figure}
 
+\noindent In order to implement your own monitoring record type, you need to:
 
+\begin{enumerate}
+\item Create a class that extends \class{AbstractMonitoringRecord}  and
+\item Override the methods \method{initFromArray}, \method{toArray}, \method{getValueTypes}.
+\end{enumerate}
 
-To implement your own record type, the easiest way is to extend the already existing abstract class \class{kieker.common.record.AbstractMonitoringRecord}. A custom record type must override methods to serialize and deserialize the record data to/from an array. Due to the fact that the data has to be read again, the records have to provide methods to restore the content from an array as well. Listing \ref{listing:MyRecord} shows a simple record implementation which stores information about the called class and method.
+\noindent The class \class{MyResponseTimeRecord}, shown in the class diagram in %
+Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses} and in %
+Listing~\ref{listing:MyRecord}, is an example of a custom monitoring record type %
+that can be used to monitor response times of method executions.
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyRecord.java}
+\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyResponseTimeRecord.java}
 
 
 \section{Monitoring Probes}\label{sec:monitoring:probe}
