@@ -71,7 +71,7 @@ to a third-party library which is needed by \Kieker{} in any case.
 
 The Bookstore application is a small sample application resembling a simple %
 bookstore with a marketplace facility where user can search for books in an %
-online catalog and subsequently get offers from different book sellers. %
+online catalog, and subsequently get offers from different book sellers. %
 Figure~\ref{fig:bookstore:classAndSequenceDiagrams} shows %on the left side 
 a class diagram describing the structure of the bookstore and %on the right side 
 a sequence diagram illustrating the dynamics of the application. 
@@ -117,7 +117,7 @@ Figure~\ref{fig:PlainBookstoreExample} and comprises four Java classes in %
 \label{fig:PlainBookstoreExample}
 \end{figure}
 
-\NOTIFYBOX{The Java sources of the uninstrumented bookstore described in this section %
+\NOTIFYBOX{The Java sources of the uninstrumented Bookstore application described in this section %
 can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
 
 \quad\
@@ -174,6 +174,8 @@ hardly maintainable. \Kieker{} includes probes %
 based on AOP (aspect-oriented programming, \cite{Kiczales1997}) %
 technology, as covered by Chapter~\ref{chap:aspectJ}. However, to illustrate the %
 instrumentation in detail, the quick start example uses manual instrumentation.}
+
+\
 
 \noindent The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
 The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied to the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
@@ -266,7 +268,7 @@ a semicolon instead of a colon.}
 
 \quad\
 
-\noindent If everything worked correctly, a new directory for the monitoring data with the name \dir{tpmon-20100727-181422131-UTC/} is created in the default temporary directory (see Listing \ref{fig:logtree}). The numbers in the directory name represent the time and date of the monitoring. Thus, they will be different numbers for every run.
+\noindent If everything worked correctly, a new directory for the monitoring data with the name \dir{tpmon-20100727-181422131-UTC/} is created in the default temporary directory (see Listing \ref{fig:logtree}). The numbers in the directory name represent the time and date of the monitoring. %Thus, they will be different numbers for every run.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -281,7 +283,7 @@ a semicolon instead of a colon.}
 \label{fig:logtree}
 \end{figure}
 
-\noindent In \Kieker's default configuration, the log directory can be found in the default temporary directory: \dir{/tmp/} under \UnixLikeSystems{} and \dir{C:\textbackslash{}temp\textbackslash{}} under Windows. The monitoring directory contains two types of files. Files with the extension \dir{.dat} containing text representations of the monitoring records and a single file named \dir{tpmon.map} which contains information on the types of the monitoring records used. 
+\noindent In \Kieker's default configuration, the log directory can be found in the default temporary directory: \dir{/tmp/} under \UnixLikeSystems{} and \dir{C:\textbackslash{}temp\textbackslash{}} under Windows. The monitoring directory contains two types of files: files with the extension \dir{.dat} containing text representations of the monitoring records and a single file named \dir{tpmon.map} which contains information on the types of the monitoring records used. 
 
 The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example file contents. The \file{.dat}-file is saved in CSV format (\textbf{C}omma \textbf{S}eparated \textbf{V}alues)---in this case, the values of a monitoring record are separated by semicolons. To understand the \file{.dat}-file structure the semantics have to be explained. For this quick start example only some of the values are relevant. The first value \verb!$1! indicates the record type. The forth value indicates the class and method which has been called. And the seventh and eighth value are the start and end time of the execution of the called method.
 
@@ -298,7 +300,7 @@ The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example file con
 have been manually instrumented using \KiekerMonitoringPart{} and at least one %
 run of the instrumented application has been performed. %
 The resulting monitoring log, written to the \file{.dat}-file in CSV format, could %
-already been used for analysis or visualization by any spreadsheet or %
+already be used for analysis or visualization by any spreadsheet or %
 statistical tool. %
 The following Section~\ref{sec:example:analysis} will show how to process %
 this monitoring data with \KiekerAnalysisPart{}. 
@@ -335,7 +337,7 @@ which uses \KiekerTraceAnalysis{}.
 
 \noindent The analysis application developed in this section comprises the files %
 \file{Consumer.java} and \file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
-These files can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDir{}/}. 
+These files can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}. 
 
 Listing \ref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{} monitoring records. The consumer is part of the \KiekerAnalysisPart{} component. It processes records provided by the monitoring log readers (see Chapter~\ref{chap:introduction}). %For details on the composition of the \Kieker{} framework).
 
