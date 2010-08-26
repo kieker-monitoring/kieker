@@ -8,6 +8,9 @@
 
 \chapter{The \KiekerMonitoringPart{} Component}\label{chap:componentsMonitoring}
 
+\NOTIFYBOX{The Java sources of this chapter can be found in the %
+\file{\customComponentsBookstoreApplicationDirDistro{}/} directory of the %
+binary release.}
 
 \section{Configuration}\label{sec:monitoring:configuration}
 
@@ -99,23 +102,23 @@ Listing~\ref{listing:MyRecord}, is an example of a custom monitoring record type
 that can be used to monitor response times of method executions.
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyResponseTimeRecord.java}
+\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeRecord.java}
 
 
 \section{Monitoring Probes}\label{sec:monitoring:probe}
 
-The probes are responsible for the monitoring itself. They decide which (and where) information should be collected. Technically, they were already used in the example chapter by manually surrounding the method calls with code to measure the data of interest, %
-construct and initialize the monitoring records, as well as to deliver these records to the monitoring controller. %
-The code used to manually instrument the method call in the Bookstore example is %
-shown in Listing~\ref{listing:cuttingBookstore}. %
+The probes are responsible for collecting the monitoring data and passing this %
+monitoring data to the monitoring controller. %
+In Chapter~\ref{sec:example:monitoring}, we have already demonstrated how to %
+manually instrument a Java application. Listing~\ref{listing:cuttingBookstore} %
+shows a similar monitoring probe which uses the monitoring record type %
+\class{MyResponseTimeRecord} defined in the previous Section~\ref{sec:componentsMonitoring:monitoringRecords}.
 
-		\TODO{avh: use \texttt{MyRecord}}
+% Make sure that this listing will be modified, once the sourcecode changes!!!
+% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
+\lstinputlisting[firstline=66, lastline=76, firstnumber=66, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
-		% Make sure that this listing will be modified, once the sourcecode changes!!!
-		% It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-		\lstinputlisting[firstline=15, lastline=24, firstnumber=15, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
-
-		\noindent Other specific probes could for example record only the amount of delivered bytes between methods or record only every second method call as well. The possibility to use annotations to make the monitoring much more comfortable will be shown in the appendix.
+\noindent Other specific probes could for example record only the amount of delivered bytes between methods or record only every second method call as well. The possibility to use annotations to make the monitoring much more comfortable will be shown in the appendix.
 
 \section{Monitoring Log Writers}\label{sec:monitoring-log-writers}
 
@@ -137,7 +140,7 @@ shown in Listing~\ref{listing:cuttingBookstore}. %
 		The implementation of an own writer is quite simple and can be done by implementing the interface \class{kieker.monitoring.writer.IMonitoringLogWriter}. Listing \ref{listing:MyWriter} shows an example writer which uses a named pipe to write the given records directly into the memory. The class \class{MyPipe} is descriped in the appendix of the tutorial. 
 
 		\setJavaCodeListing
-		\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyWriter.java}
+		\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyWriter.java}
 
 		\noindent Making sure that \Kieker\  uses the new writer is done by modifying the above mentioned configuration file \dir{\monitoringPropertiesFile}.
 

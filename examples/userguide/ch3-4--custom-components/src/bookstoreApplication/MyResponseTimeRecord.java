@@ -12,16 +12,19 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord {
     public String methodName = NULL_VAL;
     public long responseTimeNanos = -1;
 
+    @Override
     public final void initFromArray(Object[] values) {
             this.className = (String) values[0];
             this.methodName = (String) values[1];
             this.responseTimeNanos = (Long) values[2];
     }
 
+    @Override
     public final Object[] toArray() {
         return new Object[]{this.className, this.methodName, this.responseTimeNanos};
     }
 
+    @Override
     public Class[] getValueTypes() {
         return new Class[]{String.class, String.class, long.class};
     }

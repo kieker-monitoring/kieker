@@ -9,6 +9,8 @@ import kieker.monitoring.core.MonitoringController;
 
 public class Bookstore extends Thread {
 
+    private final static MonitoringController MONITORING_CONTROLLER =
+            MonitoringController.getInstance();
     static int numberOfRequests = 1;
     static int interRequestTime = 5;
     static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
@@ -60,22 +62,26 @@ public class Bookstore extends Thread {
 
     public void searchBook() {
         for (int i = 0; i < 1; i++) {
-            catalog.getBook(false);
 
-            /* Create a new record */
+            /* Invoke method and measure response time */
+            long tin = MONITORING_CONTROLLER.currentTimeNanos();
+            catalog.getBook(false);
+            long tout = MONITORING_CONTROLLER.currentTimeNanos();
+            /* Create a new record and set values */
             MyResponseTimeRecord e = new MyResponseTimeRecord();
             e.className = "mySimpleKiekerExample.bookstoreTracing.Catalog";
             e.methodName = "getBook(false)";
-            /* Make sure that the record will somehow be persisted. */
-            MonitoringController.getInstance().newMonitoringRecord(e);
+            e.responseTimeNanos = tout - tin;
+            /* Pass the record to the monitoring controller */
+            MONITORING_CONTROLLER.newMonitoringRecord(e);
 
             crm.getOffers();
             /* Create a new record */
             e = new MyResponseTimeRecord();
             e.className = "mySimpleKiekerExample.bookstoreTracing.CRM";
             e.methodName = "getOffers()";
-            /* Make sure that the record will somehow be persisted. */
-            MonitoringController.getInstance().newMonitoringRecord(e);
+            /* Pass the record to the monitoring controller */
+            MONITORING_CONTROLLER.newMonitoringRecord(e);
         }
     }
 
