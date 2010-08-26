@@ -9,8 +9,8 @@
 	<condition property="not-all-files-available">
 		<not>
 			<and>
-				<available file="${lib.dir}/${jar.file.libA}" />
-				<available file="${lib.dir}/${jar.file.libB}" />
+				<available file="${lib.dir}/${jar.file.commons-logging}" />
+				<available file="${lib.dir}/${jar.file.kieker}" />
 			</and>
 		</not>
 	</condition>
