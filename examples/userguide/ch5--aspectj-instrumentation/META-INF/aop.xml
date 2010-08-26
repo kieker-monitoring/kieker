@@ -6,11 +6,6 @@
     </weaver>
     
     <aspects>
-      <!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
-      
       <aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>
-      <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotationServlet"/>-->
-      <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>-->
-      <!--<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFullServlet"/>-->
     </aspects>
 </aspectj>
