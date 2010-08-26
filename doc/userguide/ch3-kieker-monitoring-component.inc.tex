@@ -118,37 +118,66 @@ shows a similar monitoring probe which uses the monitoring record type %
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 \lstinputlisting[firstline=66, lastline=76, firstnumber=66, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
-\noindent Other specific probes could for example record only the amount of delivered bytes between methods or record only every second method call as well. The possibility to use annotations to make the monitoring much more comfortable will be shown in the appendix.
+\noindent In order to avoid multiple calls to the \method{getInstance} method of the %
+\class{MonitoringController} class, the singleton instance should be stored %
+in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:finalStaticController}.
+
+\lstinputlisting[firstline=12, lastline=13, firstnumber=12, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+
+\noindent When manually instrumenting an application, the monitoring probe is implemented %
+by mixing monitoring logic with business logic, which is often not desired since %
+the resulting code is hardly maintainable. %
+Many middleware technologies, such as Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
+Spring~\cite{Spring-WebSite}, and %
+Apache~CXF~\cite{CXF-WebSite} provide interception/AOP~\cite{Kiczales1997} interfaces %
+which are well-suited to implement monitoring probes. AspectJ~\cite{AspectJ-WebSite} allows to %
+instrument Java application without source code modifications. %
+Chapter~\ref{chap:aspectJ} provides probes based on these technologies allowing to %
+monitor trace information in distributed applications. 
 
 \section{Monitoring Log Writers}\label{sec:monitoring-log-writers}
 
-		The so called monitoring log writers serialize and persist the recorded informations into files, databases etc. %
-%In other words: They get an instance of an \class{IMonitoringRecord} and produce and output of any nature whatsoever.
-		Some writers are already implemented, as can be seen in their hierarchy in Figure \ref{figure:monitoringLogWritersHierarchy}.
+Monitoring log writers serialize monitoring records to the monitoring log and  % and persist the recorded informations into files, databases etc. %
+must implement the interface \class{IMonitoringLogWriter}. The monitoring %
+controller passes the received records to the writer by calling the method %
+\method{newMonitoringRecord}. Writers can use the methods to serialize the %
+record contents, as described in Section~\ref{sec:componentsMonitoring:monitoringRecords}. 
 
-		% This is the diagram with the hierarchy of the writers.
-		\begin{figure}[H]
-			\begin{centering}
-				\includegraphics[width=0.5\textwidth]{images/kieker_writerimpls}
-				\caption{The inheritance hierarchy of the current implemented monitoring log writers}
-				\label{figure:monitoringLogWritersHierarchy}
-			\end{centering}
-		\end{figure}
+Figure~\ref{figure:monitoringLogWritersHierarchy} shows the monitoring writers %
+already implemented in \KiekerMonitoringPart{}. The writers \class{AsyncFsWriter}, %
+\class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter} can be used %
+to store monitoring records to filesystems and database respectively. %
+The variants with the prefix \class{Async} are implemented using asynchronous %
+threads that decouple the I/O operations. % 
+The \class{AsyncFsWriter} is the default writer which has already been used in %
+Section~\ref{sec:example:monitoring}. %
+Currently, the database writers only support the record type \class{OperationExecutionRecord}.
 
+% This is the diagram with the hierarchy of the writers.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[width=0.5\textwidth]{images/kieker_writerimplsuserguide-modified}
+\caption{Interface \class{IMonitoringLogWriter} and  the implementing classes}
+\label{figure:monitoringLogWritersHierarchy}
+\end{centering}
+\end{figure}
 
-		\noindent As the example chapter already showed it, each monitoring record is sent to the \class{MonitoringController} which itself calls the current writer. The writer uses the \method{toArray()} method of the record to get the stored information from the record as handable array. The writer writes these objects for example into a CSV file.\\
-		The implementation of an own writer is quite simple and can be done by implementing the interface \class{kieker.monitoring.writer.IMonitoringLogWriter}. Listing \ref{listing:MyWriter} shows an example writer which uses a named pipe to write the given records directly into the memory. The class \class{MyPipe} is descriped in the appendix of the tutorial. 
+\noindent Listing~\ref{listing:MyWriter} shows a custom writer \class{MyPipeWriter} which uses a named pipe to %
+write the given records into a buffer located in the memory. The source code of %
+the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
-		\setJavaCodeListing
-		\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyWriter.java}
+\setJavaCodeListing
+\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipeWriter.java}
 
-		\noindent Making sure that \Kieker\  uses the new writer is done by modifying the above mentioned configuration file \dir{\monitoringPropertiesFile}.
+The monitoring writer to be used is selected and configured by the \KiekerMonitoringPart{} %
+configuration properties (Section~\ref{chap:componentsMonitoring}) %
+\textit{monitoringDataWriter} and \textit{monitoringDataWriterInitString}. %
+Listing~\ref{lst:monitoringwriter:MyWriter} demonstrates how to use the custom %
+writer \class{MyPipeWriter} defined above. In this example, the pipe name is %
+passed as the property value \textit{monitoringDataWriterInitString}.
 
-		\setBashListing       
-		\begin{lstlisting}
-			monitoringDataWriter=bookstoreTracing.MyWriter
-			monitoringDataWriterInitString=somePipe
-		\end{lstlisting}
-
-		\noindent The first property decides which writer should be used. If none of the already implemented writers is used, the whole name of the class of the writer has to be delivered. The second property is an init string which can be used to initialize the writer in any way. In this case the parameter is used to tell the writer the name of the pipe to be used.\\
-		\WARNBOX{ It is important that every implemented writer class has a corresponding reader class, so that the persisted data can be loaded again.}
+\setBashListing       
+\begin{lstlisting}[label=lst:monitoringwriter:MyWriter]
+monitoringDataWriter=bookstoreTracing.MyWriter
+monitoringDataWriterInitString=somePipe
+\end{lstlisting}
