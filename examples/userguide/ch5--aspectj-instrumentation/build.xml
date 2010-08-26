@@ -9,9 +9,9 @@
 	<condition property="not-all-files-available">
 		<not>
 			<and>
-				<available file="${lib.dir}/${jar.file.libA}" />
-				<available file="${lib.dir}/${jar.file.libB}" />
-				<available file="${lib.dir}/${jar.file.libC}" />
+				<available file="${lib.dir}/${jar.file.commonslogging}" />
+				<available file="${lib.dir}/${jar.file.aspectjweaver}" />
+				<available file="${lib.dir}/${jar.file.kieker}" />
 			</and>
 		</not>
 	</condition>
@@ -26,7 +26,7 @@
 				<path refid="classpath" />
 				<path location="${jar.file}" />
 			</classpath>
-			<jvmarg value="-javaagent:${lib.dir}/${jar.file.libB}" />
+			<jvmarg value="-javaagent:${lib.dir}/${jar.file.aspectjweaver}" />
 			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
 			<jvmarg value="-Daj.weaving.verbose=true" />
 		</java>
