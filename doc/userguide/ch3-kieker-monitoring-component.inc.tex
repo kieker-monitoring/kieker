@@ -6,35 +6,82 @@
 % $Author$
 
 
-\chapter{Kieker Monitoring Component}\label{chap:componentsMonitoring}
+\chapter{The \KiekerMonitoringPart{} Component}\label{chap:componentsMonitoring}
 
 
-	\section{Configuration}
+\section{Configuration}\label{sec:monitoring:configuration}
 
-		\NOTIFYBOX{The monitoring part of \Kieker\ can easily be configured and adjusted using the configuration file named \dir{\monitoringPropertiesFile}.}
+\KiekerMonitoringPart{} is being configured by a properties file. A sample %
+configuration file, which can be used as a template for custom configurations, %
+is provided by the file \file{\monitoringPropertiesFile} in the directory %
+\dir{\KiekerDir/META-INF/} of the binary release %
+(see Section~\ref{sec:example:downloadInstall}). %
+Appendix~\ref{sec:appdx:monitoringproperties} lists this file with a documentation 
+of all available properties.
 
-\
+In order to use a custom configuration file, the file location needs to be passed to %
+the JVM using the parameter \textit{kieker.monitoring.properties}, as shown in %
+Listing~\ref{lst:monitoringPropertiesPassedToJVM}. If no configuration file %
+is passed, a default configuration (according to the sample file) is being %
+used by \KiekerMonitoringPart{}. %
 
-\noindent By default, the configuration file within \dir{\mainJar} will be used. If a modified file should be used, the configuration file within \dir{\KiekerDir/META-INF/} can be used as a base. To inform \Kieker\  about this, following parameter has to be add while calling the JVM:
+\setBashListing
+\begin{lstlisting}[label=lst:monitoringPropertiesPassedToJVM]
+#\lstshellprompt# java	#\textbf{-Dkieker.monitoring.properties=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
+\end{lstlisting}
 
-		\setBashListing
-		\begin{lstlisting} 
-			-Dkieker.monitoring.properties=<ANY-DIR>/kieker.monitoring.properties      
-		\end{lstlisting}
+\section{Monitoring Controller}\label{sec:componentsMonitoring:monitoringController}
 
-		\noindent A listing of all variables and their explanation can be found in the
-		appendix.
-
-
-	\section{Monitoring Records}\label{sec:componentsMonitoring:monitoringRecords}
-
-		As can be seen in the example chapter, the records are the objects which store the monitored informations somehow. To be more precise, they are not really part of \KiekerMonitoringPart\, but in order to use them in this chapter, they will be examined now.\\ To implement your own record type, the easiest way is to extend the already existing abstract class \class{kieker.common.record.AbstractMonitoringRecord}. A custom record type must override methods to serialize and deserialize the record data to/from an array. Due to the fact that the data has to be read again, the records have to provide methods to restore the content from an array as well. Listing \ref{listing:MyRecord} shows a simple record implementation which stores information about the called class and method.
-
-		\setJavaCodeListing
-		\lstinputlisting[caption=MyRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyRecord.java}
+The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart{} %
+instance and provides methods to, among others, log monitoring records %
+(\method{newMonitoringRecord}) employing the configured monitoring log writer and %
+to retrieve the current timestamp (\method{currentTimeNanos}). %
+The class is implemented employing the singleton pattern. The singleton instance %
+can be retrieved by calling the static method \method{getInstance}. %
+Figure~\ref{fig:monitoringController:classdiagram} shows %
+a class diagram of the class \class{MonitoringController} including the methods 
+just mentioned. The \class{MonitoringController} is configured based on a configuration %
+file, as described in Section~\ref{sec:monitoring:configuration}.
 
 
-	\section{Monitoring Probes}
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{images/kieker_monitoringControlleruserguide-simplified}
+\caption{Class diagram of the \class{MonitoringController} (including selected methods)}
+\label{fig:monitoringController:classdiagram}
+\end{figure}
+
+
+\section{Monitoring Records}\label{sec:componentsMonitoring:monitoringRecords}
+
+As mentioned in the previous chapters, monitoring records are the objects that %
+contain the monitoring data. Typically, an instance of a monitoring record is %
+constructed in a monitoring probe (Section~\ref{sec:monitoring:probe}), %
+passed to the monitoring controller (Section~\ref{sec:componentsMonitoring:monitoringController}), %
+serialized and deserialized by monitoring a %
+monitoring log writer (Section~\ref{sec:monitoring-log-writers}) and a
+monitoring log reader (sec:analysis:writer) and provided to the %
+analyis plugins (Section~\ref{sec:analysis:consumer}) %
+by the analyis controller (Section~\ref{sec:analysis:controller}). %
+Figure~\ref{fig:KiekerCommunicationDiagram} illustrates this life cycle of a monitoring %
+record. %
+
+In Chapter~\ref{chap:example}, we've already introduced and used the monitoring %
+record type \class{OperationExecutionRecord}. \Kieker{} allows to use custom %
+monitoring record types. Corresponding classes must implement the %
+Interface \class{IMonitoringRecord}, shown in Figure~\ref:{todo}. %
+
+\KiekerMonitoringPart{} provides the abstract class \class{AbstractMonitoringRecord} %
+which eases the implementation of own record types. 
+
+
+
+To implement your own record type, the easiest way is to extend the already existing abstract class \class{kieker.common.record.AbstractMonitoringRecord}. A custom record type must override methods to serialize and deserialize the record data to/from an array. Due to the fact that the data has to be read again, the records have to provide methods to restore the content from an array as well. Listing \ref{listing:MyRecord} shows a simple record implementation which stores information about the called class and method.
+
+\setJavaCodeListing
+\lstinputlisting[caption=MyRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreTracing/MyRecord.java}
+
+
+\section{Monitoring Probes}\label{sec:monitoring:probe}
 
 The probes are responsible for the monitoring itself. They decide which (and where) information should be collected. Technically, they were already used in the example chapter by manually surrounding the method calls with code to measure the data of interest, %
 construct and initialize the monitoring records, as well as to deliver these records to the monitoring controller. %
@@ -49,7 +96,7 @@ shown in Listing~\ref{listing:cuttingBookstore}. %
 
 		\noindent Other specific probes could for example record only the amount of delivered bytes between methods or record only every second method call as well. The possibility to use annotations to make the monitoring much more comfortable will be shown in the appendix.
 
-	\section{Monitoring Log Writers}\label{sec:monitoring-log-writers}
+\section{Monitoring Log Writers}\label{sec:monitoring-log-writers}
 
 		The so called monitoring log writers serialize and persist the recorded informations into files, databases etc. %
 %In other words: They get an instance of an \class{IMonitoringRecord} and produce and output of any nature whatsoever.

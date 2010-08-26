@@ -291,6 +291,66 @@
         <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_li-cQqSREd-O9v5GGkzICw" points="[-928, 518, -771, -2357]$[-928, 2357, -771, -518]"/>
       </edges>
     </contents>
+    <contents xmi:type="notation:Diagram" xmi:id="_RJry0LEREd-Eb8Wg-FPmGw" type="Class" name="MyRTRecord">
+      <children xmi:id="_XbiycLEREd-Eb8Wg-FPmGw">
+        <children xmi:id="_XblOsLEREd-Eb8Wg-FPmGw" type="ImageCompartment">
+          <layoutConstraint xmi:type="notation:Size" xmi:id="_XblOsbEREd-Eb8Wg-FPmGw" width="1320" height="1320"/>
+        </children>
+        <children xmi:id="_XblOsrEREd-Eb8Wg-FPmGw" type="Stereotype"/>
+        <children xmi:id="_XblOs7EREd-Eb8Wg-FPmGw" type="Name"/>
+        <children xmi:id="_Xbl1wLEREd-Eb8Wg-FPmGw" type="Parent"/>
+        <children xmi:id="_Xbl1wbEREd-Eb8Wg-FPmGw" type="AttributeCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbl1wrEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_Xbmc0LEREd-Eb8Wg-FPmGw" type="OperationCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbmc0bEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_Xbmc0rEREd-Eb8Wg-FPmGw" visible="false" type="SignalCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbmc07EREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_XbnD4LEREd-Eb8Wg-FPmGw" visible="false" type="StructureCompartment">
+          <styles xmi:type="umlnotation:UMLShapeCompartmentStyle" xmi:id="_XbnD4bEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_XbiycbEREd-Eb8Wg-FPmGw" fontName="Arial" showListVisibility="Text" lineColor="0" showParent="QualifiedName" showStereotype="Text"/>
+        <element xmi:type="uml:Class" href="platform:/resource/Kieker-Developerguide/model-project/kieker.emx#_4hIpADHKEd-Dw_r6qZDmjQ?kieker/common/record/AbstractMonitoringRecord?"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XbiycrEREd-Eb8Wg-FPmGw" x="7250" y="750"/>
+      </children>
+      <children xmi:id="_Xbnq8LEREd-Eb8Wg-FPmGw">
+        <children xmi:id="_XboSALEREd-Eb8Wg-FPmGw" type="ImageCompartment">
+          <layoutConstraint xmi:type="notation:Size" xmi:id="_XboSAbEREd-Eb8Wg-FPmGw" width="530" height="530"/>
+        </children>
+        <children xmi:id="_XboSArEREd-Eb8Wg-FPmGw" type="Stereotype"/>
+        <children xmi:id="_XboSA7EREd-Eb8Wg-FPmGw" type="Kind"/>
+        <children xmi:id="_XboSBLEREd-Eb8Wg-FPmGw" type="Name"/>
+        <children xmi:id="_XboSBbEREd-Eb8Wg-FPmGw" type="Parent"/>
+        <children xmi:id="_Xbo5ELEREd-Eb8Wg-FPmGw" visible="false" type="AttributeCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbo5EbEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_Xbo5ErEREd-Eb8Wg-FPmGw" type="OperationCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbo5E7EREd-Eb8Wg-FPmGw"/>
+        </children>
+        <children xmi:id="_Xbo5FLEREd-Eb8Wg-FPmGw" visible="false" type="SignalCompartment">
+          <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Xbo5FbEREd-Eb8Wg-FPmGw"/>
+        </children>
+        <styles xmi:type="umlnotation:UMLClassifierStyle" xmi:id="_Xbnq8bEREd-Eb8Wg-FPmGw" fontName="Arial" showListVisibility="Text" lineColor="0" showParent="QualifiedName" showStereotype="Text" useClassifierShape="true"/>
+        <element xmi:type="uml:Interface" href="platform:/resource/Kieker-Developerguide/model-project/kieker.emx#_Zg22cEu2Ed-_k5NmN0Xc4Q?kieker/common/record/IMonitoringRecord?"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Xbnq8rEREd-Eb8Wg-FPmGw" x="750" y="750"/>
+      </children>
+      <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="_RJry0bEREd-Eb8Wg-FPmGw"/>
+      <element xsi:nil="true"/>
+      <edges xmi:id="_XbzRILEREd-Eb8Wg-FPmGw" source="_XbiycLEREd-Eb8Wg-FPmGw" target="_Xbnq8LEREd-Eb8Wg-FPmGw">
+        <children xmi:id="_Xbz4MLEREd-Eb8Wg-FPmGw" type="NameLabel">
+          <children xmi:id="_Xbz4MrEREd-Eb8Wg-FPmGw" type="Stereotype"/>
+          <children xmi:id="_Xb0fQLEREd-Eb8Wg-FPmGw" type="Name"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Xbz4MbEREd-Eb8Wg-FPmGw" y="-220"/>
+        </children>
+        <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_XbzRIbEREd-Eb8Wg-FPmGw" fontName="Arial" routing="Rectilinear" lineColor="0" lineWidth="1" showStereotype="Text"/>
+        <element xmi:type="uml:InterfaceRealization" href="platform:/resource/Kieker-Developerguide/model-project/kieker.emx#_lQS5EEu2Ed-_k5NmN0Xc4Q?kieker/common/record/AbstractMonitoringRecord/%3CInterfaceRealization%3E?"/>
+        <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_XbzRIrEREd-Eb8Wg-FPmGw" points="[-2256, 513, 4682, 638]$[-3045, 693, 3893, 818]$[-4743, 336, 2195, 461]"/>
+        <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Xec8gLEREd-Eb8Wg-FPmGw" id="(0.49989,0.0)"/>
+        <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_XedjkLEREd-Eb8Wg-FPmGw" id="(0.49988684,1.0)"/>
+      </edges>
+    </contents>
   </eAnnotations>
   <eAnnotations xmi:id="_FMNlxKSQEd-O9v5GGkzICw" source="com.ibm.xtools.common.ui.reduction.editingCapabilities">
     <details xmi:id="_FMNlxaSQEd-O9v5GGkzICw" key="com.ibm.xtools.activities.umlBBSpecificInstanceType1" value="1"/>
@@ -744,22 +804,6 @@
     <ownedAttribute xmi:id="_yjPbUKSWEd-O9v5GGkzICw" name="crm" type="_WRE08KSQEd-O9v5GGkzICw"/>
   </packagedElement>
   <packagedElement xmi:type="uml:Actor" xmi:id="_ml7UwKSWEd-O9v5GGkzICw" name="Actor1"/>
-  <packagedElement xmi:type="uml:Package" xmi:id="_M0YZIKUhEd-O9v5GGkzICw" name="common">
-    <eAnnotations xmi:id="_M0ZAMKUhEd-O9v5GGkzICw" source="uml2.diagrams" references="_M0ZAMaUhEd-O9v5GGkzICw">
-      <contents xmi:type="notation:Diagram" xmi:id="_M0ZAMaUhEd-O9v5GGkzICw" type="Freeform" name="Main">
-        <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="_M0ZAMqUhEd-O9v5GGkzICw"/>
-        <element xsi:nil="true"/>
-      </contents>
-    </eAnnotations>
-    <packagedElement xmi:type="uml:Package" xmi:id="_OyxYcKUhEd-O9v5GGkzICw" name="record">
-      <eAnnotations xmi:id="_Oyx_gKUhEd-O9v5GGkzICw" source="uml2.diagrams" references="_Oyx_gaUhEd-O9v5GGkzICw">
-        <contents xmi:type="notation:Diagram" xmi:id="_Oyx_gaUhEd-O9v5GGkzICw" type="Freeform" name="Main">
-          <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="_Oyx_gqUhEd-O9v5GGkzICw"/>
-          <element xsi:nil="true"/>
-        </contents>
-      </eAnnotations>
-    </packagedElement>
-  </packagedElement>
   <profileApplication xmi:id="_FMONNqSQEd-O9v5GGkzICw">
     <eAnnotations xmi:id="_FMONN6SQEd-O9v5GGkzICw" source="http://www.eclipse.org/uml2/2.0.0/UML">
       <references xmi:type="ecore:EPackage" href="pathmap://UML_PROFILES/Standard.profile.uml#_yzU58YinEdqtvbnfB2L_5w"/>
