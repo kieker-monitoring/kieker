@@ -5,7 +5,7 @@ import java.util.Collection;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.common.record.IMonitoringRecord;
 
-public class MyConsumer implements IMonitoringRecordConsumerPlugin {
+public class MyResponseTimeConsumer implements IMonitoringRecordConsumerPlugin {
 
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
@@ -27,12 +27,9 @@ public class MyConsumer implements IMonitoringRecordConsumerPlugin {
 	}
 
 	@Override
-	public boolean execute() {
-		return true;
-	}
+	public boolean execute() { return true; }
 
 	@Override
-	public void terminate(boolean error) {
-	}
+	public void terminate(boolean error) {}
 
 }

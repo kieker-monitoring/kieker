@@ -10,6 +10,12 @@ public class MyPipeReader extends AbstractMonitoringLogReader {
 
     private volatile MyPipe pipe;
 
+    public MyPipeReader () {}
+
+    public MyPipeReader (final String pipeName) {
+        this.init(PROPERTY_PIPE_NAME+"="+pipeName);
+    }
+    
     @Override
     public void init(String initString) throws IllegalArgumentException {
         PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
