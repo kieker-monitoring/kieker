@@ -5,11 +5,11 @@ import kieker.common.record.AbstractMonitoringRecord;
 public class MyResponseTimeRecord extends AbstractMonitoringRecord {
 
     private static final long serialVersionUID = 1775L;
-    private final static String NULL_VAL = "N/A";
+    private final static String NA_VAL = "N/A";
 
     /* Attributes storing the actual monitoring data: */
-    public String className = NULL_VAL;
-    public String methodName = NULL_VAL;
+    public String className = NA_VAL;
+    public String methodName = NA_VAL;
     public long responseTimeNanos = -1;
 
     @Override

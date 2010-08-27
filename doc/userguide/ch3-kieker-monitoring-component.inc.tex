@@ -116,13 +116,13 @@ shows a similar manual monitoring probe which uses the monitoring record type %
 
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-\lstinputlisting[firstline=66, lastline=76, firstnumber=66, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[firstline=14, lastline=23, firstnumber=14, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
 \class{MonitoringController} class, the singleton instance should be stored %
 in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:finalStaticController}.
 
-\lstinputlisting[firstline=12, lastline=13, firstnumber=12, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[firstline=9, lastline=10, firstnumber=9, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
 \noindent When manually instrumenting an application, the monitoring probe is implemented %
 by mixing monitoring logic with business logic, which is often not desired since %

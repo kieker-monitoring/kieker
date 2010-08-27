@@ -21,7 +21,7 @@ public class CRM {
         long tout = MONITORING_CONTROLLER.currentTimeNanos();
         OperationExecutionRecord e =
                 new OperationExecutionRecord(
-                "bookstoreApplication.Catalog", "getBook()",
+                Catalog.class.getName(), "getBook()",
                 tin, tout);
         MONITORING_CONTROLLER.newMonitoringRecord(e);
     }
