@@ -109,8 +109,9 @@ The calls are shown in Listing~\ref{lst:traceAnalysis:sequenceDiagram}.
 
 \setBashListing
 \input{ch5-trace-analysis_Produce_Sequence_Diagram.inc}
-\TODO{Wrapper script for Windows?}
 The first call produces the sequence diagram and the second one converts the data with the help of another wrapper script to the easier readable \file{png}-format. The result should be a sequence diagram very similar to the one seen in Figure \ref{fig:bookstore:classAndSequenceDiagrams}.
+Under Windows the first part is very similar and can be done via a wrapper script as well:
+\input{ch5-trace-analysis_Produce_Sequence_Diagram-win.inc}
 
 It is possible to create other diagrams as well with the help of the visualization tool like for example aggregated call trees or component dependency diagrams. The Figures~\ref{fig:aspectJ:componentDependencyGraph} and \ref{fig:aspectJ:aggregatedCallTree} show some example diagrams.
 
