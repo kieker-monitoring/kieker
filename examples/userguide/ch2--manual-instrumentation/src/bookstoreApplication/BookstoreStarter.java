@@ -1,6 +1,6 @@
 package bookstoreApplication;
 
-public class BookstoreStarter {
+public class Starter {
 
     public static void main(String[] args) {
         Bookstore bookstore = new Bookstore();
