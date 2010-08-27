@@ -106,7 +106,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
         // that knowns the request object (e.g. a servlet or a spring MVC controller).
         execData.sessionId = sessionRegistry.recallThreadLocalSessionId();
         execData.experimentId = tpmonController.getExperimentId();
-        execData.vmName = vmName;
+        execData.hostName = vmName;
         return execData;
     }
 

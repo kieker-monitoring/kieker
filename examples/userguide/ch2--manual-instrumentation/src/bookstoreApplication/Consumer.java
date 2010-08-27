@@ -31,11 +31,11 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 		/* Now check compare with the response responseTime threshold: */
 		if (responseTime > maxResponseTime) {
 			System.err.println("maximum response time exceeded by "
-					+ (responseTime - maxResponseTime) + " ns: " + rec.componentName
-					+ "." + rec.opname);
+					+ (responseTime - maxResponseTime) + " ns: " + rec.className
+					+ "." + rec.operationName);
 		} else {
-			System.out.println("response time accepted: " + rec.componentName
-					+ "." + rec.opname);
+			System.out.println("response time accepted: " + rec.className
+					+ "." + rec.operationName);
 		}
 		return true;
 	}

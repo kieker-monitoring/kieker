@@ -114,12 +114,12 @@ public class DbWriterThread extends AbstractWorkerThread {
             }
 
             OperationExecutionRecord execData = (OperationExecutionRecord) monitoringRecord;
-            psInsertMonitoringData.setString(1, execData.componentName + "." + execData.opname);
+            psInsertMonitoringData.setString(1, execData.className + "." + execData.operationName);
             psInsertMonitoringData.setString(2, execData.sessionId);
             psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));
             psInsertMonitoringData.setLong(4, execData.tin);
             psInsertMonitoringData.setLong(5, execData.tout);
-            psInsertMonitoringData.setString(6, execData.vmName);
+            psInsertMonitoringData.setString(6, execData.hostName);
             psInsertMonitoringData.setLong(7, execData.eoi);
             psInsertMonitoringData.setLong(8, execData.ess);
             psInsertMonitoringData.execute();

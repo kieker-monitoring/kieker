@@ -111,7 +111,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
             execData.isEntryPoint = true; // of course (however, we never evaluate it here)!
             cfRegistry.storeThreadLocalEOI(0); // current execution's eoi is 0
             cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
-            execData.vmName = vmName;
+            execData.hostName = vmName;
             execData.experimentId = ctrlInst.getExperimentId();
             execData.tin = ctrlInst.currentTimeNanos();
         }

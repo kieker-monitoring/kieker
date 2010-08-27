@@ -32,13 +32,13 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
 
     private static final String DEFAULT_VALUE="N/A";
 
-    private static final long serialVersionUID = 117L;
+    private static final long serialVersionUID = 1179L;
     /** Used to identify the type of CSV records */
     private static final int numRecordFields = 9;
     public int experimentId = -1;
-    public String vmName = DEFAULT_VALUE;
-    public String componentName = DEFAULT_VALUE;
-    public String opname = DEFAULT_VALUE;
+    public String hostName = DEFAULT_VALUE;
+    public String className = DEFAULT_VALUE;
+    public String operationName = DEFAULT_VALUE;
     public String sessionId = DEFAULT_VALUE;
     public long traceId = -1;
     public long tin = -1;
@@ -59,8 +59,8 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
     public OperationExecutionRecord(
             String componentName, String methodName,
             long traceId) {
-        this.componentName = componentName;
-        this.opname = methodName;
+        this.className = componentName;
+        this.operationName = methodName;
         this.traceId = traceId;
     }
 
@@ -94,7 +94,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
             String vnName,
             int eoi, int ess) {
         this(componentName, opName, sessionId, traceId, tin, tout);
-        this.vmName = vnName;
+        this.hostName = vnName;
         this.eoi = eoi;
         this.ess = ess;
     }
@@ -102,12 +102,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
     public final Object[] toArray() {
         return new Object[]{
                     this.experimentId,
-                    this.componentName + "." + this.opname,
+                    this.className + "." + this.operationName,
                     (this.sessionId == null) ? "NULL" : this.sessionId,
                     this.traceId,
                     this.tin,
                     this.tout,
-                    (this.vmName == null) ? "NULLHOST" : this.vmName,
+                    (this.hostName == null) ? "NULLHOST" : this.hostName,
                     this.eoi,
                     this.ess
                 };
@@ -121,7 +121,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
                     long.class,   // traceId
                     long.class,   // tin
                     long.class,   // tout
-                    String.class, // vmName
+                    String.class, // hostName
                     int.class,    // eoi
                     int.class     // ess
                 };
@@ -146,18 +146,18 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
                     posDot = name.lastIndexOf('.');
                 }
                 if (posDot == -1) {
-                    componentName = "";
-                    this.opname = name;
+                    className = "";
+                    this.operationName = name;
                 } else {
-                    componentName = name.substring(0, posDot);
-                    this.opname = name.substring(posDot + 1);
+                    className = name.substring(0, posDot);
+                    this.operationName = name.substring(posDot + 1);
                 }
             }
             this.sessionId = (String)values[2];
             this.traceId = (Long)values[3];
             this.tin = (Long)values[4];
             this.tout = (Long)values[5];
-            this.vmName = (String)values[6];
+            this.hostName = (String)values[6];
             this.eoi = (Integer)values[7];
             this.ess = (Integer)values[8];
         } catch (Exception exc) {
@@ -189,16 +189,16 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
 
         try {
         return
-                this.componentName.equals(ro.componentName) &&
+                this.className.equals(ro.className) &&
                 this.eoi == ro.eoi &&
                 this.ess == ro.ess &&
                 //this.experimentId == ro.experimentId &&
-                this.opname.equals(ro.opname) &&
+                this.operationName.equals(ro.operationName) &&
                 this.sessionId.equals(ro.sessionId) &&
                 this.tin == ro.tin &&
                 this.tout == ro.tout &&
                 this.traceId == ro.traceId &&
-                this.vmName.equals(ro.vmName);
+                this.hostName.equals(ro.hostName);
         } catch (NullPointerException ex){
             log.error(ex);
             return false;

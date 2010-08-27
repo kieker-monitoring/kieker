@@ -56,7 +56,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
             execData.traceId = cfRegistry.getAndStoreUniqueThreadLocalTraceId();
             execData.isEntryPoint = true;
         }
-        execData.vmName = vmName;
+        execData.hostName = vmName;
         execData.experimentId = ctrlInst.getExperimentId();
         return execData;
     }

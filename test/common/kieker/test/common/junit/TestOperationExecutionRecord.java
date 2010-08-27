@@ -37,18 +37,18 @@ public class TestOperationExecutionRecord extends TestCase {
      */
     public void testSerializeDeserializeEquals(){
         OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.componentName = "p1.p2.p3.componentname";
+        r1.className = "p1.p2.p3.componentname";
         r1.eoi=1;
         r1.ess=2;
         r1.experimentId=55;
         r1.isEntryPoint=true;
-        r1.opname="operation(boolean arg1, int arg2)";
+        r1.operationName="operation(boolean arg1, int arg2)";
         r1.retVal=new Object();
         r1.sessionId="XXLJHDJHDHF";
         r1.tin=5577376;
         r1.tout=7544522;
         r1.traceId=882287444;
-        r1.vmName="myVM";
+        r1.hostName="myVM";
 
         Object[] r1Array = r1.toArray();
 
@@ -66,32 +66,32 @@ public class TestOperationExecutionRecord extends TestCase {
      */
     public void testEqualsEqualVariablesValues(){
         OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.componentName = "p1.p2.p3.componentname";
+        r1.className = "p1.p2.p3.componentname";
         r1.eoi=1;
         r1.ess=2;
         r1.experimentId=55;
         r1.isEntryPoint=true;
-        r1.opname="operation(boolean arg1, int arg2)";
+        r1.operationName="operation(boolean arg1, int arg2)";
         r1.retVal=new Object();
         r1.sessionId="XXLJHDJHDHF";
         r1.tin=5577376;
         r1.tout=7544522;
         r1.traceId=882287444;
-        r1.vmName="myVM";
+        r1.hostName="myVM";
 
         OperationExecutionRecord r2 = new OperationExecutionRecord();
-        r2.componentName = "p1.p2.p3.componentname";
+        r2.className = "p1.p2.p3.componentname";
         r2.eoi=1;
         r2.ess=2;
         r2.experimentId=55;
         r2.isEntryPoint=true;
-        r2.opname="operation(boolean arg1, int arg2)";
+        r2.operationName="operation(boolean arg1, int arg2)";
         r2.retVal=new Object();
         r2.sessionId="XXLJHDJHDHF";
         r2.tin=5577376;
         r2.tout=7544522;
         r2.traceId=882287444;
-        r2.vmName="myVM";
+        r2.hostName="myVM";
 
         assertEquals(r1, r2);
     }
@@ -104,53 +104,53 @@ public class TestOperationExecutionRecord extends TestCase {
      */
     public void testEqualsNullVariableValues(){
         OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.componentName = "p1.p2.p3.componentname";
+        r1.className = "p1.p2.p3.componentname";
         r1.eoi=1;
         r1.ess=2;
         r1.experimentId=55;
         r1.isEntryPoint=true;
-        r1.opname="operation(boolean arg1, int arg2)";
+        r1.operationName="operation(boolean arg1, int arg2)";
         r1.retVal=new Object();
         r1.sessionId="XXLJHDJHDHF";
         r1.tin=5577376;
         r1.tout=7544522;
         r1.traceId=882287444;
-        r1.vmName="myVM";
+        r1.hostName="myVM";
 
         OperationExecutionRecord r2 = new OperationExecutionRecord();
-        r2.componentName = "p1.p2.p3.componentname";
+        r2.className = "p1.p2.p3.componentname";
         r2.eoi=1;
         r2.ess=2;
         r2.experimentId=55;
         r2.isEntryPoint=true;
-        r2.opname="operation(boolean arg1, int arg2)";
+        r2.operationName="operation(boolean arg1, int arg2)";
         r2.retVal=new Object();
         r2.sessionId="XXLJHDJHDHF";
         r2.tin=5577376;
         r2.tout=7544522;
         r2.traceId=882287444;
-        r2.vmName="myVM";
+        r2.hostName="myVM";
 
         assertEquals(r1, r2);
 
-        /* Modification of componentName */
-        String oldComponentName1 = r1.componentName;
-        String oldComponentName2 = r2.componentName;
-        r1.componentName = null;
-        r2.componentName = null;
+        /* Modification of className */
+        String oldComponentName1 = r1.className;
+        String oldComponentName2 = r2.className;
+        r1.className = null;
+        r2.className = null;
         assertFalse(r1.equals(r2));
-        r1.componentName = oldComponentName1;
-        r2.componentName = oldComponentName2;
+        r1.className = oldComponentName1;
+        r2.className = oldComponentName2;
         assertEquals(r1, r2);
 
-        /* Modification of opname */
-        String oldOpname1 = r1.opname;
-        String oldOpname2 = r2.opname;
-        r1.opname = null;
-        r2.opname = null;
+        /* Modification of operationName */
+        String oldOpname1 = r1.operationName;
+        String oldOpname2 = r2.operationName;
+        r1.operationName = null;
+        r2.operationName = null;
         assertFalse(r1.equals(r2));
-        r1.opname = oldOpname1;
-        r2.opname = oldOpname2;
+        r1.operationName = oldOpname1;
+        r2.operationName = oldOpname2;
         assertEquals(r1, r2);
 
         /* Modification of sessionId */
@@ -163,14 +163,14 @@ public class TestOperationExecutionRecord extends TestCase {
         r2.sessionId = oldSessionId2;
         assertEquals(r1, r2);
 
-        /* Modification of vmName */
-        String oldVmName1 = r1.vmName;
-        String oldVmName2 = r2.vmName;
-        r1.vmName = null;
-        r2.vmName = null;
+        /* Modification of hostName */
+        String oldVmName1 = r1.hostName;
+        String oldVmName2 = r2.hostName;
+        r1.hostName = null;
+        r2.hostName = null;
         assertFalse(r1.equals(r2));
-        r1.vmName = oldVmName1;
-        r2.vmName = oldVmName2;
+        r1.hostName = oldVmName1;
+        r2.hostName = oldVmName2;
         assertEquals(r1, r2);
     }
 
@@ -182,40 +182,40 @@ public class TestOperationExecutionRecord extends TestCase {
      */
     public void testEqualsDifferentVariablesValues(){
         OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.componentName = "p1.p2.p3.componentname";
+        r1.className = "p1.p2.p3.componentname";
         r1.eoi=1;
         r1.ess=2;
         r1.experimentId=55;
         r1.isEntryPoint=true;
-        r1.opname="operation(boolean arg1, int arg2)";
+        r1.operationName="operation(boolean arg1, int arg2)";
         r1.retVal=new Object();
         r1.sessionId="XXLJHDJHDHF";
         r1.tin=5577376;
         r1.tout=7544522;
         r1.traceId=882287444;
-        r1.vmName="myVM";
+        r1.hostName="myVM";
 
         OperationExecutionRecord r2 = new OperationExecutionRecord();
-        r2.componentName = "p1.p2.p3.componentname";
+        r2.className = "p1.p2.p3.componentname";
         r2.eoi=1;
         r2.ess=2;
         r2.experimentId=55;
         r2.isEntryPoint=true;
-        r2.opname="operation(boolean arg1, int arg2)";
+        r2.operationName="operation(boolean arg1, int arg2)";
         r2.retVal=new Object();
         r2.sessionId="XXLJHDJHDHF";
         r2.tin=5577376;
         r2.tout=7544522;
         r2.traceId=882287444;
-        r2.vmName="myVM";
+        r2.hostName="myVM";
 
         assertEquals(r1, r2);
 
-        /* Modification of componentName */
-        String oldComponentName = r2.componentName;
-        r2.componentName = r2.componentName+"_";
+        /* Modification of className */
+        String oldComponentName = r2.className;
+        r2.className = r2.className+"_";
         assertFalse(r1.equals(r2));
-        r2.componentName = oldComponentName;
+        r2.className = oldComponentName;
         assertEquals(r1, r2);
 
         /* Modification of eoi */
@@ -232,11 +232,11 @@ public class TestOperationExecutionRecord extends TestCase {
         r2.ess = oldEss;
         assertEquals(r1, r2);
 
-        /* Modification of opname */
-        String oldOpname = r2.opname;
-        r2.opname = r2.opname+"_";
+        /* Modification of operationName */
+        String oldOpname = r2.operationName;
+        r2.operationName = r2.operationName+"_";
         assertFalse(r1.equals(r2));
-        r2.opname = oldOpname;
+        r2.operationName = oldOpname;
         assertEquals(r1, r2);
 
         /* Modification of sessionId */
@@ -267,11 +267,11 @@ public class TestOperationExecutionRecord extends TestCase {
         r2.traceId = oldTraceId;
         assertEquals(r1, r2);
 
-        /* Modification of vmName */
-        String oldVmName = r2.vmName;
-        r2.vmName = r2.vmName+"_";
+        /* Modification of hostName */
+        String oldVmName = r2.hostName;
+        r2.hostName = r2.hostName+"_";
         assertFalse(r1.equals(r2));
-        r2.vmName = oldVmName;
+        r2.hostName = oldVmName;
         assertEquals(r1, r2);
     }
 }

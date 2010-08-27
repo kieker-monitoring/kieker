@@ -22,7 +22,7 @@
 \title{%
 \Huge\Kieker{} \version{} User Guide%\\[0.5ex] \Large{Continuous Monitoring and Analysis of Java Software Behavior}%
 }
-% \subtitle{---User Guide---}
+
 \author{\sffamily Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung} % , and contributors
 \date{\sffamily\today}
 \publishers{\normalsize\sffamily
@@ -32,12 +32,19 @@ Software Engineering Group, \url{http://se.informatik.uni-kiel.de}\\ %
 Dept.\ Computer Science, Christian Albrechts University of Kiel, Germany
 }
 
+\hypersetup
+{%
+pdftitle = {\Kieker{} \version{} User Guide},
+pdfauthor = {Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung}
+% colorlinks = {true}
+}
+
 % Here we go.
 \begin{document}
   % We want a table of contents seperated from the rest of the text.
   \maketitle
   \setcounter{tocdepth}{1} % not deeper than section level
-  \tableofcontents
+  {\sffamily\tableofcontents}
 
   % Insert the other parts of the document.
   \input{ch1-introduction.inc}
@@ -46,6 +53,7 @@ Dept.\ Computer Science, Christian Albrechts University of Kiel, Germany
   \input{ch4-kieker-analysis-component.inc.tex}
   \input{ch5-trace-analysis.inc.tex}
   
+  % suppress appendix chapters in toc
   \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
   \input{Appendix}
 

@@ -56,7 +56,7 @@ public class StorageOnly {
             System.out.printf("Starting test by adding %d monitoring events\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
                 OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L, ctrl.getVmName(),i,i);
-                record.vmName = vmName;
+                record.hostName = vmName;
                 ctrl.newMonitoringRecord(record);
             }
             System.out.println("Sleeping for 8 seconds");
@@ -64,7 +64,7 @@ public class StorageOnly {
             System.out.printf("%d more monitoring points\n",numberOfEvents);
             for (int i = 0; i < numberOfEvents; i++) {
                 OperationExecutionRecord record = new OperationExecutionRecord(i%2 + "component", i%4 + "method", "sessionid", 3333, 123123L, 123124L,ctrl.getVmName(),i+10000,i);
-                record.vmName = vmName;
+                record.hostName = vmName;
                 ctrl.newMonitoringRecord(record);
             }
             System.out.println("Sleeping for 60 seconds");

@@ -91,15 +91,15 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
         }
         OperationExecutionRecord execRec = (OperationExecutionRecord) record;
 
-        String executionContainerName = execRec.vmName;
-        //(this.considerExecutionContainer) ? execRec.vmName : "DEFAULTCONTAINER";
-        String componentTypeName = execRec.componentName;
+        String executionContainerName = execRec.hostName;
+        //(this.considerExecutionContainer) ? execRec.hostName : "DEFAULTCONTAINER";
+        String componentTypeName = execRec.className;
         String assemblyComponentName = componentTypeName;
         String allocationComponentName =
                 new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
         String operationFactoryName =
-                new StringBuilder(assemblyComponentName).append(".").append(execRec.opname).toString();
-        String operationSignatureStr = execRec.opname;
+                new StringBuilder(assemblyComponentName).append(".").append(execRec.operationName).toString();
+        String operationSignatureStr = execRec.operationName;
 
         AllocationComponent allocInst = this.getSystemEntityFactory().getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
         if (allocInst == null) { /* Allocation component instance doesn't exist */
