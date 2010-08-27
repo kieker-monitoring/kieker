@@ -83,7 +83,7 @@ Listing~\ref{listing:MyReader} shows a simple reader which reads a stored record
 
 \section{Monitorig Record Consumer Plugins}\label{sec:analysis:consumer}
 
-The consumers are the parts of Kieker which work with the records that have been loaded by the reader. There can be (theoretically) an infinite number of consumers which produce any kind of output. A consumer can be programmed by implementing the interface \class{kieker.analysis.plugin.IMonitoringRecordConsumerPlugin} and writing the necessary methods. Following example consumer takes the given record and writes the content to the default output stream.
+The consumers are the parts of Kieker which work with the records that have been loaded by the reader. There can be (theoretically) an infinite number of consumers which produce any kind of output. A consumer can be programmed by implementing the interface \class{kieker.analysis.plugin.IMonitoringRecordConsumerPlugin} and writing the necessary methods. The following example consumer takes the given record and writes the content to the default output stream.
 
 \setJavaCodeListing
 \lstinputlisting[caption=MyReponseTimeConsumer.java]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeConsumer.java}
