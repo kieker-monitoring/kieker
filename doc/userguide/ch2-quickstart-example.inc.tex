@@ -217,17 +217,11 @@ The record type will be detailed in Chapter~\ref{chap:aspectJ} .
 \end{centering}
 \end{figure}
 
-\noindent The important attributes for the quick start guide are:
+\noindent The attributes relevant to this part are \method{className} and \method{operationName} %
+for the class and method name, as well as \method{tin} and \method{tout} for %
+the timestamp before and after the call of the instrumented method. 
 
-\begin{itemize}
-\item[\hskip1em\class{componentName:}] In this case, the name of the class %
-providing the called method
-\item[\hskip1em\class{opName:}] The name of the called method
-\item[\hskip1em\class{tin:}] The timestamp before calling the method
-\item[\hskip1em\class{tout:}] The timestamp after the method returned
-\end{itemize}
-
-\noindent Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines 11 and 12, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
+Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines 11 and 12, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
 
 % \TODO{Imports?!\\ --- avh: ja, evtl. mit linerange, aber er bl\"oderweise nummeriert er so durch}
 % Make sure that this listing will be modified, once the sourcecode changes!!!
@@ -374,5 +368,7 @@ describe how the analysis application can be compiled and executed under \UnixLi
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}	
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc-win.tex}	
 
-It should be ensured that the application gets the correct path from the monitoring run. 
-If everything worked correctly, the consumer writes something on the output stream for every record it gets. A possible display of the run can be found in the appendix of this tutorial. 
+\noindent You need to make sure that the application gets the correct path from the monitoring run. 
+The consumer writes prints an output message for each record received. %
+An example output can be found in Appendix~\ref{sec:appendix:manualInstrumentation:output}.
+% A possible display of the run can be found in the appendix of this tutorial. 

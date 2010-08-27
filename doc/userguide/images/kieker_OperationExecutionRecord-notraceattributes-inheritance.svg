@@ -54,7 +54,7 @@
      showgrid="false"
      inkscape:zoom="5.2879291"
      inkscape:cx="41.96943"
-     inkscape:cy="140.18028"
+     inkscape:cy="49.407505"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -105,13 +105,6 @@
         <path
            id="path21"
            d="m 15,160 131,0 0,16 -131,0 0,-16 z" />
-      </clipPath>
-      <clipPath
-         id="clipPath6"
-         clipPathUnits="userSpaceOnUse">
-        <path
-           id="path24"
-           d="m 15,173 89,0 0,16 -89,0 0,-16 z" />
       </clipPath>
       <clipPath
          id="clipPath7"
@@ -272,15 +265,15 @@
      xml:space="preserve"
      id="text87"
      style="font-size:10px;fill:#000000;stroke:none;font-family:Arial"
-     transform="translate(-9.5,-19.901047)">+ componentName : String</text>
+     transform="translate(-9.5,-19.901047)">+ className : String</text>
   <text
      x="16"
      y="184"
-     clip-path="url(#clipPath6)"
+     clip-path="none"
      xml:space="preserve"
      id="text89"
      style="font-size:10px;fill:#000000;stroke:none;font-family:Arial"
-     transform="translate(-9.5,-20.332267)">+ opName : String</text>
+     transform="translate(-9.5,-20.332267)">+ operationName : String</text>
   <text
      x="16"
      y="223"
