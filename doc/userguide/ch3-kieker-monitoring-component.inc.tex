@@ -19,19 +19,19 @@ configuration file, which can be used as a template for custom configurations, %
 is provided by the file \file{\monitoringPropertiesFile} in the directory %
 \dir{\KiekerDir/META-INF/} of the binary release %
 (see Section~\ref{sec:example:downloadInstall}). %
-Appendix~\ref{sec:appdx:monitoringproperties} lists this file with a documentation 
-of all available properties.
 
 In order to use a custom configuration file, the file location needs to be passed to %
-the JVM using the parameter \textit{kieker.monitoring.properties}, as shown in %
-Listing~\ref{lst:monitoringPropertiesPassedToJVM}. If no configuration file %
-is passed, a default configuration (according to the sample file) is being %
-used by \KiekerMonitoringPart{}. %
+the JVM using the parameter \textit{kieker.monitoring.properties} as follows:
 
 \setBashListing
-\begin{lstlisting}[label=lst:monitoringPropertiesPassedToJVM]
+\begin{lstlisting}[caption=,label=lst:monitoringPropertiesPassedToJVM]
 #\lstshellprompt# java	#\textbf{-Dkieker.monitoring.properties=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
 \end{lstlisting}
+
+\noindent Appendix~\ref{sec:appdx:monitoringproperties} lists this file with a documentation 
+of all available properties. If no configuration file %
+is passed, a default configuration (according to the sample file) is being %
+used by \KiekerMonitoringPart{}. %
 
 \section{Monitoring Controller}\label{sec:componentsMonitoring:monitoringController}
 
@@ -43,12 +43,12 @@ The class is implemented employing the singleton pattern. The singleton instance
 can be retrieved by calling the static method \method{getInstance}. %
 Figure~\ref{fig:monitoringController:classdiagram} shows %
 a class diagram of the class \class{MonitoringController} including the methods 
-just mentioned. The \class{MonitoringController} is configured based on a configuration %
+just mentioned. The \class{MonitoringController} reads the configuration %
 file, as described in Section~\ref{sec:monitoring:configuration}.
 
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.95\textwidth]{images/kieker_monitoringControlleruserguide-simplified}
+\includegraphics[scale=0.7]{images/kieker_monitoringControlleruserguide-simplified}
 \caption{Class diagram of the \class{MonitoringController} (including selected methods)}
 \label{fig:monitoringController:classdiagram}
 \end{figure}
@@ -57,7 +57,7 @@ file, as described in Section~\ref{sec:monitoring:configuration}.
 \section{Monitoring Records}\label{sec:componentsMonitoring:monitoringRecords}
 
 Monitoring records are objects that contain the monitoring data, as mentioned %
-in the previous chapters, Typically, an instance of a monitoring record is %
+in the previous chapters. Typically, an instance of a monitoring record is %
 constructed in a monitoring probe (Section~\ref{sec:monitoring:probe}), %
 passed to the monitoring controller (Section~\ref{sec:componentsMonitoring:monitoringController}), %
 serialized and deserialized by a monitoring %
@@ -73,10 +73,10 @@ record type \class{OperationExecutionRecord}. \Kieker{} allows to use custom %
 monitoring record types. Corresponding classes must implement the %
 interface \class{IMonitoringRecord} shown in Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}. %
 The methods \method{initFromArray}, \method{toArray}, \method{getValueTypes} %
-are use for serialization and deserialization of the monitoring data contained %
+are used for serialization and deserialization of the monitoring data contained %
 in the record. The method \method{setLoggingTimestamp} is used by the monitoring controller to %
-store the date and time when a record is received by the controller in the %
-record. The \method{getLoggingTimestamp} can be used during analysis to retrieve %
+store the date and time when a record is received by the controller. %
+The \method{getLoggingTimestamp} can be used during analysis to retrieve %
 this value. \KiekerMonitoringPart{} provides the abstract class %
 \class{AbstractMonitoringRecord} (Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}) %
 which already implements the methods to maintain the logging timestamp. 
@@ -111,7 +111,7 @@ The probes are responsible for collecting the monitoring data and passing this %
 monitoring data to the monitoring controller. %
 In Chapter~\ref{sec:example:monitoring}, we have already demonstrated how to %
 manually instrument a Java application. Listing~\ref{listing:cuttingBookstore} %
-shows a similar monitoring probe which uses the monitoring record type %
+shows a similar manual monitoring probe which uses the monitoring record type %
 \class{MyResponseTimeRecord} defined in the previous Section~\ref{sec:componentsMonitoring:monitoringRecords}.
 
 % Make sure that this listing will be modified, once the sourcecode changes!!!
@@ -146,12 +146,19 @@ record contents, as described in Section~\ref{sec:componentsMonitoring:monitorin
 Figure~\ref{figure:monitoringLogWritersHierarchy} shows the monitoring writers %
 already implemented in \KiekerMonitoringPart{}. The writers \class{AsyncFsWriter}, %
 \class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter} can be used %
-to store monitoring records to filesystems and database respectively. %
+to store monitoring records to filesystems and databases respectively. %
 The variants with the prefix \class{Async} are implemented using asynchronous %
-threads that decouple the I/O operations. % 
+threads that decouple the I/O operations from the control flow of the %
+instrumented application. % 
 The \class{AsyncFsWriter} is the default writer which has already been used in %
 Section~\ref{sec:example:monitoring}. %
-Currently, the database writers only support the record type \class{OperationExecutionRecord}.
+Currently, the database writer only supports the record type \class{OperationExecutionRecord}. %
+
+The \class{JMSWriter} writes records to a JMS (Java Messaging Service~\cite{JMS-WebSite}) queue. %
+This allows to implement on-the-fly analysis in distributed systems, i.e., analysis while %
+continuously receiving new monitoring data from an instrumented application potentially %
+running on another machine. %
+The \Kieker{} web site provides an example for this. %
 
 % This is the diagram with the hierarchy of the writers.
 \begin{figure}[H]
@@ -169,7 +176,7 @@ the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 \setJavaCodeListing
 \lstinputlisting[caption=MyWriter.java, label=listing:MyWriter]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipeWriter.java}
 
-The monitoring writer to be used is selected and configured by the \KiekerMonitoringPart{} %
+\noindent The monitoring writer to be used is selected and configured by the \KiekerMonitoringPart{} %
 configuration properties (Section~\ref{chap:componentsMonitoring}) %
 \textit{monitoringDataWriter} and \textit{monitoringDataWriterInitString}. %
 Listing~\ref{lst:monitoringwriter:MyWriter} demonstrates how to use the custom %
@@ -181,3 +188,9 @@ passed as the property value \textit{monitoringDataWriterInitString}.
 monitoringDataWriter=bookstoreTracing.MyWriter
 monitoringDataWriterInitString=somePipe
 \end{lstlisting}
+
+\noindent Notice, that we decided to use \class{Object} arrays as the data structure of the %
+monitoring log in order to demonstrate the use of the \method{toArray} and %
+\method{initFromArray} (in Section~\ref{sec:analysis:reader}) methods. %
+Alternatively, we could have used \class{IMonitoringRecord} as the data structure %
+used by the pipe. %
