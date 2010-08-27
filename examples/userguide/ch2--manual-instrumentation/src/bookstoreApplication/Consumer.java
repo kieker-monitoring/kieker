@@ -1,6 +1,5 @@
 package bookstoreApplication;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
@@ -26,9 +25,9 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 			return true;
 		}
 		OperationExecutionRecord rec = (OperationExecutionRecord) record;
-		/* Get the response responseTime from the record. */
+		/* Derive response time from the record. */
 		long responseTime = rec.tout - rec.tin;
-		/* Now check compare with the response responseTime threshold: */
+		/* Now compare with the response responseTime threshold: */
 		if (responseTime > maxResponseTime) {
 			System.err.println("maximum response time exceeded by "
 					+ (responseTime - maxResponseTime) + " ns: " + rec.className
@@ -41,12 +40,9 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 	}
 
 	@Override
-	public boolean execute() {
-		return true;
-	}
+	public boolean execute() { return true;	}
 
 	@Override
-	public void terminate(boolean arg0) {
-	}
+	public void terminate(boolean error) {	}
 
 }

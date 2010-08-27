@@ -4,10 +4,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class MyPipe {
-	private String pipeName;
-	private LinkedBlockingQueue<Object[]> storage = new LinkedBlockingQueue<Object[]>();
+	private final String pipeName;
+	private final LinkedBlockingQueue<Object[]> storage =
+                new LinkedBlockingQueue<Object[]>();
 
-	public MyPipe(String pipeName) {
+	public MyPipe(final String pipeName) {
 		this.pipeName = pipeName;
 	}
 
@@ -15,11 +16,11 @@ public class MyPipe {
 		return pipeName;
 	}
 
-	public void put(Object[] obj) throws InterruptedException {
+	public void put(final Object[] obj) throws InterruptedException {
 		storage.put(obj);
 	}
 
-	public Object[] poll(long timeout) throws InterruptedException {
+	public Object[] poll(final long timeout) throws InterruptedException {
 		return storage.poll(timeout, TimeUnit.SECONDS);
 	}
 

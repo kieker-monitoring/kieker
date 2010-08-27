@@ -3,54 +3,46 @@ package bookstoreApplication;
 import java.util.Vector;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.PropertyMap;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
 public class MyPipeWriter implements IMonitoringLogWriter {
 
-	private MyPipe pipe;
+    private static final String PROPERTY_PIPE_NAME = "pipeName";
+    private volatile MyPipe pipe;
 
-	@Override
-	public String getInfoString() {
-		return "MyWriter";
-	}
+    @Override
+    public boolean init(String initString) throws IllegalArgumentException {
+        try {
+            PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
+            String pipeName = propertyMap.getProperty(PROPERTY_PIPE_NAME);
+            this.pipe = MyNamedPipeManager.getInstance().acquirePipe(pipeName);
+        } catch (IllegalArgumentException ex) {
+            return false; // signal error
+        }
+        return true;
+    }
 
-	@Override
-	public Vector<AbstractWorkerThread> getWorkers() {
-		/* We don't have any worker threads, so we return just null. */
-		return null;
-	}
+    @Override
+    public boolean newMonitoringRecord(IMonitoringRecord record) {
+        try {
+            /* Just write the content of the record into the pipe. */
+            this.pipe.put(record.toArray());
+        } catch (InterruptedException e) {
+            return false; // signal error
+        }
+        return true;
+    }
 
-	@Override
-	public boolean init(String initString) {
-		boolean result;
-		try {
-			/*
-			 * The init string should have the form
-			 * "pipename | asyncRecordQueueSize=8000" or something similar. We
-			 * are only interested in the name of the pipe.
-			 */
-			initString = initString.substring(0, initString.indexOf('|') - 1);
-			/* Try to get the pipe via name. */
-			pipe = MyNamedPipeManager.getInstance().acquirePipe(initString);
-			result = true;
-		} catch (IllegalArgumentException ex) {
-			result = false;
-		}
-		return result;
-	}
+    @Override
+    public String getInfoString() {
+        return "MyWriter";
+    }
 
-	@Override
-	public boolean newMonitoringRecord(IMonitoringRecord record) {
-		boolean result;
-		try {
-			/* Just write the content of the record into the pipe. */
-			pipe.put(record.toArray());
-			result = true;
-		} catch (InterruptedException e) {
-			result = false;
-		}
-		return result;
-	}
-
+    @Override
+    public Vector<AbstractWorkerThread> getWorkers() {
+        /* We don't have any worker threads, so we return just null. */
+        return null;
+    }
 }
