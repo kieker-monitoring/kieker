@@ -37,7 +37,7 @@ public class MyPipeWriter implements IMonitoringLogWriter {
 
     @Override
     public String getInfoString() {
-        return "MyWriter";
+        return MyPipeWriter.class.getName();
     }
 
     @Override
