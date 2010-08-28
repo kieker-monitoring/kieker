@@ -102,32 +102,41 @@ In order to use this tool, it is necessary to install two other programs:
 Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
 } \vspace{3mm}
 
-\noindent Once both have been installed, the trace-analysis-tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} in the \dir{bin/} directory. A non-parameterized call of the script prints all possible options on the screen.
+\noindent Once both have been installed, the trace-analysis-tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or \file{trace-analysis.bat} in the \dir{bin/} directory, respectivly.  A non-parameterized call of the script prints all possible options on the screen.
 
-Assume the monitored data within the directory \dir{/tmp/tpmon-20100813-121041532-UTC} should be analyzed by the tool to produce a sequence diagram which should then be written to an existing directory named \dir{out/}. %
-The calls are shown in Listing~\ref{lst:traceAnalysis:sequenceDiagram}.
+Assume the monitored data within the directory \dir{/tmp/tpmon-20100813-121041532-UTC} (or \dir{C:$\backslash{}$Temp$\backslash{}$tpmon-20100813-121041532-UTC} under Windows) should be analyzed by the tool to produce a sequence diagram as well as a call tree which should then be written to an existing directory named \dir{out/}. %
+The necessary calls are shown in Listing~\ref{lst:traceAnalysis:sequenceDiagram} and \ref{lst:traceAnalysis:sequenceDiagramWin}.
 
 \setBashListing
 \input{ch5-trace-analysis_Produce_Sequence_Diagram.inc}
-The first call produces the sequence diagram and the second one converts the data with the help of another wrapper script to the easier readable \file{png}-format. The result should be a sequence diagram very similar to the one seen in Figure \ref{fig:bookstore:classAndSequenceDiagrams}.
-Under Windows the first part is very similar and can be done via a wrapper script as well:
 \input{ch5-trace-analysis_Produce_Sequence_Diagram-win.inc}
-
-It is possible to create other diagrams as well with the help of the visualization tool like for example aggregated call trees or component dependency diagrams. The Figures~\ref{fig:aspectJ:componentDependencyGraph} and \ref{fig:aspectJ:aggregatedCallTree} show some example diagrams.
-
+The result should be similar to the following Figure:
 \begin{figure}[H]
-\centering
-\includegraphics[width=1.0\textwidth]{images/ComponentDependencyGraph}
-\caption{Component Dependency Graph}
-\label{fig:aspectJ:componentDependencyGraph}
+\begin{graybox}
+\dirtree{%
+.1 \DirInDirTree{out/}.
+.2 allocationSequenceDiagram-6120391893596504065.pic.
+.2 callTree-6120391893596504065.dot.
+.2 system-entities.html.
+}
+\end{graybox}
+\end{figure}
+The \file{.pic} and \file{.dir}-files can now be converted into a readable format by using graphviz and the plotutils as seen in Listing~\ref{lst:traceAnalysis:convertDiagrams}.
+\input{ch5-trace-analysis_Convert_Diagrams.inc}
+The diagram and the graph after the converting can be seen in the following Figures.
+
+\begin{figure}[H]\centering
+	\subfigure[]{\label{fig:traceAnalysis:callTree}%
+	\includegraphics[height=0.4\textheight]{images/callTree}
+	}%
+	\subfigure[]{\label{fig:traceAnalysis:allocSeqDiagr}%
+	\includegraphics[height=0.4\textheight]{images/allocationSequenceDiagram}
+	}%
+
+	\caption{Call Tree~\subref{fig:traceAnalysis:callTree} and Allocation Sequence Diagram~\subref{fig:traceAnalysis:allocSeqDiagr}}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.4]{images/AggregatedCallTree}
-\caption{Aggregated Call Tree}
-\label{fig:aspectJ:aggregatedCallTree}
-\end{figure}
+\NOTIFYBOX{Under Linux it is possible to use a shell script for the converting as well. \file{dotPic-fileConverter.sh} searches all \file{.pic} and \file{.dir}-files in the given directory and converts them by using the necessary tools.}
 
 \section{Full Monitoring}\label{sec:aspectJ:fullweaving}
 The full monitoring without using any annotations is quite simple. It is only necessary to modify the corresponding configuration-file of AspectJ, as can be seen in Listing~\ref{lst:aopConfigFileFull}.
@@ -135,8 +144,10 @@ The full monitoring without using any annotations is quite simple. It is only ne
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{ch5-trace-analysis_FullMonitoring-aop.xml}
 
-\noindent The old aspect has been deactivated by uncommenting it, while the new aspect \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>$ has been activated. As the name already reveals, the new aspect makes sure that every method within the included classes/packages will be monitored. The exact behavior can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. Listing \ref{lst:aopConfigFileFull} shows for example how to make sure that only the methods within the class \class{BookstoreStarter} will be monitored.
+\noindent The old aspect has been deactivated by removing it (uncommenting it would work as well), while the new aspect \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>$ has been activated. As the name already reveals, the new aspect makes sure that every method within the included classes/packages will be monitored. The exact behavior can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. Listing \ref{lst:aopConfigFileFull} shows for example how to make sure that only the methods within the class \class{BookstoreStarter} will be monitored.
 
 The commands to compile and run the source code are just the same as in the Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1}. The only thing changing is that the annotations within the source code are no longer necessary.
 
 An example log of a complete run can be found in the appendix.
+
+\WARNBOX{By using an own implemented probe it can be necessary to include the corresponding class for this probe as well in the configuration file.}
