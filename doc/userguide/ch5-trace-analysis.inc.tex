@@ -24,6 +24,12 @@ during compile-time seems to suggest itself, but in this chapter it
 is only shown how to perform the so called load-time-weaving - the
 weaving during runtime, which is more flexible than the compile-time-weaving.
 
+\
+
+\NOTIFYBOX{The Java sources of this chapter can be found in the %
+\file{\aspectJBookstoreApplicationDirDistro{}/} directory of the %
+binary release.}
+
 %%
 \section{AspectJ Annotations}\label{sec:aspectJ:annotation}
 
@@ -121,7 +127,7 @@ The result should be similar to the following Figure:
 }
 \end{graybox}
 \end{figure}
-The \file{.pic} and \file{.dir}-files can now be converted into a readable format by using graphviz and the plotutils as seen in Listing~\ref{lst:traceAnalysis:convertDiagrams}.
+The \file{.pic} and \file{.dot} files can now be converted into a readable format by using graphviz and the plotutils as seen in Listing~\ref{lst:traceAnalysis:convertDiagrams}.
 \input{ch5-trace-analysis_Convert_Diagrams.inc}
 The diagram and the graph after the converting can be seen in the following Figures.
 

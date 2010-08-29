@@ -44,7 +44,6 @@ constitutes \KiekerMonitoringPart{}'s default configuration.
 		\input{appendix_ch2_ExampleLog_2.inc}
 \newpage	
 	\subsection{Trace Monitoring, Analysis \& Visualization (Chapter \ref{chap:aspectJ})}
-	    The following listing shows the produced log during a run of the Bookstore Application, weaved with the necessary code at runtime as shown in Section \ref{sec:aspectJ:fullweaving}.
 		\input{appendix_ch5_ExampleLog_1.inc}
 	
 \newpage
@@ -54,78 +53,85 @@ The following \file{build.xml} and \file{build.properties} files can be %
 used for compiling and executing the manually instrumentated Bookstore %
 application and the analysis, as described in Chapter~\ref{chap:example}. %
 The files are included in the directory \file{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
-      \setXMLListing
-      \lstinputlisting[caption=build.xml]{\manualInstrumentedBookstoreApplicationDir/build.xml}
-      \lstinputlisting[caption=build.properties]{\manualInstrumentedBookstoreApplicationDir/build.properties}
-      In order to run the analysis of the application, it is still necessary to supply the program with the path to the output directory of the monitoring. This is done via the parameter "analysis.directory", e.g.:
+
+      In order to run the analysis of the application, it is necessary to pass the location of the monitoring log directory. This is done via the parameter \textit{analysis.directory}, e.g.:
       \setBashListing
       \input{appendix_Compile_Run_Example_1.inc}
+
+\enlargethispage{1.2cm}
+      \setXMLListing
+      \lstinputlisting[caption=build.properties]{\manualInstrumentedBookstoreApplicationDir/build.properties}
+      \lstinputlisting[caption=build.xml]{\manualInstrumentedBookstoreApplicationDir/build.xml}
 \newpage
     \subsection{Custom Components (Chapters \ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis})}
       The following \file{build.xml} and \file{build.properties} files can be used for compiling and executing the manually instrumentated Bookstore application with the custom components, as described in Chapters~\ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis}. %
 The files are included in the directory \file{\customComponentsBookstoreApplicationDirDistro{}/}.
       \setXMLListing
-      \lstinputlisting[caption=build.xml]{\customComponentsBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\customComponentsBookstoreApplicationDir/build.properties}
+      \lstinputlisting[caption=build.xml]{\customComponentsBookstoreApplicationDir/build.xml}
 \newpage
     \subsection{AspectJ-based Trace Monitoring (Chapter \ref{chap:aspectJ})}
       The following \file{build.xml} and \file{build.properties} files can be used for compiling and executing the Bookstore application instrumentated with AspectJ, as described in Chapter~\ref{chap:aspectJ}. %
+
 The files are included in the directory \file{\aspectJBookstoreApplicationDirDistro{}/}.
       \setXMLListing
-      \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\aspectJBookstoreApplicationDir/build.properties}     
+      \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
 
 \newpage
-  \section{Example Graphs and Diagrams}
-    \begin{figure}[H]\centering
-	\subfigure[]{\label{fig:appendix:aggregatedAllocationCallTree}%
-	\includegraphics[width=0.33\textwidth]{images/aggregatedAllocationCallTree}%
-	}%
-	\subfigure[]{\label{fig:appendix:aggregatedAssemblyCallTree}%
-	\includegraphics[width=0.33\textwidth]{images/aggregatedAssemblyCallTree}%
-	}%
-	\subfigure[]{\label{fig:appendix:callTree}%
-	\includegraphics[width=0.33\textwidth]{images/callTree}%
-	}%
-	\caption{Aggregated Allocation Call Tree~\subref{fig:appendix:aggregatedAllocationCallTree}, Aggregated Assembly Call Tree~\subref{fig:appendix:aggregatedAssemblyCallTree} and Call Tree~\subref{fig:appendix:callTree}}
-	\end{figure}
-	
-    \begin{figure}[H]\centering
-	\subfigure[]{\label{fig:appendix:allocationComponentDependencyGraph}%
-	\includegraphics[width=0.8\textwidth]{images/allocationComponentDependencyGraph}
-	}\\
-	\subfigure[]{\label{fig:appendix:assemblyComponentDependencyGraph}%
-	\includegraphics[width=0.8\textwidth]{images/assemblyComponentDependencyGraph}
-	}%
-	\caption{Allocation Component Dependency Graph~\subref{fig:appendix:allocationComponentDependencyGraph} and Assembly Component Dependency Graph~\subref{fig:appendix:assemblyComponentDependencyGraph}}
-	\end{figure}
-	
+  \section{Example Visualizations Generated with \KiekerTraceAnalysis}
+\enlargethispage{2cm}
 	\begin{figure}[H]\centering
-	\subfigure[]{\label{fig:appendix:allocationOperationDependencyGraph}%
-	\includegraphics[width=0.8\textwidth]{images/allocationOperationDependencyGraph}
-	}\\
-	\subfigure[]{\label{fig:appendix:assemblyOperationDependencyGraph}%
-	\includegraphics[width=0.8\textwidth]{images/assemblyOperationDependencyGraph}
+	\subfigure[deployment level]{\label{fig:appendix:allocationSequenceDiagram}
+	\includegraphics[scale=0.4]{images/allocationSequenceDiagram-crop}
+	}
+	\subfigure[assembly level]{\label{fig:appendix:assemblySequenceDiagram}
+	\includegraphics[scale=0.4]{images/assemblySequenceDiagram-crop}
+	}
+	\caption{Sequence diagrams}
+	\end{figure}
+
+    \begin{figure}[H]\centering
+	\subfigure[single trace]{\label{fig:appendix:callTree}%
+	\quad \includegraphics[scale=0.4]{images/callTree-crop} \quad%
 	}%
-	\caption{Allocation Operation Dependency Graph~\subref{fig:appendix:allocationOperationDependencyGraph} and Allocation Operation Dependency Graph~\subref{fig:appendix:assemblyOperationDependencyGraph}}
+	\subfigure[aggregated (deployment level)]{\label{fig:appendix:aggregatedAllocationCallTree}%
+	\quad\quad \includegraphics[scale=0.4]{images/aggregatedAllocationCallTree-crop}\quad\quad %
+	}%
+	\subfigure[aggregated (assembly level)]{\label{fig:appendix:aggregatedAssemblyCallTree}%
+	\quad\quad\quad \includegraphics[scale=0.4]{images/aggregatedAssemblyCallTree-crop}\quad\quad\quad %
+	}%
+	\caption{Calls trees for a single trace~\subref{fig:appendix:callTree} and aggregated call %
+	trees~\subref{fig:appendix:aggregatedAllocationCallTree}/\subref{fig:appendix:aggregatedAssemblyCallTree}}
 	\end{figure}
-	
-	\begin{figure}[H]\centering
-	\subfigure[]{\label{fig:appendix:allocationSequenceDiagram}
-	\includegraphics[width=0.4\textwidth]{images/allocationSequenceDiagram}
-	}
-	\subfigure[]{\label{fig:appendix:assemblySequenceDiagram}
-	\includegraphics[width=0.4\textwidth]{images/assemblySequenceDiagram}
-	}
-	\caption{Allocation Sequence Diagram~\subref{fig:appendix:allocationSequenceDiagram} and Assembly Sequence Diagram~\subref{fig:appendix:assemblySequenceDiagram}}
-	\end{figure}
-	
+
+\newpage
+
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.5\textwidth]{images/containerDependencyGraph}
+		\includegraphics[scale=0.45]{images/containerDependencyGraph-crop}
 		\caption{Container Dependency Graph}
+	\end{figure}  
+
+    \begin{figure}[H]\centering
+\subfigure[deployment level]{\label{fig:appendix:allocationComponentDependencyGraph}%
+		\includegraphics[scale=0.45]{images/allocationComponentDependencyGraph-crop}
+	}\\
+	\subfigure[assembly level]{\label{fig:appendix:assemblyComponentDependencyGraph}%
+		\includegraphics[scale=0.45]{images/assemblyComponentDependencyGraph-crop}
+	}%
+	\caption{Component Dependency Graphs}
 	\end{figure}
-  
+
+	\begin{figure}[H]\centering
+	\subfigure[deployment level]{\label{fig:appendix:allocationOperationDependencyGraph}%
+		\includegraphics[scale=0.45]{images/allocationOperationDependencyGraph-crop}
+	}\\
+	\subfigure[assembly level]{\label{fig:appendix:assemblyOperationDependencyGraph}%
+		\includegraphics[scale=0.45]{images/assemblyOperationDependencyGraph-crop}
+	}%
+	\caption{Operation Dependency Graphs}
+	\end{figure}
   
 \newpage
   \section{Libraries}
