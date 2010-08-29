@@ -23,38 +23,38 @@ public class Constants {
     //public static final String CMD_OPT_NAME_TRACEEQUIVCLASSMODE = "trace-equivalence-mode";
     public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
     public static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
-    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS = "plot-Allocation-Sequence-Diagrams";
+    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS = "plot-Deployment-Sequence-Diagrams";
     public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS = "plot-Assembly-Sequence-Diagrams";
-    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG = "plot-Allocation-Component-Dependency-Graph";
+    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG = "plot-Deployment-Component-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG = "plot-Assembly-Component-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG = "plot-Container-Dependency-Graph";
-    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG = "plot-Allocation-Operation-Dependency-Graph";
+    public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG = "plot-Deployment-Operation-Dependency-Graph";
     public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG = "plot-Assembly-Operation-Dependency-Graph";
-    public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE = "plot-Aggregated-Allocation-Call-Tree";
+    public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE = "plot-Aggregated-Deployment-Call-Tree";
     public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE = "plot-Aggregated-Assembly-Call-Tree";
     public static final String CMD_OPT_NAME_TASK_PLOTCALLTREES = "plot-Call-Trees";
     public static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
     public static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
     public static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
-    public static final String CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT = "print-Allocation-Equivalence-Classes";
+    public static final String CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT = "print-Deployment-Equivalence-Classes";
     public static final String CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT = "print-Assembly-Equivalence-Classes";
     public static final String CMD_OPT_NAME_MAXTRACEDURATION = "max-trace-duration";
     public static final String CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE = "ignore-executions-before-date";
     public static final String CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE = "ignore-executions-after-date";
-    public static final String ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX = "allocationSequenceDiagram";
+    public static final String ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX = "deploymentSequenceDiagram";
     public static final String ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX = "assemblySequenceDiagram";
-    public static final String ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "allocationComponentDependencyGraph";
+    public static final String ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "deploymentComponentDependencyGraph";
     public static final String ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyComponentDependencyGraph";
     public static final String CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX = "containerDependencyGraph";
-    public static final String ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "allocationOperationDependencyGraph";
+    public static final String ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "deploymentOperationDependencyGraph";
     public static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyOperationDependencyGraph";
-    public static final String AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX = "aggregatedAllocationCallTree";
+    public static final String AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX = "aggregatedDeploymentCallTree";
     public static final String AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX = "aggregatedAssemblyCallTree";
     public static final String CALL_TREE_FN_PREFIX = "callTree";
     public static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
     public static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
     public static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
-    public static final String TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX = "traceAllocationEquivClasses";
+    public static final String TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX = "traceDeploymentEquivClasses";
     public static final String TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX = "traceAssemblyEquivClasses";
     public static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
     //public static final String TRACE_EQUIVALENCE_MODE_STR_DISABLED = "disabled";
@@ -62,19 +62,19 @@ public class Constants {
     //public static final String TRACE_EQUIVALENCE_MODE_STR_ALLOCATION = "allocation";
     public static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
     public static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
-    public static final String TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (allocation mode)";
+    public static final String TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (deployment mode)";
     public static final String TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (assembly mode)";
     public static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
     public static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
     public static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-    public static final String PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph (allocation level)";
+    public static final String PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph (deployment level)";
     public static final String PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph (assembly level)";
     public static final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
-    public static final String PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (allocation level)";
+    public static final String PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (deployment level)";
     public static final String PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (assembly level)";
-    public static final String PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME = "Sequence diagrams (allocation level)";
+    public static final String PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME = "Sequence diagrams (deployment level)";
     public static final String PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME = "Sequence diagrams (assembly level)";
-    public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (allocation level)";
+    public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (deployment level)";
     public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
     public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
     public static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
@@ -97,13 +97,13 @@ public class Constants {
         // cmdlOptGroupTask.isRequired();
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false).withDescription(
-                "Generate and store allocation-level sequence diagrams (.pic files)").create());
+                "Generate and store deployment-level sequence diagrams (.pic files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS).hasArg(false).withDescription(
                 "Generate and store assembly-level sequence diagrams (.pic files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG).hasArg(false).withDescription(
-                "Generate and store an allocation-level component dependency graph (.dot file)").create());
+                "Generate and store an deployment-level component dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG).hasArg(false).withDescription(
                 "Generate and store an assembly-level component dependency graph (.dot file)").create());
@@ -112,14 +112,14 @@ public class Constants {
                 "Generate and store a container dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG).hasArg(false).withDescription(
-                "Generate and store an allocation-level operation dependency graph (.dot file)").create());
+                "Generate and store an deployment-level operation dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG).hasArg(false).withDescription(
                 "Generate and store an assembly-level operation dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE).hasArg(
                 false).withDescription(
-                "Generate and store an aggregated allocation-level call tree (.dot files)").create());
+                "Generate and store an aggregated deployment-level call tree (.dot files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE).hasArg(
                 false).withDescription(
@@ -136,7 +136,7 @@ public class Constants {
                 "Save a execution trace representations of invalid trace artifacts (.txt files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT).hasArg(false).withDescription(
-                "Output an overview about the allocation-level trace equivalence classes").create());
+                "Output an overview about the deployment-level trace equivalence classes").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT).hasArg(false).withDescription(
                 "Output an overview about the assembly-level trace equivalence classes").create());

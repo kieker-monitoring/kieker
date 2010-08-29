@@ -39,7 +39,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 
     public static final String STEREOTYPE_EXECUTION_CONTAINER="<<execution container>>";
     public static final String STEREOTYPE_ASSEMBLY_COMPONENT="<<assembly component>>";
-    public static final String STEREOTYPE_ALLOCATION_COMPONENT="<<allocation component>>";
+    public static final String STEREOTYPE_ALLOCATION_COMPONENT="<<deployment component>>";
 
     private static final String NODE_PREFIX="depNode_";
 

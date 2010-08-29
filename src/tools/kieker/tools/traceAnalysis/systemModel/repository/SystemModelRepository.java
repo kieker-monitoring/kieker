@@ -209,7 +209,7 @@ public class SystemModelRepository {
             printHtmlTableRow(ps, cells);
         }
         printCloseHtmlTable(ps);
-        ps.println("<h1>Allocated Components</h1>");
+        ps.println("<h1>Deployment Components</h1>");
         printOpenHtmlTable(ps, new String[]{"ID", "assembly component", "execution container"});
         Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
         for (AllocationComponent allocationComponent : allocationComponentInstances) {
