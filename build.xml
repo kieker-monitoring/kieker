@@ -41,8 +41,6 @@
         <property name="dist.kieker.apiBaseName"
                   value="${kieker.dist.name}_${kieker-api.suffix}"/>
 
-        <property name="dist.kieker.example.myaspectjexample"
-                  value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerAspectJExample"/>
         <property name="dist.kieker.example.myjmsexample"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerJMSExample"/>
         <property name="dist.kieker.example.jpetstore"
@@ -390,6 +388,7 @@
             <include name="HISTORY"/>
             <include name="LICENSE"/>
             <include name="${src.userguide.dist.pdf}"/>
+            <include name="${src.userguide.examples.dir}/README"/>
             <include name="${src.userguide.example.bookstore.dir}/build.xml"/>
             <include name="${src.userguide.example.bookstore.dir}/build.properties"/>
             <include name="${src.userguide.example.bookstore.dir}/src/**/*.java"/>
@@ -434,39 +433,6 @@
             </zipfileset>
             <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755"  defaultexcludes="yes">
                 <patternset refid="dist_bin_files-binmode"/>
-            </zipfileset>
-        </zip>
-    </target>
-
-    <target name="build-example-MySimpleKiekerAspectJExample" depends="init">
-        <patternset id="dist_myaspectjexample_files">
-            <include name="examples/MySimpleKiekerAspectJExample/README"/>
-            <include name="examples/MySimpleKiekerAspectJExample/LICENSE"/>
-            <include name="examples/MySimpleKiekerAspectJExample/build.xml"/>
-            <include name="examples/MySimpleKiekerAspectJExample/build.properties"/>
-            <include name="examples/MySimpleKiekerAspectJExample/lib/"/>
-            <include name="examples/MySimpleKiekerAspectJExample/kieker-testdata/**"/>
-            <exclude name="examples/MySimpleKiekerAspectJExample/lib/*.jar"/>
-            <include name="examples/MySimpleKiekerAspectJExample/META-INF/ltwtests-RTs.aop.xml"/>
-            <include name="examples/MySimpleKiekerAspectJExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
-            <include name="examples/MySimpleKiekerAspectJExample/META-INF/ltwtests-executions.aop.xml"/>
-            <include name="examples/MySimpleKiekerAspectJExample/META-INF/tests.log4j.properties"/>
-            <include name="examples/MySimpleKiekerAspectJExample/META-INF/kieker.monitoring.properties.example"/>
-            <include name="examples/MySimpleKiekerAspectJExample/src/**"/>
-        </patternset>
-
-        <tar destfile="${release.dir}/${dist.kieker.example.myaspectjexample}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_myaspectjexample_files"/>
-            </tarfileset>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.example.myaspectjexample}.tar.gz" src="${release.dir}/${dist.kieker.example.myaspectjexample}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.example.myaspectjexample}.tar"/>
-
-        <zip  zipfile="${release.dir}/${dist.kieker.example.myaspectjexample}.zip">
-            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_myaspectjexample_files"/>
             </zipfileset>
         </zip>
     </target>
@@ -581,7 +547,7 @@
     </target>
 
     <target name="build-examples"
-            depends="init,build-example-MySimpleKiekerAspectJExample,build-example-MySimpleKiekerJMSExample,build-example-JPetStoreExample,build-example-microbenchmark">
+            depends="init,build-example-MySimpleKiekerJMSExample,build-example-JPetStoreExample,build-example-microbenchmark">
     </target>
 
     <target name="build-userguide">

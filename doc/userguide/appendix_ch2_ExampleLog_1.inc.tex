@@ -1,5 +1,5 @@
 \setBashListing
-\begin{lstlisting}
+\begin{lstlisting}[caption=Execution of the manually instrumented Bookstore application (Section~\ref{sec:example:monitoring})]
 14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController <init>
 INFO: The VM has the name Laptop Thread:1
 14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController <init>
@@ -10,17 +10,17 @@ INFO: Loading properties from Kieker.Monitoring library jar!META-INF/kieker.moni
 INFO: You can specify an alternative properties file using the property 'kieker.monitoring.configuration'
 14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController loadPropertiesFile
 INFO: Debug mode disabled
-14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.AsyncFsConnector init
+14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.AsyncFsWriter init
 INFO: Directory for monitoring data: C:\Temp\/tpmon-20100814-103954167-UTC/
 14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.FsWriterThread <init>
 INFO: New FsWriter thread created
-14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.AsyncFsConnector init
+14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.AsyncFsWriter init
 INFO: (1 threads) will write to the file system
 14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.FsWriterThread run
 INFO: FsWriter thread running
 14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController <init>
 INFO: Initialization completed.
- Connector Info: monitoringDataWriter : kieker.monitoring.writer.filesystem.AsyncFsConnector, monitoringDataWriter config : (below), filenamePrefix :C:\Temp\, outputDirectory :C:\Temp\/tpmon-20100814-103954167-UTC/, version :1.2-SNAPSHOT-20100814, debug :false, enabled :true, terminated :false, experimentID :0, vmname:Laptop
+ Writer Info: monitoringDataWriter : kieker.monitoring.writer.filesystem.AsyncFsWriter, monitoringDataWriter config : (below), filenamePrefix :C:\Temp\, outputDirectory :C:\Temp\/tpmon-20100814-103954167-UTC/, version :1.2-SNAPSHOT-20100814, debug :false, enabled :true, terminated :false, experimentID :0, vmname:Laptop
 Bookstore.main: Starting request 0
 Bookstore.main: Starting request 1
 14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.MappingFileWriter writeMapping

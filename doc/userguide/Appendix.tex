@@ -27,42 +27,50 @@ constitutes \KiekerMonitoringPart{}'s default configuration.
     \subsection{MyNamedPipeManager and MyPipe}\label{appendix:pipeListings}
       \setJavaCodeListing
       \lstinputlisting[caption=MyNamedPipeManager.java]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyNamedPipeManager.java}
-
+\newpage
       \setJavaCodeListing
       \lstinputlisting[caption=MyPipe.java]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipe.java}
 
 \newpage
-  \section{Example File System Monitoring Logs}
+  \section{Example Console Outputs}
 
-	\subsection{Chapter \ref{chap:example}}\label{sec:appendix:manualInstrumentation:output}
-		The following listing shows the produced log during a run of the Bookstore Application with the manual monitoring probes.
+	\subsection{Quick Start Example (Chapter~\ref{chap:example})}\label{sec:appendix:manualInstrumentation:output}
+% \subsubsection{Monitoring}
+% 		The following listing shows the produced log during a run of the Bookstore Application with the manual monitoring probes.
 		\input{appendix_ch2_ExampleLog_1.inc}
-		The second listing is the log during the analysis of the produced data. It can be seen that some of the calls are accepted and some others refused.
+\newpage
+% \subsubsection{Analysis}
+% 		The second listing is the log during the analysis of the produced data. It can be seen that some of the calls are accepted and some others refused.
 		\input{appendix_ch2_ExampleLog_2.inc}
-	
-	\subsection{Chapter \ref{chap:aspectJ}}
+\newpage	
+	\subsection{Trace Monitoring, Analysis \& Visualization (Chapter \ref{chap:aspectJ})}
 	    The following listing shows the produced log during a run of the Bookstore Application, weaved with the necessary code at runtime as shown in Section \ref{sec:aspectJ:fullweaving}.
 		\input{appendix_ch5_ExampleLog_1.inc}
 	
 \newpage
   \section{Ant Scripts}
-    \subsection{Chapter \ref{chap:example}}
-      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manual instrumentated Bookstore Application shown in Chapter~\ref{chap:example}.
+    \subsection{Quick Start Example (Chapter \ref{chap:example})}
+The following \file{build.xml} and \file{build.properties} files can be %
+used for compiling and executing the manually instrumentated Bookstore %
+application and the analysis, as described in Chapter~\ref{chap:example}. %
+The files are included in the directory \file{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
       \setXMLListing
       \lstinputlisting[caption=build.xml]{\manualInstrumentedBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\manualInstrumentedBookstoreApplicationDir/build.properties}
       In order to run the analysis of the application, it is still necessary to supply the program with the path to the output directory of the monitoring. This is done via the parameter "analysis.directory", e.g.:
       \setBashListing
       \input{appendix_Compile_Run_Example_1.inc}
-
-    \subsection{Chapter \ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis}}
-      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the manually instrumentated Bookstore Application with the own components shown in Chapter~\ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis}.
+\newpage
+    \subsection{Custom Components (Chapters \ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis})}
+      The following \file{build.xml} and \file{build.properties} files can be used for compiling and executing the manually instrumentated Bookstore application with the custom components, as described in Chapters~\ref{chap:componentsMonitoring} and \ref{chap:componentsAnalysis}. %
+The files are included in the directory \file{\customComponentsBookstoreApplicationDirDistro{}/}.
       \setXMLListing
       \lstinputlisting[caption=build.xml]{\customComponentsBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\customComponentsBookstoreApplicationDir/build.properties}
-
-    \subsection{Chapter \ref{chap:aspectJ}}
-      Following listings show the necessary \file{build.xml} and \file{build.properties} to compile and execute the Bookstore Application instrumentated with AspectJ shown in Chapter~\ref{chap:aspectJ}.
+\newpage
+    \subsection{AspectJ-based Trace Monitoring (Chapter \ref{chap:aspectJ})}
+      The following \file{build.xml} and \file{build.properties} files can be used for compiling and executing the Bookstore application instrumentated with AspectJ, as described in Chapter~\ref{chap:aspectJ}. %
+The files are included in the directory \file{\aspectJBookstoreApplicationDirDistro{}/}.
       \setXMLListing
       \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
       \lstinputlisting[caption=build.properties]{\aspectJBookstoreApplicationDir/build.properties}     

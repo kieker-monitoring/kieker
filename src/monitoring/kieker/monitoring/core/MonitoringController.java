@@ -204,7 +204,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
             // TODO: we should add a getter to all writers like isInitialized.
             //       right now, the following even appears in case init failed.
             //       Or can we simply throw an exception from within the constructors
-            log.info("Initialization completed.\n Connector Info: " + this.getConnectorInfo());
+            log.info("Initialization completed.\n Writer Info: " + this.getConnectorInfo());
         } catch (Exception exc) {
             log.error("Disabling monitoring", exc);
             this.terminate();
