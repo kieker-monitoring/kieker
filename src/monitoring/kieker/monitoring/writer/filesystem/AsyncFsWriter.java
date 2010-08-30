@@ -75,7 +75,7 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     }
 
     
-    public void init() {
+    private void init() {
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {
             log.error(this.storagePathBase + " is not a directory");
