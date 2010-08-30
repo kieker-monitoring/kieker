@@ -79,59 +79,8 @@ The files are included in the directory \file{\aspectJBookstoreApplicationDirDis
       \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
 
 \newpage
-  \section{Example Visualizations Generated with \KiekerTraceAnalysis}
-\enlargethispage{2cm}
-	\begin{figure}[H]\centering
-	\subfigure[deployment level]{\label{fig:appendix:allocationSequenceDiagram}
-	\includegraphics[scale=0.4]{images/allocationSequenceDiagram-crop}
-	}
-	\subfigure[assembly level]{\label{fig:appendix:assemblySequenceDiagram}
-	\includegraphics[scale=0.4]{images/assemblySequenceDiagram-crop}
-	}
-	\caption{Sequence diagrams}
-	\end{figure}
-
-    \begin{figure}[H]\centering
-	\subfigure[single trace]{\label{fig:appendix:callTree}%
-	\quad \includegraphics[scale=0.4]{images/callTree-crop} \quad%
-	}%
-	\subfigure[aggregated (deployment level)]{\label{fig:appendix:aggregatedAllocationCallTree}%
-	\quad\quad \includegraphics[scale=0.4]{images/aggregatedAllocationCallTree-crop}\quad\quad %
-	}%
-	\subfigure[aggregated (assembly level)]{\label{fig:appendix:aggregatedAssemblyCallTree}%
-	\quad\quad\quad \includegraphics[scale=0.4]{images/aggregatedAssemblyCallTree-crop}\quad\quad\quad %
-	}%
-	\caption{Calls trees for a single trace~\subref{fig:appendix:callTree} and aggregated call %
-	trees~\subref{fig:appendix:aggregatedAllocationCallTree}/\subref{fig:appendix:aggregatedAssemblyCallTree}}
-	\end{figure}
-
-\newpage
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[scale=0.45]{images/containerDependencyGraph-crop}
-		\caption{Container Dependency Graph}
-	\end{figure}  
-
-    \begin{figure}[H]\centering
-\subfigure[deployment level]{\label{fig:appendix:allocationComponentDependencyGraph}%
-		\includegraphics[scale=0.45]{images/allocationComponentDependencyGraph-crop}
-	}\\
-	\subfigure[assembly level]{\label{fig:appendix:assemblyComponentDependencyGraph}%
-		\includegraphics[scale=0.45]{images/assemblyComponentDependencyGraph-crop}
-	}%
-	\caption{Component Dependency Graphs}
-	\end{figure}
-
-	\begin{figure}[H]\centering
-	\subfigure[deployment level]{\label{fig:appendix:allocationOperationDependencyGraph}%
-		\includegraphics[scale=0.45]{images/allocationOperationDependencyGraph-crop}
-	}\\
-	\subfigure[assembly level]{\label{fig:appendix:assemblyOperationDependencyGraph}%
-		\includegraphics[scale=0.45]{images/assemblyOperationDependencyGraph-crop}
-	}%
-	\caption{Operation Dependency Graphs}
-	\end{figure}
+\section{Example \KiekerTraceAnalysis{} Outputs}
+\input{Appendix-example-TraceAnalysis-outputs.inc}
   
 \newpage
   \section{Libraries}

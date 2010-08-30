@@ -11,3 +11,6 @@ Assembly-level representative:    6488138950668976129
 
 ~/svn_work/kieker/software/kieker/trunk/bin/dotPic-fileConverter.sh . pdf
 
+for f in *.pdf; do
+    pdfcrop "$f"
+done
