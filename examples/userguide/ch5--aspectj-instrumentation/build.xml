@@ -33,6 +33,17 @@
 		</java>
 	</target>
 
+	<target name="run-hostname-rewriter" depends="-check-files, -build-jar">
+		<java fork="true" classname="${main-class-hostname-rewriter}">
+			<arg line="${analysis.directory}" />
+			<classpath>
+				<path refid="classpath" />
+				<path location="${jar.file}" />
+			</classpath>
+		</java>
+	</target>
+
+
 	<target name="-build-jar" depends="-compile">
 		<copy file="META-INF/aop.xml" tofile="${build.dir}/META-INF/aop.xml" />
 		<jar destfile="${jar.file}" basedir="${build.dir}">
