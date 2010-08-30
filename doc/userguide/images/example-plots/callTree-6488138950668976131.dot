@@ -1,0 +1,16 @@
+digraph G {
+0[label ="$",shape=none];
+1[label ="SRV0::\n@3:..Bookstore\n.searchBook()",shape=none];
+2[label ="SRV0::\n@1:..Catalog\n.getBook(..)",shape=none];
+3[label ="SRV0::\n@2:..CRM\n.getOffers()",shape=none];
+4[label ="SRV1::\n@1:..Catalog\n.getBook(..)",shape=none];
+
+0->1[style=solid,arrowhead=none,label="1." ]
+
+1->2[style=solid,arrowhead=none,label="2." ]
+
+1->3[style=solid,arrowhead=none,label="3." ]
+
+3->4[style=solid,arrowhead=none,label="4." ]
+
+}

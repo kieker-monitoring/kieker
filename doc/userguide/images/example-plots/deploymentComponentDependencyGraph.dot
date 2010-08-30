@@ -1,0 +1,27 @@
+digraph G {
+ rankdir=LR;
+subgraph "cluster_container2" {
+ label = "<<execution container>>\nSRV0";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_2" [label="<<deployment component>>\n@1:..Catalog",shape="box",style="filled",fillcolor="white"]
+"depNode_3" [label="<<deployment component>>\n@2:..CRM",shape="box",style="filled",fillcolor="white"]
+"depNode_4" [label="<<deployment component>>\n@3:..Bookstore",shape="box",style="filled",fillcolor="white"]
+}
+subgraph "cluster_container1" {
+ label = "<<execution container>>\nSRV1";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_1" [label="<<deployment component>>\n@1:..Catalog",shape="box",style="filled",fillcolor="white"]
+}
+"depNode_0" [label="$",shape="none"]
+
+depNode_0->depNode_4[label=1635, style="dashed", arrowhead="open"]
+depNode_3->depNode_1[label=1062, style="dashed", arrowhead="open"]
+depNode_3->depNode_2[label=573, style="dashed", arrowhead="open"]
+depNode_4->depNode_1[label=1092, style="dashed", arrowhead="open"]
+depNode_4->depNode_2[label=543, style="dashed", arrowhead="open"]
+depNode_4->depNode_3[label=1635, style="dashed", arrowhead="open"]
+}

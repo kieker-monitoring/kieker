@@ -1,0 +1,1 @@
+Class 0 ; cardinality: 1635; # executions: 4; representative: 6488138950668976129; max. stack depth: 2
