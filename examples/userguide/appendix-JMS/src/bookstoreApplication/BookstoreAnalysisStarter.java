@@ -4,8 +4,6 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.monitoring.core.MonitoringController;
-
 public class BookstoreAnalysisStarter {
 
     public static void main(String[] args)
