@@ -18,19 +18,13 @@ package bookstoreApplication;
  * ==================================================
  *
  */
-import java.util.ArrayList;
-import java.util.Collection;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.OperationExecutionRecord;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.reader.IMonitoringLogReader;
 import kieker.analysis.reader.JMSReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
-import mySimpleKiekerJMSExample.record.MyRTMonitoringRecord;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *

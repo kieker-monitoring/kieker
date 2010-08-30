@@ -27,7 +27,7 @@ public class BookstoreStarter {
      * @param latch count down latch counted down after the request is completed
      * @param bookstore the bookstore
      */
-    private static final void spawnAsyncRequest(final Bookstore bookstore,
+    private static void spawnAsyncRequest(final Bookstore bookstore,
             final CountDownLatch latch) {
         new Thread(new Runnable() {
 
