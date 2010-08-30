@@ -42,7 +42,7 @@ EXTS=$*
 
 for f in ${PIC_FILES}; do 
     BASENAME=$(echo $f | sed -E s/"\.[[:alnum:]]+$"//g); 
-    if (echo "${EXTS}" | grep -q pdf) && !(echo "$*" | grep -q ps); then
+    if (echo "${EXTS}" | grep -q pdf) && !(echo "${EXTS}" | grep -q ps); then
 	EXTS="$EXTS ps"
     fi
     for ext in ${EXTS}; do 
@@ -55,6 +55,9 @@ for f in ${PIC_FILES}; do
 	    && (pdfcrop "${BASENAME}.pdf" > /dev/null) \
 	    && rm "${BASENAME}.pdf" \
 	    && mv "${BASENAME}-crop.pdf" "${BASENAME}".pdf
+       if !(echo "$*" | grep -q ps); then
+       	    rm "${BASENAME}.ps"
+       fi                    	
     fi
     PIC_COUNTER=$((${PIC_COUNTER}+1))
 done
