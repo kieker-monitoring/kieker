@@ -1,72 +1,85 @@
-\subsection{Execution Traces, Message Traces, and Trace Equivalence Classes}
+\section{Execution Traces, Message Traces, and Trace Equivalence Classes}
 
-\subsubsection{Execution Traces}
-
-\setTextListing
-\lstinputlisting[firstline=1,lastline=10,caption=]{images/example-plots/executionTraces.txt}
-
-\subsubsection{Message Traces}
+\subsection{Execution Traces}
 
 \setTextListing
-\lstinputlisting[firstline=1,lastline=9,caption=]{images/example-plots/messageTraces.txt}
+\lstinputlisting[firstline=1,lastline=10,%
+caption=Textual output of trace 6488138950668976129's execution trace representation,%
+label=lst:appendix:traceAnalysisExample:executionTraces]%
+{images/example-plots/executionTraces.txt}
 
-\subsubsection{Trace Equivalence Classes}
+\subsection{Message Traces}
 
 \setTextListing
-\lstinputlisting[caption=]{images/example-plots/traceDeploymentEquivClasses.txt}
+\lstinputlisting[firstline=1,lastline=9,%
+caption=Textual output of trace 6488138950668976129's message trace representation,%
+label=lst:appendix:traceAnalysisExample:messageTraces]%
+{images/example-plots/messageTraces.txt}
+
+\subsection{Trace Equivalence Classes}
 
 \setTextListing
-\lstinputlisting[caption=]{images/example-plots/traceAssemblyEquivClasses.txt}
+\lstinputlisting[caption=Textual output of information on the \textit{deployment-level} trace equivalence classes,label=lst:appendix:traceAnalysisExample:traceDeploymentEquivClasses]
+{images/example-plots/traceDeploymentEquivClasses.txt}
 
-\subsection{Sequence Diagrams}
+\setTextListing
+\lstinputlisting[caption=Textual output of information on the \textit{assembly-level} trace equivalence classes,label=lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses]%
+{images/example-plots/traceAssemblyEquivClasses.txt}
 
-\subsubsection{Deployment-Level Sequence Diagrams}
+\section{Sequence Diagrams}
+
+\subsection{Deployment-Level Sequence Diagrams}
 
 \begin{figure}[h]\centering
-\subfigure{%
+\subfigure[Trace \ldots{}6129]{%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976129-crop}
 }
-\subfigure{%
+\subfigure[Trace \ldots{}6130]{%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976130-crop}
 }
-\subfigure{%
+\subfigure[Trace \ldots{}6131]{%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976131-crop}
 }
-\subfigure{%
+\subfigure[Trace \ldots{}6141]{%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976141-crop}
 }
+\caption{\textit{Deployment-level} sequence diagrams of the trace %
+equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses})}
 \end{figure}
 
 \newpage
 
-\subsubsection{Assembly-Level Sequence Diagrams}
+\subsection{Assembly-Level Sequence Diagrams}
 
 \begin{figure}[h]\centering
 \includegraphics[scale=0.4]{images/example-plots/assemblySequenceDiagram-6488138950668976129-crop}
+\caption{\textit{Assembly-level} sequence diagram of trace \ldots{}6129}
 \end{figure}
 
-\subsection{Call Trees}
+\section{Call Trees}
 
-\subsubsection{Trace Call Trees}
+\subsection{Trace Call Trees}
 
 \begin{figure}[h]\centering
-\subfigure{%
-\includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976129-crop}
+\subfigure[Trace \ldots{}6129]{%
+\ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976129-crop}\ \ 
 }
-\subfigure{%
-\includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976130-crop}
+\subfigure[Trace \ldots{}6130]{%
+\ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976130-crop}\ \ 
 }
-\subfigure{%
-\includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976131-crop}
+\subfigure[Trace \ldots{}6131]{%
+\ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976131-crop}\ \ 
 }
-\subfigure{%
-\includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976141-crop}
+\subfigure[Trace \ldots{}6141]{%
+\ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976141-crop}\ \ 
 }
+\caption{Calls trees of the trace %
+equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses})}
 \end{figure}
 
 \newpage
 
-\subsubsection{Aggregated Call Trees}
+\subsection{Aggregated Call Trees}
 
 \begin{figure}[h]\centering
 \subfigure{%
@@ -78,15 +91,15 @@
 \end{figure}
 
 
-\subsection{Dependency Graphs}
+\section{Dependency Graphs}
 
-\subsubsection{Container Dependency Graphs}
+\subsection{Container Dependency Graphs}
 
 \begin{figure}[h]\centering
 \includegraphics[scale=0.4]{images/example-plots/containerDependencyGraph-crop} 
 \end{figure}
 
-\subsubsection{Component Dependency Graphs}
+\subsection{Component Dependency Graphs}
 
 \begin{figure}[h]\centering
 \subfigure{%
@@ -98,7 +111,7 @@
 \end{figure}
 
 
-\subsubsection{Operation Dependency Graphs}
+\subsection{Operation Dependency Graphs}
 
 \begin{figure}[h]\centering
 \subfigure{%

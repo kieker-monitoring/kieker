@@ -63,3 +63,31 @@
 100  INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--aspectj-instrumentation/testdata/tpmon-20100830-082225522-UTC/] kieker.common.record.MonitoringRecordTypeRegistry     - Registered record type mapping 1/kieker.common.record.OperationExecutionRecord
 458  INFO  [main] kieker.analysis.reader.filesystem.FSReader     - All reader threads provided FS_READER_TERMINATION_MARKER
 458  INFO  [main] kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter     - terminate called with error flag set; won't process timeoutqueue any more.
+0    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@19209ea
+27   INFO  [main]    kieker.analysis.AnalysisController     - Plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@19209ea also registered as record consumer
+29   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter@1c99159
+30   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter@a61164
+39   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter@1d9fd51
+43   WARN  [main] kieker.tools.traceAnalysis.TraceAnalysisTool     - No task requested
+0    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@c8f6f8
+0    INFO  [main]    kieker.analysis.AnalysisController     - Plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@c8f6f8 also registered as record consumer
+2    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter@65a77f
+2    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter@bfc8e0
+6    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter@860d49
+14   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin@12d3205
+15   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAssemblyComponentOperationCallTreePlugin@16df84b
+121  INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--aspectj-instrumentation/testdata/tpmon-20100830-082225522-UTC/] kieker.analysis.reader.filesystem.FSDirectoryReader     - < Loading /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--aspectj-instrumentation/testdata/tpmon-20100830-082225522-UTC/tpmon-20100830-082225582-UTC-Thread-2.dat
+136  INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--aspectj-instrumentation/testdata/tpmon-20100830-082225522-UTC/] kieker.common.record.MonitoringRecordTypeRegistry     - Registered record type mapping 1/kieker.common.record.OperationExecutionRecord
+577  INFO  [main] kieker.analysis.reader.filesystem.FSReader     - All reader threads provided FS_READER_TERMINATION_MARKER
+578  INFO  [main] kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter     - terminate called with error flag set; won't process timeoutqueue any more.
+0    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@19209ea
+1    INFO  [main]    kieker.analysis.AnalysisController     - Plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@19209ea also registered as record consumer
+3    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter@1c99159
+3    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter@a61164
+16   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter@1d9fd51
+25   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin@181edf4
+25   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAssemblyComponentOperationCallTreePlugin@1adc30
+70   INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--aspectj-instrumentation/testdata/tpmon-20100830-082225522-UTC/] kieker.analysis.reader.filesystem.FSDirectoryReader     - < Loading /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--aspectj-instrumentation/testdata/tpmon-20100830-082225522-UTC/tpmon-20100830-082225582-UTC-Thread-2.dat
+71   INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--aspectj-instrumentation/testdata/tpmon-20100830-082225522-UTC/] kieker.common.record.MonitoringRecordTypeRegistry     - Registered record type mapping 1/kieker.common.record.OperationExecutionRecord
+497  INFO  [main] kieker.analysis.reader.filesystem.FSReader     - All reader threads provided FS_READER_TERMINATION_MARKER
+497  INFO  [main] kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter     - terminate called with error flag set; won't process timeoutqueue any more.
