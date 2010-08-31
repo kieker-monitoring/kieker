@@ -419,6 +419,10 @@
             <exclude name="${src.userguide.example.jms.dir}/lib/*"/>
             <include name="${src.userguide.example.jms.dir}/src/**/*.java"/>
             <include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties"/>
+            <include name="${example.microbenchmark.dir}/**"/>
+            <exclude name="${example.microbenchmark.dir}/results/**/*"/>
+            <exclude name="${example.microbenchmark.dir}/tmp/**/*"/>
+            <exclude name="${example.microbenchmark.dir}/lib/**/*.jar"/>
         </patternset>
         <patternset id="dist_bin_files-binmode">
             <include name="bin/*.sh"/>
@@ -499,33 +503,8 @@
         </zip>
     </target>
 
-    <target name="build-example-microbenchmark" depends="init">
-        <property name="microbenchmark.dir" value="OverheadEvaluationMicrobenchmark/"/>
-        <patternset id="dist_microbenchmarkExample_files">
-            <include name="examples/${microbenchmark.dir}/**"/>
-            <exclude name="examples/${microbenchmark.dir}/results/**/*"/>
-            <exclude name="examples/${microbenchmark.dir}//tmp/**/*"/>
-            <exclude name="examples/${microbenchmark.dir}/lib/**/*.jar"/>
-        </patternset>
-
-        <tar destfile="${release.dir}/${dist.kieker.example.microbenchmark}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_microbenchmarkExample_files"/>
-            </tarfileset>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.example.microbenchmark}.tar.gz" src="${release.dir}/${dist.kieker.example.microbenchmark}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.example.microbenchmark}.tar"/>
-
-        <zip  zipfile="${release.dir}/${dist.kieker.example.microbenchmark}.zip">
-            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_microbenchmarkExample_files"/>
-            </zipfileset>
-        </zip>
-    </target>
-
     <target name="build-examples"
-            depends="init,build-example-JPetStoreExample,build-example-microbenchmark">
+            depends="init,build-example-JPetStoreExample">
     </target>
 
     <target name="build-userguide">
