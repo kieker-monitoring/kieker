@@ -407,9 +407,16 @@
             <include name="${src.userguide.example.aspectj.dir}/build.properties"/>
             <include name="${src.userguide.example.aspectj.dir}/lib/"/>
             <exclude name="${src.userguide.example.aspectj.dir}/lib/*"/>
+            <include name="${src.userguide.example.aspectj.dir}/testdata/**"/>
             <include name="${src.userguide.example.aspectj.dir}/src/**/*.java"/>
             <include name="${src.userguide.example.aspectj.dir}/META-INF/aop.xml"/>
             <include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties"/>
+            <include name="${src.userguide.example.jms.dir}/build.xml"/>
+            <include name="${src.userguide.example.jms.dir}/build.properties"/>
+            <include name="${src.userguide.example.jms.dir}/lib/"/>
+            <exclude name="${src.userguide.example.jms.dir}/lib/*"/>
+            <include name="${src.userguide.example.jms.dir}/src/**/*.java"/>
+            <include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties"/>
         </patternset>
         <patternset id="dist_bin_files-binmode">
             <include name="bin/*.sh"/>

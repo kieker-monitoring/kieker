@@ -76,10 +76,66 @@ The files are included in the directory \file{\aspectJBookstoreApplicationDirDis
       \lstinputlisting[caption=build.properties]{\aspectJBookstoreApplicationDir/build.properties}     
       \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
 
-\newpage
 \chapter{Example \KiekerTraceAnalysis{} Outputs}
 \input{Appendix-example-TraceAnalysis-outputs.inc}
-  
+
+\chapter{Using the JMS Writer and Reader}
+
+This chapter gives a brief description on how to use the \class{AsyncJMSWriter} and \class{JMSReader} %
+classes. This example is based on the Bookstore %
+application with manual instrumentation presented in Chapter~\ref{chap:example}. %
+The directory \dir{\JMSBookstoreApplicationDirDistro/} contains the %
+sources, ant scripts etc. 
+
+% \paragraph*{Preparation}
+
+\begin{compactenum}
+\item Copy the files \file{\mainJar} and \file{\commonsLoggingJar} from the %
+binary distribution to the example's \dir{lib/} directory.
+\item The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties} %
+is already configured to use the \class{AsyncJMSWriter}:
+\end{compactenum}
+
+\setPropertiesListing
+\lstinputlisting[firstline=40,lastline=42,caption=Excerpt from \file{kieker.monitoring.properties} configuring the JMS writer]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties}
+
+\begin{compactenum}\setcounter{enumi}{2}
+\item Download an OpenJMS install archive from \url{http://openjms.sourceforge.net} %
+and decompress it to the root directory of the example. 
+\item Copy the following files from the OpenJMS \dir{lib/} folder to the \dir{lib/} directory 
+   of this example:
+\begin{compactenum}
+\item \file{openjms-<version>.jar}
+\item \file{openjms-common-<version>.jar}
+\item \file{openjms-net-<version>.jar}
+\item \file{jms-<version>.jar}
+\item \file{concurrent-<version>.jar}
+\item \file{spice-jndikit-<version>.jar}
+\end{compactenum}
+\end{compactenum}
+
+\enlargethispage{2cm}
+
+% \paragraph*{Execution}%
+ The execution of the example is performed by the following three steps:
+\begin{enumerate}
+\item Start the JMS server (you may have to set your \class{JAVA\_HOME} variable first):
+
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# openjms-<version>/bin/startup.sh
+\end{lstlisting}
+\item Start the analysis part (in a new terminal):
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# ant run-analysis
+\end{lstlisting}
+\item Start the instrumented Bookstore (in a new terminal):
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# ant run-monitoring
+\end{lstlisting}
+\end{enumerate}
 
 \chapter{Libraries}
     The following table shows all libraries which are used by \Kieker\ and explains them briefly.
