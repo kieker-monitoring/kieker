@@ -109,7 +109,7 @@ public class SystemModelRepository {
     private void printOpenHtmlTable(final PrintStream ps, final String[] columnTitle) {
         ps.println("<table border=\"1\"><tr>");
         for (String cell : columnTitle) {
-            ps.println("<th>" + cell + "</th>");
+            ps.println("<th class=\"colTitle\">" + cell + "</th>");
         }
         ps.println("</tr>");
     }
@@ -142,12 +142,14 @@ public class SystemModelRepository {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".html"));
         ps.println("<html><head>");
         ps.println("<style type=\"text/css\">\n"
-                + ".cell { font-family:monospace; }\n"
+                + ".colTitle { font-family:sans; font-size:11px; }\n"
+                + ".cell { font-family:monospace; font-size:10px; }\n"
+                + "h1 { font-family:sans; font-size:14px; }\n"
                 + "</style>");
         ps.println("</head><body>");
         htmlHSpace(ps, 10);
         ps.println("<h1>Component Types</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "package", "name", "operations"});
+        printOpenHtmlTable(ps, new String[]{"ID", "Package", "Name", "Operations"});
         Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
         for (ComponentType type : componentTypes) {
             StringBuilder opListBuilder = new StringBuilder();
@@ -168,7 +170,7 @@ public class SystemModelRepository {
         }
         printCloseHtmlTable(ps);
         ps.println("<h1>Operations</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "component type", "name", "parameter types", "return type"});
+        printOpenHtmlTable(ps, new String[]{"ID", "Component type", "Name", "Parameter types", "Return type"});
         Collection<Operation> operations = this.operationFactory.getOperations();
         for (Operation op : operations) {
             StringBuilder paramListStrBuild = new StringBuilder();
@@ -188,7 +190,7 @@ public class SystemModelRepository {
         }
         printCloseHtmlTable(ps);
         ps.println("<h1>Assembled Components</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "name", "component type"});
+        printOpenHtmlTable(ps, new String[]{"ID", "Name", "Component type"});
         Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
         for (AssemblyComponent ac : assemblyComponents) {
             String[] cells = new String[]{
@@ -199,7 +201,7 @@ public class SystemModelRepository {
         }
         printCloseHtmlTable(ps);
         ps.println("<h1>Execution Containers</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "name"});
+        printOpenHtmlTable(ps, new String[]{"ID", "Name"});
         Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
         for (ExecutionContainer container : containers) {
             String[] cells = new String[]{
@@ -210,7 +212,7 @@ public class SystemModelRepository {
         }
         printCloseHtmlTable(ps);
         ps.println("<h1>Deployment Components</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "assembly component", "execution container"});
+        printOpenHtmlTable(ps, new String[]{"ID", "Assembly component", "Execution container"});
         Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
         for (AllocationComponent allocationComponent : allocationComponentInstances) {
             String[] cells = new String[]{

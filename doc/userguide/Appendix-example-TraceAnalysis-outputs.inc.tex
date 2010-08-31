@@ -31,20 +31,21 @@ label=lst:appendix:traceAnalysisExample:messageTraces]%
 \subsection{Deployment-Level Sequence Diagrams}
 
 \begin{figure}[h]\centering
-\subfigure[Trace \ldots{}6129]{%
+\subfigure[Trace \ldots{}6129]{\label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6129}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976129-crop}
 }
-\subfigure[Trace \ldots{}6130]{%
+\subfigure[Trace \ldots{}6130]{\label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6130}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976130-crop}
 }
-\subfigure[Trace \ldots{}6131]{%
+\subfigure[Trace \ldots{}6131]{\label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6131}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976131-crop}
 }
-\subfigure[Trace \ldots{}6141]{%
+\subfigure[Trace \ldots{}6141]{\label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6141}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentSequenceDiagram-6488138950668976141-crop}
 }
 \caption{\textit{Deployment-level} sequence diagrams of the trace %
 equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses})}
+\label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl}
 \end{figure}
 
 \newpage
@@ -54,6 +55,7 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \begin{figure}[h]\centering
 \includegraphics[scale=0.4]{images/example-plots/assemblySequenceDiagram-6488138950668976129-crop}
 \caption{\textit{Assembly-level} sequence diagram of trace \ldots{}6129}
+\label{fig:appendix:traceAnalysisExample:SeqDiagrDepl6129}
 \end{figure}
 
 \section{Call Trees}
@@ -61,20 +63,21 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \subsection{Trace Call Trees}
 
 \begin{figure}[h]\centering
-\subfigure[Trace \ldots{}6129]{%
+\subfigure[Trace \ldots{}6129]{\label{fig:appendix:traceAnalysisExample:TraceCallTrees6129}%
 \ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976129-crop}\ \ 
 }
-\subfigure[Trace \ldots{}6130]{%
+\subfigure[Trace \ldots{}6130]{\label{fig:appendix:traceAnalysisExample:TraceCallTrees6130}%
 \ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976130-crop}\ \ 
 }
-\subfigure[Trace \ldots{}6131]{%
+\subfigure[Trace \ldots{}6131]{\label{fig:appendix:traceAnalysisExample:TraceCallTrees6131}%
 \ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976131-crop}\ \ 
 }
-\subfigure[Trace \ldots{}6141]{%
+\subfigure[Trace \ldots{}6141]{\label{fig:appendix:traceAnalysisExample:TraceCallTrees6141}%
 \ \ \includegraphics[scale=0.4]{images/example-plots/callTree-6488138950668976141-crop}\ \ 
 }
 \caption{Calls trees of the trace %
 equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses})}
+\label{fig:appendix:traceAnalysisExample:TraceCallTrees}
 \end{figure}
 
 \newpage
@@ -82,12 +85,14 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \subsection{Aggregated Call Trees}
 
 \begin{figure}[h]\centering
-\subfigure{%
-\includegraphics[scale=0.4]{images/example-plots/aggregatedAssemblyCallTree-crop}%
-}
-\subfigure{%
+\subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:AggregatedCallTreesDeployment}%
 \includegraphics[scale=0.4]{images/example-plots/aggregatedDeploymentCallTree-crop}%
 }
+\subfigure[assembly-level]{\label{fig:appendix:traceAnalysisExample:AggregatedCallTreesAssembly}%
+\includegraphics[scale=0.4]{images/example-plots/aggregatedAssemblyCallTree-crop}%
+}
+\caption{Aggregated call trees generated from the 1635~traces}
+\label{fig:appendix:traceAnalysisExample:AggregatedCallTrees}
 \end{figure}
 
 
@@ -96,31 +101,45 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \subsection{Container Dependency Graphs}
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.4]{images/example-plots/containerDependencyGraph-crop} 
+\includegraphics[scale=0.4]{images/example-plots/containerDependencyGraph-crop}
+\caption{Container dependency graph}
+\label{fig:appendix:traceAnalysisExample:ContainerDepGraph}
 \end{figure}
 
 \subsection{Component Dependency Graphs}
 
 \begin{figure}[h]\centering
-\subfigure{%
+\subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:ComponentDepGraphsDeployment}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentComponentDependencyGraph-crop}
 }
-\subfigure{%
+\subfigure[assembly-level]{\label{fig:appendix:traceAnalysisExample:ComponentDepGraphsAssembly}%
 \includegraphics[scale=0.4]{images/example-plots/assemblyComponentDependencyGraph-crop}
 }
+\caption{Component dependency graphs}
+\label{fig:appendix:traceAnalysisExample:ComponentDepGraphs}
 \end{figure}
-
 
 \subsection{Operation Dependency Graphs}
 
 \begin{figure}[h]\centering
-\subfigure{%
+\subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:OperationDepGraphsDeployment}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentOperationDependencyGraph-crop}
 }
-\subfigure{%
+\subfigure[assembly-level]{\label{fig:appendix:traceAnalysisExample:OperationDepGraphsAssembly}%
 \includegraphics[scale=0.4]{images/example-plots/assemblyOperationDependencyGraph-crop}
 }
+\caption{Operation dependency graphs}
+\label{fig:appendix:traceAnalysisExample:OperationDepGraphs}
 \end{figure}
+
+\section{HTML Output of the System Model}
+
+\begin{figure}[h]\centering
+\includegraphics[width=0.6\textwidth]{images/example-plots/system-entities-html-FFscrsh.png}
+\caption{HTML output of the system model reconstructed from the traces}
+\label{fig:appendix:traceAnalysisExample:htmlSystemModel}
+\end{figure}
+
 
 % \enlargethispage{2cm}
 % 	\begin{figure}[H]\centering
