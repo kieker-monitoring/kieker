@@ -13,9 +13,7 @@ Initially, the following steps are required:
   http://kieker.sourceforge.net.
 2.Copy the following files from the binary distribution 
   to the lib/ directory of this example:
-  * dist/kieker-common-<version>.jar
-  * dist/kieker-tpmon-<version>_ctrl.jar
-  * dist/kieker-tpmon-<version>_ltw.jar
+  * dist/kieker-<version>.jar
   * lib/aspectjrt-<version>.jar
   * lib/aspectjtools-<version>.jar
   * lib/aspectjweaver-<version>.jar
