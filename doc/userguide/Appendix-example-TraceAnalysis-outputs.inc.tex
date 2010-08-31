@@ -1,3 +1,23 @@
+\subsection{Execution Traces, Message Traces, and Trace Equivalence Classes}
+
+\subsubsection{Execution Traces}
+
+\setTextListing
+\lstinputlisting[firstline=1,lastline=10,caption=]{images/example-plots/executionTraces.txt}
+
+\subsubsection{Message Traces}
+
+\setTextListing
+\lstinputlisting[firstline=1,lastline=9,caption=]{images/example-plots/messageTraces.txt}
+
+\subsubsection{Trace Equivalence Classes}
+
+\setTextListing
+\lstinputlisting[caption=]{images/example-plots/traceDeploymentEquivClasses.txt}
+
+\setTextListing
+\lstinputlisting[caption=]{images/example-plots/traceAssemblyEquivClasses.txt}
+
 \subsection{Sequence Diagrams}
 
 \subsubsection{Deployment-Level Sequence Diagrams}
@@ -80,57 +100,64 @@
 
 \subsubsection{Operation Dependency Graphs}
 
+\begin{figure}[h]\centering
+\subfigure{%
+\includegraphics[scale=0.4]{images/example-plots/deploymentOperationDependencyGraph-crop}
+}
+\subfigure{%
+\includegraphics[scale=0.4]{images/example-plots/assemblyOperationDependencyGraph-crop}
+}
+\end{figure}
 
-
-\enlargethispage{2cm}
-	\begin{figure}[H]\centering
-	\subfigure[deployment level]{\label{fig:appendix:allocationSequenceDiagram}
-	\includegraphics[scale=0.4]{images/allocationSequenceDiagram-crop}
-	}
-	\subfigure[assembly level]{\label{fig:appendix:assemblySequenceDiagram}
-	\includegraphics[scale=0.4]{images/assemblySequenceDiagram-crop}
-	}
-	\caption{Sequence diagrams}
-	\end{figure}
-
-    \begin{figure}[H]\centering
-	\subfigure[single trace]{\label{fig:appendix:callTree}%
-	\quad \includegraphics[scale=0.4]{images/callTree-crop} \quad%
-	}%
-	\subfigure[aggregated (deployment level)]{\label{fig:appendix:aggregatedAllocationCallTree}%
-	\quad\quad \includegraphics[scale=0.4]{images/aggregatedAllocationCallTree-crop}\quad\quad %
-	}%
-	\subfigure[aggregated (assembly level)]{\label{fig:appendix:aggregatedAssemblyCallTree}%
-	\quad\quad\quad \includegraphics[scale=0.4]{images/aggregatedAssemblyCallTree-crop}\quad\quad\quad %
-	}%
-	\caption{Calls trees for a single trace~\subref{fig:appendix:callTree} and aggregated call %
-	trees~\subref{fig:appendix:aggregatedAllocationCallTree}/\subref{fig:appendix:aggregatedAssemblyCallTree}}
-	\end{figure}
-
-\newpage
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[scale=0.45]{images/containerDependencyGraph-crop}
-		\caption{Container Dependency Graph}
-	\end{figure}  
-
-    \begin{figure}[H]\centering
-\subfigure[deployment level]{\label{fig:appendix:allocationComponentDependencyGraph}%
-		\includegraphics[scale=0.45]{images/allocationComponentDependencyGraph-crop}
-	}\\
-	\subfigure[assembly level]{\label{fig:appendix:assemblyComponentDependencyGraph}%
-		\includegraphics[scale=0.45]{images/assemblyComponentDependencyGraph-crop}
-	}%
-	\caption{Component Dependency Graphs}
-	\end{figure}
-
-	\begin{figure}[H]\centering
-	\subfigure[deployment level]{\label{fig:appendix:allocationOperationDependencyGraph}%
-		\includegraphics[scale=0.45]{images/allocationOperationDependencyGraph-crop}
-	}\\
-	\subfigure[assembly level]{\label{fig:appendix:assemblyOperationDependencyGraph}%
-		\includegraphics[scale=0.45]{images/assemblyOperationDependencyGraph-crop}
-	}%
-	\caption{Operation Dependency Graphs}
-	\end{figure}
+% \enlargethispage{2cm}
+% 	\begin{figure}[H]\centering
+% 	\subfigure[deployment level]{\label{fig:appendix:allocationSequenceDiagram}
+% 	\includegraphics[scale=0.4]{images/allocationSequenceDiagram-crop}
+% 	}
+% 	\subfigure[assembly level]{\label{fig:appendix:assemblySequenceDiagram}
+% 	\includegraphics[scale=0.4]{images/assemblySequenceDiagram-crop}
+% 	}
+% 	\caption{Sequence diagrams}
+% 	\end{figure}
+% 
+%     \begin{figure}[H]\centering
+% 	\subfigure[single trace]{\label{fig:appendix:callTree}%
+% 	\quad \includegraphics[scale=0.4]{images/callTree-crop} \quad%
+% 	}%
+% 	\subfigure[aggregated (deployment level)]{\label{fig:appendix:aggregatedAllocationCallTree}%
+% 	\quad\quad \includegraphics[scale=0.4]{images/aggregatedAllocationCallTree-crop}\quad\quad %
+% 	}%
+% 	\subfigure[aggregated (assembly level)]{\label{fig:appendix:aggregatedAssemblyCallTree}%
+% 	\quad\quad\quad \includegraphics[scale=0.4]{images/aggregatedAssemblyCallTree-crop}\quad\quad\quad %
+% 	}%
+% 	\caption{Calls trees for a single trace~\subref{fig:appendix:callTree} and aggregated call %
+% 	trees~\subref{fig:appendix:aggregatedAllocationCallTree}/\subref{fig:appendix:aggregatedAssemblyCallTree}}
+% 	\end{figure}
+% 
+% \newpage
+% 
+% 	\begin{figure}[H]
+% 		\centering
+% 		\includegraphics[scale=0.45]{images/containerDependencyGraph-crop}
+% 		\caption{Container Dependency Graph}
+% 	\end{figure}  
+% 
+%     \begin{figure}[H]\centering
+% \subfigure[deployment level]{\label{fig:appendix:allocationComponentDependencyGraph}%
+% 		\includegraphics[scale=0.45]{images/allocationComponentDependencyGraph-crop}
+% 	}\\
+% 	\subfigure[assembly level]{\label{fig:appendix:assemblyComponentDependencyGraph}%
+% 		\includegraphics[scale=0.45]{images/assemblyComponentDependencyGraph-crop}
+% 	}%
+% 	\caption{Component Dependency Graphs}
+% 	\end{figure}
+% 
+% 	\begin{figure}[H]\centering
+% 	\subfigure[deployment level]{\label{fig:appendix:allocationOperationDependencyGraph}%
+% 		\includegraphics[scale=0.45]{images/allocationOperationDependencyGraph-crop}
+% 	}\\
+% 	\subfigure[assembly level]{\label{fig:appendix:assemblyOperationDependencyGraph}%
+% 		\includegraphics[scale=0.45]{images/assemblyOperationDependencyGraph-crop}
+% 	}%
+% 	\caption{Operation Dependency Graphs}
+% 	\end{figure}

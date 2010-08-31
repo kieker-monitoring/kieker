@@ -40,6 +40,9 @@
 \newcommand{\aspectJBookstoreApplicationDir}{\exampleDirRelativePath/ch5--aspectj-instrumentation}
 \newcommand{\aspectJBookstoreApplicationDirDistro}{\exampleDir/ch5--aspectj-instrumentation}
 
+\newcommand{\distributedTestdataDir}{\aspectJBookstoreApplicationDir/testdata/tpmon-20100830-082225522-UTC/}
+\newcommand{\distributedTestdataDirDistro}{\aspectJBookstoreApplicationDirDistro/testdata/tpmon-20100830-082225522-UTC/}
+
 % The complete url where to find Kieker.
 \newcommand{\KiekerURL}{\url{http://kieker.sourceforge.net}}
 \newcommand{\KiekerDownloadURL}{\url{http://sourceforge.net/projects/kieker/files}}
@@ -134,6 +137,10 @@ xleftmargin=3mm,
 \lstdefinestyle{xmlStyle}{
 language=XML
 }
+\lstdefinestyle{textStyle}{
+language=bash,
+xleftmargin=3mm,
+}
 
 \newcommand{\UnixLikeSystem}{UNIX-like system}
 \newcommand{\UnixLikeSystems}{UNIX-like systems}
@@ -141,6 +148,7 @@ language=XML
 \newcommand{\lstHighlight}{\bfseries}
 \newcommand{\setJavaCodeListing}{\setListing{javaStyle}{left}{\sffamily\footnotesize}{\#}}
 \newcommand{\setBashListing}{\setListing{bashStyle}{none}{\sffamily\footnotesize}{\#}}
+\newcommand{\setTextListing}{\setListing{textStyle}{none}{\sffamily\scriptsize}{}}
 \newcommand{\setXMLListing}{\setListing{xmlStyle}{none}{\sffamily\footnotesize}{}}
 
 % This is the definition for the environment, that can be used for the background of the dirtrees.
