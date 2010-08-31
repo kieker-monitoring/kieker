@@ -329,6 +329,7 @@
     <target name="dist-kieker-sources" depends="init">
         <patternset id="dist_src_files-nonbinmode">
             <include name="bin/log4j.properties"/>
+            <include name="bin/*.bat"/>
             <include name="META-INF/*"/>
             <include name="src/**/*.java"/>
             <include name="test/**/*.java"/>
@@ -378,6 +379,7 @@
 
         <patternset id="dist_bin_files-nonbinmode">
             <include name="bin/log4j.properties"/>
+            <include name="bin/*.bat"/>
             <include name="dist/*.jar"/>
             <include name="dist/*.war"/>
             <include name="META-INF/*"/>
@@ -440,37 +442,6 @@
             </zipfileset>
             <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755"  defaultexcludes="yes">
                 <patternset refid="dist_bin_files-binmode"/>
-            </zipfileset>
-        </zip>
-    </target>
-
-    <target name="build-example-MySimpleKiekerJMSExample" depends="init">
-        <patternset id="dist_myJMSExample_files">
-            <include name="examples/MySimpleKiekerJMSExample/README"/>
-            <include name="examples/MySimpleKiekerJMSExample/LICENSE"/>
-            <include name="examples/MySimpleKiekerJMSExample/build.xml"/>
-            <include name="examples/MySimpleKiekerJMSExample/build.properties"/>
-            <include name="examples/MySimpleKiekerJMSExample/lib/"/>
-            <exclude name="examples/MySimpleKiekerJMSExample/lib/*.jar"/>
-            <exclude name="examples/MySimpleKiekerJMSExample/**/*.log"/>
-            <include name="examples/MySimpleKiekerJMSExample/META-INF/ltwtests-RTsExecutions.aop.xml"/>
-            <include name="examples/MySimpleKiekerJMSExample/META-INF/tests.log4j.properties"/>
-            <include name="examples/MySimpleKiekerJMSExample/META-INF/kieker.monitoring.properties.example"/>
-            <include name="examples/MySimpleKiekerJMSExample/src/**"/>
-        </patternset>
-
-        <tar destfile="${release.dir}/${dist.kieker.example.myjmsexample}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_myJMSExample_files"/>
-            </tarfileset>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.example.myjmsexample}.tar.gz" src="${release.dir}/${dist.kieker.example.myjmsexample}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.example.myjmsexample}.tar"/>
-
-        <zip  zipfile="${release.dir}/${dist.kieker.example.myjmsexample}.zip">
-            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_myJMSExample_files"/>
             </zipfileset>
         </zip>
     </target>
@@ -554,7 +525,7 @@
     </target>
 
     <target name="build-examples"
-            depends="init,build-example-MySimpleKiekerJMSExample,build-example-JPetStoreExample,build-example-microbenchmark">
+            depends="init,build-example-JPetStoreExample,build-example-microbenchmark">
     </target>
 
     <target name="build-userguide">

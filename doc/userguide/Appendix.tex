@@ -28,13 +28,47 @@ list their usage outputs as listed when called without command-line parameters. 
 \setTextListing
 \lstinputlisting[caption=]{Appendix-usage-convertLoggingTimestamp.sh.inc}
 
-\paragraph*{Example}
+\paragraph*{Example}\
 
-\setBashListing
+\setTextListing
 \begin{lstlisting}
-#\lstshellprompt{}# 
+$\lstshellprompt{}$ $\textbf{bin/convertLoggingTimestamp.sh}$ $\textbf{-t}$ 1283156545581511026 1283156546127117246 
+1283156545581511026: Mo, 30 Aug 2010 08:22:25 +0000 (UTC) (Mo, 30 Aug 2010 10:22:25 +0200 (local time))
+1283156546127117246: Mo, 30 Aug 2010 08:22:26 +0000 (UTC) (Mo, 30 Aug 2010 10:22:26 +0200 (local time))
 \end{lstlisting}
 
+\section{Script \file{dotPic-fileConverter.sh|bat}}
+
+\paragraph*{Usage \& Example}\
+
+\setTextListing
+\lstinputlisting[caption=,firstline=3]{Appendix-usage-dotPic-fileConverter.sh.inc}
+
+\section{Script \file{logReplay.sh|bat}}
+
+\paragraph*{Usage}\
+
+\setTextListing
+\lstinputlisting[caption=]{Appendix-usage-logReplay.sh.inc}
+
+\paragraph*{Example}\
+
+\setTextListing
+\begin{lstlisting}
+$\lstshellprompt{}$ $\textbf{bin/logReplay.sh}$ $\textbf{--inputdirs}$ $\distributedTestdataDirDistro$ $\textbf{--keep-logging-timestamps}$ $true$ $\textbf{--realtime}$ $true$
+\end{lstlisting}
+
+\section{Script \file{trace-analysis.sh|bat}}
+
+\paragraph*{Usage}\
+
+\setTextListing
+\lstinputlisting[caption=]{Appendix-usage-trace-analysis.sh.inc}
+
+\paragraph*{Example}\
+
+Examples on using this script can be found in Chapter~\ref{chap:aspectJ} and %
+Appendix~\ref{appendix:traceAnalysisOutputExamples}.
 
 \chapter{\KiekerMonitoringPart{} Configuration File}\label{sec:appdx:monitoringproperties}
 
@@ -100,7 +134,7 @@ The files are included in the directory \file{\aspectJBookstoreApplicationDirDis
       \lstinputlisting[caption=build.properties]{\aspectJBookstoreApplicationDir/build.properties}     
       \lstinputlisting[caption=build.xml]{\aspectJBookstoreApplicationDir/build.xml}
 
-\chapter{Example \KiekerTraceAnalysis{} Outputs}
+\chapter{Example \KiekerTraceAnalysis{} Outputs}\label{appendix:traceAnalysisOutputExamples}
 \input{Appendix-example-TraceAnalysis-outputs.inc}
 
 \chapter{Using the JMS Writer and Reader}\label{appendix:usingJMS}
