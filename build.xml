@@ -43,10 +43,8 @@
 
         <property name="dist.kieker.example.myjmsexample"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerJMSExample"/>
-        <property name="dist.kieker.example.jpetstore"
-                  value="${kieker.dist.name}_${kieker-examples.suffix}-JPetStoreExample"/>
-        <property name="dist.kieker.example.microbenchmark"
-                  value="${kieker.dist.name}_${kieker-examples.suffix}-OverheadEvaluationMicrobenchmark"/>
+        <property name="dist.kieker.example.jpetstoreservlet"
+                  value="${kieker.dist.name}_${kieker-examples.suffix}-JavaEEServletContainerExample"/>
     </target>
 
     <target name="update-version" unless="version.noupdate"
@@ -454,34 +452,34 @@
         <property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
         <property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
         <patternset id="dist_jpetstoreExample_files-nonbinmode">
-            <include name="examples/JPetStoreExample/README"/>
-            <include name="examples/JPetStoreExample/LICENSE"/>
-            <include name="examples/JPetStoreExample/kieker-testdata/**"/>
-            <include name="examples/JPetStoreExample/${tomcat.dir}/**"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/bin/*.sh"/>
-            <include name="examples/JPetStoreExample/${jpetstore.dir}/**"/>
-            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/devlib/kieker*.jar"/>
-            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/nbproject/**"/>
-            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/reports/**"/>
-            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/wars/**"/>
-            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/webapp/**"/>
-            <exclude name="examples/JPetStoreExample/${jpetstore.dir}/build/work/**"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/bin/catalina.sh.localjvmmem.conf/"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/work/**/*"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/temp/**/*"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/logs/**/*"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/jpetstore/"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/webapps/kieker*/"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/kieker*.jar"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/aspectj*.jar"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/commons-logging*.jar"/>
-            <exclude name="examples/JPetStoreExample/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>
+            <include name="${example.jpetstoreservlet.dir}/README"/>
+            <include name="${example.jpetstoreservlet.dir}/LICENSE"/>
+            <include name="${example.jpetstoreservlet.dir}/kieker-testdata/**"/>
+            <include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/**"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh"/>
+            <include name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/**"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/devlib/kieker*.jar"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/nbproject/**"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/reports/**"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/wars/**"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/webapp/**"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/work/**"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/catalina.sh.localjvmmem.conf/"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/work/**/*"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/temp/**/*"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/logs/**/*"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/webapps/jpetstore/"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/webapps/kieker*/"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/kieker*.jar"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/aspectj*.jar"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/commons-logging*.jar"/>
+            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>
         </patternset>
         <patternset id="dist_jpetstoreExample_files-binmode">
-            <include name="examples/JPetStoreExample/${tomcat.dir}/bin/*.sh"/>
+            <include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh"/>
         </patternset>
 
-        <tar destfile="${release.dir}/${dist.kieker.example.jpetstore}.tar" longfile="gnu">
+        <tar destfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" longfile="gnu">
             <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
             </tarfileset>
@@ -489,11 +487,11 @@
                 <patternset refid="dist_jpetstoreExample_files-binmode"/>
             </tarfileset>
         </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.example.jpetstore}.tar.gz" src="${release.dir}/${dist.kieker.example.jpetstore}.tar" />
+        <gzip zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar.gz" src="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" />
         <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.example.jpetstore}.tar"/>
+        <delete file="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar"/>
 
-        <zip  zipfile="${release.dir}/${dist.kieker.example.jpetstore}.zip">
+        <zip  zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.zip">
             <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
                 <patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
             </zipfileset>
