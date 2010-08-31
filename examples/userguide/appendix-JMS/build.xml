@@ -24,7 +24,10 @@
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.monitoring}" />
+                                <path location="." />
 			</classpath>
+        	<jvmarg value="-Dkieker.monitoring.properties=${meta.dir}/${properties.file}" />
+        	<jvmarg value="-Dlog4j.configuration=./log4j.properties" />
 		</java>
 
 	</target>
@@ -35,7 +38,9 @@
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />
+                                <path location="." />
 			</classpath>
+        	<jvmarg value="-Dlog4j.configuration=./log4j.properties" />
 		</java>
 	</target>
 
