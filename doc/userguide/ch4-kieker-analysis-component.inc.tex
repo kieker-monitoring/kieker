@@ -55,7 +55,7 @@ with these custom components:
 \section{Monitoring Log Readers}\label{sec:analysis:reader}
 
 % Warning-tag for the reader-writer-thing
-The monitoring log readers are the direct counterpart to the monitoring log writers. While a writer gets a record and writes it into files or somewhere else, the reader takes the written data and converts it into a suitable instance of \class{IMonitoringRecord}.
+The monitoring log readers are the direct counterpart to the monitoring log writers. While a writer gets a record and writes it into files or somewhere else, the reader takes the written data and converts it into a suitable instance of \class{IMonitoringRecord}. 
 
 % \
 % 
@@ -63,7 +63,13 @@ The monitoring log readers are the direct counterpart to the monitoring log writ
 % 
 % \
 
-\noindent There are already some readers implemented in \Kieker\  as can be seen in the hierarchy diagram in Figure \ref{Figure:ReaderHierarchy}.
+\noindent There are already some readers implemented in \Kieker\  as can be seen in the hierarchy diagram in Figure \ref{Figure:ReaderHierarchy}. %
+The \class{FSReader} has already been used in Section~\ref{sec:example:analysis}. %
+The \class{FSReaderRealtime} can be used to simulate continuous monitoring of a %
+production system. It adds delays between the delivery of the monitoring records %
+to its consumers according to the original delays reconstructed from the logging %
+timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
+A brief description of how to use the \class{JMSReader} can be found in Appendix~\ref{appendix:usingJMS}. %
 
 % This image shows the reader hierarchy.
 \begin{figure}[H]\centering

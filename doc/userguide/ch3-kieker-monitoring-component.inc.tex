@@ -154,10 +154,11 @@ The \class{AsyncFsWriter} is the default writer which has already been used in %
 Section~\ref{sec:example:monitoring}. %
 Currently, the database writer only supports the record type \class{OperationExecutionRecord}. %
 
-The \class{JMSWriter} writes records to a JMS (Java Messaging Service~\cite{JMS-WebSite}) queue. %
+The \class{AsyncJMSWriter} writes records to a JMS (Java Messaging Service~\cite{JMS-WebSite}) queue. %
 This allows to implement on-the-fly analysis in distributed systems, i.e., analysis while %
 continuously receiving new monitoring data from an instrumented application potentially %
-running on another machine. %
+running on another machine. A brief description of how to use the \class{AsyncJMSWriter} %
+can be found in Appendix~\ref{appendix:usingJMS}. %
 The \Kieker{} web site provides an example for this. %
 
 % This is the diagram with the hierarchy of the writers.
