@@ -1,10 +1,10 @@
 @echo off 
-REM This script should NOT be called directly. Use trace-analysis.bat instead.
+REM This script should NOT be called directly. Use convertLoggingTimestamp.bat instead.
 REM
 REM @author Nils Christian Ehmke
 
 SET JAVAARGS="-Dlog4j.configuration=./log4j.properties -Xms56m -Xmx1024m"
-SET MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisTool
+SET MAINCLASSNAME=kieker.tools.loggingTimestampConverter.LoggingTimestampConverterTool
 
 REM Get the directory of this file and change the working directory to it.
 cd %~dp0

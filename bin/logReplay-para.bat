@@ -1,15 +1,15 @@
 @echo off 
-REM This script should NOT be called directly. Use trace-analysis.bat instead.
+REM This script should NOT be called directly. Use logReplay.bat instead.
 REM
 REM @author Nils Christian Ehmke
 
-SET JAVAARGS="-Dlog4j.configuration=./log4j.properties -Xms56m -Xmx1024m"
-SET MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisTool
+SET JAVAARGS=-Dlog4j.configuration=./log4j.properties
+SET MAINCLASSNAME=kieker.tools.logReplayer.FilesystemLogReplayerStarter
 
 REM Get the directory of this file and change the working directory to it.
 cd %~dp0
 
-REM Set every variable we will need for the execution.
+REM Set some variables we will need for the execution.
 SET BINDIR=%cd%
 
 SET CLASSPATH=%BINDIR%

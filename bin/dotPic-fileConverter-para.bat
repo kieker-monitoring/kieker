@@ -1,6 +1,6 @@
 @echo off
-REM Script could need some improvement.
-REM 
+REM This script should NOT be called directly. Use dotPic-fileConverter.bat instead.
+REM
 REM @author Nils Christian Ehmke
 
 :main
