@@ -21,7 +21,6 @@ package kieker.tools.loggingTimestampConverter;
 import java.util.Comparator;
 import java.util.Vector;
 import kieker.common.util.LoggingTimestampConverter;
-import kieker.tools.traceAnalysis.TraceAnalysisTool;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -103,7 +102,7 @@ public class LoggingTimestampConverterTool {
     }
 
     private static void printUsage() {
-        cmdHelpFormatter.printHelp(80, TraceAnalysisTool.class.getName(), "", cmdlOpts, "", true);
+        cmdHelpFormatter.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", cmdlOpts, "", true);
     }
 
     private static boolean initFromArgs() {
@@ -117,7 +116,6 @@ public class LoggingTimestampConverterTool {
         for (int curIdx = 0; curIdx<timestampsStr.length; curIdx++) {
             try {
                 timestampsLong[curIdx] = Long.parseLong(timestampsStr[curIdx]);
-                curIdx++;
             } catch (NumberFormatException ex) {
                 log.error("Failed to parse timestamp:" + timestampsStr[curIdx], ex);
                 System.err.println("Failed to parse timestamp:" + timestampsStr[curIdx]);
