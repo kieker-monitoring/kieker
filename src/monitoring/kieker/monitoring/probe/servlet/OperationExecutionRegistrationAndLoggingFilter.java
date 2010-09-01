@@ -46,7 +46,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * <filter>
  * <filter-name>sessionRegistrationFilter</filter-name>
- * <filter-class>kieker.monitoring.probe.servlet.KiekerTraceRegistrationFilter</filter-class>
+ * <filter-class>kieker.monitoring.probe.servlet.OperationExecutionRegistrationAndLoggingFilter</filter-class>
  * </filter>
  * <filter-mapping>
  * <filter-name>sessionRegistrationFilter</filter-name>
@@ -67,7 +67,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 
     private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
 
-    
+    @Override
     public void init(FilterConfig config) throws ServletException {
         /*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
         if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
@@ -92,7 +92,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
             }
     }
 
-    
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         OperationExecutionRecord execData = null;
@@ -139,7 +139,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
         }
     }
 
-    
+    @Override
     public void destroy() {
     }
 }

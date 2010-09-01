@@ -1,8 +1,14 @@
 package kieker.monitoring.probe.servlet;
 
 import java.io.IOException;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import kieker.monitoring.core.ControlFlowRegistry;
 import kieker.monitoring.core.SessionRegistry;
@@ -37,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * <filter>
  * <filter-name>sessionRegistrationFilter</filter-name>
- * <filter-class>kieker.monitoring.probe.servlet.KiekerRequestRegistrationFilter</filter-class>
+ * <filter-class>kieker.monitoring.probe.servlet.OperationExecutionRegistrationFilter</filter-class>
  * </filter>
  * <filter-mapping>
  * <filter-name>sessionRegistrationFilter</filter-name>
@@ -52,7 +58,8 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 
-    
+
+    @Override
     public void init(FilterConfig config) throws ServletException {
         /*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
         if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
@@ -64,7 +71,7 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
         }*/
     }
 
-    
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
@@ -81,7 +88,7 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
         }
     }
 
-    
+    @Override
     public void destroy() {
     }
 }

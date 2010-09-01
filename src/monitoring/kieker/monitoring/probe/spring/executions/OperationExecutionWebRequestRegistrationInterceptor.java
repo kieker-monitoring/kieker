@@ -1,7 +1,5 @@
 package kieker.monitoring.probe.spring.executions;
 
-import kieker.monitoring.core.MonitoringController;
-
 import kieker.monitoring.core.ControlFlowRegistry;
 import kieker.monitoring.core.SessionRegistry;
 import org.springframework.ui.ModelMap;
