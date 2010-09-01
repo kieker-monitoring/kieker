@@ -189,7 +189,7 @@ public class SystemModelRepository {
             printHtmlTableRow(ps, cells);
         }
         printCloseHtmlTable(ps);
-        ps.println("<h1>Assembled Components</h1>");
+        ps.println("<h1>Assembly Components</h1>");
         printOpenHtmlTable(ps, new String[]{"ID", "Name", "Component type"});
         Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
         for (AssemblyComponent ac : assemblyComponents) {

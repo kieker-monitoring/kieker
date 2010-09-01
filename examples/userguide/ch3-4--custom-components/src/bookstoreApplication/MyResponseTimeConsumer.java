@@ -15,7 +15,7 @@ public class MyResponseTimeConsumer implements IMonitoringRecordConsumerPlugin {
     @Override
     public boolean newMonitoringRecord(IMonitoringRecord record) {
         if (record instanceof MyResponseTimeRecord) {
-            /* Seems like yes. Write the content to the default output. */
+            /* Write the content to the standard output stream. */
             MyResponseTimeRecord myRecord = (MyResponseTimeRecord) record;
             System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
                     + ": " + myRecord.className + ", " + myRecord.methodName

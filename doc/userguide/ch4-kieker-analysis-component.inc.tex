@@ -35,7 +35,7 @@ following steps to be performed, as described in Section~\ref{sec:example:analys
 
 \begin{compactenum}
 \item Creating an instance of the \class{AnalysisController} class
-\item Creating registering the monitoring log reader (\method{setLogReader}) as %
+\item Creating and registering the monitoring log reader (\method{setLogReader}) as %
 well as the monitoring record consumers and other analysis plugins (\method{registerPlugin}).
 \item Starting the analysis instance (\method{run}).
 \end{compactenum}
@@ -52,18 +52,37 @@ with these custom components:
 \lstinputlisting[caption=Code snippet setting up and running a \KiekerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=25, lastline=32, firstnumber=25]%
 {\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Starter.java}
 
+\noindent On invocation of the \method{run} method, the \class{Analysis Controller} %
+calls the \method{execute} if all analysis plugins allowing them to initialize. %
+Then, it starts the configured monitoring log reader by calling its \method{read} %
+method. Monitoring record consumers receive the monitoring records provided by %
+the reader. As soon as the reader returns from the execution of its \method{read} 
+method, the method \method{terminate} of each registered plugin is called by the %
+\class{Analysis Controller}.
+
 \section{Monitoring Log Readers}\label{sec:analysis:reader}
 
 % Warning-tag for the reader-writer-thing
-The monitoring log readers are the direct counterpart to the monitoring log writers. While a writer gets a record and writes it into files or somewhere else, the reader takes the written data and converts it into a suitable instance of \class{IMonitoringRecord}. 
+The monitoring log readers are the direct counterpart to the monitoring log %
+writers. While writers receive records and write them into files or other kinds %
+of monitoring logs, readers deserialize monitoring data and provide it as %
+\class{IMonitoringRecord} instances. 
 
+\begin{figure}\centering
+\includegraphics[scale=0.7]{images/kieker_readerimplsuserguide-modified}
+\caption{Interface \class{IMonitoringLogReader} and implementing classes}
+\label{Figure:ReaderHierarchy}
+\end{figure}
 % \
 % 
 % \WARNBOX{This means that whenever a new writer is implemented, a corresponding reader has to be implemented as well. If one want for example to store the recorded informations in a database, one should be capable of reading these saved informations from the database again.}
 % 
 % \
 
-\noindent There are already some readers implemented in \Kieker\  as can be seen in the hierarchy diagram in Figure \ref{Figure:ReaderHierarchy}. %
+\enlargethispage{1cm}
+
+\noindent There are already some readers implemented in \Kieker\  as shown in the %
+class diagram in Figure \ref{Figure:ReaderHierarchy}. %
 The \class{FSReader} has already been used in Section~\ref{sec:example:analysis}. %
 The \class{FSReaderRealtime} can be used to simulate continuous monitoring of a %
 production system. It adds delays between the delivery of the monitoring records %
@@ -71,26 +90,53 @@ to its consumers according to the original delays reconstructed from the logging
 timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
 A brief description of how to use the \class{JMSReader} can be found in Appendix~\ref{appendix:usingJMS}. %
 
-% This image shows the reader hierarchy.
-\begin{figure}[H]\centering
-\includegraphics[scale=0.7]{images/kieker_readerimplsuserguide-modified}
-\caption{Interface \class{IMonitoringLogReader} and implementing classes}
-\label{Figure:ReaderHierarchy}
-\end{figure}
+\noindent The implementation of a custom reader is similar to implementating a %
+monitoring log writer. Custom reader should extend the class \class{AbstractKiekerMonitoringLogReader} %
+which already provides an implementation of the observer pattern. %
+By invoking the method \method{deliverRecord},  the delivery of records is then %
+delegated to the super class.
 
-\noindent The implementation of an own reader is nearly the same as the implementation of the writer, but to keep things simple, it is recommended to extend the already implemented \class{AbstractKiekerMonitoringLogReader}, because otherwise it would be necessary to implement the employed observer pattern of the reader. By using the methods of the abstract class \class{AbstractMonitoringLogReader}, the task of delivering a new record to the consumers can be delegated to the super class.\\
-Listing~\ref{listing:MyReader} shows a simple reader which reads a stored record from the pipe. If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
+Listing~\ref{listing:MyReader} shows a simple reader which polls records from %
+the named pipe introduced in the previous Chapter~\ref{chap:componentsMonitoring}. %
+
+% If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
 
 \setJavaCodeListing
 \lstinputlisting[caption=MyPipeReader.java, label=listing:MyReader]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipeReader.java}
 
 \section{Analysis Plugins}\label{sec:analysis:plugins}
 
-\TODO{Input/Output ports}
+Any analysis or visualization component used with \KiekerAnalysisPart{} must %
+implement the interface \class{IAnalysisPlugin} (Figure~\ref{fig:analysisController:classdiagram}). %
+As described in Section~\ref{sec:analysis:controller}, the life-cycle of each %
+registered plugin is controlled by the \class{Analysis Controller} instance %
+employing the methods \method{execute} and \method{terminate}. Analysis plugins %
+must implement these methods for initialization and termination.
+
+The monitoring record consumer plugins described in the following %
+Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
+the monitoring records provided by the monitoring log reader. %
+Starting with these monitoring record plugins, analysis plugins can be connected %
+in a pipe-and-filter style to implement more complex analyses. %
+\Kieker{} provides input and output port interface and implementing classes %
+to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
+and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
+based on this pattern. 
 
 \section{Monitoring Record Consumer Plugins}\label{sec:analysis:consumer}
 
-The consumers are the parts of Kieker which work with the records that have been loaded by the reader. There can be (theoretically) an infinite number of consumers which produce any kind of output. A consumer can be programmed by implementing the interface \class{kieker.analysis.plugin.IMonitoringRecordConsumerPlugin} and writing the necessary methods. The following example consumer takes the given record and writes the content to the default output stream.
+As just mentioned, consumer plugins are special analysis plugins which receive %
+the records provided by the monitoring log reader and implement analyses or %
+visualizations based on these records. %
+Consumer plugins must implement the interface \class{IMonitoringRecordConsumerPlugin} %
+(see Figure~\ref{fig:analysisController:classdiagram}). %
+By implementing the \method{getRecordTypeSubscriptionList} method, a consumer plugin %
+can specify the desired types of monitoring records to be received via the %
+method \method{newMonitoringRecord}.
+
+
+The custom consumer in Listing~\ref{lst:MyReponseTimeConsumer} simply writes %
+the content of the received response time records to the standard output stream.
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyReponseTimeConsumer.java]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeConsumer.java}
+\lstinputlisting[caption=MyReponseTimeConsumer.java,label=lst:MyReponseTimeConsumer]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeConsumer.java}

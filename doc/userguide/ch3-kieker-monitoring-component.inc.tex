@@ -20,7 +20,7 @@ is provided by the file \file{\monitoringPropertiesFile} in the directory %
 \dir{\KiekerDir/META-INF/} of the binary release %
 (see Section~\ref{sec:example:downloadInstall}). %
 
-In order to use a custom configuration file, the file location needs to be passed to %
+In order to use a custom configuration file, its location needs to be passed to %
 the JVM using the parameter \textit{kieker.monitoring.configuration} as follows:
 
 \setBashListing
@@ -28,9 +28,9 @@ the JVM using the parameter \textit{kieker.monitoring.configuration} as follows:
 #\lstshellprompt# java	#\textbf{-Dkieker.monitoring.configuration=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
 \end{lstlisting}
 
-\noindent Appendix~\ref{sec:appdx:monitoringproperties} lists this file with a documentation 
-of all available properties. If no configuration file %
-is passed, a default configuration (according to the sample file) is being %
+\noindent Appendix~\ref{sec:appdx:monitoringproperties} lists the template file %
+with a documentation of all available properties. If no configuration file %
+is passed to the JVM, a default configuration---according to this sample file---is being %
 used by \KiekerMonitoringPart{}. %
 
 \section{Monitoring Controller}\label{sec:componentsMonitoring:monitoringController}
@@ -39,13 +39,16 @@ The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart
 instance and provides methods to, among others, log monitoring records %
 (\method{newMonitoringRecord}) employing the configured monitoring log writer and %
 to retrieve the current timestamp (\method{currentTimeNanos}). %
-The class is implemented employing the singleton pattern. The singleton instance %
+The method \method{currentTimeNanos} returns the number of nanoseconds elapsed %
+since 1 Jan 1970 00:00~UTC. %
+
+The class \class{MonitoringController} is implemented employing the singleton pattern. %
+The singleton instance %
 can be retrieved by calling the static method \method{getInstance}. %
 Figure~\ref{fig:monitoringController:classdiagram} shows %
 a class diagram of the class \class{MonitoringController} including the methods 
 just mentioned. The \class{MonitoringController} reads the configuration %
 file, as described in Section~\ref{sec:monitoring:configuration}.
-
 
 \begin{figure}[H]\centering
 \includegraphics[scale=0.7]{images/kieker_monitoringControlleruserguide-simplified}
@@ -87,6 +90,8 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \class{MyResponseTimeRecord}}
 \label{sec:monitoringrecord:interfacesAndImplementingClasses}
 \end{figure}
+
+\pagebreak
 
 \noindent In order to implement your own monitoring record type, you need to:
 
@@ -130,8 +135,8 @@ Many middleware technologies, such as Java~EE Servlet~\cite{JavaServletTechnolog
 Spring~\cite{Spring-WebSite}, and %
 Apache~CXF~\cite{CXF-WebSite} provide interception/AOP~\cite{Kiczales1997} interfaces %
 which are well-suited to implement monitoring probes. AspectJ~\cite{AspectJ-WebSite} allows to %
-instrument Java application without source code modifications. %
-Chapter~\ref{chap:aspectJ} provides probes based on these technologies allowing to %
+instrument Java applications without source code modifications. %
+Chapter~\ref{chap:aspectJ} describes the \Kieker{} probes based on these technologies allowing to %
 monitor trace information in distributed applications. 
 
 \section{Monitoring Log Writers}\label{sec:monitoring-log-writers}
