@@ -21,11 +21,11 @@ is provided by the file \file{\monitoringPropertiesFile} in the directory %
 (see Section~\ref{sec:example:downloadInstall}). %
 
 In order to use a custom configuration file, the file location needs to be passed to %
-the JVM using the parameter \textit{kieker.monitoring.properties} as follows:
+the JVM using the parameter \textit{kieker.monitoring.configuration} as follows:
 
 \setBashListing
 \begin{lstlisting}[caption=,label=lst:monitoringPropertiesPassedToJVM]
-#\lstshellprompt# java	#\textbf{-Dkieker.monitoring.properties=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
+#\lstshellprompt# java	#\textbf{-Dkieker.monitoring.configuration=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
 \end{lstlisting}
 
 \noindent Appendix~\ref{sec:appdx:monitoringproperties} lists this file with a documentation 
