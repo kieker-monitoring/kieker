@@ -7,7 +7,6 @@
 
 \chapter{\KiekerTraceAnalysis{} Tool}\label{chap:aspectJ}
 
-
 \KiekerTraceAnalysis{} implements the special feature of \Kieker{} allowing to %
 monitor, analyze and visualize (distributed) traces of method executions and %
 corresponding timing information. For this purpose, it includes monitoring probes employing %
@@ -38,11 +37,15 @@ monitoring trace information. %
 It presents the technology-specific probes provided for this purpose---with %
 a focus on AspectJ. Section~\ref{sec:traceAnalysisTool} presents the %
 tool which can be used to analyze and visualize the recorded trace %
-data. Analysis and visualization examples are presented in Section~\ref{sec:traceAnalysisExamples}.
+data.  Examples for all available analysis and visualization outputs are %
+presented in Section~\ref{sec:traceAnalysisExamples}.
 
 \section{Monitoring Trace Information}\label{sec:traceMonitoring}
 
-\subsection{AspectJ-Based Instrumentation}
+The following Sections describe how to use the monitoring probes based on %
+AspectJ~(Section~\ref{sec:traceAnalysis:instr:AspectJ}), \ldots.
+
+\subsection{AspectJ-Based Instrumentation}\label{sec:traceAnalysis:instr:AspectJ}
 
 This chapter will show in Section~\ref{sec:aspectJ:annotation} how
 to use AspectJ to mark methods to be monitored with a simple annotation
@@ -135,9 +138,28 @@ The AspectJ-Weaver itself has to be loaded by the JVM as a so-called javaagent. 
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
 
+After a complete run of the application, the monitoring files should appear in %
+the same way as mentioned in Section~\ref{sec:example:monitoring} including the %
+additional trace information. 
+
+\section{Full Monitoring}\label{sec:aspectJ:fullweaving}
+The full monitoring without using any annotations is quite simple. It is only necessary to modify the corresponding configuration-file of AspectJ, as can be seen in Listing~\ref{lst:aopConfigFileFull}.
+
+\setXMLListing
+\lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{ch5-trace-analysis_FullMonitoring-aop.xml}
+
+\noindent The old aspect has been deactivated by removing it (uncommenting it would work as well), while the new aspect \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>$ has been activated. As the name already reveals, the new aspect makes sure that every method within the included classes/packages will be monitored. The exact behavior can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. Listing \ref{lst:aopConfigFileFull} shows for example how to make sure that only the methods within the class \class{BookstoreStarter} will be monitored.
+
+The commands to compile and run the source code are just the same as in the Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1}. The only thing changing is that the annotations within the source code are no longer necessary.
+
+An example log of a complete run can be found in the appendix.
+
+\WARNBOX{By using an own implemented probe it can be necessary to include the corresponding class for this probe as well in the configuration file.}
+
 \section{Trace Analysis and Visualization}\label{sec:traceAnalysisTool}
 
-After a complete run of the application, the monitoring files should appear in the same way as mentioned in Section~\ref{sec:example:monitoring}, just with some more informations. These stored informations will now be visualized with the help of the trace-analysis-tool which can be found in the \Kieker{}-binaries as well.\\
+Monitoring data including trace information can be analyzed and visualized with %
+the \KiekerTraceAnalysis{} tool which is included in the \Kieker{} binary as well.\\
 
 \WARNBOX{
 In order to use this tool, it is necessary to install two other programs:
@@ -148,9 +170,16 @@ In order to use this tool, it is necessary to install two other programs:
 Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
 } \vspace{3mm}
 
-\noindent Once both have been installed, the trace-analysis-tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or \file{trace-analysis.bat} in the \dir{bin/} directory, respectivly.  A non-parameterized call of the script prints all possible options on the screen.
+\noindent Once both have been installed, the \KiekerTraceAnalysis{} tool can be %
+used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or %
+\file{trace-analysis.bat} (Windows) in the \dir{bin/} directory. A %
+non-parameterized call of the script prints all possible options on the screen, %
+as listed in Appendix~\ref{appendix:wrapperScripts:traceAnalysis}.
 
-Assume the monitored data within the directory \dir{/tmp/tpmon-20100813-121041532-UTC} (or \dir{C:$\backslash{}$Temp$\backslash{}$tpmon-20100813-121041532-UTC} under Windows) should be analyzed by the tool to produce a sequence diagram as well as a call tree which should then be written to an existing directory named \dir{out/}. %
+Assuming monitoring data, for example the data generated in the previous section, 
+within the directory \dir{/tmp/tpmon-20100813-121041532-UTC} (or \dir{C:$\backslash{}$Temp$\backslash{}$tpmon-20100813-121041532-UTC} under Windows) %
+should be analyzed by the tool to produce a sequence diagram as well as a call %
+tree which should then be written to an existing directory named \dir{out/}. %
 The necessary calls are shown in Listing~\ref{lst:traceAnalysis:sequenceDiagram} and \ref{lst:traceAnalysis:sequenceDiagramWin}.
 
 \setBashListing
@@ -167,9 +196,14 @@ The result should be similar to the following Figure:
 }
 \end{graybox}
 \end{figure}
-The \file{.pic} and \file{.dot} files can now be converted into a readable format by using graphviz and the plotutils as seen in Listing~\ref{lst:traceAnalysis:convertDiagrams}.
+
+\noindent The \file{.pic} and \file{.dot} files can be converted into other formats, %
+such as \file{.pdf} , by using \textit{Graphviz} and \textit{PlotUtils}. %
+The following Listing~\ref{lst:traceAnalysis:convertDiagrams} demonstrates this. %
+The generated diagrams are shown in the following %
+Figures~\ref{fig:traceAnalysis:callTree} and~\ref{fig:traceAnalysis:allocSeqDiagr}. 
+
 \input{ch5-trace-analysis_Convert_Diagrams.inc}
-The diagram and the graph after the converting can be seen in the following Figures.
 
 \begin{figure}[H]\centering
 	\subfigure[]{\label{fig:traceAnalysis:callTree}%
@@ -182,21 +216,9 @@ The diagram and the graph after the converting can be seen in the following Figu
 	\caption{Call Tree~\subref{fig:traceAnalysis:callTree} and Allocation Sequence Diagram~\subref{fig:traceAnalysis:allocSeqDiagr}}
 \end{figure}
 
-\NOTIFYBOX{Under Linux it is possible to use a shell script for the converting as well. \file{dotPic-fileConverter.sh} searches all \file{.pic} and \file{.dir}-files in the given directory and converts them by using the necessary tools.}
-
-\section{Full Monitoring}\label{sec:aspectJ:fullweaving}
-The full monitoring without using any annotations is quite simple. It is only necessary to modify the corresponding configuration-file of AspectJ, as can be seen in Listing~\ref{lst:aopConfigFileFull}.
-
-\setXMLListing
-\lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{ch5-trace-analysis_FullMonitoring-aop.xml}
-
-\noindent The old aspect has been deactivated by removing it (uncommenting it would work as well), while the new aspect \lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectFull"/>$ has been activated. As the name already reveals, the new aspect makes sure that every method within the included classes/packages will be monitored. The exact behavior can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. Listing \ref{lst:aopConfigFileFull} shows for example how to make sure that only the methods within the class \class{BookstoreStarter} will be monitored.
-
-The commands to compile and run the source code are just the same as in the Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1}. The only thing changing is that the annotations within the source code are no longer necessary.
-
-An example log of a complete run can be found in the appendix.
-
-\WARNBOX{By using an own implemented probe it can be necessary to include the corresponding class for this probe as well in the configuration file.}
+\NOTIFYBOX{The scripts \file{dotPic-fileConverter.sh} and \file{dotPic-fileConverter.bat} %
+convert all \file{.pic} and \file{.dot} in a specified directory. %
+See Appendix~\ref{appendix:wrapperScripts:dotPicFileConverter} for details.}
 
 \section{Example \KiekerTraceAnalysis{} Outputs}\label{sec:traceAnalysisExamples}
 \input{ch5-trace-analysis-exampleOutputs.inc}
