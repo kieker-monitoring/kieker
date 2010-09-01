@@ -5,7 +5,44 @@
 % $Rev$:
 % $Author$
 
-\chapter{\KiekerTraceAnalysis{}: Monitoring, Analyzing \& Visualizing Traces}\label{chap:aspectJ}
+\chapter{\KiekerTraceAnalysis{} Tool}\label{chap:aspectJ}
+
+
+\KiekerTraceAnalysis{} implements the special feature of \Kieker{} allowing to %
+monitor, analyze and visualize (distributed) traces of method executions and %
+corresponding timing information. For this purpose, it includes monitoring probes employing %
+AspectJ~\cite{AspectJ-WebSite}, Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
+Spring~\cite{Spring-WebSite}, and Apache~CXF~\cite{CXF-WebSite} technology. %
+Moreover, it allows to reconstruct and visualize architectural models of the %
+monitored systems, e.g., as sequence and dependency diagrams. %
+
+Section~\ref{chap:example} already introduced parts of the monitoring record %
+type \class{OperationExecutionRecord}. \KiekerTraceAnalysis{} uses this record %
+type to represent monitoring executions. Figure~\ref{fig:OperationExecutionRecordClassDiagramComplete} shows a class diagram %
+with all attributes. The attributes \method{className}, \method{operationName}, %
+\method{tin}, and \method{tout} have been introduced before. %
+The attributes \method{traceId} and \method{sessionId} are used to store %
+trace and session information; \method{eoi} and \method{ess} contain control-flow %
+information needed to reconstruct the trace from the monitoring data. %
+For details on this, we refer to our technical %
+report~\cite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework}.
+
+\begin{figure}[hb]\centering
+\includegraphics[scale=0.8]{images/kieker_OperationExecutionRecord-complete-modified}%
+\caption{The class diagram of the operation execution record}
+\label{fig:OperationExecutionRecordClassDiagramComplete}
+\end{figure}
+
+\noindent Section~\ref{sec:traceMonitoring} describes how to instrument application for %
+monitoring trace information. %
+It presents the technology-specific probes provided for this purpose---with %
+a focus on AspectJ. Section~\ref{sec:traceAnalysisTool} presents the %
+tool which can be used to analyze and visualize the recorded trace %
+data. Analysis and visualization examples are presented in Section~\ref{sec:traceAnalysisExamples}.
+
+\section{Monitoring Trace Information}\label{sec:traceMonitoring}
+
+\subsection{AspectJ-Based Instrumentation}
 
 This chapter will show in Section~\ref{sec:aspectJ:annotation} how
 to use AspectJ to mark methods to be monitored with a simple annotation
@@ -29,6 +66,7 @@ weaving during runtime, which is more flexible than the compile-time-weaving.
 \NOTIFYBOX{The Java sources of this chapter can be found in the %
 \file{\aspectJBookstoreApplicationDirDistro{}/} directory of the %
 binary release.}
+
 
 %%
 \section{AspectJ Annotations}\label{sec:aspectJ:annotation}
@@ -97,6 +135,8 @@ The AspectJ-Weaver itself has to be loaded by the JVM as a so-called javaagent. 
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
 
+\section{Trace Analysis and Visualization}\label{sec:traceAnalysisTool}
+
 After a complete run of the application, the monitoring files should appear in the same way as mentioned in Section~\ref{sec:example:monitoring}, just with some more informations. These stored informations will now be visualized with the help of the trace-analysis-tool which can be found in the \Kieker{}-binaries as well.\\
 
 \WARNBOX{
@@ -157,3 +197,6 @@ The commands to compile and run the source code are just the same as in the List
 An example log of a complete run can be found in the appendix.
 
 \WARNBOX{By using an own implemented probe it can be necessary to include the corresponding class for this probe as well in the configuration file.}
+
+\section{Example \KiekerTraceAnalysis{} Outputs}\label{sec:traceAnalysisExamples}
+\input{ch5-trace-analysis-exampleOutputs.inc}
