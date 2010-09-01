@@ -174,12 +174,12 @@ An example log of a complete run can be found in the appendix.
 
 \WARNBOX{By using an own implemented probe it can be necessary to include the corresponding class for this probe as well in the configuration file.}
 
-\subsection{Servlet Filters}\label{sec:traceAnalysis:instr:AspectJ}
+\subsection{Servlet Filters}\label{sec:traceAnalysis:instr:servlet}
 
 The Java Servlet API~\cite{JavaServletTechnology-WebSite} includes the %
 \class{javax.servlet.Filter} interface. It can be used to implement %
 interceptors for incoming HTTP requests. %
-\Kieker{} includes the following two probes %
+\Kieker{} includes the probes %
 \class{OperationExecutionRegistrationFilter} and %
 \class{OperationExecutionRegistrationAndLoggingFilter} which implement the %
 \class{javax.servlet.Filter} interface. %
@@ -196,6 +196,38 @@ in a \file{web.xml} file of a web application.
 caption=\class{OperationExecutionRegistrationAndLoggingFilter} in a \file{web.xml} file,%
 label=lst:OperationExecutionRegistrationAndLoggingFilterInWebXML]%
 {\JavaEEServletExampleDir/JPetStore-5.0-instrumented/web/WEB-INF/web.xml}
+
+\subsection{Spring}\label{sec:traceAnalysis:instr:spring}
+
+The Spring framework~\cite{Spring-WebSite} provides interfaces for intercepting %
+Spring services and web requests. %
+\Kieker{} includes the probes %
+\class{OperationExecutionMethodInvocationInterceptor} and
+\class{OperationExecutionWebRequestRegistrationInterceptor}. %
+The \class{OperationExecutionMethodInvocationInterceptor} is similar to the %
+AspectJ-based probes described in the previous section and monitors method %
+executions as well as corresponding trace and session information. %
+The \class{OperationExecutionWebRequestRegistrationInterceptor} intercepts %
+incoming Web requests and initializes the trace and session data for this %
+trace.
+
+See the Spring documentation for instructions how to add the interceptors %
+to the server configuration.
+
+\subsection{CXF SOAP Interceptors}\label{sec:traceAnalysis:instr:cxf}
+
+The Apache~CXF framework~\cite{CXF-WebSite} allows to implement and interceptors for service calls, %
+for example, based on the SOAP web service protocol. %
+\Kieker{} includes the probes %
+\class{OperationExecutionSOAPRequestOutInterceptor}, %
+\class{OperationExecutionSOAPRequestInInterceptor}, %
+\class{OperationExecutionSOAPResponseOutInterceptor}, and %
+\class{OperationExecutionSOAPResponseInInterceptor} which can be used to %
+monitor SOAP-based web service calls. %
+Session and trace information is written to and read from the SOAP header of %
+service requests and responses allowing to monitor distributed traces. %
+See the CXF documentation for instructions how to add the interceptors %
+to the server configuration.
 
 \section{Trace Analysis and Visualization}\label{sec:traceAnalysisTool}
 
