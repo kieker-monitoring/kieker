@@ -137,6 +137,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     private volatile boolean storeInJavaIoTmpdir = true;
     private volatile String customStoragePath = "/tmp"; // only used as default if storeInJavaIoTmpdir == false
     private volatile int asyncRecordQueueSize = 8000;
+    private volatile boolean asyncBlockOnFullQueue = false;
     private volatile IMonitoringLogWriter monitoringLogWriter = null;
     private volatile String vmName = "unknown";    // the following configuration values are overwritten by tpmonLTW.properties in tpmonLTW.jar
     // database only configuration configuration values that are overwritten by kieker.monitoring.properties included in the kieker.monitoring library
@@ -173,7 +174,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                 this.monitoringLogWriter = new SyncFsWriter(filenameBase);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringLogWriter = new AsyncFsWriter(filenameBase, asyncRecordQueueSize);
+                this.monitoringLogWriter = new AsyncFsWriter(filenameBase, asyncRecordQueueSize, asyncBlockOnFullQueue);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
                 this.monitoringLogWriter = new SyncDbWriter(
                         dbDriverClassname, dbConnectionAddress,
@@ -183,7 +184,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                 this.monitoringLogWriter = new AsyncDbWriter(
                         dbDriverClassname, dbConnectionAddress,
                         dbTableName,
-                        setInitialExperimentIdBasedOnLastId, asyncRecordQueueSize);
+                        setInitialExperimentIdBasedOnLastId, asyncRecordQueueSize, asyncBlockOnFullQueue);
             } else {
                 /* try to load the class by name */
                 this.monitoringLogWriter = (IMonitoringLogWriter) Class.forName(this.monitoringDataWriterClassname).newInstance();
@@ -591,6 +592,22 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
         } else {
             log.warn("Could not find asyncRecordQueueSize parameter in monitoringLTW.jar/" + configurationFile
                     + ". Using default value " + asyncRecordQueueSize);
+        }
+
+        // load property "asyncBlockOnFullQueue"
+        String asyncBlockOnFullQueueProperty = null;
+        if (System.getProperty("kieker.monitoring.asyncBlockOnFullQueue") != null) { // we use the present virtual machine parameter value
+            asyncBlockOnFullQueueProperty = System.getProperty("kieker.monitoring.asyncBlockOnFullQueue");
+        } else { // we use the parameter in the properties file
+            asyncBlockOnFullQueueProperty = prop.getProperty("asyncBlockOnFullQueue");
+        }
+        if (asyncBlockOnFullQueueProperty != null && asyncBlockOnFullQueueProperty.length() != 0) {
+            asyncBlockOnFullQueue = Boolean.parseBoolean(asyncBlockOnFullQueueProperty);
+            log.info("Using asyncBlockOnFullQueue value (" + asyncBlockOnFullQueueProperty + ") in monitoringLTW.jar/" + configurationFile
+                    + ". Using default value " + asyncBlockOnFullQueue);
+        } else {
+            log.warn("Could not find asyncBlockOnFullQueue parameter in monitoringLTW.jar/" + configurationFile
+                    + ". Using default value " + asyncBlockOnFullQueue);
         }
 
         String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");

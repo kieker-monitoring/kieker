@@ -33,7 +33,6 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * @author Matthias Rohr, Andre van Hoorn
  */
@@ -43,16 +42,16 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     //configuration parameter
     private static final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
-    private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
+    private final Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     private BlockingQueue<IMonitoringRecord> blockingQueue = null;
+    private final boolean blockOnFullQueue;
     private String storagePathBase = null;
     private String storageDir = null; // full path
     private int asyncRecordQueueSize = 8000;
-
     private final static String defaultConstructionErrorMsg =
-            "Do not select this writer using the full-qualified classname. " +
-            "Use the the constant " + MonitoringController.WRITER_ASYNCFS +
-            " and the file system specific configuration properties.";
+            "Do not select this writer using the full-qualified classname. "
+            + "Use the the constant " + MonitoringController.WRITER_ASYNCFS
+            + " and the file system specific configuration properties.";
 
     public AsyncFsWriter() {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
@@ -63,18 +62,17 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    
     public Vector<AbstractWorkerThread> getWorkers() {
         return workers;
     }
 
-    public AsyncFsWriter(String storagePathBase, int asyncRecordQueueSize) {
+    public AsyncFsWriter(final String storagePathBase, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
         this.storagePathBase = storagePathBase;
         this.asyncRecordQueueSize = asyncRecordQueueSize;
+        this.blockOnFullQueue = blockOnFullQueue;
         this.init();
     }
 
-    
     private void init() {
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {
@@ -124,21 +122,24 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     @Override
     public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         try {
-            blockingQueue.add(monitoringRecord); // tries to add immediately!
+            if (this.blockOnFullQueue) {
+                blockingQueue.offer(monitoringRecord); // blocks when queue full
+            } else {
+                blockingQueue.add(monitoringRecord); // tries to add immediately!
+            }
         } catch (Exception ex) {
             log.error(" insertMonitoringData() failed: Exception: " + ex);
             return false;
         }
         return true;
     }
-    
+
     public String getFilenamePrefix() {
         return storagePathBase;
     }
 
-    
     public String getInfoString() {
-        return "filenamePrefix :" + this.storagePathBase +
-                ", outputDirectory :" + this.storageDir;
+        return "filenamePrefix :" + this.storagePathBase
+                + ", outputDirectory :" + this.storageDir;
     }
 }

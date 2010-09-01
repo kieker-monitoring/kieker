@@ -34,7 +34,6 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * Stores monitoring data into a database.
  *
@@ -84,15 +83,17 @@ public final class AsyncDbWriter implements IMonitoringLogWriter {
     private boolean setInitialExperimentIdBasedOnLastId = false;
     // only used if setInitialExperimentIdBasedOnLastId==true
     private int experimentId = -1;
-    private int asyncRecordQueueSize = 8000;
+    private final int asyncRecordQueueSize; // = 8000;
+    private final boolean blockOnFullQueue;
 
     public AsyncDbWriter(String dbDriverClassname, String dbConnectionAddress, String dbTableName,
-            boolean setInitialExperimentIdBasedOnLastId, int asyncRecordQueueSize) {
+            boolean setInitialExperimentIdBasedOnLastId, int asyncRecordQueueSize, final boolean blockOnFullQueue) {
         this.dbDriverClassname = dbDriverClassname;
         this.dbConnectionAddress = dbConnectionAddress;
         this.dbTableName = dbTableName;
         this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
         this.asyncRecordQueueSize = asyncRecordQueueSize;
+        this.blockOnFullQueue = blockOnFullQueue;
         this.init();
     }
     private Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
@@ -184,8 +185,11 @@ public final class AsyncDbWriter implements IMonitoringLogWriter {
             wr.changeStatement(preparedQuery);
             }
             }*/
-
-            blockingQueue.add(monitoringRecord); // tries to add immediately!
+            if (this.blockOnFullQueue) {
+                blockingQueue.offer(monitoringRecord); // blocks when queue full
+            } else {
+                blockingQueue.add(monitoringRecord); // tries to add immediately!
+            }
             //System.out.println("Queue is "+blockingQueue.size());
 
         } catch (Exception ex) {
