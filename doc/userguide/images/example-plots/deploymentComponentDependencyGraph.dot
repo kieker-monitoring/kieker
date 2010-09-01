@@ -5,16 +5,16 @@ subgraph "cluster_container2" {
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_2" [label="<<deployment component>>\n@1:..Catalog",shape="box",style="filled",fillcolor="white"]
-"depNode_3" [label="<<deployment component>>\n@2:..CRM",shape="box",style="filled",fillcolor="white"]
-"depNode_4" [label="<<deployment component>>\n@3:..Bookstore",shape="box",style="filled",fillcolor="white"]
+"depNode_2" [label="<<deployment component>>\n@1:bookstoreTracing.Catalog",shape="box",style="filled",fillcolor="white"]
+"depNode_3" [label="<<deployment component>>\n@2:bookstoreTracing.CRM",shape="box",style="filled",fillcolor="white"]
+"depNode_4" [label="<<deployment component>>\n@3:bookstoreTracing.Bookstore",shape="box",style="filled",fillcolor="white"]
 }
 subgraph "cluster_container1" {
  label = "<<execution container>>\nSRV1";
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_1" [label="<<deployment component>>\n@1:..Catalog",shape="box",style="filled",fillcolor="white"]
+"depNode_1" [label="<<deployment component>>\n@1:bookstoreTracing.Catalog",shape="box",style="filled",fillcolor="white"]
 }
 "depNode_0" [label="$",shape="none"]
 
