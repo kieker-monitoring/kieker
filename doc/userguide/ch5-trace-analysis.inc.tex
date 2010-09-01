@@ -174,6 +174,29 @@ An example log of a complete run can be found in the appendix.
 
 \WARNBOX{By using an own implemented probe it can be necessary to include the corresponding class for this probe as well in the configuration file.}
 
+\subsection{Servlet Filters}\label{sec:traceAnalysis:instr:AspectJ}
+
+The Java Servlet API~\cite{JavaServletTechnology-WebSite} includes the %
+\class{javax.servlet.Filter} interface. It can be used to implement %
+interceptors for incoming HTTP requests. %
+\Kieker{} includes the following two probes %
+\class{OperationExecutionRegistrationFilter} and %
+\class{OperationExecutionRegistrationAndLoggingFilter} which implement the %
+\class{javax.servlet.Filter} interface. %
+Both initialize the session and trace information for incoming requests. %
+The latter additionally creates an \class{OperationExecutionRecord} for each %
+invocation of the filter and passes it to the \class{MonitoringController}.
+
+Listing~\ref{lst:OperationExecutionRegistrationAndLoggingFilterInWebXML} %
+demonstrates how to integrate the \class{OperationExecutionRegistrationAndLoggingFilter} %
+in a \file{web.xml} file of a web application. 
+
+\setXMLListing
+\lstinputlisting[firstline=31,lastline=38,numbers=none,%
+caption=\class{OperationExecutionRegistrationAndLoggingFilter} in a \file{web.xml} file,%
+label=lst:OperationExecutionRegistrationAndLoggingFilterInWebXML]%
+{\JavaEEServletExampleDir/JPetStore-5.0-instrumented/web/WEB-INF/web.xml}
+
 \section{Trace Analysis and Visualization}\label{sec:traceAnalysisTool}
 
 Monitoring data including trace information can be analyzed and visualized with %
