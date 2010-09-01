@@ -103,7 +103,7 @@ public class Constants {
                 "Generate and store assembly-level sequence diagrams (.pic files)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG).hasArg(false).withDescription(
-                "Generate and store an deployment-level component dependency graph (.dot file)").create());
+                "Generate and store a deployment-level component dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG).hasArg(false).withDescription(
                 "Generate and store an assembly-level component dependency graph (.dot file)").create());
@@ -112,7 +112,7 @@ public class Constants {
                 "Generate and store a container dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG).hasArg(false).withDescription(
-                "Generate and store an deployment-level operation dependency graph (.dot file)").create());
+                "Generate and store a deployment-level operation dependency graph (.dot file)").create());
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
                 Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG).hasArg(false).withDescription(
                 "Generate and store an assembly-level operation dependency graph (.dot file)").create());
@@ -150,7 +150,7 @@ public class Constants {
 
         // cmdlOpts.addOptionGroup(cmdlOptGroupTask);
         SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false).withDescription(
-                "Consider only the traces identified by the comma-separated list of trace IDs. Defaults to all traces.").create());
+                "Consider only the traces identified by the list of trace IDs. Defaults to all traces.").create());
         //SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE).withArgName(
         //        String.format(
         //        "%s|%s|%s",
