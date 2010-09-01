@@ -3,12 +3,14 @@ package main;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * The main class of the little program. The program itself takes a directory
@@ -87,8 +89,9 @@ public class Main {
 				}
 
 			});
+                        System.out.println("Sorting libs ...");
+                        Arrays.sort(libs, new FileComparator()); // sort alphabetically
 			System.out.println(libs.length + " files/directories found.");
-
 			for (File lib : libs) {
 					System.out.print(lib.getName() + ": ");
 					boolean b = false;
@@ -195,4 +198,27 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		new Main().doJob(args);
 	}
+
+    /** source: http://weblog.janek.org/Archive/2005/01/16/HowtoSortFilesandDirector.html */
+    private static class FileComparator
+            implements Comparator<File> {
+
+        private Collator c = Collator.getInstance();
+
+        public int compare(File f1,
+                File f2) {
+            if (f1 == f2) {
+                return 0;
+            }
+
+            if (f1.isDirectory() && f2.isFile()) {
+                return -1;
+            }
+            if (f1.isFile() && f2.isDirectory()) {
+                return 1;
+            }
+
+            return c.compare(f1.getName(), f2.getName());
+        }
+    }
 }

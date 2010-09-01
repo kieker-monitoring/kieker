@@ -2,8 +2,9 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} includes an additiona
 example \file{\JavaEEServletExampleName}. Using the sample Java Web application %
 iBATIS JPetStore\footnote{\url{http://ibatis.apache.org/}}, this example %
 demonstrates how to employ \KiekerMonitoringPart{} for monitoring a Java application %
-running in a Java~EE container. Monitoring probes based on Java~EE and AspectJ %
-are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}).
+running in a Java~EE container---in this case, Apache Tomcat\footnote{\url{http://tomcat.apache.org/}}. %
+Monitoring probes based on the Java~EE Servlet API %
+and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}).
 
 \
 
@@ -14,9 +15,9 @@ Windows}
 \section{Preparation of the Tomcat Servlet Container}
 
 \begin{compactenum}
-\item Copy the files \file{\mainJar}, \file{\commonsLoggingJar}, and \file{\aspectJWeaverJar} from the %
-binary distribution to the Tomcat's \dir{lib/} directory.
-\item Copy the file \file{\servletWar} from the %
+\item Copy the files \file{\mainJar}, \file{\commonsLoggingJar}, and \file{\aspectJWeaverJar} from %
+\Kieker{}'s binary distribution to the Tomcat's \dir{lib/} directory.
+\item Copy the file \file{\servletWar} from \Kieker{}'s %
 binary distribution to the Tomcat's \dir{webapps/} directory.
 \item Tomcat's \dir{lib/} directory contains the files \file{kieker.monitoring.properties} %
 and \file{aop.xml} --- the configuration of \KiekerMonitoringPart{} and the %
@@ -45,7 +46,7 @@ accessing the JPetStore web application.
 
 \begin{compactenum}
 \item Start the Tomcat server using the \file{bin/startup.sh} script in the 
-   Tomcat's \dir{bin/} directory (you may have to "\texttt{chmod +x bin/*.sh}" %
+   Tomcat's \dir{bin/} directory (you may have to execute "\texttt{chmod +x bin/*.sh}" %
    in order to set the executable flags of the shell scripts). %
    You should make sure, that the Tomcat started properly, by taking 
    a look at the \file{logs/catalina.out} file. %
@@ -53,14 +54,14 @@ accessing the JPetStore web application.
    to resolve the issue.
 \item Now, you can access the JPetStore application by opening the URL
    \url{http://localhost:8080/jpetstore/} (Figure~\ref{fig:jpetstore}). %
-   Kieker intialization messages should appear in \file{logs/catalina.out}. %
-   The output includes the information where the data is written to
+   \Kieker{} intialization messages should appear in \file{logs/catalina.out}. %
+   The output includes the information where the monitoring data is written to
    (should be Tomcat's \dir{temp/tpmon-<DATE-TIME>/} directory).
 \item  Browse through the application to generate some monitoring data. %
    This data can be analyzed and visualized using \KiekerTraceAnalysis{}, %
    as described in Chapter~\ref{chap:aspectJ}.
-\item \Kieker{} includes a control servlet to check the status of \KiekerMonitoringPart{}. %
-   It can be accessed via: \url{http://localhost:8080/kieker-monitoring-servlet-\version/} %
+\item \Kieker{} includes a servlet to control the status of \KiekerMonitoringPart{}. %
+   It can be accessed via \url{http://localhost:8080/kieker-monitoring-servlet-\version/} %
    (Figure~\ref{fig:controlServlet}).
 \end{compactenum}
 
@@ -89,9 +90,9 @@ the following steps are required:
    binary distribution to the JPetStore's \dir{devlib/} directory. %
    \mainJar{} is required for the annotation-based instrumentation %
    (@OperationExecutionMonitoringProbe), as described in Chapter~\ref{chap:aspectJ}
-\item build the JPetStore with the \file{build.xml} by calling \texttt{ant} from %
+\item Build the JPetStore with the \file{build.xml} by calling \texttt{ant} from %
     within \dir{build/} directory. 
-\item You'll find the packaged JPetStore \file{.war}-file in \dir{build/wars/}
+\item You'll find the packaged JPetStore \file{.war}-file in \dir{build/wars/}.
 \item Copy the file to the Tomcat's \dir{webapps/} directory.
 \end{compactenum}
 

@@ -123,3 +123,13 @@
 70   INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/] kieker.common.record.MonitoringRecordTypeRegistry     - Registered record type mapping 1/kieker.common.record.OperationExecutionRecord
 479  INFO  [main] kieker.analysis.reader.filesystem.FSReader     - All reader threads provided FS_READER_TERMINATION_MARKER
 479  INFO  [main] kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter     - terminate called with error flag set; won't process timeoutqueue any more.
+0    INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@c8f6f8
+15   INFO  [main]    kieker.analysis.AnalysisController     - Plugin kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter@c8f6f8 also registered as record consumer
+17   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter@65a77f
+18   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter@bfc8e0
+23   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter@860d49
+30   INFO  [main]    kieker.analysis.AnalysisController     - Registered plugin kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ComponentDependencyGraphPluginAllocation@1b383e9
+72   INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/] kieker.analysis.reader.filesystem.FSDirectoryReader     - < Loading /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/tpmon-20100830-082225582-UTC-Thread-2.dat
+89   INFO  [Reader thread for /home/voorn/svn_work/kieker/software/kieker/trunk/examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/] kieker.common.record.MonitoringRecordTypeRegistry     - Registered record type mapping 1/kieker.common.record.OperationExecutionRecord
+491  INFO  [main] kieker.analysis.reader.filesystem.FSReader     - All reader threads provided FS_READER_TERMINATION_MARKER
+491  INFO  [main] kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter     - terminate called with error flag set; won't process timeoutqueue any more.
