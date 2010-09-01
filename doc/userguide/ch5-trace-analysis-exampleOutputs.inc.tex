@@ -16,9 +16,18 @@
 \newcommand{\OPTplotDeploymentOperationDependencyGraph}{-\,-plot-Deployment-Operation-Dependency-Graph}
 \newcommand{\OPTplotAssemblyOperationDependencyGraph}{-\,-plot-Assembly-Operation-Dependency-Graph}
 
-\section{Textual Trace and Equivalence Class Representations}
+The examples presented in this section were generated based on the %
+monitoring data which can be found in the directory %
+\dir{\distributedTestdataDirDistro/}. It consists of 1635 traces %
+of the Bookstore application with AspectJ-based instrumentation, %
+as described in Section~\ref{sec:traceAnalysis:instr:AspectJ}. %
+In order to illustrate the visualization of distributed traces, %
+the hostname of the \class{Catalog}'s method \method{getBook} was %
+probabilistically changed to a second hostname.
 
-\subsection{Execution Traces}\label{sec:example:executionTraces}%
+\subsection{Textual Trace and Equivalence Class Representations}
+
+\subsubsection{Execution Traces}\label{sec:example:executionTraces}%
 
 Textual execution trace representations of valid/invalid traces are written to %
 an output file using the command-line options \OPT{\OPTprintValidExecutionTraces} and %
@@ -32,7 +41,7 @@ caption=Textual output of trace 6488138950668976129's execution trace representa
 label=lst:appendix:traceAnalysisExample:executionTraces]%
 {images/example-plots/executionTraces.txt}
 
-\subsection{Message Traces}\label{sec:example:messageTraces}%
+\subsubsection{Message Traces}\label{sec:example:messageTraces}%
 
 Textual message trace representations of valid traces are written to an output %
 file using the command-line option \OPT{\OPTprintMessageTraces}. %
@@ -45,7 +54,7 @@ caption=Textual output of trace 6488138950668976129's message trace representati
 label=lst:appendix:traceAnalysisExample:messageTraces]%
 {images/example-plots/messageTraces.txt}
 
-\subsection{Trace Equivalence Classes}\label{sec:example:traceEquivClasses}%
+\subsubsection{Trace Equivalence Classes}\label{sec:example:traceEquivClasses}%
 
 Deployment/assembly-level trace equivalence classes are computed and written %
 to output files using the command-line options \OPT{\OPTprintDeploymentEquivalenceClasses} %
@@ -64,9 +73,9 @@ label=lst:appendix:traceAnalysisExample:traceDeploymentEquivClasses]
 label=lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses]%
 {images/example-plots/traceAssemblyEquivClasses.txt}
 
-\section{Sequence Diagrams}\label{sec:example:seqDiagrams}%
+\subsection{Sequence Diagrams}\label{sec:example:seqDiagrams}%
 
-\subsection{Deployment-Level Sequence Diagrams}\label{sec:example:deploymentSeqDiagrams}%
+\subsubsection{Deployment-Level Sequence Diagrams}\label{sec:example:deploymentSeqDiagrams}%
 
 Deployment-level sequence diagrams are generated using the command-line option \OPT{\OPTplotDeploymentSequenceDiagrams}. %
 Figures~\ref{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6129}--\ref{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6141} %
@@ -91,7 +100,9 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl}
 \end{figure}
 
-\subsection{Assembly-Level Sequence Diagrams}\label{sec:example:assemblySeqDiagrams}%
+% \pagebreak
+
+\subsubsection{Assembly-Level Sequence Diagrams}\label{sec:example:assemblySeqDiagrams}%
 
 Assembly-level sequence diagrams are generated using the command-line option \OPT{\OPTplotAssemblySequenceDiagrams}. %
 Figure~\ref{fig:appendix:traceAnalysisExample:SeqDiagrDepl6129} %
@@ -104,9 +115,11 @@ show the sequence diagram for the assembly-level trace equivalence representativ
 \label{fig:appendix:traceAnalysisExample:SeqDiagrDepl6129}
 \end{figure}
 
-\section{Call Trees}\label{sec:example:callTrees}%
+\subsection{Call Trees}\label{sec:example:callTrees}%
 
-\subsection{Trace Call Trees}\label{sec:example:traceCallTrees}%
+\subsubsection{Trace Call Trees}\label{sec:example:traceCallTrees}%
+
+\enlargethispage{1.2cm}
 
 Trace call trees are generated using the command-line option \OPT{\OPTplotCallTrees}. %
 Figures~\ref{fig:appendix:traceAnalysisExample:TraceCallTrees6129}--\ref{fig:appendix:traceAnalysisExample:TraceCallTrees6141} %
@@ -131,9 +144,9 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \label{fig:appendix:traceAnalysisExample:TraceCallTrees}
 \end{figure}
 
-\newpage
+% \newpage
 
-\subsection{Aggregated Call Trees}\label{sec:example:aggregatedCallTrees}%
+\subsubsection{Aggregated Call Trees}\label{sec:example:aggregatedCallTrees}%
 
 Aggregated deployment/assembly-level call trees are generated using the command-line options %
 \OPT{\OPTplotAggregatedDeploymentCallTree} and \OPT{\OPTplotAggregatedAssemblyCallTree}. %
@@ -153,9 +166,9 @@ used in this section. %
 \end{figure}
 
 
-\section{Dependency Graphs}
+\subsection{Dependency Graphs}
 
-\subsection{Container Dependency Graphs}
+\subsubsection{Container Dependency Graphs}
 
 A container dependency graph is generated using the command-line option %
 \OPT{\OPTplotContainerDependencyGraph}. %
@@ -163,12 +176,12 @@ Figure~\ref{fig:appendix:traceAnalysisExample:ContainerDepGraph} shows the %
 container dependency graph for the monitoring data used in this section. 
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.4]{images/example-plots/containerDependencyGraph-crop}
+\includegraphics[scale=0.45]{images/example-plots/containerDependencyGraph-crop}
 \caption{Container dependency graph}
 \label{fig:appendix:traceAnalysisExample:ContainerDepGraph}
 \end{figure}
 
-\subsection{Component Dependency Graphs}
+\subsubsection{Component Dependency Graphs}
 
 Deployment/assembly-level component dependency graphs are generated using the %
 command-line options \OPT{\OPTplotDeploymentComponentDependencyGraph} and %
@@ -179,16 +192,16 @@ component dependency graphs for the monitoring data used in this section.
 
 \begin{figure}[h]\centering
 \subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:ComponentDepGraphsDeployment}%
-\includegraphics[scale=0.4]{images/example-plots/deploymentComponentDependencyGraph-crop}
+\includegraphics[scale=0.45]{images/example-plots/deploymentComponentDependencyGraph-crop}
 }
 \subfigure[assembly-level]{\label{fig:appendix:traceAnalysisExample:ComponentDepGraphsAssembly}%
-\includegraphics[scale=0.4]{images/example-plots/assemblyComponentDependencyGraph-crop}
+\includegraphics[scale=0.45]{images/example-plots/assemblyComponentDependencyGraph-crop}
 }
 \caption{Component dependency graphs}
 \label{fig:appendix:traceAnalysisExample:ComponentDepGraphs}
 \end{figure}
 
-\subsection{Operation Dependency Graphs}
+\subsubsection{Operation Dependency Graphs}
 
 Deployment/assembly-level operation dependency graphs are generated using the %
 command-line options \OPT{\OPTplotDeploymentOperationDependencyGraph} and %
@@ -197,7 +210,7 @@ Figures~\ref{fig:appendix:traceAnalysisExample:OperationDepGraphsDeployment} and
 \ref{fig:appendix:traceAnalysisExample:OperationDepGraphsAssembly} show the %
 operation dependency graphs for the monitoring data used in this section. 
 
-\begin{figure}[h]\centering
+\begin{figure}[ht]\centering
 \subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:OperationDepGraphsDeployment}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentOperationDependencyGraph-crop}
 }
@@ -208,69 +221,19 @@ operation dependency graphs for the monitoring data used in this section.
 \label{fig:appendix:traceAnalysisExample:OperationDepGraphs}
 \end{figure}
 
-\section{HTML Output of the System Model}
+\subsection{HTML Output of the System Model}
 
 \KiekerTraceAnalysis{} writes an HTML representation of the system model reconstructed %
 from the trace data to a file \file{system-entities.html}. %
 Figure~\ref{fig:appendix:traceAnalysisExample:htmlSystemModel} shows a screenshot %
 of this file as rendered by a web browser.
 
+\pagebreak
+
+\enlargethispage{3cm}
+
 \begin{figure}[h]\centering
-\includegraphics[width=0.6\textwidth]{images/example-plots/system-entities-html-FFscrsh.png}
+\includegraphics[width=0.5\textwidth]{images/example-plots/system-entities-html-FFscrsh.png}
 \caption{HTML output of the system model reconstructed from the traces}
 \label{fig:appendix:traceAnalysisExample:htmlSystemModel}
 \end{figure}
-
-
-% \enlargethispage{2cm}
-% 	\begin{figure}[H]\centering
-% 	\subfigure[deployment level]{\label{fig:appendix:allocationSequenceDiagram}
-% 	\includegraphics[scale=0.4]{images/allocationSequenceDiagram-crop}
-% 	}
-% 	\subfigure[assembly level]{\label{fig:appendix:assemblySequenceDiagram}
-% 	\includegraphics[scale=0.4]{images/assemblySequenceDiagram-crop}
-% 	}
-% 	\caption{Sequence diagrams}
-% 	\end{figure}
-% 
-%     \begin{figure}[H]\centering
-% 	\subfigure[single trace]{\label{fig:appendix:callTree}%
-% 	\quad \includegraphics[scale=0.4]{images/callTree-crop} \quad%
-% 	}%
-% 	\subfigure[aggregated (deployment level)]{\label{fig:appendix:aggregatedAllocationCallTree}%
-% 	\quad\quad \includegraphics[scale=0.4]{images/aggregatedAllocationCallTree-crop}\quad\quad %
-% 	}%
-% 	\subfigure[aggregated (assembly level)]{\label{fig:appendix:aggregatedAssemblyCallTree}%
-% 	\quad\quad\quad \includegraphics[scale=0.4]{images/aggregatedAssemblyCallTree-crop}\quad\quad\quad %
-% 	}%
-% 	\caption{Calls trees for a single trace~\subref{fig:appendix:callTree} and aggregated call %
-% 	trees~\subref{fig:appendix:aggregatedAllocationCallTree}/\subref{fig:appendix:aggregatedAssemblyCallTree}}
-% 	\end{figure}
-% 
-% \newpage
-% 
-% 	\begin{figure}[H]
-% 		\centering
-% 		\includegraphics[scale=0.45]{images/containerDependencyGraph-crop}
-% 		\caption{Container Dependency Graph}
-% 	\end{figure}  
-% 
-%     \begin{figure}[H]\centering
-% \subfigure[deployment level]{\label{fig:appendix:allocationComponentDependencyGraph}%
-% 		\includegraphics[scale=0.45]{images/allocationComponentDependencyGraph-crop}
-% 	}\\
-% 	\subfigure[assembly level]{\label{fig:appendix:assemblyComponentDependencyGraph}%
-% 		\includegraphics[scale=0.45]{images/assemblyComponentDependencyGraph-crop}
-% 	}%
-% 	\caption{Component Dependency Graphs}
-% 	\end{figure}
-% 
-% 	\begin{figure}[H]\centering
-% 	\subfigure[deployment level]{\label{fig:appendix:allocationOperationDependencyGraph}%
-% 		\includegraphics[scale=0.45]{images/allocationOperationDependencyGraph-crop}
-% 	}\\
-% 	\subfigure[assembly level]{\label{fig:appendix:assemblyOperationDependencyGraph}%
-% 		\includegraphics[scale=0.45]{images/assemblyOperationDependencyGraph-crop}
-% 	}%
-% 	\caption{Operation Dependency Graphs}
-% 	\end{figure}
