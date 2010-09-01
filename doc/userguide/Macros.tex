@@ -146,11 +146,16 @@ xleftmargin=3mm,
 language=XML
 }
 \lstdefinestyle{PropertiesStyle}{
-language=Bash
+language=Bash,
+xleftmargin=0mm
+}
+\lstdefinestyle{AntStyle}{
+language=Ant,
+xleftmargin=0mm
 }
 \lstdefinestyle{textStyle}{
-language=Java,
-xleftmargin=3mm,
+language=,
+xleftmargin=3mm
 }
 
 \newcommand{\UnixLikeSystem}{UNIX-like system}
@@ -160,6 +165,7 @@ xleftmargin=3mm,
 \newcommand{\setJavaCodeListing}{\setListing{javaStyle}{left}{\sffamily\footnotesize}{\#}}
 \newcommand{\setBashListing}{\setListing{bashStyle}{none}{\sffamily\footnotesize}{\#}}
 \newcommand{\setPropertiesListing}{\setListing{PropertiesStyle}{none}{\sffamily\footnotesize}{}}
+\newcommand{\setAntListing}{\setListing{AntStyle}{none}{\sffamily\footnotesize}{}}
 \newcommand{\setTextListing}{\setListing{textStyle}{none}{\sffamily\scriptsize}{\$}}
 \newcommand{\setXMLListing}{\setListing{xmlStyle}{none}{\sffamily\footnotesize}{}}
 

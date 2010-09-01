@@ -1,34 +1,77 @@
+\newcommand{\OPT}[1]{\texttt{#1}}
+\newcommand{\OPTprintValidExecutionTraces}{-\,-print-Execution-Traces}
+\newcommand{\OPTprintInvalidExecutionTraces}{-\,-print-invalid-Execution-Traces}
+\newcommand{\OPTprintMessageTraces}{-\,-print-Message-Traces}
+\newcommand{\OPTprintDeploymentEquivalenceClasses}{-\,-print-Deployment-Equivalence-Classes}
+\newcommand{\OPTprintAssemblyEquivalenceClasses}{-\,-print-Assembly-Equivalence-Classes}
+\newcommand{\OPTplotDeploymentSequenceDiagrams}{-\,-plot-Deployment-Sequence-Diagrams}
+\newcommand{\OPTplotAssemblySequenceDiagrams}{-\,-plot-Assembly-Sequence-Diagrams}
+\newcommand{\OPTplotCallTrees}{-\,-plotCallTrees}
+\newcommand{\OPTplotAggregatedDeploymentCallTree}{-\,-plot-Aggregated-Deployment-Call-Tree}
+\newcommand{\OPTplotAggregatedAssemblyCallTree}{-\,-plot-Aggregated-Assembly-Call-Tree}
+
+\newcommand{\OPTplotContainerDependencyGraph}{-\,-plot-Container-Dependency-Graph}
+\newcommand{\OPTplotDeploymentComponentDependencyGraph}{-\,-plot-Deployment-Component-Dependency-Graph}
+\newcommand{\OPTplotAssemblyComponentDependencyGraph}{-\,-plot-Assembly-Component-Dependency-Graph}
+\newcommand{\OPTplotDeploymentOperationDependencyGraph}{-\,-plot-Deployment-Operation-Dependency-Graph}
+\newcommand{\OPTplotAssemblyOperationDependencyGraph}{-\,-plot-Assembly-Operation-Dependency-Graph}
+
 \section{Execution Traces, Message Traces, and Trace Equivalence Classes}
 
-\subsection{Execution Traces}
+\subsection{Execution Traces}\label{sec:example:executionTraces}%
+
+Textual execution trace representations of valid/invalid traces are written to %
+an output file using the command-line options \OPT{\OPTprintValidExecutionTraces} and %
+\OPT{\OPTprintInvalidExecutionTraces}. %
+Listing~\ref{lst:appendix:traceAnalysisExample:executionTraces} %
+shows the execution trace representation for the valid trace \ldots6129.
 
 \setTextListing
-\lstinputlisting[firstline=1,lastline=10,%
+\lstinputlisting[firstline=1,lastline=5,escapechar={},%
 caption=Textual output of trace 6488138950668976129's execution trace representation,%
 label=lst:appendix:traceAnalysisExample:executionTraces]%
 {images/example-plots/executionTraces.txt}
 
-\subsection{Message Traces}
+\subsection{Message Traces}\label{sec:example:messageTraces}%
+
+Textual message trace representations of valid traces are written to an output %
+file using the command-line option \OPT{\OPTprintMessageTraces}. %
+Listing~\ref{lst:appendix:traceAnalysisExample:messageTraces} %
+shows the message trace representation for the valid trace \ldots6129.
 
 \setTextListing
-\lstinputlisting[firstline=1,lastline=9,%
+\lstinputlisting[firstline=1,lastline=9,escapechar={},%
 caption=Textual output of trace 6488138950668976129's message trace representation,%
 label=lst:appendix:traceAnalysisExample:messageTraces]%
 {images/example-plots/messageTraces.txt}
 
-\subsection{Trace Equivalence Classes}
+\subsection{Trace Equivalence Classes}\label{sec:example:traceEquivClasses}%
+
+Deployment/assembly-level trace equivalence classes are computed and written %
+to output files using the command-line options \OPT{\OPTprintDeploymentEquivalenceClasses} %
+and \OPT{\OPTprintAssemblyEquivalenceClasses}. %
+Listings~\ref{lst:appendix:traceAnalysisExample:traceDeploymentEquivClasses} and %
+\ref{lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses} show the %
+output generated for the monitoring data used in this section. %
 
 \setTextListing
-\lstinputlisting[caption=Textual output of information on the \textit{deployment-level} trace equivalence classes,label=lst:appendix:traceAnalysisExample:traceDeploymentEquivClasses]
+\lstinputlisting[caption=Textual output of information on the \textit{deployment-level} trace equivalence classes,%
+label=lst:appendix:traceAnalysisExample:traceDeploymentEquivClasses]
 {images/example-plots/traceDeploymentEquivClasses.txt}
 
 \setTextListing
-\lstinputlisting[caption=Textual output of information on the \textit{assembly-level} trace equivalence classes,label=lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses]%
+\lstinputlisting[caption=Textual output of information on the \textit{assembly-level} trace equivalence classes,%
+label=lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses]%
 {images/example-plots/traceAssemblyEquivClasses.txt}
 
-\section{Sequence Diagrams}
+\section{Sequence Diagrams}\label{sec:example:seqDiagrams}%
 
-\subsection{Deployment-Level Sequence Diagrams}
+\subsection{Deployment-Level Sequence Diagrams}\label{sec:example:deploymentSeqDiagrams}%
+
+Deployment-level sequence diagrams are generated using the command-line option \OPT{\OPTplotDeploymentSequenceDiagrams}. %
+Figures~\ref{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6129}--\ref{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6141} %
+show these sequence diagrams for each deployment-level %
+trace equivalence representative (Section~\ref{sec:example:traceEquivClasses}).
 
 \begin{figure}[h]\centering
 \subfigure[Trace \ldots{}6129]{\label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl6129}%
@@ -48,9 +91,12 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \label{fig:appendix:traceAnalysisExample:SeqDiagrsDepl}
 \end{figure}
 
-\newpage
+\subsection{Assembly-Level Sequence Diagrams}\label{sec:example:assemblySeqDiagrams}%
 
-\subsection{Assembly-Level Sequence Diagrams}
+Assembly-level sequence diagrams are generated using the command-line option \OPT{\OPTplotAssemblySequenceDiagrams}. %
+Figure~\ref{fig:appendix:traceAnalysisExample:SeqDiagrDepl6129} %
+show the sequence diagram for the assembly-level trace equivalence representative %
+(Section~\ref{sec:example:traceEquivClasses}).
 
 \begin{figure}[h]\centering
 \includegraphics[scale=0.4]{images/example-plots/assemblySequenceDiagram-6488138950668976129-crop}
@@ -58,9 +104,14 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \label{fig:appendix:traceAnalysisExample:SeqDiagrDepl6129}
 \end{figure}
 
-\section{Call Trees}
+\section{Call Trees}\label{sec:example:callTrees}%
 
-\subsection{Trace Call Trees}
+\subsection{Trace Call Trees}\label{sec:example:traceCallTrees}%
+
+Trace call trees are generated using the command-line option \OPT{\OPTplotCallTrees}. %
+Figures~\ref{fig:appendix:traceAnalysisExample:TraceCallTrees6129}--\ref{fig:appendix:traceAnalysisExample:TraceCallTrees6141} %
+show these call trees for each deployment-level %
+trace equivalence representative (Section~\ref{sec:example:traceEquivClasses}).
 
 \begin{figure}[h]\centering
 \subfigure[Trace \ldots{}6129]{\label{fig:appendix:traceAnalysisExample:TraceCallTrees6129}%
@@ -82,7 +133,13 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 
 \newpage
 
-\subsection{Aggregated Call Trees}
+\subsection{Aggregated Call Trees}\label{sec:example:aggregatedCallTrees}%
+
+Aggregated deployment/assembly-level call trees are generated using the command-line options %
+\OPT{\OPTplotAggregatedDeploymentCallTree} and \OPT{\OPTplotAggregatedAssemblyCallTree}. %
+Figures~\ref{fig:appendix:traceAnalysisExample:AggregatedCallTreesDeployment} and \ref{fig:appendix:traceAnalysisExample:AggregatedCallTreesAssembly} %
+show these aggregated call trees for the traces contained in the monitoring data %
+used in this section. %
 
 \begin{figure}[h]\centering
 \subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:AggregatedCallTreesDeployment}%
@@ -100,6 +157,11 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 
 \subsection{Container Dependency Graphs}
 
+A container dependency graph is generated using the command-line option %
+\OPT{\OPTplotContainerDependencyGraph}. %
+Figure~\ref{fig:appendix:traceAnalysisExample:ContainerDepGraph} shows the %
+container dependency graph for the monitoring data used in this section. 
+
 \begin{figure}[h]\centering
 \includegraphics[scale=0.4]{images/example-plots/containerDependencyGraph-crop}
 \caption{Container dependency graph}
@@ -107,6 +169,13 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \end{figure}
 
 \subsection{Component Dependency Graphs}
+
+Deployment/assembly-level component dependency graphs are generated using the %
+command-line options \OPT{\OPTplotDeploymentComponentDependencyGraph} and %
+\OPT{\OPTplotAssemblyComponentDependencyGraph}. %
+Figures~\ref{fig:appendix:traceAnalysisExample:ComponentDepGraphsDeployment} and %
+\ref{fig:appendix:traceAnalysisExample:ComponentDepGraphsAssembly} show the %
+component dependency graphs for the monitoring data used in this section. 
 
 \begin{figure}[h]\centering
 \subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:ComponentDepGraphsDeployment}%
@@ -121,6 +190,13 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 
 \subsection{Operation Dependency Graphs}
 
+Deployment/assembly-level operation dependency graphs are generated using the %
+command-line options \OPT{\OPTplotDeploymentOperationDependencyGraph} and %
+\OPT{\OPTplotAssemblyOperationDependencyGraph}. %
+Figures~\ref{fig:appendix:traceAnalysisExample:OperationDepGraphsDeployment} and %
+\ref{fig:appendix:traceAnalysisExample:OperationDepGraphsAssembly} show the %
+operation dependency graphs for the monitoring data used in this section. 
+
 \begin{figure}[h]\centering
 \subfigure[deployment-level]{\label{fig:appendix:traceAnalysisExample:OperationDepGraphsDeployment}%
 \includegraphics[scale=0.4]{images/example-plots/deploymentOperationDependencyGraph-crop}
@@ -133,6 +209,11 @@ equivalence class representatives (Listing~\ref{lst:appendix:traceAnalysisExampl
 \end{figure}
 
 \section{HTML Output of the System Model}
+
+\KiekerTraceAnalysis{} writes an HTML representation of the system model reconstructed %
+from the trace data to a file \file{system-entities.html}. %
+Figure~\ref{fig:appendix:traceAnalysisExample:htmlSystemModel} shows a screenshot %
+of this file as rendered by a web browser.
 
 \begin{figure}[h]\centering
 \includegraphics[width=0.6\textwidth]{images/example-plots/system-entities-html-FFscrsh.png}

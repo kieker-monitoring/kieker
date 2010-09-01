@@ -140,7 +140,7 @@ public class SystemModelRepository {
 
     public void saveSystemToHTMLFile(final String outputFnBase) throws FileNotFoundException {
         PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".html"));
-        ps.println("<html><head>");
+        ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
         ps.println("<style type=\"text/css\">\n"
                 + ".colTitle { font-family:sans; font-size:11px; }\n"
                 + ".cell { font-family:monospace; font-size:10px; }\n"
