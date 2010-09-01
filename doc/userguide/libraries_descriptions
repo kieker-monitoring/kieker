@@ -4,7 +4,7 @@
 // Lines that start with double slash will be ignored.
 // The descriptions themself can contain tex-code but should be in one line.
 
-derby.jar	Apache Derby is a lightweight database written in Java which can also be used as an embedded database. This library contains the necessary drivers for the database as well as the database managment system itself.
+derby.jar	Apache Derby is a lightweight database written in Java which can also be used as an embedded database. This library contains the necessary drivers for the database as well as the database management system itself.
 
 mysql-connector-java-$-bin.jar	This library contains the drivers to connect from a Java application to a MySQL database system.
 
