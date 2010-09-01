@@ -17,12 +17,14 @@ monitored systems, e.g., as sequence and dependency diagrams. %
 
 Section~\ref{chap:example} already introduced parts of the monitoring record %
 type \class{OperationExecutionRecord}. \KiekerTraceAnalysis{} uses this record %
-type to represent monitoring executions. Figure~\ref{fig:OperationExecutionRecordClassDiagramComplete} shows a class diagram %
-with all attributes. The attributes \method{className}, \method{operationName}, %
+type to represent monitored executions and associated trace and session information. %
+Figure~\ref{fig:OperationExecutionRecordClassDiagramComplete} shows a class diagram %
+with all attributes of the record type \class{OperationExecutionRecord}. %
+The attributes \method{className}, \method{operationName}, %
 \method{tin}, and \method{tout} have been introduced before. %
 The attributes \method{traceId} and \method{sessionId} are used to store %
 trace and session information; \method{eoi} and \method{ess} contain control-flow %
-information needed to reconstruct the trace from the monitoring data. %
+information needed to reconstruct traces from monitoring data. %
 For details on this, we refer to our technical %
 report~\cite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework}.
 
@@ -32,13 +34,17 @@ report~\cite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousM
 \label{fig:OperationExecutionRecordClassDiagramComplete}
 \end{figure}
 
-\noindent Section~\ref{sec:traceMonitoring} describes how to instrument application for %
-monitoring trace information. %
-It presents the technology-specific probes provided for this purpose---with %
-a focus on AspectJ. Section~\ref{sec:traceAnalysisTool} presents the %
+\noindent Section~\ref{sec:traceMonitoring} describes how to instrument Java %
+applications for monitoring trace information. %
+It presents the technology-specific probes provided by \Kieker{} for this %
+purpose---with a focus on AspectJ. %
+Additional technology-specific probes can be implemented based on the existing %
+probes. %
+Section~\ref{sec:traceAnalysisTool} presents the %
 tool which can be used to analyze and visualize the recorded trace %
-data.  Examples for all available analysis and visualization outputs are %
-presented in Section~\ref{sec:traceAnalysisExamples}.
+data.  Examples for the available analysis and visualization outputs %
+provided by \KiekerTraceAnalysis{} are presented in %
+Section~\ref{sec:traceAnalysisExamples}.
 
 \section{Monitoring Trace Information}\label{sec:traceMonitoring}
 
@@ -66,15 +72,12 @@ weaving during runtime, which is more flexible than the compile-time-weaving.
 
 \
 
-\NOTIFYBOX{The Java sources of this chapter can be found in the %
+\NOTIFYBOX{The Java sources of the AspectJ example presented in %
+this section can be found in the %
 \file{\aspectJBookstoreApplicationDirDistro{}/} directory of the %
 binary release.}
 
-
-%%
-\section{AspectJ Annotations}\label{sec:aspectJ:annotation}
-
-To weave the code via AspectJ with the \Kieker{}-Framework,
+\noindent To weave the code via AspectJ with the \Kieker{},
 some new files are required, including the AspectJ-Agent and a configuration
 file for AspectJ. Figure~\ref{fig:bookstoreAOP:dirStructure} shows the resulting %
 directory tree with the necessary files, based on the Bookstore application from %
@@ -105,45 +108,60 @@ Chapter~\ref{chap:example}.
 \label{fig:bookstoreAOP:dirStructure}
 \end{figure}
 
-\noindent The new jar-file \file{aspectjweaver-1.6.9.jar} also can be found
-in the \dir{lib/} directory of the \Kieker{}-binaries. The
-configuration file \file{\aopConfigFile} can be found in the directory \dir{META-INF/}.
+\noindent The jar-file \file{aspectjweaver-1.6.9.jar} is included in the %
+\dir{lib/} directory of the \Kieker{} binary release. Its %
+\dir{META-INF/} directory contains an example \file{\aopConfigFile}.
 
-Once the necessary files has been copied to the example-directory,
-the sourcecode can be instrumented with the annotation \class{OperationExecutionMonitoringProbe}.
-Listing~\ref{lst:BookstoreAspectJ} shows how the annotation is
-used.
+Once the necessary files have been copied to the example directory,
+the source code can be instrumented with the annotation %
+\class{OperationExecutionMonitoringProbe}. %
+Listing~\ref{lst:BookstoreAspectJ} shows how the annotation is used.
 
 \setJavaCodeListing
 \lstinputlisting[caption=Bookstore.java, label=lst:BookstoreAspectJ]{\aspectJBookstoreApplicationDir/src/bookstoreTracing/Bookstore.java}
 
-As an example all methods within the four sourcecode files will be
-annotated. It is possible to mark nearly every method with the annotation
---- except constructors. Now the configuration file has to be modified to inform AspectJ about the classes we want to weave. Listing~\ref{lst:aopConfigFileAnnotations} shows the modified configuration file.
+As a first example, each method of the Bookstore application will be %
+annotated. The annotation can be used to instrumented all methods % 
+except for constructors. %
+
+The \file{\aopConfigFile} file has to be modified to specify the classes to %
+be considered for instrumentation by the AspectJ weaver. %
+Listing~\ref{lst:aopConfigFileAnnotations} shows the modified configuration file.
+
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileAnnotations]{\aspectJBookstoreApplicationDir/META-INF/aop.xml}
-Usually, the configuration file consists of much more lines, but most of them are uncommented anyway. The first important line ist 
-\lstinline$<include within="bookstoreTracing..*"/>$
-with which AspectJ knows that the classes to be weaved are inside the package \class{bookstoreTracing}. It is of course possible to weave only classes instead of whole packages by using for example 
-\lstinline$<include within="bookstoreTracing.Bookstore*"/>$. The second important line is 
-\lstinline$<aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>$ which informs AspectJ about the aspect to be used.
 
-In this case the aspect makes sure that all methods which are annotated will be monitored. In Section~\ref{sec:aspectJ:fullweaving} another aspect will be used as well. Normally only one of the given aspects should be used and therefore be uncommented.
+\noindent Line~5 tells the AspectJ weaver to consider all classes inside the package %
+\class{bookstoreTracing}. Wildcards may be used to specify the classes to include%
+---e.g., \lstinline$<include within="bookstoreTracing.Bookstore*"/>$ to weave all %
+classes in this package with the prefix \class{Bookstore}. 
 
-Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and \ref{lst:traceAnalysisCompileRunExample1} show how to compile and run the annotated Bookstore Application manually. It must be pointed out that it is necessary to copy the configuration file for AspectJ into the \dir{META-INF/} directory within the \dir{build/} directory to offer the AspectJ-Weaver an easy access.
+Line~9 specifies aspect to be woven into the classes. In this case, the \Kieker{} %
+probe \class{OperationExecutionAspectAnnotation} is used which additionally %
+requires that method intended to be instrumented are annotated by %
+\lstinline[language=Java]{@OperationExecutionMonitoringProbe}.
 
-The AspectJ-Weaver itself has to be loaded by the JVM as a so-called javaagent. In simple terms an agent is just a specific class which is loaded before the \method{main} method of the application and executed in the same JVM. It has therefore access to the same context as the main application. In this specific case the agent is loaded to weave the monitoring code into the ``plain'' java-code of the Bookstore Application.
+Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and %
+\ref{lst:traceAnalysisCompileRunExample1} show how to compile and run the annotated %
+Bookstore application. The \file{\aopConfigFile} must be located in a %
+\dir{META-INF/} directory in the classpath---in this case the \dir{build/} directory. %
+The AspectJ weaver has to be loaded as a so-called Java-agent. It  %
+it is loaded before the \method{main} method and weaves the monitoring aspects into %
+the byte code of the Bookstore application.
 
 \setBashListing
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc-win}
 
-After a complete run of the application, the monitoring files should appear in %
+\noindent After a complete run of the application, the monitoring files should appear in %
 the same way as mentioned in Section~\ref{sec:example:monitoring} including the %
 additional trace information. 
 
-\section{Full Monitoring}\label{sec:aspectJ:fullweaving}
-The full monitoring without using any annotations is quite simple. It is only necessary to modify the corresponding configuration-file of AspectJ, as can be seen in Listing~\ref{lst:aopConfigFileFull}.
+\paragraph*{Instrumentation without annoations}%\label{sec:aspectJ:fullweaving}
+
+The full monitoring without using any annotations is quite simple. It is only %
+necessary to modify the corresponding configuration-file of AspectJ, as can be %
+seen in Listing~\ref{lst:aopConfigFileFull}.
 
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{ch5-trace-analysis_FullMonitoring-aop.xml}
