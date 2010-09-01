@@ -39,6 +39,12 @@ monitoringDataWriterInitString=
 # Kieker will terminate with a Queue Full Exception!
 #
 asyncRecordQueueSize=8000
+# Behavior of the asynchronous writer when the internal queue is full:
+# If set to 'false' (default), the writer reports an error and monitoring terminates
+# If set to 'true', the writer blocks until queue capacity is available. 
+#  Be careful when using the value 'true' since then, the asynchronous writer
+#  is no longer decoupled from the monitored application.
+asyncBlockOnFullQueue=false
 
 # 1.2 Database configuration
 # (only meaningful if monitoringDataWriter=AsyncDB, or =SyncDB)
