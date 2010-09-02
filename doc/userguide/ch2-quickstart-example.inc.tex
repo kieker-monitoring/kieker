@@ -142,6 +142,8 @@ In a real application these methods would pass objects to ensure the results of 
 
 \noindent The final class is \class{Catalog} shown in Listing~\ref{lst:class:Catalog}. It resembles the catalog component in the application.
 
+\pagebreak
+
 \lstinputlisting[caption=Catalog.java,label=lst:class:Catalog]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
 
 \noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader enters the commands in the \dir{example/} directory.
@@ -278,6 +280,8 @@ a semicolon instead of a colon.}
 \end{figure}
 
 \noindent In \Kieker's default configuration, the log directory can be found in the default temporary directory: \dir{/tmp/} under \UnixLikeSystems{} and \dir{C:\textbackslash{}temp\textbackslash{}} under Windows. The monitoring directory contains two types of files: files with the extension \dir{.dat} containing text representations of the monitoring records and a single file named \dir{tpmon.map} which contains information on the types of the monitoring records used. 
+
+\enlargethispage{1.5cm}
 
 The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example file contents. The \file{.dat}-file is saved in CSV format (\textbf{C}omma \textbf{S}eparated \textbf{V}alues)---in this case, the values of a monitoring record are separated by semicolons. To understand the \file{.dat}-file structure the semantics have to be explained. For this quick start example only some of the values are relevant. The first value \verb!$1! indicates the record type. The forth value indicates the class and method which has been called. And the seventh and eighth value are the start and end time of the execution of the called method.
 

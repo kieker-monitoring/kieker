@@ -226,6 +226,8 @@ Both initialize the session and trace information for incoming requests. %
 The latter additionally creates an \class{OperationExecutionRecord} for each %
 invocation of the filter and passes it to the \class{MonitoringController}.
 
+\enlargethispage{1.5cm}
+
 Listing~\ref{lst:OperationExecutionRegistrationAndLoggingFilterInWebXML} %
 demonstrates how to integrate the \class{OperationExecutionRegistrationAndLoggingFilter} %
 in a \file{web.xml} file of a web application. 
@@ -273,6 +275,8 @@ to the server configuration.
 
 \section{Trace Analysis and Visualization}\label{sec:traceAnalysisTool}
 
+\enlargethispage{1.5cm}
+
 Monitoring data including trace information can be analyzed and visualized with %
 the \KiekerTraceAnalysis{} tool which is included in the \Kieker{} binary as well.\\
 
@@ -318,8 +322,7 @@ the following tree:
 such as \file{.pdf}, by using the \textit{Graphviz} and \textit{PlotUtils} tools %
 \file{dot} and \file{pic2plot}. %
 The following Listing~\ref{lst:traceAnalysis:convertDiagrams} demonstrates this. %
-Examples of all available visualization are presented in the following %
-Section~\ref{sec:traceAnalysisExamples}.
+
 % The generated diagrams are shown in the following %
 % Figures~\ref{fig:traceAnalysis:callTree} and~\ref{fig:traceAnalysis:allocSeqDiagr}. 
 
@@ -339,6 +342,13 @@ Section~\ref{sec:traceAnalysisExamples}.
 \NOTIFYBOX{The scripts \file{dotPic-fileConverter.sh} and \file{dotPic-fileConverter.bat} %
 convert all \file{.pic} and \file{.dot} in a specified directory. %
 See Appendix~\ref{appendix:wrapperScripts:dotPicFileConverter} for details.}
+
+\
+
+Examples of all available visualization are presented in the following %
+Section~\ref{sec:traceAnalysisExamples}.
+
+\pagebreak
 
 \section{Example \KiekerTraceAnalysis{} Outputs}\label{sec:traceAnalysisExamples}
 \input{ch5-trace-analysis-exampleOutputs.inc}
