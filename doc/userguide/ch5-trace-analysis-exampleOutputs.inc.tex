@@ -23,7 +23,9 @@ of the Bookstore application with AspectJ-based instrumentation, %
 as described in Section~\ref{sec:traceAnalysis:instr:AspectJ}. %
 In order to illustrate the visualization of distributed traces, %
 the hostname of the \class{Catalog}'s method \method{getBook} was %
-probabilistically changed to a second hostname.
+probabilistically changed to a second hostname. %
+For a more detailed description on the underlying formalisms, %
+we refer to our technical report~\cite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework}.
 
 \subsection{Textual Trace and Equivalence Class Representations}
 
@@ -69,7 +71,7 @@ label=lst:appendix:traceAnalysisExample:traceDeploymentEquivClasses]
 {images/example-plots/traceDeploymentEquivClasses.txt}
 
 \setTextListing
-\lstinputlisting[caption=Textual output of information on the \textit{assembly-level} trace equivalence classes,%
+\lstinputlisting[caption=Textual output of information on the \textit{assembly-level} trace equivalence class,%
 label=lst:appendix:traceAnalysisExample:traceAssemblyEquivClasses]%
 {images/example-plots/traceAssemblyEquivClasses.txt}
 
@@ -226,7 +228,7 @@ operation dependency graphs for the monitoring data used in this section.
 \KiekerTraceAnalysis{} writes an HTML representation of the system model reconstructed %
 from the trace data to a file \file{system-entities.html}. %
 Figure~\ref{fig:appendix:traceAnalysisExample:htmlSystemModel} shows a screenshot %
-of this file as rendered by a web browser.
+of this file rendered by a web browser.
 
 \pagebreak
 
