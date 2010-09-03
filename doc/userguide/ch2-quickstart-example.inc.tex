@@ -146,13 +146,18 @@ In a real application these methods would pass objects to ensure the results of 
 
 \lstinputlisting[caption=Catalog.java,label=lst:class:Catalog]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
 
-\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterWin} can be executed. This document assumes that the reader enters the commands in the \dir{example/} directory.
+\noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterNoInstr} can be executed. This document assumes that the reader enters the commands in the \dir{example/} directory.
 
 \setBashListing
 % \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
 % \WARNBOX{The default command-line interpreter of Windows doesn't support automatic file expansion. Therefore every single sourcefile has to be passed:
-\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr-win.inc}%
+%\input{ch2-quickstart-example_Compile_Run_Example_1-noinstr-win.inc}%
 %}
+\begin{lstlisting}[label=lst:bookstoreStarterNoInstr, caption=Commands to compile and run the Bookstore application]
+> javac src/bookstoreApplication/*.java -d build
+
+> java -classpath build bookstoreApplication.BookstoreStarter 
+\end{lstlisting}
 
 \noindent The first command compiles the application and places the resulting four class files in the \dir{build/} directory. To verify the build process, the \dir{build/} directory can be inspected. The second command loads the bookstore application and produces the output shown in Listing~\ref{lst:result-noinstr}.
 
