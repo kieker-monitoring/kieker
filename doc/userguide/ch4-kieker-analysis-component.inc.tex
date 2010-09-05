@@ -96,7 +96,7 @@ which already provides an implementation of the observer pattern. %
 By invoking the method \method{deliverRecord},  the delivery of records is then %
 delegated to the super class.
 
-Listing~\ref{listing:MyReader} shows a simple reader which polls records from %
+Listing~\ref{listing:MyReader} on page~\pageref{listing:MyReader} shows a simple reader which polls records from %
 the named pipe introduced in the previous Chapter~\ref{chap:componentsMonitoring}. %
 
 % If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
@@ -134,9 +134,11 @@ By implementing the \method{getRecordTypeSubscriptionList} method, a consumer pl
 can specify the desired types of monitoring records to be received via the %
 method \method{newMonitoringRecord}.
 
-
-The custom consumer in Listing~\ref{lst:MyReponseTimeConsumer} simply writes %
+The custom consumer in Listing~\ref{lst:MyReponseTimeConsumer} on %
+page~\pageref{lst:MyReponseTimeConsumer} simply writes %
 the content of the received response time records to the standard output stream.
+
+\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[caption=MyReponseTimeConsumer.java,label=lst:MyReponseTimeConsumer]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeConsumer.java}
