@@ -17,12 +17,15 @@ continuous monitoring in production systems inducing only a very low overhead.
 %%
 \section{What is \Kieker?}\label{sec:kieker}
 
-The present version of \Kieker{} is a monitoring and analysis framework for Java applications. Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
-We plan to provide support for other, such as .NET-based, platforms.
+The present version of \Kieker{} is a monitoring and analysis framework for %
+Java applications. %
+Support for other platforms, such as .NET, is planned. %
+Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based %
+on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
 
 % This is the component diagram of Kieker (the satellite).
 \begin{figure}[H]\centering
-\includegraphics[width=0.95\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis}
+\includegraphics[width=0.98\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis}
 \caption{Overview of the framework components}
 \label{fig:KiekerComponentDiagram}
 \end{figure}
@@ -33,13 +36,17 @@ The component \KiekerAnalysisPart{} is responsible for the analysis and visualiz
 
 The monitoring and analysis parts of the \Kieker{} framework are composed of subcomponents which represent the different functionalities of the monitoring and analysis tasks. The important interaction pattern among the components is illustrated in Figure~\ref{fig:KiekerCommunicationDiagram} but will be explained furthermore throughout the course of this tutorial. 
 
+\vspace{1cm}
+
 % This image shows the communication diagram of the different components.
 \begin{figure}[H]\centering
 \includegraphics[width=1\textwidth]{images/kiekerCommunications-revisedReArranged-woMonitoringLog-bw-newNames}
 \caption{Communication among \Kieker{} framework components}
 \label{fig:KiekerCommunicationDiagram}
 \end{figure}
-		
+
+\vspace{1cm}
+
 % Notify-tag because it is explained how Kieker works.
 % avh: removed
 \noindent The monitoring probes create the monitoring records containing the %
@@ -56,7 +63,7 @@ Kieker includes monitoring log writers and readers for filesystems, SQL %
 databases, and the Java Messaging Service~(JMS)~\cite{JMS-WebSite}. %
 A special feature of \Kieker{} is the ability to monitor and analyze (distributed) %
 traces of method executions and corresponding timing information. %
-For this purpose, Kieker includes monitoring probes employing %
+For monitoring this data, Kieker includes monitoring probes employing %
 AspectJ~\cite{AspectJ-WebSite}, %
 Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
 Spring~\cite{Spring-WebSite}, and %
@@ -65,7 +72,9 @@ The \KiekerTraceAnalysis{} tool, itself implemented as a \KiekerAnalysisPart{} %
 plugin (Figure~\ref{fig:KiekerComponentDiagram}), allows to reconstruct and visualize architectural models of the monitored %
 systems, e.g., as sequence and dependency diagrams.
 
-%%	
+%%
+\pagebreak
+
 \section{Structure of this User Guide}
 
 Based on a simple example, Chapter~\ref{chap:example} demonstrates %
