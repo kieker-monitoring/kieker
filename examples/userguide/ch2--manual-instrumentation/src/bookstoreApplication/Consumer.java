@@ -27,7 +27,7 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 		OperationExecutionRecord rec = (OperationExecutionRecord) record;
 		/* Derive response time from the record. */
 		long responseTime = rec.tout - rec.tin;
-		/* Now compare with the response response time threshold: */
+		/* Now compare with the response time threshold: */
 		if (responseTime > maxResponseTime) {
 			System.err.println("maximum response time exceeded by "
 					+ (responseTime - maxResponseTime) + " ns: " + rec.className

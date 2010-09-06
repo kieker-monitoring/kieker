@@ -63,7 +63,7 @@ in the previous chapters. Typically, an instance of a monitoring record is %
 constructed in a monitoring probe (Section~\ref{sec:monitoring:probe}), %
 passed to the monitoring controller (Section~\ref{sec:componentsMonitoring:monitoringController}), %
 serialized and deserialized by a monitoring %
-monitoring log writer (Section~\ref{sec:monitoring-log-writers}) and a
+log writer (Section~\ref{sec:monitoring-log-writers}) and a
 monitoring log reader (Section~\ref{sec:analysis:reader}), and provided to the %
 analyis plugins (Section~\ref{sec:analysis:consumer}) %
 by the analysis controller (Section~\ref{sec:analysis:controller}). %
@@ -93,7 +93,7 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 
 \pagebreak
 
-\noindent In order to implement your own monitoring record type, you need to:
+\noindent Employing the abstract class for implementing your own monitoring record type, you need to:
 
 \begin{enumerate}
 \item Create a class that extends \class{AbstractMonitoringRecord}  and
@@ -108,6 +108,7 @@ that can be used to monitor response times of method executions.
 \setJavaCodeListing
 \lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeRecord.java}
 
+\pagebreak
 
 \section{Monitoring Probes}\label{sec:monitoring:probe}
 
@@ -174,7 +175,8 @@ The \Kieker{} web site provides an example for this. %
 \end{centering}
 \end{figure}
 
-\noindent Listing~\ref{listing:MyWriter} shows a custom writer \class{MyPipeWriter} which uses a named pipe to %
+\noindent Listing~\ref{listing:MyWriter} on page~\pageref{listing:MyWriter} shows %
+a custom writer \class{MyPipeWriter} which uses a named pipe to %
 write the given records into a buffer located in the memory. The source code of %
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
@@ -193,6 +195,8 @@ passed as the property value \textit{monitoringDataWriterInitString}.
 monitoringDataWriter=bookstoreApplication.MyPipeWriter
 monitoringDataWriterInitString=pipeName=somePipe
 \end{lstlisting}
+
+\enlargethispage{1cm}
 
 \noindent Notice, that we decided to use \class{Object} arrays as the data structure of the %
 monitoring log in order to demonstrate the use of the \method{toArray} and %

@@ -11,35 +11,35 @@
             <classpathentry kind="src" path="test//monitoring/"/>
             <classpathentry kind="src" path="test//tools/"/>
             <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-            <classpathentry kind="lib" path="lib/Scenario.jar"/>
-    <classpathentry kind="lib" path="lib/aspectjrt-1.6.9.jar"/>
-    <classpathentry kind="lib" path="lib/aspectjtools-1.6.9.jar"/>
-    <classpathentry kind="lib" path="lib/aspectjweaver-1.6.9.jar"/>
-    <classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/commons-io-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
-    <classpathentry kind="lib" path="lib/commons-pool-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/concurrent-1.3.4.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-api-2.2.9.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-common-utilities-2.2.9.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-rt-bindings-soap-2.2.9.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-rt-core-2.2.9.jar"/>
-    <classpathentry kind="lib" path="lib/derby.jar"/>
-    <classpathentry kind="lib" path="lib/jmc.jar"/>
-    <classpathentry kind="lib" path="lib/jms-1.1.jar"/>
-    <classpathentry kind="lib" path="lib/jndi-1.2.1.jar"/>
-    <classpathentry kind="lib" path="lib/junit-4.5.jar"/>
-    <classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
-    <classpathentry kind="lib" path="lib/mysql-connector-java-5.1.5-bin.jar"/>
-    <classpathentry kind="lib" path="lib/openjms-0.7.7-beta-1.jar"/>
-    <classpathentry kind="lib" path="lib/openjms-common-0.7.7-beta-1.jar"/>
-    <classpathentry kind="lib" path="lib/openjms-net-0.7.7-beta-1.jar"/>
-    <classpathentry kind="lib" path="lib/rabbitmq-client.jar"/>
-    <classpathentry kind="lib" path="lib/servlet-api.jar"/>
-    <classpathentry kind="lib" path="lib/servlet.jar"/>
-    <classpathentry kind="lib" path="lib/spice-jndikit-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/spring-web.jar"/>
-    <classpathentry kind="lib" path="lib/spring.jar"/>
+            <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/Scenario.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/aspectjrt-1.6.9.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/aspectjtools-1.6.9.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/aspectjweaver-1.6.9.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/commons-cli-1.2.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/commons-io-1.2.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/commons-logging-1.1.1.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/commons-pool-1.2.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/concurrent-1.3.4.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/cxf-api-2.2.9.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/cxf-common-utilities-2.2.9.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/cxf-rt-bindings-soap-2.2.9.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/cxf-rt-core-2.2.9.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/derby.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/jmc.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/jms-1.1.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/jndi-1.2.1.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/junit-4.5.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/log4j-1.2.15.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/mysql-connector-java-5.1.5-bin.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/openjms-0.7.7-beta-1.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/openjms-common-0.7.7-beta-1.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/openjms-net-0.7.7-beta-1.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/rabbitmq-client.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/servlet-api.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/servlet.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/spice-jndikit-1.2.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/spring-web.jar"/>
+    <classpathentry kind="lib" path="/home/voorn/svn_work/kieker/software/kieker/trunk/lib/spring.jar"/>
             <classpathentry kind="output" path="build-eclipse"/>
         </classpath>
         
