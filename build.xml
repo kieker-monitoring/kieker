@@ -526,7 +526,7 @@
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="run-test-storage" depends="compile-kieker.monitoring">
+    <target name="run-test-storage" depends="compile-tests-monitoring">
         <echo>
             This is a small test for the part of Tpmon that
             stores monitoring data. Tpmon's monitoring API
@@ -544,45 +544,24 @@
             (default: /tmp).
         </echo>
 
-        <path id="kieker.test-storage-compile-classpath">
-            <!--<fileset dir="${lib.dir}">
-                <include name="commons-cli-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-            </fileset>-->
-            <!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>-->
-            <pathelement location="${build.kieker.common.dir}/"/>
-            <pathelement location="${build.kieker.monitoring.dir}/"/>
-        </path>
-
-        <javac source="1.5" target="1.5"
-               destDir="${build.tests.dir}"
-               classpathref="kieker.test-storage-compile-classpath"
-               srcdir="test/kieker/tests/storageOnly/"
-               verbose="off"
-               debug="true"/>
-        <copy file="${tests.log4j.properties}"
-              todir="${build.dir}/"/>
-
         <path id="kieker.test-storage-run-classpath">
             <fileset dir="${lib.dir}">
                 <include name="commons-logging-*.jar"/>
-                <!--<include name="log4j-*.jar"/>-->
             </fileset>
             <pathelement location="${build.tests.dir}/"/>
             <!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <pathelement location="${build.kieker.common.dir}/"/>
-            <pathelement location="${build.kieker.monitoring.dir}/"/>
+            <fileset dir="${dist.dir}">
+                <include name="${dist.kieker.main.jar}"/>
+            </fileset>
         </path>
+
         <java
             dir="."
             fork="true"
-            classname="kieker.tests.storageOnly.StorageOnly"
+            classname="kieker.test.monitoring.manualInstrumentation.storageOnly.StorageOnly"
             classpathref="kieker.test-storage-run-classpath">
             <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
             <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>

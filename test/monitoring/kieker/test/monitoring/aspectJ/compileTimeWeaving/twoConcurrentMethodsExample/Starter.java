@@ -26,6 +26,7 @@ public class Starter extends Thread {
             Thread.sleep((int) (Math.max(0, Math.random() * 115d - (i / 142d)) + 1)); // wait between requests
             //log.info(i);
         }
+        // TODO: since looks strange and should not be necessary:
         MonitoringController.getInstance().terminate();
         //System.exit(0);
     }
