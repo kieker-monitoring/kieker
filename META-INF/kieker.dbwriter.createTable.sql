@@ -1,4 +1,4 @@
-CREATE TABLE tpmondata(
+CREATE TABLE kiekerdata(
 `autoid` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `experimentid` SMALLINT NOT NULL DEFAULT '0',
 `operation` VARCHAR( 160 ) NOT NULL ,
