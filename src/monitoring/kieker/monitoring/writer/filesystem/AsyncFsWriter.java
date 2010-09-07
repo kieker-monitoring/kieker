@@ -45,7 +45,8 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     private final Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
     private BlockingQueue<IMonitoringRecord> blockingQueue = null;
     private final boolean blockOnFullQueue;
-    private String storagePathBase = null;
+    private final String storagePathBase;
+    private final String storagePathPostfix;
     private String storageDir = null; // full path
     private int asyncRecordQueueSize = 8000;
     private final static String defaultConstructionErrorMsg =
@@ -66,8 +67,9 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
         return workers;
     }
 
-    public AsyncFsWriter(final String storagePathBase, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
+    public AsyncFsWriter(final String storagePathBase, final String storagePathPostfix, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
         this.storagePathBase = storagePathBase;
+        this.storagePathPostfix = storagePathPostfix;
         this.asyncRecordQueueSize = asyncRecordQueueSize;
         this.blockOnFullQueue = blockOnFullQueue;
         this.init();
@@ -85,7 +87,7 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
         m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
         String dateStr = m_ISO8601UTC.format(new java.util.Date());
-        storageDir = this.storagePathBase + "/tpmon-" + dateStr + "-UTC/";
+        storageDir = this.storagePathBase + "/tpmon-" + dateStr + "-UTC-"+this.storagePathPostfix+"/";
 
         f = new File(storageDir);
         if (!f.mkdir()) {

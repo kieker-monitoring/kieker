@@ -98,6 +98,8 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     private String dbConnectionAddress = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
     private String dbTableName = "turbomon10";
 
+    private final String instanceName;
+
     public enum ControllerMode {
 
         /**
@@ -169,8 +171,8 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
      * @param props
      * @return
      */
-    public static MonitoringController createInstance (final Properties props){
-        return new MonitoringController(props,
+    public static MonitoringController createInstance (final String instanceName, final Properties props){
+        return new MonitoringController(instanceName, props,
                 false // do not consider system properties
                 );
     }
@@ -185,8 +187,9 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
      * @param configurationFn
      * @return
      */
-    public static MonitoringController createInstance (final String configurationFn) throws FileNotFoundException, IOException{
+    public static MonitoringController createInstance (final String instanceName, final String configurationFn) throws FileNotFoundException, IOException{
         return new MonitoringController(
+                instanceName,
                 loadPropertiesFromFile(configurationFn),
                 false // do not consider system properties
                 );
@@ -280,7 +283,8 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
      * @param considerSystemProperties whether Kieker configuration parameters
      * passed to the JVM shall be considered
      */
-    private MonitoringController(final Properties props, final boolean considerSystemProperties) {
+    private MonitoringController(final String instanceName, final Properties props, final boolean considerSystemProperties) {
+        this.instanceName = instanceName;
         try {
             vmName = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception ex) {
@@ -302,10 +306,10 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                 throw new Exception("Property monitoringDataWriter not set");
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringLogWriter = new SyncFsWriter(filenameBase);
+                this.monitoringLogWriter = new SyncFsWriter(filenameBase, this.instanceName);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_ASYNCFS)) {
                 String filenameBase = filenamePrefix;
-                this.monitoringLogWriter = new AsyncFsWriter(filenameBase, asyncRecordQueueSize, asyncBlockOnFullQueue);
+                this.monitoringLogWriter = new AsyncFsWriter(filenameBase, this.instanceName, asyncRecordQueueSize, asyncBlockOnFullQueue);
             } else if (this.monitoringDataWriterClassname.equals(WRITER_SYNCDB)) {
                 this.monitoringLogWriter = new SyncDbWriter(
                         dbDriverClassname, dbConnectionAddress,
@@ -343,11 +347,14 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
         }
     }
 
+    private static final String SINGLETON_INSTANCE_NAME = "SINGLETON";
+
     /**
      * Constructor used for singleton instance. 
      */
     private MonitoringController() {
-        this(loadSingletonProperties(),
+        this(   SINGLETON_INSTANCE_NAME,
+                loadSingletonProperties(),
                 true // consider Kieker properties passed to JVM
                 );
     }

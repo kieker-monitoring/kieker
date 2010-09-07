@@ -75,7 +75,8 @@ public final class SyncFsWriter implements IMonitoringLogWriter {
     // configuration parameters
     private static final int maxEntriesInFile = 22000;
     // internal variables
-    private String storagePathBase = "";
+    private final String storagePathBase;
+    private final String storagePathPostfix;
     private boolean filenameInitialized = false;
     private int entriesInCurrentFileCounter = 0;
     private PrintWriter pos = null;
@@ -95,7 +96,7 @@ public final class SyncFsWriter implements IMonitoringLogWriter {
         throw new UnsupportedOperationException(defaultConstructionErrorMsg);
     }
 
-    public SyncFsWriter(String storagePathBase) {
+    public SyncFsWriter(String storagePathBase, final String storagePathPostfix) {
         log.info("storagePathBase :" + storagePathBase);
         File f = new File(storagePathBase);
         if (!f.isDirectory()) {
@@ -104,13 +105,13 @@ public final class SyncFsWriter implements IMonitoringLogWriter {
             throw new IllegalArgumentException(storagePathBase + " is not a directory");
         }
 
-        this.storagePathBase = storagePathBase;
+        this.storagePathPostfix = storagePathPostfix;
 
         DateFormat m_ISO8601UTC =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
         m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
         String dateStr = m_ISO8601UTC.format(new java.util.Date());
-        this.storagePathBase = this.storagePathBase + "/tpmon-" + dateStr + "-UTC/";
+        this.storagePathBase =  storagePathBase + "/tpmon-" + dateStr + "-UTC-"+this.storagePathPostfix+"/";
         log.info("this.storagePathBase :" + this.storagePathBase);
 
         f = new File(this.storagePathBase);
