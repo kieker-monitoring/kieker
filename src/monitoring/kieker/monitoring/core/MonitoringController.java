@@ -1,5 +1,7 @@
 package kieker.monitoring.core;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import kieker.common.util.Version;
 import kieker.common.record.AbstractMonitoringRecord;
 
@@ -143,13 +145,142 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     // database only configuration configuration values that are overwritten by kieker.monitoring.properties included in the kieker.monitoring library
     private volatile boolean setInitialExperimentIdBasedOnLastId = false;    // only use the asyncDbconnector in server environments, that do not directly terminate after the executions, or some
 
+    private static final String KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME =
+            "kieker.monitoring.configuration";
+    private static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH =
+            "META-INF/kieker.monitoring.properties";
+    private static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT =
+            "META-INF/kieker.monitoring.properties.default";
+
     /** Returns the singleton instance. */
     public static MonitoringController getInstance() {
+
+
         return MonitoringController.ctrlInst;
     }
 
-    /** Private constructor. */
-    private MonitoringController() {
+    /**
+     * Creates a new monitoring controller instance based on the configuration
+     * provided by the properties props.
+     *
+     * Note, that in this case, no Kieker properties passed to the JVM are
+     * evaluated.
+     *
+     * @param props
+     * @return
+     */
+    public static MonitoringController createInstance (final Properties props){
+        return new MonitoringController(props,
+                false // do not consider system properties
+                );
+    }
+
+    /**
+     * Creates a new monitoring controller instance based on the configuration
+     * file configurationFn.
+     *
+     * Note, that in this case, no Kieker properties passed to the JVM are
+     * evaluated.
+     *
+     * @param configurationFn
+     * @return
+     */
+    public static MonitoringController createInstance (final String configurationFn) throws FileNotFoundException, IOException{
+        return new MonitoringController(
+                loadPropertiesFromFile(configurationFn),
+                false // do not consider system properties
+                );
+    }
+
+    /**
+     * Returns the properties loaded from file propertiesFn.
+     *
+     * @param propertiesFn
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    private static Properties loadPropertiesFromFile (final String propertiesFn) throws FileNotFoundException, IOException{
+        InputStream is = new FileInputStream(propertiesFn);
+        Properties prop = new Properties();
+        prop.load(is);
+        return prop;
+    }
+
+    /**
+     * Returns the properties loaded from the resource name or null if the
+     * resource could not be found.
+     *
+     * @param classLoader
+     * @param name
+     * @return
+     * @throws IOException
+     */
+    private static Properties loadPropertiesFromResource (final String name) throws IOException{
+        InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(name);
+        if (is == null) {
+            return null;
+        }
+        Properties prop = new Properties();
+
+        prop.load(is);
+        return prop;
+    }
+
+    /**
+     * Returns the properties used to construct the singleton instance.
+     * If a custom configuration file location is passed to the JVM using the
+     * property kieker.monitoring.configuration, this the properties are
+     * loaded from this file. Otherwise, the method searches for a
+     * configuration file META-INF/kieker.monitoring.properties in the classpath,
+     * and if this does not exist, it loads the default properties contained in
+     * the Kieker jar. 
+     *
+     * @return
+     */
+    private static Properties loadSingletonProperties() {
+        Properties prop = null; // = new Properties();
+        String configurationFile = null;
+        try {
+            /* 1. Searching for configuration file location passed to JVM */
+            if (System.getProperty(KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME) != null) {
+                configurationFile = System.getProperty(KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME);
+                log.info("Loading properties from JVM-specified location '" + configurationFile + "'");
+                prop = loadPropertiesFromFile(configurationFile);
+            } else {
+                /* 2. No JVM property; 
+                 *    Trying to find configuration file in classpath */
+                configurationFile = KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+                prop = loadPropertiesFromResource(configurationFile);
+                if (prop != null) { // success
+                    log.info("Loading properties from properties file in classpath: " + configurationFile);
+                    log.info("You can specify an alternative properties file using the property '" + KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME + "'");
+                } else {
+                    /* 3. No  */
+                    configurationFile = KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT;
+                    log.info("Loading properties from Kieker.Monitoring library jar!" + configurationFile);
+                    log.info("You can specify an alternative properties file using the property '" + KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME + "'");
+                    prop = loadPropertiesFromResource(configurationFile);
+                }
+            }
+        } catch (Exception ex) {
+            log.error("Error loading kieker configuration file '" + configurationFile + "'", ex);
+            // TODO: introduce static variable 'terminated' or alike
+        }
+        return prop;
+    }
+
+    /**
+     * Constructs a controller instance which is configured based on the
+     * properties props. If the boolean flag considerSystemProperties is set to 
+     * true, the Kieker configuration properties passed the JVM are considered
+     * to override properties in props.
+     *
+     * @param props the configuration properties
+     * @param considerSystemProperties whether Kieker configuration parameters
+     * passed to the JVM shall be considered
+     */
+    private MonitoringController(final Properties props, final boolean considerSystemProperties) {
         try {
             vmName = java.net.InetAddress.getLocalHost().getHostName();
         } catch (Exception ex) {
@@ -163,7 +294,7 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
 
         Runtime.getRuntime().addShutdownHook(shutdownhook);
 
-        loadPropertiesFile();
+        initFromProperties(props, considerSystemProperties);
 
         /* We will now determine and load the monitoring Writer to use */
         try {
@@ -210,6 +341,15 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
             log.error("Disabling monitoring", exc);
             this.terminate();
         }
+    }
+
+    /**
+     * Constructor used for singleton instance. 
+     */
+    private MonitoringController() {
+        this(loadSingletonProperties(),
+                true // consider Kieker properties passed to JVM
+                );
     }
 
     /**
@@ -404,73 +544,35 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
     /**    
      *  Loads properties from configuration file. 
      */
-    private void loadPropertiesFile() {
-        InputStream is = null;
-        Properties prop = new Properties();
-        String configurationFile = null;
-        try {
-            if (System.getProperty("kieker.monitoring.configuration") != null) { // we use the present virtual machine parameter value
-                configurationFile = System.getProperty("kieker.monitoring.configuration");
-                log.info("Loading properties JVM-specified path '" + configurationFile + "'");
-                is = new FileInputStream(configurationFile);
-            } else {
-                // no system property.
-
-                // Trying to find configuration file in classpath
-                configurationFile = "META-INF/kieker.monitoring.properties";
-                is = MonitoringController.class.getClassLoader().getResourceAsStream(configurationFile);
-                if (is != null) { // success
-                    log.info("Loading properties from properties file in classpath: " + configurationFile);
-                    log.info("You can specify an alternative properties file using the property 'kieker.monitoring.configuration'");
-                } else { // default file in jar as fall-back
-                    configurationFile = "META-INF/kieker.monitoring.properties.default";
-                    log.info("Loading properties from Kieker.Monitoring library jar!" + configurationFile);
-                    log.info("You can specify an alternative properties file using the property 'kieker.monitoring.configuration'");
-                    is = MonitoringController.class.getClassLoader().getResourceAsStream(configurationFile);
-                }
-            }
-            // TODO: the fall-back file in the Kieker.Monitoring library should be renamed to
-            //       META-INF/kieker.monitoring.properties.default or alike, in order to
-            //       avoid strange behavior caused by the order of jars being
-            //       being loaded by the classloader.
-            prop.load(is);
-        } catch (Exception ex) {
-            log.error("Error loading kieker.monitoring.properties file '" + configurationFile + "'", ex);
-            // TODO: introduce static variable 'terminated' or alike
-        } finally {
-            try {
-                is.close();
-            } catch (Exception ex) { /* nothing we can do */ }
-        }
-
+    private void initFromProperties(final Properties props, final boolean considerSystemProperties) {
         // load property monitoringLogWriter
-        monitoringDataWriterClassname = prop.getProperty("monitoringDataWriter");
-        monitoringDataWriterInitString = prop.getProperty("monitoringDataWriterInitString");
+        monitoringDataWriterClassname = props.getProperty("monitoringDataWriter");
+        monitoringDataWriterInitString = props.getProperty("monitoringDataWriterInitString");
 
         String dbDriverClassnameProperty;
-        if (System.getProperty("kieker.monitoring.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
+        if (considerSystemProperties && System.getProperty("kieker.monitoring.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
             dbDriverClassnameProperty = System.getProperty("kieker.monitoring.dbDriverClassname");
         } else { // we use the parameter in the properties file
-            dbDriverClassnameProperty = prop.getProperty("dbDriverClassname");
+            dbDriverClassnameProperty = props.getProperty("dbDriverClassname");
         }
         if (dbDriverClassnameProperty != null && dbDriverClassnameProperty.length() != 0) {
             dbDriverClassname = dbDriverClassnameProperty;
         } else {
-            log.info("No dbDriverClassname parameter found in monitoringLTW.jar/" + configurationFile
+            log.info("No dbDriverClassname parameter found"
                     + ". Using default value " + dbDriverClassname + ".");
         }
 
         // load property "dbConnectionAddress"
         String dbConnectionAddressProperty;
-        if (System.getProperty("kieker.monitoring.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
+        if (considerSystemProperties && System.getProperty("kieker.monitoring.dbConnectionAddress") != null) { // we use the present virtual machine parameter value
             dbConnectionAddressProperty = System.getProperty("kieker.monitoring.dbConnectionAddress");
         } else { // we use the parameter in the properties file
-            dbConnectionAddressProperty = prop.getProperty("dbConnectionAddress");
+            dbConnectionAddressProperty = props.getProperty("dbConnectionAddress");
         }
         if (dbConnectionAddressProperty != null && dbConnectionAddressProperty.length() != 0) {
             dbConnectionAddress = dbConnectionAddressProperty;
         } else {
-            log.warn("No dbConnectionAddress parameter found in monitoringLTW.jar/" + configurationFile
+            log.warn("No dbConnectionAddress parameter found"
                     + ". Using default value " + dbConnectionAddress + ".");
         }
 
@@ -479,21 +581,21 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
 // and kieker.monitoring.customStoragePath
 // these both parameters may be provided (with higher priority) as java command line parameters as well (example in the properties file)
         String storeInJavaIoTmpdirProperty;
-        if (System.getProperty("kieker.monitoring.storeInJavaIoTmpdir") != null) { // we use the present virtual machine parameter value
+        if (considerSystemProperties && System.getProperty("kieker.monitoring.storeInJavaIoTmpdir") != null) { // we use the present virtual machine parameter value
             storeInJavaIoTmpdirProperty = System.getProperty("kieker.monitoring.storeInJavaIoTmpdir");
         } else { // we use the parameter in the properties file
-            storeInJavaIoTmpdirProperty = prop.getProperty("kieker.monitoring.storeInJavaIoTmpdir");
+            storeInJavaIoTmpdirProperty = props.getProperty("kieker.monitoring.storeInJavaIoTmpdir");
         }
 
         if (storeInJavaIoTmpdirProperty != null && storeInJavaIoTmpdirProperty.length() != 0) {
             if (storeInJavaIoTmpdirProperty.toLowerCase().equals("true") || storeInJavaIoTmpdirProperty.toLowerCase().equals("false")) {
                 storeInJavaIoTmpdir = storeInJavaIoTmpdirProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for kieker.monitoring.storeInJavaIoTmpdir (or provided via command line) parameter (" + storeInJavaIoTmpdirProperty + ") in monitoringLTW.jar/" + configurationFile
+                log.warn("Bad value for kieker.monitoring.storeInJavaIoTmpdir (or provided via command line) parameter (" + storeInJavaIoTmpdirProperty + ")"
                         + ". Using default value " + storeInJavaIoTmpdir);
             }
         } else {
-            log.warn("No kieker.monitoring.storeInJavaIoTmpdir parameter found in monitoringLTW.jar/" + configurationFile
+            log.warn("No kieker.monitoring.storeInJavaIoTmpdir parameter found"
                     + " (or provided via command line). Using default value '" + storeInJavaIoTmpdir + "'.");
         }
 
@@ -501,16 +603,16 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
             filenamePrefix = System.getProperty("java.io.tmpdir");
         } else { // only now we consider kieker.monitoring.customStoragePath
             String customStoragePathProperty;
-            if (System.getProperty("kieker.monitoring.customStoragePath") != null) { // we use the present virtual machine parameter value
+            if (considerSystemProperties && System.getProperty("kieker.monitoring.customStoragePath") != null) { // we use the present virtual machine parameter value
                 customStoragePathProperty = System.getProperty("kieker.monitoring.customStoragePath");
             } else { // we use the parameter in the properties file
-                customStoragePathProperty = prop.getProperty("kieker.monitoring.customStoragePath");
+                customStoragePathProperty = props.getProperty("kieker.monitoring.customStoragePath");
             }
 
             if (customStoragePathProperty != null && customStoragePathProperty.length() != 0) {
                 filenamePrefix = customStoragePathProperty;
             } else {
-                log.warn("No kieker.monitoring.customStoragePath parameter found in monitoringLTW.jar/" + configurationFile
+                log.warn("No kieker.monitoring.customStoragePath parameter found"
                         + " (or provided via command line). Using default value '" + customStoragePath + "'.");
                 filenamePrefix =
                         customStoragePath;
@@ -519,24 +621,24 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
 
         // load property "dbTableNameProperty"
         String dbTableNameProperty;
-        if (System.getProperty("kieker.monitoring.dbTableName") != null) { // we use the present virtual machine parameter value
+        if (considerSystemProperties && System.getProperty("kieker.monitoring.dbTableName") != null) { // we use the present virtual machine parameter value
             dbTableNameProperty = System.getProperty("kieker.monitoring.dbTableName");
         } else { // we use the parameter in the properties file
-            dbTableNameProperty = prop.getProperty("dbTableName");
+            dbTableNameProperty = props.getProperty("dbTableName");
         }
         if (dbTableNameProperty != null && dbTableNameProperty.length() != 0) {
             dbTableName = dbTableNameProperty;
         } else {
-            log.warn("No dbTableName  parameter found in monitoringLTW.jar/" + configurationFile
+            log.warn("No dbTableName  parameter found"
                     + ". Using default value " + dbTableName + ".");
         }
 
         // load property "debug"
         String debugProperty;
-        if (System.getProperty("kieker.monitoring.debug") != null) { // we use the present virtual machine parameter value
+        if (considerSystemProperties && System.getProperty("kieker.monitoring.debug") != null) { // we use the present virtual machine parameter value
             debugProperty = System.getProperty("kieker.monitoring.debug");
         } else { // we use the parameter in the properties file
-            debugProperty = prop.getProperty("debug");
+            debugProperty = props.getProperty("debug");
         }
         if (debugProperty != null && debugProperty.length() != 0) {
             if (debugProperty.toLowerCase().equals("true") || debugProperty.toLowerCase().equals("false")) {
@@ -548,34 +650,34 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                     this.debugMode = DebugMode.DISABLED;
                 }
             } else {
-                log.warn("Bad value for debug parameter (" + debugProperty + ") in monitoringLTW.jar/" + configurationFile
+                log.warn("Bad value for debug parameter (" + debugProperty + ")"
                         + ". Using default value " + this.debugMode.isDebugEnabled());
             }
         } else {
-            log.warn("Could not find debug parameter in monitoringLTW.jar/" + configurationFile
+            log.warn("Could not find debug parameter"
                     + ". Using default value " + this.debugMode.isDebugEnabled());
         }
 
         // load property "setInitialExperimentIdBasedOnLastId"
-        String setInitialExperimentIdBasedOnLastIdProperty = prop.getProperty("setInitialExperimentIdBasedOnLastId");
+        String setInitialExperimentIdBasedOnLastIdProperty = props.getProperty("setInitialExperimentIdBasedOnLastId");
         if (setInitialExperimentIdBasedOnLastIdProperty != null && setInitialExperimentIdBasedOnLastIdProperty.length() != 0) {
             if (setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true") || setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("false")) {
                 setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true");
             } else {
-                log.warn("Bad value for setInitialExperimentIdBasedOnLastId parameter (" + setInitialExperimentIdBasedOnLastIdProperty + ") in monitoringLTW.jar/" + configurationFile
+                log.warn("Bad value for setInitialExperimentIdBasedOnLastId parameter (" + setInitialExperimentIdBasedOnLastIdProperty + ")"
                         + ". Using default value " + setInitialExperimentIdBasedOnLastId);
             }
         } else {
-            log.warn("Could not find setInitialExperimentIdBasedOnLastId parameter in monitoringLTW.jar/" + configurationFile
+            log.warn("Could not find setInitialExperimentIdBasedOnLastId parameter"
                     + ". Using default value " + setInitialExperimentIdBasedOnLastId);
         }
 
         // load property "asyncRecordQueueSize"
         String asyncRecordQueueSizeProperty = null;
-        if (System.getProperty("kieker.monitoring.asyncRecordQueueSize") != null) { // we use the present virtual machine parameter value
+        if (considerSystemProperties && System.getProperty("kieker.monitoring.asyncRecordQueueSize") != null) { // we use the present virtual machine parameter value
             asyncRecordQueueSizeProperty = System.getProperty("kieker.monitoring.asyncRecordQueueSize");
         } else { // we use the parameter in the properties file
-            asyncRecordQueueSizeProperty = prop.getProperty("asyncRecordQueueSize");
+            asyncRecordQueueSizeProperty = props.getProperty("asyncRecordQueueSize");
         }
         if (asyncRecordQueueSizeProperty != null && asyncRecordQueueSizeProperty.length() != 0) {
             int asyncRecordQueueSizeValue = -1;
@@ -586,31 +688,31 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
             if (asyncRecordQueueSizeValue >= 0) {
                 asyncRecordQueueSize = asyncRecordQueueSizeValue;
             } else {
-                log.warn("Bad value for asyncRecordQueueSize parameter (" + asyncRecordQueueSizeProperty + ") in monitoringLTW.jar/" + configurationFile
+                log.warn("Bad value for asyncRecordQueueSize parameter (" + asyncRecordQueueSizeProperty + ")"
                         + ". Using default value " + asyncRecordQueueSize);
             }
         } else {
-            log.warn("Could not find asyncRecordQueueSize parameter in monitoringLTW.jar/" + configurationFile
+            log.warn("Could not find asyncRecordQueueSize parameter"
                     + ". Using default value " + asyncRecordQueueSize);
         }
 
         // load property "asyncBlockOnFullQueue"
         String asyncBlockOnFullQueueProperty = null;
-        if (System.getProperty("kieker.monitoring.asyncBlockOnFullQueue") != null) { // we use the present virtual machine parameter value
+        if (considerSystemProperties && System.getProperty("kieker.monitoring.asyncBlockOnFullQueue") != null) { // we use the present virtual machine parameter value
             asyncBlockOnFullQueueProperty = System.getProperty("kieker.monitoring.asyncBlockOnFullQueue");
         } else { // we use the parameter in the properties file
-            asyncBlockOnFullQueueProperty = prop.getProperty("asyncBlockOnFullQueue");
+            asyncBlockOnFullQueueProperty = props.getProperty("asyncBlockOnFullQueue");
         }
         if (asyncBlockOnFullQueueProperty != null && asyncBlockOnFullQueueProperty.length() != 0) {
             asyncBlockOnFullQueue = Boolean.parseBoolean(asyncBlockOnFullQueueProperty);
-            log.info("Using asyncBlockOnFullQueue value (" + asyncBlockOnFullQueueProperty + ") in monitoringLTW.jar/" + configurationFile
+            log.info("Using asyncBlockOnFullQueue value (" + asyncBlockOnFullQueueProperty + ")"
                     + ". Using default value " + asyncBlockOnFullQueue);
         } else {
-            log.warn("Could not find asyncBlockOnFullQueue parameter in monitoringLTW.jar/" + configurationFile
+            log.warn("Could not find asyncBlockOnFullQueue"
                     + ". Using default value " + asyncBlockOnFullQueue);
         }
 
-        String monitoringEnabledProperty = prop.getProperty("monitoringEnabled");
+        String monitoringEnabledProperty = props.getProperty("monitoringEnabled");
         if (monitoringEnabledProperty != null && monitoringEnabledProperty.length() != 0) {
             if (monitoringEnabledProperty.toLowerCase().equals("true") || monitoringEnabledProperty.toLowerCase().equals("false")) {
                 if (monitoringEnabledProperty.toLowerCase().equals("true")) {
@@ -619,12 +721,12 @@ public final class MonitoringController implements IMonitoringRecordReceiver {
                     this.controllerState.set(ControllerState.DISABLED);
                 }
             } else {
-                log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ") in monitoringLTW.jar/" + configurationFile
+                log.warn("Bad value for monitoringEnabled parameter (" + monitoringEnabledProperty + ")"
                         + ". Using default value " + this.controllerState.get().equals(ControllerState.ENABLED));
             }
 
         } else {
-            log.warn("Could not find monitoringEnabled parameter in monitoringLTW.jar/" + configurationFile
+            log.warn("Could not find monitoringEnabled parameter"
                     + ". Using default value " + this.controllerState.get().equals(ControllerState.ENABLED));
         }
 
