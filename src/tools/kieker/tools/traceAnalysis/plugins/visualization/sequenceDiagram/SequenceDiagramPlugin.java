@@ -203,24 +203,35 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
         return strBuild.toString();
     }
 
+    /**
+     * It is important NOT to use the println method but print and a manuel
+     * linebreak by printing the character \n. The pic2plot tool can only
+     * process pic files with UNIX line breaks.
+     *
+     * @param systemEntityFactory
+     * @param messageTrace
+     * @param sdMode
+     * @param ps
+     * @param shortLabels
+     */
     private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory,
             final MessageTrace messageTrace, final SDModes sdMode, final PrintStream ps,
             final boolean shortLabels) {
         // dot node ID x component instance
         Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
-        ps.println(".PS");
-        //ps.println("copy \"lib/sequence.pic\";");
-        ps.println(sequencePicContent);
-        ps.println("boxwid = 1.1;");
-        ps.println("movewid = 0.5;");
+        ps.print(".PS"+"\n");
+        //ps.print("copy \"lib/sequence.pic\";"+"\n");
+        ps.print(sequencePicContent+"\n");
+        ps.print("boxwid = 1.1;"+"\n");
+        ps.print("movewid = 0.5;"+"\n");
 
         TreeSet<Integer> plottedComponentIds = new TreeSet<Integer>();
 
         final AllocationComponent rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
         final String rootDotId = "O" + rootAllocationComponent.getId();
-        ps.println("actor(O" + rootAllocationComponent.getId()
-                + ",\"\");");
+        ps.print("actor(O" + rootAllocationComponent.getId()
+                + ",\"\");"+"\n");
         plottedComponentIds.add(rootAllocationComponent.getId());
 
         if (sdMode == SDModes.ALLOCATION) {
@@ -228,13 +239,13 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                 AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
                 AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
                 if (!plottedComponentIds.contains(senderComponent.getId())) {
-                    ps.println("object(O" + senderComponent.getId()
-                            + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\"" + allocationComponentLabel(senderComponent, shortLabels) + "\");");
+                    ps.print("object(O" + senderComponent.getId()
+                            + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\"" + allocationComponentLabel(senderComponent, shortLabels) + "\");"+"\n");
                     plottedComponentIds.add(senderComponent.getId());
                 }
                 if (!plottedComponentIds.contains(receiverComponent.getId())) {
-                    ps.println("object(O" + receiverComponent.getId()
-                            + ",\"" + receiverComponent.getExecutionContainer().getName() + "::\",\"" + allocationComponentLabel(receiverComponent, shortLabels) + "\");");
+                    ps.print("object(O" + receiverComponent.getId()
+                            + ",\"" + receiverComponent.getExecutionContainer().getName() + "::\",\"" + allocationComponentLabel(receiverComponent, shortLabels) + "\");"+"\n");
                     plottedComponentIds.add(receiverComponent.getId());
                 }
             }
@@ -243,13 +254,13 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                 AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
                 AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
                 if (!plottedComponentIds.contains(senderComponent.getId())) {
-                    ps.println("object(O" + senderComponent.getId()
-                            + ",\"\",\"" + assemblyComponentLabel(senderComponent, shortLabels) + "\");");
+                    ps.print("object(O" + senderComponent.getId()
+                            + ",\"\",\"" + assemblyComponentLabel(senderComponent, shortLabels) + "\");"+"\n");
                     plottedComponentIds.add(senderComponent.getId());
                 }
                 if (!plottedComponentIds.contains(receiverComponent.getId())) {
-                    ps.println("object(O" + receiverComponent.getId()
-                            + ",\"\",\"" + assemblyComponentLabel(receiverComponent, shortLabels) + "\");");
+                    ps.print("object(O" + receiverComponent.getId()
+                            + ",\"\",\"" + assemblyComponentLabel(receiverComponent, shortLabels) + "\");"+"\n");
                     plottedComponentIds.add(receiverComponent.getId());
                 }
             }
@@ -258,10 +269,10 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
         }
 
 
-        //ps.println("step()");
-        ps.println("step()");
-        ps.println("active(" + rootDotId + ");");
-        //ps.println("step();");
+        //ps.print("step()"+"\n");
+        ps.print("step()"+"\n");
+        ps.print("active(" + rootDotId + ");"+"\n");
+        //ps.print("step();"+"\n");
         boolean first = true;
         for (Message me : messages) {
             String senderDotId = "-1";
@@ -294,39 +305,39 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                 //if (method.indexOf('(') != -1) {
                 //    method = me.receiver.opname;
                 //}
-                //ps.println("step();");
+                //ps.print("step();"+"\n");
                 if (first == true) {
-                    ps.println("async();");
+                    ps.print("async();"+"\n");
                     first = false;
                 } else {
-                    ps.println("sync();");
+                    ps.print("sync();"+"\n");
                 }
-                ps.println("message(" + senderDotId
+                ps.print("message(" + senderDotId
                         + "," + receiverDotId
                         + ", \"" + msgLabel.toString()
-                        + "\");");
-                ps.println("active(" + receiverDotId + ");");
-                ps.println("step();");
+                        + "\");"+"\n");
+                ps.print("active(" + receiverDotId + ");"+"\n");
+                ps.print("step();"+"\n");
             } else if (me instanceof SynchronousReplyMessage) {
-                ps.println("step();");
-                ps.println("async();");
-                ps.println("rmessage(" + senderDotId
+                ps.print("step();"+"\n");
+                ps.print("async();"+"\n");
+                ps.print("rmessage(" + senderDotId
                         + "," + receiverDotId
-                        + ", \"\");");
-                ps.println("inactive(" + senderDotId + ");");
+                        + ", \"\");"+"\n");
+                ps.print("inactive(" + senderDotId + ");"+"\n");
             } else {
                 log.error("Message type not supported: " + me.getClass().getName());
             }
         }
-        ps.println("inactive(" + rootDotId + ");");
-        ps.println("step();");
+        ps.print("inactive(" + rootDotId + ");"+"\n");
+        ps.print("step();"+"\n");
 
         for (int i : plottedComponentIds) {
-            ps.println("complete(O" + i + ");");
+            ps.print("complete(O" + i + ");"+"\n");
         }
-        ps.println("complete(" + rootDotId + ");");
+        ps.print("complete(" + rootDotId + ");"+"\n");
 
-        ps.println(".PE");
+        ps.print(".PE"+"\n");
     }
 
     public static void writePicForMessageTrace(final SystemModelRepository systemEntityFactory,
