@@ -417,6 +417,7 @@
             <exclude name="${src.userguide.example.jms.dir}/lib/*"/>
             <include name="${src.userguide.example.jms.dir}/src/**/*.java"/>
             <include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties"/>
+            <include name="${src.userguide.example.jms.dir}/META-INF/log4j.properties"/>
             <include name="${example.microbenchmark.dir}/**"/>
             <exclude name="${example.microbenchmark.dir}/results/**/*"/>
             <exclude name="${example.microbenchmark.dir}/tmp/**/*"/>
