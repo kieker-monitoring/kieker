@@ -179,6 +179,7 @@ public final class FsWriterThread extends AbstractWorkerThread {
 
         for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
             Object val = recordFields[i];
+            // TODO: assert that val!=null and provide suitable log msg if null
             pos.write(val.toString());
             if (i < LAST_FIELD_INDEX) {
                 pos.write(';');
