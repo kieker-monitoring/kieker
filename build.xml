@@ -474,7 +474,7 @@
             <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/kieker*.jar"/>
             <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/aspectj*.jar"/>
             <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/commons-logging*.jar"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>
+            <!--<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>-->
         </patternset>
         <patternset id="dist_jpetstoreExample_files-binmode">
             <include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh"/>
