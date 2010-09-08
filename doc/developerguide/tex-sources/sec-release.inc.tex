@@ -60,15 +60,21 @@ bin/convertLoggingTimestamp.sh \
 \item \file{bin/trace-analysis.sh}
 \setBashListing
 \begin{lstlisting}
-bin/trace-analysis.sh \
-  -i examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/\
-  -o . --plot-Deployment-Operation-Dependency-Graph --plot-Assembly-Operation-Dependency-Graph
+bin/trace-analysis.sh --inputdirs examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/ --outputdir . --plot-Deployment-Component-Dependency-Graph --plot-Assembly-Component-Dependency-Graph --plot-Container-Dependency-Graph --plot-Deployment-Operation-Dependency-Graph --plot-Assembly-Operation-Dependency-Graph --plot-Aggregated-Deployment-Call-Tree --plot-Aggregated-Assembly-Call-Tree --print-Deployment-Equivalence-Classes --print-Assembly-Equivalence-Classes --plot-Aggregated-Deployment-Call-Tree --plot-Aggregated-Assembly-Call-Tree --short-labels
 
-bin/trace-analysis.sh \
-  -i examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/\
-  -o . --plot-Deployment-Sequence-Diagrams --plot-Assembly-Sequence-Diagrams
-  --select-traces 6488138950668976192 6488138950668976197
+bin/trace-analysis.sh --inputdirs examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/ --outputdir . --select-traces  6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131 --plot-Deployment-Sequence-Diagrams --plot-Assembly-Sequence-Diagrams --plot-Call-Trees --print-Message-Traces --print-Execution-Traces  --short-labels
 \end{lstlisting}
+
+% \begin{lstlisting}
+% bin/trace-analysis.sh \
+%   -i examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/\
+%   -o . --plot-Deployment-Operation-Dependency-Graph --plot-Assembly-Operation-Dependency-Graph
+% 
+% bin/trace-analysis.sh \
+%   -i examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/\
+%   -o . --plot-Deployment-Sequence-Diagrams --plot-Assembly-Sequence-Diagrams
+%   --select-traces 6488138950668976192 6488138950668976197
+% \end{lstlisting}
 \item \file{bin/dotPic-fileConverter.sh}
 \setBashListing
 \begin{lstlisting}
