@@ -1,6 +1,5 @@
 \textbf{Checklist for creating a release version}
 
-
 \begin{compactenum}
 \item Tag the \dir{trunk/} to work on a frozen copy:
 \setBashListing
@@ -17,10 +16,14 @@ svn export \
  http://samoa.informatik.uni-kiel.de/[...]/tags/1.2 kieker-1.2-export \
  --username=USER --password=PASS
 \end{lstlisting}
-
-\item \textbf{Test the source release:}
+\item \textbf{Build the release files}
+\setBashListing
+\begin{lstlisting}
+ant release
+\end{lstlisting}
+\item \textbf{Test the source release:} \textit{--- Extract source release archive to a tmp directory}
 \begin{compactenum}
-\item Extract source release archive to a temporary directory
+\item Manually inspect contents
 \item Test build:
 \setBashListing
 \begin{lstlisting}
@@ -45,13 +48,11 @@ ant run-test-storage
 \end{lstlisting}
 \end{compactenum}
 
-\item \textbf{Test the binary release:}
+\item \textbf{Test the binary release:} \textit{--- Extract binary release archive to a tmp directory}
 \begin{compactenum}
-\item Extract binary release archive to a temporary directory
-
-\item Test wrapper scripts:
+\item Test wrapper scripts: \textbf{\textit{--- Linux \& Windows}}
 \begin{compactitem}
-\item \file{bin/convertLoggingTimestamp.sh}
+\item \file{bin/convertLoggingTimestamp.sh} \textit{--- inspect generated \file{.html}/\file{.txt} files}
 \setBashListing
 \begin{lstlisting}
 bin/convertLoggingTimestamp.sh \
@@ -124,5 +125,32 @@ ant run
 \item Check user guide PDF \file{doc/kieker-userguide.pdf}
 \end{compactenum}
 
-\item Merge the changes (if such) back to the \dir{trunk/}
+\item Copy \dir{dist/} to SVN tag and add to repository
+\item Merge the \dir{tag/}'s changes (if such) back to the \dir{trunk/}
+\item \textbf{Publish release files}\\
+{\scriptsize\url{https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease}}\\
+Uploads via \textit{Project Admin} $\rightarrow$ \textit{File Manager}
+\begin{compactenum}
+\item \dir{/}
+\begin{compactenum}
+\item \file{kieker-<version>\_binaries.zip|tar.gz}
+\item \file{kieker-<version>\_sources.zip|tar.gz}
+\item \file{kieker-userguide.pdf} (e.g., extracted from zip)
+\end{compactenum}
+\item \dir{/examples/}
+\begin{compactenum}
+\item \file{kieker-examples-JavaEEServletContainerExample.zip|tar.gz}
+\end{compactenum}
+\item \dir{/javadoc/}
+\begin{compactenum}
+\item \file{kieker-<version>\_javadoc.zip|tar.gz}
+\end{compactenum}
+\end{compactenum}
+\item Upload HTML version of Javadoc API\\
+Only via scp: {\scriptsize\texttt{SFUSER,kieker@web.sourceforge.net:/home/groups/k/ki/kieker/htdocs/}}\\
+(An ftp client supporting scp can be used, of course)
+\begin{compactenum}
+\item Create directory \dir{<version>/doc/api/}
+\item Upload contents of unzipped javadoc
+\end{compactenum}
 \end{compactenum}

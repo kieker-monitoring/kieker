@@ -517,7 +517,6 @@
             depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,build-examples">
         <echo message="Sourceforge release instructions can be found at:"/>
         <echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease"/>
-        <echo message="scp dist/release/kieker-VERSION_* USER@frs.sourceforge.net:uploads"/>
     </target>
 
     <target name="clean">
