@@ -1,4 +1,4 @@
-<project name="Bookstore-Application" basedir="." default="run-monitoring">
+<project name="Bookstore-Application" basedir="." default="">
 
 	<property file="build.properties" />
 
@@ -26,8 +26,8 @@
 				<path location="${jar.file.monitoring}" />
                                 <path location="." />
 			</classpath>
-        	<jvmarg value="-Dkieker.monitoring.properties=${meta.dir}/${properties.file}" />
-        	<jvmarg value="-Dlog4j.configuration=./log4j.properties" />
+                   	<jvmarg value="-Dkieker.monitoring.properties=${meta.dir}/${properties.file}" />
+                        <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 
 	</target>
@@ -40,7 +40,7 @@
 				<path location="${jar.file.analysis}" />
                                 <path location="." />
 			</classpath>
-        	<jvmarg value="-Dlog4j.configuration=./log4j.properties" />
+                        <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
 
@@ -65,6 +65,7 @@
 	<target name="-compile" depends="-init">
 		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" />
 		<mkdir dir="${build.dir}/${meta.dir}" />
+                <copy file="${log4j.properties.example}" tofile="${build.dir}/${meta.dir}/log4j.properties"/>
 	</target>
 
 	<target name="-init">

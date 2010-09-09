@@ -2,6 +2,15 @@ Introduction:
 
 This document summarizes changes made in all releases starting with 0.90.
 
+* 1.2 (Sep 8, 2010)
+- Minor bug-fixes and refactorings 
+  (e.g., renaming Kieker.Tpmon/Tpan->Kieker.Monitoring/Analysis )
+- Further enancements to trace analysis tool
+  (e.g., analysis and visualization features providing software 
+   assembly- and deployment-level views)
+- Improved documentation, e.g., brand-new user guide with examples!
+- Improved Windows support (e.g., wrapper scripts)
+
 * 1.1 (March 04, 2010)
 - Improved implementation of trace analysis tool
   - internal meta-model, on-the-fly trace reconstruction, ...
@@ -11,11 +20,11 @@ This document summarizes changes made in all releases starting with 0.90.
     - hierarchical dependency graphs (operation-, component-, container-level), 
     - call graphs
 
-* 1.0 (Nov 18 2009)
+* 1.0 (Nov 18, 2009)
 - Minor changes to Kieker's architecture
 - Bug fixes
 
-* 0.95a (Jul 09 2009)
+* 0.95a (Jul 09, 2009)
 - Considerable improvements to Kieker's architecture, e.g.
   - Generalized/extensible monitoring record model (more than executions)
   - Generalized/extensible writer model (more than database and filesystem)
@@ -23,7 +32,7 @@ This document summarizes changes made in all releases starting with 0.90.
 - Major refactorings
 - First release containing core parts of the analysis component Tpan
 
-* 0.91 (Apr 27 2009)
+* 0.91 (Apr 27, 2009)
 - Aspects are in @Aspect style
 - Adapted to operate with Java 6
 - Maven build support
@@ -31,9 +40,9 @@ This document summarizes changes made in all releases starting with 0.90.
 - More efficient internal data structures and processing
 - Distributed monitoring
 
-* 0.6 (Jul 30 2008)
+* 0.6 (Jul 30, 2008)
 - Added a new test for load-time weaving without Java annotation using full 
   instrumentation
 
-* 0.5 (May 08 2008)
+* 0.5 (May 08, 2008)
 - first sourceforge release

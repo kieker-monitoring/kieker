@@ -1,0 +1,128 @@
+\textbf{Checklist for creating a release version}
+
+
+\begin{compactenum}
+\item Tag the \dir{trunk/} to work on a frozen copy:
+\setBashListing
+\begin{lstlisting}
+ svn cp trunk/  tags/<version>/
+\end{lstlisting}
+\item Set the final release version number in the \file{build.xml}
+\item Modify the \file{HISTORY} file
+\item Commit the tag
+\item Export a clean version of the tag from the svn:
+\setBashListing
+\begin{lstlisting}
+svn export \
+ http://samoa.informatik.uni-kiel.de/[...]/tags/1.2 kieker-1.2-export \
+ --username=USER --password=PASS
+\end{lstlisting}
+
+\item \textbf{Test the source release:}
+\begin{compactenum}
+\item Extract source release archive to a temporary directory
+\item Test build:
+\setBashListing
+\begin{lstlisting}
+ant
+\end{lstlisting}
+\item Execute JUnit tests
+\setBashListing
+\begin{lstlisting}
+ant run-tests-junit
+\end{lstlisting}
+\item Execute integration tests (each test eventually terminates; some take quite a while)
+\setBashListing
+\begin{lstlisting}
+ant run-tests-compileTimeWeaving-bookstore
+ant run-tests-compileTimeWeaving-bookstore-synchronized
+ant run-tests-compileTimeWeaving-bookstoreDB
+ant run-tests-compileTimeWeaving-twoConcurrentMethodsExample
+ant run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes
+ant run-tests-loadTimeWeaving-bookstoreFullInstrumentation
+ant run-tests-loadTimeWeaving-executionOrderTest
+ant run-test-storage
+\end{lstlisting}
+\end{compactenum}
+
+\item \textbf{Test the binary release:}
+\begin{compactenum}
+\item Extract binary release archive to a temporary directory
+
+\item Test wrapper scripts:
+\begin{compactitem}
+\item \file{bin/convertLoggingTimestamp.sh}
+\setBashListing
+\begin{lstlisting}
+bin/convertLoggingTimestamp.sh \
+ --timestamps 1283156545581511026 1283156546127117246
+\end{lstlisting}
+\item \file{bin/trace-analysis.sh}
+\setBashListing
+\begin{lstlisting}
+bin/trace-analysis.sh --inputdirs examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/ --outputdir . --plot-Deployment-Component-Dependency-Graph --plot-Assembly-Component-Dependency-Graph --plot-Container-Dependency-Graph --plot-Deployment-Operation-Dependency-Graph --plot-Assembly-Operation-Dependency-Graph --plot-Aggregated-Deployment-Call-Tree --plot-Aggregated-Assembly-Call-Tree --print-Deployment-Equivalence-Classes --print-Assembly-Equivalence-Classes --plot-Aggregated-Deployment-Call-Tree --plot-Aggregated-Assembly-Call-Tree --short-labels
+
+bin/trace-analysis.sh --inputdirs examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/ --outputdir . --select-traces  6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131 --plot-Deployment-Sequence-Diagrams --plot-Assembly-Sequence-Diagrams --plot-Call-Trees --print-Message-Traces --print-Execution-Traces  --short-labels
+\end{lstlisting}
+
+% \begin{lstlisting}
+% bin/trace-analysis.sh \
+%   -i examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/\
+%   -o . --plot-Deployment-Operation-Dependency-Graph --plot-Assembly-Operation-Dependency-Graph
+% 
+% bin/trace-analysis.sh \
+%   -i examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/\
+%   -o . --plot-Deployment-Sequence-Diagrams --plot-Assembly-Sequence-Diagrams
+%   --select-traces 6488138950668976192 6488138950668976197
+% \end{lstlisting}
+\item \file{bin/dotPic-fileConverter.sh}
+\setBashListing
+\begin{lstlisting}
+bin/dotPic-fileConverter.sh . pdf ps png
+\end{lstlisting}
+\item \file{bin/logReplay.sh}
+\setBashListing
+\begin{lstlisting}
+bin/logReplay.sh \
+ -i examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/ \
+ -k true -r false
+
+diff -r examples/userguide/ch5--trace-monitoring-aspectj/testdata/tpmon-20100830-082225522-UTC/tpmon-20100830-082225582-UTC-Thread-2.dat \
+ <replayed dat file>
+\end{lstlisting}
+\item \file{bin/mappingGenerator.sh} ---
+\textit{Not really used so far}
+\end{compactitem}
+
+\item Execute user guide examples:
+
+\begin{compactitem}
+\item \dir{ch2--bookstore-application}
+\setBashListing
+\begin{lstlisting}
+ant run-jar
+\end{lstlisting}
+\item \dir{ch2--manual-instrumentation} -- copy jars first
+\setBashListing
+\begin{lstlisting}
+ant run-monitoring
+ant run-analysis -Danalysis.directory=<DIR>
+\end{lstlisting}
+\item \dir{ch3-4--custom-components} -- copy jars first
+\setBashListing
+\begin{lstlisting}
+ant run
+\end{lstlisting}
+\item \dir{ch5--trace-monitoring-aspectj} -- copy jars first
+\setBashListing
+\begin{lstlisting}
+ant run
+\end{lstlisting}
+\item \dir{appendix-JMS} -- see instructions in user guide% appendix
+\item \dir{JavaEEServletContainerExample} -- see instructions in user guide% appendix
+\end{compactitem}
+\item Check user guide PDF \file{doc/kieker-userguide.pdf}
+\end{compactenum}
+
+\item Merge the changes (if such) back to the \dir{trunk/}
+\end{compactenum}

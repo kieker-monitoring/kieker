@@ -273,7 +273,7 @@ The next step after instrumenting the code is running the instrumented applicati
 \quad\
 
 \WARNBOX{%
-Unter Windows it is necessary to separate the classpath elements by %
+Under Windows it is necessary to separate the classpath elements by %
 a semicolon instead of a colon.}
 
 \quad\
@@ -285,7 +285,7 @@ In \Kieker's default configuration, the log directory can be found in the defaul
 check the environment variable \dir{\%temp\%} for the location  under Windows. %
 %it \dir{C:\textbackslash{}users\textbackslash{}[\ldots]\textbackslash{}temp} under Windows.
 The monitoring directory contains two types of files: \dir{.dat} files containing text representations of the monitoring records and a %single 
-file named \dir{tpmon.map} which contains information on the types of the monitoring records used. 
+file named \dir{tpmon.map} which contains information on the types of monitoring records used. 
 
 \begin{figure}[H]
 \begin{graybox}
@@ -364,9 +364,9 @@ Listing \ref{lst:Consumer} on page~\pageref{lst:Consumer} shows the content of t
 
 \noindent The consumer checks if the response time of each method call, in this case \method{getBook()}, is below %
 a specified threshold value. %Meaning the maximal response time has not been exceeded. 
-This threshold is set during construction of the \class{Consumer} class (see lines 14--16). 
+This threshold is set during construction of the \class{Consumer} class (see lines 13--15). 
 
-For the data analysis the \method{newMonitoringRecord()} (see lines 24--41) is used. %
+For the data analysis, the \method{newMonitoringRecord()} (see lines 23--40) is used. %
 This method is called for every monitoring record. At first the method tests if %
 the monitoring record are really \class{OperationExecutionRecord} instances, as %
 these are the only record types it can process. Then the methods calculates the %
@@ -391,11 +391,11 @@ analysis tool has to create at least one \class{AnalysisController} which can be
 seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line~18. Then the consumers %
 are registered with the analysis instance. In this case, the previously described %
 \class{Consumer} is instantiated and the maximum response time is set to 1.9 milliseconds. %3 nanoseconds. %
-Line~27 sets the file system monitoring log reader which is initialized with the first %
+Line~24 sets the file system monitoring log reader which is initialized with the first %
 command-line argument value as the input directory. The application expects the %
 output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) %
 as the only argument value, which must be passed manually. %
-The analysis started by calling its \method{run} method (line~24). %
+The analysis started by calling its \method{run} method (line~27). %
 
 \pagebreak
 

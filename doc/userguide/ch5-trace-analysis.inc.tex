@@ -50,7 +50,7 @@ Section~\ref{sec:traceAnalysisExamples}.
 
 \section{Monitoring Trace Information}\label{sec:traceMonitoring}
 
-The following Sections describe how to the monitoring probes based on %
+The following Sections describe how to use the monitoring probes based on %
 AspectJ (Section~\ref{sec:traceAnalysis:instr:AspectJ}), %
 the Java Servlet~API (Section~\ref{sec:traceAnalysis:instr:servlet}), %
 the Spring Framework (Section~\ref{sec:traceAnalysis:instr:spring}), and %
@@ -60,7 +60,7 @@ by \Kieker{}. %
 \subsection{AspectJ-Based Instrumentation}\label{sec:traceAnalysis:instr:AspectJ}
 
 AspectJ~\cite{AspectJ-WebSite} allows to weave code into the byte code of %
-Java applications and librarries without requiring manual modifications of the %
+Java applications and libraries without requiring manual modifications of the %
 source code. %
 \Kieker{} includes the AspectJ-based monitoring probes %
 \class{OperationExecutionAspectAnnotation}, %
@@ -161,7 +161,7 @@ Listing~\ref{lst:aopConfigFileAnnotations} shows the modified configuration file
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileAnnotations]{\aspectJBookstoreApplicationDir/META-INF/aop.xml}
 
 \noindent Line~5 tells the AspectJ weaver to consider all classes inside the package %
-\class{bookstoreTracing}. AspectJ allows to use for the definition of classes to %
+\class{bookstoreTracing}. AspectJ allows to use wild-cards for the definition of classes to %
 include---e.g., \lstinline$<include within="bookstoreTracing.Bookstore*"/>$ to weave all %
 classes in this package with the prefix \class{Bookstore}. 
 
@@ -230,7 +230,7 @@ invocation of the filter and passes it to the \class{MonitoringController}.
 
 Listing~\ref{lst:OperationExecutionRegistrationAndLoggingFilterInWebXML} %
 demonstrates how to integrate the \class{OperationExecutionRegistrationAndLoggingFilter} %
-in a \file{web.xml} file of a web application. 
+in the \file{web.xml} file of a web application. 
 
 \setXMLListing
 \lstinputlisting[xleftmargin=0mm,firstline=31,lastline=38,numbers=none,%
