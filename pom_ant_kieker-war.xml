@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.sf.kieker</groupId>
-  <artifactId>monitoring</artifactId>
-  <name>Kieker Monitoring</name>
-  <packaging>jar</packaging>
+  <artifactId>kieker-monitoring-servlet</artifactId>
+  <name>Kieker Monitoring Servlet Webapp</name>
+  <packaging>war</packaging>
   <parent>
   	<artifactId>base</artifactId>
   	<groupId>net.sf.kieker</groupId>

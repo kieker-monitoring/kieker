@@ -42,9 +42,8 @@
   </developers>
   
   <modules>
-  	<module>tpmon-ctrl</module>
-  	<module>tpmon-ctw</module>
-  	<module>tpmon-ltw</module>
+  	<module>jar</module>
+  	<module>war</module>
   </modules>
   
     <!-- TODO add further dependencies -->

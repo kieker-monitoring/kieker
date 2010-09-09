@@ -1083,12 +1083,20 @@
                  classpathref="maven-ant-tasks.classpath" />
     </target>
 
-    <target name="mvn-deploy" depends="mvn-init, mvn-deploy-base, mvn-deploy-monitoring" />
+    <target name="mvn-deploy" depends="mvn-init, mvn-deploy-base, mvn-deploy-jar, mvn-deploy-war" />
 
-    <target name="mvn-deploy-monitoring" depends="compile-kieker.monitoring, mvn-deploy-base">
+    <target name="mvn-deploy-jar" depends="compile-kieker.monitoring, mvn-deploy-base">
         <artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
-        <artifact:pom id="mavenproject" file="pom_ant_kieker-monitoring.xml" />
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-jar.xml" />
         <artifact:deploy file="${dist.dir}/${dist.kieker.main.jar}">
+            <pom refid="mavenproject"/>
+        </artifact:deploy>
+    </target>
+
+    <target name="mvn-deploy-war" depends="compile-kieker.monitoring-servlet, mvn-deploy-jar">
+        <artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+        <artifact:pom id="mavenproject" file="pom_ant_kieker-war.xml" />
+        <artifact:deploy file="${dist.dir}/${dist.kieker.monitoring.servlet.war}">
             <pom refid="mavenproject"/>
         </artifact:deploy>
     </target>
