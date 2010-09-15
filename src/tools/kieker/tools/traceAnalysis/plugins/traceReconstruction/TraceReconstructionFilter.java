@@ -58,11 +58,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     private final boolean ignoreInvalidTraces;
     private final Execution rootExecution;
     private final long maxTraceDurationNanos;
-    /** Timestamp of most recent execution x trace */
+    /** Pending traces sorted by tin timestamps */
     private final TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(
             new Comparator<ExecutionTrace>() {
 
                 /** Order traces by tins */
+                @Override
                 public int compare(final ExecutionTrace t1,
                         final ExecutionTrace t2) {
                     if (t1 == t2) {
@@ -121,6 +122,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
         return this.maxTout;
     }
 
+    @Override
     public boolean execute() {
         return true; // no need to do anything here
     }
@@ -141,6 +143,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
         if (executionTrace != null) { /* trace (artifacts) exists already; */
             if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
                 TraceReconstructionFilter.log.error("Missing entry for trace in timeoutMap: " + executionTrace);
+                // TODO: We must throw a ExecutionEventProcessingException because
+                //       the pendingTraces and timeoutMap are now longer
+                //       consistent!
             }
         } else { /* create and add new trace */
             executionTrace = new ExecutionTrace(traceId);
@@ -149,7 +154,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
         try {
             executionTrace.add(execution);
             if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-                TraceReconstructionFilter.log.error("Equal entry existed in timeout already:" + executionTrace);
+                TraceReconstructionFilter.log.error("Equal entry existed in timeoutMap already:" + executionTrace);
             }
             this.processTimeoutQueue();
         } catch (final InvalidTraceException ex) { // this would be a bug!
@@ -222,7 +227,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
     /**
      * Processes the pending traces in the timeout queue: Either those, 
-     * that timed out are all, if the filte was requested to terminate.
+     * that timed out are all, if the filter was requested to terminate.
      *
      * @throws ExecutionEventProcessingException
      */
