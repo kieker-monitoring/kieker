@@ -62,7 +62,7 @@ public class MonitoringRecordTypeRegistry {
      *
      * @param recordTypeId
      * @param classname
-     * @throws LogReaderExecutionException
+     * @throws ClassNotFoundException
      */
     public final void registerRecordTypeIdMapping(int recordTypeId, String classname) throws ClassNotFoundException {
         try {

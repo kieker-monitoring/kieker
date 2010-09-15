@@ -7,7 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MonitoringRecordTypeRegistry;
@@ -38,7 +41,6 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  *
  */
-
 /**
  * This reader allows one to read a folder (the contained tpmon-*.dat files, 
  * respectively) and transform pass the monitoring events to registered consumers.
@@ -53,33 +55,63 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
     private static final String PROP_NAME_INPUTDIR = "inputDirName";
     private static final Log log = LogFactory.getLog(FSDirectoryReader.class);
     private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(true); // compatibility mode
-
     private volatile boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
-
     private File inputDir = null;
+    /**
+     * Together with the member recordTypeIdIgnoreList, used to filter only
+     * records of a specific type. The value null means all record types
+     * are read. 
+     * 
+     * @see #recordTypeIdIgnoreList
+     */
+    private final HashSet<String> recordTypeSelector; // Set of classnames
+    /** Records whose ID is in this list are simply skipped by the reader */
+    private final HashSet<Integer> recordTypeIdIgnoreList = new HashSet<Integer>();
 
-    /** Constructor for FSDirectoryReader. Requires a subsequent call to the init
-     *  method in order to specify the input directory using the parameter
-     *  @a inputDirName. */
-    public FSDirectoryReader(){ }
+    /**
+     * Constructor for FSDirectoryReader. Requires a subsequent call to the init
+     * method in order to specify the input directory
+     * 
+     * @see #init(java.lang.String) 
+     */
+    public FSDirectoryReader() {
+        this.recordTypeSelector = null; // final member must be initialized
+    }
+
+    /**
+     *
+     * @param inputDirName
+     * @param readOnlyRecordsOfType select only records of this type; null selects all
+     */
+    public FSDirectoryReader(final String inputDirName, Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
+        initInputDir(inputDirName); // throws IllegalArgumentException
+        if (readOnlyRecordsOfType != null) {
+            this.recordTypeSelector = new HashSet<String>();
+            for (Class<? extends IMonitoringRecord> recordType : readOnlyRecordsOfType) {
+                this.recordTypeSelector.add(recordType.getName());
+            }
+        } else {
+            this.recordTypeSelector = null; // ready records of any type
+        }
+    }
 
     public FSDirectoryReader(final String inputDirName) {
-        initInstanceFromArgs(inputDirName); // throws IllegalArgumentException
+        this(inputDirName, null);
     }
 
     /** Valid key/value pair: inputDirName=INPUTDIRECTORY */
-    public void init(String initString) throws IllegalArgumentException{
+    @Override
+    public void init(String initString) throws IllegalArgumentException {
         PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-        this.initInstanceFromArgs(propertyMap.getProperty(PROP_NAME_INPUTDIR)); // throws IllegalArgumentException
+        this.initInputDir(propertyMap.getProperty(PROP_NAME_INPUTDIR)); // throws IllegalArgumentException
     }
 
-   private void initInstanceFromArgs(final String inputDirName) throws IllegalArgumentException {
+    private void initInputDir(final String inputDirName) throws IllegalArgumentException {
         if (inputDirName == null || inputDirName.equals("")) {
-            throw new IllegalArgumentException("Invalid or missing property "+PROP_NAME_INPUTDIR+": " + inputDirName);
+            throw new IllegalArgumentException("Invalid or missing property " + PROP_NAME_INPUTDIR + ": " + inputDirName);
         }
         this.inputDir = new File(inputDirName);
     }
-
     static final String filePrefix = "tpmon";
     static final String filePostfix = ".dat";
 
@@ -88,16 +120,18 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
         boolean retVal = false;
         try {
             File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
+
+                @Override
                 public boolean accept(File pathname) {
-                    return pathname.isFile() &&
-                            pathname.getName().startsWith(filePrefix) &&
-                            pathname.getName().endsWith(filePostfix);
+                    return pathname.isFile()
+                            && pathname.getName().startsWith(filePrefix)
+                            && pathname.getName().endsWith(filePostfix);
                 }
             });
 
             if (inputFiles == null) {
                 throw new MonitoringLogReaderException("Directory '" + this.inputDir + "' does not exist or an I/O error occured. No files starting with '"
-                        +filePrefix+"' and ending with '"+filePostfix+"' could be found.");
+                        + filePrefix + "' and ending with '" + filePostfix + "' could be found.");
             } else {
                 retVal = true;
             }
@@ -110,12 +144,12 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
             throw e;
         } catch (Exception e2) {
             if (!(e2 instanceof MonitoringLogReaderException)) {
-                MonitoringLogReaderException readerEx = new MonitoringLogReaderException("An error occurred while parsing files from directory " +
-                        this.inputDir.getAbsolutePath() + ":", e2);
+                MonitoringLogReaderException readerEx = new MonitoringLogReaderException("An error occurred while parsing files from directory "
+                        + this.inputDir.getAbsolutePath() + ":", e2);
                 log.error("Exception", readerEx);
                 throw readerEx;
             }
-        } 
+        }
         return retVal;
     }
 
@@ -142,11 +176,17 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                     // the leading $ is optional
                     Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr);
                     String classname = st.nextToken();
-                    this.typeRegistry.registerRecordTypeIdMapping(id, classname);
+
+                    if (this.recordTypeSelector == null || this.recordTypeSelector.contains(classname)) {
+                        this.typeRegistry.registerRecordTypeIdMapping(id, classname);
+                    } else {
+                        this.recordTypeIdIgnoreList.add(id);
+                        log.info("Ignoring record type for mapping " + line);
+                    }
                 } catch (Exception e) {
                     log.error(
-                            "Failed to parse line: {" + line + "} from file " +
-                            mappingFile.getAbsolutePath(), e);
+                            "Failed to parse line: {" + line + "} from file "
+                            + mappingFile.getAbsolutePath(), e);
                     break;
                 }
             }
@@ -171,7 +211,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
             in = new BufferedReader(new FileReader(input));
             String line;
 
-            while ((line = in.readLine()) != null) {
+            curRecord: while ((line = in.readLine()) != null) {
                 IMonitoringRecord rec = null;
                 try {
                     if (!recordTypeIdMapInitialized && line.startsWith("$")) {
@@ -182,6 +222,7 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                     int numTokens = st.countTokens();
                     String[] vec = null;
                     boolean haveTypeId = false;
+                    
                     for (int i = 0; st.hasMoreTokens(); i++) {
 //                        log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
                         String token = st.nextToken();
@@ -190,10 +231,16 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
 //                            log.info("i:" + i + " numTokens:" + numTokens + " hasMoreTokens():" + st.hasMoreTokens());
 
                             Integer id = Integer.valueOf(token.substring(1));
+
+                            if (this.recordTypeIdIgnoreList.contains(id)) {
+                                /* skip this record since records of this type are being ignored */
+                                continue curRecord;
+                            }
+
                             Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
                             if (clazz == null) {
-                                log.fatal("Missing classname mapping for record type id " + "'" +id+ "'");
-                                throw new IllegalStateException("Missing classname mapping for record type id " + "'" +id+ "'");
+                                log.fatal("Missing classname mapping for record type id " + "'" + id + "'");
+                                throw new IllegalStateException("Missing classname mapping for record type id " + "'" + id + "'");
                             }
                             rec = (IMonitoringRecord) clazz.newInstance();
                             token = st.nextToken();
@@ -220,8 +267,8 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
                     this.deliverRecord(rec);
                 } catch (Exception e) {
                     log.error(
-                            "Failed to process line: {" + line + "} from file " +
-                            input.getAbsolutePath(), e);
+                            "Failed to process line: {" + line + "} from file "
+                            + input.getAbsolutePath(), e);
                     log.error("Abort reading");
                     throw new MonitoringLogReaderException("LogReaderExecutionException ", e);
                 }
@@ -238,40 +285,40 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
     }
 
     private Object[] StringToTypedArray(String[] vec, Class[] valueTypes)
-    throws IllegalArgumentException{
+            throws IllegalArgumentException {
         final Object[] typedArray = new Object[vec.length];
         int curIdx = -1;
-        for (Class clazz : valueTypes){
+        for (Class clazz : valueTypes) {
             curIdx++;
-            if (clazz == String.class){
+            if (clazz == String.class) {
                 typedArray[curIdx] = vec[curIdx];
                 continue;
             }
-            if (clazz == int.class || clazz == Integer.class){
+            if (clazz == int.class || clazz == Integer.class) {
                 typedArray[curIdx] = Integer.valueOf(vec[curIdx]);
                 continue;
             }
-            if (clazz == long.class || clazz == Long.class){
+            if (clazz == long.class || clazz == Long.class) {
                 typedArray[curIdx] = Long.valueOf(vec[curIdx]);
                 continue;
             }
-            if (clazz == float.class || clazz == Float.class){
+            if (clazz == float.class || clazz == Float.class) {
                 typedArray[curIdx] = Float.valueOf(vec[curIdx]);
                 continue;
             }
-            if (clazz == double.class || clazz == Double.class){
+            if (clazz == double.class || clazz == Double.class) {
                 typedArray[curIdx] = Double.valueOf(vec[curIdx]);
                 continue;
             }
-            if (clazz == byte.class || clazz == Byte.class){
+            if (clazz == byte.class || clazz == Byte.class) {
                 typedArray[curIdx] = Byte.valueOf(vec[curIdx]);
                 continue;
             }
-            if (clazz == short.class || clazz == Short.class){
+            if (clazz == short.class || clazz == Short.class) {
                 typedArray[curIdx] = Short.valueOf(vec[curIdx]);
                 continue;
             }
-            if (clazz == boolean.class || clazz == Boolean.class){
+            if (clazz == boolean.class || clazz == Boolean.class) {
                 typedArray[curIdx] = Boolean.valueOf(vec[curIdx]);
                 continue;
             }

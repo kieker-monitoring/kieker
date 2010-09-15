@@ -20,10 +20,10 @@
     <classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
     <classpathentry kind="lib" path="lib/commons-pool-1.2.jar"/>
     <classpathentry kind="lib" path="lib/concurrent-1.3.4.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-api-2.2.9.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-common-utilities-2.2.9.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-rt-bindings-soap-2.2.9.jar"/>
-    <classpathentry kind="lib" path="lib/cxf-rt-core-2.2.9.jar"/>
+    <classpathentry kind="lib" path="lib/cxf-api-2.2.10.jar"/>
+    <classpathentry kind="lib" path="lib/cxf-common-utilities-2.2.10.jar"/>
+    <classpathentry kind="lib" path="lib/cxf-rt-bindings-soap-2.2.10.jar"/>
+    <classpathentry kind="lib" path="lib/cxf-rt-core-2.2.10.jar"/>
     <classpathentry kind="lib" path="lib/derby.jar"/>
     <classpathentry kind="lib" path="lib/jmc.jar"/>
     <classpathentry kind="lib" path="lib/jms-1.1.jar"/>

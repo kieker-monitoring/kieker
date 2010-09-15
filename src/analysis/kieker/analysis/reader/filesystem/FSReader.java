@@ -46,15 +46,27 @@ public class FSReader extends AbstractMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSReader.class);
     public static final String PROP_NAME_INPUTDIRS = "inputDirs"; // value: semicolon-separated list of directories
-    private volatile String[] inputDirs = null;
+    private String[] inputDirs = null;
 
-    // TODO: provide constructor with time interval
     public FSReader(final String[] inputDirs) {
+        this(inputDirs, null);
+    }
+
+    private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
+
+    /**
+     *
+     * @param inputDirs
+     * @param readOnlyRecordsOfType select only records of this type; null selects all
+     */
+    public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
         this.inputDirs = inputDirs;
+        this.readOnlyRecordsOfType = readOnlyRecordsOfType;
     }
 
     /** Default constructor used for construction by reflection. */
     public FSReader() {
+        this.readOnlyRecordsOfType = null; // final member wants to be initialized
     }
     /**
      * Acts as a consumer to the FSDirectoryReader and delegates incoming records
@@ -106,22 +118,13 @@ public class FSReader extends AbstractMonitoringLogReader {
                 IMonitoringRecord t1 = e1.getRecord();
 
                 if (t == FS_READER_TERMINATION_MARKER) {
-                        if (t.getLoggingTimestamp() == 1269110550923163000l && t1.getLoggingTimestamp() == 1269110550923163000l) {
-                            log.info("cmp result 1 (TERMINATION): " + t + " and " + t1);
-                        }
                     return 1;
                 }
                 if (t1 == FS_READER_TERMINATION_MARKER) {
-                        if (t.getLoggingTimestamp() == 1269110550923163000l && t1.getLoggingTimestamp() == 1269110550923163000l) {
-                            log.info("cmp result -1 (TERMINATION): " + t + " and " + t1);
-                        }
                     return -1;
                 }
                 /* Only return 0 (equal) iff the objects are identical, i.e., the same */
                 if (t == t1) {
-                        if (t.getLoggingTimestamp() == 1269110550923163000l && t1.getLoggingTimestamp() == 1269110550923163000l) {
-                            log.info("cmp result 0: " + t + " and " + t1);
-                        }
                     return 0;
                 }
 
@@ -130,7 +133,7 @@ public class FSReader extends AbstractMonitoringLogReader {
                      * the same and thus, we must not return 0!
                      * We use the id of the wrapping element to order these two
                      * elements in a deterministic way. */
-                    log.info("Elements have equal timestamp; ordering by wrapper id.");
+                    //log.info("Elements have equal timestamp; ordering by wrapper id.");
                     return (e.getElementId() < e1.getElementId()) ? -1 : 1;
                 }
 
@@ -181,7 +184,7 @@ public class FSReader extends AbstractMonitoringLogReader {
             try {
                 { // 1. init and start reader threads
                     for (int i = 0; i < inputDirs.length; i++) {
-                        final FSDirectoryReader r = new FSDirectoryReader(this.inputDirs[i]);
+                        final FSDirectoryReader r = new FSDirectoryReader(this.inputDirs[i], readOnlyRecordsOfType);
                         r.addRecordReceiver(this); // consume records of any type and pass to this
                         final Thread t = new Thread(new Runnable() {
 
@@ -216,9 +219,6 @@ public class FSReader extends AbstractMonitoringLogReader {
 
                         OrderRecordBufferElement nextBufferElement = this.orderRecordBuffer.firstKey(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
                         nextRecord = nextBufferElement.getRecord();
-                        if (nextRecord.getLoggingTimestamp() == 1269110550923163000l) {
-                            log.info("Found 1269110550923163000l Record: " + nextRecord);
-                        }
                         //1.5 un-compatibility: firstEntry = this.nextRecordsFromReaders.firstEntry(); // do not poll since FS_READER_TERMINATION_MARKER remains in list
                         if (nextRecord == FS_READER_TERMINATION_MARKER) {
                             log.info("All reader threads provided FS_READER_TERMINATION_MARKER");

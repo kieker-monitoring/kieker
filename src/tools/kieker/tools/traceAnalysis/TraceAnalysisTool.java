@@ -25,6 +25,7 @@ import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,8 @@ import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.Containe
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAllocation;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAssembly;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.visualization.sequenceDiagram.SequenceDiagramPlugin;
 
 import org.apache.commons.cli.BasicParser;
@@ -328,8 +331,15 @@ public class TraceAnalysisTool {
         TraceReconstructionFilter mtReconstrFilter = null;
         try {
             final AnalysisController analysisInstance = new AnalysisController();
+
+            { /* Register an FSReader which only reads records of type OperationExecutionRecord */
+            final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet =
+                    new ArrayList<Class<? extends IMonitoringRecord>>();
+            recordTypeSelectorSet.add(OperationExecutionRecord.class);
             analysisInstance.setLogReader(new FSReader(
-                    TraceAnalysisTool.inputDirs));
+                    TraceAnalysisTool.inputDirs,
+                    recordTypeSelectorSet));
+            }
 
             final ExecutionRecordTransformationFilter execRecTransformer = new ExecutionRecordTransformationFilter(
                     Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
