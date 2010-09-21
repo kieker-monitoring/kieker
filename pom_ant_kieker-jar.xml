@@ -12,7 +12,6 @@
   	<version>1.3-SNAPSHOT-20100915</version>
   </parent>
 
-  <dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>aopalliance</groupId>
@@ -62,6 +61,5 @@
 			<artifactId>spring</artifactId>
 		</dependency>
 	</dependencies>
-  </dependencyManagement>
-  
+
 </project>
