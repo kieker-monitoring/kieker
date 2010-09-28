@@ -33,10 +33,10 @@ public class MonitoringRecordTypeRegistry {
     /** recordTypeId x class object */
     private final Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
 
-    private final String oldKiekerExecutionRecordClassname =
+    public final static String OLD_KIEKEREXECUTIONRECORD_CLASSNAME =
             "kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord";
     /**
-     * If true, the classname ${@value #oldKiekerExecutionRecordClassname}
+     * If true, the classname ${@value #OLD_KIEKEREXECUTIONRECORD_CLASSNAME}
      * is automatically mapped to the new classname of ${@link OperationExecutionRecord}.
      */
     private final boolean oldKiekerExecutionRecordCompatibilityMode;
@@ -74,7 +74,7 @@ public class MonitoringRecordTypeRegistry {
             /**
              * If the compatibility mode for the old execution record name is
              * enables, map old name to new name. */
-            if (this.oldKiekerExecutionRecordCompatibilityMode && classname.equals(oldKiekerExecutionRecordClassname)){
+            if (this.oldKiekerExecutionRecordCompatibilityMode && classname.equals(OLD_KIEKEREXECUTIONRECORD_CLASSNAME)){
                 classname = OperationExecutionRecord.class.getName();
             }
 

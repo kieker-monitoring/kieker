@@ -51,9 +51,12 @@ import org.apache.commons.logging.LogFactory;
  */
 class FSDirectoryReader extends AbstractMonitoringLogReader {
 
-    private static final String PROP_NAME_INPUTDIR = "inputDirName";
+	private static final String PROP_NAME_INPUTDIR = "inputDirName";
     private static final Log log = LogFactory.getLog(FSDirectoryReader.class);
-    private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(true); // compatibility mode
+    
+    private static final boolean OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE = true;    
+    
+    private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE);
     private volatile boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
     private File inputDir = null;
     /**
@@ -178,6 +181,9 @@ class FSDirectoryReader extends AbstractMonitoringLogReader {
 
                     if (this.recordTypeSelector == null || this.recordTypeSelector.contains(classname)) {
                         this.typeRegistry.registerRecordTypeIdMapping(id, classname);
+                    } else if (OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE && classname.equals(MonitoringRecordTypeRegistry.OLD_KIEKEREXECUTIONRECORD_CLASSNAME)) {
+                    	log.info("Using compatibility mode for mapping " + classname);
+                    	this.typeRegistry.registerRecordTypeIdMapping(id, classname);
                     } else {
                         this.recordTypeIdIgnoreList.add(id);
                         log.info("Ignoring record type for mapping " + line);
