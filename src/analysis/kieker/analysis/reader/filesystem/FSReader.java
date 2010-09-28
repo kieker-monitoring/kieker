@@ -19,6 +19,7 @@ import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2010 Kieker Project
@@ -93,7 +94,11 @@ public class FSReader extends AbstractMonitoringLogReader {
 
             private final IMonitoringRecord record;
 
-            private OrderRecordBufferElement() {
+            /**
+             * OrderRecordBufferElements must not be created by calling the default constructor
+             */
+            @SuppressWarnings("unused")
+			private OrderRecordBufferElement() {
                 this.record = null;
             }
 
@@ -145,10 +150,6 @@ public class FSReader extends AbstractMonitoringLogReader {
         public FSReaderCons(final FSReader master, final String[] inputDirs) {
             this.master = master;
             this.inputDirs = inputDirs;
-        }
-
-        public String[] getRecordTypeSubscriptionList() {
-            return null;
         }
 
         /** 

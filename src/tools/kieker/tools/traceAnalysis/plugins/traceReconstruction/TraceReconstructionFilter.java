@@ -71,7 +71,16 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
                     }
                     final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
                     final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
-                    return t1LowestTin < t2LowestTin ? -1 : 1;
+                    
+                    /**
+                     * Multiple traces may have an equal tin timestamp value. 
+                     * In order to provide an absolute ordering of the keys, 
+                     * we take the traceId as a second ordering key.   
+                     */
+                    if (t1LowestTin != t2LowestTin){
+                        return t1LowestTin < t2LowestTin ? -1 : 1;
+                    }
+                    return t1.getTraceId() < t2.getTraceId() ? -1 : 1;
                 }
             });
 
@@ -142,10 +151,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
         ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
         if (executionTrace != null) { /* trace (artifacts) exists already; */
             if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
-                TraceReconstructionFilter.log.error("Missing entry for trace in timeoutMap: " + executionTrace);
-                // TODO: We must throw a ExecutionEventProcessingException because
-                //       the pendingTraces and timeoutMap are now longer
-                //       consistent!
+                TraceReconstructionFilter.log.fatal("Missing entry for trace in timeoutMap: " + executionTrace);
+                log.fatal("pendingTraces and timeoutMap are now longer consistent!");
+                this.reportError(traceId);
             }
         } else { /* create and add new trace */
             executionTrace = new ExecutionTrace(traceId);
@@ -173,7 +181,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
      *
      * @param executionTrace
      * @throws ExecutionEventProcessingException if the passed execution trace is
-     * invalid and this filter is configured to fail on the occurence of invalid
+     * invalid and this filter is configured to fail on the occurrence of invalid
      * traces.
      */
     private void processExecutionTrace(final ExecutionTrace executionTrace)
@@ -185,8 +193,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
             final MessageTrace mt = executionTrace.toMessageTrace(this.rootExecution);
 
             if (mt != null) {
-                /* Transformation successful und the trace is for itself valid. 
-                 * Howeever, this trace may actually contain the [0,0] execution
+                /* Transformation successful and the trace is for itself valid. 
+                 * However, this trace may actually contain the [0,0] execution
                  * and thus complete a trace that has timed out before and has 
                  * thus been considered an invalid trace.
                  */
@@ -199,7 +207,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
                     /* mt is the completing part of an invalid trace */
                     this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
                     // the statistics have been updated on the first
-                    // occurence of artifacts of this trace
+                    // occurrence of artifacts of this trace
                 }
             } else {
                 log.error("mt == null but no exception was thrown");
