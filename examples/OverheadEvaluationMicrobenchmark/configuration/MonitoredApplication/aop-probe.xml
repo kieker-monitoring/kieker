@@ -4,6 +4,6 @@
         <include within="kieker.evaluation.monitoredApplication.MonitoredClass"/>
     </weaver>
     <aspects>
-        <aspect name="kieker.tpmon.probe.aspectJ.executions.KiekerTpmonExecutionProbeAnnotationRemote"/>
+        <aspect name="kieker.monitoring.probe.aspectJ.executions.OperationExecutionAspectAnnotation"/>
     </aspects>
 </aspectj>

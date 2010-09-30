@@ -19,13 +19,16 @@ Initially, the following steps are required:
   * lib/aspectjweaver-<version>.jar
   * lib/commons-cli-<version>.jar
   * lib/commons-logging-<version>.jar
-  * lib/log4j-<version>.jar
-3. You should check whether you installed ant (http://ant.apache.org/), 
+3. Rename
+  * lib/aspectjrt-<version>.jar -> lib/aspectjrt.jar
+  * lib/aspectjtools-<version>.jar -> lib/aspectjtools.jar
+  * lib/aspectjweaver-<version>.jar -> lib/aspectjweaver.jar
+4. You should check whether you installed ant (http://ant.apache.org/), 
    since the execution of all examples described in this 
    README is based on the run-targets in the ant file build.xml.
-4. Make sure, that you've installed R (http://www.r-project.org/) to 
+5. Make sure, that you've installed R (http://www.r-project.org/) to 
    generate the results.
-4. Compile the application by calling ant   
+6. Compile the application by calling ant   
 
 
 Execution of Microbenchmark 1:

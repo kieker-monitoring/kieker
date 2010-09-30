@@ -1,7 +1,7 @@
 package kieker.monitoring.probe;
 
 import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.probe.IMonitoringProbe;
+import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,18 +29,17 @@ import org.apache.commons.logging.LogFactory;
  */
 
 /**
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
 @Aspect
-public class EmptyProbeAnnotation implements IMonitoringProbe {
+public class EmptyProbeAnnotation extends AbstractAspectJProbe {
     private static final Log log = LogFactory.getLog(EmptyProbeAnnotation.class);
-
-    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
-
-    @Pointcut("execution(@kieker.tpmon.annotation.BenchmarkProbe * *.*(..)) && !execution(@kieker.tpmon.annotation.TpmonInternal * *.*(..))")
+	protected static final MonitoringController ctrlInst = MonitoringController.getInstance();
+    
+    @Pointcut("execution(@kieker.monitoring.annotation.BenchmarkProbe * *.*(..)) && notWithinKieker()")
     public void monitoredMethod() {
     }
-   
+
     @Around("monitoredMethod()")
     public Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         if (!ctrlInst.isMonitoringEnabled()) {

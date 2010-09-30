@@ -36,8 +36,8 @@ AOPXML_PATH="${BASEDIR}build/META-INF/aop.xml"
 AOPXML_INSTR_EMPTYPROBE="${BASEDIR}configuration/MonitoredApplication/aop-emptyProbe.xml"
 AOPXML_INSTR_PROBE="${BASEDIR}configuration/MonitoredApplication/aop-probe.xml"
 
-TPMONCONF_NOLOGGING="${BASEDIR}configuration/MonitoredApplication/tpmon-nologging.properties"
-TPMONCONF_LOGGING="${BASEDIR}configuration/MonitoredApplication/tpmon-logging.properties"
+KIEKER_MONITORING_CONF_NOLOGGING="${BASEDIR}configuration/MonitoredApplication/kieker.monitoring-nologging.properties"
+KIEKER_MONITORING_CONF_LOGGING="${BASEDIR}configuration/MonitoredApplication/kieker.monitoring-logging.properties"
 
 JAVAARGS="-server -d64 -Xmx4G"
 #JAVAARGS="${JAVAARGS} -XX:+PrintCompilation -XX:+PrintInlining"
@@ -48,10 +48,11 @@ CLASSPATH=$(ls lib/*.jar | tr "\n" "${CPSEPCHAR}")build/
 #echo "Classpath: ${CLASSPATH}"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
-JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver-1.6.6.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVAARGS_INSTR_EMPTYPROBE="${JAVAARGS_LTW} -Dtpmon.storeInJavaIoTmpdir=false -Dtpmon.customStoragePath=${BASEDIR}tmp/ -Dtpmon.configuration=${TPMONCONF_NOLOGGING}"
-JAVAARGS_INSTR_NOLOGGING="${JAVAARGS_LTW} -Dtpmon.storeInJavaIoTmpdir=false -Dtpmon.customStoragePath=${BASEDIR}tmp/ -Dtpmon.configuration=${TPMONCONF_NOLOGGING}"
-JAVAARGS_INSTR_LOGGING="${JAVAARGS_LTW} -Dtpmon.storeInJavaIoTmpdir=false -Dtpmon.customStoragePath=${BASEDIR}tmp/ -Dtpmon.configuration=${TPMONCONF_LOGGING}"
+JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.storeInJavaIoTmpdir=false -Dkieker.monitoring.customStoragePath=${BASEDIR}tmp/"
+JAVAARGS_INSTR_EMPTYPROBE="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
+JAVAARGS_INSTR_NOLOGGING="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
+JAVAARGS_INSTR_LOGGING="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_LOGGING}"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt
