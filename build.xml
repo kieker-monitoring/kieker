@@ -1021,7 +1021,7 @@
 
     <!-- Generates sample files for .classpath and .project Eclipse files -->
     <target name="create-eclipse-sample-files" depends="init">
-        <pathconvert property="eclipse.entries" refid="all-external-jars"
+        <pathconvert property="eclipse.entries" refid="all-external-jars" dirsep="/"
                      pathsep="&quot;/&gt;&#10;    &lt;classpathentry kind=&quot;lib&quot; path=&quot;">
             <map from="${user.dir}/" to=""/> <!-- change absolute path back to relative path -->
         </pathconvert>
