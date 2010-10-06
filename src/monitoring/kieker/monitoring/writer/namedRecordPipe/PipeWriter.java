@@ -2,6 +2,7 @@ package kieker.monitoring.writer.namedRecordPipe;
 
 import java.util.Vector;
 
+import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.namedRecordPipe.PipeException;
 import kieker.common.record.IMonitoringRecord;
