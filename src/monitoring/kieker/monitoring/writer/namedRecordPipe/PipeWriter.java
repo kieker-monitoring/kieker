@@ -20,8 +20,8 @@ import org.apache.commons.logging.LogFactory;
 public final class PipeWriter implements IMonitoringLogWriter {
 	private static final Log log = LogFactory.getLog(PipeWriter.class);
 
-	private static final String PROPERTY_PIPE_NAME = "pipeName";
-	private Pipe pipe;
+	public static final String PROPERTY_PIPE_NAME = "pipeName";
+	private volatile Pipe pipe;
 	private String pipeName;
 
 	@Override
