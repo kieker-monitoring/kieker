@@ -20,7 +20,13 @@ package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
+
+import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.configuration.IOutputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.OperationExecutionRecord;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
@@ -29,11 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-import kieker.common.record.OperationExecutionRecord;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.configuration.IOutputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -55,24 +57,25 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
             new ArrayList<Class<? extends IMonitoringRecord>>();
 
     static {
-        recordTypeSubscriptionList.add(OperationExecutionRecord.class);
+        ExecutionRecordTransformationFilter.recordTypeSubscriptionList.add(OperationExecutionRecord.class);
     }
 
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-        return recordTypeSubscriptionList;
+    @Override
+	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+        return ExecutionRecordTransformationFilter.recordTypeSubscriptionList;
     }
 
     private Signature createSignature(final String operationSignatureStr) {
-        String returnType = "N/A";
+        final String returnType = "N/A";
         String name;
         String[] paramTypeList;
-        int openParenIdx = operationSignatureStr.indexOf('(');
+        final int openParenIdx = operationSignatureStr.indexOf('(');
         if (openParenIdx == -1) { // no parameter list
             paramTypeList = new String[]{};
             name = operationSignatureStr;
         } else {
             name = operationSignatureStr.substring(0, openParenIdx);
-            StringTokenizer strTokenizer =
+            final StringTokenizer strTokenizer =
                     new StringTokenizer(operationSignatureStr.substring(openParenIdx + 1, operationSignatureStr.length() - 1), ",");
             paramTypeList = new String[strTokenizer.countTokens()];
             for (int i = 0; strTokenizer.hasMoreTokens(); i++) {
@@ -84,22 +87,22 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
     }
 
     @Override
-    public boolean newMonitoringRecord(IMonitoringRecord record) {
+    public boolean newMonitoringRecord(final IMonitoringRecord record) {
         if (!(record instanceof OperationExecutionRecord)) {
-            log.error("Can only process records of type"
+            ExecutionRecordTransformationFilter.log.error("Can only process records of type"
                     + OperationExecutionRecord.class.getName() + " but received" + record.getClass().getName());
         }
-        OperationExecutionRecord execRec = (OperationExecutionRecord) record;
+        final OperationExecutionRecord execRec = (OperationExecutionRecord) record;
 
-        String executionContainerName = execRec.hostName;
+        final String executionContainerName = execRec.hostName;
         //(this.considerExecutionContainer) ? execRec.hostName : "DEFAULTCONTAINER";
-        String componentTypeName = execRec.className;
-        String assemblyComponentName = componentTypeName;
-        String allocationComponentName =
+        final String componentTypeName = execRec.className;
+        final String assemblyComponentName = componentTypeName;
+        final String allocationComponentName =
                 new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
-        String operationFactoryName =
+        final String operationFactoryName =
                 new StringBuilder(assemblyComponentName).append(".").append(execRec.operationName).toString();
-        String operationSignatureStr = execRec.operationName;
+        final String operationSignatureStr = execRec.operationName;
 
         AllocationComponent allocInst = this.getSystemEntityFactory().getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
         if (allocInst == null) { /* Allocation component instance doesn't exist */
@@ -123,12 +126,12 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
         Operation op = this.getSystemEntityFactory().getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
         if (op == null) { /* Operation doesn't exist */
-            Signature signature = createSignature(operationSignatureStr);
+            final Signature signature = this.createSignature(operationSignatureStr);
             op = this.getSystemEntityFactory().getOperationFactory().createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
             allocInst.getAssemblyComponent().getType().addOperation(op);
         }
 
-        Execution execution = new Execution(op, allocInst, execRec.traceId,
+        final Execution execution = new Execution(op, allocInst, execRec.traceId,
                 execRec.sessionId, execRec.eoi, execRec.ess, execRec.tin, execRec.tout);
         this.executionOutputPort.deliver(execution);
         return true;

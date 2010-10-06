@@ -4894,6 +4894,7 @@
           </edges>
         </contents>
       </eAnnotations>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_BjlVUMxoEd-Sao5XyHPpTQ" name="IAnalysisEvent"/>
       <packagedElement xmi:type="uml:Package" xmi:id="_IRlPEFHtEd-YbPw1JbK5qA" name="executionRecordTransformation">
         <eAnnotations xmi:id="_IS6EwFHtEd-YbPw1JbK5qA" source="uml2.diagrams" references="_IS6EwVHtEd-YbPw1JbK5qA">
           <contents xmi:type="notation:Diagram" xmi:id="_IS6EwVHtEd-YbPw1JbK5qA" type="Class" name="executionRecordTransformer">
