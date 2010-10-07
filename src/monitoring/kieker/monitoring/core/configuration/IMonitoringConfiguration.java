@@ -109,5 +109,5 @@ public interface IMonitoringConfiguration {
 	 * 
 	 * @return
 	 */
-	public String getConfigurationName();
+	public String getName();
 }

@@ -7,6 +7,7 @@ import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
+import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.core.state.IMonitoringControllerState;
 import kieker.monitoring.core.state.MonitoringControllerState;
 import kieker.monitoring.writer.IMonitoringLogWriter;
@@ -18,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,9 +62,8 @@ public final class MonitoringController2 implements IMonitoringController {
 	/**
 	 * The singleton instance of the monitoring controller
 	 */
-	// TODO: MonitoringConfiguration.createSingletonConfiguration()
 	private static final MonitoringController2 SINGLETON_INSTANCE = new MonitoringController2(
-			null);
+			MonitoringConfiguration.createSingletonConfiguration());
 
 	/**
 	 * Returns the singleton instance.
@@ -117,7 +117,7 @@ public final class MonitoringController2 implements IMonitoringController {
 		this.state = new MonitoringControllerState(configuration);
 		/* Cache value of writer for faster access */
 		this.monitoringLogWriter = this.state.getMonitoringLogWriter();
-		this.instanceName = configuration.getConfigurationName();
+		this.instanceName = configuration.getName();
 
 		final Vector<AbstractWorkerThread> worker = this.monitoringLogWriter
 				.getWorkers(); // may be null

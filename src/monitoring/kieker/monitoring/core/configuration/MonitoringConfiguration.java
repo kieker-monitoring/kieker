@@ -1,14 +1,20 @@
 package kieker.monitoring.core.configuration;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.database.AsyncDbWriter;
 import kieker.monitoring.writer.database.SyncDbWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.monitoring.writer.filesystem.SyncFsWriter;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 
 /*
  * ==================LICENCE=========================
@@ -28,823 +34,549 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  */
 /**
- *
+ * Used to define the initial configuration of a monitoring controller.
+ * 
  * @author Andre van Hoorn
  */
 public final class MonitoringConfiguration implements IMonitoringConfiguration {
 
-    private static final String JVM_ARG_PREFIX = "kieker.monitoring.";
+	private static final String KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME = "kieker.monitoring.configuration";
 
-    enum ConfigurationProperty {
+	private static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/kieker.monitoring.properties";
 
-        DB_CONNECTION_ADDRESS("dbConnectionAddress", JVM_ARG_PREFIX+"dbConnectionAddress", "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS"),
-        MONITORING_DATA_WRITER_CLASSNAME("monitoringDataWriter", JVM_ARG_PREFIX+"monitoringDataWriter", null),
-        MONITORING_DATA_WRITER_INIT_STRING("monitoringDataWriterInitString", "monitoringDataWriter"+"monitoringDataWriterInitString", ""),
-        DEBUG_ENABLED("debug", JVM_ARG_PREFIX+"debug", "false"),
-        MONITORING_ENABLED("monitoringEnabled", JVM_ARG_PREFIX+"monitoringEnabled", "true"),
-        ASYNC__RECORD_QUEUE_SIZE("asyncRecordQueueSize", JVM_ARG_PREFIX+"asyncRecordQueueSize", "8000"),
-        ASYNC__BLOCK_ON_FULL_QUEUEU("asyncBlockOnFullQueue", JVM_ARG_PREFIX+"asyncBlockOnFullQueue", "false"),
-        /* For historic reasons ;-), the following two properties have the prefix also in the configuration file  */
-        FS_WRITER__STORE_IN_JAVAIOTMPDIR(JVM_ARG_PREFIX+"storeInJavaIoTmpdir", JVM_ARG_PREFIX+"kieker.monitoring.storeInJavaIoTmpdir", "true"),
-        FS_WRITER__CUSTOM_STORAGE_PATH(JVM_ARG_PREFIX+"customStoragePath",JVM_ARG_PREFIX+"customStoragePath", "/tmp"),
-        /* Actually, this is not a property but only a default value */
-        FS_FN_PREFIX(null, null, ""),
-        INITIAL_EXPERIMENT_ID("initialExperimentId", JVM_ARG_PREFIX+"initialExperimentId", "0"),
-        DB__DRIVER_CLASSNAME("dbDriverClassname", JVM_ARG_PREFIX+"dbDriverClassname", "com.mysql.jdbc.Driver"),
-        DB__TABLE_NAME("dbTableName", JVM_ARG_PREFIX+"dbTableName", "kieker"),
-        DB__SET_INITIAL_EXP_ID_BASED_ON_LAST("setInitialExperimentIdBasedOnLastId", JVM_ARG_PREFIX+"setInitialExperimentIdBasedOnLastId", "true");
-        private final String propertyName;
-        private final String jvmArgName;
-        private final String defaultValue;
+	private static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT = "META-INF/kieker.monitoring.properties.default";
 
-        /**
-         * Constructs an enum property.
-         *
-         * @param propertyName the property name used in the configuration file
-         * @param jvmArgName set null if the property value cannot be specified via a JVM argument
-         * @param defaultValue the String representation of the default value or null if none
-         */
-        ConfigurationProperty(String propertyName, String jvmArgName, String defaultValue) {
-            this.propertyName = propertyName;
-            this.jvmArgName = jvmArgName;
-            this.defaultValue = defaultValue;
-        }
+	private static final String LOCAL_HOST_NAME;
 
-        public String getPropertyName() {
-            return this.propertyName;
-        }
+	private static final Log log = LogFactory
+			.getLog(MonitoringConfiguration.class);
 
-        /**
-         * Returns the name of the system property or null if none.
-         *
-         * @return
-         */
-        public String getJVMArgumentName() {
-            return this.jvmArgName;
-        }
+	/**
+	 * Name of the singleton instance
+	 */
+	private final static String SINGLETON_INSTANCE_NAME = "Singleton Instance";
 
-        /**
-         * Returns whether this property can be configured via JVM argument.
-         *
-         * @return
-         */
-        public boolean hasJVMArgument() {
-            return this.jvmArgName != null;
-        }
+	static {
+		String hostname = "<UNKNOWN>";
+		try {
+			hostname = java.net.InetAddress.getLocalHost().getHostName();
+		} catch (final Exception ex) {
+			MonitoringConfiguration.log.warn("Failed to get hostname", ex);
+		} finally {
+			LOCAL_HOST_NAME = hostname;
+		}
+	}
 
-        /**
-         * Returns the string representation of the default value.
-         *
-         * @return
-         */
-        public String defaultValue() {
-            return this.defaultValue;
-        }
-    }
+	/**
+	 * Creates a new configuration based on the given configuration file.
+	 * 
+	 * @param name
+	 * @param configurationFile
+	 * @return
+	 * @throws IOException
+	 */
+	public static MonitoringConfiguration createConfiguration(
+			final String name, final String configurationFile)
+			throws IOException {
+		final Properties props = MonitoringConfiguration
+				.loadPropertiesFromFile(configurationFile);
+		return new MonitoringConfiguration(name, props,
+		/* Do not consider jvm arguments */
+		false);
+	}
 
-    @Override
-    public void setDebugEnabled(final boolean debugEnabled) {
-        // TODO Auto-generated method stub
-    }
+	/**
+	 * Creates a default configuration.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static MonitoringConfiguration createDefaultConfiguration(
+			final String name) {
+		final Properties defaultProps = ConfigurationProperty
+				.defaultProperties();
+		return new MonitoringConfiguration(name, defaultProps,
+		/* Do not consider jvm arguments */
+		false);
+	}
 
-    @Override
-    public boolean isDebugEnabled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	/**
+	 * Creates a default configuration with the given monitoring log writer.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static MonitoringConfiguration createDefaultConfiguration(
+			final IMonitoringLogWriter monitoringLogWriter, final String name) {
+		final Properties defaultProps = ConfigurationProperty
+				.defaultProperties();
+		return new MonitoringConfiguration(name, defaultProps,
+				monitoringLogWriter,
+				/* Do not consider jvm arguments */
+				false);
+	}
 
-    @Override
-    public void setMonitoringEnabled(final boolean monitoringEnabled) {
-        // TODO Auto-generated method stub
-    }
+	/**
+	 * Creates the configuration for the singleton controller instance.
+	 * 
+	 * @return
+	 */
+	public static MonitoringConfiguration createSingletonConfiguration() {
+		final Properties singletonProperties = MonitoringConfiguration
+				.loadSingletonProperties();
+		return new MonitoringConfiguration(
+				MonitoringConfiguration.SINGLETON_INSTANCE_NAME,
+				singletonProperties,
+				/* Consider jvm arguments */
+				true);
+	}
 
-    @Override
-    public boolean isMonitoringEnabled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	/**
+	 * Returns the name of the localhost.
+	 * 
+	 * @return
+	 */
+	public final static String getLocalHostName() {
+		return MonitoringConfiguration.LOCAL_HOST_NAME;
+	}
 
-    @Override
-    public IMonitoringLogWriter getMonitoringLogWriter() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/**
+	 * Returns the properties loaded from file propertiesFn.
+	 * 
+	 * @param propertiesFn
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	private static Properties loadPropertiesFromFile(final String propertiesFn)
+			throws FileNotFoundException, IOException {
+		final InputStream is = new FileInputStream(propertiesFn);
+		final Properties prop = new Properties();
+		prop.load(is);
+		return prop;
+	}
 
-    @Override
-    public void setMonitoringLogWriter(final IMonitoringLogWriter monitoringLogWriter) {
-        // TODO Auto-generated method stub
-    }
+	/**
+	 * Returns the properties loaded from the resource name or null if the
+	 * resource could not be found.
+	 * 
+	 * @param classLoader
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
+	private static Properties loadPropertiesFromResource(final String name)
+			throws IOException {
+		final InputStream is = MonitoringController.class.getClassLoader()
+				.getResourceAsStream(name);
+		if (is == null) {
+			return null;
+		}
+		final Properties prop = new Properties();
 
-    @Override
-    public IMonitoringLogWriter createAndSetMonitoringLogWriter(
-            final Class<? extends IMonitoringLogWriter> logWriterClass,
-            final String initString) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+		prop.load(is);
+		return prop;
+	}
 
-    @Override
-    public void setHostName(final String newHostName) {
-        // TODO Auto-generated method stub
-    }
+	/**
+	 * Returns the properties used to construct the singleton instance. If a
+	 * custom configuration file location is passed to the JVM using the
+	 * property kieker.monitoring.configuration, this the properties are loaded
+	 * from this file. Otherwise, the method searches for a configuration file
+	 * META-INF/kieker.monitoring.properties in the classpath, and if this does
+	 * not exist, it loads the default properties contained in the Kieker jar.
+	 * 
+	 * @return
+	 */
+	private static Properties loadSingletonProperties() {
+		Properties prop = null; // = new Properties();
+		String configurationFile = null;
+		try {
+			/* 1. Searching for configuration file location passed to JVM */
+			if (System
+					.getProperty(MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME) != null) {
+				configurationFile = System
+						.getProperty(MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME);
+				MonitoringConfiguration.log
+						.info("Loading properties from JVM-specified location '"
+								+ configurationFile + "'");
+				prop = MonitoringConfiguration
+						.loadPropertiesFromFile(configurationFile);
+			} else {
+				/*
+				 * 2. No JVM property; Trying to find configuration file in
+				 * classpath
+				 */
+				configurationFile = MonitoringConfiguration.KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+				prop = MonitoringConfiguration
+						.loadPropertiesFromResource(configurationFile);
+				if (prop != null) { // success
+					MonitoringConfiguration.log
+							.info("Loading properties from properties file in classpath: "
+									+ configurationFile);
+					MonitoringConfiguration.log
+							.info("You can specify an alternative properties file using the property '"
+									+ MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME
+									+ "'");
+				} else {
+					/*
+					 * 3. No configuration file found in classpath; using
+					 * default configuration.
+					 */
+					configurationFile = MonitoringConfiguration.KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT;
+					MonitoringConfiguration.log
+							.info("Loading properties from Kieker.Monitoring library jar!"
+									+ configurationFile);
+					MonitoringConfiguration.log
+							.info("You can specify an alternative properties file using the property '"
+									+ MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME
+									+ "'");
+					prop = MonitoringConfiguration
+							.loadPropertiesFromResource(configurationFile);
+				}
+			}
+		} catch (final Exception ex) {
+			MonitoringConfiguration.log.error(
+					"Error loading kieker configuration file '"
+							+ configurationFile + "'", ex);
+			// TODO: introduce static variable 'terminated' or alike
+		}
+		return prop;
+	}
 
-    @Override
-    public String getHostName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	private boolean debugEnabled;
 
-    @Override
-    public String getConfigurationName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-//	private final static String SINGLETON_INSTANCE_NAME = "Singleton Instance";
-//
-//	public enum PROPERTY_NAME {
-//		PROPERTY_NAME (){
-//			
-//		}
-//		
-//	};
-//	
-//
-//	public static final String KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME = "kieker.monitoring.configuration";
-//
-//	public static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/kieker.monitoring.properties";
-//
-//	public static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT = "META-INF/kieker.monitoring.properties.default";
-//
-//	private static final String LOCAL_HOST_NAME;
-    private static final Log log = LogFactory.getLog(MonitoringConfiguration.class);
-//
-//	static {
-//		String hostname = "<UNKNOWN>";
-//		try {
-//			hostname = java.net.InetAddress.getLocalHost().getHostName();
-//		} catch (final Exception ex) {
-//			MonitoringConfiguration.log.warn("Failed to get hostname", ex);
-//		} finally {
-//			LOCAL_HOST_NAME = hostname;
-//		}
-//	}
-//
-//	public static MonitoringConfiguration createSingletonConfiguration() {
-//
-//	}
-//
-//	/**
-//	 * Returns the name of the localhost.
-//	 * 
-//	 * @return
-//	 */
-//	public final static String getLocalHostName() {
-//		return MonitoringConfiguration.LOCAL_HOST_NAME;
-//	}
-//
-//	/**
-//	 * Creates a new monitoring configuration based on the given configuration
-//	 * file.
-//	 * 
-//	 * Note, that in this case, no Kieker properties passed to the JVM are
-//	 * evaluated.
-//	 * 
-//	 * @param configurationFn
-//	 * @return
-//	 */
-//	public static MonitoringConfiguration loadConfiguraton(
-//			final String instanceName, final String configurationFn)
-//			throws FileNotFoundException, IOException {
-//		// TODO: to be implemented
-//		return null;
-//	}
-//
-//	/**
-//	 * Returns the properties loaded from file propertiesFn.
-//	 * 
-//	 * @param propertiesFn
-//	 * @return
-//	 * @throws FileNotFoundException
-//	 * @throws IOException
-//	 */
-//	private static Properties loadPropertiesFromFile(final String propertiesFn)
-//			throws FileNotFoundException, IOException {
-//		final InputStream is = new FileInputStream(propertiesFn);
-//		final Properties prop = new Properties();
-//		prop.load(is);
-//		return prop;
-//	}
-//
-//	/**
-//	 * Returns the properties loaded from the resource name or null if the
-//	 * resource could not be found.
-//	 * 
-//	 * @param classLoader
-//	 * @param name
-//	 * @return
-//	 * @throws IOException
-//	 */
-//	private static Properties loadPropertiesFromResource(final String name)
-//			throws IOException {
-//		final InputStream is = MonitoringController.class.getClassLoader()
-//				.getResourceAsStream(name);
-//		if (is == null) {
-//			return null;
-//		}
-//		final Properties prop = new Properties();
-//
-//		prop.load(is);
-//		return prop;
-//	}
-//
-//	/**
-//	 * Returns the properties used to construct the singleton instance. If a
-//	 * custom configuration file location is passed to the JVM using the
-//	 * property kieker.monitoring.configuration, this the properties are loaded
-//	 * from this file. Otherwise, the method searches for a configuration file
-//	 * META-INF/kieker.monitoring.properties in the classpath, and if this does
-//	 * not exist, it loads the default properties contained in the Kieker jar.
-//	 * 
-//	 * @return
-//	 */
-//	private static Properties loadSingletonProperties() {
-//		Properties prop = null; // = new Properties();
-//		String configurationFile = null;
-//		try {
-//			/* 1. Searching for configuration file location passed to JVM */
-//			if (System
-//					.getProperty(MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME) != null) {
-//				configurationFile = System
-//						.getProperty(MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME);
-//				MonitoringConfiguration.log
-//						.info("Loading properties from JVM-specified location '"
-//								+ configurationFile + "'");
-//				prop = MonitoringConfiguration
-//						.loadPropertiesFromFile(configurationFile);
-//			} else {
-//				/*
-//				 * 2. No JVM property; Trying to find configuration file in
-//				 * classpath
-//				 */
-//				configurationFile = MonitoringConfiguration.KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-//				prop = MonitoringConfiguration
-//						.loadPropertiesFromResource(configurationFile);
-//				if (prop != null) { // success
-//					MonitoringConfiguration.log
-//							.info("Loading properties from properties file in classpath: "
-//									+ configurationFile);
-//					MonitoringConfiguration.log
-//							.info("You can specify an alternative properties file using the property '"
-//									+ MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME
-//									+ "'");
-//				} else {
-//					/*
-//					 * 3. No configuration file found in classpath; using
-//					 * default configuration.
-//					 */
-//					configurationFile = MonitoringConfiguration.KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT;
-//					MonitoringConfiguration.log
-//							.info("Loading properties from Kieker.Monitoring library jar!"
-//									+ configurationFile);
-//					MonitoringConfiguration.log
-//							.info("You can specify an alternative properties file using the property '"
-//									+ MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME
-//									+ "'");
-//					prop = MonitoringConfiguration
-//							.loadPropertiesFromResource(configurationFile);
-//				}
-//			}
-//		} catch (final Exception ex) {
-//			MonitoringConfiguration.log.error(
-//					"Error loading kieker configuration file '"
-//							+ configurationFile + "'", ex);
-//			// TODO: introduce static variable 'terminated' or alike
-//		}
-//		return prop;
-//	}
-//
-//	// private final String dbTableName = "turbomon10";
-//	private int experimentId = ConfigurationDefaults.EXPERIMENT_ID;
-//
-//	private volatile String filenamePrefix = ConfigurationDefaults.FS_FN_PREFIX;
-//
-//	@Override
-//	public IMonitoringLogWriter createAndSetMonitoringLogWriter(
-//			final Class<? extends IMonitoringLogWriter> logWriterClass,
-//			final String initString) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	// private volatile boolean asyncBlockOnFullQueue = false;
-//	// // if
-//	// // storeInJavaIoTmpdir
-//	// // == false
-//	// private volatile int asyncRecordQueueSize = 8000;
-//	// private volatile String customStoragePath = "/tmp"; // only used as
-//	// default
-//	// private final String dbConnectionAddress =
-//	// "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
-//
-//	// private final String dbDriverClassname = "com.mysql.jdbc.Driver";
-//
-//	/**
-//	 * Returns the experiment ID.
-//	 * 
-//	 * @return
-//	 */
-//	public final int getExperimentId() {
-//		return this.experimentId;
-//	}
-//
-//	@Override
-//	public String getHostName() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	// // database only configuration configuration values that are overwritten
-//	// by
-//	// // kieker.monitoring.properties included in the kieker.monitoring library
-//	// private volatile boolean setInitialExperimentIdBasedOnLastId = false;
-//
-//	// private volatile boolean storeInJavaIoTmpdir = true;
-//
-//	@Override
-//	public IMonitoringLogWriter getMonitoringLogWriter() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
+	private String hostName;
 
-    /**
-     * 
-     * @param props
-     * @param property
-     * @param considerSystemProperties
-     * @return
-     */
-    private String loadStringProperty(final Properties props,
-            final ConfigurationProperty property, final boolean considerSystemProperties) {
-        String propertyValue;
-        if (considerSystemProperties && property.hasJVMArgument()
-                && (System.getProperty(property.getJVMArgumentName()) != null)) {
-            /* We use the present virtual machine parameter value */
-            propertyValue = System.getProperty(property.getJVMArgumentName());
-        } else {
-            /* we use the value from the properties map */
-            propertyValue = props.getProperty(property.getPropertyName());
-        }
+	private final String instanceName;
 
-        if ((propertyValue == null) || propertyValue.isEmpty()) {
-            propertyValue = property.defaultValue();
-            MonitoringConfiguration.log.info("Missing value for property '"
-                    + property.getPropertyName() + "' using default value " + propertyValue);
-        }
+	private boolean monitoringEnabled;
 
-        return propertyValue;
-    }
+	private IMonitoringLogWriter monitoringLogWriter;
 
-    /**
-     *
-     * @param props
-     * @param propertyName
-     * @param defaultValue
-     * @param considerSystemProperties
-     * @return
-     */
-    private boolean loadBooleanProperty(final Properties props,
-            final ConfigurationProperty property, final boolean considerSystemProperties) {
-        final String stringValue = this.loadStringProperty(props, property, considerSystemProperties);
+	/**
+	 * Must not be used for construction.
+	 */
+	private MonitoringConfiguration() {
+		this.instanceName = null;
+	}
 
-        return Boolean.parseBoolean(stringValue);
-    }
+	/**
+	 * Constructs a configuration based on the given properties.
+	 * 
+	 * @param name
+	 * @param properties
+	 * @param considerSystemProperties
+	 */
+	private MonitoringConfiguration(final String name,
+			final Properties properties, final boolean considerSystemProperties) {
+		this.instanceName = name;
+		this.initWriter(properties, considerSystemProperties);
+		this.initVariables(properties, considerSystemProperties);
+	}
 
-    /**
-     *
-     * @param props
-     * @param property
-     * @param considerSystemProperties
-     * @return
-     * @throws NumberFormatException
-     */
-    private int loadIntProperty(final Properties props,
-            final ConfigurationProperty property, final boolean considerSystemProperties)
-            throws NumberFormatException {
-        final String stringValue = this.loadStringProperty(props, property, considerSystemProperties);
+	/**
+	 * Constructs a configuration based on the given properties and monitoring
+	 * log writer.
+	 * 
+	 * @param name
+	 * @param properties
+	 * @param monitoringLogWriter
+	 * @param considerSystemProperties
+	 */
+	private MonitoringConfiguration(final String name,
+			final Properties properties,
+			final IMonitoringLogWriter monitoringLogWriter,
+			final boolean considerSystemProperties) {
+		this.instanceName = name;
+		this.setMonitoringLogWriter(monitoringLogWriter);
+		this.initVariables(properties, considerSystemProperties);
+	}
 
-        return Integer.parseInt(stringValue);
-    }
+	@Override
+	public IMonitoringLogWriter createAndSetMonitoringLogWriter(
+			final Class<? extends IMonitoringLogWriter> logWriterClass,
+			final String initString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    private final String instanceName = null;
+	@Override
+	public String getName() {
+		return this.instanceName;
+	}
 
-    /**
-     * Loads the writer based on the given properties
-     *
-     * @param props
-     * @return the writer, null if the construction of the writer failed
-     */
-    private IMonitoringLogWriter loadWriter(final Properties props, final boolean considerSystemProperties) {
-        IMonitoringLogWriter monitoringLogWriter = null;
+	@Override
+	public String getHostName() {
+		return this.hostName;
+	}
 
-        try {
-            final String monitoringDataWriterClassname = loadStringProperty(props, ConfigurationProperty.MONITORING_DATA_WRITER_CLASSNAME, considerSystemProperties);
-            final String monitoringDataWriterInitString = loadStringProperty(props, ConfigurationProperty.MONITORING_DATA_WRITER_INIT_STRING, considerSystemProperties);
+	@Override
+	public IMonitoringLogWriter getMonitoringLogWriter() {
+		return this.monitoringLogWriter;
+	}
 
-            if ((monitoringDataWriterClassname == null)
-                    || (monitoringDataWriterClassname.isEmpty())) {
-                log.error("Property monitoringDataWriter not set");
-                return null;
-            } else if (monitoringDataWriterClassname.equals(ConfigurationFileConstants.WRITER_SYNCFS)) {
-                final String filenameBase = loadStringProperty(props, ConfigurationProperty.FS_FN_PREFIX, considerSystemProperties);
-                monitoringLogWriter = new SyncFsWriter(filenameBase, this.instanceName);
-            } else if (monitoringDataWriterClassname.equals(ConfigurationFileConstants.WRITER_ASYNCFS)) {
-                final String filenameBase = loadStringProperty(props, ConfigurationProperty.FS_FN_PREFIX, considerSystemProperties);
-                final int asyncRecordQueueSize = loadIntProperty(props, ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE, considerSystemProperties);
-                final boolean asyncBlockOnFullQueue = loadBooleanProperty(props, ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUEU, considerSystemProperties);
-                monitoringLogWriter = new AsyncFsWriter(filenameBase,
-                        this.instanceName, asyncRecordQueueSize,
-                        asyncBlockOnFullQueue);
-            } else if (monitoringDataWriterClassname.equals(ConfigurationFileConstants.WRITER_SYNCDB)) {
-                final String dbDriverClassname = loadStringProperty(props, ConfigurationProperty.DB__DRIVER_CLASSNAME, considerSystemProperties);
-                final String dbConnectionAddress = loadStringProperty(props, ConfigurationProperty.DB_CONNECTION_ADDRESS, considerSystemProperties);
-                final String dbTableName = loadStringProperty(props, ConfigurationProperty.DB__TABLE_NAME, considerSystemProperties);
-                final boolean setInitialExperimentIdBasedOnLastId = loadBooleanProperty(props, ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST, considerSystemProperties);
-                monitoringLogWriter = new SyncDbWriter(dbDriverClassname,
-                        dbConnectionAddress, dbTableName,
-                        setInitialExperimentIdBasedOnLastId);
-            } else if (monitoringDataWriterClassname.equals(ConfigurationFileConstants.WRITER_ASYNCDB)) {
-                final String dbDriverClassname = loadStringProperty(props, ConfigurationProperty.DB__DRIVER_CLASSNAME, considerSystemProperties);
-                final String dbConnectionAddress = loadStringProperty(props, ConfigurationProperty.DB_CONNECTION_ADDRESS, considerSystemProperties);
-                final String dbTableName = loadStringProperty(props, ConfigurationProperty.DB__TABLE_NAME, considerSystemProperties);
-                final boolean setInitialExperimentIdBasedOnLastId = loadBooleanProperty(props, ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST, considerSystemProperties);
-                final int asyncRecordQueueSize = loadIntProperty(props, ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE, considerSystemProperties);
-                final boolean asyncBlockOnFullQueue = loadBooleanProperty(props, ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUEU, considerSystemProperties);
-                monitoringLogWriter = new AsyncDbWriter(dbDriverClassname,
-                        dbConnectionAddress, dbTableName,
-                        setInitialExperimentIdBasedOnLastId,
-                        asyncRecordQueueSize, asyncBlockOnFullQueue);
-            } else {
-                /* try to load the class by name */
-                final int asyncRecordQueueSize = loadIntProperty(props, ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE, considerSystemProperties);
-                monitoringLogWriter = (IMonitoringLogWriter) Class.forName(
-                        monitoringDataWriterClassname).newInstance();
-                // add asyncRecordQueueSize
-                // TODO: this is still a dirty hack!
-                if (!monitoringLogWriter.init(monitoringDataWriterInitString + " | asyncRecordQueueSize="
-                        + asyncRecordQueueSize)) {
-                    monitoringLogWriter = null;
-                    throw new Exception("Initialization of writer failed!");
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error loading monitoring data writer", e);
-            return null;
-        }
-        return monitoringLogWriter;
-    }
+	/**
+	 * Initialize the instance based on the properties. Note, that the
+	 * monitoring log writer is not initialized in this method.
+	 * 
+	 * @see #initWriter(Properties, boolean)
+	 * @see #setMonitoringLogWriter(IMonitoringLogWriter)
+	 * 
+	 * @return true if the initialization was successful, false otherwise
+	 */
+	private boolean initVariables(final Properties props,
+			final boolean considerSystemProperties) {
+		/* Set the debug level */
+		final boolean debugEnabled = this.loadBooleanProperty(props,
+				ConfigurationProperty.DEBUG_ENABLED, considerSystemProperties);
+		this.setDebugEnabled(debugEnabled);
 
-//    /**
-//     * Loads properties from configuration file.
-//     *
-//     * @return true if the initialization was successful, false otherwise
-//     */
-//    private boolean initFromProperties(final Properties props,
-//            final boolean considerSystemProperties) {
-//
-//        if (this.loadWriter(props, considerSystemProperties) == null) {
-//            // TODO: handle
-//            MonitoringConfiguration.log.error("Failed to load writer");
-//            return false;
-//        }
-//
-//        String dbDriverClassnameProperty;
-//        if (considerSystemProperties && (System.getProperty() != null)) {
-//            /* we use the present virtual machine parameter value */
-//            dbDriverClassnameProperty = System.getProperty("kieker.monitoring.dbDriverClassname");
-//        } else { // we use the parameter in the properties file
-//            dbDriverClassnameProperty = props.getProperty("dbDriverClassname");
-//        }
-//        if ((dbDriverClassnameProperty != null)
-//                && (dbDriverClassnameProperty.length() != 0)) {
-//            this.dbDriverClassname = dbDriverClassnameProperty;
-//        } else {
-//            MonitoringController.log.info("No dbDriverClassname parameter found"
-//                    + ". Using default value " + this.dbDriverClassname
-//                    + ".");
-//        }
-//
-//        // load property "dbConnectionAddress"
-//        String dbConnectionAddressProperty;
-//        if (considerSystemProperties
-//                && (System.getProperty(MonitoringConfiguration.PROPERTY_NAME__KIEKER_MONITORING_DB_CONNECTION_ADDRESS) != null)) { // we
-//            // use
-//            // the
-//            // present
-//            // virtual
-//            // machine
-//            // parameter
-//            // value
-//            dbConnectionAddressProperty = System.getProperty(MonitoringConfiguration.PROPERTY_NAME__KIEKER_MONITORING_DB_CONNECTION_ADDRESS);
-//        } else { // we use the parameter in the properties file
-//            dbConnectionAddressProperty = props.getProperty("dbConnectionAddress");
-//        }
-//        if ((dbConnectionAddressProperty != null)
-//                && (dbConnectionAddressProperty.length() != 0)) {
-//            this.dbConnectionAddress = dbConnectionAddressProperty;
-//        } else {
-//            MonitoringController.log.warn("No dbConnectionAddress parameter found"
-//                    + ". Using default value "
-//                    + this.dbConnectionAddress + ".");
-//        }
-//
-//        // the filenamePrefix (folder where Kieker.Monitoring stores its data)
-//        // for monitoring data depends on the properties
-//        // kieker.monitoring.storeInJavaIoTmpdir
-//        // and kieker.monitoring.customStoragePath
-//        // these both parameters may be provided (with higher priority) as java
-//        // command line parameters as well (example in the properties file)
-//        String storeInJavaIoTmpdirProperty;
-//        if (considerSystemProperties
-//                && (System.getProperty("kieker.monitoring.storeInJavaIoTmpdir") != null)) { // we
-//            // use
-//            // the
-//            // present
-//            // virtual
-//            // machine
-//            // parameter
-//            // value
-//            storeInJavaIoTmpdirProperty = System.getProperty("kieker.monitoring.storeInJavaIoTmpdir");
-//        } else { // we use the parameter in the properties file
-//            storeInJavaIoTmpdirProperty = props.getProperty("kieker.monitoring.storeInJavaIoTmpdir");
-//        }
-//
-//        if ((storeInJavaIoTmpdirProperty != null)
-//                && (storeInJavaIoTmpdirProperty.length() != 0)) {
-//            if (storeInJavaIoTmpdirProperty.toLowerCase().equals("true")
-//                    || storeInJavaIoTmpdirProperty.toLowerCase().equals("false")) {
-//                this.storeInJavaIoTmpdir = storeInJavaIoTmpdirProperty.toLowerCase().equals("true");
-//            } else {
-//                MonitoringController.log.warn("Bad value for kieker.monitoring.storeInJavaIoTmpdir (or provided via command line) parameter ("
-//                        + storeInJavaIoTmpdirProperty
-//                        + ")"
-//                        + ". Using default value "
-//                        + this.storeInJavaIoTmpdir);
-//            }
-//        } else {
-//            MonitoringController.log.warn("No kieker.monitoring.storeInJavaIoTmpdir parameter found"
-//                    + " (or provided via command line). Using default value '"
-//                    + this.storeInJavaIoTmpdir + "'.");
-//        }
-//
-//        if (this.storeInJavaIoTmpdir) {
-//            this.filenamePrefix = System.getProperty("java.io.tmpdir");
-//        } else { // only now we consider kieker.monitoring.customStoragePath
-//            String customStoragePathProperty;
-//            if (considerSystemProperties
-//                    && (System.getProperty("kieker.monitoring.customStoragePath") != null)) { // we
-//                // use
-//                // the
-//                // present
-//                // virtual
-//                // machine
-//                // parameter
-//                // value
-//                customStoragePathProperty = System.getProperty("kieker.monitoring.customStoragePath");
-//            } else { // we use the parameter in the properties file
-//                customStoragePathProperty = props.getProperty("kieker.monitoring.customStoragePath");
-//            }
-//
-//            if ((customStoragePathProperty != null)
-//                    && (customStoragePathProperty.length() != 0)) {
-//                this.filenamePrefix = customStoragePathProperty;
-//            } else {
-//                MonitoringController.log.warn("No kieker.monitoring.customStoragePath parameter found"
-//                        + " (or provided via command line). Using default value '"
-//                        + this.customStoragePath + "'.");
-//                this.filenamePrefix = this.customStoragePath;
-//            }
-//        }
-//
-//        // load property "dbTableNameProperty"
-//        String dbTableNameProperty;
-//        if (considerSystemProperties
-//                && (System.getProperty("kieker.monitoring.dbTableName") != null)) { // we
-//            // use
-//            // the
-//            // present
-//            // virtual
-//            // machine
-//            // parameter
-//            // value
-//            dbTableNameProperty = System.getProperty("kieker.monitoring.dbTableName");
-//        } else { // we use the parameter in the properties file
-//            dbTableNameProperty = props.getProperty("dbTableName");
-//        }
-//        if ((dbTableNameProperty != null)
-//                && (dbTableNameProperty.length() != 0)) {
-//            this.dbTableName = dbTableNameProperty;
-//        } else {
-//            MonitoringController.log.warn("No dbTableName  parameter found"
-//                    + ". Using default value " + this.dbTableName + ".");
-//        }
-//
-//        // load property "debug"
-//        String debugProperty;
-//        if (considerSystemProperties
-//                && (System.getProperty("kieker.monitoring.debug") != null)) { // we
-//            // use
-//            // the
-//            // present
-//            // virtual
-//            // machine
-//            // parameter
-//            // value
-//            debugProperty = System.getProperty("kieker.monitoring.debug");
-//        } else { // we use the parameter in the properties file
-//            debugProperty = props.getProperty("debug");
-//        }
-//        if ((debugProperty != null) && (debugProperty.length() != 0)) {
-//            if (debugProperty.toLowerCase().equals("true")
-//                    || debugProperty.toLowerCase().equals("false")) {
-//                if (debugProperty.toLowerCase().equals("true")) {
-//                    MonitoringController.log.info("Debug mode enabled");
-//                    this.debugMode = DebugMode.ENABLED;
-//                } else {
-//                    MonitoringController.log.info("Debug mode disabled");
-//                    this.debugMode = DebugMode.DISABLED;
-//                }
-//            } else {
-//                MonitoringController.log.warn("Bad value for debug parameter ("
-//                        + debugProperty + ")" + ". Using default value "
-//                        + this.debugMode.isDebugEnabled());
-//            }
-//        } else {
-//            MonitoringController.log.warn("Could not find debug parameter"
-//                    + ". Using default value "
-//                    + this.debugMode.isDebugEnabled());
-//        }
-//
-//        // load property "setInitialExperimentIdBasedOnLastId"
-//        final String setInitialExperimentIdBasedOnLastIdProperty = props.getProperty("setInitialExperimentIdBasedOnLastId");
-//        if ((setInitialExperimentIdBasedOnLastIdProperty != null)
-//                && (setInitialExperimentIdBasedOnLastIdProperty.length() != 0)) {
-//            if (setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true")
-//                    || setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("false")) {
-//                this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastIdProperty.toLowerCase().equals("true");
-//            } else {
-//                MonitoringController.log.warn("Bad value for setInitialExperimentIdBasedOnLastId parameter ("
-//                        + setInitialExperimentIdBasedOnLastIdProperty
-//                        + ")"
-//                        + ". Using default value "
-//                        + this.setInitialExperimentIdBasedOnLastId);
-//            }
-//        } else {
-//            MonitoringController.log.warn("Could not find setInitialExperimentIdBasedOnLastId parameter"
-//                    + ". Using default value "
-//                    + this.setInitialExperimentIdBasedOnLastId);
-//        }
-//
-//        // load property "asyncRecordQueueSize"
-//        String asyncRecordQueueSizeProperty = null;
-//        if (considerSystemProperties
-//                && (System.getProperty("kieker.monitoring.asyncRecordQueueSize") != null)) { // we
-//            // use
-//            // the
-//            // present
-//            // virtual
-//            // machine
-//            // parameter
-//            // value
-//            asyncRecordQueueSizeProperty = System.getProperty("kieker.monitoring.asyncRecordQueueSize");
-//        } else { // we use the parameter in the properties file
-//            asyncRecordQueueSizeProperty = props.getProperty("asyncRecordQueueSize");
-//        }
-//        if ((asyncRecordQueueSizeProperty != null)
-//                && (asyncRecordQueueSizeProperty.length() != 0)) {
-//            int asyncRecordQueueSizeValue = -1;
-//            try {
-//                asyncRecordQueueSizeValue = Integer.parseInt(asyncRecordQueueSizeProperty);
-//            } catch (final NumberFormatException ex) {
-//            }
-//            if (asyncRecordQueueSizeValue >= 0) {
-//                this.asyncRecordQueueSize = asyncRecordQueueSizeValue;
-//            } else {
-//                MonitoringController.log.warn("Bad value for asyncRecordQueueSize parameter ("
-//                        + asyncRecordQueueSizeProperty + ")"
-//                        + ". Using default value "
-//                        + this.asyncRecordQueueSize);
-//            }
-//        } else {
-//            MonitoringController.log.warn("Could not find asyncRecordQueueSize parameter"
-//                    + ". Using default value "
-//                    + this.asyncRecordQueueSize);
-//        }
-//
-//        // load property "asyncBlockOnFullQueue"
-//        String asyncBlockOnFullQueueProperty = null;
-//        if (considerSystemProperties
-//                && (System.getProperty("kieker.monitoring.asyncBlockOnFullQueue") != null)) { // we
-//            // use
-//            // the
-//            // present
-//            // virtual
-//            // machine
-//            // parameter
-//            // value
-//            asyncBlockOnFullQueueProperty = System.getProperty("kieker.monitoring.asyncBlockOnFullQueue");
-//        } else { // we use the parameter in the properties file
-//            asyncBlockOnFullQueueProperty = props.getProperty("asyncBlockOnFullQueue");
-//        }
-//        if ((asyncBlockOnFullQueueProperty != null)
-//                && (asyncBlockOnFullQueueProperty.length() != 0)) {
-//            this.asyncBlockOnFullQueue = Boolean.parseBoolean(asyncBlockOnFullQueueProperty);
-//            MonitoringController.log.info("Using asyncBlockOnFullQueue value ("
-//                    + asyncBlockOnFullQueueProperty + ")"
-//                    + ". Using default value " + this.asyncBlockOnFullQueue);
-//        } else {
-//            MonitoringController.log.warn("Could not find asyncBlockOnFullQueue"
-//                    + ". Using default value "
-//                    + this.asyncBlockOnFullQueue);
-//        }
-//
-//        final String monitoringEnabledProperty = props.getProperty("monitoringEnabled");
-//        if ((monitoringEnabledProperty != null)
-//                && (monitoringEnabledProperty.length() != 0)) {
-//            if (monitoringEnabledProperty.toLowerCase().equals("true")
-//                    || monitoringEnabledProperty.toLowerCase().equals("false")) {
-//                if (monitoringEnabledProperty.toLowerCase().equals("true")) {
-//                    this.controllerState.set(ControllerState.ENABLED);
-//                } else {
-//                    this.controllerState.set(ControllerState.DISABLED);
-//                }
-//            } else {
-//                MonitoringController.log.warn("Bad value for monitoringEnabled parameter ("
-//                        + monitoringEnabledProperty
-//                        + ")"
-//                        + ". Using default value "
-//                        + this.controllerState.get().equals(
-//                        ControllerState.ENABLED));
-//            }
-//
-//        } else {
-//            MonitoringController.log.warn("Could not find monitoringEnabled parameter"
-//                    + ". Using default value "
-//                    + this.controllerState.get().equals(
-//                    ControllerState.ENABLED));
-//        }
-//
-//        if (!this.controllerState.get().equals(ControllerState.ENABLED)) {
-//            MonitoringController.log.info("Monitoring is not enabled");
-//        }
-//    }
-//
-//	@Override
-//	public boolean isDebugEnabled() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean isMonitoringEnabled() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//
-//	@Override
-//	public void setDebugEnabled(final boolean debugEnabled) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	/**
-//	 * Sets the experiment ID to the given value.
-//	 * 
-//	 * @param experimentId
-//	 */
-//	public final void setExperimentId(final int experimentId) {
-//		this.experimentId = experimentId;
-//	}
-//
-//	@Override
-//	public void setHostName(final String newHostName) {
-//	}
-//
-//	@Override
-//	public void setMonitoringEnabled(final boolean monitoringEnabled) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	@Override
-//	public void setMonitoringLogWriter(
-//			final IMonitoringLogWriter monitoringLogWriter) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	@Override
-//	public String getConfigurationName() {
-//		return this.instanceName;
-//	}
+		/* Sets whether monitoring is enabled or disabled */
+		final boolean monitoringEnabled = this.loadBooleanProperty(props,
+				ConfigurationProperty.MONITORING_ENABLED,
+				considerSystemProperties);
+		this.setMonitoringEnabled(monitoringEnabled);
+
+		return true;
+	}
+
+	/**
+	 * Initializes the monitoring log writer based on the properties.
+	 * 
+	 * @param props
+	 * @param considerSystemProperties
+	 * @return
+	 */
+	private boolean initWriter(final Properties props,
+			final boolean considerSystemProperties) {
+		/* Set the monitoring log writer */
+		final IMonitoringLogWriter monitoringLogWriter = this.loadWriter(props,
+				considerSystemProperties);
+		if (monitoringLogWriter == null) {
+			MonitoringConfiguration.log.error("Failed to load writer");
+			return false;
+		} else {
+			this.monitoringLogWriter = monitoringLogWriter;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean isDebugEnabled() {
+		return this.debugEnabled;
+	}
+
+	@Override
+	public boolean isMonitoringEnabled() {
+		return this.monitoringEnabled;
+	}
+
+	/**
+	 * 
+	 * @param props
+	 * @param propertyName
+	 * @param defaultValue
+	 * @param considerSystemProperties
+	 * @return
+	 */
+	private boolean loadBooleanProperty(final Properties props,
+			final ConfigurationProperty property,
+			final boolean considerSystemProperties) {
+		final String stringValue = this.loadStringProperty(props, property,
+				considerSystemProperties);
+
+		return Boolean.parseBoolean(stringValue);
+	}
+
+	/**
+	 * 
+	 * @param props
+	 * @param property
+	 * @param considerSystemProperties
+	 * @return
+	 * @throws NumberFormatException
+	 */
+	private int loadIntProperty(final Properties props,
+			final ConfigurationProperty property,
+			final boolean considerSystemProperties)
+			throws NumberFormatException {
+		final String stringValue = this.loadStringProperty(props, property,
+				considerSystemProperties);
+
+		return Integer.parseInt(stringValue);
+	}
+
+	/**
+	 * 
+	 * @param props
+	 * @param property
+	 * @param considerSystemProperties
+	 * @return
+	 */
+	private String loadStringProperty(final Properties props,
+			final ConfigurationProperty property,
+			final boolean considerSystemProperties) {
+		String propertyValue;
+		if (considerSystemProperties && property.hasJVMArgument()
+				&& (System.getProperty(property.getJVMArgumentName()) != null)) {
+			/* We use the present virtual machine parameter value */
+			propertyValue = System.getProperty(property.getJVMArgumentName());
+		} else {
+			/* we use the value from the properties map */
+			propertyValue = props.getProperty(property.getPropertyName());
+		}
+
+		if ((propertyValue == null) || propertyValue.isEmpty()) {
+			propertyValue = property.defaultValue();
+			MonitoringConfiguration.log.info("Missing value for property '"
+					+ property.getPropertyName() + "' using default value "
+					+ propertyValue);
+		}
+
+		return propertyValue;
+	}
+
+	/**
+	 * Loads the writer based on the given properties
+	 * 
+	 * @param props
+	 * @return the writer, null if the construction of the writer failed
+	 */
+	private IMonitoringLogWriter loadWriter(final Properties props,
+			final boolean considerSystemProperties) {
+		IMonitoringLogWriter monitoringLogWriter = null;
+
+		try {
+			final String monitoringDataWriterClassname = this
+					.loadStringProperty(
+							props,
+							ConfigurationProperty.MONITORING_DATA_WRITER_CLASSNAME,
+							considerSystemProperties);
+			final String monitoringDataWriterInitString = this
+					.loadStringProperty(
+							props,
+							ConfigurationProperty.MONITORING_DATA_WRITER_INIT_STRING,
+							considerSystemProperties);
+
+			if ((monitoringDataWriterClassname == null)
+					|| (monitoringDataWriterClassname.isEmpty())) {
+				MonitoringConfiguration.log
+						.error("Property monitoringDataWriter not set");
+				return null;
+			} else if (monitoringDataWriterClassname
+					.equals(ConfigurationFileConstants.WRITER_SYNCFS)) {
+				/* Synchronous file system writer */
+				final String filenameBase = this.loadStringProperty(props,
+						ConfigurationProperty.FS_FN_PREFIX,
+						considerSystemProperties);
+				monitoringLogWriter = new SyncFsWriter(filenameBase,
+						this.instanceName);
+			} else if (monitoringDataWriterClassname
+					.equals(ConfigurationFileConstants.WRITER_ASYNCFS)) {
+				/* Asynchronous file system writer */
+				final String filenameBase = this.loadStringProperty(props,
+						ConfigurationProperty.FS_FN_PREFIX,
+						considerSystemProperties);
+				final int asyncRecordQueueSize = this.loadIntProperty(props,
+						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
+						considerSystemProperties);
+				final boolean asyncBlockOnFullQueue = this.loadBooleanProperty(
+						props,
+						ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUEU,
+						considerSystemProperties);
+				monitoringLogWriter = new AsyncFsWriter(filenameBase,
+						this.instanceName, asyncRecordQueueSize,
+						asyncBlockOnFullQueue);
+			} else if (monitoringDataWriterClassname
+					.equals(ConfigurationFileConstants.WRITER_SYNCDB)) {
+				/* Synchronous database writer */
+				final String dbDriverClassname = this.loadStringProperty(props,
+						ConfigurationProperty.DB__DRIVER_CLASSNAME,
+						considerSystemProperties);
+				final String dbConnectionAddress = this.loadStringProperty(
+						props, ConfigurationProperty.DB_CONNECTION_ADDRESS,
+						considerSystemProperties);
+				final String dbTableName = this.loadStringProperty(props,
+						ConfigurationProperty.DB__TABLE_NAME,
+						considerSystemProperties);
+				final boolean setInitialExperimentIdBasedOnLastId = this
+						.loadBooleanProperty(
+								props,
+								ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST,
+								considerSystemProperties);
+				monitoringLogWriter = new SyncDbWriter(dbDriverClassname,
+						dbConnectionAddress, dbTableName,
+						setInitialExperimentIdBasedOnLastId);
+			} else if (monitoringDataWriterClassname
+					.equals(ConfigurationFileConstants.WRITER_ASYNCDB)) {
+				/* Asynchronous database writer */
+				final String dbDriverClassname = this.loadStringProperty(props,
+						ConfigurationProperty.DB__DRIVER_CLASSNAME,
+						considerSystemProperties);
+				final String dbConnectionAddress = this.loadStringProperty(
+						props, ConfigurationProperty.DB_CONNECTION_ADDRESS,
+						considerSystemProperties);
+				final String dbTableName = this.loadStringProperty(props,
+						ConfigurationProperty.DB__TABLE_NAME,
+						considerSystemProperties);
+				final boolean setInitialExperimentIdBasedOnLastId = this
+						.loadBooleanProperty(
+								props,
+								ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST,
+								considerSystemProperties);
+				final int asyncRecordQueueSize = this.loadIntProperty(props,
+						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
+						considerSystemProperties);
+				final boolean asyncBlockOnFullQueue = this.loadBooleanProperty(
+						props,
+						ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUEU,
+						considerSystemProperties);
+				monitoringLogWriter = new AsyncDbWriter(dbDriverClassname,
+						dbConnectionAddress, dbTableName,
+						setInitialExperimentIdBasedOnLastId,
+						asyncRecordQueueSize, asyncBlockOnFullQueue);
+			} else {
+				/* Load the writer by its classname */
+				final int asyncRecordQueueSize = this.loadIntProperty(props,
+						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
+						considerSystemProperties);
+				monitoringLogWriter = (IMonitoringLogWriter) Class.forName(
+						monitoringDataWriterClassname).newInstance();
+				// add asyncRecordQueueSize
+				// TODO: this is still a dirty hack!
+				if (!monitoringLogWriter.init(monitoringDataWriterInitString
+						+ " | asyncRecordQueueSize=" + asyncRecordQueueSize)) {
+					monitoringLogWriter = null;
+					throw new Exception("Initialization of writer failed!");
+				}
+			}
+		} catch (final Exception e) {
+			MonitoringConfiguration.log.error(
+					"Error loading monitoring data writer", e);
+			return null;
+		}
+		return monitoringLogWriter;
+	}
+
+	@Override
+	public void setDebugEnabled(final boolean debugEnabled) {
+		this.debugEnabled = debugEnabled;
+	}
+
+	@Override
+	public void setHostName(final String hostName) {
+		this.hostName = hostName;
+	}
+
+	@Override
+	public void setMonitoringEnabled(final boolean monitoringEnabled) {
+		this.monitoringEnabled = monitoringEnabled;
+	}
+
+	@Override
+	public void setMonitoringLogWriter(
+			final IMonitoringLogWriter monitoringLogWriter) {
+		this.monitoringLogWriter = monitoringLogWriter;
+	}
 }
