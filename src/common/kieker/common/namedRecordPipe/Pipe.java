@@ -46,11 +46,6 @@ public final class Pipe {
 
 	public void close() {
 		this.closed = true;
-//		try {
-//			this.writeMonitoringRecord(MonitoringController.END_OF_MONITORING_MARKER);
-//		} catch (final PipeException ex) {
-//			Pipe.log.error("Failed to send END_OF_MONITORING_MARKER", ex);
-//			// we can't do anything more
-//		}
+		this.pipeReader.notifyPipeClosed();
 	}
 }

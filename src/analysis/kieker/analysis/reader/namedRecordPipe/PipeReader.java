@@ -1,5 +1,7 @@
 package kieker.analysis.reader.namedRecordPipe;
 
+import java.util.concurrent.CountDownLatch;
+
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.common.namedRecordPipe.Broker;
@@ -21,6 +23,16 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 	private static final Log log = LogFactory.getLog(PipeReader.class);
 
 	private volatile Pipe pipe;
+
+	/**
+	 * Returns the pipe from which the reader receives its monitoring records.
+	 * One reason to require the pipe is to close it by a call to
+	 * {@link Pipe#close()}.
+	 */
+	public Pipe getPipe() {
+		return this.pipe;
+	}
+
 	private String pipeName;
 
 	public PipeReader() {
@@ -30,34 +42,54 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 		this.initPipe(pipeName);
 	}
 
-	private void initPipe(final String pipeName) throws IllegalArgumentException {
+	private final CountDownLatch terminationLatch = new CountDownLatch(1);
+
+	private void initPipe(final String pipeName)
+			throws IllegalArgumentException {
 		this.pipeName = pipeName;
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
-			PipeReader.log.error("Failed to get Pipe with name " + this.pipeName);
+			PipeReader.log.error("Failed to get Pipe with name "
+					+ this.pipeName);
 			throw new IllegalArgumentException("Failed to get Pipe with name "
 					+ this.pipeName);
 		}
 		this.pipe.setPipeReader(this);
 	}
 
+	/**
+	 * Blocks until the associated pipe is being closed.
+	 */
 	@Override
 	public boolean read() throws MonitoringLogReaderException {
 		// No need to initialize since we receive asynchronously
+		try {
+			this.terminationLatch.await();
+			PipeReader.log.info("Pipe closed. Will terminate.");
+		} catch (final InterruptedException e) {
+			PipeReader.log.error("Received InterruptedException", e);
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public void init(final String initString) throws IllegalArgumentException {
 		final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
-																			// IllegalArgumentException
+																				// IllegalArgumentException
 		this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-		PipeReader.log.info("Connected to pipe '" + this.pipeName + "'" + " (" + this.pipe
-				+ ")");
+		PipeReader.log.info("Connected to pipe '" + this.pipeName + "'" + " ("
+				+ this.pipe + ")");
 	}
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
 		return super.deliverRecord(rec);
+	}
+
+	@Override
+	public void notifyPipeClosed() {
+		/* Notify main thread */
+		this.terminationLatch.countDown();
 	}
 }

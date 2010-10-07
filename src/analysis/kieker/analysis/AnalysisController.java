@@ -20,142 +20,183 @@ package kieker.analysis;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.common.record.MonitoringRecordReceiverException;
-import kieker.analysis.reader.IMonitoringLogReader;
 
-import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
+import kieker.analysis.reader.IMonitoringLogReader;
+import kieker.analysis.reader.MonitoringLogReaderException;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.common.record.MonitoringRecordReceiverException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
- * 2010-03-06 Matthias:
- *      Added exception handling for the case that the log reader is missing.
- *          (I had lot of pain because of this).
- *
+ * 
+ * 2010-03-06 Matthias: Added exception handling for the case that the log
+ * reader is missing. (I had lot of pain because of this).
+ * 
  * 2010-03-04 Andre: Release of Kieker 1.1
- *
- *
- * TODOs:
- *  - In the context of realizing a event driven architecture for the model
- *    synthesis layer, it makes sense to refactor the KiekerRecordConsumers to
- *    KiekerRecordFilters. Consumers are only about how data goes in - but we
- *    also have now a concept what should happen if the data goes out: its
- *    again a publisher, to which other filters or plugins can subscribe to.
- *
+ * 
+ * 
+ * TODOs: - In the context of realizing a event driven architecture for the
+ * model synthesis layer, it makes sense to refactor the KiekerRecordConsumers
+ * to KiekerRecordFilters. Consumers are only about how data goes in - but we
+ * also have now a concept what should happen if the data goes out: its again a
+ * publisher, to which other filters or plugins can subscribe to.
+ * 
  * @author Andre van Hoorn, Matthias Rohr
  */
 public class AnalysisController {
 
-    private static final Log log = LogFactory.getLog(AnalysisController.class);
-    private IMonitoringLogReader logReader;
-    /** this are the consumers for data that are comming into kieker by readers (files or system under monitoring)*/
-    private final Vector<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
-    /** Contains all consumers which consume records of any type */
-    private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers =
-            new Vector<IMonitoringRecordConsumerPlugin>();
-    /** Contains mapping of record types to subscribed consumers */
-    private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers =
-            new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
-    private final Collection<IAnalysisPlugin> plugins =
-            new Vector<IAnalysisPlugin>();
+	private static final Log log = LogFactory.getLog(AnalysisController.class);
+	private IMonitoringLogReader logReader;
+	/**
+	 * this are the consumers for data that are coming into kieker by readers
+	 * (files or system under monitoring)
+	 */
+	private final Vector<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
+	/** Contains all consumers which consume records of any type */
+	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new Vector<IMonitoringRecordConsumerPlugin>();
+	/** Contains mapping of record types to subscribed consumers */
+	private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
+	private final Collection<IAnalysisPlugin> plugins = new Vector<IAnalysisPlugin>();
 
-    public void run() throws MonitoringLogReaderException, MonitoringRecordConsumerException {
-        for (IAnalysisPlugin c : this.plugins) {
-            c.execute();
-        }
-        try {
-            if (logReader == null) {
-                log.error("Error: LogReader is missing - cannot execute run() without it!");
-                throw new MonitoringLogReaderException(" LogReader is missing - cannot execute run() without it!");
-            } else {
-                this.logReader.addRecordReceiver(new IMonitoringRecordReceiver() {
+	/**
+	 * Starts an {@link AnalysisController} instance and returns after the
+	 * configured reader finished reading and all analysis plugins terminated.
+	 * 
+	 * @throws MonitoringLogReaderException
+	 * @throws MonitoringRecordConsumerException
+	 */
+	public void run() throws MonitoringLogReaderException,
+			MonitoringRecordConsumerException {
+		for (final IAnalysisPlugin c : this.plugins) {
+			c.execute();
+		}
+		try {
+			if (this.logReader == null) {
+				AnalysisController.log
+						.error("Error: LogReader is missing - cannot execute run() without it!");
+				throw new MonitoringLogReaderException(
+						" LogReader is missing - cannot execute run() without it!");
+			} else {
+				this.logReader
+						.addRecordReceiver(new IMonitoringRecordReceiver() {
 
-                    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
-                        try {
-                            deliverRecordToConsumers(monitoringRecord);
-                        } catch (MonitoringRecordReceiverException ex) {
-                            log.error("Caught MonitoringRecordConsumerExecutionException", ex);
-                            return false;
-                        }
-                        return true;
-                    }
-                });
-                if (!this.logReader.read()) {
-                    log.error("Calling execute() on logReader returned false");
-                    throw new MonitoringLogReaderException("Calling execute() on logReader returned false");
-                }
-            }
-        } catch (MonitoringLogReaderException exc) {
-            log.fatal("LogReaderException! Will terminate consumers.");
-            for (IAnalysisPlugin c : this.plugins) {
-                c.terminate(true); // terminate due to an error
-            }
-            throw exc;
-        }
-        for (IAnalysisPlugin c : this.plugins) {
-            c.terminate(false); // terminate due to an error
-        }
-    }
+							/**
+							 * Delegates the records provided by the reader to
+							 * the registered record consumers
+							 */
+							@Override
+							public boolean newMonitoringRecord(
+									final IMonitoringRecord monitoringRecord) {
+								try {
+									AnalysisController.this
+											.deliverRecordToConsumers(monitoringRecord);
+								} catch (final MonitoringRecordReceiverException ex) {
+									AnalysisController.log
+											.error("Caught MonitoringRecordConsumerExecutionException",
+													ex);
+									return false;
+								}
+								return true;
+							}
+						});
+				if (!this.logReader.read()) {
+					AnalysisController.log
+							.error("Calling execute() on logReader returned false");
+					throw new MonitoringLogReaderException(
+							"Calling execute() on logReader returned false");
+				}
+			}
+		} catch (final MonitoringLogReaderException exc) {
+			AnalysisController.log
+					.fatal("LogReaderException! Will terminate consumers.");
+			for (final IAnalysisPlugin c : this.plugins) {
+				c.terminate(true); // terminate due to an error
+			}
+			throw exc;
+		}
+		for (final IAnalysisPlugin c : this.plugins) {
+			c.terminate(false); // terminate due to an error
+		}
+	}
 
-    public void setLogReader(IMonitoringLogReader reader) {
-        this.logReader = reader;
-    }
+	/**
+	 * Sets the log reader used as the source for monitoring records. 
+	 * 
+	 * @param reader
+	 */
+	public void setLogReader(final IMonitoringLogReader reader) {
+		this.logReader = reader;
+	}
 
-    private void addRecordConsumer(IMonitoringRecordConsumerPlugin consumer) {
-        this.consumers.add(consumer);
-        final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
-        if (recordTypeSubscriptionList == null) {
-            this.anyTypeConsumers.add(consumer);
-        } else {
-            for (Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
-                Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(recordType);
-                if (cList == null) {
-                    cList = new Vector<IMonitoringRecordConsumerPlugin>(0);
-                    this.specificTypeConsumers.put(recordType, cList);
-                }
-                cList.add(consumer);
-            }
-        }
-    }
+	/**
+	 * Adds the given consumer to the analysis. 
+	 * 
+	 * @param consumer
+	 */
+	private void addRecordConsumer(
+			final IMonitoringRecordConsumerPlugin consumer) {
+		this.consumers.add(consumer);
+		final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer
+				.getRecordTypeSubscriptionList();
+		if (recordTypeSubscriptionList == null) {
+			this.anyTypeConsumers.add(consumer);
+		} else {
+			for (final Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
+				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers
+						.get(recordType);
+				if (cList == null) {
+					cList = new Vector<IMonitoringRecordConsumerPlugin>(0);
+					this.specificTypeConsumers.put(recordType, cList);
+				}
+				cList.add(consumer);
+			}
+		}
+	}
 
-    /**
-     * Registers the passed plugin <i>c<i>. If <i>c</i> is an
-     * instance of the interface <i>IMonitoringRecordConsumerPlugin</i>
-     * it is also registered as a record consumer.
-     */
-    public void registerPlugin(IAnalysisPlugin plugin) {
-        this.plugins.add(plugin);
-        log.info("Registered plugin " + plugin);
+	/**
+	 * Registers the passed plugin <i>c<i>. If <i>c</i> is an instance of the
+	 * interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered as
+	 * a record consumer.
+	 */
+	public void registerPlugin(final IAnalysisPlugin plugin) {
+		this.plugins.add(plugin);
+		AnalysisController.log.info("Registered plugin " + plugin);
 
-        if (plugin instanceof IMonitoringRecordConsumerPlugin){
-            log.info("Plugin " + plugin + " also registered as record consumer");
-            this.addRecordConsumer((IMonitoringRecordConsumerPlugin)plugin);
-        }
-    }
+		if (plugin instanceof IMonitoringRecordConsumerPlugin) {
+			AnalysisController.log.info("Plugin " + plugin
+					+ " also registered as record consumer");
+			this.addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
+		}
+	}
 
-    /**
-     * Delivers the given record to the consumers that are registered for this
-     * type of records.
-     *
-     * @param monitoringRecord the record
-     * @throws LogReaderExecutionException if an error occurs
-     */
-    private final void deliverRecordToConsumers(final IMonitoringRecord monitoringRecord) throws MonitoringRecordReceiverException {
+	/**
+	 * Delivers the given record to the consumers that are registered for this
+	 * type of records.
+	 * 
+	 * @param monitoringRecord
+	 *            the record
+	 * @throws LogReaderExecutionException
+	 *             if an error occurs
+	 */
+	private final void deliverRecordToConsumers(
+			final IMonitoringRecord monitoringRecord)
+			throws MonitoringRecordReceiverException {
 
-        for (IMonitoringRecordConsumerPlugin c : this.anyTypeConsumers) {
-            c.newMonitoringRecord(monitoringRecord);
-        }
-        Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(monitoringRecord.getClass());
-        if (cList != null) {
-            for (IMonitoringRecordConsumerPlugin c : cList) {
-                c.newMonitoringRecord(monitoringRecord);
-            }
-        }
-    }
+		for (final IMonitoringRecordConsumerPlugin c : this.anyTypeConsumers) {
+			c.newMonitoringRecord(monitoringRecord);
+		}
+		final Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers
+				.get(monitoringRecord.getClass());
+		if (cList != null) {
+			for (final IMonitoringRecordConsumerPlugin c : cList) {
+				c.newMonitoringRecord(monitoringRecord);
+			}
+		}
+	}
 }

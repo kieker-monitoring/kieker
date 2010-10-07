@@ -19,90 +19,110 @@ package kieker.tools.logReplayer;
  * 
  */
 import java.util.Collection;
-import kieker.common.record.IMonitoringRecord;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.monitoring.core.MonitoringController;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * 
  * @author Andre van Hoorn
  */
 public class FilesystemLogReplayer {
 
-    private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
-    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
-    private String[] inputDirs = null;
-    private volatile boolean realtimeMode = false;
-    private boolean keepOriginalLoggingTimestamps = true;
-    private int numRealtimeWorkerThreads = -1;
+	private static final Log log = LogFactory
+			.getLog(FilesystemLogReplayer.class);
+	private final IMonitoringRecordReceiver recordReceiver;
+	private final String[] inputDirs;
+	private final boolean realtimeMode;
+	private final int numRealtimeWorkerThreads;
 
-    private FilesystemLogReplayer() {
-    }
+	@SuppressWarnings("unused")
+	private FilesystemLogReplayer() {
+		this.recordReceiver = null;
+		this.inputDirs = null;
+		this.realtimeMode = false;
+		this.numRealtimeWorkerThreads = -1;
+	}
 
-    /** Normal replay mode (i.e., non-real-time). */
-    public FilesystemLogReplayer(final String[] inputDirs) {
-        this.inputDirs = inputDirs;
-    }
+	/** Normal replay mode (i.e., non-real-time). */
+	public FilesystemLogReplayer(
+			final IMonitoringRecordReceiver monitoringController,
+			final String[] inputDirs) {
+		this.recordReceiver = monitoringController;
+		this.inputDirs = inputDirs;
+		this.realtimeMode = false;
+		this.numRealtimeWorkerThreads = -1;
+	}
 
-    public FilesystemLogReplayer(final String[] inputDirs, final boolean keepOriginalLoggingTimestamps, final boolean realtimeMode, final int numRealtimeWorkerThreads) {
-        this.inputDirs = inputDirs;
-        this.realtimeMode = realtimeMode;
-        this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
-        this.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestamps;
-    }
+	public FilesystemLogReplayer(
+			final IMonitoringRecordReceiver monitoringController,
+			final String[] inputDirs,
+			final boolean realtimeMode, final int numRealtimeWorkerThreads) {
+		this.recordReceiver = monitoringController;
+		this.inputDirs = inputDirs;
+		this.realtimeMode = realtimeMode;
+		this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
+	}
 
-    /**
-     * @return true on success; false otherwise */
-    public boolean replay() {
-        boolean success = true;
+	/**
+	 * @return true on success; false otherwise
+	 */
+	public boolean replay() {
+		boolean success = true;
 
-        /**
-         * Force the controller to keep the original logging timestamps
-         * of the monitoring records.
-         */
-        ctrlInst.setControllerMode(this.keepOriginalLoggingTimestamps?MonitoringController.ControllerMode.REPLAY:MonitoringController.ControllerMode.REALTIME);
 
-        IMonitoringRecordConsumerPlugin logCons = new IMonitoringRecordConsumerPlugin() {
+		final IMonitoringRecordConsumerPlugin logCons = new IMonitoringRecordConsumerPlugin() {
 
-            /** Anonymous consumer class that simply passes all records to the
-             *  controller */
-            public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-                return null; // consume all types
-            }
+			/**
+			 * Anonymous consumer class that simply passes all records to the
+			 * controller
+			 */
+			@Override
+			public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+				return null; // consume all types
+			}
 
-            public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-                return ctrlInst.newMonitoringRecord(monitoringRecord);
-            }
+			@Override
+			public boolean newMonitoringRecord(
+					final IMonitoringRecord monitoringRecord) {
+				return FilesystemLogReplayer.this.recordReceiver
+						.newMonitoringRecord(monitoringRecord);
+			}
 
-            public boolean execute() {
-                return true; // no need to do anything
-            }
+			@Override
+			public boolean execute() {
+				return true; // no need to do anything
+			}
 
-            public void terminate(boolean error) {
-                // no need to do anything
-            }
-        };
-        AbstractMonitoringLogReader fsReader;
-        if (realtimeMode) {
-            fsReader = new FSReaderRealtime(inputDirs, numRealtimeWorkerThreads);
-        } else {
-            fsReader = new FSReader(inputDirs);
-        }
-        AnalysisController tpanInstance = new AnalysisController();
-        tpanInstance.setLogReader(fsReader);
-        tpanInstance.registerPlugin(logCons);
-        try {
-            tpanInstance.run();
-            success = true;
-        } catch (Exception ex) {
-            log.error("Exception", ex);
-            success = false;
-        }
-        return success;
-    }
+			@Override
+			public void terminate(final boolean error) {
+				// no need to do anything
+			}
+		};
+		AbstractMonitoringLogReader fsReader;
+		if (this.realtimeMode) {
+			fsReader = new FSReaderRealtime(this.inputDirs,
+					this.numRealtimeWorkerThreads);
+		} else {
+			fsReader = new FSReader(this.inputDirs);
+		}
+		final AnalysisController tpanInstance = new AnalysisController();
+		tpanInstance.setLogReader(fsReader);
+		tpanInstance.registerPlugin(logCons);
+		try {
+			tpanInstance.run();
+			success = true;
+		} catch (final Exception ex) {
+			FilesystemLogReplayer.log.error("Exception", ex);
+			success = false;
+		}
+		return success;
+	}
 }

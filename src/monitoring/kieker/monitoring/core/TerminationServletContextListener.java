@@ -10,24 +10,35 @@ import org.apache.commons.logging.LogFactory;
  * Use this listener in webapps where TpmonShutdownHook is not called
  * 
  * @author Dennis Kieselhorst
- *
+ * 
  */
-public class TerminationServletContextListener implements ServletContextListener {
-	private static final Log LOG = LogFactory.getLog(TerminationServletContextListener.class);
+public class TerminationServletContextListener implements
+		ServletContextListener {
+	private static final Log LOG = LogFactory
+			.getLog(TerminationServletContextListener.class);
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
+	 * ServletContextEvent)
 	 */
-	public void contextDestroyed(ServletContextEvent evt) {
+	@Override
+	public void contextDestroyed(final ServletContextEvent evt) {
 		MonitoringController.getInstance().terminate();
-		LOG.info("context destroyed");
+		TerminationServletContextListener.LOG.info("context destroyed");
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet
+	 * .ServletContextEvent)
 	 */
-	public void contextInitialized(ServletContextEvent evt) {
-		LOG.info("context initialized");
+	@Override
+	public void contextInitialized(final ServletContextEvent evt) {
+		TerminationServletContextListener.LOG.info("context initialized");
 	}
 
 }

@@ -22,14 +22,15 @@ package kieker.tools.logReplayer;
 import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.PropertyMap;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.MonitoringLogReaderException;
-
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.PropertyMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,7 +42,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
 
     private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
-    /* manages the lifecycle of the reader and consumers */
+    /* manages the life-cycle of the reader and consumers */
     private final AnalysisController tpanInstance = new AnalysisController();
     private RealtimeReplayDistributor rtDistributor = null;
     private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
@@ -57,28 +58,32 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
 
         private final FSReaderRealtime master;
 
-        public FSReaderRealtimeCons(FSReaderRealtime master) {
+        public FSReaderRealtimeCons(final FSReaderRealtime master) {
             this.master = master;
         }
 
-        public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+        @Override
+		public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
             return null;
         }
 
-        public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
+        @Override
+		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
             if (!this.master.deliverRecord(monitoringRecord)){
-                log.error("LogReaderExecutionException");
+                FSReaderRealtime.log.error("LogReaderExecutionException");
                 return false;
             }
             return true;
         }
 
-        public boolean execute() {
+        @Override
+		public boolean execute() {
             /* do nothing */
             return true;
         }
 
-        public void terminate(final boolean error) {
+        @Override
+		public void terminate(final boolean error) {
         }
     }
 
@@ -89,72 +94,74 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
     }
 
     /** Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN | numWorkers=XX */
-    public void init(String initString) throws IllegalArgumentException {
-        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-        String numWorkersString = propertyMap.getProperty(PROP_NAME_NUM_WORKERS);
+    @Override
+	public void init(final String initString) throws IllegalArgumentException {
+        final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+        final String numWorkersString = propertyMap.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
         int numWorkers = -1;
         if (numWorkersString == null) {
-            throw new IllegalArgumentException("Missing init parameter '" + PROP_NAME_NUM_WORKERS + "'");
+            throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
         }
         try {
             numWorkers = Integer.parseInt(numWorkersString);
-        } catch (NumberFormatException ex) { /* value of numWorkers remains -1 */ }
+        } catch (final NumberFormatException ex) { /* value of numWorkers remains -1 */ }
 
-        initInstanceFromArgs(inputDirNameListToArray(propertyMap.getProperty(PROP_NAME_INPUTDIRNAMES)), numWorkers);
+        this.initInstanceFromArgs(this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
     }
 
-    public FSReaderRealtime(final String[] inputDirNames, int numWorkers) {
-        initInstanceFromArgs(inputDirNames, numWorkers);
+    public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
+        this.initInstanceFromArgs(inputDirNames, numWorkers);
     }
 
     private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
         String[] dirNameArray;
 
         // parse inputDir property value
-        if (inputDirNameList == null || inputDirNameList.trim().length() == 0) {
-            log.error("Invalid argument value for inputDirNameList:" + inputDirNameList);
+        if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) {
+            FSReaderRealtime.log.error("Invalid argument value for inputDirNameList:" + inputDirNameList);
             throw new IllegalArgumentException("Invalid argument value for inputDirNameList:" + inputDirNameList);
         }
         try {
-            StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
+            final StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
             dirNameArray = new String[dirNameTokenizer.countTokens()];
             for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
                 dirNameArray[i] = dirNameTokenizer.nextToken().trim();
             }
-        } catch (Exception exc) {
+        } catch (final Exception exc) {
             throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
         }
         return dirNameArray;
     }
 
-    private void initInstanceFromArgs(final String[] inputDirNames, int numWorkers) throws IllegalArgumentException {
-        if (inputDirNames == null || inputDirNames.length <= 0) {
-            throw new IllegalArgumentException("Invalid property value for " + PROP_NAME_INPUTDIRNAMES + ":" + inputDirNames);
+    private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
+        if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
+            throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":" + inputDirNames);
         }
 
         if (numWorkers <= 0) {
-            throw new IllegalArgumentException("Invalid proprty value for " + PROP_NAME_NUM_WORKERS + ": " + numWorkers);
+            throw new IllegalArgumentException("Invalid proprty value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers);
         }
 
         final AbstractMonitoringLogReader fsReader = new FSReader(inputDirNames);
         final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
-        rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, terminationLatch);
+        this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
         //fsReader.addConsumer(rtDistributor, null);
         this.tpanInstance.setLogReader(fsReader);
-        this.tpanInstance.registerPlugin(rtDistributor);
+        this.tpanInstance.registerPlugin(this.rtDistributor);
     }
 
     /**
      * Replays the monitoring log in real-time and returns after the complete
      * log was being replayed.
      */
-    public boolean read() throws MonitoringLogReaderException {
-        boolean success = true;
+    @Override
+	public boolean read() throws MonitoringLogReaderException {
+        final boolean success = true;
         try {
             this.tpanInstance.run();
             this.terminationLatch.await();
-        } catch (Exception ex) {
-            log.error("An error occured while reading", ex);
+        } catch (final Exception ex) {
+            FSReaderRealtime.log.error("An error occured while reading", ex);
             throw new MonitoringLogReaderException("An error occured while reading", ex);
         }
         return success;

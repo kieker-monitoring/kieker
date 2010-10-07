@@ -3,11 +3,12 @@ package kieker.monitoring.probe.cxf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.SessionRegistry;
-import kieker.monitoring.core.MonitoringController;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.ControlFlowRegistry;
+import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
+
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
 import org.apache.cxf.common.logging.LogUtils;
@@ -52,13 +53,14 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
     private static final String componentName = OperationExecutionSOAPResponseInInterceptor.class.getName();
     private static final String opName = "handleMessage(SoapMessage msg)";
-    protected static final String vmName = ctrlInst.getVmName();
+    protected static final String vmName = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getVmName();
     
     
-    public void handleMessage(Message msg) throws Fault {
+    @Override
+	public void handleMessage(final Message msg) throws Fault {
         if (msg instanceof SoapMessage) {
-            boolean isEntryCall = soapRegistry.recallThreadLocalOutRequestIsEntryCall();
-            SoapMessage soapMsg = (SoapMessage) msg;
+            final boolean isEntryCall = OperationExecutionSOAPResponseInInterceptor.soapRegistry.recallThreadLocalOutRequestIsEntryCall();
+            final SoapMessage soapMsg = (SoapMessage) msg;
 
             /* 1.) Extract sessionId from SOAP header */
             // No need to fetch sessionId from reponse header since it must be
@@ -66,23 +68,23 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
             /* 2.) Extract eoi from SOAP header */
             Header hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
-            String eoiStr = getStringContentFromHeader(hdr); // null if hdr==null
+            final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
             if (eoiStr == null) {
                 /* No Kieker eoi in header.
                  * This may happen for responses from callees w/o Kieker instrumentation. */
-                LOG.log(Level.FINE,
+                OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE,
                         "Found no Kieker eoi in response header. " +
                         "Will unset all threadLocal variables");
-                unsetKiekerThreadLocalData();
+                this.unsetKiekerThreadLocalData();
                 return;
             }
             int eoi = 0;
             try {
                 eoi = Integer.parseInt(eoiStr);
-            } catch (Exception exc) {
+            } catch (final Exception exc) {
                 /* invalid eoi! */
-                LOG.log(Level.WARNING, exc.getMessage(), exc);
-                unsetKiekerThreadLocalData();
+                OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
+                this.unsetKiekerThreadLocalData();
                 return;
             }
 
@@ -92,50 +94,50 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
             /* 4. Extract traceId from SOAP header */
             hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
-            String traceIdStr = getStringContentFromHeader(hdr); // null if hdr==null
+            final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
             if (traceIdStr == null) {
                 /* No Kieker trace Id in header.
                  * This may happen for responses from callees w/o Kieker instrumentation. */
-                LOG.log(Level.FINE,
+                OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE,
                         "Found no Kieker traceId in response header. " +
                         "Will unset all threadLocal variables");
-                unsetKiekerThreadLocalData();
+                this.unsetKiekerThreadLocalData();
                 return;
             }
             long traceId = -1;
             try {
                 traceId = Long.parseLong(traceIdStr);
-            } catch (Exception exc) {
+            } catch (final Exception exc) {
                 /* Invalid trace id! */
-                LOG.log(Level.WARNING, exc.getMessage(), exc);
-                unsetKiekerThreadLocalData();
+                OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
+                this.unsetKiekerThreadLocalData();
                 return;
             }
 
             /* Recall my thread-local data stored before the SOAP call */
-            long myTraceId = cfRegistry.recallThreadLocalTraceId();
-            String mySessionId = sessionRegistry.recallThreadLocalSessionId();
-            int myEoi = cfRegistry.recallThreadLocalEOI();
-            int myEss = cfRegistry.recallThreadLocalESS();
-            long myTin = soapRegistry.recallThreadLocalOutRequestTin();
-            long myTout = ctrlInst.currentTimeNanos();
+            final long myTraceId = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalTraceId();
+            final String mySessionId = OperationExecutionSOAPResponseInInterceptor.sessionRegistry.recallThreadLocalSessionId();
+            final int myEoi = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalEOI();
+            final int myEss = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalESS();
+            final long myTin = OperationExecutionSOAPResponseInInterceptor.soapRegistry.recallThreadLocalOutRequestTin();
+            final long myTout = OperationExecutionSOAPResponseInInterceptor.ctrlInst.currentTimeNanos();
             // TODO:  Remove following plausibility checks if implementation stable
             if (myTraceId != traceId) {
-                LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" +
+                OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" +
                         "" + myTraceId + "(before) != " + traceId + "(after)");
             }
 
             // Log this execution
-            OperationExecutionRecord rec = new OperationExecutionRecord(componentName, opName, mySessionId, myTraceId, myTin, myTout, vmName, myEoi, myEss);
-            rec.experimentId = ctrlInst.getExperimentId();
-            ctrlInst.newMonitoringRecord(rec);
+            final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.componentName, OperationExecutionSOAPResponseInInterceptor.opName, mySessionId, myTraceId, myTin, myTout, OperationExecutionSOAPResponseInInterceptor.vmName, myEoi, myEss);
+            rec.experimentId = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getExperimentId();
+            OperationExecutionSOAPResponseInInterceptor.ctrlInst.newMonitoringRecord(rec);
 
             /* Store received Kieker EOI
              * ESS remains the same as before the call since we didn't increment the variable! */
-            cfRegistry.storeThreadLocalEOI(eoi);
+            OperationExecutionSOAPResponseInInterceptor.cfRegistry.storeThreadLocalEOI(eoi);
 
             if (isEntryCall){ // clean up iff trace's origin was right before the call!
-                unsetKiekerThreadLocalData();
+                this.unsetKiekerThreadLocalData();
             }
         }
     }
@@ -146,18 +148,18 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
             return null;
         }
         if (hdr.getObject() instanceof Element) {
-            Element e = (Element) hdr.getObject();
+            final Element e = (Element) hdr.getObject();
             return DOMUtils.getContent(e);
         }
         return null;
     }
 
     private final void unsetKiekerThreadLocalData() {
-        cfRegistry.unsetThreadLocalTraceId();
-        sessionRegistry.unsetThreadLocalSessionId();
-        cfRegistry.unsetThreadLocalEOI();
-        cfRegistry.unsetThreadLocalESS();
-        soapRegistry.unsetThreadLocalOutRequestIsEntryCall();
-        soapRegistry.unsetThreadLocalOutRequestTin();
+        OperationExecutionSOAPResponseInInterceptor.cfRegistry.unsetThreadLocalTraceId();
+        OperationExecutionSOAPResponseInInterceptor.sessionRegistry.unsetThreadLocalSessionId();
+        OperationExecutionSOAPResponseInInterceptor.cfRegistry.unsetThreadLocalEOI();
+        OperationExecutionSOAPResponseInInterceptor.cfRegistry.unsetThreadLocalESS();
+        OperationExecutionSOAPResponseInInterceptor.soapRegistry.unsetThreadLocalOutRequestIsEntryCall();
+        OperationExecutionSOAPResponseInInterceptor.soapRegistry.unsetThreadLocalOutRequestTin();
     }
 }
