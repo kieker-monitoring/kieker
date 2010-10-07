@@ -19,21 +19,5 @@ package kieker.monitoring.core.configuration;
  */
 
 public class ConfigurationDefaults {
-	public static final boolean DEBUG_ENABLED = true;
-	public static final boolean MONITORING_ENABLED = true;
 
-	public static final int ASYNC__RECORD_QUEUE_SIZE = 8000;
-
-	public static final boolean ASYNC__BLOCK_ON_FULL_QUEUEU = false;
-
-	public static final boolean FS_WRITER__STORE_IN_JAVAIOTMPDIR = true;
-	public static final String FS_WRITER__CUSTOM_STORAGE_PATH = "/tmp";
-	public static final String FS_FN_PREFIX = "";
-	
-	public static final int EXPERIMENT_ID = 0;
-	
-	public static final String DB__DRIVER_CLASSNAME = "com.mysql.jdbc.Driver";
-	public static final String DB__CONNECTION_ADDRESS = "jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS";
-	public static final String DB__TABLE_NAME = "kieker";
-	public static final boolean DB__SET_INITIAL_EXP_ID_BASED_ON_LAST = true;
 }
