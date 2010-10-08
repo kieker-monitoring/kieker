@@ -35,6 +35,17 @@ import org.apache.commons.logging.LogFactory;
  */
 /**
  * Used to define the initial configuration of a monitoring controller.
+ * <p>
+ * 
+ * Use the factory methods to create instances:
+ * 
+ * <ul>
+ * <li>{@link #createConfiguration(String, String)}</li>
+ * <li>{@link #createDefaultConfiguration(String, IMonitoringLogWriter)}</li>
+ * <li>{@link #createDefaultConfiguration(String, Class, String)}</li>
+ * <li>{@link #createSingletonConfiguration()}</li>
+ * </ul>
+ * 
  * 
  * @author Andre van Hoorn
  */
@@ -160,9 +171,8 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 */
 	private static Properties loadPropertiesFromFile(final String propertiesFn)
 			throws FileNotFoundException, IOException {
-		MonitoringConfiguration.log
-				.info("Loading configuration from file '" + propertiesFn
-						+ "' ...");
+		MonitoringConfiguration.log.info("Loading configuration from file '"
+				+ propertiesFn + "' ...");
 		final InputStream is = new FileInputStream(propertiesFn);
 		final Properties prop = new Properties();
 		prop.load(is);
@@ -273,7 +283,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 
 	private boolean debugEnabled;
 
-	private String hostName;
+	private String hostName = MonitoringConfiguration.LOCAL_HOST_NAME; // default
 
 	private final String instanceName;
 

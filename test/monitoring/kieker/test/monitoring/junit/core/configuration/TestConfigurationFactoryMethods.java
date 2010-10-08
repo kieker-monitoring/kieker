@@ -135,4 +135,12 @@ public class TestConfigurationFactoryMethods extends TestCase {
 				debugEnabledInvertedDefault,
 				config.isDebugEnabled());
 	}
+	
+	/**
+	 * Tests {@link MonitoringConfiguration#createSingletonConfiguration()}.
+	 * 
+	 */
+	public void testCreationSingletonJVMArgsOverrideConfigurationFile(){
+		Assert.fail("Missing test");
+	}
 }
