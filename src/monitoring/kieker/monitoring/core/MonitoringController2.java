@@ -382,7 +382,6 @@ public final class MonitoringController2 implements IMonitoringController {
 
 	@Override
 	public void terminateMonitoring() {
-		this.state.terminateMonitoring();
 		if (this.monitoringLogWriter != null) {
 			/* if the initialization of the writer failed, it is set to null */
 			if (!this.monitoringLogWriter
@@ -390,5 +389,7 @@ public final class MonitoringController2 implements IMonitoringController {
 				MonitoringController2.log.error("Failed to terminate writer");
 			}
 		}
+		/* Must be set after the END_OF_MONITORING_MARKER was sent */
+		this.state.terminateMonitoring();
 	}
 }
