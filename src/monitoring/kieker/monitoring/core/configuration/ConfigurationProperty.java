@@ -26,7 +26,7 @@ class ConfigurationFileConstants {
 
 	public final static String WRITER_SYNCDB = "SyncDB";
 	public final static String WRITER_SYNCFS = "SyncFS";
-	
+
 	public final static String JVM_ARG_PREFIX = "kieker.monitoring.";
 }
 
@@ -34,61 +34,78 @@ public enum ConfigurationProperty {
 	/* */
 	DB_CONNECTION_ADDRESS("dbConnectionAddress",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "dbConnectionAddress",
-			"jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS"),
+			"jdbc:mysql://HOSTNAME/DATABASENAME?user=DBUSER&password=DBPASS",
+			/* must not be empty: */false),
 	/* */
 	MONITORING_DATA_WRITER_CLASSNAME("monitoringDataWriter",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "monitoringDataWriter",
-			ConfigurationFileConstants.WRITER_ASYNCFS),
+			ConfigurationFileConstants.WRITER_ASYNCFS,
+			/* must not be empty: */false),
 	/* */
 	MONITORING_DATA_WRITER_INIT_STRING("monitoringDataWriterInitString",
-			"monitoringDataWriter" + "monitoringDataWriterInitString", ""),
+			"monitoringDataWriter" + "monitoringDataWriterInitString", "",
+			/* can be empty: */true),
 	/* */
 	DEBUG_ENABLED("debug", ConfigurationFileConstants.JVM_ARG_PREFIX + "debug",
-			"false"),
+			"false",
+			/* must not be empty: */false),
 	/* */
 	MONITORING_ENABLED("monitoringEnabled",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "monitoringEnabled",
-			"true"),
+			"true",
+			/* must not be empty: */false),
 	/* */
 	ASYNC__RECORD_QUEUE_SIZE("asyncRecordQueueSize",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "asyncRecordQueueSize",
-			"8000"),
+			"8000",
+			/* must not be empty: */false),
 	/* */
-	ASYNC__BLOCK_ON_FULL_QUEUEU(
+	ASYNC__BLOCK_ON_FULL_QUEUE(
 			"asyncBlockOnFullQueue",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "asyncBlockOnFullQueue",
-			"false"),
+			"false",
+			/* must not be empty: */false),
 	/*
-	 * For historic reasons ;-), the following two properties have the prefix
-	 * also in the configuration file
+	 * For historic reasons ;-) this property has the prefix also in the
+	 * configuration file:
 	 */
 	FS_WRITER__STORE_IN_JAVAIOTMPDIR(ConfigurationFileConstants.JVM_ARG_PREFIX
 			+ "storeInJavaIoTmpdir", ConfigurationFileConstants.JVM_ARG_PREFIX
-			+ "kieker.monitoring.storeInJavaIoTmpdir", "true"), FS_WRITER__CUSTOM_STORAGE_PATH(
-			ConfigurationFileConstants.JVM_ARG_PREFIX + "customStoragePath",
-			ConfigurationFileConstants.JVM_ARG_PREFIX + "customStoragePath",
-			"/tmp"),
+			+ "kieker.monitoring.storeInJavaIoTmpdir", "true",
+	/* must not be empty: */false),
+	/*
+	 * For historic reasons ;-) this property has the prefix also in the
+	 * configuration file:
+	 */
+	FS_WRITER__CUSTOM_STORAGE_PATH(ConfigurationFileConstants.JVM_ARG_PREFIX
+			+ "customStoragePath", ConfigurationFileConstants.JVM_ARG_PREFIX
+			+ "customStoragePath", "/tmp",
+	/* must not be empty: */false),
 	/* Actually, this is not a property but only a default value */
-	FS_FN_PREFIX(null, null, ""),
+	FS_FN_PREFIX(null, null, "", /* can be empty: */true),
 	/* */
 	INITIAL_EXPERIMENT_ID("initialExperimentId",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "initialExperimentId",
-			"0"),
+			"0", /* can be empty: */false),
 	/* */
 	DB__DRIVER_CLASSNAME("dbDriverClassname",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "dbDriverClassname",
-			"com.mysql.jdbc.Driver"),
+			"com.mysql.jdbc.Driver",
+			/* must not be empty: */false),
 	/* */
 	DB__TABLE_NAME("dbTableName", ConfigurationFileConstants.JVM_ARG_PREFIX
-			+ "dbTableName", "kieker"),
+			+ "dbTableName", "kieker",
+	/* must not be empty: */false),
 	/* */
 	DB__SET_INITIAL_EXP_ID_BASED_ON_LAST("setInitialExperimentIdBasedOnLastId",
 			ConfigurationFileConstants.JVM_ARG_PREFIX
-					+ "setInitialExperimentIdBasedOnLastId", "true");
+					+ "setInitialExperimentIdBasedOnLastId", "true",
+			/* must not be empty: */false);
 
 	private final String propertyName;
 	private final String jvmArgName;
 	private final String defaultValue;
+	private final boolean allowEmpty;
 
 	/**
 	 * Constructs an enum property.
@@ -102,10 +119,11 @@ public enum ConfigurationProperty {
 	 *            the String representation of the default value or null if none
 	 */
 	ConfigurationProperty(final String propertyName, final String jvmArgName,
-			final String defaultValue) {
+			final String defaultValue, final boolean allowEmpty) {
 		this.propertyName = propertyName;
 		this.jvmArgName = jvmArgName;
 		this.defaultValue = defaultValue;
+		this.allowEmpty = allowEmpty;
 	}
 
 	/**
@@ -149,11 +167,20 @@ public enum ConfigurationProperty {
 	}
 
 	/**
+	 * Returns whether the empty String is a valid property value.
+	 * 
+	 * @return
+	 */
+	public boolean isAllowEmpty() {
+		return this.allowEmpty;
+	}
+
+	/**
 	 * Returns the string representation of the default value.
 	 * 
 	 * @return
 	 */
-	public String defaultValue() {
+	public String getDefaultValue() {
 		return this.defaultValue;
 	}
 }

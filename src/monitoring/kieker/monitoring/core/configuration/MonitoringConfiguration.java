@@ -40,11 +40,11 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class MonitoringConfiguration implements IMonitoringConfiguration {
 
-	private static final String KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME = "kieker.monitoring.configuration";
+	public static final String KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME = "kieker.monitoring.configuration";
 
-	private static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/kieker.monitoring.properties";
+	public static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/kieker.monitoring.properties";
 
-	private static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT = "META-INF/kieker.monitoring.properties.default";
+	public static final String KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT = "META-INF/kieker.monitoring.properties.default";
 
 	private static final String LOCAL_HOST_NAME;
 
@@ -54,7 +54,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	/**
 	 * Name of the singleton instance
 	 */
-	private final static String SINGLETON_INSTANCE_NAME = "Singleton Instance";
+	private final static String SINGLETON_INSTANCE_NAME = "SINGLETON";
 
 	static {
 		String hostname = "<UNKNOWN>";
@@ -89,19 +89,19 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	}
 
 	/**
-	 * Creates a default configuration.
+	 * Creates a default configuration with the given monitoring log writer.
 	 * 
 	 * @param name
 	 * @return
 	 */
 	public static MonitoringConfiguration createDefaultConfiguration(
-			final String name) {
+			final String name, final IMonitoringLogWriter monitoringLogWriter) {
 		final Properties defaultProps = ConfigurationProperty
 				.defaultProperties();
-		final MonitoringConfiguration retVal =  new MonitoringConfiguration(name, defaultProps,
-		/* Do not consider jvm arguments */
-		false);
-		
+		final MonitoringConfiguration retVal = new MonitoringConfiguration(
+				name, defaultProps, monitoringLogWriter,
+				/* Do not consider jvm arguments */
+				false);
 		return retVal;
 	}
 
@@ -112,13 +112,16 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * @return
 	 */
 	public static MonitoringConfiguration createDefaultConfiguration(
-			final IMonitoringLogWriter monitoringLogWriter, final String name) {
-		final Properties defaultProps = ConfigurationProperty
-				.defaultProperties();
-		final MonitoringConfiguration retVal =  new MonitoringConfiguration(name, defaultProps,
-				monitoringLogWriter,
-				/* Do not consider jvm arguments */
-				false);
+			final String name,
+			final Class<? extends IMonitoringLogWriter> logWriterClass,
+			final String initString) {
+		final IMonitoringLogWriter logWriter = MonitoringConfiguration
+				.loadWriterByClassAndInitString(
+						initString,
+						Integer.parseInt(ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE
+								.getDefaultValue()), logWriterClass);
+		final MonitoringConfiguration retVal = MonitoringConfiguration
+				.createDefaultConfiguration(name, logWriter);
 		return retVal;
 	}
 
@@ -130,7 +133,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	public static MonitoringConfiguration createSingletonConfiguration() {
 		final Properties singletonProperties = MonitoringConfiguration
 				.loadSingletonProperties();
-		final MonitoringConfiguration retVal =  new MonitoringConfiguration(
+		final MonitoringConfiguration retVal = new MonitoringConfiguration(
 				MonitoringConfiguration.SINGLETON_INSTANCE_NAME,
 				singletonProperties,
 				/* Consider jvm arguments */
@@ -157,6 +160,9 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 */
 	private static Properties loadPropertiesFromFile(final String propertiesFn)
 			throws FileNotFoundException, IOException {
+		MonitoringConfiguration.log
+				.info("Loading configuration from file '" + propertiesFn
+						+ "' ...");
 		final InputStream is = new FileInputStream(propertiesFn);
 		final Properties prop = new Properties();
 		prop.load(is);
@@ -177,6 +183,8 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 		final InputStream is = MonitoringController.class.getClassLoader()
 				.getResourceAsStream(name);
 		if (is == null) {
+			MonitoringConfiguration.log.warn("Failed to load resource '" + name
+					+ "'");
 			return null;
 		}
 		final Properties prop = new Properties();
@@ -198,8 +206,14 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	private static Properties loadSingletonProperties() {
 		Properties prop = null; // = new Properties();
 		String configurationFile = null;
+		MonitoringConfiguration.log
+				.info("Locating configuration file for singleton instance ...");
 		try {
 			/* 1. Searching for configuration file location passed to JVM */
+			MonitoringConfiguration.log
+					.info("1. Searching for JVM argument '"
+							+ MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME
+							+ "' ...");
 			if (System
 					.getProperty(MonitoringConfiguration.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME) != null) {
 				configurationFile = System
@@ -214,6 +228,10 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 				 * 2. No JVM property; Trying to find configuration file in
 				 * classpath
 				 */
+				MonitoringConfiguration.log
+						.info("2. No JVM argument; Trying to find configuration file '"
+								+ MonitoringConfiguration.KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH
+								+ "' in classpath ...");
 				configurationFile = MonitoringConfiguration.KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
 				prop = MonitoringConfiguration
 						.loadPropertiesFromResource(configurationFile);
@@ -230,6 +248,8 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 					 * 3. No configuration file found in classpath; using
 					 * default configuration.
 					 */
+					MonitoringConfiguration.log
+							.info("3. No configuration file in classpath; Using default configuration ...");
 					configurationFile = MonitoringConfiguration.KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT;
 					MonitoringConfiguration.log
 							.info("Loading properties from Kieker.Monitoring library jar!"
@@ -265,7 +285,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * Must not be used for construction.
 	 */
 	private MonitoringConfiguration() {
-		instanceName = null;
+		this.instanceName = null;
 	}
 
 	/**
@@ -277,9 +297,9 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 */
 	private MonitoringConfiguration(final String name,
 			final Properties properties, final boolean considerSystemProperties) {
-		instanceName = name;
-		initWriter(properties, considerSystemProperties);
-		initVariables(properties, considerSystemProperties);
+		this.instanceName = name;
+		this.initWriter(properties, considerSystemProperties, this.instanceName);
+		this.initVariables(properties, considerSystemProperties);
 	}
 
 	/**
@@ -295,32 +315,32 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 			final Properties properties,
 			final IMonitoringLogWriter monitoringLogWriter,
 			final boolean considerSystemProperties) {
-		instanceName = name;
-		setMonitoringLogWriter(monitoringLogWriter);
-		initVariables(properties, considerSystemProperties);
+		this.instanceName = name;
+		this.setMonitoringLogWriter(monitoringLogWriter);
+		this.initVariables(properties, considerSystemProperties);
 	}
 
-	@Override
-	public IMonitoringLogWriter createAndSetMonitoringLogWriter(
-			final Class<? extends IMonitoringLogWriter> logWriterClass,
-			final String initString) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	// @Override
+	// public IMonitoringLogWriter createAndSetMonitoringLogWriter(
+	// final Class<? extends IMonitoringLogWriter> logWriterClass,
+	// final String initString) {
+	// final IMonitoringLogWriter newWriter = null;
+	// return newWriter;
+	// }
 
 	@Override
 	public String getName() {
-		return instanceName;
+		return this.instanceName;
 	}
 
 	@Override
 	public String getHostName() {
-		return hostName;
+		return this.hostName;
 	}
 
 	@Override
 	public IMonitoringLogWriter getMonitoringLogWriter() {
-		return monitoringLogWriter;
+		return this.monitoringLogWriter;
 	}
 
 	/**
@@ -335,15 +355,18 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	private boolean initVariables(final Properties props,
 			final boolean considerSystemProperties) {
 		/* Set the debug level */
-		final boolean debugEnabled = loadBooleanProperty(props,
-				ConfigurationProperty.DEBUG_ENABLED, considerSystemProperties);
-		setDebugEnabled(debugEnabled);
+		final boolean debugEnabled = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(props,
+						ConfigurationProperty.DEBUG_ENABLED,
+						considerSystemProperties);
+		this.setDebugEnabled(debugEnabled);
 
 		/* Sets whether monitoring is enabled or disabled */
-		final boolean monitoringEnabled = loadBooleanProperty(props,
-				ConfigurationProperty.MONITORING_ENABLED,
-				considerSystemProperties);
-		setMonitoringEnabled(monitoringEnabled);
+		final boolean monitoringEnabled = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(props,
+						ConfigurationProperty.MONITORING_ENABLED,
+						considerSystemProperties);
+		this.setMonitoringEnabled(monitoringEnabled);
 
 		return true;
 	}
@@ -356,10 +379,11 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * @return
 	 */
 	private boolean initWriter(final Properties props,
-			final boolean considerSystemProperties) {
+			final boolean considerSystemProperties,
+			final String configurationName) {
 		/* Set the monitoring log writer */
-		final IMonitoringLogWriter monitoringLogWriter = loadWriter(props,
-				considerSystemProperties);
+		final IMonitoringLogWriter monitoringLogWriter = MonitoringConfiguration
+				.loadWriter(props, considerSystemProperties, configurationName);
 		if (monitoringLogWriter == null) {
 			MonitoringConfiguration.log.error("Failed to load writer");
 			return false;
@@ -371,12 +395,12 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 
 	@Override
 	public boolean isDebugEnabled() {
-		return debugEnabled;
+		return this.debugEnabled;
 	}
 
 	@Override
 	public boolean isMonitoringEnabled() {
-		return monitoringEnabled;
+		return this.monitoringEnabled;
 	}
 
 	/**
@@ -387,11 +411,12 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * @param considerSystemProperties
 	 * @return
 	 */
-	private boolean loadBooleanProperty(final Properties props,
-			final ConfigurationProperty property,
+	private static boolean loadBooleanConfigurationProperty(
+			final Properties props, final ConfigurationProperty property,
 			final boolean considerSystemProperties) {
-		final String stringValue = loadStringProperty(props, property,
-				considerSystemProperties);
+		final String stringValue = MonitoringConfiguration
+				.loadStringConfigurationProperty(props, property,
+						considerSystemProperties);
 
 		return Boolean.parseBoolean(stringValue);
 	}
@@ -404,12 +429,13 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	private int loadIntProperty(final Properties props,
+	private static int loadIntConfigurationProperty(final Properties props,
 			final ConfigurationProperty property,
 			final boolean considerSystemProperties)
 			throws NumberFormatException {
-		final String stringValue = loadStringProperty(props, property,
-				considerSystemProperties);
+		final String stringValue = MonitoringConfiguration
+				.loadStringConfigurationProperty(props, property,
+						considerSystemProperties);
 
 		return Integer.parseInt(stringValue);
 	}
@@ -421,8 +447,8 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * @param considerSystemProperties
 	 * @return
 	 */
-	private String loadStringProperty(final Properties props,
-			final ConfigurationProperty property,
+	private static String loadStringConfigurationProperty(
+			final Properties props, final ConfigurationProperty property,
 			final boolean considerSystemProperties) {
 		String propertyValue;
 		if (considerSystemProperties && property.hasJVMArgument()
@@ -434,11 +460,12 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 			propertyValue = props.getProperty(property.getPropertyName());
 		} else {
 			/* Un-named property with a default value */
-			propertyValue = property.defaultValue();
+			propertyValue = property.getDefaultValue();
 		}
 
-		if ((propertyValue == null) || propertyValue.isEmpty()) {
-			propertyValue = property.defaultValue();
+		if ((propertyValue == null)
+				|| (!property.isAllowEmpty() && propertyValue.isEmpty())) {
+			propertyValue = property.getDefaultValue();
 			MonitoringConfiguration.log.info("Missing value for property '"
 					+ property.getPropertyName() + "' using default value "
 					+ propertyValue);
@@ -453,19 +480,22 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * @param props
 	 * @return the writer, null if the construction of the writer failed
 	 */
-	private IMonitoringLogWriter loadWriter(final Properties props,
-			final boolean considerSystemProperties) {
+	private static IMonitoringLogWriter loadWriter(final Properties props,
+			final boolean considerSystemProperties,
+			final String configurationName) {
 		IMonitoringLogWriter monitoringLogWriter = null;
 
 		try {
-			final String monitoringDataWriterClassname = loadStringProperty(
-					props,
-					ConfigurationProperty.MONITORING_DATA_WRITER_CLASSNAME,
-					considerSystemProperties);
-			final String monitoringDataWriterInitString = loadStringProperty(
-					props,
-					ConfigurationProperty.MONITORING_DATA_WRITER_INIT_STRING,
-					considerSystemProperties);
+			final String monitoringDataWriterClassname = MonitoringConfiguration
+					.loadStringConfigurationProperty(
+							props,
+							ConfigurationProperty.MONITORING_DATA_WRITER_CLASSNAME,
+							considerSystemProperties);
+			final String monitoringDataWriterInitString = MonitoringConfiguration
+					.loadStringConfigurationProperty(
+							props,
+							ConfigurationProperty.MONITORING_DATA_WRITER_INIT_STRING,
+							considerSystemProperties);
 
 			if ((monitoringDataWriterClassname == null)
 					|| (monitoringDataWriterClassname.isEmpty())) {
@@ -475,93 +505,278 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 			} else if (monitoringDataWriterClassname
 					.equals(ConfigurationFileConstants.WRITER_SYNCFS)) {
 				/* Synchronous file system writer */
-				final String filenameBase = loadStringProperty(props,
-						ConfigurationProperty.FS_FN_PREFIX,
-						considerSystemProperties);
-				monitoringLogWriter = new SyncFsWriter(filenameBase,
-						instanceName);
+				monitoringLogWriter = MonitoringConfiguration.loadSyncFSWriter(
+						props, considerSystemProperties, configurationName);
 			} else if (monitoringDataWriterClassname
 					.equals(ConfigurationFileConstants.WRITER_ASYNCFS)) {
 				/* Asynchronous file system writer */
-				final String filenameBase = loadStringProperty(props,
-						ConfigurationProperty.FS_FN_PREFIX,
-						considerSystemProperties);
-				final int asyncRecordQueueSize = loadIntProperty(props,
-						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
-						considerSystemProperties);
-				final boolean asyncBlockOnFullQueue = loadBooleanProperty(
-						props,
-						ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUEU,
-						considerSystemProperties);
-				monitoringLogWriter = new AsyncFsWriter(filenameBase,
-						instanceName, asyncRecordQueueSize,
-						asyncBlockOnFullQueue);
+				monitoringLogWriter = MonitoringConfiguration
+						.loadAsyncFSWriter(props, considerSystemProperties,
+								configurationName);
 			} else if (monitoringDataWriterClassname
 					.equals(ConfigurationFileConstants.WRITER_SYNCDB)) {
 				/* Synchronous database writer */
-				final String dbDriverClassname = loadStringProperty(props,
-						ConfigurationProperty.DB__DRIVER_CLASSNAME,
-						considerSystemProperties);
-				final String dbConnectionAddress = loadStringProperty(props,
-						ConfigurationProperty.DB_CONNECTION_ADDRESS,
-						considerSystemProperties);
-				final String dbTableName = loadStringProperty(props,
-						ConfigurationProperty.DB__TABLE_NAME,
-						considerSystemProperties);
-				final boolean setInitialExperimentIdBasedOnLastId = loadBooleanProperty(
-						props,
-						ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST,
-						considerSystemProperties);
-				monitoringLogWriter = new SyncDbWriter(dbDriverClassname,
-						dbConnectionAddress, dbTableName,
-						setInitialExperimentIdBasedOnLastId);
+				monitoringLogWriter = MonitoringConfiguration.loadSyncDBWriter(
+						props, considerSystemProperties);
 			} else if (monitoringDataWriterClassname
 					.equals(ConfigurationFileConstants.WRITER_ASYNCDB)) {
 				/* Asynchronous database writer */
-				final String dbDriverClassname = loadStringProperty(props,
-						ConfigurationProperty.DB__DRIVER_CLASSNAME,
-						considerSystemProperties);
-				final String dbConnectionAddress = loadStringProperty(props,
-						ConfigurationProperty.DB_CONNECTION_ADDRESS,
-						considerSystemProperties);
-				final String dbTableName = loadStringProperty(props,
-						ConfigurationProperty.DB__TABLE_NAME,
-						considerSystemProperties);
-				final boolean setInitialExperimentIdBasedOnLastId = loadBooleanProperty(
-						props,
-						ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST,
-						considerSystemProperties);
-				final int asyncRecordQueueSize = loadIntProperty(props,
-						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
-						considerSystemProperties);
-				final boolean asyncBlockOnFullQueue = loadBooleanProperty(
-						props,
-						ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUEU,
-						considerSystemProperties);
-				monitoringLogWriter = new AsyncDbWriter(dbDriverClassname,
-						dbConnectionAddress, dbTableName,
-						setInitialExperimentIdBasedOnLastId,
-						asyncRecordQueueSize, asyncBlockOnFullQueue);
+				monitoringLogWriter = MonitoringConfiguration
+						.loadAsyncDBWriter(props, considerSystemProperties);
 			} else {
 				/* Load the writer by its classname */
-				final int asyncRecordQueueSize = loadIntProperty(props,
-						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
-						considerSystemProperties);
-				monitoringLogWriter = (IMonitoringLogWriter) Class.forName(
-						monitoringDataWriterClassname).newInstance();
-				// add asyncRecordQueueSize
-				// TODO: this is still a dirty hack!
-				if (!monitoringLogWriter.init(monitoringDataWriterInitString
-						+ " | asyncRecordQueueSize=" + asyncRecordQueueSize)) {
-					monitoringLogWriter = null;
-					throw new Exception("Initialization of writer failed!");
-				}
+				monitoringLogWriter = MonitoringConfiguration
+						.loadWriterByClassnameAndInitProps(props,
+								considerSystemProperties,
+								monitoringDataWriterClassname,
+								monitoringDataWriterInitString);
 			}
 		} catch (final Exception e) {
 			MonitoringConfiguration.log.error(
 					"Error loading monitoring data writer", e);
 			return null;
 		}
+		return monitoringLogWriter;
+	}
+
+	/**
+	 * Returns an instance of the monitoring log writer class and init String as
+	 * specified in the given properties and (if specified) considering JVM
+	 * arguments.
+	 * 
+	 * @param props
+	 * @param considerSystemProperties
+	 * @param monitoringDataWriterClassname
+	 * @param monitoringDataWriterInitString
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 * @throws Exception
+	 */
+	private static IMonitoringLogWriter loadWriterByClassnameAndInitProps(
+			final Properties props, final boolean considerSystemProperties,
+			final String monitoringDataWriterClassname,
+			final String monitoringDataWriterInitString)
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException, Exception {
+		IMonitoringLogWriter monitoringLogWriter;
+		final int asyncRecordQueueSize = MonitoringConfiguration
+				.loadIntConfigurationProperty(props,
+						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
+						considerSystemProperties);
+		monitoringLogWriter = MonitoringConfiguration
+				.loadWriterByClassnameAndInitString(
+						monitoringDataWriterClassname,
+						monitoringDataWriterInitString, asyncRecordQueueSize);
+		return monitoringLogWriter;
+	}
+
+	/**
+	 * Returns an instance of the monitoring log writer class initialized based
+	 * on the given init String.
+	 * 
+	 * @param monitoringDataWriterClassname
+	 * @param monitoringDataWriterInitString
+	 * @param asyncRecordQueueSize
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 * @throws Exception
+	 */
+	private static IMonitoringLogWriter loadWriterByClassnameAndInitString(
+			final String monitoringDataWriterClassname,
+			final String monitoringDataWriterInitString,
+			final int asyncRecordQueueSize) throws InstantiationException {
+		Class<?> logWriterClass = null;
+		try {
+			logWriterClass = Class.forName(monitoringDataWriterClassname);
+		} catch (final ClassNotFoundException e) {
+			MonitoringConfiguration.log.error(
+					"Failed to load writer class for name"
+							+ monitoringDataWriterClassname, e);
+		}
+		return MonitoringConfiguration.loadWriterByClassAndInitString(
+				monitoringDataWriterInitString, asyncRecordQueueSize,
+				logWriterClass);
+	}
+
+	/**
+	 * 
+	 * @param monitoringDataWriterInitString
+	 * @param asyncRecordQueueSize
+	 * @param logWriterClass
+	 * @return the writer, null if an error occurred.
+	 */
+	private static IMonitoringLogWriter loadWriterByClassAndInitString(
+			final String monitoringDataWriterInitString,
+			final int asyncRecordQueueSize, final Class<?> logWriterClass) {
+		IMonitoringLogWriter monitoringLogWriter;
+		try {
+			monitoringLogWriter = (IMonitoringLogWriter) logWriterClass
+					.newInstance();
+		} catch (final Exception e) {
+			MonitoringConfiguration.log.error(
+					"Failed to create instance of writer class", e);
+			return null;
+		}
+
+		// TODO: this is still a dirty hack with the asyncRecordQueueSize
+		// property!
+		if (!monitoringLogWriter.init(monitoringDataWriterInitString
+				+ " | asyncRecordQueueSize=" + asyncRecordQueueSize)) {
+			MonitoringConfiguration.log
+					.error("init(..) failed for writer instance of class"
+							+ logWriterClass.getName());
+			monitoringLogWriter = null;
+		}
+		return monitoringLogWriter;
+	}
+
+	/**
+	 * Returns an instance of the asynchronous database writer initialized based
+	 * on the given properties and (if specified) considering JVM arguments.
+	 * 
+	 * @param props
+	 * @param considerSystemProperties
+	 * @return
+	 */
+	private static IMonitoringLogWriter loadAsyncDBWriter(
+			final Properties props, final boolean considerSystemProperties) {
+		IMonitoringLogWriter monitoringLogWriter;
+		final String dbDriverClassname = MonitoringConfiguration
+				.loadStringConfigurationProperty(props,
+						ConfigurationProperty.DB__DRIVER_CLASSNAME,
+						considerSystemProperties);
+		final String dbConnectionAddress = MonitoringConfiguration
+				.loadStringConfigurationProperty(props,
+						ConfigurationProperty.DB_CONNECTION_ADDRESS,
+						considerSystemProperties);
+		final String dbTableName = MonitoringConfiguration
+				.loadStringConfigurationProperty(props,
+						ConfigurationProperty.DB__TABLE_NAME,
+						considerSystemProperties);
+		final boolean setInitialExperimentIdBasedOnLastId = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(
+						props,
+						ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST,
+						considerSystemProperties);
+		final int asyncRecordQueueSize = MonitoringConfiguration
+				.loadIntConfigurationProperty(props,
+						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
+						considerSystemProperties);
+		final boolean asyncBlockOnFullQueue = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(props,
+						ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUE,
+						considerSystemProperties);
+		monitoringLogWriter = new AsyncDbWriter(dbDriverClassname,
+				dbConnectionAddress, dbTableName,
+				setInitialExperimentIdBasedOnLastId, asyncRecordQueueSize,
+				asyncBlockOnFullQueue);
+		return monitoringLogWriter;
+	}
+
+	/**
+	 * Returns an instance of the synchronous database writer initialized based
+	 * on the given properties and (if specified) considering JVM arguments.
+	 * 
+	 * @param props
+	 * @param considerSystemProperties
+	 * @return
+	 */
+	private static IMonitoringLogWriter loadSyncDBWriter(
+			final Properties props, final boolean considerSystemProperties) {
+		IMonitoringLogWriter monitoringLogWriter;
+		final String dbDriverClassname = MonitoringConfiguration
+				.loadStringConfigurationProperty(props,
+						ConfigurationProperty.DB__DRIVER_CLASSNAME,
+						considerSystemProperties);
+		final String dbConnectionAddress = MonitoringConfiguration
+				.loadStringConfigurationProperty(props,
+						ConfigurationProperty.DB_CONNECTION_ADDRESS,
+						considerSystemProperties);
+		final String dbTableName = MonitoringConfiguration
+				.loadStringConfigurationProperty(props,
+						ConfigurationProperty.DB__TABLE_NAME,
+						considerSystemProperties);
+		final boolean setInitialExperimentIdBasedOnLastId = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(
+						props,
+						ConfigurationProperty.DB__SET_INITIAL_EXP_ID_BASED_ON_LAST,
+						considerSystemProperties);
+		monitoringLogWriter = new SyncDbWriter(dbDriverClassname,
+				dbConnectionAddress, dbTableName,
+				setInitialExperimentIdBasedOnLastId);
+		return monitoringLogWriter;
+	}
+
+	/**
+	 * Returns an instance of the asynchronous filesystem writer initialized
+	 * based on the given properties and (if specified) considering JVM
+	 * arguments.
+	 * 
+	 * @param props
+	 * @param considerSystemProperties
+	 * @return
+	 */
+	private static IMonitoringLogWriter loadAsyncFSWriter(
+			final Properties props, final boolean considerSystemProperties,
+			final String storagePathPostfix) {
+		IMonitoringLogWriter monitoringLogWriter;
+		final boolean storeInJavaIOTmpDir = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(props,
+						ConfigurationProperty.FS_WRITER__STORE_IN_JAVAIOTMPDIR,
+						considerSystemProperties);
+		final String filenameBase;
+		if (storeInJavaIOTmpDir) {
+			filenameBase = System.getProperty("java.io.tmpdir");
+		} else {
+			filenameBase = MonitoringConfiguration
+					.loadStringConfigurationProperty(props,
+							ConfigurationProperty.FS_FN_PREFIX,
+							considerSystemProperties);
+		}
+		final int asyncRecordQueueSize = MonitoringConfiguration
+				.loadIntConfigurationProperty(props,
+						ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE,
+						considerSystemProperties);
+		final boolean asyncBlockOnFullQueue = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(props,
+						ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUE,
+						considerSystemProperties);
+		monitoringLogWriter = new AsyncFsWriter(filenameBase,
+				storagePathPostfix, asyncRecordQueueSize, asyncBlockOnFullQueue);
+		return monitoringLogWriter;
+	}
+
+	/**
+	 * Returns an instance of the synchronous filesystem writer initialized
+	 * based on the given properties and (if specified) considering JVM
+	 * arguments.
+	 * 
+	 * @param props
+	 * @param considerSystemProperties
+	 * @return
+	 */
+	private static IMonitoringLogWriter loadSyncFSWriter(
+			final Properties props, final boolean considerSystemProperties,
+			final String storagePathPostfix) {
+		IMonitoringLogWriter monitoringLogWriter;
+		final boolean storeInJavaIOTmpDir = MonitoringConfiguration
+				.loadBooleanConfigurationProperty(props,
+						ConfigurationProperty.FS_WRITER__STORE_IN_JAVAIOTMPDIR,
+						considerSystemProperties);
+		final String filenameBase;
+		if (storeInJavaIOTmpDir) {
+			filenameBase = System.getProperty("java.io.tmpdir");
+		} else {
+			filenameBase = MonitoringConfiguration
+					.loadStringConfigurationProperty(props,
+							ConfigurationProperty.FS_FN_PREFIX,
+							considerSystemProperties);
+		}
+		monitoringLogWriter = new SyncFsWriter(filenameBase, storagePathPostfix);
 		return monitoringLogWriter;
 	}
 
@@ -580,8 +795,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 		this.monitoringEnabled = monitoringEnabled;
 	}
 
-	@Override
-	public void setMonitoringLogWriter(
+	private void setMonitoringLogWriter(
 			final IMonitoringLogWriter monitoringLogWriter) {
 		this.monitoringLogWriter = monitoringLogWriter;
 	}

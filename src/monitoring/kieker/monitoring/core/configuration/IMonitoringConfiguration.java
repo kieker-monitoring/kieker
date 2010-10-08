@@ -69,28 +69,6 @@ public interface IMonitoringConfiguration {
 	public IMonitoringLogWriter getMonitoringLogWriter();
 
 	/**
-	 * Sets the given initialized monitoring log writer.
-	 * 
-	 * @param monitoringLogWriter
-	 */
-	public void setMonitoringLogWriter(IMonitoringLogWriter monitoringLogWriter);
-
-	/**
-	 * Creates an instance of the given monitoring log writer class with the
-	 * given init string and sets this writer in the current configuration.
-	 * 
-	 * @see IMonitoringLogWriter#init(String)
-	 * 
-	 * @param logWriterClass
-	 * @param initString
-	 * 
-	 * @return the initialized writer or null if the initialization failed.
-	 */
-	public IMonitoringLogWriter createAndSetMonitoringLogWriter(
-			Class<? extends IMonitoringLogWriter> logWriterClass,
-			String initString);
-
-	/**
 	 * Sets the host name field to the given value.
 	 * 
 	 * @param newHostName

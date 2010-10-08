@@ -21,7 +21,10 @@ package kieker.test.monitoring.junit.core.configuration;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.monitoring.core.configuration.ConfigurationProperty;
+import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
+import kieker.monitoring.writer.DummyLogWriter;
+import kieker.test.monitoring.junit.core.configuration.util.DefaultConfigurationFactory;
 
 /**
  * 
@@ -29,11 +32,25 @@ import kieker.monitoring.core.configuration.MonitoringConfiguration;
  * 
  */
 public class TestDefaultConfiguration extends TestCase {
-	public void testDefaultConfigurationHasDefaultValues() {
-		final MonitoringConfiguration config = MonitoringConfiguration
-				.createDefaultConfiguration("Default config");
+
+	/**
+	 * Creates a default configuration with a {@link DummyLogWriter} and checks
+	 * the values of {@link MonitoringConfiguration#isDebugEnabled()} and
+	 * {@link MonitoringConfiguration#isMonitoringEnabled()}, as well as the
+	 * configuration name are correctly set to the default value.
+	 */
+	public void testDefaultConfigurationHasDefaultDebugAndMonitoringEnabledValuesAndCorrectName() {
+		final String configName = "DefaultConfig";
+		final IMonitoringConfiguration config = DefaultConfigurationFactory
+				.createDefaultConfigWithDummyWriter(configName);
 		Assert.assertEquals("Wrong default value for debug property",
-				ConfigurationProperty.DEBUG_ENABLED.defaultValue(),
+				ConfigurationProperty.DEBUG_ENABLED.getDefaultValue(),
 				Boolean.toString(config.isDebugEnabled()));
+		Assert.assertEquals(
+				"Wrong default value for monitoringEnable property",
+				ConfigurationProperty.MONITORING_ENABLED.getDefaultValue(),
+				Boolean.toString(config.isMonitoringEnabled()));
+		Assert.assertEquals("Wrong configuration name", configName,
+				config.getName());
 	}
 }

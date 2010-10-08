@@ -1,6 +1,7 @@
 package kieker.monitoring.writer;
 
 import java.util.Vector;
+
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
@@ -30,11 +31,9 @@ public interface IMonitoringLogWriter extends IMonitoringRecordReceiver {
     /**
      * Initialize instance from passed initialization string which is typically
      * a list of separated parameter/values pairs.
-     * The implementing class AbstractMonitoringLogWriter includes convenient
-     * methods to extract configuration values from an initString.
      *
      * @param initString the initialization string
-     * @return true iff the initialiation was successful
+     * @return true iff the initialization was successful
      */
     public boolean init(String initString);
 
