@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ShutdownHook extends Thread {
 
-	private static final Log log = LogFactory.getLog(TpmonShutdownHook.class);
+	private static final Log log = LogFactory.getLog(ShutdownHook.class);
 
 	private final MonitoringController2 ctrl;
 	
