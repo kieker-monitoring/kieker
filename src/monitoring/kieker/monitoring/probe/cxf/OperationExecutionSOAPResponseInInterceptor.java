@@ -53,7 +53,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
     private static final String componentName = OperationExecutionSOAPResponseInInterceptor.class.getName();
     private static final String opName = "handleMessage(SoapMessage msg)";
-    protected static final String vmName = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getVmName();
+    protected static final String vmName = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getHostName();
     
     
     @Override

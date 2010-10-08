@@ -201,11 +201,13 @@ public class FilesystemLogReplayerStarter {
 		 * monitoring records.
 		 */
 		final MonitoringController monitoringController = MonitoringController.getInstance(); // use the singleton instance
-		monitoringController
-				.setControllerMode(FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? MonitoringController.ControllerMode.REPLAY
-						: MonitoringController.ControllerMode.REALTIME);
-
 		
+		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {
+			monitoringController.enableReplayMode();
+		} else  {
+			monitoringController.enableRealtimeMode();
+		}
+				
 		final FilesystemLogReplayer player = new FilesystemLogReplayer(
 				monitoringController,
 				FilesystemLogReplayerStarter.inputDirs,

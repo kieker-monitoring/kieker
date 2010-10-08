@@ -63,7 +63,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     private static final MonitoringController ctrlInst = MonitoringController.getInstance();
-    private static final String vmName = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getVmName();
+    private static final String vmName = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getHostName();
 
     private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
 

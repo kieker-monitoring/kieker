@@ -111,7 +111,7 @@ public class ControlServlet extends HttpServlet {
 		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: "
 				+ ctrlInst.currentTimeNanos() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
-		out.println("Vmname:\"" + ctrlInst.getVmName() + "\"<br>");
+		out.println("Vmname:\"" + ctrlInst.getHostName() + "\"<br>");
 
 		String action = request.getParameter("action");
 		if (action == null) {
@@ -125,10 +125,10 @@ public class ControlServlet extends HttpServlet {
 			if (action.equals("setDebug")) {
 				if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("on")) {
-					ctrlInst.setDebug(true);
+					ctrlInst.setDebugEnabled(true);
 				} else if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("off")) {
-					ctrlInst.setDebug(false);
+					ctrlInst.setDebugEnabled(false);
 				} else {
 					this.dumpError(out,
 							"Invalid or missing value for parameter 'debug'");
@@ -153,7 +153,7 @@ public class ControlServlet extends HttpServlet {
 			} else if (action.equals("setVmname")) {
 				final String vmname = request.getParameter("vmname");
 				if (vmname != null) {
-					ctrlInst.setVmname(vmname);
+					ctrlInst.setHostName(vmname);
 				}
 				/*
 				 * action = incExperimentId
@@ -164,17 +164,17 @@ public class ControlServlet extends HttpServlet {
 				 * action = enable
 				 */
 			} else if (action.equals("enable")) {
-				ctrlInst.enable();
+				ctrlInst.enableMonitoring();
 				/*
 				 * action = disable
 				 */
 			} else if (action.equals("disable")) {
-				ctrlInst.disable();
+				ctrlInst.disableMonitoring();
 				/*
 				 * action = terminate
 				 */
 			} else if (action.equals("terminate")) {
-				ctrlInst.terminate();
+				ctrlInst.terminateMonitoring();
 				/*
 				 * action = ...
 				 */
@@ -190,7 +190,7 @@ public class ControlServlet extends HttpServlet {
 							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ctrlInst
 									.currentTimeNanos(), ctrlInst
 									.currentTimeNanos(),
-							ctrlInst.getVmName(), i, i));
+							ctrlInst.getHostName(), i, i));
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();
 				ControlServlet.sessionRegistry.unsetThreadLocalSessionId();
@@ -280,7 +280,7 @@ public class ControlServlet extends HttpServlet {
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
 		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\""
-				+ ctrlInst.getVmName() + "\"/>");
+				+ ctrlInst.getHostName() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
 		bu.append(" Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
 		bu.append(" Kieker monitoring events since last execution environment restart = "

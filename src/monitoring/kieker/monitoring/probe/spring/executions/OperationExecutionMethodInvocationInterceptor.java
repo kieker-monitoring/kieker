@@ -2,7 +2,6 @@ package kieker.monitoring.probe.spring.executions;
 
 import kieker.common.record.OperationExecutionRecord;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,46 +33,67 @@ import org.apache.commons.logging.LogFactory;
  * to use the declaring or the runtime classname of the instrumented methods.
  */
 
- /**
-  * @author Andre van Hoorn
-  */
-public class OperationExecutionMethodInvocationInterceptor extends AbstractOperationExecutionMethodInvocationInterceptor {
+/**
+ * @author Andre van Hoorn
+ */
+public class OperationExecutionMethodInvocationInterceptor extends
+		AbstractOperationExecutionMethodInvocationInterceptor {
 
-    private static final Log log = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);
+	private static final Log log = LogFactory
+			.getLog(OperationExecutionMethodInvocationInterceptor.class);
 
-    /**
-     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
-     */
-    
-    public Object invoke(MethodInvocation invocation) throws Throwable {
-        long traceId = cfRegistry.recallThreadLocalTraceId();
-        // Only go on if a traceId has been registered before
-        if (traceId == -1 || !tpmonController.isMonitoringEnabled()) {
-            return invocation.proceed();
-        }
+	/**
+	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
+	 */
 
-        OperationExecutionRecord execData = this.initExecutionData(invocation);
-        execData.eoi = cfRegistry.incrementAndRecallThreadLocalEOI(); /* this is executionOrderIndex-th execution in this trace */
-        execData.ess = cfRegistry.recallAndIncrementThreadLocalESS(); /* this is the height in the dynamic call tree of this execution */
+	@Override
+	public Object invoke(final MethodInvocation invocation) throws Throwable {
+		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
+				.recallThreadLocalTraceId();
+		// Only go on if a traceId has been registered before
+		if ((traceId == -1)
+				|| !AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
+						.isMonitoringEnabled()) {
+			return invocation.proceed();
+		}
 
-        try {
-            this.proceedAndMeasure(invocation, execData);
-            if (execData.eoi== -1 || execData.ess == -1) {
-                log.fatal("eoi and/or ess have invalid values:" +
-                        " eoi == " + execData.eoi +
-                        " ess == " + execData.ess);
-                log.fatal("Terminating Tpmon!");
-                tpmonController.terminate();
-            }
-        } catch (Exception e) {
-            throw e; // exceptions are forwarded
-        } finally {
-            /* note that proceedAndMeasure(...) even sets the variable name
-             * in case the execution of the joint point resulted in an
-             * exception! */
-            tpmonController.newMonitoringRecord(execData);
-            cfRegistry.storeThreadLocalESS(execData.ess);
-        }
-        return execData.retVal;
-    }
+		final OperationExecutionRecord execData = this
+				.initExecutionData(invocation);
+		execData.eoi = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
+				.incrementAndRecallThreadLocalEOI();
+		/*
+		 * this is executionOrderIndex-th execution in this trace
+		 */
+		execData.ess = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
+				.recallAndIncrementThreadLocalESS();
+		/*
+		 * this is the height in the dynamic call tree of this execution
+		 */
+
+		try {
+			this.proceedAndMeasure(invocation, execData);
+			if ((execData.eoi == -1) || (execData.ess == -1)) {
+				OperationExecutionMethodInvocationInterceptor.log
+						.fatal("eoi and/or ess have invalid values:"
+								+ " eoi == " + execData.eoi + " ess == "
+								+ execData.ess);
+				OperationExecutionMethodInvocationInterceptor.log
+						.fatal("Terminating Tpmon!");
+				AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
+						.terminateMonitoring();
+			}
+		} catch (final Exception e) {
+			throw e; // exceptions are forwarded
+		} finally {
+			/*
+			 * note that proceedAndMeasure(...) even sets the variable name in
+			 * case the execution of the joint point resulted in an exception!
+			 */
+			AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
+					.newMonitoringRecord(execData);
+			AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
+					.storeThreadLocalESS(execData.ess);
+		}
+		return execData.retVal;
+	}
 }

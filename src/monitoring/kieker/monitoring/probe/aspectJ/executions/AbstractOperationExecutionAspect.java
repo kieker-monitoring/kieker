@@ -35,7 +35,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
     protected static final MonitoringController ctrlInst = MonitoringController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-    protected static final String vmName = AbstractOperationExecutionAspect.ctrlInst.getVmName();
+    protected static final String vmName = AbstractOperationExecutionAspect.ctrlInst.getHostName();
 
     protected OperationExecutionRecord initExecutionData(final ProceedingJoinPoint thisJoinPoint) {
         // e.g. "getBook"

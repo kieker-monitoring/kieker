@@ -7,8 +7,9 @@ import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.configuration.ConfigurationFileConstants;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
@@ -51,20 +52,21 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     private int asyncRecordQueueSize = 8000;
     private final static String defaultConstructionErrorMsg =
             "Do not select this writer using the full-qualified classname. "
-            + "Use the the constant " + MonitoringController.WRITER_ASYNCFS
+            + "Use the the constant " + ConfigurationFileConstants.WRITER_ASYNCFS
             + " and the file system specific configuration properties.";
 
     public AsyncFsWriter() {
-        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+        throw new UnsupportedOperationException(AsyncFsWriter.defaultConstructionErrorMsg);
     }
 
     @Override
-    public boolean init(String initString) {
-        throw new UnsupportedOperationException(defaultConstructionErrorMsg);
+    public boolean init(final String initString) {
+        throw new UnsupportedOperationException(AsyncFsWriter.defaultConstructionErrorMsg);
     }
 
-    public Vector<AbstractWorkerThread> getWorkers() {
-        return workers;
+    @Override
+	public Vector<AbstractWorkerThread> getWorkers() {
+        return this.workers;
     }
 
     public AsyncFsWriter(final String storagePathBase, final String storagePathPostfix, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
@@ -76,46 +78,46 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     }
 
     private void init() {
-        File f = new File(storagePathBase);
+        File f = new File(this.storagePathBase);
         if (!f.isDirectory()) {
-            log.error(this.storagePathBase + " is not a directory");
-            log.error("Will abort init().");
+            AsyncFsWriter.log.error(this.storagePathBase + " is not a directory");
+            AsyncFsWriter.log.error("Will abort init().");
             return;
         }
 
-        DateFormat m_ISO8601UTC =
+        final DateFormat m_ISO8601UTC =
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
         m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateStr = m_ISO8601UTC.format(new java.util.Date());
-        storageDir = this.storagePathBase + "/tpmon-" + dateStr + "-UTC-"+this.storagePathPostfix+"/";
+        final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+        this.storageDir = this.storagePathBase + "/tpmon-" + dateStr + "-UTC-"+this.storagePathPostfix+"/";
 
-        f = new File(storageDir);
+        f = new File(this.storageDir);
         if (!f.mkdir()) {
-            log.error("Failed to create directory '" + this.storagePathBase + "'");
-            log.error("Will abort init().");
+            AsyncFsWriter.log.error("Failed to create directory '" + this.storagePathBase + "'");
+            AsyncFsWriter.log.error("Will abort init().");
             return;
         }
-        log.info("Directory for monitoring data: " + storageDir);
+        AsyncFsWriter.log.info("Directory for monitoring data: " + this.storageDir);
 
         final MappingFileWriter mappingFileWriter;
-        final String mappingFileFn = storageDir + File.separatorChar + "tpmon.map";
+        final String mappingFileFn = this.storageDir + File.separatorChar + "tpmon.map";
         try {
             mappingFileWriter = new MappingFileWriter(mappingFileFn);
-        } catch (Exception exc) {
-            log.error("Failed to create mapping file '" + mappingFileFn + "'", exc);
-            log.error("Will abort init().");
+        } catch (final Exception exc) {
+            AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", exc);
+            AsyncFsWriter.log.error("Will abort init().");
             return;
         }
 
-        blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
-        for (int i = 0; i < numberOfFsWriters; i++) {
-            FsWriterThread dbw = new FsWriterThread(blockingQueue, mappingFileWriter, storageDir + "/tpmon");
+        this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.asyncRecordQueueSize);
+        for (int i = 0; i < AsyncFsWriter.numberOfFsWriters; i++) {
+            final FsWriterThread dbw = new FsWriterThread(this.blockingQueue, mappingFileWriter, this.storageDir + "/tpmon");
             dbw.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
-            workers.add(dbw);
+            this.workers.add(dbw);
             dbw.start();
         }
         //System.out.println("(" + numberOfFsWriters + " threads) will write to the file system");
-        log.info("(" + numberOfFsWriters + " threads) will write to the file system");
+        AsyncFsWriter.log.info("(" + AsyncFsWriter.numberOfFsWriters + " threads) will write to the file system");
     }
 
     /**
@@ -125,22 +127,23 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         try {
             if (this.blockOnFullQueue) {
-                blockingQueue.offer(monitoringRecord); // blocks when queue full
+                this.blockingQueue.offer(monitoringRecord); // blocks when queue full
             } else {
-                blockingQueue.add(monitoringRecord); // tries to add immediately!
+                this.blockingQueue.add(monitoringRecord); // tries to add immediately!
             }
-        } catch (Exception ex) {
-            log.error(" insertMonitoringData() failed: Exception: " + ex);
+        } catch (final Exception ex) {
+            AsyncFsWriter.log.error(" insertMonitoringData() failed: Exception: " + ex);
             return false;
         }
         return true;
     }
 
     public String getFilenamePrefix() {
-        return storagePathBase;
+        return this.storagePathBase;
     }
 
-    public String getInfoString() {
+    @Override
+	public String getInfoString() {
         return "filenamePrefix :" + this.storagePathBase
                 + ", outputDirectory :" + this.storageDir;
     }

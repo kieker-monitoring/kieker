@@ -23,7 +23,7 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.MonitoringController2;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.test.monitoring.junit.core.configuration.util.DefaultConfigurationFactory;
 
@@ -42,7 +42,7 @@ public class TestMonitoringControllerConstruction extends TestCase {
 
 		{
 			/* Test with default values */
-			final MonitoringController2 ctrl = new MonitoringController2(config);
+			final MonitoringController ctrl = new MonitoringController(config);
 			Assert.assertEquals("monitoringEnabled values differ",
 					config.isMonitoringEnabled(), ctrl.isMonitoringEnabled());
 			Assert.assertEquals("debugEnabled values differ",
@@ -60,7 +60,7 @@ public class TestMonitoringControllerConstruction extends TestCase {
 			config.setMonitoringEnabled(!config.isMonitoringEnabled());
 			config.setHostName(config.getHostName() + "__");
 
-			final MonitoringController2 ctrl = new MonitoringController2(config);
+			final MonitoringController ctrl = new MonitoringController(config);
 			Assert.assertEquals("monitoringEnabled values differ",
 					config.isMonitoringEnabled(), ctrl.isMonitoringEnabled());
 			Assert.assertEquals("debugEnabled values differ",
@@ -81,7 +81,7 @@ public class TestMonitoringControllerConstruction extends TestCase {
 	 */
 	public void testSingletonGetterOnlyOneInstance() {
 		Assert.assertSame("singleton getter returned different objects",
-				MonitoringController2.getInstance(),
-				MonitoringController2.getInstance());
+				MonitoringController.getInstance(),
+				MonitoringController.getInstance());
 	}
 }

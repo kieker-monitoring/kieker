@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Use this listener in webapps where TpmonShutdownHook is not called
+ * Use this listener in webapps where TpmonShutdownHook is not called.
  * 
  * @author Dennis Kieselhorst
  * 
@@ -17,6 +17,16 @@ public class TerminationServletContextListener implements
 	private static final Log LOG = LogFactory
 			.getLog(TerminationServletContextListener.class);
 
+	private final MonitoringController ctrl;
+
+	public TerminationServletContextListener() {
+		this.ctrl = MonitoringController.getInstance();
+	}
+
+	public TerminationServletContextListener(final MonitoringController ctrl) {
+		this.ctrl = ctrl;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -25,7 +35,7 @@ public class TerminationServletContextListener implements
 	 */
 	@Override
 	public void contextDestroyed(final ServletContextEvent evt) {
-		MonitoringController.getInstance().terminate();
+		this.ctrl.terminateMonitoring();
 		TerminationServletContextListener.LOG.info("context destroyed");
 	}
 

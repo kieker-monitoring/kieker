@@ -59,7 +59,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
 
-    protected static final String vmName = OperationExecutionSOAPResponseOutInterceptor.ctrlInst.getVmName();
+    protected static final String vmName = OperationExecutionSOAPResponseOutInterceptor.ctrlInst.getHostName();
     
     
     @Override

@@ -1,14 +1,15 @@
 package kieker.monitoring.writer.database;
 
-import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.MonitoringController;
 
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.writer.util.async.AbstractWorkerThread;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,65 +38,68 @@ import org.apache.commons.logging.LogFactory;
 public class DbWriterThread extends AbstractWorkerThread {
 
     private static final Log log = LogFactory.getLog(DbWriterThread.class);
-    private Connection conn;
-    private BlockingQueue<IMonitoringRecord> writeQueue;
+    private final Connection conn;
+    private final BlockingQueue<IMonitoringRecord> writeQueue;
     private PreparedStatement psInsertMonitoringData;
     private static boolean shutdown = false;
     private boolean finished = false;
     boolean statementChanged = true;
     String nextStatementText;
 
-    public DbWriterThread(Connection initializedConnection, BlockingQueue<IMonitoringRecord> writeQueue, String statementtext) {
+    public DbWriterThread(final Connection initializedConnection, final BlockingQueue<IMonitoringRecord> writeQueue, final String statementtext) {
         this.conn = initializedConnection;
         this.writeQueue = writeQueue;
         this.nextStatementText = statementtext;
-        log.info("New DbWriter thread created");
+        DbWriterThread.log.info("New DbWriter thread created");
     }
 
     
-    synchronized void changeStatement(String statementtext) {
-        nextStatementText = statementtext;
-        statementChanged = true;
+    synchronized void changeStatement(final String statementtext) {
+        this.nextStatementText = statementtext;
+        this.statementChanged = true;
     }
 
     /**
      * May be called more often than required... but that doesn't harm
      */
     
-    public void initShutdown() {
+    @Override
+	public void initShutdown() {
         DbWriterThread.shutdown = true;
     }
 
     
-    public void run() {
-        log.info("Dbwriter thread running");
+    @Override
+	public void run() {
+        DbWriterThread.log.info("Dbwriter thread running");
         try {
-            while (!finished) {
-                IMonitoringRecord data = writeQueue.take();
+            while (!this.finished) {
+                final IMonitoringRecord data = this.writeQueue.take();
                 if (data == MonitoringController.END_OF_MONITORING_MARKER){
-                    log.info("Found END_OF_MONITORING_MARKER. Will terminate");
+                    DbWriterThread.log.info("Found END_OF_MONITORING_MARKER. Will terminate");
                     // need to put the marker back into the queue to notify other threads
-                    writeQueue.add(MonitoringController.END_OF_MONITORING_MARKER);
-                    finished = true;
+                    this.writeQueue.add(MonitoringController.END_OF_MONITORING_MARKER);
+                    this.finished = true;
                     break;
                 }
                 if (data != null) {
-                    consume(data); // throws SQLException
+                    this.consume(data); // throws SQLException
                 } else {
                     // timeout ... 
-                    if (shutdown && writeQueue.isEmpty()) {
-                        finished = true;
+                    if (DbWriterThread.shutdown && this.writeQueue.isEmpty()) {
+                        this.finished = true;
                     }
                 }
             }
-            log.info("Dbwriter finished");
-        } catch (Exception ex) {
+            DbWriterThread.log.info("Dbwriter finished");
+        } catch (final Exception ex) {
             // e.g. Interrupted Exception or SQLException
-            log.error("DB Writer will halt " + ex.getMessage());
+            DbWriterThread.log.error("DB Writer will halt " + ex.getMessage());
             // TODO: This is a dirty hack!
             // What we need is a listener interface!
-            log.error("Will terminate monitoring!");
-            MonitoringController.getInstance().terminate();
+            DbWriterThread.log.error("Will terminate monitoring!");
+            // TODO: FIX?
+            //MonitoringController.getInstance().terminateMonitoring();
         } finally {
             this.finished = true;
         }
@@ -105,33 +109,34 @@ public class DbWriterThread extends AbstractWorkerThread {
      * writes next item into database
      */
     
-    private void consume(IMonitoringRecord monitoringRecord) throws SQLException {
+    private void consume(final IMonitoringRecord monitoringRecord) throws SQLException {
         //if (TpmonController.debug) System.out.println("DbWriterThread "+this+" Consuming "+monitoringRecord);
         try {
-            if (statementChanged || psInsertMonitoringData == null) {
-                psInsertMonitoringData = conn.prepareStatement(nextStatementText);
-                statementChanged = false;
+            if (this.statementChanged || (this.psInsertMonitoringData == null)) {
+                this.psInsertMonitoringData = this.conn.prepareStatement(this.nextStatementText);
+                this.statementChanged = false;
             }
 
-            OperationExecutionRecord execData = (OperationExecutionRecord) monitoringRecord;
-            psInsertMonitoringData.setString(1, execData.className + "." + execData.operationName);
-            psInsertMonitoringData.setString(2, execData.sessionId);
-            psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));
-            psInsertMonitoringData.setLong(4, execData.tin);
-            psInsertMonitoringData.setLong(5, execData.tout);
-            psInsertMonitoringData.setString(6, execData.hostName);
-            psInsertMonitoringData.setLong(7, execData.eoi);
-            psInsertMonitoringData.setLong(8, execData.ess);
-            psInsertMonitoringData.execute();
+            final OperationExecutionRecord execData = (OperationExecutionRecord) monitoringRecord;
+            this.psInsertMonitoringData.setString(1, execData.className + "." + execData.operationName);
+            this.psInsertMonitoringData.setString(2, execData.sessionId);
+            this.psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));
+            this.psInsertMonitoringData.setLong(4, execData.tin);
+            this.psInsertMonitoringData.setLong(5, execData.tout);
+            this.psInsertMonitoringData.setString(6, execData.hostName);
+            this.psInsertMonitoringData.setLong(7, execData.eoi);
+            this.psInsertMonitoringData.setLong(8, execData.ess);
+            this.psInsertMonitoringData.execute();
 
-        } catch (SQLException ex) {
-            log.error("DbWriter Error during database statement preparation: ", ex);
+        } catch (final SQLException ex) {
+            DbWriterThread.log.error("DbWriter Error during database statement preparation: ", ex);
             throw ex;
         }
     }
 
     
-    public boolean isFinished() {
-        return finished;
+    @Override
+	public boolean isFinished() {
+        return this.finished;
     }
 }

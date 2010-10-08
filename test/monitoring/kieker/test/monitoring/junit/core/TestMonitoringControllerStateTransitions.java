@@ -6,7 +6,7 @@ package kieker.test.monitoring.junit.core;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.monitoring.core.IMonitoringController;
-import kieker.monitoring.core.MonitoringController2;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.test.monitoring.junit.core.configuration.util.DefaultConfigurationFactory;
 
@@ -20,7 +20,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 		final IMonitoringConfiguration config = DefaultConfigurationFactory
 				.createDefaultConfigWithDummyWriter(name);
 		config.setMonitoringEnabled(true); // make sure that monitoring enabled
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		{ /* Check values when enabled */
 			Assert.assertEquals("Unexpected monitoringEnabled value", true,
@@ -52,7 +52,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 		final IMonitoringConfiguration config = DefaultConfigurationFactory
 				.createDefaultConfigWithDummyWriter(name);
 		config.setMonitoringEnabled(false); // make sure that monitoring enabled
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		{ /* Check values when disabled */
 			Assert.assertEquals("Unexpected monitoringEnabled value", false,
@@ -84,7 +84,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 		final IMonitoringConfiguration config = DefaultConfigurationFactory
 				.createDefaultConfigWithDummyWriter(name);
 		config.setMonitoringEnabled(true); // make sure that monitoring enabled
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		/** Check values when enabled covered by other tests */
 
@@ -106,7 +106,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 		final IMonitoringConfiguration config = DefaultConfigurationFactory
 				.createDefaultConfigWithDummyWriter(name);
 		config.setMonitoringEnabled(false); // make sure that monitoring enabled
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		/** Check values when disabled covered by other tests */
 
@@ -127,7 +127,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 		final String name = "TheName";
 		final IMonitoringConfiguration config = DefaultConfigurationFactory
 				.createDefaultConfigWithDummyWriter(name);
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		/** Check values when disabled covered by other tests */
 
@@ -142,7 +142,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 		final String name = "TheName";
 		final IMonitoringConfiguration config = DefaultConfigurationFactory
 				.createDefaultConfigWithDummyWriter(name);
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		/** Check values when disabled covered by other tests */
 

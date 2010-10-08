@@ -45,7 +45,7 @@ public class StorageOnly {
 	private static final int numberOfEvents = 1000;
 	private static final MonitoringController ctrl = MonitoringController
 			.getInstance();
-	private static final String vmName = StorageOnly.ctrl.getVmName();
+	private static final String vmName = StorageOnly.ctrl.getHostName();
 
 	public static void main(final String args[]) {
 		try {
@@ -54,7 +54,7 @@ public class StorageOnly {
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord(
 						i % 2 + "component", i % 4 + "method", "sessionid",
-						3333, 123123L, 123124L, StorageOnly.ctrl.getVmName(),
+						3333, 123123L, 123124L, StorageOnly.ctrl.getHostName(),
 						i, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
@@ -66,14 +66,14 @@ public class StorageOnly {
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord(
 						i % 2 + "component", i % 4 + "method", "sessionid",
-						3333, 123123L, 123124L, StorageOnly.ctrl.getVmName(),
+						3333, 123123L, 123124L, StorageOnly.ctrl.getHostName(),
 						i + 10000, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 60 seconds");
 			Thread.sleep(10000);
-			StorageOnly.ctrl.terminate();
+			StorageOnly.ctrl.terminateMonitoring();
 		} catch (final InterruptedException ex) {
 			System.out.println("Exception:" + ex);
 			ex.printStackTrace();

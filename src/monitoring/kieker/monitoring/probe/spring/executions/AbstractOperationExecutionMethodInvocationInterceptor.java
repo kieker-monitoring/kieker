@@ -54,7 +54,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry
 			.getInstance();
 	protected static final String vmName = AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
-			.getVmName();
+			.getHostName();
 
 	/**
 	 * Iff true, the name of the runtime class is used, iff false, the name of

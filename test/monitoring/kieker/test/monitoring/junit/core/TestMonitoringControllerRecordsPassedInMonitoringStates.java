@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.IMonitoringController;
-import kieker.monitoring.core.MonitoringController2;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.writer.DummyLogWriter;
@@ -25,7 +25,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends
 		final MyDummyRecordCountWriter countWriter = new MyDummyRecordCountWriter();
 		final IMonitoringConfiguration config = MonitoringConfiguration
 				.createDefaultConfiguration("MyName", countWriter);
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		Assert.assertTrue("Failed to enable monitoring",
 				ctrl.enableMonitoring());
@@ -39,7 +39,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends
 		final MyDummyRecordCountWriter countWriter = new MyDummyRecordCountWriter();
 		final IMonitoringConfiguration config = MonitoringConfiguration
 				.createDefaultConfiguration("MyName", countWriter);
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		Assert.assertTrue("Failed to disable monitoring",
 				ctrl.disableMonitoring());
@@ -53,7 +53,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends
 		final MyDummyRecordCountWriter countWriter = new MyDummyRecordCountWriter();
 		final IMonitoringConfiguration config = MonitoringConfiguration
 				.createDefaultConfiguration("MyName", countWriter);
-		final IMonitoringController ctrl = new MonitoringController2(config);
+		final IMonitoringController ctrl = new MonitoringController(config);
 
 		ctrl.terminateMonitoring();
 		ctrl.newMonitoringRecord(new MyDummyRecord());

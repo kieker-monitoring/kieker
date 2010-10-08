@@ -2,7 +2,7 @@ package kieker.monitoring.writer.util.async;
 
 import java.util.Vector;
 
-import kieker.monitoring.core.MonitoringController2;
+import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,7 +50,7 @@ public class ShutdownHook extends Thread {
 
 	private static final Log log = LogFactory.getLog(ShutdownHook.class);
 
-	private final MonitoringController2 ctrl;
+	private final MonitoringController ctrl;
 	
 	/**
 	 * Must not be used for construction
@@ -60,7 +60,7 @@ public class ShutdownHook extends Thread {
 		this.ctrl = null;
 	}
 	
-	public ShutdownHook(final MonitoringController2 ctrl) {
+	public ShutdownHook(final MonitoringController ctrl) {
 		this.ctrl = ctrl;
 	}
 
