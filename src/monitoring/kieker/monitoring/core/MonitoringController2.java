@@ -3,7 +3,6 @@ package kieker.monitoring.core;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
@@ -12,7 +11,7 @@ import kieker.monitoring.core.state.IMonitoringControllerState;
 import kieker.monitoring.core.state.MonitoringControllerState;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
-import kieker.monitoring.writer.util.async.TpmonShutdownHook;
+import kieker.monitoring.writer.util.async.ShutdownHook;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,10 +45,10 @@ public final class MonitoringController2 implements IMonitoringController {
 	/**
 	 * Used to notify the writer threads that monitoring ended.
 	 */
-	public static final IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
+	public static final IMonitoringRecord END_OF_MONITORING_MARKER = MonitoringController.END_OF_MONITORING_MARKER;
 
 	private static final Log log = LogFactory
-			.getLog(MonitoringController.class);
+			.getLog(MonitoringController2.class);
 
 	/**
 	 * Offset used to determine the number of nanoseconds since 1970-1-1. This
@@ -90,7 +89,7 @@ public final class MonitoringController2 implements IMonitoringController {
 	 */
 	private final AtomicLong numberOfInserts = new AtomicLong(0);
 
-	private final TpmonShutdownHook shutdownhook = new TpmonShutdownHook();
+	private final ShutdownHook shutdownhook;
 
 	/**
 	 * Runtime state of the monitoring controller
@@ -105,6 +104,7 @@ public final class MonitoringController2 implements IMonitoringController {
 		this.state = null;
 		this.monitoringLogWriter = null;
 		this.instanceName = null;
+		this.shutdownhook = null;
 	}
 
 	/**
@@ -121,12 +121,17 @@ public final class MonitoringController2 implements IMonitoringController {
 
 		final Vector<AbstractWorkerThread> worker = this.monitoringLogWriter
 				.getWorkers(); // may be null
+		this.shutdownhook = new ShutdownHook(this);
 		if (worker != null) {
 			for (final AbstractWorkerThread w : worker) {
 				this.registerWorker(w);
 			}
 		}
-		Runtime.getRuntime().addShutdownHook(this.shutdownhook);
+		try {
+			Runtime.getRuntime().addShutdownHook(this.shutdownhook);
+		} catch (final Exception e) {
+			MonitoringController2.log.warn("Failed to add shutdownHook", e);
+		}
 
 		MonitoringController2.log
 				.info("Initialization completed.\n Writer Info: "
@@ -381,7 +386,7 @@ public final class MonitoringController2 implements IMonitoringController {
 		if (this.monitoringLogWriter != null) {
 			/* if the initialization of the writer failed, it is set to null */
 			if (!this.monitoringLogWriter
-					.newMonitoringRecord(MonitoringController.END_OF_MONITORING_MARKER)) {
+					.newMonitoringRecord(MonitoringController2.END_OF_MONITORING_MARKER)) {
 				MonitoringController2.log.error("Failed to terminate writer");
 			}
 		}

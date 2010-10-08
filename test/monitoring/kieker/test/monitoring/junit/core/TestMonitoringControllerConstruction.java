@@ -1,7 +1,7 @@
 /**
  * 
  */
-package kieker.test.monitoring.junit.core.state;
+package kieker.test.monitoring.junit.core;
 
 /*
  * ==================LICENCE=========================
@@ -23,17 +23,15 @@ package kieker.test.monitoring.junit.core.state;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.monitoring.core.MonitoringController2;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
-import kieker.monitoring.core.state.IMonitoringControllerState;
-import kieker.monitoring.core.state.MonitoringControllerState;
 import kieker.test.monitoring.junit.core.configuration.util.DefaultConfigurationFactory;
 
 /**
  * @author Andre van Hoorn
  * 
  */
-public class TestMonitoringControllerStateConstruction extends TestCase {
-	
+public class TestMonitoringControllerConstruction extends TestCase {
 	/**
 	 * 
 	 */
@@ -44,17 +42,16 @@ public class TestMonitoringControllerStateConstruction extends TestCase {
 
 		{
 			/* Test with default values */
-			final IMonitoringControllerState state = new MonitoringControllerState(
-					config);
+			final MonitoringController2 ctrl = new MonitoringController2(config);
 			Assert.assertEquals("monitoringEnabled values differ",
-					config.isMonitoringEnabled(), state.isMonitoringEnabled());
+					config.isMonitoringEnabled(), ctrl.isMonitoringEnabled());
 			Assert.assertEquals("debugEnabled values differ",
-					config.isDebugEnabled(), state.isDebugEnabled());
+					config.isDebugEnabled(), ctrl.isDebugEnabled());
 			Assert.assertEquals("hostName values differ", config.getHostName(),
-					state.getHostName());
+					ctrl.getHostName());
 			Assert.assertSame("log writers differ",
 					config.getMonitoringLogWriter(),
-					state.getMonitoringLogWriter());
+					ctrl.getMonitoringLogWriter());
 		}
 
 		{
@@ -63,18 +60,28 @@ public class TestMonitoringControllerStateConstruction extends TestCase {
 			config.setMonitoringEnabled(!config.isMonitoringEnabled());
 			config.setHostName(config.getHostName() + "__");
 
-			final IMonitoringControllerState state = new MonitoringControllerState(
-					config);
+			final MonitoringController2 ctrl = new MonitoringController2(config);
 			Assert.assertEquals("monitoringEnabled values differ",
-					config.isMonitoringEnabled(), state.isMonitoringEnabled());
+					config.isMonitoringEnabled(), ctrl.isMonitoringEnabled());
 			Assert.assertEquals("debugEnabled values differ",
-					config.isDebugEnabled(), state.isDebugEnabled());
+					config.isDebugEnabled(), ctrl.isDebugEnabled());
 			Assert.assertEquals("hostName values differ", config.getHostName(),
-					state.getHostName());
+					ctrl.getHostName());
 			Assert.assertSame("log writers differ",
 					config.getMonitoringLogWriter(),
-					state.getMonitoringLogWriter());
+					ctrl.getMonitoringLogWriter());
 
 		}
+	}
+
+	/**
+	 * Make sure that {@link MonitoringController2#getInstance()} always returns
+	 * the same instance.
+	 * 
+	 */
+	public void testSingletonGetterOnlyOneInstance() {
+		Assert.assertSame("singleton getter returned different objects",
+				MonitoringController2.getInstance(),
+				MonitoringController2.getInstance());
 	}
 }

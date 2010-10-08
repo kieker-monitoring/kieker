@@ -2,7 +2,7 @@ package kieker.monitoring.writer.util.async;
 
 import java.util.Vector;
 
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.MonitoringController2;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +26,8 @@ import org.apache.commons.logging.LogFactory;
  * /
 
  /**
+ * Become the new ShutDownHook. 
+ * 
  * This class ensures that virtual machine shutdown (e.g., cause by a
  * System.exit(int)) is delayed until all monitoring data is written.
  * This is important for the asynchronous writers for the files system
@@ -44,18 +46,29 @@ import org.apache.commons.logging.LogFactory;
  *             Kieker and publication under an open source licence
  * 2007/12/16: Initial Prototype
  */
-public class TpmonShutdownHook extends Thread {
+public class ShutdownHook extends Thread {
 
 	private static final Log log = LogFactory.getLog(TpmonShutdownHook.class);
 
-	public TpmonShutdownHook() {
+	private final MonitoringController2 ctrl;
+	
+	/**
+	 * Must not be used for construction
+	 */
+	@SuppressWarnings("unused")
+	private ShutdownHook (){
+		this.ctrl = null;
+	}
+	
+	public ShutdownHook(final MonitoringController2 ctrl) {
+		this.ctrl = ctrl;
 	}
 
 	private final Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
 
 	/**
 	 * Registers a worker, so that it is notified when system shutdown is
-	 * initialized and to allow the TpmonShutdownHook to wait till the worker is
+	 * initiated and to allow the TpmonShutdownHook to wait till the worker is
 	 * finished.
 	 * 
 	 * @param newWorker
@@ -71,15 +84,15 @@ public class TpmonShutdownHook extends Thread {
 		try {
 			// is called when VM shutdown (e.g., strg+c) is initiated or when
 			// system.exit is called
-			TpmonShutdownHook.log.info("Tpmon: TpmonShutdownHook notifies all workers to initiate shutdown");
+			ShutdownHook.log.info("Tpmon: TpmonShutdownHook notifies all workers to initiate shutdown");
 			this.initateShutdownForAllWorkers();
 			while (!this.allWorkersFinished()) {
 				Thread.sleep(500);
-				TpmonShutdownHook.log.info("Tpmon: Shutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
+				ShutdownHook.log.info("Tpmon: Shutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
 			}
-			TpmonShutdownHook.log.info("Tpmon: TpmonShutdownHook can terminate since all workers are finished");
+			ShutdownHook.log.info("Tpmon: TpmonShutdownHook can terminate since all workers are finished");
 		} catch (final InterruptedException ex) {
-			TpmonShutdownHook.log.error("Tpmon: Interrupted Exception occured", ex);
+			ShutdownHook.log.error("Tpmon: Interrupted Exception occured", ex);
 		}
 	}
 
@@ -89,7 +102,7 @@ public class TpmonShutdownHook extends Thread {
 				wrk.initShutdown();
 			}
 		}
-		MonitoringController.getInstance().terminate();
+		this.ctrl.terminateMonitoring();
 	}
 
 	public synchronized boolean allWorkersFinished() {
