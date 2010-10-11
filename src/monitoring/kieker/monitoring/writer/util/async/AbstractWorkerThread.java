@@ -28,19 +28,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractWorkerThread extends Thread {
     private static final Log log = LogFactory.getLog(AbstractWorkerThread.class);
 
-   private boolean writeRecordTypeIds = false;
-
-    
-    public boolean isWriteRecordTypeIds() {
-        return writeRecordTypeIds;
-    }
-
-    
-    public void setWriteRecordTypeIds(boolean writeRecordTypeIds) {
-        this.writeRecordTypeIds = writeRecordTypeIds;
-    }
-
-   /**
+    /**
     * initShutdown has to be called before isFinished will result in true.
     * IsFinished == true means that the worker does not have additional jobs in it's queue 
     * and won't accept new jobs.
