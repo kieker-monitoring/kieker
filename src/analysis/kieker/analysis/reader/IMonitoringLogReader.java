@@ -36,15 +36,11 @@ public interface IMonitoringLogReader {
 	 * AbstractMonitoringLogWriter includes convenient methods to extract
 	 * configuration values from an initString.
 	 * 
-	 * TODO: make signature of this init method and the writer's init method
-	 * (returns boolean and doesn't throw exception) consistent.
-	 * 
 	 * @param initString
 	 *            the initialization string
-	 * @throws IllegalArgumentException
-	 *             if an error occured
+	 * @return true if the initialization was successful; false if an error occurred
 	 */
-	public void init(String initString) throws IllegalArgumentException;
+	public boolean init(String initString);
 
 	/**
 	 * Adds the given record receiver. This method is only used by the framework

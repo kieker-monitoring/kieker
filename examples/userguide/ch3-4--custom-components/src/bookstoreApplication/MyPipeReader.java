@@ -1,11 +1,15 @@
 package bookstoreApplication;
 
 import kieker.analysis.reader.AbstractMonitoringLogReader;
-import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.common.util.PropertyMap;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class MyPipeReader extends AbstractMonitoringLogReader {
 
+	private static final Log log = LogFactory.getLog(MyPipeReader.class);
+	
     private static final String PROPERTY_PIPE_NAME = "pipeName";
 
     private volatile MyPipe pipe;
@@ -13,29 +17,36 @@ public class MyPipeReader extends AbstractMonitoringLogReader {
     public MyPipeReader () {}
 
     public MyPipeReader (final String pipeName) {
-        this.init(PROPERTY_PIPE_NAME+"="+pipeName);
+        this.init(MyPipeReader.PROPERTY_PIPE_NAME+"="+pipeName);
     }
     
     @Override
-    public void init(String initString) throws IllegalArgumentException {
-        PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-        String pipeName = propertyMap.getProperty(PROPERTY_PIPE_NAME);
+    public boolean init(final String initString) throws IllegalArgumentException {
+    	try {
+        final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
+        final String pipeName = propertyMap.getProperty(MyPipeReader.PROPERTY_PIPE_NAME);
         this.pipe = MyNamedPipeManager.getInstance().acquirePipe(pipeName);
+		} catch (final Exception exc) {
+			MyPipeReader.log.error("Failed to parse initString '" + initString
+					+ "': " + exc.getMessage());
+			return false;
+		}
+		return true;
     }
 
     @Override
-    public boolean read() throws MonitoringLogReaderException {
+    public boolean read() {
         try {
             Object[] objArray;
             /* Wait max. 4 seconds for the next data. */
-            while ((objArray = pipe.poll(4)) != null) {
+            while ((objArray = this.pipe.poll(4)) != null) {
                 /* Create new record, init from received array ... */
-                MyResponseTimeRecord record = new MyResponseTimeRecord();
+                final MyResponseTimeRecord record = new MyResponseTimeRecord();
                 record.initFromArray(objArray);
                 /* ...and delegate the task of delivering to the super class. */
-                deliverRecord(record);
+                this.deliverRecord(record);
             }
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             return false; // signal error
         }
         return true;

@@ -102,23 +102,28 @@ public class FSReader extends AbstractMonitoringLogReader {
 	}
 
 	/**
-	 * @param initString
-	 *            List of input directories separated by semicolon
+	 * Initializes the reader based on the given key/value pair initString. For
+	 * the key {@value #PROP_NAME_INPUTDIRS}, the method expects a list of input
+	 * directories separated by semicolon.
+	 * <p>
+	 * 
+	 * Example: <code>inputDirs=dir0;...;dir1</code>
 	 */
 	@Override
-	public void init(final String initString) throws IllegalArgumentException {
-		/* throws IllegalArgumentException: */
-		final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-		final String dirList = propertyMap
-				.getProperty(FSReader.PROP_NAME_INPUTDIRS);
-
-		if (dirList == null) {
-			FSReader.log.error("Missing value for property "
-					+ FSReader.PROP_NAME_INPUTDIRS);
-			throw new IllegalArgumentException("Missing value for property "
-					+ FSReader.PROP_NAME_INPUTDIRS);
-		} // parse inputDir property value
+	public boolean init(final String initString) {
+		String dirList = null;
 		try {
+			/* throws IllegalArgumentException: */
+			final PropertyMap propertyMap = new PropertyMap(initString, "|",
+					"=");
+			dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
+
+			if (dirList == null) {
+				FSReader.log.error("Missing value for property "
+						+ FSReader.PROP_NAME_INPUTDIRS);
+				return false;
+			} // parse inputDir property value
+
 			final StringTokenizer dirNameTokenizer = new StringTokenizer(
 					dirList, ";");
 			this.inputDirs = new String[dirNameTokenizer.countTokens()];
@@ -126,9 +131,10 @@ public class FSReader extends AbstractMonitoringLogReader {
 				this.inputDirs[i] = dirNameTokenizer.nextToken().trim();
 			}
 		} catch (final Exception exc) {
-			throw new IllegalArgumentException(
-					"Error parsing list of input directories'" + dirList + "'",
-					exc);
+			FSReader.log.error("Error parsing list of input directories'"
+					+ dirList + "':" + exc.getMessage(), exc);
+			return false;
 		}
+		return true;
 	}
 }

@@ -49,7 +49,8 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 			throw new IllegalArgumentException("Failed to get Pipe with name "
 					+ pipeName);
 		} else {
-			PipeReader.log.info("Connectod to named pipe '" + this.pipe.getName() + "'");
+			PipeReader.log.info("Connectod to named pipe '"
+					+ this.pipe.getName() + "'");
 		}
 		this.pipe.setPipeReader(this);
 	}
@@ -71,12 +72,21 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 	}
 
 	@Override
-	public void init(final String initString) throws IllegalArgumentException {
-		final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
-																				// IllegalArgumentException
-		this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-		PipeReader.log.info("Connected to pipe '" + this.pipe.getName() + "'"
-				+ " (" + this.pipe + ")");
+	public boolean init(final String initString) {
+		try {
+			final PropertyMap propertyMap = new PropertyMap(initString, "|",
+					"="); // throws
+			// IllegalArgumentException
+			this.initPipe(propertyMap
+					.getProperty(PipeReader.PROPERTY_PIPE_NAME));
+			PipeReader.log.info("Connected to pipe '" + this.pipe.getName()
+					+ "'" + " (" + this.pipe + ")");
+		} catch (final Exception exc) {
+			PipeReader.log.error("Failed to parse initString '" + initString
+					+ "': " + exc.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override

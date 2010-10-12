@@ -14,15 +14,15 @@ public class CRM {
 
     public void getOffers() {
         /* Invoke catalog.getBook() and monitor response time */
-        long tin = MONITORING_CONTROLLER.currentTimeNanos();
-        catalog.getBook(false);
-        long tout = MONITORING_CONTROLLER.currentTimeNanos();
+        final long tin = MonitoringController.currentTimeNanos();
+        this.catalog.getBook(false);
+        final long tout = MonitoringController.currentTimeNanos();
         /* Create a new record and set values */
-        MyResponseTimeRecord e = new MyResponseTimeRecord();
+        final MyResponseTimeRecord e = new MyResponseTimeRecord();
         e.className = "mySimpleKiekerExample.bookstoreTracing.Catalog";
         e.methodName = "getBook(..)";
         e.responseTimeNanos = tout - tin;
         /* Pass the record to the monitoring controller */
-        MONITORING_CONTROLLER.newMonitoringRecord(e);
+        CRM.MONITORING_CONTROLLER.newMonitoringRecord(e);
     }
 }

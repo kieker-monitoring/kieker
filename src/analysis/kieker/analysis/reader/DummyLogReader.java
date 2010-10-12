@@ -60,7 +60,8 @@ public class DummyLogReader extends AbstractMonitoringLogReader {
 	}
 
 	@Override
-	public void init(final String initString) throws IllegalArgumentException {
+	public boolean init(final String initString) throws IllegalArgumentException {
 		// nothing to do...
+		return true;
 	}
 }
