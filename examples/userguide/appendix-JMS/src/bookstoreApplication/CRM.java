@@ -16,13 +16,13 @@ public class CRM {
     public void getOffers() {
         /* Call the Catalog component's getBook() method
          * and log its entry and exit timestamp using Kieker. */
-        long tin = MONITORING_CONTROLLER.currentTimeNanos();
-        catalog.getBook(false);
-        long tout = MONITORING_CONTROLLER.currentTimeNanos();
-        OperationExecutionRecord e =
+        final long tin = MonitoringController.currentTimeNanos();
+        this.catalog.getBook(false);
+        final long tout = MonitoringController.currentTimeNanos();
+        final OperationExecutionRecord e =
                 new OperationExecutionRecord(
                 Catalog.class.getName(), "getBook()",
                 tin, tout);
-        MONITORING_CONTROLLER.newMonitoringRecord(e);
+        CRM.MONITORING_CONTROLLER.newMonitoringRecord(e);
     }
 }
