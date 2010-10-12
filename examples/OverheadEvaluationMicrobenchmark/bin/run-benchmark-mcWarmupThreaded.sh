@@ -5,12 +5,12 @@ BASEDIR=${BINDIR}../
 
 SLEEPTIME=30
 NUM_LOOPS=1
-THREADS=8
-TOTALCALLS=100000000
-RECORDEDCALLS=1000000
-METHODTIME=100000
+THREADS=16
+TOTALCALLS=1000000
+RECORDEDCALLS=100000
+METHODTIME=500000
 
-TIME=`expr ${THREADS} \* ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}`
+TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}`
 echo "Experiment will take circa ${TIME} seconds."
 
 # determine correct classpath separator
@@ -38,7 +38,8 @@ AOPXML_INSTR_PROBE="${BASEDIR}configuration/MonitoredApplication/aop-probe.xml"
 KIEKER_MONITORING_CONF_NOLOGGING="${BASEDIR}configuration/MonitoredApplication/kieker.monitoring-nologging.properties"
 KIEKER_MONITORING_CONF_LOGGING="${BASEDIR}configuration/MonitoredApplication/kieker.monitoring-logging.properties"
 
-JAVAARGS="-server -d64"
+JAVAARGS="-server"
+#JAVAARGS="${JAVAARGS} -d64"
 #JAVAARGS="${JAVAARGS} -XX:+PrintCompilation -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
@@ -65,6 +66,7 @@ echo "NUM_LOOPS=${NUM_LOOPS}" >>${RESULTSDIR}configuration.txt
 echo "TOTALCALLS=${TOTALCALLS}" >>${RESULTSDIR}configuration.txt
 echo "RECORDEDCALLS=${RECORDEDCALLS}" >>${RESULTSDIR}configuration.txt
 echo "METHODTIME=${METHODTIME}" >>${RESULTSDIR}configuration.txt
+echo "THREADS=${THREADS}" >>${RESULTSDIR}configuration.txt
 sync
 
 ## Execute Benchmark
@@ -134,6 +136,6 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 done
 
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
-${BINDIR}run-r-mcWarmup.sh
+${BINDIR}run-r-mcWarmupThreaded.sh
 [ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log
 [ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}

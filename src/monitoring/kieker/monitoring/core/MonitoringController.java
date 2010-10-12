@@ -351,7 +351,7 @@ public final class MonitoringController implements IMonitoringController {
 	}
 
 	/**
-	 * See TpmonShutdownHook.registerWorker
+	 * See ShutdownHook.registerWorker
 	 * 
 	 * @param newWorker
 	 */

@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * This annotation marks methods that are exit points for remote calls
  * that go to an other virtual machine. The annotation tries to ensure
- * that the trace id is propergated to an other instance of tpmon in
+ * that the trace id is propergated to an other instance of Kieker in
  * the other virtual machine.
  *
  * It provides the boolean property useRuntimeClassname to select whether
