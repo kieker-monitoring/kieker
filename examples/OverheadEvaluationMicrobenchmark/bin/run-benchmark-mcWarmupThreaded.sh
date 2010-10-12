@@ -42,7 +42,7 @@ JAVAARGS="-server -d64"
 #JAVAARGS="${JAVAARGS} -XX:+PrintCompilation -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
-MAINCLASSNAME=kieker.evaluation.benchmark.Warmup
+MAINCLASSNAME=kieker.evaluation.benchmark.WarmupThreaded
 CLASSPATH=$(ls lib/*.jar | tr "\n" "${CPSEPCHAR}")build/
 #echo "Classpath: ${CLASSPATH}"
 
@@ -79,7 +79,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --configuration-id "noinstr;${i};0" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
-        --methodtime ${METHODTIME}
+        --methodtime ${METHODTIME} \
         --totalthreads ${THREADS}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_1.log
     sync
@@ -93,7 +93,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --configuration-id "empty_probe;${i};1" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
-        --methodtime ${METHODTIME}
+        --methodtime ${METHODTIME} \
         --totalthreads ${THREADS}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
@@ -108,7 +108,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --configuration-id "no_logging;${i};2" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
-        --methodtime ${METHODTIME}
+        --methodtime ${METHODTIME} \
         --totalthreads ${THREADS}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_3.log
@@ -123,7 +123,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --configuration-id "logging;${i};3" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
-        --methodtime ${METHODTIME}
+        --methodtime ${METHODTIME} \
         --totalthreads ${THREADS}
     rm -f ${AOPXML_PATH}
     rm -rf ${BASEDIR}tmp/tpmon-*
