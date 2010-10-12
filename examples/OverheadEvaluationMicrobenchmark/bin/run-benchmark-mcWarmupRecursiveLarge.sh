@@ -11,7 +11,7 @@ METHODTIME=1000000
 MAXRECURSIONDEPTH=7
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${NUM_LOOPS} \* ${MAXRECURSIONDEPTH} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS} \* ${MAXRECURSIONDEPTH}`
-echo "Experiemnt will take circa ${TIME} seconds."
+echo "Experiment will take circa ${TIME} seconds."
 
 # determine correct classpath separator
 CPSEPCHAR=":" # default :, ; for windows

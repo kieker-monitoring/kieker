@@ -5,11 +5,12 @@ BASEDIR=${BINDIR}../
 
 SLEEPTIME=30
 NUM_LOOPS=1
+THREADS=8
 TOTALCALLS=100000000
 RECORDEDCALLS=1000000
 METHODTIME=100000
 
-TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}`
+TIME=`expr ${THREADS} \* ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}`
 echo "Experiment will take circa ${TIME} seconds."
 
 # determine correct classpath separator
@@ -17,7 +18,7 @@ CPSEPCHAR=":" # default :, ; for windows
 if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
 # echo "Classpath separator: '${CPSEPCHAR}'"
 
-RESULTSDIR="${BASEDIR}tmp/results-mcWarmup/"
+RESULTSDIR="${BASEDIR}tmp/results-mcWarmupThreaded/"
 echo "Removing and recreating '$RESULTSDIR'"
 rm -rf ${RESULTSDIR} && mkdir ${RESULTSDIR}
 mkdir -p ${BASEDIR}build/META-INF/
@@ -27,7 +28,7 @@ rm -f ${BASEDIR}kieker.log
 
 RESULTSFN="${RESULTSDIR}results.csv"
 # Write csv file headers:
-CSV_HEADER="configuration;iteration;order_index;duration_nsec"
+CSV_HEADER="configuration;iteration;order_index;threadid;duration_nsec"
 echo ${CSV_HEADER} > ${RESULTSFN}
 
 AOPXML_PATH="${BASEDIR}build/META-INF/aop.xml"
@@ -79,6 +80,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME}
+        --totalthreads ${THREADS}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_1.log
     sync
     sleep ${SLEEPTIME}
@@ -92,6 +94,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME}
+        --totalthreads ${THREADS}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
     sync
@@ -106,6 +109,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME}
+        --totalthreads ${THREADS}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_3.log
     sync
@@ -120,6 +124,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME}
+        --totalthreads ${THREADS}
     rm -f ${AOPXML_PATH}
     rm -rf ${BASEDIR}tmp/tpmon-*
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log

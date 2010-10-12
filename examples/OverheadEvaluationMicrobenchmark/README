@@ -36,3 +36,6 @@ Execution of Microbenchmark 1:
 
 Execution of Microbenchmark 2:
 1. bin/run-benchmark-mcWarmupRecursive.sh
+
+Execution of Microbenchmark 3:
+1. bin/run-benchmark-mcWarmupThreaded.sh
