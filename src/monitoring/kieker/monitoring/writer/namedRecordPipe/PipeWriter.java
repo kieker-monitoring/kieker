@@ -1,10 +1,28 @@
 package kieker.monitoring.writer.namedRecordPipe;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2010 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ */
+
 import java.util.Vector;
 
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.Pipe;
-import kieker.common.namedRecordPipe.PipeException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
 import kieker.monitoring.writer.IMonitoringLogWriter;
@@ -22,39 +40,53 @@ public final class PipeWriter implements IMonitoringLogWriter {
 
 	public static final String PROPERTY_PIPE_NAME = "pipeName";
 	private volatile Pipe pipe;
-	private String pipeName;
+
+	/**
+	 * 
+	 * @param pipeName
+	 */
+	// TODO: throw Exception on error (e.g., )?
+	public PipeWriter(final String pipeName) {
+		this.initPipe(pipeName);
+	}
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		try {
-			this.pipe.writeMonitoringRecord(monitoringRecord);
-		} catch (final PipeException ex) {
-			PipeWriter.log.error("PipeException occured", ex);
+		return this.pipe.writeMonitoringRecord(monitoringRecord);
+	}
+
+	/**
+	 * Initializes the {@link #pipe} and and {@link #pipeName} fields.
+	 * 
+	 * @param pipeName
+	 * @return true on success; false otherwise
+	 */
+	private boolean initPipe(final String pipeName) {
+		this.pipe = Broker.getInstance().acquirePipe(pipeName);
+		if (this.pipe == null) {
+			PipeWriter.log.error("Failed to get pipe with name:" + pipeName);
 			return false;
 		}
+		PipeWriter.log.info("Connected to pipe '" + pipeName + "'" + " ("
+				+ this.pipe + ")");
 		return true;
 	}
 
 	@Override
-	public boolean init(final String initString) throws IllegalArgumentException {
+	public boolean init(final String initString)
+			throws IllegalArgumentException {
 		final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
-																			// IllegalArgumentException
-		this.pipeName = propertyMap.getProperty(PipeWriter.PROPERTY_PIPE_NAME);
-		if ((this.pipeName == null) || (this.pipeName.length() == 0)) {
-			PipeWriter.log.error("Invalid or missing pipeName value for property '"
-					+ PipeWriter.PROPERTY_PIPE_NAME + "'");
+																				// IllegalArgumentException
+		final String pipeName = propertyMap
+				.getProperty(PipeWriter.PROPERTY_PIPE_NAME);
+		if ((pipeName == null) || (pipeName.isEmpty())) {
+			PipeWriter.log
+					.error("Invalid or missing pipeName value for property '"
+							+ PipeWriter.PROPERTY_PIPE_NAME + "'");
 			throw new IllegalArgumentException(
-					"Invalid or missing pipeName value:" + this.pipeName);
+					"Invalid or missing pipeName value:" + pipeName);
 		}
-		this.pipe = Broker.getInstance().acquirePipe(this.pipeName);
-		if (this.pipe == null) {
-			PipeWriter.log.error("Failed to get pipe with name:" + this.pipeName);
-			throw new IllegalArgumentException("Failed to get pipe with name:"
-					+ this.pipeName);
-		}
-		PipeWriter.log.info("Connected to pipe '" + this.pipeName + "'" + " (" + this.pipe
-				+ ")");
-		return true;
+		return this.initPipe(pipeName);
 	}
 
 	@Override
@@ -66,7 +98,7 @@ public final class PipeWriter implements IMonitoringLogWriter {
 	public String getInfoString() {
 		final StringBuilder strB = new StringBuilder();
 
-		strB.append("pipeName : " + this.pipeName);
+		strB.append("pipeName : " + this.pipe.getName());
 
 		return strB.toString();
 	}

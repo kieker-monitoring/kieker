@@ -109,7 +109,7 @@ public class ControlServlet extends HttpServlet {
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
 		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: "
-				+ ctrlInst.currentTimeNanos() + "<br>");
+				+ MonitoringController.currentTimeNanos() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
 		out.println("Vmname:\"" + ctrlInst.getHostName() + "\"<br>");
 
@@ -187,8 +187,8 @@ public class ControlServlet extends HttpServlet {
 							"kieker.monitoring.controlServlet.ControlServlet",
 							"processRequest(HttpServletRequest,HttpServletResponse)",
 							ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ctrlInst
-									.currentTimeNanos(), ctrlInst
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), MonitoringController
+									.currentTimeNanos(), MonitoringController
 									.currentTimeNanos(),
 							ctrlInst.getHostName(), i, i));
 				}

@@ -2,7 +2,7 @@ package kieker.tools.logReplayer;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * Replays a filesystem monitoring log and simply passes each record a specified
+ * {@link IMonitoringRecordReceiver}. The {@link FilesystemLogReplayer} can
+ * replay monitoring logs in real-time.
  * 
  * @author Andre van Hoorn
  */
@@ -38,11 +41,13 @@ public class FilesystemLogReplayer {
 
 	private static final Log log = LogFactory
 			.getLog(FilesystemLogReplayer.class);
+	/** Each record is delegated to this receiver. */
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final String[] inputDirs;
 	private final boolean realtimeMode;
 	private final int numRealtimeWorkerThreads;
 
+	/** Must not be used for construction */
 	@SuppressWarnings("unused")
 	private FilesystemLogReplayer() {
 		this.recordReceiver = null;
@@ -63,8 +68,8 @@ public class FilesystemLogReplayer {
 
 	public FilesystemLogReplayer(
 			final IMonitoringRecordReceiver monitoringController,
-			final String[] inputDirs,
-			final boolean realtimeMode, final int numRealtimeWorkerThreads) {
+			final String[] inputDirs, final boolean realtimeMode,
+			final int numRealtimeWorkerThreads) {
 		this.recordReceiver = monitoringController;
 		this.inputDirs = inputDirs;
 		this.realtimeMode = realtimeMode;
@@ -72,40 +77,14 @@ public class FilesystemLogReplayer {
 	}
 
 	/**
+	 * Replays the monitoring log terminates after the last record was passed to
+	 * the configured {@link IMonitoringRecordReceiver}.
+	 * 
 	 * @return true on success; false otherwise
 	 */
 	public boolean replay() {
 		boolean success = true;
 
-
-		final IMonitoringRecordConsumerPlugin logCons = new IMonitoringRecordConsumerPlugin() {
-
-			/**
-			 * Anonymous consumer class that simply passes all records to the
-			 * controller
-			 */
-			@Override
-			public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-				return null; // consume all types
-			}
-
-			@Override
-			public boolean newMonitoringRecord(
-					final IMonitoringRecord monitoringRecord) {
-				return FilesystemLogReplayer.this.recordReceiver
-						.newMonitoringRecord(monitoringRecord);
-			}
-
-			@Override
-			public boolean execute() {
-				return true; // no need to do anything
-			}
-
-			@Override
-			public void terminate(final boolean error) {
-				// no need to do anything
-			}
-		};
 		AbstractMonitoringLogReader fsReader;
 		if (this.realtimeMode) {
 			fsReader = new FSReaderRealtime(this.inputDirs,
@@ -115,7 +94,8 @@ public class FilesystemLogReplayer {
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setLogReader(fsReader);
-		tpanInstance.registerPlugin(logCons);
+		tpanInstance.registerPlugin(new RecordDelegationPlugin(
+				this.recordReceiver));
 		try {
 			tpanInstance.run();
 			success = true;
@@ -124,5 +104,61 @@ public class FilesystemLogReplayer {
 			success = false;
 		}
 		return success;
+	}
+}
+
+/**
+ * Kieker analysis plugin that delegates each record to the configured
+ * {@link IMonitoringRecordReceiver}.
+ * 
+ * @author Andre van Hoorn
+ * 
+ */
+class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
+
+	private final IMonitoringRecordReceiver rec;
+
+	/**
+	 * Must not be used for construction.
+	 */
+	@SuppressWarnings("unused")
+	private RecordDelegationPlugin() {
+		this.rec = null;
+	}
+
+	public RecordDelegationPlugin(final IMonitoringRecordReceiver rec) {
+		this.rec = rec;
+	}
+
+	/*
+	 * {@inheritdoc}
+	 */
+	@Override
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+		return this.rec.newMonitoringRecord(record);
+	}
+
+	/*
+	 * {@inheritdoc}
+	 */
+	@Override
+	public boolean execute() {
+		return true;
+	}
+
+	/*
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void terminate(final boolean error) {
+		return;
+	}
+
+	/*
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+		return null; // receive records of any type
 	}
 }

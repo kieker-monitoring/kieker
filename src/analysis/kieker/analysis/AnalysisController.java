@@ -23,9 +23,7 @@ import java.util.Vector;
 
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.IMonitoringLogReader;
-import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.MonitoringRecordReceiverException;
@@ -66,23 +64,38 @@ public class AnalysisController {
 
 	/**
 	 * Starts an {@link AnalysisController} instance and returns after the
-	 * configured reader finished reading and all analysis plugins terminated.
+	 * configured reader finished reading and all analysis plug-ins terminated;
+	 * or immediately, if an error occurs.
 	 * 
-	 * @throws MonitoringLogReaderException
-	 * @throws MonitoringRecordConsumerException
+	 * @return true on success; false if an error occurred
 	 */
-	public void run() throws MonitoringLogReaderException,
-			MonitoringRecordConsumerException {
-		for (final IAnalysisPlugin c : this.plugins) {
-			c.execute();
-		}
+	public boolean run() {
+		boolean success = true;
+
 		try {
+			/**
+			 * Call execute() method of all plug-ins.
+			 */
+			for (final IAnalysisPlugin c : this.plugins) {
+				if (!c.execute()) {
+					AnalysisController.log
+							.error("A plug-in's execute message failed");
+					success = false;
+				}
+			}
+
+			/**
+			 * Make sure that log reader is not null
+			 */
 			if (this.logReader == null) {
-				AnalysisController.log
-						.error("Error: LogReader is missing - cannot execute run() without it!");
-				throw new MonitoringLogReaderException(
-						" LogReader is missing - cannot execute run() without it!");
-			} else {
+				AnalysisController.log.error("No log reader registered.");
+				success = false;
+			}
+
+			/**
+			 * Add delegation receiver to reader.
+			 */
+			if (success) {
 				this.logReader
 						.addRecordReceiver(new IMonitoringRecordReceiver() {
 
@@ -93,40 +106,44 @@ public class AnalysisController {
 							@Override
 							public boolean newMonitoringRecord(
 									final IMonitoringRecord monitoringRecord) {
-								try {
-									AnalysisController.this
-											.deliverRecordToConsumers(monitoringRecord);
-								} catch (final MonitoringRecordReceiverException ex) {
-									AnalysisController.log
-											.error("Caught MonitoringRecordConsumerExecutionException",
-													ex);
-									return false;
-								}
-								return true;
+								return AnalysisController.this
+										.deliverRecordToConsumers(
+												monitoringRecord,
+												/* abort on consumer error */
+												true);
 							}
 						});
+			}
+
+			/**
+			 * Start reading
+			 */
+			if (success) {
 				if (!this.logReader.read()) {
 					AnalysisController.log
 							.error("Calling execute() on logReader returned false");
-					throw new MonitoringLogReaderException(
-							"Calling execute() on logReader returned false");
+					success = false;
 				}
 			}
-		} catch (final MonitoringLogReaderException exc) {
-			AnalysisController.log
-					.fatal("LogReaderException! Will terminate consumers.");
-			for (final IAnalysisPlugin c : this.plugins) {
-				c.terminate(true); // terminate due to an error
+		} catch (final Exception exc) {
+			AnalysisController.log.fatal("Error occurred: " + exc.getMessage());
+			success = false;
+		} finally {
+			try {
+				for (final IAnalysisPlugin c : this.plugins) {
+					c.terminate(!success); // normal termination (w/o error)
+				}
+			} catch (final Exception e) {
+				AnalysisController.log.error(
+						"Error during termination: " + e.getMessage(), e);
 			}
-			throw exc;
 		}
-		for (final IAnalysisPlugin c : this.plugins) {
-			c.terminate(false); // terminate due to an error
-		}
+
+		return success;
 	}
 
 	/**
-	 * Sets the log reader used as the source for monitoring records. 
+	 * Sets the log reader used as the source for monitoring records.
 	 * 
 	 * @param reader
 	 */
@@ -135,7 +152,7 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Adds the given consumer to the analysis. 
+	 * Adds the given consumer to the analysis.
 	 * 
 	 * @param consumer
 	 */
@@ -160,7 +177,7 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Registers the passed plugin <i>c<i>. If <i>c</i> is an instance of the
+	 * Registers the passed plug-in <i>c<i>. If <i>c</i> is an instance of the
 	 * interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered as
 	 * a record consumer.
 	 */
@@ -180,23 +197,45 @@ public class AnalysisController {
 	 * type of records.
 	 * 
 	 * @param monitoringRecord
-	 *            the record
-	 * @throws LogReaderExecutionException
-	 *             if an error occurs
+	 * @param abortOnConsumerError
+	 *            if true, the method returns immediately when a consumer
+	 *            reports an error
+	 * @return
+	 * @throws MonitoringRecordReceiverException
+	 *             true if no consumer reported an error; false if at least one
+	 *             consumer reported an error
 	 */
-	private final void deliverRecordToConsumers(
-			final IMonitoringRecord monitoringRecord)
-			throws MonitoringRecordReceiverException {
+	private final boolean deliverRecordToConsumers(
+			final IMonitoringRecord monitoringRecord,
+			final boolean abortOnConsumerError) {
+
+		boolean success = true;
 
 		for (final IMonitoringRecordConsumerPlugin c : this.anyTypeConsumers) {
-			c.newMonitoringRecord(monitoringRecord);
+			if (!c.newMonitoringRecord(monitoringRecord)) {
+				success = false;
+				if (abortOnConsumerError) {
+					AnalysisController.log
+							.warn("Consumer returned false. Aborting delivery of record. ");
+					return false;
+				}
+			}
 		}
 		final Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers
 				.get(monitoringRecord.getClass());
 		if (cList != null) {
 			for (final IMonitoringRecordConsumerPlugin c : cList) {
-				c.newMonitoringRecord(monitoringRecord);
+				if (!c.newMonitoringRecord(monitoringRecord)) {
+					success = false;
+					if (abortOnConsumerError) {
+						AnalysisController.log
+								.warn("Consumer returned false. Aborting delivery of record. ");
+						return false;
+					}
+				}
 			}
 		}
+
+		return success;
 	}
 }

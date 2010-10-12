@@ -18,9 +18,10 @@ package kieker.monitoring.probe.manual;
  * ==================================================
  */
 
-import kieker.monitoring.core.MonitoringController;
 import kieker.common.record.BranchingRecord;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.probe.IMonitoringProbe;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -33,13 +34,13 @@ public class BranchingProbe implements IMonitoringProbe {
     private static final Log log = LogFactory.getLog(BranchingProbe.class);
     private static final MonitoringController ctrlInst = MonitoringController.getInstance();
 
-    public static void monitorBranch(int branchID, int branchingOutcome){
+    public static void monitorBranch(final int branchID, final int branchingOutcome){
         /* try-catch in order to avoid that any exception is propagated
          * to the application code. */
         try{
-            ctrlInst.newMonitoringRecord(new BranchingRecord(ctrlInst.currentTimeNanos(), branchID, branchingOutcome));
-        }catch(Exception exc){
-            log.error("Error monitoring branching", exc);
+            BranchingProbe.ctrlInst.newMonitoringRecord(new BranchingRecord(MonitoringController.currentTimeNanos(), branchID, branchingOutcome));
+        }catch(final Exception exc){
+            BranchingProbe.log.error("Error monitoring branching", exc);
         }
     }
 }

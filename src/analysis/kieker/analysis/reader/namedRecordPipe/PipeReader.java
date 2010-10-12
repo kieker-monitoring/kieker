@@ -3,7 +3,6 @@ package kieker.analysis.reader.namedRecordPipe;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.reader.AbstractMonitoringLogReader;
-import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
@@ -33,8 +32,6 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 		return this.pipe;
 	}
 
-	private String pipeName;
-
 	public PipeReader() {
 	}
 
@@ -46,13 +43,13 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 
 	private void initPipe(final String pipeName)
 			throws IllegalArgumentException {
-		this.pipeName = pipeName;
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
-			PipeReader.log.error("Failed to get Pipe with name "
-					+ this.pipeName);
+			PipeReader.log.error("Failed to get Pipe with name " + pipeName);
 			throw new IllegalArgumentException("Failed to get Pipe with name "
-					+ this.pipeName);
+					+ pipeName);
+		} else {
+			PipeReader.log.info("Connectod to named pipe '" + this.pipe.getName() + "'");
 		}
 		this.pipe.setPipeReader(this);
 	}
@@ -61,7 +58,7 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 	 * Blocks until the associated pipe is being closed.
 	 */
 	@Override
-	public boolean read() throws MonitoringLogReaderException {
+	public boolean read() {
 		// No need to initialize since we receive asynchronously
 		try {
 			this.terminationLatch.await();
@@ -78,8 +75,8 @@ public final class PipeReader extends AbstractMonitoringLogReader implements
 		final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
 																				// IllegalArgumentException
 		this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-		PipeReader.log.info("Connected to pipe '" + this.pipeName + "'" + " ("
-				+ this.pipe + ")");
+		PipeReader.log.info("Connected to pipe '" + this.pipe.getName() + "'"
+				+ " (" + this.pipe + ")");
 	}
 
 	@Override

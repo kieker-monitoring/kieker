@@ -5,21 +5,23 @@
 
 package kieker.analysis.reader;
 
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.ConnectionParameters;
-import com.rabbitmq.client.QueueingConsumer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import kieker.common.record.OperationExecutionRecord;
+import kieker.common.util.PropertyMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import kieker.common.record.OperationExecutionRecord;
-import kieker.common.util.PropertyMap;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.ConnectionParameters;
+import com.rabbitmq.client.QueueingConsumer;
 /**
  *
  * This reader is an alternative to the JMS reader. RabbitMQ
@@ -51,9 +53,9 @@ public class RabbitMqReader extends AbstractMonitoringLogReader {
      * @param rmqPassword
      * @param rmqPortNumber
      */
-    public RabbitMqReader(String rmqHostName, String rmqVirtualHost, String rmqExchangeName, String rmqQueueName,
-            String rmqUserName, String rmqRoutingKey, String rmqPassword, int rmqPortNumber ) {
-            initInstanceFromArgs(rmqHostName, rmqVirtualHost, rmqExchangeName, rmqQueueName,
+    public RabbitMqReader(final String rmqHostName, final String rmqVirtualHost, final String rmqExchangeName, final String rmqQueueName,
+            final String rmqUserName, final String rmqRoutingKey, final String rmqPassword, final int rmqPortNumber ) {
+            this.initInstanceFromArgs(rmqHostName, rmqVirtualHost, rmqExchangeName, rmqQueueName,
             rmqUserName, rmqRoutingKey, rmqPassword, rmqPortNumber);  // throws IllegalArgumentException
     }
 
@@ -64,24 +66,25 @@ public class RabbitMqReader extends AbstractMonitoringLogReader {
 
     /** Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 */
     
-    public void init(String initString) throws IllegalArgumentException {
-        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+    @Override
+	public void init(final String initString) throws IllegalArgumentException {
+        final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
 
-        rmqHostName = propertyMap.getProperty("rmqHostName", null);
-        rmqVirtualHost = propertyMap.getProperty("rmqVirtualHost", null);
-        rmqExchangeName = propertyMap.getProperty("rmqExchangeName", null);
-        rmqQueueName = propertyMap.getProperty("rmqQueueName", null);
-        rmqUserName =propertyMap.getProperty("rmqUserName", null);
-        rmqRoutingKey =propertyMap.getProperty("rmqRoutingKey", null);
-        rmqPassword = propertyMap.getProperty("rmqPassword", null);
-        rmqPortNumber = Integer.parseInt(propertyMap.getProperty("rmqPortNumber", null));
-         initInstanceFromArgs(rmqHostName, rmqVirtualHost, rmqExchangeName, rmqQueueName,
-            rmqUserName, rmqRoutingKey, rmqPassword, rmqPortNumber);
+        this.rmqHostName = propertyMap.getProperty("rmqHostName", null);
+        this.rmqVirtualHost = propertyMap.getProperty("rmqVirtualHost", null);
+        this.rmqExchangeName = propertyMap.getProperty("rmqExchangeName", null);
+        this.rmqQueueName = propertyMap.getProperty("rmqQueueName", null);
+        this.rmqUserName =propertyMap.getProperty("rmqUserName", null);
+        this.rmqRoutingKey =propertyMap.getProperty("rmqRoutingKey", null);
+        this.rmqPassword = propertyMap.getProperty("rmqPassword", null);
+        this.rmqPortNumber = Integer.parseInt(propertyMap.getProperty("rmqPortNumber", null));
+         this.initInstanceFromArgs(this.rmqHostName, this.rmqVirtualHost, this.rmqExchangeName, this.rmqQueueName,
+            this.rmqUserName, this.rmqRoutingKey, this.rmqPassword, this.rmqPortNumber);
     }
 
-   private void initInstanceFromArgs(String rmqHostName, String rmqVirtualHost, String rmqExchangeName,
-           String rmqQueueName, String rmqUserName, String rmqRoutingKey, String rmqPassword, int rmqPortNumber) {
-        initInstanceFromArgs(rmqHostName, rmqVirtualHost, rmqExchangeName, rmqQueueName,
+   private void initInstanceFromArgs(final String rmqHostName, final String rmqVirtualHost, final String rmqExchangeName,
+           final String rmqQueueName, final String rmqUserName, final String rmqRoutingKey, final String rmqPassword, final int rmqPortNumber) {
+        this.initInstanceFromArgs(rmqHostName, rmqVirtualHost, rmqExchangeName, rmqQueueName,
             rmqUserName, rmqRoutingKey, rmqPassword, rmqPortNumber);  // throws IllegalArgumentException
     }
 
@@ -90,23 +93,23 @@ public class RabbitMqReader extends AbstractMonitoringLogReader {
     /**
      * A call to this method is a blocking call.
      */
-    public boolean read() throws MonitoringLogReaderException {
-        boolean retVal = false;
+    public boolean read() {
+        final boolean retVal = false;
 
-        System.out.printf("Starting connection to the Rabbit MQ message broker at %s : %d. (User %s, Pass %s)\n",rmqHostName,rmqPortNumber,rmqUserName,rmqPassword);
+        System.out.printf("Starting connection to the Rabbit MQ message broker at %s : %d. (User %s, Pass %s)\n",this.rmqHostName,this.rmqPortNumber,this.rmqUserName,this.rmqPassword);
 
         Channel channel = null;
         try {
-            ConnectionParameters params = new ConnectionParameters();
-            params.setUsername(rmqUserName);
-            params.setPassword(rmqPassword);
-            params.setVirtualHost(rmqVirtualHost);
+            final ConnectionParameters params = new ConnectionParameters();
+            params.setUsername(this.rmqUserName);
+            params.setPassword(this.rmqPassword);
+            params.setVirtualHost(this.rmqVirtualHost);
             params.setRequestedHeartbeat(0);
-            ConnectionFactory factory = new ConnectionFactory(params);
-            Connection conn = factory.newConnection(rmqHostName, rmqPortNumber);
-            System.out.printf("Successfully connect to the rabbit MQ message broker at %s : %d. \n", rmqHostName, rmqPortNumber);
+            final ConnectionFactory factory = new ConnectionFactory(params);
+            final Connection conn = factory.newConnection(this.rmqHostName, this.rmqPortNumber);
+            System.out.printf("Successfully connect to the rabbit MQ message broker at %s : %d. \n", this.rmqHostName, this.rmqPortNumber);
             channel = conn.createChannel();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger( this.getClass().getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error: Failed to connect to the rabbit MQ message broker.");
             System.out.println(ex.getMessage());
@@ -114,45 +117,45 @@ public class RabbitMqReader extends AbstractMonitoringLogReader {
 
         int numberOfMessagesReceived = 0;
         // Retrieving messages by subscription
-        boolean noAck = false;
-        QueueingConsumer consumer = new QueueingConsumer(channel);
+        final boolean noAck = false;
+        final QueueingConsumer consumer = new QueueingConsumer(channel);
         try {
-            channel.basicConsume(rmqQueueName, noAck, consumer);
+            channel.basicConsume(this.rmqQueueName, noAck, consumer);
 
-        System.out.printf("Listening for messages at queue %s\n", rmqQueueName);
+        System.out.printf("Listening for messages at queue %s\n", this.rmqQueueName);
         while (true) {
             QueueingConsumer.Delivery delivery;
             numberOfMessagesReceived++;
             try {
                 delivery = consumer.nextDelivery();
-            } catch (InterruptedException ie) {
+            } catch (final InterruptedException ie) {
                 continue;
             }
             // (process the message components ...)
-            String execRecordString = new String(delivery.getBody());
+            final String execRecordString = new String(delivery.getBody());
 
         try {
             //AbstractMonitoringRecord abs = AbstractMonitoringRecord.getInstance();
             //abs.initFromStringArray(toStringArray(execRecordString));
-            int indexOfFirstTokenEnd = execRecordString.indexOf(";");
-            String execRecStringWithoutFirstToken = execRecordString.substring(indexOfFirstTokenEnd+1, execRecordString.length());
+            final int indexOfFirstTokenEnd = execRecordString.indexOf(";");
+            final String execRecStringWithoutFirstToken = execRecordString.substring(indexOfFirstTokenEnd+1, execRecordString.length());
 
-            OperationExecutionRecord ker = new OperationExecutionRecord();
+            final OperationExecutionRecord ker = new OperationExecutionRecord();
             if (true){
             throw new RuntimeException("tokenize string");
             }
             // OLD: ker.initFromString(execRecStringWithoutFirstToken);
             // System.out.println(execRecStringWithoutFirstToken);
             //    System.out.printf("Recieved (%d) and decoded KiekerExecutionRecord: %s \n", numberOfMessagesReceived, ker);
-            deliverRecord(ker);
-            } catch (Exception e) {
+            this.deliverRecord(ker);
+            } catch (final Exception e) {
                 System.out.printf("Recieved (%d) but could not Decode as KiekerExecutionRecord: %s \n %s", numberOfMessagesReceived, execRecordString,e.getMessage());
                 //     System.out.printf("Skipping Message (%d) (Not proper KiekerExecutionRecord) \n");
             }
             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         }
 
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger(RabbitMqReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         return retVal;
@@ -160,9 +163,9 @@ public class RabbitMqReader extends AbstractMonitoringLogReader {
 
 
     
-    private final String[] toStringArray(String stringSerialization){
-        StringTokenizer stk = new StringTokenizer(stringSerialization,";");
-        ArrayList<String> als = new ArrayList<String>();
+    private final String[] toStringArray(final String stringSerialization){
+        final StringTokenizer stk = new StringTokenizer(stringSerialization,";");
+        final ArrayList<String> als = new ArrayList<String>();
         while (stk.hasMoreElements()) {
             als.add(stk.nextToken());
         }

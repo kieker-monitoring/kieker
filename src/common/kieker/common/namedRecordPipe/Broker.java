@@ -13,7 +13,10 @@ public class Broker {
 	private static final Broker INSTANCE = new Broker();
 	private static final Log log = LogFactory.getLog(Broker.class);
 
-	/* Not synchronized! */
+	/**
+	 * Access synchronized through synchronized method
+	 * {@link #acquirePipe(String)} !
+	 */
 	private final HashMap<String, Pipe> pipeMap = new HashMap<String, Pipe>();
 
 	public static Broker getInstance() {
@@ -26,10 +29,11 @@ public class Broker {
 	 */
 	public synchronized Pipe acquirePipe(final String pipeName)
 			throws IllegalArgumentException {
-		if ((pipeName == null) || (pipeName.length() == 0)) {
-			Broker.log.error("Invalid connection name " + pipeName);
-			throw new IllegalArgumentException("Invalid connection name "
-					+ pipeName);
+		if ((pipeName == null) || (pipeName.isEmpty())) {
+			final String errorMsg = "pipeName must not be null or empty!  (Found: "
+					+ pipeName + ")";
+			Broker.log.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 		Pipe conn = this.pipeMap.get(pipeName);
 		if (conn == null) {

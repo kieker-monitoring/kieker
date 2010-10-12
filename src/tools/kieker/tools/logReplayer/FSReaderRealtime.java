@@ -26,7 +26,6 @@ import java.util.concurrent.CountDownLatch;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.AbstractMonitoringLogReader;
-import kieker.analysis.reader.MonitoringLogReaderException;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
@@ -139,7 +138,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
         }
 
         if (numWorkers <= 0) {
-            throw new IllegalArgumentException("Invalid proprty value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers);
+            throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers);
         }
 
         final AbstractMonitoringLogReader fsReader = new FSReader(inputDirNames);
@@ -155,14 +154,14 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
      * log was being replayed.
      */
     @Override
-	public boolean read() throws MonitoringLogReaderException {
+	public boolean read() {
         final boolean success = true;
         try {
             this.tpanInstance.run();
             this.terminationLatch.await();
         } catch (final Exception ex) {
             FSReaderRealtime.log.error("An error occured while reading", ex);
-            throw new MonitoringLogReaderException("An error occured while reading", ex);
+            return false;
         }
         return success;
     }

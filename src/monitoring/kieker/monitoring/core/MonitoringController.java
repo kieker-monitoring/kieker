@@ -36,7 +36,6 @@ import org.apache.commons.logging.LogFactory;
  */
 
 /**
- * Will become the new Monitoring Controller as soon as it is properly tested.
  * 
  * @author Andre van Hoorn, Matthias Rohr
  * 
@@ -60,10 +59,18 @@ public final class MonitoringController implements IMonitoringController {
 			- System.nanoTime();
 
 	/**
-	 * The singleton instance of the monitoring controller
+	 * http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
+	 * 
+	 * @author Andre van Hoorn
+	 *
 	 */
-	private static final MonitoringController SINGLETON_INSTANCE = new MonitoringController(
-			MonitoringConfiguration.createSingletonConfiguration());
+	private static class LazyHolder {
+		/**
+		 * The singleton instance of the monitoring controller
+		 */
+		private static final MonitoringController SINGLETON_INSTANCE = new MonitoringController(
+				MonitoringConfiguration.createSingletonConfiguration());
+	}
 
 	/**
 	 * Returns the singleton instance.
@@ -71,7 +78,7 @@ public final class MonitoringController implements IMonitoringController {
 	public static MonitoringController getInstance() {
 		// TODO: change to lazy initialization
 
-		return MonitoringController.SINGLETON_INSTANCE;
+		return LazyHolder.SINGLETON_INSTANCE;
 	}
 
 	/**
@@ -143,7 +150,7 @@ public final class MonitoringController implements IMonitoringController {
 	 * Returns the timestamp for the current time. The value corresponds to the
 	 * number of nanoseconds elapsed since January 1, 1970 UTC.
 	 */
-	public final long currentTimeNanos() {
+	public final static long currentTimeNanos() {
 		return System.nanoTime() + MonitoringController.offsetA;
 	}
 
@@ -197,7 +204,7 @@ public final class MonitoringController implements IMonitoringController {
 	 * 
 	 * @return the date/time string.
 	 */
-	public String getDateString() {
+	public static String getDateString() {
 		return java.util.Calendar.getInstance().getTime().toString();
 	}
 
@@ -251,7 +258,7 @@ public final class MonitoringController implements IMonitoringController {
 	 * 
 	 * @return the version name
 	 */
-	public String getVersion() {
+	public static String getVersion() {
 		return Version.getVERSION();
 	}
 
@@ -285,6 +292,7 @@ public final class MonitoringController implements IMonitoringController {
 
 	/**
 	 * Returns whether controller is in real-time mode state.
+	 * .currentTimeNanos()
 	 * 
 	 * @see #enableRealtimeMode()
 	 * @see #enableReplayMode()
@@ -324,7 +332,8 @@ public final class MonitoringController implements IMonitoringController {
 			}
 			this.numberOfInserts.incrementAndGet();
 			if (this.isRealtimeMode()) {
-				record.setLoggingTimestamp(this.currentTimeNanos());
+				record.setLoggingTimestamp(MonitoringController
+						.currentTimeNanos());
 			}
 			if (!this.monitoringLogWriter.newMonitoringRecord(record)) {
 				MonitoringController.log
@@ -383,6 +392,8 @@ public final class MonitoringController implements IMonitoringController {
 
 	@Override
 	public void terminateMonitoring() {
+		MonitoringController.log.info("Monitoring controller ("
+				+ this.instanceName + ") terminates monitoring");
 		if (this.monitoringLogWriter != null) {
 			/* if the initialization of the writer failed, it is set to null */
 			if (!this.monitoringLogWriter

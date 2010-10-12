@@ -2,22 +2,24 @@ package kieker.analysis.reader;
 
 import java.io.Serializable;
 import java.util.Hashtable;
-import javax.jms.JMSException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.jms.ConnectionFactory;
+
 import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
+import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.Session;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageFormatException;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,8 +44,8 @@ public class JMSReader extends AbstractMonitoringLogReader {
      * @throws IllegalArgumentException if passed parameters are null or empty.
      * @return
      */
-    public JMSReader(String jmsProviderUrl, String jmsDestination) {
-            initInstanceFromArgs(jmsProviderUrl, jmsDestination);  // throws IllegalArgumentException
+    public JMSReader(final String jmsProviderUrl, final String jmsDestination) {
+            this.initInstanceFromArgs(jmsProviderUrl, jmsDestination);  // throws IllegalArgumentException
     }
 
     /** Constructor for JMSReader. Requires a subsequent call to the init
@@ -54,18 +56,19 @@ public class JMSReader extends AbstractMonitoringLogReader {
 
    /** Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 */
     
-    public void init(String initString) throws IllegalArgumentException {
-        PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+    @Override
+	public void init(final String initString) throws IllegalArgumentException {
+        final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
 
-        String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
-        String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
-        initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP); // throws IllegalArgumentException
+        final String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
+        final String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
+        this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP); // throws IllegalArgumentException
     }
 
     private void initInstanceFromArgs(final String jmsProviderUrl,
             final String jmsDestination) throws IllegalArgumentException {
-        if (jmsProviderUrl == null || jmsProviderUrl.equals("")
-                || jmsDestination == null || jmsDestination.equals("")) {
+        if ((jmsProviderUrl == null) || jmsProviderUrl.equals("")
+                || (jmsDestination == null) || jmsDestination.equals("")) {
             throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl or jmsDestination is null");
         }
 
@@ -76,52 +79,54 @@ public class JMSReader extends AbstractMonitoringLogReader {
     /**
      * A call to this method is a blocking call.
      */
-    public boolean read() throws MonitoringLogReaderException {
+    @Override
+	public boolean read() {
         boolean retVal = false;
         try {
-            Hashtable<String, String> properties = new Hashtable<String, String>();
+            final Hashtable<String, String> properties = new Hashtable<String, String>();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.exolab.jms.jndi.InitialContextFactory");
 
             // JMS initialization
-            properties.put(Context.PROVIDER_URL, jmsProviderUrl);
-            Context context = new InitialContext(properties);
-            ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
-            Connection connection = factory.createConnection();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = (Destination) context.lookup(jmsDestination);
-            log.info("\n\n***\nListening to destination:" + destination + " at " + jmsProviderUrl + " !\n***\n\n");
-            MessageConsumer receiver = session.createConsumer(destination);
+            properties.put(Context.PROVIDER_URL, this.jmsProviderUrl);
+            final Context context = new InitialContext(properties);
+            final ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
+            final Connection connection = factory.createConnection();
+            final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            final Destination destination = (Destination) context.lookup(this.jmsDestination);
+            JMSReader.log.info("\n\n***\nListening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+            final MessageConsumer receiver = session.createConsumer(destination);
             receiver.setMessageListener(new MessageListener() {
                 // the MessageListener will read onMessage each time a message comes in
 
-                public void onMessage(Message jmsMessage) {
+                @Override
+				public void onMessage(final Message jmsMessage) {
                     if (jmsMessage instanceof TextMessage) {
-                        TextMessage text = (TextMessage) jmsMessage;
-                        log.info("Received text message: " + text);
+                        final TextMessage text = (TextMessage) jmsMessage;
+                        JMSReader.log.info("Received text message: " + text);
 
                     } else {
-                        ObjectMessage om = (ObjectMessage) jmsMessage;
+                        final ObjectMessage om = (ObjectMessage) jmsMessage;
                         //System.out.println("Received object message: " + om.toString());
                         try {
-                            Serializable omo = om.getObject();
+                            final Serializable omo = om.getObject();
                             if (omo instanceof IMonitoringRecord) {
-                                IMonitoringRecord rec =
+                                final IMonitoringRecord rec =
                                         (IMonitoringRecord) omo;
-                                if (!deliverRecord(rec)){
-                                    log.error("deliverRecord returned false");
+                                if (!JMSReader.this.deliverRecord(rec)){
+                                    JMSReader.log.error("deliverRecord returned false");
                                     throw new MonitoringLogReaderException("deliverRecord returned false");
                                 }
                             } else {
-                                log.info("Unknown type of message " + om);
+                                JMSReader.log.info("Unknown type of message " + om);
                             }
-                        } catch (MessageFormatException em) {
-                            log.fatal("MessageFormatException:", em);
-                        } catch (JMSException ex) {
-                            log.fatal("JMSException ", ex);
-                        } catch (MonitoringLogReaderException ex) {
-                            log.error("LogReaderExecutionException", ex);
-                        } catch (Exception ex) {
-                            log.error("Exception", ex);
+                        } catch (final MessageFormatException em) {
+                            JMSReader.log.fatal("MessageFormatException:", em);
+                        } catch (final JMSException ex) {
+                            JMSReader.log.fatal("JMSException ", ex);
+                        } catch (final MonitoringLogReaderException ex) {
+                            JMSReader.log.error("LogReaderExecutionException", ex);
+                        } catch (final Exception ex) {
+                            JMSReader.log.error("Exception", ex);
                         }
                     }
                 }
@@ -134,7 +139,8 @@ public class JMSReader extends AbstractMonitoringLogReader {
             final Object blockingObj = new Object();
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
-                public void run() {
+                @Override
+				public void run() {
                     synchronized (blockingObj) {
                         blockingObj.notifyAll();
                     }
@@ -143,8 +149,8 @@ public class JMSReader extends AbstractMonitoringLogReader {
             synchronized (blockingObj) {
                 blockingObj.wait();
             }
-            log.info("Woke up by shutdown hook");
-        } catch (Exception ex) {
+            JMSReader.log.info("Woke up by shutdown hook");
+        } catch (final Exception ex) {
             System.out.println("" + JMSReader.class.getName() + " " + ex.getMessage());
             ex.printStackTrace();
             retVal = false;

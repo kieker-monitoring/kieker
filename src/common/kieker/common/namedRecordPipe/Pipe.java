@@ -1,5 +1,24 @@
 package kieker.common.namedRecordPipe;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2010 Kieker Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ *
+ */
+
 import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
@@ -35,17 +54,33 @@ public final class Pipe {
 		this.name = name;
 	}
 
-	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord)
-			throws PipeException {
+	/**
+	 * Passe the monitoring record to the registered pipe reader.
+	 * 
+	 * @param monitoringRecord
+	 * @throws PipeException
+	 *             if the pipe is closed or no pipe reader is registered
+	 */
+	public boolean writeMonitoringRecord(
+			final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {
-			Pipe.log.error("trying to write to closed pipe");
-			throw new PipeException("trying to write to closed pipe");
+			final String errorMsg = "trying to write to closed pipe";
+			Pipe.log.error(errorMsg);
+			return false;
 		}
-		this.pipeReader.newMonitoringRecord(monitoringRecord);
+		if (this.pipeReader == null) {
+			final String errorMsg = "pipeReader is null, i.e., no pipe reader has been registered.";
+			Pipe.log.error(errorMsg);
+			return false;
+		}
+
+		return this.pipeReader.newMonitoringRecord(monitoringRecord);
 	}
 
 	public void close() {
 		this.closed = true;
-		this.pipeReader.notifyPipeClosed();
+		if (this.pipeReader != null) {
+			this.pipeReader.notifyPipeClosed();
+		}
 	}
 }

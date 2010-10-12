@@ -2,7 +2,7 @@ package kieker.tools.logReplayer;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2010 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import kieker.common.record.IMonitoringRecord;
+
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
-
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.logging.Log;
@@ -47,13 +47,13 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
     private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
     private final ScheduledThreadPoolExecutor executor;
     private long lTime;
-    private static final MonitoringController ctrlnst = MonitoringController.getInstance();
     private volatile int active;
     private final int maxQueueSize;
     private final CountDownLatch terminationLatch;
 
-    /** Private constructor should not be used */
-    private RealtimeReplayDistributor() {
+    /** Private constructor must not be used */
+    @SuppressWarnings("unused")
+	private RealtimeReplayDistributor() {
         this.executor = null;
         this.numWorkers = -1;
         this.cons = null;
@@ -80,7 +80,8 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
     //private static final String outputFn = "SchedulingList";
     //private static PrintStream ps;
-    public boolean newMonitoringRecord(
+    @Override
+	public boolean newMonitoringRecord(
             final IMonitoringRecord monitoringRecord) {
         if (this.startTime == -1) { // init on first record
             //try {
@@ -90,26 +91,26 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             //    log.info("FileNotFound:", ex);
             //}
             this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance
-            this.offset = (2 * 1000 * 1000 * 1000) - firstLoggingTimestamp;
-            this.startTime = ctrlnst.currentTimeNanos();
+            this.offset = (2 * 1000 * 1000 * 1000) - this.firstLoggingTimestamp;
+            this.startTime = MonitoringController.currentTimeNanos();
             //log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);
             //log.info("offset: " + this.offset);
             //log.info("startTime" + this.startTime);
         }
         if (monitoringRecord.getLoggingTimestamp() < this.firstLoggingTimestamp) {
-            MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("Timestamp of current record " + monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
-            log.error("RecordConsumerExecutionException", e);
+            final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("Timestamp of current record " + monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
+            RealtimeReplayDistributor.log.error("RecordConsumerExecutionException", e);
             return false;
         }
-        long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
-                - (ctrlnst.currentTimeNanos() - this.startTime); // substract elapsed time
+        final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
+                - (MonitoringController.currentTimeNanos() - this.startTime); // substract elapsed time
         //ps.println("curT.record: " + monitoringRecord.getLoggingTimestamp());ps.flush();
         //ps.println("curT.ctrl: " + ctrlnst.currentTimeNanos());ps.flush();
         //ps.println("elapsedT (nsec): " + (ctrlnst.currentTimeNanos() - this.startTime));
         //ps.println("schedTime (nsec): " + schedTime);
         if (schedTime < 0) {
-            MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
-            log.error("RecordConsumerExecutionException", e);
+            final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
+            RealtimeReplayDistributor.log.error("RecordConsumerExecutionException", e);
             return false;
         }
         synchronized (this) {
@@ -117,7 +118,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
                 //log.info("this.active > this.maxQueueSize ("+this.active+"<"+this.maxQueueSize+")");
                 try {
                     this.wait();
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -131,11 +132,13 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
         return true;
     }
 
-    public boolean execute() {
+    @Override
+	public boolean execute() {
         return true;
     }
 
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+    @Override
+	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
         return null;
     }
 
@@ -147,17 +150,19 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
         return this.startTime;
     }
 
-    public void terminate(final boolean error) {
-        long terminationDelay = (this.lTime + this.offset) - (ctrlnst.currentTimeNanos() - this.startTime) + 100000000;
-        log.info("Will terminate in " + terminationDelay + "nsecs from now");
+    @Override
+	public void terminate(final boolean error) {
+        final long terminationDelay = (this.lTime + this.offset) - (MonitoringController.currentTimeNanos() - this.startTime) + 100000000;
+        RealtimeReplayDistributor.log.info("Will terminate in " + terminationDelay + "nsecs from now");
         this.executor.schedule(new Runnable() {
 
-            public void run() {
+            @Override
+			public void run() {
                 //ctrlnst.terminateMonitoring();
-                if (terminationLatch != null) {
-                    terminationLatch.countDown(); // signal that last record has been scheduled
+                if (RealtimeReplayDistributor.this.terminationLatch != null) {
+                    RealtimeReplayDistributor.this.terminationLatch.countDown(); // signal that last record has been scheduled
                 } else {
-                    log.warn("terminationLatch == null");
+                    RealtimeReplayDistributor.log.warn("terminationLatch == null");
                 }
                 //cons.terminate(error);
                 //log.info("Terminating Controller");
