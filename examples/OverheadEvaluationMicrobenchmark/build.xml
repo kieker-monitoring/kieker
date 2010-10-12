@@ -2,7 +2,7 @@
 <project name="KiekerOverheadEvaluation" default="build-all" basedir=".">
   <property file="build.properties"/>
 
-  <target name="build-all" depends="clean,init,compile-all" />
+  <target name="build-all" depends="clean,init,compile,jar" />
 
   <target name="init" depends="">
     <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
@@ -11,10 +11,11 @@
       <condition><not><available file="lib/aspectjtools.jar"/></not></condition>
     </fail>
     <mkdir dir="build"/>
+    <mkdir dir="dist"/>
     <mkdir dir="tmp"/>
   </target>
 
-  <target name="compile-all" depends="init">
+  <target name="compile" depends="init">
     <path id="compile-classpath">
       <fileset dir="lib/">
         <include name="commons-cli-*.jar"/>
@@ -47,10 +48,18 @@
           </sourceroots>
     </iajc>
   </target>
+  
+  <target name="jar" depends="compile">
+    <jar destfile="dist/OverheadEvaluationMicrobenchmark.jar">
+      <fileset dir="build"/>
+      <fileset dir="." includes="LICENSE README" />
+    </jar>
+  </target>
 
   <target name="clean">
     <!--<delete dir="tmp"/>-->
     <delete dir="build"/>
+    <delete dir="dist"/>
   </target>
 
 </project>
