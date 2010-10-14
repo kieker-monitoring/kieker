@@ -7,59 +7,47 @@ import kieker.monitoring.core.MonitoringController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/* 
+/*
  * ==================LICENCE=========================
- * Copyright 2006-2008 Matthias Rohr and the Kieker Project 
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- * /
-
- /**
- * Become the new ShutDownHook. 
+ * Copyright 2006-2010 Kieker Project
  * 
- * This class ensures that virtual machine shutdown (e.g., cause by a
- * System.exit(int)) is delayed until all monitoring data is written.
- * This is important for the asynchronous writers for the files system
- * and database, since these store data with a small delay and data would
- * be lost when System.exit is not delayed.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License. ================================================== /
+ * 
+ * /** This class ensures that virtual machine shutdown (e.g., cause by a
+ * System.exit(int)) is delayed until all monitoring data is written. This is
+ * important for the asynchronous writers for the files system and database,
+ * since these store data with a small delay and data would be lost when
+ * System.exit is not delayed.
  * 
  * When the system shutdown is initiated, the termination of the Virtual Machine
  * is delayed until all registered worker queues are empty.
  * 
  * @author Matthias Rohr
- * 
- * TODO: Bind to controller instance
- * 
- * History: 
- * 2008/01/04: Refactoring for the first release of 
- *             Kieker and publication under an open source licence
- * 2007/12/16: Initial Prototype
  */
 public class ShutdownHook extends Thread {
 
 	private static final Log log = LogFactory.getLog(ShutdownHook.class);
 
 	private final MonitoringController ctrl;
-	
+
 	/**
 	 * Must not be used for construction
 	 */
 	@SuppressWarnings("unused")
-	private ShutdownHook (){
+	private ShutdownHook() {
 		this.ctrl = null;
 	}
-	
+
 	public ShutdownHook(final MonitoringController ctrl) {
 		this.ctrl = ctrl;
 	}
@@ -84,15 +72,18 @@ public class ShutdownHook extends Thread {
 		try {
 			// is called when VM shutdown (e.g., strg+c) is initiated or when
 			// system.exit is called
-			ShutdownHook.log.info("Tpmon: TpmonShutdownHook notifies all workers to initiate shutdown");
+			ShutdownHook.log
+					.info("ShutdownHook notifies all workers to initiate shutdown");
 			this.initateShutdownForAllWorkers();
 			while (!this.allWorkersFinished()) {
 				Thread.sleep(500);
-				ShutdownHook.log.info("Tpmon: Shutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
+				ShutdownHook.log
+						.info("hutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
 			}
-			ShutdownHook.log.info("Tpmon: TpmonShutdownHook can terminate since all workers are finished");
+			ShutdownHook.log
+					.info("ShutdownHook can terminate since all workers are finished");
 		} catch (final InterruptedException ex) {
-			ShutdownHook.log.error("Tpmon: Interrupted Exception occured", ex);
+			ShutdownHook.log.error("Interrupted Exception occured", ex);
 		}
 	}
 
@@ -107,8 +98,7 @@ public class ShutdownHook extends Thread {
 
 	public synchronized boolean allWorkersFinished() {
 		for (final AbstractWorkerThread wrk : this.workers) {
-			if ((wrk != null) && (wrk.isFinished() == false))
-			 {
+			if ((wrk != null) && (wrk.isFinished() == false)) {
 				return false; // at least one busy worker exists
 			}
 		}
