@@ -35,18 +35,18 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
     private static final long serialVersionUID = 1179L;
     /** Used to identify the type of CSV records */
     private static final int numRecordFields = 9;
-    public int experimentId = -1;
-    public String hostName = DEFAULT_VALUE;
-    public String className = DEFAULT_VALUE;
-    public String operationName = DEFAULT_VALUE;
-    public String sessionId = DEFAULT_VALUE;
-    public long traceId = -1;
-    public long tin = -1;
-    public long tout = -1;
-    public int eoi = -1;
-    public int ess = -1;
-    public boolean isEntryPoint = false;
-    public Object retVal = null;
+    public volatile int experimentId = -1;
+    public volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
+    public volatile String className = OperationExecutionRecord.DEFAULT_VALUE;
+    public volatile String operationName = OperationExecutionRecord.DEFAULT_VALUE;
+    public volatile String sessionId = OperationExecutionRecord.DEFAULT_VALUE;
+    public volatile long traceId = -1;
+    public volatile long tin = -1;
+    public volatile long tout = -1;
+    public volatile int eoi = -1;
+    public volatile int ess = -1;
+    public volatile boolean isEntryPoint = false;
+    public volatile Object retVal = null;
 
     /**
      * Returns an instance of OperationExecutionRecord.
@@ -57,49 +57,50 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
     }
 
     public OperationExecutionRecord(
-            String componentName, String methodName,
-            long traceId) {
+            final String componentName, final String methodName,
+            final long traceId) {
         this.className = componentName;
         this.operationName = methodName;
         this.traceId = traceId;
     }
 
     public OperationExecutionRecord(
-            String componentName, String opName,
-            long traceId,
-            long tin, long tout) {
+            final String componentName, final String opName,
+            final long traceId,
+            final long tin, final long tout) {
         this(componentName, opName, traceId);
         this.tin = tin;
         this.tout = tout;
     }
 	
 	public OperationExecutionRecord(
-            String componentName, String opName,
-            long tin, long tout) {
+            final String componentName, final String opName,
+            final long tin, final long tout) {
         this(componentName, opName, -1, tin, tout);
     }
 
     public OperationExecutionRecord(
-            String componentName, String opName,
-            String sessionId, long traceId,
-            long tin, long tout) {
+            final String componentName, final String opName,
+            final String sessionId, final long traceId,
+            final long tin, final long tout) {
         this(componentName, opName, traceId, tin, tout);
         this.sessionId = sessionId;
     }
 
     public OperationExecutionRecord(
-            String componentName, String opName,
-            String sessionId, long traceId,
-            long tin, long tout,
-            String vnName,
-            int eoi, int ess) {
+            final String componentName, final String opName,
+            final String sessionId, final long traceId,
+            final long tin, final long tout,
+            final String vnName,
+            final int eoi, final int ess) {
         this(componentName, opName, sessionId, traceId, tin, tout);
         this.hostName = vnName;
         this.eoi = eoi;
         this.ess = ess;
     }
 
-    public final Object[] toArray() {
+    @Override
+	public final Object[] toArray() {
         return new Object[]{
                     this.experimentId,
                     this.className + "." + this.operationName,
@@ -113,7 +114,8 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
                 };
     }
 
-    public Class[] getValueTypes() {
+    @Override
+	public Class[] getValueTypes() {
         return new Class[] {
                     int.class,    // experimentId
                     String.class, // component + op
@@ -127,7 +129,8 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
                 };
     }
 
-    public final void initFromArray(Object[] values)
+    @Override
+	public final void initFromArray(final Object[] values)
             throws IllegalArgumentException {
         try {
             if (values.length != OperationExecutionRecord.numRecordFields) {
@@ -137,8 +140,8 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
 
             this.experimentId = (Integer)values[0];
             { // divide name into component and operation name
-                String name = (String)values[1];
-                int posParen = name.lastIndexOf('(');
+                final String name = (String)values[1];
+                final int posParen = name.lastIndexOf('(');
                 int posDot;
                 if (posParen != -1) {
                     posDot = name.substring(0, posParen).lastIndexOf('.');
@@ -146,10 +149,10 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
                     posDot = name.lastIndexOf('.');
                 }
                 if (posDot == -1) {
-                    className = "";
+                    this.className = "";
                     this.operationName = name;
                 } else {
-                    className = name.substring(0, posDot);
+                    this.className = name.substring(0, posDot);
                     this.operationName = name.substring(posDot + 1);
                 }
             }
@@ -160,7 +163,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
             this.hostName = (String)values[6];
             this.eoi = (Integer)values[7];
             this.ess = (Integer)values[8];
-        } catch (Exception exc) {
+        } catch (final Exception exc) {
             throw new IllegalArgumentException("Failed to init", exc);
         }
         return;
@@ -176,7 +179,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
      * @return true iff the compared records are equal.
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -185,22 +188,22 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
             return false;
         }
         
-        OperationExecutionRecord ro = (OperationExecutionRecord) o;
+        final OperationExecutionRecord ro = (OperationExecutionRecord) o;
 
         try {
         return
                 this.className.equals(ro.className) &&
-                this.eoi == ro.eoi &&
-                this.ess == ro.ess &&
+                (this.eoi == ro.eoi) &&
+                (this.ess == ro.ess) &&
                 //this.experimentId == ro.experimentId &&
                 this.operationName.equals(ro.operationName) &&
                 this.sessionId.equals(ro.sessionId) &&
-                this.tin == ro.tin &&
-                this.tout == ro.tout &&
-                this.traceId == ro.traceId &&
+                (this.tin == ro.tin) &&
+                (this.tout == ro.tout) &&
+                (this.traceId == ro.traceId) &&
                 this.hostName.equals(ro.hostName);
-        } catch (NullPointerException ex){
-            log.error(ex);
+        } catch (final NullPointerException ex){
+            OperationExecutionRecord.log.error(ex);
             return false;
         }
     }

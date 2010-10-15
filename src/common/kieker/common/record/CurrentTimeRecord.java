@@ -19,43 +19,60 @@ package kieker.common.record;
  */
 
 /**
+ * Record type which can be used to store the current time 
+ * in the field {@link #currentTime}.
+ * 
  * @author Andre van Hoorn
  */
-public class BranchingRecord extends AbstractMonitoringRecord {
+public class CurrentTimeRecord extends AbstractMonitoringRecord {
 
-    private static final long serialVersionUID = 1113L;
-    private static int numRecordFields = 3;
-    private volatile long timestamp = -1;
-    private volatile int branchID = -1;
-    private volatile int branchingOutcome = -1;
+    private static final long serialVersionUID = 112213L;
+    private static int numRecordFields = 1;
+    private volatile long currentTime = -1;
 
-    public BranchingRecord () { };
+    /**
+     * Returns the current time.
+     * 
+     * @return
+     */
+    public long getCurrentTime() {
+		return this.currentTime;
+	}
 
-    public BranchingRecord (final long timestamp, final int branchID, final int branchingOutcome) {
-        this.timestamp = timestamp;
-        this.branchID = branchID;
-        this.branchingOutcome = branchingOutcome;
+    /**
+     * Sets the current time to the given value.
+     * 
+     * @param currentTime
+     */
+	public void setCurrentTime(final long currentTime) {
+		this.currentTime = currentTime;
+	}
+
+	/**
+	 * Constructs a new {@link CurrentTimeRecord} with the 
+	 * without setting the current time value. 
+	 */
+	public CurrentTimeRecord () { };
+
+    public CurrentTimeRecord (final long timestamp) {
+        this.currentTime = timestamp;
     }
 
     @Override
-	public Class[] getValueTypes() {
+	public Class<?>[] getValueTypes() {
         return new Class[] {
           long.class, // timestamp
-          int.class,  // branchId
-          int.class   // branchingOutcome
         };
     }
 
     @Override
 	public void initFromArray(final Object[] values) throws IllegalArgumentException {
         try {
-            if (values.length != BranchingRecord.numRecordFields) {
+            if (values.length != CurrentTimeRecord.numRecordFields) {
                 throw new IllegalArgumentException("Expecting vector with "
-                        + BranchingRecord.numRecordFields + " elements but found:" + values.length);
+                        + CurrentTimeRecord.numRecordFields + " elements but found:" + values.length);
             }
-            this.timestamp = (Long) values[0];
-            this.branchID = (Integer) values[1];
-            this.branchingOutcome = (Integer) values[2];
+            this.currentTime = (Long) values[0];
         } catch (final Exception exc) {
             throw new IllegalArgumentException("Failed to init", exc);
         }
@@ -65,9 +82,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
     @Override
 	public Object[] toArray() {
         return new Object[] {
-            this.timestamp,
-            this.branchID,
-            this.branchingOutcome
+            this.currentTime,
         };
     }
 }

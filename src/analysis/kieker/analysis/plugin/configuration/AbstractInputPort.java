@@ -1,6 +1,7 @@
 package kieker.analysis.plugin.configuration;
 
 import kieker.analysis.plugin.IAnalysisEvent;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -30,7 +31,8 @@ public abstract class AbstractInputPort<T extends IAnalysisEvent> implements IIn
     private static final Log log = LogFactory.getLog(AbstractInputPort.class);
     private final String description;
 
-    private AbstractInputPort() {
+    @SuppressWarnings("unused")
+	private AbstractInputPort() {
         this.description = null;
     }
 
@@ -38,7 +40,8 @@ public abstract class AbstractInputPort<T extends IAnalysisEvent> implements IIn
         this.description = description;
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return this.description;
     }
 }
