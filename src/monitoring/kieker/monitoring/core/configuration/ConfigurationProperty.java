@@ -47,13 +47,13 @@ public enum ConfigurationProperty {
 	/* */
 	ASYNC__RECORD_QUEUE_SIZE("asyncRecordQueueSize",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "asyncRecordQueueSize",
-			"8000",
+			Integer.toString(MonitoringConfiguration.DEFAULT_ASYNC_RECORD_QUEUE_SIZE),
 			/* must not be empty: */false),
 	/* */
 	ASYNC__BLOCK_ON_FULL_QUEUE(
 			"asyncBlockOnFullQueue",
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "asyncBlockOnFullQueue",
-			"false",
+			Boolean.toString(MonitoringConfiguration.DEFAULT_ASYNC__BLOCK_ON_FULL_QUEUE),
 			/* must not be empty: */false),
 	/*
 	 * For historic reasons ;-) this property has the prefix also in the

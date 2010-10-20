@@ -76,8 +76,6 @@ public final class MonitoringController implements IMonitoringController {
 	 * Returns the singleton instance.
 	 */
 	public static MonitoringController getInstance() {
-		// TODO: change to lazy initialization
-
 		return LazyHolder.SINGLETON_INSTANCE;
 	}
 

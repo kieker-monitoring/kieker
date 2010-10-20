@@ -1,18 +1,19 @@
 package kieker.monitoring.writer.jms;
 
-import kieker.common.record.MonitoringRecordTypeClassnameMapping;
-import kieker.monitoring.writer.util.async.AbstractWorkerThread;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import kieker.monitoring.core.MonitoringController;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.MonitoringRecordTypeClassnameMapping;
 import kieker.common.util.PropertyMap;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.util.async.AbstractWorkerThread;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
@@ -38,7 +39,7 @@ import kieker.monitoring.writer.IMonitoringLogWriter;
 public final class AsyncJMSWriter implements IMonitoringLogWriter {
 
     private static final Log log = LogFactory.getLog(AsyncJMSWriter.class);
-    private Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
+    private final Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
     private static final MonitoringRecordTypeClassnameMapping TYPE_WRITER_END_OF_MONITORING_MARKER = new MonitoringRecordTypeClassnameMapping(-1, null);
     private static final IMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
     private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
@@ -50,7 +51,7 @@ public final class AsyncJMSWriter implements IMonitoringLogWriter {
     private String topic;
     private long messageTimeToLive;
     private int asyncRecordQueueSize = 8000;
-    private int asyncTypeQueueSize = 20;
+    private final int asyncTypeQueueSize = 20;
 
     /**
      * Init String. Expect key=value pairs separated by |.
@@ -67,9 +68,10 @@ public final class AsyncJMSWriter implements IMonitoringLogWriter {
      * @param initString
      * @return true on success. false on error.
      */
-    public boolean init(String initString) {
-        if (initString == null || initString.length() == 0) {
-            log.error("Invalid initString. Valid example for kieker.monitoring.properties:\n"
+    @Override
+	public boolean init(final String initString) {
+        if ((initString == null) || (initString.length() == 0)) {
+            AsyncJMSWriter.log.error("Invalid initString. Valid example for kieker.monitoring.properties:\n"
                     + "monitoringDataWriterInitString=jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000");
             return false;
         }
@@ -86,57 +88,60 @@ public final class AsyncJMSWriter implements IMonitoringLogWriter {
             this.asyncRecordQueueSize = Integer.valueOf(propertyMap.getProperty("asyncRecordQueueSize"));
 
 
-            this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
-            this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(asyncTypeQueueSize);
-            for (int i = 1; i <= numberOfJmsWriters; i++) {
-                JMSWriterThread<IMonitoringRecord> recordWriter =
-                        new JMSWriterThread<IMonitoringRecord>(recordQueue, AsyncJMSWriter.RECORD_WRITER_END_OF_MONITORING_MARKER, contextFactoryType, providerUrl, factoryLookupName, topic, messageTimeToLive);
-                typeWriterAndRecordWriters.add(recordWriter);
+            this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.asyncRecordQueueSize);
+            this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(this.asyncTypeQueueSize);
+            for (int i = 1; i <= this.numberOfJmsWriters; i++) {
+                final JMSWriterThread<IMonitoringRecord> recordWriter =
+                        new JMSWriterThread<IMonitoringRecord>(this.recordQueue, AsyncJMSWriter.RECORD_WRITER_END_OF_MONITORING_MARKER, this.contextFactoryType, this.providerUrl, this.factoryLookupName, this.topic, this.messageTimeToLive);
+                this.typeWriterAndRecordWriters.add(recordWriter);
                 recordWriter.setDaemon(true);
                 recordWriter.start();
             }
-            log.info("(" + numberOfJmsWriters + " threads) will send to the JMS server topic");
-        } catch (Exception exc) {
-            log.fatal("Error initiliazing JMS Connector", exc);
+            AsyncJMSWriter.log.info("(" + this.numberOfJmsWriters + " threads) will send to the JMS server topic");
+        } catch (final Exception exc) {
+            AsyncJMSWriter.log.fatal("Error initiliazing JMS Connector", exc);
             retVal = false;
         }
         return retVal;
     }
 
     
-    public String getInfoString() {
-        StringBuilder strB = new StringBuilder();
+    @Override
+	public String getInfoString() {
+        final StringBuilder strB = new StringBuilder();
 
         strB.append("contextFactoryType : " + this.contextFactoryType);
-        strB.append("providerUrl : " + this.providerUrl);
-        strB.append("factoryLookupName : " + this.factoryLookupName);
-        strB.append("topic : " + this.topic);
-        strB.append("messageTimeToLive : " + this.messageTimeToLive);
-
+        strB.append(", providerUrl : " + this.providerUrl);
+        strB.append(", factoryLookupName : " + this.factoryLookupName);
+        strB.append(", topic : " + this.topic);
+        strB.append(", messageTimeToLive : " + this.messageTimeToLive);
+        strB.append(", asyncRecordQueueSize :" + this.asyncRecordQueueSize);
         return strB.toString();
     }
 
     
-    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    @Override
+	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
         try {
             if (monitoringRecord == MonitoringController.END_OF_MONITORING_MARKER) {
                 // "translate" END_OF_MONITORING_MARKER
-                log.info("Found END_OF_MONITORING_MARKER. Notifying type and record writers");
+                AsyncJMSWriter.log.info("Found END_OF_MONITORING_MARKER. Notifying type and record writers");
                 this.typeQueue.add(AsyncJMSWriter.TYPE_WRITER_END_OF_MONITORING_MARKER);
                 this.recordQueue.add(AsyncJMSWriter.RECORD_WRITER_END_OF_MONITORING_MARKER);
             } else {
-                recordQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
+                this.recordQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
             }
             //int currentQueueSize = recordQueue.size();
-        } catch (Exception ex) {
-            log.error(System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
+        } catch (final Exception ex) {
+            AsyncJMSWriter.log.error(System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
             return false;
         }
         return true;
     }
 
     
-    public Vector<AbstractWorkerThread> getWorkers() {
+    @Override
+	public Vector<AbstractWorkerThread> getWorkers() {
         return this.typeWriterAndRecordWriters;
     }
 }

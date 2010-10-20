@@ -218,6 +218,8 @@ public final class AsyncDbWriter implements IMonitoringLogWriter {
         strB.append(", dbConnectionAddress : " + dbConnectionAddress2);
         strB.append(", dbTableName : " + this.dbTableName);
         strB.append(", setInitialExperimentIdBasedOnLastId : " + this.setInitialExperimentIdBasedOnLastId);
+        strB.append(", asyncRecordQueueSize :" + this.asyncRecordQueueSize);
+        strB.append(", blockOnFullQueue :" + this.blockOnFullQueue);
 
         return strB.toString();
     }

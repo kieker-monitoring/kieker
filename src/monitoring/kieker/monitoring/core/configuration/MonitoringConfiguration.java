@@ -59,6 +59,9 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 
 	private static final String LOCAL_HOST_NAME;
 
+	public static final int DEFAULT_ASYNC_RECORD_QUEUE_SIZE = 8000;
+	public static final boolean DEFAULT_ASYNC__BLOCK_ON_FULL_QUEUE = false;
+	
 	private static final Log log = LogFactory
 			.getLog(MonitoringConfiguration.class);
 
@@ -81,18 +84,18 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	/**
 	 * Creates a new configuration based on the given configuration file.
 	 * 
-	 * @param name
+	 * @param configurationName
 	 * @param configurationFile
 	 * @return
 	 * @throws IOException
 	 */
 	public static MonitoringConfiguration createConfiguration(
-			final String name, final String configurationFile)
+			final String configurationName, final String configurationFile)
 			throws IOException {
 		final Properties props = MonitoringConfiguration
 				.loadPropertiesFromFile(configurationFile);
 		final MonitoringConfiguration retVal = new MonitoringConfiguration(
-				name, props,
+				configurationName, props,
 				/* Do not consider jvm arguments */
 				false);
 
@@ -102,15 +105,15 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	/**
 	 * Creates a default configuration with the given monitoring log writer.
 	 * 
-	 * @param name
+	 * @param configurationName
 	 * @return
 	 */
 	public static MonitoringConfiguration createDefaultConfiguration(
-			final String name, final IMonitoringLogWriter monitoringLogWriter) {
+			final String configurationName, final IMonitoringLogWriter monitoringLogWriter) {
 		final Properties defaultProps = ConfigurationProperty
 				.defaultProperties();
 		final MonitoringConfiguration retVal = new MonitoringConfiguration(
-				name, defaultProps, monitoringLogWriter,
+				configurationName, defaultProps, monitoringLogWriter,
 				/* Do not consider jvm arguments */
 				false);
 		return retVal;
@@ -119,11 +122,11 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	/**
 	 * Creates a default configuration with the given monitoring log writer.
 	 * 
-	 * @param name
+	 * @param configurationName
 	 * @return
 	 */
 	public static MonitoringConfiguration createDefaultConfiguration(
-			final String name,
+			final String configurationName,
 			final Class<? extends IMonitoringLogWriter> logWriterClass,
 			final String initString) {
 		final IMonitoringLogWriter logWriter = MonitoringConfiguration
@@ -132,12 +135,39 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 						Integer.parseInt(ConfigurationProperty.ASYNC__RECORD_QUEUE_SIZE
 								.getDefaultValue()), logWriterClass);
 		final MonitoringConfiguration retVal = MonitoringConfiguration
-				.createDefaultConfiguration(name, logWriter);
+				.createDefaultConfiguration(configurationName, logWriter);
 		return retVal;
 	}
+	
+	/**
+	 * Creates a default configuration using the {@link AsyncFsWriter} with the given
+	 * properties. You way set the value storagePathBaseDir to the default temporary
+	 * directory using  <code>System.getProperty("java.io.tmpdir")</code>.
+	 * 
+	 * @see #DEFAULT_ASYNC_RECORD_QUEUE_SIZE
+	 * @see #DEFAULT_ASYNC__BLOCK_ON_FULL_QUEUE
+	 * @see AsyncFsWriter
+	 * 
+	 * @param configurationName
+	 * @param storagePathBaseDir
+	 * @param asyncRecordQueueSize
+	 * @param blockOnFullQueue
+	 * @return
+	 */
+	public static MonitoringConfiguration createDefaultConfigurationAsyncFSWriter (
+			final String configurationName, final String storagePathBaseDir, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
+		final IMonitoringLogWriter monitoringLogWriter = 
+			new AsyncFsWriter(storagePathBaseDir, configurationName, asyncRecordQueueSize, blockOnFullQueue);
+		return MonitoringConfiguration.createDefaultConfiguration(configurationName, monitoringLogWriter);
+	}
 
+	// TODO: Factory methods for SyncFSWriter, SyncDBWriter, AsyncDBWriter
+	
 	/**
 	 * Creates the configuration for the singleton controller instance.
+	 * Note that the {@link MonitoringConfiguration} returned by this 
+	 * method is not a singleton instance, i.e., each call returns an equal
+	 * but not same {@link MonitoringConfiguration}.
 	 * 
 	 * @return
 	 */
@@ -329,14 +359,6 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 		this.setMonitoringLogWriter(monitoringLogWriter);
 		this.initVariables(properties, considerSystemProperties);
 	}
-
-	// @Override
-	// public IMonitoringLogWriter createAndSetMonitoringLogWriter(
-	// final Class<? extends IMonitoringLogWriter> logWriterClass,
-	// final String initString) {
-	// final IMonitoringLogWriter newWriter = null;
-	// return newWriter;
-	// }
 
 	@Override
 	public String getName() {
@@ -738,11 +760,11 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 				.loadBooleanConfigurationProperty(props,
 						ConfigurationProperty.FS_WRITER__STORE_IN_JAVAIOTMPDIR,
 						considerSystemProperties);
-		final String filenameBase;
+		final String storagePathBaseDir;
 		if (storeInJavaIOTmpDir) {
-			filenameBase = System.getProperty("java.io.tmpdir");
+			storagePathBaseDir = System.getProperty("java.io.tmpdir");
 		} else {
-			filenameBase = MonitoringConfiguration
+			storagePathBaseDir = MonitoringConfiguration
 					.loadStringConfigurationProperty(props,
 							ConfigurationProperty.FS_FN_PREFIX,
 							considerSystemProperties);
@@ -755,7 +777,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 				.loadBooleanConfigurationProperty(props,
 						ConfigurationProperty.ASYNC__BLOCK_ON_FULL_QUEUE,
 						considerSystemProperties);
-		monitoringLogWriter = new AsyncFsWriter(filenameBase,
+		monitoringLogWriter = new AsyncFsWriter(storagePathBaseDir,
 				storagePathPostfix, asyncRecordQueueSize, asyncBlockOnFullQueue);
 		return monitoringLogWriter;
 	}

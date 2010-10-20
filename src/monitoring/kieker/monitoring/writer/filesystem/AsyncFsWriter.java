@@ -44,9 +44,9 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     private static final int numberOfFsWriters = 1; // one is usually sufficient and more usuable since only one file is created at once
     //internal variables
     private final Vector<AbstractWorkerThread> workers = new Vector<AbstractWorkerThread>();
-    private BlockingQueue<IMonitoringRecord> blockingQueue = null;
+    private volatile BlockingQueue<IMonitoringRecord> blockingQueue = null;
     private final boolean blockOnFullQueue;
-    private final String storagePathBase;
+    private final String storagePathBaseDir;
     private final String storagePathPostfix;
     private String storageDir = null; // full path
     private int asyncRecordQueueSize = 8000;
@@ -69,8 +69,15 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
         return this.workers;
     }
 
-    public AsyncFsWriter(final String storagePathBase, final String storagePathPostfix, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
-        this.storagePathBase = storagePathBase;
+    /**
+     * 
+     * @param storagePathBaseDir
+     * @param storagePathPostfix
+     * @param asyncRecordQueueSize
+     * @param blockOnFullQueue
+     */
+    public AsyncFsWriter(final String storagePathBaseDir, final String storagePathPostfix, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
+        this.storagePathBaseDir = storagePathBaseDir;
         this.storagePathPostfix = storagePathPostfix;
         this.asyncRecordQueueSize = asyncRecordQueueSize;
         this.blockOnFullQueue = blockOnFullQueue;
@@ -78,9 +85,9 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     }
 
     private void init() {
-        File f = new File(this.storagePathBase);
+        File f = new File(this.storagePathBaseDir);
         if (!f.isDirectory()) {
-            AsyncFsWriter.log.error(this.storagePathBase + " is not a directory");
+            AsyncFsWriter.log.error(this.storagePathBaseDir + " is not a directory");
             AsyncFsWriter.log.error("Will abort init().");
             return;
         }
@@ -89,11 +96,11 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
                 new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
         m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
         final String dateStr = m_ISO8601UTC.format(new java.util.Date());
-        this.storageDir = this.storagePathBase + "/tpmon-" + dateStr + "-UTC-"+this.storagePathPostfix+"/";
+        this.storageDir = this.storagePathBaseDir + "/tpmon-" + dateStr + "-UTC-"+this.storagePathPostfix+"/";
 
         f = new File(this.storageDir);
         if (!f.mkdir()) {
-            AsyncFsWriter.log.error("Failed to create directory '" + this.storagePathBase + "'");
+            AsyncFsWriter.log.error("Failed to create directory '" + this.storagePathBaseDir + "'");
             AsyncFsWriter.log.error("Will abort init().");
             return;
         }
@@ -139,12 +146,14 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
     }
 
     public String getFilenamePrefix() {
-        return this.storagePathBase;
+        return this.storagePathBaseDir;
     }
 
     @Override
 	public String getInfoString() {
-        return "filenamePrefix :" + this.storagePathBase
-                + ", outputDirectory :" + this.storageDir;
+        return "filenamePrefix :" + this.storagePathBaseDir
+                + ", outputDirectory :" + this.storageDir 
+                + ", asyncRecordQueueSize: " + this.asyncRecordQueueSize 
+                + ", blockOnFullQueue: " + this.blockOnFullQueue;
     }
 }
