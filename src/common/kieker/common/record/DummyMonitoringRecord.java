@@ -29,14 +29,17 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord {
         return new DummyMonitoringRecord();
     }
 
-    public void initFromArray(Object[] values) {
+    @Override
+	public void initFromArray(final Object[] values) {
     }
 
-    public Object[] toArray() {
+    @Override
+	public Object[] toArray() {
        return new Object[]{};
     }
 
-    public Class[] getValueTypes() {
+    @Override
+	public Class<?>[] getValueTypes() {
         return new Class[]{};
     }
 }

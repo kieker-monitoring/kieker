@@ -115,7 +115,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
     }
 
     @Override
-	public Class[] getValueTypes() {
+	public Class<?>[] getValueTypes() {
         return new Class[] {
                     int.class,    // experimentId
                     String.class, // component + op
@@ -207,4 +207,144 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
             return false;
         }
     }
+
+	/**
+	 * @return the experimentId
+	 */
+	public final int getExperimentId() {
+		return this.experimentId;
+	}
+
+	/**
+	 * @param experimentId the experimentId to set
+	 */
+	public final void setExperimentId(final int experimentId) {
+		this.experimentId = experimentId;
+	}
+
+	/**
+	 * @return the hostName
+	 */
+	public final String getHostName() {
+		return this.hostName;
+	}
+
+	/**
+	 * @param hostName the hostName to set
+	 */
+	public final void setHostName(final String hostName) {
+		this.hostName = hostName;
+	}
+
+	/**
+	 * @return the className
+	 */
+	public final String getClassName() {
+		return this.className;
+	}
+
+	/**
+	 * @param className the className to set
+	 */
+	public final void setClassName(final String className) {
+		this.className = className;
+	}
+
+	/**
+	 * @return the operationName
+	 */
+	public final String getOperationName() {
+		return this.operationName;
+	}
+
+	/**
+	 * @param operationName the operationName to set
+	 */
+	public final void setOperationName(final String operationName) {
+		this.operationName = operationName;
+	}
+
+	/**
+	 * @return the sessionId
+	 */
+	public final String getSessionId() {
+		return this.sessionId;
+	}
+
+	/**
+	 * @param sessionId the sessionId to set
+	 */
+	public final void setSessionId(final String sessionId) {
+		this.sessionId = sessionId;
+	}
+
+	/**
+	 * @return the traceId
+	 */
+	public final long getTraceId() {
+		return this.traceId;
+	}
+
+	/**
+	 * @param traceId the traceId to set
+	 */
+	public final void setTraceId(final long traceId) {
+		this.traceId = traceId;
+	}
+
+	/**
+	 * @return the tin
+	 */
+	public final long getTin() {
+		return this.tin;
+	}
+
+	/**
+	 * @param tin the tin to set
+	 */
+	public final void setTin(final long tin) {
+		this.tin = tin;
+	}
+
+	/**
+	 * @return the tout
+	 */
+	public final long getTout() {
+		return this.tout;
+	}
+
+	/**
+	 * @param tout the tout to set
+	 */
+	public final void setTout(final long tout) {
+		this.tout = tout;
+	}
+
+	/**
+	 * @return the eoi
+	 */
+	public final int getEoi() {
+		return this.eoi;
+	}
+
+	/**
+	 * @param eoi the eoi to set
+	 */
+	public final void setEoi(final int eoi) {
+		this.eoi = eoi;
+	}
+
+	/**
+	 * @return the ess
+	 */
+	public final int getEss() {
+		return this.ess;
+	}
+
+	/**
+	 * @param ess the ess to set
+	 */
+	public final void setEss(final int ess) {
+		this.ess = ess;
+	}
 }

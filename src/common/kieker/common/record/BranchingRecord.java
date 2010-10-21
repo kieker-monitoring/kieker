@@ -23,7 +23,49 @@ package kieker.common.record;
  */
 public class BranchingRecord extends AbstractMonitoringRecord {
 
-    private static final long serialVersionUID = 1113L;
+    /**
+	 * @return the timestamp
+	 */
+	public final long getTimestamp() {
+		return this.timestamp;
+	}
+
+	/**
+	 * @param timestamp the timestamp to set
+	 */
+	public final void setTimestamp(final long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	/**
+	 * @return the branchID
+	 */
+	public final int getBranchID() {
+		return this.branchID;
+	}
+
+	/**
+	 * @param branchID the branchID to set
+	 */
+	public final void setBranchID(final int branchID) {
+		this.branchID = branchID;
+	}
+
+	/**
+	 * @return the branchingOutcome
+	 */
+	public final int getBranchingOutcome() {
+		return this.branchingOutcome;
+	}
+
+	/**
+	 * @param branchingOutcome the branchingOutcome to set
+	 */
+	public final void setBranchingOutcome(final int branchingOutcome) {
+		this.branchingOutcome = branchingOutcome;
+	}
+
+	private static final long serialVersionUID = 1113L;
     private static int numRecordFields = 3;
     private volatile long timestamp = -1;
     private volatile int branchID = -1;
@@ -38,7 +80,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
     }
 
     @Override
-	public Class[] getValueTypes() {
+	public Class<?>[] getValueTypes() {
         return new Class[] {
           long.class, // timestamp
           int.class,  // branchId

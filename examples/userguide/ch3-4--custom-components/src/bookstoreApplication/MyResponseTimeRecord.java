@@ -8,12 +8,12 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord {
     private final static String NA_VAL = "N/A";
 
     /* Attributes storing the actual monitoring data: */
-    public String className = NA_VAL;
-    public String methodName = NA_VAL;
+    public String className = MyResponseTimeRecord.NA_VAL;
+    public String methodName = MyResponseTimeRecord.NA_VAL;
     public long responseTimeNanos = -1;
 
     @Override
-    public final void initFromArray(Object[] values) {
+    public final void initFromArray(final Object[] values) {
             this.className = (String) values[0];
             this.methodName = (String) values[1];
             this.responseTimeNanos = (Long) values[2];
@@ -25,7 +25,7 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord {
     }
 
     @Override
-    public Class[] getValueTypes() {
+    public Class<?>[] getValueTypes() {
         return new Class[]{String.class, String.class, long.class};
     }
 }

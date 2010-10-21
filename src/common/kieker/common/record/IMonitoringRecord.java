@@ -30,5 +30,5 @@ public interface IMonitoringRecord extends Serializable {
     public void setLoggingTimestamp(long timestamp);
     public void initFromArray(Object[] values);
     public Object[] toArray();
-    public Class[] getValueTypes();
+    public Class<?>[] getValueTypes();
 }
