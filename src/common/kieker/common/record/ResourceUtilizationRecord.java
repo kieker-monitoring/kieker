@@ -3,8 +3,6 @@
  */
 package kieker.common.record;
 
-import kieker.monitoring.core.MonitoringController;
-
 /**
  * @author Andre van Hoorn
  * 
@@ -15,8 +13,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
-	 * of nano-seconds elapsed since Jan 1st, 1970 UTC, as returned by
-	 * {@link MonitoringController#currentTimeNanos()}.
+	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.
 	 */
 	private volatile long timestamp = -1;
 
@@ -64,6 +61,14 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 		}
 		return;
 	}
+	
+	/**
+	 * 
+	 */
+	public ResourceUtilizationRecord() {
+	}
+
+
 
 	/**
 	 * @param timestamp
