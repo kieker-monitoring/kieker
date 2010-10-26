@@ -56,6 +56,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
     public OperationExecutionRecord() {
     }
 
+    /**
+     * 
+     * @param componentName
+     * @param methodName
+     * @param traceId
+     */
     public OperationExecutionRecord(
             final String componentName, final String methodName,
             final long traceId) {
@@ -64,6 +70,14 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
         this.traceId = traceId;
     }
 
+    /**
+     * 
+     * @param componentName
+     * @param opName
+     * @param traceId
+     * @param tin
+     * @param tout
+     */
     public OperationExecutionRecord(
             final String componentName, final String opName,
             final long traceId,
@@ -73,12 +87,28 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
         this.tout = tout;
     }
 	
+    /**
+     * 
+     * @param componentName
+     * @param opName
+     * @param tin
+     * @param tout
+     */
 	public OperationExecutionRecord(
             final String componentName, final String opName,
             final long tin, final long tout) {
         this(componentName, opName, -1, tin, tout);
     }
 
+	/**
+	 * 
+	 * @param componentName
+	 * @param opName
+	 * @param sessionId
+	 * @param traceId
+	 * @param tin
+	 * @param tout
+	 */
     public OperationExecutionRecord(
             final String componentName, final String opName,
             final String sessionId, final long traceId,
@@ -87,6 +117,18 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
         this.sessionId = sessionId;
     }
 
+    /**
+     * 
+     * @param componentName
+     * @param opName
+     * @param sessionId
+     * @param traceId
+     * @param tin
+     * @param tout
+     * @param vnName
+     * @param eoi
+     * @param ess
+     */
     public OperationExecutionRecord(
             final String componentName, final String opName,
             final String sessionId, final long traceId,
