@@ -40,24 +40,24 @@ public class OperationExecutionAspectFullServlet extends
 	private static final Log log = LogFactory
 			.getLog(OperationExecutionAspectAnnotation.class);
 
-	@Pointcut("execution(* *.do*(..)) && args(request,response) && notWithinKieker()")
+	@Pointcut("execution(* *.do*(..)) && args(request,response)")
 	public void monitoredServletEntry(final HttpServletRequest request,
 			final HttpServletResponse response) {
 	}
 
 	@Override
-	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)")
+	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
 	public Object doServletEntryProfiling(
 			final ProceedingJoinPoint thisJoinPoint) throws Throwable {
 		return super.doServletEntryProfiling(thisJoinPoint);
 	}
 
-	@Pointcut("execution(* *.*(..)) && !within(kieker.monitoring..*) && notWithinKieker()")
+	@Pointcut("execution(* *.*(..))")
 	public void monitoredMethod() {
 	}
 
 	@Override
-	@Around("monitoredMethod()")
+	@Around("monitoredMethod() && notWithinKieker()")
 	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint)
 			throws Throwable {
 		if (!AbstractOperationExecutionAspect.ctrlInst.isMonitoringEnabled()) {

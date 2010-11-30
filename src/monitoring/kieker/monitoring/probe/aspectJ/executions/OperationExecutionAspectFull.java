@@ -38,12 +38,12 @@ public class OperationExecutionAspectFull extends
 	private static final Log log = LogFactory
 			.getLog(OperationExecutionAspectFull.class);
 
-	@Pointcut("execution(* *.*(..)) && !within(kieker.monitoring..*) && notWithinKieker()")
+	@Pointcut("execution(* *.*(..))")
 	public void monitoredMethod() {
 	}
 
 	@Override
-	@Around("monitoredMethod()")
+	@Around("monitoredMethod() && notWithinKieker()")
 	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint)
 			throws Throwable {
 		if (!AbstractOperationExecutionAspect.ctrlInst.isMonitoringEnabled()) {

@@ -37,12 +37,12 @@ public class OperationExecutionAspectAnnotation extends
 	private static final Log log = LogFactory
 			.getLog(OperationExecutionAspectAnnotation.class);
 
-	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..)) && notWithinKieker()")
+	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..))")
 	public void monitoredMethod() {
 	}
 
 	@Override
-	@Around("monitoredMethod()")
+	@Around("monitoredMethod() && notWithinKieker()")
 	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint)
 			throws Throwable {
 		if (!AbstractOperationExecutionAspect.ctrlInst.isMonitoringEnabled()) {
