@@ -157,7 +157,7 @@ public final class SyncDbWriter implements IMonitoringLogWriter {
                     (this.setInitialExperimentIdBasedOnLastId && (this.experimentId >= 0)) ? this.experimentId : execRecord.experimentId);
             this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName);
             this.psInsertMonitoringData.setString(3, execRecord.sessionId);
-            this.psInsertMonitoringData.setString(4, String.valueOf(execRecord.traceId));
+            this.psInsertMonitoringData.setLong(4, execRecord.traceId);
             this.psInsertMonitoringData.setLong(5, execRecord.tin);
             this.psInsertMonitoringData.setLong(6, execRecord.tout);
             this.psInsertMonitoringData.setString(7, execRecord.hostName);

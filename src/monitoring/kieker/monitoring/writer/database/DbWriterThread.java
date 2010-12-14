@@ -120,7 +120,7 @@ public class DbWriterThread extends AbstractWorkerThread {
             final OperationExecutionRecord execData = (OperationExecutionRecord) monitoringRecord;
             this.psInsertMonitoringData.setString(1, execData.className + "." + execData.operationName);
             this.psInsertMonitoringData.setString(2, execData.sessionId);
-            this.psInsertMonitoringData.setString(3, String.valueOf(execData.traceId));
+            this.psInsertMonitoringData.setLong(3, execData.traceId);
             this.psInsertMonitoringData.setLong(4, execData.tin);
             this.psInsertMonitoringData.setLong(5, execData.tout);
             this.psInsertMonitoringData.setString(6, execData.hostName);

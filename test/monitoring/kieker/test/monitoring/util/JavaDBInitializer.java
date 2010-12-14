@@ -45,7 +45,7 @@ public class JavaDBInitializer {
             "experimentid SMALLINT NOT NULL DEFAULT 0," +
             "operation VARCHAR(160) NOT NULL," +
             "sessionid VARCHAR(34)," +
-            "traceid VARCHAR(34) NOT NULL," +
+            "traceid BIGINT NOT NULL," +
             "tin BIGINT NOT NULL," +
             "tout BIGINT NOT NULL," +
             "vmname VARCHAR(40) NOT NULL DEFAULT ''," +
@@ -54,38 +54,38 @@ public class JavaDBInitializer {
 //            "INDEX (operation(16)), INDEX (traceid), INDEX (tin)" +
             ")";
 
-    public static void main(String[] args) {
-        if (!readProperties()){
-            log.error("readProperties returned false.");
+    public static void main(final String[] args) {
+        if (!JavaDBInitializer.readProperties()){
+            JavaDBInitializer.log.error("readProperties returned false.");
             System.exit(1);
         }
         
         Connection dbConnection = null;
         try {
-            dbConnection = DriverManager.getConnection(dbConnectionAddress+";create=true");
-            createTables(dbConnection);
+            dbConnection = DriverManager.getConnection(JavaDBInitializer.dbConnectionAddress+";create=true");
+            JavaDBInitializer.createTables(dbConnection);
             dbConnection.close();            
-        } catch (SQLException ex) {
-            log.error(ex);
+        } catch (final SQLException ex) {
+            JavaDBInitializer.log.error(ex);
             System.exit(1);
         }
-        log.info(JavaDBInitializer.class.getName()+".main(..) done");
+        JavaDBInitializer.log.info(JavaDBInitializer.class.getName()+".main(..) done");
     }
 
     private static boolean readProperties(){
-       dbConnectionAddress = System.getProperty("kieker.monitoring.dbConnectionAddress");
-       dbDriverClassname = System.getProperty("kieker.monitoring.dbDriverClassname");
-       dbTableName = System.getProperty("kieker.monitoring.dbTableName");
-       return dbConnectionAddress != null && dbDriverClassname != null 
-               && dbTableName != null;
+       JavaDBInitializer.dbConnectionAddress = System.getProperty("kieker.monitoring.dbConnectionAddress");
+       JavaDBInitializer.dbDriverClassname = System.getProperty("kieker.monitoring.dbDriverClassname");
+       JavaDBInitializer.dbTableName = System.getProperty("kieker.monitoring.dbTableName");
+       return (JavaDBInitializer.dbConnectionAddress != null) && (JavaDBInitializer.dbDriverClassname != null) 
+               && (JavaDBInitializer.dbTableName != null);
     }
     
-    private static boolean createTables(Connection dbConnection) {
+    private static boolean createTables(final Connection dbConnection) {
         boolean bCreatedTables = false;
         Statement statement = null;
         try {
             statement = dbConnection.createStatement();
-            statement.execute(strCreateAddressTable);
+            statement.execute(JavaDBInitializer.strCreateAddressTable);
             bCreatedTables = true;
             
             // TODO: remove:
@@ -98,7 +98,7 @@ public class JavaDBInitializer {
 //                if (res.next()) {
 //                    System.out.println(res.getInt(1));
 //                }
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             ex.printStackTrace();
         }
 

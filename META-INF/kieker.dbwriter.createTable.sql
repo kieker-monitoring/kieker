@@ -3,7 +3,7 @@ CREATE TABLE kiekerdata(
 `experimentid` SMALLINT NOT NULL DEFAULT '0',
 `operation` VARCHAR( 160 ) NOT NULL ,
 `sessionid` VARCHAR( 34 ) NOT NULL ,
-`traceid` VARCHAR( 34 ) NOT NULL ,
+`traceid` BIGINT NOT NULL ,
 `tin` BIGINT( 19 ) UNSIGNED NOT NULL ,
 `tout` BIGINT( 19 ) UNSIGNED NOT NULL ,
 `vmname` VARCHAR( 40 ) NOT NULL DEFAULT '',
