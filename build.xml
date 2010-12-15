@@ -114,6 +114,7 @@
 				<include name="cxf-rt-bindings-soap-*.jar"/>
 				<include name="jms-*.jar"/>
 				<include name="servlet-api.jar"/>
+				<include name="sigar-*.jar"/>
 				<include name="spring.jar"/>
 				<include name="spring-web.jar"/>
 			</fileset>
