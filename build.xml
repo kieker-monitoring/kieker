@@ -1,309 +1,310 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Kieker" default="build-all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-    <property file="build.properties"/>
+	<property file="build.properties"/>
 
-    <property name="TestAspect"
+	<property name="TestAspect"
               value="OperationExecutionAspectFull.java"/>
 
-    <path id="pmd.libs">
-        <fileset dir="lib/pmd">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
+	<path id="pmd.libs">
+		<fileset dir="lib/pmd">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
 
-    <target name="init-version">
-        <tstamp/>
-        <property name="kieker.version"
-                  value="1.3-SNAPSHOT"/> <!-- -20090716-1022 -->
-        <property name="year"
+	<target name="init-version">
+		<tstamp/>
+		<property name="kieker.version"
+                  value="1.3-SNAPSHOT"/>
+		<!-- -20090716-1022 -->
+		<property name="year"
                   value="2010"/>
-        <property name="copyright"
+		<property name="copyright"
                   value="the Kieker Project"/>
-        <!--<property name="dist.kieker.monitoring.jar"
+		<!--<property name="dist.kieker.monitoring.jar"
                   value="${kieker.monitoring.packagenamebase}-${kieker.version}.jar"/>-->
-        <property name="dist.kieker.monitoring.servlet.war"
+		<property name="dist.kieker.monitoring.servlet.war"
                   value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war"/>
-        <!--<property name="dist.kieker.common.jar"
+		<!--<property name="dist.kieker.common.jar"
                   value="${kieker.common.packagenamebase}-${kieker.version}.jar"/>
         <property name="dist.kieker.tools.jar"
                   value="${kieker.tools.packagenamebase}-${kieker.version}.jar"/>
         <property name="dist.kieker.analysis.jar"
                   value="${kieker.analysis.packagenamebase}-${kieker.version}.jar"/>-->
-        <property name="dist.kieker.main.jar"
+		<property name="dist.kieker.main.jar"
                   value="${kieker.main.packagenamebase}-${kieker.version}.jar"/>
 
-        <property name="kieker.dist.name"
+		<property name="kieker.dist.name"
                   value="${kieker.packagenamebase}-${kieker.version}"/>
-        <property name="dist.kieker.srcBaseName"
+		<property name="dist.kieker.srcBaseName"
                   value="${kieker.dist.name}_${kieker-src.suffix}"/>
-        <property name="dist.kieker.binBaseName"
+		<property name="dist.kieker.binBaseName"
                   value="${kieker.dist.name}_${kieker-bin.suffix}"/>
-        <property name="dist.kieker.apiBaseName"
+		<property name="dist.kieker.apiBaseName"
                   value="${kieker.dist.name}_${kieker-api.suffix}"/>
 
-        <property name="dist.kieker.example.myjmsexample"
+		<property name="dist.kieker.example.myjmsexample"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerJMSExample"/>
-        <property name="dist.kieker.example.jpetstoreservlet"
+		<property name="dist.kieker.example.jpetstoreservlet"
                   value="${kieker.dist.name}_${kieker-examples.suffix}-JavaEEServletContainerExample"/>
-    </target>
+	</target>
 
-    <target name="update-version" unless="version.noupdate"
+	<target name="update-version" unless="version.noupdate"
             depends="init-version">
-        <replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java"
+		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java"
                        match="VERSION = &quot;.*?&quot;"
                        replace="VERSION = &quot;${kieker.version}-${DSTAMP}&quot;"/>
-        <replaceregexp match="&lt;version&gt;.*?&lt;/version&gt;"
+		<replaceregexp match="&lt;version&gt;.*?&lt;/version&gt;"
                        replace="&lt;version&gt;${kieker.version}-${DSTAMP}&lt;/version&gt;">
-            <fileset dir=".">
-                <include name="pom_ant_kieker*.xml"/>
-            </fileset>
-        </replaceregexp>
-    </target>
+			<fileset dir=".">
+				<include name="pom_ant_kieker*.xml"/>
+			</fileset>
+		</replaceregexp>
+	</target>
 
-    <target name="build-all"
+	<target name="build-all"
             depends="clean,init,build-kieker.main,compile-kieker.monitoring-servlet,create-eclipse-sample-files">
-    </target>
+	</target>
 
-    <target name="init" depends="update-version,init-compile-classpaths">
-        <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
-        <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
-        <fail message="Critical error: AspectJ library not found
+	<target name="init" depends="update-version,init-compile-classpaths">
+		<!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
+		<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="${aspectjtoolsjar}"/>
+		<fail message="Critical error: AspectJ library not found
               in ${aspectjtoolsjar}.
               Check your build.properties.">
-            <condition>
-                <not>
-                    <available file="${aspectjtoolsjar}"/>
-                </not>
-            </condition>
-        </fail>
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${dist.dir}"/>
-        <mkdir dir="${release.dir}"/>
-        <mkdir dir="${build.tests.dir}"/>
-        <mkdir dir="tmp"/>
-    </target>
+			<condition>
+				<not>
+					<available file="${aspectjtoolsjar}"/>
+				</not>
+			</condition>
+		</fail>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${release.dir}"/>
+		<mkdir dir="${build.tests.dir}"/>
+		<mkdir dir="tmp"/>
+	</target>
 
-    <!-- Compile classpaths used for javac and javadoc -->
-    <target name="init-compile-classpaths">
-        <path id="kieker.common-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-        </path>
+	<!-- Compile classpaths used for javac and javadoc -->
+	<target name="init-compile-classpaths">
+		<path id="kieker.common-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+		</path>
 
-        <path id="kieker.monitoring-servlet-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="servlet-api.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.monitoring-servlet-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="servlet-api.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <pathelement location="${build.kieker.common.dir}/"/>
-            <pathelement location="${build.kieker.monitoring.dir}/"/>
-        </path>
+			<pathelement location="${build.kieker.common.dir}/"/>
+			<pathelement location="${build.kieker.monitoring.dir}/"/>
+		</path>
 
-        <path id="kieker.monitoring-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="cxf-api-*.jar"/>
-                <include name="cxf-common-utilities-*.jar"/>
-                <include name="cxf-rt-core-*.jar"/>
-                <include name="cxf-rt-bindings-soap-*.jar"/>
-                <include name="jms-*.jar"/>
-                <include name="servlet-api.jar"/>
-                <include name="spring.jar"/>
-                <include name="spring-web.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.monitoring-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="cxf-api-*.jar"/>
+				<include name="cxf-common-utilities-*.jar"/>
+				<include name="cxf-rt-core-*.jar"/>
+				<include name="cxf-rt-bindings-soap-*.jar"/>
+				<include name="jms-*.jar"/>
+				<include name="servlet-api.jar"/>
+				<include name="spring.jar"/>
+				<include name="spring-web.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
             </fileset>-->
-            <pathelement location="${build.kieker.common.dir}/"/>
-        </path>
+			<pathelement location="${build.kieker.common.dir}/"/>
+		</path>
 
-        <path id="kieker.monitoring-ajc-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="aspectjrt-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-                <include name="servlet-api.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.monitoring-ajc-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="aspectjrt-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="servlet-api.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
             </fileset>-->
-            <pathelement location="${build.kieker.common.dir}/"/>
-            <pathelement location="${build.kieker.monitoring.dir}"/>
-        </path>
+			<pathelement location="${build.kieker.common.dir}/"/>
+			<pathelement location="${build.kieker.monitoring.dir}"/>
+		</path>
 
-        <path id="kieker.analysis-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="rabbitmq-client.jar"/>
-                <include name="jms-1.1.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.analysis-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="rabbitmq-client.jar"/>
+				<include name="jms-1.1.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
             </fileset>-->
-            <pathelement location="${build.kieker.common.dir}/"/>
-        </path>
+			<pathelement location="${build.kieker.common.dir}/"/>
+		</path>
 
-        <path id="kieker.tools-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-cli-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.tools-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-cli-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
             </fileset>-->
-            <pathelement location="${build.kieker.common.dir}/"/>
-            <pathelement location="${build.kieker.monitoring.dir}/"/>
-            <pathelement location="${build.kieker.analysis.dir}/"/>
-        </path>
+			<pathelement location="${build.kieker.common.dir}/"/>
+			<pathelement location="${build.kieker.monitoring.dir}/"/>
+			<pathelement location="${build.kieker.analysis.dir}/"/>
+		</path>
 
-        <path id="all-external-jars">
-            <fileset dir="${lib.dir}">
-                <include name="*.jar"/>
-            </fileset>
-        </path>
-    </target>
+		<path id="all-external-jars">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+	</target>
 
-    <!-- Build kieker.common  -->
-    <target name="compile-kieker.common" depends="init">
-        <delete dir="${build.kieker.common.dir}"/>
-        <mkdir  dir="${build.kieker.common.dir}"/>
-        <!--<mkdir  dir="${build.kieker.common.dir}/META-INF"/>-->
-        <javac destDir="${build.kieker.common.dir}"
+	<!-- Build kieker.common  -->
+	<target name="compile-kieker.common" depends="init">
+		<delete dir="${build.kieker.common.dir}"/>
+		<mkdir  dir="${build.kieker.common.dir}"/>
+		<!--<mkdir  dir="${build.kieker.common.dir}/META-INF"/>-->
+		<javac destDir="${build.kieker.common.dir}"
                source="1.5" target="1.5"
                srcdir="${src.kieker.common.dir}"
                debug="true"
                classpathref="kieker.common-compile-classpath">
-            <compilerarg value="-Xlint:all,-path"/>
-        </javac>
-        <!--<copy file="LICENSE" todir="${build.kieker.common.dir}/"/>
+			<compilerarg value="-Xlint:all,-path"/>
+		</javac>
+		<!--<copy file="LICENSE" todir="${build.kieker.common.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.common.jar}">
             <fileset dir="${build.kieker.common.dir}"/>
         </jar>-->
-    </target>
+	</target>
 
-    <target name="compile-kieker.monitoring" depends="init,compile-kieker.common">
-        <delete dir="${build.kieker.monitoring.dir}"/>
-        <mkdir  dir="${build.kieker.monitoring.dir}"/>
-        <mkdir  dir="${build.kieker.monitoring.dir}/META-INF"/>
-        <javac destDir="${build.kieker.monitoring.dir}"
+	<target name="compile-kieker.monitoring" depends="init,compile-kieker.common">
+		<delete dir="${build.kieker.monitoring.dir}"/>
+		<mkdir  dir="${build.kieker.monitoring.dir}"/>
+		<mkdir  dir="${build.kieker.monitoring.dir}/META-INF"/>
+		<javac destDir="${build.kieker.monitoring.dir}"
                source="1.5"
                target="1.5"
                srcdir="${src.kieker.monitoring.dir}"
                debug="true"
                excludes="kieker/monitoring/probe/aspectJ/"
                classpathref="kieker.monitoring-compile-classpath">
-            <compilerarg value="-Xlint:all,-path"/>
-        </javac>
-        <!-- WORKAROUND!!! -->
-        <iajc destdir="${build.kieker.monitoring.dir}"
+			<compilerarg value="-Xlint:all,-path"/>
+		</javac>
+		<!-- WORKAROUND!!! -->
+		<iajc destdir="${build.kieker.monitoring.dir}"
               source="1.5"
               target="1.5"
               Xlint="ignore"
               debug="true"
               classpathref="kieker.monitoring-ajc-compile-classpath">
-            <sourceroots>
-                <pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/"/>
-            </sourceroots>
-        </iajc>
-        <copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
-        <copy file="${sequence.pic}" tofile="${build.kieker.monitoring.dir}/META-INF/sequence.pic"/>
-        <!--<copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
+			<sourceroots>
+				<pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/"/>
+			</sourceroots>
+		</iajc>
+		<copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
+		<copy file="${sequence.pic}" tofile="${build.kieker.monitoring.dir}/META-INF/sequence.pic"/>
+		<!--<copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
             <fileset dir="${build.kieker.monitoring.dir}"/>
         </jar>-->
-    </target>
+	</target>
 
-    <target name="compile-kieker.monitoring-servlet" depends="init,compile-kieker.common,compile-kieker.monitoring">
-        <delete dir="${build.kieker.monitoring.servlet.dir}"/>
-        <mkdir dir="${build.kieker.monitoring.servlet.dir}"/>
-        <javac source="1.5" target="1.5"
+	<target name="compile-kieker.monitoring-servlet" depends="init,compile-kieker.common,compile-kieker.monitoring">
+		<delete dir="${build.kieker.monitoring.servlet.dir}"/>
+		<mkdir dir="${build.kieker.monitoring.servlet.dir}"/>
+		<javac source="1.5" target="1.5"
                destDir="${build.kieker.monitoring.servlet.dir}"
                classpathref="kieker.monitoring-servlet-compile-classpath"
                srcdir="${src.kieker.monitoring-servlet.dir}"
                debug="true"/>
-        <war destfile="${dist.dir}/${dist.kieker.monitoring.servlet.war}" webxml="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/web.xml">
-            <classes dir="${build.kieker.monitoring.servlet.dir}"/>
-            <zipfileset dir="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images" prefix="images"/>
-            <zipfileset file="LICENSE" prefix=""/>
-        </war>
-    </target>
+		<war destfile="${dist.dir}/${dist.kieker.monitoring.servlet.war}" webxml="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/web.xml">
+			<classes dir="${build.kieker.monitoring.servlet.dir}"/>
+			<zipfileset dir="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images" prefix="images"/>
+			<zipfileset file="LICENSE" prefix=""/>
+		</war>
+	</target>
 
-    <target name="compile-kieker.analysis" depends="init,compile-kieker.common">
-        <delete dir="${build.kieker.analysis.dir}"/>
-        <mkdir  dir="${build.kieker.analysis.dir}"/>
-        <javac destDir="${build.kieker.analysis.dir}"
+	<target name="compile-kieker.analysis" depends="init,compile-kieker.common">
+		<delete dir="${build.kieker.analysis.dir}"/>
+		<mkdir  dir="${build.kieker.analysis.dir}"/>
+		<javac destDir="${build.kieker.analysis.dir}"
                source="1.5" target="1.5"
                srcdir="${src.kieker.analysis.dir}"
                debug="true"
                classpathref="kieker.analysis-compile-classpath">
-            <compilerarg value="-Xlint:all,-path"/>
-        </javac>
-        <!--<copy file="LICENSE" todir="${build.kieker.analysis.dir}/"/>
+			<compilerarg value="-Xlint:all,-path"/>
+		</javac>
+		<!--<copy file="LICENSE" todir="${build.kieker.analysis.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.analysis.jar}">
             <fileset dir="${build.kieker.analysis.dir}"/>
         </jar>-->
-    </target>
+	</target>
 
-    <target name="compile-kieker.tools" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis">
-        <delete dir="${build.kieker.tools.dir}"/>
-        <mkdir  dir="${build.kieker.tools.dir}"/>
-        <javac destDir="${build.kieker.tools.dir}"
+	<target name="compile-kieker.tools" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis">
+		<delete dir="${build.kieker.tools.dir}"/>
+		<mkdir  dir="${build.kieker.tools.dir}"/>
+		<javac destDir="${build.kieker.tools.dir}"
                source="1.5" target="1.5"
                srcdir="${src.kieker.tools.dir}"
                debug="true"
                classpathref="kieker.tools-compile-classpath">
-            <compilerarg value="-Xlint:all,-path"/>
-        </javac>
-        <!--<copy file="LICENSE" todir="${build.kieker.tools.dir}/"/>
+			<compilerarg value="-Xlint:all,-path"/>
+		</javac>
+		<!--<copy file="LICENSE" todir="${build.kieker.tools.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.tools.jar}">
             <fileset dir="${build.kieker.tools.dir}"/>
         </jar>-->
-    </target>
+	</target>
 
-    <target name="build-kieker.main" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis,compile-kieker.tools">
-        <jar destfile="${dist.dir}/${dist.kieker.main.jar}">
-            <fileset dir="${build.kieker.common.dir}"/>
-            <fileset dir="${build.kieker.analysis.dir}"/>
-            <fileset dir="${build.kieker.monitoring.dir}"/>
-            <fileset dir="${build.kieker.tools.dir}"/>
-            <fileset dir="." includes="LICENSE" />
-        </jar>
-    </target>
+	<target name="build-kieker.main" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis,compile-kieker.tools">
+		<jar destfile="${dist.dir}/${dist.kieker.main.jar}">
+			<fileset dir="${build.kieker.common.dir}"/>
+			<fileset dir="${build.kieker.analysis.dir}"/>
+			<fileset dir="${build.kieker.monitoring.dir}"/>
+			<fileset dir="${build.kieker.tools.dir}"/>
+			<fileset dir="." includes="LICENSE" />
+		</jar>
+	</target>
 
-    <target name="dist-kieker-javadoc" depends="init,javadoc"
+	<target name="dist-kieker-javadoc" depends="init,javadoc"
             description="Create Javadoc API documentation">
-        <tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
-            <tarfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.apiBaseName}.tar.gz" src="${release.dir}/${dist.kieker.apiBaseName}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.apiBaseName}.tar"/>
+		<tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
+			<tarfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
+		</tar>
+		<gzip zipfile="${release.dir}/${dist.kieker.apiBaseName}.tar.gz" src="${release.dir}/${dist.kieker.apiBaseName}.tar" />
+		<!-- tar file no longer needed -->
+		<delete file="${release.dir}/${dist.kieker.apiBaseName}.tar"/>
 
-        <zip  zipfile="${release.dir}/${dist.kieker.apiBaseName}.zip">
-            <zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
-        </zip>
-    </target>
+		<zip  zipfile="${release.dir}/${dist.kieker.apiBaseName}.zip">
+			<zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes"/>
+		</zip>
+	</target>
 
-    <target name="javadoc" depends="init"
+	<target name="javadoc" depends="init"
             description="Create Javadoc API documentation">
-        <delete dir="${build.api.dir}"/>
-        <mkdir dir="${build.api.dir}"/>
-        <path id="javadoc-sourcepath">
-            <dirset dir=".">
-                <include name="${src.kieker.common.dir}"/>
-                <include name="${src.kieker.analysis.dir}"/>
-                <include name="${src.kieker.monitoring.dir}"/>
-                <include name="${src.kieker.monitoring-servlet.dir}"/>
-                <include name="${src.kieker.tools.dir}"/>
-            </dirset>
-        </path>
-        <javadoc sourcepathref="javadoc-sourcepath"
+		<delete dir="${build.api.dir}"/>
+		<mkdir dir="${build.api.dir}"/>
+		<path id="javadoc-sourcepath">
+			<dirset dir=".">
+				<include name="${src.kieker.common.dir}"/>
+				<include name="${src.kieker.analysis.dir}"/>
+				<include name="${src.kieker.monitoring.dir}"/>
+				<include name="${src.kieker.monitoring-servlet.dir}"/>
+				<include name="${src.kieker.tools.dir}"/>
+			</dirset>
+		</path>
+		<javadoc sourcepathref="javadoc-sourcepath"
                  destdir="${build.api.dir}"
                  packagenames="*"
                  access="public"
@@ -314,220 +315,220 @@
                  header="Kieker ${kieker.version}"
                  footer="Kieker ${kieker.version}"
                  bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker.sourceforge.net&quot;&gt;http://kieker.sourceforge.net&lt;/&gt;">
-            <classpath refid="kieker.common-compile-classpath"/>
-            <classpath refid="kieker.analysis-compile-classpath"/>
-            <classpath refid="kieker.monitoring-compile-classpath"/>
-            <classpath refid="kieker.monitoring-ajc-compile-classpath"/>
-            <classpath refid="kieker.monitoring-servlet-compile-classpath"/>
-            <classpath refid="kieker.tools-compile-classpath"/>
-            <link href="http://download.oracle.com/javase/6/docs/api/"/>
-        </javadoc>
-    </target>
+			<classpath refid="kieker.common-compile-classpath"/>
+			<classpath refid="kieker.analysis-compile-classpath"/>
+			<classpath refid="kieker.monitoring-compile-classpath"/>
+			<classpath refid="kieker.monitoring-ajc-compile-classpath"/>
+			<classpath refid="kieker.monitoring-servlet-compile-classpath"/>
+			<classpath refid="kieker.tools-compile-classpath"/>
+			<link href="http://download.oracle.com/javase/6/docs/api/"/>
+		</javadoc>
+	</target>
 
-    <target name="dist-kieker-sources" depends="init">
-        <patternset id="dist_src_files-nonbinmode">
-            <include name="bin/log4j.properties"/>
-            <include name="bin/*.bat"/>
-            <include name="META-INF/*"/>
-            <include name="src/**/*.java"/>
-            <include name="test/**/*.java"/>
-            <include name="test/META-INF/*"/>
-            <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**"/>
-            <include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**"/>
-            <include name="lib/**"/>
-            <include name="${eclipse-classpath.sample}"/>
-            <include name="${eclipse-project.sample}"/>
-            <include name="build.xml"/>
-            <include name="build.properties"/>
-            <!--<include name="ISSUES"/>-->
-            <include name="HISTORY"/>
-            <include name="LICENSE"/>
-            <include name="pom_ant_kieker-*.xml"/>
-        </patternset>
-        <patternset id="dist_src_files-binmode">
-            <include name="bin/*.sh"/>
-        </patternset>
+	<target name="dist-kieker-sources" depends="init">
+		<patternset id="dist_src_files-nonbinmode">
+			<include name="bin/log4j.properties"/>
+			<include name="bin/*.bat"/>
+			<include name="META-INF/*"/>
+			<include name="src/**/*.java"/>
+			<include name="test/**/*.java"/>
+			<include name="test/META-INF/*"/>
+			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**"/>
+			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**"/>
+			<include name="lib/**"/>
+			<include name="${eclipse-classpath.sample}"/>
+			<include name="${eclipse-project.sample}"/>
+			<include name="build.xml"/>
+			<include name="build.properties"/>
+			<!--<include name="ISSUES"/>-->
+			<include name="HISTORY"/>
+			<include name="LICENSE"/>
+			<include name="pom_ant_kieker-*.xml"/>
+		</patternset>
+		<patternset id="dist_src_files-binmode">
+			<include name="bin/*.sh"/>
+		</patternset>
 
-        <tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_src_files-nonbinmode"/>
-            </tarfileset>
-            <tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
-                <patternset refid="dist_src_files-binmode"/>
-            </tarfileset>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${release.dir}/${dist.kieker.srcBaseName}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.srcBaseName}.tar"/>
+		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
+			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+				<patternset refid="dist_src_files-nonbinmode"/>
+			</tarfileset>
+			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+				<patternset refid="dist_src_files-binmode"/>
+			</tarfileset>
+		</tar>
+		<gzip zipfile="${release.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${release.dir}/${dist.kieker.srcBaseName}.tar" />
+		<!-- tar file no longer needed -->
+		<delete file="${release.dir}/${dist.kieker.srcBaseName}.tar"/>
 
-        <zip  zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
-            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_src_files-nonbinmode"/>
-            </zipfileset>
-            <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
-                <patternset refid="dist_src_files-binmode"/>
-            </zipfileset>
-        </zip>
-    </target>
+		<zip  zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
+			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+				<patternset refid="dist_src_files-nonbinmode"/>
+			</zipfileset>
+			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+				<patternset refid="dist_src_files-binmode"/>
+			</zipfileset>
+		</zip>
+	</target>
 
-    <target name="dist-kieker-binaries" depends="build-all,build-userguide">
-        <echo message="${src.userguide.pdf}"/>
+	<target name="dist-kieker-binaries" depends="build-all,build-userguide">
+		<echo message="${src.userguide.pdf}"/>
 
-        <copy file="${src.userguide.pdf}" tofile="${src.userguide.dist.pdf}"/>
+		<copy file="${src.userguide.pdf}" tofile="${src.userguide.dist.pdf}"/>
 
-        <patternset id="dist_bin_files-nonbinmode">
-            <include name="bin/log4j.properties"/>
-            <include name="bin/*.bat"/>
-            <include name="dist/*.jar"/>
-            <include name="dist/*.war"/>
-            <include name="META-INF/*"/>
-            <include name="lib/*"/>
-            <exclude name="lib/maven/"/>
-            <exclude name="lib/pmd/"/>
-            <!--<include name="ISSUES"/>-->
-            <include name="HISTORY"/>
-            <include name="LICENSE"/>
-            <include name="${src.userguide.dist.pdf}"/>
-            <include name="${src.userguide.examples.dir}/README"/>
-            <include name="${src.userguide.example.bookstore.dir}/build.xml"/>
-            <include name="${src.userguide.example.bookstore.dir}/build.properties"/>
-            <include name="${src.userguide.example.bookstore.dir}/src/**/*.java"/>
-            <include name="${src.userguide.example.manual.dir}/build.xml"/>
-            <include name="${src.userguide.example.manual.dir}/build.properties"/>
-            <include name="${src.userguide.example.manual.dir}/lib/"/>
-            <exclude name="${src.userguide.example.manual.dir}/lib/*"/>
-            <include name="${src.userguide.example.manual.dir}/src/**/*.java"/>
-            <include name="${src.userguide.example.extended.dir}/build.xml"/>
-            <include name="${src.userguide.example.extended.dir}/build.properties"/>
-            <include name="${src.userguide.example.extended.dir}/lib/"/>
-            <exclude name="${src.userguide.example.extended.dir}/lib/*"/>
-            <include name="${src.userguide.example.extended.dir}/src/**/*.java"/>
-            <include name="${src.userguide.example.extended.dir}/META-INF/kieker.monitoring.properties"/>
-            <include name="${src.userguide.example.aspectj.dir}/build.xml"/>
-            <include name="${src.userguide.example.aspectj.dir}/build.properties"/>
-            <include name="${src.userguide.example.aspectj.dir}/lib/"/>
-            <exclude name="${src.userguide.example.aspectj.dir}/lib/*"/>
-            <include name="${src.userguide.example.aspectj.dir}/testdata/**"/>
-            <include name="${src.userguide.example.aspectj.dir}/src/**/*.java"/>
-            <include name="${src.userguide.example.aspectj.dir}/META-INF/aop.xml"/>
-            <include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties"/>
-            <include name="${src.userguide.example.jms.dir}/build.xml"/>
-            <include name="${src.userguide.example.jms.dir}/build.properties"/>
-            <include name="${src.userguide.example.jms.dir}/lib/"/>
-            <exclude name="${src.userguide.example.jms.dir}/lib/*"/>
-            <include name="${src.userguide.example.jms.dir}/src/**/*.java"/>
-            <include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties"/>
-            <include name="${src.userguide.example.jms.dir}/META-INF/log4j.properties"/>
-            <include name="${example.microbenchmark.dir}/**"/>
-            <exclude name="${example.microbenchmark.dir}/results/**/*"/>
-            <exclude name="${example.microbenchmark.dir}/tmp/**/*"/>
-            <exclude name="${example.microbenchmark.dir}/lib/**/*.jar"/>
-        </patternset>
-        <patternset id="dist_bin_files-binmode">
-            <include name="bin/*.sh"/>
-        </patternset>
+		<patternset id="dist_bin_files-nonbinmode">
+			<include name="bin/log4j.properties"/>
+			<include name="bin/*.bat"/>
+			<include name="dist/*.jar"/>
+			<include name="dist/*.war"/>
+			<include name="META-INF/*"/>
+			<include name="lib/*"/>
+			<exclude name="lib/maven/"/>
+			<exclude name="lib/pmd/"/>
+			<!--<include name="ISSUES"/>-->
+			<include name="HISTORY"/>
+			<include name="LICENSE"/>
+			<include name="${src.userguide.dist.pdf}"/>
+			<include name="${src.userguide.examples.dir}/README"/>
+			<include name="${src.userguide.example.bookstore.dir}/build.xml"/>
+			<include name="${src.userguide.example.bookstore.dir}/build.properties"/>
+			<include name="${src.userguide.example.bookstore.dir}/src/**/*.java"/>
+			<include name="${src.userguide.example.manual.dir}/build.xml"/>
+			<include name="${src.userguide.example.manual.dir}/build.properties"/>
+			<include name="${src.userguide.example.manual.dir}/lib/"/>
+			<exclude name="${src.userguide.example.manual.dir}/lib/*"/>
+			<include name="${src.userguide.example.manual.dir}/src/**/*.java"/>
+			<include name="${src.userguide.example.extended.dir}/build.xml"/>
+			<include name="${src.userguide.example.extended.dir}/build.properties"/>
+			<include name="${src.userguide.example.extended.dir}/lib/"/>
+			<exclude name="${src.userguide.example.extended.dir}/lib/*"/>
+			<include name="${src.userguide.example.extended.dir}/src/**/*.java"/>
+			<include name="${src.userguide.example.extended.dir}/META-INF/kieker.monitoring.properties"/>
+			<include name="${src.userguide.example.aspectj.dir}/build.xml"/>
+			<include name="${src.userguide.example.aspectj.dir}/build.properties"/>
+			<include name="${src.userguide.example.aspectj.dir}/lib/"/>
+			<exclude name="${src.userguide.example.aspectj.dir}/lib/*"/>
+			<include name="${src.userguide.example.aspectj.dir}/testdata/**"/>
+			<include name="${src.userguide.example.aspectj.dir}/src/**/*.java"/>
+			<include name="${src.userguide.example.aspectj.dir}/META-INF/aop.xml"/>
+			<include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties"/>
+			<include name="${src.userguide.example.jms.dir}/build.xml"/>
+			<include name="${src.userguide.example.jms.dir}/build.properties"/>
+			<include name="${src.userguide.example.jms.dir}/lib/"/>
+			<exclude name="${src.userguide.example.jms.dir}/lib/*"/>
+			<include name="${src.userguide.example.jms.dir}/src/**/*.java"/>
+			<include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties"/>
+			<include name="${src.userguide.example.jms.dir}/META-INF/log4j.properties"/>
+			<include name="${example.microbenchmark.dir}/**"/>
+			<exclude name="${example.microbenchmark.dir}/results/**/*"/>
+			<exclude name="${example.microbenchmark.dir}/tmp/**/*"/>
+			<exclude name="${example.microbenchmark.dir}/lib/**/*.jar"/>
+		</patternset>
+		<patternset id="dist_bin_files-binmode">
+			<include name="bin/*.sh"/>
+		</patternset>
 
-        <tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_bin_files-nonbinmode"/>
-            </tarfileset>
-            <tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
-                <patternset refid="dist_bin_files-binmode"/>
-            </tarfileset>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.binBaseName}.tar"/>
+		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
+			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+				<patternset refid="dist_bin_files-nonbinmode"/>
+			</tarfileset>
+			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+				<patternset refid="dist_bin_files-binmode"/>
+			</tarfileset>
+		</tar>
+		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
+		<!-- tar file no longer needed -->
+		<delete file="${release.dir}/${dist.kieker.binBaseName}.tar"/>
 
-        <zip  zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
-            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_bin_files-nonbinmode"/>
-            </zipfileset>
-            <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755"  defaultexcludes="yes">
-                <patternset refid="dist_bin_files-binmode"/>
-            </zipfileset>
-        </zip>
-    </target>
+		<zip  zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
+			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+				<patternset refid="dist_bin_files-nonbinmode"/>
+			</zipfileset>
+			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755"  defaultexcludes="yes">
+				<patternset refid="dist_bin_files-binmode"/>
+			</zipfileset>
+		</zip>
+	</target>
 
-    <target name="build-example-JPetStoreExample" depends="init">
-        <property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
-        <property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
-        <patternset id="dist_jpetstoreExample_files-nonbinmode">
-            <include name="${example.jpetstoreservlet.dir}/README"/>
-            <include name="${example.jpetstoreservlet.dir}/LICENSE"/>
-            <include name="${example.jpetstoreservlet.dir}/kieker-testdata/**"/>
-            <include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/**"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh"/>
-            <include name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/**"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/devlib/kieker*.jar"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/nbproject/**"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/reports/**"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/wars/**"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/webapp/**"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/work/**"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/catalina.sh.localjvmmem.conf/"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/work/**/*"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/temp/**/*"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/logs/**/*"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/webapps/jpetstore/"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/webapps/kieker*/"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/kieker*.jar"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/aspectj*.jar"/>
-            <exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/commons-logging*.jar"/>
-            <!--<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>-->
-        </patternset>
-        <patternset id="dist_jpetstoreExample_files-binmode">
-            <include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh"/>
-        </patternset>
+	<target name="build-example-JPetStoreExample" depends="init">
+		<property name="tomcat.dir" value="Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore"/>
+		<property name="jpetstore.dir" value="JPetStore-5.0-instrumented"/>
+		<patternset id="dist_jpetstoreExample_files-nonbinmode">
+			<include name="${example.jpetstoreservlet.dir}/README"/>
+			<include name="${example.jpetstoreservlet.dir}/LICENSE"/>
+			<include name="${example.jpetstoreservlet.dir}/kieker-testdata/**"/>
+			<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/**"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh"/>
+			<include name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/**"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/devlib/kieker*.jar"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/nbproject/**"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/reports/**"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/wars/**"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/webapp/**"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${jpetstore.dir}/build/work/**"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/catalina.sh.localjvmmem.conf/"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/work/**/*"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/temp/**/*"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/logs/**/*"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/webapps/jpetstore/"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/webapps/kieker*/"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/kieker*.jar"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/aspectj*.jar"/>
+			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/commons-logging*.jar"/>
+			<!--<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>-->
+		</patternset>
+		<patternset id="dist_jpetstoreExample_files-binmode">
+			<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh"/>
+		</patternset>
 
-        <tar destfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" longfile="gnu">
-            <tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
-            </tarfileset>
-            <tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
-                <patternset refid="dist_jpetstoreExample_files-binmode"/>
-            </tarfileset>
-        </tar>
-        <gzip zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar.gz" src="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" />
-        <!-- tar file no longer needed -->
-        <delete file="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar"/>
+		<tar destfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" longfile="gnu">
+			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+				<patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
+			</tarfileset>
+			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+				<patternset refid="dist_jpetstoreExample_files-binmode"/>
+			</tarfileset>
+		</tar>
+		<gzip zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar.gz" src="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" />
+		<!-- tar file no longer needed -->
+		<delete file="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar"/>
 
-        <zip  zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.zip">
-            <zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-                <patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
-            </zipfileset>
-            <zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
-                <patternset refid="dist_jpetstoreExample_files-binmode"/>
-            </zipfileset>
-        </zip>
-    </target>
+		<zip  zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.zip">
+			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+				<patternset refid="dist_jpetstoreExample_files-nonbinmode"/>
+			</zipfileset>
+			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+				<patternset refid="dist_jpetstoreExample_files-binmode"/>
+			</zipfileset>
+		</zip>
+	</target>
 
-    <target name="build-examples"
+	<target name="build-examples"
             depends="init,build-example-JPetStoreExample">
-    </target>
+	</target>
 
-    <target name="build-userguide">
-        <exec executable="make">
-            <arg value="-C"/>
-            <arg value="${src.userguide.dir}"/>
-        </exec>
-    </target>
+	<target name="build-userguide">
+		<exec executable="make">
+			<arg value="-C"/>
+			<arg value="${src.userguide.dir}"/>
+		</exec>
+	</target>
 
-    <target name="release"
+	<target name="release"
             depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,build-examples">
-        <echo message="Sourceforge release instructions can be found at:"/>
-        <echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease"/>
-    </target>
+		<echo message="Sourceforge release instructions can be found at:"/>
+		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease"/>
+	</target>
 
-    <target name="clean">
-        <!-- <delete dir="tmp"/>-->
-        <delete dir="${dist.dir}"/>
-        <delete dir="${release.dir}"/>
-        <delete dir="${build.dir}"/>
-    </target>
+	<target name="clean">
+		<!-- <delete dir="tmp"/>-->
+		<delete dir="${dist.dir}"/>
+		<delete dir="${release.dir}"/>
+		<delete dir="${build.dir}"/>
+	</target>
 
-    <target name="run-test-storage" depends="compile-tests-monitoring">
-        <echo>
+	<target name="run-test-storage" depends="compile-tests-monitoring">
+		<echo>
             This is a small test for the part of Tpmon that
             stores monitoring data. Tpmon's monitoring API
             is manually invoked to collect monitoring data.
@@ -544,568 +545,573 @@
             (default: /tmp).
         </echo>
 
-        <path id="kieker.test-storage-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-storage-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <java
+		<java
             dir="."
             fork="true"
             classname="kieker.test.monitoring.manualInstrumentation.storageOnly.StorageOnly"
             classpathref="kieker.test-storage-run-classpath">
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
-            <!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
-            <!-- <jvmarg value="-Xloggc:details.out"/> -->
-            <!-- <jvmarg value="-verbosegc"/> -->
-        </java>
-    </target>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
+			<!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
+			<!-- <jvmarg value="-Xloggc:details.out"/> -->
+			<!-- <jvmarg value="-verbosegc"/> -->
+		</java>
+	</target>
 
-    <target name="compile-tests-common"
+	<target name="compile-tests-common"
             depends="build-kieker.main">
-        <path id="common-test-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="junit-*.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="common-test-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="junit-*.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
-        <javac source="1.5" target="1.5"
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
+		<javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
                classpathref="common-test-compile-classpath"
                srcdir="${test.kieker.common.dir}">
-        </javac>
-    </target>
+		</javac>
+	</target>
 
-    <target name="compile-tests-monitoring"
+	<target name="compile-tests-monitoring"
             depends="build-kieker.main">
-        <path id="monitoring-test-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="junit-*.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="monitoring-test-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="junit-*.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
-        <javac source="1.5" target="1.5"
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
+		<javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
                classpathref="monitoring-test-compile-classpath"
                srcdir="${test.kieker.monitoring.dir}"
                excludes="kieker/test/monitoring/aspectJ/compileTimeWeaving/">
-        </javac>
-    </target>
+		</javac>
+	</target>
 
-    <target name="compile-tests-analysis"
+	<target name="compile-tests-analysis"
             depends="build-kieker.main">
-        <path id="analysis-test-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="junit-*.jar"/>
-            </fileset>
-           <!-- <fileset dir="${dist.dir}">
+		<path id="analysis-test-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="junit-*.jar"/>
+			</fileset>
+			<!-- <fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
-        <javac source="1.5" target="1.5"
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
+		<javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
                classpathref="analysis-test-compile-classpath"
                srcdir="${test.kieker.analysis.dir}">
-        </javac>
-    </target>
+		</javac>
+	</target>
 
-    <target name="compile-tests-tools"
+	<target name="compile-tests-tools"
             depends="build-kieker.main">
-        <path id="tools-test-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="junit-*.jar"/>
-            </fileset>
-            <!--<fileset dir="${dist.dir}">
+		<path id="tools-test-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="junit-*.jar"/>
+			</fileset>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.tools.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
-        <javac source="1.5" target="1.5"
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
+		<javac source="1.5" target="1.5"
                destDir="${build.tests.dir}"
                classpathref="tools-test-compile-classpath"
                srcdir="${test.kieker.tools.dir}">
-        </javac>
-    </target>
+		</javac>
+	</target>
 
-    <target name="run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes"
+	<target name="run-tests-loadTimeWeaving-bookstoreDifferentRecordTypes"
             depends="compile-tests-monitoring">
-        <path id="kieker.test-loadTimeWeaving-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-loadTimeWeaving-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <copy file="${tests.log4j.properties}"
+		<copy file="${tests.log4j.properties}"
               tofile="${build.dir}/log4j.properties"/>
-        <copy file="${aop.xml.ltwtests.annotation}"
+		<copy file="${aop.xml.ltwtests.annotation}"
               tofile="${build.tests.dir}/META-INF/aop.xml"
               overwrite="true"/>
-        <java dir="."
+		<java dir="."
               fork="true"
               classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore"
               classpathref="kieker.test-loadTimeWeaving-run-classpath">
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dkieker.monitoring.debug=false"/>
-            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
-            <!--<jvmarg value="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop.xml"/>-->
-            <jvmarg value="-Daj.weaving.verbose=true"/>
-        </java>
-    </target>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-Dkieker.monitoring.debug=false"/>
+			<jvmarg value="-javaagent:${aspectjweaverjar}"/>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+			<!--<jvmarg value="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop.xml"/>-->
+			<jvmarg value="-Daj.weaving.verbose=true"/>
+		</java>
+	</target>
 
-    <target name="run-tests-loadTimeWeaving-bookstoreFullInstrumentation"
+	<target name="run-tests-loadTimeWeaving-bookstoreFullInstrumentation"
             depends="compile-tests-monitoring">
-        <path id="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <copy file="${tests.log4j.properties}"
+		<copy file="${tests.log4j.properties}"
               tofile="${build.dir}/log4j.properties"/>
-        <copy file="${aop.xml.ltwtests.full}"
+		<copy file="${aop.xml.ltwtests.full}"
               tofile="${build.tests.dir}/META-INF/aop.xml"
               overwrite="true"/>
-        <java dir="."
+		<java dir="."
               fork="true"
               classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA"
               classpathref="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
-            <jvmarg value="-Daj.weaving.verbose=true"/>
-        </java>
-    </target>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-javaagent:${aspectjweaverjar}"/>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+			<jvmarg value="-Daj.weaving.verbose=true"/>
+		</java>
+	</target>
 
-    <target name="run-tests-loadTimeWeaving-executionOrderTest"
+	<target name="run-tests-loadTimeWeaving-executionOrderTest"
             depends="compile-tests-monitoring">
-        <path id="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <copy file="${tests.log4j.properties}"
+		<copy file="${tests.log4j.properties}"
               tofile="${build.dir}/log4j.properties"/>
-        <copy file="${aop.xml.ltwtests.full}"
+		<copy file="${aop.xml.ltwtests.full}"
               tofile="${build.tests.dir}/META-INF/aop.xml"
               overwrite="true"/>
-        <java dir="."
+		<java dir="."
               fork="true"
               classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.executionOrderTest.ExecutionOrderTest"
               classpathref="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-javaagent:${aspectjweaverjar}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-            <jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
-            <jvmarg value="-Daj.weaving.verbose=true"/>
-        </java>
-    </target>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-javaagent:${aspectjweaverjar}"/>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true"/>
+			<jvmarg value="-Daj.weaving.verbose=true"/>
+		</java>
+	</target>
 
-    <target name="compile-tests-compileTimeWeaving-bookstore"
+	<target name="compile-tests-compileTimeWeaving-bookstore"
             depends="compile-kieker.monitoring">
-        <path id="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="aspectjrt-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-                <include name="servlet-api.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="aspectjrt-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="servlet-api.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <delete dir="tmp/aspects/"/>
-        <mkdir dir="tmp/aspects/"/>
-        <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspect.java"
+		<delete dir="tmp/aspects/"/>
+		<mkdir dir="tmp/aspects/"/>
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspect.java"
               todir="tmp/aspects/"/>
-        <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspectServlet.java"
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspectServlet.java"
               todir="tmp/aspects/"/>
-        <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/${TestAspect}"
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/${TestAspect}"
               todir="tmp/aspects/"/>
-        <copy file="${tests.log4j.properties}"
+		<copy file="${tests.log4j.properties}"
               tofile="${build.dir}/log4j.properties"/>
-        <iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
+		<iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
               classpathref="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
-            <sourceroots>
-                <pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/bookstore/"/>
-                <pathelement location="tmp/aspects/"/>
-            </sourceroots>
-        </iajc>
-    </target>
+			<sourceroots>
+				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/bookstore/"/>
+				<pathelement location="tmp/aspects/"/>
+			</sourceroots>
+		</iajc>
+	</target>
 
-    <target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample"
+	<target name="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample"
             depends="compile-kieker.monitoring">
-        <path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="aspectjrt-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-                <include name="servlet-api.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="aspectjrt-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="servlet-api.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <delete dir="tmp/aspects/"/>
-        <mkdir dir="tmp/aspects/"/>
-        <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspect.java"
+		<delete dir="tmp/aspects/"/>
+		<mkdir dir="tmp/aspects/"/>
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspect.java"
               todir="tmp/aspects/"/>
-        <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspectServlet.java"
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspectServlet.java"
               todir="tmp/aspects/"/>
-        <copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/${TestAspect}"
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/${TestAspect}"
               todir="tmp/aspects/"/>
-        <copy file="${tests.log4j.properties}"
+		<copy file="${tests.log4j.properties}"
               tofile="${build.dir}/log4j.properties"/>
-        <iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
+		<iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true"
               classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
-            <sourceroots>
-                <pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/twoConcurrentMethodsExample/"/>
-                <pathelement location="tmp/aspects/"/>
-            </sourceroots>
-        </iajc>
-    </target>
+			<sourceroots>
+				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/twoConcurrentMethodsExample/"/>
+				<pathelement location="tmp/aspects/"/>
+			</sourceroots>
+		</iajc>
+	</target>
 
-    <target name="run-tests-compileTimeWeaving-bookstore"
+	<target name="run-tests-compileTimeWeaving-bookstore"
             depends="compile-tests-compileTimeWeaving-bookstore">
-        <path id="kieker.test-compileTimeWeaving-bookstore-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="aspectjweaver-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-compileTimeWeaving-bookstore-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="aspectjweaver-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <java dir="."
+		<java dir="."
               fork="true"
               classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.Bookstore"
               classpathref="kieker.test-compileTimeWeaving-bookstore-run-classpath">
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-        </java>
-    </target>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+		</java>
+	</target>
 
-    <target name="run-tests-compileTimeWeaving-bookstoreDB"
+	<target name="run-tests-compileTimeWeaving-bookstoreDB"
             depends="compile-all-tests,compile-tests-compileTimeWeaving-bookstore">
-        <path id="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="aspectjweaver-*.jar"/>
-                <include name="derby.jar"/>
-                <include name="mysql-connector-java-*-bin.jar"/><!--needed for some reason ...-->
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="aspectjweaver-*.jar"/>
+				<include name="derby.jar"/>
+				<include name="mysql-connector-java-*-bin.jar"/>
+				<!--needed for some reason ...-->
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <delete dir="${tests.javadb.kiekerdb.path}"/> <!-- delete existing DB -->
-        <java dir="."
+		<delete dir="${tests.javadb.kiekerdb.path}"/>
+		<!-- delete existing DB -->
+		<java dir="."
               fork="true"
               classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath"
               classname="kieker.test.monitoring.util.JavaDBInitializer">
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-            <jvmarg value="-Dkieker.monitoring.dbDriverClassname="/>
-            <jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:${tests.javadb.kiekerdb.path};user=DBUSER;password=DBPASS"/>
-            <jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata"/>
-        </java>
-        <java dir="."
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+			<jvmarg value="-Dkieker.monitoring.dbDriverClassname="/>
+			<jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:${tests.javadb.kiekerdb.path};user=DBUSER;password=DBPASS"/>
+			<jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata"/>
+		</java>
+		<java dir="."
               fork="true"
               classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.Bookstore"
               classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
-            <jvmarg value="-Dkieker.monitoring.configuration=${tests.db.kieker.monitoring.properties}"/>
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-            <jvmarg value="-Dkieker.monitoring.dbDriverClassname="/>
-            <jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
-            <jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata"/>
-        </java>
-    </target>
+			<jvmarg value="-Dkieker.monitoring.configuration=${tests.db.kieker.monitoring.properties}"/>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+			<jvmarg value="-Dkieker.monitoring.dbDriverClassname="/>
+			<jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS"/>
+			<jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata"/>
+		</java>
+	</target>
 
-    <target name="run-tests-compileTimeWeaving-bookstore-synchronized"
+	<target name="run-tests-compileTimeWeaving-bookstore-synchronized"
             depends="compile-tests-compileTimeWeaving-bookstore">
-        <echo message="Using Bookstore variant with synchronized Catalog.getBooks (is slower)."/>
+		<echo message="Using Bookstore variant with synchronized Catalog.getBooks (is slower)."/>
 
-        <path id="kieker.test-compileTimeWeaving-bookstore-synchronized-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="aspectjweaver-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+		<path id="kieker.test-compileTimeWeaving-bookstore-synchronized-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="aspectjweaver-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <java dir="."
+		<java dir="."
               fork="true"
               classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.synchron.Bookstore"
               classpathref="kieker.test-compileTimeWeaving-bookstore-synchronized-run-classpath">
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-        </java>
-    </target>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+		</java>
+	</target>
 
-    <target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample">
-        <path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="aspectjweaver-*.jar"/>
-                <include name="commons-logging-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+	<target name="run-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="compile-tests-compileTimeWeaving-twoConcurrentMethodsExample">
+		<path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="aspectjweaver-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <java dir="."
+		<java dir="."
               fork="true"
               classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.twoConcurrentMethodsExample.Starter"
               classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-run-classpath">
-            <jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-            <jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
-            <jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-        </java>
-    </target>
+			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
+			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
+		</java>
+	</target>
 
-    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
 
-    <target name="compile-all-tests"
-            depends="compile-tests-common,compile-tests-analysis,compile-tests-monitoring,compile-tests-tools"/>
+	<target name="compile-all-tests" depends="compile-tests-common,compile-tests-analysis,compile-tests-monitoring,compile-tests-tools" />
 
-    <target name="run-tests-junit" depends="compile-all-tests">
-        <path id="kieker.test-junit-run-classpath">
-            <fileset dir="${lib.dir}">
-                <include name="commons-logging-*.jar"/>
-                <include name="junit-*.jar"/>
-            </fileset>
-            <pathelement location="${build.tests.dir}/"/>
-            <!--<fileset dir="${dist.dir}">
+	<target name="run-tests-junit" depends="compile-all-tests">
+		<path id="kieker.test-junit-run-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="commons-logging-*.jar"/>
+				<include name="junit-*.jar"/>
+			</fileset>
+			<pathelement location="${build.tests.dir}/"/>
+			<!--<fileset dir="${dist.dir}">
                 <include name="${dist.kieker.common.jar}"/>
                 <include name="${dist.kieker.monitoring.jar}"/>
                 <include name="${dist.kieker.analysis.jar}"/>
                 <include name="${dist.kieker.tools.jar}"/>
             </fileset>-->
-            <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.main.jar}"/>
-            </fileset>
-        </path>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}"/>
+			</fileset>
+		</path>
 
-        <delete dir="${tests.junit-results.dir}"/>
-        <mkdir  dir="${tests.junit-results.dir}"/>
+		<delete dir="${tests.junit-results.dir}"/>
+		<mkdir  dir="${tests.junit-results.dir}"/>
 
-        <junit printsummary="yes" haltonfailure="no">
-            <classpath refid="kieker.test-junit-run-classpath"/>
+		<junit printsummary="yes" haltonfailure="no">
+			<classpath refid="kieker.test-junit-run-classpath"/>
 
-            <formatter type="xml"/>
+			<formatter type="xml"/>
 
-            <batchtest fork="yes" todir="${tests.junit-results.dir}">
-                <fileset dir="${build.tests.dir}/">
-                    <include name="**/junit/**/*Test*.class"/>
-                    <exclude name="**/*$*.class"/>
-                </fileset>
-            </batchtest>
-        </junit>
+			<batchtest fork="yes" todir="${tests.junit-results.dir}">
+				<fileset dir="${build.tests.dir}/">
+					<include name="**/junit/**/*Test*.class"/>
+					<exclude name="**/*$*.class"/>
+				</fileset>
+			</batchtest>
+		</junit>
 
-        <antcall target="test.junit.report"/>
-    </target>
+		<antcall target="test.junit.report"/>
+	</target>
 
-    <target name="test.junit.report" depends="" >
-        <junitreport todir="${tests.junit-results.dir}">
-            <fileset dir="${tests.junit-results.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${tests.junit-results.dir}"/>
-        </junitreport>
+	<target name="test.junit.report" depends="" >
+		<junitreport todir="${tests.junit-results.dir}">
+			<fileset dir="${tests.junit-results.dir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${tests.junit-results.dir}"/>
+		</junitreport>
 
-        <echo message="To see the test report, open ${tests.junit-results.dir}/index.html in your Web browser."/>
-    </target>
+		<echo message="To see the test report, open ${tests.junit-results.dir}/index.html in your Web browser."/>
+	</target>
 
-    <!-- Generates sample files for .classpath and .project Eclipse files -->
-    <target name="create-eclipse-sample-files" depends="init">
-        <pathconvert property="eclipse.entries" refid="all-external-jars" dirsep="/"
+	<!-- Generates sample files for .classpath and .project Eclipse files -->
+	<target name="create-eclipse-sample-files" depends="init">
+		<pathconvert property="eclipse.entries" refid="all-external-jars" dirsep="/"
                      pathsep="&quot;/&gt;&#10;    &lt;classpathentry kind=&quot;lib&quot; path=&quot;">
-            <map from="${user.dir}/" to=""/> <!-- change absolute path back to relative path -->
-        </pathconvert>
+			<map from="${user.dir}/" to=""/>
+			<!-- change absolute path back to relative path -->
+		</pathconvert>
 
-        <echo file="${eclipse-classpath.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-        <!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
-        <classpath>
-            <classpathentry kind="src" path="${src.kieker.common.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.analysis.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.monitoring.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.monitoring-servlet.dir}"/>
-            <classpathentry kind="src" path="${src.kieker.tools.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.common.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
-            <classpathentry kind="src" path="${test.kieker.tools.dir}"/>
-            <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-            <classpathentry kind="lib" path="${eclipse.entries}"/>
-            <classpathentry kind="output" path="build-eclipse"/>
-        </classpath>
+		<echo file="${eclipse-classpath.sample}">
+			<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+			<!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
+			<classpath>
+				<classpathentry kind="src" path="${src.kieker.common.dir}"/>
+				<classpathentry kind="src" path="${src.kieker.analysis.dir}"/>
+				<classpathentry kind="src" path="${src.kieker.monitoring.dir}"/>
+				<classpathentry kind="src" path="${src.kieker.monitoring-servlet.dir}"/>
+				<classpathentry kind="src" path="${src.kieker.tools.dir}"/>
+				<classpathentry kind="src" path="${test.kieker.common.dir}"/>
+				<classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
+				<classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
+				<classpathentry kind="src" path="${test.kieker.tools.dir}"/>
+				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+				<classpathentry kind="lib" path="${eclipse.entries}"/>
+				<classpathentry kind="output" path="build-eclipse"/>
+			</classpath>
         ]]>
         </echo>
-        <echo file="${eclipse-project.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-        <!-- Sample eclipse .project file. Copy this file to ".project". -->
-        <projectDescription>
-            <name>Kieker</name>
-            <comment></comment>
-            <projects>
-            </projects>
-            <buildSpec>
-                    <buildCommand>
-                            <name>org.eclipse.jdt.core.javabuilder</name>
-                            <arguments>
-                            </arguments>
-                    </buildCommand>
-            </buildSpec>
-            <natures>
-                    <nature>org.eclipse.jdt.core.javanature</nature>
-            </natures>
-        </projectDescription>
+		<echo file="${eclipse-project.sample}">
+			<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+			<!-- Sample eclipse .project file. Copy this file to ".project". -->
+			<projectDescription>
+				<name>Kieker</name>
+				<comment>
+				</comment>
+				<projects>
+				</projects>
+				<buildSpec>
+					<buildCommand>
+						<name>org.eclipse.jdt.core.javabuilder</name>
+						<arguments>
+						</arguments>
+					</buildCommand>
+				</buildSpec>
+				<natures>
+					<nature>org.eclipse.jdt.core.javanature</nature>
+				</natures>
+			</projectDescription>
         ]]>
         </echo>
-    </target>
+	</target>
 
-    <target name="pmd">
-        <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
-        <pmd shortFilenames="true">
-            <ruleset>rulesets/favorites.xml</ruleset>
-            <ruleset>basic</ruleset>
-            <formatter type="html" toFile="pmd_report.html" />
-            <fileset dir="src/" includes="**/*.java"/>
-        </pmd>
-    </target>
+	<target name="pmd">
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
+		<pmd shortFilenames="true">
+			<ruleset>rulesets/favorites.xml</ruleset>
+			<ruleset>basic</ruleset>
+			<formatter type="html" toFile="pmd_report.html" />
+			<fileset dir="src/" includes="**/*.java"/>
+		</pmd>
+	</target>
 
-    <target name="mvn-init" depends="update-version">
-        <xmlproperty file="pom.xml" prefix="pom.xml" />
-        <path id="maven-ant-tasks.classpath" path="lib/maven/maven-ant-tasks-2.1.0.jar" />
-        <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
+	<target name="mvn-init" depends="update-version">
+		<xmlproperty file="pom.xml" prefix="pom.xml" />
+		<path id="maven-ant-tasks.classpath" path="lib/maven/maven-ant-tasks-2.1.0.jar" />
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
                  classpathref="maven-ant-tasks.classpath" />
-    </target>
+	</target>
 
-    <target name="mvn-deploy" depends="mvn-init, mvn-deploy-base, mvn-deploy-jar, mvn-deploy-war" />
+	<target name="mvn-deploy" depends="mvn-init, mvn-deploy-base, mvn-deploy-jar, mvn-deploy-war" />
 
-    <target name="mvn-deploy-jar" depends="compile-kieker.monitoring, mvn-deploy-base">
-        <artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
-        <artifact:pom id="mavenproject" file="pom_ant_kieker-jar.xml" />
-        <artifact:deploy file="${dist.dir}/${dist.kieker.main.jar}">
-            <pom refid="mavenproject"/>
-        </artifact:deploy>
-    </target>
+	<target name="mvn-deploy-jar" depends="compile-kieker.monitoring, mvn-deploy-base">
+		<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+		<artifact:pom id="mavenproject" file="pom_ant_kieker-jar.xml" />
+		<artifact:deploy file="${dist.dir}/${dist.kieker.main.jar}">
+			<pom refid="mavenproject"/>
+		</artifact:deploy>
+	</target>
 
-    <target name="mvn-deploy-war" depends="compile-kieker.monitoring-servlet, mvn-deploy-jar">
-        <artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
-        <artifact:pom id="mavenproject" file="pom_ant_kieker-war.xml" />
-        <artifact:deploy file="${dist.dir}/${dist.kieker.monitoring.servlet.war}">
-            <pom refid="mavenproject"/>
-        </artifact:deploy>
-    </target>
+	<target name="mvn-deploy-war" depends="compile-kieker.monitoring-servlet, mvn-deploy-jar">
+		<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+		<artifact:pom id="mavenproject" file="pom_ant_kieker-war.xml" />
+		<artifact:deploy file="${dist.dir}/${dist.kieker.monitoring.servlet.war}">
+			<pom refid="mavenproject"/>
+		</artifact:deploy>
+	</target>
 
-    <target name="mvn-deploy-base" depends="mvn-init">
-        <artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
-        <artifact:pom id="mavenproject" file="pom_ant_kieker-base.xml" />
-        <artifact:deploy file="pom_ant_kieker-base.xml">
-            <pom refid="mavenproject"/>
-        </artifact:deploy>
-    </target>
+	<target name="mvn-deploy-base" depends="mvn-init">
+		<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+		<artifact:pom id="mavenproject" file="pom_ant_kieker-base.xml" />
+		<artifact:deploy file="pom_ant_kieker-base.xml">
+			<pom refid="mavenproject"/>
+		</artifact:deploy>
+	</target>
 </project>
