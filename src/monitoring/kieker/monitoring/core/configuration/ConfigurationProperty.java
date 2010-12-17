@@ -20,6 +20,9 @@ import java.util.Properties;
  * ==================================================
  */
 
+/**
+ * @author Andre van Hoorn
+ */
 public enum ConfigurationProperty {
 	/* */
 	DB_CONNECTION_ADDRESS("dbConnectionAddress",
