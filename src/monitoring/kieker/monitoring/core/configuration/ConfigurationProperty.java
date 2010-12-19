@@ -58,6 +58,12 @@ public enum ConfigurationProperty {
 			ConfigurationFileConstants.JVM_ARG_PREFIX + "asyncBlockOnFullQueue",
 			Boolean.toString(MonitoringConfiguration.DEFAULT_ASYNC__BLOCK_ON_FULL_QUEUE),
 			/* must not be empty: */false),
+	/* */
+	PERIODIC_SENSORS_EXECUTOR_POOL_SIZE(
+			"periodicSensorsExecutorPoolSize",
+			ConfigurationFileConstants.JVM_ARG_PREFIX + "periodicSensorsExecutorPoolSize",
+			Integer.toString(MonitoringConfiguration.DEFAULT_EXECUTOR_THREAD_POOL_SIZE),
+			/* must not be empty: */false),
 	/*
 	 * For historic reasons ;-) this property has the prefix also in the
 	 * configuration file:

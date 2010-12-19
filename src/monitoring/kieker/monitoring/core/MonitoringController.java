@@ -1,6 +1,10 @@
 package kieker.monitoring.core;
 
 import java.util.Vector;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.record.DummyMonitoringRecord;
@@ -10,6 +14,9 @@ import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.core.state.IMonitoringControllerState;
 import kieker.monitoring.core.state.MonitoringControllerState;
+import kieker.monitoring.probe.sigar.sensors.AbstractTriggeredSigarSensor;
+import kieker.monitoring.probe.util.IPeriodicSensingController;
+import kieker.monitoring.probe.util.ITriggeredSensor;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 import kieker.monitoring.writer.util.async.ShutdownHook;
@@ -40,12 +47,14 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Matthias Rohr
  * 
  */
-public final class MonitoringController implements IMonitoringController {
+public final class MonitoringController implements IMonitoringController,
+		IPeriodicSensingController {
 
 	/**
 	 * Used to notify the writer threads that monitoring ended.
 	 */
-	public static final IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
+	public static final IMonitoringRecord END_OF_MONITORING_MARKER =
+			new DummyMonitoringRecord();
 
 	private static final Log log = LogFactory
 			.getLog(MonitoringController.class);
@@ -62,14 +71,15 @@ public final class MonitoringController implements IMonitoringController {
 	 * http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
 	 * 
 	 * @author Andre van Hoorn
-	 *
+	 * 
 	 */
 	private static class LazyHolder {
 		/**
 		 * The singleton instance of the monitoring controller
 		 */
-		private static final MonitoringController SINGLETON_INSTANCE = new MonitoringController(
-				MonitoringConfiguration.createSingletonConfiguration());
+		private static final MonitoringController SINGLETON_INSTANCE =
+				new MonitoringController(
+						MonitoringConfiguration.createSingletonConfiguration());
 	}
 
 	/**
@@ -103,6 +113,11 @@ public final class MonitoringController implements IMonitoringController {
 	private final IMonitoringControllerState state;
 
 	/**
+	 * Executes the {@link AbstractTriggeredSigarSensor}s.
+	 */
+	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
+
+	/**
 	 * Must not be used for construction.
 	 */
 	@SuppressWarnings("unused")
@@ -110,6 +125,7 @@ public final class MonitoringController implements IMonitoringController {
 		this.state = null;
 		this.monitoringLogWriter = null;
 		this.instanceName = null;
+		this.periodicSensorsPoolExecutor = null;
 		this.shutdownhook = null;
 	}
 
@@ -133,6 +149,10 @@ public final class MonitoringController implements IMonitoringController {
 				this.registerWorker(w);
 			}
 		}
+
+		this.periodicSensorsPoolExecutor =
+				this.createPeriodicSensorsPoolExecutor(configuration);
+
 		try {
 			Runtime.getRuntime().addShutdownHook(this.shutdownhook);
 		} catch (final Exception e) {
@@ -142,6 +162,35 @@ public final class MonitoringController implements IMonitoringController {
 		MonitoringController.log
 				.info("Initialization completed.\n Writer Info: "
 						+ this.getConnectorInfo());
+	}
+
+	private final ScheduledThreadPoolExecutor createPeriodicSensorsPoolExecutor(
+			final IMonitoringConfiguration configuration) {
+		final ScheduledThreadPoolExecutor executor =
+				new ScheduledThreadPoolExecutor(
+						configuration.getPeriodicSensorsExecutorPoolSize(),
+						/*
+						 * Handler for failed sensor executions that simply logs
+						 * notifications.
+						 */
+						new RejectedExecutionHandler() {
+
+							@Override
+							public void rejectedExecution(final Runnable r,
+									final ThreadPoolExecutor executor) {
+								MonitoringController.log
+										.error("Exception caught by RejectedExecutionHandler for Runnable "
+												+ r
+												+ " and ThreadPoolExecutor "
+												+ executor);
+
+							}
+						});
+		this.periodicSensorsPoolExecutor
+				.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
+		this.periodicSensorsPoolExecutor
+				.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+		return executor;
 	}
 
 	/**
@@ -392,6 +441,9 @@ public final class MonitoringController implements IMonitoringController {
 	public void terminateMonitoring() {
 		MonitoringController.log.info("Monitoring controller ("
 				+ this.instanceName + ") terminates monitoring");
+		if (this.periodicSensorsPoolExecutor != null) {
+			this.periodicSensorsPoolExecutor.shutdown();
+		}
 		if (this.monitoringLogWriter != null) {
 			/* if the initialization of the writer failed, it is set to null */
 			if (!this.monitoringLogWriter
@@ -401,5 +453,31 @@ public final class MonitoringController implements IMonitoringController {
 		}
 		/* Must be set after the END_OF_MONITORING_MARKER was sent */
 		this.state.terminateMonitoring();
+	}
+
+	@Override
+	public synchronized ScheduledSensorJob schedulePeriodicSensor(
+			final ITriggeredSensor sensor,
+			final long initialDelay,
+			final long period, final TimeUnit timeUnit) {
+		if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
+			MonitoringController.log
+					.warn("Won't schedule periodic sensor since core pool size <1: "
+							+ this.periodicSensorsPoolExecutor
+									.getCorePoolSize());
+			return null;
+		}
+
+		final ScheduledSensorJob job =
+				new ScheduledSensorJob(this, sensor);
+		this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay,
+				period, timeUnit);
+		return job;
+	}
+
+	@Override
+	public synchronized boolean removePeriodicSensor(
+			final ScheduledSensorJob sensorJob) {
+		return this.periodicSensorsPoolExecutor.remove(sensorJob);
 	}
 }

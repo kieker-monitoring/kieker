@@ -69,6 +69,30 @@ public interface IMonitoringConfiguration {
 	public IMonitoringLogWriter getMonitoringLogWriter();
 
 	/**
+	 * Sets the configured size of the thread pool used to execute the
+	 * periodic sensor jobs registered and removed via
+	 * {@link MonitoringController#schedulePeriodicSensor(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
+	 * and
+	 * {@link MonitoringController#removePeriodicSensor(kieker.monitoring.core.ScheduledSensorJob)}
+	 * respectively.
+	 * 
+	 * @return
+	 */
+	public void setPeriodicSensorsExecutorPoolSize(int poolSize);
+	
+	/**
+	 * Returns the configured size of the thread pool used to execute the
+	 * periodic sensor jobs registered and removed via
+	 * {@link MonitoringController#schedulePeriodicSensor(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
+	 * and
+	 * {@link MonitoringController#removePeriodicSensor(kieker.monitoring.core.ScheduledSensorJob)}
+	 * respectively.
+	 * 
+	 * @return
+	 */
+	public int getPeriodicSensorsExecutorPoolSize();
+
+	/**
 	 * Sets the host name field to the given value.
 	 * 
 	 * @param newHostName

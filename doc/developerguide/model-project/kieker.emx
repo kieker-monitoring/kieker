@@ -877,7 +877,24 @@
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_apGwUFE6Ed-ULIx_3ef1Lw" name="probe">
-      <eAnnotations xmi:id="_apHXYFE6Ed-ULIx_3ef1Lw" source="uml2.diagrams"/>
+      <eAnnotations xmi:id="_apHXYFE6Ed-ULIx_3ef1Lw" source="uml2.diagrams" references="_apHXYVE6Ed-ULIx_3ef1Lw">
+        <contents xmi:type="umlnotation:UMLDiagram" xmi:id="_apHXYVE6Ed-ULIx_3ef1Lw" type="Class" name="Main">
+          <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_b5bvwFE6Ed-ULIx_3ef1Lw" element="_b5ZTgFE6Ed-ULIx_3ef1Lw" fontName="Arial" fontHeight="10" showListStereotype="Text" showListVisibility="Text" lineColor="0" showStereotype="Text" useClassifierShape="true">
+            <children xmi:type="notation:DecorationNode" xmi:id="_b5cW0FE6Ed-ULIx_3ef1Lw" type="ImageCompartment">
+              <layoutConstraint xmi:type="notation:Size" xmi:id="_b5cW0VE6Ed-ULIx_3ef1Lw" width="530" height="530"/>
+            </children>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_b5cW0lE6Ed-ULIx_3ef1Lw" type="Stereotype"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_b5c94FE6Ed-ULIx_3ef1Lw" type="Kind"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_b5c94VE6Ed-ULIx_3ef1Lw" type="Name"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_b5c94lE6Ed-ULIx_3ef1Lw" type="Parent"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_b5dk8FE6Ed-ULIx_3ef1Lw" type="AttributeCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_b5eMAFE6Ed-ULIx_3ef1Lw" type="OperationCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_b5ezEFE6Ed-ULIx_3ef1Lw" visible="false" type="SignalCompartment"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_b5bvwlE6Ed-ULIx_3ef1Lw" x="11713" y="5050"/>
+          </children>
+          <element xsi:nil="true"/>
+        </contents>
+      </eAnnotations>
       <packagedElement xmi:type="uml:Interface" xmi:id="_b5ZTgFE6Ed-ULIx_3ef1Lw" name="IMonitoringProbe">
         <ownedAttribute xmi:id="_rdzckFE6Ed-ULIx_3ef1Lw" name="ctrlInst" visibility="private" type="_FOzq8DHKEd-Dw_r6qZDmjQ" association="_rdyOcFE6Ed-ULIx_3ef1Lw">
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rd1RwFE6Ed-ULIx_3ef1Lw" value="1"/>
@@ -890,136 +907,189 @@
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rd2f4FE6Ed-ULIx_3ef1Lw"/>
         </ownedEnd>
       </packagedElement>
-      <packagedElement xmi:type="uml:Package" xmi:id="_TxsQcAmxEeC4waODmkrM-Q" name="sigar">
-        <eAnnotations xmi:id="_TyhW4AmxEeC4waODmkrM-Q" source="uml2.diagrams" references="_Tyh98AmxEeC4waODmkrM-Q">
-          <contents xmi:type="umlnotation:UMLDiagram" xmi:id="_Tyh98AmxEeC4waODmkrM-Q" type="Freeform" name="SigarSensingController">
-            <children xmi:type="umlnotation:UMLShape" xmi:id="_dkOhgAmxEeC4waODmkrM-Q" element="_WYAycAmxEeC4waODmkrM-Q" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Label">
-              <children xmi:type="notation:DecorationNode" xmi:id="_dkQ9wAmxEeC4waODmkrM-Q" type="ImageCompartment">
-                <layoutConstraint xmi:type="notation:Size" xmi:id="_dkQ9wQmxEeC4waODmkrM-Q" width="1320" height="1320"/>
+      <packagedElement xmi:type="uml:Package" xmi:id="_pjaUsAnPEeCukfKREHG-og" name="sigar">
+        <eAnnotations xmi:id="_pj-8cAnPEeCukfKREHG-og" source="uml2.diagrams">
+          <contents xmi:type="umlnotation:UMLDiagram" xmi:id="_uGp2YAnPEeCukfKREHG-og" type="Class" name="SigarSensingController">
+            <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_Rg6BIAnTEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" showListSignature="true" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName" useClassifierShape="true">
+              <children xmi:type="notation:DecorationNode" xmi:id="_Rg8dYAnTEeCukfKREHG-og" type="ImageCompartment">
+                <layoutConstraint xmi:type="notation:Size" xmi:id="_Rg8dYQnTEeCukfKREHG-og" width="530" height="530"/>
               </children>
-              <children xmi:type="notation:BasicDecorationNode" xmi:id="_dkRk0AmxEeC4waODmkrM-Q" type="Stereotype"/>
-              <children xmi:type="notation:BasicDecorationNode" xmi:id="_dkRk0QmxEeC4waODmkrM-Q" type="Name"/>
-              <children xmi:type="notation:BasicDecorationNode" xmi:id="_dkSL4AmxEeC4waODmkrM-Q" type="Parent"/>
-              <children xmi:type="notation:SemanticListCompartment" xmi:id="_dkSL4QmxEeC4waODmkrM-Q" type="AttributeCompartment"/>
-              <children xmi:type="notation:SemanticListCompartment" xmi:id="_dkSy8AmxEeC4waODmkrM-Q" type="OperationCompartment"/>
-              <children xmi:type="notation:SemanticListCompartment" xmi:id="_dkTaAAmxEeC4waODmkrM-Q" visible="false" type="SignalCompartment"/>
-              <children xmi:type="umlnotation:UMLShapeCompartment" xmi:id="_dkTaAQmxEeC4waODmkrM-Q" visible="false" type="StructureCompartment"/>
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dkOhgQmxEeC4waODmkrM-Q" x="6340" y="1585"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_Rg9EcAnTEeCukfKREHG-og" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_RhVe8AnTEeCukfKREHG-og" type="Kind"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_RhWGAAnTEeCukfKREHG-og" type="Name"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_RhWGAQnTEeCukfKREHG-og" type="Parent"/>
+              <children xmi:type="notation:SemanticListCompartment" xmi:id="_RhWtEAnTEeCukfKREHG-og" visible="false" type="AttributeCompartment"/>
+              <children xmi:type="notation:SemanticListCompartment" xmi:id="_Rhq2IAnTEeCukfKREHG-og" type="OperationCompartment"/>
+              <children xmi:type="notation:SemanticListCompartment" xmi:id="_RhsEQAnTEeCukfKREHG-og" visible="false" type="SignalCompartment"/>
+              <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=ISigarTriggeredSensorFactory%5Bjcu%5Ename=ISigarTriggeredSensorFactory.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Interface"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Rg6BIQnTEeCukfKREHG-og" x="17752" y="-3804"/>
+            </children>
+            <children xmi:type="umlnotation:UMLShape" xmi:id="_ZewBcAnTEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName">
+              <children xmi:type="notation:DecorationNode" xmi:id="_Ze0S4AnTEeCukfKREHG-og" type="ImageCompartment">
+                <layoutConstraint xmi:type="notation:Size" xmi:id="_Ze058AnTEeCukfKREHG-og" width="1320" height="1320"/>
+              </children>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_Ze058QnTEeCukfKREHG-og" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_Ze058gnTEeCukfKREHG-og" type="Name"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_Ze1hAAnTEeCukfKREHG-og" type="Parent"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_Ze2IEAnTEeCukfKREHG-og" visible="false" type="ANNOTATION_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_Ze5ycAnTEeCukfKREHG-og" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_Ze7AkAnTEeCukfKREHG-og" visible="false" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+              <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=SigarTriggeredSensorFactory%5Bjcu%5Ename=SigarTriggeredSensorFactory.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Class"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZewBcQnTEeCukfKREHG-og" x="19337" y="634"/>
+            </children>
+            <children xmi:type="umlnotation:UMLShape" xmi:id="_jXr1cAnTEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName">
+              <children xmi:type="notation:DecorationNode" xmi:id="_jXtDkAnTEeCukfKREHG-og" type="ImageCompartment">
+                <layoutConstraint xmi:type="notation:Size" xmi:id="_jXtDkQnTEeCukfKREHG-og" width="1320" height="1320"/>
+              </children>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_jXtDkgnTEeCukfKREHG-og" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_jXtDkwnTEeCukfKREHG-og" type="Name"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_jXtqoAnTEeCukfKREHG-og" type="Parent"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_jXtqoQnTEeCukfKREHG-og" visible="false" type="ANNOTATION_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_jXtqognTEeCukfKREHG-og" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_jXuRsAnTEeCukfKREHG-og" visible="false" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+              <element xmi:type="uml:Class" href="mmi:///#jbintype%5Ename=org.hyperic.sigar.Sigar%5Bproject%5Eid=Kieker%5D$uml.Class"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jXr1cQnTEeCukfKREHG-og" x="39465" y="634"/>
+            </children>
+            <children xmi:type="umlnotation:UMLShape" xmi:id="_zR7roAnTEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName">
+              <children xmi:type="notation:DecorationNode" xmi:id="_zR85wAnTEeCukfKREHG-og" type="ImageCompartment">
+                <layoutConstraint xmi:type="notation:Size" xmi:id="_zR85wQnTEeCukfKREHG-og" width="1320" height="1320"/>
+              </children>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_zR9g0AnTEeCukfKREHG-og" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_zR9g0QnTEeCukfKREHG-og" type="Name"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_zR-H4AnTEeCukfKREHG-og" type="Parent"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_zR-H4QnTEeCukfKREHG-og" visible="false" type="ANNOTATION_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_zSDAYAnTEeCukfKREHG-og" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_zSDncAnTEeCukfKREHG-og" visible="false" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+              <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=MonitoringController%5Bjcu%5Ename=MonitoringController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Class"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_zR7roQnTEeCukfKREHG-og" x="38726" y="-1239"/>
+            </children>
+            <children xmi:type="umlnotation:UMLShape" xmi:id="_77g28AnbEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName">
+              <children xmi:type="notation:DecorationNode" xmi:id="_77iFEAnbEeCukfKREHG-og" type="ImageCompartment">
+                <layoutConstraint xmi:type="notation:Size" xmi:id="_77iFEQnbEeCukfKREHG-og" width="1320" height="1320"/>
+              </children>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_77iFEgnbEeCukfKREHG-og" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_77isIAnbEeCukfKREHG-og" type="Name"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_77isIQnbEeCukfKREHG-og" type="Parent"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_77isIgnbEeCukfKREHG-og" visible="false" type="ANNOTATION_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_77lvcAnbEeCukfKREHG-og" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_77mWgAnbEeCukfKREHG-og" visible="false" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+              <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=AbstractTriggeredSigarSensor%5Bjcu%5Ename=AbstractTriggeredSigarSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar.sensors%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Class"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_77g28QnbEeCukfKREHG-og" x="29798" y="634"/>
+            </children>
+            <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_ba_VkAncEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName" useClassifierShape="true">
+              <children xmi:type="notation:DecorationNode" xmi:id="_ba_8oAncEeCukfKREHG-og" type="ImageCompartment">
+                <layoutConstraint xmi:type="notation:Size" xmi:id="_ba_8oQncEeCukfKREHG-og" width="530" height="530"/>
+              </children>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_bbAjsAncEeCukfKREHG-og" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_bbAjsQncEeCukfKREHG-og" type="Kind"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_bbBKwAncEeCukfKREHG-og" type="Name"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_bbBKwQncEeCukfKREHG-og" type="Parent"/>
+              <children xmi:type="notation:SemanticListCompartment" xmi:id="_bbBx0AncEeCukfKREHG-og" visible="false" type="AttributeCompartment"/>
+              <children xmi:type="notation:SemanticListCompartment" xmi:id="_bbBx0QncEeCukfKREHG-og" type="OperationCompartment"/>
+              <children xmi:type="notation:SemanticListCompartment" xmi:id="_bbCY4AncEeCukfKREHG-og" visible="false" type="SignalCompartment"/>
+              <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=ITriggeredSensor%5Bjcu%5Ename=ITriggeredSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.util%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Interface"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ba_VkQncEeCukfKREHG-og" x="28530" y="-1689"/>
+            </children>
+            <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_n-NlkAncEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName" useClassifierShape="true">
+              <children xmi:type="notation:DecorationNode" xmi:id="_n-OMoAncEeCukfKREHG-og" type="ImageCompartment">
+                <layoutConstraint xmi:type="notation:Size" xmi:id="_n-OMoQncEeCukfKREHG-og" width="530" height="530"/>
+              </children>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_n-OMogncEeCukfKREHG-og" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_n-OzsAncEeCukfKREHG-og" type="Kind"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_n-OzsQncEeCukfKREHG-og" type="Name"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_n-OzsgncEeCukfKREHG-og" type="Parent"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_n-PawAncEeCukfKREHG-og" visible="false" type="AttributeCompartment" collapsed="true"/>
+              <children xmi:type="notation:ListCompartment" xmi:id="_n-QB0AncEeCukfKREHG-og" visible="false" type="OperationCompartment" collapsed="true"/>
+              <children xmi:type="notation:SemanticListCompartment" xmi:id="_n-RP8AncEeCukfKREHG-og" visible="false" type="SignalCompartment"/>
+              <element xmi:type="uml:Interface" href="mmi:///#jbintype%5Ename=java.lang.Runnable%5Bproject%5Eid=Kieker%5D$uml.Interface"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_n-NlkQncEeCukfKREHG-og" x="32651" y="-3170" height="1053"/>
             </children>
             <element xsi:nil="true"/>
+            <edges xmi:type="umlnotation:UMLConnector" xmi:id="_Zr5FkAnTEeCukfKREHG-og" source="_ZewBcAnTEeCukfKREHG-og" target="_Rg6BIAnTEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+              <children xmi:type="notation:DecorationNode" xmi:id="_Zr5soAnTEeCukfKREHG-og" type="NameLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_Zr6TsAnTEeCukfKREHG-og" type="Stereotype"/>
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_Zr6TsQnTEeCukfKREHG-og" type="Name"/>
+                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Zr5soQnTEeCukfKREHG-og" y="-186"/>
+              </children>
+              <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=SigarTriggeredSensorFactory%5Bjcu%5Ename=SigarTriggeredSensorFactory.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=ISigarTriggeredSensorFactory%5Bjcu%5Ename=ISigarTriggeredSensorFactory.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.InterfaceRealization"/>
+              <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Zr5FkQnTEeCukfKREHG-og" points="[-430, -939, -458, 1017]$[-430, -1862, -458, 94]"/>
+              <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Z2BR8AnTEeCukfKREHG-og" id="(0.5,0.9896398618648249)"/>
+              <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Z2B5AAnTEeCukfKREHG-og" id="(0.4999999999999999,0.9735049205147615)"/>
+            </edges>
+            <edges xmi:type="umlnotation:UMLConnector" xmi:id="_bbYXIAncEeCukfKREHG-og" source="_77g28AnbEeCukfKREHG-og" target="_ba_VkAncEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+              <children xmi:type="notation:DecorationNode" xmi:id="_bbY-MAncEeCukfKREHG-og" type="NameLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_bbY-MgncEeCukfKREHG-og" type="Stereotype"/>
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_bbZlQAncEeCukfKREHG-og" type="Name"/>
+                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_bbY-MQncEeCukfKREHG-og" y="-186"/>
+              </children>
+              <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=AbstractTriggeredSigarSensor%5Bjcu%5Ename=AbstractTriggeredSigarSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar.sensors%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=ITriggeredSensor%5Bjcu%5Ename=ITriggeredSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.util%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.InterfaceRealization"/>
+              <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_bbYXIQncEeCukfKREHG-og" points="[-709, -854, 558, 2323]$[-709, -1777, 558, 1400]"/>
+              <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bb4tcAncEeCukfKREHG-og" id="(0.3333330486004811,0.9003795066413662)"/>
+              <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bb5UgAncEeCukfKREHG-og" id="(0.3333333333333333,1.8719018285666744E-16)"/>
+            </edges>
+            <edges xmi:type="umlnotation:UMLConnector" xmi:id="_n-mAEAncEeCukfKREHG-og" source="_77g28AnbEeCukfKREHG-og" target="_n-NlkAncEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+              <children xmi:type="notation:DecorationNode" xmi:id="_n-mnIAncEeCukfKREHG-og" type="NameLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_n-nOMAncEeCukfKREHG-og" type="Stereotype"/>
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_n-nOMQncEeCukfKREHG-og" type="Name"/>
+                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_n-mnIQncEeCukfKREHG-og" y="-186"/>
+              </children>
+              <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=AbstractTriggeredSigarSensor%5Bjcu%5Ename=AbstractTriggeredSigarSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar.sensors%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjbintype%5Ename=java.lang.Runnable%5Bproject%5Eid=Kieker%5D%5D$uml.InterfaceRealization"/>
+              <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_n-mAEQncEeCukfKREHG-og" points="[2720, -854, 1415, 3804]$[2720, -3709, 1415, 949]"/>
+              <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_oB5LsAncEeCukfKREHG-og" id="(0.5,0.9003795066413662)"/>
+              <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_oB5LsQncEeCukfKREHG-og" id="(0.5001630789302022,0.0)"/>
+            </edges>
+            <edges xmi:type="umlnotation:UMLConnector" xmi:id="_WB6ioAndEeCukfKREHG-og" source="_ZewBcAnTEeCukfKREHG-og" target="_77g28AnbEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+              <children xmi:type="notation:DecorationNode" xmi:id="_WB7JsAndEeCukfKREHG-og" type="FromMultiplicityLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_WB7JsgndEeCukfKREHG-og" type="FromMultiplicity"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_WB7JsQndEeCukfKREHG-og" y="396"/>
+              </children>
+              <children xmi:type="notation:DecorationNode" xmi:id="_WB7wwAndEeCukfKREHG-og" type="FromRoleLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_WB7wwgndEeCukfKREHG-og" type="FromRole"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_WB7wwQndEeCukfKREHG-og" x="-1063" y="-283"/>
+              </children>
+              <children xmi:type="notation:DecorationNode" xmi:id="_WB7wwwndEeCukfKREHG-og" visible="false" type="associationTypeLabel">
+                <children xmi:id="_WB7wxQndEeCukfKREHG-og" type="associationTypeCompartment"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_WB7wxAndEeCukfKREHG-og" y="-186"/>
+              </children>
+              <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=jobTable%5Bjsrctype%5Ename=SigarTriggeredSensorFactory%5Bjcu%5Ename=SigarTriggeredSensorFactory.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.Property"/>
+              <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_WB6ioQndEeCukfKREHG-og" points="[165, -57, -524, 178]$[637, -217, -52, 18]"/>
+            </edges>
+            <edges xmi:type="umlnotation:UMLConnector" xmi:id="_eq2uYAndEeCukfKREHG-og" source="_77g28AnbEeCukfKREHG-og" target="_jXr1cAnTEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+              <children xmi:type="notation:DecorationNode" xmi:id="_eq3VcAndEeCukfKREHG-og" type="FromMultiplicityLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_eq38gAndEeCukfKREHG-og" type="FromMultiplicity"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_eq3VcQndEeCukfKREHG-og" x="-186" y="-320"/>
+              </children>
+              <children xmi:type="notation:DecorationNode" xmi:id="_eq38gQndEeCukfKREHG-og" type="FromRoleLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_eq38gwndEeCukfKREHG-og" type="FromRole"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_eq38ggndEeCukfKREHG-og" x="-532" y="298"/>
+              </children>
+              <children xmi:type="notation:DecorationNode" xmi:id="_eq4jkAndEeCukfKREHG-og" visible="false" type="associationTypeLabel">
+                <children xmi:id="_eq4jkgndEeCukfKREHG-og" type="associationTypeCompartment"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_eq4jkQndEeCukfKREHG-og" y="-186"/>
+              </children>
+              <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=sigar%5Bjsrctype%5Ename=AbstractTriggeredSigarSensor%5Bjcu%5Ename=AbstractTriggeredSigarSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar.sensors%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.Property"/>
+              <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_eq2uYQndEeCukfKREHG-og" points="[3597, 29, -4655, 164]$[5594, 29, -2658, 164]"/>
+            </edges>
+            <edges xmi:type="umlnotation:UMLConnector" xmi:id="_fpmOkAndEeCukfKREHG-og" source="_77g28AnbEeCukfKREHG-og" target="_zR7roAnTEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+              <children xmi:type="notation:DecorationNode" xmi:id="_fpm1oAndEeCukfKREHG-og" type="FromMultiplicityLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_fpm1ogndEeCukfKREHG-og" type="FromMultiplicity"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_fpm1oQndEeCukfKREHG-og" x="212" y="-266"/>
+              </children>
+              <children xmi:type="notation:DecorationNode" xmi:id="_fpncsAndEeCukfKREHG-og" type="FromRoleLabel">
+                <children xmi:type="notation:BasicDecorationNode" xmi:id="_fpncsgndEeCukfKREHG-og" type="FromRole"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_fpncsQndEeCukfKREHG-og" x="1580" y="799"/>
+              </children>
+              <children xmi:type="notation:DecorationNode" xmi:id="_fpncswndEeCukfKREHG-og" visible="false" type="associationTypeLabel">
+                <children xmi:id="_fpnctQndEeCukfKREHG-og" type="associationTypeCompartment"/>
+                <layoutConstraint xmi:type="notation:Location" xmi:id="_fpnctAndEeCukfKREHG-og" y="-186"/>
+              </children>
+              <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=monitoringController%5Bjsrctype%5Ename=AbstractTriggeredSigarSensor%5Bjcu%5Ename=AbstractTriggeredSigarSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar.sensors%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.Property"/>
+              <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fpmOkQndEeCukfKREHG-og" points="[3597, -156, -4788, 1717]$[4669, -156, -3716, 1717]$[4669, -1876, -3716, -3]$[5331, -1876, -3054, -3]"/>
+            </edges>
           </contents>
         </eAnnotations>
-        <packagedElement xmi:type="uml:Class" xmi:id="_WYAycAmxEeC4waODmkrM-Q" name="SigarSensingController"/>
-        <packagedElement xmi:type="uml:Package" xmi:id="_zFfqkAmxEeC4waODmkrM-Q" name="loggerJobs">
-          <eAnnotations xmi:id="_zFit4AmxEeC4waODmkrM-Q" source="uml2.diagrams" references="_zFit4QmxEeC4waODmkrM-Q">
-            <contents xmi:type="umlnotation:UMLDiagram" xmi:id="_zFit4QmxEeC4waODmkrM-Q" type="Freeform" name="loggerJobs">
-              <children xmi:type="umlnotation:UMLShape" xmi:id="_5gOSUAmxEeC4waODmkrM-Q" element="_5gKA4AmxEeC4waODmkrM-Q" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Label">
-                <children xmi:type="notation:DecorationNode" xmi:id="_5gPgcAmxEeC4waODmkrM-Q" type="ImageCompartment">
-                  <layoutConstraint xmi:type="notation:Size" xmi:id="_5gPgcQmxEeC4waODmkrM-Q" width="1320" height="1320"/>
-                </children>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_5gQHgAmxEeC4waODmkrM-Q" type="Stereotype"/>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_5gQHgQmxEeC4waODmkrM-Q" type="Name"/>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_5gQukAmxEeC4waODmkrM-Q" type="Parent"/>
-                <children xmi:type="notation:SemanticListCompartment" xmi:id="_5gQukQmxEeC4waODmkrM-Q" type="AttributeCompartment"/>
-                <children xmi:type="notation:SemanticListCompartment" xmi:id="_5gRVoAmxEeC4waODmkrM-Q" type="OperationCompartment"/>
-                <children xmi:type="notation:SemanticListCompartment" xmi:id="_5gR8sAmxEeC4waODmkrM-Q" visible="false" type="SignalCompartment"/>
-                <children xmi:type="umlnotation:UMLShapeCompartment" xmi:id="_5gR8sQmxEeC4waODmkrM-Q" visible="false" type="StructureCompartment"/>
-                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_5gOSUQmxEeC4waODmkrM-Q" x="4755" y="3804"/>
-              </children>
-              <children xmi:type="umlnotation:UMLShape" xmi:id="_NkIFgAmyEeC4waODmkrM-Q" element="_FOzq8DHKEd-Dw_r6qZDmjQ" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Label">
-                <children xmi:type="notation:DecorationNode" xmi:id="_NkJ6sAmyEeC4waODmkrM-Q" type="ImageCompartment">
-                  <layoutConstraint xmi:type="notation:Size" xmi:id="_NkJ6sQmyEeC4waODmkrM-Q" width="1320" height="1320"/>
-                </children>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_NkJ6sgmyEeC4waODmkrM-Q" type="Stereotype"/>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_NkJ6swmyEeC4waODmkrM-Q" type="Name"/>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_NkKhwAmyEeC4waODmkrM-Q" type="Parent"/>
-                <children xmi:type="notation:SemanticListCompartment" xmi:id="_NkKhwQmyEeC4waODmkrM-Q" visible="false" type="AttributeCompartment"/>
-                <children xmi:type="notation:SemanticListCompartment" xmi:id="_NkLI0AmyEeC4waODmkrM-Q" visible="false" type="OperationCompartment"/>
-                <children xmi:type="notation:SemanticListCompartment" xmi:id="_NkLI0QmyEeC4waODmkrM-Q" visible="false" type="SignalCompartment"/>
-                <children xmi:type="umlnotation:UMLShapeCompartment" xmi:id="_NkLv4AmyEeC4waODmkrM-Q" visible="false" type="StructureCompartment"/>
-                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_NkIFgQmyEeC4waODmkrM-Q" x="13948" y="3804"/>
-              </children>
-              <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_w9OCkAnJEeCahf0N7IMXdg" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Label" useClassifierShape="true">
-                <children xmi:type="notation:DecorationNode" xmi:id="_w9PQsAnJEeCahf0N7IMXdg" type="ImageCompartment">
-                  <layoutConstraint xmi:type="notation:Size" xmi:id="_w9PQsQnJEeCahf0N7IMXdg" width="530" height="530"/>
-                </children>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_w9PQsgnJEeCahf0N7IMXdg" type="Stereotype"/>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_w9P3wAnJEeCahf0N7IMXdg" type="Kind"/>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_w9Rs8AnJEeCahf0N7IMXdg" type="Name"/>
-                <children xmi:type="notation:BasicDecorationNode" xmi:id="_w9TiIAnJEeCahf0N7IMXdg" type="Parent"/>
-                <children xmi:type="notation:ListCompartment" xmi:id="_w9UJMAnJEeCahf0N7IMXdg" type="AttributeCompartment" collapsed="true"/>
-                <children xmi:type="notation:ListCompartment" xmi:id="_w9UJMQnJEeCahf0N7IMXdg" type="OperationCompartment" collapsed="true"/>
-                <children xmi:type="notation:SemanticListCompartment" xmi:id="_w9UwQAnJEeCahf0N7IMXdg" visible="false" type="SignalCompartment"/>
-                <element xmi:type="uml:Interface" href="mmi:///#jbintype%5Ename=java.lang.Runnable%5Bproject%5Eid=Kieker%5D$uml.Interface"/>
-                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_w9OCkQnJEeCahf0N7IMXdg" x="5706" y="1585"/>
-              </children>
-              <element xsi:nil="true"/>
-              <edges xmi:type="umlnotation:UMLConnector" xmi:id="_UwHLEAmyEeC4waODmkrM-Q" element="_Uv5IoAmyEeC4waODmkrM-Q" source="_5gOSUAmxEeC4waODmkrM-Q" target="_NkIFgAmyEeC4waODmkrM-Q" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwHyIAmyEeC4waODmkrM-Q" type="NameLabel">
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_UwIZMAmyEeC4waODmkrM-Q" type="Stereotype"/>
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_UwIZMQmyEeC4waODmkrM-Q" type="Name"/>
-                  <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UwHyIQmyEeC4waODmkrM-Q" y="-186"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwIZMgmyEeC4waODmkrM-Q" type="ToMultiplicityLabel" element="_Uv_2UAmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_UwJAQAmyEeC4waODmkrM-Q" type="ToMultiplicity"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwIZMwmyEeC4waODmkrM-Q" y="396"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwJAQQmyEeC4waODmkrM-Q" type="ToRoleLabel" element="_Uv_2UAmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_UwJAQwmyEeC4waODmkrM-Q" type="ToRole"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwJAQgmyEeC4waODmkrM-Q" y="-397"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwJnUAmyEeC4waODmkrM-Q" type="FromMultiplicityLabel" element="_Uv8L8AmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_UwJnUgmyEeC4waODmkrM-Q" type="FromMultiplicity"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwJnUQmyEeC4waODmkrM-Q" y="396"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwJnUwmyEeC4waODmkrM-Q" type="FromRoleLabel" element="_Uv8L8AmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_UwKOYAmyEeC4waODmkrM-Q" type="FromRole"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwJnVAmyEeC4waODmkrM-Q" x="-1454" y="-307"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwKOYQmyEeC4waODmkrM-Q" type="ToQualifierLabel" element="_Uv_2UAmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:SemanticListCompartment" xmi:id="_UwKOYwmyEeC4waODmkrM-Q" type="QualifierCompartment"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwKOYgmyEeC4waODmkrM-Q" y="-186"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwK1cAmyEeC4waODmkrM-Q" type="FromQualifierLabel" element="_Uv8L8AmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:SemanticListCompartment" xmi:id="_UwK1cgmyEeC4waODmkrM-Q" type="QualifierCompartment"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwK1cQmyEeC4waODmkrM-Q" y="-186"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwK1cwmyEeC4waODmkrM-Q" type="ToConstraintLabel" element="_Uv_2UAmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:ListCompartment" xmi:id="_UwLcgAmyEeC4waODmkrM-Q" type="ToConstraintCompartment"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwK1dAmyEeC4waODmkrM-Q" y="1058"/>
-                </children>
-                <children xmi:type="notation:DecorationNode" xmi:id="_UwLcgQmyEeC4waODmkrM-Q" type="FromConstraintLabel" element="_Uv8L8AmyEeC4waODmkrM-Q">
-                  <children xmi:type="notation:ListCompartment" xmi:id="_UwLcgwmyEeC4waODmkrM-Q" type="FromConstraintCompartment"/>
-                  <layoutConstraint xmi:type="notation:Location" xmi:id="_UwLcggmyEeC4waODmkrM-Q" y="1058"/>
-                </children>
-                <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_UwHLEQmyEeC4waODmkrM-Q" points="[86, -5, -175, 14]$[261, -7, 0, 12]"/>
-              </edges>
-              <edges xmi:type="umlnotation:UMLConnector" xmi:id="_5gY9gAnJEeCahf0N7IMXdg" element="_5d9UkAnJEeCahf0N7IMXdg" source="_5gOSUAmxEeC4waODmkrM-Q" target="_w9OCkAnJEeCahf0N7IMXdg" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-                <children xmi:type="notation:DecorationNode" xmi:id="_5gbZwAnJEeCahf0N7IMXdg" type="NameLabel">
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_5gcA0AnJEeCahf0N7IMXdg" type="Stereotype"/>
-                  <children xmi:type="notation:BasicDecorationNode" xmi:id="_5gcA0QnJEeCahf0N7IMXdg" type="Name"/>
-                  <layoutConstraint xmi:type="notation:Bounds" xmi:id="_5gbZwQnJEeCahf0N7IMXdg" y="-186"/>
-                </children>
-                <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_5gY9gQnJEeCahf0N7IMXdg" points="[-2, -24, -9, 90]$[-38, -84, -45, 30]"/>
-              </edges>
-            </contents>
-          </eAnnotations>
-          <packagedElement xmi:type="uml:Class" xmi:id="_5gKA4AmxEeC4waODmkrM-Q" name="AbstractSigarLogger" clientDependency="_5d9UkAnJEeCahf0N7IMXdg" isAbstract="true">
-            <ownedAttribute xmi:id="_Uv8L8AmyEeC4waODmkrM-Q" name="monitoringController" visibility="private" type="_FOzq8DHKEd-Dw_r6qZDmjQ" association="_Uv5IoAmyEeC4waODmkrM-Q">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Uv-BIAmyEeC4waODmkrM-Q" value="1"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Uv9aEAmyEeC4waODmkrM-Q" value="1"/>
-            </ownedAttribute>
-            <interfaceRealization xmi:id="_5d9UkAnJEeCahf0N7IMXdg" client="_5gKA4AmxEeC4waODmkrM-Q">
-              <supplier xmi:type="uml:Interface" href="mmi:///#jbintype%5Ename=java.lang.Runnable%5Bproject%5Eid=Kieker%5D$uml.Interface"/>
-              <contract href="mmi:///#jbintype%5Ename=java.lang.Runnable%5Bproject%5Eid=Kieker%5D$uml.Interface"/>
-            </interfaceRealization>
-          </packagedElement>
-          <packagedElement xmi:type="uml:Association" xmi:id="_Uv5IoAmyEeC4waODmkrM-Q" memberEnd="_Uv8L8AmyEeC4waODmkrM-Q _Uv_2UAmyEeC4waODmkrM-Q">
-            <ownedEnd xmi:id="_Uv_2UAmyEeC4waODmkrM-Q" name="" visibility="private" type="_5gKA4AmxEeC4waODmkrM-Q" association="_Uv5IoAmyEeC4waODmkrM-Q">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UwBEcQmyEeC4waODmkrM-Q" value="*"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UwBEcAmyEeC4waODmkrM-Q"/>
-            </ownedEnd>
-          </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_K4qh0AnTEeCukfKREHG-og" name="logger">
+          <eAnnotations xmi:id="_K4rI4AnTEeCukfKREHG-og" source="uml2.diagrams"/>
         </packagedElement>
       </packagedElement>
     </packagedElement>

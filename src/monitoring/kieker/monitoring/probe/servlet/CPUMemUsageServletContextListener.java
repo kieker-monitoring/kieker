@@ -1,24 +1,42 @@
 package kieker.monitoring.probe.servlet;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import kieker.monitoring.probe.sigar.SigarSensingController;
+import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.ScheduledSensorJob;
+import kieker.monitoring.probe.sigar.ISigarTriggeredSensorFactory;
+import kieker.monitoring.probe.sigar.SigarTriggeredSensorFactory;
+import kieker.monitoring.probe.sigar.sensors.CPUsDetailedPercSensor;
+import kieker.monitoring.probe.sigar.sensors.MemSwapUsageSensor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Starts and stops the logging of CPU utilization employing the
- * {@link SigarSensingController} as the Servlet is initialized and destroyed
- * respectively.
+ * <p>
+ * Starts and stops the periodic logging of CPU utilization employing the
+ * {@link SigarTriggeredSensorFactory} as the Servlet is initialized and
+ * destroyed respectively. The statistics are logged with a period of
+ * {@value #SENSOR_INTERVAL_SECONDS} seconds.
+ * </p>
  * 
- * TODO: should be moved to Kieker as an example later on.
+ * <p>
+ * It can be integrated into a web.xml as follows:<br/>
+ * 
+ * {@code
+ * <listener>
+ *   <listener-class>
+ *    kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener
+ *   </listener-class>
+ * </listener>}
+ * </p>
  * 
  * @author Andre van Hoorn
- * 
  */
 public class CPUMemUsageServletContextListener implements
 		ServletContextListener {
@@ -26,29 +44,62 @@ public class CPUMemUsageServletContextListener implements
 	private static final Log log = LogFactory
 			.getLog(CPUMemUsageServletContextListener.class);
 
-	private volatile SigarSensingController sigarCtrl = null;
+	private final MonitoringController monitoringController =
+			MonitoringController.getInstance();
+
+	/**
+	 * Stores the {@link ScheduledSensorJob}s which are scheduled in
+	 * {@link #contextInitialized(ServletContextEvent)} and removed from the
+	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
+	 */
+	private final Collection<ScheduledSensorJob> sensorJobs =
+			new ArrayList<ScheduledSensorJob>();
+
+	private static final long SENSOR_INTERVAL_SECONDS = 30;
+	private static final long SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent arg0) {
-		if (this.sigarCtrl != null) {
-			this.sigarCtrl.shutdown();
+		for (final ScheduledSensorJob s : this.sensorJobs) {
+			this.monitoringController.removePeriodicSensor(s);
 		}
 	}
 
 	@Override
 	public void contextInitialized(final ServletContextEvent arg0) {
-		this.sigarCtrl = SigarSensingController.getInstance();
+		this.initSensors();
+	}
 
-		if (this.sigarCtrl == null) {
-			CPUMemUsageServletContextListener.log
-					.error("Failed to acquire sigar controller instance");
-			// will not exit from method but force a NullpointerException
-		}
+	/**
+	 * Creates and schedules the {@link ScheduledSensorJob}s and stores them for
+	 * later removal in the {@link Collection} {@link #sensorJobs}.
+	 */
+	private void initSensors() {
+		final ISigarTriggeredSensorFactory sigarFactory =
+				SigarTriggeredSensorFactory.getInstance();
 
 		// Log utilization of each CPU every 30 seconds
-		this.sigarCtrl.senseCPUsDetailedPercPeriodic(0, 30, TimeUnit.SECONDS);
+		final CPUsDetailedPercSensor cpuSensor =
+				sigarFactory.createSensorCPUsDetailedPerc();
+		final ScheduledSensorJob cpuSensorJob =
+				this.monitoringController
+						.schedulePeriodicSensor(
+								cpuSensor,
+								CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS,
+								CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS,
+								TimeUnit.SECONDS);
+		this.sensorJobs.add(cpuSensorJob);
 
 		// Log memory and swap statistics every 30 seconds
-		this.sigarCtrl.senseMemSwapUsagePeriodic(0, 30, TimeUnit.SECONDS);
+		final MemSwapUsageSensor memSensor =
+				sigarFactory.createSensorMemSwapUsage();
+		final ScheduledSensorJob memSensorJob =
+				this.monitoringController
+						.schedulePeriodicSensor(
+								memSensor,
+								CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS,
+								CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS,
+								TimeUnit.SECONDS);
+		this.sensorJobs.add(memSensorJob);
 	}
 }

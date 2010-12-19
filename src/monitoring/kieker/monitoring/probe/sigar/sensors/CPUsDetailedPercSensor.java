@@ -1,4 +1,4 @@
-package kieker.monitoring.probe.sigar.loggerJobs;
+package kieker.monitoring.probe.sigar.sensors;
 
 import kieker.common.record.CPUUtilizationRecord;
 import kieker.monitoring.core.MonitoringController;
@@ -17,46 +17,42 @@ import org.hyperic.sigar.Sigar;
  * @author Andre van Hoorn
  * 
  */
-public class CPUsDetailedPercLogger extends AbstractSigarLogger {
+public class CPUsDetailedPercSensor extends AbstractTriggeredSigarSensor {
 
 	private static final Log log = LogFactory
-			.getLog(CPUsDetailedPercLogger.class);
+			.getLog(CPUsDetailedPercSensor.class);
 
 	/**
 	 * Must not be used for construction.
 	 */
 	@SuppressWarnings("unused")
-	private CPUsDetailedPercLogger() {
-		this(null, null);
+	private CPUsDetailedPercSensor() {
+		this(null);
 	}
 
-	public CPUsDetailedPercLogger(final Sigar sigar,
-			final MonitoringController monitoringController) {
-		super(sigar, monitoringController);
+	public CPUsDetailedPercSensor(final Sigar sigar) {
+		super(sigar);
 	}
 
 	private final static String CPU_RESOURCE_NAME_PREFIX = "cpu-";
 
-	private void logCPUsPerc(final org.hyperic.sigar.CpuPerc[] cpus) {
+	@Override
+	public void senseAndLog(final MonitoringController monitoringController)
+			throws Exception {
+		final org.hyperic.sigar.CpuPerc[] cpus =
+				this.sigar.getCpuPercList();
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
 			final CPUUtilizationRecord r =
 					new CPUUtilizationRecord(
 							MonitoringController.currentTimeNanos(),
-							this.getHostname(),
-							CPUsDetailedPercLogger.CPU_RESOURCE_NAME_PREFIX + i,
+							monitoringController.getHostName(),
+							CPUsDetailedPercSensor.CPU_RESOURCE_NAME_PREFIX + i,
 							curCPU.getUser(), curCPU.getSys(),
 							curCPU.getWait(), curCPU.getNice(),
 							curCPU.getIrq(), curCPU.getCombined(), curCPU
 									.getIdle());
-			this.logRecord(r);
+			monitoringController.newMonitoringRecord(r);
 		}
-	}
-
-	@Override
-	protected void concreteRun() throws Exception {
-		final org.hyperic.sigar.CpuPerc[] cpus =
-				this.getSigar().getCpuPercList();
-		this.logCPUsPerc(cpus);
 	}
 }
