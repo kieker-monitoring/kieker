@@ -1,6 +1,5 @@
-package kieker.monitoring.probe.util;
+package kieker.monitoring.core;
 
-import kieker.monitoring.core.MonitoringController;
 
 /**
  * 

@@ -15,8 +15,6 @@ import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.core.state.IMonitoringControllerState;
 import kieker.monitoring.core.state.MonitoringControllerState;
 import kieker.monitoring.probe.sigar.sensors.AbstractTriggeredSigarSensor;
-import kieker.monitoring.probe.util.IPeriodicSensingController;
-import kieker.monitoring.probe.util.ITriggeredSensor;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 import kieker.monitoring.writer.util.async.ShutdownHook;

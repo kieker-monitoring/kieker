@@ -1,7 +1,6 @@
 package kieker.monitoring.core;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.probe.util.ITriggeredSensor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

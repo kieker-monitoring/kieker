@@ -381,6 +381,168 @@
             <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_TxnHgLEAEd-R5KDBvzYjMw" points="[106, 1967, 226, -1824]$[106, 3270, 226, -521]"/>
           </edges>
         </contents>
+        <contents xmi:type="umlnotation:UMLDiagram" xmi:id="_evt1sAxNEeC8i4_Qt8dcRg" type="Class" name="monitoringController-periodicSensing">
+          <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_krLHgQxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" showListVisibility="Text" showListSignature="true" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName" useClassifierShape="true">
+            <children xmi:type="notation:DecorationNode" xmi:id="_krLHgwxNEeC8i4_Qt8dcRg" type="ImageCompartment">
+              <layoutConstraint xmi:type="notation:Size" xmi:id="_krLukAxNEeC8i4_Qt8dcRg" width="530" height="530"/>
+            </children>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krLukQxNEeC8i4_Qt8dcRg" type="Stereotype"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krLukgxNEeC8i4_Qt8dcRg" type="Kind"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krLukwxNEeC8i4_Qt8dcRg" type="Name"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krLulAxNEeC8i4_Qt8dcRg" type="Parent"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krLulQxNEeC8i4_Qt8dcRg" visible="false" type="AttributeCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krLulgxNEeC8i4_Qt8dcRg" type="OperationCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krMVoAxNEeC8i4_Qt8dcRg" visible="false" type="SignalCompartment"/>
+            <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=IPeriodicSensingController%5Bjcu%5Ename=IPeriodicSensingController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Interface"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_krLHggxNEeC8i4_Qt8dcRg" x="14113" y="5875"/>
+          </children>
+          <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_krOK0gxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" showListVisibility="Text" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName" useClassifierShape="true">
+            <children xmi:type="notation:DecorationNode" xmi:id="_krOK1AxNEeC8i4_Qt8dcRg" type="ImageCompartment">
+              <layoutConstraint xmi:type="notation:Size" xmi:id="_krOK1QxNEeC8i4_Qt8dcRg" width="530" height="530"/>
+            </children>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krOx4AxNEeC8i4_Qt8dcRg" type="Stereotype"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krOx4QxNEeC8i4_Qt8dcRg" type="Kind"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krPY8AxNEeC8i4_Qt8dcRg" type="Name"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krPY8QxNEeC8i4_Qt8dcRg" type="Parent"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krPY8gxNEeC8i4_Qt8dcRg" visible="false" type="AttributeCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krPY8wxNEeC8i4_Qt8dcRg" visible="false" type="OperationCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krPY9AxNEeC8i4_Qt8dcRg" visible="false" type="SignalCompartment"/>
+            <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=IMonitoringController%5Bjcu%5Ename=IMonitoringController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Interface"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_krOK0wxNEeC8i4_Qt8dcRg" x="7125" y="5875"/>
+          </children>
+          <children xmi:type="umlnotation:UMLShape" xmi:id="_krQAAAxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" showListVisibility="Text" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName">
+            <children xmi:type="notation:DecorationNode" xmi:id="_krQAAgxNEeC8i4_Qt8dcRg" type="ImageCompartment">
+              <layoutConstraint xmi:type="notation:Size" xmi:id="_krQAAwxNEeC8i4_Qt8dcRg" width="1320" height="1320"/>
+            </children>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krQABAxNEeC8i4_Qt8dcRg" type="Stereotype"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krQABQxNEeC8i4_Qt8dcRg" type="Name"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krQABgxNEeC8i4_Qt8dcRg" type="Parent"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_krQnEAxNEeC8i4_Qt8dcRg" visible="false" type="ANNOTATION_COMPARTMENT"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_krQnEQxNEeC8i4_Qt8dcRg" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_krQnEgxNEeC8i4_Qt8dcRg" visible="false" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+            <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=MonitoringController%5Bjcu%5Ename=MonitoringController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Class"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_krQAAQxNEeC8i4_Qt8dcRg" x="7125" y="9375"/>
+          </children>
+          <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_krQnEwxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" showListVisibility="Text" showListSignature="true" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName" useClassifierShape="true">
+            <children xmi:type="notation:DecorationNode" xmi:id="_krROIAxNEeC8i4_Qt8dcRg" type="ImageCompartment">
+              <layoutConstraint xmi:type="notation:Size" xmi:id="_krROIQxNEeC8i4_Qt8dcRg" width="530" height="530"/>
+            </children>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krR1MAxNEeC8i4_Qt8dcRg" type="Stereotype"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krR1MQxNEeC8i4_Qt8dcRg" type="Kind"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krScQAxNEeC8i4_Qt8dcRg" type="Name"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_krScQQxNEeC8i4_Qt8dcRg" type="Parent"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krScQgxNEeC8i4_Qt8dcRg" visible="false" type="AttributeCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krScQwxNEeC8i4_Qt8dcRg" type="OperationCompartment"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_krTDUAxNEeC8i4_Qt8dcRg" visible="false" type="SignalCompartment"/>
+            <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=ITriggeredSensor%5Bjcu%5Ename=ITriggeredSensor.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Interface"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_krQnFAxNEeC8i4_Qt8dcRg" x="19256" y="12000"/>
+          </children>
+          <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_VJyAwAxOEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" showListVisibility="Text" transparency="0" lineColor="14263149" lineWidth="1" useClassifierShape="true">
+            <children xmi:type="notation:DecorationNode" xmi:id="_VJyAwgxOEeC8i4_Qt8dcRg" type="ImageCompartment">
+              <layoutConstraint xmi:type="notation:Size" xmi:id="_VJyAwwxOEeC8i4_Qt8dcRg" width="530" height="530"/>
+            </children>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_VJyn0AxOEeC8i4_Qt8dcRg" type="Stereotype"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_VJyn0QxOEeC8i4_Qt8dcRg" type="Kind"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_VJyn0gxOEeC8i4_Qt8dcRg" type="Name"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_VJyn0wxOEeC8i4_Qt8dcRg" type="Parent"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_VJyn1AxOEeC8i4_Qt8dcRg" visible="false" type="AttributeCompartment" collapsed="true"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_VJyn1QxOEeC8i4_Qt8dcRg" visible="false" type="OperationCompartment" collapsed="true"/>
+            <children xmi:type="notation:SemanticListCompartment" xmi:id="_VJzO4AxOEeC8i4_Qt8dcRg" visible="false" type="SignalCompartment"/>
+            <element xmi:type="uml:Interface" href="mmi:///#jbintype%5Ename=java.lang.Runnable%5Bproject%5Eid=Kieker%5D$uml.Interface"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_VJyAwQxOEeC8i4_Qt8dcRg" x="25375" y="7875"/>
+          </children>
+          <children xmi:type="umlnotation:UMLShape" xmi:id="_cWL9EAxOEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" showListVisibility="Text" showListSignature="true" transparency="0" lineColor="14263149" lineWidth="1">
+            <children xmi:type="notation:DecorationNode" xmi:id="_cWMkIAxOEeC8i4_Qt8dcRg" type="ImageCompartment">
+              <layoutConstraint xmi:type="notation:Size" xmi:id="_cWMkIQxOEeC8i4_Qt8dcRg" width="1320" height="1320"/>
+            </children>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_cWMkIgxOEeC8i4_Qt8dcRg" type="Stereotype"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_cWMkIwxOEeC8i4_Qt8dcRg" type="Name"/>
+            <children xmi:type="notation:BasicDecorationNode" xmi:id="_cWMkJAxOEeC8i4_Qt8dcRg" type="Parent"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_cWMkJQxOEeC8i4_Qt8dcRg" visible="false" type="ANNOTATION_COMPARTMENT"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_cWMkJgxOEeC8i4_Qt8dcRg" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
+            <children xmi:type="notation:ListCompartment" xmi:id="_cWNLMAxOEeC8i4_Qt8dcRg" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+            <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ScheduledSensorJob%5Bjcu%5Ename=ScheduledSensorJob.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Class"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_cWL9EQxOEeC8i4_Qt8dcRg" x="17500" y="9354"/>
+          </children>
+          <element xsi:nil="true"/>
+          <edges xmi:type="umlnotation:UMLConnector" xmi:id="_k44MVQxNEeC8i4_Qt8dcRg" source="_krQAAAxNEeC8i4_Qt8dcRg" target="_krLHgQxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+            <children xmi:type="notation:DecorationNode" xmi:id="_k44zYAxNEeC8i4_Qt8dcRg" type="NameLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_k44zYgxNEeC8i4_Qt8dcRg" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_k44zYwxNEeC8i4_Qt8dcRg" type="Name"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_k44zYQxNEeC8i4_Qt8dcRg" y="-220"/>
+            </children>
+            <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=MonitoringController%5Bjcu%5Ename=MonitoringController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=IPeriodicSensingController%5Bjcu%5Ename=IPeriodicSensingController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.InterfaceRealization"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_k44MVgxNEeC8i4_Qt8dcRg" points="[3537, 0, -5373, 1722]$[3537, -1881, -5373, -159]$[5421, -1881, -3489, -159]"/>
+            <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_k9hbwQxNEeC8i4_Qt8dcRg" id="(0.2500551136631748,0.0)"/>
+            <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_k9iC0AxNEeC8i4_Qt8dcRg" id="(0.25008738901986355,0.9453432444250109)"/>
+          </edges>
+          <edges xmi:type="umlnotation:UMLConnector" xmi:id="_k44zZAxNEeC8i4_Qt8dcRg" source="_krQAAAxNEeC8i4_Qt8dcRg" target="_krOK0gxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+            <children xmi:type="notation:DecorationNode" xmi:id="_k45acAxNEeC8i4_Qt8dcRg" type="NameLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_k45acgxNEeC8i4_Qt8dcRg" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_k45acwxNEeC8i4_Qt8dcRg" type="Name"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_k45acQxNEeC8i4_Qt8dcRg" y="-220"/>
+            </children>
+            <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=MonitoringController%5Bjcu%5Ename=MonitoringController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=IMonitoringController%5Bjcu%5Ename=IMonitoringController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.InterfaceRealization"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_k44zZQxNEeC8i4_Qt8dcRg" points="[-605, -1088, -157, 6021]$[-605, -2220, -157, 4889]"/>
+            <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_k9ip4AxNEeC8i4_Qt8dcRg" id="(0.5714837114241224,0.9934729256957862)"/>
+            <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_k9ip4QxNEeC8i4_Qt8dcRg" id="(0.5,0.0)"/>
+          </edges>
+          <edges xmi:type="umlnotation:UMLConnector" xmi:id="_cYzzQAxOEeC8i4_Qt8dcRg" source="_krQAAAxNEeC8i4_Qt8dcRg" target="_cWL9EAxOEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+            <children xmi:type="notation:DecorationNode" xmi:id="_cYzzQgxOEeC8i4_Qt8dcRg" type="KindLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_cYzzRAxOEeC8i4_Qt8dcRg" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_cY0aUQxOEeC8i4_Qt8dcRg" type="Kind"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_cY0aUAxOEeC8i4_Qt8dcRg" type="Name"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_cYzzQwxOEeC8i4_Qt8dcRg" y="-220"/>
+            </children>
+            <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=MonitoringController%5Bjcu%5Ename=MonitoringController.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=ScheduledSensorJob%5Bjcu%5Ename=ScheduledSensorJob.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.Usage"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_cYzzQQxOEeC8i4_Qt8dcRg" points="[4180, 973, -6378, -574]$[7036, 973, -3522, -574]"/>
+            <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ceYPwQxOEeC8i4_Qt8dcRg" id="(0.3333333333333333,0.0)"/>
+            <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ceY20AxOEeC8i4_Qt8dcRg" id="(0.3334256601492437,0.9630505468519065)"/>
+          </edges>
+          <edges xmi:type="umlnotation:UMLConnector" xmi:id="_cY22kwxOEeC8i4_Qt8dcRg" source="_cWL9EAxOEeC8i4_Qt8dcRg" target="_VJyAwAxOEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+            <children xmi:type="notation:DecorationNode" xmi:id="_cY3doAxOEeC8i4_Qt8dcRg" type="NameLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_cY3dogxOEeC8i4_Qt8dcRg" type="Stereotype"/>
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_cY3dowxOEeC8i4_Qt8dcRg" type="Name"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_cY3doQxOEeC8i4_Qt8dcRg" y="-220"/>
+            </children>
+            <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=ScheduledSensorJob%5Bjcu%5Ename=ScheduledSensorJob.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjbintype%5Ename=java.lang.Runnable%5Bproject%5Eid=Kieker%5D%5D$uml.InterfaceRealization"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_cY22lAxOEeC8i4_Qt8dcRg" points="[2204, -1568, 15, 1479]$[2204, -2327, 15, 720]"/>
+            <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ceasAAxOEeC8i4_Qt8dcRg" id="(0.6667589934825771,0.9630505468519065)"/>
+            <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ceasAQxOEeC8i4_Qt8dcRg" id="(0.49999999999999867,-1.0763250908555364E-15)"/>
+          </edges>
+          <edges xmi:type="umlnotation:UMLConnector" xmi:id="_iIghAAxOEeC8i4_Qt8dcRg" source="_cWL9EAxOEeC8i4_Qt8dcRg" target="_krQAAAxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+            <children xmi:type="notation:DecorationNode" xmi:id="_iIhIEAxOEeC8i4_Qt8dcRg" type="FromMultiplicityLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_iIhIEgxOEeC8i4_Qt8dcRg" type="FromMultiplicity"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_iIhIEQxOEeC8i4_Qt8dcRg" x="-22" y="-464"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_iIhIEwxOEeC8i4_Qt8dcRg" type="FromRoleLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_iIhvIAxOEeC8i4_Qt8dcRg" type="FromRole"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_iIhIFAxOEeC8i4_Qt8dcRg" x="-1371" y="411"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_iIhvIQxOEeC8i4_Qt8dcRg" visible="false" type="associationTypeLabel">
+              <children xmi:id="_iIhvIwxOEeC8i4_Qt8dcRg" type="associationTypeCompartment"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_iIhvIgxOEeC8i4_Qt8dcRg" y="-220"/>
+            </children>
+            <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=monitoringController%5Bjsrctype%5Ename=ScheduledSensorJob%5Bjcu%5Ename=ScheduledSensorJob.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.Property"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_iIghAQxOEeC8i4_Qt8dcRg" points="[-2413, -590, 5991, -345]$[-5269, -590, 3135, -345]"/>
+          </edges>
+          <edges xmi:type="umlnotation:UMLConnector" xmi:id="_jkG8UAxOEeC8i4_Qt8dcRg" source="_cWL9EAxOEeC8i4_Qt8dcRg" target="_krQnEwxNEeC8i4_Qt8dcRg" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+            <children xmi:type="notation:DecorationNode" xmi:id="_jkHjYAxOEeC8i4_Qt8dcRg" type="FromMultiplicityLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_jkHjYgxOEeC8i4_Qt8dcRg" type="FromMultiplicity"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_jkHjYQxOEeC8i4_Qt8dcRg" x="-159" y="391"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_jkIKcAxOEeC8i4_Qt8dcRg" type="FromRoleLabel">
+              <children xmi:type="notation:BasicDecorationNode" xmi:id="_jkIKcgxOEeC8i4_Qt8dcRg" type="FromRole"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_jkIKcQxOEeC8i4_Qt8dcRg" x="-159" y="-985"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_jkIKcwxOEeC8i4_Qt8dcRg" visible="false" type="associationTypeLabel">
+              <children xmi:id="_jkIKdQxOEeC8i4_Qt8dcRg" type="associationTypeCompartment"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_jkIKdAxOEeC8i4_Qt8dcRg" y="-220"/>
+            </children>
+            <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=sensor%5Bjsrctype%5Ename=ScheduledSensorJob%5Bjcu%5Ename=ScheduledSensorJob.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.Property"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_jkG8UQxOEeC8i4_Qt8dcRg" points="[203, 815, 203, -1769]$[203, 1832, 203, -752]"/>
+          </edges>
+        </contents>
       </eAnnotations>
       <packagedElement xmi:type="uml:Class" xmi:id="_FOzq8DHKEd-Dw_r6qZDmjQ" name="MonitoringController" clientDependency="_SlkkgE4VEd-SGaceHE4Xog">
         <ownedAttribute xmi:id="_3gpQ0DHUEd-Dw_r6qZDmjQ" name="writer" visibility="private" type="_np4eYDHSEd-Dw_r6qZDmjQ" aggregation="composite" association="_3gmNgDHUEd-Dw_r6qZDmjQ">
@@ -987,7 +1149,7 @@
               <children xmi:type="notation:SemanticListCompartment" xmi:id="_bbBx0AncEeCukfKREHG-og" visible="false" type="AttributeCompartment"/>
               <children xmi:type="notation:SemanticListCompartment" xmi:id="_bbBx0QncEeCukfKREHG-og" type="OperationCompartment"/>
               <children xmi:type="notation:SemanticListCompartment" xmi:id="_bbCY4AncEeCukfKREHG-og" visible="false" type="SignalCompartment"/>
-              <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=ITriggeredSensor%5Bjcu%5Ename=ITriggeredSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.util%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Interface"/>
+              <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=ITriggeredSensor%5Bjcu%5Ename=ITriggeredSensor.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D$uml.Interface"/>
               <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ba_VkQncEeCukfKREHG-og" x="28530" y="-1689"/>
             </children>
             <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_n-NlkAncEeCukfKREHG-og" fontName="Sans Serif" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showParent="QualifiedName" useClassifierShape="true">
@@ -1022,7 +1184,7 @@
                 <children xmi:type="notation:BasicDecorationNode" xmi:id="_bbZlQAncEeCukfKREHG-og" type="Name"/>
                 <layoutConstraint xmi:type="notation:Bounds" xmi:id="_bbY-MQncEeCukfKREHG-og" y="-186"/>
               </children>
-              <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=AbstractTriggeredSigarSensor%5Bjcu%5Ename=AbstractTriggeredSigarSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar.sensors%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=ITriggeredSensor%5Bjcu%5Ename=ITriggeredSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.util%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.InterfaceRealization"/>
+              <element xmi:type="uml:InterfaceRealization" href="mmi:///#jimpl%5Bjsrctype%5Ename=AbstractTriggeredSigarSensor%5Bjcu%5Ename=AbstractTriggeredSigarSensor.java%5Bjpack%5Ename=kieker.monitoring.probe.sigar.sensors%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=ITriggeredSensor%5Bjcu%5Ename=ITriggeredSensor.java%5Bjpack%5Ename=kieker.monitoring.core%5Bjsrcroot%5Esrcfolder=src/monitoring%5Bproject%5Eid=Kieker%5D%5D%5D%5D%5D$uml.InterfaceRealization"/>
               <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_bbYXIQncEeCukfKREHG-og" points="[-709, -854, 558, 2323]$[-709, -1777, 558, 1400]"/>
               <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bb4tcAncEeCukfKREHG-og" id="(0.3333330486004811,0.9003795066413662)"/>
               <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bb5UgAncEeCukfKREHG-og" id="(0.3333333333333333,1.8719018285666744E-16)"/>

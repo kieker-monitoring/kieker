@@ -1,9 +1,6 @@
-package kieker.monitoring.probe.util;
+package kieker.monitoring.core;
 
 import java.util.concurrent.TimeUnit;
-
-import kieker.monitoring.core.ScheduledSensorJob;
-import kieker.monitoring.probe.sigar.sensors.AbstractTriggeredSigarSensor;
 
 /**
  * 
@@ -12,7 +9,7 @@ import kieker.monitoring.probe.sigar.sensors.AbstractTriggeredSigarSensor;
  */
 public interface IPeriodicSensingController {
 	/**
-	 * Schedules the given {@link AbstractTriggeredSigarSensor} to be scheduled
+	 * Schedules the given {@link ITriggeredSensor} to be scheduled
 	 * with the given initial delay, and period.
 	 * 
 	 * @param sigarLogger
