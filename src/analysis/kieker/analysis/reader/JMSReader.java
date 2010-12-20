@@ -38,7 +38,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
 	private String jmsDestination = null;
 
 	/**
-	 * @param jmsServerLocation
+	 * @param jmsProviderUrl
 	 *            = for instance "tcp://127.0.0.1:3035/"
 	 * @param jmsDestination
 	 *            = for instance "queue1"
