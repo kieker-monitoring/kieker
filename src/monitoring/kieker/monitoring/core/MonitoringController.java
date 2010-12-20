@@ -186,9 +186,9 @@ public final class MonitoringController implements IMonitoringController,
 
 							}
 						});
-		this.periodicSensorsPoolExecutor
+		executor
 				.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
-		this.periodicSensorsPoolExecutor
+		executor
 				.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 		return executor;
 	}
