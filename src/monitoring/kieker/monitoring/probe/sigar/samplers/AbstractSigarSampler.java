@@ -1,7 +1,7 @@
-package kieker.monitoring.probe.sigar.sensors;
+package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.ITriggeredSensor;
+import kieker.monitoring.core.ISampler;
 import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.logging.Log;
@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.Sigar;
 
 /**
- * Eases the implementation of {@link ITriggeredSensor}s which collect
+ * Eases the implementation of {@link ISampler}s which collect
  * system-level sensor data via the {@link Sigar} API and store this data as
  * {@link IMonitoringRecord}s via
  * {@link MonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
@@ -18,10 +18,10 @@ import org.hyperic.sigar.Sigar;
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTriggeredSigarSensor implements ITriggeredSensor {
+public abstract class AbstractSigarSampler implements ISampler {
 
 	private static final Log log = LogFactory
-			.getLog(AbstractTriggeredSigarSensor.class);
+			.getLog(AbstractSigarSampler.class);
 
 	/**
 	 * TODO: Make sure that {@link Sigar} is thread-safe! Otherwise we need to
@@ -33,17 +33,17 @@ public abstract class AbstractTriggeredSigarSensor implements ITriggeredSensor {
 	 * Must not be used for construction.
 	 */
 	@SuppressWarnings("unused")
-	private AbstractTriggeredSigarSensor() {
+	private AbstractSigarSampler() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a new {@link AbstractTriggeredSigarSensor} with given
+	 * Constructs a new {@link AbstractSigarSampler} with given
 	 * {@link Sigar} instance used to retrieve the sensor data.
 	 * 
 	 * @param sigar
 	 */
-	public AbstractTriggeredSigarSensor(final Sigar sigar) {
+	public AbstractSigarSampler(final Sigar sigar) {
 		this.sigar = sigar;
 	}
 }

@@ -8,11 +8,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.ScheduledSensorJob;
-import kieker.monitoring.probe.sigar.ISigarTriggeredSensorFactory;
-import kieker.monitoring.probe.sigar.SigarTriggeredSensorFactory;
-import kieker.monitoring.probe.sigar.sensors.CPUsDetailedPercSensor;
-import kieker.monitoring.probe.sigar.sensors.MemSwapUsageSensor;
+import kieker.monitoring.core.ScheduledSamplerJob;
+import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
+import kieker.monitoring.probe.sigar.SigarSamplerFactory;
+import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * <p>
  * Starts and stops the periodic logging of CPU utilization employing the
- * {@link SigarTriggeredSensorFactory} as the Servlet is initialized and
+ * {@link SigarSamplerFactory} as the Servlet is initialized and
  * destroyed respectively. The statistics are logged with a period of
  * {@value #SENSOR_INTERVAL_SECONDS} seconds.
  * </p>
@@ -48,20 +48,20 @@ public class CPUMemUsageServletContextListener implements
 			MonitoringController.getInstance();
 
 	/**
-	 * Stores the {@link ScheduledSensorJob}s which are scheduled in
+	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in
 	 * {@link #contextInitialized(ServletContextEvent)} and removed from the
 	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
 	 */
-	private final Collection<ScheduledSensorJob> sensorJobs =
-			new ArrayList<ScheduledSensorJob>();
+	private final Collection<ScheduledSamplerJob> samplerJobs =
+			new ArrayList<ScheduledSamplerJob>();
 
 	private static final long SENSOR_INTERVAL_SECONDS = 30;
 	private static final long SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent arg0) {
-		for (final ScheduledSensorJob s : this.sensorJobs) {
-			this.monitoringController.removePeriodicSensor(s);
+		for (final ScheduledSamplerJob s : this.samplerJobs) {
+			this.monitoringController.removeScheduledSampler(s);
 		}
 	}
 
@@ -71,35 +71,35 @@ public class CPUMemUsageServletContextListener implements
 	}
 
 	/**
-	 * Creates and schedules the {@link ScheduledSensorJob}s and stores them for
-	 * later removal in the {@link Collection} {@link #sensorJobs}.
+	 * Creates and schedules the {@link ScheduledSamplerJob}s and stores them for
+	 * later removal in the {@link Collection} {@link #samplerJobs}.
 	 */
 	private void initSensors() {
-		final ISigarTriggeredSensorFactory sigarFactory =
-				SigarTriggeredSensorFactory.getInstance();
+		final ISigarSamplerFactory sigarFactory =
+				SigarSamplerFactory.getInstance();
 
 		// Log utilization of each CPU every 30 seconds
-		final CPUsDetailedPercSensor cpuSensor =
+		final CPUsDetailedPercSampler cpuSensor =
 				sigarFactory.createSensorCPUsDetailedPerc();
-		final ScheduledSensorJob cpuSensorJob =
+		final ScheduledSamplerJob cpuSensorJob =
 				this.monitoringController
-						.schedulePeriodicSensor(
+						.schedulePeriodicSampler(
 								cpuSensor,
 								CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS,
 								CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS,
 								TimeUnit.SECONDS);
-		this.sensorJobs.add(cpuSensorJob);
+		this.samplerJobs.add(cpuSensorJob);
 
 		// Log memory and swap statistics every 30 seconds
-		final MemSwapUsageSensor memSensor =
+		final MemSwapUsageSampler memSensor =
 				sigarFactory.createSensorMemSwapUsage();
-		final ScheduledSensorJob memSensorJob =
+		final ScheduledSamplerJob memSensorJob =
 				this.monitoringController
-						.schedulePeriodicSensor(
+						.schedulePeriodicSampler(
 								memSensor,
 								CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS,
 								CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS,
 								TimeUnit.SECONDS);
-		this.sensorJobs.add(memSensorJob);
+		this.samplerJobs.add(memSensorJob);
 	}
 }

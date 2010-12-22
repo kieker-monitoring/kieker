@@ -10,29 +10,29 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  * 
  */
-public class ScheduledSensorJob implements Runnable {
+public class ScheduledSamplerJob implements Runnable {
 	private static final Log log = LogFactory
-			.getLog(ScheduledSensorJob.class);
+			.getLog(ScheduledSamplerJob.class);
 
 	private final MonitoringController monitoringController;
-	private final ITriggeredSensor sensor;
+	private final ISampler sampler;
 
 	/**
-	 * Constructs a new {@link ScheduledSensorJob} with the given parameters.
+	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.
 	 * 
 	 * @param monitoringController
-	 *            used to log the sensed data (represented as
+	 *            used to log the sampled data (represented as
 	 *            {@link IMonitoringRecord}s) via
 	 *            {@link MonitoringController#newMonitoringRecord(IMonitoringRecord)}
-	 * @param sensor
-	 *            sensor to be trigger via
-	 *            {@link ITriggeredSensor#senseAndLog(MonitoringController)}
+	 * @param sampler
+	 *            sampler to be trigger via
+	 *            {@link ISampler#sample(MonitoringController)}
 	 */
-	public ScheduledSensorJob(
+	public ScheduledSamplerJob(
 			final MonitoringController monitoringController,
-			final ITriggeredSensor sensor) {
+			final ISampler sensor) {
 		this.monitoringController = monitoringController;
-		this.sensor = sensor;
+		this.sampler = sensor;
 	}
 
 	/**
@@ -41,12 +41,12 @@ public class ScheduledSensorJob implements Runnable {
 	@Override
 	public final void run() throws RuntimeException {
 		try {
-			this.sensor.senseAndLog(this.monitoringController);
+			this.sampler.sample(this.monitoringController);
 		} catch (final Exception e) {
 			final String errorMsg =
 					"Exception occurred: "
 							+ e.getMessage();
-			ScheduledSensorJob.log.error(errorMsg, e);
+			ScheduledSamplerJob.log.error(errorMsg, e);
 			/* Re-throw exception */
 			throw new RuntimeException(errorMsg, e);
 		}

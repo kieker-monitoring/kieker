@@ -1,4 +1,4 @@
-package kieker.monitoring.probe.sigar.sensors;
+package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.MemSwapUsageRecord;
 import kieker.monitoring.core.MonitoringController;
@@ -18,24 +18,24 @@ import org.hyperic.sigar.Swap;
  * @author Andre van Hoorn
  * 
  */
-public class MemSwapUsageSensor extends AbstractTriggeredSigarSensor {
+public class MemSwapUsageSampler extends AbstractSigarSampler {
 
-	private static final Log log = LogFactory.getLog(MemSwapUsageSensor.class);
+	private static final Log log = LogFactory.getLog(MemSwapUsageSampler.class);
 
 	/**
 	 * Must not be used for construction.
 	 */
 	@SuppressWarnings("unused")
-	private MemSwapUsageSensor() {
+	private MemSwapUsageSampler() {
 		this(null);
 	}
 
-	public MemSwapUsageSensor(final Sigar sigar) {
+	public MemSwapUsageSampler(final Sigar sigar) {
 		super(sigar);
 	}
 
 	@Override
-	public void senseAndLog(final MonitoringController monitoringController)
+	public void sample(final MonitoringController monitoringController)
 			throws Exception {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();

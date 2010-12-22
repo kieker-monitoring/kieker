@@ -14,7 +14,7 @@ import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.core.state.IMonitoringControllerState;
 import kieker.monitoring.core.state.MonitoringControllerState;
-import kieker.monitoring.probe.sigar.sensors.AbstractTriggeredSigarSensor;
+import kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 import kieker.monitoring.writer.util.async.ShutdownHook;
@@ -46,7 +46,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public final class MonitoringController implements IMonitoringController,
-		IPeriodicSensingController {
+		ISamplingController {
 
 	/**
 	 * Used to notify the writer threads that monitoring ended.
@@ -111,7 +111,7 @@ public final class MonitoringController implements IMonitoringController,
 	private final IMonitoringControllerState state;
 
 	/**
-	 * Executes the {@link AbstractTriggeredSigarSensor}s.
+	 * Executes the {@link AbstractSigarSampler}s.
 	 */
 	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
 
@@ -454,8 +454,8 @@ public final class MonitoringController implements IMonitoringController,
 	}
 
 	@Override
-	public synchronized ScheduledSensorJob schedulePeriodicSensor(
-			final ITriggeredSensor sensor,
+	public synchronized ScheduledSamplerJob schedulePeriodicSampler(
+			final ISampler sensor,
 			final long initialDelay,
 			final long period, final TimeUnit timeUnit) {
 		if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
@@ -466,16 +466,16 @@ public final class MonitoringController implements IMonitoringController,
 			return null;
 		}
 
-		final ScheduledSensorJob job =
-				new ScheduledSensorJob(this, sensor);
+		final ScheduledSamplerJob job =
+				new ScheduledSamplerJob(this, sensor);
 		this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay,
 				period, timeUnit);
 		return job;
 	}
 
 	@Override
-	public synchronized boolean removePeriodicSensor(
-			final ScheduledSensorJob sensorJob) {
+	public synchronized boolean removeScheduledSampler(
+			final ScheduledSamplerJob sensorJob) {
 		return this.periodicSensorsPoolExecutor.remove(sensorJob);
 	}
 }

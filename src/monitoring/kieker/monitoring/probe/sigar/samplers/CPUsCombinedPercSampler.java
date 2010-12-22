@@ -1,6 +1,6 @@
-package kieker.monitoring.probe.sigar.sensors;
+package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.common.record.CPUUtilizationRecord;
+import kieker.common.record.ResourceUtilizationRecord;
 import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.logging.Log;
@@ -9,49 +9,46 @@ import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Sigar;
 
 /**
- * Logs detailed utilization statistics for each CPU in the system, retrieved
- * from {@link CpuPerc}, as {@link CPUUtilizationRecord}s via
+ * Logs the combined (i.e., User + Sys + Nice + Wait) cpu utilization for each
+ * CPU in the system, retrieved via {@link CpuPerc#getCombined()}, as
+ * {@link ResourceUtilizationRecord}s via
  * {@link MonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
  * .
  * 
  * @author Andre van Hoorn
  * 
  */
-public class CPUsDetailedPercSensor extends AbstractTriggeredSigarSensor {
+public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 
 	private static final Log log = LogFactory
-			.getLog(CPUsDetailedPercSensor.class);
+			.getLog(CPUsCombinedPercSampler.class);
 
 	/**
 	 * Must not be used for construction.
 	 */
 	@SuppressWarnings("unused")
-	private CPUsDetailedPercSensor() {
+	private CPUsCombinedPercSampler() {
 		this(null);
 	}
 
-	public CPUsDetailedPercSensor(final Sigar sigar) {
+	public CPUsCombinedPercSampler(final Sigar sigar) {
 		super(sigar);
 	}
 
 	private final static String CPU_RESOURCE_NAME_PREFIX = "cpu-";
 
 	@Override
-	public void senseAndLog(final MonitoringController monitoringController)
+	public void sample(final MonitoringController monitoringController)
 			throws Exception {
 		final org.hyperic.sigar.CpuPerc[] cpus =
 				this.sigar.getCpuPercList();
 		for (int i = 0; i < cpus.length; i++) {
-			final CpuPerc curCPU = cpus[i];
-			final CPUUtilizationRecord r =
-					new CPUUtilizationRecord(
+			final ResourceUtilizationRecord r =
+					new ResourceUtilizationRecord(
 							MonitoringController.currentTimeNanos(),
 							monitoringController.getHostName(),
-							CPUsDetailedPercSensor.CPU_RESOURCE_NAME_PREFIX + i,
-							curCPU.getUser(), curCPU.getSys(),
-							curCPU.getWait(), curCPU.getNice(),
-							curCPU.getIrq(), curCPU.getCombined(), curCPU
-									.getIdle());
+							CPUsCombinedPercSampler.CPU_RESOURCE_NAME_PREFIX + i,
+							cpus[i].getCombined());
 			monitoringController.newMonitoringRecord(r);
 		}
 	}

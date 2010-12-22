@@ -71,9 +71,9 @@ public interface IMonitoringConfiguration {
 	/**
 	 * Sets the configured size of the thread pool used to execute the
 	 * periodic sensor jobs registered and removed via
-	 * {@link MonitoringController#schedulePeriodicSensor(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
+	 * {@link MonitoringController#schedulePeriodicSampler(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
 	 * and
-	 * {@link MonitoringController#removePeriodicSensor(kieker.monitoring.core.ScheduledSensorJob)}
+	 * {@link MonitoringController#removeScheduledSampler(kieker.monitoring.core.ScheduledSamplerJob)}
 	 * respectively.
 	 * 
 	 * @return
@@ -83,9 +83,9 @@ public interface IMonitoringConfiguration {
 	/**
 	 * Returns the configured size of the thread pool used to execute the
 	 * periodic sensor jobs registered and removed via
-	 * {@link MonitoringController#schedulePeriodicSensor(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
+	 * {@link MonitoringController#schedulePeriodicSampler(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
 	 * and
-	 * {@link MonitoringController#removePeriodicSensor(kieker.monitoring.core.ScheduledSensorJob)}
+	 * {@link MonitoringController#removeScheduledSampler(kieker.monitoring.core.ScheduledSamplerJob)}
 	 * respectively.
 	 * 
 	 * @return
