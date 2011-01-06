@@ -51,8 +51,8 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 							CPUsCombinedPercSampler.CPU_RESOURCE_NAME_PREFIX
 									+ i, combinedUtilization);
 			monitoringController.newMonitoringRecord(r);
-			CPUsCombinedPercSampler.log.info("Sigar utilization: "
-					+ combinedUtilization + "; " + " Record: " + r);
+//			CPUsCombinedPercSampler.log.info("Sigar utilization: "
+//					+ combinedUtilization + "; " + " Record: " + r);
 		}
 	}
 }

@@ -43,6 +43,7 @@ public class CPUsDetailedPercSampler extends AbstractSigarSampler {
 				this.sigar.getCpuPercList();
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
+			final double combinedUtilization = curCPU.getCombined();
 			final CPUUtilizationRecord r =
 					new CPUUtilizationRecord(
 							MonitoringController.currentTimeNanos(),
@@ -53,6 +54,8 @@ public class CPUsDetailedPercSampler extends AbstractSigarSampler {
 							curCPU.getIrq(), curCPU.getCombined(), curCPU
 									.getIdle());
 			monitoringController.newMonitoringRecord(r);
+//			CPUsDetailedPercSampler.log.info("Sigar utilization: "
+//					+ combinedUtilization + "; " + " Record: " + r);
 		}
 	}
 }
