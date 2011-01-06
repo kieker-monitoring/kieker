@@ -45,9 +45,19 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
     public volatile long tout = -1;
     public volatile int eoi = -1;
     public volatile int ess = -1;
-    public volatile boolean isEntryPoint = false;
-    public volatile Object retVal = null;
+    
+    /**
+     * Used by probes to store the return value of executed operations.
+     * The field is marked transient as it must not be serialized. 
+     */
+    public volatile transient Object retVal = null;
 
+    /**
+     * Used by probes to intermediate information.
+     * The field is marked transient as it must not be serialized. 
+     */
+    public volatile transient boolean isEntryPoint = false;
+    
     /**
      * Returns an instance of OperationExecutionRecord.
      * The member variables are initialized that way that only actually
