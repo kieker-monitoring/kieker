@@ -6,7 +6,7 @@ import kieker.monitoring.core.MonitoringController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.CpuPerc;
-import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarProxy;
 
 /**
  * Logs detailed utilization statistics for each CPU in the system, retrieved
@@ -30,7 +30,7 @@ public class CPUsDetailedPercSampler extends AbstractSigarSampler {
 		this(null);
 	}
 
-	public CPUsDetailedPercSampler(final Sigar sigar) {
+	public CPUsDetailedPercSampler(final SigarProxy sigar) {
 		super(sigar);
 	}
 

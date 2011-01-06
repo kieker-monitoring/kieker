@@ -6,7 +6,7 @@ import kieker.monitoring.core.MonitoringController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.Mem;
-import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarProxy;
 import org.hyperic.sigar.Swap;
 
 /**
@@ -30,7 +30,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 		this(null);
 	}
 
-	public MemSwapUsageSampler(final Sigar sigar) {
+	public MemSwapUsageSampler(final SigarProxy sigar) {
 		super(sigar);
 	}
 

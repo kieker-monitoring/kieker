@@ -8,18 +8,18 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hyperic.sigar.Humidor;
 import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarProxy;
 
 /**
  * Provides factory methods for {@link AbstractSigarSampler}s.
  * 
  * @author Andre van Hoorn
  */
-public class SigarSamplerFactory implements
-		ISigarSamplerFactory {
+public class SigarSamplerFactory implements ISigarSamplerFactory {
 
-	private static final Log log = LogFactory
-			.getLog(SigarSamplerFactory.class);
+	private static final Log log = LogFactory.getLog(SigarSamplerFactory.class);
 
 	/**
 	 * http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
@@ -36,9 +36,9 @@ public class SigarSamplerFactory implements
 	}
 
 	/**
-	 * Returns the singleton instance of the {@link SigarSamplerFactory}
-	 * which uses the singleton instance of the {@link MonitoringController
-	 * retrieved via {@link MonitoringController#getInstance()}.
+	 * Returns the singleton instance of the {@link SigarSamplerFactory} which
+	 * uses the singleton instance of the {@link MonitoringController retrieved
+	 * via {@link MonitoringController#getInstance()}.
 	 * 
 	 * The size of the internal thread pool used to serve the sensing and
 	 * logging jobs is set to
@@ -49,26 +49,25 @@ public class SigarSamplerFactory implements
 	}
 
 	/**
-	 * {@link Sigar} instance used to retrieve the data to be logged.
+	 * {@link SigarProxy} instance used to retrieve the data to be logged.
 	 */
-	private final Sigar sigar;
+	private final SigarProxy sigar;
 
 	/**
 	 * Used by {@link #getInstance()} to construct the singleton instance.
 	 */
 	private SigarSamplerFactory() {
-		this(new Sigar());
+		this(new Humidor(new Sigar()));
 	}
 
 	/**
-	 * Constructs a {@link SigarSamplerFactory} with the given
-	 * parameters.
+	 * Constructs a {@link SigarSamplerFactory} with the given parameters.
 	 * 
 	 * @param name
 	 * @param monitoringController
 	 */
-	public SigarSamplerFactory(final Sigar sigar) {
-		this.sigar = sigar;
+	public SigarSamplerFactory(final Humidor humidor) {
+		this.sigar = humidor.getSigar();
 	}
 
 	@Override
@@ -87,8 +86,7 @@ public class SigarSamplerFactory implements
 
 	@Override
 	public MemSwapUsageSampler createSensorMemSwapUsage() {
-		final MemSwapUsageSampler l =
-				new MemSwapUsageSampler(this.sigar);
+		final MemSwapUsageSampler l = new MemSwapUsageSampler(this.sigar);
 		return l;
 	}
 }

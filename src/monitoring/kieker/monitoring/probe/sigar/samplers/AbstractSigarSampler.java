@@ -7,6 +7,7 @@ import kieker.monitoring.core.MonitoringController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarProxy;
 
 /**
  * Eases the implementation of {@link ISampler}s which collect
@@ -23,11 +24,7 @@ public abstract class AbstractSigarSampler implements ISampler {
 	private static final Log log = LogFactory
 			.getLog(AbstractSigarSampler.class);
 
-	/**
-	 * TODO: Make sure that {@link Sigar} is thread-safe! Otherwise we need to
-	 * force synchronization.
-	 */
-	protected final Sigar sigar;
+	protected final SigarProxy sigar;
 
 	/**
 	 * Must not be used for construction.
@@ -39,11 +36,11 @@ public abstract class AbstractSigarSampler implements ISampler {
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given
-	 * {@link Sigar} instance used to retrieve the sensor data.
+	 * {@link SigarProxy} instance used to retrieve the sensor data.
 	 * 
 	 * @param sigar
 	 */
-	public AbstractSigarSampler(final Sigar sigar) {
+	public AbstractSigarSampler(final SigarProxy sigar) {
 		this.sigar = sigar;
 	}
 }

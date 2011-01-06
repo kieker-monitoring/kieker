@@ -6,7 +6,7 @@ import kieker.monitoring.core.MonitoringController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.CpuPerc;
-import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarProxy;
 
 /**
  * Logs the combined (i.e., User + Sys + Nice + Wait) cpu utilization for each
@@ -31,7 +31,7 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 		this(null);
 	}
 
-	public CPUsCombinedPercSampler(final Sigar sigar) {
+	public CPUsCombinedPercSampler(final SigarProxy sigar) {
 		super(sigar);
 	}
 
@@ -40,16 +40,19 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	@Override
 	public void sample(final MonitoringController monitoringController)
 			throws Exception {
-		final org.hyperic.sigar.CpuPerc[] cpus =
-				this.sigar.getCpuPercList();
+		final org.hyperic.sigar.CpuPerc[] cpus = this.sigar.getCpuPercList();
 		for (int i = 0; i < cpus.length; i++) {
+			final CpuPerc curCPU = cpus[i];
+			final double combinedUtilization = curCPU.getCombined();
 			final ResourceUtilizationRecord r =
 					new ResourceUtilizationRecord(
 							MonitoringController.currentTimeNanos(),
 							monitoringController.getHostName(),
-							CPUsCombinedPercSampler.CPU_RESOURCE_NAME_PREFIX + i,
-							cpus[i].getCombined());
+							CPUsCombinedPercSampler.CPU_RESOURCE_NAME_PREFIX
+									+ i, combinedUtilization);
 			monitoringController.newMonitoringRecord(r);
+			CPUsCombinedPercSampler.log.info("Sigar utilization: "
+					+ combinedUtilization + "; " + " Record: " + r);
 		}
 	}
 }

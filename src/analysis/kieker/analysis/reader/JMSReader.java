@@ -134,10 +134,10 @@ public class JMSReader extends AbstractMonitoringLogReader {
 						JMSReader.log.info("Received text message: " + text);
 
 					} else {
-						final ObjectMessage om = (ObjectMessage) jmsMessage;
-						// System.out.println("Received object message: " +
-						// om.toString());
 						try {
+							final ObjectMessage om = (ObjectMessage) jmsMessage;
+							// System.out.println("Received object message: " +
+							// om.toString());
 							final Serializable omo = om.getObject();
 							if (omo instanceof IMonitoringRecord) {
 								final IMonitoringRecord rec = (IMonitoringRecord) omo;
@@ -152,11 +152,11 @@ public class JMSReader extends AbstractMonitoringLogReader {
 										+ om);
 							}
 						} catch (final MessageFormatException em) {
-							JMSReader.log.fatal("MessageFormatException:", em);
+							JMSReader.log.fatal("MessageFormatException:" + em.getMessage(), em);
 						} catch (final JMSException ex) {
-							JMSReader.log.fatal("JMSException ", ex);
+							JMSReader.log.fatal("JMSException: " + ex.getMessage(), ex);
 						} catch (final MonitoringLogReaderException ex) {
-							JMSReader.log.error("LogReaderExecutionException",
+							JMSReader.log.error("LogReaderExecutionException: " + ex.getMessage(),
 									ex);
 						} catch (final Exception ex) {
 							JMSReader.log.error("Exception", ex);
