@@ -34,8 +34,6 @@ public class CPUsDetailedPercSampler extends AbstractSigarSampler {
 		super(sigar);
 	}
 
-	private final static String CPU_RESOURCE_NAME_PREFIX = "cpu-";
-
 	@Override
 	public void sample(final MonitoringController monitoringController)
 			throws Exception {
@@ -43,12 +41,12 @@ public class CPUsDetailedPercSampler extends AbstractSigarSampler {
 				this.sigar.getCpuPercList();
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
-			final double combinedUtilization = curCPU.getCombined();
+			//final double combinedUtilization = curCPU.getCombined();
 			final CPUUtilizationRecord r =
 					new CPUUtilizationRecord(
 							MonitoringController.currentTimeNanos(),
 							monitoringController.getHostName(),
-							CPUsDetailedPercSampler.CPU_RESOURCE_NAME_PREFIX + i,
+							Integer.toString(i),
 							curCPU.getUser(), curCPU.getSys(),
 							curCPU.getWait(), curCPU.getNice(),
 							curCPU.getIrq(), curCPU.getCombined(), curCPU
