@@ -34,6 +34,13 @@ public class PropertyMap {
     private final HashMap<String, String> map = new HashMap<String, String>();
 
     /**
+	 * @return the map
+	 */
+	public final HashMap<String, String> getMap() {
+		return this.map;
+	}
+
+	/**
      * Constructs an object from the given initString using the given delimiters.
      *
      * @param initString
@@ -47,9 +54,9 @@ public class PropertyMap {
      *  the passed default value @a default if no value for this property
      *  exists. */
 
-    public final String getProperty(String propName, String defaultVal) {
+    public final String getProperty(final String propName, final String defaultVal) {
         if (!this.initStringProcessed) {
-            log.error("InitString not yet processed. " +
+            PropertyMap.log.error("InitString not yet processed. " +
                     " Call method initVarsFromInitString(..) first.");
             return null;
         }
@@ -65,7 +72,7 @@ public class PropertyMap {
     /** Returns the value for the initialization property @a propName or null
      *  if no value for this property exists. */
 
-    public final String getProperty(String propName) {
+    public final String getProperty(final String propName) {
         return this.getProperty(propName, null);
     }
     private boolean initStringProcessed = false;
@@ -78,28 +85,28 @@ public class PropertyMap {
      */
 
     private final void initFromDelimitedString(final String initString, final String pairDelimiter, final String keyValueDelimiter) throws IllegalArgumentException {
-        if (initString == null || initString.length() == 0) {
-            initStringProcessed = true;
+        if ((initString == null) || (initString.length() == 0)) {
+            this.initStringProcessed = true;
             return;
         }
 
         try {
-            StringTokenizer keyValListTokens = new StringTokenizer(initString, pairDelimiter);
+            final StringTokenizer keyValListTokens = new StringTokenizer(initString, pairDelimiter);
             while (keyValListTokens.hasMoreTokens()) {
-                String curKeyValToken = keyValListTokens.nextToken().trim();
-                StringTokenizer keyValTokens = new StringTokenizer(curKeyValToken, keyValueDelimiter);
+                final String curKeyValToken = keyValListTokens.nextToken().trim();
+                final StringTokenizer keyValTokens = new StringTokenizer(curKeyValToken, keyValueDelimiter);
                 if (keyValTokens.countTokens() != 2) {
                     throw new IllegalArgumentException("Expected key=value pair, found " + curKeyValToken);
                 }
-                String key = keyValTokens.nextToken().trim();
-                String val = keyValTokens.nextToken().trim();
-                log.info("Found key/value pair: " + key + "=" + val);
-                map.put(key, val);
+                final String key = keyValTokens.nextToken().trim();
+                final String val = keyValTokens.nextToken().trim();
+                PropertyMap.log.info("Found key/value pair: " + key + "=" + val);
+                this.map.put(key, val);
             }
-        } catch (Exception exc) {
+        } catch (final Exception exc) {
             throw new IllegalArgumentException("Error parsing init string '" + initString + "'", exc);
         }
 
-        initStringProcessed = true;
+        this.initStringProcessed = true;
     }
 }

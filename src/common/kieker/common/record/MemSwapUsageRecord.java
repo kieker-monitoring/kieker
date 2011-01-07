@@ -3,7 +3,6 @@
  */
 package kieker.common.record;
 
-import kieker.common.record.AbstractMonitoringRecord;
 
 /**
  * @author Andre van Hoorn
@@ -28,6 +27,90 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	private volatile String hostName = MemSwapUsageRecord.DEFAULT_VALUE;
 
 	private volatile long memTotal = MemSwapUsageRecord.UNDEFINED_LONG;
+	/**
+	 * @return the memTotal
+	 */
+	public final long getMemTotal() {
+		return this.memTotal;
+	}
+
+	/**
+	 * @param memTotal the memTotal to set
+	 */
+	public final void setMemTotal(final long memTotal) {
+		this.memTotal = memTotal;
+	}
+
+	/**
+	 * @return the memUsed
+	 */
+	public final long getMemUsed() {
+		return this.memUsed;
+	}
+
+	/**
+	 * @param memUsed the memUsed to set
+	 */
+	public final void setMemUsed(final long memUsed) {
+		this.memUsed = memUsed;
+	}
+
+	/**
+	 * @return the memFree
+	 */
+	public final long getMemFree() {
+		return this.memFree;
+	}
+
+	/**
+	 * @param memFree the memFree to set
+	 */
+	public final void setMemFree(final long memFree) {
+		this.memFree = memFree;
+	}
+
+	/**
+	 * @return the swapTotal
+	 */
+	public final long getSwapTotal() {
+		return this.swapTotal;
+	}
+
+	/**
+	 * @param swapTotal the swapTotal to set
+	 */
+	public final void setSwapTotal(final long swapTotal) {
+		this.swapTotal = swapTotal;
+	}
+
+	/**
+	 * @return the swapUsed
+	 */
+	public final long getSwapUsed() {
+		return this.swapUsed;
+	}
+
+	/**
+	 * @param swapUsed the swapUsed to set
+	 */
+	public final void setSwapUsed(final long swapUsed) {
+		this.swapUsed = swapUsed;
+	}
+
+	/**
+	 * @return the swapFree
+	 */
+	public final long getSwapFree() {
+		return this.swapFree;
+	}
+
+	/**
+	 * @param swapFree the swapFree to set
+	 */
+	public final void setSwapFree(final long swapFree) {
+		this.swapFree = swapFree;
+	}
+
 	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
 	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
 	private volatile long swapTotal = MemSwapUsageRecord.UNDEFINED_LONG;
