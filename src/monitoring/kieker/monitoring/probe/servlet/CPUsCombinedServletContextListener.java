@@ -54,7 +54,7 @@ public class CPUsCombinedServletContextListener implements
 	private final Collection<ScheduledSamplerJob> samplerJobs =
 			new ArrayList<ScheduledSamplerJob>();
 
-	private static final long SENSOR_INTERVAL_SECONDS = 30;
+	private static final long SENSOR_INTERVAL_SECONDS = 15;
 	private static final long SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	@Override

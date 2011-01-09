@@ -55,8 +55,8 @@ public class CPUMemUsageServletContextListener implements
 	private final Collection<ScheduledSamplerJob> samplerJobs =
 			new ArrayList<ScheduledSamplerJob>();
 
-	private static final long SENSOR_INTERVAL_SECONDS = 30;
-	private static final long SENSOR_INITIAL_DELAY_SECONDS = 0;
+	private static final long SENSOR_INTERVAL_SECONDS = 0;
+	private static final long SENSOR_INITIAL_DELAY_SECONDS = 15;
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent arg0) {
