@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2010 Kieker Project
+ * Copyright 2006-2011 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  */
 
 /**
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

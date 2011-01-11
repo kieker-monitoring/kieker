@@ -12,7 +12,7 @@ pdf(output_fn, width=2, height=5, paper="special")
   barplot(
     matrix(c(m2,m3,m4),ncol=1),
     ylab="Mean execution time (microseconds)",
-    ylim=c(0,2.5)
+    ylim=c(0,m2+m3+m4+1)
   )
   text((m2),as.character(round(m2,digits=3)),pos=2)
   text((m2+m3/2),as.character(round(m3,digits=3)),pos=2)

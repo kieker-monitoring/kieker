@@ -13,9 +13,9 @@
 				<classpathentry kind="src" path="test//tools/"/>
 				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 				<classpathentry kind="lib" path="lib/Scenario.jar"/>
-    <classpathentry kind="lib" path="lib/aspectjrt-1.6.9.jar"/>
-    <classpathentry kind="lib" path="lib/aspectjtools-1.6.9.jar"/>
-    <classpathentry kind="lib" path="lib/aspectjweaver-1.6.9.jar"/>
+    <classpathentry kind="lib" path="lib/aspectjrt-1.6.10.jar"/>
+    <classpathentry kind="lib" path="lib/aspectjtools-1.6.10.jar"/>
+    <classpathentry kind="lib" path="lib/aspectjweaver-1.6.10.jar"/>
     <classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
     <classpathentry kind="lib" path="lib/commons-io-1.2.jar"/>
     <classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>

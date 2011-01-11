@@ -28,7 +28,7 @@
            debug="true"
            classpathref="compile-classpath"
            srcdir="src"
-           excludes="kieker/monitoring/probe/" />
+           excludes="kieker/monitoring/probe/aspectJ/" />
     <!-- WORKAROUND!!! -->
     <path id="compile-ajc-classpath">
       <fileset dir="lib/">
@@ -42,9 +42,10 @@
           destdir="build"
           Xlint="ignore"
           debug="true"
+          verbose="true"
           classpathref="compile-ajc-classpath">
           <sourceroots>
-            <pathelement location="src/kieker/monitoring/probe/"/>
+            <pathelement location="src/kieker/monitoring/probe/aspectJ/"/>
           </sourceroots>
     </iajc>
   </target>

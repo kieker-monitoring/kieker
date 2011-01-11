@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2010 Kieker Project
+ * Copyright 2006-2011 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.apache.commons.logging.LogFactory;
  * Monitoring writer which does nothing.
  *
  * @author Andre van Hoorn
+ * @author Jan Waller
  */
 public class NullWriter implements IMonitoringLogWriter {
 
