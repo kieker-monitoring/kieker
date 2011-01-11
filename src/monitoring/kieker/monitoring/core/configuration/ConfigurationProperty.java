@@ -70,7 +70,7 @@ public enum ConfigurationProperty {
 	 */
 	FS_WRITER__STORE_IN_JAVAIOTMPDIR(ConfigurationFileConstants.JVM_ARG_PREFIX
 			+ "storeInJavaIoTmpdir", ConfigurationFileConstants.JVM_ARG_PREFIX
-			+ "kieker.monitoring.storeInJavaIoTmpdir", "true",
+			+ "storeInJavaIoTmpdir", "true",
 	/* must not be empty: */false),
 	/*
 	 * For historic reasons ;-) this property has the prefix also in the
