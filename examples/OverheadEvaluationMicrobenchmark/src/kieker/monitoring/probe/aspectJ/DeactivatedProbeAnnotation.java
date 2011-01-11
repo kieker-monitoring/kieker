@@ -44,7 +44,7 @@ public class DeactivatedProbeAnnotation extends AbstractAspectJProbe {
 	{
 		deactivatedProbes.put("asdfasfg", dummy);
 		deactivatedProbes.put("xcasdgsdfahsdfh", dummy);
-		deactivatedProbes.put("long kieker.evaluation.monitoredApplication.MonitoredClass.monitoredMethod(long)", dummy);
+		deactivatedProbes.put("long kieker.evaluation.monitoredApplication.MonitoredClass.monitoredMethod(long, int)", dummy);
 	}
   
 	@Pointcut("execution(@kieker.monitoring.annotation.BenchmarkProbe * *.*(..))")
@@ -59,7 +59,7 @@ public class DeactivatedProbeAnnotation extends AbstractAspectJProbe {
 		}
 		Object retVal = null;
 		// Measure
-		log.fatal("Probe got accidently acttivated!!!");
+		log.fatal("Probe got accidently activated!!!");
 		try {
       retVal =  thisJoinPoint.proceed();
     } catch (final Exception e) {

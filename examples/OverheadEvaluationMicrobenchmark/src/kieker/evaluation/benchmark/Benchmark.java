@@ -15,7 +15,7 @@ import org.apache.commons.cli.Options;
 /**
  * @author Jan Waller
  */
-public class WarmupThreaded {
+public final class Benchmark {
 
 	private static PrintStream ps = null;
 	private static String configurationId = null;
@@ -24,6 +24,7 @@ public class WarmupThreaded {
 	private static int totalCalls = 0;
 	private static int recordedCalls = 0;
 	private static long methodTime = 0;
+  private static int recursionDepth = 0;
 
 	public static void main(String[] args) {
 
@@ -32,16 +33,17 @@ public class WarmupThreaded {
 
 		System.out.println(" # Experiment run configuration:");
 		System.out.println(" # 1. Output filename " + outputFn);
-		System.out.println(" # 2. Threads " + totalThreads);
-		System.out.println(" # 3. Total-Calls " + totalCalls);
-		System.out.println(" # 4. Recorded-Calls " + recordedCalls);
+    System.out.println(" # 2. Recursion Depth " + recursionDepth);
+		System.out.println(" # 3. Threads " + totalThreads);
+		System.out.println(" # 4. Total-Calls " + totalCalls);
+		System.out.println(" # 5. Recorded-Calls " + recordedCalls);
 
 		/* 2. Initialize Threads and Classes */
 		CountDownLatch doneSignal = new CountDownLatch(totalThreads);
 		MonitoredClass mc = new MonitoredClass();
 		BenchmarkingThread[] threads = new BenchmarkingThread[totalThreads];
 		for (int i = 0; i < totalThreads; i++) {
-			threads[i] = new BenchmarkingThread(mc, totalCalls, recordedCalls, methodTime, doneSignal);
+			threads[i] = new BenchmarkingThread(mc, totalCalls, recordedCalls, methodTime, recursionDepth, doneSignal);
 		}
 
 		/* 3. Starting Threads */
@@ -105,6 +107,13 @@ public class WarmupThreaded {
 				.withArgName("threads").hasArg(true).isRequired(true)
 				.withDescription("Number of Threads started.")
 				.withValueSeparator('=').create("h"));
+    cmdlOpts.addOption(OptionBuilder.
+    		withLongOpt("recursiondepth").
+    		withArgName("depth").
+    		hasArg(true).
+    		isRequired(true).
+    		withDescription("Depth of Recursion performed.").
+    		withValueSeparator('=').create("d"));
 		cmdlOpts.addOption(OptionBuilder
 				.withLongOpt("output-filename")
 				.withArgName("filename")
@@ -122,9 +131,10 @@ public class WarmupThreaded {
 			totalCalls = Integer.parseInt(cmdl.getOptionValue("totalcalls"));
 			methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
 			totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
+			recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
 			ps = new PrintStream(new FileOutputStream(outputFn, true));
 		} catch (Exception ex) {
-			new HelpFormatter().printHelp(Warmup.class.getName(), cmdlOpts);
+			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace();
 			System.exit(-1);
 		}

@@ -3,12 +3,13 @@
 BINDIR=$(dirname $0)/
 BASEDIR=${BINDIR}../
 
-SLEEPTIME=30
-NUM_LOOPS=1
-THREADS=1
-TOTALCALLS=1000000
-RECORDEDCALLS=100000
-METHODTIME=500000
+SLEEPTIME=0             ## 30
+NUM_LOOPS=1             ## 1
+THREADS=1               ## 1
+RECURSIONDEPTH=1        ## 1
+TOTALCALLS=100          ## 1000000
+RECORDEDCALLS=100       ## 100000
+METHODTIME=100000       ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 5 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 5 \* ${NUM_LOOPS}`
 echo "Experiment will take circa ${TIME} seconds."
@@ -28,7 +29,7 @@ rm -f ${BASEDIR}kieker.log
 
 RESULTSFN="${RESULTSDIR}results.csv"
 # Write csv file headers:
-CSV_HEADER="configuration;iteration;order_index;duration_nsec"
+CSV_HEADER="configuration;iteration;order_index;recursion_depth;thread_id;duration_nsec"
 echo ${CSV_HEADER} > ${RESULTSFN}
 
 AOPXML_PATH="${BASEDIR}build/META-INF/aop.xml"
@@ -44,9 +45,9 @@ JAVAARGS="-server"
 #JAVAARGS="${JAVAARGS} -XX:+PrintCompilation -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
-MAINCLASSNAME=kieker.evaluation.benchmark.WarmupThreaded
+MAINCLASSNAME=kieker.evaluation.benchmark.Benchmark
 CLASSPATH=$(ls lib/*.jar | tr "\n" "${CPSEPCHAR}")build/
-echo "Classpath: ${CLASSPATH}"
+#echo "Classpath: ${CLASSPATH}"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
@@ -69,6 +70,7 @@ echo "TOTALCALLS=${TOTALCALLS}" >>${RESULTSDIR}configuration.txt
 echo "RECORDEDCALLS=${RECORDEDCALLS}" >>${RESULTSDIR}configuration.txt
 echo "METHODTIME=${METHODTIME}" >>${RESULTSDIR}configuration.txt
 echo "THREADS=${THREADS}" >>${RESULTSDIR}configuration.txt
+echo "RECURSIONDEPTH=${RECURSIONDEPTH}" >>${RESULTSDIR}configuration.txt
 sync
 
 ## Execute Benchmark
@@ -80,11 +82,12 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     echo " # ${i}.1 No instrumentation"
     java  ${JAVAARGS_NOINSTR} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
         --output-filename ${RESULTSFN} \
-        --configuration-id "noinstr;${i};0" \
+        --configuration-id "noinstr;${i};0;${RECURSIONDEPTH}" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS}
+        --totalthreads ${THREADS} \
+        --recursiondepth ${RECURSIONDEPTH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_1.log
     sync
     sleep ${SLEEPTIME}
@@ -94,11 +97,12 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     cp ${AOPXML_INSTR_EMPTYPROBE} ${AOPXML_PATH}
     java  ${JAVAARGS_INSTR_EMPTYPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
         --output-filename ${RESULTSFN} \
-        --configuration-id "empty_probe;${i};1" \
+        --configuration-id "empty_probe;${i};1;${RECURSIONDEPTH}" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS}
+        --totalthreads ${THREADS} \
+        --recursiondepth ${RECURSIONDEPTH}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
     sync
@@ -109,11 +113,12 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     cp ${AOPXML_INSTR_DEACTPROBE} ${AOPXML_PATH}
     java  ${JAVAARGS_INSTR_DEACTPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
         --output-filename ${RESULTSFN} \
-        --configuration-id "deact_probe;${i};2" \
+        --configuration-id "deact_probe;${i};2;${RECURSIONDEPTH}" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS}
+        --totalthreads ${THREADS} \
+        --recursiondepth ${RECURSIONDEPTH}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
     sync
@@ -124,11 +129,12 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
     java  ${JAVAARGS_INSTR_NOLOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
         --output-filename ${RESULTSFN} \
-        --configuration-id "no_logging;${i};3" \
+        --configuration-id "no_logging;${i};3;${RECURSIONDEPTH}" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS}
+        --totalthreads ${THREADS} \
+        --recursiondepth ${RECURSIONDEPTH}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_3.log
     sync
@@ -139,13 +145,14 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
     java  ${JAVAARGS_INSTR_LOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
         --output-filename ${RESULTSFN} \
-        --configuration-id "logging;${i};4" \
+        --configuration-id "logging;${i};4;${RECURSIONDEPTH}" \
         --totalcalls ${TOTALCALLS} \
         --recordedcalls ${RECORDEDCALLS} \
         --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS}
+        --totalthreads ${THREADS} \
+        --recursiondepth ${RECURSIONDEPTH}
     rm -f ${AOPXML_PATH}
-    rm -rf ${BASEDIR}tmp/tpmon-*
+    mv ${BASEDIR}tmp/tpmon-* ${RESULTSDIR}/kiekerlog/
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log
     sync
     sleep ${SLEEPTIME}
@@ -153,6 +160,5 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 done
 
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
-#${BINDIR}run-r-mcWarmupThreaded.sh
 [ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log
 [ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}

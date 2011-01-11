@@ -808,7 +808,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 		} else {
 			storagePathBaseDir = MonitoringConfiguration
 					.loadStringConfigurationProperty(props,
-							ConfigurationProperty.FS_FN_PREFIX,
+							ConfigurationProperty.FS_WRITER__CUSTOM_STORAGE_PATH,
 							considerSystemProperties);
 		}
 		final int asyncRecordQueueSize = MonitoringConfiguration
@@ -849,7 +849,7 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 		} else {
 			filenameBase = MonitoringConfiguration
 					.loadStringConfigurationProperty(props,
-							ConfigurationProperty.FS_FN_PREFIX,
+							ConfigurationProperty.FS_WRITER__CUSTOM_STORAGE_PATH,
 							considerSystemProperties);
 		}
 		monitoringLogWriter =
