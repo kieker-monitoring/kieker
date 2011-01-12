@@ -11,7 +11,7 @@ TOTALCALLS=1000000      ## 1000000
 RECORDEDCALLS=100000    ## 100000
 METHODTIME=500000       ## 500000
 
-TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 5 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 5 \* ${NUM_LOOPS}`
+TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 5 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 5 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
 echo "Experiment will take circa ${TIME} seconds."
 
 # determine correct classpath separator
@@ -155,7 +155,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
         rm -f ${AOPXML_PATH}
-        mv ${BASEDIR}tmp/tpmon-* ${RESULTSDIR}/kiekerlog/
+        mkdir -p ${RESULTSDIR}kiekerlog/
+        mv -t ${RESULTSDIR}kiekerlog/ ${BASEDIR}tmp/tpmon-*
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log
         sync
         sleep ${SLEEPTIME}
