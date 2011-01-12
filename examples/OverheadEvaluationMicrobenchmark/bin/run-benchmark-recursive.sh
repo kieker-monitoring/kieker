@@ -19,7 +19,7 @@ CPSEPCHAR=":" # default :, ; for windows
 if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
 # echo "Classpath separator: '${CPSEPCHAR}'"
 
-RESULTSDIR="${BASEDIR}tmp/results-experimental/"
+RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 echo "Removing and recreating '$RESULTSDIR'"
 rm -rf ${RESULTSDIR} && mkdir ${RESULTSDIR}
 mkdir -p ${BASEDIR}build/META-INF/
@@ -165,5 +165,6 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 done
 
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
+${BINDIR}run-r-benchmark-recursive.sh
 [ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log
 [ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}
