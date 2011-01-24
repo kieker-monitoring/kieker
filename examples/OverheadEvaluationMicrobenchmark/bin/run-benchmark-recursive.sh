@@ -156,7 +156,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --recursiondepth ${j}
         rm -f ${AOPXML_PATH}
         mkdir -p ${RESULTSDIR}kiekerlog/
-        mv -t ${RESULTSDIR}kiekerlog/ ${BASEDIR}tmp/tpmon-*
+        mv ${BASEDIR}tmp/tpmon-* ${RESULTSDIR}kiekerlog/
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log
         sync
         sleep ${SLEEPTIME}
@@ -164,7 +164,9 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     done
 
 done
-
+tar cf ${RESULTSDIR}/kiekerlog.tar ${RESULTSDIR}/kiekerlog/
+rm -rf ${RESULTSDIR}/kiekerlog/
+gzip -9 ${RESULTSDIR}/kiekerlog.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
 ${BINDIR}run-r-benchmark-recursive.sh
 [ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log

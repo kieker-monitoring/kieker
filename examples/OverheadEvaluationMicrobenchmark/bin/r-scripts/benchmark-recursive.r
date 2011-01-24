@@ -1,5 +1,5 @@
-#results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-experimental\\results.csv"
-#output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-experimental\\results.pdf"
+#results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
+#output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
 baseresults=read.csv2(results_fn,quote="",colClasses=c("NULL","NULL","integer","integer","NULL","integer"))
 baseresults["rt_msec"]=baseresults["duration_nsec"]/(1000)
 ## order_index recursion_depth duration_nsec rt_msec
@@ -29,19 +29,25 @@ plot.new()
 plot.window(xlim=c(min(recdepth)-0.5,max(recdepth)+0.5),ylim=c(min(medianvalues,meanvalues),max(medianvalues,meanvalues)),ylab="test")
 axis(1,at=recdepth)
 axis(2)
-title(xlab="Recursion Depth (Number of Executions)",ylab="Execution Time (ms)")
+title(xlab="Recursion Depth (Number of Executions)",ylab="Execution Time (µs)")
+angle=rep(c(45,135),length(configs)/2,length.out=length(configs)-1)
 density=1:(length(configs)-1)*10
-legend("topleft",inset=c(0.05,0.15),legend=rev(configs.labels),fill=TRUE,density=rev(density),title="Overhead of ...")
+#density=rep(0,length(configs)-1)
+#legend("topleft",inset=c(0.05,0.15),legend=rev(configs.labels),fill=TRUE,angle=rev(angle),density=rev(density),title="Overhead (median) of ...")
+legend("topleft",inset=c(0.05,0.15),legend=c(rev(configs.labels),"(mean values)"),fill=TRUE,angle=rev(angle),density=c(rev(density),0),title="Overhead (median) of ...",ncol=2)
 for (i in recdepth) {
-  medianval <- medianvalues[(1:length(recdepth))[recdepth==i],]
-  for (j in 1:(length(medianval)-1)) {
-    rect(i-0.45,medianval[j],i+0.45,medianval[j+1],density=density[j])
-    text(i,medianval[j+1],labels=format(medianval[j+1]-medianval[j],digits=3,nsmall=3),cex=0.75,col="black",pos=1,offset=0.1)
-  }
   meanval <- meanvalues[(1:length(recdepth))[recdepth==i],]
   for (j in 1:(length(meanval)-1)) {
-    #rect(i-0.45,meanval[j],i+0.45,meanval[j+1],lty="dotted")
+    rect(i-0.35,meanval[j],i+0.5,meanval[j+1])
+  }
+  medianval <- medianvalues[(1:length(recdepth))[recdepth==i],]
+  for (j in 1:(length(medianval)-1)) {
+    rect(i-0.4,medianval[j],i+0.4,medianval[j+1],col="white",border="black")
+    rect(i-0.4,medianval[j],i+0.4,medianval[j+1],angle=angle[j],density=density[j])
+    labeltext=format(medianval[j+1]-medianval[j],digits=3,nsmall=3)
+    rect(i-(strwidth(labeltext)*0.5),medianval[j+1]-strheight(labeltext),i+(strwidth(labeltext)*0.5),medianval[j+1],col="white",border="black")
+    text(i,medianval[j+1],labels=labeltext,cex=0.75,col="black",pos=1,offset=0.1)
   }
 }
-rm(output_fn,medianval,meanval,i,j,density)
+rm(output_fn,medianval,meanval,i,j,labeltext,density,angle)
 dev.off()
