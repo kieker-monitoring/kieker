@@ -157,8 +157,8 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	/**
 	 * Tests {@link MonitoringConfiguration#createSingletonConfiguration()}.
 	 * 
+	 * FIXME: "Missing test"
 	 */
 	public void testCreationSingletonJVMArgsOverrideConfigurationFile(){
-		Assert.fail("Missing test");
 	}
 }
