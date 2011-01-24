@@ -1030,45 +1030,43 @@
 			<!-- change absolute path back to relative path -->
 		</pathconvert>
 
-		<echo file="${eclipse-classpath.sample}">
-			<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-			<!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
-			<classpath>
-				<classpathentry kind="src" path="${src.kieker.common.dir}"/>
-				<classpathentry kind="src" path="${src.kieker.analysis.dir}"/>
-				<classpathentry kind="src" path="${src.kieker.monitoring.dir}"/>
-				<classpathentry kind="src" path="${src.kieker.monitoring-servlet.dir}"/>
-				<classpathentry kind="src" path="${src.kieker.tools.dir}"/>
-				<classpathentry kind="src" path="${test.kieker.common.dir}"/>
-				<classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
-				<classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
-				<classpathentry kind="src" path="${test.kieker.tools.dir}"/>
-				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-				<classpathentry kind="lib" path="${eclipse.entries}"/>
-				<classpathentry kind="output" path="build-eclipse"/>
-			</classpath>
+		<echo file="${eclipse-classpath.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
+<classpath>
+	<classpathentry kind="src" path="${src.kieker.common.dir}"/>
+	<classpathentry kind="src" path="${src.kieker.analysis.dir}"/>
+	<classpathentry kind="src" path="${src.kieker.monitoring.dir}"/>
+	<classpathentry kind="src" path="${src.kieker.monitoring-servlet.dir}"/>
+	<classpathentry kind="src" path="${src.kieker.tools.dir}"/>
+	<classpathentry kind="src" path="${test.kieker.common.dir}"/>
+	<classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
+	<classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
+	<classpathentry kind="src" path="${test.kieker.tools.dir}"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="${eclipse.entries}"/>
+	<classpathentry kind="output" path="build-eclipse"/>
+</classpath>
         ]]>
         </echo>
-		<echo file="${eclipse-project.sample}">
-			<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-			<!-- Sample eclipse .project file. Copy this file to ".project". -->
-			<projectDescription>
-				<name>Kieker</name>
-				<comment>
-				</comment>
-				<projects>
-				</projects>
-				<buildSpec>
-					<buildCommand>
-						<name>org.eclipse.jdt.core.javabuilder</name>
-						<arguments>
-						</arguments>
-					</buildCommand>
-				</buildSpec>
-				<natures>
-					<nature>org.eclipse.jdt.core.javanature</nature>
-				</natures>
-			</projectDescription>
+		<echo file="${eclipse-project.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sample eclipse .project file. Copy this file to ".project". -->
+<projectDescription>
+	<name>Kieker</name>
+	<comment>
+	</comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>
         ]]>
         </echo>
 	</target>
