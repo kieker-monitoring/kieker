@@ -129,6 +129,9 @@ public final class Benchmark {
 			configurationId = cmdl.getOptionValue("configuration-id");
 			recordedCalls = Integer.parseInt(cmdl.getOptionValue("recordedcalls"));
 			totalCalls = Integer.parseInt(cmdl.getOptionValue("totalcalls"));
+			if(totalCalls < recordedCalls) {
+				recordedCalls = totalCalls;
+			}
 			methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
 			totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
 			recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
