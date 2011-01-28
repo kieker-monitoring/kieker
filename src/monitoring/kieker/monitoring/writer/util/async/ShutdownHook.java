@@ -82,7 +82,7 @@ public class ShutdownHook extends Thread {
 			while (!this.allWorkersFinished()) {
 				Thread.sleep(500);
 				ShutdownHook.log
-						.info("hutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
+						.info("shutdown delayed - At least one worker is busy ... waiting additional 0.5 seconds");
 			}
 			ShutdownHook.log
 					.info("ShutdownHook can terminate since all workers are finished");
