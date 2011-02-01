@@ -1,14 +1,9 @@
 package kieker.monitoring.writer;
 
-import java.util.Vector;
-
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
-/*
- * 
- * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+/* ==================LICENCE=========================
+ * Copyright 2006-2011 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,32 +20,32 @@ import kieker.monitoring.writer.util.async.AbstractWorkerThread;
  */
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 public interface IMonitoringLogWriter extends IMonitoringRecordReceiver {
-    /**
-     * Initialize instance from passed initialization string which is typically
-     * a list of separated parameter/values pairs.
-     *
-     * @param initString the initialization string
-     * @return true iff the initialization was successful
-     */
-    public boolean init(String initString);
+	/**
+	 * Initialize instance from passed initialization string which is typically a
+	 * list of separated parameter/values pairs.
+	 * 
+	 * @param initString
+	 *          the initialization string
+	 * @return true iff the initialization was successful
+	 */
+	public boolean init(String initString);
 
-    // TODO: do we need an invoke(), or similar, method?
+	/**
+	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
+	 * Writers should return as soon as it is safe to terminate Kieker.
+	 */
+	public void terminate();
 
-    // TODO: try to remove the need for this method!
-    /**
-     *
-     * Returns a vector of workers, or null if none.
-     */
-    public Vector<AbstractWorkerThread> getWorkers();
+	/**
+	 * Returns a human-readable information string about the writer's
+	 * configuration and state.
+	 * 
+	 * @return the information string.
+	 */
+	public String getInfoString();
 
-    /**
-     * Returns a human-readable information string about the writer's
-     * configuration and state.
-     *
-     * @return the information string.
-     */
-    public String getInfoString();
+	// TODO: do we need an invoke(), or similar, method?
 }

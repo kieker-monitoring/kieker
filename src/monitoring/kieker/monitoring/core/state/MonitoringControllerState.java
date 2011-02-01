@@ -14,14 +14,14 @@ import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
- *
+ * Copyright 2006-2011 Kieker Project
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,11 +33,10 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Represents the runtime state of a {@link MonitoringController} instance.
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 public final class MonitoringControllerState implements IMonitoringControllerState {
-	private static final Log log = LogFactory
-			.getLog(MonitoringControllerState.class);
+	private static final Log log = LogFactory.getLog(MonitoringControllerState.class);
 
 	/**
 	 * Instances must not be created using this constructor.
@@ -53,10 +52,8 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	 * 
 	 * @param monitoringConfiguration
 	 */
-	public MonitoringControllerState(
-			final IMonitoringConfiguration monitoringConfiguration) {
-		this.monitoringLogWriter = monitoringConfiguration
-				.getMonitoringLogWriter();
+	public MonitoringControllerState(final IMonitoringConfiguration monitoringConfiguration) {
+		this.monitoringLogWriter = monitoringConfiguration.getMonitoringLogWriter();
 		this.setDebugEnabled(monitoringConfiguration.isDebugEnabled());
 		if (monitoringConfiguration.isMonitoringEnabled()) {
 			this.enableMonitoring();
@@ -69,10 +66,7 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 
 	private volatile ControllerMode controllerMode = ControllerMode.REALTIME;
 
-	private enum ControllerState {
-
-		ENABLED, DISABLED, TERMINATED;
-	}
+	private static enum ControllerState { ENABLED, DISABLED, TERMINATED;	}
 
 	/**
 	 * @see IMonitoringController#isMonitoringEnabled()
@@ -80,7 +74,7 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	 * @return
 	 */
 	@Override
-	public boolean isMonitoringEnabled() {
+	public final boolean isMonitoringEnabled() {
 		return this.controllerState.get() == ControllerState.ENABLED;
 	}
 
@@ -90,12 +84,12 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	 * @return
 	 */
 	@Override
-	public boolean isMonitoringTerminated() {
+	public final boolean isMonitoringTerminated() {
 		return this.controllerState.get() == ControllerState.TERMINATED;
 	}
 
 	@Override
-	public boolean isMonitoringDisabled() {
+	public final boolean isMonitoringDisabled() {
 		return this.controllerState.get() == ControllerState.DISABLED;
 	}
 
@@ -107,24 +101,23 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	 * @return true if debug is set to enabled, false otherwise
 	 */
 	@Override
-	public boolean isDebugEnabled() {
+	public final boolean isDebugEnabled() {
 		return this.debugEnabled;
 	}
 
 	@Override
-	public void enableReplayMode() {
+	public final void enableReplayMode() {
 		this.controllerMode = ControllerMode.REPLAY;
 	}
 
 	@Override
-	public void enableRealtimeMode() {
+	public final void enableRealtimeMode() {
 		this.controllerMode = ControllerMode.REALTIME;
 	}
 
-	private final AtomicReference<ControllerState> controllerState = new AtomicReference<ControllerState>(
-			ControllerState.ENABLED);
+	private final AtomicReference<ControllerState> controllerState = new AtomicReference<ControllerState>(ControllerState.ENABLED);
 
-	public enum ControllerMode {
+	public static enum ControllerMode {
 
 		/**
 		 * The loggingTimestamp is not set by the newMonitoringRecord method.
@@ -140,31 +133,34 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	}
 
 	@Override
-	public String stateInfo() {
+	public final String stateInfo() {
 		final StringBuilder strB = new StringBuilder();
-
-		strB.append("monitoringDataWriter : "
-				+ this.monitoringLogWriter.getClass().getName());
-		strB.append(",");
-		strB.append(" monitoringDataWriter config : (below), "
-				+ this.monitoringLogWriter.getInfoString());
-		strB.append(",");
-		strB.append(" version :" + Version.getVERSION() + ", debug :"
-				+ this.isDebugEnabled() + ", enabled :"
-				+ this.isMonitoringEnabled() + ", terminated :"
-				+ this.isMonitoringTerminated() + ", experimentID :"
-				+ this.getExperimentId() + ", vmname :" + this.getHostName());
-
+		strB.append("monitoringDataWriter : ");
+		strB.append(this.monitoringLogWriter.getClass().getName());
+		strB.append(", monitoringDataWriter config : (below), ");
+		strB.append(this.monitoringLogWriter.getInfoString());
+		strB.append(", version :");
+		strB.append(Version.getVERSION());
+		strB.append(", debug :");
+		strB.append(this.isDebugEnabled());
+		strB.append(", enabled :");
+		strB.append(this.isMonitoringEnabled());
+		strB.append(", terminated :");
+		strB.append(this.isMonitoringTerminated());
+		strB.append(", experimentID :");
+		strB.append(this.getExperimentId());
+		strB.append(", vmname :");
+		strB.append(this.getHostName());
 		return strB.toString();
 	}
 
 	@Override
-	public boolean isReplayMode() {
+	public final boolean isReplayMode() {
 		return this.controllerMode == ControllerMode.REPLAY;
 	}
 
 	@Override
-	public boolean isRealtimeMode() {
+	public final boolean isRealtimeMode() {
 		return this.controllerMode == ControllerMode.REALTIME;
 	}
 
@@ -174,24 +170,22 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	private volatile String vmName = "unknown";
 
 	@Override
-	public String getHostName() {
+	public final String getHostName() {
 		return this.vmName;
 	}
 
 	@Override
-	public void setHostName(final String newHostName) {
-		MonitoringControllerState.log.info("The VM has the NEW name "
-				+ newHostName + " Thread:" + Thread.currentThread().getId());
+	public final void setHostName(final String newHostName) {
+		MonitoringControllerState.log.debug("The VM has the name " + newHostName + " Thread:" + Thread.currentThread().getId());
 		this.vmName = newHostName;
 	}
 
 	@Override
-	public boolean enableMonitoring() {
+	public final boolean enableMonitoring() {
 		MonitoringControllerState.log.info("Enabling monitoring");
 		/* Requires no synchronization since terminated is a final state */
 		if (this.isMonitoringTerminated()) {
-			MonitoringControllerState.log
-					.error("Refused to enable monitoring because monitoring has been permanently terminated before");
+			MonitoringControllerState.log.error("Refused to enable monitoring because monitoring has been permanently terminated before");
 			return false;
 		}
 		this.controllerState.set(ControllerState.ENABLED);
@@ -199,12 +193,12 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	}
 
 	@Override
-	public boolean disableMonitoring() {
+	public final boolean disableMonitoring() {
 		MonitoringControllerState.log.info("Disabling monitoring");
 		/* Requires no synchronization since terminated is a final state */
+		/* the comment is wrong? has nothing to do with final, but it uses an atomic reference, so it still works correctly */
 		if (this.isMonitoringTerminated()) {
-			MonitoringControllerState.log
-					.error("Refused to disable monitoring because monitoring has been permanently terminated before");
+			MonitoringControllerState.log.error("Refused to disable monitoring because monitoring has been permanently terminated before");
 			return false;
 		}
 		this.controllerState.set(ControllerState.DISABLED);
@@ -212,38 +206,37 @@ public final class MonitoringControllerState implements IMonitoringControllerSta
 	}
 
 	@Override
-	public void terminateMonitoring() {
-		MonitoringControllerState.log
-				.info("Permanently terminating monitoring");
+	public final void terminateMonitoring() {
+		MonitoringControllerState.log.info("Permanently terminating monitoring");
 		this.controllerState.set(ControllerState.TERMINATED);
 	}
 
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 
 	@Override
-	public int getExperimentId() {
+	public final int getExperimentId() {
 		return this.experimentId.get();
 	}
 
 	@Override
-	public int incExperimentId() {
+	public final int incExperimentId() {
 		return this.experimentId.incrementAndGet();
 	}
 
 	@Override
-	public void setExperimentId(final int newExperimentID) {
+	public final void setExperimentId(final int newExperimentID) {
 		this.experimentId.set(newExperimentID);
 	}
 
 	@Override
-	public void setDebugEnabled(final boolean debugEnabled) {
+	public final void setDebugEnabled(final boolean debugEnabled) {
 		this.debugEnabled = debugEnabled;
 	}
 
 	public final IMonitoringLogWriter monitoringLogWriter;
 
 	@Override
-	public IMonitoringLogWriter getMonitoringLogWriter() {
+	public final IMonitoringLogWriter getMonitoringLogWriter() {
 		return this.monitoringLogWriter;
 	}
 }

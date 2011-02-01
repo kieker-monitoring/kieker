@@ -1,15 +1,11 @@
 package kieker.monitoring.writer;
 
-import java.util.Vector;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
-/*
- * ==================LICENCE=========================
+/* ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +33,7 @@ public class DummyLogWriter implements IMonitoringLogWriter {
 
 	private static final Log log = LogFactory.getLog(DummyLogWriter.class);
 
-	/*
+	/**
 	 * {@inheritdoc}
 	 */
 	@Override
@@ -45,7 +41,7 @@ public class DummyLogWriter implements IMonitoringLogWriter {
 		return true; // we don't care about incoming records
 	}
 
-	/*
+	/**
 	 * {@inheritdoc}
 	 */
 	@Override
@@ -54,12 +50,13 @@ public class DummyLogWriter implements IMonitoringLogWriter {
 		return true; // no initialization required
 	}
 
-	/*
+	/**
 	 * {@inheritdoc}
 	 */
 	@Override
-	public Vector<AbstractWorkerThread> getWorkers() {
-		return null; // have no workers
+	public void terminate() {
+		log.info(this.getClass().getName() + " shutting down.");
+		// no shutdown required
 	}
 
 	/*

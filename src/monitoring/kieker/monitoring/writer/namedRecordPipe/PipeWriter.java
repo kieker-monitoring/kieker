@@ -2,31 +2,27 @@ package kieker.monitoring.writer.namedRecordPipe;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2010 Kieker Project
- *
+ * Copyright 2006-2011 Kieker Project
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ==================================================
- *
  */
-
-import java.util.Vector;
 
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
 import kieker.monitoring.writer.IMonitoringLogWriter;
-import kieker.monitoring.writer.util.async.AbstractWorkerThread;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,11 +46,6 @@ public final class PipeWriter implements IMonitoringLogWriter {
 		this.initPipe(pipeName);
 	}
 
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		return this.pipe.writeMonitoringRecord(monitoringRecord);
-	}
-
 	/**
 	 * Initializes the {@link #pipe} and and {@link #pipeName} fields.
 	 * 
@@ -67,40 +58,36 @@ public final class PipeWriter implements IMonitoringLogWriter {
 			PipeWriter.log.error("Failed to get pipe with name:" + pipeName);
 			return false;
 		}
-		PipeWriter.log.info("Connected to pipe '" + pipeName + "'" + " ("
-				+ this.pipe + ")");
+		PipeWriter.log.info("Connected to pipe '" + pipeName + "'" + " (" + this.pipe + ")");
 		return true;
 	}
 
 	@Override
-	public boolean init(final String initString)
-			throws IllegalArgumentException {
-		final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
-																				// IllegalArgumentException
-		final String pipeName = propertyMap
-				.getProperty(PipeWriter.PROPERTY_PIPE_NAME);
+	public boolean init(final String initString) throws IllegalArgumentException {
+		final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+		final String pipeName = propertyMap.getProperty(PipeWriter.PROPERTY_PIPE_NAME);
 		if ((pipeName == null) || (pipeName.isEmpty())) {
-			PipeWriter.log
-					.error("Invalid or missing pipeName value for property '"
-							+ PipeWriter.PROPERTY_PIPE_NAME + "'");
-			throw new IllegalArgumentException(
-					"Invalid or missing pipeName value:" + pipeName);
+			PipeWriter.log.error("Invalid or missing pipeName value for property '" + PipeWriter.PROPERTY_PIPE_NAME + "'");
+			throw new IllegalArgumentException("Invalid or missing pipeName value:" + pipeName);
 		}
 		return this.initPipe(pipeName);
 	}
 
 	@Override
-	public Vector<AbstractWorkerThread> getWorkers() {
-		return new Vector<AbstractWorkerThread>();
+	public void terminate() {
+		this.pipe.close();
+	}
+
+	@Override
+	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+		return this.pipe.writeMonitoringRecord(monitoringRecord);
 	}
 
 	@Override
 	public String getInfoString() {
 		final StringBuilder strB = new StringBuilder();
-
-		strB.append("pipeName : " + this.pipe.getName());
-
+		strB.append("pipeName : ");
+		strB.append(this.pipe.getName());
 		return strB.toString();
 	}
-
 }
