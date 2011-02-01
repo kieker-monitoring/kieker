@@ -29,7 +29,7 @@ public final class Version {
      */
 
     private static final String VERSION = "1.3-SNAPSHOT-20110131";
-    private static final String COPYRIGHT = "Copyright (c) 2006-2010 Kieker Project";
+    private static final String COPYRIGHT = "Copyright (c) 2006-2011 Kieker Project";
 
     /**
      * Not instantiable.

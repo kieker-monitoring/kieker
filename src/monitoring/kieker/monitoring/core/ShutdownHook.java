@@ -1,5 +1,8 @@
 package kieker.monitoring.core;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
@@ -29,8 +32,8 @@ package kieker.monitoring.core;
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-public class ShutdownHook extends Thread {
-	//private static final Log log = LogFactory.getLog(ShutdownHook.class);
+class ShutdownHook extends Thread {
+	private static final Log log = LogFactory.getLog(ShutdownHook.class);
 
 	private final MonitoringController ctrl;
 
@@ -42,7 +45,7 @@ public class ShutdownHook extends Thread {
 	public void run() {
 		// is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
 		//TODO: We can't use a logger in shutdown hooks, logger may already be down!
-		//ShutdownHook.log.info("ShutdownHook notifies controller to initiate shutdown");
+		ShutdownHook.log.info("ShutdownHook notifies controller to initiate shutdown");
 		this.ctrl.terminateMonitoring();
 	}
 }
