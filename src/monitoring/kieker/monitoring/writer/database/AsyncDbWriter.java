@@ -10,7 +10,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFileConstants;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 
 import org.apache.commons.logging.Log;
@@ -68,7 +68,7 @@ public final class AsyncDbWriter implements IMonitoringLogWriter {
 	private final static String defaultConstructionErrorMsg = 
 		"Do not select this writer using the full-qualified classname. "
 			+ "Use the the constant "
-			+ ConfigurationFileConstants.WRITER_ASYNCDB
+			+ ConfigurationConstants.WRITER_ASYNCDB
 			+ " and the file system specific configuration properties.";
 
 	public AsyncDbWriter() {

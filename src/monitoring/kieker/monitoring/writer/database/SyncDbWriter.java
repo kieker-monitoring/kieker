@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.configuration.ConfigurationFileConstants;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 
 import org.apache.commons.logging.Log;
@@ -77,7 +77,7 @@ public final class SyncDbWriter implements IMonitoringLogWriter {
 	private final static String defaultConstructionErrorMsg = 
 		"Do not select this writer using the fully qualified classname. "
 			+ "Use the the constant "
-			+ ConfigurationFileConstants.WRITER_SYNCDB
+			+ ConfigurationConstants.WRITER_SYNCDB
 			+ " and the file system specific configuration properties.";
 
 	public SyncDbWriter() {

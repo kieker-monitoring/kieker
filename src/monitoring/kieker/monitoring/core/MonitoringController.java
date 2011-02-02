@@ -62,7 +62,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 	private volatile boolean monitoringTerminated = false;
 	private volatile boolean monitoringRealtimeMode = true;
-	private volatile boolean monitoringEnabled;
+	private volatile boolean monitoringEnabled = false;
 	private volatile boolean debugEnabled;
 	private volatile String vmName;
 	
@@ -85,15 +85,26 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	 */
 	// TODO: should be private?!? or at least somehow protected!
 	public MonitoringController(final IMonitoringConfiguration configuration) {
-		this.monitoringLogWriter = configuration.getMonitoringLogWriter();
+		if (configuration == null) {
+			MonitoringController.log.error("Failed to create Monitoring Configuration");
+			this.instanceName = "Error Creating Configuration";
+			this.periodicSensorsPoolExecutor = null;
+			this.monitoringLogWriter = null;
+			terminateMonitoring();
+			return;
+		}
 		this.instanceName = configuration.getName();
 		this.vmName = configuration.getHostName();
 		this.debugEnabled = configuration.isDebugEnabled();
-		if (configuration.isMonitoringEnabled()) {
-			enableMonitoring();
-		} else {
-			disableMonitoring();
+		// initialize Writer
+		monitoringLogWriter = configuration.getMonitoringLogWriter();
+		if (monitoringLogWriter == null) {
+			MonitoringController.log.error("Failed to create Writer");
+			this.periodicSensorsPoolExecutor = null;
+			terminateMonitoring();
+			return;
 		}
+		monitoringLogWriter.start();
 		this.periodicSensorsPoolExecutor = this.createPeriodicSensorsPoolExecutor(configuration);
 		try {
 			// Dangerous! escaping "this" in constructor!
@@ -101,7 +112,12 @@ public final class MonitoringController implements IMonitoringController, IRepla
 		} catch (final Exception ex) {
 			MonitoringController.log.warn("Failed to add shutdownHook", ex);
 		}
-		MonitoringController.log.info("Initialization completed.\n Writer Info: " + this.getConnectorInfo());
+		if (configuration.isMonitoringEnabled()) {
+			enableMonitoring();
+		} else {
+			disableMonitoring();
+		}
+		MonitoringController.log.info("Initialization completed.\nWriter Info: " + this.getConnectorInfo());
 	}
 	
 	/**
@@ -116,7 +132,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			if (!monitoringEnabled) {
+			if (!isMonitoringEnabled()) { //enabled and not terminated
 				return false;
 			}
 			numberOfInserts.incrementAndGet();
@@ -177,15 +193,19 @@ public final class MonitoringController implements IMonitoringController, IRepla
 
 	@Override
 	public final boolean enableMonitoring() {
-		MonitoringController.log.info("Enabling monitoring");
 		if (monitoringTerminated) {
 			MonitoringController.log.error("Refused to enable monitoring because monitoring has been permanently terminated before");
 			return false;
 		}
+		MonitoringController.log.info("Enabling monitoring");
 		monitoringEnabled = true;
 		return true;
 	}
 	
+	/**
+	 * Careful!
+	 * isMonitoringEnabled() != !isMonitoringDisabled()
+	 */
 	@Override
 	public final boolean isMonitoringEnabled() {
 		return !monitoringTerminated && monitoringEnabled;
@@ -193,19 +213,21 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	
 	@Override
 	public final boolean disableMonitoring() {
-		MonitoringController.log.info("Disabling monitoring");
 		if (monitoringTerminated) {
 			MonitoringController.log.error("Refused to disable monitoring because monitoring has been permanently terminated before");
 			return false;
 		}
+		MonitoringController.log.info("Disabling monitoring");
 		monitoringEnabled = false;
 		return true;
 	}
 
+	/**
+	 * Careful!
+	 * isMonitoringDisabled() != !isMonitoringEnabled()
+	 */
 	@Override
 	public final boolean isMonitoringDisabled() {
-		//TODO: would perhaps be better?
-		//return monitoringTerminated || !monitoringEnabled;
 		return !monitoringTerminated && !monitoringEnabled;
 	}
 	
@@ -310,6 +332,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	 */
 	public final String getConnectorInfo() {
 		final StringBuilder strB = new StringBuilder();
+		//TODO: careful: NULLpointer exception if no writer!
 		strB.append("monitoringDataWriter : ");
 		strB.append(monitoringLogWriter.getClass().getName());
 		strB.append(", monitoringDataWriter config : (below), ");

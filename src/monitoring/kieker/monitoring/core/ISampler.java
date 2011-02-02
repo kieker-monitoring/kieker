@@ -14,6 +14,5 @@ public interface ISampler {
 	 * @throws Exception
 	 *             thrown to indicate an error.
 	 */
-	public void sample(final MonitoringController monitoringCtrl)
-			throws Exception;
+	public void sample(final MonitoringController monitoringCtrl) throws Exception;
 }

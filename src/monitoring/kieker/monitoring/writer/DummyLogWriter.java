@@ -1,19 +1,22 @@
 package kieker.monitoring.writer;
 
+import java.util.Properties;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import kieker.common.record.IMonitoringRecord;
 
-/* ==================LICENCE=========================
+/*
+ * ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,45 +28,34 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * A writer that does nothing but consuming records.
  * 
- * @author Andre van Hoorn
- * @author Jan Waller
+ * @author Andre van Hoorn, Jan Waller
  * 
  */
-public class DummyLogWriter implements IMonitoringLogWriter {
-
+public class DummyLogWriter extends AbstractMonitoringLogWriter {
 	private static final Log log = LogFactory.getLog(DummyLogWriter.class);
 
-	/**
-	 * {@inheritdoc}
-	 */
+	public DummyLogWriter(final Properties properties) {
+		super(properties);
+		log.info(this.getClass().getName() + " initialized with properties:\n" + getProperties());
+	}
+
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return true; // we don't care about incoming records
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
 	@Override
-	public boolean init(final String initString) {
-		log.info(this.getClass().getName() + " initializing with initString '" + initString + "'");
-		return true; // no initialization required
+	public void start() {
+		log.info(this.getClass().getName() + " started");
 	}
-
-	/**
-	 * {@inheritdoc}
-	 */
+	
 	@Override
 	public void terminate() {
-		log.info(this.getClass().getName() + " shutting down.");
-		// no shutdown required
+		log.info(this.getClass().getName() + " shutting down");
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
 	@Override
-	public String getInfoString() {
-		return this.getClass().getName();
+	public Properties getDefaultProperties() {
+		return null; //no Properties
 	}
 }

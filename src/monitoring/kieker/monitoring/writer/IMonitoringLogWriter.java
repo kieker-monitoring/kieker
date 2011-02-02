@@ -23,16 +23,13 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * @author Andre van Hoorn, Jan Waller
  */
 public interface IMonitoringLogWriter extends IMonitoringRecordReceiver {
-	/**
-	 * Initialize instance from passed initialization string which is typically a
-	 * list of separated parameter/values pairs.
-	 * 
-	 * @param initString
-	 *          the initialization string
-	 * @return true iff the initialization was successful
-	 */
-	public boolean init(String initString);
 
+	/**
+	 * Called by the Monitoring Controller to announce the start of monitoring.
+	 * Writers should start threads, etc. in this method.
+	 */
+	public void start();
+	
 	/**
 	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
 	 * Writers should return as soon as it is safe to terminate Kieker.
@@ -40,12 +37,9 @@ public interface IMonitoringLogWriter extends IMonitoringRecordReceiver {
 	public void terminate();
 
 	/**
-	 * Returns a human-readable information string about the writer's
-	 * configuration and state.
+	 * Returns a human-readable information string about the writer's configuration and state.
 	 * 
 	 * @return the information string.
 	 */
 	public String getInfoString();
-
-	// TODO: do we need an invoke(), or similar, method?
 }

@@ -1,5 +1,6 @@
 package kieker.monitoring.writer.filesystem;
 
+import java.awt.Stroke;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -9,7 +10,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFileConstants;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 
 import org.apache.commons.logging.Log;
@@ -49,7 +49,7 @@ public final class AsyncFsWriter implements IMonitoringLogWriter {
 	private final static String defaultConstructionErrorMsg = 
 		"Do not select this writer using the full-qualified classname. "
 			+ "Use the the constant "
-			+ ConfigurationFileConstants.WRITER_ASYNCFS
+			+ ConfigurationConstants.WRITER_ASYNCFS
 			+ " and the file system specific configuration properties.";
 
 	public AsyncFsWriter() {

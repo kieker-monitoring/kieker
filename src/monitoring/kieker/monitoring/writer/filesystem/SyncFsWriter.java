@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.TimeZone;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFileConstants;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.writer.IMonitoringLogWriter;
 
 import org.apache.commons.logging.Log;
@@ -84,7 +84,7 @@ public final class SyncFsWriter implements IMonitoringLogWriter {
 	private final static String defaultConstructionErrorMsg = 
 		"Do not select this writer using the fully qualified classname. "
 			+ "Use the the constant "
-			+ ConfigurationFileConstants.WRITER_SYNCFS
+			+ ConfigurationConstants.WRITER_SYNCFS
 			+ " and the file system specific configuration properties.";
 
 	public SyncFsWriter() {

@@ -20,7 +20,7 @@ package kieker.test.monitoring.junit.core.configuration;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.configuration.ConfigurationProperty;
+import kieker.monitoring.core.configuration.ConfigurationProperties;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.writer.DummyLogWriter;
@@ -44,11 +44,11 @@ public class TestDefaultConfiguration extends TestCase {
 		final IMonitoringConfiguration config = DefaultConfigurationFactory
 				.createDefaultConfigWithDummyWriter(configName);
 		Assert.assertEquals("Wrong default value for debug property",
-				ConfigurationProperty.DEBUG_ENABLED.getDefaultValue(),
+				ConfigurationProperties.DEBUG_ENABLED.getDefaultValue(),
 				Boolean.toString(config.isDebugEnabled()));
 		Assert.assertEquals(
 				"Wrong default value for monitoringEnable property",
-				ConfigurationProperty.MONITORING_ENABLED.getDefaultValue(),
+				ConfigurationProperties.MONITORING_ENABLED.getDefaultValue(),
 				Boolean.toString(config.isMonitoringEnabled()));
 		Assert.assertEquals("Wrong configuration name", configName,
 				config.getName());

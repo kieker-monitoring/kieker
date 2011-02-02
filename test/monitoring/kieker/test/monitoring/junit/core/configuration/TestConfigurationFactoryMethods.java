@@ -23,7 +23,7 @@ package kieker.test.monitoring.junit.core.configuration;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.configuration.ConfigurationProperty;
+import kieker.monitoring.core.configuration.ConfigurationProperties;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.writer.DummyLogWriter;
@@ -76,11 +76,11 @@ public class TestConfigurationFactoryMethods extends TestCase {
 
 		/* The following values must be the default values: */
 		Assert.assertEquals("Wrong default value for debug property",
-				ConfigurationProperty.DEBUG_ENABLED.getDefaultValue(),
+				ConfigurationProperties.DEBUG_ENABLED.getDefaultValue(),
 				Boolean.toString(config.isDebugEnabled()));
 		Assert.assertEquals(
 				"Wrong default value for monitoringEnable property",
-				ConfigurationProperty.MONITORING_ENABLED.getDefaultValue(),
+				ConfigurationProperties.MONITORING_ENABLED.getDefaultValue(),
 				Boolean.toString(config.isMonitoringEnabled()));
 	}
 
@@ -106,11 +106,11 @@ public class TestConfigurationFactoryMethods extends TestCase {
 
 			/* The following values must be the default values: */
 			Assert.assertEquals("Wrong default value for debug property",
-					ConfigurationProperty.DEBUG_ENABLED.getDefaultValue(),
+					ConfigurationProperties.DEBUG_ENABLED.getDefaultValue(),
 					Boolean.toString(config.isDebugEnabled()));
 			Assert.assertEquals(
 					"Wrong default value for monitoringEnable property",
-					ConfigurationProperty.MONITORING_ENABLED.getDefaultValue(),
+					ConfigurationProperties.MONITORING_ENABLED.getDefaultValue(),
 					Boolean.toString(config.isMonitoringEnabled()));
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -125,17 +125,17 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 */
 	public void testCreationSingletonJVMArgsOverrideMonitoringEnabledAndDebug() {
 		final boolean monitoringEnabledInvertedDefault = !Boolean
-				.parseBoolean(ConfigurationProperty.MONITORING_ENABLED
+				.parseBoolean(ConfigurationProperties.MONITORING_ENABLED
 						.getDefaultValue());
 		final boolean debugEnabledInvertedDefault = !Boolean
-		.parseBoolean(ConfigurationProperty.DEBUG_ENABLED
+		.parseBoolean(ConfigurationProperties.DEBUG_ENABLED
 				.getDefaultValue());
 
 		System.setProperty(
-				ConfigurationProperty.MONITORING_ENABLED.getJVMArgumentName(),
+				ConfigurationProperties.MONITORING_ENABLED.getJVMArgumentName(),
 				Boolean.toString(monitoringEnabledInvertedDefault));
 		System.setProperty(
-				ConfigurationProperty.DEBUG_ENABLED.getJVMArgumentName(),
+				ConfigurationProperties.DEBUG_ENABLED.getJVMArgumentName(),
 				Boolean.toString(debugEnabledInvertedDefault));
 		
 		final IMonitoringConfiguration config = MonitoringConfiguration

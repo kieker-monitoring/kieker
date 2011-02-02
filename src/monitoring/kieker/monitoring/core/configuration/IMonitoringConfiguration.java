@@ -5,7 +5,7 @@ import kieker.monitoring.writer.IMonitoringLogWriter;
 
 /*
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
+ * Copyright 2006-2011 Kieker Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import kieker.monitoring.writer.IMonitoringLogWriter;
  */
 
 /**
- * author Andre van Hoorn
+ * author Andre van Hoorn, Jan Waller
  */
 public interface IMonitoringConfiguration {
 
@@ -30,8 +30,7 @@ public interface IMonitoringConfiguration {
 	 * Enables or disables the logging of debug messages by the monitoring
 	 * framework.
 	 * 
-	 * @param debugEnabled
-	 *            true to enable debug output; false to disable debug output
+	 * @param debugEnabled true to enable debug output; false to disable debug output
 	 */
 	public void setDebugEnabled(boolean debugEnabled);
 
@@ -72,8 +71,7 @@ public interface IMonitoringConfiguration {
 	 * Sets the configured size of the thread pool used to execute the
 	 * periodic sensor jobs registered and removed via
 	 * {@link MonitoringController#schedulePeriodicSampler(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
-	 * and
-	 * {@link MonitoringController#removeScheduledSampler(kieker.monitoring.core.ScheduledSamplerJob)}
+	 * and {@link MonitoringController#removeScheduledSampler(kieker.monitoring.core.ScheduledSamplerJob)}
 	 * respectively.
 	 * 
 	 * @return
@@ -84,14 +82,27 @@ public interface IMonitoringConfiguration {
 	 * Returns the configured size of the thread pool used to execute the
 	 * periodic sensor jobs registered and removed via
 	 * {@link MonitoringController#schedulePeriodicSampler(kieker.monitoring.probe.util.ITriggeredSensor, long, long, java.util.concurrent.TimeUnit)}
-	 * and
-	 * {@link MonitoringController#removeScheduledSampler(kieker.monitoring.core.ScheduledSamplerJob)}
+	 * and {@link MonitoringController#removeScheduledSampler(kieker.monitoring.core.ScheduledSamplerJob)}
 	 * respectively.
 	 * 
 	 * @return
 	 */
 	public int getPeriodicSensorsExecutorPoolSize();
 
+	/**
+	 * Sets the initial ExperimentID
+	 * 
+	 * @return
+	 */
+	public void setInitialExperimentId(int initialExperimentId);
+	
+	/**
+	 * Returns the initial ExperimentID
+	 * 
+	 * @return
+	 */
+	public int getInitialExperimentId();
+	
 	/**
 	 * Sets the host name field to the given value.
 	 * 
