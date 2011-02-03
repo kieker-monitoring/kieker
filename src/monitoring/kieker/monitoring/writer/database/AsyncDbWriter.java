@@ -11,7 +11,7 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -62,7 +62,7 @@ import org.apache.commons.logging.LogFactory;
  *                     which may be changed during runtime
  *         2007/07/30: Initial Prototype
  */
-public final class AsyncDbWriter implements IMonitoringLogWriter {
+public final class AsyncDbWriter implements IMonitoringWriter {
 	private static final Log log = LogFactory.getLog(AsyncDbWriter.class);
 
 	private final static String defaultConstructionErrorMsg = 

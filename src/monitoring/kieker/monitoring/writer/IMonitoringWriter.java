@@ -22,7 +22,7 @@ import kieker.common.record.IMonitoringRecordReceiver;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public interface IMonitoringLogWriter extends IMonitoringRecordReceiver {
+public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 
 	/**
 	 * Called by the Monitoring Controller to announce the start of monitoring.

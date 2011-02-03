@@ -2,7 +2,6 @@ package kieker.monitoring.core.configuration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -56,49 +55,72 @@ public final class ConfigurationProperties {
 	 * 
 	 * @return
 	 */
-	public final static Properties defaultProperties() {
-		try {
+	final static Properties defaultProperties() {
+		//try {
 			final Properties defaultProps = loadPropertiesFromResource(KIEKER_DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
-			if (defaultProps == null) {
-				throw new FileNotFoundException();
-			}
+			/*if (defaultProps == null) {
+				ConfigurationProperties.log.error("Default properties file '" + KIEKER_DEFAULT_PROPERTIES_LOCATION_CLASSPATH + "' not found");
+				return null;
+			}*/
 			return defaultProps;
-		} catch (final IOException ex) {
-			ConfigurationProperties.log.error("Failed to load default properties from " + KIEKER_DEFAULT_PROPERTIES_LOCATION_CLASSPATH, ex);
+		/*} catch (final IOException ex) {
+			ConfigurationProperties.log.error("Failed to load default properties from '" + KIEKER_DEFAULT_PROPERTIES_LOCATION_CLASSPATH + "'", ex);
 			return null;
-		}
+		}*/
 	}
+	
+	/**
+	 * Returns an empty properties map with the default configuration.
+	 * 
+	 * @return
+	 */
+	public final static Properties getDefaultProperties() {
+		return new Properties(defaultProperties());
+	}
+	
 	
 	/**
 	 * Returns the properties loaded from file propertiesFn.
 	 * 
 	 * @param propertiesFn
+	 * @param defaultValues
 	 * @return
-	 * @throws IOException
 	 */
-	public final static Properties loadPropertiesFromFile(final String propertiesFn, final Properties defaultValues) throws IOException {
-		final Properties prop = new Properties(defaultValues);
-		prop.load(new FileInputStream(propertiesFn));
-		return prop;
+	final static Properties loadPropertiesFromFile(final String propertiesFn, final Properties defaultValues) {
+		try {
+			final Properties properties = new Properties(defaultValues);
+			properties.load(new FileInputStream(propertiesFn));
+			return properties;
+		} catch (final FileNotFoundException ex) {
+			ConfigurationProperties.log.warn("File '" + propertiesFn + "' not found");
+		} catch (final Exception ex) {
+			ConfigurationProperties.log.error("Error reading file '" + propertiesFn + "'", ex);
+		}
+		return new Properties(defaultValues);
 	}
 
 	/**
 	 * Returns the properties loaded from the resource name or null if the resource could not be found.
 	 * 
-	 * @param classLoader
-	 * @param name
+	 * @param propertiesFn
+	 * @param defaultValues
 	 * @return
-	 * @throws IOException
 	 */
-	public final static Properties loadPropertiesFromResource(final String name, final Properties defaultValues) throws IOException {
-		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(name);
+	final static Properties loadPropertiesFromResource(final String propertiesFn, final Properties defaultValues) {
+		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
-			ConfigurationProperties.log.error("File " + name + "not found in classpath");
+			ConfigurationProperties.log.warn("File '" + propertiesFn + "' not found in classpath");
 			return defaultValues;
+		} else {
+			try {
+				final Properties properties = new Properties(defaultValues);
+				properties.load(is);
+				return properties;
+			} catch (final Exception ex) {
+				ConfigurationProperties.log.error("Error reading file '" + propertiesFn + "'", ex);
+			}
 		}
-		final Properties prop = new Properties(defaultValues);
-		prop.load(is);
-		return prop;
+		return new Properties(defaultValues);
 	}
 	
 	public final static Properties getPropertiesStartingWith(final String prefix, final Properties properties, final Properties defaultValues) {
@@ -111,19 +133,21 @@ public final class ConfigurationProperties {
 		return props;
 	}
 	
-	public final static String getStringProperty(final Properties prop, final String key) {
-		return prop.getProperty(key);
+	public final static String getStringProperty(final Properties properties, final String key) {
+		final String s = properties.getProperty(key);
+		return (s == null) ? "" : s;
 	}
 	
-	public final static boolean getBooleanProperty(final Properties prop, final String key) {
-		return Boolean.parseBoolean(prop.getProperty(key));
+	public final static boolean getBooleanProperty(final Properties properties, final String key) {
+		return Boolean.parseBoolean(getStringProperty(properties, key));
 	}
 	
-	public final static int getIntProperty(final Properties prop, final String key) {
+	public final static int getIntProperty(final Properties properties, final String key) {
+		final String s = getStringProperty(properties, key);
 		try {
-			return Integer.parseInt(prop.getProperty(key));
+			return Integer.parseInt(s);
 		} catch (final NumberFormatException ex) {
-			ConfigurationProperties.log.error("Error parsing configuration property " + key + "using default value of 0", ex);
+			ConfigurationProperties.log.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
 			return 0;
 		}
 	}

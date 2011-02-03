@@ -1,12 +1,12 @@
 package kieker.monitoring.core.configuration;
 
-import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 /*
  * ==================LICENCE=========================
@@ -31,10 +31,9 @@ import kieker.monitoring.writer.IMonitoringLogWriter;
  * Use the factory methods to create instances:
  * 
  * <ul>
- * <li>{@link #createConfiguration(String, String)}</li>
- * <li>{@link #createDefaultConfiguration(String, IMonitoringLogWriter)}</li>
- * <li>{@link #createDefaultConfiguration(String, Class, String)}</li>
  * <li>{@link #createSingletonConfiguration()}</li>
+ * <li>{@link #createConfiguration(String, String)}</li>
+ * <li>{@link #createConfiguration(String, Properties)}</li>
  * </ul>
  * 
  * 
@@ -52,15 +51,15 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 		String hostname = "<UNKNOWN>";
 		try {
 			hostname = java.net.InetAddress.getLocalHost().getHostName();
-		} catch (final Exception ex) {
-			MonitoringConfiguration.log.warn("Failed to get hostname", ex);
+		} catch (final UnknownHostException ex) {
+			MonitoringConfiguration.log.warn("Failed to retrieve hostname");
 		} finally {
 			LOCAL_HOST_NAME = hostname;
 		}
 	}
 	private String hostName = MonitoringConfiguration.LOCAL_HOST_NAME;;
 	private final String instanceName;
-	private final IMonitoringLogWriter monitoringLogWriter;
+	private final IMonitoringWriter monitoringLogWriter;
 	private boolean monitoringEnabled;
 	private boolean debugEnabled;
 	private int initialExperimentId;
@@ -77,28 +76,23 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	public final static MonitoringConfiguration createSingletonConfiguration() {
 		String configurationFile = "";
 		final Properties properties;
-		try {
-			MonitoringConfiguration.log.debug("Searching for JVM argument '" + ConfigurationProperties.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME + "' ...");
-			if (System.getProperty(ConfigurationProperties.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME) != null) {
-				// Searching for configuration file location passed to JVM
-				configurationFile = System.getProperty(ConfigurationProperties.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME);
-				MonitoringConfiguration.log.info("Loading configuration from JVM-specified location: " + configurationFile);
-				properties = ConfigurationProperties.getPropertiesStartingWith(
-						ConfigurationProperties.PREFIX, System.getProperties(), 
-						ConfigurationProperties.loadPropertiesFromFile(
-								configurationFile, ConfigurationProperties.defaultProperties()));
-			} else {
-				// No JVM property; Trying to find configuration file in classpath
-				configurationFile = ConfigurationProperties.KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-				MonitoringConfiguration.log.info("Loading properties from properties file in classpath: " + configurationFile);
-				properties = ConfigurationProperties.getPropertiesStartingWith(
-						ConfigurationProperties.PREFIX, System.getProperties(), 
-						ConfigurationProperties.loadPropertiesFromResource(
-								configurationFile, ConfigurationProperties.defaultProperties()));
-			}
-		} catch (final Exception ex) {
-			MonitoringConfiguration.log.error("Error loading kieker configuration file '" + configurationFile + "'", ex);
-			return null;
+		MonitoringConfiguration.log.debug("Searching for JVM argument '" + ConfigurationProperties.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME + "' ...");
+		if (System.getProperty(ConfigurationProperties.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME) != null) {
+			// Searching for configuration file location passed to JVM
+			configurationFile = System.getProperty(ConfigurationProperties.KIEKER_CUSTOM_CONFIGURATION_JVM_PROP_NAME);
+			MonitoringConfiguration.log.info("Loading configuration from JVM-specified location: " + configurationFile);
+			properties = ConfigurationProperties.getPropertiesStartingWith(
+					ConfigurationProperties.PREFIX, System.getProperties(), 
+					ConfigurationProperties.loadPropertiesFromFile(
+							configurationFile, ConfigurationProperties.defaultProperties()));
+		} else {
+			// No JVM property; Trying to find configuration file in classpath
+			configurationFile = ConfigurationProperties.KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+			MonitoringConfiguration.log.info("Loading properties from properties file in classpath: " + configurationFile);
+			properties = ConfigurationProperties.getPropertiesStartingWith(
+					ConfigurationProperties.PREFIX, System.getProperties(), 
+					ConfigurationProperties.loadPropertiesFromResource(
+							configurationFile, ConfigurationProperties.defaultProperties()));
 		}
 		return new MonitoringConfiguration(MonitoringConfiguration.SINGLETON_INSTANCE_NAME, properties);
 	}
@@ -109,9 +103,8 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	 * @param configurationName
 	 * @param configurationFile
 	 * @return
-	 * @throws IOException
 	 */
-	public final static MonitoringConfiguration createConfiguration(final String configurationName, final String configurationFile) throws IOException {
+	public final static MonitoringConfiguration createConfiguration(final String configurationName, final String configurationFile) {
 		final Properties properties = ConfigurationProperties.loadPropertiesFromFile(configurationFile, ConfigurationProperties.defaultProperties());
 		return new MonitoringConfiguration(configurationName, properties);
 	}
@@ -143,14 +136,17 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 		setInitialExperimentId(ConfigurationProperties.getIntProperty(properties, ConfigurationProperties.INITIAL_EXPERIMENT_ID));
 		// Set Writer
 		final String writerClassname = ConfigurationProperties.getStringProperty(properties, ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME);
-		final Properties writerProperties = ConfigurationProperties.getPropertiesStartingWith(writerClassname, properties, null);
-		IMonitoringLogWriter monitoringLogWriter = null;
+		IMonitoringWriter monitoringLogWriter = null;
 		try {
 			// search for correct Constructor -> 1 parameter of type Properties
-			monitoringLogWriter = IMonitoringLogWriter.class.cast(Class.forName(writerClassname).getConstructor(Properties.class).newInstance(writerProperties));
+			monitoringLogWriter = IMonitoringWriter.class.cast(Class.forName(writerClassname).getConstructor(Properties.class).newInstance(properties));
 		} catch (final NoSuchMethodException ex) {
-			MonitoringConfiguration.log.error("Writer Class " + writerClassname + " has to implement a constructor that accepts a single set of configuration Properties", ex);
-		} catch (final Exception ex) {
+			MonitoringConfiguration.log.error("Writer Class '" + writerClassname + "' has to implement a constructor that accepts a single set of configuration Properties");
+		} catch (final NoClassDefFoundError ex) {
+			MonitoringConfiguration.log.error("Writer Class '" + writerClassname + "' not found");
+		} catch (final ClassNotFoundException ex) {
+			MonitoringConfiguration.log.error("Writer Class '" + writerClassname + "' not found");
+		} catch (final Throwable ex) {
 			MonitoringConfiguration.log.error("Failed to load writer class for name " + writerClassname, ex);
 		}
 		this.monitoringLogWriter =  monitoringLogWriter;
@@ -174,11 +170,6 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	@Override
 	public final boolean isMonitoringEnabled() {
 		return monitoringEnabled;
-	}
-
-	@Override
-	public final IMonitoringLogWriter getMonitoringLogWriter() {
-		return monitoringLogWriter;
 	}
 
 	@Override
@@ -214,5 +205,10 @@ public final class MonitoringConfiguration implements IMonitoringConfiguration {
 	@Override
 	public final String getName() {
 		return instanceName;
+	}
+
+	@Override
+	public final IMonitoringWriter getMonitoringLogWriter() {
+		return monitoringLogWriter;
 	}
 }

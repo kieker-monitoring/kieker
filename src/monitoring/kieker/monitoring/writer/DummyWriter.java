@@ -31,10 +31,10 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Jan Waller
  * 
  */
-public class DummyLogWriter extends AbstractMonitoringLogWriter {
-	private static final Log log = LogFactory.getLog(DummyLogWriter.class);
+public class DummyWriter extends AbstractMonitoringWriter {
+	private static final Log log = LogFactory.getLog(DummyWriter.class);
 
-	public DummyLogWriter(final Properties properties) {
+	public DummyWriter(final Properties properties) {
 		super(properties);
 		log.info(this.getClass().getName() + " initialized with properties:\n" + getProperties());
 	}

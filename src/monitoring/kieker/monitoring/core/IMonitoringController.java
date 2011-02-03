@@ -1,7 +1,7 @@
 package kieker.monitoring.core;
 
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 /*
  * ==================LICENCE=========================
@@ -34,7 +34,7 @@ public interface IMonitoringController extends IMonitoringRecordReceiver {
 	 * 
 	 * @return
 	 */
-	public IMonitoringLogWriter getMonitoringLogWriter();
+	public IMonitoringWriter getMonitoringLogWriter();
 
 	/**
 	 * Enables or disables the logging of debug messages by the monitoring

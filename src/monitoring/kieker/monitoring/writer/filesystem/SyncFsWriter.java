@@ -14,7 +14,7 @@ import java.util.TimeZone;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -67,7 +67,7 @@ import org.apache.commons.logging.LogFactory;
  *         2007/03/13: Refactoring
  *         2006/12/20: Initial Prototype
  */
-public final class SyncFsWriter implements IMonitoringLogWriter {
+public final class SyncFsWriter implements IMonitoringWriter {
 
 	private static final Log log = LogFactory.getLog(SyncFsWriter.class);
 	// configuration parameters

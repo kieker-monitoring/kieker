@@ -13,7 +13,7 @@ import kieker.monitoring.core.IMonitoringController;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
-import kieker.monitoring.writer.DummyLogWriter;
+import kieker.monitoring.writer.DummyWriter;
 
 /**
  * @author Andre van Hoorn
@@ -78,7 +78,7 @@ class MyDummyRecord extends DummyMonitoringRecord {
  * @author Andre van Hoorn
  * 
  */
-class MyDummyRecordCountWriter extends DummyLogWriter {
+class MyDummyRecordCountWriter extends DummyWriter {
 	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
 
 	/**

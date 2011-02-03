@@ -1,7 +1,7 @@
 package kieker.monitoring.core.configuration;
 
 import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 /*
  * ==================LICENCE=========================
@@ -65,7 +65,7 @@ public interface IMonitoringConfiguration {
 	 * 
 	 * @return the monitoring log writer
 	 */
-	public IMonitoringLogWriter getMonitoringLogWriter();
+	public IMonitoringWriter getMonitoringLogWriter();
 
 	/**
 	 * Sets the configured size of the thread pool used to execute the

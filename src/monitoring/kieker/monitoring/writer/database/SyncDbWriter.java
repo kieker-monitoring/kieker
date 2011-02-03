@@ -10,7 +10,7 @@ import java.sql.Statement;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -63,7 +63,7 @@ import org.apache.commons.logging.LogFactory;
  *         2006/12/20: Initial Prototype
  * 
  */
-public final class SyncDbWriter implements IMonitoringLogWriter {
+public final class SyncDbWriter implements IMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncDbWriter.class);
 
 	private Connection conn = null;

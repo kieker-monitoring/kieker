@@ -28,7 +28,17 @@ kieker.monitoring.enabled=true
 # The size of the thread pool used to execute registered periodic sensor jobs.
 kieker.monitoring.periodicSensorsExecutorPoolSize=1
 
+kieker.monitoring.initialExperimentId=1
+
+###########################
+#######    WRITER   #######
+###########################
+
+kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
+##Configuration Properties of the DummyWriter
+kieker.monitoring.writer.DummyWriter.key=value
+
 # Selection of monitoring data writer (classname)
 # The value must be a fully-qualified classname of a class implementing 
 # kieker.monitoring.IMonitoringDataWriter. 
-kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFSWriter
+#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFSWriter

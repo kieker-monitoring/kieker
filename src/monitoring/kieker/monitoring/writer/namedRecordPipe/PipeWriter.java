@@ -22,7 +22,7 @@ import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.PropertyMap;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public final class PipeWriter implements IMonitoringLogWriter {
+public final class PipeWriter implements IMonitoringWriter {
 	private static final Log log = LogFactory.getLog(PipeWriter.class);
 
 	public static final String PROPERTY_PIPE_NAME = "pipeName";

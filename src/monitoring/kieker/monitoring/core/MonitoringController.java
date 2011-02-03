@@ -12,7 +12,7 @@ import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.IMonitoringConfiguration;
 import kieker.monitoring.core.configuration.MonitoringConfiguration;
 import kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +58,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
 
 	// Runtime state of the monitoring controller
-	private final IMonitoringLogWriter monitoringLogWriter;
+	private final IMonitoringWriter monitoringLogWriter;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 	private volatile boolean monitoringTerminated = false;
 	private volatile boolean monitoringRealtimeMode = true;
@@ -86,6 +86,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	// TODO: should be private?!? or at least somehow protected!
 	public MonitoringController(final IMonitoringConfiguration configuration) {
 		if (configuration == null) {
+			// Should currently not happen!
 			MonitoringController.log.error("Failed to create Monitoring Configuration");
 			this.instanceName = "Error Creating Configuration";
 			this.periodicSensorsPoolExecutor = null;
@@ -262,7 +263,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	}
 
 	@Override
-	public final IMonitoringLogWriter getMonitoringLogWriter() {
+	public final IMonitoringWriter getMonitoringLogWriter() {
 		return monitoringLogWriter;
 	}
 

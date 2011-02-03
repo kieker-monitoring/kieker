@@ -10,7 +10,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-public final class AsyncFsWriter implements IMonitoringLogWriter {
+public final class AsyncFsWriter implements IMonitoringWriter {
 	private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
 
 	// internal variables

@@ -9,7 +9,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MonitoringRecordTypeClassnameMapping;
 import kieker.common.util.PropertyMap;
 import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.writer.IMonitoringLogWriter;
+import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Matthias Rohr, Andre van Hoorn
  */
-public final class AsyncJMSWriter implements IMonitoringLogWriter {
+public final class AsyncJMSWriter implements IMonitoringWriter {
 
 	private static final Log log = LogFactory.getLog(AsyncJMSWriter.class);
 	private final Vector<Thread> typeWriterAndRecordWriters = new Vector<Thread>();
