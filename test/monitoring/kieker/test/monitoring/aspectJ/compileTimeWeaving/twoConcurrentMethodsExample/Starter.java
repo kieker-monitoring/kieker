@@ -1,34 +1,26 @@
 package kieker.test.monitoring.aspectJ.compileTimeWeaving.twoConcurrentMethodsExample;
 
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-import kieker.monitoring.core.MonitoringController;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A simple test and demonstration scenario for Kieker's monitoring component
  * tpmon.
  * 
- * @author Matthias Rohr History: 2009/02/20: Reduced text length 2008/10/20:
- *         Initial version
+ * @author Matthias Rohr
+ * 
+ *         History:
+ *         2009/02/20: Reduced text length
+ *         2008/10/20: Initial version
  * 
  */
 public class Starter extends Thread {
 
-	private static final Log log = LogFactory.getLog(Starter.class);
-
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < 10000; i++) {
 			new Starter().start();
-			Thread.sleep((int) (Math.max(0, Math.random() * 115d - (i / 142d)) + 1)); // wait
-																						// between
-																						// requests
-			// log.info(i);
+			// wait between requests
+			Thread.sleep((int) (Math.max(0, Math.random() * 115d - (i / 142d)) + 1));
 		}
-		// TODO: remove since looks strange and should not be necessary:
-		MonitoringController.getInstance().terminateMonitoring();
-		// System.exit(0);
 	}
 
 	@Override
