@@ -4,6 +4,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -60,7 +61,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	// Runtime state of the monitoring controller
 	private final IMonitoringWriter monitoringLogWriter;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
-	private volatile boolean monitoringTerminated = false;
+	private final AtomicBoolean monitoringTerminated = new AtomicBoolean(false);
 	private volatile boolean monitoringRealtimeMode = true;
 	private volatile boolean monitoringEnabled = false;
 	private volatile boolean debugEnabled;
@@ -70,6 +71,9 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	 * SINGLETON
 	 */
 	private final static class LazyHolder {
+		static {
+			MonitoringController.log.info("Initialization started");
+		}
 		private static final MonitoringController SINGLETON_INSTANCE = 
 			new MonitoringController(MonitoringConfiguration.createSingletonConfiguration());
 	}
@@ -118,7 +122,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 		} else {
 			disableMonitoring();
 		}
-		MonitoringController.log.info("Initialization completed.\nWriter Info: " + this.getConnectorInfo());
+		MonitoringController.log.info("Initialization completed.\n" + this.getConnectorInfo());
 	}
 	
 	/**
@@ -157,7 +161,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	 * Returns the timestamp for the current time. The value corresponds to the
 	 * number of nanoseconds elapsed since January 1, 1970 UTC.
 	 */
-	//TODO: should be moved somewhere else? Utility function! At least in an interface!
+	//TODO: should be moved somewhere else? Utility function!
 	public final static long currentTimeNanos() {
 		return System.nanoTime() + MonitoringController.offsetA;
 	}
@@ -167,17 +171,20 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	 * 
 	 * @return the date/time string.
 	 */
-	//TODO: should be moved somewhere else? Utility function! At least in an interface!
+	//TODO: should be moved somewhere else? Utility function!!
 	public final static String getDateString() {
 		return java.util.Calendar.getInstance().getTime().toString();
 	}
 	
 	@Override
 	public final void terminateMonitoring() {
-		// TODO: Logger is problematic, may already have shutdown!
-		MonitoringController.log.info("Monitoring controller (" + this.instanceName + ") terminates monitoring");
 		// we should terminate first, so no new data will be collected!
-		monitoringTerminated = true;
+		if (monitoringTerminated.getAndSet(true)) {
+			// nothing to do if already terminated
+			return;
+		}
+		// TODO: Logger may be problematic, may already have shutdown!
+		MonitoringController.log.info("Monitoring controller (" + this.instanceName + ") terminates monitoring");
 		if (this.periodicSensorsPoolExecutor != null) {
 			this.periodicSensorsPoolExecutor.shutdown();
 		}
@@ -189,12 +196,12 @@ public final class MonitoringController implements IMonitoringController, IRepla
 
 	@Override
 	public final boolean isMonitoringTerminated() {
-		return monitoringTerminated;
+		return monitoringTerminated.get();
 	}
 
 	@Override
 	public final boolean enableMonitoring() {
-		if (monitoringTerminated) {
+		if (monitoringTerminated.get()) {
 			MonitoringController.log.error("Refused to enable monitoring because monitoring has been permanently terminated before");
 			return false;
 		}
@@ -209,12 +216,12 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	 */
 	@Override
 	public final boolean isMonitoringEnabled() {
-		return !monitoringTerminated && monitoringEnabled;
+		return !monitoringTerminated.get() && monitoringEnabled;
 	}
 	
 	@Override
 	public final boolean disableMonitoring() {
-		if (monitoringTerminated) {
+		if (monitoringTerminated.get()) {
 			MonitoringController.log.error("Refused to disable monitoring because monitoring has been permanently terminated before");
 			return false;
 		}
@@ -229,7 +236,7 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	 */
 	@Override
 	public final boolean isMonitoringDisabled() {
-		return !monitoringTerminated && !monitoringEnabled;
+		return !monitoringTerminated.get() && !monitoringEnabled;
 	}
 	
 	@Override
@@ -334,22 +341,26 @@ public final class MonitoringController implements IMonitoringController, IRepla
 	public final String getConnectorInfo() {
 		final StringBuilder strB = new StringBuilder();
 		//TODO: careful: NULLpointer exception if no writer!
-		strB.append("monitoringDataWriter : ");
-		strB.append(monitoringLogWriter.getClass().getName());
-		strB.append(", monitoringDataWriter config : (below), ");
-		strB.append(monitoringLogWriter.getInfoString());
-		strB.append(", version :");
+		strB.append("Instance: ");
+		strB.append(getInstanceName());
+		strB.append(", version: ");
 		strB.append(Version.getVERSION());
-		strB.append(", debug :");
+		strB.append(", debug: ");
 		strB.append(isDebugEnabled());
-		strB.append(", enabled :");
+		strB.append(", enabled: ");
 		strB.append(isMonitoringEnabled());
-		strB.append(", terminated :");
+		strB.append(", terminated: ");
 		strB.append(isMonitoringTerminated());
-		strB.append(", experimentID :");
+		strB.append(", realtimeMode: ");
+		strB.append(isRealtimeMode());
+		strB.append(", experimentID: ");
 		strB.append(getExperimentId());
-		strB.append(", vmname :");
+		strB.append(", vmname: ");
 		strB.append(getHostName());
+		strB.append(", monitoringDataWriter: ");
+		strB.append(monitoringLogWriter.getClass().getName());
+		strB.append(", monitoringDataWriter config (below):\n");
+		strB.append(monitoringLogWriter.getInfoString());
 		return strB.toString();
 	}
 

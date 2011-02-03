@@ -35,6 +35,7 @@ public final class ConfigurationProperties {
 	
 	//TODO: if this changes, the default config file has to be adjusted!
 	//      Ideally it would be created using this file!
+	//TODO: rename the constants to better names!
 	public final static String PREFIX = "kieker.monitoring.";
 	public final static String KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + PREFIX + "properties";
 	public final static String KIEKER_DEFAULT_PROPERTIES_LOCATION_CLASSPATH = KIEKER_CUSTOM_PROPERTIES_LOCATION_CLASSPATH + ".default";
@@ -46,9 +47,6 @@ public final class ConfigurationProperties {
 	public final static String MONITORING_ENABLED = PREFIX + "enabled";
 	public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = PREFIX + "periodicSensorsExecutorPoolSize";
 	public final static String INITIAL_EXPERIMENT_ID = PREFIX + "initialExperimentId";
-	
-	// only static stuff
-	private ConfigurationProperties() {}
 	
 	/**
 	 * Returns a properties map with the default configuration.

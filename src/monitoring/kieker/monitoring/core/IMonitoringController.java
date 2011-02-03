@@ -105,17 +105,4 @@ public interface IMonitoringController extends IMonitoringRecordReceiver {
 	 * @return true if monitoring is permanently terminated, false if monitoring is enabled or disabled.
 	 */
 	public boolean isMonitoringTerminated();
-
-	/**
-	 * Passes the given monitoring record to the configured writer if the
-	 * controller is enabled. If monitoring is disabled or terminate, this
-	 * method returns immediately. As a side-effect, the method must terminate
-	 * monitoring if an error occurs.
-	 * 
-	 * @param monitoringRecord the record to be logged
-	 * @return true if the record has been passed the writer successfully; false
-	 *         in case an error occurred or the controller is not enabled.
-	 */
-	//@Override
-	//public boolean newMonitoringRecord(IMonitoringRecord record);
 }

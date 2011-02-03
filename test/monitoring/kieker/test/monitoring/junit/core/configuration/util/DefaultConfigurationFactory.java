@@ -11,17 +11,13 @@ import kieker.monitoring.writer.DummyWriter;
  * 
  */
 public class DefaultConfigurationFactory {
-	public static final String defaultName = "DEFAULT";
+	public static final String defaultName = "jUnit-Default-Configuration";
 	public static final String writerName = DummyWriter.class.getName();
 
-	public static MonitoringConfiguration createDefaultConfigWithDummyWriter(final String configName) {
+	public static MonitoringConfiguration createDefaultConfigWithDummyWriter() {
 		final Properties properties = ConfigurationProperties.getDefaultProperties();
 		properties.setProperty(ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME, writerName);
 		properties.setProperty(writerName + ".jUnit", "true");
-		return MonitoringConfiguration.createConfiguration(configName, properties);
-	}
-
-	public static MonitoringConfiguration createDefaultConfigWithDummyWriter() {
-		return DefaultConfigurationFactory.createDefaultConfigWithDummyWriter(DefaultConfigurationFactory.defaultName);
+		return MonitoringConfiguration.createConfiguration(defaultName, properties);
 	}
 }

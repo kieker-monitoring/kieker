@@ -44,8 +44,10 @@ class ShutdownHook extends Thread {
 	@Override
 	public void run() {
 		// is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
-		//TODO: We can't use a logger in shutdown hooks, logger may already be down!
-		ShutdownHook.log.info("ShutdownHook notifies controller to initiate shutdown");
-		this.ctrl.terminateMonitoring();
+		if (!ctrl.isMonitoringTerminated()) {
+			//TODO: We can't use a logger in shutdown hooks, logger may already be down!
+			ShutdownHook.log.info("ShutdownHook notifies controller to initiate shutdown");
+			this.ctrl.terminateMonitoring();
+		}
 	}
 }
