@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller
  */
-abstract class MonitoringController extends Controller implements IMonitoringController {
+abstract class MonitoringController extends ReplayController implements IMonitoringController {
 	private static final Log log = LogFactory.getLog(MonitoringController.class);
 
 	/** Used to track the total number of monitoring records received while the controller has been enabled */
@@ -74,9 +74,6 @@ abstract class MonitoringController extends Controller implements IMonitoringCon
 		if (super.terminateMonitoring()) {
 			// TODO: Logger may be problematic, may already have shutdown!
 			MonitoringController.log.info("Shutting down Monitoring Controller");
-			/*if (this.periodicSensorsPoolExecutor != null) {
-				this.periodicSensorsPoolExecutor.shutdown();
-			}*/
 			if (this.monitoringWriter != null) {
 				monitoringWriter.terminate();
 			}
@@ -109,6 +106,9 @@ abstract class MonitoringController extends Controller implements IMonitoringCon
 				return false;
 			}
 			numberOfInserts.incrementAndGet();
+			if (this.isRealtimeMode()) {
+				record.setLoggingTimestamp(MonitoringController.currentTimeNanos());
+			}
 			if (!monitoringWriter.newMonitoringRecord(record)) {
 				MonitoringController.log.fatal("Error writing the monitoring data. Will terminate monitoring!");
 				terminateMonitoring();

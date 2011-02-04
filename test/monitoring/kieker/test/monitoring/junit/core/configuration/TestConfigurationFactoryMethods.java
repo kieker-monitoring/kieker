@@ -31,14 +31,17 @@ import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
 public class TestConfigurationFactoryMethods extends TestCase {
 
 	private void testValues(Configuration configuration) {
-		Assert.assertNotNull("Configuration is null", 
-				configuration);
+		Assert.assertNotNull("Configuration is null",  configuration);
 		Assert.assertNotNull(Configuration.CONTROLLER_NAME + " must not be empty", 
 				configuration.getProperty(Configuration.CONTROLLER_NAME));
-		Assert.assertNotNull(Configuration.WRITER_CLASSNAME + " must not be empty", 
-				configuration.getProperty(Configuration.WRITER_CLASSNAME));
+		Assert.assertNotNull(Configuration.REPLAY_MODE + " must not be empty", 
+				configuration.getProperty(Configuration.REPLAY_MODE));
 		Assert.assertNotNull(Configuration.MONITORING_ENABLED + " must not be empty", 
 				configuration.getProperty(Configuration.MONITORING_ENABLED));
+		Assert.assertNotNull(Configuration.WRITER_CLASSNAME + " must not be empty", 
+				configuration.getProperty(Configuration.WRITER_CLASSNAME));
+		Assert.assertNotNull(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty", 
+				configuration.getProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		//TODO: add other enforced values!
 	}
 	

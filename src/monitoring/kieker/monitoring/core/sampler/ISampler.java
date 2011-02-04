@@ -1,18 +1,17 @@
-package kieker.common.record;
+package kieker.monitoring.core.sampler;
 
-import java.io.Serializable;
+import kieker.monitoring.core.ISamplingController;
 
 /*
- *
  * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
- *
+ * Copyright 2006-2011 Kieker Project
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,15 +19,16 @@ import java.io.Serializable;
  * limitations under the License.
  * ==================================================
  */
-
 /**
- *
  * @author Andre van Hoorn
  */
-public interface IMonitoringRecord extends Serializable {
-    public long getLoggingTimestamp();
-    public void setLoggingTimestamp(long timestamp);
-    public void initFromArray(Object[] values);
-    public Object[] toArray();
-    public Class<?>[] getValueTypes();
+public interface ISampler {
+
+	/**
+	 * Triggers this {@link ISampler} to perform a measurement and to pass the data
+	 * to the given {@link SamplingController}.
+	 * 
+	 * @throws Exception thrown to indicate an error.
+	 */
+	public void sample(final ISamplingController samplingController) throws Exception;
 }

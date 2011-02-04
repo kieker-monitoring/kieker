@@ -23,9 +23,16 @@ kieker.monitoring.name=KIEKER
 # this property.
 kieker.monitoring.enabled=true
 
-### NOT YET IMPLEMENTED
+# Whether Kieker runs in replay or realtime mode.
+# You usually don't want to change this value.
+kieker.monitoring.replayMode=false
+
 # The size of the thread pool used to execute registered periodic sensor jobs.
-#kieker.monitoring.periodicSensorsExecutorPoolSize=1
+kieker.monitoring.periodicSensorsExecutorPoolSize=1
+
+###########################
+### NOT YET IMPLEMENTED ###
+###########################
 #kieker.monitoring.initialExperimentId=1
 # Enable/disable debug mode (true|false, default; false) 
 # Debug mode provides a more verbose logging output. It should not be used in 

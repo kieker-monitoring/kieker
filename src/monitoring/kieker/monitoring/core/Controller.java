@@ -2,7 +2,6 @@ package kieker.monitoring.core;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import kieker.monitoring.core.ShutdownHook;
 import kieker.monitoring.core.configuration.Configuration;
 
 import org.apache.commons.logging.Log;
@@ -58,6 +57,11 @@ abstract class Controller implements IController {
 	public boolean isMonitoringTerminated() {
 		return monitoringTerminated.get();
 	}
+
+	@Override
+	public final String getName() {
+		return name;
+	}
 	
 	@Override
 	public String getState() {
@@ -68,5 +72,37 @@ abstract class Controller implements IController {
 		sb.append(isMonitoringTerminated());
 		sb.append("'");
 		return sb.toString();
+	}
+}
+
+/**
+ * This class ensures that virtual machine shutdown (e.g., cause by a
+ * System.exit(int)) is delayed until all monitoring data is written. This is
+ * important for the asynchronous writers for the files system and database,
+ * since these store data with a small delay and data would be lost when
+ * System.exit is not delayed.
+ * 
+ * When the system shutdown is initiated, the termination of the Virtual Machine
+ * is delayed until all registered worker queues are empty.
+ * 
+ * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ */
+final class ShutdownHook extends Thread {
+	private static final Log log = LogFactory.getLog(ShutdownHook.class);
+
+	private final IController ctrl;
+
+	public ShutdownHook(final IController ctrl) {
+		this.ctrl = ctrl;
+	}
+
+	@Override
+	public void run() {
+		// is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
+		if (!ctrl.isMonitoringTerminated()) {
+			//TODO: We can't use a logger in shutdown hooks, logger may already be down!
+			ShutdownHook.log.info("ShutdownHook notifies controller to initiate shutdown");
+			this.ctrl.terminateMonitoring();
+		}
 	}
 }

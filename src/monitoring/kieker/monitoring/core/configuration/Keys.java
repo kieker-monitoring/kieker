@@ -37,11 +37,16 @@ interface Keys {
 
 	// these MUST be declared in the file DEFAULT_PROPERTIES_LOCATION_CLASSPATH
 
-	// Monitoring Controller
+	// Controller
 	public final static String CONTROLLER_NAME = PREFIX + "name";
+	// Replay Controller
+	public final static String REPLAY_MODE = PREFIX + "replayMode";
+	// Monitoring Controller
 	public final static String MONITORING_ENABLED = PREFIX + "enabled";
 	public final static String WRITER_CLASSNAME = PREFIX + "writer";
+	// Sampling Controller
+	public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = PREFIX + "periodicSensorsExecutorPoolSize";
 
 	//public final static String DEBUG_ENABLED = PREFIX + "debug";
-	//public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = PREFIX + "periodicSensorsExecutorPoolSize";
+
 }

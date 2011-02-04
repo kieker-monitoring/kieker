@@ -1,5 +1,10 @@
 package kieker.monitoring.core;
 
+import java.util.concurrent.TimeUnit;
+
+import kieker.monitoring.core.sampler.ISampler;
+import kieker.monitoring.core.sampler.ScheduledSamplerJob;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
@@ -18,37 +23,27 @@ package kieker.monitoring.core;
  * ==================================================
  */
 /**
- * @author Jan Waller
+ * @author Andre van Hoorn
  */
-interface IController {
-
-	/**
-	 * Permanently terminates monitoring
-	 * 
-	 * @see #isMonitoringTerminated()
-	 * @return true if now terminated; false if already terminated
-	 */
-	public abstract boolean terminateMonitoring();
-
-	/**
-	 * Returns whether monitoring is permanently terminated.
-	 * 
-	 * @see #terminateMonitoring()
-	 * @return true if monitoring is permanently terminated, false if monitoring is enabled or disabled.
-	 */
-	public abstract boolean isMonitoringTerminated();
+public interface ISamplingController {
 	
 	/**
-	 * Returns the name of this controller.
+	 * Schedules the given {@link ISampler} with given initial delay, and period.
 	 * 
-	 * @return String
+	 * @param sigarLogger
+	 * @param initialDelay
+	 * @param period
+	 * @param timeUnit
+	 * @return
 	 */
-	public abstract String getName();
+	public ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler,
+			final long initialDelay, final long period, final TimeUnit timeUnit);
 
 	/**
-	 * a String representation of the current state
+	 * Stops future executions of the given periodic {@link ScheduledSamplerJob}.
 	 * 
-	 * @return String
+	 * @param sampler
+	 * @return true if the sensor is not registered
 	 */
-	public abstract String getState();
+	public boolean removeScheduledSampler(final ScheduledSamplerJob sampler);
 }
