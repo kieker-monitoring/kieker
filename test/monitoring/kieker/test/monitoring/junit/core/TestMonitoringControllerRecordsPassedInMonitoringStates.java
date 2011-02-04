@@ -1,13 +1,9 @@
 package kieker.test.monitoring.junit.core;
 
-import java.util.Properties;
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.IMonitoringController;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.configuration.ConfigurationProperties;
-import kieker.monitoring.core.configuration.IMonitoringConfiguration;
-import kieker.monitoring.core.configuration.MonitoringConfiguration;
+import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.configuration.Configuration;
 import kieker.test.monitoring.junit.core.util.DummyRecord;
 import kieker.test.monitoring.junit.core.util.DummyRecordCountWriter;
 
@@ -34,37 +30,40 @@ import kieker.test.monitoring.junit.core.util.DummyRecordCountWriter;
 public class TestMonitoringControllerRecordsPassedInMonitoringStates extends TestCase {
 	
 	public void testRecordsPassedToWriterWhenEnabled() {
-		final Properties properties = ConfigurationProperties.getDefaultProperties();
-		properties.setProperty(ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
-		final IMonitoringConfiguration config = MonitoringConfiguration.createConfiguration("jUnit-DummyRecordCounter", properties);
-		final IMonitoringController ctrl = new MonitoringController(config);
+		final Configuration configuration = Configuration.createDefaultConfiguration();
+		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
+		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
+		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
+		final Kieker kieker = Kieker.createAdditionalKieker(configuration);
 
-		Assert.assertTrue("Failed to enable monitoring", ctrl.enableMonitoring());
-		ctrl.newMonitoringRecord(new DummyRecord());
-		Assert.assertEquals("Unexpected number of records received", 1, ((DummyRecordCountWriter)ctrl.getMonitoringLogWriter()).getNumDummyRecords());
-		ctrl.terminateMonitoring();
+		Assert.assertTrue("Failed to enable monitoring", kieker.enableMonitoring());
+		kieker.newMonitoringRecord(new DummyRecord());
+		Assert.assertEquals("Unexpected number of records received", 1, ((DummyRecordCountWriter)kieker.getMonitoringWriter()).getNumDummyRecords());
+		kieker.terminateMonitoring();
 	}
 
 	public void testNoRecordsPassedToWriterWhenDisabled() {
-		final Properties properties = ConfigurationProperties.getDefaultProperties();
-		properties.setProperty(ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
-		final IMonitoringConfiguration config = MonitoringConfiguration.createConfiguration("jUnit-DummyRecordCounter", properties);
-		final IMonitoringController ctrl = new MonitoringController(config);
+		final Configuration configuration = Configuration.createDefaultConfiguration();
+		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
+		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
+		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
+		final Kieker kieker = Kieker.createAdditionalKieker(configuration);
 
-		Assert.assertTrue("Failed to disable monitoring", ctrl.disableMonitoring());
-		ctrl.newMonitoringRecord(new DummyRecord());
-		Assert.assertEquals("Unexpected number of records received", 0, ((DummyRecordCountWriter)ctrl.getMonitoringLogWriter()).getNumDummyRecords());
-		ctrl.terminateMonitoring();
+		Assert.assertTrue("Failed to disable monitoring", kieker.disableMonitoring());
+		kieker.newMonitoringRecord(new DummyRecord());
+		Assert.assertEquals("Unexpected number of records received", 0, ((DummyRecordCountWriter)kieker.getMonitoringWriter()).getNumDummyRecords());
+		kieker.terminateMonitoring();
 	}
 
 	public void testNoRecordsPassedToWriterWhenTerminated() {
-		final Properties properties = ConfigurationProperties.getDefaultProperties();
-		properties.setProperty(ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
-		final IMonitoringConfiguration config = MonitoringConfiguration.createConfiguration("jUnit-DummyRecordCounter", properties);
-		final IMonitoringController ctrl = new MonitoringController(config);
+		final Configuration configuration = Configuration.createDefaultConfiguration();
+		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
+		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
+		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
+		final Kieker kieker = Kieker.createAdditionalKieker(configuration);
 
-		ctrl.terminateMonitoring();
-		ctrl.newMonitoringRecord(new DummyRecord());
-		Assert.assertEquals("Unexpected number of records received", 0, ((DummyRecordCountWriter)ctrl.getMonitoringLogWriter()).getNumDummyRecords());
+		kieker.terminateMonitoring();
+		kieker.newMonitoringRecord(new DummyRecord());
+		Assert.assertEquals("Unexpected number of records received", 0, ((DummyRecordCountWriter)kieker.getMonitoringWriter()).getNumDummyRecords());
 	}
 }

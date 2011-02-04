@@ -2,8 +2,11 @@ package kieker.monitoring.writer;
 
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationProperties;
+import kieker.monitoring.core.configuration.Configuration;
 
 /*
  * ==================LICENCE=========================
@@ -25,27 +28,38 @@ import kieker.monitoring.core.configuration.ConfigurationProperties;
 /**
  * @author Jan Waller
  */
-abstract class AbstractMonitoringWriter implements IMonitoringWriter {
+public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
+	private static final Log log = LogFactory.getLog(Configuration.class);
 
-	protected final Properties properties;
+	protected final Configuration configuration;
 
 	/**
 	 * 
-	 * @param properties the configuration
+	 * @param configuration
 	 */
-	protected AbstractMonitoringWriter(final Properties properties) {
-		this.properties = ConfigurationProperties.getPropertiesStartingWith(this.getClass().getName() + ".", properties, getDefaultProperties());
+	protected AbstractMonitoringWriter(final Configuration configuration) {
+		try {
+			// somewhat dirty hack...
+			configuration.setDefaultProperties(getDefaultProperties());
+		} catch (final IllegalAccessException ex) {
+			AbstractMonitoringWriter.log.error("Unable to set custom default properties");
+		}
+		this.configuration = configuration;
 	}
 
 	protected String getProperties() {
 		final StringBuilder sb = new StringBuilder();
-		for (String property : properties.stringPropertyNames()) {
-			sb.append(property);
-			sb.append("=");
-			sb.append(properties.getProperty(property));
-			sb.append("\n");
+		if (configuration.isEmpty()) {
+			return "no parameters";
+		} else {
+			for (String property : configuration.stringPropertyNames()) {
+				sb.append(property);
+				sb.append("=");
+				sb.append(configuration.getProperty(property));
+				sb.append("\n");
+			}
+			return sb.toString().trim();
 		}
-		return sb.toString().trim();
 	}
 
 	/**
@@ -70,9 +84,6 @@ abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 
 	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
-
-	@Override
-	public abstract void start();
 
 	@Override
 	public abstract void terminate();

@@ -1,13 +1,9 @@
 package kieker.test.monitoring.junit.core.configuration;
 
-import java.util.Properties;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.configuration.ConfigurationProperties;
-import kieker.monitoring.core.configuration.IMonitoringConfiguration;
-import kieker.monitoring.core.configuration.MonitoringConfiguration;
-import kieker.monitoring.writer.DummyWriter;
+import kieker.monitoring.core.configuration.Configuration;
+import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
 
 /*
  * ==================LICENCE=========================
@@ -27,94 +23,64 @@ import kieker.monitoring.writer.DummyWriter;
  * ==================================================
  */
 /**
- * Tests whether the factory methods of {@link MonitoringConfiguration} return
+ * Tests whether the factory methods of {@link Configuration} return
  * instances and performs basic checks on these.
  * 
  * @author Andre van Hoorn, Jan Waller
  */
 public class TestConfigurationFactoryMethods extends TestCase {
 
-	/**
-	 * Tests {@link MonitoringConfiguration#createConfiguration(String, Properties)}.
-	 * 
-	 * Creates a configuration based on the default configuration file
-	 * {@link ConfigurationProperties#KIEKER_CUSTOM_PROPERTIES_LOCATION_DEFAULT} contained in the Kieker library jar.
-	 */
-	public void testCreationDefaultPropertiesFileInJar() {
-		final Properties properties = ConfigurationProperties.getDefaultProperties();
-		final IMonitoringConfiguration config = MonitoringConfiguration.createConfiguration("ConfigName", properties);
-		Assert.assertNotNull("Config is null", config);
-		Assert.assertNotNull("writer is null", config.getMonitoringLogWriter());
-		// The following values must be the default values:
-		final Properties defaultProperties = ConfigurationProperties.getDefaultProperties();
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME + " property", 
-				ConfigurationProperties.getStringProperty(defaultProperties, ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME),
-				config.getMonitoringLogWriter().getClass().getName());
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.DEBUG_ENABLED + " property", 
-				ConfigurationProperties.getBooleanProperty(defaultProperties, ConfigurationProperties.DEBUG_ENABLED),
-				config.isDebugEnabled());
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.MONITORING_ENABLED + " property", 
-				ConfigurationProperties.getBooleanProperty(defaultProperties, ConfigurationProperties.MONITORING_ENABLED),
-				config.isMonitoringEnabled());
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " property", 
-				ConfigurationProperties.getIntProperty(defaultProperties, ConfigurationProperties.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE),
-				config.getPeriodicSensorsExecutorPoolSize());
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.INITIAL_EXPERIMENT_ID + " property", 
-				ConfigurationProperties.getIntProperty(defaultProperties, ConfigurationProperties.INITIAL_EXPERIMENT_ID),
-				config.getInitialExperimentId());
+	private void testValues(Configuration configuration) {
+		Assert.assertNotNull("Configuration is null", 
+				configuration);
+		Assert.assertNotNull(Configuration.CONTROLLER_NAME + " must not be empty", 
+				configuration.getProperty(Configuration.CONTROLLER_NAME));
+		Assert.assertNotNull(Configuration.WRITER_CLASSNAME + " must not be empty", 
+				configuration.getProperty(Configuration.WRITER_CLASSNAME));
+		Assert.assertNotNull(Configuration.MONITORING_ENABLED + " must not be empty", 
+				configuration.getProperty(Configuration.MONITORING_ENABLED));
+		//TODO: add other enforced values!
 	}
 	
 	/**
-	 * Tests {@link MonitoringConfiguration#createConfiguration(String, Properties)}
+	 * Tests {@link Configuration#createSingletonConfiguration()}.
 	 */
-	public void testCreationDefaultWithOwnWriter() {
-		final Properties properties = ConfigurationProperties.getDefaultProperties();
-		properties.setProperty(ConfigurationProperties.MONITORING_DATA_WRITER_CLASSNAME, DummyWriter.class.getName());
-		final IMonitoringConfiguration config = MonitoringConfiguration.createConfiguration("ConfigName", properties);
-		Assert.assertNotNull("Config is null", config);
-		Assert.assertNotNull("writer is null", config.getMonitoringLogWriter());
-		// The following values must be the default values:
-		final Properties defaultProperties = ConfigurationProperties.getDefaultProperties();
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.DEBUG_ENABLED + " property", 
-				ConfigurationProperties.getBooleanProperty(defaultProperties, ConfigurationProperties.DEBUG_ENABLED),
-				config.isDebugEnabled());
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.MONITORING_ENABLED + " property", 
-				ConfigurationProperties.getBooleanProperty(defaultProperties, ConfigurationProperties.MONITORING_ENABLED),
-				config.isMonitoringEnabled());
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " property", 
-				ConfigurationProperties.getIntProperty(defaultProperties, ConfigurationProperties.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE),
-				config.getPeriodicSensorsExecutorPoolSize());
-		Assert.assertEquals("Wrong default value for " + ConfigurationProperties.INITIAL_EXPERIMENT_ID + " property", 
-				ConfigurationProperties.getIntProperty(defaultProperties, ConfigurationProperties.INITIAL_EXPERIMENT_ID),
-				config.getInitialExperimentId());
+	public void testCreationDefaultConfigurationWithDummyWriter() {
+		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
+		testValues(configuration);
+		Assert.assertEquals("Writer must be " + DefaultConfigurationFactory.writerName, 
+				DefaultConfigurationFactory.writerName,
+				configuration.getStringProperty(Configuration.WRITER_CLASSNAME));
+	}
+	
+	/**
+	 * Tests {@link Configuration#createSingletonConfiguration()}.
+	 */
+	public void testCreationSingletonConfiguration() {
+		testValues(Configuration.createSingletonConfiguration());
 	}
 
 	/**
-	 * Tests {@link MonitoringConfiguration#createSingletonConfiguration()}.
+	 * Tests {@link Configuration#createDefaultConfiguration()}.
 	 */
-	public void testCreationSingletonConfiguration() {
-		final IMonitoringConfiguration config = MonitoringConfiguration.createSingletonConfiguration();
-		Assert.assertNotNull("Config is null", config);
-		Assert.assertNotNull("writer is null", config.getMonitoringLogWriter());
+	public void testCreationDefaultConfiguration() {
+		testValues(Configuration.createDefaultConfiguration());
 	}
-	
+
 	/**
-	 * Tests {@link MonitoringConfiguration#createSingletonConfiguration()}.
+	 * Tests {@link Configuration#createSingletonConfiguration()}.
 	 * 
-	 * FIXME: "Missing test: Should test combinations of JVM-Params, Filenames, etc."
+	 * FIXME: "Missing test: Should test combinations of JVM-Params, Filenames, etc. How to do that?
 	 */
 	public void testCreationSingletonConfigurationVariants() {}
 
-
 	/**
-	 * Tests {@link MonitoringConfiguration#createConfiguration(String, String)}.
+	 * Tests {@link Configuration#createConfigurationFromFile(String)}.
 	 * 
-	 * FIXME: "File should be included correctly"
+	 * FIXME: "File should be included correctly and it should be tested if the correct values are set"
 	 */
-	public void testCreationCustomFileConfiguration() {
+	public void testCreationfromFile() {
 		final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "META-INF/kieker.monitoring.properties.test";
-		final IMonitoringConfiguration config = MonitoringConfiguration.createConfiguration("ConfigName", EXAMPLE_CONFIG_FILE_IN_TRUNK);
-		Assert.assertNotNull("Config is null", config);
-		Assert.assertNotNull("writer is null", config.getMonitoringLogWriter());
+		testValues(Configuration.createConfigurationFromFile(EXAMPLE_CONFIG_FILE_IN_TRUNK));
 	}
 }

@@ -20,36 +20,20 @@ import kieker.monitoring.writer.IMonitoringWriter;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * The methods must not throw any exceptions but indicate problems via its
  * respective return value.
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
-public interface IMonitoringController extends IMonitoringRecordReceiver {
+interface IMonitoringController extends IMonitoringRecordReceiver {
 
 	/**
-	 * Returns the configured monitoring log writer.
+	 * Returns the configured monitoring writer.
 	 * 
 	 * @return
 	 */
-	public IMonitoringWriter getMonitoringLogWriter();
-
-	/**
-	 * Enables or disables the logging of debug messages by the monitoring
-	 * framework.
-	 * 
-	 * @param debugEnabled true to enable debug output; false to disable debug output
-	 */
-	public void setDebugEnabled(boolean debugEnabled);
-
-	/**
-	 * Returns whether debug output is enabled or disabled
-	 * 
-	 * @return true if debug the debug mode is enabled, false if it is disabled
-	 */
-	public boolean isDebugEnabled();
+	public IMonitoringWriter getMonitoringWriter();
 
 	/**
 	 * Enables monitoring.
@@ -68,18 +52,10 @@ public interface IMonitoringController extends IMonitoringRecordReceiver {
 	public boolean disableMonitoring();
 
 	/**
-	 * Permanently terminates monitoring (e.g., due to a failure). Subsequent
-	 * tries to enable monitoring via {@link #setMonitoringEnabled(boolean)} will
-	 * be refused. Regardless of this method's return value monitoring will
-	 * be terminated after this call returns.
-	 * 
-	 */
-	public void terminateMonitoring();
-
-	/**
 	 * Returns whether monitoring is enabled or disabled.
 	 * 
-	 * @see #setMonitoringEnabled(boolean)
+	 * @see #disableMonitoring()
+	 * @see #enableMonitoring()
 	 * 
 	 * @return true of monitoring is enabled, false if monitoring is disabled or terminated.
 	 */
@@ -90,19 +66,8 @@ public interface IMonitoringController extends IMonitoringRecordReceiver {
 	 * 
 	 * @see #disableMonitoring()
 	 * @see #enableMonitoring()
-	 * @see #terminateMonitoring()
 	 * 
 	 * @return true if monitoring is disabled; false it monitoring is enabled or terminated.
 	 */
 	public boolean isMonitoringDisabled();
-
-	/**
-	 * Returns whether monitoring is permanently terminated.
-	 * 
-	 * @see #terminateMonitoring()
-	 * @see #setMonitoringEnabled(boolean)
-	 * 
-	 * @return true if monitoring is permanently terminated, false if monitoring is enabled or disabled.
-	 */
-	public boolean isMonitoringTerminated();
 }

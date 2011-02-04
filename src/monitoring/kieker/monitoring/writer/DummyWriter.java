@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.Configuration;
 
 /*
  * ==================LICENCE=========================
@@ -34,9 +35,9 @@ import kieker.common.record.IMonitoringRecord;
 public class DummyWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(DummyWriter.class);
 
-	public DummyWriter(final Properties properties) {
-		super(properties);
-		log.info(this.getClass().getName() + " initialized with properties:\n" + getProperties());
+	public DummyWriter(final Configuration configuration) {
+		super(configuration);
+		//log.info(this.getClass().getName() + " initialized with properties:\n" + getProperties());
 	}
 
 	@Override
@@ -45,17 +46,13 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public void start() {
-		log.info(this.getClass().getName() + " started");
-	}
-	
-	@Override
 	public void terminate() {
 		log.info(this.getClass().getName() + " shutting down");
 	}
 
 	@Override
 	public Properties getDefaultProperties() {
-		return null; //no Properties
+		//return null; //no Properties
+		return new Properties();
 	}
 }

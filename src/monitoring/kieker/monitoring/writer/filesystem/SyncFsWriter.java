@@ -9,11 +9,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 import java.util.Random;
 import java.util.TimeZone;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
@@ -59,7 +60,7 @@ import org.apache.commons.logging.LogFactory;
  * it might be an option to write to multiple files, while writing with more
  * than one thread into a single file is not considered a save option.
  * 
- * @author Matthias Rohr, Andre van Hoorn
+ * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  * 
  *         History:
  *         2008/01/04: Refactoring for the first release of Kieker and
@@ -67,9 +68,9 @@ import org.apache.commons.logging.LogFactory;
  *         2007/03/13: Refactoring
  *         2006/12/20: Initial Prototype
  */
-public final class SyncFsWriter implements IMonitoringWriter {
-
+public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncFsWriter.class);
+
 	// configuration parameters
 	private static final int maxEntriesInFile = 22000;
 	// internal variables
@@ -81,28 +82,11 @@ public final class SyncFsWriter implements IMonitoringWriter {
 
 	private final MappingFileWriter mappingFileWriter;
 
-	private final static String defaultConstructionErrorMsg = 
-		"Do not select this writer using the fully qualified classname. "
-			+ "Use the the constant "
-			+ ConfigurationConstants.WRITER_SYNCFS
-			+ " and the file system specific configuration properties.";
-
-	public SyncFsWriter() {
-		throw new UnsupportedOperationException(SyncFsWriter.defaultConstructionErrorMsg);
-	}
-
-	@Override
-	public final boolean init(final String initString) {
-		throw new UnsupportedOperationException(SyncFsWriter.defaultConstructionErrorMsg);
-	}
-	
-	@Override
-	public final void terminate() {
-		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
-		this.pos.close();
-	}
-
-	public SyncFsWriter(final String storagePathBase, final String storagePathPostfix) {
+	public SyncFsWriter(Properties properties) {
+		super(properties);
+		
+		Configu
+		
 		SyncFsWriter.log.debug("storagePathBase :" + storagePathBase);
 		File f = new File(storagePathBase);
 		if (!f.isDirectory()) {
@@ -136,6 +120,19 @@ public final class SyncFsWriter implements IMonitoringWriter {
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", exc);
 		}
 	}
+	
+	@Override
+	public void start() {
+		
+	}
+	
+	@Override
+	public final void terminate() {
+		this.pos.close();
+		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
+	}
+
+
 
 	/**
 	 * Determines and sets a new Filename
@@ -195,10 +192,5 @@ public final class SyncFsWriter implements IMonitoringWriter {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public final String getInfoString() {
-		return "filenamePrefix :" + this.storagePathBase;
 	}
 }

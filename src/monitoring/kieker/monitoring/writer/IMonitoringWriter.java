@@ -25,12 +25,6 @@ import kieker.common.record.IMonitoringRecordReceiver;
 public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 
 	/**
-	 * Called by the Monitoring Controller to announce the start of monitoring.
-	 * Writers should start threads, etc. in this method.
-	 */
-	public void start();
-	
-	/**
 	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
 	 * Writers should return as soon as it is safe to terminate Kieker.
 	 */

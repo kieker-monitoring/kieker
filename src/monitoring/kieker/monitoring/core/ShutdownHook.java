@@ -35,9 +35,9 @@ import org.apache.commons.logging.LogFactory;
 class ShutdownHook extends Thread {
 	private static final Log log = LogFactory.getLog(ShutdownHook.class);
 
-	private final MonitoringController ctrl;
+	private final IController ctrl;
 
-	public ShutdownHook(final MonitoringController ctrl) {
+	public ShutdownHook(final IController ctrl) {
 		this.ctrl = ctrl;
 	}
 

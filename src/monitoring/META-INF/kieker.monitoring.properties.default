@@ -13,10 +13,8 @@
 ## If this also fails, a default configuration is being used according to the values in 
 ## this default file.
 
-# Enable/disable debug mode (true|false, default; false) 
-# Debug mode provides a more verbose logging output. It should not be used in 
-# in production.
-kieker.monitoring.debug=false
+# the name of the Kieker instance
+kieker.monitoring.name=KIEKER
 
 # Enable/disable monitoring after startup (true|false; default: true)
 # If monitoring is disabled, the MonitoringController simply drops incoming 
@@ -25,20 +23,28 @@ kieker.monitoring.debug=false
 # this property.
 kieker.monitoring.enabled=true
 
+### NOT YET IMPLEMENTED
 # The size of the thread pool used to execute registered periodic sensor jobs.
-kieker.monitoring.periodicSensorsExecutorPoolSize=1
+#kieker.monitoring.periodicSensorsExecutorPoolSize=1
+#kieker.monitoring.initialExperimentId=1
+# Enable/disable debug mode (true|false, default; false) 
+# Debug mode provides a more verbose logging output. It should not be used in 
+# in production.
+#kieker.monitoring.debug=false
 
-kieker.monitoring.initialExperimentId=1
 
 ###########################
 #######    WRITER   #######
 ###########################
-
-kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
-##Configuration Properties of the DummyWriter
-kieker.monitoring.writer.DummyWriter.key=value
-
 # Selection of monitoring data writer (classname)
 # The value must be a fully-qualified classname of a class implementing 
-# kieker.monitoring.IMonitoringDataWriter. 
+# kieker.monitoring.IMonitoringWriter and providing a constructor that 
+# offers a single Configuration parameter. 
+kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
+
+#kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
+## Configuration Properties of the DummyWriter
+kieker.monitoring.writer.DummyWriter.key=value
+
+
 #kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFSWriter

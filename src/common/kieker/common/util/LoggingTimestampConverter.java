@@ -3,13 +3,9 @@ package kieker.common.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
@@ -33,9 +29,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class LoggingTimestampConverter {
+    //private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);
 
-    private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);
-    private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
+	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
     private static final String dateFormatPattern = "EEE, d MMM yyyy HH:mm:ss Z";
 
     /**
