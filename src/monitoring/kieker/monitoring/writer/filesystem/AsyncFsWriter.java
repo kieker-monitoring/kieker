@@ -10,14 +10,13 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.IMonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.util.async.AbstractAsyncThread;
+import kieker.monitoring.writer.AbstractAsyncThread;
+import kieker.monitoring.writer.AbstractAsyncWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,21 +41,17 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-public final class AsyncFsWriter extends AbstractMonitoringWriter {
+public final class AsyncFsWriter extends AbstractAsyncWriter {
 	private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
 
 	private static final String PREFIX = "kieker.monitoring.writer.filesystem.AsyncFsWriter.";
 	private static final String PATH = PREFIX + "customStoragePath";
 	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
-	private static final String QUEUESIZE = PREFIX + "QueueSize";
-	private static final String BEHAVIOR = PREFIX + "QueueFullBehavior";
 
-	// internal variables
-	private final FsWriterThread worker;
-	private final BlockingQueue<IMonitoringRecord> blockingQueue;
-	private final int queueFullBehavior;
+	// only to get that information later
+	private final String path;
 
-	public AsyncFsWriter(IMonitoringController ctrl, Configuration configuration) {
+	public AsyncFsWriter(final IMonitoringController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 		String path;
 		if (this.configuration.getBooleanProperty(TEMP)) {
@@ -80,6 +75,7 @@ public final class AsyncFsWriter extends AbstractMonitoringWriter {
 			AsyncFsWriter.log.error("Failed to create directory '" + path + "'");
 			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
+		this.path = f.getAbsolutePath();
 
 		final String mappingFileFn = path + File.separatorChar + "tpmon.map";
 		final MappingFileWriter mappingFileWriter;
@@ -89,59 +85,20 @@ public final class AsyncFsWriter extends AbstractMonitoringWriter {
 			AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
-
-		final int queueFullBehavior = this.configuration.getIntProperty(BEHAVIOR);
-		if ((queueFullBehavior < 0) || (queueFullBehavior > 2)) {
-			AsyncFsWriter.log.warn("Unknown value '" + queueFullBehavior + "' for " + BEHAVIOR + "; using default value 0");
-			this.queueFullBehavior = 0;
-		} else {
-			this.queueFullBehavior = queueFullBehavior;
-		}
-
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(QUEUESIZE));
-		this.worker = new FsWriterThread(this.ctrl, this.blockingQueue, mappingFileWriter, path + File.separatorChar + "tpmon");
-		this.worker.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
-		this.worker.start();
+		setWorker(new FsWriterThread(this.ctrl, this.blockingQueue, mappingFileWriter, path + File.separatorChar + "tpmon"));
 	}
-
+	
 	@Override
-	public void terminate() {
-		this.worker.initShutdown();
-		while (!this.worker.isFinished()) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException ex) {
-				// we should be able to ignore an interrupted sleep.
-			}
-			AsyncFsWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
-		}
-		AsyncFsWriter.log.info("Writer: AsyncFsWriter shutdown complete");
-	}
-
-	/**
-	 * This method is not synchronized!
-	 */
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		try {
-			switch (this.queueFullBehavior) {
-			case 1: // blocks when queue full
-				this.blockingQueue.put(monitoringRecord);
-				break;
-			case 2: // does nothing if queue is full
-				this.blockingQueue.offer(monitoringRecord);
-				break;
-			default: // tries to add immediately (error if full)
-				this.blockingQueue.add(monitoringRecord);
-				break;
-			}
-		} catch (final Exception ex) {
-			AsyncFsWriter.log.error(" insertMonitoringData() failed: Exception: " + ex);
-			return false;
-		}
-		return true;
+	public final String getInfoString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("\nWriting to Directory: '");
+		sb.append(path);
+		sb.append("'");
+		return sb.toString();
 	}
 }
+
 
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
@@ -216,5 +173,10 @@ final class FsWriterThread extends AbstractAsyncThread {
 			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))));
 			this.pos.flush();
 		}
+	}
+
+	@Override
+	protected void cleanup() {
+		pos.close();
 	}
 }

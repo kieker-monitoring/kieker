@@ -46,10 +46,10 @@ kieker.monitoring.periodicSensorsExecutorPoolSize=1
 ###########################
 #######    WRITER   #######
 ###########################
-# Selection of monitoring data writer (classname)
-# The value must be a fully-qualified classname of a class implementing 
-# kieker.monitoring.IMonitoringWriter and providing a constructor that 
-# accepts an IMonitoringController and a single Configuration. 
+## Selection of monitoring data writer (classname)
+## The value must be a fully-qualified classname of a class implementing 
+## kieker.monitoring.IMonitoringWriter and providing a constructor that 
+## accepts an IMonitoringController and a single Configuration. 
 kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
 
 
@@ -63,32 +63,76 @@ kieker.monitoring.writer.DummyWriter.key=value
 #####
 #kieker.monitoring.writer=kieker.monitoring.writer.filesystem.SyncFsWriter
 #
-# In order to use the default temporary directory, set the property value of
-# storeInJavaIoTmpdir to true.
+## In order to use the default temporary directory, set the property value of
+## storeInJavaIoTmpdir to true.
 kieker.monitoring.writer.filesystem.SyncFsWriter.storeInJavaIoTmpdir=true
-# In order to use a custom directory, set storeInJavaIoTmpdir=false
-# and set customStoragePath as desired. Examples:
-# /var/kieker/ or "C:\KiekerData\" (ensure the folder exists).
+#
+## In order to use a custom directory, set storeInJavaIoTmpdir=false
+## and set customStoragePath as desired. Examples:
+## /var/kieker or "C:\KiekerData" (ensure the folder exists).
 kieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=
 
 
 #####
 #kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter
 #
-# In order to use the default temporary directory, set the property value of
-# storeInJavaIoTmpdir to true.
+## In order to use the default temporary directory, set the property value of
+## storeInJavaIoTmpdir to true.
 kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=true
-# In order to use a custom directory, set storeInJavaIoTmpdir=false
-# and set customStoragePath as desired. Examples:
-# /var/kieker/ or "C:\KiekerData\" (ensure the folder exists).
+#
+## In order to use a custom directory, set storeInJavaIoTmpdir=false
+## and set customStoragePath as desired. Examples:
+## /var/kieker or "C:\KiekerData" (ensure the folder exists).
 kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=
-# Asyncronous writers need to store monitoring records in an internal buffer.
-# This parameter defines its capacity in terms of the number of records. 
+#
+## Asynchronous writers need to store monitoring records in an internal buffer.
+## This parameter defines its capacity in terms of the number of records. 
 kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=10000
-# Behavior of the asynchronous writer when the internal queue is full:
-# 0: terminate Monitoring with an error (default)
-# 1: writer blocks until queue capacity is available
-# 2: writer discards new records until space is available
-#  Be careful when using the value '1' since then, the asynchronous writer
-#  is no longer decoupled from the monitored application.
+#
+## Behavior of the asynchronous writer when the internal queue is full:
+## 0: terminate Monitoring with an error (default)
+## 1: writer blocks until queue capacity is available
+## 2: writer discards new records until space is available
+##  Be careful when using the value '1' since then, the asynchronous writer
+##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior=0
+
+
+#####
+#kieker.monitoring.writer=kieker.monitoring.writer.namedRecordPipe.PipeWriter
+#
+## The name of the pipe used (must not be empty).
+kieker.monitoring.writer.namedRecordPipe.PipeWriter.pipeName=kieker-pipe
+
+
+#####
+#kieker.monitoring.writer=kieker.monitoring.writer.jms.AsyncJMSWriter
+#
+## The url of the jndi provider that knows the jms service
+kieker.monitoring.writer.jms.AsyncJMSWriter.ProviderUrl=tcp://localhost:3035/
+#
+## The topic at the jms server which is used in the publisher/subscribe communication.
+kieker.monitoring.writer.jms.AsyncJMSWriter.Topic=queue1
+#
+## The type of the jms factory implementation, e.g.
+## "org.exolab.jms.jndi.InitialContextFactory" for openjms 0.7.7
+kieker.monitoring.writer.jms.AsyncJMSWriter.ContextFactoryType=org.exolab.jms.jndi.InitialContextFactory
+#
+## The service name for the jms connection factory.
+kieker.monitoring.writer.jms.AsyncJMSWriter.FactoryLookupName=ConnectionFactory
+#
+## The time that a jms message will be kept alive at the jms server before 
+## it is automatically deleted.
+kieker.monitoring.writer.jms.AsyncJMSWriter.MessageTimeToLive=10000
+#
+## Asynchronous writers need to store monitoring records in an internal buffer.
+## This parameter defines its capacity in terms of the number of records. 
+kieker.monitoring.writer.jms.AsyncJMSWriter.QueueSize=10000
+#
+## Behavior of the asynchronous writer when the internal queue is full:
+## 0: terminate Monitoring with an error (default)
+## 1: writer blocks until queue capacity is available
+## 2: writer discards new records until space is available
+##  Be careful when using the value '1' since then, the asynchronous writer
+##  is no longer decoupled from the monitored application.
+kieker.monitoring.writer.jms.AsyncJMSWriter.QueueFullBehavior=0

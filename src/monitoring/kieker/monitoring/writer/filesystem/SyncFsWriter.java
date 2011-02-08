@@ -82,9 +82,11 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private final MappingFileWriter mappingFileWriter;
 	private PrintWriter pos = null;
 	private int entriesInCurrentFileCounter = maxEntriesInFile + 1; // Force to initialize first file!
+	// only to get that information later
+	private final String path;
 
 
-	public SyncFsWriter(IMonitoringController ctrl, Configuration configuration) {
+	public SyncFsWriter(final IMonitoringController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 		String path;
 		if (this.configuration.getBooleanProperty(TEMP)) {
@@ -109,6 +111,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
 		this.filenamePrefix = path + File.separatorChar + "tpmon";
+		this.path = f.getAbsolutePath();
 
 		final String mappingFileFn = path + File.separatorChar + "tpmon.map";
 		try {
@@ -156,6 +159,16 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public final void terminate() {
 		this.pos.close();
 		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
+	}
+	
+	@Override
+	public final String getInfoString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("\nWriting to Directory: '");
+		sb.append(path);
+		sb.append("'");
+		return sb.toString();
 	}
 	
 	/**

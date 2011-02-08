@@ -1,4 +1,4 @@
-package kieker.monitoring.writer.util.async;
+package kieker.monitoring.writer;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -75,6 +75,7 @@ public abstract class AbstractAsyncThread extends Thread {
 						}
 						this.finished = true;
 						this.writeQueue.put(END_OF_MONITORING_MARKER);
+						cleanup();
 						break;
 					} else {
 						this.consume(monitoringRecord);
@@ -88,7 +89,6 @@ public abstract class AbstractAsyncThread extends Thread {
 		} catch (final Exception ex) {
 			// e.g. Interrupted Exception or IOException
 			AbstractAsyncThread.log.error("Writer thread will halt", ex);
-			AbstractAsyncThread.log.error("Will terminate monitoring!");
 			this.finished = true;
 			ctrl.terminateMonitoring();
 		} finally {
@@ -97,4 +97,5 @@ public abstract class AbstractAsyncThread extends Thread {
 	}
 
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
+	protected abstract void cleanup();
 }

@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
+@Deprecated
 public class PropertyMap {
     private static final Log log = LogFactory.getLog(PropertyMap.class);
 

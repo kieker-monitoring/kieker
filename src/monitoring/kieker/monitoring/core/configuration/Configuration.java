@@ -203,4 +203,14 @@ public final class Configuration extends Properties implements Keys {
 			return 0;
 		}
 	}
+	
+	public final long getLongProperty(final String key) {
+		final String s = getStringProperty(key);
+		try {
+			return Long.parseLong(s);
+		} catch (final NumberFormatException ex) {
+			Configuration.log.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
+			return 0;
+		}
+	}
 }

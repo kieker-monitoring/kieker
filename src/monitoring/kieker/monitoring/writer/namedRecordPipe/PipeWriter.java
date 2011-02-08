@@ -1,5 +1,15 @@
 package kieker.monitoring.writer.namedRecordPipe;
 
+import kieker.common.namedRecordPipe.Broker;
+import kieker.common.namedRecordPipe.Pipe;
+import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
@@ -17,77 +27,48 @@ package kieker.monitoring.writer.namedRecordPipe;
  * limitations under the License.
  * ==================================================
  */
-
-import kieker.common.namedRecordPipe.Broker;
-import kieker.common.namedRecordPipe.Pipe;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.PropertyMap;
-import kieker.monitoring.writer.IMonitoringWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * 
  * @author Andre van Hoorn
  */
-public final class PipeWriter implements IMonitoringWriter {
+public final class PipeWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(PipeWriter.class);
 
-	public static final String PROPERTY_PIPE_NAME = "pipeName";
-	private volatile Pipe pipe;
+	private static final String PREFIX = "kieker.monitoring.writer.namedRecordPipe.PipeWriter.";
+	private static final String PIPENAME = PREFIX + "pipeName";
+	private final Pipe pipe;
 
-	/**
-	 * 
-	 * @param pipeName
-	 */
-	// TODO: throw Exception on error (e.g., )?
-	public PipeWriter(final String pipeName) {
-		this.initPipe(pipeName);
-	}
-
-	/**
-	 * Initializes the {@link #pipe} and and {@link #pipeName} fields.
-	 * 
-	 * @param pipeName
-	 * @return true on success; false otherwise
-	 */
-	private boolean initPipe(final String pipeName) {
+	public PipeWriter(IMonitoringController ctrl, Configuration configuration) {
+		super(ctrl, configuration);
+		final String pipeName = this.configuration.getStringProperty(PIPENAME);
+		if (pipeName.isEmpty()) {
+			PipeWriter.log.error("Invalid or missing value for property '" + PIPENAME + "': '" + pipeName + "'");
+			throw new IllegalArgumentException("Invalid or missing value for property '" + PIPENAME + "': '" + pipeName + "'");
+		}
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
 			PipeWriter.log.error("Failed to get pipe with name:" + pipeName);
-			return false;
+			throw new IllegalArgumentException("Failed to get pipe with name:" + pipeName);
 		}
-		PipeWriter.log.info("Connected to pipe '" + pipeName + "'" + " (" + this.pipe + ")");
-		return true;
 	}
 
 	@Override
-	public boolean init(final String initString) throws IllegalArgumentException {
-		final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-		final String pipeName = propertyMap.getProperty(PipeWriter.PROPERTY_PIPE_NAME);
-		if ((pipeName == null) || (pipeName.isEmpty())) {
-			PipeWriter.log.error("Invalid or missing pipeName value for property '" + PipeWriter.PROPERTY_PIPE_NAME + "'");
-			throw new IllegalArgumentException("Invalid or missing pipeName value:" + pipeName);
-		}
-		return this.initPipe(pipeName);
-	}
-
-	@Override
-	public void terminate() {
+	public final void terminate() {
 		this.pipe.close();
 	}
 
 	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		return this.pipe.writeMonitoringRecord(monitoringRecord);
 	}
 
 	@Override
 	public String getInfoString() {
-		final StringBuilder strB = new StringBuilder();
-		strB.append("pipeName : ");
-		strB.append(this.pipe.getName());
-		return strB.toString();
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("\nConnected to pipe: '");
+		sb.append(this.pipe.getName());
+		sb.append("'");
+		return sb.toString();
 	}
 }
