@@ -1,8 +1,12 @@
 package kieker.monitoring.writer.filesystem;
 
-import java.awt.Stroke;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -10,7 +14,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.IMonitoringWriter;
+import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writer.util.async.AbstractAsyncThread;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,36 +42,72 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-public final class AsyncFsWriter implements IMonitoringWriter {
+public final class AsyncFsWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
+
+	private static final String PREFIX = "kieker.monitoring.writer.filesystem.SyncFsWriter.";
+	private static final String PATH = PREFIX + "customStoragePath";
+	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
+	private static final String QUEUESIZE = PREFIX + "QueueSize";
+	private static final String BEHAVIOR = PREFIX + "QueueFullBehavior";
 
 	// internal variables
 	private final FsWriterThread worker;
-	private final String storagePathBaseDir;
-	private final String storagePathPostfix;
-	private final int asyncRecordQueueSize;
-	private final boolean blockOnFullQueue;
 	private final BlockingQueue<IMonitoringRecord> blockingQueue;
-	private final String storageDir; // full path
-	private final static String defaultConstructionErrorMsg = 
-		"Do not select this writer using the full-qualified classname. "
-			+ "Use the the constant "
-			+ ConfigurationConstants.WRITER_ASYNCFS
-			+ " and the file system specific configuration properties.";
+	private final int queueFullBehavior;
 
-	public AsyncFsWriter() {
-		throw new UnsupportedOperationException(AsyncFsWriter.defaultConstructionErrorMsg);
-	}
+	public AsyncFsWriter(IMonitoringController ctrl, Configuration configuration) {
+		super(ctrl, configuration);
+		String path;
+		if (this.configuration.getBooleanProperty(TEMP)) {
+			path = System.getProperty("java.io.tmpdir");
+		} else {
+			path = this.configuration.getStringProperty(PATH);
+		}
+		File f = new File(path);
+		if (!f.isDirectory()) {
+			AsyncFsWriter.log.error(path + " is not a directory.");
+			throw new IllegalArgumentException(path + " is not a directory.");
+		}
+		final String ctrlName = this.ctrl.getHostName() + "-" + this.ctrl.getName();
 
-	@Override
-	public final boolean init(final String initString) {
-		throw new UnsupportedOperationException(AsyncFsWriter.defaultConstructionErrorMsg);
+		final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+		path = path + File.separatorChar + "tpmon-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
+		f = new File(path);
+		if (!f.mkdir()) {
+			AsyncFsWriter.log.error("Failed to create directory '" + path + "'");
+			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
+		}
+
+		final String mappingFileFn = path + File.separatorChar + "tpmon.map";
+		final MappingFileWriter mappingFileWriter;
+		try {
+			mappingFileWriter = new MappingFileWriter(mappingFileFn);
+		} catch (final Exception ex) {
+			AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
+			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
+		}
+
+		final int queueFullBehavior = this.configuration.getIntProperty(BEHAVIOR);
+		if ((queueFullBehavior < 0) || (queueFullBehavior > 2)) {
+			AsyncFsWriter.log.warn("Unknown value '" + queueFullBehavior + "' for " + BEHAVIOR + "; using default value 0");
+			this.queueFullBehavior = 0;
+		} else {
+			this.queueFullBehavior = queueFullBehavior;
+		}
+
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(QUEUESIZE));
+		this.worker = new FsWriterThread(this.ctrl, this.blockingQueue, mappingFileWriter, path + File.separatorChar + "tpmon");
+		this.worker.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
+		this.worker.start();
 	}
 
 	@Override
 	public void terminate() {
-		worker.initShutdown();
-		while (!worker.isFinished()) {
+		this.worker.initShutdown();
+		while (!this.worker.isFinished()) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException ex) {
@@ -74,55 +117,23 @@ public final class AsyncFsWriter implements IMonitoringWriter {
 		}
 		AsyncFsWriter.log.info("Writer: AsyncFsWriter shutdown complete");
 	}
-	
-	/**
-	 * 
-	 * @param storagePathBaseDir
-	 * @param storagePathPostfix
-	 * @param asyncRecordQueueSize
-	 * @param blockOnFullQueue
-	 * @throws IOException 
-	 */
-	public AsyncFsWriter(final String storagePathBaseDir, final String storagePathPostfix, final int asyncRecordQueueSize, final boolean blockOnFullQueue) throws IOException {
-		this.storagePathBaseDir = storagePathBaseDir;
-		this.storagePathPostfix = storagePathPostfix;
-		this.asyncRecordQueueSize = asyncRecordQueueSize;
-		this.blockOnFullQueue = blockOnFullQueue;
-
-		File f = new File(this.storagePathBaseDir);
-		if (!f.isDirectory()) {
-			AsyncFsWriter.log.error("Will abort init().");
-			throw new IOException(this.storagePathBaseDir + " is not a directory");
-		}
-
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
-		this.storageDir = this.storagePathBaseDir + "/tpmon-" + dateStr + "-UTC-" + this.storagePathPostfix + "/";
-		f = new File(this.storageDir);
-		if (!f.mkdir()) {
-			AsyncFsWriter.log.error("Will abort init().");
-			throw new IOException("Failed to create directory '" + this.storagePathBaseDir + "'");
-		}
-		AsyncFsWriter.log.debug("Directory for monitoring data: " + this.storageDir);
-
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(asyncRecordQueueSize);
-		final String mappingFileFn = this.storageDir + File.separatorChar + "tpmon.map";
-		worker = new FsWriterThread(this.blockingQueue, new MappingFileWriter(mappingFileFn), this.storageDir + "/tpmon");
-		worker.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
-		worker.start();
-	}
 
 	/**
-	 * This method is not synchronized.
+	 * This method is not synchronized!
 	 */
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
-			if (this.blockOnFullQueue) {
-				this.blockingQueue.offer(monitoringRecord); // blocks when queue full
-			} else {
-				this.blockingQueue.add(monitoringRecord); // tries to add immediately!
+			switch (this.queueFullBehavior) {
+			case 1: // blocks when queue full
+				this.blockingQueue.put(monitoringRecord);
+				break;
+			case 2: // does nothing if queue is full
+				this.blockingQueue.offer(monitoringRecord);
+				break;
+			default: // tries to add immediately (error if full)
+				this.blockingQueue.add(monitoringRecord);
+				break;
 			}
 		} catch (final Exception ex) {
 			AsyncFsWriter.log.error(" insertMonitoringData() failed: Exception: " + ex);
@@ -130,17 +141,80 @@ public final class AsyncFsWriter implements IMonitoringWriter {
 		}
 		return true;
 	}
+}
 
-	//TODO: needed?
-	@Deprecated
-	public final String getFilenamePrefix() {
-		return this.storagePathBaseDir;
+/**
+ * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ */
+final class FsWriterThread extends AbstractAsyncThread {
+
+	// configuration parameters
+	private static final int maxEntriesInFile = 25000;
+
+	// internal variables
+	private final String filenamePrefix;
+	private final MappingFileWriter mappingFileWriter;
+	private PrintWriter pos = null;
+	private int entriesInCurrentFileCounter = maxEntriesInFile + 1; // Force to initialize first file!
+
+	public FsWriterThread(final IMonitoringController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue, final MappingFileWriter mappingFileWriter, final String filenamePrefix) {
+		super(ctrl, writeQueue);
+		this.filenamePrefix = filenamePrefix;
+		this.mappingFileWriter = mappingFileWriter;
 	}
 
+	// TODO: keep track of record type ID mapping!
+	/**
+	 * Note that it's not necessary to synchronize this method since
+	 * a file is written at most by one thread.
+	 * 
+	 * @throws java.io.IOException
+	 */
 	@Override
-	public String getInfoString() {
-		return "filenamePrefix :" + this.storagePathBaseDir + ", outputDirectory :" + this.storageDir
-				+ ", asyncRecordQueueSize: " + this.asyncRecordQueueSize + ", blockOnFullQueue: " + this.blockOnFullQueue;
+	protected final void consume(final IMonitoringRecord monitoringRecord) throws IOException {
+		final Object[] recordFields = monitoringRecord.toArray();
+		final int LAST_FIELD_INDEX = recordFields.length - 1;
+		// check if file exists and is not full
+		this.prepareFile(); // may throw FileNotFoundException
+
+		this.pos.write("$");
+		this.pos.write(Integer.toString((this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()))));
+		this.pos.write(';');
+		this.pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
+		if (LAST_FIELD_INDEX > 0) {
+			this.pos.write(';');
+		}
+		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
+			final Object val = recordFields[i];
+			// TODO: assert that val!=null and provide suitable log msg if null
+			this.pos.write(val.toString());
+			if (i < LAST_FIELD_INDEX) {
+				this.pos.write(';');
+			}
+		}
+		this.pos.println();
+		this.pos.flush();
 	}
 
+	/**
+	 * Determines and sets a new Filename
+	 */
+	private final void prepareFile() throws FileNotFoundException {
+		if (this.entriesInCurrentFileCounter++ > FsWriterThread.maxEntriesInFile) {
+			if (this.pos != null) {
+				this.pos.close();
+			}
+			this.entriesInCurrentFileCounter = 0;
+
+			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+			// TODO: where does this number come from?
+			// final int random = (new Random()).nextInt(100);
+			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
+			// log.debug("** " + java.util.Calendar.getInstance().currentTimeNanos().toString() + " new filename: " + filename);
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))));
+			this.pos.flush();
+		}
+	}
 }

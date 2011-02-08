@@ -4,9 +4,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
 
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -54,7 +55,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
     private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
 
-    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
+    private static final Kieker ctrlInst = Kieker.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
@@ -69,7 +70,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
         long tin = -1, tout = -1;
         boolean isEntryCall = true;
         int eoi = -1;
-		final int ess = -1;
+		//final int ess = -1;
 		int myEoi = -1, myEss = -1;
 
         if (traceId == -1) {
@@ -88,7 +89,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
             myEoi = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestEOI();
             myEss = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestESS();
             tin = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestTin();
-            tout = MonitoringController.currentTimeNanos();
+            tout = Timer.currentTimeNanos();
             isEntryCall = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestIsEntryCall();
         }
 

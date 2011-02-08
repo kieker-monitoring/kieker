@@ -12,13 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
@@ -37,7 +35,6 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
 */
-
 /**
  * Register session and trace id for incoming request.
  * This probe also logs activations of this probe as execution records.
@@ -59,10 +56,9 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 
     private static final String componentName = OperationExecutionRegistrationAndLoggingFilter.class.getName();
     private static final String opName = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain)";
-    private static final Log log = LogFactory.getLog(OperationExecutionRegistrationAndLoggingFilter.class);
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
+    private static final Kieker ctrlInst = Kieker.getInstance();
     private static final String vmName = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getHostName();
 
     private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
@@ -113,13 +109,13 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
             OperationExecutionRegistrationAndLoggingFilter.cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
             execData.hostName = OperationExecutionRegistrationAndLoggingFilter.vmName;
             execData.experimentId = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getExperimentId();
-            execData.tin = MonitoringController.currentTimeNanos();
+            execData.tin = Timer.currentTimeNanos();
         }
         try {
             chain.doFilter(request, response);
         } finally {
             if (execData != null) {
-                execData.tout = MonitoringController.currentTimeNanos();
+                execData.tout = Timer.currentTimeNanos();
                 execData.eoi = eoi;
                 execData.ess = ess;
                 //if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)

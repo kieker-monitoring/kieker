@@ -1,9 +1,8 @@
 package kieker.monitoring.probe.cxf;
 
-
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
 
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -60,7 +59,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
         /* Store entry time tin for this trace.
         This value will be used by the corresponding invocation of the
         KiekerTpmonResponseOutProbe. */
-        final long tin = MonitoringController.currentTimeNanos();
+        final long tin = Timer.currentTimeNanos();
         boolean isEntryCall = false; // set true below if is entry call
 
         if (traceId == -1) {

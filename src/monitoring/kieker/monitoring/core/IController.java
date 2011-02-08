@@ -20,7 +20,7 @@ package kieker.monitoring.core;
 /**
  * @author Jan Waller
  */
-interface IController {
+public interface IController {
 
 	/**
 	 * Permanently terminates monitoring
@@ -44,11 +44,57 @@ interface IController {
 	 * @return String
 	 */
 	public abstract String getName();
+	
+	/**
+	 * The HostName will be part of the monitoring data and allows to assing 
+	 * observations in cases where the software system is deployed on more 
+	 * than one host.
+	 * 
+	 * When you want to distinguish multiple Virtual Machines on one host, you
+	 * have to set the HostName manually in the Configuration.
+	 */
+	public abstract String getHostName();
+	
+	/**
+	 * Increments the experiment ID by 1 and returns the new value.
+	 * 
+	 * @return experimentID
+	 */
+	public int incExperimentId();
 
+	/**
+	 * Sets the experiment ID to the given value.
+	 * 
+	 * @param newExperimentID
+	 */
+	public void setExperimentId(final int newExperimentID);
+	
+	/**
+	 * Returns the experiment ID.
+	 * 
+	 * @return experimentID
+	 */
+	public int getExperimentId();
+	
 	/**
 	 * a String representation of the current state
 	 * 
 	 * @return String
 	 */
 	public abstract String getState();
+
+	/**
+	 * Enables DebugMode
+	 */
+	public void enableDebug();
+	
+	/**
+	 * Disables DebugMode
+	 */
+	public void disableDebug();
+
+	/**
+	 * @return debugMode
+	 */
+	public boolean isDebug();
 }

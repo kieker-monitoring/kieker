@@ -10,12 +10,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.SessionRegistry;
-
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /*
  * ==================LICENCE=========================
@@ -54,7 +51,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class OperationExecutionRegistrationFilter implements Filter, IMonitoringProbe {
 
-    private static final Log log = LogFactory.getLog(OperationExecutionRegistrationFilter.class);
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 

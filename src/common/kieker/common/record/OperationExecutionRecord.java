@@ -17,20 +17,18 @@ package kieker.common.record;
  * limitations under the License.
  * ==================================================
  */
-
 /**
- * None of the String variables must be null.
+ * String variables must not be null.
  * 
  * @author Andre van Hoorn, Jan Waller
  */
 public final class OperationExecutionRecord extends AbstractMonitoringRecord {
-	// private static final Log log = LogFactory.getLog(OperationExecutionRecord.class);
-
 	private static final String DEFAULT_VALUE = "N/A";
-	private static final long serialVersionUID = 1179L;
+	private static final long serialVersionUID = 1180L;
 
 	/** Used to identify the type of CSV records */
-	private static final int numRecordFields = 9; // 10?
+	private static final int numRecordFields = 9; //TODO: 10?
+
 	public volatile int experimentId = -1;
 	public volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
 	public volatile String className = OperationExecutionRecord.DEFAULT_VALUE;
@@ -134,9 +132,17 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.experimentId, this.className + "." + this.operationName,
-				(this.sessionId == null) ? "NULL" : this.sessionId, this.traceId, this.tin, this.tout,
-				(this.hostName == null) ? "NULLHOST" : this.hostName, this.eoi, this.ess };
+		return new Object[] { 
+				this.experimentId, 
+				this.className + "." + this.operationName,
+				(this.sessionId == null) ? "NULL" : this.sessionId, 
+				this.traceId, 
+				this.tin, 
+				this.tout,
+				(this.hostName == null) ? "NULLHOST" : this.hostName, 
+				this.eoi, 
+				this.ess
+		};
 	}
 
 	@Override
@@ -205,7 +211,6 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		if (this == o) {
 			return true;
 		}
-
 		if (!(o instanceof OperationExecutionRecord)) {
 			return false;
 		}
@@ -222,8 +227,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 					&& (this.traceId == ro.traceId) 
 					&& this.hostName.equals(ro.hostName);
 		} catch (final NullPointerException ex) {
-			//TODO: avoid logging!!!! Do something else instead! Records should not depend on logger!
-			//OperationExecutionRecord.log.error(ex);
+			// avoid logging!!!! Do something else instead! Records should not depend on logger!
 			return false;
 		}
 	}
@@ -236,8 +240,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param experimentId
-	 *          the experimentId to set
+	 * @param the experimentId to set
 	 */
 	public final void setExperimentId(final int experimentId) {
 		this.experimentId = experimentId;
@@ -251,8 +254,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param hostName
-	 *          the hostName to set
+	 * @param the hostName to set
 	 */
 	public final void setHostName(final String hostName) {
 		this.hostName = hostName;
@@ -266,8 +268,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param className
-	 *          the className to set
+	 * @param the className to set
 	 */
 	public final void setClassName(final String className) {
 		this.className = className;
@@ -281,8 +282,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param operationName
-	 *          the operationName to set
+	 * @param the operationName to set
 	 */
 	public final void setOperationName(final String operationName) {
 		this.operationName = operationName;
@@ -296,8 +296,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param sessionId
-	 *          the sessionId to set
+	 * @param the sessionId to set
 	 */
 	public final void setSessionId(final String sessionId) {
 		this.sessionId = sessionId;
@@ -311,8 +310,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param traceId
-	 *          the traceId to set
+	 * @param the traceId to set
 	 */
 	public final void setTraceId(final long traceId) {
 		this.traceId = traceId;
@@ -326,8 +324,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param tin
-	 *          the tin to set
+	 * @param the tin to set
 	 */
 	public final void setTin(final long tin) {
 		this.tin = tin;
@@ -341,8 +338,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param tout
-	 *          the tout to set
+	 * @param the tout to set
 	 */
 	public final void setTout(final long tout) {
 		this.tout = tout;
@@ -356,8 +352,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param eoi
-	 *          the eoi to set
+	 * @param the eoi to set
 	 */
 	public final void setEoi(final int eoi) {
 		this.eoi = eoi;
@@ -371,8 +366,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param ess
-	 *          the ess to set
+	 * @param the ess to set
 	 */
 	public final void setEss(final int ess) {
 		this.ess = ess;

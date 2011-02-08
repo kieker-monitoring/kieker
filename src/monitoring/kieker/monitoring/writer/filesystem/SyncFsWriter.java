@@ -9,13 +9,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Properties;
-import java.util.Random;
 import java.util.TimeZone;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,117 +69,76 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncFsWriter.class);
+	
+	private static final String PREFIX = "kieker.monitoring.writer.filesystem.SyncFsWriter.";
+	private static final String PATH = PREFIX + "customStoragePath";
+	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
 
 	// configuration parameters
-	private static final int maxEntriesInFile = 22000;
+	private static final int maxEntriesInFile = 25000;
+
 	// internal variables
-	private final String storagePathBase;
-	private final String storagePathPostfix;
-	private boolean filenameInitialized = false;
-	private int entriesInCurrentFileCounter = 0;
-	private PrintWriter pos = null;
-
+	private final String filenamePrefix;
 	private final MappingFileWriter mappingFileWriter;
+	private PrintWriter pos = null;
+	private int entriesInCurrentFileCounter = maxEntriesInFile + 1; // Force to initialize first file!
 
-	public SyncFsWriter(Properties properties) {
-		super(properties);
-		
-		Configu
-		
-		SyncFsWriter.log.debug("storagePathBase :" + storagePathBase);
-		File f = new File(storagePathBase);
-		if (!f.isDirectory()) {
-			SyncFsWriter.log.error(storagePathBase + " is not a directory");
-			SyncFsWriter.log.error("Will abort constructor.");
-			throw new IllegalArgumentException(storagePathBase + " is not a directory");
+
+	public SyncFsWriter(IMonitoringController ctrl, Configuration configuration) {
+		super(ctrl, configuration);
+		String path;
+		if (this.configuration.getBooleanProperty(TEMP)) {
+			path = System.getProperty("java.io.tmpdir");
+		} else {
+			path = this.configuration.getStringProperty(PATH); 
 		}
-
-		this.storagePathPostfix = storagePathPostfix;
+		File f = new File(path);
+		if (!f.isDirectory()) {
+			SyncFsWriter.log.error(path + " is not a directory.");
+			throw new IllegalArgumentException(path + " is not a directory.");
+		}
+		final String ctrlName = this.ctrl.getHostName() + "-" + this.ctrl.getName();
 
 		final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
-		this.storagePathBase = storagePathBase + "/tpmon-" + dateStr + "-UTC-" + this.storagePathPostfix + "/";
-		SyncFsWriter.log.debug("this.storagePathBase :" + this.storagePathBase);
-
-		f = new File(this.storagePathBase);
+		path = path + File.separatorChar + "tpmon-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
+		f = new File(path);
 		if (!f.mkdir()) {
-			SyncFsWriter.log.error("Failed to create directory '" + this.storagePathBase + "'");
-			SyncFsWriter.log.error("Will abort constructor.");
-			throw new IllegalArgumentException("Failed to create directory '" + this.storagePathBase + "'");
+			SyncFsWriter.log.error("Failed to create directory '" + path + "'");
+			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
-		SyncFsWriter.log.debug("Directory for monitoring data: " + this.storagePathBase);
+		this.filenamePrefix = path + File.separatorChar + "tpmon";
 
-		final String mappingFileFn = this.storagePathBase + File.separatorChar + "tpmon.map";
+		final String mappingFileFn = path + File.separatorChar + "tpmon.map";
 		try {
 			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
-		} catch (final Exception exc) {
-			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", exc);
-			SyncFsWriter.log.error("Will abort init().");
-			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", exc);
+		} catch (final Exception ex) {
+			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
+			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
 	}
 	
-	@Override
-	public void start() {
-		
-	}
-	
-	@Override
-	public final void terminate() {
-		this.pos.close();
-		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
-	}
-
-
-
-	/**
-	 * Determines and sets a new Filename
-	 */
-	private final void prepareFile() throws FileNotFoundException {
-		if ((this.entriesInCurrentFileCounter++ > SyncFsWriter.maxEntriesInFile) || !this.filenameInitialized) {
-			if (this.pos != null) {
-				this.pos.close();
-			}
-			this.filenameInitialized = true;
-			this.entriesInCurrentFileCounter = 0;
-
-			final DateFormat m_ISO8601Local = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-			m_ISO8601Local.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = m_ISO8601Local.format(new java.util.Date());
-			// TODO: where does this number come from ??
-			final int random = (new Random()).nextInt(100);
-			final String filename = this.storagePathBase + "/tpmon-" + dateStr + "-UTC-" + random + ".dat";
-			log.debug("** " + java.util.Calendar.getInstance().getTime().toString() + " new filename: " + filename);
-			try {
-				final FileOutputStream fos = new FileOutputStream(filename);
-				final BufferedOutputStream bos = new BufferedOutputStream(fos);
-				final DataOutputStream dos = new DataOutputStream(bos);
-				this.pos = new PrintWriter(dos);
-				this.pos.flush();
-			} catch (final FileNotFoundException ex) {
-				SyncFsWriter.log.error("Tpmon: Error creating the file: " + filename + " \n ", ex);
-				throw ex;
-			}
-		}
-	}
-
 	// TODO: keep track of record type ID mapping!
 	@Override
 	public final synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			final Object[] recordFields = monitoringRecord.toArray();
 			final int LAST_FIELD_INDEX = recordFields.length - 1;
+			// check if file exists and is not full
 			this.prepareFile(); // may throw FileNotFoundException
 
-			this.pos.write("$" + this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()));
+			this.pos.write("$");
+			this.pos.write(Integer.toString((this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()))));
 			this.pos.write(';');
 			this.pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
 			if (LAST_FIELD_INDEX > 0) {
 				this.pos.write(';');
 			}
 			for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
-				this.pos.write(recordFields[i].toString());
+				final Object val = recordFields[i];
+				// TODO: assert that val!=null and provide suitable log msg if null
+				this.pos.write(val.toString());
 				if (i < LAST_FIELD_INDEX) {
 					this.pos.write(';');
 				}
@@ -192,5 +150,32 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public final void terminate() {
+		this.pos.close();
+		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
+	}
+	
+	/**
+	 * Determines and sets a new Filename
+	 */
+	private final void prepareFile() throws FileNotFoundException {
+		if (this.entriesInCurrentFileCounter++ > SyncFsWriter.maxEntriesInFile) {
+			if (this.pos != null) {
+				this.pos.close();
+			}
+			this.entriesInCurrentFileCounter = 0;
+
+			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+			// TODO: where does this number come from?
+			//final int random = (new Random()).nextInt(100);
+			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))));
+			this.pos.flush();
+		}
 	}
 }

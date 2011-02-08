@@ -1,11 +1,10 @@
 package kieker.monitoring.writer;
 
-import java.util.Properties;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.IMonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
 
 /*
@@ -35,9 +34,8 @@ import kieker.monitoring.core.configuration.Configuration;
 public class DummyWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(DummyWriter.class);
 
-	public DummyWriter(final Configuration configuration) {
-		super(configuration);
-		//log.info(this.getClass().getName() + " initialized with properties:\n" + getProperties());
+	public DummyWriter(final IMonitoringController ctrl, final Configuration configuration) {
+		super(ctrl, configuration);
 	}
 
 	@Override
@@ -48,11 +46,5 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	@Override
 	public void terminate() {
 		log.info(this.getClass().getName() + " shutting down");
-	}
-
-	@Override
-	public Properties getDefaultProperties() {
-		//return null; //no Properties
-		return new Properties();
 	}
 }

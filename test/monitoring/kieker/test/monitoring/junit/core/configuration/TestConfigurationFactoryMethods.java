@@ -32,8 +32,15 @@ public class TestConfigurationFactoryMethods extends TestCase {
 
 	private void testValues(Configuration configuration) {
 		Assert.assertNotNull("Configuration is null",  configuration);
+		Assert.assertNotNull(Configuration.DEBUG + " must not be empty", 
+				configuration.getProperty(Configuration.DEBUG));
 		Assert.assertNotNull(Configuration.CONTROLLER_NAME + " must not be empty", 
 				configuration.getProperty(Configuration.CONTROLLER_NAME));
+		// HostName may be empty!
+		//Assert.assertNotNull(Configuration.HOST_NAME + " must not be empty", 
+		//		configuration.getProperty(Configuration.HOST_NAME));
+		Assert.assertNotNull(Configuration.EXPERIMENT_ID + " must not be empty", 
+				configuration.getProperty(Configuration.EXPERIMENT_ID));
 		Assert.assertNotNull(Configuration.REPLAY_MODE + " must not be empty", 
 				configuration.getProperty(Configuration.REPLAY_MODE));
 		Assert.assertNotNull(Configuration.MONITORING_ENABLED + " must not be empty", 

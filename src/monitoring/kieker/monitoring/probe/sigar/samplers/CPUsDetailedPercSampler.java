@@ -1,59 +1,54 @@
 package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.CPUUtilizationRecord;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.ISamplingController;
+import kieker.monitoring.core.util.Timer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarProxy;
 
+/*
+ * ==================LICENCE=========================
+ * Copyright 2006-2011 Kieker Project
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ==================================================
+ */
 /**
  * Logs detailed utilization statistics for each CPU in the system, retrieved
  * from {@link CpuPerc}, as {@link CPUUtilizationRecord}s via
- * {@link MonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
- * .
+ * {@link MonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
  * 
  * @author Andre van Hoorn
  * 
  */
-public class CPUsDetailedPercSampler extends AbstractSigarSampler {
-
-	private static final Log log = LogFactory
-			.getLog(CPUsDetailedPercSampler.class);
-
-	/**
-	 * Must not be used for construction.
-	 */
-	@SuppressWarnings("unused")
-	private CPUsDetailedPercSampler() {
-		this(null);
-	}
+public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 
 	public CPUsDetailedPercSampler(final SigarProxy sigar) {
 		super(sigar);
 	}
 
 	@Override
-	public void sample(final MonitoringController monitoringController)
-			throws Exception {
-		final org.hyperic.sigar.CpuPerc[] cpus =
-				this.sigar.getCpuPercList();
+	public void sample(final ISamplingController samplingController) throws Exception {
+		final CpuPerc[] cpus = this.sigar.getCpuPercList();
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
-			//final double combinedUtilization = curCPU.getCombined();
-			final CPUUtilizationRecord r =
-					new CPUUtilizationRecord(
-							MonitoringController.currentTimeNanos(),
-							monitoringController.getHostName(),
-							Integer.toString(i),
-							curCPU.getUser(), curCPU.getSys(),
-							curCPU.getWait(), curCPU.getNice(),
-							curCPU.getIrq(), curCPU.getCombined(), curCPU
-									.getIdle());
-			monitoringController.newMonitoringRecord(r);
-//			CPUsDetailedPercSampler.log.info("Sigar utilization: "
-//					+ combinedUtilization + "; " + " Record: " + r);
+			// final double combinedUtilization = curCPU.getCombined();
+			final CPUUtilizationRecord r = new CPUUtilizationRecord(Timer.currentTimeNanos(),
+					samplingController.getHostName(), Integer.toString(i), curCPU.getUser(), curCPU.getSys(), curCPU.getWait(),
+					curCPU.getNice(), curCPU.getIrq(), curCPU.getCombined(), curCPU.getIdle());
+			samplingController.newMonitoringRecord(r);
+			// CPUsDetailedPercSampler.log.info("Sigar utilization: " + combinedUtilization + "; " + " Record: " + r);
 		}
 	}
 }

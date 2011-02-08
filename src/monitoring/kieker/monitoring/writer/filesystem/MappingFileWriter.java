@@ -27,9 +27,7 @@ import org.apache.commons.logging.LogFactory;
  * limitations under the License.
  * ==================================================
  */
-
 /**
- * 
  * @author Andre van Hoorn, Jan Waller
  */
 public final class MappingFileWriter {
@@ -62,14 +60,14 @@ public final class MappingFileWriter {
 			fos = new FileOutputStream(this.mappingFile, true); // append
 			pw = new PrintWriter(fos);
 			pw.println("$" + id + "=" + className);
-		} catch (Exception exc) {
-			MappingFileWriter.log.fatal("Failed to register record type", exc);
+		} catch (Exception ex) {
+			MappingFileWriter.log.fatal("Failed to register record type", ex);
 		} finally {
 			try {
 				pw.close();
 				fos.close();
-			} catch (IOException exc) {
-				log.error("IO Exception", exc);
+			} catch (IOException ex) {
+				log.error("IO Exception", ex);
 			}
 		}
 	}

@@ -33,7 +33,7 @@ import kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class SamplingController extends MonitoringController implements ISamplingController {
+abstract class SamplingController extends MonitoringController implements ISamplingController {
 	private static final Log log = LogFactory.getLog(SamplingController.class);
 
 	/** Executes the {@link AbstractSigarSampler}s. */
@@ -41,6 +41,10 @@ public class SamplingController extends MonitoringController implements ISamplin
 	
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
+		if (isMonitoringTerminated()) {
+			this.periodicSensorsPoolExecutor = null;
+			return;
+		}
 		periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(
 				configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE),
 					 // Handler for failed sensor executions that simply logs notifications.
@@ -71,14 +75,16 @@ public class SamplingController extends MonitoringController implements ISamplin
 	@Override
 	public String getState() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(super.getState().trim());
 		if (periodicSensorsPoolExecutor != null) {
-			sb.append("periodicSensorsPoolExecutorPoolSize: '");
-			sb.append(periodicSensorsPoolExecutor.getCorePoolSize());
-			sb.append("'");
+			sb.append("\nPeriodic Sensor available: Current Poolsize: '");
+			sb.append(periodicSensorsPoolExecutor.getPoolSize());
+			sb.append("'; Scheduled Tasks: '");
+			sb.append(periodicSensorsPoolExecutor.getTaskCount());
+			sb.append("'\n");
 		} else {
-			sb.append("No periodic Sensor available; ");
+			sb.append("\nNo periodic Sensor available\n");
 		}
-		sb.append(super.getState());
 		return sb.toString();
 	}
 	

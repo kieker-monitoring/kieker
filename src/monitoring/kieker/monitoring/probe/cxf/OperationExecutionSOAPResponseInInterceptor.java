@@ -4,9 +4,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
 
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -47,7 +48,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
     // the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 
     private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
-    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
+    private static final Kieker ctrlInst = Kieker.getInstance();
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
@@ -120,7 +121,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
             final int myEoi = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalEOI();
             final int myEss = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalESS();
             final long myTin = OperationExecutionSOAPResponseInInterceptor.soapRegistry.recallThreadLocalOutRequestTin();
-            final long myTout = MonitoringController.currentTimeNanos();
+            final long myTout = Timer.currentTimeNanos();
             // TODO:  Remove following plausibility checks if implementation stable
             if (myTraceId != traceId) {
                 OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" +

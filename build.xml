@@ -196,7 +196,7 @@
                target="1.5"
                srcdir="${src.kieker.monitoring.dir}"
                debug="true"
-               excludes="kieker/monitoring/probe/aspectJ/ kieker/monitoring/writer/jms/ kieker/monitoring/writer/database/ kieker/monitoring/writer/namedRecordPipe/ kieker/monitoring/writer/filesystem/"
+               excludes="kieker/monitoring/probe/aspectJ/ kieker/monitoring/writer/jms/ kieker/monitoring/writer/database/ kieker/monitoring/writer/namedRecordPipe/"
                classpathref="kieker.monitoring-compile-classpath">
 			<compilerarg value="-Xlint:all,-path"/>
 		</javac>
@@ -211,7 +211,7 @@
 				<pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/"/>
 			</sourceroots>
 		</iajc>
-		<copy file="${kieker.monitoring.properties.example}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
+		<copy file="${kieker.monitoring.properties.default}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default"/>
 		<copy file="${sequence.pic}" tofile="${build.kieker.monitoring.dir}/META-INF/sequence.pic"/>
 		<!--<copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
         <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
@@ -549,23 +549,19 @@
 				<include name="commons-logging-*.jar"/>
 			</fileset>
 			<pathelement location="${build.tests.dir}/"/>
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}"/>
 			</fileset>
 		</path>
 
-		<java
-            dir="."
-            fork="true"
-            classname="kieker.test.monitoring.manualInstrumentation.storageOnly.StorageOnly"
-            classpathref="kieker.test-storage-run-classpath">
+		<java dir="."
+          fork="true"
+          classname="kieker.test.monitoring.manualInstrumentation.storageOnly.StorageOnly"
+          classpathref="kieker.test-storage-run-classpath">
 			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties"/>
-			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}"/>
-			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}"/>
+			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.SyncFsWriter"/>
+			<jvmarg value="-Dkieker.monitoring.writer.filesystem.SyncFsWriter.storeInJavaIoTmpdir=false"/>
+			<jvmarg value="-Dkieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=tmp/"/>
 			<!-- <jvmarg value="-javaagent:../${aspectjweaverjar}"/> -->
 			<!-- <jvmarg value="-XX:+PrintGCTimeStamps"/> -->
 			<!-- <jvmarg value="-Xloggc:details.out"/> -->

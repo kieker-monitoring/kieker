@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.util.Timer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -92,7 +92,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             //}
             this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance
             this.offset = (2 * 1000 * 1000 * 1000) - this.firstLoggingTimestamp;
-            this.startTime = MonitoringController.currentTimeNanos();
+            this.startTime = Timer.currentTimeNanos();
             //log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);
             //log.info("offset: " + this.offset);
             //log.info("startTime" + this.startTime);
@@ -103,7 +103,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             return false;
         }
         final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
-                - (MonitoringController.currentTimeNanos() - this.startTime); // substract elapsed time
+                - (Timer.currentTimeNanos() - this.startTime); // substract elapsed time
         //ps.println("curT.record: " + monitoringRecord.getLoggingTimestamp());ps.flush();
         //ps.println("curT.ctrl: " + ctrlnst.currentTimeNanos());ps.flush();
         //ps.println("elapsedT (nsec): " + (ctrlnst.currentTimeNanos() - this.startTime));
@@ -152,7 +152,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
     @Override
 	public void terminate(final boolean error) {
-        final long terminationDelay = (this.lTime + this.offset) - (MonitoringController.currentTimeNanos() - this.startTime) + 100000000;
+        final long terminationDelay = (this.lTime + this.offset) - (Timer.currentTimeNanos() - this.startTime) + 100000000;
         RealtimeReplayDistributor.log.info("Will terminate in " + terminationDelay + "nsecs from now");
         this.executor.schedule(new Runnable() {
 

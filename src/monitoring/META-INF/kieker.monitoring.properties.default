@@ -13,8 +13,24 @@
 ## If this also fails, a default configuration is being used according to the values in 
 ## this default file.
 
-# the name of the Kieker instance
+# Enable/disable debug mode (true|false, default; false) 
+# Debug mode provides a more verbose logging output. It should not be used in 
+# in production. (not fully implemented)
+kieker.monitoring.debug=false
+
+# The name of the Kieker instance.
 kieker.monitoring.name=KIEKER
+
+# The name of the VM running Kieker. If empty the name will be determined 
+# automatically, else it will be set to the given value.
+kieker.monitoring.hostname=
+
+# The initial ID associated with all experiments.
+kieker.monitoring.initialExperimentId=1
+
+# Whether Kieker runs in replay or realtime mode.
+# You usually don't want to change this value.
+kieker.monitoring.replayMode=false
 
 # Enable/disable monitoring after startup (true|false; default: true)
 # If monitoring is disabled, the MonitoringController simply drops incoming 
@@ -23,21 +39,8 @@ kieker.monitoring.name=KIEKER
 # this property.
 kieker.monitoring.enabled=true
 
-# Whether Kieker runs in replay or realtime mode.
-# You usually don't want to change this value.
-kieker.monitoring.replayMode=false
-
 # The size of the thread pool used to execute registered periodic sensor jobs.
 kieker.monitoring.periodicSensorsExecutorPoolSize=1
-
-###########################
-### NOT YET IMPLEMENTED ###
-###########################
-#kieker.monitoring.initialExperimentId=1
-# Enable/disable debug mode (true|false, default; false) 
-# Debug mode provides a more verbose logging output. It should not be used in 
-# in production.
-#kieker.monitoring.debug=false
 
 
 ###########################
@@ -46,12 +49,46 @@ kieker.monitoring.periodicSensorsExecutorPoolSize=1
 # Selection of monitoring data writer (classname)
 # The value must be a fully-qualified classname of a class implementing 
 # kieker.monitoring.IMonitoringWriter and providing a constructor that 
-# offers a single Configuration parameter. 
+# accepts an IMonitoringController and a single Configuration. 
 kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
 
+
+#####
 #kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
+#
 ## Configuration Properties of the DummyWriter
 kieker.monitoring.writer.DummyWriter.key=value
 
 
-#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFSWriter
+#####
+#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.SyncFsWriter
+#
+# In order to use the default temporary directory, set the property value of
+# storeInJavaIoTmpdir to true.
+kieker.monitoring.writer.filesystem.SyncFsWriter.storeInJavaIoTmpdir=true
+# In order to use a custom directory, set storeInJavaIoTmpdir=false
+# and set customStoragePath as desired. Examples:
+# /var/kieker/ or "C:\KiekerData\" (ensure the folder exists).
+kieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=
+
+
+#####
+#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter
+#
+# In order to use the default temporary directory, set the property value of
+# storeInJavaIoTmpdir to true.
+kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=true
+# In order to use a custom directory, set storeInJavaIoTmpdir=false
+# and set customStoragePath as desired. Examples:
+# /var/kieker/ or "C:\KiekerData\" (ensure the folder exists).
+kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=
+# Asyncronous writers need to store monitoring records in an internal buffer.
+# This parameter defines its capacity in terms of the number of records. 
+kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=10000
+# Behavior of the asynchronous writer when the internal queue is full:
+# 0: terminate Monitoring with an error (default)
+# 1: writer blocks until queue capacity is available
+# 2: writer discards new records until space is available
+#  Be careful when using the value '1' since then, the asynchronous writer
+#  is no longer decoupled from the monitored application.
+kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior=0

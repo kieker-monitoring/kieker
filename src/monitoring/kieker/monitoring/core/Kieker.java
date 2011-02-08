@@ -3,6 +3,7 @@ package kieker.monitoring.core;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.Configuration;
 
 /*
@@ -48,6 +49,11 @@ public class Kieker extends SamplingController {
 	
 	private Kieker(final Configuration configuration) {
 		super(configuration);
+		if (isMonitoringTerminated()) {
+			Kieker.log.error("Kieker initializsation failed\n" + getState());
+			Kieker.log.error(configuration.toString());
+			return;
+		}
 		Kieker.log.info("Kieker initializsation finished\n" + getState());
 	}
 	
@@ -63,11 +69,22 @@ public class Kieker extends SamplingController {
 	@Override
 	public final String getState() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Current State of Kieker:\n");
+		sb.append("Current State of Kieker (");
+		sb.append(getVersion());
+		sb.append("):\n");
 		sb.append(super.getState());
 		return sb.toString();
 	}
-
+	
+	/**
+	 * Return the version name of this controller instance.
+	 * 
+	 * @return the version name
+	 */
+	public final static String getVersion() {
+		return Version.getVERSION();
+	}
+	
 	/**
 	 * SINGLETON
 	 */

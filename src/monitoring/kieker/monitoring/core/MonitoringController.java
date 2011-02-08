@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
@@ -41,14 +42,20 @@ abstract class MonitoringController extends ReplayController implements IMonitor
 	
 	protected MonitoringController(final Configuration configuration) {
 		super(configuration);
+		if (isMonitoringTerminated()) {
+			this.monitoringWriter = null;
+			return;
+		}
 		// set Writer
 		final String writerClassname = configuration.getStringProperty(Configuration.WRITER_CLASSNAME);
 		IMonitoringWriter monitoringWriter = null;
 		try {
-			// search for correct Constructor -> 1 parameter of type Properties
-			monitoringWriter = IMonitoringWriter.class.cast(Class.forName(writerClassname).getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(writerClassname)));
+			// search for correct Constructor -> 2 correct parameters
+			monitoringWriter = IMonitoringWriter.class.cast(Class.forName(writerClassname).
+					getConstructor(IMonitoringController.class, Configuration.class).newInstance(
+							this, configuration.getPropertiesStartingWith(writerClassname)));
 		} catch (final NoSuchMethodException ex) {
-			MonitoringController.log.error("Writer Class '" + writerClassname + "' has to implement a constructor that accepts a single Configuration");
+			MonitoringController.log.error("Writer Class '" + writerClassname + "' has to implement a constructor that accepts an IMonitoringController and a single Configuration");
 		} catch (final NoClassDefFoundError ex) {
 			MonitoringController.log.error("Writer Class '" + writerClassname + "' not found");
 		} catch (final ClassNotFoundException ex) {
@@ -74,7 +81,7 @@ abstract class MonitoringController extends ReplayController implements IMonitor
 		if (super.terminateMonitoring()) {
 			// TODO: Logger may be problematic, may already have shutdown!
 			MonitoringController.log.info("Shutting down Monitoring Controller");
-			if (this.monitoringWriter != null) {
+			if (monitoringWriter != null) {
 				monitoringWriter.terminate();
 			}
 			return true;
@@ -86,16 +93,17 @@ abstract class MonitoringController extends ReplayController implements IMonitor
 	public String getState() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.getState());
-		sb.append("; Enabled: '");
-		sb.append(monitoringEnabled);
-		sb.append("'; Writer: '");
+		sb.append("'; Monitoring Enabled: '");
+		sb.append(isMonitoringEnabled());
+		sb.append("'; Number of Inserts: '");
+		sb.append(getNumberOfInserts());
+		sb.append("'\n");
 		if (monitoringWriter != null) {
-			sb.append(monitoringWriter.getClass().getName());
-			sb.append("'\n");
 			sb.append(monitoringWriter.getInfoString());
 		} else {
-			sb.append("null'");
+			sb.append("No Monitoring Writer available");
 		}
+		sb.append("\n");
 		return sb.toString();
 	}
 	
@@ -107,7 +115,7 @@ abstract class MonitoringController extends ReplayController implements IMonitor
 			}
 			numberOfInserts.incrementAndGet();
 			if (this.isRealtimeMode()) {
-				record.setLoggingTimestamp(MonitoringController.currentTimeNanos());
+				record.setLoggingTimestamp(Timer.currentTimeNanos());
 			}
 			if (!monitoringWriter.newMonitoringRecord(record)) {
 				MonitoringController.log.fatal("Error writing the monitoring data. Will terminate monitoring!");
@@ -165,5 +173,10 @@ abstract class MonitoringController extends ReplayController implements IMonitor
 	@Override
 	public final IMonitoringWriter getMonitoringWriter() {
 		return monitoringWriter;
+	}
+	
+	@Override
+	public final long getNumberOfInserts() {
+		return numberOfInserts.longValue();
 	}
 }

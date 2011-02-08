@@ -1,8 +1,7 @@
 package kieker.monitoring.probe.aspectJ.executions;
 
 import javax.servlet.http.HttpServletRequest;
-
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 

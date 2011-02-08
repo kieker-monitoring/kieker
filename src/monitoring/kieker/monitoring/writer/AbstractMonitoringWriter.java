@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.IMonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
 
 /*
@@ -30,38 +31,29 @@ import kieker.monitoring.core.configuration.Configuration;
  */
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	private static final Log log = LogFactory.getLog(Configuration.class);
-
+	
 	protected final Configuration configuration;
-
+	protected final IMonitoringController ctrl;
+	
 	/**
 	 * 
+	 * @param IMonitoringController
 	 * @param configuration
 	 */
-	protected AbstractMonitoringWriter(final Configuration configuration) {
+	protected AbstractMonitoringWriter(final IMonitoringController ctrl, final Configuration configuration) {
+		this.ctrl = ctrl; 
 		try {
 			// somewhat dirty hack...
-			configuration.setDefaultProperties(getDefaultProperties());
+			Properties defaultProps = getDefaultProperties();
+			if (defaultProps != null) {
+				configuration.setDefaultProperties(defaultProps);
+			}
 		} catch (final IllegalAccessException ex) {
-			AbstractMonitoringWriter.log.error("Unable to set custom default properties");
+			AbstractMonitoringWriter.log.error("Unable to set writer custom default properties");
 		}
 		this.configuration = configuration;
 	}
-
-	protected String getProperties() {
-		final StringBuilder sb = new StringBuilder();
-		if (configuration.isEmpty()) {
-			return "no parameters";
-		} else {
-			for (String property : configuration.stringPropertyNames()) {
-				sb.append(property);
-				sb.append("=");
-				sb.append(configuration.getProperty(property));
-				sb.append("\n");
-			}
-			return sb.toString().trim();
-		}
-	}
-
+	
 	/**
 	 * This method should be overwritten, iff the writer is external to Kieker and
 	 * thus its default configuration is not included in the default config file.
@@ -71,20 +63,30 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	protected Properties getDefaultProperties() {
 		return null;
 	}
-
+	
 	@Override
 	public String getInfoString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("Writer: ");
+		sb.append("Writer: '");
 		sb.append(this.getClass().getName());
-		sb.append("\n");
-		sb.append(getProperties());
+		sb.append("'");
+		if (configuration.isEmpty()) {
+			sb.append(" (No Parameters)");
+		} else {
+			for (String property : configuration.stringPropertyNames()) {
+				sb.append("\n\t");
+				sb.append(property);
+				sb.append("='");
+				sb.append(configuration.getProperty(property));
+				sb.append("'");
+			}
+		}
 		return sb.toString();
 	}
-
+	
 	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
-
+	
 	@Override
 	public abstract void terminate();
 }

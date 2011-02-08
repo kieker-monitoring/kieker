@@ -26,7 +26,7 @@ import kieker.monitoring.writer.IMonitoringWriter;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-interface IMonitoringController extends IMonitoringRecordReceiver {
+public interface IMonitoringController extends IMonitoringRecordReceiver, IController {
 
 	/**
 	 * Returns the configured monitoring writer.
@@ -70,4 +70,11 @@ interface IMonitoringController extends IMonitoringRecordReceiver {
 	 * @return true if monitoring is disabled; false it monitoring is enabled or terminated.
 	 */
 	public boolean isMonitoringDisabled();
+	
+	/**
+	 * Shows how many inserts have been performed since last restart of the execution environment.
+	 * 
+	 * @return long
+	 */
+	public long getNumberOfInserts();
 }

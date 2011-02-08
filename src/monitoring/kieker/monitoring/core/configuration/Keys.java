@@ -38,7 +38,10 @@ interface Keys {
 	// these MUST be declared in the file DEFAULT_PROPERTIES_LOCATION_CLASSPATH
 
 	// Controller
+	public final static String DEBUG = PREFIX + "debug";
 	public final static String CONTROLLER_NAME = PREFIX + "name";
+	public final static String HOST_NAME = PREFIX + "hostname";
+	public final static String EXPERIMENT_ID = PREFIX + "initialExperimentId";
 	// Replay Controller
 	public final static String REPLAY_MODE = PREFIX + "replayMode";
 	// Monitoring Controller

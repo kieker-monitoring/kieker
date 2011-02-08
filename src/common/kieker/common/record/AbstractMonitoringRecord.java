@@ -17,23 +17,25 @@ package kieker.common.record;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * @author Andre van Hoorn, Jan Waller
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
+	private static final long serialVersionUID = 1L;
 	// private static final Log log = LogFactory.getLog(AbstractMonitoringRecord.class);
-	//TODO: does this really need volatile?
+	
 	private volatile long loggingTimestamp = -1;
-
+	
+	@Override
 	public final long getLoggingTimestamp() {
 		return this.loggingTimestamp;
 	}
-
+	
+	@Override
 	public final void setLoggingTimestamp(final long timestamp) {
 		this.loggingTimestamp = timestamp;
 	}
-
+	
 	/**
 	 * Creates a string representation of this record.
 	 * 
@@ -47,7 +49,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		sb.append(this.loggingTimestamp);
 		for (Object curStr : recordVector) {
 			sb.append(";");
-			sb.append(curStr);
+			sb.append(curStr.toString());
 		}
 		return sb.toString();
 	}

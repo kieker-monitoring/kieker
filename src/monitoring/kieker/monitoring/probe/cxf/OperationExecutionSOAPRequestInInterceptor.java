@@ -3,9 +3,9 @@ package kieker.monitoring.probe.cxf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
 
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -64,7 +64,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
             /* Store entry time tin for this trace.
                This value will be used by the corresponding invocation of the
                KiekerTpmonResponseOutProbe. */
-            final long tin = MonitoringController.currentTimeNanos();
+            final long tin = Timer.currentTimeNanos();
             boolean isEntryCall = false; // set true below if is entry call
 
             /* 1.) Extract sessionId from SOAP header */

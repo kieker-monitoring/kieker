@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.core.util.Timer;
 
 /*
  * ==================LICENCE=========================
@@ -31,7 +32,6 @@ import kieker.monitoring.core.SessionRegistry;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * @author Matthias Rohr, Andre van Hoorn
  * 
@@ -93,7 +93,7 @@ public class ControlServlet extends HttpServlet {
 			ControlServlet.initialize();
 		}
 
-		final MonitoringController ctrlInst = MonitoringController.getInstance();
+		final Kieker ctrlInst = Kieker.getInstance();
 
 		int experimentID = 0;
 		final boolean connectorError = false;
@@ -109,7 +109,7 @@ public class ControlServlet extends HttpServlet {
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
 		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: "
-				+ MonitoringController.currentTimeNanos() + "<br>");
+				+ Timer.currentTimeNanos() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
 		out.println("Vmname:\"" + ctrlInst.getHostName() + "\"<br>");
 
@@ -125,10 +125,10 @@ public class ControlServlet extends HttpServlet {
 			if (action.equals("setDebug")) {
 				if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("on")) {
-					ctrlInst.setDebugEnabled(true);
+					ctrlInst.enableDebug();
 				} else if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("off")) {
-					ctrlInst.setDebugEnabled(false);
+					ctrlInst.disableDebug();
 				} else {
 					this.dumpError(out,
 							"Invalid or missing value for parameter 'debug'");
@@ -148,12 +148,6 @@ public class ControlServlet extends HttpServlet {
 					} catch (final NumberFormatException ne) {
 						this.dumpError(out, ne.getMessage());
 					}
-				}
-
-			} else if (action.equals("setVmname")) {
-				final String vmname = request.getParameter("vmname");
-				if (vmname != null) {
-					ctrlInst.setHostName(vmname);
 				}
 				/*
 				 * action = incExperimentId
@@ -187,8 +181,8 @@ public class ControlServlet extends HttpServlet {
 							"kieker.monitoring.controlServlet.ControlServlet",
 							"processRequest(HttpServletRequest,HttpServletResponse)",
 							ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), MonitoringController
-									.currentTimeNanos(), MonitoringController
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), Timer
+									.currentTimeNanos(), Timer
 									.currentTimeNanos(),
 							ctrlInst.getHostName(), i, i));
 				}
@@ -198,11 +192,11 @@ public class ControlServlet extends HttpServlet {
 				 * action = switchFaultInjection
 				 */
 			} else if (action.equalsIgnoreCase("switchFaultInjection")) {
-				final String activate = request.getParameter("activate");
-				boolean enable = false;
-				if ((activate != null) && activate.equalsIgnoreCase("true")) {
-					enable = true;
-				}
+				//final String activate = request.getParameter("activate");
+				//boolean enable = false;
+				//if ((activate != null) && activate.equalsIgnoreCase("true")) {
+				//	enable = true;
+				//}
 				final String location = request.getParameter("location");
 				if (location != null) {
 					// if (location.equalsIgnoreCase("AccountSqlMapDao")) {
@@ -233,7 +227,7 @@ public class ControlServlet extends HttpServlet {
 				+ ")  </h3>");
 		String dbconnectorInfo = "";
 		try {
-			dbconnectorInfo = ctrlInst.getConnectorInfo();
+			dbconnectorInfo = ctrlInst.getState();
 		} catch (final Exception e) {
 			out.println(e.getMessage());
 		}

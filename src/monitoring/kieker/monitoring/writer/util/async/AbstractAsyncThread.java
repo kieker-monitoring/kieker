@@ -4,7 +4,7 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.IMonitoringController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,9 +36,11 @@ public abstract class AbstractAsyncThread extends Thread {
 	private final static IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 	private volatile boolean finished = false;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
+	private final IMonitoringController ctrl;
 
-	public AbstractAsyncThread(final BlockingQueue<IMonitoringRecord> writeQueue) {
+	public AbstractAsyncThread(final IMonitoringController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;
+		this.ctrl = ctrl;
 	}
 	
 	public final void initShutdown() {
@@ -88,7 +90,7 @@ public abstract class AbstractAsyncThread extends Thread {
 			AbstractAsyncThread.log.error("Writer thread will halt", ex);
 			AbstractAsyncThread.log.error("Will terminate monitoring!");
 			this.finished = true;
-			MonitoringController.getInstance().terminateMonitoring();
+			ctrl.terminateMonitoring();
 		} finally {
 			this.finished = true;
 		}

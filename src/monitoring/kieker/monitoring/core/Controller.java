@@ -1,6 +1,8 @@
 package kieker.monitoring.core;
 
+import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.monitoring.core.configuration.Configuration;
 
@@ -30,12 +32,31 @@ import org.apache.commons.logging.LogFactory;
 abstract class Controller implements IController {
 	private static final Log log = LogFactory.getLog(Controller.class);
 	
+	/** Whether monitoring is terminated */
 	private final AtomicBoolean monitoringTerminated = new AtomicBoolean(false);
 	/** The name of this controller instance */
 	private final String name;
+	/** The hostname of this controller instance */
+	private final String hostname;
+	/** The experimentId of this controller instance */
+	private final AtomicInteger experimentId = new AtomicInteger(0);
+	/** DebugMode */
+	private volatile boolean debug = false;
 
 	protected Controller(final Configuration configuration) {
 		name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
+		String hostname = configuration.getStringProperty(Configuration.HOST_NAME);
+		if (hostname.isEmpty()) {
+			hostname = "<UNKNOWN>";
+			try {
+				hostname = java.net.InetAddress.getLocalHost().getHostName();
+			} catch (final UnknownHostException ex) {
+				Controller.log.warn("Failed to retrieve hostname");
+			}
+		}
+		this.hostname = hostname; 
+		this.experimentId.set(configuration.getIntProperty(Configuration.EXPERIMENT_ID));
+		this.debug = configuration.getBooleanProperty(Configuration.DEBUG);
 		try {
 			// Dangerous! escaping "this" in constructor!
 			Runtime.getRuntime().addShutdownHook(new ShutdownHook(this));
@@ -57,6 +78,21 @@ abstract class Controller implements IController {
 	public boolean isMonitoringTerminated() {
 		return monitoringTerminated.get();
 	}
+	
+	@Override
+	public final void enableDebug() {
+		debug = true;
+	}
+	
+	@Override
+	public final void disableDebug() {
+		debug = false;
+	}
+
+	@Override
+	public final boolean isDebug() {
+		return debug;
+	}
 
 	@Override
 	public final String getName() {
@@ -64,12 +100,38 @@ abstract class Controller implements IController {
 	}
 	
 	@Override
+	public final String getHostName() {
+		return hostname;
+	}
+	
+	@Override
+	public final int incExperimentId() {
+		return experimentId.incrementAndGet();
+	}
+
+	@Override
+	public final void setExperimentId(final int newExperimentID) {
+		experimentId.set(newExperimentID);
+	}
+	
+	@Override
+	public final int getExperimentId() {
+		return experimentId.get();
+	}
+	
+	@Override
 	public String getState() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Name: '");
 		sb.append(name);
+		sb.append("'; Hostname: '");
+		sb.append(hostname);
 		sb.append("'; Terminated: '");
 		sb.append(isMonitoringTerminated());
+		sb.append("'; Debug Mode: '");
+		sb.append(debug);
+		sb.append("'; experimentID: '");
+		sb.append(getExperimentId());
 		sb.append("'");
 		return sb.toString();
 	}

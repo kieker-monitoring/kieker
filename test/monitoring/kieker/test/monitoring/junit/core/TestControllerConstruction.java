@@ -77,5 +77,8 @@ public class TestControllerConstruction extends TestCase {
 	 */
 	public void testSingletonGetterOnlyOneInstance() {
 		Assert.assertSame("singleton getter returned different objects", Kieker.getInstance(), Kieker.getInstance());
+		Assert.assertEquals("monitoring should not be terminated", 
+				false,
+				Kieker.getInstance().isMonitoringTerminated());
 	}
 }
