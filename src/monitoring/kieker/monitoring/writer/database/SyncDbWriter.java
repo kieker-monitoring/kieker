@@ -9,7 +9,6 @@ import java.sql.Statement;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;

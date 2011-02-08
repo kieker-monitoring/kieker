@@ -1,5 +1,6 @@
 package kieker.monitoring.writer;
 
+import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -54,6 +55,18 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 			this.queueFullBehavior = queueFullBehavior;
 		}
 		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(PREFIX + QUEUESIZE));
+	}
+	
+	/**
+	 * Make sure that the two required properties always have default values!
+	 */
+	@Override
+	protected Properties getDefaultProperties() {
+		final Properties properties = new Properties(super.getDefaultProperties());
+		final String PREFIX = this.getClass().getName() + ".";
+		properties.setProperty(PREFIX + QUEUESIZE, "10000");
+		properties.setProperty(PREFIX + BEHAVIOR, "0");
+		return properties;
 	}
 	
 	/**
