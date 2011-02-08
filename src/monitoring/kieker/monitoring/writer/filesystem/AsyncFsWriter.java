@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
 public final class AsyncFsWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
 
-	private static final String PREFIX = "kieker.monitoring.writer.filesystem.SyncFsWriter.";
+	private static final String PREFIX = "kieker.monitoring.writer.filesystem.AsyncFsWriter.";
 	private static final String PATH = PREFIX + "customStoragePath";
 	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
 	private static final String QUEUESIZE = PREFIX + "QueueSize";
@@ -66,8 +66,8 @@ public final class AsyncFsWriter extends AbstractMonitoringWriter {
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {
-			AsyncFsWriter.log.error(path + " is not a directory.");
-			throw new IllegalArgumentException(path + " is not a directory.");
+			AsyncFsWriter.log.error("'" + path + "' is not a directory.");
+			throw new IllegalArgumentException("'" + path + "' is not a directory.");
 		}
 		final String ctrlName = this.ctrl.getHostName() + "-" + this.ctrl.getName();
 

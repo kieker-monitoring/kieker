@@ -94,8 +94,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {
-			SyncFsWriter.log.error(path + " is not a directory.");
-			throw new IllegalArgumentException(path + " is not a directory.");
+			SyncFsWriter.log.error("'" + path + "' is not a directory.");
+			throw new IllegalArgumentException("'" + path + "' is not a directory.");
 		}
 		final String ctrlName = this.ctrl.getHostName() + "-" + this.ctrl.getName();
 
