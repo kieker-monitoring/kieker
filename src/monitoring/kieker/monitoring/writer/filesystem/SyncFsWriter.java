@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -70,7 +70,7 @@ import org.apache.commons.logging.LogFactory;
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncFsWriter.class);
 	
-	private static final String PREFIX = "kieker.monitoring.writer.filesystem.SyncFsWriter.";
+	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	private static final String PATH = PREFIX + "customStoragePath";
 	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
 
@@ -85,8 +85,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	// only to get that information later
 	private final String path;
 
-
-	public SyncFsWriter(final IMonitoringController ctrl, final Configuration configuration) {
+	public SyncFsWriter(final IWriterController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 		String path;
 		if (this.configuration.getBooleanProperty(TEMP)) {

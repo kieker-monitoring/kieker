@@ -3,7 +3,7 @@ package kieker.monitoring.writer.namedRecordPipe;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -38,7 +38,7 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 	private static final String PIPENAME = PREFIX + "pipeName";
 	private final Pipe pipe;
 
-	public PipeWriter(IMonitoringController ctrl, Configuration configuration) {
+	public PipeWriter(IWriterController ctrl, Configuration configuration) {
 		super(ctrl, configuration);
 		final String pipeName = this.configuration.getStringProperty(PIPENAME);
 		if (pipeName.isEmpty()) {

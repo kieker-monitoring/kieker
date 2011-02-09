@@ -6,7 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 
 import org.apache.commons.logging.Log;
@@ -44,7 +44,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final int queueFullBehavior;
 	
-	protected AbstractAsyncWriter(final IMonitoringController ctrl, final Configuration configuration) {
+	protected AbstractAsyncWriter(final IWriterController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 		this.PREFIX = this.getClass().getName() + ".";
 		

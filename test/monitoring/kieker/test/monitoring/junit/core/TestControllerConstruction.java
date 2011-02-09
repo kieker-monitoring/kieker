@@ -2,7 +2,7 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
 
@@ -36,7 +36,7 @@ public class TestControllerConstruction extends TestCase {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		{
 			// Test with default values
-			final Kieker kieker = Kieker.createAdditionalKieker(configuration);
+			final MonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", 
 					false, 
 					kieker.isMonitoringTerminated());
@@ -55,7 +55,7 @@ public class TestControllerConstruction extends TestCase {
 		{
 			configuration.setProperty(Configuration.MONITORING_ENABLED, 
 					Boolean.toString(!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED)));
-			final Kieker kieker = Kieker.createAdditionalKieker(configuration);
+			final MonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", 
 					false, 
 					kieker.isMonitoringTerminated());
@@ -76,9 +76,9 @@ public class TestControllerConstruction extends TestCase {
 	 * Make sure that {@link Controller#getInstance()} always returns the same instance.
 	 */
 	public void testSingletonGetterOnlyOneInstance() {
-		Assert.assertSame("singleton getter returned different objects", Kieker.getInstance(), Kieker.getInstance());
+		Assert.assertSame("singleton getter returned different objects", MonitoringController.getInstance(), MonitoringController.getInstance());
 		Assert.assertEquals("monitoring should not be terminated", 
 				false,
-				Kieker.getInstance().isMonitoringTerminated());
+				MonitoringController.getInstance().isMonitoringTerminated());
 	}
 }

@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.core.util.Timer;
+import kieker.monitoring.timer.ITimeSource;
 
 /*
  * ==================LICENCE=========================
@@ -46,9 +46,12 @@ import kieker.monitoring.core.util.Timer;
  *         Prototype
  */
 public class ControlServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 689701318L;
 
+	private final static MonitoringController ctrlInst = MonitoringController.getInstance();
+	private final static ITimeSource timesource = ctrlInst.getTimeSource();
+
+	
 	private static final SessionRegistry sessionRegistry = SessionRegistry
 			.getInstance();
 	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry
@@ -93,7 +96,6 @@ public class ControlServlet extends HttpServlet {
 			ControlServlet.initialize();
 		}
 
-		final Kieker ctrlInst = Kieker.getInstance();
 
 		int experimentID = 0;
 		final boolean connectorError = false;
@@ -109,7 +111,7 @@ public class ControlServlet extends HttpServlet {
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
 		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: "
-				+ Timer.currentTimeNanos() + "<br>");
+				+ timesource.currentTimeNanos() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
 		out.println("Vmname:\"" + ctrlInst.getHostName() + "\"<br>");
 
@@ -181,9 +183,8 @@ public class ControlServlet extends HttpServlet {
 							"kieker.monitoring.controlServlet.ControlServlet",
 							"processRequest(HttpServletRequest,HttpServletResponse)",
 							ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), Timer
-									.currentTimeNanos(), Timer
-									.currentTimeNanos(),
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), timesource.currentTimeNanos(), 
+							timesource.currentTimeNanos(),
 							ctrlInst.getHostName(), i, i));
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();

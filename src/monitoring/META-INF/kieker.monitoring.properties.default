@@ -39,6 +39,9 @@ kieker.monitoring.replayMode=false
 # this property.
 kieker.monitoring.enabled=true
 
+# The Timer used by Kieker. You usually don't want to change the value.
+kieker.monitoring.timer=kieker.monitoring.timer.DefaultSystemTimer
+
 # The size of the thread pool used to execute registered periodic sensor jobs.
 kieker.monitoring.periodicSensorsExecutorPoolSize=1
 
@@ -136,3 +139,47 @@ kieker.monitoring.writer.jms.AsyncJMSWriter.QueueSize=10000
 ##  Be careful when using the value '1' since then, the asynchronous writer
 ##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.jms.AsyncJMSWriter.QueueFullBehavior=0
+
+
+#####
+#kieker.monitoring.writer=kieker.monitoring.writer.database.SyncDbWriter
+#
+## Database driver classname
+## Examples: MySQL -> com.mysql.jdbc.Driver
+kieker.monitoring.writer.database.SyncDbWriter.DriverClassname=com.mysql.jdbc.Driver
+#
+## Connection string
+## Examples:
+##   MySQL:   jdbc:mysql://HOSTNAME/DBNAME?user=DBUSER&password=DBPASS
+##   DerbyDB: jdbc:derby:DBNAME;user=DBUSER;password=DBPASS
+kieker.monitoring.writer.database.SyncDbWriter.ConnectionString=jdbc:mysql://HOSTNAME/DBNAME?user=DBUSER&password=DBPASS
+#
+## Name of the database table 
+## (can be generated using the file table-for-monitoring.sql)
+kieker.monitoring.writer.database.SyncDbWriter.TableName=kiekerdata
+
+
+#####
+#kieker.monitoring.writer=kieker.monitoring.writer.database.AsyncDbWriter
+#
+## Database driver classname
+## Examples: MySQL -> com.mysql.jdbc.Driver
+kieker.monitoring.writer.database.AsyncDbWriter.DriverClassname=com.mysql.jdbc.Driver
+#
+## Connection string
+## Examples:
+##   MySQL:   jdbc:mysql://HOSTNAME/DBNAME?user=DBUSER&password=DBPASS
+##   DerbyDB: jdbc:derby:DBNAME;user=DBUSER;password=DBPASS
+kieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:mysql://HOSTNAME/DBNAME?user=DBUSER&password=DBPASS
+#
+## Name of the database table 
+## (can be generated using the file table-for-monitoring.sql)
+kieker.monitoring.writer.database.AsyncDbWriter.TableName=kiekerdata
+#
+## The number of concurrent Database connections.
+kieker.monitoring.writer.database.AsyncDbWriter.numberOfConnections=4
+#
+## Load the initialExperimentId from the DB and increase it by 1
+## instead of using the value from the configuration.
+## (Currently not implemented!) 
+kieker.monitoring.writer.database.AsyncDbWriter.loadInitialExperimentId=false

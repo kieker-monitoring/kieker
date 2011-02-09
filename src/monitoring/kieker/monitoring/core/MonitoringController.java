@@ -1,14 +1,10 @@
 package kieker.monitoring.core;
 
-import java.util.concurrent.atomic.AtomicLong;
-
-import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.util.Timer;
-import kieker.monitoring.writer.IMonitoringWriter;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import kieker.common.util.Version;
+import kieker.monitoring.core.configuration.Configuration;
 
 /*
  * ==================LICENCE=========================
@@ -28,155 +24,74 @@ import org.apache.commons.logging.LogFactory;
  * ==================================================
  */
 /**
- * @author Andre van Hoorn, Matthias Rohr, Jan Waller
+ * @author Jan Waller
  */
-abstract class MonitoringController extends ReplayController implements IMonitoringController {
+public class MonitoringController extends SamplingController implements IMonitoringController {
 	private static final Log log = LogFactory.getLog(MonitoringController.class);
 
-	/** Used to track the total number of monitoring records received while the controller has been enabled */
-	private final AtomicLong numberOfInserts = new AtomicLong(0);
-	/** Monitoring Writer */
-	private final IMonitoringWriter monitoringWriter;
-	/** State of monitoring */
-	private volatile boolean monitoringEnabled = false;
-	
-	protected MonitoringController(final Configuration configuration) {
-		super(configuration);
-		if (isMonitoringTerminated()) {
-			this.monitoringWriter = null;
-			return;
-		}
-		// set Writer
-		final String writerClassname = configuration.getStringProperty(Configuration.WRITER_CLASSNAME);
-		IMonitoringWriter monitoringWriter = null;
-		try {
-			// search for correct Constructor -> 2 correct parameters
-			monitoringWriter = IMonitoringWriter.class.cast(Class.forName(writerClassname).
-					getConstructor(IMonitoringController.class, Configuration.class).newInstance(
-							this, configuration.getPropertiesStartingWith(writerClassname)));
-		} catch (final NoSuchMethodException ex) {
-			MonitoringController.log.error("Writer Class '" + writerClassname + "' has to implement a constructor that accepts an IMonitoringController and a single Configuration");
-		} catch (final NoClassDefFoundError ex) {
-			MonitoringController.log.error("Writer Class '" + writerClassname + "' not found");
-		} catch (final ClassNotFoundException ex) {
-			MonitoringController.log.error("Writer Class '" + writerClassname + "' not found");
-		} catch (final Throwable ex) {
-			MonitoringController.log.error("Failed to load writer class for name " + writerClassname, ex);
-		}
-		if ((this.monitoringWriter = monitoringWriter) == null) {
-			terminateMonitoring();
-			return;
-		}
-		// set State
-		monitoringEnabled = configuration.getBooleanProperty(Configuration.MONITORING_ENABLED);
+	/**
+	 * @return the singleton instance of Kieker
+	 */
+	public final static MonitoringController getInstance() {
+		return LazyHolder.INSTANCE;
 	}
 
 	/**
-	 * Permanently terminates monitoring (e.g., due to a failure). Subsequent
-	 * tries to enable monitoring via {@link #setMonitoringEnabled(boolean)} will
-	 * be refused. 
+	 * Returns an additional Kieker Object
+	 * 
+	 * @param name
+	 * @param configuration
+	 * @return Kieker
 	 */
+	public final static MonitoringController createInstance(final Configuration configuration) {
+		return new MonitoringController(configuration);
+	}
+	
+	private MonitoringController(final Configuration configuration) {
+		super(configuration);
+		if (isMonitoringTerminated()) {
+			MonitoringController.log.error("Kieker initializsation failed\n" + getState());
+			MonitoringController.log.error(configuration.toString());
+			return;
+		}
+		MonitoringController.log.info("Kieker initializsation finished\n" + getState());
+	}
+	
 	@Override
-	public boolean terminateMonitoring() {
+	public final boolean terminateMonitoring() {
 		if (super.terminateMonitoring()) {
-			// TODO: Logger may be problematic, may already have shutdown!
-			MonitoringController.log.info("Shutting down Monitoring Controller");
-			if (monitoringWriter != null) {
-				monitoringWriter.terminate();
-			}
+			MonitoringController.log.info("Kieker Shutdown completed");
 			return true;
 		}
 		return false;
 	}
 	
 	@Override
-	public String getState() {
+	public final String getState() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("Current State of Kieker (");
+		sb.append(getVersion());
+		sb.append("):\n");
 		sb.append(super.getState());
-		sb.append("'; Monitoring Enabled: '");
-		sb.append(isMonitoringEnabled());
-		sb.append("'; Number of Inserts: '");
-		sb.append(getNumberOfInserts());
-		sb.append("'\n");
-		if (monitoringWriter != null) {
-			sb.append(monitoringWriter.getInfoString());
-		} else {
-			sb.append("No Monitoring Writer available");
-		}
-		sb.append("\n");
 		return sb.toString();
 	}
 	
-	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
-		try {
-			if (!isMonitoringEnabled()) { //enabled and not terminated
-				return false;
-			}
-			numberOfInserts.incrementAndGet();
-			if (this.isRealtimeMode()) {
-				record.setLoggingTimestamp(Timer.currentTimeNanos());
-			}
-			if (!monitoringWriter.newMonitoringRecord(record)) {
-				MonitoringController.log.fatal("Error writing the monitoring data. Will terminate monitoring!");
-				terminateMonitoring();
-				return false;
-			}
-			return true;
-	} catch (final Throwable ex) {
-			MonitoringController.log.fatal("Exception detected. Will terminate monitoring", ex);
-			terminateMonitoring();
-			return false;
-		}
-	}
-
-	@Override
-	public final boolean enableMonitoring() {
-		if (isMonitoringTerminated()) {
-			MonitoringController.log.error("Refused to enable monitoring because monitoring has been permanently terminated before");
-			return false;
-		}
-		MonitoringController.log.info("Enabling monitoring");
-		monitoringEnabled = true;
-		return true;
+	/**
+	 * Return the version name of this controller instance.
+	 * 
+	 * @return the version name
+	 */
+	public final static String getVersion() {
+		return Version.getVERSION();
 	}
 	
 	/**
-	 * Careful!
-	 * isMonitoringEnabled() != !isMonitoringDisabled()
+	 * SINGLETON
 	 */
-	@Override
-	public final boolean isMonitoringEnabled() {
-		return !isMonitoringTerminated() && monitoringEnabled;
-	}
-	
-	@Override
-	public final boolean disableMonitoring() {
-		if (isMonitoringTerminated()) {
-			MonitoringController.log.error("Refused to disable monitoring because monitoring has been permanently terminated before");
-			return false;
+	private final static class LazyHolder {
+		static {
+			MonitoringController.log.info("Initialization started");
 		}
-		MonitoringController.log.info("Disabling monitoring");
-		monitoringEnabled = false;
-		return true;
-	}
-
-	/**
-	 * Careful!
-	 * isMonitoringDisabled() != !isMonitoringEnabled()
-	 */
-	@Override
-	public final boolean isMonitoringDisabled() {
-		return !isMonitoringTerminated() && !monitoringEnabled;
-	}
-
-	@Override
-	public final IMonitoringWriter getMonitoringWriter() {
-		return monitoringWriter;
-	}
-	
-	@Override
-	public final long getNumberOfInserts() {
-		return numberOfInserts.longValue();
+		private static final MonitoringController INSTANCE = new MonitoringController(Configuration.createSingletonConfiguration());
 	}
 }

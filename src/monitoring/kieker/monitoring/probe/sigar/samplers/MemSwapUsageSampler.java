@@ -2,7 +2,6 @@ package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.MemSwapUsageRecord;
 import kieker.monitoring.core.ISamplingController;
-import kieker.monitoring.core.util.Timer;
 
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.SigarProxy;
@@ -28,7 +27,7 @@ import org.hyperic.sigar.Swap;
 /**
  * Logs memory and swap statistics retrieved from {@link Mem} and {@link Swap},
  * as {@link MemSwapUsageRecord}s via
- * {@link MonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
+ * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
  * .
  * 
  * @author Andre van Hoorn
@@ -46,7 +45,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r =
-				new MemSwapUsageRecord(Timer.currentTimeNanos(),
+				new MemSwapUsageRecord(samplingController.getTimeSource().currentTimeNanos(),
 						samplingController.getHostName(), mem.getTotal(),
 						mem.getActualUsed(), mem.getActualFree(),
 						swap.getTotal(), swap.getUsed(), swap.getTotal());

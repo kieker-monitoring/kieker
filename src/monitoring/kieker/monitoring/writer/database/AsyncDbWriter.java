@@ -2,16 +2,16 @@ package kieker.monitoring.writer.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Vector;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationConstants;
-import kieker.monitoring.writer.IMonitoringWriter;
+import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.IWriterController;
+import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.writer.AbstractAsyncThread;
+import kieker.monitoring.writer.AbstractAsyncWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -62,184 +62,104 @@ import org.apache.commons.logging.LogFactory;
  *                     which may be changed during runtime
  *         2007/07/30: Initial Prototype
  */
-public final class AsyncDbWriter implements IMonitoringWriter {
+public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final Log log = LogFactory.getLog(AsyncDbWriter.class);
 
-	private final static String defaultConstructionErrorMsg = 
-		"Do not select this writer using the full-qualified classname. "
-			+ "Use the the constant "
-			+ ConfigurationConstants.WRITER_ASYNCDB
-			+ " and the file system specific configuration properties.";
+	private static final String PREFIX = "kieker.monitoring.writer.database.AsyncDbWriter.";
+	private static final String DRIVERCLASSNAME = PREFIX + "DriverClassname";
+	private static final String CONNECTIONSTRING = PREFIX + "ConnectionString";
+	private static final String TABLENAME = PREFIX + "TableName";
+	private static final String NRCONN = PREFIX + "numberOfConnections";
+	//private static final String LOADID = PREFIX + "loadInitialExperimentId";
 
-	public AsyncDbWriter() {
-		throw new UnsupportedOperationException(AsyncDbWriter.defaultConstructionErrorMsg);
-	}
-
-	@Override
-	public boolean init(final String initString) {
-		throw new UnsupportedOperationException(AsyncDbWriter.defaultConstructionErrorMsg);
-	}
-
-	private Connection conn = null;
-	private BlockingQueue<IMonitoringRecord> blockingQueue;
-	private String dbDriverClassname = "com.mysql.jdbc.Driver";
-	private String dbConnectionAddress = "jdbc:mysql://jupiter.informatik.uni-oldenburg.de/0610turbomon?user=root&password=xxxxxx";
-	private String dbTableName = "turbomon10";
-	private boolean setInitialExperimentIdBasedOnLastId = false;
-	// only used if setInitialExperimentIdBasedOnLastId==true
-	private int experimentId = -1;
-	private final int asyncRecordQueueSize; // = 8000;
-	private final boolean blockOnFullQueue;
-
-	public AsyncDbWriter(final String dbDriverClassname, final String dbConnectionAddress, final String dbTableName,
-			final boolean setInitialExperimentIdBasedOnLastId, final int asyncRecordQueueSize, final boolean blockOnFullQueue) {
-		this.dbDriverClassname = dbDriverClassname;
-		this.dbConnectionAddress = dbConnectionAddress;
-		this.dbTableName = dbTableName;
-		this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
-		this.asyncRecordQueueSize = asyncRecordQueueSize;
-		this.blockOnFullQueue = blockOnFullQueue;
-		this.init();
-	}
-
-	private final Vector<DbWriterThread> workers = new Vector<DbWriterThread>();
-
-	/**
-	 * Returns false if an error occurs. Errors are printed to stdout (e.g.,
-	 * App-server logfiles), even if debug = false.
-	 */
-	public boolean init() {
-		AsyncDbWriter.log.info("Tpmon asyncDbconnector init");
+	public AsyncDbWriter(final IWriterController ctrl, final Configuration configuration) throws Exception {
+		super(ctrl, configuration);
 		try {
-			if ((this.dbDriverClassname != null) && (this.dbDriverClassname.length() != 0)) {
-				// NOTE: It's absolutely ok to have no class loaded at this point!
-				// For example Java 6 and higher have an embedded DB driver
-				Class.forName(this.dbDriverClassname).newInstance();
-			}
+			// register correct Driver
+			Class.forName(this.configuration.getStringProperty(DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
-			AsyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar missing? Exception: ", ex);
-			return false;
+			AsyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
+			throw ex;
 		}
+		final String connectionString = this.configuration.getStringProperty(CONNECTIONSTRING);
+		final String tablename = this.configuration.getStringProperty(TABLENAME);
+		final String preparedQuery  = "INSERT INTO " + tablename + 
+				" (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + 
+				" VALUES (?,?,?,?,?,?,?,?,?)";
 		try {
-			this.conn = DriverManager.getConnection(this.dbConnectionAddress);
-			final int numberOfConnections = 4;
-			this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.asyncRecordQueueSize);
-			if (this.setInitialExperimentIdBasedOnLastId) {
-				// set initial experiment id based on last id (increased by 1)
-				//TODO: FindBugs says this method may fail to close the database resource
-				final Statement stm = this.conn.createStatement(); 
-				final ResultSet res = stm.executeQuery("SELECT max(experimentID) FROM " + this.dbTableName);
+			/* IS THIS STILL NEEDED? 
+			if (this.configuration.getBooleanProperty(LOADID)) {
+				final Connection conn = DriverManager.getConnection(connectionString);
+				final Statement stm = conn.createStatement();
+				final ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
 				if (res.next()) {
-					this.experimentId = res.getInt(1) + 1;
+					//TODO: this may not be fully constructed!!!! But it should mostly work?!?
+					this.ctrl.setExperimentId(res.getInt(1) + 1);
 				}
-				AsyncDbWriter.log.info(" set initial experiment id based on last id (=" + (this.experimentId - 1) + " + 1 = " + this.experimentId + ")");
+				conn.close();
+			} /**/
+			for (int i = 0; i < this.configuration.getIntProperty(NRCONN); i++) {
+				this.addWorker(new DbWriterThread(this.ctrl, this.blockingQueue, connectionString, preparedQuery));
 			}
-			final String preparedQuery = "INSERT INTO " + this.dbTableName
-					+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)"
-					+ "VALUES (" + this.experimentId + ",?,?,?,?,?,?,?,?)";
-			for (int i = 0; i < numberOfConnections; i++) {
-				DbWriterThread dbw = new DbWriterThread(DriverManager.getConnection(this.dbConnectionAddress), this.blockingQueue, preparedQuery);
-				dbw.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
-				workers.add(dbw);
-				dbw.start();
-			}
-			AsyncDbWriter.log.info("Tpmon (" + numberOfConnections + " threads) connected to database");
 		} catch (final SQLException ex) {
 			AsyncDbWriter.log.error("SQLException: " + ex.getMessage());
 			AsyncDbWriter.log.error("SQLState: " + ex.getSQLState());
 			AsyncDbWriter.log.error("VendorError: " + ex.getErrorCode());
-			return false;
+			throw ex;
 		}
-		return true;
+	}
+}
+
+
+/**
+ * @author Matthias Rohr, Jan Waller
+ */
+final class DbWriterThread extends AbstractAsyncThread {
+	private static final Log log = LogFactory.getLog(DbWriterThread.class);
+	
+	private final Connection conn;
+	private final PreparedStatement psInsertMonitoringData;
+
+	public DbWriterThread(final IWriterController ctrl, final BlockingQueue<IMonitoringRecord> blockingQueue, final String connectionString, final String preparedQuery) throws SQLException {
+		super(ctrl, blockingQueue);
+		this.conn = DriverManager.getConnection(connectionString);
+		this.psInsertMonitoringData = this.conn.prepareStatement(preparedQuery);
+	}
+
+	@Override
+	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
+		// connector only supports execution records so far
+		final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
+		this.psInsertMonitoringData.setInt(1, execRecord.experimentId);
+		this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName);
+		this.psInsertMonitoringData.setString(3, execRecord.sessionId);
+		this.psInsertMonitoringData.setLong(4, execRecord.traceId);
+		this.psInsertMonitoringData.setLong(5, execRecord.tin);
+		this.psInsertMonitoringData.setLong(6, execRecord.tout);
+		this.psInsertMonitoringData.setString(7, execRecord.hostName);
+		this.psInsertMonitoringData.setLong(8, execRecord.eoi);
+		this.psInsertMonitoringData.setLong(9, execRecord.ess);
+		this.psInsertMonitoringData.execute();
+	}
+
+	@Override
+	protected void cleanup() {
+		try {
+			this.conn.close();
+		} catch (final SQLException ex) {
+			DbWriterThread.log.error("SQLException: " + ex.getMessage());
+			DbWriterThread.log.error("SQLState: " + ex.getSQLState());
+			DbWriterThread.log.error("VendorError: " + ex.getErrorCode());
+		}
 	}
 	
 	@Override
-	public void terminate() {
-		for (DbWriterThread dbw : workers) {
-			dbw.initShutdown();
-		}
-		boolean finished = false;
-		for (DbWriterThread dbw : workers) {
-			finished = finished && dbw.isFinished(); 
-		}
-		while (!finished) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException ex) {
-				// we should be able to ignore an interrupted sleep.
-			}
-			AsyncDbWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
-			finished = true;
-			for (DbWriterThread dbw : workers) {
-				finished = finished && dbw.isFinished(); 
-			}
-		}
-		AsyncDbWriter.log.info("Writer: AsyncDbWriter shutdown complete");
-	}
-
-	/**
-	 * This method is not synchronized, in contrast to the insert method of the
-	 * Dbconnector.java.
-	 * It uses several dbconnections in parallel using the consumer, producer
-	 * pattern.
-	 */
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		try {
-			// INSERT INTO `newSchema` ( `experimentid` , `operation` , `traceid` ,
-			// `tin` , `tout` ) VALUES ( '0', '1231', '1231', '12312', '1221233' );
-			/*
-			 * BY ANDRE: I disabled this for the moment since we don't seem to use the
-			 * db anyhow
-			 * 
-			 * if (experimentId != TpmonController.getExperimentId() ||
-			 * !vmname.equals(TpmonController.getVmname())) { // ExperimentId and
-			 * vmname may be changed
-			 * experimentId = TpmonController.getExperimentId();
-			 * vmname = TpmonController.getVmname();
-			 * String preparedQuery = "INSERT INTO " + TpmonController.dbTableName +
-			 * " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)"
-			 * +
-			 * "VALUES (" + experimentId + ",?,?,?,?,?," + vmname + ",?,?)";
-			 * for (DbWriterThread wr : workers) {
-			 * wr.changeStatement(preparedQuery);
-			 * }
-			 * }
-			 */
-			if (this.blockOnFullQueue) {
-				this.blockingQueue.offer(monitoringRecord); // blocks when queue full
-			} else {
-				this.blockingQueue.add(monitoringRecord); // tries to add immediately!
-			}
-			// System.out.println("Queue is "+blockingQueue.size());
-		} catch (final Exception ex) {
-			AsyncDbWriter.log.error("" + System.currentTimeMillis() + " insertMonitoringData() failed: ", ex);
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public String getInfoString() {
-		final StringBuilder strB = new StringBuilder();
-		// only show the password if debug is on
-		String dbConnectionAddress2 = this.dbConnectionAddress;
-		if (this.dbConnectionAddress.toLowerCase().contains("password")) {
-			final int posPassw = this.dbConnectionAddress.toLowerCase().lastIndexOf("password");
-			dbConnectionAddress2 = this.dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
-		}
-		strB.append("dbDriverClassname : ");
-		strB.append(this.dbDriverClassname);
-		strB.append(", dbConnectionAddress : ");
-		strB.append(dbConnectionAddress2);
-		strB.append(", dbTableName : ");
-		strB.append(this.dbTableName);
-		strB.append(", setInitialExperimentIdBasedOnLastId : ");
-		strB.append(this.setInitialExperimentIdBasedOnLastId);
-		strB.append(", asyncRecordQueueSize : ");
-		strB.append(this.asyncRecordQueueSize);
-		strB.append(", blockOnFullQueue : ");
-		strB.append(this.blockOnFullQueue);
-		return strB.toString();
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("Connection: '");
+		sb.append(conn.toString());
+		sb.append("'");
+		return sb.toString();
 	}
 }

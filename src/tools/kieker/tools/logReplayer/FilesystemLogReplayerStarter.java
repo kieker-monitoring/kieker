@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -331,15 +331,15 @@ public class FilesystemLogReplayerStarter {
 					.info("Replaying log data in non-real time");
 		}
 
-		System.out.println(Kieker.getInstance()
+		System.out.println(MonitoringController.getInstance()
 				.getState());
 
 		/**
 		 * Force the controller to keep the original logging timestamps of the
 		 * monitoring records.
 		 */
-		final Kieker monitoringController =
-			Kieker.getInstance(); // use the singleton
+		final MonitoringController monitoringController =
+			MonitoringController.getInstance(); // use the singleton
 													// instance
 
 		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {

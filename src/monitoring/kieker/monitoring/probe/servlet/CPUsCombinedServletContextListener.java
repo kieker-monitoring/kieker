@@ -8,7 +8,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import kieker.monitoring.core.ISamplingController;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
 import kieker.monitoring.probe.sigar.SigarSamplerFactory;
@@ -36,7 +36,7 @@ import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
  */
 public class CPUsCombinedServletContextListener implements ServletContextListener {
 
-	private final ISamplingController samplingController = Kieker.getInstance();
+	private final ISamplingController samplingController = MonitoringController.getInstance();
 
 	/**
 	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in {@link #contextInitialized(ServletContextEvent)} and

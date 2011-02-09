@@ -6,7 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 
 /*
@@ -30,17 +30,17 @@ import kieker.monitoring.core.configuration.Configuration;
  * @author Jan Waller
  */
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
-	private static final Log log = LogFactory.getLog(Configuration.class);
+	private static final Log log = LogFactory.getLog(AbstractMonitoringWriter.class);
 	
 	protected final Configuration configuration;
-	protected final IMonitoringController ctrl;
+	protected final IWriterController ctrl;
 	
 	/**
 	 * 
-	 * @param IMonitoringController
+	 * @param IWriterController
 	 * @param configuration
 	 */
-	protected AbstractMonitoringWriter(final IMonitoringController ctrl, final Configuration configuration) {
+	protected AbstractMonitoringWriter(final IWriterController ctrl, final Configuration configuration) {
 		this.ctrl = ctrl; 
 		try {
 			// somewhat dirty hack...

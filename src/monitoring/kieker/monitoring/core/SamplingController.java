@@ -33,7 +33,7 @@ import kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-abstract class SamplingController extends MonitoringController implements ISamplingController {
+abstract class SamplingController extends WriterController implements ISamplingController {
 	private static final Log log = LogFactory.getLog(SamplingController.class);
 
 	/** Executes the {@link AbstractSigarSampler}s. */

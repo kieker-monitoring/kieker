@@ -37,9 +37,9 @@ public class ScheduledSamplerJob implements Runnable {
 	 * 
 	 * @param monitoringController
 	 *          used to log the sampled data (represented as {@link IMonitoringRecord}s) via
-	 *          {@link MonitoringController#newMonitoringRecord(IMonitoringRecord)}
+	 *          {@link WriterController#newMonitoringRecord(IMonitoringRecord)}
 	 * @param sampler
-	 *          sampler to be trigger via {@link ISampler#sample(MonitoringController)}
+	 *          sampler to be trigger via {@link ISampler#sample(WriterController)}
 	 */
 	public ScheduledSamplerJob(final ISamplingController samplingController, final ISampler sensor) {
 		this.samplingController = samplingController;

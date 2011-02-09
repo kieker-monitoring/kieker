@@ -26,7 +26,7 @@ import org.hyperic.sigar.SigarProxy;
 /**
  * Eases the implementation of {@link ISampler}s which collect
  * system-level sensor data via the {@link Sigar} API and store this data as {@link IMonitoringRecord}s via
- * {@link MonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
+ * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
  * 
  * @author Andre van Hoorn
  * 

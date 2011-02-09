@@ -2,7 +2,6 @@ package kieker.monitoring.core;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
@@ -26,7 +25,7 @@ import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 /**
  * @author Andre van Hoorn
  */
-public interface ISamplingController extends IMonitoringRecordReceiver, IController {
+public interface ISamplingController extends IWriterController, IController {
 	
 	/**
 	 * Schedules the given {@link ISampler} with given initial delay, and period.

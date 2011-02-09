@@ -1,11 +1,11 @@
 package kieker.monitoring.probe.spring.executions;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
+import kieker.monitoring.timer.ITimeSource;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -43,9 +43,10 @@ import org.aopalliance.intercept.MethodInvocation;
 public abstract class AbstractOperationExecutionMethodInvocationInterceptor implements MethodInterceptor,
 		IMonitoringProbe {
 
-	protected static final Kieker tpmonController = Kieker.getInstance();
+	protected static final MonitoringController tpmonController = MonitoringController.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+	protected static final ITimeSource timesource = tpmonController.getTimeSource();
 	protected static final String vmName = AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
 			.getHostName();
 
@@ -126,14 +127,14 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 
 	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData)
 			throws Throwable {
-		execData.tin = Timer.currentTimeNanos();
+		execData.tin = timesource.currentTimeNanos();
 		try {
 			// executing the intercepted method call
 			execData.retVal = invocation.proceed();
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = Timer.currentTimeNanos();
+			execData.tout = timesource.currentTimeNanos();
 			if (execData.isEntryPoint) {
 				AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.unsetThreadLocalTraceId();
 			}

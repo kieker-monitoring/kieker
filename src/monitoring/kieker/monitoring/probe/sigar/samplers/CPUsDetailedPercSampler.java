@@ -2,7 +2,7 @@ package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.CPUUtilizationRecord;
 import kieker.monitoring.core.ISamplingController;
-import kieker.monitoring.core.util.Timer;
+import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarProxy;
@@ -27,7 +27,7 @@ import org.hyperic.sigar.SigarProxy;
 /**
  * Logs detailed utilization statistics for each CPU in the system, retrieved
  * from {@link CpuPerc}, as {@link CPUUtilizationRecord}s via
- * {@link MonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
+ * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
  * 
  * @author Andre van Hoorn
  * 
@@ -41,10 +41,11 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 	@Override
 	public void sample(final ISamplingController samplingController) throws Exception {
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
+		final ITimeSource timesource = samplingController.getTimeSource();
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
 			// final double combinedUtilization = curCPU.getCombined();
-			final CPUUtilizationRecord r = new CPUUtilizationRecord(Timer.currentTimeNanos(),
+			final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.currentTimeNanos(),
 					samplingController.getHostName(), Integer.toString(i), curCPU.getUser(), curCPU.getSys(), curCPU.getWait(),
 					curCPU.getNice(), curCPU.getIrq(), curCPU.getCombined(), curCPU.getIdle());
 			samplingController.newMonitoringRecord(r);

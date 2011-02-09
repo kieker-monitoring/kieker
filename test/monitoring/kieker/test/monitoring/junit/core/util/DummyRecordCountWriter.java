@@ -2,7 +2,7 @@ package kieker.test.monitoring.junit.core.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.DummyWriter;
 
@@ -31,7 +31,7 @@ import kieker.monitoring.writer.DummyWriter;
 public final class DummyRecordCountWriter extends DummyWriter {
 	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
 
-	public DummyRecordCountWriter(final IMonitoringController ctrl, final Configuration configuration) {
+	public DummyRecordCountWriter(final IWriterController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 	}
 

@@ -2,9 +2,9 @@ package kieker.monitoring.probe.aspectJ.operationExecution;
 
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
-import kieker.monitoring.core.util.Timer;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
+import kieker.monitoring.timer.ITimeSource;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -31,9 +31,10 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
 
-	protected static final Kieker ctrlInst = Kieker.getInstance();
+	protected static final MonitoringController ctrlInst = MonitoringController.getInstance();
 	protected static final String vmName = ctrlInst.getHostName();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+	protected static final ITimeSource timesource = ctrlInst.getTimeSource();
 
 	protected OperationExecutionRecord initExecutionData(final ProceedingJoinPoint thisJoinPoint) {
 		final String methodname = thisJoinPoint.getSignature().getName();
@@ -60,13 +61,13 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData)
 			throws Throwable {
-		execData.tin = Timer.currentTimeNanos(); // startint stopwatch
+		execData.tin = timesource.currentTimeNanos(); // startint stopwatch
 		try {
 			execData.retVal = thisJoinPoint.proceed();
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = Timer.currentTimeNanos();
+			execData.tout = timesource.currentTimeNanos();
 			if (execData.isEntryPoint) {
 				AbstractOperationExecutionAspect.cfRegistry.unsetThreadLocalTraceId();
 			}

@@ -2,7 +2,7 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.test.monitoring.junit.core.util.DummyRecord;
 import kieker.test.monitoring.junit.core.util.DummyRecordCountWriter;
@@ -34,7 +34,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
 		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
 		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final Kieker kieker = Kieker.createAdditionalKieker(configuration);
+		final MonitoringController kieker = MonitoringController.createInstance(configuration);
 
 		Assert.assertTrue("Failed to enable monitoring", kieker.enableMonitoring());
 		kieker.newMonitoringRecord(new DummyRecord());
@@ -47,7 +47,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
 		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
 		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final Kieker kieker = Kieker.createAdditionalKieker(configuration);
+		final MonitoringController kieker = MonitoringController.createInstance(configuration);
 
 		Assert.assertTrue("Failed to disable monitoring", kieker.disableMonitoring());
 		kieker.newMonitoringRecord(new DummyRecord());
@@ -60,7 +60,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
 		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
 		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final Kieker kieker = Kieker.createAdditionalKieker(configuration);
+		final MonitoringController kieker = MonitoringController.createInstance(configuration);
 
 		kieker.terminateMonitoring();
 		kieker.newMonitoringRecord(new DummyRecord());

@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
+import kieker.monitoring.timer.ITimeSource;
 
 /*
  * ==================LICENCE=========================
@@ -58,7 +58,8 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
     private static final String opName = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain)";
     private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-    private static final Kieker ctrlInst = Kieker.getInstance();
+    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
+  	private static final ITimeSource timesource = ctrlInst.getTimeSource();
     private static final String vmName = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getHostName();
 
     private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
@@ -109,13 +110,13 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
             OperationExecutionRegistrationAndLoggingFilter.cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
             execData.hostName = OperationExecutionRegistrationAndLoggingFilter.vmName;
             execData.experimentId = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getExperimentId();
-            execData.tin = Timer.currentTimeNanos();
+            execData.tin = timesource.currentTimeNanos();
         }
         try {
             chain.doFilter(request, response);
         } finally {
             if (execData != null) {
-                execData.tout = Timer.currentTimeNanos();
+                execData.tout = timesource.currentTimeNanos();
                 execData.eoi = eoi;
                 execData.ess = ess;
                 //if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)

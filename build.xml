@@ -178,7 +178,7 @@
 			target="1.5" 
 			srcdir="${src.kieker.monitoring.dir}" 
 			debug="true" 
-			excludes="kieker/monitoring/probe/aspectJ/ kieker/monitoring/writer/database/" 
+			excludes="kieker/monitoring/probe/aspectJ/" 
 			classpathref="kieker.monitoring-compile-classpath">
 			<compilerarg value="-Xlint:all,-path" />
 		</javac>
@@ -752,7 +752,6 @@
 	</target>
 
 	<target name="run-tests-compileTimeWeaving-bookstoreDB" depends="compile-all-tests,compile-tests-compileTimeWeaving-bookstore">
-		<fail message="Not yet updated!"/>
 		<path id="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjweaver-*.jar" />

@@ -3,13 +3,13 @@ package kieker.monitoring.writer.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.writer.IMonitoringWriter;
+import kieker.monitoring.core.IWriterController;
+import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -62,103 +62,57 @@ import org.apache.commons.logging.LogFactory;
  *         2006/12/20: Initial Prototype
  * 
  */
-public final class SyncDbWriter implements IMonitoringWriter {
+public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncDbWriter.class);
+	
+	private static final String PREFIX = "kieker.monitoring.writer.database.SyncDbWriter.";
+	private static final String DRIVERCLASSNAME = PREFIX + "DriverClassname";
+	private static final String CONNECTIONSTRING = PREFIX + "ConnectionString";
+	private static final String TABLENAME = PREFIX + "TableName";
+	//private static final String LOADID = PREFIX + "loadInitialExperimentId";
 
-	private Connection conn = null;
-	private PreparedStatement psInsertMonitoringData;
-	private String dbDriverClassname;
-	private String dbConnectionAddress;
-	private String dbTableName;
-	private boolean setInitialExperimentIdBasedOnLastId = false;
-	// only used if setInitialExperimentIdBasedOnLastId==true
-	private int experimentId = -1;
-	private final static String defaultConstructionErrorMsg = 
-		"Do not select this writer using the fully qualified classname. "
-			+ "Use the the constant "
-			+ ConfigurationConstants.WRITER_SYNCDB
-			+ " and the file system specific configuration properties.";
-
-	public SyncDbWriter() {
-		throw new UnsupportedOperationException(SyncDbWriter.defaultConstructionErrorMsg);
-	}
-
-	@Override
-	public boolean init(final String initString) {
-		throw new UnsupportedOperationException(SyncDbWriter.defaultConstructionErrorMsg);
-	}
-
-	public SyncDbWriter(final String dbDriverClassname, final String dbConnectionAddress, final String dbTableName, final boolean setInitialExperimentIdBasedOnLastId) {
-		this.dbDriverClassname = dbDriverClassname;
-		this.dbConnectionAddress = dbConnectionAddress;
-		this.dbTableName = dbTableName;
-		this.setInitialExperimentIdBasedOnLastId = setInitialExperimentIdBasedOnLastId;
-		this.init();
-	}
-
-	/**
-	 * Returns false if an error occurs.
-	 */
-	private boolean init() {
-		SyncDbWriter.log.debug("Tpmon dbconnector init");
+	private final Connection conn;
+	private final PreparedStatement psInsertMonitoringData;
+	
+	public SyncDbWriter(final IWriterController ctrl, final Configuration configuration) throws Exception {
+		super(ctrl, configuration);
 		try {
-			if ((this.dbDriverClassname != null) && (this.dbDriverClassname.length() != 0)) {
-				// NOTE: It's absolutely ok to have no class loaded at this point!
-				// For example Java 6 and higher have an embedded DB driver
-				Class.forName(this.dbDriverClassname).newInstance();
-			}
+			// register correct Driver
+			Class.forName(this.configuration.getStringProperty(DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
-			SyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar missing?", ex);
-			return false;
+			SyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
+			throw ex;
 		}
 		try {
-			this.conn = DriverManager.getConnection(this.dbConnectionAddress);
-			SyncDbWriter.log.info("Tpmon: Connected to database");
-			if (this.setInitialExperimentIdBasedOnLastId) {
-				// set initial experiment id based on last id (increased by 1)
-				SyncDbWriter.log.debug("Tpmon: Setting initial experiment id based on last id (=" + (this.experimentId - 1) + " + 1 = " + this.experimentId + ")");
- 			 	//TODO: FindBugs says this method may fail to close the database resource
+			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(CONNECTIONSTRING));
+			final String tablename = this.configuration.getStringProperty(TABLENAME);
+			/* IS THIS STILL NEEDED?
+			if (this.configuration.getBooleanProperty(LOADID)) {
 				final Statement stm = this.conn.createStatement();
-				final ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + this.dbTableName);
+				final ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
 				if (res.next()) {
-					this.experimentId = res.getInt(1) + 1;
+					//TODO: this may not be fully constructed!!!! But it should mostly work?!?
+					this.ctrl.setExperimentId(res.getInt(1) + 1);
 				}
-				// this.experimentId keeps the old value else
-			}
-			this.psInsertMonitoringData = this.conn.prepareStatement("INSERT INTO " + this.dbTableName
-					+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)"
-					+ "VALUES (?,?,?,?,?,?,?,?,?)");
+			} */
+			this.psInsertMonitoringData = this.conn.prepareStatement(
+					"INSERT INTO " + tablename + 
+					" (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + 
+					" VALUES (?,?,?,?,?,?,?,?,?)");
 		} catch (final SQLException ex) {
-			SyncDbWriter.log.error("Tpmon: SQLException: " + ex.getMessage());
-			SyncDbWriter.log.error("Tpmon: SQLState: " + ex.getSQLState());
-			SyncDbWriter.log.error("Tpmon: VendorError: " + ex.getErrorCode());
-			return false;
+			SyncDbWriter.log.error("SQLException: " + ex.getMessage());
+			SyncDbWriter.log.error("SQLState: " + ex.getSQLState());
+			SyncDbWriter.log.error("VendorError: " + ex.getErrorCode());
+			throw ex;
 		}
-		return true;
 	}
 	
 	@Override
-	public void terminate() {
-		try {
-			this.conn.close();
-		} catch (final SQLException ex) {
-			SyncDbWriter.log.error("Tpmon: SQLException: " + ex.getMessage());
-			SyncDbWriter.log.error("Tpmon: SQLState: " + ex.getSQLState());
-			SyncDbWriter.log.error("Tpmon: VendorError: " + ex.getErrorCode());
-		}
-	}
-
-	/**
-	 * This method is used to store monitoring data into the database or
-	 * file system. The storage mode is configured in the file
-	 * dbconnector.properties.
-	 */
-	@Override
-	public synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+	public final synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			// connector only supports execution records so far
 			final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-			this.psInsertMonitoringData.setInt(1, (this.setInitialExperimentIdBasedOnLastId && (this.experimentId >= 0)) ? this.experimentId : execRecord.experimentId);
+			this.psInsertMonitoringData.setInt(1, execRecord.experimentId);
 			this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName);
 			this.psInsertMonitoringData.setString(3, execRecord.sessionId);
 			this.psInsertMonitoringData.setLong(4, execRecord.traceId);
@@ -169,7 +123,7 @@ public final class SyncDbWriter implements IMonitoringWriter {
 			this.psInsertMonitoringData.setLong(9, execRecord.ess);
 			this.psInsertMonitoringData.execute();
 		} catch (final Exception ex) {
-			SyncDbWriter.log.error("Tpmon Error: " + System.currentTimeMillis() + " insertMonitoringData() failed:" + ex.getMessage());
+			SyncDbWriter.log.error("Failed to write new monitoring record:", ex);
 			return false;
 		} finally {
 			try {
@@ -181,24 +135,26 @@ public final class SyncDbWriter implements IMonitoringWriter {
 		}
 		return true;
 	}
+	
+	@Override
+	public void terminate() {
+		try {
+			this.conn.close();
+		} catch (final SQLException ex) {
+			SyncDbWriter.log.error("SQLException: " + ex.getMessage());
+			SyncDbWriter.log.error("SQLState: " + ex.getSQLState());
+			SyncDbWriter.log.error("VendorError: " + ex.getErrorCode());
+		}
+		SyncDbWriter.log.info("Writer: SyncDbWriter shutdown complete");
+	}
 
 	@Override
 	public String getInfoString() {
-		final StringBuilder strB = new StringBuilder();
-
-		// only show the password if debug is on
-		String dbConnectionAddress2 = this.dbConnectionAddress;
-		if (this.dbConnectionAddress.toLowerCase().contains("password")) {
-			final int posPassw = this.dbConnectionAddress.toLowerCase().lastIndexOf("password");
-			dbConnectionAddress2 = this.dbConnectionAddress.substring(0, posPassw) + "-PASSWORD-HIDDEN";
-		}
-		strB.append("dbDriverClassname :" + this.dbDriverClassname);
-		strB.append(", dbConnectionAddress : " + dbConnectionAddress2);
-		strB.append(", dbTableName : " + this.dbTableName);
-		strB.append(", setInitialExperimentIdBasedOnLastId : " + this.setInitialExperimentIdBasedOnLastId);
-		if (this.setInitialExperimentIdBasedOnLastId && (this.experimentId >= 0)) {
-			strB.append(", ACTUAL EXPERIMENT_ID : " + this.experimentId);
-		}
-		return strB.toString();
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("\n\tConnection: '");
+		sb.append(conn.toString());
+		sb.append("'");
+		return sb.toString();
 	}
 }

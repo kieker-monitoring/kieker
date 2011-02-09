@@ -4,11 +4,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.core.util.Timer;
 import kieker.monitoring.probe.IMonitoringProbe;
+import kieker.monitoring.timer.ITimeSource;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
@@ -55,10 +55,11 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
     private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
 
-    private static final Kieker ctrlInst = Kieker.getInstance();
+    private static final MonitoringController ctrlInst = MonitoringController.getInstance();
     protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
     protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
     protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
+    protected static final ITimeSource timesource = ctrlInst.getTimeSource();
 
     protected static final String vmName = OperationExecutionSOAPResponseOutInterceptor.ctrlInst.getHostName();
     
@@ -89,7 +90,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
             myEoi = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestEOI();
             myEss = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestESS();
             tin = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestTin();
-            tout = Timer.currentTimeNanos();
+            tout = timesource.currentTimeNanos();
             isEntryCall = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestIsEntryCall();
         }
 

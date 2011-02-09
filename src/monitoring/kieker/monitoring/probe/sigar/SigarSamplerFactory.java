@@ -36,8 +36,8 @@ public final class SigarSamplerFactory implements ISigarSamplerFactory {
 
 	/**
 	 * Returns the singleton instance of the {@link SigarSamplerFactory} which
-	 * uses the singleton instance of the {@link MonitoringController retrieved via
-	 * {@link MonitoringController#getInstance()}.
+	 * uses the singleton instance of the {@link WriterController retrieved via
+	 * {@link WriterController#getInstance()}.
 	 * 
 	 * The size of the internal thread pool used to serve the sensing and
 	 * logging jobs is set to {@link SigarSamplerFactory#DEFAULT_EXECUTOR_THREAD_POOL_SIZE}.

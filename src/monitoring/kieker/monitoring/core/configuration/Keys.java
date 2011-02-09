@@ -47,6 +47,7 @@ interface Keys {
 	// Monitoring Controller
 	public final static String MONITORING_ENABLED = PREFIX + "enabled";
 	public final static String WRITER_CLASSNAME = PREFIX + "writer";
+	public final static String TIMER_CLASSNAME = PREFIX + "timer";
 	// Sampling Controller
 	public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = PREFIX + "periodicSensorsExecutorPoolSize";
 

@@ -13,7 +13,7 @@ import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
@@ -48,7 +48,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 	private static final String PATH = PREFIX + "customStoragePath";
 	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
 
-	public AsyncFsWriter(final IMonitoringController ctrl, final Configuration configuration) {
+	public AsyncFsWriter(final IWriterController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 		String path;
 		if (this.configuration.getBooleanProperty(TEMP)) {
@@ -103,7 +103,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 	// to get that info later
 	private final String path;
 
-	public FsWriterThread(final IMonitoringController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue, final MappingFileWriter mappingFileWriter, final String path) {
+	public FsWriterThread(final IWriterController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue, final MappingFileWriter mappingFileWriter, final String path) {
 		super(ctrl, writeQueue);
 		this.path = new File(path).getAbsolutePath();
 		this.filenamePrefix = path + File.separatorChar + "tpmon";

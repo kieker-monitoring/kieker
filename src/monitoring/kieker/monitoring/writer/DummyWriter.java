@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 
 /*
@@ -34,7 +34,7 @@ import kieker.monitoring.core.configuration.Configuration;
 public class DummyWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(DummyWriter.class);
 
-	public DummyWriter(final IMonitoringController ctrl, final Configuration configuration) {
+	public DummyWriter(final IWriterController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 	}
 

@@ -1,7 +1,7 @@
 package kieker.test.monitoring.manualInstrumentation.helloWorld;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.Kieker;
+import kieker.monitoring.core.MonitoringController;
 
 /*
  * ==================LICENCE=========================
@@ -34,7 +34,7 @@ public class HelloWorld {
 		doSomething();
 
 		long endTime = System.nanoTime();
-		Kieker.getInstance().newMonitoringRecord(
+		MonitoringController.getInstance().newMonitoringRecord(
 				new OperationExecutionRecord("kieker.component", "method", 1, startTime, endTime));
 	}
 
