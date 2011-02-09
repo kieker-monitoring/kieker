@@ -95,7 +95,20 @@ public abstract class AbstractAsyncThread extends Thread {
 			this.finished = true;
 		}
 	}
-
+	
+	/**
+	 * Returns a human-readable information string about the writer's configuration and state.
+	 * 
+	 * @return the information string.
+	 */
+	public String getInfoString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Finished: '");
+		sb.append(isFinished());
+		sb.append("'");
+		return sb.toString();
+	}
+	
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
 	protected abstract void cleanup();
 }

@@ -178,7 +178,7 @@
 			target="1.5" 
 			srcdir="${src.kieker.monitoring.dir}" 
 			debug="true" 
-			excludes="kieker/monitoring/probe/aspectJ/ kieker/monitoring/writer/jms/ kieker/monitoring/writer/database/" 
+			excludes="kieker/monitoring/probe/aspectJ/ kieker/monitoring/writer/database/" 
 			classpathref="kieker.monitoring-compile-classpath">
 			<compilerarg value="-Xlint:all,-path" />
 		</javac>

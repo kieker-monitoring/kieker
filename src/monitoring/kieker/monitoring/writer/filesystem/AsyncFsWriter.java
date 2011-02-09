@@ -48,9 +48,6 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 	private static final String PATH = PREFIX + "customStoragePath";
 	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
 
-	// only to get that information later
-	private final String path;
-
 	public AsyncFsWriter(final IMonitoringController ctrl, final Configuration configuration) {
 		super(ctrl, configuration);
 		String path;
@@ -75,7 +72,6 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 			AsyncFsWriter.log.error("Failed to create directory '" + path + "'");
 			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
-		this.path = f.getAbsolutePath();
 
 		final String mappingFileFn = path + File.separatorChar + "tpmon.map";
 		final MappingFileWriter mappingFileWriter;
@@ -85,17 +81,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 			AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
-		setWorker(new FsWriterThread(this.ctrl, this.blockingQueue, mappingFileWriter, path + File.separatorChar + "tpmon"));
-	}
-	
-	@Override
-	public final String getInfoString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(super.getInfoString());
-		sb.append("\nWriting to Directory: '");
-		sb.append(path);
-		sb.append("'");
-		return sb.toString();
+		this.addWorker(new FsWriterThread(this.ctrl, this.blockingQueue, mappingFileWriter, path));
 	}
 }
 
@@ -113,10 +99,14 @@ final class FsWriterThread extends AbstractAsyncThread {
 	private final MappingFileWriter mappingFileWriter;
 	private PrintWriter pos = null;
 	private int entriesInCurrentFileCounter = maxEntriesInFile + 1; // Force to initialize first file!
+	
+	// to get that info later
+	private final String path;
 
-	public FsWriterThread(final IMonitoringController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue, final MappingFileWriter mappingFileWriter, final String filenamePrefix) {
+	public FsWriterThread(final IMonitoringController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue, final MappingFileWriter mappingFileWriter, final String path) {
 		super(ctrl, writeQueue);
-		this.filenamePrefix = filenamePrefix;
+		this.path = new File(path).getAbsolutePath();
+		this.filenamePrefix = path + File.separatorChar + "tpmon";
 		this.mappingFileWriter = mappingFileWriter;
 	}
 
@@ -178,5 +168,15 @@ final class FsWriterThread extends AbstractAsyncThread {
 	@Override
 	protected void cleanup() {
 		pos.close();
+	}
+	
+	@Override
+	public final String getInfoString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("; Writing to Directory: '");
+		sb.append(path);
+		sb.append("'");
+		return sb.toString();
 	}
 }

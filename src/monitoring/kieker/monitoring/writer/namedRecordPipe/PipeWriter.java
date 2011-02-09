@@ -66,7 +66,7 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 	public String getInfoString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getInfoString());
-		sb.append("\nConnected to pipe: '");
+		sb.append("\n\tConnected to pipe: '");
 		sb.append(this.pipe.getName());
 		sb.append("'");
 		return sb.toString();

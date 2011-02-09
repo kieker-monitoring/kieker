@@ -53,7 +53,7 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 
 	public AsyncJMSWriter(final IMonitoringController ctrl, final Configuration configuration) throws NamingException, JMSException {
 		super(ctrl, configuration);
-		setWorker(new JMSWriterThread(
+		this.addWorker(new JMSWriterThread(
 				ctrl,
 				this.blockingQueue,
 				this.configuration.getStringProperty(CONTEXTFACTORYTYPE),
@@ -62,13 +62,6 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 				this.configuration.getStringProperty(TOPIC), 
 				this.configuration.getLongProperty(MESSAGETTL)
 			));
-	}
-	
-	@Override
-	public String getInfoString() {
-		final StringBuilder strB = new StringBuilder();
-		strB.append(super.getInfoString());
-		return strB.toString();
 	}
 }
 
@@ -122,7 +115,21 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	}
 	
 	@Override
-	protected void consume(IMonitoringRecord monitoringRecord) throws JMSException {
+	public final String getInfoString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("; Session: '");
+		sb.append(session.toString());
+		sb.append("'; Connection: '");
+		sb.append(connection.toString());
+		sb.append("'; MessageProducer: '");
+		sb.append(sender.toString());
+		sb.append("'");
+		return sb.toString();
+	}
+	
+	@Override
+	protected final void consume(final IMonitoringRecord monitoringRecord) throws JMSException {
 		try {
 			sender.send(session.createObjectMessage(monitoringRecord));
 		} catch (final JMSException ex) {

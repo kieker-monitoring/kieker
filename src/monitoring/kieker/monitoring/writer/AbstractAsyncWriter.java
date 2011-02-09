@@ -1,6 +1,7 @@
 package kieker.monitoring.writer;
 
 import java.util.Properties;
+import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -39,7 +40,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	
 	// internal variables
 	private final String PREFIX;
-	protected AbstractAsyncThread worker;
+	protected final Vector<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final int queueFullBehavior;
 	
@@ -74,22 +75,29 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	 * 
 	 * @param worker
 	 */
-	protected final void setWorker(AbstractAsyncThread worker) {
-		this.worker = worker;
-		this.worker.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
-		this.worker.start();
+	protected final void addWorker(AbstractAsyncThread worker) {
+		this.workers.add(worker);
+		worker.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
+		worker.start();
 	}
 
 	@Override
 	public final void terminate() {
-		this.worker.initShutdown();
-		while (!this.worker.isFinished()) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException ex) {
-				// we should be able to ignore an interrupted sleep.
+		// notify all workers
+		for (AbstractAsyncThread worker : this.workers) {
+			worker.initShutdown();
+		}
+		// wait for all worker to finish
+		for (AbstractAsyncThread worker : this.workers) {
+			while (!worker.isFinished()) {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException ex) {
+					// we should be able to ignore an interrupted wait
+				}
+				AbstractAsyncWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
+				//TODO: we should be able to abort this, perhaps a max time of repeats?
 			}
-			AbstractAsyncWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
 		}
 		AbstractAsyncWriter.log.info("Writer shutdown complete");
 	}
@@ -113,5 +121,19 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public String getInfoString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.getInfoString());
+		sb.append("\n\tWriter Threads (");
+		sb.append(this.workers.size());
+		sb.append("): ");
+		for (AbstractAsyncThread worker : this.workers) {
+			sb.append("\n\t\t");
+			sb.append(worker.getInfoString());
+		}
+		return sb.toString();
 	}
 }

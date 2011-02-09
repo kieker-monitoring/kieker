@@ -165,7 +165,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public final String getInfoString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getInfoString());
-		sb.append("\nWriting to Directory: '");
+		sb.append("\n\tWriting to Directory: '");
 		sb.append(path);
 		sb.append("'");
 		return sb.toString();
