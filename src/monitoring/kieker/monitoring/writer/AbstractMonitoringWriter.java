@@ -69,9 +69,9 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Writer: '");
 		sb.append(this.getClass().getName());
-		sb.append("'\n\tConfiguration");
-		if (configuration.isEmpty()) {
-			sb.append("\n\t\tNo Parameters)");
+		sb.append("'\n\tConfiguration:");
+		if (configuration.stringPropertyNames().isEmpty()) {
+			sb.append("\n\t\tNo Configuration");
 		} else {
 			for (String property : configuration.stringPropertyNames()) {
 				sb.append("\n\t\t");
