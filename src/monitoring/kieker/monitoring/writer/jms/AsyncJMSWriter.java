@@ -44,7 +44,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
-	private static final String PREFIX = "kieker.monitoring.writer.jms.AsyncJMSWriter.";
+	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
 	private static final String PROVIDERURL = PREFIX + "ProviderUrl";
 	private static final String TOPIC = PREFIX + "Topic";
 	private static final String CONTEXTFACTORYTYPE = PREFIX + "ContextFactoryType";

@@ -5,9 +5,9 @@ import java.util.StringTokenizer;
 
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.util.PropertyMap;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.common.util.PropertyMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

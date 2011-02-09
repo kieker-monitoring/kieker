@@ -34,7 +34,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.Map.Entry;
 
-import kieker.common.util.LoggingTimestampConverter;
 import kieker.analysis.AnalysisController;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
@@ -62,6 +61,7 @@ import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.visualization.sequenceDiagram.SequenceDiagramPlugin;
+import kieker.tools.util.LoggingTimestampConverter;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;

@@ -65,7 +65,7 @@ import org.apache.commons.logging.LogFactory;
 public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final Log log = LogFactory.getLog(AsyncDbWriter.class);
 
-	private static final String PREFIX = "kieker.monitoring.writer.database.AsyncDbWriter.";
+	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
 	private static final String DRIVERCLASSNAME = PREFIX + "DriverClassname";
 	private static final String CONNECTIONSTRING = PREFIX + "ConnectionString";
 	private static final String TABLENAME = PREFIX + "TableName";
@@ -157,7 +157,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 	public String getInfoString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getInfoString());
-		sb.append("Connection: '");
+		sb.append("; Connection: '");
 		sb.append(conn.toString());
 		sb.append("'");
 		return sb.toString();

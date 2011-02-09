@@ -770,18 +770,13 @@
 		<!-- delete existing DB -->
 		<java dir="." fork="true" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath" classname="kieker.test.monitoring.util.JavaDBInitializer">
 			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties" />
-			<jvmarg value="-Dkieker.monitoring.dbDriverClassname=" />
-			<jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:${tests.javadb.kiekerdb.path};user=DBUSER;password=DBPASS" />
-			<jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata" />
 		</java>
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.Bookstore" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
-			<jvmarg value="-Dkieker.monitoring.configuration=${tests.db.kieker.monitoring.properties}" />
-			<jvmarg value="-Dkieker.monitoring.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
-			<jvmarg value="-Dkieker.monitoring.customStoragePath=${tests.storagepath}" />
 			<jvmarg value="-Dlog4j.configuration=${build.dir}/log4j.properties" />
-			<jvmarg value="-Dkieker.monitoring.dbDriverClassname=" />
-			<jvmarg value="-Dkieker.monitoring.dbConnectionAddress=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS" />
-			<jvmarg value="-Dkieker.monitoring.dbTableName=APP.tpmondata" />
+			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.AsyncDbWriter" />
+			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.DriverClassname=org.apache.derby.jdbc.EmbeddedDriver" />
+			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS" />
+			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.TableName=APP.tpmondata" />
 		</java>
 	</target>
 

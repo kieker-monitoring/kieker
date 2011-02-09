@@ -1,4 +1,4 @@
-package kieker.common.util;
+package kieker.analysis.util;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -28,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
-@Deprecated
 public class PropertyMap {
     private static final Log log = LogFactory.getLog(PropertyMap.class);
 

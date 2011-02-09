@@ -65,7 +65,7 @@ import org.apache.commons.logging.LogFactory;
 public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncDbWriter.class);
 	
-	private static final String PREFIX = "kieker.monitoring.writer.database.SyncDbWriter.";
+	private static final String PREFIX = SyncDbWriter.class.getName() + ".";
 	private static final String DRIVERCLASSNAME = PREFIX + "DriverClassname";
 	private static final String CONNECTIONSTRING = PREFIX + "ConnectionString";
 	private static final String TABLENAME = PREFIX + "TableName";

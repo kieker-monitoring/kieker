@@ -25,8 +25,9 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicReference;
-import kieker.common.util.LoggingTimestampConverter;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
+import kieker.tools.util.LoggingTimestampConverter;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

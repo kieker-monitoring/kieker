@@ -27,7 +27,7 @@ import kieker.analysis.reader.AbstractMonitoringLogReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.common.util.LoggingTimestampConverter;
+import kieker.tools.util.LoggingTimestampConverter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

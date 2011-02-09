@@ -1,4 +1,4 @@
-package kieker.common.util;
+package kieker.tools.util;
 
 import java.text.DateFormat;
 import java.text.ParseException;

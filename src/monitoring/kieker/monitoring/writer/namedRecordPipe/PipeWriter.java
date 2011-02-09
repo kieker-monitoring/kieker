@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 public final class PipeWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(PipeWriter.class);
 
-	private static final String PREFIX = "kieker.monitoring.writer.namedRecordPipe.PipeWriter.";
+	private static final String PREFIX = PipeWriter.class.getName() + ".";
 	private static final String PIPENAME = PREFIX + "pipeName";
 	private final Pipe pipe;
 

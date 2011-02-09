@@ -44,7 +44,7 @@ import org.apache.commons.logging.LogFactory;
 public final class AsyncFsWriter extends AbstractAsyncWriter {
 	private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
 
-	private static final String PREFIX = "kieker.monitoring.writer.filesystem.AsyncFsWriter.";
+	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
 	private static final String PATH = PREFIX + "customStoragePath";
 	private static final String TEMP = PREFIX + "storeInJavaIoTmpdir";
 

@@ -17,8 +17,8 @@ import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import kieker.analysis.util.PropertyMap;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.PropertyMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

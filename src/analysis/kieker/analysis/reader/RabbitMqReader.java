@@ -11,8 +11,8 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import kieker.analysis.util.PropertyMap;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.common.util.PropertyMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -31,17 +31,11 @@ public final class Version {
 	private static final String COPYRIGHT = "Copyright (c) 2006-2011 Kieker Project";
 
 	/**
-	 * Not instantiable.
-	 */
-	private Version() {
-	}
-
-	/**
 	 * Returns the version String.
 	 * 
 	 * @return the version String.
 	 */
-	public static String getVERSION() {
+	public final static String getVERSION() {
 		return VERSION;
 	}
 	
@@ -50,7 +44,9 @@ public final class Version {
 	 * 
 	 * @return the version String.
 	 */
-	public static String getCOPYRIGHT() {
+	public final static String getCOPYRIGHT() {
 		return COPYRIGHT;
 	}
+
+	private Version() {}
 }
