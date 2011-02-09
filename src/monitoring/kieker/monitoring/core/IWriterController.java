@@ -1,7 +1,6 @@
 package kieker.monitoring.core;
 
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 /*
@@ -27,7 +26,7 @@ import kieker.monitoring.writer.IMonitoringWriter;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public interface IWriterController extends IMonitoringRecordReceiver, IController {
+public interface IWriterController extends IMonitoringRecordReceiver, IController, ITimerController {
 
 	/**
 	 * Returns the configured monitoring writer.
@@ -78,11 +77,4 @@ public interface IWriterController extends IMonitoringRecordReceiver, IControlle
 	 * @return long
 	 */
 	public long getNumberOfInserts();
-	
-	/**
-	 * Returns the ITimeSource used in this controller.
-	 * 
-	 * @return ITimeSource
-	 */
-	public ITimeSource getTimeSource();
 }

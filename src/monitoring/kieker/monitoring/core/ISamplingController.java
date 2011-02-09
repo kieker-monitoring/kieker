@@ -23,7 +23,7 @@ import kieker.monitoring.core.sampler.ScheduledSamplerJob;
  * ==================================================
  */
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 public interface ISamplingController extends IWriterController, IController {
 	

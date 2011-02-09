@@ -4,7 +4,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
@@ -30,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller
  */
-abstract class WriterController extends ReplayController implements IWriterController {
+abstract class WriterController extends TimerController implements IWriterController {
 	private static final Log log = LogFactory.getLog(WriterController.class);
 
 	/** Used to track the total number of monitoring records received while the controller has been enabled */
@@ -39,14 +38,11 @@ abstract class WriterController extends ReplayController implements IWriterContr
 	private final IMonitoringWriter monitoringWriter;
 	/** State of monitoring */
 	private volatile boolean monitoringEnabled = false;
-	/** The {@link ITimeSource} used */
-	private final ITimeSource timesource;
 	
 	protected WriterController(final Configuration configuration) {
 		super(configuration);
 		if (isMonitoringTerminated()) {
 			this.monitoringWriter = null;
-			this.timesource = null;
 			return;
 		}
 		// set Writer
@@ -65,29 +61,9 @@ abstract class WriterController extends ReplayController implements IWriterContr
 		} catch (final ClassNotFoundException ex) {
 			WriterController.log.error("Writer Class '" + writerClassname + "' not found");
 		} catch (final Throwable ex) {
-			WriterController.log.error("Failed to load writer class for name " + writerClassname, ex);
+			WriterController.log.error("Failed to load writer class for name '" + writerClassname + "'", ex);
 		}
 		if ((this.monitoringWriter = monitoringWriter) == null) {
-			this.timesource = null;
-			terminateMonitoring();
-			return;
-		}
-		final String timerClassname = configuration.getStringProperty(Configuration.TIMER_CLASSNAME);
-		ITimeSource timesource = null;
-		try {
-			timesource = ITimeSource.class.cast(Class.forName(timerClassname).
-					getConstructor(Configuration.class).newInstance(
-							configuration.getPropertiesStartingWith(timerClassname)));
-		} catch (final NoSuchMethodException ex) {
-			WriterController.log.error("Timer Class '" + timerClassname + "' has to implement a constructor that accepts a single Configuration");
-		} catch (final NoClassDefFoundError ex) {
-			WriterController.log.error("Timer Class '" + timerClassname + "' not found");
-		} catch (final ClassNotFoundException ex) {
-			WriterController.log.error("Timer Class '" + timerClassname + "' not found");
-		} catch (final Throwable ex) {
-			WriterController.log.error("Failed to load timer class for name " + timerClassname, ex);
-		}
-		if ((this.timesource = timesource) == null) {
 			terminateMonitoring();
 			return;
 		}
@@ -139,7 +115,7 @@ abstract class WriterController extends ReplayController implements IWriterContr
 			}
 			numberOfInserts.incrementAndGet();
 			if (this.isRealtimeMode()) {
-				record.setLoggingTimestamp(this.timesource.currentTimeNanos());
+				record.setLoggingTimestamp(this.getTimeSource().currentTimeNanos());
 			}
 			if (!monitoringWriter.newMonitoringRecord(record)) {
 				WriterController.log.fatal("Error writing the monitoring data. Will terminate monitoring!");
@@ -202,10 +178,5 @@ abstract class WriterController extends ReplayController implements IWriterContr
 	@Override
 	public final long getNumberOfInserts() {
 		return numberOfInserts.longValue();
-	}
-	
-	@Override
-	public final ITimeSource getTimeSource() {
-		return this.timesource;
 	}
 }

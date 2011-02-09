@@ -1,5 +1,7 @@
 package kieker.monitoring.core;
 
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -51,7 +53,20 @@ public class MonitoringController extends SamplingController implements IMonitor
 		super(configuration);
 		if (isMonitoringTerminated()) {
 			MonitoringController.log.error("Controller (" + this.getName() +") initializsation failed\n" + getState());
-			MonitoringController.log.error(configuration.toString());
+			final StringBuilder sb = new StringBuilder("Configuration:");
+			final Set<String> keys = configuration.stringPropertyNames();
+			if (keys.isEmpty()) {
+				sb.append("\n\tNo Configuration found");
+			} else {
+				for (String property : keys) {
+					sb.append("\n\t");
+					sb.append(property);
+					sb.append("='");
+					sb.append(configuration.getProperty(property));
+					sb.append("'");
+				}
+			}
+			MonitoringController.log.error(sb.toString());
 			return;
 		}
 		MonitoringController.log.info("Controller (" + this.getName() +") initializsation finished\n" + getState());
@@ -73,7 +88,7 @@ public class MonitoringController extends SamplingController implements IMonitor
 		sb.append(getVersion());
 		sb.append("):\n");
 		sb.append(super.getState());
-		return sb.toString();
+		return sb.toString().trim();
 	}
 	
 	/**
