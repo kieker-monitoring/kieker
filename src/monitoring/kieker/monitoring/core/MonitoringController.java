@@ -28,7 +28,7 @@ import kieker.monitoring.core.configuration.Configuration;
 /**
  * @author Jan Waller
  */
-public class MonitoringController extends SamplingController implements IMonitoringController {
+public class MonitoringController extends SamplingController implements IMonitoringController, MonitoringControllerMBean {
 	private static final Log log = LogFactory.getLog(MonitoringController.class);
 
 	/**
