@@ -1,6 +1,7 @@
 package kieker.monitoring.writer;
 
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,10 +71,11 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		sb.append("Writer: '");
 		sb.append(this.getClass().getName());
 		sb.append("'\n\tConfiguration:");
-		if (configuration.stringPropertyNames().isEmpty()) {
+		final Set<String> keys = configuration.stringPropertyNames();
+		if (keys.isEmpty()) {
 			sb.append("\n\t\tNo Configuration");
 		} else {
-			for (String property : configuration.stringPropertyNames()) {
+			for (String property : keys) {
 				sb.append("\n\t\t");
 				sb.append(property);
 				sb.append("='");
