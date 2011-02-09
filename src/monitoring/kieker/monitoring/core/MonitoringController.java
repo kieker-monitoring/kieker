@@ -50,17 +50,17 @@ public class MonitoringController extends SamplingController implements IMonitor
 	private MonitoringController(final Configuration configuration) {
 		super(configuration);
 		if (isMonitoringTerminated()) {
-			MonitoringController.log.error("Kieker initializsation failed\n" + getState());
+			MonitoringController.log.error("Controller (" + this.getName() +") initializsation failed\n" + getState());
 			MonitoringController.log.error(configuration.toString());
 			return;
 		}
-		MonitoringController.log.info("Kieker initializsation finished\n" + getState());
+		MonitoringController.log.info("Controller (" + this.getName() +") initializsation finished\n" + getState());
 	}
 	
 	@Override
 	public final boolean terminateMonitoring() {
 		if (super.terminateMonitoring()) {
-			MonitoringController.log.info("Kieker Shutdown completed");
+			MonitoringController.log.info("Controller (" + this.getName() +") shutdown completed");
 			return true;
 		}
 		return false;
@@ -69,7 +69,7 @@ public class MonitoringController extends SamplingController implements IMonitor
 	@Override
 	public final String getState() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Current State of Kieker (");
+		sb.append("Current State of kieker.monitoring (");
 		sb.append(getVersion());
 		sb.append("):\n");
 		sb.append(super.getState());

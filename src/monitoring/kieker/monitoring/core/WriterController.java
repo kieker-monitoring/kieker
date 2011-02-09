@@ -104,7 +104,7 @@ abstract class WriterController extends ReplayController implements IWriterContr
 	public boolean terminateMonitoring() {
 		if (super.terminateMonitoring()) {
 			// TODO: Logger may be problematic, may already have shutdown!
-			WriterController.log.info("Shutting down Monitoring Controller");
+			WriterController.log.info("Shutting down Writer Controller");
 			if (monitoringWriter != null) {
 				monitoringWriter.terminate();
 			}
