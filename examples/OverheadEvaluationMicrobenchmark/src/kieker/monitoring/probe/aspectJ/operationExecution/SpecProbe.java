@@ -1,4 +1,4 @@
-package kieker.monitoring.probe.aspectJ.executions;
+package kieker.monitoring.probe.aspectJ.operationExecution;
 
 import kieker.common.record.OperationExecutionRecord;
 
@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /*
- *
  * ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
  *
@@ -27,7 +26,6 @@ import org.aspectj.lang.annotation.Pointcut;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * @author Andre van Hoorn
  * @author Jan Waller
