@@ -1,17 +1,15 @@
 #results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\branches\\1.3-refactoring\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark\\results.csv"
-#results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
-#output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
+#output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\branches\\1.3-refactoring\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
 baseresults=read.csv2(results_fn,quote="",colClasses=c("NULL","NULL","integer","integer","NULL","integer"))
 baseresults["rt_msec"]=baseresults["duration_nsec"]/(1000)
 ## order_index recursion_depth duration_nsec rt_msec
 
 configs=unique(baseresults$order_index)
-configs.labels=c("Empty Probe","Inactive Probe","Collecting Data","Writing Data")
+configs.labels=c("Empty Probe","Inactive Probe","Collecting Data","Writing Data","JMX")
 ##_Remove_Empty_Probe
-configs=c(0,2,3,4)
-configs.labels=c("Inactive Probe","Collecting Data","Writing Data")
+configs=c(0,2,3,4,5)
+configs.labels=c("Inactive Probe","Collecting Data","Writing Data","JMX")
 ##_Remove_Empty_Probe
-recdepth=unique(baseresults$recursion_depth)
 
 meanvalues <- matrix(nrow=length(recdepth),ncol=length(configs),byrow=TRUE,dimnames=list(recdepth,configs))
 medianvalues <- matrix(nrow=length(recdepth),ncol=length(configs),byrow=TRUE,dimnames=list(recdepth,configs))
