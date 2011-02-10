@@ -50,15 +50,18 @@ public final class Configuration extends Properties implements Keys {
 		Configuration.log.debug("Searching for JVM argument '" + CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		// Searching for configuration file location passed to JVM
 		String configurationFile = System.getProperty(CUSTOM_PROPERTIES_LOCATION_JVM);
+		final Configuration loadConfiguration;
 		if (configurationFile != null) {
 			Configuration.log.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
+			loadConfiguration = loadConfigurationFromFile(configurationFile, defaultConfiguration());
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
 			Configuration.log.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
+			loadConfiguration = loadConfigurationFromResource(configurationFile, defaultConfiguration());
 		}
 		// 1.JVM-params   ->  2.properties file  ->  3.default properties file
-		final Configuration configuration =getSystemPropertiesStartingWith(PREFIX, loadConfigurationFromResource(configurationFile, defaultConfiguration()));
+		final Configuration configuration = getSystemPropertiesStartingWith(PREFIX, loadConfiguration);
 		configuration.setProperty(CONTROLLER_NAME, "KIEKER-SINGLETON");
 		return configuration;
 	}
