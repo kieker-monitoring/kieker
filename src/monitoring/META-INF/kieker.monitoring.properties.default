@@ -28,6 +28,15 @@ kieker.monitoring.hostname=
 # The initial ID associated with all experiments.
 kieker.monitoring.initialExperimentId=1
 
+# Whether the MonitoringController will be available as an MBean.
+kieker.monitoring.MBean=false
+
+# These two properties are only evaluated if the MBean is activated.
+# They define the ObjectName used to access the MBean (usually you
+# don't have to change them).
+kieker.monitoring.MBean.domain=kieker.monitoring
+kieker.monitoring.MBean.name=MonitoringController
+
 # Whether Kieker runs in replay or realtime mode.
 # You usually don't want to change this value.
 kieker.monitoring.replayMode=false
@@ -41,6 +50,8 @@ kieker.monitoring.enabled=true
 
 # The Timer used by Kieker. You usually don't want to change the value.
 kieker.monitoring.timer=kieker.monitoring.timer.DefaultSystemTimer
+# You can specify additional parameters send to the Timer, e.g.
+#kieker.monitoring.timer.DefaultSystemTimer.KEY=VALUE
 
 # The size of the thread pool used to execute registered periodic sensor jobs.
 kieker.monitoring.periodicSensorsExecutorPoolSize=1

@@ -44,13 +44,17 @@ interface Keys {
 	public final static String EXPERIMENT_ID = PREFIX + "initialExperimentId";
 	// Replay Controller
 	public final static String REPLAY_MODE = PREFIX + "replayMode";
-	// Monitoring Controller
+	// Writer Controller
 	public final static String MONITORING_ENABLED = PREFIX + "enabled";
 	public final static String WRITER_CLASSNAME = PREFIX + "writer";
 	public final static String TIMER_CLASSNAME = PREFIX + "timer";
 	// Sampling Controller
 	public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = PREFIX + "periodicSensorsExecutorPoolSize";
-
+	// Monitoring Controller
+	public final static String ACTIVATE_MBEAN = PREFIX + "MBean";
+	public final static String ACTIVATE_MBEAN_DOMAIN = PREFIX + "MBean.domain";
+	public final static String ACTIVATE_MBEAN_TYPE = PREFIX + "MBean.name";
+	
 	//public final static String DEBUG_ENABLED = PREFIX + "debug";
 
 }

@@ -1,6 +1,10 @@
 package kieker.monitoring.core;
 
+import java.lang.management.ManagementFactory;
 import java.util.Set;
+
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +35,8 @@ import kieker.monitoring.core.configuration.Configuration;
 public class MonitoringController extends SamplingController implements IMonitoringController, MonitoringControllerMBean {
 	private static final Log log = LogFactory.getLog(MonitoringController.class);
 
+	private final ObjectName objectname;
+	
 	/**
 	 * @return the singleton instance of Kieker
 	 */
@@ -52,6 +58,7 @@ public class MonitoringController extends SamplingController implements IMonitor
 	private MonitoringController(final Configuration configuration) {
 		super(configuration);
 		if (isMonitoringTerminated()) {
+			this.objectname = null;
 			MonitoringController.log.error("Controller (" + this.getName() +") initializsation failed\n" + getState());
 			final StringBuilder sb = new StringBuilder("Configuration:");
 			final Set<String> keys = configuration.stringPropertyNames();
@@ -69,12 +76,40 @@ public class MonitoringController extends SamplingController implements IMonitor
 			MonitoringController.log.error(sb.toString());
 			return;
 		}
+		// register MBean
+		ObjectName objectname = null;
+		if (configuration.getBooleanProperty(Configuration.ACTIVATE_MBEAN)) {
+			try {
+				objectname = new ObjectName(
+						configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_DOMAIN), 
+						"type", 
+						configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_TYPE));
+				ManagementFactory.getPlatformMBeanServer().registerMBean(this, objectname);
+			} catch (final MalformedObjectNameException ex) {
+				log.warn("Unable to register MBean (constructed ObjectName malformated)! Check the following configuration values '" + 
+						Configuration.ACTIVATE_MBEAN_DOMAIN + "=" + configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_DOMAIN) + "' and '" + 
+						Configuration.ACTIVATE_MBEAN_TYPE + "=" + configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_TYPE) + "'");
+				objectname = null;
+			} catch (final Exception ex) {
+				log.warn("Unable to register MBean", ex);
+				objectname = null;
+			}
+		}
+		this.objectname = objectname;
+		// finished initialization
 		MonitoringController.log.info("Controller (" + this.getName() +") initializsation finished\n" + getState());
 	}
 	
 	@Override
 	public final boolean terminateMonitoring() {
 		if (super.terminateMonitoring()) {
+			if (objectname != null) {
+				try {
+					ManagementFactory.getPlatformMBeanServer().unregisterMBean(objectname);
+				} catch (final Exception ex) {
+					log.error("Failed to terminate MBean", ex);
+				}
+			}
 			MonitoringController.log.info("Controller (" + this.getName() +") shutdown completed");
 			return true;
 		}
@@ -86,7 +121,13 @@ public class MonitoringController extends SamplingController implements IMonitor
 		StringBuilder sb = new StringBuilder();
 		sb.append("Current State of kieker.monitoring (");
 		sb.append(getVersion());
-		sb.append("):\n");
+		sb.append(")");
+		if (objectname != null) {
+			sb.append("(MBean available: ");
+			sb.append(objectname.getCanonicalName());
+			sb.append(")");
+		}
+		sb.append(":\n");
 		sb.append(super.getState());
 		return sb.toString().trim();
 	}
