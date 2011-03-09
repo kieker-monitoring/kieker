@@ -29,7 +29,11 @@ public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
     private final String name;
     private final SystemModelRepository systemEntityFactory;
 
-    private AbstractTraceAnalysisPlugin(){
+    /**
+     * Must not be used for construction
+     */
+    @SuppressWarnings("unused")
+	private AbstractTraceAnalysisPlugin(){
         this.name = "no name";
         this.systemEntityFactory = null;
     }
@@ -44,7 +48,7 @@ public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
         System.out.println("");
         System.out.println("#");
         System.out.println("# Plugin: " + this.name);
-        for (String l : lines){
+        for (final String l : lines){
             System.out.println(l);
         }
     }
