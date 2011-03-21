@@ -33,14 +33,14 @@ public interface IWriterController extends IMonitoringRecordReceiver, IControlle
 	 * 
 	 * @return
 	 */
-	public IMonitoringWriter getMonitoringWriter();
+	public abstract IMonitoringWriter getMonitoringWriter();
 
 	/**
 	 * Enables monitoring.
 	 * 
 	 * @return true if monitoring is enabled, false otherwise
 	 */
-	public boolean enableMonitoring();
+	public abstract boolean enableMonitoring();
 
 	/**
 	 * Disables monitoring. This means that the {@link WriterController} drops all records received via
@@ -49,7 +49,7 @@ public interface IWriterController extends IMonitoringRecordReceiver, IControlle
 	 * 
 	 * @return true if monitoring is disabled, false otherwise
 	 */
-	public boolean disableMonitoring();
+	public abstract boolean disableMonitoring();
 
 	/**
 	 * Returns whether monitoring is enabled or disabled.
@@ -59,7 +59,7 @@ public interface IWriterController extends IMonitoringRecordReceiver, IControlle
 	 * 
 	 * @return true of monitoring is enabled, false if monitoring is disabled or terminated.
 	 */
-	public boolean isMonitoringEnabled();
+	public abstract boolean isMonitoringEnabled();
 
 	/**
 	 * Returns whether monitoring is disabled.
@@ -69,12 +69,12 @@ public interface IWriterController extends IMonitoringRecordReceiver, IControlle
 	 * 
 	 * @return true if monitoring is disabled; false it monitoring is enabled or terminated.
 	 */
-	public boolean isMonitoringDisabled();
+	public abstract boolean isMonitoringDisabled();
 	
 	/**
 	 * Shows how many inserts have been performed since last restart of the execution environment.
 	 * 
 	 * @return long
 	 */
-	public long getNumberOfInserts();
+	public abstract long getNumberOfInserts();
 }

@@ -36,7 +36,7 @@ public interface ISamplingController extends IWriterController, IController {
 	 * @param timeUnit
 	 * @return
 	 */
-	public ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler,
+	public abstract ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler,
 			final long initialDelay, final long period, final TimeUnit timeUnit);
 
 	/**
@@ -45,5 +45,5 @@ public interface ISamplingController extends IWriterController, IController {
 	 * @param sampler
 	 * @return true if the sensor is not registered
 	 */
-	public boolean removeScheduledSampler(final ScheduledSamplerJob sampler);
+	public abstract boolean removeScheduledSampler(final ScheduledSamplerJob sampler);
 }

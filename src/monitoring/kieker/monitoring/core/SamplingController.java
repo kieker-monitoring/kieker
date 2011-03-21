@@ -74,7 +74,7 @@ abstract class SamplingController extends WriterController implements ISamplingC
 	
 	@Override
 	public String getState() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getState().trim());
 		if (periodicSensorsPoolExecutor != null) {
 			sb.append("\nPeriodic Sensor available: Current Poolsize: '");

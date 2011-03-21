@@ -121,7 +121,7 @@ abstract class Controller implements IController {
 	
 	@Override
 	public String getState() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("Name: '");
 		sb.append(name);
 		sb.append("'; Hostname: '");

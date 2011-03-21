@@ -36,7 +36,7 @@ abstract class ReplayController extends Controller implements IReplayController 
 
 	@Override
 	public String getState() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getState());
 		sb.append("; ReplayMode: '");
 		sb.append(replayMode);

@@ -91,7 +91,7 @@ abstract class WriterController extends TimerController implements IWriterContro
 	
 	@Override
 	public String getState() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getState());
 		sb.append("'; Monitoring Enabled: '");
 		sb.append(isMonitoringEnabled());

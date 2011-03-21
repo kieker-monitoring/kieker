@@ -118,7 +118,7 @@ public class MonitoringController extends SamplingController implements IMonitor
 	
 	@Override
 	public final String getState() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("Current State of kieker.monitoring (");
 		sb.append(getVersion());
 		sb.append(")");

@@ -29,5 +29,5 @@ public interface ITimerController extends IController {
 	 * 
 	 * @return ITimeSource
 	 */
-	public ITimeSource getTimeSource();
+	public abstract ITimeSource getTimeSource();
 }

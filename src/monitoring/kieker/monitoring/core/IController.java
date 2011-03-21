@@ -60,21 +60,21 @@ public interface IController {
 	 * 
 	 * @return experimentID
 	 */
-	public int incExperimentId();
+	public abstract int incExperimentId();
 
 	/**
 	 * Sets the experiment ID to the given value.
 	 * 
 	 * @param newExperimentID
 	 */
-	public void setExperimentId(final int newExperimentID);
+	public abstract void setExperimentId(final int newExperimentID);
 	
 	/**
 	 * Returns the experiment ID.
 	 * 
 	 * @return experimentID
 	 */
-	public int getExperimentId();
+	public abstract int getExperimentId();
 	
 	/**
 	 * a String representation of the current state
@@ -86,15 +86,15 @@ public interface IController {
 	/**
 	 * Enables DebugMode
 	 */
-	public void enableDebug();
+	public abstract void enableDebug();
 	
 	/**
 	 * Disables DebugMode
 	 */
-	public void disableDebug();
+	public abstract void disableDebug();
 
 	/**
 	 * @return debugMode
 	 */
-	public boolean isDebug();
+	public abstract boolean isDebug();
 }

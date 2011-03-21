@@ -42,7 +42,7 @@ abstract class TimerController extends ReplayController implements ITimerControl
 	
 	@Override
 	public String getState() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getState());
 		sb.append("; Time Source: '");
 		sb.append(this.timesource.getClass().getName());
