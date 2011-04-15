@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT NOTE: Make sure this file is NOT auto-formatted by the editor -->
 <project name="Kieker" default="build-all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
 	<property file="build.properties" />
 
@@ -148,9 +149,10 @@
 			<pathelement location="${build.kieker.analysis.dir}/" />
 		</path>
 
-		<path id="all-external-jars">
+		<path id="eclipse-external-jars">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
+				<exclude name="log4j-*.jar" />
 			</fileset>
 		</path>
 	</target>
@@ -173,13 +175,7 @@
 		<delete dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}/META-INF" />
-		<javac destDir="${build.kieker.monitoring.dir}" 
-			source="1.5" 
-			target="1.5" 
-			srcdir="${src.kieker.monitoring.dir}" 
-			debug="true" 
-			excludes="kieker/monitoring/probe/aspectJ/" 
-			classpathref="kieker.monitoring-compile-classpath">
+		<javac destDir="${build.kieker.monitoring.dir}" source="1.5" target="1.5" srcdir="${src.kieker.monitoring.dir}" debug="true" excludes="kieker/monitoring/probe/aspectJ/" classpathref="kieker.monitoring-compile-classpath">
 			<compilerarg value="-Xlint:all,-path" />
 		</javac>
 		<!-- WORKAROUND!!! -->
@@ -266,17 +262,7 @@
 				<include name="${src.kieker.tools.dir}" />
 			</dirset>
 		</path>
-		<javadoc sourcepathref="javadoc-sourcepath" 
-			destdir="${build.api.dir}" 
-			packagenames="*" 
-			access="public" 
-			author="true" 
-			version="false" 
-			use="true" 
-			doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" 
-			header="Kieker ${kieker.version}" 
-			footer="Kieker ${kieker.version}" 
-			bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker.sourceforge.net&quot;&gt;http://kieker.sourceforge.net&lt;/&gt;">
+		<javadoc sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="*" access="public" author="true" version="false" use="true" doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" header="Kieker ${kieker.version}" footer="Kieker ${kieker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker.sourceforge.net&quot;&gt;http://kieker.sourceforge.net&lt;/&gt;">
 			<classpath refid="kieker.common-compile-classpath" />
 			<classpath refid="kieker.analysis-compile-classpath" />
 			<classpath refid="kieker.monitoring-compile-classpath" />
@@ -876,13 +862,14 @@
 
 	<!-- Generates sample files for .classpath and .project Eclipse files -->
 	<target name="create-eclipse-sample-files" depends="init">
-		<pathconvert property="eclipse.entries" refid="all-external-jars" dirsep="/" pathsep="&quot;/&gt;&#10;    &lt;classpathentry kind=&quot;lib&quot; path=&quot;">
+		<pathconvert property="eclipse.entries" refid="eclipse-external-jars" dirsep="/" pathsep="&quot;/&gt;&#10;    &lt;classpathentry kind=&quot;lib&quot; path=&quot;">
 			<map from="${user.dir}/" to="" />
 			<!-- change absolute path back to relative path -->
 		</pathconvert>
 
-		<echo file="${eclipse-classpath.sample}">
-			<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+		<!-- Make sure that the following echo message (the content of the template file) is 
+		auto-formatted by the editor. Particularly, there mustn't be a leading empty line. -->
+		<echo file="${eclipse-classpath.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 			<!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
 			<classpath>
 				<classpathentry kind="src" path="${src.kieker.common.dir}"/>
@@ -900,8 +887,9 @@
 			</classpath>
         ]]>
         </echo>
-		<echo file="${eclipse-project.sample}">
-			<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+		<!-- Make sure that the following echo message (the content of the template file) is 
+		auto-formatted by the editor. Particularly, there mustn't be a leading empty line. -->
+		<echo file="${eclipse-project.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 			<!-- Sample eclipse .project file. Copy this file to ".project". -->
 			<projectDescription>
 				<name>Kieker</name>
