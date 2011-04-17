@@ -1,7 +1,8 @@
 package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.ResourceUtilizationRecord;
-import kieker.monitoring.core.ISamplingController;
+import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.WriterController;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;
@@ -41,14 +42,14 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	private final static String CPU_RESOURCE_NAME_PREFIX = "cpu-";
 
 	@Override
-	public void sample(final ISamplingController samplingController) throws Exception {
+	public void sample(final IMonitoringController samplingController) throws Exception {
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
 		final ITimeSource timesource = samplingController.getTimeSource();
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
 			final double combinedUtilization = curCPU.getCombined();
 			final ResourceUtilizationRecord r = new ResourceUtilizationRecord(timesource.currentTimeNanos(),
-					samplingController.getHostName(), CPUsCombinedPercSampler.CPU_RESOURCE_NAME_PREFIX + i, combinedUtilization);
+					samplingController.getControllerConfig().getHostName(), CPUsCombinedPercSampler.CPU_RESOURCE_NAME_PREFIX + i, combinedUtilization);
 			samplingController.newMonitoringRecord(r);
 			// CPUsCombinedPercSampler.log.info("Sigar utilization: " + combinedUtilization + "; " + " Record: " + r);
 		}

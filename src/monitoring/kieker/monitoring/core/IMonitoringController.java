@@ -18,8 +18,12 @@ package kieker.monitoring.core;
  * ==================================================
  */
 /**
- * @author Jan Waller
+ * @author Jan Waller, Robert von Massow
  */
-public interface IMonitoringController extends IController, IReplayController, ITimerController, IWriterController, ISamplingController {
+public interface IMonitoringController extends IController, IWriterController, ISamplingController {
 
+	abstract public String getState();
+
+	@Override
+	abstract public boolean terminateMonitoring();
 }

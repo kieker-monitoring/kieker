@@ -64,7 +64,7 @@ kieker.monitoring.periodicSensorsExecutorPoolSize=1
 ## The value must be a fully-qualified classname of a class implementing 
 ## kieker.monitoring.IMonitoringWriter and providing a constructor that 
 ## accepts an IMonitoringController and a single Configuration. 
-kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
+kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter
 
 
 #####

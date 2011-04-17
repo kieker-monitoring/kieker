@@ -1,6 +1,7 @@
 package kieker.monitoring.writer;
 
 import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.monitoring.core.IWriterController;
 
 /* ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
@@ -20,7 +21,7 @@ import kieker.common.record.IMonitoringRecordReceiver;
  */
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 
@@ -28,12 +29,22 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
 	 * Writers should return as soon as it is safe to terminate Kieker.
 	 */
-	public void terminate();
+	abstract public void terminate();
 
 	/**
 	 * Returns a human-readable information string about the writer's configuration and state.
-	 * 
+	 *
 	 * @return the information string.
 	 */
-	public String getInfoString();
+	abstract public String getInfoString();
+
+
+	/**
+	 * Set the <code>IWriterController</code> controlling this writer.
+	 *
+	 * @param controller
+	 * @throws Exception
+	 */
+	abstract public void setController(IWriterController controller) throws Exception;
+
 }

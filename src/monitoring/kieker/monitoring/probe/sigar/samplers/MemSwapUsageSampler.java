@@ -1,7 +1,8 @@
 package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.MemSwapUsageRecord;
-import kieker.monitoring.core.ISamplingController;
+import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.WriterController;
 
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.SigarProxy;
@@ -40,15 +41,15 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	}
 
 	@Override
-	public void sample(final ISamplingController samplingController)
-			throws Exception {
+	public void sample(final IMonitoringController samplingController)
+	throws Exception {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r =
-				new MemSwapUsageRecord(samplingController.getTimeSource().currentTimeNanos(),
-						samplingController.getHostName(), mem.getTotal(),
-						mem.getActualUsed(), mem.getActualFree(),
-						swap.getTotal(), swap.getUsed(), swap.getTotal());
+			new MemSwapUsageRecord(samplingController.getTimeSource().currentTimeNanos(),
+					samplingController.getHostName(), mem.getTotal(),
+					mem.getActualUsed(), mem.getActualFree(),
+					swap.getTotal(), swap.getUsed(), swap.getTotal());
 		samplingController.newMonitoringRecord(r);
 	}
 }

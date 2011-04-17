@@ -1,6 +1,7 @@
 package kieker.monitoring.probe.manual;
 
 import kieker.common.record.BranchingRecord;
+import kieker.monitoring.core.ControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.probe.IMonitoringProbe;
 import kieker.monitoring.timer.ITimeSource;
@@ -32,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class BranchingProbe implements IMonitoringProbe {
 	private static final Log log = LogFactory.getLog(BranchingProbe.class);
-	private static final MonitoringController ctrlInst = MonitoringController.getInstance();
+	private static final MonitoringController ctrlInst = ControllerFactory.getInstance();
 	private static final ITimeSource timesource = ctrlInst.getTimeSource();
 
 

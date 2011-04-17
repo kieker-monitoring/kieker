@@ -6,7 +6,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
 
 import org.apache.commons.logging.Log;
@@ -15,13 +14,13 @@ import org.apache.commons.logging.LogFactory;
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,27 +36,27 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	private static final String QUEUESIZE = "QueueSize";
 	private static final String BEHAVIOR = "QueueFullBehavior";
-	
+
 	// internal variables
 	private final String PREFIX;
-	protected final Vector<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
+	private final Vector<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final int queueFullBehavior;
-	
-	protected AbstractAsyncWriter(final IWriterController ctrl, final Configuration configuration) {
-		super(ctrl, configuration);
+
+	protected AbstractAsyncWriter(final Configuration configuration) {
+		super(configuration);
 		this.PREFIX = this.getClass().getName() + ".";
-		
-		final int queueFullBehavior = this.configuration.getIntProperty(PREFIX + BEHAVIOR);
+
+		final int queueFullBehavior = this.configuration.getIntProperty(this.PREFIX + BEHAVIOR);
 		if ((queueFullBehavior < 0) || (queueFullBehavior > 2)) {
-			AbstractAsyncWriter.log.warn("Unknown value '" + queueFullBehavior + "' for " + PREFIX + BEHAVIOR + "; using default value 0");
+			AbstractAsyncWriter.log.warn("Unknown value '" + queueFullBehavior + "' for " + this.PREFIX + BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehavior;
 		}
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(PREFIX + QUEUESIZE));
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.PREFIX + QUEUESIZE));
 	}
-	
+
 	/**
 	 * Make sure that the two required properties always have default values!
 	 */
@@ -69,13 +68,13 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		properties.setProperty(PREFIX + BEHAVIOR, "0");
 		return properties;
 	}
-	
+
 	/**
 	 * This method must be called at the end of the child constructor!
-	 * 
+	 *
 	 * @param worker
 	 */
-	protected final void addWorker(AbstractAsyncThread worker) {
+	protected final void addWorker(final AbstractAsyncThread worker) {
 		this.workers.add(worker);
 		worker.setDaemon(true); // might lead to inconsistent data due to harsh shutdown
 		worker.start();
@@ -84,15 +83,15 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	public final void terminate() {
 		// notify all workers
-		for (AbstractAsyncThread worker : this.workers) {
+		for (final AbstractAsyncThread worker : this.workers) {
 			worker.initShutdown();
 		}
 		// wait for all worker to finish
-		for (AbstractAsyncThread worker : this.workers) {
+		for (final AbstractAsyncThread worker : this.workers) {
 			while (!worker.isFinished()) {
 				try {
 					Thread.sleep(500);
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					// we should be able to ignore an interrupted wait
 				}
 				AbstractAsyncWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
@@ -122,7 +121,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public String getInfoString() {
 		final StringBuilder sb = new StringBuilder();
@@ -130,10 +129,11 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		sb.append("\n\tWriter Threads (");
 		sb.append(this.workers.size());
 		sb.append("): ");
-		for (AbstractAsyncThread worker : this.workers) {
+		for (final AbstractAsyncThread worker : this.workers) {
 			sb.append("\n\t\t");
 			sb.append(worker.getInfoString());
 		}
 		return sb.toString();
 	}
+
 }

@@ -1,6 +1,7 @@
 package kieker.test.monitoring.junit.core.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
@@ -32,14 +33,14 @@ public final class DummyRecordCountWriter extends DummyWriter {
 	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
 
 	public DummyRecordCountWriter(final IWriterController ctrl, final Configuration configuration) {
-		super(ctrl, configuration);
+		super(configuration);
 	}
 
 	/**
 	 * @return the number of records
 	 */
 	public final int getNumDummyRecords() {
-		return numDummyRecords.get();
+		return this.numDummyRecords.get();
 	}
 
 	@Override

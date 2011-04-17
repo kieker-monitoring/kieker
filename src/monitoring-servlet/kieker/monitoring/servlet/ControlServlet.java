@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.ControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -48,14 +49,14 @@ import kieker.monitoring.timer.ITimeSource;
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 689701318L;
 
-	private final static MonitoringController ctrlInst = MonitoringController.getInstance();
+	private final static MonitoringController ctrlInst = ControllerFactory.getInstance();
 	private final static ITimeSource timesource = ctrlInst.getTimeSource();
 
-	
+
 	private static final SessionRegistry sessionRegistry = SessionRegistry
-			.getInstance();
+	.getInstance();
 	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry
-			.getInstance();
+	.getInstance();
 
 	protected void dumpError(final PrintWriter out, final String msg) {
 		out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
@@ -127,13 +128,13 @@ public class ControlServlet extends HttpServlet {
 			if (action.equals("setDebug")) {
 				if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("on")) {
-					ctrlInst.enableDebug();
+					ctrlInst.setDebug(true);
 				} else if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("off")) {
-					ctrlInst.disableDebug();
+					ctrlInst.setDebug(false);
 				} else {
 					this.dumpError(out,
-							"Invalid or missing value for parameter 'debug'");
+					"Invalid or missing value for parameter 'debug'");
 				}
 				/*
 				 * action = setExperimentId
@@ -183,7 +184,7 @@ public class ControlServlet extends HttpServlet {
 							"kieker.monitoring.controlServlet.ControlServlet",
 							"processRequest(HttpServletRequest,HttpServletResponse)",
 							ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), timesource.currentTimeNanos(), 
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), timesource.currentTimeNanos(),
 							timesource.currentTimeNanos(),
 							ctrlInst.getHostName(), i, i));
 				}
@@ -284,9 +285,9 @@ public class ControlServlet extends HttpServlet {
 				+ " <br>");
 		try {
 			final String youngGC = java.lang.management.ManagementFactory
-					.getGarbageCollectorMXBeans().get(0).getName();
+			.getGarbageCollectorMXBeans().get(0).getName();
 			final String tenureGC = java.lang.management.ManagementFactory
-					.getGarbageCollectorMXBeans().get(1).getName();
+			.getGarbageCollectorMXBeans().get(1).getName();
 			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC
 					+ "<br>");
 		} catch (final Exception e) { /* nothing we can do */

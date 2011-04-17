@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kieker.monitoring.core.ControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
@@ -36,7 +37,7 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
  */
 public class CPUMemUsageServletContextListener implements ServletContextListener {
 
-	private final MonitoringController monitoringController = MonitoringController.getInstance();
+	private final MonitoringController monitoringController = ControllerFactory.getInstance();
 
 	/**
 	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in {@link #contextInitialized(ServletContextEvent)} and

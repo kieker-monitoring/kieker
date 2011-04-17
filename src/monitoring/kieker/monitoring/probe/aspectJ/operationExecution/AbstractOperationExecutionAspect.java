@@ -1,8 +1,9 @@
 package kieker.monitoring.probe.aspectJ.operationExecution;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.ControllerFactory;
 import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
@@ -31,7 +32,7 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
 
-	protected static final MonitoringController ctrlInst = MonitoringController.getInstance();
+	protected static final MonitoringController ctrlInst = ControllerFactory.getInstance();
 	protected static final String vmName = ctrlInst.getHostName();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final ITimeSource timesource = ctrlInst.getTimeSource();
@@ -60,7 +61,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable;
 
 	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData)
-			throws Throwable {
+	throws Throwable {
 		execData.tin = timesource.currentTimeNanos(); // startint stopwatch
 		try {
 			execData.retVal = thisJoinPoint.proceed();

@@ -37,24 +37,24 @@ public interface IController {
 	 * @return true if monitoring is permanently terminated, false if monitoring is enabled or disabled.
 	 */
 	public abstract boolean isMonitoringTerminated();
-	
+
 	/**
 	 * Returns the name of this controller.
 	 * 
 	 * @return String
 	 */
 	public abstract String getName();
-	
+
 	/**
-	 * The HostName will be part of the monitoring data and allows to assing 
-	 * observations in cases where the software system is deployed on more 
+	 * The HostName will be part of the monitoring data and allows to distinguish
+	 * observations in cases where the software system is deployed on more
 	 * than one host.
 	 * 
 	 * When you want to distinguish multiple Virtual Machines on one host, you
 	 * have to set the HostName manually in the Configuration.
 	 */
 	public abstract String getHostName();
-	
+
 	/**
 	 * Increments the experiment ID by 1 and returns the new value.
 	 * 
@@ -68,33 +68,29 @@ public interface IController {
 	 * @param newExperimentID
 	 */
 	public abstract void setExperimentId(final int newExperimentID);
-	
+
 	/**
 	 * Returns the experiment ID.
 	 * 
 	 * @return experimentID
 	 */
 	public abstract int getExperimentId();
-	
+
 	/**
 	 * a String representation of the current state
 	 * 
-	 * @return String
+	 * @param StringBuilder a StringBuilder to write to
 	 */
-	public abstract String getState();
+	public abstract void getState(StringBuilder sb);
 
 	/**
-	 * Enables DebugMode
+	 * Enables/disables debug mode DebugMode
 	 */
-	public abstract void enableDebug();
-	
-	/**
-	 * Disables DebugMode
-	 */
-	public abstract void disableDebug();
+	public abstract void setDebug(boolean debug);
 
 	/**
 	 * @return debugMode
 	 */
 	public abstract boolean isDebug();
+
 }

@@ -1,6 +1,7 @@
 package kieker.monitoring.probe.spring.executions;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.ControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -41,14 +42,14 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author Marco Luebcke
  */
 public abstract class AbstractOperationExecutionMethodInvocationInterceptor implements MethodInterceptor,
-		IMonitoringProbe {
+IMonitoringProbe {
 
-	protected static final MonitoringController tpmonController = MonitoringController.getInstance();
+	protected static final MonitoringController tpmonController = ControllerFactory.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final ITimeSource timesource = tpmonController.getTimeSource();
 	protected static final String vmName = AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
-			.getHostName();
+	.getHostName();
 
 	/**
 	 * Iff true, the name of the runtime class is used, iff false, the name of
@@ -92,17 +93,17 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 
 		final OperationExecutionRecord execData = new OperationExecutionRecord(componentName /* component */,
 				opname /* operation */, traceId /*
-																					 * -1
-																					 * if
-																					 * entry
-																					 * point
-																					 */);
+				 * -1
+				 * if
+				 * entry
+				 * point
+				 */);
 		execData.isEntryPoint = false;
 		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if
 		// entry point
 		if (execData.traceId == -1) {
 			execData.traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
-					.getAndStoreUniqueThreadLocalTraceId();
+			.getAndStoreUniqueThreadLocalTraceId();
 			execData.isEntryPoint = true;
 		}
 		// here we can collect the sessionid, which may for instance be
@@ -112,7 +113,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 		// that knowns the request object (e.g. a servlet or a spring MVC
 		// controller).
 		execData.sessionId = AbstractOperationExecutionMethodInvocationInterceptor.sessionRegistry
-				.recallThreadLocalSessionId();
+		.recallThreadLocalSessionId();
 		execData.experimentId = AbstractOperationExecutionMethodInvocationInterceptor.tpmonController.getExperimentId();
 		execData.hostName = AbstractOperationExecutionMethodInvocationInterceptor.vmName;
 		return execData;
@@ -126,7 +127,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	public abstract Object invoke(MethodInvocation invocation) throws Throwable;
 
 	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData)
-			throws Throwable {
+	throws Throwable {
 		execData.tin = timesource.currentTimeNanos();
 		try {
 			// executing the intercepted method call

@@ -2,6 +2,7 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.monitoring.core.ControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.test.monitoring.junit.core.util.DummyRecord;
@@ -28,13 +29,13 @@ import kieker.test.monitoring.junit.core.util.DummyRecordCountWriter;
  * @author Andre van Hoorn, Jan Waller
  */
 public class TestMonitoringControllerRecordsPassedInMonitoringStates extends TestCase {
-	
+
 	public void testRecordsPassedToWriterWhenEnabled() {
 		final Configuration configuration = Configuration.createDefaultConfiguration();
 		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
 		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
 		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final MonitoringController kieker = MonitoringController.createInstance(configuration);
+		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
 
 		Assert.assertTrue("Failed to enable monitoring", kieker.enableMonitoring());
 		kieker.newMonitoringRecord(new DummyRecord());
@@ -47,7 +48,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
 		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
 		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final MonitoringController kieker = MonitoringController.createInstance(configuration);
+		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
 
 		Assert.assertTrue("Failed to disable monitoring", kieker.disableMonitoring());
 		kieker.newMonitoringRecord(new DummyRecord());
@@ -60,7 +61,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
 		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
 		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final MonitoringController kieker = MonitoringController.createInstance(configuration);
+		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
 
 		kieker.terminateMonitoring();
 		kieker.newMonitoringRecord(new DummyRecord());

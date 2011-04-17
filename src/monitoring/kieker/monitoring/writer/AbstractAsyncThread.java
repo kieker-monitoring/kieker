@@ -36,13 +36,13 @@ public abstract class AbstractAsyncThread extends Thread {
 	private final static IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 	private volatile boolean finished = false;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
-	private final IWriterController ctrl;
+	private final IWriterController writerCtrl;
 
 	public AbstractAsyncThread(final IWriterController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;
-		this.ctrl = ctrl;
+		this.writerCtrl = ctrl;
 	}
-	
+
 	public final void initShutdown() {
 		try {
 			this.writeQueue.put(END_OF_MONITORING_MARKER);
@@ -75,12 +75,13 @@ public abstract class AbstractAsyncThread extends Thread {
 						}
 						this.finished = true;
 						this.writeQueue.put(END_OF_MONITORING_MARKER);
-						cleanup();
+						this.cleanup();
 						break;
 					} else {
 						this.consume(monitoringRecord);
 					}
 				} catch (final InterruptedException ex) {
+					continue;
 					// would be another method to finish the execution
 					// but normally we should be able to continue
 				}
@@ -90,13 +91,13 @@ public abstract class AbstractAsyncThread extends Thread {
 			// e.g. Interrupted Exception or IOException
 			AbstractAsyncThread.log.error("Writer thread will halt", ex);
 			this.finished = true;
-			cleanup();
-			ctrl.terminateMonitoring();
+			this.cleanup();
+			this.writerCtrl.terminateMonitoring();
 		} finally {
 			this.finished = true;
 		}
 	}
-	
+
 	/**
 	 * Returns a human-readable information string about the writer's configuration and state.
 	 * 
@@ -105,11 +106,11 @@ public abstract class AbstractAsyncThread extends Thread {
 	public String getInfoString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Finished: '");
-		sb.append(isFinished());
+		sb.append(this.isFinished());
 		sb.append("'");
 		return sb.toString();
 	}
-	
+
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
 	protected abstract void cleanup();
 }

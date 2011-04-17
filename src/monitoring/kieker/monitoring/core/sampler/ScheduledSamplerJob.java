@@ -1,7 +1,8 @@
 package kieker.monitoring.core.sampler;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.ISamplingController;
+import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.WriterController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 public class ScheduledSamplerJob implements Runnable {
 	private static final Log log = LogFactory.getLog(ScheduledSamplerJob.class);
 
-	private final ISamplingController samplingController;
+	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
 
 	/**
@@ -41,8 +42,8 @@ public class ScheduledSamplerJob implements Runnable {
 	 * @param sampler
 	 *          sampler to be trigger via {@link ISampler#sample(WriterController)}
 	 */
-	public ScheduledSamplerJob(final ISamplingController samplingController, final ISampler sensor) {
-		this.samplingController = samplingController;
+	public ScheduledSamplerJob(final IMonitoringController writerController, final ISampler sensor) {
+		this.monitoringController = writerController;
 		this.sampler = sensor;
 	}
 
@@ -52,7 +53,7 @@ public class ScheduledSamplerJob implements Runnable {
 	@Override
 	public final void run() throws RuntimeException {
 		try {
-			this.sampler.sample(this.samplingController);
+			this.sampler.sample(this.monitoringController);
 		} catch (final Exception ex) {
 			ScheduledSamplerJob.log.error("Exception occurred: ", ex);
 			/* Re-throw exception */

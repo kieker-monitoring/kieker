@@ -2,6 +2,7 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.monitoring.core.ControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
@@ -27,7 +28,7 @@ import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public class TestControllerConstruction extends TestCase {
-	
+
 	/**
 	 * 
 	 */
@@ -36,37 +37,37 @@ public class TestControllerConstruction extends TestCase {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		{
 			// Test with default values
-			final MonitoringController kieker = MonitoringController.createInstance(configuration);
-			Assert.assertEquals("monitoring should not be terminated", 
-					false, 
+			final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+			Assert.assertEquals("monitoring should not be terminated",
+					false,
 					kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ", 
-					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED), 
+			Assert.assertEquals("monitoringEnabled values differ",
+					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
 					kieker.isMonitoringEnabled());
-			Assert.assertEquals("monitoringDisabled values differ", 
+			Assert.assertEquals("monitoringDisabled values differ",
 					!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
 					kieker.isMonitoringDisabled());
-			Assert.assertSame("log writers differ", 
-					configuration.getStringProperty(Configuration.WRITER_CLASSNAME), 
+			Assert.assertSame("log writers differ",
+					configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
 					kieker.getMonitoringWriter().getClass().getName());
 			kieker.terminateMonitoring();
 		}
 
 		{
-			configuration.setProperty(Configuration.MONITORING_ENABLED, 
+			configuration.setProperty(Configuration.MONITORING_ENABLED,
 					Boolean.toString(!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED)));
-			final MonitoringController kieker = MonitoringController.createInstance(configuration);
-			Assert.assertEquals("monitoring should not be terminated", 
-					false, 
+			final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+			Assert.assertEquals("monitoring should not be terminated",
+					false,
 					kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ", 
-					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED), 
+			Assert.assertEquals("monitoringEnabled values differ",
+					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
 					kieker.isMonitoringEnabled());
-			Assert.assertEquals("monitoringDisabled values differ", 
+			Assert.assertEquals("monitoringDisabled values differ",
 					!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
 					kieker.isMonitoringDisabled());
-			Assert.assertSame("log writers differ", 
-					configuration.getStringProperty(Configuration.WRITER_CLASSNAME), 
+			Assert.assertSame("log writers differ",
+					configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
 					kieker.getMonitoringWriter().getClass().getName());
 			kieker.terminateMonitoring();
 		}
@@ -77,7 +78,7 @@ public class TestControllerConstruction extends TestCase {
 	 */
 	public void testSingletonGetterOnlyOneInstance() {
 		Assert.assertSame("singleton getter returned different objects", MonitoringController.getInstance(), MonitoringController.getInstance());
-		Assert.assertEquals("monitoring should not be terminated", 
+		Assert.assertEquals("monitoring should not be terminated",
 				false,
 				MonitoringController.getInstance().isMonitoringTerminated());
 	}

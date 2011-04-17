@@ -1,7 +1,8 @@
 package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.CPUUtilizationRecord;
-import kieker.monitoring.core.ISamplingController;
+import kieker.monitoring.core.IMonitoringController;
+import kieker.monitoring.core.WriterController;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;
@@ -39,7 +40,7 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 	}
 
 	@Override
-	public void sample(final ISamplingController samplingController) throws Exception {
+	public void sample(final IMonitoringController samplingController) throws Exception {
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
 		final ITimeSource timesource = samplingController.getTimeSource();
 		for (int i = 0; i < cpus.length; i++) {

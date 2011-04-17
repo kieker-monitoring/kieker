@@ -45,37 +45,44 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
-	private static final String PROVIDERURL = PREFIX + "ProviderUrl";
-	private static final String TOPIC = PREFIX + "Topic";
-	private static final String CONTEXTFACTORYTYPE = PREFIX + "ContextFactoryType";
-	private static final String FACTORYLOOKUPNAME = PREFIX + "FactoryLookupName";
-	private static final String MESSAGETTL = PREFIX + "MessageTimeToLive";
+	private static final String PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
+	private static final String TOPIC = AsyncJMSWriter.PREFIX + "Topic";
+	private static final String CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX
+			+ "ContextFactoryType";
+	private static final String FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX
+			+ "FactoryLookupName";
+	private static final String MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 
-	public AsyncJMSWriter(final IWriterController ctrl, final Configuration configuration) throws NamingException, JMSException {
-		super(ctrl, configuration);
+	public AsyncJMSWriter(final IWriterController ctrl,
+			final Configuration configuration) throws NamingException,
+			JMSException {
+		super(configuration);
 		this.addWorker(new JMSWriterThread(
 				ctrl,
 				this.blockingQueue,
-				this.configuration.getStringProperty(CONTEXTFACTORYTYPE),
-				this.configuration.getStringProperty(PROVIDERURL), 
-				this.configuration.getStringProperty(FACTORYLOOKUPNAME), 
-				this.configuration.getStringProperty(TOPIC), 
-				this.configuration.getLongProperty(MESSAGETTL)
-			));
+				this.configuration.getStringProperty(AsyncJMSWriter.CONTEXTFACTORYTYPE),
+				this.configuration.getStringProperty(AsyncJMSWriter.PROVIDERURL),
+				this.configuration.getStringProperty(AsyncJMSWriter.FACTORYLOOKUPNAME),
+				this.configuration.getStringProperty(AsyncJMSWriter.TOPIC),
+				this.configuration.getLongProperty(AsyncJMSWriter.MESSAGETTL)
+				));
+	}
+
+	@Override
+	protected void init() {
 	}
 }
 
 /**
  * The writer moves monitoring data via messaging to a JMS server. This uses the
  * publishRecord/subscribe pattern. The JMS server will only keep each
- * monitoring event
- * for messageTimeToLive milliseconds presents before it is deleted.
+ * monitoring event for messageTimeToLive milliseconds presents before it is
+ * deleted.
  * 
- * At the moment, JmsWorkers do not share any connections,
- * sessions or other objects.
+ * At the moment, JmsWorkers do not share any connections, sessions or other
+ * objects.
  * 
- * History:
- * 2008-09-13: Initial prototype
+ * History: 2008-09-13: Initial prototype
  * 
  * @author Matthias Rohr, Jan Waller
  */
@@ -87,65 +94,80 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	private Connection connection;
 	private MessageProducer sender;
 
-	public JMSWriterThread(final IWriterController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final String contextFactoryType, final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive) 
+	public JMSWriterThread(final IWriterController ctrl,
+			final BlockingQueue<IMonitoringRecord> writeQueue,
+			final String contextFactoryType, final String providerUrl,
+			final String factoryLookupName, final String topic,
+			final long messageTimeToLive)
 			throws NamingException, JMSException {
 		super(ctrl, writeQueue);
 		Context context;
 		try {
 			context = new InitialContext();
-			context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
+			context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY,
+					contextFactoryType);
 			context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
-			final ConnectionFactory factory = (ConnectionFactory) context.lookup(factoryLookupName);
+			final ConnectionFactory factory =
+					(ConnectionFactory) context.lookup(factoryLookupName);
 			this.connection = factory.createConnection();
-			this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			this.session =
+					this.connection.createSession(false,
+							Session.AUTO_ACKNOWLEDGE);
 			this.connection.start();
 			final Destination destination = (Destination) context.lookup(topic);
-			this.sender = session.createProducer(destination);
+			this.sender = this.session.createProducer(destination);
 			this.sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 			this.sender.setDisableMessageID(false);
 			this.sender.setTimeToLive(messageTimeToLive);
 		} catch (final NamingException ex) {
-			log.error("NamingException Exception while initializing JMS Writer");
+			JMSWriterThread.log.error("NamingException Exception while initializing JMS Writer");
 			throw ex;
 		} catch (final JMSException ex) {
-			log.error("JMSException Exception while initializing JMS Writer");
+			JMSWriterThread.log.error("JMSException Exception while initializing JMS Writer");
 			throw ex;
 		}
 	}
-	
+
 	@Override
 	public final String getInfoString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.getInfoString());
 		sb.append("; Session: '");
-		sb.append(session.toString());
+		sb.append(this.session.toString());
 		sb.append("'; Connection: '");
-		sb.append(connection.toString());
+		sb.append(this.connection.toString());
 		sb.append("'; MessageProducer: '");
-		sb.append(sender.toString());
+		sb.append(this.sender.toString());
 		sb.append("'");
 		return sb.toString();
 	}
-	
+
 	@Override
-	protected final void consume(final IMonitoringRecord monitoringRecord) throws JMSException {
+	protected final void consume(final IMonitoringRecord monitoringRecord)
+			throws JMSException {
 		try {
-			sender.send(session.createObjectMessage(monitoringRecord));
+			this.sender
+					.send(this.session.createObjectMessage(monitoringRecord));
 		} catch (final JMSException ex) {
-			log.error("Error sending jms message");
+			JMSWriterThread.log.error("Error sending jms message");
 			throw ex;
 		}
 	}
-	
+
 	@Override
 	protected final void cleanup() {
 		try {
-			sender.close();
-			session.close();
-			connection.close();
+			if (this.sender != null) {
+				this.sender.close();
+			}
+			if (this.session != null) {
+				this.session.close();
+			}
+			if (this.connection != null) {
+				this.connection.close();
+			}
 		} catch (final JMSException ex) {
-			log.error("Error closing connection", ex);
+			JMSWriterThread.log.error("Error closing connection", ex);
 		}
 	}
 }
