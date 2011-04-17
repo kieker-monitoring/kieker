@@ -2,7 +2,7 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
@@ -31,7 +31,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 	public void testMonitoringEnabledToDisabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "true");
-		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+		final MonitoringController kieker = MonitoringControllerFactory.createInstance(configuration);
 		{ /* Check values when enabled */
 			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled());
 			Assert.assertEquals("Unexpected monitoringDisabled value", false, kieker.isMonitoringDisabled());
@@ -52,7 +52,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 	public void testMonitoringDisabledToEnabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "false");
-		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+		final MonitoringController kieker = MonitoringControllerFactory.createInstance(configuration);
 		{ /* Check values when disabled */
 			Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
 			Assert.assertEquals("Unexpected monitoringDisabled value", true, kieker.isMonitoringDisabled());
@@ -73,7 +73,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 	public void testMonitoringEnabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "true");
-		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+		final MonitoringController kieker = MonitoringControllerFactory.createInstance(configuration);
 		/* Change to terminated */
 		kieker.terminateMonitoring();
 		{ /* Check values when terminated */
@@ -87,7 +87,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 	public void testMonitoringDisabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "false");
-		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+		final MonitoringController kieker = MonitoringControllerFactory.createInstance(configuration);
 		/* Change to terminated */
 		kieker.terminateMonitoring();
 		{ /* Check values when terminated */
@@ -100,7 +100,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 
 	public void testMonitoringTerminatedToEnabledMustFail() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+		final MonitoringController kieker = MonitoringControllerFactory.createInstance(configuration);
 		/* Change to terminated */
 		Assert.assertTrue("Failed to enableMonitoring", kieker.enableMonitoring());
 		kieker.terminateMonitoring();
@@ -110,7 +110,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 
 	public void testMonitoringTerminatedToDisabledMustFail() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		final MonitoringController kieker = ControllerFactory.createInstance(configuration);
+		final MonitoringController kieker = MonitoringControllerFactory.createInstance(configuration);
 		/* Change to terminated */
 		Assert.assertTrue("Failed to disableMonitoring", kieker.disableMonitoring());
 		kieker.terminateMonitoring();

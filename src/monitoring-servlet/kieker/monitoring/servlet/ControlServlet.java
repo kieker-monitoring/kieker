@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -49,8 +49,8 @@ import kieker.monitoring.timer.ITimeSource;
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 689701318L;
 
-	private final static MonitoringController ctrlInst = ControllerFactory.getInstance();
-	private final static ITimeSource timesource = ctrlInst.getTimeSource();
+	private final static MonitoringController ctrlInst = MonitoringControllerFactory.getInstance();
+	private final static ITimeSource timesource = ControlServlet.ctrlInst.getTimeSource();
 
 
 	private static final SessionRegistry sessionRegistry = SessionRegistry
@@ -112,9 +112,9 @@ public class ControlServlet extends HttpServlet {
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
 		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: "
-				+ timesource.currentTimeNanos() + "<br>");
+				+ ControlServlet.timesource.currentTimeNanos() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
-		out.println("Vmname:\"" + ctrlInst.getHostName() + "\"<br>");
+		out.println("Vmname:\"" + ControlServlet.ctrlInst.getHostName() + "\"<br>");
 
 		String action = request.getParameter("action");
 		if (action == null) {
@@ -128,10 +128,10 @@ public class ControlServlet extends HttpServlet {
 			if (action.equals("setDebug")) {
 				if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("on")) {
-					ctrlInst.setDebug(true);
+					ControlServlet.ctrlInst.setDebug(true);
 				} else if ((request.getParameter("debug") != null)
 						&& request.getParameter("debug").equals("off")) {
-					ctrlInst.setDebug(false);
+					ControlServlet.ctrlInst.setDebug(false);
 				} else {
 					this.dumpError(out,
 					"Invalid or missing value for parameter 'debug'");
@@ -145,7 +145,7 @@ public class ControlServlet extends HttpServlet {
 					try {
 						experimentID = Integer.parseInt(expimentIdString);
 						if (experimentID >= 0) {
-							ctrlInst.setExperimentId(experimentID);
+							ControlServlet.ctrlInst.setExperimentId(experimentID);
 						}
 
 					} catch (final NumberFormatException ne) {
@@ -156,22 +156,22 @@ public class ControlServlet extends HttpServlet {
 				 * action = incExperimentId
 				 */
 			} else if (action.equals("incExperimentId")) {
-				ctrlInst.incExperimentId();
+				ControlServlet.ctrlInst.incExperimentId();
 				/*
 				 * action = enable
 				 */
 			} else if (action.equals("enable")) {
-				ctrlInst.enableMonitoring();
+				ControlServlet.ctrlInst.setWritingEnabled(true);
 				/*
 				 * action = disable
 				 */
 			} else if (action.equals("disable")) {
-				ctrlInst.disableMonitoring();
+				ControlServlet.ctrlInst.setWritingEnabled(false);
 				/*
 				 * action = terminate
 				 */
 			} else if (action.equals("terminate")) {
-				ctrlInst.terminateMonitoring();
+				ControlServlet.ctrlInst.terminateMonitoring();
 				/*
 				 * action = ...
 				 */
@@ -180,13 +180,13 @@ public class ControlServlet extends HttpServlet {
 						true).getId());
 				ControlServlet.cfRegistry.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) {
-					ctrlInst.newMonitoringRecord(new OperationExecutionRecord(
+					ControlServlet.ctrlInst.newMonitoringRecord(new OperationExecutionRecord(
 							"kieker.monitoring.controlServlet.ControlServlet",
 							"processRequest(HttpServletRequest,HttpServletResponse)",
 							ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), timesource.currentTimeNanos(),
-							timesource.currentTimeNanos(),
-							ctrlInst.getHostName(), i, i));
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ControlServlet.timesource.currentTimeNanos(),
+							ControlServlet.timesource.currentTimeNanos(),
+							ControlServlet.ctrlInst.getHostName(), i, i));
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();
 				ControlServlet.sessionRegistry.unsetThreadLocalSessionId();
@@ -229,7 +229,7 @@ public class ControlServlet extends HttpServlet {
 				+ ")  </h3>");
 		String dbconnectorInfo = "";
 		try {
-			dbconnectorInfo = ctrlInst.getState();
+			dbconnectorInfo = ControlServlet.ctrlInst.getState();
 		} catch (final Exception e) {
 			out.println(e.getMessage());
 		}
@@ -264,23 +264,24 @@ public class ControlServlet extends HttpServlet {
 		}
 		final StringBuffer bu = new StringBuffer();
 		bu.append("<br><h3>Options:</h3>");
-		bu.append(" enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> / <a href=\"index?action=terminate\"> terminate</a><br>");
+		bu.append(" writing: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a><br>");
+		bu.append(" monitoring: <a href=\"index?action=terminate\"> terminate</a><br>");
 		bu.append(" debug: <a href=\"index?action=setDebug&debug=on\"> on </a> / <a href=\"index?action=setDebug&debug=off\"> off </a> <br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");
 		bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">");
 		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\""
-				+ ctrlInst.getExperimentId() + "\"/>");
+				+ ControlServlet.ctrlInst.getExperimentId() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
 		bu.append("</FORM> <br><br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
 		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\""
-				+ ctrlInst.getHostName() + "\"/>");
+				+ ControlServlet.ctrlInst.getHostName() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
 		bu.append(" Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
 		bu.append(" Kieker monitoring events since last execution environment restart = "
-				+ ctrlInst.getNumberOfInserts() + " <br>");
+				+ ControlServlet.ctrlInst.getNumberOfInserts() + " <br>");
 		bu.append(" java.vm.name = " + System.getProperty("java.vm.name")
 				+ " <br>");
 		try {

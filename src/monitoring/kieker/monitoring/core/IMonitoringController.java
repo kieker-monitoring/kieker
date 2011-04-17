@@ -20,7 +20,7 @@ package kieker.monitoring.core;
 /**
  * @author Jan Waller, Robert von Massow
  */
-public interface IMonitoringController extends IController, IWriterController, ISamplingController {
+public interface IMonitoringController extends IMonitoringControllerState, IWriterController, ISamplingController {
 
 	abstract public String getState();
 

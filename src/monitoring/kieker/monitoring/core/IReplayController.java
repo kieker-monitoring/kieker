@@ -22,7 +22,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Jan Waller
  */
-public interface IReplayController extends IController {
+public interface IReplayController extends IMonitoringControllerState {
 
 	/**
 	 * Enables the default mode that the logging timestamp of monitoring records

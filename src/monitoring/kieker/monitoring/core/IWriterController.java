@@ -24,75 +24,58 @@ import kieker.monitoring.writer.IMonitoringWriter;
 /**
  * The methods must not throw any exceptions but indicate problems via its
  * respective return value.
- *
+ * 
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
  */
-public interface IWriterController extends IMonitoringRecordReceiver, IStatefulMonitoringController {
+public interface IWriterController extends IMonitoringRecordReceiver,
+		IStatefulMonitoringController {
 
 	/**
 	 * Returns the configured monitoring writer.
-	 *
+	 * 
 	 * @return
 	 */
-	public abstract IMonitoringWriter getMonitoringWriter();
+	public IMonitoringWriter getMonitoringWriter();
 
 	/**
-	 * Enables monitoring.
-	 *
-	 * @return true if monitoring is enabled, false otherwise
+	 * Returns whether writing is enabled or disabled. 
+	 * 
+	 * @return true if writing is enabled; false if writing is disabled.
 	 */
-	public abstract boolean enableMonitoring();
+	public boolean isWritingEnabled();
 
 	/**
-	 * Disables monitoring. This means that the {@link WriterController} drops all records received via
+	 * Enables or disables writing. If writing is disabled, the
+	 * {@link WriterController} drops all records received via
 	 * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
 	 * instead of passing them to the configured monitoring log writer.
-	 *
-	 * @return true if monitoring is disabled, false otherwise
+	 * 
+	 * @param enableWriting
+	 *            true enables writing; false disables writing.
 	 */
-	public abstract boolean disableMonitoring();
+	public void setWritingEnabled(boolean enableWriting);
 
 	/**
-	 * Returns whether monitoring is enabled or disabled.
-	 *
-	 * @see #disableMonitoring()
-	 * @see #enableMonitoring()
-	 *
-	 * @return true of monitoring is enabled, false if monitoring is disabled or terminated.
-	 */
-	public abstract boolean isMonitoringEnabled();
-
-	/**
-	 * Returns whether monitoring is disabled.
-	 *
-	 * @see #disableMonitoring()
-	 * @see #enableMonitoring()
-	 *
-	 * @return true if monitoring is disabled; false it monitoring is enabled or terminated.
-	 */
-	public abstract boolean isMonitoringDisabled();
-
-	/**
-	 * Shows how many inserts have been performed since last restart of the execution environment.
-	 *
+	 * Shows how many inserts have been performed since last restart of the
+	 * execution environment.
+	 * 
 	 * @return long
 	 */
 	public abstract long getNumberOfInserts();
 
 	/**
 	 * Returns the ITimeSource used in this controller.
-	 *
+	 * 
 	 * @return ITimeSource
 	 */
 	public abstract ITimeSource getTimeSource();
 
 	/**
 	 * Returns the IController instance which is actually a configuration/state.
-	 *
+	 * 
 	 * @return the config of the controller
 	 */
-	abstract public IController getControllerConfig();
-
+	abstract public IMonitoringControllerState getControllerConfig();
 
 	public void enableRealtimeMode();
 

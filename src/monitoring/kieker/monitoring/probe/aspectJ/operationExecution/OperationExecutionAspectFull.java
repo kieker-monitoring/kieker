@@ -46,9 +46,6 @@ public class OperationExecutionAspectFull extends
 	@Around("monitoredMethod() && notWithinKieker()")
 	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint)
 			throws Throwable {
-		if (!AbstractOperationExecutionAspect.ctrlInst.isMonitoringEnabled()) {
-			return thisJoinPoint.proceed();
-		}
 		final OperationExecutionRecord execData = this
 				.initExecutionData(thisJoinPoint);
 		int eoi = 0; /* this is executionOrderIndex-th execution in this trace */

@@ -49,16 +49,20 @@ public class WriterController implements IWriterController {
 		return this.timeSource;
 	}
 
-	private final IController controller;
+	private final IMonitoringControllerState controller;
 
 	private boolean replayMode;
 
-	WriterController(final ITimeSource timeSource, final IMonitoringWriter writer, final IController controller, final boolean replayMode){
-		if(timeSource == null || writer == null || controller == null) {
-			final IllegalArgumentException illegalArgumentException = new IllegalArgumentException("Arguments must not be null (" +
-					"TimeSource: " + timeSource +
-					", Writer: " + writer +
-					", Controller: " + controller);
+	WriterController(final ITimeSource timeSource,
+			final IMonitoringWriter writer, final IMonitoringControllerState controller,
+			final boolean replayMode) {
+		if ((timeSource == null) || (writer == null) || (controller == null)) {
+			final IllegalArgumentException illegalArgumentException =
+					new IllegalArgumentException("Arguments must not be null ("
+							+
+							"TimeSource: " + timeSource +
+							", Writer: " + writer +
+							", Controller: " + controller);
 			throw illegalArgumentException;
 		}
 		this.timeSource = timeSource;
@@ -84,7 +88,7 @@ public class WriterController implements IWriterController {
 		WriterController.log.info("Shutting down Writer Controller");
 		if (this.monitoringWriter != null) {
 			this.monitoringWriter.terminate();
-			if(!this.controller.isMonitoringTerminated()) {
+			if (!this.controller.isMonitoringTerminated()) {
 				return this.controller.terminateMonitoring();
 			}
 			return true;
@@ -98,8 +102,8 @@ public class WriterController implements IWriterController {
 		sb.append(this.timeSource.getClass().getName());
 		sb.append("';\nReplay Mode: '");
 		sb.append(this.replayMode);
-		sb.append("';\nMonitoring Enabled: '");
-		sb.append(this.isMonitoringEnabled());
+		sb.append("';\nWriting Enabled: '");
+		sb.append(this.isWritingEnabled());
 		sb.append("'; Number of Inserts: '");
 		sb.append(this.getNumberOfInserts());
 		sb.append("'\n");
@@ -114,7 +118,8 @@ public class WriterController implements IWriterController {
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			if (!this.isMonitoringEnabled()) { // enabled and not terminated
+			if (this.controller.isMonitoringTerminated()
+					|| !this.isWritingEnabled()) { // enabled and not terminated
 				return false;
 			}
 			if (this.isRealtimeMode()) {
@@ -122,10 +127,11 @@ public class WriterController implements IWriterController {
 						.currentTimeNanos());
 			}
 			this.numberOfInserts.incrementAndGet();
-			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
+			final boolean successfulWriting =
+					this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {
 				WriterController.log
-				.fatal("Error writing the monitoring data. Will terminate monitoring!");
+						.fatal("Error writing the monitoring data. Will terminate monitoring!");
 				this.terminateMonitoring();
 				return false;
 			}
@@ -139,43 +145,17 @@ public class WriterController implements IWriterController {
 	}
 
 	@Override
-	public final boolean enableMonitoring() {
-		if (this.controller.isMonitoringTerminated()) {
+	public boolean isWritingEnabled() {
+		return this.writingEnabled;
+	}
+
+	@Override
+	public void setWritingEnabled(final boolean enableWriting) {
+		this.writingEnabled = enableWriting;
+		if (enableWriting && this.controller.isMonitoringTerminated()) {
 			WriterController.log
-			.error("Refused to enable monitoring because monitoring has been permanently terminated before");
-			return false;
+					.warn("Enabled writing but monitoring is terminated");
 		}
-		WriterController.log.info("Enabling monitoring");
-		this.writingEnabled = true;
-		return true;
-	}
-
-	/**
-	 * Careful! isMonitoringEnabled() != !isMonitoringDisabled()
-	 */
-	@Override
-	public final boolean isMonitoringEnabled() {
-		return !this.controller.isMonitoringTerminated() && this.writingEnabled;
-	}
-
-	@Override
-	public final boolean disableMonitoring() {
-		if (this.controller.isMonitoringTerminated()) {
-			WriterController.log
-			.error("Refused to disable monitoring because monitoring has been permanently terminated before");
-			return false;
-		}
-		WriterController.log.info("Disabling monitoring");
-		this.writingEnabled = false;
-		return true;
-	}
-
-	/**
-	 * Careful! isMonitoringDisabled() != !isMonitoringEnabled()
-	 */
-	@Override
-	public final boolean isMonitoringDisabled() {
-		return !this.controller.isMonitoringTerminated() && !this.writingEnabled;
 	}
 
 	@Override
@@ -209,7 +189,7 @@ public class WriterController implements IWriterController {
 	}
 
 	@Override
-	public IController getControllerConfig() {
+	public IMonitoringControllerState getControllerConfig() {
 		return this.controller;
 	}
 }

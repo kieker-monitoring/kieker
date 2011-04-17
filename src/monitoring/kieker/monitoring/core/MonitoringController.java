@@ -41,7 +41,7 @@ public final class MonitoringController implements IMonitoringController, Monito
 
 	private final ISamplingController samplingController;
 	private final IWriterController writerController;
-	private final IController controller;
+	private final IMonitoringControllerState controller;
 
 	/**
 	 * Name of the MBean.
@@ -55,7 +55,7 @@ public final class MonitoringController implements IMonitoringController, Monito
 		return LazyHolder.INSTANCE;
 	}
 
-	protected MonitoringController(final IController controller, final IWriterController writerController,
+	protected MonitoringController(final IMonitoringControllerState controller, final IWriterController writerController,
 			final ISamplingController samplingController, final ObjectName name) {
 		this.controller = controller;
 		this.writerController = writerController;
@@ -119,32 +119,22 @@ public final class MonitoringController implements IMonitoringController, Monito
 	}
 
 	@Override
-	public final boolean enableMonitoring() {
-		return this.writerController.enableMonitoring();
+	public boolean isWritingEnabled() {
+		return this.writerController.isWritingEnabled();
 	}
 
 	@Override
-	public final boolean disableMonitoring() {
-		return this.writerController.disableMonitoring();
+	public void setWritingEnabled(final boolean enableWriting) {
+		this.writerController.setWritingEnabled(enableWriting);
 	}
-
-	@Override
-	public final boolean isMonitoringEnabled() {
-		return this.writerController.isMonitoringEnabled();
-	}
-
-	@Override
-	public final boolean isMonitoringDisabled() {
-		return this.writerController.isMonitoringDisabled();
-	}
-
+	
 	@Override
 	public final long getNumberOfInserts() {
 		return this.writerController.getNumberOfInserts();
 	}
 
 	@Override
-	public final IController getControllerConfig() {
+	public final IMonitoringControllerState getControllerConfig() {
 		return this.writerController.getControllerConfig();
 	}
 
@@ -289,7 +279,7 @@ public final class MonitoringController implements IMonitoringController, Monito
 			MonitoringController.log.info("Initialization started");
 			IMonitoringController tmp = null;
 			try {
-				tmp = ControllerFactory.createInstance(Configuration.createSingletonConfiguration());
+				tmp = MonitoringControllerFactory.createInstance(Configuration.createSingletonConfiguration());
 			} catch (final Exception e) {
 				MonitoringController.log.error("Something went wrong initializing the Controller", e);
 			} finally {

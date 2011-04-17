@@ -1,7 +1,7 @@
 package kieker.monitoring.probe.spring.executions;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -44,7 +44,7 @@ import org.aopalliance.intercept.MethodInvocation;
 public abstract class AbstractOperationExecutionMethodInvocationInterceptor implements MethodInterceptor,
 IMonitoringProbe {
 
-	protected static final MonitoringController tpmonController = ControllerFactory.getInstance();
+	protected static final MonitoringController tpmonController = MonitoringControllerFactory.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final ITimeSource timesource = tpmonController.getTimeSource();

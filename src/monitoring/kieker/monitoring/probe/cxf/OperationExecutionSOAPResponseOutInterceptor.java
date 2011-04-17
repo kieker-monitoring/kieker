@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -56,7 +56,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
 
-	private static final MonitoringController ctrlInst = ControllerFactory.getInstance();
+	private static final MonitoringController ctrlInst = MonitoringControllerFactory.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();

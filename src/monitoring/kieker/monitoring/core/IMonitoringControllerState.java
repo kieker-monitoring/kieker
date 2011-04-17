@@ -20,7 +20,7 @@ package kieker.monitoring.core;
 /**
  * @author Jan Waller
  */
-public interface IController {
+public interface IMonitoringControllerState {
 
 	/**
 	 * Permanently terminates monitoring

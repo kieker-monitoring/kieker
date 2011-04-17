@@ -59,9 +59,6 @@ public class OperationExecutionAspectAnnotationServlet extends
 	@Around("monitoredMethod() && notWithinKieker()")
 	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint)
 			throws Throwable {
-		if (!AbstractOperationExecutionAspect.ctrlInst.isMonitoringEnabled()) {
-			return thisJoinPoint.proceed();
-		}
 		final OperationExecutionRecord execData = this
 				.initExecutionData(thisJoinPoint);
 		execData.sessionId = AbstractOperationExecutionAspectServlet.sessionRegistry

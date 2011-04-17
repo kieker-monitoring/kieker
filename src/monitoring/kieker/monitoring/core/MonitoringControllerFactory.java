@@ -21,9 +21,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Robert von Massow
  *
  */
-public class ControllerFactory {
+public class MonitoringControllerFactory {
 
-	private static Log log = LogFactory.getLog(ControllerFactory.class);
+	private static Log log = LogFactory.getLog(MonitoringControllerFactory.class);
 
 	private static IMonitoringWriter createWriter(final Configuration configuration) throws InstantiationException {
 		IMonitoringWriter monitoringWriter = null;
@@ -38,16 +38,16 @@ public class ControllerFactory {
 				Constructor<? extends IMonitoringWriter> constructor =
 					(Constructor<IMonitoringWriter>) clazz.
 					getConstructor(Configuration.class);
-				monitoringWriter = ControllerFactory.instantiateClass(constructor, configuration.getPropertiesStartingWith(writerClassname));
+				monitoringWriter = MonitoringControllerFactory.instantiateClass(constructor, configuration.getPropertiesStartingWith(writerClassname));
 			}
 		} catch (final NoSuchMethodException ex) {
-			ControllerFactory.log.error("Writer Class '" + writerClassname + "' has to implement a constructor that accepts a single Configuration", ex);
+			MonitoringControllerFactory.log.error("Writer Class '" + writerClassname + "' has to implement a constructor that accepts a single Configuration", ex);
 		} catch (final ClassNotFoundException ex) {
-			ControllerFactory.log.error("Writer Class '" + writerClassname + "' not found", ex);
+			MonitoringControllerFactory.log.error("Writer Class '" + writerClassname + "' not found", ex);
 		} catch (final NoClassDefFoundError ex) {
-			ControllerFactory.log.error("Writer Class '" + writerClassname + "' not found", ex);
+			MonitoringControllerFactory.log.error("Writer Class '" + writerClassname + "' not found", ex);
 		} catch(final InstantiationException ex) {
-			ControllerFactory.log.error("Error invoking constructor " + writerClassname + "(IWriterController, Configuration)", ex);
+			MonitoringControllerFactory.log.error("Error invoking constructor " + writerClassname + "(IWriterController, Configuration)", ex);
 			throw ex;
 		}
 		return monitoringWriter;
@@ -65,17 +65,17 @@ public class ControllerFactory {
 				Constructor<? extends ITimeSource> constructor =
 					(Constructor<ITimeSource>) clazz.
 					getConstructor(Configuration.class);
-				timesource = ControllerFactory.instantiateClass(constructor, configuration.getPropertiesStartingWith(timerClassname));
+				timesource = MonitoringControllerFactory.instantiateClass(constructor, configuration.getPropertiesStartingWith(timerClassname));
 				System.out.println();
 			}
 		} catch (final NoSuchMethodException ex) {
-			ControllerFactory.log.error("Writer Class '" + timerClassname + "' has to implement a constructor that accepts a single Configuration", ex);
+			MonitoringControllerFactory.log.error("Writer Class '" + timerClassname + "' has to implement a constructor that accepts a single Configuration", ex);
 		} catch (final ClassNotFoundException ex) {
-			ControllerFactory.log.error("Writer Class '" + timerClassname + "' not found", ex);
+			MonitoringControllerFactory.log.error("Writer Class '" + timerClassname + "' not found", ex);
 		} catch (final NoClassDefFoundError ex) {
-			ControllerFactory.log.error("Writer Class '" + timerClassname + "' not found", ex);
+			MonitoringControllerFactory.log.error("Writer Class '" + timerClassname + "' not found", ex);
 		} catch(final InstantiationException ex) {
-			ControllerFactory.log.error("Error invoking constructor " + timerClassname + "(IWriterController, Configuration)", ex);
+			MonitoringControllerFactory.log.error("Error invoking constructor " + timerClassname + "(IWriterController, Configuration)", ex);
 			throw ex;
 		}
 		return timesource;
@@ -96,26 +96,26 @@ public class ControllerFactory {
 	 * @return the requested instance of an <code>{@link IMonitoringController}</code>
 	 */
 	public static MonitoringController createInstance(final Configuration configuration) {
-		final IController controller = new Controller(configuration);
+		final IMonitoringControllerState controller = new ControllerState(configuration);
 		try {
 			Runtime.getRuntime().addShutdownHook(new ShutdownHook(controller));
 		} catch (final Exception e){
-			ControllerFactory.log.warn("Failed to add shutdownHook");
+			MonitoringControllerFactory.log.warn("Failed to add shutdownHook");
 		}
 		IMonitoringWriter writer = null;
 		final MonitoringController monitoringController;
 		ITimeSource timeSource = null;
 		try {
-			timeSource = ControllerFactory.createTimeSource(configuration);
+			timeSource = MonitoringControllerFactory.createTimeSource(configuration);
 		}catch (final Exception e){
-			ControllerFactory.log.error("TimeSource initalization failed", e);
+			MonitoringControllerFactory.log.error("TimeSource initalization failed", e);
 			controller.terminateMonitoring();
 			return null;
 		}
 		try{
-			writer = ControllerFactory.createWriter(configuration);
+			writer = MonitoringControllerFactory.createWriter(configuration);
 		}catch (final Exception e){
-			ControllerFactory.log.error("Writer creation failed", e);
+			MonitoringControllerFactory.log.error("Writer creation failed", e);
 			controller.terminateMonitoring();
 			return null;
 		}
@@ -124,7 +124,7 @@ public class ControllerFactory {
 			writer.setController(writerController);
 		} catch (final Exception e) {
 			writerController.terminateMonitoring();
-			ControllerFactory.log.error("Failed to initialize the Writer", e);
+			MonitoringControllerFactory.log.error("Failed to initialize the Writer", e);
 			return null;
 		}
 		final SamplingController samplingController = new SamplingController(configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
@@ -135,13 +135,13 @@ public class ControllerFactory {
 					"type",
 					configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_TYPE));
 		} catch (final Exception e) {
-			ControllerFactory.log.warn("Failed to initialize ObjectName", e);
+			MonitoringControllerFactory.log.warn("Failed to initialize ObjectName", e);
 		}
 		monitoringController = new MonitoringController(controller, writerController, samplingController, objectname);
 		try {
 			ManagementFactory.getPlatformMBeanServer().registerMBean(monitoringController, objectname);
 		} catch (final Exception e) {
-			ControllerFactory.log.warn("Unable to register MBean Server", e);
+			MonitoringControllerFactory.log.warn("Unable to register MBean Server", e);
 		}
 		samplingController.setMonController(monitoringController);
 		return monitoringController;
@@ -156,12 +156,12 @@ public class ControllerFactory {
 	 */
 	private final static class LazyHolder {
 		static {
-			ControllerFactory.log.info("Initialization started");
+			MonitoringControllerFactory.log.info("Initialization started");
 			MonitoringController tmp = null;
 			try {
-				tmp = ControllerFactory.createInstance(Configuration.createSingletonConfiguration());
+				tmp = MonitoringControllerFactory.createInstance(Configuration.createSingletonConfiguration());
 			} catch (final Exception e) {
-				ControllerFactory.log.error("Something went wrong initializing the Controller", e);
+				MonitoringControllerFactory.log.error("Something went wrong initializing the Controller", e);
 			} finally {
 				INSTANCE = tmp;
 			}

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -59,7 +59,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	private static final String opName = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain)";
 	private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-	private static final MonitoringController ctrlInst = ControllerFactory.getInstance();
+	private static final MonitoringController ctrlInst = MonitoringControllerFactory.getInstance();
 	private static final ITimeSource timesource = ctrlInst.getTimeSource();
 	private static final String vmName = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getHostName();
 

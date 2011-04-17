@@ -1,7 +1,7 @@
 package kieker.test.monitoring.manualInstrumentation.storageOnly;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 
 /*
@@ -60,7 +60,7 @@ import kieker.monitoring.core.MonitoringController;
  */
 public class StorageOnly {
 	private static final int numberOfEvents = 1000;
-	private static final MonitoringController ctrl = ControllerFactory.getInstance();
+	private static final MonitoringController ctrl = MonitoringControllerFactory.getInstance();
 	private static final String vmName = StorageOnly.ctrl.getHostName();
 
 	public static void main(final String args[]) {

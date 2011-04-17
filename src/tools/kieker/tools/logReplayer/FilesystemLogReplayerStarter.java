@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 
 import org.apache.commons.cli.BasicParser;
@@ -341,7 +341,7 @@ public class FilesystemLogReplayerStarter {
 		 * monitoring records.
 		 */
 		final MonitoringController monitoringController =
-			ControllerFactory.getInstance(); // use the singleton
+			MonitoringControllerFactory.getInstance(); // use the singleton
 		// instance
 
 		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {

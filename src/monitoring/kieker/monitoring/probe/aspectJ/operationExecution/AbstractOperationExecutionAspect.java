@@ -1,7 +1,7 @@
 package kieker.monitoring.probe.aspectJ.operationExecution;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControllerFactory;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
@@ -32,7 +32,7 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
 
-	protected static final MonitoringController ctrlInst = ControllerFactory.getInstance();
+	protected static final MonitoringController ctrlInst = MonitoringControllerFactory.getInstance();
 	protected static final String vmName = ctrlInst.getHostName();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final ITimeSource timesource = ctrlInst.getTimeSource();
