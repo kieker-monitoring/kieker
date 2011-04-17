@@ -28,7 +28,7 @@ import kieker.monitoring.writer.IMonitoringWriter;
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public interface IWriterController extends IMonitoringRecordReceiver,
-		IStatefulMonitoringController {
+		IStatefulSubController {
 
 	/**
 	 * Returns the configured monitoring writer.

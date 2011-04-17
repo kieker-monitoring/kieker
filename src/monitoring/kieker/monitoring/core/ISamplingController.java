@@ -25,7 +25,7 @@ import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public interface ISamplingController extends IStatefulMonitoringController {
+public interface ISamplingController extends IStatefulSubController {
 
 	/**
 	 * Schedules the given {@link ISampler} with given initial delay, and period.

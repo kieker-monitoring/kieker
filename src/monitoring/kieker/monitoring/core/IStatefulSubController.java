@@ -1,6 +1,6 @@
 package kieker.monitoring.core;
 
-interface IStatefulMonitoringController {
+interface IStatefulSubController {
 
 	/**
 	 * Internal API to terminate Monitoring

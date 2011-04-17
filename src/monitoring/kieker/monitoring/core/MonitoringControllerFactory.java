@@ -96,7 +96,7 @@ public class MonitoringControllerFactory {
 	 * @return the requested instance of an <code>{@link IMonitoringController}</code>
 	 */
 	public static MonitoringController createInstance(final Configuration configuration) {
-		final IMonitoringControllerState controller = new ControllerState(configuration);
+		final IMonitoringControllerState controller = new MonitoringControllerState(configuration);
 		try {
 			Runtime.getRuntime().addShutdownHook(new ShutdownHook(controller));
 		} catch (final Exception e){

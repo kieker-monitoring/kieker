@@ -29,8 +29,8 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Jan Waller
  */
-public class ControllerState implements IMonitoringControllerState {
-	private static final Log log = LogFactory.getLog(ControllerState.class);
+public class MonitoringControllerState implements IMonitoringControllerState {
+	private static final Log log = LogFactory.getLog(MonitoringControllerState.class);
 
 	/** Whether monitoring is terminated */
 	private final AtomicBoolean monitoringTerminated = new AtomicBoolean(false);
@@ -43,7 +43,7 @@ public class ControllerState implements IMonitoringControllerState {
 	/** DebugMode */
 	private volatile boolean debug = false;
 
-	protected ControllerState(final Configuration configuration) {
+	protected MonitoringControllerState(final Configuration configuration) {
 		this.name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
 		String hostname = configuration.getStringProperty(Configuration.HOST_NAME);
 		if (hostname.isEmpty()) {
@@ -51,7 +51,7 @@ public class ControllerState implements IMonitoringControllerState {
 			try {
 				hostname = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
-				ControllerState.log.warn("Failed to retrieve hostname");
+				MonitoringControllerState.log.warn("Failed to retrieve hostname");
 			}
 		}
 		this.hostname = hostname;
@@ -62,7 +62,7 @@ public class ControllerState implements IMonitoringControllerState {
 	@Override
 	public boolean terminateMonitoring() {
 		if (!this.monitoringTerminated.getAndSet(true)) {
-			ControllerState.log.info("Controller (" + this.name + ") shutting down");
+			MonitoringControllerState.log.info("Controller (" + this.name + ") shutting down");
 			return true;
 		}
 		return false;
@@ -123,38 +123,4 @@ public class ControllerState implements IMonitoringControllerState {
 		sb.append("'");
 	}
 
-}
-
-/**
- * This class ensures that virtual machine shutdown (e.g., cause by a
- * System.exit(int)) is delayed until all monitoring data is written. This is
- * important for the asynchronous writers for the files system and database,
- * since these store data with a small delay and data would be lost when
- * System.exit is not delayed.
- *
- * When the system shutdown is initiated, the termination of the Virtual Machine
- * is delayed until all registered worker queues are empty.
- *
- * @author Matthias Rohr, Andre van Hoorn, Jan Waller, Robert von Massow
- */
-final class ShutdownHook extends Thread {
-	private static final Log log = LogFactory.getLog(ShutdownHook.class);
-
-	private final IMonitoringControllerState ctrl;
-
-	public ShutdownHook(final IMonitoringControllerState ctrl) {
-		this.ctrl = ctrl;
-	}
-
-	@Override
-	public void run() {
-		// is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
-		if (!this.ctrl.isMonitoringTerminated()) {
-			//TODO: We can't use a logger in shutdown hooks, logger may already be down!
-			// i think: make sure that they are either down and don't log or they are terminated
-			// by the shutdown hook. it would be ok to tear down logging at last
-			ShutdownHook.log.info("ShutdownHook notifies controller to initiate shutdown");
-			this.ctrl.terminateMonitoring();
-		}
-	}
 }
