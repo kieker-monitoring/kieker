@@ -46,7 +46,7 @@ public class MonitoringControllerState implements IMonitoringControllerState {
 
 	/** State of monitoring */
 	private volatile boolean writingEnabled = false;
-	
+
 	protected MonitoringControllerState(final Configuration configuration) {
 		this.name =
 				configuration.getStringProperty(Configuration.CONTROLLER_NAME);
@@ -65,6 +65,9 @@ public class MonitoringControllerState implements IMonitoringControllerState {
 		this.experimentId.set(configuration
 				.getIntProperty(Configuration.EXPERIMENT_ID));
 		this.debug = configuration.getBooleanProperty(Configuration.DEBUG);
+		this.writingEnabled =
+				configuration
+						.getBooleanProperty(Configuration.MONITORING_ENABLED);
 	}
 
 	@Override
@@ -113,7 +116,7 @@ public class MonitoringControllerState implements IMonitoringControllerState {
 		this.writingEnabled = false;
 		return true;
 	}
-	
+
 	/**
 	 * Careful! isMonitoringDisabled() != !isMonitoringEnabled()
 	 */

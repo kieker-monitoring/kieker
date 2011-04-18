@@ -96,9 +96,9 @@ public class MonitoringControllerFactory {
 	 * @return the requested instance of an <code>{@link IMonitoringController}</code>
 	 */
 	public static MonitoringController createInstance(final Configuration configuration) {
-		final IMonitoringControllerState controller = new MonitoringControllerState(configuration);
+		final IMonitoringControllerState controllerState = new MonitoringControllerState(configuration);
 		try {
-			Runtime.getRuntime().addShutdownHook(new ShutdownHook(controller));
+			Runtime.getRuntime().addShutdownHook(new ShutdownHook(controllerState));
 		} catch (final Exception e){
 			MonitoringControllerFactory.log.warn("Failed to add shutdownHook");
 		}
@@ -109,17 +109,17 @@ public class MonitoringControllerFactory {
 			timeSource = MonitoringControllerFactory.createTimeSource(configuration);
 		}catch (final Exception e){
 			MonitoringControllerFactory.log.error("TimeSource initalization failed", e);
-			controller.terminateMonitoring();
+			controllerState.terminateMonitoring();
 			return null;
 		}
 		try{
 			writer = MonitoringControllerFactory.createWriter(configuration);
 		}catch (final Exception e){
 			MonitoringControllerFactory.log.error("Writer creation failed", e);
-			controller.terminateMonitoring();
+			controllerState.terminateMonitoring();
 			return null;
 		}
-		final WriterController writerController = new WriterController(timeSource, writer, controller,configuration.getBooleanProperty(Configuration.REPLAY_MODE));
+		final WriterController writerController = new WriterController(timeSource, writer, controllerState,configuration.getBooleanProperty(Configuration.REPLAY_MODE));
 		try {
 			writer.setController(writerController);
 		} catch (final Exception e) {
@@ -137,7 +137,7 @@ public class MonitoringControllerFactory {
 		} catch (final Exception e) {
 			MonitoringControllerFactory.log.warn("Failed to initialize ObjectName", e);
 		}
-		monitoringController = new MonitoringController(controller, writerController, samplingController, objectname);
+		monitoringController = new MonitoringController(controllerState, writerController, samplingController, objectname);
 		try {
 			ManagementFactory.getPlatformMBeanServer().registerMBean(monitoringController, objectname);
 		} catch (final Exception e) {
