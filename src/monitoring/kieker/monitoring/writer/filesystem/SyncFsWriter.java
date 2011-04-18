@@ -112,7 +112,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 		path =
-				path + File.separatorChar + "tpmon-" + dateStr + "-UTC-"
+				path + File.separatorChar + "kieker-" + dateStr + "-UTC-"
 						+ ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
@@ -120,10 +120,10 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			throw new IllegalArgumentException("Failed to create directory '"
 					+ path + "'");
 		}
-		this.filenamePrefix = path + File.separatorChar + "tpmon";
+		this.filenamePrefix = path + File.separatorChar + "kieker";
 		this.path = f.getAbsolutePath();
 
-		final String mappingFileFn = path + File.separatorChar + "tpmon.map";
+		final String mappingFileFn = path + File.separatorChar + "kieker.map";
 		try {
 			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
 		} catch (final Exception ex) {

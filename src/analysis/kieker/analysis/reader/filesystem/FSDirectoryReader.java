@@ -50,10 +50,12 @@ class FSDirectoryReader {
 
 	private static final Log log = LogFactory.getLog(FSDirectoryReader.class);
 
-	private static final boolean OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE = true;
+	private static final boolean OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE =
+			true;
 
-	private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(
-			FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE);
+	private final MonitoringRecordTypeRegistry typeRegistry =
+			new MonitoringRecordTypeRegistry(
+					FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE);
 	private volatile boolean recordTypeIdMapInitialized = false; // will read it
 																	// "on-demand"
 	private File inputDir = null;
@@ -66,7 +68,8 @@ class FSDirectoryReader {
 	 */
 	private final HashSet<String> recordTypeSelector; // Set of classnames
 	/** Records whose ID is in this list are simply skipped by the reader */
-	private final HashSet<Integer> recordTypeIdIgnoreList = new HashSet<Integer>();
+	private final HashSet<Integer> recordTypeIdIgnoreList =
+			new HashSet<Integer>();
 
 	private final IMonitoringRecordReceiver recordReceiver;
 
@@ -110,8 +113,9 @@ class FSDirectoryReader {
 		this.inputDir = new File(inputDirName);
 	}
 
-	static final String filePrefix = "tpmon";
-	static final String filePostfix = ".dat";
+	private String filePrefix = "kieker";
+	private static final String legayFilePrefix = "tpmon";
+	private final String filePostfix = ".dat";
 
 	/**
 	 * Starts reading and returns after each record has been passed to the
@@ -127,9 +131,9 @@ class FSDirectoryReader {
 			public boolean accept(final File pathname) {
 				return pathname.isFile()
 						&& pathname.getName().startsWith(
-								FSDirectoryReader.filePrefix)
+								FSDirectoryReader.this.filePrefix)
 						&& pathname.getName().endsWith(
-								FSDirectoryReader.filePostfix);
+								FSDirectoryReader.this.filePostfix);
 			}
 		});
 
@@ -138,9 +142,9 @@ class FSDirectoryReader {
 					"Directory '"
 							+ this.inputDir
 							+ "' does not exist or an I/O error occured. No files starting with '"
-							+ FSDirectoryReader.filePrefix
+							+ this.filePrefix
 							+ "' and ending with '"
-							+ FSDirectoryReader.filePostfix
+							+ this.filePostfix
 							+ "' could be found.");
 		}
 		Arrays.sort(inputFiles, new FileComparator()); // sort
@@ -151,14 +155,34 @@ class FSDirectoryReader {
 	}
 
 	/**
+	 * If true, we are reading a monitoring log from a Kieker version < 1.3 with
+	 * monitoring log files having the prefix 'tpmon' instead of 'kieker'
+	 */
+	private boolean legacyTpmonMode = false;
+
+	/**
 	 * Reads the mapping file located in the directory and loads the required
 	 * {@link IMonitoringRecord} types (i.e., classes).
 	 * 
 	 * @throws IOException
 	 */
 	private void readMappingFile() throws IOException {
-		final File mappingFile = new File(this.inputDir.getAbsolutePath()
-				+ File.separator + "tpmon.map");
+		File mappingFile = new File(this.inputDir.getAbsolutePath()
+				+ File.separator + "kieker.map");
+
+		if (!mappingFile.exists()) {
+			/* No mapping file found. Check whether we find a legacy tpmon.map file */
+			mappingFile = new File(this.inputDir.getAbsolutePath()
+					+ File.separator + "tpmon.map");
+			if (mappingFile.exists()) {
+				FSDirectoryReader.log.warn("directory '" + this.inputDir
+						+ "' contains no file 'kieker.map'");
+				FSDirectoryReader.log.info("Found 'tpmon.map' ... switching to legacy mode");
+				this.legacyTpmonMode = true;
+				this.filePrefix = FSDirectoryReader.legayFilePrefix;
+			}
+		}
+
 		BufferedReader in = null;
 		StringTokenizer st = null;
 		try {
@@ -275,8 +299,9 @@ class FSDirectoryReader {
 								continue curRecord;
 							}
 
-							final Class<? extends IMonitoringRecord> clazz = this.typeRegistry
-									.fetchClassForRecordTypeId(id);
+							final Class<? extends IMonitoringRecord> clazz =
+									this.typeRegistry
+											.fetchClassForRecordTypeId(id);
 							if (clazz == null) {
 								FSDirectoryReader.log
 										.fatal("Missing classname mapping for record type id "
@@ -323,7 +348,8 @@ class FSDirectoryReader {
 
 				/* Deliver record */
 				if (!this.recordReceiver.newMonitoringRecord(rec)) {
-					final String errorMsg = "failed to deliver record. Will terminate";
+					final String errorMsg =
+							"failed to deliver record. Will terminate";
 					FSDirectoryReader.log.error(errorMsg);
 					throw new MonitoringLogReaderException(errorMsg);
 				}

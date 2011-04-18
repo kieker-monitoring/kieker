@@ -77,7 +77,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 		path =
-				path + File.separatorChar + "tpmon-" + dateStr + "-UTC-"
+				path + File.separatorChar + "kieker-" + dateStr + "-UTC-"
 						+ ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
@@ -87,7 +87,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 					+ path + "'");
 		}
 
-		final String mappingFileFn = path + File.separatorChar + "tpmon.map";
+		final String mappingFileFn = path + File.separatorChar + "kieker.map";
 		final MappingFileWriter mappingFileWriter;
 		try {
 			mappingFileWriter = new MappingFileWriter(mappingFileFn);
@@ -127,7 +127,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			final MappingFileWriter mappingFileWriter, final String path) {
 		super(ctrl, writeQueue);
 		this.path = new File(path).getAbsolutePath();
-		this.filenamePrefix = path + File.separatorChar + "tpmon";
+		this.filenamePrefix = path + File.separatorChar + "kieker";
 		this.mappingFileWriter = mappingFileWriter;
 	}
 
