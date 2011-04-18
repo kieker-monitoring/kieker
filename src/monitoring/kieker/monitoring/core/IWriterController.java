@@ -38,24 +38,6 @@ public interface IWriterController extends IMonitoringRecordReceiver,
 	public IMonitoringWriter getMonitoringWriter();
 
 	/**
-	 * Returns whether writing is enabled or disabled. 
-	 * 
-	 * @return true if writing is enabled; false if writing is disabled.
-	 */
-	public boolean isWritingEnabled();
-
-	/**
-	 * Enables or disables writing. If writing is disabled, the
-	 * {@link WriterController} drops all records received via
-	 * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
-	 * instead of passing them to the configured monitoring log writer.
-	 * 
-	 * @param enableWriting
-	 *            true enables writing; false disables writing.
-	 */
-	public void setWritingEnabled(boolean enableWriting);
-
-	/**
 	 * Shows how many inserts have been performed since last restart of the
 	 * execution environment.
 	 * 

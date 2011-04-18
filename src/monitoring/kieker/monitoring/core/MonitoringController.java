@@ -41,7 +41,7 @@ public final class MonitoringController implements IMonitoringController, Monito
 
 	private final ISamplingController samplingController;
 	private final IWriterController writerController;
-	private final IMonitoringControllerState controller;
+	private final IMonitoringControllerState state;
 
 	/**
 	 * Name of the MBean.
@@ -57,7 +57,7 @@ public final class MonitoringController implements IMonitoringController, Monito
 
 	protected MonitoringController(final IMonitoringControllerState controller, final IWriterController writerController,
 			final ISamplingController samplingController, final ObjectName name) {
-		this.controller = controller;
+		this.state = controller;
 		this.writerController = writerController;
 		this.samplingController = samplingController;
 		this.objectname = name;
@@ -117,15 +117,25 @@ public final class MonitoringController implements IMonitoringController, Monito
 	public final IMonitoringWriter getMonitoringWriter() {
 		return this.writerController.getMonitoringWriter();
 	}
-
+	
 	@Override
-	public boolean isWritingEnabled() {
-		return this.writerController.isWritingEnabled();
+	public final boolean enableMonitoring() {
+		return this.state.enableMonitoring();
 	}
 
 	@Override
-	public void setWritingEnabled(final boolean enableWriting) {
-		this.writerController.setWritingEnabled(enableWriting);
+	public final boolean disableMonitoring() {
+		return this.state.disableMonitoring();
+	}
+
+	@Override
+	public final boolean isMonitoringEnabled() {
+		return this.state.isMonitoringEnabled();
+	}
+
+	@Override
+	public final boolean isMonitoringDisabled() {
+		return this.state.isMonitoringDisabled();
 	}
 	
 	@Override
@@ -140,47 +150,47 @@ public final class MonitoringController implements IMonitoringController, Monito
 
 	@Override
 	public final boolean isMonitoringTerminated() {
-		return this.controller.isMonitoringTerminated();
+		return this.state.isMonitoringTerminated();
 	}
 
 	@Override
 	public final String getName() {
-		return this.controller.getName();
+		return this.state.getName();
 	}
 
 	@Override
 	public final String getHostName() {
-		return this.controller.getHostName();
+		return this.state.getHostName();
 	}
 
 	@Override
 	public final int incExperimentId() {
-		return this.controller.incExperimentId();
+		return this.state.incExperimentId();
 	}
 
 	@Override
 	public final void setExperimentId(final int newExperimentID) {
-		this.controller.setExperimentId(newExperimentID);
+		this.state.setExperimentId(newExperimentID);
 	}
 
 	@Override
 	public final int getExperimentId() {
-		return this.controller.getExperimentId();
+		return this.state.getExperimentId();
 	}
 
 	@Override
 	public final void setDebug(final boolean debug) {
-		this.controller.setDebug(debug);
+		this.state.setDebug(debug);
 	}
 
 	@Override
 	public final boolean isDebug() {
-		return this.controller.isDebug();
+		return this.state.isDebug();
 	}
 
 	@Override
 	public final boolean terminateMonitoring() {
-		boolean res = this.controller.terminateMonitoring();
+		boolean res = this.state.terminateMonitoring();
 		if(res) {
 			res &= this.samplingController.terminateMonitoring();
 		}
@@ -221,7 +231,7 @@ public final class MonitoringController implements IMonitoringController, Monito
 		sb.append(":\n");
 		this.samplingController.getState(sb);
 		this.writerController.getState(sb);
-		this.controller.getState(sb);
+		this.state.getState(sb);
 	}
 
 	/**

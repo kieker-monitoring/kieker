@@ -30,7 +30,8 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public class MonitoringControllerState implements IMonitoringControllerState {
-	private static final Log log = LogFactory.getLog(MonitoringControllerState.class);
+	private static final Log log = LogFactory
+			.getLog(MonitoringControllerState.class);
 
 	/** Whether monitoring is terminated */
 	private final AtomicBoolean monitoringTerminated = new AtomicBoolean(false);
@@ -43,26 +44,34 @@ public class MonitoringControllerState implements IMonitoringControllerState {
 	/** DebugMode */
 	private volatile boolean debug = false;
 
+	/** State of monitoring */
+	private volatile boolean writingEnabled = false;
+	
 	protected MonitoringControllerState(final Configuration configuration) {
-		this.name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
-		String hostname = configuration.getStringProperty(Configuration.HOST_NAME);
+		this.name =
+				configuration.getStringProperty(Configuration.CONTROLLER_NAME);
+		String hostname =
+				configuration.getStringProperty(Configuration.HOST_NAME);
 		if (hostname.isEmpty()) {
 			hostname = "<UNKNOWN>";
 			try {
 				hostname = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
-				MonitoringControllerState.log.warn("Failed to retrieve hostname");
+				MonitoringControllerState.log
+						.warn("Failed to retrieve hostname");
 			}
 		}
 		this.hostname = hostname;
-		this.experimentId.set(configuration.getIntProperty(Configuration.EXPERIMENT_ID));
+		this.experimentId.set(configuration
+				.getIntProperty(Configuration.EXPERIMENT_ID));
 		this.debug = configuration.getBooleanProperty(Configuration.DEBUG);
 	}
 
 	@Override
 	public boolean terminateMonitoring() {
 		if (!this.monitoringTerminated.getAndSet(true)) {
-			MonitoringControllerState.log.info("Controller (" + this.name + ") shutting down");
+			MonitoringControllerState.log.info("Controller (" + this.name
+					+ ") shutting down");
 			return true;
 		}
 		return false;
@@ -71,6 +80,46 @@ public class MonitoringControllerState implements IMonitoringControllerState {
 	@Override
 	public boolean isMonitoringTerminated() {
 		return this.monitoringTerminated.get();
+	}
+
+	@Override
+	public final boolean enableMonitoring() {
+		if (this.isMonitoringTerminated()) {
+			MonitoringControllerState.log
+					.error("Refused to enable monitoring because monitoring has been permanently terminated before");
+			return false;
+		}
+		MonitoringControllerState.log.info("Enabling monitoring");
+		this.writingEnabled = true;
+		return true;
+	}
+
+	/**
+	 * Careful! isMonitoringEnabled() != !isMonitoringDisabled()
+	 */
+	@Override
+	public final boolean isMonitoringEnabled() {
+		return !this.isMonitoringTerminated() && this.writingEnabled;
+	}
+
+	@Override
+	public final boolean disableMonitoring() {
+		if (this.isMonitoringTerminated()) {
+			MonitoringControllerState.log
+					.error("Refused to disable monitoring because monitoring has been permanently terminated before");
+			return false;
+		}
+		MonitoringControllerState.log.info("Disabling monitoring");
+		this.writingEnabled = false;
+		return true;
+	}
+	
+	/**
+	 * Careful! isMonitoringDisabled() != !isMonitoringEnabled()
+	 */
+	@Override
+	public final boolean isMonitoringDisabled() {
+		return !this.isMonitoringTerminated() && !this.writingEnabled;
 	}
 
 	@Override

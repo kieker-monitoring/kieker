@@ -39,8 +39,6 @@ public class WriterController implements IWriterController {
 	private final AtomicLong numberOfInserts = new AtomicLong(0);
 	/** Monitoring Writer */
 	private final IMonitoringWriter monitoringWriter;
-	/** State of monitoring */
-	private volatile boolean writingEnabled = false;
 
 	private final ITimeSource timeSource;
 
@@ -54,7 +52,8 @@ public class WriterController implements IWriterController {
 	private boolean replayMode;
 
 	WriterController(final ITimeSource timeSource,
-			final IMonitoringWriter writer, final IMonitoringControllerState controller,
+			final IMonitoringWriter writer,
+			final IMonitoringControllerState controller,
 			final boolean replayMode) {
 		if ((timeSource == null) || (writer == null) || (controller == null)) {
 			final IllegalArgumentException illegalArgumentException =
@@ -102,8 +101,6 @@ public class WriterController implements IWriterController {
 		sb.append(this.timeSource.getClass().getName());
 		sb.append("';\nReplay Mode: '");
 		sb.append(this.replayMode);
-		sb.append("';\nWriting Enabled: '");
-		sb.append(this.isWritingEnabled());
 		sb.append("'; Number of Inserts: '");
 		sb.append(this.getNumberOfInserts());
 		sb.append("'\n");
@@ -118,8 +115,8 @@ public class WriterController implements IWriterController {
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			if (this.controller.isMonitoringTerminated()
-					|| !this.isWritingEnabled()) { // enabled and not terminated
+			if (!this.controller.isMonitoringEnabled()) { // enabled and not
+															// terminated
 				return false;
 			}
 			if (this.isRealtimeMode()) {
@@ -141,20 +138,6 @@ public class WriterController implements IWriterController {
 					"Exception detected. Will terminate monitoring", ex);
 			this.terminateMonitoring();
 			return false;
-		}
-	}
-
-	@Override
-	public boolean isWritingEnabled() {
-		return this.writingEnabled;
-	}
-
-	@Override
-	public void setWritingEnabled(final boolean enableWriting) {
-		this.writingEnabled = enableWriting;
-		if (enableWriting && this.controller.isMonitoringTerminated()) {
-			WriterController.log
-					.warn("Enabled writing but monitoring is terminated");
 		}
 	}
 

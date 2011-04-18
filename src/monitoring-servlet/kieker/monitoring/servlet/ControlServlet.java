@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.MonitoringControllerFactory;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
@@ -161,12 +161,12 @@ public class ControlServlet extends HttpServlet {
 				 * action = enable
 				 */
 			} else if (action.equals("enable")) {
-				ControlServlet.ctrlInst.setWritingEnabled(true);
+				ControlServlet.ctrlInst.enableMonitoring();
 				/*
 				 * action = disable
 				 */
 			} else if (action.equals("disable")) {
-				ControlServlet.ctrlInst.setWritingEnabled(false);
+				ControlServlet.ctrlInst.disableMonitoring();
 				/*
 				 * action = terminate
 				 */
@@ -264,8 +264,7 @@ public class ControlServlet extends HttpServlet {
 		}
 		final StringBuffer bu = new StringBuffer();
 		bu.append("<br><h3>Options:</h3>");
-		bu.append(" writing: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a><br>");
-		bu.append(" monitoring: <a href=\"index?action=terminate\"> terminate</a><br>");
+		bu.append(" enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> / <a href=\"index?action=terminate\"> terminate</a><br>");
 		bu.append(" debug: <a href=\"index?action=setDebug&debug=on\"> on </a> / <a href=\"index?action=setDebug&debug=off\"> off </a> <br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");

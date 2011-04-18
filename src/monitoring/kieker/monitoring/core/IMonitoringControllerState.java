@@ -39,6 +39,43 @@ public interface IMonitoringControllerState {
 	public abstract boolean isMonitoringTerminated();
 
 	/**
+	 * Enables monitoring.
+	 *
+	 * @return true if monitoring is enabled, false otherwise
+	 */
+	public abstract boolean enableMonitoring();
+
+	/**
+	 * Disables monitoring. This means that the {@link WriterController} drops all records received via
+	 * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
+	 * instead of passing them to the configured monitoring log writer.
+	 *
+	 * @return true if monitoring is disabled, false otherwise
+	 */
+	public abstract boolean disableMonitoring();
+
+	/**
+	 * Returns whether monitoring is enabled or disabled.
+	 *
+	 * @see #disableMonitoring()
+	 * @see #enableMonitoring()
+	 *
+	 * @return true of monitoring is enabled, false if monitoring is disabled or terminated.
+	 */
+	public abstract boolean isMonitoringEnabled();
+
+	/**
+	 * Returns whether monitoring is disabled.
+	 *
+	 * @see #disableMonitoring()
+	 * @see #enableMonitoring()
+	 *
+	 * @return true if monitoring is disabled; false it monitoring is enabled or terminated.
+	 */
+	public abstract boolean isMonitoringDisabled();
+
+	
+	/**
 	 * Returns the name of this controller.
 	 * 
 	 * @return String
