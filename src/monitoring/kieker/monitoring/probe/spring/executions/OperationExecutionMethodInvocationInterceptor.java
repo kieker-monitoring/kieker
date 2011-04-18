@@ -51,7 +51,9 @@ public class OperationExecutionMethodInvocationInterceptor extends
 		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
 				.recallThreadLocalTraceId();
 		// Only go on if a traceId has been registered before
-		if ((traceId == -1)) {
+		if ((traceId == -1)
+				|| !AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
+						.isMonitoringEnabled()) {
 			return invocation.proceed();
 		}
 
