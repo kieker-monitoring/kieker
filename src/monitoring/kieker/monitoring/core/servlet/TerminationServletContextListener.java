@@ -3,8 +3,8 @@ package kieker.monitoring.core.servlet;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import kieker.monitoring.core.IMonitoringControllerState;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.controller.IMonitoringControllerState;
+import kieker.monitoring.core.controller.MonitoringController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

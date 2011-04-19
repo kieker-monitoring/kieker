@@ -4,8 +4,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.MonitoringControllerFactory;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;

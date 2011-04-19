@@ -4,8 +4,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.controller.IWriterController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

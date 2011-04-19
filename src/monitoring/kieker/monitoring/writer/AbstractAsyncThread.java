@@ -4,7 +4,7 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IWriterController;
+import kieker.monitoring.core.controller.IWriterController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

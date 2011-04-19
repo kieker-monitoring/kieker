@@ -1,8 +1,8 @@
 package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.MemSwapUsageRecord;
-import kieker.monitoring.core.IMonitoringController;
-import kieker.monitoring.core.WriterController;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.WriterController;
 
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.SigarProxy;

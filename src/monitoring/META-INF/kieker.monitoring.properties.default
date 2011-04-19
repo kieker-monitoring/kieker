@@ -13,11 +13,6 @@
 ## If this also fails, a default configuration is being used according to the values in 
 ## this default file.
 
-# Enable/disable debug mode (true|false, default; false) 
-# Debug mode provides a more verbose logging output. It should not be used in 
-# in production. (not fully implemented)
-kieker.monitoring.debug=false
-
 # The name of the Kieker instance.
 kieker.monitoring.name=KIEKER
 
@@ -42,10 +37,9 @@ kieker.monitoring.MBean.name=MonitoringController
 kieker.monitoring.replayMode=false
 
 # Enable/disable monitoring after startup (true|false; default: true)
-# If monitoring is disabled, the MonitoringController simply drops incoming 
-# monitoring records. Thus, they are not passed to the monitoring log writer.
-# Monitoring probes may also change their behavior depending on the value of 
-# this property.
+# If monitoring is disabled, the MonitoringController simply pauses.
+# Furthermore, probes should stop collecting new data and monitoring 
+# writers stop should stop writing existing data.
 kieker.monitoring.enabled=true
 
 # The Timer used by Kieker. You usually don't want to change the value.

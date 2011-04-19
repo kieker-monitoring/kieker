@@ -1,8 +1,8 @@
 package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.ResourceUtilizationRecord;
-import kieker.monitoring.core.IMonitoringController;
-import kieker.monitoring.core.WriterController;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;

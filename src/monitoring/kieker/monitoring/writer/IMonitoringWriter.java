@@ -1,7 +1,7 @@
 package kieker.monitoring.writer;
 
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.core.IWriterController;
+import kieker.monitoring.core.controller.IWriterController;
 
 /* ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project

@@ -8,8 +8,8 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.IWriterController;
 import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.controller.IWriterController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 

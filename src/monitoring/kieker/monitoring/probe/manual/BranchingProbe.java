@@ -1,8 +1,8 @@
 package kieker.monitoring.probe.manual;
 
 import kieker.common.record.BranchingRecord;
-import kieker.monitoring.core.MonitoringControllerFactory;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.monitoring.probe.IMonitoringProbe;
 import kieker.monitoring.timer.ITimeSource;
 
