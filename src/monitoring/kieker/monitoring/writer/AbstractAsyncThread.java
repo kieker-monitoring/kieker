@@ -4,28 +4,10 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.controller.ITimeSourceController;
+import kieker.monitoring.core.controller.IMonitoringController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2011 Kieker Project
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -36,11 +18,11 @@ public abstract class AbstractAsyncThread extends Thread {
 	private final static IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 	private volatile boolean finished = false;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
-	private final ITimeSourceController writerCtrl;
+	private final IMonitoringController monitoringController;
 
-	public AbstractAsyncThread(final ITimeSourceController ctrl, final BlockingQueue<IMonitoringRecord> writeQueue) {
+	public AbstractAsyncThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;
-		this.writerCtrl = ctrl;
+		this.monitoringController = monitoringController;
 	}
 
 	public final void initShutdown() {
@@ -92,7 +74,7 @@ public abstract class AbstractAsyncThread extends Thread {
 			AbstractAsyncThread.log.error("Writer thread will halt", ex);
 			this.finished = true;
 			this.cleanup();
-			this.writerCtrl.terminateMonitoring();
+			this.monitoringController.terminateMonitoring();
 		} finally {
 			this.finished = true;
 		}
@@ -103,7 +85,8 @@ public abstract class AbstractAsyncThread extends Thread {
 	 * 
 	 * @return the information string.
 	 */
-	public String getInfoString() {
+	@Override
+	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Finished: '");
 		sb.append(this.isFinished());
@@ -112,5 +95,6 @@ public abstract class AbstractAsyncThread extends Thread {
 	}
 
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
+
 	protected abstract void cleanup();
 }

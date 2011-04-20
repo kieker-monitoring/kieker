@@ -13,23 +13,6 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2011 Kieker Project
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
  * Stores monitoring data into a database.
  * 
@@ -74,19 +57,14 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		try {
 			// register correct Driver
-			Class.forName(this.configuration.getStringProperty(SyncDbWriter.DRIVERCLASSNAME))
-					.newInstance();
+			Class.forName(this.configuration.getStringProperty(SyncDbWriter.DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
-			SyncDbWriter.log
-					.error("DB driver registration failed. Perhaps the driver jar is missing?");
+			SyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
 		try {
-			this.conn =
-					DriverManager.getConnection(this.configuration
-							.getStringProperty(SyncDbWriter.CONNECTIONSTRING));
-			final String tablename =
-					this.configuration.getStringProperty(SyncDbWriter.TABLENAME);
+			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONNECTIONSTRING));
+			final String tablename = this.configuration.getStringProperty(SyncDbWriter.TABLENAME);
 			/*
 			 * IS THIS STILL NEEDED? if
 			 * (this.configuration.getBooleanProperty(LOADID)) { final Statement
@@ -96,15 +74,8 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			 * But it should mostly work?!?
 			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } }
 			 */
-			this.psInsertMonitoringData =
-					this.conn
-							.prepareStatement(
-							"INSERT INTO "
-									+ tablename
-									+
-									" (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)"
-									+
-									" VALUES (?,?,?,?,?,?,?,?,?)");
+			this.psInsertMonitoringData = this.conn.prepareStatement("INSERT INTO " + tablename
+					+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)");
 		} catch (final SQLException ex) {
 			SyncDbWriter.log.error("SQLException: " + ex.getMessage());
 			SyncDbWriter.log.error("SQLState: " + ex.getSQLState());
@@ -118,15 +89,12 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public final synchronized boolean newMonitoringRecord(
-			final IMonitoringRecord monitoringRecord) {
+	public final synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			// connector only supports execution records so far
-			final OperationExecutionRecord execRecord =
-					(OperationExecutionRecord) monitoringRecord;
+			final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
 			this.psInsertMonitoringData.setInt(1, execRecord.experimentId);
-			this.psInsertMonitoringData.setString(2, execRecord.className + "."
-					+ execRecord.operationName);
+			this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName);
 			this.psInsertMonitoringData.setString(3, execRecord.sessionId);
 			this.psInsertMonitoringData.setLong(4, execRecord.traceId);
 			this.psInsertMonitoringData.setLong(5, execRecord.tin);
@@ -136,8 +104,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			this.psInsertMonitoringData.setLong(9, execRecord.ess);
 			this.psInsertMonitoringData.execute();
 		} catch (final Exception ex) {
-			SyncDbWriter.log
-					.error("Failed to write new monitoring record:", ex);
+			SyncDbWriter.log.error("Failed to write new monitoring record:", ex);
 			return false;
 		} finally {
 			try {
@@ -165,9 +132,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public String getInfoString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(super.getInfoString());
+		sb.append(super.toString());
 		sb.append("\n\tConnection: '");
 		sb.append(this.conn.toString());
 		sb.append("'");

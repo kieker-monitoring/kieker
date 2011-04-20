@@ -1,26 +1,9 @@
 package kieker.test.monitoring.manualInstrumentation.storageOnly;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.MonitoringControllerFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2011 Kieker Project
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
  * 
  * This is a small test for the part of Tpmon that stores monitoring data.
@@ -56,19 +39,19 @@ import kieker.monitoring.core.controller.MonitoringControllerFactory;
  * @author Matthias Rohr
  * 
  *         History: 2008-05-05 small refactoring for first release
- *                  2008-03-30 initial version
+ *         2008-03-30 initial version
  */
 public class StorageOnly {
 	private static final int numberOfEvents = 1000;
-	private static final MonitoringController ctrl = MonitoringControllerFactory.getInstance();
+	private static final IMonitoringController ctrl = MonitoringController.getInstance();
 	private static final String vmName = StorageOnly.ctrl.getHostName();
 
 	public static void main(final String args[]) {
 		try {
 			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.numberOfEvents);
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component",
-						i % 4 + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.ctrl.getHostName(), i, i);
+				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component", i % 4 + "method", "sessionid", 3333, 123123L,
+						123124L, StorageOnly.ctrl.getHostName(), i, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
 			}
@@ -76,8 +59,8 @@ public class StorageOnly {
 			Thread.sleep(8000);
 			System.out.printf("%d more monitoring points\n", StorageOnly.numberOfEvents);
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component",
-						i % 4 + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.ctrl.getHostName(), i + 10000, i);
+				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component", i % 4 + "method", "sessionid", 3333, 123123L,
+						123124L, StorageOnly.ctrl.getHostName(), i + 10000, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
 			}

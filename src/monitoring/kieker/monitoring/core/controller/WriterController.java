@@ -27,7 +27,7 @@ public final class WriterController extends AbstractController implements IWrite
 			return;
 		}
 	}
-	
+
 	@Override
 	protected final void cleanup() {
 		WriterController.log.info("Shutting down Writer Controller");
@@ -43,7 +43,7 @@ public final class WriterController extends AbstractController implements IWrite
 		sb.append(this.getNumberOfInserts());
 		sb.append("'\n");
 		if (this.monitoringWriter != null) {
-			sb.append(this.monitoringWriter.getInfoString());
+			sb.append(this.monitoringWriter.toString());
 		} else {
 			sb.append("\tNo Monitoring Writer available");
 		}

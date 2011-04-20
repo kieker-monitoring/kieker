@@ -11,23 +11,6 @@ import kieker.monitoring.core.configuration.Configuration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2011 Kieker Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
  * @author Jan Waller
  */
@@ -71,7 +54,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * This method must be called at the end of the child constructor!
-	 *
+	 * 
 	 * @param worker
 	 */
 	protected final void addWorker(final AbstractAsyncThread worker) {
@@ -95,7 +78,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 					// we should be able to ignore an interrupted wait
 				}
 				AbstractAsyncWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
-				//TODO: we should be able to abort this, perhaps a max time of repeats?
+				// TODO: we should be able to abort this, perhaps a max time of repeats?
 			}
 		}
 		AbstractAsyncWriter.log.info("Writer shutdown complete");
@@ -105,15 +88,15 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			switch (this.queueFullBehavior) {
-			case 1: // blocks when queue full
-				this.blockingQueue.put(monitoringRecord);
-				break;
-			case 2: // does nothing if queue is full
-				this.blockingQueue.offer(monitoringRecord);
-				break;
-			default: // tries to add immediately (error if full)
-				this.blockingQueue.add(monitoringRecord);
-				break;
+				case 1: // blocks when queue full
+					this.blockingQueue.put(monitoringRecord);
+					break;
+				case 2: // does nothing if queue is full
+					this.blockingQueue.offer(monitoringRecord);
+					break;
+				default: // tries to add immediately (error if full)
+					this.blockingQueue.add(monitoringRecord);
+					break;
 			}
 		} catch (final Exception ex) {
 			AbstractAsyncWriter.log.error("Failed to retrieve new monitoring record." + ex);
@@ -123,17 +106,16 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public String getInfoString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(super.getInfoString());
+		sb.append(super.toString());
 		sb.append("\n\tWriter Threads (");
 		sb.append(this.workers.size());
 		sb.append("): ");
 		for (final AbstractAsyncThread worker : this.workers) {
 			sb.append("\n\t\t");
-			sb.append(worker.getInfoString());
+			sb.append(worker.toString());
 		}
 		return sb.toString();
 	}
-
 }

@@ -15,30 +15,13 @@ import javax.naming.NamingException;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.ITimeSourceController;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2011 Kieker Project
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
@@ -47,25 +30,15 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
 	private static final String PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
 	private static final String TOPIC = AsyncJMSWriter.PREFIX + "Topic";
-	private static final String CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX
-			+ "ContextFactoryType";
-	private static final String FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX
-			+ "FactoryLookupName";
+	private static final String CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
+	private static final String FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
 	private static final String MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 
-	public AsyncJMSWriter(final ITimeSourceController ctrl,
-			final Configuration configuration) throws NamingException,
-			JMSException {
+	public AsyncJMSWriter(final IMonitoringController monitoringController, final Configuration configuration) throws NamingException, JMSException {
 		super(configuration);
-		this.addWorker(new JMSWriterThread(
-				ctrl,
-				this.blockingQueue,
-				this.configuration.getStringProperty(AsyncJMSWriter.CONTEXTFACTORYTYPE),
-				this.configuration.getStringProperty(AsyncJMSWriter.PROVIDERURL),
-				this.configuration.getStringProperty(AsyncJMSWriter.FACTORYLOOKUPNAME),
-				this.configuration.getStringProperty(AsyncJMSWriter.TOPIC),
-				this.configuration.getLongProperty(AsyncJMSWriter.MESSAGETTL)
-				));
+		this.addWorker(new JMSWriterThread(monitoringController, this.blockingQueue, this.configuration.getStringProperty(AsyncJMSWriter.CONTEXTFACTORYTYPE),
+				this.configuration.getStringProperty(AsyncJMSWriter.PROVIDERURL), this.configuration.getStringProperty(AsyncJMSWriter.FACTORYLOOKUPNAME),
+				this.configuration.getStringProperty(AsyncJMSWriter.TOPIC), this.configuration.getLongProperty(AsyncJMSWriter.MESSAGETTL)));
 	}
 
 	@Override
@@ -94,25 +67,17 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	private Connection connection;
 	private MessageProducer sender;
 
-	public JMSWriterThread(final ITimeSourceController ctrl,
-			final BlockingQueue<IMonitoringRecord> writeQueue,
-			final String contextFactoryType, final String providerUrl,
-			final String factoryLookupName, final String topic,
-			final long messageTimeToLive)
+	public JMSWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
+			final String contextFactoryType, final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive)
 			throws NamingException, JMSException {
-		super(ctrl, writeQueue);
-		Context context;
+		super(monitoringController, writeQueue);
 		try {
-			context = new InitialContext();
-			context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY,
-					contextFactoryType);
+			final Context context = new InitialContext();
+			context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
 			context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
-			final ConnectionFactory factory =
-					(ConnectionFactory) context.lookup(factoryLookupName);
+			final ConnectionFactory factory = (ConnectionFactory) context.lookup(factoryLookupName);
 			this.connection = factory.createConnection();
-			this.session =
-					this.connection.createSession(false,
-							Session.AUTO_ACKNOWLEDGE);
+			this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			this.connection.start();
 			final Destination destination = (Destination) context.lookup(topic);
 			this.sender = this.session.createProducer(destination);
@@ -129,9 +94,9 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	}
 
 	@Override
-	public final String getInfoString() {
+	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(super.getInfoString());
+		sb.append(super.toString());
 		sb.append("; Session: '");
 		sb.append(this.session.toString());
 		sb.append("'; Connection: '");
@@ -143,11 +108,9 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	}
 
 	@Override
-	protected final void consume(final IMonitoringRecord monitoringRecord)
-			throws JMSException {
+	protected final void consume(final IMonitoringRecord monitoringRecord) throws JMSException {
 		try {
-			this.sender
-					.send(this.session.createObjectMessage(monitoringRecord));
+			this.sender.send(this.session.createObjectMessage(monitoringRecord));
 		} catch (final JMSException ex) {
 			JMSWriterThread.log.error("Error sending jms message");
 			throw ex;

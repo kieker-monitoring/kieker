@@ -9,30 +9,13 @@ import java.util.concurrent.BlockingQueue;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.ITimeSourceController;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2011 the Kieker Project
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
  * Stores monitoring data into a database.
  * 
@@ -62,13 +45,10 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final Log log = LogFactory.getLog(AsyncDbWriter.class);
 
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
-	private static final String DRIVERCLASSNAME = AsyncDbWriter.PREFIX
-			+ "DriverClassname";
-	private static final String CONNECTIONSTRING = AsyncDbWriter.PREFIX
-			+ "ConnectionString";
+	private static final String DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
+	private static final String CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
 	private static final String TABLENAME = AsyncDbWriter.PREFIX + "TableName";
-	private static final String NRCONN = AsyncDbWriter.PREFIX
-			+ "numberOfConnections";
+	private static final String NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
 
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 
@@ -81,27 +61,15 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public void init() throws Exception {
 		try {
 			// register correct Driver
-			Class.forName(
-					this.configuration
-							.getStringProperty(AsyncDbWriter.DRIVERCLASSNAME))
-					.newInstance();
+			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
-			AsyncDbWriter.log
-					.error("DB driver registration failed. Perhaps the driver jar is missing?");
+			AsyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
-		final String connectionString =
-				this.configuration
-						.getStringProperty(AsyncDbWriter.CONNECTIONSTRING);
-		final String tablename =
-				this.configuration.getStringProperty(AsyncDbWriter.TABLENAME);
-		final String preparedQuery =
-				"INSERT INTO "
-						+ tablename
-						+
-						" (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)"
-						+
-						" VALUES (?,?,?,?,?,?,?,?,?)";
+		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONNECTIONSTRING);
+		final String tablename = this.configuration.getStringProperty(AsyncDbWriter.TABLENAME);
+		final String preparedQuery = "INSERT INTO " + tablename
+				+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)";
 		try {
 			/*
 			 * IS THIS STILL NEEDED? if
@@ -114,10 +82,8 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } conn.close(); }
 			 * /*
 			 */
-			for (int i = 0; i < this.configuration
-					.getIntProperty(AsyncDbWriter.NRCONN); i++) {
-				this.addWorker(new DbWriterThread(this.getController(),
-						this.blockingQueue, connectionString, preparedQuery));
+			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.NRCONN); i++) {
+				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {
 			AsyncDbWriter.log.error("SQLException: " + ex.getMessage());
@@ -137,24 +103,19 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final Connection conn;
 	private final PreparedStatement psInsertMonitoringData;
 
-	public DbWriterThread(final ITimeSourceController ctrl,
-			final BlockingQueue<IMonitoringRecord> blockingQueue,
-			final String connectionString, final String preparedQuery)
-			throws SQLException {
-		super(ctrl, blockingQueue);
+	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue,
+			final String connectionString, final String preparedQuery) throws SQLException {
+		super(monitoringController, blockingQueue);
 		this.conn = DriverManager.getConnection(connectionString);
 		this.psInsertMonitoringData = this.conn.prepareStatement(preparedQuery);
 	}
 
 	@Override
-	protected final void consume(final IMonitoringRecord monitoringRecord)
-			throws Exception {
+	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
 		// connector only supports execution records so far
-		final OperationExecutionRecord execRecord =
-				(OperationExecutionRecord) monitoringRecord;
+		final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
 		this.psInsertMonitoringData.setInt(1, execRecord.experimentId);
-		this.psInsertMonitoringData.setString(2, execRecord.className + "."
-				+ execRecord.operationName);
+		this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName);
 		this.psInsertMonitoringData.setString(3, execRecord.sessionId);
 		this.psInsertMonitoringData.setLong(4, execRecord.traceId);
 		this.psInsertMonitoringData.setLong(5, execRecord.tin);
@@ -179,9 +140,9 @@ final class DbWriterThread extends AbstractAsyncThread {
 	}
 
 	@Override
-	public String getInfoString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(super.getInfoString());
+		sb.append(super.toString());
 		sb.append("; Connection: '");
 		sb.append(this.conn.toString());
 		sb.append("'");

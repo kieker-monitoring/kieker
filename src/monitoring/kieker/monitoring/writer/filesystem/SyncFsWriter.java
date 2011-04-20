@@ -18,23 +18,6 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2011 Kieker Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
  * Simple class to store monitoring data in the file system. Although a buffered
  * writer is used, outliers (delays of 1000 ms) occur from time to time if many
@@ -78,10 +61,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private String filenamePrefix;
 	private MappingFileWriter mappingFileWriter;
 	private PrintWriter pos = null;
-	private int entriesInCurrentFileCounter = SyncFsWriter.maxEntriesInFile + 1; // Force to
-																	// initialize
-																	// first
-																	// file!
+	// Force to initialize first file!
+	private int entriesInCurrentFileCounter = SyncFsWriter.maxEntriesInFile + 1;
 	// only to get that information later
 	private String path;
 
@@ -100,25 +81,18 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		File f = new File(path);
 		if (!f.isDirectory()) {
 			SyncFsWriter.log.error("'" + path + "' is not a directory.");
-			throw new IllegalArgumentException("'" + path
-					+ "' is not a directory.");
+			throw new IllegalArgumentException("'" + path + "' is not a directory.");
 		}
-		final String ctrlName =
-				this.getController().getControllerConfig().getHostName() + "-"
-						+ this.getController().getControllerConfig().getName();
+		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat m_ISO8601UTC =
-				new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+		final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
-		path =
-				path + File.separatorChar + "kieker-" + dateStr + "-UTC-"
-						+ ctrlName + File.separatorChar;
+		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
 			SyncFsWriter.log.error("Failed to create directory '" + path + "'");
-			throw new IllegalArgumentException("Failed to create directory '"
-					+ path + "'");
+			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
 		this.filenamePrefix = path + File.separatorChar + "kieker";
 		this.path = f.getAbsolutePath();
@@ -127,17 +101,14 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		try {
 			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
 		} catch (final Exception ex) {
-			SyncFsWriter.log.error("Failed to create mapping file '"
-					+ mappingFileFn + "'", ex);
-			throw new IllegalArgumentException(
-					"Failed to create mapping file '" + mappingFileFn + "'", ex);
+			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
+			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
 	}
 
 	// TODO: keep track of record type ID mapping!
 	@Override
-	public final boolean newMonitoringRecord(
-			final IMonitoringRecord monitoringRecord) {
+	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 
 		final StringBuilder sb = new StringBuilder();
 		final Object[] recordFields = monitoringRecord.toArray();
@@ -145,9 +116,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		// check if file exists and is not full
 
 		sb.append("$");
-		final int idForRecordType =
-				this.mappingFileWriter.idForRecordTypeClass(monitoringRecord
-						.getClass());
+		final int idForRecordType = this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass());
 		sb.append(idForRecordType);
 		sb.append(';');
 		sb.append(monitoringRecord.getLoggingTimestamp());
@@ -184,9 +153,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public final String getInfoString() {
+	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(super.getInfoString());
+		sb.append(super.toString());
 		sb.append("\n\tWriting to Directory: '");
 		sb.append(this.path);
 		sb.append("'");
@@ -204,18 +173,13 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			}
 			this.entriesInCurrentFileCounter = 0;
 
-			final DateFormat m_ISO8601UTC =
-					new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 			// TODO: where does this number come from?
 			// final int random = (new Random()).nextInt(100);
-			final String filename =
-					this.filenamePrefix + "-" + dateStr + "-UTC.dat";
-			this.pos =
-					new PrintWriter(new DataOutputStream(
-							new BufferedOutputStream(new FileOutputStream(
-									filename))));
+			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))));
 		}
 	}
 }

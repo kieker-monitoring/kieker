@@ -4,8 +4,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
@@ -49,7 +49,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
-	private static final MonitoringController ctrlInst = MonitoringControllerFactory.getInstance();
+	private static final IMonitoringController ctrlInst = MonitoringController.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
@@ -58,7 +58,6 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	private static final String componentName = OperationExecutionSOAPResponseInInterceptor.class.getName();
 	private static final String opName = "handleMessage(SoapMessage msg)";
 	protected static final String vmName = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getHostName();
-
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
@@ -74,11 +73,12 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
 			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (eoiStr == null) {
-				/* No Kieker eoi in header.
-				 * This may happen for responses from callees w/o Kieker instrumentation. */
-				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE,
-						"Found no Kieker eoi in response header. " +
-				"Will unset all threadLocal variables");
+				/*
+				 * No Kieker eoi in header.
+				 * This may happen for responses from callees w/o Kieker instrumentation.
+				 */
+				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker eoi in response header. "
+						+ "Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -100,11 +100,12 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
 			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (traceIdStr == null) {
-				/* No Kieker trace Id in header.
-				 * This may happen for responses from callees w/o Kieker instrumentation. */
-				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE,
-						"Found no Kieker traceId in response header. " +
-				"Will unset all threadLocal variables");
+				/*
+				 * No Kieker trace Id in header.
+				 * This may happen for responses from callees w/o Kieker instrumentation.
+				 */
+				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker traceId in response header. "
+						+ "Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -125,27 +126,30 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final int myEss = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalESS();
 			final long myTin = OperationExecutionSOAPResponseInInterceptor.soapRegistry.recallThreadLocalOutRequestTin();
 			final long myTout = timesource.currentTimeNanos();
-			// TODO:  Remove following plausibility checks if implementation stable
+			// TODO: Remove following plausibility checks if implementation stable
 			if (myTraceId != traceId) {
-				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" +
-						"" + myTraceId + "(before) != " + traceId + "(after)");
+				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + ""
+						+ myTraceId + "(before) != " + traceId + "(after)");
 			}
 
 			// Log this execution
-			final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.componentName, OperationExecutionSOAPResponseInInterceptor.opName, mySessionId, myTraceId, myTin, myTout, OperationExecutionSOAPResponseInInterceptor.vmName, myEoi, myEss);
+			final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.componentName,
+					OperationExecutionSOAPResponseInInterceptor.opName, mySessionId, myTraceId, myTin, myTout,
+					OperationExecutionSOAPResponseInInterceptor.vmName, myEoi, myEss);
 			rec.experimentId = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getExperimentId();
 			OperationExecutionSOAPResponseInInterceptor.ctrlInst.newMonitoringRecord(rec);
 
-			/* Store received Kieker EOI
-			 * ESS remains the same as before the call since we didn't increment the variable! */
+			/*
+			 * Store received Kieker EOI
+			 * ESS remains the same as before the call since we didn't increment the variable!
+			 */
 			OperationExecutionSOAPResponseInInterceptor.cfRegistry.storeThreadLocalEOI(eoi);
 
-			if (isEntryCall){ // clean up iff trace's origin was right before the call!
+			if (isEntryCall) { // clean up iff trace's origin was right before the call!
 				this.unsetKiekerThreadLocalData();
 			}
 		}
 	}
-
 
 	private final String getStringContentFromHeader(final Header hdr) {
 		if (hdr == null) {

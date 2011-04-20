@@ -1,14 +1,15 @@
 package kieker.monitoring.probe.aspectJ.operationExecution;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+
 /*
  * ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
@@ -32,7 +33,7 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
 
-	protected static final MonitoringController ctrlInst = MonitoringControllerFactory.getInstance();
+	protected static final IMonitoringController ctrlInst = MonitoringController.getInstance();
 	protected static final String vmName = ctrlInst.getHostName();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final ITimeSource timesource = ctrlInst.getTimeSource();
@@ -43,9 +44,8 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		final int paranthIndex = paramList.lastIndexOf('(');
 		paramList = paramList.substring(paranthIndex); // paramList is now e.g., "()"
 
-		final OperationExecutionRecord execData = new OperationExecutionRecord(thisJoinPoint.getSignature()
-				.getDeclaringTypeName() /* component */, methodname + paramList /* operation */,
-				AbstractOperationExecutionAspect.cfRegistry.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
+		final OperationExecutionRecord execData = new OperationExecutionRecord(thisJoinPoint.getSignature().getDeclaringTypeName() /* component */, methodname
+				+ paramList /* operation */, AbstractOperationExecutionAspect.cfRegistry.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
 
 		execData.isEntryPoint = false;
 		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point
@@ -60,8 +60,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable;
 
-	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData)
-	throws Throwable {
+	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData) throws Throwable {
 		execData.tin = timesource.currentTimeNanos(); // startint stopwatch
 		try {
 			execData.retVal = thisJoinPoint.proceed();

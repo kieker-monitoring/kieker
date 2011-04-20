@@ -7,8 +7,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
 import kieker.monitoring.probe.sigar.SigarSamplerFactory;
@@ -17,9 +17,8 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 
 /**
  * <p>
- * Starts and stops the periodic logging of CPU utilization employing the {@link SigarSamplerFactory} as the Servlet is
- * initialized and destroyed respectively. The statistics are logged with a period of {@value #SENSOR_INTERVAL_SECONDS}
- * seconds.
+ * Starts and stops the periodic logging of CPU utilization employing the {@link SigarSamplerFactory} as the Servlet is initialized and destroyed respectively.
+ * The statistics are logged with a period of {@value #SENSOR_INTERVAL_SECONDS} seconds.
  * </p>
  * 
  * <p>
@@ -37,7 +36,7 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
  */
 public class CPUMemUsageServletContextListener implements ServletContextListener {
 
-	private final MonitoringController monitoringController = MonitoringControllerFactory.getInstance();
+	private final IMonitoringController monitoringController = MonitoringController.getInstance();
 
 	/**
 	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in {@link #contextInitialized(ServletContextEvent)} and
@@ -71,15 +70,13 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		// Log utilization of each CPU every 30 seconds
 		final CPUsDetailedPercSampler cpuSensor = sigarFactory.createSensorCPUsDetailedPerc();
 		final ScheduledSamplerJob cpuSensorJob = this.monitoringController.schedulePeriodicSampler(cpuSensor,
-				CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS,
-				CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
+				CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS, CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
 		this.samplerJobs.add(cpuSensorJob);
 
 		// Log memory and swap statistics every 30 seconds
 		final MemSwapUsageSampler memSensor = sigarFactory.createSensorMemSwapUsage();
 		final ScheduledSamplerJob memSensorJob = this.monitoringController.schedulePeriodicSampler(memSensor,
-				CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS,
-				CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
+				CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS, CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
 		this.samplerJobs.add(memSensorJob);
 	}
 }

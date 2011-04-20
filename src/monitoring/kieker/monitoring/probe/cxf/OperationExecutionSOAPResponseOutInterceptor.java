@@ -4,8 +4,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
@@ -56,14 +56,13 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
 
-	private static final MonitoringController ctrlInst = MonitoringControllerFactory.getInstance();
+	private static final IMonitoringController ctrlInst = MonitoringController.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
 	protected static final ITimeSource timesource = ctrlInst.getTimeSource();
 
 	protected static final String vmName = OperationExecutionSOAPResponseOutInterceptor.ctrlInst.getHostName();
-
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
@@ -72,20 +71,23 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		long tin = -1, tout = -1;
 		boolean isEntryCall = true;
 		int eoi = -1;
-		//final int ess = -1;
+		// final int ess = -1;
 		int myEoi = -1, myEss = -1;
 
 		if (traceId == -1) {
-			/* Kieker trace Id not registered.
-			 * Should not happen, since this is a response message! */
-			OperationExecutionSOAPResponseOutInterceptor.LOG.log(Level.WARNING,
-					"Kieker traceId not registered. " +
-			"Will unset all threadLocal variables and return.");
+			/*
+			 * Kieker trace Id not registered.
+			 * Should not happen, since this is a response message!
+			 */
+			OperationExecutionSOAPResponseOutInterceptor.LOG.log(Level.WARNING, "Kieker traceId not registered. "
+					+ "Will unset all threadLocal variables and return.");
 			this.unsetKiekerThreadLocalData(); // unset all variables
 			return;
 		} else {
-			/* thread-local traceId exists: eoi, ess, and sessionID should have
-			 * been registered before */
+			/*
+			 * thread-local traceId exists: eoi, ess, and sessionID should have
+			 * been registered before
+			 */
 			eoi = OperationExecutionSOAPResponseOutInterceptor.cfRegistry.recallThreadLocalEOI();
 			sessionID = OperationExecutionSOAPResponseOutInterceptor.sessionRegistry.recallThreadLocalSessionId();
 			myEoi = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestEOI();
@@ -99,13 +101,17 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		this.unsetKiekerThreadLocalData();
 
 		/* Log this execution */
-		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.componentName, OperationExecutionSOAPResponseOutInterceptor.opName, sessionID, traceId, tin, tout, OperationExecutionSOAPResponseOutInterceptor.vmName, myEoi, myEss);
+		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.componentName,
+				OperationExecutionSOAPResponseOutInterceptor.opName, sessionID, traceId, tin, tout, OperationExecutionSOAPResponseOutInterceptor.vmName, myEoi,
+				myEss);
 		rec.experimentId = OperationExecutionSOAPResponseOutInterceptor.ctrlInst.getExperimentId();
 		OperationExecutionSOAPResponseOutInterceptor.ctrlInst.newMonitoringRecord(rec);
 
-		/* We don't put Kieker data into response header if request didn't
-		 * contain Kieker information*/
-		if(isEntryCall){
+		/*
+		 * We don't put Kieker data into response header if request didn't
+		 * contain Kieker information
+		 */
+		if (isEntryCall) {
 			return;
 		}
 
