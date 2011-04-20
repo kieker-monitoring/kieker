@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.ControlFlowRegistry;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.SessionRegistry;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.timer.ITimeSource;
 
 /*
  * ==================LICENCE=========================
@@ -31,7 +33,6 @@ import kieker.monitoring.core.SessionRegistry;
  * limitations under the License.
  * ==================================================
  */
-
 /**
  * @author Matthias Rohr, Andre van Hoorn
  * 
@@ -46,13 +47,13 @@ import kieker.monitoring.core.SessionRegistry;
  *         Prototype
  */
 public class ControlServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 689701318L;
 
-	private static final SessionRegistry sessionRegistry = SessionRegistry
-			.getInstance();
-	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry
-			.getInstance();
+	private final static IMonitoringController ctrlInst = MonitoringController.getInstance();
+	private final static ITimeSource timesource = ControlServlet.ctrlInst.getTimeSource();
+
+	private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 
 	protected void dumpError(final PrintWriter out, final String msg) {
 		out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
@@ -79,21 +80,17 @@ public class ControlServlet extends HttpServlet {
 	}
 
 	/**
-	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-	 * methods.
+	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 * 
 	 * @param request
 	 *            servlet request
 	 * @param response
 	 *            servlet response
 	 */
-	protected void processRequest(final HttpServletRequest request,
-			final HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
-
-		final MonitoringController ctrlInst = MonitoringController.getInstance();
 
 		int experimentID = 0;
 		final boolean connectorError = false;
@@ -108,89 +105,60 @@ public class ControlServlet extends HttpServlet {
 		out.println("<body>");
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
-		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: "
-				+ MonitoringController.currentTimeNanos() + "<br>");
+		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.timesource.getTime() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
-		out.println("Vmname:\"" + ctrlInst.getHostName() + "\"<br>");
+		out.println("Vmname:\"" + ControlServlet.ctrlInst.getHostName() + "\"<br>");
 
 		String action = request.getParameter("action");
 		if (action == null) {
 			action = "";
 		}
 
-		/*
-		 * action = setDebug
-		 */
 		if (!connectorError) {
-			if (action.equals("setDebug")) {
-				if ((request.getParameter("debug") != null)
-						&& request.getParameter("debug").equals("on")) {
-					ctrlInst.setDebugEnabled(true);
-				} else if ((request.getParameter("debug") != null)
-						&& request.getParameter("debug").equals("off")) {
-					ctrlInst.setDebugEnabled(false);
-				} else {
-					this.dumpError(out,
-							"Invalid or missing value for parameter 'debug'");
-				}
-				/*
-				 * action = setExperimentId
-				 */
-			} else if (action.equals("setExperimentId")) {
+			if (action.equals("setExperimentId")) {
 				final String expimentIdString = request.getParameter("experimentID");
 				if ((expimentIdString != null) && (expimentIdString.length() != 0)) {
 					try {
 						experimentID = Integer.parseInt(expimentIdString);
 						if (experimentID >= 0) {
-							ctrlInst.setExperimentId(experimentID);
+							ControlServlet.ctrlInst.setExperimentId(experimentID);
 						}
 
 					} catch (final NumberFormatException ne) {
 						this.dumpError(out, ne.getMessage());
 					}
 				}
-
-			} else if (action.equals("setVmname")) {
-				final String vmname = request.getParameter("vmname");
-				if (vmname != null) {
-					ctrlInst.setHostName(vmname);
-				}
 				/*
 				 * action = incExperimentId
 				 */
 			} else if (action.equals("incExperimentId")) {
-				ctrlInst.incExperimentId();
+				ControlServlet.ctrlInst.incExperimentId();
 				/*
 				 * action = enable
 				 */
 			} else if (action.equals("enable")) {
-				ctrlInst.enableMonitoring();
+				ControlServlet.ctrlInst.enableMonitoring();
 				/*
 				 * action = disable
 				 */
 			} else if (action.equals("disable")) {
-				ctrlInst.disableMonitoring();
+				ControlServlet.ctrlInst.disableMonitoring();
 				/*
 				 * action = terminate
 				 */
 			} else if (action.equals("terminate")) {
-				ctrlInst.terminateMonitoring();
+				ControlServlet.ctrlInst.terminateMonitoring();
 				/*
 				 * action = ...
 				 */
 			} else if (action.equals("insertTestData")) {
-				ControlServlet.sessionRegistry.storeThreadLocalSessionId(request.getSession(
-						true).getId());
+				ControlServlet.sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
 				ControlServlet.cfRegistry.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) {
-					ctrlInst.newMonitoringRecord(new OperationExecutionRecord(
-							"kieker.monitoring.controlServlet.ControlServlet",
-							"processRequest(HttpServletRequest,HttpServletResponse)",
-							ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), MonitoringController
-									.currentTimeNanos(), MonitoringController
-									.currentTimeNanos(),
-							ctrlInst.getHostName(), i, i));
+					ControlServlet.ctrlInst.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet",
+							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ControlServlet.timesource.getTime(), ControlServlet.timesource
+									.getTime(), ControlServlet.ctrlInst.getHostName(), i, i));
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();
 				ControlServlet.sessionRegistry.unsetThreadLocalSessionId();
@@ -198,11 +166,11 @@ public class ControlServlet extends HttpServlet {
 				 * action = switchFaultInjection
 				 */
 			} else if (action.equalsIgnoreCase("switchFaultInjection")) {
-				final String activate = request.getParameter("activate");
-				boolean enable = false;
-				if ((activate != null) && activate.equalsIgnoreCase("true")) {
-					enable = true;
-				}
+				// final String activate = request.getParameter("activate");
+				// boolean enable = false;
+				// if ((activate != null) && activate.equalsIgnoreCase("true")) {
+				// enable = true;
+				// }
 				final String location = request.getParameter("location");
 				if (location != null) {
 					// if (location.equalsIgnoreCase("AccountSqlMapDao")) {
@@ -229,11 +197,10 @@ public class ControlServlet extends HttpServlet {
 		/*
 		 * Dump Connector Info
 		 */
-		out.println("<h3> Status (" + "<a href=\"index.html\"> update </a>"
-				+ ")  </h3>");
+		out.println("<h3> Status (" + "<a href=\"index.html\"> update </a>" + ")  </h3>");
 		String dbconnectorInfo = "";
 		try {
-			dbconnectorInfo = ctrlInst.getConnectorInfo();
+			dbconnectorInfo = ControlServlet.ctrlInst.toString();
 		} catch (final Exception e) {
 			out.println(e.getMessage());
 		}
@@ -241,21 +208,18 @@ public class ControlServlet extends HttpServlet {
 		if (dbconnectorInfo.length() == 0) {
 			out.println("<h2> Dbconnector not found ... </h2>");
 		} else {
-			final StringTokenizer infoTokenizer = new StringTokenizer(
-					dbconnectorInfo, ",");
+			final StringTokenizer infoTokenizer = new StringTokenizer(dbconnectorInfo, ",");
 			out.println("<table>");
 			while (infoTokenizer.hasMoreTokens()) {
 				out.print("<tr>");
 				final String nameValuePair = infoTokenizer.nextToken();
-				final StringTokenizer fieldTokenizer = new StringTokenizer(
-						nameValuePair, ":");
+				final StringTokenizer fieldTokenizer = new StringTokenizer(nameValuePair, ":");
 				if (fieldTokenizer.countTokens() < 2) {
 					out.print("<td colspan=2>");
 					this.dumpError(out, "Invalid name-value pair:" + nameValuePair);
 					out.print("</td>");
 				} else {
-					out.print("<td>" + fieldTokenizer.nextToken().trim()
-							+ ":</td>");
+					out.print("<td>" + fieldTokenizer.nextToken().trim() + ":</td>");
 					out.print("<td>");
 					while (fieldTokenizer.hasMoreTokens()) {
 						out.print(fieldTokenizer.nextToken().trim());
@@ -273,27 +237,20 @@ public class ControlServlet extends HttpServlet {
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");
 		bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">");
-		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\""
-				+ ctrlInst.getExperimentId() + "\"/>");
+		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"" + ControlServlet.ctrlInst.getExperimentId() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
 		bu.append("</FORM> <br><br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
-		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\""
-				+ ctrlInst.getHostName() + "\"/>");
+		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ControlServlet.ctrlInst.getHostName() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
 		bu.append(" Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
-		bu.append(" Kieker monitoring events since last execution environment restart = "
-				+ ctrlInst.getNumberOfInserts() + " <br>");
-		bu.append(" java.vm.name = " + System.getProperty("java.vm.name")
-				+ " <br>");
+		bu.append(" Kieker monitoring events since last execution environment restart = " + ControlServlet.ctrlInst.getNumberOfInserts() + " <br>");
+		bu.append(" java.vm.name = " + System.getProperty("java.vm.name") + " <br>");
 		try {
-			final String youngGC = java.lang.management.ManagementFactory
-					.getGarbageCollectorMXBeans().get(0).getName();
-			final String tenureGC = java.lang.management.ManagementFactory
-					.getGarbageCollectorMXBeans().get(1).getName();
-			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC
-					+ "<br>");
+			final String youngGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
+			final String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
+			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC + "<br>");
 		} catch (final Exception e) { /* nothing we can do */
 		}
 		out.println(bu.toString());
@@ -314,8 +271,7 @@ public class ControlServlet extends HttpServlet {
 	 *            servlet response
 	 */
 	@Override
-	protected void doGet(final HttpServletRequest request,
-			final HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
@@ -331,8 +287,7 @@ public class ControlServlet extends HttpServlet {
 	 *            servlet response
 	 */
 	@Override
-	protected void doPost(final HttpServletRequest request,
-			final HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}

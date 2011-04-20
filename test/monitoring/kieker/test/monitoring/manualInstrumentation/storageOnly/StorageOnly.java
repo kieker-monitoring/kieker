@@ -1,7 +1,8 @@
 package kieker.test.monitoring.manualInstrumentation.storageOnly;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * 
@@ -37,37 +38,29 @@ import kieker.monitoring.core.MonitoringController;
  * 
  * @author Matthias Rohr
  * 
- *         History: 2008-05-05 small refactoring for first release 2008-03-30
- *         initial version
+ *         History: 2008-05-05 small refactoring for first release
+ *         2008-03-30 initial version
  */
-
 public class StorageOnly {
 	private static final int numberOfEvents = 1000;
-	private static final MonitoringController ctrl = MonitoringController
-			.getInstance();
+	private static final IMonitoringController ctrl = MonitoringController.getInstance();
 	private static final String vmName = StorageOnly.ctrl.getHostName();
 
 	public static void main(final String args[]) {
 		try {
-			System.out.printf("Starting test by adding %d monitoring events\n",
-					StorageOnly.numberOfEvents);
+			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.numberOfEvents);
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord(
-						i % 2 + "component", i % 4 + "method", "sessionid",
-						3333, 123123L, 123124L, StorageOnly.ctrl.getHostName(),
-						i, i);
+				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component", i % 4 + "method", "sessionid", 3333, 123123L,
+						123124L, StorageOnly.ctrl.getHostName(), i, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 8 seconds");
 			Thread.sleep(8000);
-			System.out.printf("%d more monitoring points\n",
-					StorageOnly.numberOfEvents);
+			System.out.printf("%d more monitoring points\n", StorageOnly.numberOfEvents);
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord(
-						i % 2 + "component", i % 4 + "method", "sessionid",
-						3333, 123123L, 123124L, StorageOnly.ctrl.getHostName(),
-						i + 10000, i);
+				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component", i % 4 + "method", "sessionid", 3333, 123123L,
+						123124L, StorageOnly.ctrl.getHostName(), i + 10000, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
 			}

@@ -6,11 +6,11 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 /**
  * @author Jan Waller
  */
-public class MonitoredClass {
+public final class MonitoredClass {
 
     @OperationExecutionMonitoringProbe()
     @BenchmarkProbe()
-    public long monitoredMethod(final long methodTime, final int recDepth) {
+    public final long monitoredMethod(final long methodTime, final int recDepth) {
         if (recDepth > 1) {
             return monitoredMethod(methodTime, recDepth - 1);
         } else {

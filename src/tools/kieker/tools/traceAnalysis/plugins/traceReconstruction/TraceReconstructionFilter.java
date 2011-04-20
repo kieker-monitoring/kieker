@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
-import kieker.common.util.LoggingTimestampConverter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
@@ -35,6 +34,7 @@ import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionEventProcessingException;
+import kieker.tools.util.LoggingTimestampConverter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

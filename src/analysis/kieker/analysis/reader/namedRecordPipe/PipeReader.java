@@ -3,11 +3,11 @@ package kieker.analysis.reader.namedRecordPipe;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.util.PropertyMap;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.PropertyMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

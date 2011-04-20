@@ -20,7 +20,9 @@ package kieker.tools.loggingTimestampConverter;
 
 import java.util.Comparator;
 import java.util.Vector;
-import kieker.common.util.LoggingTimestampConverter;
+
+import kieker.tools.util.LoggingTimestampConverter;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

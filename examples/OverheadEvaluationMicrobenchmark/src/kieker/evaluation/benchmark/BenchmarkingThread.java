@@ -6,20 +6,20 @@ import kieker.evaluation.monitoredApplication.MonitoredClass;
 
 public final class BenchmarkingThread extends Thread {
 
-	private MonitoredClass mc;
-	private CountDownLatch doneSignal;
-	private int recordedCalls;
-	private int totalCalls;
-	private long methodTime;
-	private int recursionDepth;
-	private long[] timings;
+	private final MonitoredClass mc;
+	private final CountDownLatch doneSignal;
+	private final int recordedCalls;
+	private final int totalCalls;
+	private final long methodTime;
+	private final int recursionDepth;
+	private final long[] timings;
 	private int j = 0;
 	
-	public synchronized int getIndexOfTimings() {
+	public final synchronized int getIndexOfTimings() {
 		return j;
 	}
 
-	public synchronized long[] getTimings() {
+	public final synchronized long[] getTimings() {
 		return timings;
 	}
 
@@ -31,11 +31,11 @@ public final class BenchmarkingThread extends Thread {
 		this.recordedCalls = recordedCalls;
 		this.methodTime = methodTime;
 		this.recursionDepth = recursionDepth;
-		timings = new long[recordedCalls];
+		this.timings = new long[recordedCalls];
 	}
 
 	@Override
-	public void run() {
+	public final void run() {
 		long start_ns, stop_ns;
 		for (int i = 0; i < totalCalls; i++) {
 			start_ns = System.nanoTime();

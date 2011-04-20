@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#BINDJAVA="pfexec psrset -e 1"
+BINDJAVA=""
+
 BINDIR=$(dirname $0)/
 BASEDIR=${BINDIR}../
 
@@ -21,7 +24,8 @@ if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
 
 RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 echo "Removing and recreating '$RESULTSDIR'"
-rm -rf ${RESULTSDIR} && mkdir ${RESULTSDIR}
+(pfexec rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
+mkdir ${RESULTSDIR}stat/
 mkdir -p ${BASEDIR}build/META-INF/
 
 # Clear kieker.log and initialize logging
@@ -83,7 +87,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
         # 1 No instrumentation
         echo " # ${i}.1 No instrumentation"
-        java  ${JAVAARGS_NOINSTR} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-1.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-1.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-1.txt &
+        ${BINDJAVA} java  ${JAVAARGS_NOINSTR} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
             --configuration-id "noinstr;${i};0;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -91,6 +98,9 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
+        kill %mpstat
+        kill %vmstat
+        kill %iostat
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_1.log
         sync
         sleep ${SLEEPTIME}
@@ -98,7 +108,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         # 2 Empty probe
         echo " # ${i}.2 Empty probe"
         cp ${AOPXML_INSTR_EMPTYPROBE} ${AOPXML_PATH}
-        java  ${JAVAARGS_INSTR_EMPTYPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-2.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-2.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-2.txt &
+        ${BINDJAVA} java  ${JAVAARGS_INSTR_EMPTYPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
             --configuration-id "empty_probe;${i};1;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -106,6 +119,9 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
+        kill %mpstat
+        kill %vmstat
+        kill %iostat
         rm -f ${AOPXML_PATH}
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
         sync
@@ -114,7 +130,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         # 3 Deactivated probe
         echo " # ${i}.3 Deactivated probe"
         cp ${AOPXML_INSTR_DEACTPROBE} ${AOPXML_PATH}
-        java  ${JAVAARGS_INSTR_DEACTPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-3.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-3.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-3.txt &
+        ${BINDJAVA} java  ${JAVAARGS_INSTR_DEACTPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
             --configuration-id "deact_probe;${i};2;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -122,6 +141,9 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
+        kill %mpstat
+        kill %vmstat
+        kill %iostat
         rm -f ${AOPXML_PATH}
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
         sync
@@ -130,7 +152,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         # 4 No logging
         echo " # ${i}.4 No logging (null writer)"
         cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
-        java  ${JAVAARGS_INSTR_NOLOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-4.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-4.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-4.txt &
+        ${BINDJAVA} java  ${JAVAARGS_INSTR_NOLOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
             --configuration-id "no_logging;${i};3;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -138,6 +163,9 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
+        kill %mpstat
+        kill %vmstat
+        kill %iostat
         rm -f ${AOPXML_PATH}
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_3.log
         sync
@@ -146,7 +174,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         # 5 Logging
         echo " # ${i}.5 Logging"
         cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
-        java  ${JAVAARGS_INSTR_LOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-5.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-5.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-5.txt &
+        ${BINDJAVA} java  ${JAVAARGS_INSTR_LOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
             --configuration-id "logging;${i};4;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -154,6 +185,9 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
+        kill %mpstat
+        kill %vmstat
+        kill %iostat
         rm -f ${AOPXML_PATH}
         mkdir -p ${RESULTSDIR}kiekerlog/
         mv ${BASEDIR}tmp/tpmon-* ${RESULTSDIR}kiekerlog/
@@ -165,9 +199,9 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
 done
 tar cf ${RESULTSDIR}/kiekerlog.tar ${RESULTSDIR}/kiekerlog/
-rm -rf ${RESULTSDIR}/kiekerlog/
+pfexec rm -rf ${RESULTSDIR}/kiekerlog/
 gzip -9 ${RESULTSDIR}/kiekerlog.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
-${BINDIR}run-r-benchmark-recursive.sh
+## ${BINDIR}run-r-benchmark-recursive.sh
 [ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log
 [ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}

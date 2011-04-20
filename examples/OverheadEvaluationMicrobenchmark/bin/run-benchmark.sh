@@ -3,12 +3,12 @@
 BINDIR=$(dirname $0)/
 BASEDIR=${BINDIR}../
 
-SLEEPTIME=30            ## 30
+SLEEPTIME=5             ## 30
 NUM_LOOPS=1             ## 1
 THREADS=1               ## 1
 RECURSIONDEPTH=1        ## 1
-TOTALCALLS=1000000      ## 1000000
-RECORDEDCALLS=100000    ## 100000
+TOTALCALLS=10000        ## 1000000
+RECORDEDCALLS=1000      ## 100000
 METHODTIME=500000       ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 5 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 5 \* ${NUM_LOOPS}`
@@ -51,11 +51,11 @@ CLASSPATH=$(ls lib/*.jar | tr "\n" "${CPSEPCHAR}")build/
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.storeInJavaIoTmpdir=false -Dkieker.monitoring.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties"
 JAVAARGS_INSTR_EMPTYPROBE="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
 JAVAARGS_INSTR_DEACTPROBE="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
 JAVAARGS_INSTR_NOLOGGING="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
-JAVAARGS_INSTR_LOGGING="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_LOGGING}"
+JAVAARGS_INSTR_LOGGING="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_LOGGING} -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=false -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt
@@ -89,6 +89,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --totalthreads ${THREADS} \
         --recursiondepth ${RECURSIONDEPTH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_1.log
+    echo >>${BASEDIR}kieker.log
+    echo >>${BASEDIR}kieker.log
     sync
     sleep ${SLEEPTIME}
 
@@ -105,6 +107,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --recursiondepth ${RECURSIONDEPTH}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
+    echo >>${BASEDIR}kieker.log
+    echo >>${BASEDIR}kieker.log
     sync
     sleep ${SLEEPTIME}
 
@@ -121,6 +125,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --recursiondepth ${RECURSIONDEPTH}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
+    echo >>${BASEDIR}kieker.log
+    echo >>${BASEDIR}kieker.log
     sync
     sleep ${SLEEPTIME}
 
@@ -137,6 +143,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --recursiondepth ${RECURSIONDEPTH}
     rm -f ${AOPXML_PATH}
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_3.log
+    echo >>${BASEDIR}kieker.log
+    echo >>${BASEDIR}kieker.log
     sync
     sleep ${SLEEPTIME}
 
@@ -155,6 +163,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         mkdir -p ${RESULTSDIR}kiekerlog/
         mv ${BASEDIR}tmp/tpmon-* ${RESULTSDIR}kiekerlog/
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log
+    echo >>${BASEDIR}kieker.log
+    echo >>${BASEDIR}kieker.log
     sync
     sleep ${SLEEPTIME}
 

@@ -1,147 +1,136 @@
 package kieker.monitoring.writer.jms;
 
-import java.util.Vector;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import kieker.common.record.DummyMonitoringRecord;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.MonitoringRecordTypeClassnameMapping;
-import kieker.common.util.PropertyMap;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.writer.IMonitoringLogWriter;
-import kieker.monitoring.writer.util.async.AbstractWorkerThread;
+import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.writer.AbstractAsyncThread;
+import kieker.monitoring.writer.AbstractAsyncWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/*
- * ==================LICENCE=========================
- * Copyright 2006-2009 Kieker Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ==================================================
- */
 /**
- *
- * @author Matthias Rohr, Andre van Hoorn
+ * 
+ * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-public final class AsyncJMSWriter implements IMonitoringLogWriter {
+public final class AsyncJMSWriter extends AbstractAsyncWriter {
+	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
+	private static final String PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
+	private static final String TOPIC = AsyncJMSWriter.PREFIX + "Topic";
+	private static final String CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
+	private static final String FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
+	private static final String MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 
-    private static final Log log = LogFactory.getLog(AsyncJMSWriter.class);
-    private final Vector<AbstractWorkerThread> typeWriterAndRecordWriters = new Vector<AbstractWorkerThread>();
-    private static final MonitoringRecordTypeClassnameMapping TYPE_WRITER_END_OF_MONITORING_MARKER = new MonitoringRecordTypeClassnameMapping(-1, null);
-    private static final IMonitoringRecord RECORD_WRITER_END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
-    private final int numberOfJmsWriters = 3; // number of jms connections -- usually one (on every node)        
-    private BlockingQueue<IMonitoringRecord> recordQueue = null;
-    private BlockingQueue<MonitoringRecordTypeClassnameMapping> typeQueue = null;
-    private String contextFactoryType; // type of the jms factory implementation, e.g.
-    private String providerUrl;
-    private String factoryLookupName;
-    private String topic;
-    private long messageTimeToLive;
-    private int asyncRecordQueueSize = 8000;
-    private final int asyncTypeQueueSize = 20;
+	public AsyncJMSWriter(final IMonitoringController monitoringController, final Configuration configuration) throws NamingException, JMSException {
+		super(configuration);
+		this.addWorker(new JMSWriterThread(monitoringController, this.blockingQueue, this.configuration.getStringProperty(AsyncJMSWriter.CONTEXTFACTORYTYPE),
+				this.configuration.getStringProperty(AsyncJMSWriter.PROVIDERURL), this.configuration.getStringProperty(AsyncJMSWriter.FACTORYLOOKUPNAME),
+				this.configuration.getStringProperty(AsyncJMSWriter.TOPIC), this.configuration.getLongProperty(AsyncJMSWriter.MESSAGETTL)));
+	}
 
-    /**
-     * Init String. Expect key=value pairs separated by |.
-     * 
-     * Example initString (meaning of keys explained below):
-     * jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000
-     * 
-     * jmsContextFactoryType -- type of the jms factory implementation, e.g. "org.exolab.jms.jndi.InitialContextFactory" for openjms 0.7.7
-     * jmsProviderUrl -- url of the jndi provider that knows the jms service
-     * jmsFactoryLookupName -- service name for the jms connection factory
-     * jmsTopic -- topic at the jms server which is used in the publisher/subscribe communication
-     * jmsMessageTimeToLive -- time that a jms message will kepts be alive at the jms server before it is automatically deleted
-     * 
-     * @param initString
-     * @return true on success. false on error.
-     */
-    @Override
-	public boolean init(final String initString) {
-        if ((initString == null) || (initString.length() == 0)) {
-            AsyncJMSWriter.log.error("Invalid initString. Valid example for kieker.monitoring.properties:\n"
-                    + "monitoringDataWriterInitString=jmsProviderUrl=tcp://localhost:3035/ | jmsTopic=queue1 | jmsContextFactoryType=org.exolab.jms.jndi.InitialContextFactory | jmsFactoryLookupName=ConnectionFactory | jmsMessageTimeToLive = 10000");
-            return false;
-        }
+	@Override
+	protected void init() {
+	}
+}
 
-        boolean retVal = true;
-        try {
-            final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-            
-            this.contextFactoryType = propertyMap.getProperty("jmsContextFactoryType");
-            this.providerUrl = propertyMap.getProperty("jmsProviderUrl");
-            this.factoryLookupName = propertyMap.getProperty("jmsFactoryLookupName");
-            this.topic = propertyMap.getProperty("jmsTopic");
-            this.messageTimeToLive = Long.valueOf(propertyMap.getProperty("jmsMessageTimeToLive"));
-            this.asyncRecordQueueSize = Integer.valueOf(propertyMap.getProperty("asyncRecordQueueSize"));
+/**
+ * The writer moves monitoring data via messaging to a JMS server. This uses the
+ * publishRecord/subscribe pattern. The JMS server will only keep each
+ * monitoring event for messageTimeToLive milliseconds presents before it is
+ * deleted.
+ * 
+ * At the moment, JmsWorkers do not share any connections, sessions or other
+ * objects.
+ * 
+ * History: 2008-09-13: Initial prototype
+ * 
+ * @author Matthias Rohr, Jan Waller
+ */
+final class JMSWriterThread extends AbstractAsyncThread {
+	private static final Log log = LogFactory.getLog(JMSWriterThread.class);
 
+	// configuration parameters
+	private Session session;
+	private Connection connection;
+	private MessageProducer sender;
 
-            this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.asyncRecordQueueSize);
-            this.typeQueue = new ArrayBlockingQueue<MonitoringRecordTypeClassnameMapping>(this.asyncTypeQueueSize);
-            for (int i = 1; i <= this.numberOfJmsWriters; i++) {
-                final JMSWriterThread<IMonitoringRecord> recordWriter =
-                        new JMSWriterThread<IMonitoringRecord>(this.recordQueue, AsyncJMSWriter.RECORD_WRITER_END_OF_MONITORING_MARKER, this.contextFactoryType, this.providerUrl, this.factoryLookupName, this.topic, this.messageTimeToLive);
-                this.typeWriterAndRecordWriters.add(recordWriter);
-                recordWriter.setDaemon(true);
-                recordWriter.start();
-            }
-            AsyncJMSWriter.log.info("(" + this.numberOfJmsWriters + " threads) will send to the JMS server topic");
-        } catch (final Exception exc) {
-            AsyncJMSWriter.log.fatal("Error initiliazing JMS Connector", exc);
-            retVal = false;
-        }
-        return retVal;
-    }
+	public JMSWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
+			final String contextFactoryType, final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive)
+			throws NamingException, JMSException {
+		super(monitoringController, writeQueue);
+		try {
+			final Context context = new InitialContext();
+			context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
+			context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
+			final ConnectionFactory factory = (ConnectionFactory) context.lookup(factoryLookupName);
+			this.connection = factory.createConnection();
+			this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			this.connection.start();
+			final Destination destination = (Destination) context.lookup(topic);
+			this.sender = this.session.createProducer(destination);
+			this.sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+			this.sender.setDisableMessageID(false);
+			this.sender.setTimeToLive(messageTimeToLive);
+		} catch (final NamingException ex) {
+			JMSWriterThread.log.error("NamingException Exception while initializing JMS Writer");
+			throw ex;
+		} catch (final JMSException ex) {
+			JMSWriterThread.log.error("JMSException Exception while initializing JMS Writer");
+			throw ex;
+		}
+	}
 
-    
-    @Override
-	public String getInfoString() {
-        final StringBuilder strB = new StringBuilder();
+	@Override
+	public final String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.toString());
+		sb.append("; Session: '");
+		sb.append(this.session.toString());
+		sb.append("'; Connection: '");
+		sb.append(this.connection.toString());
+		sb.append("'; MessageProducer: '");
+		sb.append(this.sender.toString());
+		sb.append("'");
+		return sb.toString();
+	}
 
-        strB.append("contextFactoryType : " + this.contextFactoryType);
-        strB.append(", providerUrl : " + this.providerUrl);
-        strB.append(", factoryLookupName : " + this.factoryLookupName);
-        strB.append(", topic : " + this.topic);
-        strB.append(", messageTimeToLive : " + this.messageTimeToLive);
-        strB.append(", asyncRecordQueueSize :" + this.asyncRecordQueueSize);
-        return strB.toString();
-    }
+	@Override
+	protected final void consume(final IMonitoringRecord monitoringRecord) throws JMSException {
+		try {
+			this.sender.send(this.session.createObjectMessage(monitoringRecord));
+		} catch (final JMSException ex) {
+			JMSWriterThread.log.error("Error sending jms message");
+			throw ex;
+		}
+	}
 
-    
-    @Override
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-        try {
-            if (monitoringRecord == MonitoringController.END_OF_MONITORING_MARKER) {
-                // "translate" END_OF_MONITORING_MARKER
-                AsyncJMSWriter.log.info("Found END_OF_MONITORING_MARKER. Notifying type and record writers");
-                this.typeQueue.add(AsyncJMSWriter.TYPE_WRITER_END_OF_MONITORING_MARKER);
-                this.recordQueue.add(AsyncJMSWriter.RECORD_WRITER_END_OF_MONITORING_MARKER);
-            } else {
-                this.recordQueue.add(monitoringRecord); // tries to add immediately! -- this is for production systems
-            }
-            //int currentQueueSize = recordQueue.size();
-        } catch (final Exception ex) {
-            AsyncJMSWriter.log.error(System.currentTimeMillis() + " AsyncJmsProducer() failed: Exception:", ex);
-            return false;
-        }
-        return true;
-    }
-
-    
-    @Override
-	public Vector<AbstractWorkerThread> getWorkers() {
-        return this.typeWriterAndRecordWriters;
-    }
+	@Override
+	protected final void cleanup() {
+		try {
+			if (this.sender != null) {
+				this.sender.close();
+			}
+			if (this.session != null) {
+				this.session.close();
+			}
+			if (this.connection != null) {
+				this.connection.close();
+			}
+		} catch (final JMSException ex) {
+			JMSWriterThread.log.error("Error closing connection", ex);
+		}
+	}
 }

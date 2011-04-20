@@ -1,3 +1,4 @@
+#results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\branches\\1.3-refactoring\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
 #results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
 #output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
 baseresults=read.csv2(results_fn,quote="",colClasses=c("NULL","NULL","integer","integer","NULL","integer"))
@@ -44,7 +45,7 @@ for (i in recdepth) {
   for (j in 1:(length(medianval)-1)) {
     rect(i-0.4,medianval[j],i+0.4,medianval[j+1],col="white",border="black")
     rect(i-0.4,medianval[j],i+0.4,medianval[j+1],angle=angle[j],density=density[j])
-    labeltext=format(medianval[j+1]-medianval[j],digits=3,nsmall=3)
+    labeltext=format(medianval[j+1]-medianval[j],digits=1,nsmall=1)
     rect(i-(strwidth(labeltext)*0.5),medianval[j+1]-strheight(labeltext),i+(strwidth(labeltext)*0.5),medianval[j+1],col="white",border="black")
     text(i,medianval[j+1],labels=labeltext,cex=0.75,col="black",pos=1,offset=0.1)
   }
