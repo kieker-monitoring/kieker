@@ -82,6 +82,7 @@ public final class MonitoringController extends AbstractController implements IM
 		} catch (final Exception e) {
 			log.warn("Failed to add shutdownHook");
 		}
+		log.info(monitoringController.toString());
 		return monitoringController;
 	}
 
