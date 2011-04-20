@@ -705,9 +705,9 @@
 
 		<delete dir="tmp/aspects/" />
 		<mkdir dir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspect.java" todir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/AbstractOperationExecutionAspectServlet.java" todir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/executions/${TestAspect}" todir="tmp/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspect.java" todir="tmp/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="tmp/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/${TestAspect}" todir="tmp/aspects/" />
 		<copy file="${tests.log4j.properties}" tofile="${build.dir}/log4j.properties" />
 		<iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true" classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
 			<sourceroots>
