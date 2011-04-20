@@ -12,8 +12,8 @@ public abstract class AbstractController {
 	 * @see #isTerminated()
 	 */
 	protected final boolean terminate() {
-		if (!terminated.getAndSet(true)) {
-			cleanup();
+		if (!this.terminated.getAndSet(true)) {
+			this.cleanup();
 			return true;
 		}
 		return false;
@@ -26,7 +26,7 @@ public abstract class AbstractController {
 	 * @return true if terminated
 	 */
 	protected final boolean isTerminated() {
-		return terminated.get();
+		return this.terminated.get();
 	}
 	
 	/**

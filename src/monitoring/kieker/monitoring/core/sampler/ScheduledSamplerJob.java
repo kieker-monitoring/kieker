@@ -1,19 +1,15 @@
 package kieker.monitoring.core.sampler;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.controller.IWriterController;
-import kieker.monitoring.core.controller.WriterController;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn
  */
 public class ScheduledSamplerJob implements Runnable {
-	private static final Log log = LogFactory.getLog(ScheduledSamplerJob.class);
+	//private static final Log log = LogFactory.getLog(ScheduledSamplerJob.class);
 
-	private final IWriterController writerController;
+	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
 
 	/**
@@ -21,12 +17,12 @@ public class ScheduledSamplerJob implements Runnable {
 	 * 
 	 * @param monitoringController
 	 *          used to log the sampled data (represented as {@link IMonitoringRecord}s) via
-	 *          {@link WriterController#newMonitoringRecord(IMonitoringRecord)}
+	 *          {@link IMonitoringController#newMonitoringRecord(IMonitoringRecord)}
 	 * @param sampler
-	 *          sampler to be trigger via {@link ISampler#sample(WriterController)}
+	 *          sampler to be trigger via {@link ISampler#sample(IMonitoringController)}
 	 */
-	public ScheduledSamplerJob(final IWriterController writerController, final ISampler sensor) {
-		this.writerController = writerController;
+	public ScheduledSamplerJob(final IMonitoringController monitoringController, final ISampler sensor) {
+		this.monitoringController = monitoringController;
 		this.sampler = sensor;
 	}
 
@@ -36,11 +32,9 @@ public class ScheduledSamplerJob implements Runnable {
 	@Override
 	public final void run() throws RuntimeException {
 		try {
-			this.sampler.sample(this.writerController);
+			this.sampler.sample(this.monitoringController);
 		} catch (final Exception ex) {
-			ScheduledSamplerJob.log.error("Exception occurred: ", ex);
-			/* Re-throw exception */
-			//todo: Why rethrow it?
+			/* Re-throw exception because run must throw RuntimeException */
 			throw new RuntimeException(ex.getMessage(), ex);
 		}
 	}

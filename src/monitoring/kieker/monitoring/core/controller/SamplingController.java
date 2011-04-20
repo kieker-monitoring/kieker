@@ -21,9 +21,9 @@ public final class SamplingController extends AbstractController implements ISam
 
 	/** Executes the {@link AbstractSigarSampler}s. */
 	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
-	private final IWriterController writerController;
+	private final IMonitoringController monitoringController;
 
-	protected SamplingController(final Configuration configuration, final IWriterController writerController) {
+	protected SamplingController(final Configuration configuration, final IMonitoringController monitoringController) {
 		final int threadPoolSize = configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		// FIXME: caller should check in advance?
 		this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(
@@ -38,7 +38,7 @@ public final class SamplingController extends AbstractController implements ISam
 				});
 		this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
 		this.periodicSensorsPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
-		this.writerController = writerController;
+		this.monitoringController = monitoringController;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public final class SamplingController extends AbstractController implements ISam
 					+ this.periodicSensorsPoolExecutor.getCorePoolSize());
 			return null;
 		}
-		final ScheduledSamplerJob job = new ScheduledSamplerJob(writerController, sensor);
+		final ScheduledSamplerJob job = new ScheduledSamplerJob(this.monitoringController, sensor);
 		this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay, period, timeUnit);
 		return job;
 	}

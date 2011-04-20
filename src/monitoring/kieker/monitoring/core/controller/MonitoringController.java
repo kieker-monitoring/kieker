@@ -28,7 +28,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	/** Name of the MBean. */
 	private final ObjectName objectname;
-
+	
 	// FACTORY
 	public final static IMonitoringController createInstance(final Configuration configuration) {
 		final MonitoringController monitoringController = new MonitoringController(configuration);
@@ -48,6 +48,7 @@ public final class MonitoringController extends AbstractController implements IM
 				}
 			}
 		}
+
 		return monitoringController;
 	}
 
@@ -65,8 +66,8 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 		this.objectname = objectname;
 		this.stateController = new StateController(configuration);
-		this.writerController = new WriterController(configuration, stateController);
-		this.samplingController = new SamplingController(configuration, writerController);
+		this.writerController = new WriterController(configuration, this.stateController);
+		this.samplingController = new SamplingController(configuration, this.writerController);
 	}
 
 	/**
@@ -81,16 +82,16 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	protected final void cleanup() {
 		synchronized (this) {
-			if (objectname != null) {
+			if (this.objectname != null) {
 				try {
-					ManagementFactory.getPlatformMBeanServer().unregisterMBean(objectname);
+					ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.objectname);
 				} catch (final Exception e) {
 					MonitoringController.log.error("Failed to terminate MBean", e);
 				}
 			}
 		}
-		samplingController.terminate();
-		writerController.terminate();
+		this.samplingController.terminate();
+		this.writerController.terminate();
 	}
 
 	@Override
@@ -98,20 +99,20 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append("Current State of kieker.monitoring (");
 		sb.append(MonitoringController.getVersion());
 		sb.append("): ");
-		stateController.getState(sb);
+		this.stateController.getState(sb);
 		if (this.objectname != null) {
 			sb.append("\tMBean available: ");
 			sb.append(this.objectname.getCanonicalName());
 			sb.append("\n");
 		}
-		writerController.getState(sb);
-		samplingController.getState(sb);
+		this.writerController.getState(sb);
+		this.samplingController.getState(sb);
 	}
 
 	@Override
 	public final String getState() {
 		final StringBuilder sb = new StringBuilder();
-		getState(sb);
+		this.getState(sb);
 		return sb.toString();
 	}
 
@@ -120,82 +121,82 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final boolean terminateMonitoring() {
-		return stateController.terminateMonitoring();
+		return this.stateController.terminateMonitoring();
 	}
 
 	@Override
 	public final boolean isMonitoringTerminated() {
-		return stateController.isMonitoringTerminated();
+		return this.stateController.isMonitoringTerminated();
 	}
 
 	@Override
 	public final boolean enableMonitoring() {
-		return stateController.enableMonitoring();
+		return this.stateController.enableMonitoring();
 	}
 
 	@Override
 	public final boolean disableMonitoring() {
-		return stateController.disableMonitoring();
+		return this.stateController.disableMonitoring();
 	}
 
 	@Override
 	public final boolean isMonitoringEnabled() {
-		return stateController.isMonitoringEnabled();
+		return this.stateController.isMonitoringEnabled();
 	}
 
 	@Override
 	public final String getName() {
-		return stateController.getName();
+		return this.stateController.getName();
 	}
 
 	@Override
 	public final String getHostName() {
-		return stateController.getHostName();
+		return this.stateController.getHostName();
 	}
 
 	@Override
 	public final int incExperimentId() {
-		return stateController.incExperimentId();
+		return this.stateController.incExperimentId();
 	}
 
 	@Override
 	public final void setExperimentId(final int newExperimentID) {
-		stateController.setExperimentId(newExperimentID);
+		this.stateController.setExperimentId(newExperimentID);
 	}
 
 	@Override
 	public final int getExperimentId() {
-		return stateController.getExperimentId();
+		return this.stateController.getExperimentId();
 	}
 
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
-		return writerController.newMonitoringRecord(record);
+		return this.writerController.newMonitoringRecord(record);
 	}
 
 	@Override
 	public final IMonitoringWriter getMonitoringWriter() {
-		return writerController.getMonitoringWriter();
+		return this.writerController.getMonitoringWriter();
 	}
 
 	@Override
 	public final long getNumberOfInserts() {
-		return writerController.getNumberOfInserts();
+		return this.writerController.getNumberOfInserts();
 	}
 
 	@Override
 	public final ITimeSource getTimeSource() {
-		return writerController.getTimeSource();
+		return this.writerController.getTimeSource();
 	}
 
 	@Override
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
-		return samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
+		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
 	@Override
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
-		return samplingController.removeScheduledSampler(sampler);
+		return this.samplingController.removeScheduledSampler(sampler);
 	}
 
 	// GET SINGLETON INSTANCE
