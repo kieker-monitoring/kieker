@@ -25,7 +25,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.record.IMonitoringRecord;
@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class FSReaderRealtime extends AbstractMonitoringLogReader {
+public class FSReaderRealtime extends AbstractMonitoringReader {
 
 	private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
 
@@ -178,7 +178,7 @@ public class FSReaderRealtime extends AbstractMonitoringLogReader {
 					+ numWorkers);
 		}
 
-		final AbstractMonitoringLogReader fsReader = new FSReader(inputDirNames);
+		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);
 		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(
 				this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons,

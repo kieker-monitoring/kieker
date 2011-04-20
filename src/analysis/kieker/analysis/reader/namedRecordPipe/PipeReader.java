@@ -2,7 +2,7 @@ package kieker.analysis.reader.namedRecordPipe;
 
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public final class PipeReader extends AbstractMonitoringLogReader implements
+public final class PipeReader extends AbstractMonitoringReader implements
 		IPipeReader {
 	public static final String PROPERTY_PIPE_NAME = "pipeName";
 	private static final Log log = LogFactory.getLog(PipeReader.class);

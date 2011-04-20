@@ -1,6 +1,6 @@
 package bookstoreApplication;
 
-import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.common.util.PropertyMap;
 
 import org.apache.commons.logging.Log;

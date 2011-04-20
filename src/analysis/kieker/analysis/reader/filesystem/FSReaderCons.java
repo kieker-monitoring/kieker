@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
-import kieker.analysis.reader.MonitoringLogReaderException;
+import kieker.analysis.reader.MonitoringReaderException;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -124,7 +124,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 						this.orderRecordBuffer.wait();
 						if (this.errorOccurred.get()) {
 							FSReaderCons.log.error("Found error flag set");
-							throw new MonitoringLogReaderException(
+							throw new MonitoringReaderException(
 									"An error occured");
 						}
 					}

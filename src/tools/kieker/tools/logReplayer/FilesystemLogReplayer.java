@@ -23,7 +23,7 @@ import java.util.Collection;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -117,7 +117,7 @@ public class FilesystemLogReplayer {
 	public boolean replay() {
 		boolean success = true;
 
-		AbstractMonitoringLogReader fsReader;
+		AbstractMonitoringReader fsReader;
 		if (this.realtimeMode) {
 			fsReader =
 					new FSReaderRealtime(this.inputDirs,

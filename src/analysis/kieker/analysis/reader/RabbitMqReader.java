@@ -30,7 +30,7 @@ import com.rabbitmq.client.QueueingConsumer;
  * 
  * @author matthias
  */
-public class RabbitMqReader extends AbstractMonitoringLogReader {
+public class RabbitMqReader extends AbstractMonitoringReader {
 
 	private String rmqHostName = "localhost";
 	private String rmqVirtualHost = "kiekertest";

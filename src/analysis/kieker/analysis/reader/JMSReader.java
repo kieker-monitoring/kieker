@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Matthias Rohr History 2009-07-01 (AvH) Initial
  *         version 2009-07-25 (MR)
  */
-public class JMSReader extends AbstractMonitoringLogReader {
+public class JMSReader extends AbstractMonitoringReader {
 
 	private static final Log log = LogFactory.getLog(JMSReader.class);
 	private String jmsProviderUrl = null;
@@ -144,7 +144,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
 								if (!JMSReader.this.deliverRecord(rec)) {
 									JMSReader.log
 											.error("deliverRecord returned false");
-									throw new MonitoringLogReaderException(
+									throw new MonitoringReaderException(
 											"deliverRecord returned false");
 								}
 							} else {
@@ -155,7 +155,7 @@ public class JMSReader extends AbstractMonitoringLogReader {
 							JMSReader.log.fatal("MessageFormatException:" + em.getMessage(), em);
 						} catch (final JMSException ex) {
 							JMSReader.log.fatal("JMSException: " + ex.getMessage(), ex);
-						} catch (final MonitoringLogReaderException ex) {
+						} catch (final MonitoringReaderException ex) {
 							JMSReader.log.error("LogReaderExecutionException: " + ex.getMessage(),
 									ex);
 						} catch (final Exception ex) {

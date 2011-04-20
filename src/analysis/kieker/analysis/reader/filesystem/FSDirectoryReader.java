@@ -31,7 +31,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
-import kieker.analysis.reader.MonitoringLogReaderException;
+import kieker.analysis.reader.MonitoringReaderException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.MonitoringRecordTypeRegistry;
@@ -138,7 +138,7 @@ class FSDirectoryReader {
 		});
 
 		if (inputFiles == null) {
-			throw new MonitoringLogReaderException(
+			throw new MonitoringReaderException(
 					"Directory '"
 							+ this.inputDir
 							+ "' does not exist or an I/O error occured. No files starting with '"
@@ -250,10 +250,10 @@ class FSDirectoryReader {
 	 * 
 	 * @param input
 	 * @throws IOException
-	 * @throws MonitoringLogReaderException
+	 * @throws MonitoringReaderException
 	 */
 	private void processInputFile(final File input) throws IOException,
-			MonitoringLogReaderException {
+			MonitoringReaderException {
 		FSDirectoryReader.log.info("< Loading " + input.getAbsolutePath());
 
 		BufferedReader in = null;
@@ -342,7 +342,7 @@ class FSDirectoryReader {
 							+ line + "} from file " + input.getAbsolutePath(),
 							e);
 					FSDirectoryReader.log.error("Abort reading");
-					throw new MonitoringLogReaderException(
+					throw new MonitoringReaderException(
 							"LogReaderExecutionException ", e);
 				}
 
@@ -351,7 +351,7 @@ class FSDirectoryReader {
 					final String errorMsg =
 							"failed to deliver record. Will terminate";
 					FSDirectoryReader.log.error(errorMsg);
-					throw new MonitoringLogReaderException(errorMsg);
+					throw new MonitoringReaderException(errorMsg);
 				}
 			}
 		} finally {

@@ -28,7 +28,7 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * 
  * @author Andre van Hoorn
  */
-public interface IMonitoringLogReader {
+public interface IMonitoringReader {
 
 	/**
 	 * Initialize instance from passed initialization string which is typically

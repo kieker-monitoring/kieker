@@ -29,15 +29,15 @@ import kieker.common.record.MonitoringRecordReceiverException;
  *
  * @author Andre van Hoorn
  */
-public class MonitoringLogReaderException extends MonitoringRecordReceiverException {
+public class MonitoringReaderException extends MonitoringRecordReceiverException {
 
     private static final long serialVersionUID = 14537L;
 
-    public MonitoringLogReaderException(String messString) {
+    public MonitoringReaderException(String messString) {
         super(messString);
     }
 
-    public MonitoringLogReaderException(String messString, Throwable cause) {
+    public MonitoringReaderException(String messString, Throwable cause) {
         super(messString, cause);
     }
 }

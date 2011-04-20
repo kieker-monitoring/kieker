@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.StringTokenizer;
 
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
-import kieker.analysis.reader.AbstractMonitoringLogReader;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class FSReader extends AbstractMonitoringLogReader {
+public class FSReader extends AbstractMonitoringReader {
 
 	private static final Log log = LogFactory.getLog(FSReader.class);
 	/*

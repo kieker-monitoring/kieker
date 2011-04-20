@@ -23,7 +23,7 @@ import java.util.Vector;
 
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.reader.IMonitoringLogReader;
+import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.MonitoringRecordReceiverException;
@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
 public class AnalysisController {
 
 	private static final Log log = LogFactory.getLog(AnalysisController.class);
-	private IMonitoringLogReader logReader;
+	private IMonitoringReader logReader;
 	/**
 	 * this are the consumers for data that are coming into kieker by readers
 	 * (files or system under monitoring)
@@ -147,7 +147,7 @@ public class AnalysisController {
 	 * 
 	 * @param reader
 	 */
-	public void setLogReader(final IMonitoringLogReader reader) {
+	public void setLogReader(final IMonitoringReader reader) {
 		this.logReader = reader;
 	}
 
