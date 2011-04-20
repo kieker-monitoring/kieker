@@ -1,7 +1,7 @@
 package kieker.monitoring.writer;
 
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.core.controller.IWriterController;
+import kieker.monitoring.core.controller.ITimeSourceController;
 
 /* ==================LICENCE=========================
  * Copyright 2006-2011 Kieker Project
@@ -45,6 +45,6 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * @param controller
 	 * @throws Exception
 	 */
-	abstract public void setController(IWriterController controller) throws Exception;
+	abstract public void setController(ITimeSourceController controller) throws Exception;
 
 }

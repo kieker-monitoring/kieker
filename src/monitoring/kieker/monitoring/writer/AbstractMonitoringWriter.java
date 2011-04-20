@@ -5,7 +5,7 @@ import java.util.Set;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.IWriterController;
+import kieker.monitoring.core.controller.ITimeSourceController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,7 +34,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	private static final Log log = LogFactory.getLog(AbstractMonitoringWriter.class);
 
 	protected final Configuration configuration;
-	private IWriterController controller;
+	private ITimeSourceController controller;
 
 	/**
 	 *
@@ -91,12 +91,12 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	@Override
 	public abstract void terminate();
 
-	public final IWriterController getController() {
+	public final ITimeSourceController getController() {
 		return this.controller;
 	}
 
 	@Override
-	public final void setController(final IWriterController controller) throws Exception {
+	public final void setController(final ITimeSourceController controller) throws Exception {
 		this.controller = controller;
 		this.init();
 	}

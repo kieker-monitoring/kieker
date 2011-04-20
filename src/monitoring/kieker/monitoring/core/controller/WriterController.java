@@ -4,7 +4,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
@@ -16,36 +15,21 @@ import org.apache.commons.logging.LogFactory;
 public final class WriterController extends AbstractController implements IWriterController {
 	private static final Log log = LogFactory.getLog(WriterController.class);
 
-	/**
-	 * Used to track the total number of monitoring records received while the
-	 * controller has been enabled
-	 */
+	/** the total number of monitoring records received */
 	private final AtomicLong numberOfInserts = new AtomicLong(0);
 	/** Monitoring Writer */
 	private final IMonitoringWriter monitoringWriter;
-	/** the ITimeSource used by this instance */
-	private final ITimeSource timeSource;
-	
-	private final StateController stateController;
 
-	public WriterController(final Configuration configuration, final StateController stateController) {
-		this.stateController = stateController;
-		this.timeSource = createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
-		if (this.timeSource == null) {
-			this.monitoringWriter = null;
-			terminate();
-			return;
-		}
+	public WriterController(final Configuration configuration) {
 		this.monitoringWriter = createAndInitialize(IMonitoringWriter.class, configuration.getStringProperty(Configuration.WRITER_CLASSNAME), configuration);
 		if (this.monitoringWriter == null) {
 			terminate();
 			return;
 		}
 	}
-
+	
 	@Override
 	protected final void cleanup() {
-		stateController.terminate();
 		WriterController.log.info("Shutting down Writer Controller");
 		if (this.monitoringWriter != null) {
 			this.monitoringWriter.terminate();
@@ -53,27 +37,27 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	protected final void getState(final StringBuilder sb) {
-		sb.append("WriterController:\n\tTime Source: '");
-		sb.append(this.timeSource.getClass().getName());
-		sb.append("'; Number of Inserts: '");
+	public final String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("WriterController:\n\tNumber of Inserts: '");
 		sb.append(this.getNumberOfInserts());
 		sb.append("'\n");
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.getInfoString());
 		} else {
-			sb.append("No Monitoring Writer available");
+			sb.append("\tNo Monitoring Writer available");
 		}
-		sb.append("\n");
+		return sb.toString();
 	}
 
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			if (!stateController.isMonitoringEnabled()) { // enabled and not terminated
+			final MonitoringController monitoringController = getMonitoringController();
+			if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
 				return false;
 			}
-			record.setLoggingTimestamp(timeSource.currentTimeNanos());
+			record.setLoggingTimestamp(monitoringController.getTimeSource().currentTimeNanos());
 			numberOfInserts.incrementAndGet();
 			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {
@@ -90,37 +74,7 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	public final IMonitoringWriter getMonitoringWriter() {
-		return this.monitoringWriter;
-	}
-
-	@Override
 	public final long getNumberOfInserts() {
 		return this.numberOfInserts.longValue();
-	}
-
-	@Override
-	public ITimeSource getTimeSource() {
-		return this.timeSource;
-	}
-
-	@SuppressWarnings("unchecked")
-	public final static <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		C createdClass = null;
-		try {
-			final Class<?> clazz = Class.forName(classname);
-			if (c.isAssignableFrom(clazz)) {
-				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
-			} else {
-				WriterController.log.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
-			}
-		} catch (final ClassNotFoundException e) {
-			WriterController.log.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
-		} catch (final NoSuchMethodException e) {
-			WriterController.log.error(c.getSimpleName() + ": Class '" + classname + "' has to implement a constructor that accepts a single Configuration", e);
-		} catch (final Throwable e) { // SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			WriterController.log.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
-		}
-		return createdClass;
 	}
 }

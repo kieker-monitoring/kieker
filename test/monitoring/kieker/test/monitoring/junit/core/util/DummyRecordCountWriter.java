@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.IWriterController;
+import kieker.monitoring.core.controller.ITimeSourceController;
 import kieker.monitoring.writer.DummyWriter;
 
 /*
@@ -32,7 +32,7 @@ import kieker.monitoring.writer.DummyWriter;
 public final class DummyRecordCountWriter extends DummyWriter {
 	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
 
-	public DummyRecordCountWriter(final IWriterController ctrl, final Configuration configuration) {
+	public DummyRecordCountWriter(final ITimeSourceController ctrl, final Configuration configuration) {
 		super(configuration);
 	}
 

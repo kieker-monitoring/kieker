@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.IWriterController;
+import kieker.monitoring.core.controller.ITimeSourceController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 
@@ -137,7 +137,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final Connection conn;
 	private final PreparedStatement psInsertMonitoringData;
 
-	public DbWriterThread(final IWriterController ctrl,
+	public DbWriterThread(final ITimeSourceController ctrl,
 			final BlockingQueue<IMonitoringRecord> blockingQueue,
 			final String connectionString, final String preparedQuery)
 			throws SQLException {

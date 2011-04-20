@@ -14,7 +14,7 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.IWriterController;
+import kieker.monitoring.core.controller.ITimeSourceController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 
@@ -122,7 +122,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 	// to get that info later
 	private final String path;
 
-	public FsWriterThread(final IWriterController ctrl,
+	public FsWriterThread(final ITimeSourceController ctrl,
 			final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path) {
 		super(ctrl, writeQueue);

@@ -19,8 +19,6 @@ public final class StateController extends AbstractController implements IStateC
 	private final String hostname;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 
-	private MonitoringController monitoringController = null;
-
 	protected StateController(final Configuration configuration) {
 		this.name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
 		this.experimentId.set(configuration.getIntProperty(Configuration.EXPERIMENT_ID));
@@ -37,35 +35,15 @@ public final class StateController extends AbstractController implements IStateC
 		this.hostname = hostname;
 	}
 
-	protected final synchronized void setMonitoringController(final MonitoringController monitoringController) {
-		if (monitoringController == null) {
-			this.monitoringController = monitoringController;
-			// Register Shutdown Hook
-			try {
-				Runtime.getRuntime().addShutdownHook(new ShutdownHook(this));
-			} catch (final Exception e) {
-				log.warn("Failed to add shutdownHook");
-			}
-		}
-	}
-
-	protected final MonitoringController getMonitoringController() {
-		return monitoringController;
-	}
-
 	@Override
 	protected final void cleanup() {
-		log.info("Controller (" + getName() + ") shutting down");
-		if (monitoringController != null) {
-			monitoringController.terminate();
-		} else {
-			log.warn("Shutting down Monitoring before it is correctly initialized");
-		}
-		log.info("Controller (" + getName() + ") shutdown completed");
+		log.info("Shutting down State Controller");
 	}
 
 	@Override
-	protected final void getState(final StringBuilder sb) {
+	public final String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Status: '");
 		if (isMonitoringTerminated()) {
 			sb.append("terminated");
 		} else if (isMonitoringEnabled()) {
@@ -73,19 +51,26 @@ public final class StateController extends AbstractController implements IStateC
 		} else {
 			sb.append("disabled");
 		}
-		sb.append("\n");
+		sb.append("'\n");
 		sb.append("\tName: '");
 		sb.append(name);
 		sb.append("'; Hostname: '");
 		sb.append(hostname);
 		sb.append("'; experimentID: '");
 		sb.append(getExperimentId());
-		sb.append("'\n");
+		sb.append("'");
+		return sb.toString();
 	}
 
 	@Override
 	public final boolean terminateMonitoring() {
-		return super.terminate();
+		final MonitoringController monitoringController = super.getMonitoringController();
+		if (monitoringController != null) {
+			return monitoringController.terminate();
+		} else {
+			log.warn("Shutting down Monitoring before it is correctly initialized");
+			return false;
+		}
 	}
 
 	@Override
@@ -139,30 +124,5 @@ public final class StateController extends AbstractController implements IStateC
 	@Override
 	public final int getExperimentId() {
 		return experimentId.get();
-	}
-
-	/**
-	 * This class ensures that the terminateMonitoring() method is always called
-	 * before shutting down the JVM. This method ensures that necessary cleanup
-	 * steps are finished and no information is lost due to asynchronous writers.
-	 * 
-	 * @author Matthias Rohr, Andre van Hoorn, Jan Waller, Robert von Massow
-	 */
-	private final class ShutdownHook extends Thread {
-		private final StateController ctrl;
-
-		public ShutdownHook(final StateController ctrl) {
-			this.ctrl = ctrl;
-		}
-
-		@Override
-		public void run() {
-			// is called when VM shutdown (e.g., strg+c) is initiated or when system.exit is called
-			if (!ctrl.isMonitoringTerminated()) {
-				// TODO: We can't use a logger in shutdown hooks, logger may already be down! (#26)
-				log.info("ShutdownHook notifies controller to initiate shutdown");
-				ctrl.terminate();
-			}
-		}
 	}
 }

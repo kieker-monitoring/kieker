@@ -15,7 +15,7 @@ import javax.naming.NamingException;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.IWriterController;
+import kieker.monitoring.core.controller.ITimeSourceController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 
@@ -53,7 +53,7 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 			+ "FactoryLookupName";
 	private static final String MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 
-	public AsyncJMSWriter(final IWriterController ctrl,
+	public AsyncJMSWriter(final ITimeSourceController ctrl,
 			final Configuration configuration) throws NamingException,
 			JMSException {
 		super(configuration);
@@ -94,7 +94,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	private Connection connection;
 	private MessageProducer sender;
 
-	public JMSWriterThread(final IWriterController ctrl,
+	public JMSWriterThread(final ITimeSourceController ctrl,
 			final BlockingQueue<IMonitoringRecord> writeQueue,
 			final String contextFactoryType, final String providerUrl,
 			final String factoryLookupName, final String topic,

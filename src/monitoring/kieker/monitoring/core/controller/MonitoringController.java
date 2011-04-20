@@ -11,7 +11,6 @@ import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
-import kieker.monitoring.writer.IMonitoringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,16 +24,32 @@ public final class MonitoringController extends AbstractController implements IM
 	private final StateController stateController;
 	private final WriterController writerController;
 	private final SamplingController samplingController;
+	private final TimeSourceController timeSourceController;
 
 	/** Name of the MBean. */
 	private final ObjectName objectname;
-	
+
 	// FACTORY
 	public final static IMonitoringController createInstance(final Configuration configuration) {
 		final MonitoringController monitoringController = new MonitoringController(configuration);
-		// Initialize and handle Termination
+		// Initialize and handle early Termination (once for each Controller!)
 		monitoringController.stateController.setMonitoringController(monitoringController);
 		if (monitoringController.stateController.isTerminated()) {
+			monitoringController.terminate();
+			return monitoringController;
+		}
+		monitoringController.samplingController.setMonitoringController(monitoringController);
+		if (monitoringController.samplingController.isTerminated()) {
+			monitoringController.terminate();
+			return monitoringController;
+		}
+		monitoringController.writerController.setMonitoringController(monitoringController);
+		if (monitoringController.writerController.isTerminated()) {
+			monitoringController.terminate();
+			return monitoringController;
+		}
+		monitoringController.timeSourceController.setMonitoringController(monitoringController);
+		if (monitoringController.timeSourceController.isTerminated()) {
 			monitoringController.terminate();
 			return monitoringController;
 		}
@@ -44,11 +59,29 @@ public final class MonitoringController extends AbstractController implements IM
 				try {
 					ManagementFactory.getPlatformMBeanServer().registerMBean(monitoringController, monitoringController.objectname);
 				} catch (final Exception e) {
-					MonitoringController.log.warn("Unable to register MBean Server", e);
+					log.warn("Unable to register MBean Server", e);
 				}
 			}
 		}
-
+		/*
+		 * This ensures that the terminateMonitoring() method is always called
+		 * before shutting down the JVM. This method ensures that necessary cleanup
+		 * steps are finished and no information is lost due to asynchronous writers.
+		 */
+		try {
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					if (!monitoringController.isMonitoringTerminated()) {
+						// TODO: We should not use a logger in shutdown hooks, logger may already be down! (#26)
+						log.info("ShutdownHook notifies controller to initiate shutdown");
+						monitoringController.terminateMonitoring();
+					}
+				}
+			});
+		} catch (final Exception e) {
+			log.warn("Failed to add shutdownHook");
+		}
 		return monitoringController;
 	}
 
@@ -61,13 +94,14 @@ public final class MonitoringController extends AbstractController implements IM
 				objectname = new ObjectName(configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_DOMAIN), "type",
 						configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_TYPE));
 			} catch (final Exception e) {
-				MonitoringController.log.warn("Failed to initialize ObjectName", e);
+				log.warn("Failed to initialize ObjectName", e);
 			}
 		}
 		this.objectname = objectname;
 		this.stateController = new StateController(configuration);
-		this.writerController = new WriterController(configuration, this.stateController);
-		this.samplingController = new SamplingController(configuration, this.writerController);
+		this.writerController = new WriterController(configuration);
+		this.samplingController = new SamplingController(configuration);
+		this.timeSourceController = new TimeSourceController(configuration);
 	}
 
 	/**
@@ -81,38 +115,38 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	protected final void cleanup() {
+		log.info("Shutting down Monitoring Controller (" + getName() + ")");
+		this.stateController.terminate();
 		synchronized (this) {
 			if (this.objectname != null) {
 				try {
 					ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.objectname);
 				} catch (final Exception e) {
-					MonitoringController.log.error("Failed to terminate MBean", e);
+					log.error("Failed to terminate MBean", e);
 				}
 			}
 		}
+		this.timeSourceController.terminate();
 		this.samplingController.terminate();
 		this.writerController.terminate();
 	}
 
 	@Override
-	protected final void getState(final StringBuilder sb) {
+	public final String toString() {
+		final StringBuilder sb = new StringBuilder();
 		sb.append("Current State of kieker.monitoring (");
 		sb.append(MonitoringController.getVersion());
-		sb.append("): ");
-		this.stateController.getState(sb);
+		sb.append(") ");
+		sb.append(stateController.toString());
+		sb.append("\n");
 		if (this.objectname != null) {
-			sb.append("\tMBean available: ");
+			sb.append("\tMBean available: '");
 			sb.append(this.objectname.getCanonicalName());
-			sb.append("\n");
+			sb.append("'\n");
 		}
-		this.writerController.getState(sb);
-		this.samplingController.getState(sb);
-	}
-
-	@Override
-	public final String getState() {
-		final StringBuilder sb = new StringBuilder();
-		this.getState(sb);
+		sb.append(writerController.toString());
+		sb.append("\n");
+		sb.append(samplingController.toString());
 		return sb.toString();
 	}
 
@@ -175,18 +209,8 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final IMonitoringWriter getMonitoringWriter() {
-		return this.writerController.getMonitoringWriter();
-	}
-
-	@Override
 	public final long getNumberOfInserts() {
 		return this.writerController.getNumberOfInserts();
-	}
-
-	@Override
-	public final ITimeSource getTimeSource() {
-		return this.writerController.getTimeSource();
 	}
 
 	@Override
@@ -197,6 +221,11 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
 		return this.samplingController.removeScheduledSampler(sampler);
+	}
+
+	@Override
+	public final ITimeSource getTimeSource() {
+		return this.timeSourceController.getTimeSource();
 	}
 
 	// GET SINGLETON INSTANCE
