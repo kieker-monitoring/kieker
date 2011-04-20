@@ -14,16 +14,13 @@ public abstract class AbstractController {
 	private static final Log log = LogFactory.getLog(AbstractController.class);
 
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
-	private volatile MonitoringController monitoringController = null;
+	protected volatile MonitoringController monitoringController = null;
 
 	protected final synchronized void setMonitoringController(final MonitoringController monitoringController) {
-		if (monitoringController == null) {
+		if (this.monitoringController == null) {
 			this.monitoringController = monitoringController;
+			init();
 		}
-	}
-
-	protected final MonitoringController getMonitoringController() {
-		return monitoringController;
 	}
 
 	/**
@@ -52,6 +49,13 @@ public abstract class AbstractController {
 		return this.terminated.get();
 	}
 
+	/**
+	 * inits
+	 */
+	protected void init() {
+		//default does nothing!
+	}
+	
 	/**
 	 * cleans up
 	 */

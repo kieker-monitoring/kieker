@@ -69,7 +69,7 @@ public final class SamplingController extends AbstractController implements ISam
 			return null;
 		}
 		// TODO: should we check for NullPointer at getMonitoringController() ??
-		final ScheduledSamplerJob job = new ScheduledSamplerJob(super.getMonitoringController(), sensor);
+		final ScheduledSamplerJob job = new ScheduledSamplerJob(super.monitoringController, sensor);
 		this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay, period, timeUnit);
 		return job;
 	}

@@ -64,7 +64,7 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	public final boolean terminateMonitoring() {
-		final MonitoringController monitoringController = super.getMonitoringController();
+		final MonitoringController monitoringController = super.monitoringController;
 		if (monitoringController != null) {
 			return monitoringController.terminate();
 		} else {

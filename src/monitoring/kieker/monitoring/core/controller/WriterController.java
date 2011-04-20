@@ -29,6 +29,18 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
+	protected final void init() {
+		if (this.monitoringWriter != null) {
+			try {
+				this.monitoringWriter.setController(super.monitoringController);
+			} catch (final Exception e) {
+				log.error("Error initializing writer", e);
+				terminate();
+			}
+		}
+	}
+	
+	@Override
 	protected final void cleanup() {
 		WriterController.log.info("Shutting down Writer Controller");
 		if (this.monitoringWriter != null) {
@@ -53,7 +65,7 @@ public final class WriterController extends AbstractController implements IWrite
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			final MonitoringController monitoringController = getMonitoringController();
+			final MonitoringController monitoringController = super.monitoringController;
 			if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
 				return false;
 			}
