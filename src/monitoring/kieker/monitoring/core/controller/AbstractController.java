@@ -2,10 +2,10 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import kieker.monitoring.core.configuration.Configuration;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import kieker.monitoring.core.configuration.Configuration;
 
 /**
  * @author Jan Waller
@@ -19,7 +19,7 @@ public abstract class AbstractController {
 	protected final synchronized void setMonitoringController(final MonitoringController monitoringController) {
 		if (this.monitoringController == null) {
 			this.monitoringController = monitoringController;
-			init();
+			this.init();
 		}
 	}
 
@@ -31,8 +31,8 @@ public abstract class AbstractController {
 	protected final boolean terminate() {
 		if (!this.terminated.getAndSet(true)) {
 			this.cleanup();
-			if (monitoringController != null) {
-				monitoringController.terminate();
+			if (this.monitoringController != null) {
+				this.monitoringController.terminate();
 			}
 			return true;
 		}
@@ -72,14 +72,14 @@ public abstract class AbstractController {
 			if (c.isAssignableFrom(clazz)) {
 				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
 			} else {
-				log.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
+				AbstractController.log.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
 			}
 		} catch (final ClassNotFoundException e) {
-			log.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
+			AbstractController.log.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
 		} catch (final NoSuchMethodException e) {
-			log.error(c.getSimpleName() + ": Class '" + classname + "' has to implement a constructor that accepts a single Configuration", e);
+			AbstractController.log.error(c.getSimpleName() + ": Class '" + classname + "' has to implement a (public) constructor that accepts a single Configuration", e);
 		} catch (final Throwable e) { // SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			log.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
+			AbstractController.log.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
 		}
 		return createdClass;
 	}

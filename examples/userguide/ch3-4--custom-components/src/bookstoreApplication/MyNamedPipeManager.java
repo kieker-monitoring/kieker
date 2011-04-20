@@ -24,8 +24,8 @@ public class MyNamedPipeManager {
      */
     public synchronized MyPipe acquirePipe(final String pipeName)
             throws IllegalArgumentException {
-        if (pipeName == null || pipeName.length() == 0) {
-            throw new IllegalArgumentException("Invalid connection name " + pipeName);
+        if ((pipeName == null) || (pipeName.length() == 0)) {
+            throw new IllegalArgumentException("Invalid connection name: '" + pipeName + "'");
         }
         MyPipe conn = this.pipeMap.get(pipeName);
         if (conn == null) {

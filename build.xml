@@ -76,10 +76,6 @@
 				<include name="commons-logging-*.jar" />
 				<include name="servlet-api.jar" />
 			</fileset>
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>-->
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
 		</path>
@@ -139,11 +135,6 @@
 				<include name="commons-cli-*.jar" />
 				<include name="commons-logging-*.jar" />
 			</fileset>
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-                <include name="${dist.kieker.analysis.jar}"/>
-            </fileset>-->
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
 			<pathelement location="${build.kieker.analysis.dir}/" />
@@ -161,14 +152,9 @@
 	<target name="compile-kieker.common" depends="init">
 		<delete dir="${build.kieker.common.dir}" />
 		<mkdir dir="${build.kieker.common.dir}" />
-		<!--<mkdir  dir="${build.kieker.common.dir}/META-INF"/>-->
 		<javac destDir="${build.kieker.common.dir}" source="1.5" target="1.5" srcdir="${src.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath">
 			<compilerarg value="-Xlint:all,-path" />
 		</javac>
-		<!--<copy file="LICENSE" todir="${build.kieker.common.dir}/"/>
-        <jar destfile="${dist.dir}/${dist.kieker.common.jar}">
-            <fileset dir="${build.kieker.common.dir}"/>
-        </jar>-->
 	</target>
 
 	<target name="compile-kieker.monitoring" depends="init,compile-kieker.common">
@@ -186,10 +172,6 @@
 		</iajc>
 		<copy file="${kieker.monitoring.properties.default}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.properties.default" />
 		<copy file="${sequence.pic}" tofile="${build.kieker.monitoring.dir}/META-INF/sequence.pic" />
-		<!--<copy file="LICENSE" todir="${build.kieker.monitoring.dir}/"/>
-        <jar destfile="${dist.dir}/${dist.kieker.monitoring.jar}">
-            <fileset dir="${build.kieker.monitoring.dir}"/>
-        </jar>-->
 	</target>
 
 	<target name="compile-kieker.monitoring-servlet" depends="init,compile-kieker.common,compile-kieker.monitoring">
@@ -209,10 +191,6 @@
 		<javac destDir="${build.kieker.analysis.dir}" source="1.5" target="1.5" srcdir="${src.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath">
 			<compilerarg value="-Xlint:all,-path" />
 		</javac>
-		<!--<copy file="LICENSE" todir="${build.kieker.analysis.dir}/"/>
-        <jar destfile="${dist.dir}/${dist.kieker.analysis.jar}">
-            <fileset dir="${build.kieker.analysis.dir}"/>
-        </jar>-->
 	</target>
 
 	<target name="compile-kieker.tools" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis">
@@ -221,10 +199,6 @@
 		<javac destDir="${build.kieker.tools.dir}" source="1.5" target="1.5" srcdir="${src.kieker.tools.dir}" debug="true" classpathref="kieker.tools-compile-classpath">
 			<compilerarg value="-Xlint:all,-path" />
 		</javac>
-		<!--<copy file="LICENSE" todir="${build.kieker.tools.dir}/"/>
-        <jar destfile="${dist.dir}/${dist.kieker.tools.jar}">
-            <fileset dir="${build.kieker.tools.dir}"/>
-        </jar>-->
 	</target>
 
 	<target name="build-kieker.main" depends="init,compile-kieker.common,compile-kieker.monitoring,compile-kieker.analysis,compile-kieker.tools">
@@ -288,7 +262,6 @@
 			<include name="${eclipse-project.sample}" />
 			<include name="build.xml" />
 			<include name="build.properties" />
-			<!--<include name="ISSUES"/>-->
 			<include name="HISTORY" />
 			<include name="LICENSE" />
 			<include name="pom_ant_kieker-*.xml" />
@@ -333,7 +306,6 @@
 			<include name="lib/*" />
 			<exclude name="lib/maven/" />
 			<exclude name="lib/pmd/" />
-			<!--<include name="ISSUES"/>-->
 			<include name="HISTORY" />
 			<include name="LICENSE" />
 			<include name="${src.userguide.dist.pdf}" />
@@ -423,7 +395,6 @@
 			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/kieker*.jar" />
 			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/aspectj*.jar" />
 			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/commons-logging*.jar" />
-			<!--<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/lib/META-INF/kieker.monitoring.properties"/>-->
 		</patternset>
 		<patternset id="dist_jpetstoreExample_files-binmode">
 			<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh" />
@@ -515,9 +486,6 @@
 				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -532,10 +500,6 @@
 				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -568,12 +532,6 @@
 				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.analysis.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-                <include name="${dist.kieker.tools.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -663,10 +621,6 @@
 				<include name="servlet-api.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -694,10 +648,6 @@
 				<include name="servlet-api.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -819,12 +769,6 @@
 				<include name="junit-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
-			<!--<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.monitoring.jar}"/>
-                <include name="${dist.kieker.analysis.jar}"/>
-                <include name="${dist.kieker.tools.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>

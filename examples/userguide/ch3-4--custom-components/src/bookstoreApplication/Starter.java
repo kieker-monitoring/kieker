@@ -2,17 +2,18 @@ package bookstoreApplication;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.reader.IMonitoringLogReader;
+import kieker.analysis.reader.IMonitoringReader;
 
 public class Starter {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         /* Spawn a thread that performs asynchronous requests
          * to a bookstore. */
         new Thread(new Runnable() {
 
-            public void run() {
-                Bookstore bookstore = new Bookstore();
+            @Override
+			public void run() {
+                final Bookstore bookstore = new Bookstore();
                 for (int i = 0; i < 5; i++) {
                     System.out.println("Bookstore.main: Starting request " + i);
                     bookstore.searchBook();
@@ -22,10 +23,10 @@ public class Starter {
 
 
         /* Start an analysis of the response times */
-        AnalysisController analyisController = new AnalysisController();
-        IMonitoringLogReader reader =
+        final AnalysisController analyisController = new AnalysisController();
+        final IMonitoringReader reader =
                 new MyPipeReader("somePipe");
-        IMonitoringRecordConsumerPlugin consumer =
+        final IMonitoringRecordConsumerPlugin consumer =
                 new MyResponseTimeConsumer();
         analyisController.setLogReader(reader);
         analyisController.registerPlugin(consumer);

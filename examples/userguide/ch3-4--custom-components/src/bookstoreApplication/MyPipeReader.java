@@ -1,12 +1,12 @@
 package bookstoreApplication;
 
 import kieker.analysis.reader.AbstractMonitoringReader;
-import kieker.common.util.PropertyMap;
+import kieker.analysis.util.PropertyMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class MyPipeReader extends AbstractMonitoringLogReader {
+public class MyPipeReader extends AbstractMonitoringReader {
 
 	private static final Log log = LogFactory.getLog(MyPipeReader.class);
 	

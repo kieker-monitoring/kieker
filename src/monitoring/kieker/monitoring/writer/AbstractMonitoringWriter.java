@@ -84,5 +84,11 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		return this.configuration;
 	}
 
+	/**
+	 * Implementing classes should indicate an initialization 
+	 * error by throwing an {@link Exception}.
+	 * 
+	 * @throws Exception
+	 */
 	abstract protected void init() throws Exception;
 }
