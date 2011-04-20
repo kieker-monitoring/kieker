@@ -46,7 +46,7 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
 			// final double combinedUtilization = curCPU.getCombined();
-			final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.currentTimeNanos(),
+			final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(),
 					samplingController.getHostName(), Integer.toString(i), curCPU.getUser(), curCPU.getSys(), curCPU.getWait(),
 					curCPU.getNice(), curCPU.getIrq(), curCPU.getCombined(), curCPU.getIdle());
 			samplingController.newMonitoringRecord(r);

@@ -36,5 +36,5 @@ public abstract class AbstractTimer implements ITimeSource {
 	}
 	
 	@Override
-	public abstract long currentTimeNanos();
+	public abstract long getTime();
 }

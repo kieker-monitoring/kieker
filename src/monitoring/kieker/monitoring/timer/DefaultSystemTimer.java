@@ -22,7 +22,7 @@ public class DefaultSystemTimer extends AbstractTimer {
 	}
 	
 	@Override
-	public long currentTimeNanos() {
+	public long getTime() {
 		return System.nanoTime() + offsetA;
 	}
 

@@ -94,7 +94,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             //}
             this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance
             this.offset = (2 * 1000 * 1000 * 1000) - this.firstLoggingTimestamp;
-            this.startTime = timesource.currentTimeNanos();
+            this.startTime = timesource.getTime();
             //log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);
             //log.info("offset: " + this.offset);
             //log.info("startTime" + this.startTime);
@@ -105,7 +105,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             return false;
         }
         final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
-                - (timesource.currentTimeNanos() - this.startTime); // substract elapsed time
+                - (timesource.getTime() - this.startTime); // substract elapsed time
         //ps.println("curT.record: " + monitoringRecord.getLoggingTimestamp());ps.flush();
         //ps.println("curT.ctrl: " + ctrlnst.currentTimeNanos());ps.flush();
         //ps.println("elapsedT (nsec): " + (ctrlnst.currentTimeNanos() - this.startTime));
@@ -154,7 +154,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
     @Override
 	public void terminate(final boolean error) {
-        final long terminationDelay = (this.lTime + this.offset) - (timesource.currentTimeNanos() - this.startTime) + 100000000;
+        final long terminationDelay = (this.lTime + this.offset) - (timesource.getTime() - this.startTime) + 100000000;
         RealtimeReplayDistributor.log.info("Will terminate in " + terminationDelay + "nsecs from now");
         this.executor.schedule(new Runnable() {
 

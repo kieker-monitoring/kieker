@@ -91,7 +91,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase {
 		/* Change to terminated */
 		Assert.assertTrue("Failed to disableMonitoring", kieker.disableMonitoring());
 		kieker.terminateMonitoring();
-		Assert.assertFalse("Must not transition from terminated to disabled", kieker.disableMonitoring());
+		Assert.assertTrue("Transition to Disabled is always possible", kieker.disableMonitoring());
 		kieker.terminateMonitoring();
 	}
 }

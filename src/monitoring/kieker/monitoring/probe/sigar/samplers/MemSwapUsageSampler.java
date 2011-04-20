@@ -46,7 +46,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r =
-			new MemSwapUsageRecord(samplingController.getTimeSource().currentTimeNanos(),
+			new MemSwapUsageRecord(samplingController.getTimeSource().getTime(),
 					samplingController.getHostName(), mem.getTotal(),
 					mem.getActualUsed(), mem.getActualFree(),
 					swap.getTotal(), swap.getUsed(), swap.getTotal());

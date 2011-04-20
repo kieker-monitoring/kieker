@@ -39,7 +39,7 @@ public class BranchingProbe implements IMonitoringProbe {
 	public static void monitorBranch(final int branchID, final int branchingOutcome) {
 		// try-catch in order to avoid that any exception is propagated to the application code.
 		try {
-			BranchingProbe.ctrlInst.newMonitoringRecord(new BranchingRecord(timesource.currentTimeNanos(), branchID, branchingOutcome));
+			BranchingProbe.ctrlInst.newMonitoringRecord(new BranchingRecord(timesource.getTime(), branchID, branchingOutcome));
 		} catch (final Exception ex) {
 			BranchingProbe.log.error("Error monitoring branching", ex);
 		}

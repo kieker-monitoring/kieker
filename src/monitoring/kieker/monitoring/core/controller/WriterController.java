@@ -69,7 +69,7 @@ public final class WriterController extends AbstractController implements IWrite
 			if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
 				return false;
 			}
-			record.setLoggingTimestamp(monitoringController.getTimeSource().currentTimeNanos());
+			record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
 			numberOfInserts.incrementAndGet();
 			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {

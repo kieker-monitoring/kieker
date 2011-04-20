@@ -129,7 +129,6 @@ final class FsWriterThread extends AbstractAsyncThread {
 			}
 		}
 		this.pos.println();
-		this.pos.flush();
 	}
 
 	/**
@@ -138,6 +137,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 	private final void prepareFile() throws FileNotFoundException {
 		if (this.entriesInCurrentFileCounter++ > FsWriterThread.maxEntriesInFile) {
 			if (this.pos != null) {
+				this.pos.flush();
 				this.pos.close();
 			}
 			this.entriesInCurrentFileCounter = 0;
@@ -159,6 +159,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 	@Override
 	protected void cleanup() {
 		if (this.pos != null) {
+			this.pos.flush();
 			this.pos.close();
 		}
 	}

@@ -5,5 +5,5 @@ public interface ITimeSource {
 	/**
 	 * Returns the timestamp for the current time.
 	 */
-	public long currentTimeNanos();
+	public long getTime();
 }

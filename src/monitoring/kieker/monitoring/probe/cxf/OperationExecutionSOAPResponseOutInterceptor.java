@@ -93,7 +93,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			myEoi = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestEOI();
 			myEss = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestESS();
 			tin = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestTin();
-			tout = timesource.currentTimeNanos();
+			tout = timesource.getTime();
 			isEntryCall = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestIsEntryCall();
 		}
 

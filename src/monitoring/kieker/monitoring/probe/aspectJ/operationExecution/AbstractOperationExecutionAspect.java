@@ -61,13 +61,13 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable;
 
 	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData) throws Throwable {
-		execData.tin = timesource.currentTimeNanos(); // startint stopwatch
+		execData.tin = timesource.getTime(); // startint stopwatch
 		try {
 			execData.retVal = thisJoinPoint.proceed();
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = timesource.currentTimeNanos();
+			execData.tout = timesource.getTime();
 			if (execData.isEntryPoint) {
 				AbstractOperationExecutionAspect.cfRegistry.unsetThreadLocalTraceId();
 			}

@@ -105,7 +105,7 @@ public class ControlServlet extends HttpServlet {
 		out.println("<body>");
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
-		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.timesource.currentTimeNanos() + "<br>");
+		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.timesource.getTime() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
 		out.println("Vmname:\"" + ControlServlet.ctrlInst.getHostName() + "\"<br>");
 
@@ -157,8 +157,8 @@ public class ControlServlet extends HttpServlet {
 				for (int i = 0; i < 12; i++) {
 					ControlServlet.ctrlInst.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet",
 							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ControlServlet.timesource.currentTimeNanos(), ControlServlet.timesource
-									.currentTimeNanos(), ControlServlet.ctrlInst.getHostName(), i, i));
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ControlServlet.timesource.getTime(), ControlServlet.timesource
+									.getTime(), ControlServlet.ctrlInst.getHostName(), i, i));
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();
 				ControlServlet.sessionRegistry.unsetThreadLocalSessionId();

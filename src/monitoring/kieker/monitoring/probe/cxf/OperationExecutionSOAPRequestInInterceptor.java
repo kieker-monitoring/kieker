@@ -66,7 +66,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
             /* Store entry time tin for this trace.
                This value will be used by the corresponding invocation of the
                KiekerTpmonResponseOutProbe. */
-            final long tin = timesource.currentTimeNanos();
+            final long tin = timesource.getTime();
             boolean isEntryCall = false; // set true below if is entry call
 
             /* 1.) Extract sessionId from SOAP header */

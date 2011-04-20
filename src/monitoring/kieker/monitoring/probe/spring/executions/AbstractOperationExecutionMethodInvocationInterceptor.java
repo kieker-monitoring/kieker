@@ -96,14 +96,14 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	public abstract Object invoke(MethodInvocation invocation) throws Throwable;
 
 	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData) throws Throwable {
-		execData.tin = timesource.currentTimeNanos();
+		execData.tin = timesource.getTime();
 		try {
 			// executing the intercepted method call
 			execData.retVal = invocation.proceed();
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = timesource.currentTimeNanos();
+			execData.tout = timesource.getTime();
 			if (execData.isEntryPoint) {
 				AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.unsetThreadLocalTraceId();
 			}
