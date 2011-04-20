@@ -3,7 +3,7 @@ package kieker.monitoring.core.controller;
 /**
  * @author Jan Waller
  */
-public interface IMonitoringControllerState {
+public interface IStateController {
 
 	/**
 	 * Permanently terminates monitoring
@@ -86,6 +86,4 @@ public interface IMonitoringControllerState {
 	 * @return experimentID
 	 */
 	public abstract int getExperimentId();
-	
-	public abstract String getState();
 }

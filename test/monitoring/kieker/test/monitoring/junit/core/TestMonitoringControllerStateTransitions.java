@@ -2,9 +2,9 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.MonitoringControllerFactory;
-import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
 
 /*

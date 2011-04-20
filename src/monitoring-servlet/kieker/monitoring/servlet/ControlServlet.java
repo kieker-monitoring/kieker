@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.core.MonitoringControllerFactory;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;

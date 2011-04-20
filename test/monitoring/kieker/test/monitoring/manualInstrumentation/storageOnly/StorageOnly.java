@@ -1,8 +1,8 @@
 package kieker.test.monitoring.manualInstrumentation.storageOnly;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.MonitoringControllerFactory;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringControllerFactory;
 
 /*
  * ==================LICENCE=========================

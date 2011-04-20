@@ -2,9 +2,9 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.MonitoringControllerFactory;
-import kieker.monitoring.core.MonitoringController;
 import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringControllerFactory;
 import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
 
 /*
@@ -74,7 +74,7 @@ public class TestControllerConstruction extends TestCase {
 	}
 
 	/**
-	 * Make sure that {@link MonitoringControllerState#getInstance()} always returns the same instance.
+	 * Make sure that {@link StateController#getInstance()} always returns the same instance.
 	 */
 	public void testSingletonGetterOnlyOneInstance() {
 		Assert.assertSame("singleton getter returned different objects", MonitoringController.getInstance(), MonitoringController.getInstance());

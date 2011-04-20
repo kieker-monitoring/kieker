@@ -8,13 +8,12 @@ BASEDIR=${BINDIR}../
 
 SLEEPTIME=30            ## 30
 NUM_LOOPS=1             ## 1
-THREADS=1               ## 1
-MAXRECURSIONDEPTH=10    ## 10
+MAXTHREADS=10           ## 10
 TOTALCALLS=1000000      ## 1000000
 RECORDEDCALLS=100000    ## 100000
 METHODTIME=500000       ## 500000
 
-TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 5 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 5 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
+TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}`
 echo "Experiment will take circa ${TIME} seconds."
 
 # determine correct classpath separator
@@ -22,7 +21,7 @@ CPSEPCHAR=":" # default :, ; for windows
 if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
 # echo "Classpath separator: '${CPSEPCHAR}'"
 
-RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
+RESULTSDIR="${BASEDIR}tmp/results-benchmark-threaded/"
 echo "Removing and recreating '$RESULTSDIR'"
 (pfexec rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
 mkdir ${RESULTSDIR}stat/
@@ -33,7 +32,7 @@ rm -f ${BASEDIR}kieker.log
 
 RESULTSFN="${RESULTSDIR}results.csv"
 # Write csv file headers:
-CSV_HEADER="configuration;iteration;order_index;recursion_depth;thread_id;duration_nsec"
+CSV_HEADER="configuration;iteration;order_index;threads;thread_id;duration_nsec"
 echo ${CSV_HEADER} > ${RESULTSFN}
 
 AOPXML_PATH="${BASEDIR}build/META-INF/aop.xml"
@@ -73,8 +72,7 @@ echo "NUM_LOOPS=${NUM_LOOPS}" >>${RESULTSDIR}configuration.txt
 echo "TOTALCALLS=${TOTALCALLS}" >>${RESULTSDIR}configuration.txt
 echo "RECORDEDCALLS=${RECORDEDCALLS}" >>${RESULTSDIR}configuration.txt
 echo "METHODTIME=${METHODTIME}" >>${RESULTSDIR}configuration.txt
-echo "THREADS=${THREADS}" >>${RESULTSDIR}configuration.txt
-echo "MAXRECURSIONDEPTH=${MAXRECURSIONDEPTH}" >>${RESULTSDIR}configuration.txt
+echo "MAXTHREADS=${MAXTHREADS}" >>${RESULTSDIR}configuration.txt
 sync
 
 ## Execute Benchmark
@@ -82,8 +80,8 @@ sync
 for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     echo "## Starting iteration ${i}/${NUM_LOOPS}"
 
-    for ((j=1;j<=${MAXRECURSIONDEPTH};j+=1)); do
-        echo "# Starting recursion ${i}.${j}/${MAXRECURSIONDEPTH}"
+    for ((j=1;j<=${MAXTHREADS};j+=1)); do
+        echo "# Starting threads ${i}.${j}/${MAXTHREADS}"
 
         # 1 No instrumentation
         echo " # ${i}.1 No instrumentation"
@@ -96,8 +94,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
             --totalcalls ${TOTALCALLS} \
             --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
-            --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --totalthreads ${j} \
+            --recursiondepth 1
         kill %mpstat
         kill %vmstat
         kill %iostat
@@ -105,42 +103,20 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         sync
         sleep ${SLEEPTIME}
 
-        # 2 Empty probe
-        echo " # ${i}.2 Empty probe"
-        cp ${AOPXML_INSTR_EMPTYPROBE} ${AOPXML_PATH}
-        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-2.txt &
-        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-2.txt &
-        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-2.txt &
-        ${BINDJAVA} java  ${JAVAARGS_INSTR_EMPTYPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
-            --output-filename ${RESULTSFN} \
-            --configuration-id "empty_probe;${i};1;${j}" \
-            --totalcalls ${TOTALCALLS} \
-            --recordedcalls ${RECORDEDCALLS} \
-            --methodtime ${METHODTIME} \
-            --totalthreads ${THREADS} \
-            --recursiondepth ${j}
-        kill %mpstat
-        kill %vmstat
-        kill %iostat
-        rm -f ${AOPXML_PATH}
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
-        sync
-        sleep ${SLEEPTIME}
-
-        # 3 Deactivated probe
-        echo " # ${i}.3 Deactivated probe"
+        # 2 Deactivated probe
+        echo " # ${i}.2 Deactivated probe"
         cp ${AOPXML_INSTR_DEACTPROBE} ${AOPXML_PATH}
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-3.txt &
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-3.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-3.txt &
         ${BINDJAVA} java  ${JAVAARGS_INSTR_DEACTPROBE} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
-            --configuration-id "deact_probe;${i};2;${j}" \
+            --configuration-id "deact_probe;${i};1;${j}" \
             --totalcalls ${TOTALCALLS} \
             --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
-            --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --totalthreads ${j} \
+            --recursiondepth 1
         kill %mpstat
         kill %vmstat
         kill %iostat
@@ -149,20 +125,20 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         sync
         sleep ${SLEEPTIME}
 
-        # 4 No logging
-        echo " # ${i}.4 No logging (null writer)"
+        # 3 No logging
+        echo " # ${i}.3 No logging (null writer)"
         cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-4.txt &
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-4.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-4.txt &
         ${BINDJAVA} java  ${JAVAARGS_INSTR_NOLOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
-            --configuration-id "no_logging;${i};3;${j}" \
+            --configuration-id "no_logging;${i};2;${j}" \
             --totalcalls ${TOTALCALLS} \
             --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
-            --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --totalthreads ${j} \
+            --recursiondepth 1
         kill %mpstat
         kill %vmstat
         kill %iostat
@@ -171,20 +147,20 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         sync
         sleep ${SLEEPTIME}
 
-        # 5 Logging
-        echo " # ${i}.5 Logging"
+        # 4 Logging
+        echo " # ${i}.4 Logging"
         cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-5.txt &
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-5.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-5.txt &
         ${BINDJAVA} java  ${JAVAARGS_INSTR_LOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
             --output-filename ${RESULTSFN} \
-            --configuration-id "logging;${i};4;${j}" \
+            --configuration-id "logging;${i};3;${j}" \
             --totalcalls ${TOTALCALLS} \
             --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
-            --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --totalthreads ${j} \
+            --recursiondepth 1
         kill %mpstat
         kill %vmstat
         kill %iostat
@@ -202,6 +178,6 @@ tar cf ${RESULTSDIR}/kiekerlog.tar ${RESULTSDIR}/kiekerlog/
 pfexec rm -rf ${RESULTSDIR}/kiekerlog/
 gzip -9 ${RESULTSDIR}/kiekerlog.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
-## ${BINDIR}run-r-benchmark-recursive.sh
+## ${BINDIR}run-r-benchmark-threaded.sh
 [ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log
 [ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}

@@ -11,10 +11,12 @@ public abstract class AbstractController {
 	 * 
 	 * @see #isTerminated()
 	 */
-	protected final void terminate() {
+	protected final boolean terminate() {
 		if (!terminated.getAndSet(true)) {
 			cleanup();
+			return true;
 		}
+		return false;
 	}
 
 	/**

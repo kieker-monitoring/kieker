@@ -3,7 +3,7 @@ package kieker.monitoring.core.servlet;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import kieker.monitoring.core.controller.IMonitoringControllerState;
+import kieker.monitoring.core.controller.IStateController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 import org.apache.commons.logging.Log;
@@ -35,13 +35,13 @@ import org.apache.commons.logging.LogFactory;
 public class TerminationServletContextListener implements ServletContextListener {
 	private static final Log log = LogFactory.getLog(TerminationServletContextListener.class);
 
-	private final IMonitoringControllerState ctrl;
+	private final IStateController ctrl;
 
 	public TerminationServletContextListener() {
 		this.ctrl = MonitoringController.getInstance();
 	}
 
-	public TerminationServletContextListener(final IMonitoringControllerState ctrl) {
+	public TerminationServletContextListener(final IStateController ctrl) {
 		this.ctrl = ctrl;
 	}
 

@@ -1,7 +1,7 @@
 package kieker.test.monitoring.manualInstrumentation.helloWorld;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 
 /*
  * ==================LICENCE=========================

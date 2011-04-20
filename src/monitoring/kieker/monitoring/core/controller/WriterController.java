@@ -25,8 +25,11 @@ public final class WriterController extends AbstractController implements IWrite
 	private final IMonitoringWriter monitoringWriter;
 	/** the ITimeSource used by this instance */
 	private final ITimeSource timeSource;
+	
+	private final StateController stateController;
 
-	public WriterController(final Configuration configuration) {
+	public WriterController(final Configuration configuration, final StateController stateController) {
+		this.stateController = stateController;
 		this.timeSource = createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
 		if (this.timeSource == null) {
 			this.monitoringWriter = null;
@@ -41,7 +44,8 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	protected void cleanup() {
+	protected final void cleanup() {
+		stateController.terminate();
 		WriterController.log.info("Shutting down Writer Controller");
 		if (this.monitoringWriter != null) {
 			this.monitoringWriter.terminate();
@@ -49,7 +53,7 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	public void getState(final StringBuilder sb) {
+	protected final void getState(final StringBuilder sb) {
 		sb.append("WriterController:\n\tTime Source: '");
 		sb.append(this.timeSource.getClass().getName());
 		sb.append("'; Number of Inserts: '");
@@ -66,7 +70,7 @@ public final class WriterController extends AbstractController implements IWrite
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			if (!controller.isMonitoringEnabled()) { // enabled and not terminated
+			if (!stateController.isMonitoringEnabled()) { // enabled and not terminated
 				return false;
 			}
 			record.setLoggingTimestamp(timeSource.currentTimeNanos());
@@ -74,13 +78,13 @@ public final class WriterController extends AbstractController implements IWrite
 			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {
 				WriterController.log.fatal("Error writing the monitoring data. Will terminate monitoring!");
-				this.terminateMonitoring();
+				this.terminate();
 				return false;
 			}
 			return true;
 		} catch (final Throwable ex) {
 			WriterController.log.fatal("Exception detected. Will terminate monitoring", ex);
-			this.terminateMonitoring();
+			this.terminate();
 			return false;
 		}
 	}
