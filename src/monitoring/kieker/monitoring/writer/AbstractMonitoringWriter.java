@@ -44,7 +44,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 * @return
 	 */
 	protected Properties getDefaultProperties() {
-		return null;
+		return null; 
 	}
 
 	@Override
