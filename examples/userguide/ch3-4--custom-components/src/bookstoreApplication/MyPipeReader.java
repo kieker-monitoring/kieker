@@ -37,12 +37,13 @@ public class MyPipeReader extends AbstractMonitoringReader {
     @Override
     public boolean read() {
         try {
-            Object[] objArray;
+        	PipeData data;
             /* Wait max. 4 seconds for the next data. */
-            while ((objArray = this.pipe.poll(4)) != null) {
+            while ((data = this.pipe.poll(4)) != null) {
                 /* Create new record, init from received array ... */
                 final MyResponseTimeRecord record = new MyResponseTimeRecord();
-                record.initFromArray(objArray);
+                record.initFromArray(data.getRecordData());
+                record.setLoggingTimestamp(data.getLoggingTimestamp());
                 /* ...and delegate the task of delivering to the super class. */
                 this.deliverRecord(record);
             }

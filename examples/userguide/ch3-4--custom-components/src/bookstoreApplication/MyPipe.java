@@ -5,23 +5,23 @@ import java.util.concurrent.TimeUnit;
 
 public class MyPipe {
 	private final String pipeName;
-	private final LinkedBlockingQueue<Object[]> storage =
-                new LinkedBlockingQueue<Object[]>();
+	private final LinkedBlockingQueue<PipeData> buffer =
+                new LinkedBlockingQueue<PipeData>();
 
 	public MyPipe(final String pipeName) {
 		this.pipeName = pipeName;
 	}
 
 	public String getPipeName() {
-		return pipeName;
+		return this.pipeName;
 	}
 
-	public void put(final Object[] obj) throws InterruptedException {
-		storage.put(obj);
+	public void put(final PipeData data) throws InterruptedException {
+		this.buffer.put(data);
 	}
 
-	public Object[] poll(final long timeout) throws InterruptedException {
-		return storage.poll(timeout, TimeUnit.SECONDS);
+	public PipeData poll(final long timeout) throws InterruptedException {
+		return this.buffer.poll(timeout, TimeUnit.SECONDS);
 	}
 
 }
