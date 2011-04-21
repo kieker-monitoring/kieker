@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
@@ -214,21 +215,20 @@ public class FilesystemLogReplayerStarter {
 			FilesystemLogReplayerStarter.log.info("Replaying log data in non-real time");
 		}
 
-		System.out.println(MonitoringController.getInstance().toString());
-
 		/**
 		 * Force the controller to keep the original logging timestamps of the
 		 * monitoring records.
 		 */
-		final IMonitoringController monitoringController = MonitoringController.getInstance(); // use the singleton
-		// instance
+		final Configuration configuration = Configuration.createDefaultConfiguration();
+		
+		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {
+			configuration.setProperty(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
+		} else {
+			configuration.setProperty(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
+		}
 
-//		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {
-//			monitoringController.enableReplayMode();
-//		} else {
-//			monitoringController.enableRealtimeMode();
-//		}
-
+		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
+		
 		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringController, FilesystemLogReplayerStarter.inputDirs,
 				FilesystemLogReplayerStarter.realtimeMode, FilesystemLogReplayerStarter.numRealtimeWorkerThreads,
 				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp, FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp);

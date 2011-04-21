@@ -50,6 +50,9 @@ kieker.monitoring.timer=kieker.monitoring.timer.DefaultSystemTimer
 # The size of the thread pool used to execute registered periodic sensor jobs.
 kieker.monitoring.periodicSensorsExecutorPoolSize=1
 
+# Enables/disable the automatic assignment of each record's logging timestamp 
+# (true|false; default: true) 
+kieker.monitoring.setLoggingTimestamp=true
 
 ###########################
 #######    WRITER   #######
@@ -59,7 +62,6 @@ kieker.monitoring.periodicSensorsExecutorPoolSize=1
 ## kieker.monitoring.IMonitoringWriter and providing a constructor that 
 ## accepts an IMonitoringController and a single Configuration. 
 kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter
-
 
 #####
 #kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter

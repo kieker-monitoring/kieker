@@ -19,11 +19,14 @@ public final class WriterController extends AbstractController implements IWrite
 	private final AtomicLong numberOfInserts = new AtomicLong(0);
 	/** Monitoring Writer */
 	private final IMonitoringWriter monitoringWriter;
+	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set */
+	private final boolean autoSetLoggingTimestamp;
 
 	public WriterController(final Configuration configuration) {
-		this.monitoringWriter = createAndInitialize(IMonitoringWriter.class, configuration.getStringProperty(Configuration.WRITER_CLASSNAME), configuration);
+		this.autoSetLoggingTimestamp  = configuration.getBooleanProperty(Configuration.AUTO_SET_LOGGINGTSTAMP);
+		this.monitoringWriter = AbstractController.createAndInitialize(IMonitoringWriter.class, configuration.getStringProperty(Configuration.WRITER_CLASSNAME), configuration);
 		if (this.monitoringWriter == null) {
-			terminate();
+			this.terminate();
 			return;
 		}
 	}
@@ -34,8 +37,8 @@ public final class WriterController extends AbstractController implements IWrite
 			try {
 				this.monitoringWriter.setController(super.monitoringController);
 			} catch (final Exception e) {
-				log.error("Error initializing writer", e);
-				terminate();
+				WriterController.log.error("Error initializing writer", e);
+				this.terminate();
 			}
 		}
 	}
@@ -53,6 +56,8 @@ public final class WriterController extends AbstractController implements IWrite
 		final StringBuilder sb = new StringBuilder();
 		sb.append("WriterController:\n\tNumber of Inserts: '");
 		sb.append(this.getNumberOfInserts());
+		sb.append("'\n\tAutomatic assignment of logging timestamps: '");
+		sb.append(this.autoSetLoggingTimestamp);
 		sb.append("'\n");
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
@@ -69,8 +74,10 @@ public final class WriterController extends AbstractController implements IWrite
 			if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
 				return false;
 			}
-			record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
-			numberOfInserts.incrementAndGet();
+			if (this.autoSetLoggingTimestamp) {
+				record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
+			}
+			this.numberOfInserts.incrementAndGet();
 			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {
 				WriterController.log.fatal("Error writing the monitoring data. Will terminate monitoring!");

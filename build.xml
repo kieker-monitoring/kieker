@@ -16,11 +16,7 @@
 		<property name="kieker.version" value="1.3-dev" />
 		<property name="year" value="2011" />
 		<property name="copyright" value="the Kieker Project" />
-		<!--<property name="dist.kieker.monitoring.jar" value="${kieker.monitoring.packagenamebase}-${kieker.version}.jar"/>-->
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
-		<!--<property name="dist.kieker.common.jar" value="${kieker.common.packagenamebase}-${kieker.version}.jar"/>-->
-		<!--<property name="dist.kieker.tools.jar" value="${kieker.tools.packagenamebase}-${kieker.version}.jar"/>-->
-		<!--<property name="dist.kieker.analysis.jar" value="${kieker.analysis.packagenamebase}-${kieker.version}.jar"/>-->
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 
 		<property name="kieker.dist.name" value="${kieker.packagenamebase}-${kieker.version}" />
@@ -93,11 +89,6 @@
 				<include name="spring.jar" />
 				<include name="spring-web.jar" />
 			</fileset>
-			<!--
-			<fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-      </fileset>
-      -->
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
 
@@ -107,11 +98,6 @@
 				<include name="commons-logging-*.jar" />
 				<include name="servlet-api.jar" />
 			</fileset>
-			<!--
-			<fileset dir="${dist.dir}">
-      	<include name="${dist.kieker.common.jar}"/>
-      </fileset>
-      -->
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}" />
 		</path>
@@ -122,11 +108,6 @@
 				<include name="rabbitmq-client.jar" />
 				<include name="jms-1.1.jar" />
 			</fileset>
-			<!--
-			<fileset dir="${dist.dir}">
-      	<include name="${dist.kieker.common.jar}"/>
-      </fileset>
-      -->
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
 
@@ -252,6 +233,7 @@
 			<include name="bin/log4j.properties" />
 			<include name="bin/*.bat" />
 			<include name="META-INF/*" />
+			<!-- a file META-INF/kieker.monitoring.properties will be during packaging -->
 			<include name="src/**/*.java" />
 			<include name="test/**/*.java" />
 			<include name="test/META-INF/*" />
@@ -271,6 +253,7 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
+			<tarfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</tarfileset>
@@ -283,6 +266,7 @@
 		<delete file="${release.dir}/${dist.kieker.srcBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
+			<zipfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</zipfileset>
@@ -303,6 +287,7 @@
 			<include name="dist/*.jar" />
 			<include name="dist/*.war" />
 			<include name="META-INF/*" />
+			<!-- a file META-INF/kieker.monitoring.properties will be during packaging -->
 			<include name="lib/*" />
 			<exclude name="lib/maven/" />
 			<exclude name="lib/pmd/" />
@@ -349,6 +334,7 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
+			<tarfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</tarfileset>
@@ -361,6 +347,7 @@
 		<delete file="${release.dir}/${dist.kieker.binBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
+			<zipfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</zipfileset>
@@ -514,10 +501,6 @@
 				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
-			<!-- <fileset dir="${dist.dir}">
-                <include name="${dist.kieker.common.jar}"/>
-                <include name="${dist.kieker.analysis.jar}"/>
-            </fileset>-->
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -812,7 +795,7 @@
 		</pathconvert>
 
 		<!-- Make sure that the following echo message (the content of the template file) is 
-		auto-formatted by the editor. Particularly, there mustn't be a leading empty line. -->
+		NOT auto-formatted by the editor. Particularly, there must NOT be a leading empty line. -->
 		<echo file="${eclipse-classpath.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 			<!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
 			<classpath>
@@ -832,7 +815,7 @@
         ]]>
         </echo>
 		<!-- Make sure that the following echo message (the content of the template file) is 
-		auto-formatted by the editor. Particularly, there mustn't be a leading empty line. -->
+		NOT auto-formatted by the editor. Particularly, there must NOT be a leading empty line. -->
 		<echo file="${eclipse-project.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 			<!-- Sample eclipse .project file. Copy this file to ".project". -->
 			<projectDescription>
