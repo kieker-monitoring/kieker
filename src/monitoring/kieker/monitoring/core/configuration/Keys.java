@@ -27,8 +27,7 @@ interface Keys {
 	public final static String ACTIVATE_MBEAN = Keys.PREFIX + "MBean";
 	public final static String ACTIVATE_MBEAN_DOMAIN = Keys.PREFIX + "MBean.domain";
 	public final static String ACTIVATE_MBEAN_TYPE = Keys.PREFIX + "MBean.name";
-	// Replay Controller
-	public final static String REPLAY_MODE = Keys.PREFIX + "replayMode";
+
 	// Writer Controller
 	public final static String AUTO_SET_LOGGINGTSTAMP = Keys.PREFIX + "setLoggingTimestamp";
 	public final static String WRITER_CLASSNAME = Keys.PREFIX + "writer";
