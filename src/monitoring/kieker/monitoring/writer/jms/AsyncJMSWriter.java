@@ -28,17 +28,17 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
-	private static final String PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
-	private static final String TOPIC = AsyncJMSWriter.PREFIX + "Topic";
-	private static final String CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
-	private static final String FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
-	private static final String MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
+	public static final String CONFIG__PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
+	public static final String CONFIG__TOPIC = AsyncJMSWriter.PREFIX + "Topic";
+	public static final String CONFIG__CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
+	public static final String CONFIG__FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
+	public static final String CONFIG__MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 
 	public AsyncJMSWriter(final IMonitoringController monitoringController, final Configuration configuration) throws NamingException, JMSException {
 		super(configuration);
-		this.addWorker(new JMSWriterThread(monitoringController, this.blockingQueue, this.configuration.getStringProperty(AsyncJMSWriter.CONTEXTFACTORYTYPE),
-				this.configuration.getStringProperty(AsyncJMSWriter.PROVIDERURL), this.configuration.getStringProperty(AsyncJMSWriter.FACTORYLOOKUPNAME),
-				this.configuration.getStringProperty(AsyncJMSWriter.TOPIC), this.configuration.getLongProperty(AsyncJMSWriter.MESSAGETTL)));
+		this.addWorker(new JMSWriterThread(monitoringController, this.blockingQueue, this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE),
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__FACTORYLOOKUPNAME),
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__TOPIC), this.configuration.getLongProperty(AsyncJMSWriter.CONFIG__MESSAGETTL)));
 	}
 
 	@Override

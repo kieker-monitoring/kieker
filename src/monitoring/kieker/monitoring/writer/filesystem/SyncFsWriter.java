@@ -51,8 +51,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncFsWriter.class);
 
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
-	private static final String PATH = SyncFsWriter.PREFIX + "customStoragePath";
-	private static final String TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
+	public static final String CONFIG__PATH = SyncFsWriter.PREFIX + "customStoragePath";
+	public static final String CONFIG__TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
 
 	// configuration parameters
 	private static final int maxEntriesInFile = 25000;
@@ -73,10 +73,10 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	@Override
 	protected void init() {
 		String path;
-		if (this.configuration.getBooleanProperty(SyncFsWriter.TEMP)) {
+		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
 		} else {
-			path = this.configuration.getStringProperty(SyncFsWriter.PATH);
+			path = this.configuration.getStringProperty(SyncFsWriter.CONFIG__PATH);
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {

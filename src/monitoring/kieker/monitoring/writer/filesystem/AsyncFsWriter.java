@@ -28,8 +28,8 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 	private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
 
 	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
-	private static final String PATH = AsyncFsWriter.PREFIX + "customStoragePath";
-	private static final String TEMP = AsyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
+	public static final String CONFIG__PATH = AsyncFsWriter.PREFIX + "customStoragePath";
+	public static final String CONFIG__TEMP = AsyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
 
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);
@@ -38,10 +38,10 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 	@Override
 	protected void init() {
 		String path;
-		if (this.configuration.getBooleanProperty(AsyncFsWriter.TEMP)) {
+		if (this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
 		} else {
-			path = this.configuration.getStringProperty(AsyncFsWriter.PATH);
+			path = this.configuration.getStringProperty(AsyncFsWriter.CONFIG__PATH);
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {

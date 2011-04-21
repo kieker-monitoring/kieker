@@ -45,9 +45,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncDbWriter.class);
 
 	private static final String PREFIX = SyncDbWriter.class.getName() + ".";
-	private static final String DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname";
-	private static final String CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString";
-	private static final String TABLENAME = SyncDbWriter.PREFIX + "TableName";
+	public static final String CONFIG__DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname";
+	public static final String CONFIG__CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString";
+	public static final String CONFIG__TABLENAME = SyncDbWriter.PREFIX + "TableName";
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 
 	private final Connection conn;
@@ -57,14 +57,14 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		try {
 			// register correct Driver
-			Class.forName(this.configuration.getStringProperty(SyncDbWriter.DRIVERCLASSNAME)).newInstance();
+			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG__DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
 			SyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
 		try {
-			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONNECTIONSTRING));
-			final String tablename = this.configuration.getStringProperty(SyncDbWriter.TABLENAME);
+			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG__CONNECTIONSTRING));
+			final String tablename = this.configuration.getStringProperty(SyncDbWriter.CONFIG__TABLENAME);
 			/*
 			 * IS THIS STILL NEEDED? if
 			 * (this.configuration.getBooleanProperty(LOADID)) { final Statement

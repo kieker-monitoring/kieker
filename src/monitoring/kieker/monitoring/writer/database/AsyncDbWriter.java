@@ -45,10 +45,10 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final Log log = LogFactory.getLog(AsyncDbWriter.class);
 
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
-	private static final String DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
-	private static final String CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
-	private static final String TABLENAME = AsyncDbWriter.PREFIX + "TableName";
-	private static final String NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
+	public static final String CONFIG__DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
+	public static final String CONFIG__CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
+	public static final String CONFIG__TABLENAME = AsyncDbWriter.PREFIX + "TableName";
+	public static final String CONFIG__NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
 
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 
@@ -61,13 +61,13 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public void init() throws Exception {
 		try {
 			// register correct Driver
-			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.DRIVERCLASSNAME)).newInstance();
+			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG__DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
 			AsyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
-		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONNECTIONSTRING);
-		final String tablename = this.configuration.getStringProperty(AsyncDbWriter.TABLENAME);
+		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONFIG__CONNECTIONSTRING);
+		final String tablename = this.configuration.getStringProperty(AsyncDbWriter.CONFIG__TABLENAME);
 		final String preparedQuery = "INSERT INTO " + tablename
 				+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)";
 		try {
@@ -82,7 +82,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } conn.close(); }
 			 * /*
 			 */
-			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.NRCONN); i++) {
+			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG__NRCONN); i++) {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {
