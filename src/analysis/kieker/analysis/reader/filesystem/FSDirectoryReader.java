@@ -41,7 +41,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Reads the contents of a single filesystem log directory and passes the
+ * Reads the contents of a single file system log directory and passes the
  * records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  * 
  * @author Matthias Rohr, Andre van Hoorn
@@ -125,6 +125,7 @@ class FSDirectoryReader {
 	 * 
 	 */
 	public void read() throws Exception {
+		this.readMappingFile();
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
 			@Override
@@ -141,12 +142,18 @@ class FSDirectoryReader {
 			throw new MonitoringReaderException(
 					"Directory '"
 							+ this.inputDir
-							+ "' does not exist or an I/O error occured. No files starting with '"
-							+ this.filePrefix
-							+ "' and ending with '"
-							+ this.filePostfix
-							+ "' could be found.");
+							+ "' does not exist or an I/O error occured.");
 		}
+
+		if (inputFiles.length == 0) {
+			throw new MonitoringReaderException("Directory '" +
+					this.inputDir + "' contains no files starting with '"
+					+ this.filePrefix
+					+ "' and ending with '"
+					+ this.filePostfix
+					+ "' could be found.");
+		}
+
 		Arrays.sort(inputFiles, new FileComparator()); // sort
 														// alphabetically
 		for (int i = 0; (inputFiles != null) && (i < inputFiles.length); i++) {
@@ -171,15 +178,24 @@ class FSDirectoryReader {
 				+ File.separator + "kieker.map");
 
 		if (!mappingFile.exists()) {
-			/* No mapping file found. Check whether we find a legacy tpmon.map file */
+			/*
+			 * No mapping file found. Check whether we find a legacy tpmon.map
+			 * file
+			 */
 			mappingFile = new File(this.inputDir.getAbsolutePath()
 					+ File.separator + "tpmon.map");
 			if (mappingFile.exists()) {
 				FSDirectoryReader.log.warn("directory '" + this.inputDir
 						+ "' contains no file 'kieker.map'");
-				FSDirectoryReader.log.info("Found 'tpmon.map' ... switching to legacy mode");
+				FSDirectoryReader.log
+						.info("Found 'tpmon.map' ... switching to legacy mode");
 				this.legacyTpmonMode = true;
 				this.filePrefix = FSDirectoryReader.legayFilePrefix;
+			} else {
+				// no {kieker|tpmon}.map exists. This is valid for very old
+				// monitoring logs. Hence, only dump a log.warn
+				FSDirectoryReader.log.warn("No mapping file in directory '"
+						+ this.inputDir.getAbsolutePath() + "'");
 			}
 		}
 
@@ -233,6 +249,7 @@ class FSDirectoryReader {
 					break;
 				}
 			}
+			this.recordTypeIdMapInitialized = true;
 		} finally {
 			if (in != null) {
 				try {
