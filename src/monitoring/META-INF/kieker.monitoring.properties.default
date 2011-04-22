@@ -119,7 +119,7 @@ kieker.monitoring.writer.namedRecordPipe.PipeWriter.pipeName=kieker-pipe
 #kieker.monitoring.writer=kieker.monitoring.writer.jms.AsyncJMSWriter
 #
 ## The url of the jndi provider that knows the jms service
-kieker.monitoring.writer.jms.AsyncJMSWriter.ProviderUrl=tcp://localhost:3035/
+kieker.monitoring.writer.jms.AsyncJMSWriter.ProviderUrl=tcp://127.0.0.1:3035/
 #
 ## The topic at the jms server which is used in the publisher/subscribe communication.
 kieker.monitoring.writer.jms.AsyncJMSWriter.Topic=queue1

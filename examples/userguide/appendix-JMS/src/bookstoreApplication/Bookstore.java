@@ -1,22 +1,23 @@
 package bookstoreApplication;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.core.MonitoringController;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 
 public class Bookstore {
 
     private final Catalog catalog = new Catalog();
     private final CRM crm = new CRM(this.catalog);
 
-    private final static MonitoringController MONITORING_CONTROLLER =
+    private final static IMonitoringController MONITORING_CONTROLLER =
             MonitoringController.getInstance();
 
     public void searchBook() {
         /* 1.) Call the Catalog component's getBook() method
          *     and log its entry and exit timestamp using Kieker. */
-        final long tin = MonitoringController.currentTimeNanos();
+        final long tin = Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
         this.catalog.getBook(false);
-        final long tout = MonitoringController.currentTimeNanos();
+        final long tout = Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
         final OperationExecutionRecord e = 
                 new OperationExecutionRecord(
                 Catalog.class.getName(), "getBook(..)",

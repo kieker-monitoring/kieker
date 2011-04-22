@@ -2,7 +2,6 @@ package kieker.monitoring.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.StringTokenizer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -49,11 +48,15 @@ import kieker.monitoring.timer.ITimeSource;
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 689701318L;
 
-	private final static IMonitoringController ctrlInst = MonitoringController.getInstance();
-	private final static ITimeSource timesource = ControlServlet.ctrlInst.getTimeSource();
+	private final static IMonitoringController ctrlInst = MonitoringController
+			.getInstance();
+	private final static ITimeSource timesource = ControlServlet.ctrlInst
+			.getTimeSource();
 
-	private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
-	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+	private static final SessionRegistry sessionRegistry = SessionRegistry
+			.getInstance();
+	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry
+			.getInstance();
 
 	protected void dumpError(final PrintWriter out, final String msg) {
 		out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
@@ -72,7 +75,8 @@ public class ControlServlet extends HttpServlet {
 
 	public static void initialize() {
 		try {
-			ControlServlet.hostname = java.net.InetAddress.getLocalHost().getHostName();
+			ControlServlet.hostname =
+					java.net.InetAddress.getLocalHost().getHostName();
 		} catch (final Exception e) { /* ignore */
 		}
 		System.out.println("ControlServlet initializes.");
@@ -80,14 +84,17 @@ public class ControlServlet extends HttpServlet {
 	}
 
 	/**
-	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+	 * methods.
 	 * 
 	 * @param request
 	 *            servlet request
 	 * @param response
 	 *            servlet response
 	 */
-	protected void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequest(final HttpServletRequest request,
+			final HttpServletResponse response) throws ServletException,
+			IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
@@ -105,9 +112,11 @@ public class ControlServlet extends HttpServlet {
 		out.println("<body>");
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
-		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.timesource.getTime() + "<br>");
+		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: "
+				+ ControlServlet.timesource.getTime() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
-		out.println("Vmname:\"" + ControlServlet.ctrlInst.getHostName() + "\"<br>");
+		out.println("Vmname:\"" + ControlServlet.ctrlInst.getHostName()
+				+ "\"<br>");
 
 		String action = request.getParameter("action");
 		if (action == null) {
@@ -116,12 +125,15 @@ public class ControlServlet extends HttpServlet {
 
 		if (!connectorError) {
 			if (action.equals("setExperimentId")) {
-				final String expimentIdString = request.getParameter("experimentID");
-				if ((expimentIdString != null) && (expimentIdString.length() != 0)) {
+				final String expimentIdString =
+						request.getParameter("experimentID");
+				if ((expimentIdString != null)
+						&& (expimentIdString.length() != 0)) {
 					try {
 						experimentID = Integer.parseInt(expimentIdString);
 						if (experimentID >= 0) {
-							ControlServlet.ctrlInst.setExperimentId(experimentID);
+							ControlServlet.ctrlInst
+									.setExperimentId(experimentID);
 						}
 
 					} catch (final NumberFormatException ne) {
@@ -152,13 +164,23 @@ public class ControlServlet extends HttpServlet {
 				 * action = ...
 				 */
 			} else if (action.equals("insertTestData")) {
-				ControlServlet.sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
+				ControlServlet.sessionRegistry
+						.storeThreadLocalSessionId(request.getSession(true)
+								.getId());
 				ControlServlet.cfRegistry.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) {
-					ControlServlet.ctrlInst.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet",
-							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ControlServlet.timesource.getTime(), ControlServlet.timesource
-									.getTime(), ControlServlet.ctrlInst.getHostName(), i, i));
+					ControlServlet.ctrlInst
+							.newMonitoringRecord(new OperationExecutionRecord(
+									"kieker.monitoring.controlServlet.ControlServlet",
+									"processRequest(HttpServletRequest,HttpServletResponse)",
+									ControlServlet.sessionRegistry
+											.recallThreadLocalSessionId(),
+									ControlServlet.cfRegistry
+											.recallThreadLocalTraceId(),
+									ControlServlet.timesource.getTime(),
+									ControlServlet.timesource
+											.getTime(), ControlServlet.ctrlInst
+											.getHostName(), i, i));
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();
 				ControlServlet.sessionRegistry.unsetThreadLocalSessionId();
@@ -168,7 +190,8 @@ public class ControlServlet extends HttpServlet {
 			} else if (action.equalsIgnoreCase("switchFaultInjection")) {
 				// final String activate = request.getParameter("activate");
 				// boolean enable = false;
-				// if ((activate != null) && activate.equalsIgnoreCase("true")) {
+				// if ((activate != null) && activate.equalsIgnoreCase("true"))
+				// {
 				// enable = true;
 				// }
 				final String location = request.getParameter("location");
@@ -197,60 +220,53 @@ public class ControlServlet extends HttpServlet {
 		/*
 		 * Dump Connector Info
 		 */
-		out.println("<h3> Status (" + "<a href=\"index.html\"> update </a>" + ")  </h3>");
-		String dbconnectorInfo = "";
+		out.println("<h3> Status (" + "<a href=\"index.html\"> update </a>"
+				+ ")  </h3>");
+		String monitoringControllerStatus = "";
 		try {
-			dbconnectorInfo = ControlServlet.ctrlInst.toString();
+			monitoringControllerStatus = ControlServlet.ctrlInst.toString();
 		} catch (final Exception e) {
 			out.println(e.getMessage());
 		}
 
-		if (dbconnectorInfo.length() == 0) {
+		if (monitoringControllerStatus.length() == 0) {
 			out.println("<h2> Dbconnector not found ... </h2>");
 		} else {
-			final StringTokenizer infoTokenizer = new StringTokenizer(dbconnectorInfo, ",");
 			out.println("<table>");
-			while (infoTokenizer.hasMoreTokens()) {
-				out.print("<tr>");
-				final String nameValuePair = infoTokenizer.nextToken();
-				final StringTokenizer fieldTokenizer = new StringTokenizer(nameValuePair, ":");
-				if (fieldTokenizer.countTokens() < 2) {
-					out.print("<td colspan=2>");
-					this.dumpError(out, "Invalid name-value pair:" + nameValuePair);
-					out.print("</td>");
-				} else {
-					out.print("<td>" + fieldTokenizer.nextToken().trim() + ":</td>");
-					out.print("<td>");
-					while (fieldTokenizer.hasMoreTokens()) {
-						out.print(fieldTokenizer.nextToken().trim());
-					}
-					out.print("</td>");
-				}
-				out.println("</tr>");
-			}
+			out.print("<tr><td><pre>");
+			out.print(monitoringControllerStatus);
+			out.println("</pre></td></tr>");
 			out.println("</table>");
 		}
 		final StringBuffer bu = new StringBuffer();
 		bu.append("<br><h3>Options:</h3>");
 		bu.append(" enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> / <a href=\"index?action=terminate\"> terminate</a><br>");
-		bu.append(" debug: <a href=\"index?action=setDebug&debug=on\"> on </a> / <a href=\"index?action=setDebug&debug=off\"> off </a> <br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");
 		bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">");
-		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"" + ControlServlet.ctrlInst.getExperimentId() + "\"/>");
+		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\""
+				+ ControlServlet.ctrlInst.getExperimentId() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
 		bu.append("</FORM> <br><br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
-		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ControlServlet.ctrlInst.getHostName() + "\"/>");
+		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\""
+				+ ControlServlet.ctrlInst.getHostName() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
 		bu.append(" Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
-		bu.append(" Kieker monitoring events since last execution environment restart = " + ControlServlet.ctrlInst.getNumberOfInserts() + " <br>");
-		bu.append(" java.vm.name = " + System.getProperty("java.vm.name") + " <br>");
+		bu.append(" Kieker monitoring events since last execution environment restart = "
+				+ ControlServlet.ctrlInst.getNumberOfInserts() + " <br>");
+		bu.append(" java.vm.name = " + System.getProperty("java.vm.name")
+				+ " <br>");
 		try {
-			final String youngGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
-			final String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
-			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC + "<br>");
+			final String youngGC =
+					java.lang.management.ManagementFactory
+							.getGarbageCollectorMXBeans().get(0).getName();
+			final String tenureGC =
+					java.lang.management.ManagementFactory
+							.getGarbageCollectorMXBeans().get(1).getName();
+			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC
+					+ "<br>");
 		} catch (final Exception e) { /* nothing we can do */
 		}
 		out.println(bu.toString());
@@ -271,7 +287,9 @@ public class ControlServlet extends HttpServlet {
 	 *            servlet response
 	 */
 	@Override
-	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(final HttpServletRequest request,
+			final HttpServletResponse response) throws ServletException,
+			IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
@@ -287,7 +305,9 @@ public class ControlServlet extends HttpServlet {
 	 *            servlet response
 	 */
 	@Override
-	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(final HttpServletRequest request,
+			final HttpServletResponse response) throws ServletException,
+			IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}

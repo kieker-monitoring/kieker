@@ -1,5 +1,6 @@
 package kieker.monitoring.writer.jms;
 
+import java.util.Hashtable;
 import java.util.concurrent.BlockingQueue;
 
 import javax.jms.Connection;
@@ -34,15 +35,15 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	public static final String CONFIG__FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
 	public static final String CONFIG__MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 
-	public AsyncJMSWriter(final IMonitoringController monitoringController, final Configuration configuration) throws NamingException, JMSException {
+	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);
-		this.addWorker(new JMSWriterThread(monitoringController, this.blockingQueue, this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE),
-				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__FACTORYLOOKUPNAME),
-				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__TOPIC), this.configuration.getLongProperty(AsyncJMSWriter.CONFIG__MESSAGETTL)));
 	}
 
 	@Override
-	protected void init() {
+	protected void init() throws NamingException, JMSException {
+		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE),
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__FACTORYLOOKUPNAME),
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__TOPIC), this.configuration.getLongProperty(AsyncJMSWriter.CONFIG__MESSAGETTL)));
 	}
 }
 
@@ -72,9 +73,16 @@ final class JMSWriterThread extends AbstractAsyncThread {
 			throws NamingException, JMSException {
 		super(monitoringController, writeQueue);
 		try {
-			final Context context = new InitialContext();
-			context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
-			context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
+			  final Hashtable<String, String> properties = new Hashtable<String, String>();
+			    properties.put(Context.INITIAL_CONTEXT_FACTORY, 
+			    		contextFactoryType);
+			    properties.put(Context.PROVIDER_URL, providerUrl);
+
+			    final Context context = new InitialContext(properties);
+			    
+//			final Context context = new InitialContext();
+//			context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
+//			context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup(factoryLookupName);
 			this.connection = factory.createConnection();
 			this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
