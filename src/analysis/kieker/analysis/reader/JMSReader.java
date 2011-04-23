@@ -24,8 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Reads tpmon messages from a (remote or local) JMS queue and processes them in
- * tpan.
+ * Reads monitoring records from a (remote or local) JMS queue.
  * 
  * 
  * @author Andre van Hoorn, Matthias Rohr History 2009-07-01 (AvH) Initial

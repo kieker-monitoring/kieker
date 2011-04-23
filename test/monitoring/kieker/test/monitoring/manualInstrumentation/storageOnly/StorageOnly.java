@@ -5,20 +5,20 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * This is a small test for the part of Tpmon that stores monitoring data.
- * Tpmon's monitoring API is manually invoked to collect monitoring data.
+ * This is a small test for the part of Kieker that stores monitoring data.
+ * Kieker's monitoring API is manually invoked to collect monitoring data.
  * Therefore, the instrumentation and logic in the monitoring points (the
- * aspects) of Tpmon is not used.
+ * aspects) of Kieker is not used.
  * 
  * The main purpose of this test is to isolate configuration and installation
- * problems and to get Tpmon running.
+ * problems and to get Kieker running.
  * 
- * Just compile and start it with the KiekerTpmonCTW library in the classpath
+ * Just compile and start it with the Kieker library in the classpath
  * (no javaagent required).
  * 
- * If in tpmon.properties file system storage (store in database = false) is
- * selected, a new file (tpmon*.dat) with monitoring data should be created in
- * the folder specified in tpmon.properties (default: /tmp).
+ * If in kieker.monitoring.properties file system storage (store in database = false) is
+ * selected, a new file (kieker*.dat) with monitoring data should be created in
+ * the folder specified in kieker.monitoring.properties (default: /tmp).
  *
  * @author Matthias Rohr
  * 

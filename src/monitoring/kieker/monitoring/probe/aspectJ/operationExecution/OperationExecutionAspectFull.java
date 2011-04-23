@@ -58,7 +58,7 @@ public class OperationExecutionAspectFull extends
 				OperationExecutionAspectFull.log
 						.fatal("eoi and/or ess have invalid values:"
 								+ " eoi == " + eoi + " ess == " + ess);
-				OperationExecutionAspectFull.log.fatal("Terminating Tpmon!");
+				OperationExecutionAspectFull.log.fatal("Terminating!");
 				AbstractOperationExecutionAspect.ctrlInst.terminateMonitoring();
 			}
 		} catch (final Exception e) {

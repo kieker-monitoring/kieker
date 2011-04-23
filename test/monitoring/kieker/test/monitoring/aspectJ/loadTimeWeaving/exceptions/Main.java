@@ -3,7 +3,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.exceptions;
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
- * Experimental test for kieker in combination with exceptions.
+ * Experimental test for Kieker in combination with exceptions.
  *
  * @author Matthias Rohr
  * History:
@@ -19,28 +19,28 @@ public class Main {
       
 	for(int i = 0; i < 10; i++) {
 		try{ 
-	        helloTpmon(true);
+	        helloKieker(true);
 		} catch(Exception e){}
 	
 		//try{ 
-	        //helloTpmon(false);
+	        //helloKieker(false);
 		//} catch(Exception e){}
 	}
 
 	for(int i = 0; i < 10; i++) {
 		try{ 
-	        helloTpmon(true);
+	        helloKieker(true);
 		} catch(Exception e){}
 	
 		try{ 
-	        helloTpmon(false);
+	        helloKieker(false);
 		} catch(Exception e){}
 	}
 
     }
     
     @OperationExecutionMonitoringProbe()
-    public static void helloTpmon(boolean throwException) throws Exception{
+    public static void helloKieker(boolean throwException) throws Exception{
         System.out.println("Hello World (look at your monitoring log ...)."+Thread.currentThread().getId()+" ");        
 	if (throwException) {
 		System.out.println("For test purposes, I will throw an exception now");

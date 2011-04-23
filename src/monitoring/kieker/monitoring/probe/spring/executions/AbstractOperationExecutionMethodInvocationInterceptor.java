@@ -17,11 +17,11 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 public abstract class AbstractOperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
 
-	protected static final IMonitoringController tpmonController = MonitoringController.getInstance();
+	protected static final IMonitoringController controller = MonitoringController.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-	protected static final ITimeSource timesource = tpmonController.getTimeSource();
-	protected static final String vmName = AbstractOperationExecutionMethodInvocationInterceptor.tpmonController.getHostName();
+	protected static final ITimeSource timesource = controller.getTimeSource();
+	protected static final String vmName = AbstractOperationExecutionMethodInvocationInterceptor.controller.getHostName();
 
 	/**
 	 * Iff true, the name of the runtime class is used, iff false, the name of
@@ -83,7 +83,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 		// that knowns the request object (e.g. a servlet or a spring MVC
 		// controller).
 		execData.sessionId = AbstractOperationExecutionMethodInvocationInterceptor.sessionRegistry.recallThreadLocalSessionId();
-		execData.experimentId = AbstractOperationExecutionMethodInvocationInterceptor.tpmonController.getExperimentId();
+		execData.experimentId = AbstractOperationExecutionMethodInvocationInterceptor.controller.getExperimentId();
 		execData.hostName = AbstractOperationExecutionMethodInvocationInterceptor.vmName;
 		return execData;
 	}

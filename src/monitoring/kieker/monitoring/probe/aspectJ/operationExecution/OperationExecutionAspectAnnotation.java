@@ -43,7 +43,7 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 			if ((eoi == -1) || (ess == -1)) {
 				OperationExecutionAspectAnnotation.log.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi
 						+ " ess == " + ess);
-				OperationExecutionAspectAnnotation.log.fatal("Terminating Tpmon!");
+				OperationExecutionAspectAnnotation.log.fatal("Terminating!");
 				AbstractOperationExecutionAspect.ctrlInst.terminateMonitoring();
 			}
 		} catch (final Exception e) {

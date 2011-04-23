@@ -20,7 +20,7 @@ public class OperationExecutionAspectAnnotationServlet extends
 		AbstractOperationExecutionAspectServlet {
 
 	private static final Log log = LogFactory
-			.getLog(OperationExecutionAspectAnnotation.class);
+			.getLog(OperationExecutionAspectAnnotationServlet.class);
 
 	@Pointcut("execution(* *.do*(..)) && args(request,response)")
 	public void monitoredServletEntry(final HttpServletRequest request,
@@ -76,7 +76,7 @@ public class OperationExecutionAspectAnnotationServlet extends
 						.fatal("eoi and/or ess have invalid values:"
 								+ " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectAnnotationServlet.log
-						.fatal("Terminating Tpmon!");
+						.fatal("Terminating!");
 				AbstractOperationExecutionAspect.ctrlInst.terminateMonitoring();
 			}
 		} catch (final Exception e) {

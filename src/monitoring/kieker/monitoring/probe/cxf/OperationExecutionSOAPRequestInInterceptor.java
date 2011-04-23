@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
 
 /**
  * CXF InInterceptor to get the sessionIdentifier header from an incoming soap message
- * and associate it with the current thread id in TpmonController.
+ * and associate it with the current thread id.
  *   
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
  */
@@ -49,7 +49,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
             /* Store entry time tin for this trace.
                This value will be used by the corresponding invocation of the
-               KiekerTpmonResponseOutProbe. */
+               ResponseOutProbe. */
             final long tin = timesource.getTime();
             boolean isEntryCall = false; // set true below if is entry call
 
@@ -101,7 +101,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
             } else {
                 /* SOAP Header doesn't contain a trace id.
                  * This might be caused by a request which has been sent by
-                 * a host not equipped with the KiekerTpmonRequestOutProbe.
+                 * a host not equipped with the RequestOutProbe.
                  * We will now acquire a thread id which is stored (below)
                  * in the thread local variable! */
                 traceId = OperationExecutionSOAPRequestInInterceptor.cfRegistry.getUniqueTraceId();

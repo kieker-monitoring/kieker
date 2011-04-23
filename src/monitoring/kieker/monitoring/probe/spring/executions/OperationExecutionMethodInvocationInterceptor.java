@@ -9,8 +9,8 @@ import org.apache.commons.logging.LogFactory;
 /**
  * This annotation marks methods that are exit points for remote calls
  * that go to an other virtual machine. The annotation tries to ensure
- * that the trace id is propergated to an other instance of tpmon in
- * the other virtual machine.
+ * that the trace id is propagated to another Kieker.Monitoring instance 
+ * in the other virtual machine.
  *
  * It provides the boolean property useRuntimeClassname to select whether
  * to use the declaring or the runtime classname of the instrumented methods.
@@ -35,7 +35,7 @@ public class OperationExecutionMethodInvocationInterceptor extends
 				.recallThreadLocalTraceId();
 		// Only go on if a traceId has been registered before
 		if ((traceId == -1)
-				|| !AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
+				|| !AbstractOperationExecutionMethodInvocationInterceptor.controller
 						.isMonitoringEnabled()) {
 			return invocation.proceed();
 		}
@@ -61,8 +61,8 @@ public class OperationExecutionMethodInvocationInterceptor extends
 								+ " eoi == " + execData.eoi + " ess == "
 								+ execData.ess);
 				OperationExecutionMethodInvocationInterceptor.log
-						.fatal("Terminating Tpmon!");
-				AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
+						.fatal("Terminating Kieker.Monitoring!");
+				AbstractOperationExecutionMethodInvocationInterceptor.controller
 						.terminateMonitoring();
 			}
 		} catch (final Exception e) {
@@ -72,7 +72,7 @@ public class OperationExecutionMethodInvocationInterceptor extends
 			 * note that proceedAndMeasure(...) even sets the variable name in
 			 * case the execution of the joint point resulted in an exception!
 			 */
-			AbstractOperationExecutionMethodInvocationInterceptor.tpmonController
+			AbstractOperationExecutionMethodInvocationInterceptor.controller
 					.newMonitoringRecord(execData);
 			AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
 					.storeThreadLocalESS(execData.ess);

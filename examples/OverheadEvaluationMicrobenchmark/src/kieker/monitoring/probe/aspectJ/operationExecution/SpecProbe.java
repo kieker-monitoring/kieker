@@ -51,7 +51,7 @@ public class SpecProbe extends AbstractOperationExecutionAspect {
 			this.proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				SpecProbe.log.fatal("eoi and/or ess have invalid values: eoi == " + eoi + " ess == " + ess);
-				SpecProbe.log.fatal("Terminating Tpmon!");
+				SpecProbe.log.fatal("Terminating!");
 				AbstractOperationExecutionAspect.ctrlInst.terminateMonitoring();
 			}
 		} catch (final Exception e) {

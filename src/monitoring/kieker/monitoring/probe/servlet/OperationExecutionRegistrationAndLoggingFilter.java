@@ -50,16 +50,6 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 
 	@Override
 	public void init(final FilterConfig config) throws ServletException {
-		/*
-		 * String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
-		 * if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
-		 * String tpmonConfig = config.getInitParameter("tpmonConfigLocation");
-		 * if (tpmonConfig != null && !"".equals(tpmonConfig)) {
-		 * // following system property is needed to customise the configuration of the TpmonController
-		 * System.setProperty("tpmon.configuration", tpmonConfig);
-		 * }
-		 * }
-		 */
 	}
 
 	/**

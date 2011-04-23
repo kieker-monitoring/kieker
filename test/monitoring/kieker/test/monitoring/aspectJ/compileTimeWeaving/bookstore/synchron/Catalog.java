@@ -1,11 +1,10 @@
 package kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.synchron;
+
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
  * A simple test and demonstration scenario for Kieker's 
- * monitoring component tpmon. See the kieker tutorial 
- * for more information 
- * (http://www.matthias-rohr.com/kieker/tutorial.html)
+ * monitoring component.
  * 
  * THIS VARIANT IS nearly identical TO kieker.tests.compileTimeWeaving.bookstore.Catalog.
  * Method getBook is synchronized here. This allows to test the (negative) performance 

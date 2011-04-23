@@ -3,11 +3,6 @@ package kieker.analysis.reader;
 import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
- * This reader reads a folder or an single tpmon file and
- * transforms it to monitoring events that are stored in the file system
- * again, written to a database, or whatever tpmon is configured to do
- * with the monitoring data.
- *
  * @author Andre van Hoorn
  */
 public interface IMonitoringReader {

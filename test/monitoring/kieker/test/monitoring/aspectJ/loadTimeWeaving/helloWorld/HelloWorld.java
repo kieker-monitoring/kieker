@@ -2,7 +2,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.helloWorld;
 /**
  * Simple example, used in the tutorial for
  * illustration the instrumentation and monitoring
- * capabilities of tpmon.
+ * capabilities of Kieker.
  * 
  * @author Matthias Rohr
  */

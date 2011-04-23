@@ -31,8 +31,8 @@ public class Bookstore extends Thread{
      * by the local variables above the method.
      * (default: 100 requests; interRequestTime 5 (millisecs))
      * 
-     * This will be monitored by Tpmon, since it has the
-     * TpmonExecutionMonitoringProbe() annotation.
+     * This will be monitored by Kieker, since it has the
+     * OperationExecutionMonitoringProbe annotation.
      */
     @OperationExecutionMonitoringProbe()
     public static void main(String[] args) {

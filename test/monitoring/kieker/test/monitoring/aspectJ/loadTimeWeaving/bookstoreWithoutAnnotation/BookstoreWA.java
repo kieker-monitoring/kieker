@@ -4,7 +4,7 @@ import java.util.Vector;
 
 /**
  * A simple test and demonstration scenario for Kieker's 
- * monitoring component tpmon. 
+ * monitoring component. 
  *
  * This test does not use the Kieker typical Java Annotations. The test is used
  * to demonstrate how to instrument programs for that no sources are available.

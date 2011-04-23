@@ -18,12 +18,12 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * @author Matthias Rohr, Andre van Hoorn
  * 
- *         History: 2008/09/04: Displays Tpmon's global insert count 2008/09/02:
+ *         History: 2008/09/04: Displays the global insert count 2008/09/02:
  *         Now it shows java.vm.name. Is Client JVM used on your server ? :)
  *         Additionally, it shows the garbage collectors in use. 2008/09/01:
  *         Added some features to create dummy monitoring events 2008/05/29:
  *         Changed vmid to vmname (defaults to hostname) -- the
- *         tpmon-control-servlet can change the vmname during runtime
+ *         control-servlet can change the vmname during runtime
  *         2008/01/14: Refactoring for the first release of Kieker and
  *         publication under an open source licence 2007/03/13: Initial
  *         Prototype

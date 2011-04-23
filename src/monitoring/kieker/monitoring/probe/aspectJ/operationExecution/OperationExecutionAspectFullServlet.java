@@ -78,7 +78,7 @@ public class OperationExecutionAspectFullServlet extends
 						.fatal("eoi and/or ess have invalid values:"
 								+ " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectFullServlet.log
-						.fatal("Terminating Tpmon!");
+						.fatal("Terminating!");
 				AbstractOperationExecutionAspect.ctrlInst.terminateMonitoring();
 			}
 		} catch (final Exception e) {

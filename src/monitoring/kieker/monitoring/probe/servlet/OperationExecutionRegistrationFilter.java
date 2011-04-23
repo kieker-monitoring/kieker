@@ -18,7 +18,7 @@ import kieker.monitoring.probe.IMonitoringProbe;
  * Register session id (if it exists) of incoming request.
  * The execution of the filter is not logged.
  * 
- * Servlet filter used to register session ids within the TpmonController.
+ * Servlet filter used to register session ids.
  * It can be integrated into the web.xml as follows:
  * 
  * <filter>
@@ -40,14 +40,6 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
 
     @Override
     public void init(FilterConfig config) throws ServletException {
-        /*        String tpmonEnabledAsString = config.getInitParameter("tpmonEnabled");
-        if (tpmonEnabledAsString != null && tpmonEnabledAsString.toLowerCase().equals("true")) {
-        String tpmonConfig = config.getInitParameter("tpmonConfigLocation");
-        if (tpmonConfig != null && !"".equals(tpmonConfig)) {
-        // following system property is needed to customise the configuration of the TpmonController
-        System.setProperty("tpmon.configuration", tpmonConfig);
-        }
-        }*/
     }
 
     @Override

@@ -3,8 +3,7 @@ package kieker.test.monitoring.aspectJ.compileTimeWeaving.twoConcurrentMethodsEx
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
- * A simple test and demonstration scenario for Kieker's monitoring component
- * tpmon.
+ * A simple test and demonstration scenario for Kieker's monitoring component.
  * 
  * @author Matthias Rohr
  * 

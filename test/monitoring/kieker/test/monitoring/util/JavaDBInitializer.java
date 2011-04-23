@@ -16,7 +16,7 @@ public class JavaDBInitializer {
 
 	private static String dbDriverClassname = "org.apache.derby.jdbc.EmbeddedDriver";
 	private static String dbConnectionAddress = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS";
-	private static String dbTableName = "APP.tpmondata";
+	private static String dbTableName = "APP.kiekerdata";
 
 	// TODO: needs to be read from file
 	private static String strCreateAddressTable = 
@@ -57,12 +57,12 @@ public class JavaDBInitializer {
 
 			// TODO: remove:
 			// statement = dbConnection.createStatement();
-			// statement.execute("INSERT INTO APP.tpmondata (experimentid) VALUES (5)");
-			// statement.execute("INSERT INTO APP.tpmondata (experimentid) VALUES (7)");
+			// statement.execute("INSERT INTO APP.kiekerdata (experimentid) VALUES (5)");
+			// statement.execute("INSERT INTO APP.kiekerdata (experimentid) VALUES (7)");
 			//
 			// statement = dbConnection.createStatement(); // TODO: FindBugs says this method may fail to close the database
 			// resource
-			// ResultSet res = statement.executeQuery("SELECT max(experimentid) FROM APP.tpmondata");
+			// ResultSet res = statement.executeQuery("SELECT max(experimentid) FROM APP.kiekerdata");
 			// if (res.next()) {
 			// System.out.println(res.getInt(1));
 			// }

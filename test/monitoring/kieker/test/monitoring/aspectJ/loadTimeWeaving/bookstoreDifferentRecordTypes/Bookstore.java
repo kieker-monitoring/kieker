@@ -32,11 +32,7 @@ public class Bookstore extends Thread {
      * Both the number of requests and arrival rate are defined 
      * by the local variables above the method.
      * (default: 100 requests; interRequestTime 5 (millisecs))
-     * 
-     * This will be monitored by Tpmon, since it has the
-     * TpmonExecutionMonitoringProbe() annotation.
      */
-    //@TpmonExecutionMonitoringProbe()
     public static void main(String[] args) throws InterruptedException {
 
         for (int i = 0; i < numberOfRequests; i++) {

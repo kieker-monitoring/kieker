@@ -3,7 +3,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotatio
 
 /**
  * A simple test and demonstration scenario for Kieker's 
- * monitoring component tpmon. 
+ * monitoring component. 
  *
  * @author Matthias Rohr
  * History:
