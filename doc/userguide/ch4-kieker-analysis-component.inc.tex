@@ -16,7 +16,7 @@ binary release.}
 
 An analysis with \KiekerAnalysisPart{} is set up and executed employing %
 the class \class{AnalysisController}. %
-\KiekerAnalysisPart{} requires a monitoring log reader %
+\KiekerAnalysisPart{} requires a monitoring reader %
 (Section~\ref{sec:analysis:reader}) and at least %
 one monitoring record consumer plugin (Section~\ref{sec:analysis:consumer}). %
 In addition to the monitoring record consumer plugin, %
@@ -35,7 +35,7 @@ following steps to be performed, as described in Section~\ref{sec:example:analys
 
 \begin{compactenum}
 \item Creating an instance of the \class{AnalysisController} class
-\item Creating and registering the monitoring log reader (\method{setLogReader}) as %
+\item Creating and registering the monitoring reader (\method{setLogReader}) as %
 well as the monitoring record consumers and other analysis plugins (\method{registerPlugin}).
 \item Starting the analysis instance (\method{run}).
 \end{compactenum}
@@ -43,7 +43,7 @@ well as the monitoring record consumers and other analysis plugins (\method{regi
 \
 
 \noindent In the following Sections~\ref{sec:analysis:reader} and~\ref{sec:analysis:consumer}, %
-we will create a custom monitoring log reader \class{MyPipeReader} and a %
+we will create a custom monitoring reader \class{MyPipeReader} and a %
 monitoring record consumer plugin \class{MyResponseTimeConsumer}. %
 \noindent The following Listing~\ref{listing:AnalysisController} shows how to create and run an analysis %
 with these custom components:
@@ -53,19 +53,19 @@ with these custom components:
 {\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Starter.java}
 
 \noindent On invocation of the \method{run} method, the \class{Analysis Controller} %
-calls the \method{execute} of all analysis plugins allowing them to initialize. %
-Then, it starts the configured monitoring log reader by calling its \method{read} %
+calls the \method{execute} method of all analysis plugins allowing them to initialize. %
+Then, it starts the configured monitoring reader by calling its \method{read} %
 method. Monitoring record consumers receive the monitoring records provided by %
 the reader. As soon as the reader returns from the execution of its \method{read} 
 method, the method \method{terminate} of each registered plugin is called by the %
 \class{Analysis Controller}.
 
-\section{Monitoring Log Readers}\label{sec:analysis:reader}
+\section{Monitoring Readers}\label{sec:analysis:reader}
 
 % Warning-tag for the reader-writer-thing
-The monitoring log readers are the direct counterpart to the monitoring log %
+The monitoring readers are the direct counterpart to the monitoring %
 writers. While writers receive records and write them into files or other kinds %
-of monitoring logs, readers deserialize monitoring data and provide it as %
+of monitoring logs/streams, readers deserialize monitoring data and provide it as %
 \class{IMonitoringRecord} instances. 
 
 \begin{figure}\centering
@@ -91,7 +91,7 @@ timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
 A brief description of how to use the \class{JMSReader} can be found in Appendix~\ref{appendix:usingJMS}. %
 
 \noindent The implementation of a custom reader is similar to implementating a %
-monitoring log writer. Custom reader should extend the class \class{AbstractKiekerMonitoringLogReader} %
+monitoring writer. Custom reader should extend the class \class{AbstractKiekerMonitoringReader} %
 which already provides an implementation of the observer pattern. %
 By invoking the method \method{deliverRecord},  the delivery of records is then %
 delegated to the super class.

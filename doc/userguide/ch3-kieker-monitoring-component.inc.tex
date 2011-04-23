@@ -37,7 +37,7 @@ used by \KiekerMonitoringPart{}. %
 
 The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart{} %
 instance and provides methods to, among others, log monitoring records %
-(\method{newMonitoringRecord}) employing the configured monitoring log writer and %
+(\method{newMonitoringRecord}) employing the configured monitoring writer and %
 to retrieve the current timestamp (\method{currentTimeNanos}). %
 The method \method{currentTimeNanos} returns the number of nanoseconds elapsed %
 since 1 Jan 1970 00:00~UTC. %
@@ -63,8 +63,8 @@ in the previous chapters. Typically, an instance of a monitoring record is %
 constructed in a monitoring probe (Section~\ref{sec:monitoring:probe}), %
 passed to the monitoring controller (Section~\ref{sec:componentsMonitoring:monitoringController}), %
 serialized and deserialized by a monitoring %
-log writer (Section~\ref{sec:monitoring-log-writers}) and a
-monitoring log reader (Section~\ref{sec:analysis:reader}), and provided to the %
+writer (Section~\ref{sec:monitoring-log-writers}) and a
+monitoring reader (Section~\ref{sec:analysis:reader}), and provided to the %
 analyis plugins (Section~\ref{sec:analysis:consumer}) %
 by the analysis controller (Section~\ref{sec:analysis:controller}). %
 Figure~\ref{fig:KiekerCommunicationDiagram} illustrates this life cycle of a monitoring %
@@ -78,7 +78,7 @@ The methods \method{initFromArray}, \method{toArray}, \method{getValueTypes} %
 are used for serialization and deserialization of the monitoring data contained %
 in the record. The method \method{setLoggingTimestamp} is used by the monitoring controller to %
 store the date and time when a record is received by the controller. %
-The \method{getLoggingTimestamp} can be used during analysis to retrieve %
+The method \method{getLoggingTimestamp} can be used during analysis to retrieve %
 this value. \KiekerMonitoringPart{} provides the abstract class %
 \class{AbstractMonitoringRecord} (Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}) %
 which already implements the methods to maintain the logging timestamp. 
@@ -140,10 +140,10 @@ instrument Java applications without source code modifications. %
 Chapter~\ref{chap:aspectJ} describes the \Kieker{} probes based on these technologies allowing to %
 monitor trace information in distributed applications. 
 
-\section{Monitoring Log Writers}\label{sec:monitoring-log-writers}
+\section{Monitoring Writers}\label{sec:monitoring-log-writers}
 
 Monitoring log writers serialize monitoring records to the monitoring log and  % and persist the recorded informations into files, databases etc. %
-must implement the interface \class{IMonitoringLogWriter}. The monitoring %
+must implement the interface \class{IMonitoringWriter}. The monitoring %
 controller passes the received records to the writer by calling the method %
 \method{newMonitoringRecord}. Writers can use the methods to serialize the %
 record contents, as described in Section~\ref{sec:componentsMonitoring:monitoringRecords}. 
@@ -197,7 +197,7 @@ monitoringDataWriterInitString=pipeName=somePipe
 
 \enlargethispage{1cm}
 
-\noindent Notice, that we decided to use \class{Object} arrays as the data structure of the %
+\noindent Note that we decided to use \class{Object} arrays as the data structure of the %
 monitoring log in order to demonstrate the use of the \method{toArray} and %
 \method{initFromArray} (in Section~\ref{sec:analysis:reader}) methods. %
 Alternatively, we could have used \class{IMonitoringRecord} as the data structure %

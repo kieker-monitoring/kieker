@@ -19,7 +19,7 @@ continuous monitoring in production systems inducing only a very low overhead.
 
 The present version of \Kieker{} is a monitoring and analysis framework for %
 Java applications. %
-Support for other platforms, such as .NET, is planned. %
+Support for other platforms, such as .NET, is currently under development. %
 Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based %
 on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
 
@@ -30,11 +30,11 @@ on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
 \label{fig:KiekerComponentDiagram}
 \end{figure}
 		
-\noindent The \KiekerMonitoringPart{} component is responsible for program instrumentation, data collection and logging. Its core is the \class{MonitoringController}. %  which %
+\noindent The \KiekerMonitoringPart{} component is responsible for program instrumentation, data collection, and logging. Its core is the \class{MonitoringController}. %  which %
 %receives the monitoring data in so-called monitoring records from monitoring probes, and writes these %
 % receives the monitoring data and passes it to the configured monitoring log writer. %
 %
-The component \KiekerAnalysisPart{} is responsible for reading, analyzing and visualizing the monitoring data. Its core is the \class{AnalysisController} which manages the life-cycle of the monitoring log reader and all analysis plugins.
+The component \KiekerAnalysisPart{} is responsible for reading, analyzing, and visualizing the monitoring data. Its core is the \class{AnalysisController} which manages the life-cycle of the monitoring reader and all analysis plugins.
 
 The monitoring and analysis parts of the \Kieker{} framework are composed of subcomponents which represent the different functionalities of the monitoring and analysis tasks. The important interaction pattern among the components is illustrated in Figure~\ref{fig:KiekerCommunicationDiagram} but will be explained furthermore throughout the course of this user guide. 
 
@@ -53,15 +53,15 @@ The monitoring and analysis parts of the \Kieker{} framework are composed of sub
 % avh: removed
 \noindent The monitoring probes create the monitoring records containing the %
 monitoring data and deliver them to the monitoring controller. %
-The monitoring controller employs the monitoring log writers to write these %
-monitoring records to the monitoring log. %
-For analyzing purposes, a monitoring log reader reads the records from the monitoring log. %
+The monitoring controller employs the monitoring writers to write these %
+monitoring records to a monitoring log or stream. %
+For analyzing purposes, a monitoring reader reads the records from the monitoring log/stream. %
 These records can then be further processed by the analysis plugins.
 
 %%
 % \section{Features}
 
-Kieker includes monitoring log writers and readers for filesystems, SQL %
+Kieker includes monitoring writers and readers for filesystems, SQL %
 databases, and the Java Messaging Service~(JMS)~\cite{JMS-WebSite}. %
 A special feature of \Kieker{} is the ability to monitor and analyze (distributed) %
 traces of method executions and corresponding timing information. %
@@ -85,9 +85,9 @@ in order to monitor timing information of method executions, and %
 how to use \KiekerAnalysisPart{} to analyze the monitored data. %
 Chapter~\ref{chap:componentsMonitoring} provides a more detailed %
 description of \KiekerMonitoringPart{} and shows how to implement and %
-use custom monitoring records, monitoring probes, and monitoring log writers. %
+use custom monitoring records, monitoring probes, and monitoring writers. %
 A more detailed description of \KiekerAnalysisPart{} and how to implement and use %
-custom monitoring log readers, and analysis plugins follows in %
+custom monitoring readers, and analysis plugins follows in %
 Chapter~\ref{chap:componentsAnalysis}. %
 Chapter~\ref{chap:aspectJ} demonstrates how to use \KiekerTraceAnalysis{} %
 for monitoring, analyzing, and visualizing trace information. %
@@ -97,7 +97,7 @@ Additional resources are included in the appendix.
 
 % Notify-tag because this could be interesting for the reader.
 \NOTIFYBOX{The Java sources presented in this user guide are included in the %
-\file{\exampleDir/} directory of the \Kieker{} distribution (see %
+\file{\exampleDir/} directory of the \Kieker{} distribution (see~%
 Section \ref{sec:example:downloadInstall}).}
 
 

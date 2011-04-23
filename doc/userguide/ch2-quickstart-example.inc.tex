@@ -72,7 +72,7 @@ to a third-party library which is needed to execute \Kieker{} in any case.
 \section{Bookstore Example Application}\label{sec:example:bookstore}
 
 The Bookstore application is a small sample application resembling a simple %
-bookstore with a marketplace facility where users can search for books in an %
+bookstore with a market-place facility where users can search for books in an %
 online catalog, and subsequently get offers from different book sellers. %
 Figure~\ref{fig:bookstore:classAndSequenceDiagrams} shows %on the left side 
 a class diagram describing the structure of the bookstore and %on the right side 
@@ -192,8 +192,8 @@ instrumentation in detail, the quick start example uses manual instrumentation.}
 
 \
 
-\noindent The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in \dir{\KiekerDir/dist/} of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
-The file \file{\commonsLoggingJar} is located in \dir{\KiekerDir/lib/} directory and has to be copied to the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
+\noindent The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in the \dir{\KiekerDir/dist/} directory of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
+The file \file{\commonsLoggingJar} is located in the \dir{\KiekerDir/lib/} directory and has to be copied to the \dir{lib/} directory of the example application. The final layout of the example directories is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -356,7 +356,7 @@ which uses \KiekerTraceAnalysis{}.
 \file{Consumer.java} and \file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
 These files can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}. 
 
-Listing \ref{lst:Consumer} on page~\pageref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{} monitoring records. The consumer is part of the \KiekerAnalysisPart{} component. It processes records provided by the monitoring log readers (see Chapter~\ref{chap:introduction}). %For details on the composition of the \Kieker{} framework).
+Listing \ref{lst:Consumer} on page~\pageref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{} monitoring records. The consumer is part of the \KiekerAnalysisPart{} component. It processes records provided by the monitoring readers (see Chapter~\ref{chap:introduction}). %For details on the composition of the \Kieker{} framework).
 
 \setJavaCodeListing       
 
@@ -366,8 +366,8 @@ Listing \ref{lst:Consumer} on page~\pageref{lst:Consumer} shows the content of t
 a specified threshold value. %Meaning the maximal response time has not been exceeded. 
 This threshold is set during construction of the \class{Consumer} class (see lines 13--15). 
 
-For the data analysis, the \method{newMonitoringRecord()} (see lines 23--40) is used. %
-This method is called for every monitoring record. At first the method tests if %
+For the data analysis, the method \method{newMonitoringRecord()} (see lines 23--40) is used. %
+This method is called for every monitoring record. At first, the method tests if %
 the monitoring record are really \class{OperationExecutionRecord} instances, as %
 these are the only record types it can process. Then the methods calculates the %
 execution time of one recorded \method{getBook()} call. If the method call takes %
