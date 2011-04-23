@@ -433,18 +433,18 @@
 
 	<target name="run-test-storage" depends="compile-tests-monitoring">
 		<echo>
-            This is a small test for the part of Tpmon that
-            stores monitoring data. Tpmon's monitoring API
+            This is a small test for the part of Kieker that
+            stores monitoring data. Kieker's monitoring API
             is manually invoked to collect monitoring data.
             Therefore, the instrumentation and logic in the
-            monitoring points (the aspects) of Tpmon is not
+            monitoring points (the aspects) of Kieker is not
             used.
 
             The main purpose of this test is to isolate configuration and
-            installation problems and to get Tpmon running.
+            installation problems and to get Kieker running.
 
             If in kieker.monitoring.properties file system storage (store in database =
-            false) is selected, a new file (tpmon*.dat) with monitoring data
+            false) is selected, a new file (kieker*.dat) with monitoring data
             should be created in the folder specified in kieker.monitoring.properties
             (default: /tmp).
         </echo>
@@ -695,7 +695,7 @@
 			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.AsyncDbWriter" />
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.DriverClassname=org.apache.derby.jdbc.EmbeddedDriver" />
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS" />
-			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.TableName=APP.tpmondata" />
+			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.TableName=APP.kiekerdata" />
 		</java>
 	</target>
 
