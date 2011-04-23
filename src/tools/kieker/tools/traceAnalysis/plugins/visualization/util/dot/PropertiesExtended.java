@@ -12,7 +12,7 @@ import java.util.Properties;
  * Additional methods are provided to fetch Integer and Double objects,
  * and to check them for consistency.
  *
- * @author Nina
+ * @author Nina Marwede
  */
 class PropertiesExtended {
 

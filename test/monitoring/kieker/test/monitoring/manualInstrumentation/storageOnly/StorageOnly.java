@@ -5,7 +5,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * 
  * This is a small test for the part of Tpmon that stores monitoring data.
  * Tpmon's monitoring API is manually invoked to collect monitoring data.
  * Therefore, the instrumentation and logic in the monitoring points (the
@@ -20,22 +19,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  * If in tpmon.properties file system storage (store in database = false) is
  * selected, a new file (tpmon*.dat) with monitoring data should be created in
  * the folder specified in tpmon.properties (default: /tmp).
- * 
- * ==================LICENCE========================= Copyright 2006-2008
- * Matthias Rohr and the Kieker Project
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License. ==================================================
- * 
+ *
  * @author Matthias Rohr
  * 
  *         History: 2008-05-05 small refactoring for first release

@@ -8,7 +8,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.util.dot;
  * they have {@link StructureComponent}s as children,
  * and they are linked among each other with a <em>uses</em> relation.
  *
- * @author Nina
+ * @author Nina Marwede
  */
 class StructureDeploymentContext extends StructureElement {
 

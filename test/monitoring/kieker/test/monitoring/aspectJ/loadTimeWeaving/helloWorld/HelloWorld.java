@@ -4,7 +4,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.helloWorld;
  * illustration the instrumentation and monitoring
  * capabilities of tpmon.
  * 
- * @author matthias
+ * @author Matthias Rohr
  */
 public class HelloWorld {
 	public static void main (String args[]) {

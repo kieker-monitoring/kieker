@@ -1,6 +1,3 @@
-/**
- * 
- */
 package kieker.analysis.reader.filesystem;
 
 import java.util.ArrayList;
