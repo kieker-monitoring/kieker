@@ -2,16 +2,15 @@ package kieker.monitoring.probe.aspectJ;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller
@@ -19,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
 @Aspect
 public class DeactivatedProbeAnnotation extends AbstractAspectJProbe {
 	private static final Log log = LogFactory.getLog(DeactivatedProbeAnnotation.class);
-	protected static final MonitoringController ctrlInst = MonitoringController.getInstance();
+	protected static final IMonitoringController ctrlInst = MonitoringController.getInstance();
 
 	private static final Object dummy = new Object();
 	private static final ConcurrentHashMap<String, Object> deactivatedProbes = new ConcurrentHashMap<String, Object>();

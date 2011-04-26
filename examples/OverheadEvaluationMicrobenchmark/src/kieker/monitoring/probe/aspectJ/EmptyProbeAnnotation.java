@@ -1,14 +1,14 @@
 package kieker.monitoring.probe.aspectJ;
 
-import kieker.monitoring.core.MonitoringController;
-import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller
@@ -16,8 +16,8 @@ import org.apache.commons.logging.LogFactory;
 @Aspect
 public class EmptyProbeAnnotation extends AbstractAspectJProbe {
 	private static final Log log = LogFactory.getLog(EmptyProbeAnnotation.class);
-	protected static final MonitoringController ctrlInst = MonitoringController.getInstance();
-  
+	protected static final IMonitoringController ctrlInst = MonitoringController.getInstance();
+
 	@Pointcut("execution(@kieker.monitoring.annotation.BenchmarkProbe * *.*(..))")
 	public void monitoredMethod() {
 	}
@@ -30,12 +30,12 @@ public class EmptyProbeAnnotation extends AbstractAspectJProbe {
 		Object retVal = null;
 		// Measure
 		try {
-      retVal =  thisJoinPoint.proceed();
-    } catch (final Exception e) {
-      throw e; // exceptions are forwarded
-    } finally {
-  		// Measure
-    }
-    return retVal;
+			retVal = thisJoinPoint.proceed();
+		} catch (final Exception e) {
+			throw e; // exceptions are forwarded
+		} finally {
+			// Measure
+		}
+		return retVal;
 	}
 }
