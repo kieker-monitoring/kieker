@@ -23,7 +23,8 @@
 		<property name="dist.kieker.srcBaseName" value="${kieker.dist.name}_${kieker-src.suffix}" />
 		<property name="dist.kieker.binBaseName" value="${kieker.dist.name}_${kieker-bin.suffix}" />
 		<property name="dist.kieker.apiBaseName" value="${kieker.dist.name}_${kieker-api.suffix}" />
-
+		
+		<property name="dist.kieker.userguide.pdf" value="${kieker.dist.name}_${kieker-userguide.suffix}.pdf" />
 		<property name="dist.kieker.example.myjmsexample" value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerJMSExample" />
 		<property name="dist.kieker.example.jpetstoreservlet" value="${kieker.dist.name}_${kieker-examples.suffix}-JavaEEServletContainerExample" />
 	</target>
@@ -205,6 +206,10 @@
 		</zip>
 	</target>
 
+	<target name="dist-kieker-userguide" depends="init,build-userguide" description="Distribute user guide">
+		<copy file="${src.userguide.pdf}" tofile="${release.dir}/${dist.kieker.userguide.pdf}" />
+	</target>
+
 	<target name="javadoc" depends="init" description="Create Javadoc API documentation">
 		<delete dir="${build.api.dir}" />
 		<mkdir dir="${build.api.dir}" />
@@ -279,8 +284,6 @@
 	<target name="dist-kieker-binaries" depends="build-all,build-userguide">
 		<echo message="${src.userguide.pdf}" />
 
-		<copy file="${src.userguide.pdf}" tofile="${src.userguide.dist.pdf}" />
-
 		<patternset id="dist_bin_files-nonbinmode">
 			<include name="bin/log4j.properties" />
 			<include name="bin/*.bat" />
@@ -335,6 +338,7 @@
 
 		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
 			<tarfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<tarfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</tarfileset>
@@ -348,6 +352,7 @@
 
 		<zip zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
 			<zipfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<zipfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</zipfileset>
@@ -419,7 +424,7 @@
 		</exec>
 	</target>
 
-	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,build-examples">
+	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,build-examples,dist-kieker-userguide">
 		<echo message="Sourceforge release instructions can be found at:" />
 		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease" />
 	</target>
