@@ -1,29 +1,27 @@
 \setTextListing
 \begin{lstlisting}[caption=Execution of the manually instrumented Bookstore application (Section~\ref{sec:example:monitoring})]
-14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController <init>
-INFO: The VM has the name Laptop Thread:1
-14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController <init>
-INFO: Virtual Machine start time 1281782393977
-14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController loadPropertiesFile
-INFO: Loading properties from Kieker.Monitoring library jar!META-INF/kieker.monitoring.properties.default
-14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController loadPropertiesFile
-INFO: You can specify an alternative properties file using the property 'kieker.monitoring.configuration'
-14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController loadPropertiesFile
-INFO: Debug mode disabled
-14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.AsyncFsWriter init
-INFO: Directory for monitoring data: C:\Temp\/tpmon-20100814-103954167-UTC/
-14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.FsWriterThread <init>
-INFO: New FsWriter thread created
-14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.AsyncFsWriter init
-INFO: (1 threads) will write to the file system
-14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.FsWriterThread run
-INFO: FsWriter thread running
-14.08.2010 12:39:54 kieker.monitoring.core.MonitoringController <init>
-INFO: Initialization completed.
- Writer Info: monitoringDataWriter : kieker.monitoring.writer.filesystem.AsyncFsWriter, monitoringDataWriter config : (below), filenamePrefix :C:\Temp\, outputDirectory :C:\Temp\/tpmon-20100814-103954167-UTC/, version :1.2-SNAPSHOT-20100814, debug :false, enabled :true, terminated :false, experimentID :0, vmname:Laptop
+Apr 28, 2011 5:15:25 PM kieker.monitoring.core.configuration.Configuration createSingletonConfiguration
+INFO: Loading properties from properties file in classpath: 'META-INF/kieker.monitoring.properties'
+Apr 28, 2011 5:15:25 PM kieker.monitoring.core.configuration.Configuration loadConfigurationFromResource
+WARNING: File 'META-INF/kieker.monitoring.properties' not found in classpath
+Apr 28, 2011 5:15:25 PM kieker.monitoring.core.controller.MonitoringController createInstance
+INFO: Current State of kieker.monitoring (1.3-dev-20110427) Status: 'enabled'
+	Name: 'KIEKER-SINGLETON'; Hostname: 'Kaapstad'; experimentID: '1'
+WriterController:
+	Number of Inserts: '0'
+	Automatic assignment of logging timestamps: 'true'
+Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
+	Configuration:
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir='true'
+	Writer Threads (1): 
+		Finished: 'false'; Writing to Directory: '/tmp/kieker-20110428-151525684-UTC-Kaapstad-KIEKER-SINGLETON'
+Sampling Controller: Periodic Sensor available: Current Poolsize: '0'; Scheduled Tasks: '0'
 Bookstore.main: Starting request 0
 Bookstore.main: Starting request 1
-14.08.2010 12:39:54 kieker.monitoring.writer.filesystem.MappingFileWriter writeMapping
+Apr 28, 2011 5:15:25 PM kieker.monitoring.writer.filesystem.MappingFileWriter writeMapping
 INFO: Registered monitoring record type with id '1':kieker.common.record.OperationExecutionRecord
 Bookstore.main: Starting request 2
 Bookstore.main: Starting request 3
