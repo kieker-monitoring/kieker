@@ -1,23 +1,19 @@
 \setTextListing
 \begin{lstlisting}[caption=Execution of the example analysis (Section~\ref{sec:example:analysis})]
-19.08.2010 13:19:55 kieker.analysis.AnalysisController registerPlugin
-INFO: Registered plugin bookstoreApplication.Consumer@6ac2a132
-19.08.2010 13:19:55 kieker.analysis.AnalysisController registerPlugin
-INFO: Plugin bookstoreApplication.Consumer@6ac2a132 also registered as record consumer
-19.08.2010 13:19:55 kieker.analysis.reader.filesystem.FSDirectoryReader processInputFile
-INFO: < Loading C:\Temp\tpmon-20100814-103954167-UTC\tpmon-20100814-103954184-UTC-Thread-2.dat
-19.08.2010 13:19:55 kieker.common.record.MonitoringRecordTypeRegistry registerRecordTypeIdMapping
+Apr 28, 2011 3:46:50 PM kieker.common.record.MonitoringRecordTypeRegistry registerRecordTypeIdMapping
 INFO: Registered record type mapping 1/kieker.common.record.OperationExecutionRecord
-maximal response time exceeded by 11382559 ns: bookstoreApplication.Catalog.getBook()
-maximal response time exceeded by 11251720 ns: bookstoreApplication.Catalog.getBook()
-maximal response time exceeded by 80320 ns: bookstoreApplication.Catalog.getBook()
-maximal response time exceeded by 27400 ns: bookstoreApplication.Catalog.getBook()
-maximal response time exceeded by 81760 ns: bookstoreApplication.Catalog.getBook()
-maximal response time exceeded by 24240 ns: bookstoreApplication.Catalog.getBook()
-maximal response time exceeded by 82480 ns: bookstoreApplication.Catalog.getBook()
-response time accepted: bookstoreApplication.Catalog.getBook()
-response time accepted: bookstoreApplication.Catalog.getBook()
-response time accepted: bookstoreApplication.Catalog.getBook()
-14.08.2010 12:41:02 kieker.analysis.reader.filesystem.FSReader$\$$FSReaderCons execute
+Apr 28, 2011 3:46:50 PM kieker.analysis.reader.filesystem.FSDirectoryReader processInputFile
+INFO: < Loading /tmp/kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/kieker-20110427-142244920-UTC-Thread-1.dat
+maximum response time exceeded by 211238 ns: bookstoreApplication.Catalog.getBook(..)
+maximum response time exceeded by 193785 ns: bookstoreApplication.Catalog.getBook()
+maximum response time exceeded by 197205 ns: bookstoreApplication.Catalog.getBook(..)
+maximum response time exceeded by 226278 ns: bookstoreApplication.Catalog.getBook()
+maximum response time exceeded by 191895 ns: bookstoreApplication.Catalog.getBook(..)
+maximum response time exceeded by 229681 ns: bookstoreApplication.Catalog.getBook()
+maximum response time exceeded by 228173 ns: bookstoreApplication.Catalog.getBook(..)
+maximum response time exceeded by 196394 ns: bookstoreApplication.Catalog.getBook()
+maximum response time exceeded by 227399 ns: bookstoreApplication.Catalog.getBook(..)
+maximum response time exceeded by 227027 ns: bookstoreApplication.Catalog.getBook()
+Apr 28, 2011 3:46:50 PM kieker.analysis.reader.filesystem.FSReaderCons execute
 INFO: All reader threads provided FS_READER_TERMINATION_MARKER
 \end{lstlisting}

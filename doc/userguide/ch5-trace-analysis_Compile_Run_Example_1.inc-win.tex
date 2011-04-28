@@ -1,11 +1,13 @@
 \begin{lstlisting}[caption=Commands to compile and run the annotated Bookstore under Windows, label=lst:traceAnalysisCompileRunExample1Win]
-#\lstshellprompt{}# javac src/bookstoreTracing/*.java
-        -d build/ 
-        -classpath lib/#\mainJar{}#;lib/#\commonsLoggingJar{}#
+#\lstshellprompt{}# mkdir build
+#\lstshellprompt{}# mkdir build\META-INF
+#\lstshellprompt{}# javac src\bookstoreTracing\*.java
+        -d build\
+        -classpath lib\#\mainJar{}#;lib\#\commonsLoggingJar{}#
 
 #\lstshellprompt{}# copy META-INF\aop.xml build\META-INF\
 
-#\lstshellprompt{}# java -#\textbf{javaagent:}#lib/#\aspectJWeaverJar{}# 
-       -classpath build/;lib/#\mainJar{}#;lib/#\commonsLoggingJar{}# 
+#\lstshellprompt{}# java -#\textbf{javaagent:}#lib\#\aspectJWeaverJar{}# 
+       -classpath build\;lib/#\mainJar{}#;lib\#\commonsLoggingJar{}# 
         bookstoreTracing.BookstoreStarter
 \end{lstlisting}

@@ -109,21 +109,23 @@ binary release.}
 \begin{figure}[H]
 \begin{graybox}
 \dirtree{%
-.1 \DirInDirTree{example/}. %\DTcomment{The root directory of the project}.
-.2 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}.
-.3 \DirInDirTree{META-INF/}.
-.2 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
-.3 \aopConfigFile. 
-.2 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
-.3 \mainJar.
-.3 \commonsLoggingJar.
-.3 \aspectJWeaverJar.  
-.2 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
-.3 \DirInDirTree{bookstoreTracing/}.
-.4 Bookstore.java.
-.4 BookstoreStarter.java.
-.4 Catalog.java.
-.4 CRM.java.  
+.1 \DirInDirTree{examples/}. %\DTcomment{The root directory of the project}.
+.2 \DirInDirTree{userguide/}.
+.3 \DirInDirTree{ch5--trace-monitoring-aspectj/}.
+.4 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}.
+.5 \DirInDirTree{META-INF/}.
+.4 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
+.5 \aopConfigFile. 
+.4 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
+.5 \mainJar.
+.5 \commonsLoggingJar.
+.5 \aspectJWeaverJar.  
+.4 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
+.5 \DirInDirTree{bookstoreTracing/}.
+.6 Bookstore.java.
+.6 BookstoreStarter.java.
+.6 Catalog.java.
+.6 CRM.java.  
 }
 \end{graybox}
 
@@ -131,31 +133,17 @@ binary release.}
 \label{fig:bookstoreAOP:dirStructure}
 \end{figure}
 
-Figure~\ref{fig:bookstoreAOP:dirStructure} shows the directory used by the %
-example of this section. %
-The jar-file \file{aspectjweaver-1.6.9.jar} is included in the %
-\dir{lib/} directory of the \Kieker{} binary release. Its %
-\dir{META-INF/} directory contains an example \file{\aopConfigFile}. %
-The library \file{aspectjweaver-1.6.9.jar} contains the \textit{AspectJ weaver} %
-which is registered with the JVM and weaves the monitoring instrumentation into %
-the Java classes. It will be configured based on the configuration file %
-\file{\file{\aopConfigFile}}.
+Figure~\ref{fig:bookstoreAOP:dirStructure} shows the directory used by the example of this section. The jar-file \file{aspectjweaver-1.6.11.jar} is included in the \dir{lib/} directory of the \Kieker{} binary release. Its \dir{META-INF/} directory contains an example \file{\aopConfigFile}. The library \file{aspectjweaver-1.6.11.jar} contains the \textit{AspectJ weaver} which is registered with the JVM and weaves the monitoring instrumentation into the Java classes. It will be configured based on the configuration file \file{\file{\aopConfigFile}}.
 
-Once the necessary files have been copied to the example directory,
-the source code can be instrumented with the annotation %
-\class{OperationExecutionMonitoringProbe}. %
-Listing~\ref{lst:BookstoreAspectJ} shows how the annotation is used.
+Once the necessary files have been copied to the example directory, the source code can be instrumented with the annotation 
+\class{OperationExecutionMonitoringProbe}. Listing~\ref{lst:BookstoreAspectJ} shows how the annotation is used.
 
 \setJavaCodeListing
 \lstinputlisting[caption=Bookstore.java, label=lst:BookstoreAspectJ]{\aspectJBookstoreApplicationDir/src/bookstoreTracing/Bookstore.java}
 
-\noindent As a first example, each method of the Bookstore application will be %
-annotated. The annotation can be used to instrumented all methods % 
-except for constructors. %
+\noindent As a first example, each method of the Bookstore application will be annotated. The annotation can be used to instrumented all methods except for constructors. 
 
-The \file{\aopConfigFile} file has to be modified to specify the classes to %
-be considered for instrumentation by the AspectJ weaver. %
-Listing~\ref{lst:aopConfigFileAnnotations} shows the modified configuration file.
+The \file{\aopConfigFile} file has to be modified to specify the classes to be considered for instrumentation by the AspectJ weaver. Listing~\ref{lst:aopConfigFileAnnotations} shows the modified configuration file.
 
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileAnnotations]{\aspectJBookstoreApplicationDir/META-INF/aop.xml}
@@ -277,8 +265,7 @@ to the server configuration.
 
 % \enlargethispage{1.5cm}
 
-Monitoring data including trace information can be analyzed and visualized with %
-the \KiekerTraceAnalysis{} tool which is included in the \Kieker{} binary as well.\\
+Monitoring data including trace information can be analyzed and visualized with the \KiekerTraceAnalysis{} tool which is included in the \Kieker{} binary as well.\\
 
 \WARNBOX{
 In order to use this tool, it is necessary to install two other programs:
@@ -289,16 +276,9 @@ In order to use this tool, it is necessary to install two other programs:
 Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
 } \vspace{3mm}
 
-\noindent Once both have been installed, the \KiekerTraceAnalysis{} tool can be %
-used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or %
-\file{trace-analysis.bat} (Windows) in the \dir{bin/} directory. %
-Non-parameterized calls of the scripts print all possible options on the screen, %
-as listed in Appendix~\ref{appendix:wrapperScripts:traceAnalysis}.
+\noindent Once both have been installed, the \KiekerTraceAnalysis{} tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or \file{trace-analysis.bat} (Windows) in the \dir{bin/} directory. Non-parameterized calls of the scripts print all possible options on the screen, as listed in Appendix~\ref{appendix:wrapperScripts:traceAnalysis}.
 
-The commands shown in Listings~\ref{lst:traceAnalysis:sequenceDiagram} and \ref{lst:traceAnalysis:sequenceDiagramWin} generate a sequence diagram as well %
-as a call tree to an existing directory named \dir{out/}. The monitoring data %
-is assumed to be located in the directory %
-\dir{/tmp/tpmon-20100813-121041532-UTC} or \dir{C:$\backslash{}$Temp$\backslash{}$tpmon-20100813-121041532-UTC} under Windows. %
+The commands shown in Listings~\ref{lst:traceAnalysis:sequenceDiagram} and \ref{lst:traceAnalysis:sequenceDiagramWin} generate a sequence diagram as well as a call tree to an existing directory named \dir{out/}. The monitoring data is assumed to be located in the directory \dir{/tmp/kieker-20110428-142829399-UTC-Kaapstad-KIEKER/} or \dir{\%temp\%$\backslash{}$kieker-20100813-121041532-UTC-virus-KIEKER} under Windows. %
 
 \setBashListing
 \input{ch5-trace-analysis_Produce_Sequence_Diagram.inc}

@@ -1,31 +1,27 @@
 \setTextListing
 \begin{lstlisting}[caption=Execution of the Bookstore with AspectJ trace instrumentation (Section~\ref{sec:traceAnalysis:instr:AspectJ})]
-13.08.2010 17:51:16 kieker.monitoring.core.MonitoringController <init>
-INFO: The VM has the name Laptop Thread:1
-13.08.2010 17:51:16 kieker.monitoring.core.MonitoringController <init>
-INFO: Virtual Machine start time 1281714675672
-13.08.2010 17:51:16 kieker.monitoring.core.MonitoringController loadPropertiesFile
-INFO: Loading properties from Kieker.Monitoring library jar!META-INF/kieker.monitoring.properties.default
-13.08.2010 17:51:16 kieker.monitoring.core.MonitoringController loadPropertiesFile
-INFO: You can specify an alternative properties file using the property 'kieker.monitoring.configuration'
-13.08.2010 17:51:16 kieker.monitoring.core.MonitoringController loadPropertiesFile
-INFO: Debug mode disabled
-13.08.2010 17:51:16 kieker.monitoring.writer.filesystem.AsyncFsWriter init
-INFO: Directory for monitoring data: C:\Temp\/tpmon-20100813-155116294-UTC/
-13.08.2010 17:51:16 kieker.monitoring.writer.filesystem.FsWriterThread <init>
-INFO: New FsWriter thread created
-13.08.2010 17:51:16 kieker.monitoring.writer.filesystem.AsyncFsWriter init
-INFO: (1 threads) will write to the file system
-13.08.2010 17:51:16 kieker.monitoring.core.MonitoringController <init>
-INFO: Initialization completed.
- Writer Info: monitoringDataWriter : kieker.monitoring.writer.filesystem.AsyncFsWriter, monitoringDataWriter config : (below), filenamePrefix :C:\Temp\, outputDirectory :C:\Temp\/tpmon-20100813-155116294-UTC/, version :1.2-SNAPSHOT-20100813, debug :false, enabled :true, terminated :false, experimentID :0, vmname:Laptop
-13.08.2010 17:51:16 kieker.monitoring.writer.filesystem.FsWriterThread run
-INFO: FsWriter thread running
-13.08.2010 17:51:16 kieker.monitoring.core.ControlFlowRegistry <init>
-INFO: First threadId will be 4960996464525312001
 Bookstore.main: Starting request 0
-13.08.2010 17:51:16 kieker.monitoring.writer.filesystem.MappingFileWriter writeMapping
+Apr 28, 2011 4:28:29 PM kieker.monitoring.core.configuration.Configuration createSingletonConfiguration
+INFO: Loading properties from properties file in classpath: 'META-INF/kieker.monitoring.properties'
+Apr 28, 2011 4:28:29 PM kieker.monitoring.core.controller.MonitoringController createInstance
+INFO: Current State of kieker.monitoring (1.3-dev-20110427) Status: 'enabled'
+	Name: 'KIEKER'; Hostname: 'Kaapstad'; experimentID: '1'
+WriterController:
+	Number of Inserts: '0'
+	Automatic assignment of logging timestamps: 'true'
+Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
+	Configuration:
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
+		kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir='true'
+	Writer Threads (1): 
+		Finished: 'false'; Writing to Directory: '/tmp/kieker-20110428-142829399-UTC-Kaapstad-KIEKER'
+Sampling Controller: Periodic Sensor available: Current Poolsize: '0'; Scheduled Tasks: '0'
+Apr 28, 2011 4:28:29 PM kieker.monitoring.core.registry.ControlFlowRegistry <init>
+INFO: First threadId will be 7752665283541598209
+Apr 28, 2011 4:28:29 PM kieker.monitoring.writer.filesystem.MappingFileWriter writeMapping
 INFO: Registered monitoring record type with id '1':kieker.common.record.OperationExecutionRecord
-13.08.2010 17:51:16 kieker.monitoring.writer.util.async.TpmonShutdownHook run
-INFO: Tpmon: TpmonShutdownHook notifies all workers to initiate shutdown
 \end{lstlisting}
+
+

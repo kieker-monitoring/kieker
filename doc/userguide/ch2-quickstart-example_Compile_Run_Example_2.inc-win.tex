@@ -1,13 +1,13 @@
 \begin{lstlisting}[caption=Commands to compile and run the analysis under Windows,label=lst:bookstoreAnalysisStarterWin]
 #\lstshellprompt{}# mkdir build
-#\lstshellprompt{}# javac src/bookstoreApplication/*.java
-        -classpath lib/#\mainJar#
-        -d build/
+#\lstshellprompt{}# javac src\bookstoreApplication\*.java
+        -classpath lib\#\mainJar#
+        -d build\
 
 #\lstshellprompt{}# java -classpath 
-       build/;
-       lib/#\mainJar#;
-       lib/#\commonsLoggingJar#
+       build\;
+       lib\#\mainJar#;
+       lib\#\commonsLoggingJar#
        bookstoreApplication.BookstoreAnalysisStarter 
        C:\Temp\kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON
 \end{lstlisting}	
