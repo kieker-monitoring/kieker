@@ -61,7 +61,7 @@ public class JMSLogReplayer {
 		final IMonitoringReader logReader =
 				new JMSReader(this.jmsProviderUrl, this.jmsDestination);
 		final AnalysisController tpanInstance = new AnalysisController();
-		tpanInstance.setLogReader(logReader);
+		tpanInstance.setReader(logReader);
 		tpanInstance.registerPlugin(new RecordDelegationPlugin2(
 				this.recordReceiver));
 		try {

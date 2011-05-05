@@ -107,7 +107,7 @@ public class FilesystemLogReplayer {
 			fsReader = new FSReader(this.inputDirs);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
-		tpanInstance.setLogReader(fsReader);
+		tpanInstance.setReader(fsReader);
 		tpanInstance.registerPlugin(new RecordDelegationPlugin(
 				this.recordReceiver, this.ignoreRecordsBeforeTimestamp,
 				this.ignoreRecordsAfterTimestamp));

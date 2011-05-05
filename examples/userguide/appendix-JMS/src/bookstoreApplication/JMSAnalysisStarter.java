@@ -19,7 +19,7 @@ public class JMSAnalysisStarter {
         final AnalysisController analysisInstance = new AnalysisController();
         final IMonitoringReader logReader =
                 new JMSReader("tcp://127.0.0.1:3035/", "queue1");
-        analysisInstance.setLogReader(logReader);
+        analysisInstance.setReader(logReader);
         final IMonitoringRecordConsumerPlugin consumer =
                 new Consumer(JMSAnalysisStarter.MAX_RT_NANOS);
         analysisInstance.registerPlugin(consumer);

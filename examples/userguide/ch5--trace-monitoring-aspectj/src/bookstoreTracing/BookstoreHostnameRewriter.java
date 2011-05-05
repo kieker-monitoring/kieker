@@ -29,7 +29,7 @@ public class BookstoreHostnameRewriter {
 
         /* Set filesystem monitoring log input directory for our analysis */
         final String inputDirs[] = {args[0]};
-        analysisInstance.setLogReader(new FSReader(inputDirs));
+        analysisInstance.setReader(new FSReader(inputDirs));
 
         /* Start the analysis */
         analysisInstance.run();

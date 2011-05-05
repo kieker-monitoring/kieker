@@ -8,9 +8,9 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord {
     private final static String NA_VAL = "N/A";
 
     /* Attributes storing the actual monitoring data: */
-    public String className = MyResponseTimeRecord.NA_VAL;
-    public String methodName = MyResponseTimeRecord.NA_VAL;
-    public long responseTimeNanos = -1;
+    public volatile String className = MyResponseTimeRecord.NA_VAL;
+    public volatile String methodName = MyResponseTimeRecord.NA_VAL;
+    public volatile long responseTimeNanos = -1;
 
     @Override
     public final void initFromArray(final Object[] values) {

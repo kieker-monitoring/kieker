@@ -130,7 +130,7 @@ public class AnalysisController {
 	 * 
 	 * @param reader
 	 */
-	public void setLogReader(final IMonitoringReader reader) {
+	public void setReader(final IMonitoringReader reader) {
 		this.logReader = reader;
 	}
 

@@ -28,7 +28,7 @@ public class Starter {
                 new MyPipeReader("somePipe");
         final IMonitoringRecordConsumerPlugin consumer =
                 new MyResponseTimeConsumer();
-        analyisController.setLogReader(reader);
+        analyisController.setReader(reader);
         analyisController.registerPlugin(consumer);
         analyisController.run();
     }

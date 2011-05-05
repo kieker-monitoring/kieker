@@ -319,7 +319,7 @@ public class TraceAnalysisTool {
             final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet =
                     new ArrayList<Class<? extends IMonitoringRecord>>();
             recordTypeSelectorSet.add(OperationExecutionRecord.class);
-            analysisInstance.setLogReader(new FSReader(
+            analysisInstance.setReader(new FSReader(
                     TraceAnalysisTool.inputDirs,
                     recordTypeSelectorSet));
             }
