@@ -14,7 +14,7 @@
    height="156.1837"
    id="svg2918"
    sodipodi:version="0.32"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.1 r9760"
    version="1.0"
    sodipodi:docname="kiekerCommunications-revisedReArranged-woMonitoringLog-bw-newNames.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
@@ -235,9 +235,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="384.09439"
-     inkscape:cy="70.428306"
+     inkscape:zoom="1.979899"
+     inkscape:cx="315.11413"
+     inkscape:cy="43.800813"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -256,7 +256,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -342,8 +342,8 @@
        clip-path="url(#clipPath1)"
        id="text103"
        style="font-size:12.80000019px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.9375,0,0,0.9375,191.4638,7.6634153)"
-       sodipodi:linespacing="125%">: IMonitoringLogWriter</text>
+       transform="matrix(0.9375,0,0,0.9375,202.64642,7.6634153)"
+       sodipodi:linespacing="125%">: IMonitoringWriter</text>
     <rect
        x="612"
        y="199"
@@ -383,8 +383,8 @@
        clip-path="url(#clipPath1)"
        id="text115"
        style="font-size:12.80000019px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.9375,0,0,0.9375,179.16602,7.6634153)"
-       sodipodi:linespacing="125%">: IMonitoringLogReader</text>
+       transform="matrix(0.9375,0,0,0.9375,190.34864,7.6634153)"
+       sodipodi:linespacing="125%">: IMonitoringReader</text>
     <rect
        x="521"
        y="304"

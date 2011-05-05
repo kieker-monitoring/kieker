@@ -222,7 +222,7 @@ In this example, the filesystem writer is used---\Kieker{} uses this writer by d
 as detailed in Section~\ref{sec:monitoring-log-writers}. %.
 
 In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method of the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of the \object{catalog}'s \method{getBook()} method, as shown in %
-lines~19 and~21 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
+lines~20 and~22 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
 Finally, a record is created (see lines 23--26) and stored by calling the monitoring controller (see line 27).
 
 \setJavaCodeListing
@@ -247,7 +247,7 @@ a semicolon instead of a colon.}
 
 \quad\
 
-\noindent If everything worked correctly, a new directory for the monitoring data with a name similar to \dir{kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/} is created (see Listing \ref{fig:logtree}). %
+\noindent If everything worked correctly, a new directory for the monitoring data with a name similar to \dir{kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/} is created (see Figure~\ref{fig:logtree}). %
 % in the default temporary directory ). 
 The numbers in the directory name represent the time and date of the monitoring. %Thus, they will be different numbers for every run.
 In \Kieker's default configuration, the log directory can be found in the default temporary directory: under \UnixLikeSystems{}, this is typically \dir{/tmp/}; %

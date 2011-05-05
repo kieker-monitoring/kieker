@@ -10,9 +10,9 @@ public class BookstoreAnalysisStarter {
     public static void main(final String[] args)
             throws MonitoringReaderException, MonitoringRecordConsumerException {
        
-		if (args.length == 0) {
-		  return;
-		}
+        if (args.length == 0) {
+            return;
+        }
 
         /* Create Kieker.Analysis instance */
         final AnalysisController analysisInstance = new AnalysisController();
