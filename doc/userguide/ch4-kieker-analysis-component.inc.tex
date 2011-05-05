@@ -33,6 +33,8 @@ with the important \KiekerAnalysisPart{} classes and their relationship. %
 \noindent Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
 following steps to be performed, as described in Section~\ref{sec:example:analysis} already:\\
 
+\enlargethispage{1cm}
+
 \begin{compactenum}
 \item Creating an instance of the \class{AnalysisController} class
 \item Creating and registering the monitoring reader (\method{setReader}) as %
@@ -49,7 +51,7 @@ monitoring record consumer plugin \class{MyResponseTimeConsumer}. %
 with these custom components:
 
 \setJavaCodeListing
-\lstinputlisting[caption=Code snippet setting up and running a \KiekerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=25, lastline=32, firstnumber=25]%
+\lstinputlisting[caption=Code snippet setting up and running a \KiekerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=26, lastline=33, firstnumber=26]%
 {\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Starter.java}
 
 \noindent On invocation of the \method{run} method, the \class{Analysis Controller} %
