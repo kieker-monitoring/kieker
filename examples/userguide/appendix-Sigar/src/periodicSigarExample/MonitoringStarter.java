@@ -6,20 +6,20 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
 import kieker.monitoring.probe.sigar.SigarSamplerFactory;
-import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
+import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 
 public class MonitoringStarter {
 
     public static void main(final String[] args) throws InterruptedException {
-        System.out.println("Monitoring CPU and Mem/Swap for 30 seconds in 5 seconds steps");
+        System.out.println("Monitoring CPU and Mem/Swap for 30 seconds in 5 seconds steps () with an offset of two seconds");
     	
     	final IMonitoringController monitoringController = 
     		MonitoringController.getInstance();
     	
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.getInstance();
     	
-    	final CPUsCombinedPercSampler cpuSampler = sigarFactory.createSensorCPUsCombinedPerc();
+    	final CPUsDetailedPercSampler cpuSampler = sigarFactory.createSensorCPUsDetailedPerc();
     	final MemSwapUsageSampler memSwapSampler = sigarFactory.createSensorMemSwapUsage();
     	
     	final long offset = 2; // start after 2 seconds
