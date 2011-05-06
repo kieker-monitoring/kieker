@@ -25,7 +25,7 @@
 				<path refid="classpath" />
 				<path location="${jar.file}" />
 			</classpath>
-			<jvmarg value="-Dkieker.monitoring.properties=${meta.dir}/${properties.file}" />
+			<jvmarg value="-Dkieker.monitoring.configuration=${meta.dir}/${properties.file}" />
 		</java>
 	</target>
 
