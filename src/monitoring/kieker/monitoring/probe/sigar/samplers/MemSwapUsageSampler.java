@@ -20,11 +20,12 @@ import org.hyperic.sigar.Swap;
  */
 public class MemSwapUsageSampler extends AbstractSigarSampler {
 
-
 	/**
-	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor
-	 * data. Users should use the factory method {@link SigarSamplerFactory#createSensorMemSwapUsage()}
-	 * to acquire an instance rather than calling this constructor directly.
+	 * Constructs a new {@link AbstractSigarSampler} with given
+	 * {@link SigarProxy} instance used to retrieve the sensor data. Users
+	 * should use the factory method
+	 * {@link SigarSamplerFactory#createSensorMemSwapUsage()} to acquire an
+	 * instance rather than calling this constructor directly.
 	 * 
 	 * @param sigar
 	 */
@@ -34,14 +35,15 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 
 	@Override
 	public void sample(final IMonitoringController samplingController)
-	throws Exception {
+			throws Exception {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r =
-			new MemSwapUsageRecord(samplingController.getTimeSource().getTime(),
-					samplingController.getHostName(), mem.getTotal(),
-					mem.getActualUsed(), mem.getActualFree(),
-					swap.getTotal(), swap.getUsed(), swap.getTotal());
+				new MemSwapUsageRecord(samplingController.getTimeSource()
+						.getTime(),
+						samplingController.getHostName(), mem.getTotal(),
+						mem.getActualUsed(), mem.getActualFree(),
+						swap.getTotal(), swap.getUsed(), swap.getTotal());
 		samplingController.newMonitoringRecord(r);
 	}
 }
