@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class Broker {
+	// TODO: change to lazy construction
 	private static final Broker INSTANCE = new Broker();
 	private static final Log log = LogFactory.getLog(Broker.class);
 
