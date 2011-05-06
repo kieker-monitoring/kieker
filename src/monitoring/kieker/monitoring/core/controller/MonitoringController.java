@@ -59,7 +59,7 @@ public final class MonitoringController extends AbstractController implements IM
 				try {
 					ManagementFactory.getPlatformMBeanServer().registerMBean(monitoringController, monitoringController.objectname);
 				} catch (final Exception e) {
-					log.warn("Unable to register MBean Server", e);
+					MonitoringController.log.warn("Unable to register MBean Server", e);
 				}
 			}
 		}
@@ -74,15 +74,15 @@ public final class MonitoringController extends AbstractController implements IM
 				public void run() {
 					if (!monitoringController.isMonitoringTerminated()) {
 						// TODO: We should not use a logger in shutdown hooks, logger may already be down! (#26)
-						log.info("ShutdownHook notifies controller to initiate shutdown");
+						MonitoringController.log.info("ShutdownHook notifies controller to initiate shutdown");
 						monitoringController.terminateMonitoring();
 					}
 				}
 			});
 		} catch (final Exception e) {
-			log.warn("Failed to add shutdownHook");
+			MonitoringController.log.warn("Failed to add shutdownHook");
 		}
-		log.info(monitoringController.toString());
+		MonitoringController.log.info(monitoringController.toString());
 		return monitoringController;
 	}
 
@@ -95,7 +95,7 @@ public final class MonitoringController extends AbstractController implements IM
 				objectname = new ObjectName(configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_DOMAIN), "type",
 						configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_TYPE));
 			} catch (final Exception e) {
-				log.warn("Failed to initialize ObjectName", e);
+				MonitoringController.log.warn("Failed to initialize ObjectName", e);
 			}
 		}
 		this.objectname = objectname;
@@ -116,14 +116,14 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	protected final void cleanup() {
-		log.info("Shutting down Monitoring Controller (" + getName() + ")");
+		MonitoringController.log.info("Shutting down Monitoring Controller (" + this.getName() + ")");
 		this.stateController.terminate();
 		synchronized (this) {
 			if (this.objectname != null) {
 				try {
 					ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.objectname);
 				} catch (final Exception e) {
-					log.error("Failed to terminate MBean", e);
+					MonitoringController.log.error("Failed to terminate MBean", e);
 				}
 			}
 		}
@@ -138,16 +138,16 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append("Current State of kieker.monitoring (");
 		sb.append(MonitoringController.getVersion());
 		sb.append(") ");
-		sb.append(stateController.toString());
+		sb.append(this.stateController.toString());
 		sb.append("\n");
 		if (this.objectname != null) {
 			sb.append("\tMBean available: '");
 			sb.append(this.objectname.getCanonicalName());
 			sb.append("'\n");
 		}
-		sb.append(writerController.toString());
+		sb.append(this.writerController.toString());
 		sb.append("\n");
-		sb.append(samplingController.toString());
+		sb.append(this.samplingController.toString());
 		return sb.toString();
 	}
 
