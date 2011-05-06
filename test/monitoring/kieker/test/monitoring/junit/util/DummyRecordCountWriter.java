@@ -1,4 +1,4 @@
-package kieker.test.monitoring.junit.core.util;
+package kieker.test.monitoring.junit.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

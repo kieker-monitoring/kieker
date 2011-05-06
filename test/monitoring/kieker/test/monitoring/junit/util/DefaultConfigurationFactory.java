@@ -1,4 +1,4 @@
-package kieker.test.monitoring.junit.core.util;
+package kieker.test.monitoring.junit.util;
 
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.DummyWriter;

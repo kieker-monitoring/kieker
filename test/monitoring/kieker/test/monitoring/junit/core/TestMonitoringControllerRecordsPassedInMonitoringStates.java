@@ -1,12 +1,13 @@
 package kieker.test.monitoring.junit.core;
 
+import java.util.List;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
-import kieker.test.monitoring.junit.core.util.DummyRecord;
-import kieker.test.monitoring.junit.core.util.DummyRecordCountWriter;
+import kieker.test.monitoring.junit.util.DummyRecord;
+import kieker.test.monitoring.junit.util.NamedPipeFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -14,40 +15,61 @@ import kieker.test.monitoring.junit.core.util.DummyRecordCountWriter;
 public class TestMonitoringControllerRecordsPassedInMonitoringStates extends TestCase {
 
 	public void testRecordsPassedToWriterWhenEnabled() {
-		final Configuration configuration = Configuration.createDefaultConfiguration();
-		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
-		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
-		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
+		final String pipeName = NamedPipeFactory.createPipeName();
+		final IMonitoringController monitoringController =
+				NamedPipeFactory
+						.createMonitoringControllerWithNamedPipe(pipeName);
 
-		Assert.assertTrue("Failed to enable monitoring", kieker.enableMonitoring());
-		kieker.newMonitoringRecord(new DummyRecord());
-//		Assert.assertEquals("Unexpected number of records received", 1, ((DummyRecordCountWriter) kieker.getMonitoringWriter()).getNumDummyRecords());
-		kieker.terminateMonitoring();
+		/*
+		 * We will now register a custom IPipeReader which receives records
+		 * through the pipe and collects these in a list. On purpose, we are not
+		 * using the corresponding PipeReader that comes with Kieker.
+		 */
+		final List<IMonitoringRecord> receivedRecords =
+				NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
+
+		Assert.assertTrue("Failed to enable monitoring", monitoringController.enableMonitoring());
+		monitoringController.newMonitoringRecord(new DummyRecord());
+		Assert.assertEquals("Unexpected number of records received", 1, receivedRecords.size());
+		monitoringController.terminateMonitoring();
 	}
 
 	public void testNoRecordsPassedToWriterWhenDisabled() {
-		final Configuration configuration = Configuration.createDefaultConfiguration();
-		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
-		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
-		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
+		final String pipeName = NamedPipeFactory.createPipeName();
+		final IMonitoringController monitoringController =
+				NamedPipeFactory
+						.createMonitoringControllerWithNamedPipe(pipeName);
 
-		Assert.assertTrue("Failed to disable monitoring", kieker.disableMonitoring());
-		kieker.newMonitoringRecord(new DummyRecord());
-//		Assert.assertEquals("Unexpected number of records received", 0, ((DummyRecordCountWriter) kieker.getMonitoringWriter()).getNumDummyRecords());
-		kieker.terminateMonitoring();
+		/*
+		 * We will now register a custom IPipeReader which receives records
+		 * through the pipe and collects these in a list. On purpose, we are not
+		 * using the corresponding PipeReader that comes with Kieker.
+		 */
+		final List<IMonitoringRecord> receivedRecords =
+				NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
+
+		Assert.assertTrue("Failed to disable monitoring", monitoringController.disableMonitoring());
+		monitoringController.newMonitoringRecord(new DummyRecord());
+		Assert.assertEquals("Unexpected number of records received", 0, receivedRecords.size());
+		monitoringController.terminateMonitoring();
 	}
 
 	public void testNoRecordsPassedToWriterWhenTerminated() {
-		final Configuration configuration = Configuration.createDefaultConfiguration();
-		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
-		configuration.setProperty(Configuration.WRITER_CLASSNAME, DummyRecordCountWriter.class.getName());
-		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
+		final String pipeName = NamedPipeFactory.createPipeName();
+		final IMonitoringController monitoringController =
+				NamedPipeFactory
+						.createMonitoringControllerWithNamedPipe(pipeName);
 
-		kieker.terminateMonitoring();
-		kieker.newMonitoringRecord(new DummyRecord());
-//		Assert.assertEquals("Unexpected number of records received", 0, ((DummyRecordCountWriter) kieker.getMonitoringWriter()).getNumDummyRecords());
+		/*
+		 * We will now register a custom IPipeReader which receives records
+		 * through the pipe and collects these in a list. On purpose, we are not
+		 * using the corresponding PipeReader that comes with Kieker.
+		 */
+		final List<IMonitoringRecord> receivedRecords =
+				NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
+
+		monitoringController.terminateMonitoring();
+		monitoringController.newMonitoringRecord(new DummyRecord());
+		Assert.assertEquals("Unexpected number of records received", 0, receivedRecords.size());
 	}
 }

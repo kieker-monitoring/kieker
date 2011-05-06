@@ -3,7 +3,7 @@ package kieker.test.monitoring.junit.core.configuration;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.test.monitoring.junit.core.util.DefaultConfigurationFactory;
+import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
 
 /**
  * Tests whether the factory methods of {@link Configuration} return
