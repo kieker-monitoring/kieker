@@ -3,6 +3,7 @@ package kieker.monitoring.probe.sigar.samplers;
 import kieker.common.record.CPUUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.WriterController;
+import kieker.monitoring.probe.sigar.SigarSamplerFactory;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;
@@ -18,6 +19,13 @@ import org.hyperic.sigar.SigarProxy;
  */
 public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 
+	/**
+	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor
+	 * data. Users should use the factory method {@link SigarSamplerFactory#createSensorCPUsDetailedPerc()}
+	 * to acquire an instance rather than calling this constructor directly.
+	 * 
+	 * @param sigar
+	 */
 	public CPUsDetailedPercSampler(final SigarProxy sigar) {
 		super(sigar);
 	}

@@ -3,6 +3,7 @@ package kieker.monitoring.probe.sigar.samplers;
 import kieker.common.record.MemSwapUsageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.WriterController;
+import kieker.monitoring.probe.sigar.SigarSamplerFactory;
 
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.SigarProxy;
@@ -19,6 +20,14 @@ import org.hyperic.sigar.Swap;
  */
 public class MemSwapUsageSampler extends AbstractSigarSampler {
 
+
+	/**
+	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor
+	 * data. Users should use the factory method {@link SigarSamplerFactory#createSensorMemSwapUsage()}
+	 * to acquire an instance rather than calling this constructor directly.
+	 * 
+	 * @param sigar
+	 */
 	public MemSwapUsageSampler(final SigarProxy sigar) {
 		super(sigar);
 	}
