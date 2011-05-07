@@ -12,13 +12,54 @@
 \file{\customComponentsBookstoreApplicationDirDistro{}/} directory of the %
 binary release.}
 
+\section{Monitoring Controller}\label{sec:componentsMonitoring:monitoringController}
+
+The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart{} %
+instance. As depicted by the class diagram in Figure~\ref{fig:monitoringController:classdiagram}, it provides methods for\\
+
+\begin{figure}\centering % [H]
+\includegraphics[scale=0.7]{images/kieker_monitoringControlleruserguide-simplified}
+\caption{Class diagram of the \class{MonitoringController} (including selected methods)}
+\label{fig:monitoringController:classdiagram}
+\end{figure}
+
+\begin{compactitem}
+ \item Creating \class{IMonitoringController} instances (Section~\ref{sec:componentsMonitoring:monitoringController:factory}),
+ \item Logging monitoring records employing the configured monitoring writer (Section~\ref{sec:componentsMonitoring:monitoringController:logging}), 
+ \item Retrieving the current time via the configured time source (Section~\ref{sec:componentsMonitoring:monitoringController:getTime}), and
+ \item Controlling the monitoring state (Section~\ref{sec:componentsMonitoring:monitoringController:controState}).
+\end{compactitem}
+
+\subsection{Creating \class{MonitoringController} Instances}\label{sec:componentsMonitoring:monitoringController:factory}
+
+The \class{MonitoringController} provides two different static methods for retrieving instances of %
+\class{IMonitoringController}:\\
+
+\begin{compactenum}
+ \item The method \method{MonitoringController.getInstance()} returns a singleton instance. %
+As described in Section~\ref{sec:monitoring:configuration}, the configuration is read from %
+a properties file that has been passed to the JVM, is located in the classpath, or %
+conforms to the default configuration (Appendix~\ref{sec:appdx:monitoringproperties}). %
+ \item The method \method{MonitoringController.createInstance(Configuration config)} can be used to create %
+an instance that is configured according to the passed \class{Configuration} object, %
+as described in Section~\ref{sec:monitoring:configuration}.
+\end{compactenum}
+
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
-\KiekerMonitoringPart{} is being configured by a properties file. A sample %
-configuration file, which can be used as a template for custom configurations, %
-is provided by the file \file{\monitoringPropertiesFile} in the directory %
-\dir{\KiekerDir/META-INF/} of the binary release %
-(see Section~\ref{sec:example:downloadInstall}). %
+\KiekerMonitoringPart{} instances can being configured by properties files, %
+\class{Configuration} objects, and by passing property values as %
+JVM arguments. If no configuration is specified, a default %
+configuration is being used. %
+Appendix~\ref{sec:appdx:monitoringproperties} lists this default %
+configuration with a documentation of all available properties. %
+The default configuration properties file, which %
+can be used as a template for custom configurations, is provided by the file %
+\file{\monitoringPropertiesFile} in the directory \dir{\KiekerDir/META-INF/} of %
+the binary release (see Section~\ref{sec:example:downloadInstall}). %
+
+
+\subsection*{Configurations for Singleton Instances}
 
 In order to use a custom configuration file, its location needs to be passed to %
 the JVM using the parameter \textit{kieker.monitoring.configuration} as follows:
@@ -28,33 +69,53 @@ the JVM using the parameter \textit{kieker.monitoring.configuration} as follows:
 #\lstshellprompt# java	#\textbf{-Dkieker.monitoring.configuration=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
 \end{lstlisting}
 
-\noindent Appendix~\ref{sec:appdx:monitoringproperties} lists the template file %
-with a documentation of all available properties. If no configuration file %
-is passed to the JVM, a default configuration---according to this sample file---is being %
-used by \KiekerMonitoringPart{}. %
+\noindent Alternatively, you can place a file named \file{kieker.monitoring.properties} %
+in a directory called \dir{META-INF/} located in the classpath. %
+You can also pass any of the available configuration properties as JVM %
+arguments, e.g., \lstinline{-Dkieker.monitoring.enabled=true}. %
 
-\section{Monitoring Controller}\label{sec:componentsMonitoring:monitoringController}
+\subsection*{Configurations for Non-Singleton Instances}
 
-The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart{} %
-instance and provides methods to, among others, log monitoring records %
-(\method{newMonitoringRecord}) employing the configured monitoring writer and %
-to retrieve the current timestamp (\method{currentTimeNanos}). %
-The method \method{currentTimeNanos} returns the number of nanoseconds elapsed %
-since 1 Jan 1970 00:00~UTC. %
+The class \class{Configuration} provides factory methods to create %
+\class{Configuration} objects according to the default configuration %
+or loaded from a specified properties file: \method{createDefaultConfiguration}, %
+\method{createConfigurationFromFile}, and \method{createSingletonConfiguration}. %
+Note, that JVM parameters are only evaluated when using the factory method %
+\method{createSingletonConfiguration}. %
+The returned \class{Configuration} objects can be adjusted by setting %
+single property values using the method \method{setProperty}. %
 
-The class \class{MonitoringController} is implemented employing the singleton pattern. %
-The singleton instance %
-can be retrieved by calling the static method \method{getInstance}. %
-Figure~\ref{fig:monitoringController:classdiagram} shows %
-a class diagram of the class \class{MonitoringController} including the methods 
-just mentioned. The \class{MonitoringController} reads the configuration %
-file, as described in Section~\ref{sec:monitoring:configuration}.
 
-\begin{figure}[H]\centering
-\includegraphics[scale=0.7]{images/kieker_monitoringControlleruserguide-simplified}
-\caption{Class diagram of the \class{MonitoringController} (including selected methods)}
-\label{fig:monitoringController:classdiagram}
-\end{figure}
+\subsection{Logging Monitoring Records}\label{sec:componentsMonitoring:monitoringController:logging}
+
+Monitoring records are sent to the configured monitoring writers by passing %
+these records, in form of \class{IMonitoringRecord} objects, to the %
+\class{MonitoringController}'s \method{newMonitoringRecord} method.  %
+Note, that this is not the case if monitoring is disabled or terminated (Section~\ref{sec:componentsMonitoring:monitoringController:controState}). 
+
+\subsection{Retrieving the Current Time and Using Custom Time Sources}\label{sec:componentsMonitoring:monitoringController:getTime}
+
+The current time is maintained by a so-called time source. The \class{MonitoringController}'s method %
+\method{getTimeSource} returns an \class{ITimeSource} object which provides a method %
+\method{getTime}. Kieker's default time source (\class{DefaultSystemTimer}) returns the current system %
+time as the number of nanoseconds elapsed since 1 Jan 1970 00:00~UTC. %
+The easiest way to use a custom time source is to extend the \class{AbstractTimeSource} and %
+to implement the method \method{getTime()}. Custom time sources make sense, for instance, %
+in simulations where not the current system time but the current simulation time is %
+relevant. The configuration needs to be adjusted to use a custom time source class. %
+
+\subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
+
+The \class{MonitoringController} provides methods to temporarily enable or disable monitoring %
+(\method{enableMonitoring}/\method{disableMonitoring}), as well as to terminate monitoring %
+permanently (\method{terminateMonitoring}). %
+The current state can be requested by calling the methods \method{isMonitoringEnabled} %
+and \class{isMonitoringTerminated}. If monitoring is not enabled (i.e., disabled %
+or terminated), no monitoring records retrieved via the method \method{newMonitoringRecord} %
+are passed to the monitoring writer. Also, probes should be passive or return immediately %
+with respect to the return value of the method \method{isMonitoringEnabled}. %
+Note, that once the \class{MonitoringController} is terminated, it cannot be enabled %
+later on. 
 
 \section{Monitoring Records}\label{sec:componentsMonitoring:monitoringRecords}
 

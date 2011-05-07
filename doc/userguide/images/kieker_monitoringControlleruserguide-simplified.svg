@@ -19,7 +19,7 @@
    color-rendering="auto"
    preserveAspectRatio="xMidYMid meet"
    font-size="12"
-   viewBox="0 0 721 179"
+   viewBox="0 0 721 201"
    fill="black"
    stroke="black"
    image-rendering="auto"
@@ -30,7 +30,7 @@
    stroke-linejoin="miter"
    contentStyleType="text/css"
    font-style="normal"
-   height="179"
+   height="201"
    stroke-width="1"
    stroke-dashoffset="0"
    font-weight="normal"
@@ -39,14 +39,13 @@
    inkscape:version="0.48.1 r9760"
    sodipodi:docname="kieker_monitoringControlleruserguide-simplified.svg">
   <metadata
-     id="metadata303">
+     id="metadata315">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -61,11 +60,11 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1366"
      inkscape:window-height="713"
-     id="namedview301"
+     id="namedview313"
      showgrid="false"
-     inkscape:zoom="2.6185853"
-     inkscape:cx="553.6406"
-     inkscape:cy="96.562448"
+     inkscape:zoom="1.8516194"
+     inkscape:cx="596.26865"
+     inkscape:cy="100.4061"
      inkscape:window-x="-4"
      inkscape:window-y="32"
      inkscape:window-maximized="1"
@@ -81,9 +80,9 @@
          id="linearGradient1"
          xlink:actuate="onLoad"
          xlink:type="simple"
-         y2="164"
+         y2="187"
          gradientUnits="userSpaceOnUse"
-         y1="150"
+         y1="173"
          x2="10"
          x1="10">
         <stop
@@ -103,9 +102,9 @@
          id="linearGradient2"
          xlink:actuate="onLoad"
          xlink:type="simple"
-         y2="46"
+         y2="43"
          gradientUnits="userSpaceOnUse"
-         y1="13"
+         y1="10"
          x2="10"
          x1="10">
         <stop
@@ -125,9 +124,9 @@
          id="linearGradient3"
          xlink:actuate="onLoad"
          xlink:type="simple"
-         y2="59"
+         y2="56"
          gradientUnits="userSpaceOnUse"
-         y1="13"
+         y1="10"
          x2="514"
          x1="514">
         <stop
@@ -147,9 +146,9 @@
          id="linearGradient4"
          xlink:actuate="onLoad"
          xlink:type="simple"
-         y2="137"
+         y2="134"
          gradientUnits="userSpaceOnUse"
-         y1="123"
+         y1="120"
          x2="514"
          x1="514">
         <stop
@@ -169,9 +168,9 @@
          id="linearGradient5"
          xlink:actuate="onLoad"
          xlink:type="simple"
-         y2="123"
+         y2="120"
          gradientUnits="userSpaceOnUse"
-         y1="77"
+         y1="74"
          x2="514"
          x1="514">
         <stop
@@ -190,560 +189,547 @@
          clipPathUnits="userSpaceOnUse">
         <path
            id="path34"
-           d="M8 11 L410 11 L410 170 L8 170 L8 11 Z" />
+           d="M8 8 L410 8 L410 193 L8 193 L8 8 Z" />
       </clipPath>
       <clipPath
          id="clipPath2"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path37"
-           d="M148 15 L267 15 L267 31 L148 31 L148 15 Z" />
-      </clipPath>
-      <clipPath
-         id="clipPath3"
-         clipPathUnits="userSpaceOnUse">
-        <path
-           id="path40"
-           d="M109 28 L307 28 L307 44 L109 44 L109 28 Z" />
-      </clipPath>
-      <clipPath
-         id="clipPath14"
-         clipPathUnits="userSpaceOnUse">
-        <path
-           id="path73"
-           d="M8 162 L410 162 L410 169 L8 169 L8 162 Z" />
+           d="M148 12 L267 12 L267 28 L148 28 L148 12 Z" />
       </clipPath>
       <clipPath
          id="clipPath15"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path76"
-           d="M404 11 L411 11 L411 166 L404 166 L404 11 Z" />
+           d="M9 41 L406 41 L406 188 L9 188 L9 41 Z" />
       </clipPath>
       <clipPath
          id="clipPath16"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path79"
-           d="M512 11 L691 11 L691 65 L512 65 L512 11 Z" />
+           d="M8 185 L410 185 L410 192 L8 192 L8 185 Z" />
       </clipPath>
       <clipPath
          id="clipPath17"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path82"
-           d="M571 15 L629 15 L629 31 L571 31 L571 15 Z" />
+           d="M404 8 L411 8 L411 189 L404 189 L404 8 Z" />
       </clipPath>
       <clipPath
          id="clipPath18"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path85"
-           d="M550 28 L650 28 L650 44 L550 44 L550 28 Z" />
+           d="M512 8 L691 8 L691 62 L512 62 L512 8 Z" />
+      </clipPath>
+      <clipPath
+         id="clipPath19"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path88"
+           d="M571 12 L629 12 L629 28 L571 28 L571 12 Z" />
       </clipPath>
       <clipPath
          id="clipPath20"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path91"
-           d="M512 57 L691 57 L691 64 L512 64 L512 57 Z" />
+           d="M550 25 L650 25 L650 41 L550 41 L550 25 Z" />
       </clipPath>
       <clipPath
          id="clipPath21"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path94"
-           d="M685 11 L692 11 L692 61 L685 61 L685 11 Z" />
+           d="M523 38 L677 38 L677 54 L523 54 L523 38 Z" />
       </clipPath>
       <clipPath
          id="clipPath22"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path97"
-           d="M512 75 L713 75 L713 143 L512 143 L512 75 Z" />
+           d="M512 54 L691 54 L691 61 L512 61 L512 54 Z" />
       </clipPath>
       <clipPath
          id="clipPath23"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path100"
-           d="M582 79 L640 79 L640 95 L582 95 L582 79 Z" />
+           d="M685 8 L692 8 L692 58 L685 58 L685 8 Z" />
       </clipPath>
       <clipPath
          id="clipPath24"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path103"
-           d="M575 92 L648 92 L648 108 L575 108 L575 92 Z" />
+           d="M512 72 L713 72 L713 140 L512 140 L512 72 Z" />
       </clipPath>
       <clipPath
-         id="clipPath27"
+         id="clipPath25"
          clipPathUnits="userSpaceOnUse">
         <path
-           id="path112"
-           d="M513 121 L709 121 L709 138 L513 138 L513 121 Z" />
+           id="path106"
+           d="M582 76 L640 76 L640 92 L582 92 L582 76 Z" />
       </clipPath>
       <clipPath
-         id="clipPath28"
+         id="clipPath26"
          clipPathUnits="userSpaceOnUse">
         <path
-           id="path115"
-           d="M512 135 L713 135 L713 142 L512 142 L512 135 Z" />
+           id="path109"
+           d="M575 89 L648 89 L648 105 L575 105 L575 89 Z" />
       </clipPath>
       <clipPath
          id="clipPath29"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path118"
-           d="M707 75 L714 75 L714 139 L707 139 L707 75 Z" />
+           d="M513 118 L709 118 L709 135 L513 135 L513 118 Z" />
       </clipPath>
       <clipPath
          id="clipPath30"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path121"
-           d="M-1 -1 L722 -1 L722 180 L-1 180 L-1 -1 Z" />
+           d="M512 132 L713 132 L713 139 L512 139 L512 132 Z" />
       </clipPath>
       <clipPath
          id="clipPath31"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path124"
-           d="M421 22 L431 22 L431 41 L421 41 L421 22 Z" />
+           d="M707 72 L714 72 L714 136 L707 136 L707 72 Z" />
       </clipPath>
       <clipPath
          id="clipPath32"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path127"
-           d="M489 22 L499 22 L499 41 L489 41 L489 22 Z" />
+           d="M-1 -1 L722 -1 L722 202 L-1 202 L-1 -1 Z" />
       </clipPath>
       <clipPath
          id="clipPath33"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path130"
-           d="M464 58 L506 58 L506 77 L464 77 L464 58 Z" />
+           d="M421 26 L431 26 L431 45 L421 45 L421 26 Z" />
       </clipPath>
       <clipPath
          id="clipPath34"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path133"
-           d="M404 42 L428 42 L428 56 L404 56 L404 42 Z" />
+           d="M489 26 L499 26 L499 45 L489 45 L489 26 Z" />
       </clipPath>
       <clipPath
          id="clipPath35"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path136"
-           d="M502 42 L516 42 L516 56 L502 56 L502 42 Z" />
+           d="M464 62 L506 62 L506 81 L464 81 L464 62 Z" />
       </clipPath>
       <clipPath
          id="clipPath36"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path139"
-           d="M420 93 L430 93 L430 109 L420 109 L420 93 Z" />
+           d="M404 45 L428 45 L428 59 L404 59 L404 45 Z" />
       </clipPath>
       <clipPath
          id="clipPath37"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path142"
-           d="M488 93 L498 93 L498 109 L488 109 L488 93 Z" />
+           d="M502 45 L516 45 L516 59 L502 59 L502 45 Z" />
       </clipPath>
       <clipPath
          id="clipPath38"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path145"
-           d="M428 129 L504 129 L504 145 L428 145 L428 129 Z" />
+           d="M420 97 L430 97 L430 113 L420 113 L420 97 Z" />
       </clipPath>
       <clipPath
          id="clipPath39"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path148"
-           d="M404 109 L428 109 L428 123 L404 123 L404 109 Z" />
+           d="M488 97 L498 97 L498 113 L488 113 L488 97 Z" />
       </clipPath>
       <clipPath
          id="clipPath40"
          clipPathUnits="userSpaceOnUse">
         <path
            id="path151"
-           d="M502 109 L516 109 L516 123 L502 123 L502 109 Z" />
+           d="M428 133 L504 133 L504 149 L428 149 L428 133 Z" />
+      </clipPath>
+      <clipPath
+         id="clipPath41"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path154"
+           d="M404 113 L428 113 L428 127 L404 127 L404 113 Z" />
+      </clipPath>
+      <clipPath
+         id="clipPath42"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path157"
+           d="M502 113 L516 113 L516 127 L502 127 L502 113 Z" />
       </clipPath>
     </defs>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3"
-       id="linearGradient3450"
+       id="linearGradient3469"
        gradientUnits="userSpaceOnUse"
        spreadMethod="pad"
        x1="514"
-       y1="13"
+       y1="10"
        x2="514"
-       y2="59" />
+       y2="56" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4"
-       id="linearGradient3452"
+       id="linearGradient3471"
        gradientUnits="userSpaceOnUse"
        spreadMethod="pad"
        x1="514"
-       y1="123"
+       y1="120"
        x2="514"
-       y2="137" />
+       y2="134" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5"
-       id="linearGradient3454"
+       id="linearGradient3473"
        gradientUnits="userSpaceOnUse"
        spreadMethod="pad"
        x1="514"
-       y1="77"
+       y1="74"
        x2="514"
-       y2="123" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient2"
-       id="linearGradient3540"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="pad"
-       x1="10"
-       y1="13"
-       x2="10"
-       y2="46" />
+       y2="120" />
   </defs>
   <rect
      x="10"
-     y="13"
+     y="10"
      clip-path="url(#clipPath1)"
      width="395"
-     height="151"
-     id="rect155"
+     height="177"
+     id="rect161"
      style="font-size:11px;fill:#ffffff;stroke:none;font-family:Arial" />
-  <rect
-     x="10"
-     y="150"
-     clip-path="url(#clipPath1)"
-     width="395"
-     height="14"
-     id="rect157"
-     style="font-size:11px;fill:url(#linearGradient1);stroke:none;font-family:Arial" />
   <text
      x="149"
-     y="27"
+     y="24"
      clip-path="url(#clipPath2)"
      font-weight="bold"
      xml:space="preserve"
-     id="text161"
+     id="text167"
      style="font-size:11px;font-weight:bold;fill:#000000;stroke:none;font-family:Arial">MonitoringController</text>
   <text
      x="110"
-     y="40"
-     clip-path="url(#clipPath3)"
+     y="37"
+     clip-path="none"
      xml:space="preserve"
-     id="text163"
+     id="text169"
      style="font-size:11px;fill:#000000;stroke:none;font-family:Arial">(from kieker::monitoring::core::controller)</text>
   <text
      x="16"
-     y="57"
+     y="54"
      clip-path="none"
      xml:space="preserve"
-     id="text165"
+     id="text171"
      style="font-size:11px;fill:#000000;stroke:none;font-family:Arial">+ getInstance ( ) : IMonitoringController</text>
   <line
      clip-path="none"
-     x1="21.728285"
-     x2="206.72829"
-     y1="60.055084"
-     y2="60.055084"
-     id="line169"
+     x1="16"
+     x2="201"
+     y1="54"
+     y2="54"
+     id="line175"
      style="font-size:11px;fill:none;stroke-linecap:butt;font-family:Arial" />
   <text
      xml:space="preserve"
      x="16"
-     y="70"
+     y="67"
      clip-path="none"
-     id="text171"
+     id="text177"
      style="font-size:11px;stroke:none;font-family:Arial">+ createInstance ( configuration : Configuration ) : IMonitoringController</text>
+  <line
+     clip-path="none"
+     x1="16"
+     x2="356"
+     y1="67"
+     y2="67"
+     id="line179"
+     style="font-size:11px;fill:none;stroke-linecap:butt;font-family:Arial" />
   <text
      xml:space="preserve"
      x="16"
-     y="83"
+     y="80"
      clip-path="none"
-     id="text173"
+     id="text181"
      style="font-size:11px;stroke:none;font-family:Arial">+ getTimeSource ( ) : ITimeSource</text>
   <text
      xml:space="preserve"
      x="16"
-     y="96"
+     y="93"
      clip-path="none"
-     id="text175"
+     id="text183"
      style="font-size:11px;stroke:none;font-family:Arial">+ newMonitoringRecord ( record : IMonitoringRecord ) : boolean</text>
   <text
      xml:space="preserve"
      x="16"
-     y="109"
+     y="106"
      clip-path="none"
-     id="text177"
+     id="text185"
      style="font-size:11px;stroke:none;font-family:Arial">+ schedulePeriodicSampler ( sampler : ISampler, period : long, ... )</text>
   <text
      xml:space="preserve"
      x="16"
-     y="122"
+     y="119"
      clip-path="none"
-     id="text179"
+     id="text187"
      style="font-size:11px;stroke:none;font-family:Arial">+ removeScheduledSampler ( sampler : ScheduledSamplerJob ) : boolean</text>
   <text
      xml:space="preserve"
      x="16"
-     y="135"
+     y="132"
      clip-path="none"
-     id="text181"
+     id="text189"
      style="font-size:11px;stroke:none;font-family:Arial">+ disableMonitoring ( )</text>
   <text
      xml:space="preserve"
      x="16"
-     y="148"
+     y="145"
      clip-path="none"
-     id="text183"
+     id="text191"
      style="font-size:11px;stroke:none;font-family:Arial">+ enableMonitoring ( )</text>
   <text
      xml:space="preserve"
      x="16"
-     y="161"
+     y="158"
      clip-path="none"
-     id="text185"
+     id="text193"
      style="font-size:11px;stroke:none;font-family:Arial">+ terminateMonitoring ( )</text>
-  <line
+  <text
+     xml:space="preserve"
+     x="16"
+     y="171"
      clip-path="none"
+     id="text195"
+     style="font-size:11px;stroke:none;font-family:Arial">+ isMonitoringEnabled ( ) : boolean</text>
+  <text
+     xml:space="preserve"
+     x="16"
+     y="184"
+     clip-path="none"
+     id="text197"
+     style="font-size:11px;stroke:none;font-family:Arial">+ isMonitoringTerminated ( ) : boolean</text>
+  <line
+     clip-path="url(#clipPath15)"
      x1="10"
      x2="404"
-     y1="45"
-     y2="45"
-     id="line187"
+     y1="42"
+     y2="42"
+     id="line199"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <rect
      x="9"
-     y="12"
+     y="9"
      clip-path="url(#clipPath1)"
      width="395"
-     height="151"
-     id="rect205"
+     height="177"
+     id="rect217"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <rect
      x="514"
-     y="13"
-     clip-path="url(#clipPath16)"
+     y="10"
+     clip-path="url(#clipPath18)"
      width="172"
      height="46"
-     id="rect207"
+     id="rect219"
      style="font-size:11px;fill:#ffffff;stroke:none;font-family:Arial" />
   <text
      x="572"
-     y="27"
-     clip-path="url(#clipPath17)"
+     y="24"
+     clip-path="url(#clipPath19)"
      xml:space="preserve"
-     id="text211"
+     id="text223"
      style="font-size:11px;stroke:none;font-family:Arial">«interface»</text>
   <text
      x="551"
-     y="40"
-     clip-path="url(#clipPath18)"
+     y="37"
+     clip-path="url(#clipPath20)"
      font-weight="bold"
      xml:space="preserve"
-     id="text213"
+     id="text225"
      style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial">IMonitoringWriter</text>
   <text
      x="524"
-     y="53"
-     clip-path="none"
+     y="50"
+     clip-path="url(#clipPath21)"
      xml:space="preserve"
-     id="text215"
+     id="text227"
      style="font-size:11px;stroke:none;font-family:Arial">(from kieker::monitoring::writer)</text>
   <rect
      x="513"
-     y="12"
-     clip-path="url(#clipPath16)"
+     y="9"
+     clip-path="url(#clipPath18)"
      width="172"
      height="46"
-     id="rect233"
+     id="rect245"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <rect
      x="514"
-     y="77"
-     clip-path="url(#clipPath22)"
+     y="74"
+     clip-path="url(#clipPath24)"
      width="194"
      height="60"
-     id="rect235"
+     id="rect247"
      style="font-size:11px;fill:#ffffff;stroke:none;font-family:Arial" />
-  <rect
-     x="514"
-     y="123"
-     clip-path="url(#clipPath22)"
-     width="194"
-     height="14"
-     id="rect237"
-     style="font-size:11px;fill:url(#linearGradient3452);stroke:none;font-family:Arial" />
   <text
      x="583"
-     y="91"
-     clip-path="url(#clipPath23)"
+     y="88"
+     clip-path="url(#clipPath25)"
      xml:space="preserve"
-     id="text241"
+     id="text253"
      style="font-size:11px;stroke:none;font-family:Arial">«interface»</text>
   <text
      x="576"
-     y="104"
-     clip-path="url(#clipPath24)"
+     y="101"
+     clip-path="url(#clipPath26)"
      font-weight="bold"
      xml:space="preserve"
-     id="text243"
+     id="text255"
      style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial">ITimeSource</text>
   <text
      x="524"
-     y="117"
+     y="114"
      clip-path="none"
      xml:space="preserve"
-     id="text245"
+     id="text257"
      style="font-size:11px;stroke:none;font-family:Arial">(from kieker::monitoring::core::timer)</text>
   <text
      x="520"
-     y="134"
+     y="131"
      clip-path="none"
      xml:space="preserve"
-     id="text247"
+     id="text259"
      style="font-size:11px;stroke:none;font-family:Arial">+ getTime ( ) : long</text>
   <line
-     clip-path="url(#clipPath27)"
+     clip-path="url(#clipPath29)"
      x1="514"
      x2="707"
-     y1="122"
-     y2="122"
-     id="line249"
+     y1="119"
+     y2="119"
+     id="line261"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <rect
      x="513"
-     y="76"
-     clip-path="url(#clipPath22)"
+     y="73"
+     clip-path="url(#clipPath24)"
      width="194"
      height="60"
-     id="rect267"
+     id="rect279"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <line
-     clip-path="url(#clipPath30)"
+     clip-path="url(#clipPath32)"
      x1="405"
      x2="513"
-     y1="48"
-     y2="48"
-     id="line269"
+     y1="52"
+     y2="52"
+     id="line281"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <text
      font-size="13"
      x="422"
-     y="35"
-     clip-path="url(#clipPath31)"
+     y="39"
+     clip-path="url(#clipPath33)"
      xml:space="preserve"
-     id="text271"
+     id="text283"
      style="font-size:13px;stroke:none;font-family:Arial">1</text>
   <text
      font-size="13"
      x="490"
-     y="35"
-     clip-path="url(#clipPath32)"
+     y="39"
+     clip-path="url(#clipPath34)"
      xml:space="preserve"
-     id="text273"
+     id="text285"
      style="font-size:13px;stroke:none;font-family:Arial">1</text>
   <text
      font-size="13"
      x="465"
-     y="71"
-     clip-path="url(#clipPath33)"
+     y="75"
+     clip-path="url(#clipPath35)"
      xml:space="preserve"
-     id="text275"
+     id="text287"
      style="font-size:13px;stroke:none;font-family:Arial">- writer</text>
   <polygon
-     clip-path="url(#clipPath34)"
-     points="405,48 415,43 425,48 415,53 "
-     id="polygon277"
+     clip-path="url(#clipPath36)"
+     points="405,52 415,47 425,52 415,57 "
+     id="polygon289"
      style="font-size:11px;stroke:none;font-family:Arial" />
   <polygon
-     clip-path="url(#clipPath34)"
-     points="405,48 415,43 425,48 415,53 "
-     id="polygon279"
+     clip-path="url(#clipPath36)"
+     points="405,52 415,47 425,52 415,57 "
+     id="polygon291"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <line
-     clip-path="url(#clipPath35)"
-     x1="503"
-     x2="513"
-     y1="53"
-     y2="48"
-     id="line281"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
-  <line
-     clip-path="url(#clipPath35)"
-     x1="513"
-     x2="503"
-     y1="48"
-     y2="43"
-     id="line283"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
-  <line
-     clip-path="url(#clipPath30)"
+     clip-path="url(#clipPath32)"
      x1="405"
      x2="513"
-     y1="115"
-     y2="115"
-     id="line285"
+     y1="119"
+     y2="119"
+     id="line297"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <text
      x="421"
-     y="105"
-     clip-path="url(#clipPath36)"
+     y="109"
+     clip-path="url(#clipPath38)"
      xml:space="preserve"
-     id="text287"
+     id="text299"
      style="font-size:11px;stroke:none;font-family:Dialog">1</text>
   <text
      x="489"
-     y="105"
-     clip-path="url(#clipPath37)"
+     y="109"
+     clip-path="url(#clipPath39)"
      xml:space="preserve"
-     id="text289"
+     id="text301"
      style="font-size:11px;stroke:none;font-family:Dialog">1</text>
   <text
      x="429"
-     y="141"
-     clip-path="url(#clipPath38)"
+     y="145"
+     clip-path="url(#clipPath40)"
      xml:space="preserve"
-     id="text291"
+     id="text303"
      style="font-size:11px;stroke:none;font-family:Dialog">- timeSource</text>
   <polygon
-     clip-path="url(#clipPath39)"
-     points="405,115 415,110 425,115 415,120 "
-     id="polygon293"
+     clip-path="url(#clipPath41)"
+     points="405,119 415,114 425,119 415,124 "
+     id="polygon305"
      style="font-size:11px;stroke:none;font-family:Arial" />
   <polygon
-     clip-path="url(#clipPath39)"
-     points="405,115 415,110 425,115 415,120 "
-     id="polygon295"
+     clip-path="url(#clipPath41)"
+     points="405,119 415,114 425,119 415,124 "
+     id="polygon307"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <line
-     clip-path="url(#clipPath40)"
+     clip-path="url(#clipPath42)"
      x1="503"
      x2="513"
-     y1="120"
-     y2="115"
-     id="line297"
+     y1="124"
+     y2="119"
+     id="line309"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
   <line
-     clip-path="url(#clipPath40)"
+     clip-path="url(#clipPath42)"
      x1="513"
      x2="503"
-     y1="115"
-     y2="110"
-     id="line299"
+     y1="119"
+     y2="114"
+     id="line311"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial" />
 </svg>

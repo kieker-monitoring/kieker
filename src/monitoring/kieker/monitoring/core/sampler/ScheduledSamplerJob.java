@@ -15,8 +15,6 @@ public class ScheduledSamplerJob implements Runnable {
 	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
 
-	private volatile boolean isCancelled = false;
-
 	/**
 	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.
 	 * 
@@ -41,8 +39,7 @@ public class ScheduledSamplerJob implements Runnable {
 	@Override
 	public final void run() throws RuntimeException {
 		try {
-			if (this.isCancelled
-					|| !this.monitoringController.isMonitoringEnabled()) {
+			if (!this.monitoringController.isMonitoringEnabled()) {
 				return;
 			}
 			this.sampler.sample(this.monitoringController);

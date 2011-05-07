@@ -620,7 +620,7 @@
           <ownedOperation xmi:id="_cLelkDHLEd-Dw_r6qZDmjQ" name="getInstance" isStatic="true">
             <ownedParameter xmi:id="_nbjLoDHLEd-Dw_r6qZDmjQ" name="Parameter1" type="_vnjlsHcuEeCIBJffDvOD4w" direction="return"/>
           </ownedOperation>
-          <ownedOperation xmi:id="_oL_zEHcuEeCIBJffDvOD4w" name="createInstance">
+          <ownedOperation xmi:id="_oL_zEHcuEeCIBJffDvOD4w" name="createInstance" isStatic="true">
             <ownedParameter xmi:id="_zsJcgHcuEeCIBJffDvOD4w" name="Parameter1" type="_vnjlsHcuEeCIBJffDvOD4w" direction="return"/>
             <ownedParameter xmi:id="_2VQMwHcuEeCIBJffDvOD4w" name="configuration" type="_CG09YHcvEeCIBJffDvOD4w"/>
           </ownedOperation>
@@ -653,6 +653,16 @@
           <ownedOperation xmi:id="_TzN5IDHWEd-Dw_r6qZDmjQ" name="disableMonitoring"/>
           <ownedOperation xmi:id="_VuD1MDHWEd-Dw_r6qZDmjQ" name="enableMonitoring"/>
           <ownedOperation xmi:id="_aWQIUDHWEd-Dw_r6qZDmjQ" name="terminateMonitoring"/>
+          <ownedOperation xmi:id="_DGNSQHiZEeC5HfMPF3ypQg" name="isMonitoringEnabled">
+            <ownedParameter xmi:id="_QGhG4HiZEeC5HfMPF3ypQg" name="Parameter1" direction="return">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+            </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:id="_GZfA4HiZEeC5HfMPF3ypQg" name="isMonitoringTerminated">
+            <ownedParameter xmi:id="_IoLtEHiZEeC5HfMPF3ypQg" name="Parameter1" direction="return">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+            </ownedParameter>
+          </ownedOperation>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_3gmNgDHUEd-Dw_r6qZDmjQ" name="" memberEnd="_3gpQ0DHUEd-Dw_r6qZDmjQ _3gs7MDHUEd-Dw_r6qZDmjQ">
           <ownedEnd xmi:id="_3gs7MDHUEd-Dw_r6qZDmjQ" name="" visibility="private" type="_FOzq8DHKEd-Dw_r6qZDmjQ" association="_3gmNgDHUEd-Dw_r6qZDmjQ">

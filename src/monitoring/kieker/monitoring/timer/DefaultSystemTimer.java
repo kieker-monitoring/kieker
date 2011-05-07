@@ -2,7 +2,7 @@ package kieker.monitoring.timer;
 
 import kieker.monitoring.core.configuration.Configuration;
 
-public class DefaultSystemTimer extends AbstractTimer {
+public class DefaultSystemTimer extends AbstractTimeSource {
 	/**
 	 * Offset used to determine the number of nanoseconds since 1970-1-1. This
 	 * is necessary since System.nanoTime() returns the elapsed nanoseconds
