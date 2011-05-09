@@ -34,16 +34,16 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	}
 
 	@Override
-	public void sample(final IMonitoringController samplingController)
+	public void sample(final IMonitoringController monitoringController)
 			throws Exception {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r =
-				new MemSwapUsageRecord(samplingController.getTimeSource()
+				new MemSwapUsageRecord(monitoringController.getTimeSource()
 						.getTime(),
-						samplingController.getHostName(), mem.getTotal(),
+						monitoringController.getHostName(), mem.getTotal(),
 						mem.getActualUsed(), mem.getActualFree(),
 						swap.getTotal(), swap.getUsed(), swap.getTotal());
-		samplingController.newMonitoringRecord(r);
+		monitoringController.newMonitoringRecord(r);
 	}
 }

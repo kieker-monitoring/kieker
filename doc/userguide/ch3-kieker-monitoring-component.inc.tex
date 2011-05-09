@@ -26,7 +26,8 @@ instance. As depicted by the class diagram in Figure~\ref{fig:monitoringControll
 \begin{compactitem}
  \item Creating \class{IMonitoringController} instances (Section~\ref{sec:componentsMonitoring:monitoringController:factory}),
  \item Logging monitoring records employing the configured monitoring writer (Section~\ref{sec:componentsMonitoring:monitoringController:logging}), 
- \item Retrieving the current time via the configured time source (Section~\ref{sec:componentsMonitoring:monitoringController:getTime}), and
+ \item Retrieving the current time via the configured time source (Section~\ref{sec:componentsMonitoring:monitoringController:getTime}),
+ \item Scheduling and removing period samplers (Section~\ref{sec:componentsMonitoring:monitoringController:periodicSamplers}) and
  \item Controlling the monitoring state (Section~\ref{sec:componentsMonitoring:monitoringController:controState}).
 \end{compactitem}
 
@@ -44,6 +45,56 @@ conforms to the default configuration (Appendix~\ref{sec:appdx:monitoringpropert
 an instance that is configured according to the passed \class{Configuration} object, %
 as described in Section~\ref{sec:monitoring:configuration}.
 \end{compactenum}
+
+\subsection{Logging Monitoring Records}\label{sec:componentsMonitoring:monitoringController:logging}
+
+Monitoring records are sent to the configured monitoring writers by passing %
+these records, in form of \class{IMonitoringRecord} objects, to the %
+\class{MonitoringController}'s \method{newMonitoringRecord} method.  %
+Note, that this is not the case if monitoring is disabled or terminated (Section~\ref{sec:componentsMonitoring:monitoringController:controState}). 
+
+\subsection{Retrieving the Current Time and Using Custom Time Sources}\label{sec:componentsMonitoring:monitoringController:getTime}
+
+The current time is maintained by a so-called time source. The \class{MonitoringController}'s method %
+\method{getTimeSource} returns an \class{ITimeSource} object which provides a method %
+\method{getTime}. Kieker's default time source (\class{DefaultSystemTimer}) returns the current system %
+time as the number of nanoseconds elapsed since 1 Jan 1970 00:00~UTC. %
+The easiest way to use a custom time source is to extend the \class{AbstractTimeSource} and %
+to implement the method \method{getTime()}. Custom time sources make sense, for instance, %
+in simulations where not the current system time but the current simulation time is %
+relevant. The configuration needs to be adjusted to use a custom time source class. %
+
+\subsection{Scheduling and Removing Periodic Samplers}\label{sec:componentsMonitoring:monitoringController:periodicSamplers}
+
+For certain applications, it is required to monitor runtime data periodically, %
+e.g., the utilization of system resources such as CPUs. In Kieker, %
+this can be realized by registering special monitoring probes called samplers. %
+Samplers must implement the interface \class{ISampler} which includes a %
+single method \method{sample(IMonitoringController monitoringController)}. %
+This method is called in peridioc time steps, %
+as specified by the \class{MonitoringController}'s registration function %
+\method{schedulePeriodicSampler}. Periodic samplers can be stopped by %
+calling the \class{MonitoringController}'s method \method{removeScheduledSampler}.
+
+Listing~\ref{listing:sigarSamplerMethod} 
+
+\setJavaCodeListing
+\lstinputlisting[firstline=36, lastline=48, firstnumber=36, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
+
+Kieker already comes with samplers that allow to monitor 
+
+\subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
+
+The \class{MonitoringController} provides methods to temporarily enable or disable monitoring %
+(\method{enableMonitoring}/\method{disableMonitoring}), as well as to terminate monitoring %
+permanently (\method{terminateMonitoring}). %
+The current state can be requested by calling the methods \method{isMonitoringEnabled} %
+and \class{isMonitoringTerminated}. If monitoring is not enabled (i.e., disabled %
+or terminated), no monitoring records retrieved via the method \method{newMonitoringRecord} %
+are passed to the monitoring writer. Also, probes should be passive or return immediately %
+with respect to the return value of the method \method{isMonitoringEnabled}. %
+Note, that once the \class{MonitoringController} is terminated, it cannot be enabled %
+later on. 
 
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
@@ -84,38 +135,6 @@ Note, that JVM parameters are only evaluated when using the factory method %
 \method{createSingletonConfiguration}. %
 The returned \class{Configuration} objects can be adjusted by setting %
 single property values using the method \method{setProperty}. %
-
-
-\subsection{Logging Monitoring Records}\label{sec:componentsMonitoring:monitoringController:logging}
-
-Monitoring records are sent to the configured monitoring writers by passing %
-these records, in form of \class{IMonitoringRecord} objects, to the %
-\class{MonitoringController}'s \method{newMonitoringRecord} method.  %
-Note, that this is not the case if monitoring is disabled or terminated (Section~\ref{sec:componentsMonitoring:monitoringController:controState}). 
-
-\subsection{Retrieving the Current Time and Using Custom Time Sources}\label{sec:componentsMonitoring:monitoringController:getTime}
-
-The current time is maintained by a so-called time source. The \class{MonitoringController}'s method %
-\method{getTimeSource} returns an \class{ITimeSource} object which provides a method %
-\method{getTime}. Kieker's default time source (\class{DefaultSystemTimer}) returns the current system %
-time as the number of nanoseconds elapsed since 1 Jan 1970 00:00~UTC. %
-The easiest way to use a custom time source is to extend the \class{AbstractTimeSource} and %
-to implement the method \method{getTime()}. Custom time sources make sense, for instance, %
-in simulations where not the current system time but the current simulation time is %
-relevant. The configuration needs to be adjusted to use a custom time source class. %
-
-\subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
-
-The \class{MonitoringController} provides methods to temporarily enable or disable monitoring %
-(\method{enableMonitoring}/\method{disableMonitoring}), as well as to terminate monitoring %
-permanently (\method{terminateMonitoring}). %
-The current state can be requested by calling the methods \method{isMonitoringEnabled} %
-and \class{isMonitoringTerminated}. If monitoring is not enabled (i.e., disabled %
-or terminated), no monitoring records retrieved via the method \method{newMonitoringRecord} %
-are passed to the monitoring writer. Also, probes should be passive or return immediately %
-with respect to the return value of the method \method{isMonitoringEnabled}. %
-Note, that once the \class{MonitoringController} is terminated, it cannot be enabled %
-later on. 
 
 \section{Monitoring Records}\label{sec:componentsMonitoring:monitoringRecords}
 

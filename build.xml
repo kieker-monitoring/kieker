@@ -328,6 +328,13 @@
 			<include name="${src.userguide.example.jms.dir}/src/**/*.java" />
 			<include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties" />
 			<include name="${src.userguide.example.jms.dir}/META-INF/log4j.properties" />
+			<include name="${src.userguide.example.sigar.dir}/build.xml" />
+			<include name="${src.userguide.example.sigar.dir}/build.properties" />
+			<include name="${src.userguide.example.sigar.dir}/lib/" />
+			<exclude name="${src.userguide.example.sigar.dir}/lib/*" />
+			<include name="${src.userguide.example.sigar.dir}/src/**/*.java" />
+			<include name="${src.userguide.example.sigar.dir}/META-INF/kieker.monitoring.properties" />
+			<include name="${src.userguide.example.sigar.dir}/META-INF/log4j.properties" />
 			<include name="${example.microbenchmark.dir}/**" />
 			<exclude name="${example.microbenchmark.dir}/results/**/*" />
 			<exclude name="${example.microbenchmark.dir}/tmp/**/*" />
