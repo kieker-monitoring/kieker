@@ -316,8 +316,11 @@ monitoringDataWriterInitString=pipeName=somePipe
 
 \enlargethispage{1cm}
 
-\noindent Note that we decided to use \class{Object} arrays as the data structure of the %
-monitoring log in order to demonstrate the use of the \method{toArray} and %
+\noindent As the data structure of this kind of monitoring log, we created a %
+class \class{PipeData} in order to demonstrate the use of the \method{toArray} and %
 \method{initFromArray} (in Section~\ref{sec:analysis:reader}) methods. %
+A \class{PipeData} object holds a logging timestamp and an \class{Object} array %
+containing the serialized record data. % 
+Appendix~\ref{appendix:pipeListings} includes a source code listing of this class. %
 Alternatively, we could have used \class{IMonitoringRecord} as the data structure %
-used by the pipe. %
+used by the pipe. This is the way, Kieker's \class{PipeWriter} works. %
