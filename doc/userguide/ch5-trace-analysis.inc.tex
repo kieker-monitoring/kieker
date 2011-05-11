@@ -115,7 +115,8 @@ binary release.}
 .4 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}.
 .5 \DirInDirTree{META-INF/}.
 .4 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
-.5 \aopConfigFile. 
+.5 \aopConfigFile.
+.5 \kiekerMonitoringProperties{}. 
 .4 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
 .5 \mainJar.
 .5 \commonsLoggingJar.
@@ -163,7 +164,11 @@ Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and %
 Bookstore application. The \file{\aopConfigFile} must be located in a %
 \dir{META-INF/} directory in the classpath---in this case the \dir{build/} directory. %
 The AspectJ weaver has to be loaded as a so-called Java-agent. It weaves the %
-monitoring aspect into the byte code of the Bookstore application.
+monitoring aspect into the byte code of the Bookstore application. %
+Additionally, a \file{\kiekerMonitoringProperties{}} is copied to the \dir{META-INF/} directory. %
+The configuration may be adjusted as desired (see Section~\ref{sec:monitoring:configuration}).
+
+\
 
 \setBashListing
 \input{ch5-trace-analysis_Compile_Run_Example_1.inc}
