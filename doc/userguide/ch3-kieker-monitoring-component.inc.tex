@@ -103,6 +103,38 @@ with respect to the return value of the method \method{isMonitoringEnabled}. %
 Note, that once the \class{MonitoringController} is terminated, it cannot be enabled %
 later on. 
 
+\subsection{JMX MBean Access to \class{MonitoringController}}
+
+\begin{figure}\centering
+\subfigure[Attributes]{%
+\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-attributes.png}
+}
+\subfigure[Operations]{%
+\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-operations.png}
+}  
+\caption{Screenshots of the \class{jconsole} JMX client accessing the \class{MonitoringController}'s %
+attributes and operations via the MBean interface. %
+}
+\label{fig:monitoringController:MBean:jconsole}
+\end{figure}
+
+The \class{MonitoringController}'s %
+interface methods (see Figure~\ref{fig:monitoringController:classdiagram}) can be accessed %
+as a JMX MBean. For example, this allows to control the monitoring state using %
+the methods described in the previous Section~\ref{sec:componentsMonitoring:monitoringController:controState}. %
+As a JMX-compliant graphical client that is included in the JDK, \class{jconsole} %
+is probably the easiest way to get started. Figure~\ref{fig:monitoringController:MBean:jconsole} %
+shows two screenshots of the MBean access using \class{jconsole}.
+
+In order to enable JMX MBean access to the \class{MonitoringController}, the value of the %
+configuration property \textit{kieker.monitoring.MBean} must be set to \textit{true}:\\
+
+\setPropertiesListing
+\begin{lstlisting}
+ # Whether the MonitoringController will be available as an MBean.
+kieker.monitoring.MBean=true
+\end{lstlisting}
+
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
 \KiekerMonitoringPart{} instances can being configured by properties files, %
