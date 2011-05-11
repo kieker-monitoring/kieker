@@ -78,13 +78,17 @@ calling the \class{MonitoringController}'s method \method{removeScheduledSampler
 
 Listing~\ref{listing:sigarSamplerMethod} shows the \method{sample} method %
 of the \class{MemSwapUsageSampler} which can be used to monitor memory %
-and swap usage employing the Sigar library~\cite{Sigar} (detailed in %
-Appendix~\ref{XY}). %
+and swap usage employing the Sigar library~\cite{HypericSigarWebsite}. %
+Likewise to other monitoring probes described in this user guide (see for %
+example Sections~\ref{sec:monitoring:probe} and \ref{sec:example:monitoring}), 
+it collects the data of interest (lines~39--40), creates a monitoring record~%
+(lines~41--46), and passes this monitoring record to the monitoring controller~%
+(line~47). %
+The available Sigar-based samplers for monitoring system-level monitoring %
+data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}). %
 
 \setJavaCodeListing
 \lstinputlisting[firstline=36, lastline=48, firstnumber=36, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
-
-Kieker already comes with samplers that allow to monitor 
 
 \subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
 
