@@ -1,0 +1,158 @@
+\begin{center}
+\begin{longtable}{|p{0.4\textwidth}|p{0.5\textwidth}|}
+\hline 
+Filename & Description\\
+\hline
+\hline 
+Scenario.jar & This package provides scene graph functionality for Java.\\
+\hline 
+<<<<<<< .mine
+commons-io-1.2.jar & Commons-IO contains utility classes, stream implementations, file filters, and endian classes.\\
+=======
+rabbitmq-client.jar & This library contains the client for the RabbitMQ messaging system.\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+=======
+mysql-connector-java-5.1.5-bin.jar & The library to connect to an existing MySQL database.\\
+\hline 
+>>>>>>> .r1221
+servlet-api.jar & n/a\\
+\hline 
+<<<<<<< .mine
+aspectjtools-1.6.9.jar & n/a\\
+=======
+openjms-net-0.7.7-beta-1.jar & OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+spice-jndikit-1.2.jar & n/a\\
+=======
+junit-4.5.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+rabbitmq-client.jar & This library contains the client for the RabbitMQ messaging system.\\
+=======
+openjms-0.7.7-beta-1.jar & OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+openjms-0.7.7-beta-1.jar & OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification\\
+=======
+commons-pool-1.2.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+commons-pool-1.2.jar & n/a\\
+=======
+jms-1.1.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+cxf-rt-bindings-soap-2.2.9.jar & n/a\\
+\hline 
+aspectjweaver-1.6.9.jar & n/a\\
+=======
+servlet.jar & This package contains different classes for the work with servlets.\\
+>>>>>>> .r1221
+\hline 
+Scenario.jar & This package provides scene graph functionality for Java.\\
+\hline 
+<<<<<<< .mine
+jmc.jar & This library contains the Java Media Components which can be used for example for playing video content in Swing applications.\\
+=======
+spice-jndikit-1.2.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+derby.jar & This library contains the necessary drivers for the Apache Derby database.\\
+=======
+log4j-1.2.15.jar & log4j is a framework for the logging of messages in Java.\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+log4j-1.2.15.jar & log4j is a framework for the logging of messages in Java.\\
+=======
+jmc.jar & This library contains the Java Media Components which can be used for example for playing video content in Swing applications.\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+=======
+aspectjweaver-1.6.9.jar & n/a\\
+\hline 
+>>>>>>> .r1221
+cxf-api-2.2.9.jar & n/a\\
+\hline 
+<<<<<<< .mine
+openjms-common-0.7.7-beta-1.jar & OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification\\
+=======
+cxf-common-utilities-2.2.9.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+mysql-connector-java-5.1.5-bin.jar & The library to connect to an existing MySQL database.\\
+\hline 
+<<<<<<< .mine
+servlet.jar & This package contains different classes for the work with servlets.\\
+\hline 
+cxf-api-2.2.9.jar & n/a\\
+=======
+jndi-1.2.1.jar & The Java Naming and Directory Interface is an API which provides methods for multiple naming and directory services. It can be used for example to register disposed files in a network and to allow other part of a Java program to use them for RMI calls.\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+servlet-api.jar & n/a\\
+=======
+aspectjrt-1.6.9.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+junit-4.5.jar & n/a\\
+=======
+commons-io-1.2.jar & Commons-IO contains utility classes, stream implementations, file filters, and endian classes.\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+cxf-rt-core-2.2.9.jar & n/a\\
+=======
+concurrent-1.3.4.jar & This package contains different thread-safe classes.\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+commons-logging-1.1.1.jar & Commons Logging is a thin adapter allowing configurable bridging to other, well known logging systems.\\
+\hline 
+=======
+>>>>>>> .r1221
+commons-cli-1.2.jar & Commons CLI provides a simple API for working with the command line arguments and options.\\
+\hline 
+<<<<<<< .mine
+aspectjrt-1.6.9.jar & n/a\\
+=======
+cxf-rt-core-2.2.9.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+cxf-common-utilities-2.2.9.jar & n/a\\
+=======
+aspectjtools-1.6.9.jar & n/a\\
+>>>>>>> .r1221
+\hline 
+spring-web.jar & This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.\\
+\hline 
+<<<<<<< .mine
+openjms-net-0.7.7-beta-1.jar & OpenJMS is an open source implementation of Sun Microsystems's Java Message Service API 1.1 Specification\\
+=======
+commons-logging-1.1.1.jar & Commons Logging is a thin adapter allowing configurable bridging to other, well known logging systems.\\
+>>>>>>> .r1221
+\hline 
+<<<<<<< .mine
+spring.jar & The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.\\
+=======
+commons-cli-1.2.jar & Commons CLI provides a simple API for working with the command line arguments and options.\\
+>>>>>>> .r1221
+\hline 
+cxf-rt-bindings-soap-2.2.9.jar & n/a\\
+\hline 
+\end{longtable}
+\label{tabular:libraries}
+\end{center}
