@@ -335,6 +335,7 @@
 			<include name="${src.userguide.example.sigar.dir}/src/**/*.java" />
 			<include name="${src.userguide.example.sigar.dir}/META-INF/kieker.monitoring.properties" />
 			<include name="${src.userguide.example.sigar.dir}/META-INF/log4j.properties" />
+			<include name="${src.userguide.example.sigar.dir}/testdata/**" />
 			<include name="${example.microbenchmark.dir}/**" />
 			<exclude name="${example.microbenchmark.dir}/results/**/*" />
 			<exclude name="${example.microbenchmark.dir}/tmp/**/*" />
