@@ -1,0 +1,2 @@
+$1=kieker.common.record.CPUUtilizationRecord
+$2=kieker.common.record.MemSwapUsageRecord
