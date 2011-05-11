@@ -49,6 +49,13 @@ as explained in Section~\ref{sec:componentsMonitoring:monitoringRecords}. %
 When implementing custom Sigar-based samplers, the \class{SigarSamplerFactory}'s \method{getSigar} method should %
 be used to retrieve a \class{Sigar} instance. %
 
+This example uses a stand-alone Java application to set up %
+a Sigar-based monitoring process. When using servlet containers,  %
+users may consider implementing this routine as a \class{ServletContextListener}, %
+which are executed when the container is started and shutdown. %
+As an example, Kieker includes a \class{CPUMemUsageServletContextListener}. %
+
+
 \section{Executing the Example}
 
 The execution of the example is performed by the following two steps:\\
@@ -65,14 +72,14 @@ monitoring log. The following listing shows an excerpt: %
 
 \setBashListing
 \begin{lstlisting}
-  [java] Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
-     [java]     Configuration:
-     [java]             kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
-     [java]             kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
-     [java]             kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
-     [java]             kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir='true'
-     [java]     Writer Threads (1): 
-     [java]             Finished: 'false'; Writing to Directory: '/tmp/kieker-20110511-10095928-UTC-avanhoorn-thinkpad-KIEKER-SINGLETON'
+ Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
+     Configuration:
+             kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
+             kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
+             kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
+             kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir='true'
+     Writer Threads (1): 
+             Finished: 'false'; Writing to Directory: '/tmp/kieker-20110511-10095928-UTC-avanhoorn-thinkpad-KIEKER-SINGLETON'
 \end{lstlisting}
 
 A sample monitoring log can be found in the directory \dir{\SigarExampleDirDistro/testdata/kieker-20110511-10095928-UTC-avanhoorn-thinkpad-KIEKER-SINGLETON/}.
@@ -86,5 +93,31 @@ A sample monitoring log can be found in the directory \dir{\SigarExampleDirDistr
 
 You need to replace \dir{</path/to/monitoring/log/>} by the location of the file system monitoring log. %
 You can also use the above-mentioned monitoring log included in the example. %
+
+The \class{AnalysisStarter} produces a simple console output for each monitoring record, %
+as shown in the following excerpt: 
+
+\setBashListing
+\begin{lstlisting}
+Wed, 11 May 2011 10:10:01 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 0 ; utilization: 0.00 %
+Wed, 11 May 2011 10:10:01 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 1 ; utilization: 0.00 %
+Wed, 11 May 2011 10:10:01 +0000 (UTC): [Mem/Swap] host: thinkpad ; mem usage: 722.0 MB ; swap usage: 0.0 MB
+Wed, 11 May 2011 10:10:06 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 0 ; utilization: 5.35 %
+Wed, 11 May 2011 10:10:06 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 1 ; utilization: 1.31 %
+Wed, 11 May 2011 10:10:06 +0000 (UTC): [Mem/Swap] host: thinkpad ; mem usage: 721.0 MB ; swap usage: 0.0 MB
+Wed, 11 May 2011 10:10:11 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 0 ; utilization: 1.80 %
+Wed, 11 May 2011 10:10:11 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 1 ; utilization: 0.20 %
+Wed, 11 May 2011 10:10:11 +0000 (UTC): [Mem/Swap] host: thinkpad ; mem usage: 721.0 MB ; swap usage: 0.0 MB
+Wed, 11 May 2011 10:10:16 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 0 ; utilization: 1.40 %
+Wed, 11 May 2011 10:10:16 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 1 ; utilization: 0.79 %
+Wed, 11 May 2011 10:10:16 +0000 (UTC): [Mem/Swap] host: thinkpad ; mem usage: 721.0 MB ; swap usage: 0.0 MB
+Wed, 11 May 2011 10:10:21 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 0 ; utilization: 1.80 %
+Wed, 11 May 2011 10:10:21 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 1 ; utilization: 0.79 %
+Wed, 11 May 2011 10:10:21 +0000 (UTC): [Mem/Swap] host: thinkpad ; mem usage: 721.0 MB ; swap usage: 0.0 MB
+Wed, 11 May 2011 10:10:26 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 0 ; utilization: 0.40 %
+Wed, 11 May 2011 10:10:26 +0000 (UTC): [CPU] host: thinkpad ; cpu-id: 1 ; utilization: 0.59 %
+Wed, 11 May 2011 10:10:26 +0000 (UTC): [Mem/Swap] host: thinkpad ; mem usage: 721.0 MB ; swap usage: 0.0 MB
+\end{lstlisting}
+
 
 \end{compactenum}
