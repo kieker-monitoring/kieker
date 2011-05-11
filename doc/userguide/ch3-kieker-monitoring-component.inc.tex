@@ -67,8 +67,8 @@ relevant. The configuration needs to be adjusted to use a custom time source cla
 \subsection{Scheduling and Removing Periodic Samplers}\label{sec:componentsMonitoring:monitoringController:periodicSamplers}
 
 For certain applications, it is required to monitor runtime data periodically, %
-e.g., the utilization of system resources such as CPUs. In Kieker, %
-this can be realized by registering special monitoring probes called samplers. %
+e.g., the utilization of system resources such as CPUs. %
+For this purpose, Kieker supports special monitoring probes, called samplers. %
 Samplers must implement the interface \class{ISampler} which includes a %
 single method \method{sample(IMonitoringController monitoringController)}. %
 This method is called in peridioc time steps, %
@@ -76,7 +76,10 @@ as specified by the \class{MonitoringController}'s registration function %
 \method{schedulePeriodicSampler}. Periodic samplers can be stopped by %
 calling the \class{MonitoringController}'s method \method{removeScheduledSampler}.
 
-Listing~\ref{listing:sigarSamplerMethod} 
+Listing~\ref{listing:sigarSamplerMethod} shows the \method{sample} method %
+of the \class{MemSwapUsageSampler} which can be used to monitor memory %
+and swap usage employing the Sigar library~\cite{Sigar} (detailed in %
+Appendix~\ref{XY}). %
 
 \setJavaCodeListing
 \lstinputlisting[firstline=36, lastline=48, firstnumber=36, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
