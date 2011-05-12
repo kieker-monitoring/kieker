@@ -72,7 +72,7 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 
 \begin{figure}\centering
 \includegraphics[scale=0.7]{images/kieker_readerimplsuserguide-modified}
-\caption{Interface \class{IMonitoringLogReader} and implementing classes}
+\caption{Interface \class{IMonitoringReader} and implementing classes}
 \label{Figure:ReaderHierarchy}
 \end{figure}
 % \
@@ -120,7 +120,7 @@ Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
 the monitoring records provided by the monitoring log reader. %
 Starting with these monitoring record plugins, analysis plugins can be connected %
 in a pipe-and-filter style to implement more complex analyses. %
-\Kieker{} provides input and output port interface and implementing classes %
+\Kieker{} provides input and output port interfaces and implementing classes %
 to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
 and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
 based on this pattern. 

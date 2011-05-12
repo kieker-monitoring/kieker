@@ -122,7 +122,7 @@ In a real application these methods would pass objects to ensure the results of 
 
 \noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterNoInstr} can be executed. This document assumes that the reader enters the commands in the example directory. For this first example this is \dir{examples/userquide/ch2--bookstore-application/}.
 \\
-\NOTIFYBOX{Windows comes with two commando interpreters called \texttt{cmd.exe} and \texttt{command.com}. Only the first one is able to handle wildcards correctly. So we recommend using \texttt{cmd.exe} for these examples.}
+\NOTIFYBOX{Windows comes with two command-line interpreters called \texttt{cmd.exe} and \texttt{command.com}. Only the first one is able to handle wildcards correctly. So we recommend using \texttt{cmd.exe} for these examples.}
 
 \setBashListing
 % \input{ch2-quickstart-example_Compile_Run_Example_1-noinstr.inc}
@@ -347,9 +347,9 @@ This threshold is set during construction of the \class{Consumer} class (see lin
 
 For the data analysis, the method \method{newMonitoringRecord()} (see lines 23--40) is used. %
 This method is called for every monitoring record. At first, the method tests if %
-the monitoring record are really \class{OperationExecutionRecord} instances, as %
-these are the only record types it can process. Then the methods calculates the %
-execution time of one recorded \method{getBook()} call. If the method call takes %
+the monitoring record is an \class{OperationExecutionRecord}, as %
+this is the only record type it can process. Then the method calculates the %
+response time of one recorded \method{getBook()} call. If the method call takes %
 longer than specified, a message is written directly to the error stream.
 
 The framework methods \method{terminate} and \method{execute} don't do anything %
@@ -374,7 +374,7 @@ Line~24 sets the file system monitoring log reader which is initialized with the
 command-line argument value as the input directory. The application expects the %
 output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) %
 as the only argument value, which must be passed manually. %
-The analysis started by calling its \method{run} method (line~27). %
+The analysis is started by calling its \method{run} method (line~27). %
 
 % \pagebreak
 

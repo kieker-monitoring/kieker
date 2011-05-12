@@ -29,7 +29,7 @@ instance. As depicted by the class diagram in Figure~\ref{fig:monitoringControll
  \item Creating \class{IMonitoringController} instances (Section~\ref{sec:componentsMonitoring:monitoringController:factory}),
  \item Logging monitoring records employing the configured monitoring writer (Section~\ref{sec:componentsMonitoring:monitoringController:logging}), 
  \item Retrieving the current time via the configured time source (Section~\ref{sec:componentsMonitoring:monitoringController:getTime}),
- \item Scheduling and removing period samplers (Section~\ref{sec:componentsMonitoring:monitoringController:periodicSamplers}) and
+ \item Scheduling and removing period samplers (Section~\ref{sec:componentsMonitoring:monitoringController:periodicSamplers}), and
  \item Controlling the monitoring state (Section~\ref{sec:componentsMonitoring:monitoringController:controState}).
 \end{compactitem}
 
@@ -59,7 +59,7 @@ Note, that this is not the case if monitoring is disabled or terminated (Section
 
 The current time is maintained by a so-called time source. The \class{MonitoringController}'s method %
 \method{getTimeSource} returns an \class{ITimeSource} object which provides a method %
-\method{getTime}. Kieker's default time source (\class{DefaultSystemTimer}) returns the current system %
+\method{getTime}. \Kieker{}'s default time source (\class{DefaultSystemTimer}) returns the current system %
 time as the number of nanoseconds elapsed since 1 Jan 1970 00:00~UTC. %
 The easiest way to use a custom time source is to extend the \class{AbstractTimeSource} and %
 to implement the method \method{getTime()}. Custom time sources make sense, for instance, %
@@ -70,7 +70,7 @@ relevant. The configuration needs to be adjusted to use a custom time source cla
 
 For certain applications, it is required to monitor runtime data periodically, %
 e.g., the utilization of system resources such as CPUs. %
-For this purpose, Kieker supports special monitoring probes, called samplers. %
+For this purpose, \Kieker{} supports special monitoring probes, called samplers. %
 Samplers must implement the interface \class{ISampler} which includes a %
 single method \method{sample(IMonitoringController monitoringController)}. %
 This method is called in peridioc time steps, %
@@ -87,7 +87,7 @@ it collects the data of interest (lines~39--40), creates a monitoring record~%
 (lines~41--46), and passes this monitoring record to the monitoring controller~%
 (line~47). %
 The available Sigar-based samplers for monitoring system-level monitoring %
-data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}). %
+data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}. %
 
 \pagebreak
 
@@ -100,7 +100,7 @@ The \class{MonitoringController} provides methods to temporarily enable or disab
 (\method{enableMonitoring}/\method{disableMonitoring}), as well as to terminate monitoring %
 permanently (\method{terminateMonitoring}). %
 The current state can be requested by calling the methods \method{isMonitoringEnabled} %
-and \class{isMonitoringTerminated}. If monitoring is not enabled (i.e., disabled %
+and \method{isMonitoringTerminated}. If monitoring is not enabled (i.e., disabled %
 or terminated), no monitoring records retrieved via the method \method{newMonitoringRecord} %
 are passed to the monitoring writer. Also, probes should be passive or return immediately %
 with respect to the return value of the method \method{isMonitoringEnabled}. %
@@ -141,7 +141,7 @@ kieker.monitoring.MBean=true
 
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
-\KiekerMonitoringPart{} instances can being configured by properties files, %
+\KiekerMonitoringPart{} instances can be configured by properties files, %
 \class{Configuration} objects, and by passing property values as %
 JVM arguments. If no configuration is specified, a default %
 configuration is being used. %
@@ -163,9 +163,9 @@ the JVM using the parameter \textit{kieker.monitoring.configuration} as follows:
 #\lstshellprompt# java	#\textbf{-Dkieker.monitoring.configuration=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
 \end{lstlisting}
 
-\noindent Alternatively, you can place a file named \file{kieker.monitoring.properties} %
-in a directory called \dir{META-INF/} located in the classpath. %
-You can also pass any of the available configuration properties as JVM %
+\noindent Alternatively, a file named \file{kieker.monitoring.properties} %
+can be placed in a directory called \dir{META-INF/} located in the classpath. %
+The available configuration properties can also be passed as JVM %
 arguments, e.g., \lstinline{-Dkieker.monitoring.enabled=true}. %
 
 \subsection*{Configurations for Non-Singleton Instances}
@@ -247,7 +247,7 @@ shows a similar manual monitoring probe which uses the monitoring record type %
 \lstinputlisting[firstline=15, lastline=26, firstnumber=15, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
-\class{MonitoringController} class, the singleton instance should be stored %
+\class{MonitoringController} class, singleton instances should be stored %
 in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:finalStaticController}.
 
 \lstinputlisting[firstline=10, lastline=11, firstnumber=10, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
@@ -327,4 +327,4 @@ A \class{PipeData} object holds a logging timestamp and an \class{Object} array 
 containing the serialized record data. % 
 Appendix~\ref{appendix:pipeListings} includes a source code listing of this class. %
 Alternatively, we could have used \class{IMonitoringRecord} as the data structure %
-used by the pipe. This is the way, Kieker's \class{PipeWriter} works. %
+used by the pipe. This is the way, \Kieker{}'s \class{PipeWriter} works. %

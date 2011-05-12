@@ -2711,7 +2711,7 @@
             <children xmi:type="notation:SemanticListCompartment" xmi:id="_nQ3PmbTmEd-Eb8Wg-FPmGw" type="OperationCompartment"/>
             <children xmi:type="notation:SemanticListCompartment" xmi:id="_nQ3Pm7TmEd-Eb8Wg-FPmGw" visible="false" type="SignalCompartment"/>
             <children xmi:type="umlnotation:UMLShapeCompartment" xmi:id="_nQ3PnbTmEd-Eb8Wg-FPmGw" visible="false" type="StructureCompartment"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_nQ3PoLTmEd-Eb8Wg-FPmGw" x="6657" y="3750"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_nQ3PoLTmEd-Eb8Wg-FPmGw" x="6760" y="3768"/>
           </children>
           <children xmi:type="umlnotation:UMLClassifierShape" xmi:id="_nQ3PobTmEd-Eb8Wg-FPmGw" element="_H8qlEDHaEd-Dw_r6qZDmjQ" fontName="Sans Serif" fontHeight="8" showListStereotype="Text" showListVisibility="Text" showListSignature="true" transparency="0" lineColor="0" lineWidth="1" showParent="QualifiedName" showStereotype="Text" useClassifierShape="true">
             <children xmi:type="notation:DecorationNode" xmi:id="_nQ3PorTmEd-Eb8Wg-FPmGw" type="ImageCompartment">
@@ -2808,7 +2808,7 @@
               <children xmi:type="notation:BasicDecorationNode" xmi:id="_nQ32x7TmEd-Eb8Wg-FPmGw" type="Name"/>
               <layoutConstraint xmi:type="notation:Bounds" xmi:id="_nQ32yLTmEd-Eb8Wg-FPmGw" y="-210"/>
             </children>
-            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_nQ32yrTmEd-Eb8Wg-FPmGw" points="[-118, -316, -4051, 1688]$[-118, -1067, -4051, 937]"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_nQ32yrTmEd-Eb8Wg-FPmGw" points="[729, -274, -4600, 1811]$[729, -1289, -4600, 796]"/>
           </edges>
           <edges xmi:type="umlnotation:UMLConnector" xmi:id="_nQ32y7TmEd-Eb8Wg-FPmGw" element="_1184EDJtEd-Dw_r6qZDmjQ" source="_nQ3PwLTmEd-Eb8Wg-FPmGw" target="_nQ3PkbTmEd-Eb8Wg-FPmGw" fontName="Sans Serif" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="0" lineWidth="1" showStereotype="Text">
             <children xmi:type="notation:DecorationNode" xmi:id="_nQ32zLTmEd-Eb8Wg-FPmGw" type="NameLabel">
@@ -3064,7 +3064,7 @@
           </packagedElement>
         </packagedElement>
       </packagedElement>
-      <packagedElement xmi:type="uml:Class" xmi:id="_sK7uEDHaEd-Dw_r6qZDmjQ" name="AbstractMonitoringLogReader" clientDependency="_wXDwQDHaEd-Dw_r6qZDmjQ" isAbstract="true">
+      <packagedElement xmi:type="uml:Class" xmi:id="_sK7uEDHaEd-Dw_r6qZDmjQ" name="AbstractMonitoringReader" clientDependency="_wXDwQDHaEd-Dw_r6qZDmjQ" isAbstract="true">
         <ownedOperation xmi:id="_1Td_4DHaEd-Dw_r6qZDmjQ" name="addRecordReceiver" isLeaf="true">
           <ownedParameter xmi:id="_3_mO8DHaEd-Dw_r6qZDmjQ" name="receiver" type="_EI6jIE4UEd-SGaceHE4Xog"/>
         </ownedOperation>
