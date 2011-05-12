@@ -44,7 +44,9 @@ The Kieker download site\footnote{\KiekerDownloadURL{}} provides archives of the
 \label{fig:binary-layout}
 \end{figure}
 
-The Java sources presented in this user guide are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. A Servlet-based Web application, provided in \file{\servletWar}, can be used to control the status of \KiekerMonitoringPart{} in Java~EE environments. The file \file{\kiekerMonitoringProperties{}} is a sample configuration file for \KiekerMonitoringPart{}, as detailed in Chapter~\ref{chap:componentsMonitoring}. Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} as a logging interface, the file \file{\commonsLoggingJar} is the only dependency to a third-party library which is needed to execute \Kieker{} in any case. 
+The Java sources presented in this user guide are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. A Servlet-based Web application, provided in \file{\servletWar}, can be used to control the status of \KiekerMonitoringPart{} in Java~EE environments. The sample \KiekerMonitoringPart{} 
+configuration file %
+\file{\kiekerMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} as a logging interface, the file \file{\commonsLoggingJar} is the only dependency to a third-party library which is needed to execute \Kieker{} in any case. 
 
 %%
 \section{Bookstore Example Application}\label{sec:example:bookstore}
@@ -93,6 +95,8 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 \NOTIFYBOX{The Java sources of the not instrumented Bookstore application can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
 
 \quad\
+
+\enlargethispage{1cm}
 
 \noindent The class \class{BookstoreStarter}, shown in Listing~\ref{lst:class:BookstoreStarter}, contains the application's \method{main} method, i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
 
@@ -229,7 +233,7 @@ Finally, a record is created (see lines 23--26) and stored by calling the monito
 \lstinputlisting[firstline=17, firstnumber=17, lastline=28, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
 {\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
 
-\enlargethispage{0.5cm}
+% \enlargethispage{0.5cm}
 
 \noindent %
 The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
@@ -237,13 +241,15 @@ The next step after instrumenting the code is running the instrumented applicati
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
 
-\input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}
-
 \quad\
 
 \WARNBOX{%
 Under Windows it is necessary to separate the classpath elements by %
 a semicolon instead of a colon.}
+
+\pagebreak
+
+\input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}
 
 \quad\
 
@@ -337,6 +343,8 @@ Listing \ref{lst:Consumer} on page~\pageref{lst:Consumer} shows the content of t
 a specified threshold value. %Meaning the maximal response time has not been exceeded. 
 This threshold is set during construction of the \class{Consumer} class (see lines 13--15). 
 
+\pagebreak
+
 For the data analysis, the method \method{newMonitoringRecord()} (see lines 23--40) is used. %
 This method is called for every monitoring record. At first, the method tests if %
 the monitoring record are really \class{OperationExecutionRecord} instances, as %
@@ -368,7 +376,7 @@ output directory from the earlier monitoring run (see Section~\ref{sec:example:m
 as the only argument value, which must be passed manually. %
 The analysis started by calling its \method{run} method (line~27). %
 
-\pagebreak
+% \pagebreak
 
 The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} %
 describe how the analysis application can be compiled and executed under \UnixLikeSystems{} and Windows.

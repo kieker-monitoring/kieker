@@ -17,6 +17,8 @@ binary release.}
 The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart{} %
 instance. As depicted by the class diagram in Figure~\ref{fig:monitoringController:classdiagram}, it provides methods for\\
 
+\enlargethispage{1cm}
+
 \begin{figure}\centering % [H]
 \includegraphics[scale=0.7]{images/kieker_monitoringControlleruserguide-simplified}
 \caption{Class diagram of the \class{MonitoringController} (including selected methods)}
@@ -86,6 +88,8 @@ it collects the data of interest (lines~39--40), creates a monitoring record~%
 (line~47). %
 The available Sigar-based samplers for monitoring system-level monitoring %
 data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}). %
+
+\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=36, lastline=48, firstnumber=36, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
