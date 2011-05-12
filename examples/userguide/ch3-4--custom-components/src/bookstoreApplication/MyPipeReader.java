@@ -11,7 +11,6 @@ public class MyPipeReader extends AbstractMonitoringReader {
 	private static final Log log = LogFactory.getLog(MyPipeReader.class);
 	
     private static final String PROPERTY_PIPE_NAME = "pipeName";
-
     private volatile MyPipe pipe;
 
     public MyPipeReader () {}
