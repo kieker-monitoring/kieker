@@ -2,6 +2,19 @@ Introduction:
 
 This document summarizes changes made in all releases starting with 0.90.
 
+* 1.3 (May 19, 2011)
+- Added support for periodic samplers
+- Added support for monitoring system-level statistics based on the Sigar API
+- MonitoringController no longer restricted to singleton instance
+- Added support for custom time sources
+- Improved configuration management
+- Added named pipe reader/writer (for passing monitoring records directly within same JVM)
+- MonitoringController accessible as JMX MBean
+- API changes
+  - The format of the kieker.monitoring.properties changed!
+  - Custom writers will need be adjusted to a changed interface
+  - Minor changes in the MonitoringController interface
+
 * 1.2 (Sep 8, 2010)
 - Minor bug-fixes and refactorings 
   (e.g., renaming Kieker.Tpmon/Tpan->Kieker.Monitoring/Analysis )
