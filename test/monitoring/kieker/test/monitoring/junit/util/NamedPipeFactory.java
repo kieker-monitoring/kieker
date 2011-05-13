@@ -3,6 +3,8 @@ package kieker.test.monitoring.junit.util;
 import java.io.PipedReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.namedRecordPipe.Broker;
@@ -18,7 +20,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 /**
  * 
  * @author Andre van Hoorn
- *
+ * 
  */
 public class NamedPipeFactory {
 	private final static AtomicInteger nextPipeId = new AtomicInteger(0);
@@ -45,25 +47,53 @@ public class NamedPipeFactory {
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(
 			final String pipeName) {
+		return NamedPipeFactory.createMonitoringControllerWithNamedPipe(
+				pipeName, null);
+	}
+
+	/**
+	 * Creates a new {@link IMonitoringController} instance with the writer
+	 * being a {@link PipeWriter} with the given name. Additional configuration
+	 * properties can be passed.
+	 * 
+	 * @param pipeName
+	 * @param additionalProperties
+	 *            additional configuration properties; null is allowed
+	 * @return
+	 */
+	public static IMonitoringController createMonitoringControllerWithNamedPipe(
+			final String pipeName, final Properties additionalProperties) {
 		final Configuration configuration =
 				Configuration.createDefaultConfiguration();
 		configuration.setProperty(Configuration.WRITER_CLASSNAME,
 				PipeWriter.class.getName());
 		configuration.setProperty(PipeWriter.CONFIG__PIPENAME, pipeName);
+
+		if (additionalProperties != null) {
+			for (final Entry<Object, Object> property : additionalProperties
+					.entrySet()) {
+				final String key = (String) property.getKey();
+				final String value = (String) property.getValue();
+				configuration.setProperty(key, value);
+			}
+		}
+
 		final IMonitoringController monitoringController =
 				MonitoringController.createInstance(configuration);
 		return monitoringController;
 	}
-	
+
 	/**
-	 * Creates an {@link IMonitoringWriter} that collects records from a {@link Pipe} and 
-	 * collects these in the returned {@link List}.
+	 * Creates an {@link IMonitoringWriter} that collects records from a
+	 * {@link Pipe} and collects these in the returned {@link List}.
 	 * 
 	 * @param pipeName
 	 * @return
 	 */
-	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector (final String pipeName) {
-		final List<IMonitoringRecord> receivedRecords =  new ArrayList<IMonitoringRecord>();
+	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(
+			final String pipeName) {
+		final List<IMonitoringRecord> receivedRecords =
+				new ArrayList<IMonitoringRecord>();
 		final Pipe namedPipe = Broker.getInstance().acquirePipe(pipeName);
 		namedPipe.setPipeReader(new IPipeReader() {
 
