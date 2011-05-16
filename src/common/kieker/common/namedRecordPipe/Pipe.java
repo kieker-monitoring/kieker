@@ -18,7 +18,7 @@ public final class Pipe {
 
 	public void setPipeReader(final IPipeReader pipeReader) {
 		this.pipeReader = pipeReader;
-		Pipe.log.info("PipeReader initialized");
+		Pipe.log.debug("PipeReader initialized");
 	}
 
 	public String getName() {
