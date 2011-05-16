@@ -26,11 +26,12 @@ public class JMSLogReplayer {
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
+	private final String jmsFactoryLookupName;
 
 	/** Must not be used for construction */
 	@SuppressWarnings("unused")
 	private JMSLogReplayer() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	/**
@@ -38,15 +39,18 @@ public class JMSLogReplayer {
 	 *            = for instance "tcp://127.0.0.1:3035/"
 	 * @param jmsDestination
 	 *            = for instance "queue1"
+	 * @param jmsFactoryLookupName
+	 * 			 = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
 	 * @return
 	 */
 	public JMSLogReplayer(final IMonitoringRecordReceiver recordReceiver,
-			final String jmsProviderUrl, final String jmsDestination) {
+			final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		this.recordReceiver = recordReceiver;
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
+		this.jmsFactoryLookupName = jmsFactoryLookupName;
 	}
 
 	/**
@@ -59,7 +63,7 @@ public class JMSLogReplayer {
 		boolean success = true;
 
 		final IMonitoringReader logReader =
-				new JMSReader(this.jmsProviderUrl, this.jmsDestination);
+				new JMSReader(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(logReader);
 		tpanInstance.registerPlugin(new RecordDelegationPlugin2(
