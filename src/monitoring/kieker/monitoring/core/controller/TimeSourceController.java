@@ -16,15 +16,15 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 	private final ITimeSource timeSource;
 
 	protected TimeSourceController(final Configuration configuration) {
-		this.timeSource = createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
+		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
 		if (this.timeSource == null) {
-			terminate();
+			this.terminate();
 		}
 	}
 
 	@Override
 	protected final void cleanup() {
-		TimeSourceController.log.info("Shutting down TimeSource Controller");
+		TimeSourceController.log.debug("Shutting down TimeSource Controller");
 		// nothing to do
 		// timeSource.cleanup();
 	}
@@ -45,6 +45,6 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 
 	@Override
 	public final ITimeSource getTimeSource() {
-		return timeSource;
+		return this.timeSource;
 	}
 }

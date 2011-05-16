@@ -29,7 +29,7 @@ public final class StateController extends AbstractController implements IStateC
 			try {
 				hostname = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
-				log.warn("Failed to retrieve hostname");
+				StateController.log.warn("Failed to retrieve hostname");
 			}
 		}
 		this.hostname = hostname;
@@ -37,27 +37,27 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	protected final void cleanup() {
-		log.info("Shutting down State Controller");
+		StateController.log.debug("Shutting down State Controller");
 	}
 
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Status: '");
-		if (isMonitoringTerminated()) {
+		if (this.isMonitoringTerminated()) {
 			sb.append("terminated");
-		} else if (isMonitoringEnabled()) {
+		} else if (this.isMonitoringEnabled()) {
 			sb.append("enabled");
 		} else {
 			sb.append("disabled");
 		}
 		sb.append("'\n");
 		sb.append("\tName: '");
-		sb.append(name);
+		sb.append(this.name);
 		sb.append("'; Hostname: '");
-		sb.append(hostname);
+		sb.append(this.hostname);
 		sb.append("'; experimentID: '");
-		sb.append(getExperimentId());
+		sb.append(this.getExperimentId());
 		sb.append("'");
 		return sb.toString();
 	}
@@ -68,7 +68,7 @@ public final class StateController extends AbstractController implements IStateC
 		if (monitoringController != null) {
 			return monitoringController.terminate();
 		} else {
-			log.warn("Shutting down Monitoring before it is correctly initialized");
+			StateController.log.warn("Shutting down Monitoring before it is correctly initialized");
 			return false;
 		}
 	}
@@ -80,49 +80,49 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	public final boolean enableMonitoring() {
-		if (isMonitoringTerminated()) {
-			log.error("Refused to enable monitoring because monitoring has been permanently terminated");
+		if (this.isMonitoringTerminated()) {
+			StateController.log.error("Refused to enable monitoring because monitoring has been permanently terminated");
 			return false;
 		}
-		log.info("Enabling monitoring");
-		monitoringEnabled = true;
+		StateController.log.info("Enabling monitoring");
+		this.monitoringEnabled = true;
 		return true;
 	}
 
 	@Override
 	public final boolean disableMonitoring() {
-		log.info("Disabling monitoring");
-		monitoringEnabled = false;
+		StateController.log.info("Disabling monitoring");
+		this.monitoringEnabled = false;
 		return true;
 	}
 
 	@Override
 	public final boolean isMonitoringEnabled() {
-		return !super.isTerminated() && monitoringEnabled;
+		return !super.isTerminated() && this.monitoringEnabled;
 	}
 
 	@Override
 	public final String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public final String getHostName() {
-		return hostname;
+		return this.hostname;
 	}
 
 	@Override
 	public final int incExperimentId() {
-		return experimentId.incrementAndGet();
+		return this.experimentId.incrementAndGet();
 	}
 
 	@Override
 	public final void setExperimentId(final int newExperimentID) {
-		experimentId.set(newExperimentID);
+		this.experimentId.set(newExperimentID);
 	}
 
 	@Override
 	public final int getExperimentId() {
-		return experimentId.get();
+		return this.experimentId.get();
 	}
 }

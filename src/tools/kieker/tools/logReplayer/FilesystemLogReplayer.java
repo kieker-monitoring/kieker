@@ -176,7 +176,7 @@ class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 	 */
 	@Override
 	public boolean execute() {
-		RecordDelegationPlugin.log.info(RecordDelegationPlugin.class.getName()
+		RecordDelegationPlugin.log.debug(RecordDelegationPlugin.class.getName()
 				+ " starting ...");
 		RecordDelegationPlugin.log
 				.info("Ignoring records before "

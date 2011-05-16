@@ -52,7 +52,7 @@ public final class SamplingController extends AbstractController implements
 
 	@Override
 	protected final void cleanup() {
-		SamplingController.log.info("Shutting down Sampling Controller");
+		SamplingController.log.debug("Shutting down Sampling Controller");
 		if (this.periodicSensorsPoolExecutor != null) {
 			this.periodicSensorsPoolExecutor.shutdown();
 		}
