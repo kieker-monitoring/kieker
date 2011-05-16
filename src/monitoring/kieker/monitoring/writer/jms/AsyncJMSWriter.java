@@ -126,7 +126,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 				JMSWriterThread.log.info("Attempting to create queue ...");
 				destination = this.session.createQueue(topic);
 				// Is the following required?
-				context.bind(topic, destination);
+				//context.bind(topic, destination);
 			}
 
 			this.sender = this.session.createProducer(destination);

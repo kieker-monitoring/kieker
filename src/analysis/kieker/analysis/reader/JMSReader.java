@@ -151,7 +151,7 @@ public class JMSReader extends AbstractMonitoringReader {
 				JMSReader.log.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
 				// Is the following required?
-				context.bind(this.jmsDestination, destination);
+				//context.bind(this.jmsDestination, destination);
 			}
 
 			JMSReader.log.info("Listening to destination:"
