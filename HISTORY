@@ -12,7 +12,7 @@ This document summarizes changes made in all releases starting with 0.90.
 - MonitoringController accessible as JMX MBean
 - API changes
   - The format of the kieker.monitoring.properties changed!
-  - Custom writers will need be adjusted to a changed interface
+  - Custom writers will need to be adjusted to a changed interface
   - Minor changes in the MonitoringController interface
 
 * 1.2 (Sep 8, 2010)
