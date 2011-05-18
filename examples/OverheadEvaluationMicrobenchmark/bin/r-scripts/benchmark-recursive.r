@@ -6,11 +6,7 @@ baseresults["rt_msec"]=baseresults["duration_nsec"]/(1000)
 ## order_index recursion_depth duration_nsec rt_msec
 
 configs=unique(baseresults$order_index)
-configs.labels=c("Empty Probe","Inactive Probe","Collecting Data","Writing Data")
-##_Remove_Empty_Probe
-configs=c(0,2,3,4)
 configs.labels=c("Inactive Probe","Collecting Data","Writing Data")
-##_Remove_Empty_Probe
 recdepth=unique(baseresults$recursion_depth)
 
 meanvalues <- matrix(nrow=length(recdepth),ncol=length(configs),byrow=TRUE,dimnames=list(recdepth,configs))

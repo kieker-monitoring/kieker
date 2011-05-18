@@ -171,9 +171,12 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     done
 
 done
-tar cf ${RESULTSDIR}/kiekerlog.tar ${RESULTSDIR}/kiekerlog/
-pfexec rm -rf ${RESULTSDIR}/kiekerlog/
-gzip -9 ${RESULTSDIR}/kiekerlog.tar
+tar cf ${RESULTSDIR}kiekerlog.tar ${RESULTSDIR}kiekerlog/
+pfexec rm -rf ${RESULTSDIR}kiekerlog/
+gzip -9 ${RESULTSDIR}kiekerlog.tar
+tar cf ${RESULTSDIR}stat.tar ${RESULTSDIR}stat/
+rm -rf ${RESULTSDIR}stat/
+gzip -9 ${RESULTSDIR}stat.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
 ## ${BINDIR}run-r-benchmark-recursive.sh
 [ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log
