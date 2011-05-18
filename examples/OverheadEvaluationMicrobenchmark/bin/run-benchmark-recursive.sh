@@ -7,7 +7,7 @@ BINDIR=$(dirname $0)/
 BASEDIR=${BINDIR}../
 
 SLEEPTIME=30            ## 30
-NUM_LOOPS=5             ## 5
+NUM_LOOPS=1             ## 1
 THREADS=1               ## 1
 MAXRECURSIONDEPTH=10    ## 10
 TOTALCALLS=200000       ## 200000
@@ -38,8 +38,7 @@ echo ${CSV_HEADER} > ${RESULTSFN}
 AOPXML_INSTR_DEACTPROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-deactivatedProbe.xml"
 AOPXML_INSTR_PROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-probe.xml"
 
-KIEKER_MONITORING_CONF_NOLOGGING="META-INF/kieker.monitoring-nologging.properties"
-KIEKER_MONITORING_CONF_LOGGING="META-INF/kieker.monitoring-logging.properties"
+KIEKER_MONITORING_CONF="${BASEDIR}configuration/kieker.monitoring.properties"
 
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
@@ -50,10 +49,10 @@ JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVAARGS_KIEKER="-Djava.util.logging.config.file=META-INF/logging.properties"
-JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
-JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
-JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_LOGGING} -Dkieker.monitoring.storeInJavaIoTmpdir=false -Dkieker.monitoring.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF}"
+JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
+JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
+JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=false -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=100000 -Dkieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=${BASEDIR}tmp"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt
@@ -171,10 +170,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     done
 
 done
-tar cf ${RESULTSDIR}kiekerlog.tar ${RESULTSDIR}kiekerlog/
+tar cf ${RESULTSDIR}kiekerlog.tar ${RESULTSDIR}kiekerlog
 pfexec rm -rf ${RESULTSDIR}kiekerlog/
 gzip -9 ${RESULTSDIR}kiekerlog.tar
-tar cf ${RESULTSDIR}stat.tar ${RESULTSDIR}stat/
+tar cf ${RESULTSDIR}stat.tar ${RESULTSDIR}stat
 rm -rf ${RESULTSDIR}stat/
 gzip -9 ${RESULTSDIR}stat.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
