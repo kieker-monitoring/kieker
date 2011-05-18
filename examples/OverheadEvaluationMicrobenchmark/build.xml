@@ -29,14 +29,14 @@
            classpathref="compile-classpath"
            srcdir="src"
            excludes="kieker/monitoring/probe/aspectJ/" />
-    <!-- WORKAROUND!!! -->
+    <!-- WORKAROUND BEGIN -->
     <path id="compile-ajc-classpath">
       <fileset dir="lib/">
         <include name="aspectjrt.jar"/>
         <include name="commons-logging-*.jar"/>
         <include name="kieker-*.jar"/>
       </fileset>
-	  <pathelement location="build"/>
+      <pathelement location="build"/>
     </path>
     <iajc source="1.5" target="1.5"
           destdir="build"
@@ -48,12 +48,27 @@
             <pathelement location="src/kieker/monitoring/probe/aspectJ/"/>
           </sourceroots>
     </iajc>
+    <!-- WORKAROUND END -->
+    <copy todir="build/META-INF">
+      <fileset dir="src/META-INF"/>
+    </copy>
   </target>
   
   <target name="jar" depends="compile">
+    <manifestclasspath property="jar.classpath" jarfile="dist/OverheadEvaluationMicrobenchmark.jar">
+      <classpath>
+        <fileset dir="lib/">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </manifestclasspath>
     <jar destfile="dist/OverheadEvaluationMicrobenchmark.jar">
       <fileset dir="build"/>
       <fileset dir="." includes="LICENSE README" />
+      <manifest>
+        <attribute name="Main-Class" value="kieker.evaluation.benchmark.Benchmark"/>
+        <attribute name="Class-Path" value="${jar.classpath}"/>
+      </manifest>
     </jar>
   </target>
 

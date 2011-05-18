@@ -26,7 +26,6 @@ RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 echo "Removing and recreating '$RESULTSDIR'"
 (pfexec rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
 mkdir ${RESULTSDIR}stat/
-mkdir -p ${BASEDIR}build/META-INF/
 
 # Clear kieker.log and initialize logging
 rm -f ${BASEDIR}kieker.log
@@ -36,28 +35,25 @@ RESULTSFN="${RESULTSDIR}results.csv"
 CSV_HEADER="configuration;iteration;order_index;recursion_depth;thread_id;duration_nsec"
 echo ${CSV_HEADER} > ${RESULTSFN}
 
-AOPXML_PATH="${BASEDIR}build/META-INF/aop.xml"
-AOPXML_INSTR_DEACTPROBE="${BASEDIR}configuration/MonitoredApplication/aop-deactivatedProbe.xml"
-AOPXML_INSTR_PROBE="${BASEDIR}configuration/MonitoredApplication/aop-probe.xml"
+AOPXML_INSTR_DEACTPROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-deactivatedProbe.xml"
+AOPXML_INSTR_PROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-probe.xml"
 
-KIEKER_MONITORING_CONF_NOLOGGING="${BASEDIR}configuration/MonitoredApplication/kieker.monitoring-nologging.properties"
-KIEKER_MONITORING_CONF_LOGGING="${BASEDIR}configuration/MonitoredApplication/kieker.monitoring-logging.properties"
+KIEKER_MONITORING_CONF_NOLOGGING="META-INF/kieker.monitoring-nologging.properties"
+KIEKER_MONITORING_CONF_LOGGING="META-INF/kieker.monitoring-logging.properties"
 
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
 #JAVAARGS="${JAVAARGS} -XX:+PrintCompilation -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
-MAINCLASSNAME=kieker.evaluation.benchmark.Benchmark
-CLASSPATH=$(ls lib/*.jar | tr "\n" "${CPSEPCHAR}")build/
-#echo "Classpath: ${CLASSPATH}"
+JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties"
-JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
-JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
-JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_LOGGING} -Dkieker.monitoring.storeInJavaIoTmpdir=false -Dkieker.monitoring.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER="-Djava.util.logging.config.file=META-INF/logging.properties"
+JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
+JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_NOLOGGING}"
+JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF_LOGGING} -Dkieker.monitoring.storeInJavaIoTmpdir=false -Dkieker.monitoring.customStoragePath=${BASEDIR}tmp"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt
@@ -88,7 +84,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-1.txt &
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-1.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-1.txt &
-        ${BINDJAVA} java  ${JAVAARGS_NOINSTR} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        ${BINDJAVA} java  ${JAVAARGS_NOINSTR} ${JAR} \
             --output-filename ${RESULTSFN} \
             --configuration-id "noinstr;${i};1;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -106,11 +102,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
         # 2 Deactivated probe
         echo " # ${i}.2 Deactivated probe"
-        cp ${AOPXML_INSTR_DEACTPROBE} ${AOPXML_PATH}
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-2.txt &
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-2.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-2.txt &
-        ${BINDJAVA} java  ${JAVAARGS_KIEKER_DEACTV} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        ${BINDJAVA} java  ${JAVAARGS_KIEKER_DEACTV} ${JAR} \
             --output-filename ${RESULTSFN} \
             --configuration-id "deact_probe;${i};2;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -121,7 +116,6 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %mpstat
         kill %vmstat
         kill %iostat
-        rm -f ${AOPXML_PATH}
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
@@ -130,11 +124,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
         # 3 No logging
         echo " # ${i}.3 No logging (null writer)"
-        cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-3.txt &
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-3.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-3.txt &
-        ${BINDJAVA} java  ${JAVAARGS_INSTR_NOLOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        ${BINDJAVA} java  ${JAVAARGS_KIEKER_NOLOGGING} ${JAR} \
             --output-filename ${RESULTSFN} \
             --configuration-id "no_logging;${i};3;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -145,7 +138,6 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %mpstat
         kill %vmstat
         kill %iostat
-        rm -f ${AOPXML_PATH}
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_3.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
@@ -154,11 +146,10 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
         # 4 Logging
         echo " # ${i}.4 Logging"
-        cp ${AOPXML_INSTR_PROBE} ${AOPXML_PATH}
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-4.txt &
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-4.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-4.txt &
-        ${BINDJAVA} java  ${JAVAARGS_INSTR_LOGGING} -cp "${CLASSPATH}" ${MAINCLASSNAME} \
+        ${BINDJAVA} java  ${JAVAARGS_KIEKER_LOGGING} ${JAR} \
             --output-filename ${RESULTSFN} \
             --configuration-id "logging;${i};4;${j}" \
             --totalcalls ${TOTALCALLS} \
@@ -169,7 +160,6 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %mpstat
         kill %vmstat
         kill %iostat
-        rm -f ${AOPXML_PATH}
         mkdir -p ${RESULTSDIR}kiekerlog/
         mv ${BASEDIR}tmp/kieker-* ${RESULTSDIR}kiekerlog/
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log
