@@ -6,7 +6,12 @@
 \begin{lstlisting}
  svn cp trunk/  tags/<version>/
 \end{lstlisting}
-\item Set the final release version number in the \file{build.xml} and the user guide
+\item Set the final release version number in the
+\begin{itemize}
+\item \file{build.xml}
+\item the user guide's \textit{Macros.tex}
+\item the user guide example's \textit{build.properties}
+\end{itemize}
 \item Modify the \file{HISTORY} file
 \item Commit the tag
 \item Export a clean version of the tag from the svn:
