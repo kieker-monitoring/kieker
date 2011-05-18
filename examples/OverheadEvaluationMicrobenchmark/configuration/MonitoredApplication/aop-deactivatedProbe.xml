@@ -4,6 +4,6 @@
         <include within="kieker.evaluation.monitoredApplication.MonitoredClass"/>
     </weaver>
     <aspects>
-        <aspect name="kieker.monitoring.probe.aspectJ.DeactivatedProbeAnnotation"/>
+        <aspect name="kieker.monitoring.probe.aspectJ.operationExecution.DeactivatedOperationExecutionAspectAnnotation"/>
     </aspects>
 </aspectj>
