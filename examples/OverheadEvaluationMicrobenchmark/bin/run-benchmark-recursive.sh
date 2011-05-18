@@ -190,7 +190,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %iostat
         rm -f ${AOPXML_PATH}
         mkdir -p ${RESULTSDIR}kiekerlog/
-        mv ${BASEDIR}tmp/tpmon-* ${RESULTSDIR}kiekerlog/
+        mv ${BASEDIR}tmp/kieker-* ${RESULTSDIR}kiekerlog/
         [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log
         sync
         sleep ${SLEEPTIME}

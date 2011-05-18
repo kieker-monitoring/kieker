@@ -7,7 +7,7 @@ RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 RESULTSFN="${RESULTSDIR}results.csv"
 
 ## Generate Results file
-R --vanilla --silent <<EOF
+R --max-mem-size 8192M --vanilla --silent <<EOF
 results_fn="${RESULTSFN}"
 output_fn="${RESULTSDIR}results.pdf"
 source("${BINDIR}r-scripts/benchmark-recursive.r")
