@@ -14,7 +14,7 @@ public final class BenchmarkingThread extends Thread {
 	private final int recursionDepth;
 	private final long[] timings;
 	private int j = 0;
-	
+
 	public final synchronized int getIndexOfTimings() {
 		return j;
 	}

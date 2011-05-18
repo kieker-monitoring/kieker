@@ -24,7 +24,7 @@ public final class Benchmark {
 	private static int totalCalls = 0;
 	private static int recordedCalls = 0;
 	private static long methodTime = 0;
-  private static int recursionDepth = 0;
+	private static int recursionDepth = 0;
 
 	public static void main(String[] args) {
 
@@ -33,7 +33,7 @@ public final class Benchmark {
 
 		System.out.println(" # Experiment run configuration:");
 		System.out.println(" # 1. Output filename " + outputFn);
-    System.out.println(" # 2. Recursion Depth " + recursionDepth);
+		System.out.println(" # 2. Recursion Depth " + recursionDepth);
 		System.out.println(" # 3. Threads " + totalThreads);
 		System.out.println(" # 4. Total-Calls " + totalCalls);
 		System.out.println(" # 5. Recorded-Calls " + recordedCalls);
@@ -68,9 +68,7 @@ public final class Benchmark {
 			for (int i = 0; i < recordedCalls; i++) {
 				j = threads[h].getIndexOfTimings();
 				timings = threads[h].getTimings();
-				ps.println(configurationId + ";" + 
-						   threads[h].getName() + ";" + 
-						   timings[(j + i) % recordedCalls]);
+				ps.println(configurationId + ";" + threads[h].getName() + ";" + timings[(j + i) % recordedCalls]);
 			}
 		}
 		ps.close();
@@ -84,43 +82,20 @@ public final class Benchmark {
 	@SuppressWarnings("static-access")
 	public static void parseAndInitializeArguments(String[] args) {
 		final Options cmdlOpts = new Options();
-		cmdlOpts.addOption(OptionBuilder
-				.withLongOpt("configuration-id")
-				.withArgName("identifier")
-				.hasArg(true)
-				.isRequired(true)
-				.withDescription("Each line written to the CSV results file will start with this identifier.")
-				.withValueSeparator('=').create("c"));
-		cmdlOpts.addOption(OptionBuilder.withLongOpt("recordedcalls")
-				.withArgName("calls").hasArg(true).isRequired(true)
-				.withDescription("Number of recorded Method-Calls performed.")
-				.withValueSeparator('=').create("r"));
-		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalcalls")
-				.withArgName("calls").hasArg(true).isRequired(true)
-				.withDescription("Number of total Method-Calls performed.")
-				.withValueSeparator('=').create("t"));
-		cmdlOpts.addOption(OptionBuilder.withLongOpt("methodtime")
-				.withArgName("time").hasArg(true).isRequired(true)
-				.withDescription("Time a method call takes.")
-				.withValueSeparator('=').create("m"));
-		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalthreads")
-				.withArgName("threads").hasArg(true).isRequired(true)
-				.withDescription("Number of Threads started.")
-				.withValueSeparator('=').create("h"));
-    cmdlOpts.addOption(OptionBuilder.
-    		withLongOpt("recursiondepth").
-    		withArgName("depth").
-    		hasArg(true).
-    		isRequired(true).
-    		withDescription("Depth of Recursion performed.").
-    		withValueSeparator('=').create("d"));
-		cmdlOpts.addOption(OptionBuilder
-				.withLongOpt("output-filename")
-				.withArgName("filename")
-				.hasArg(true)
-				.isRequired(true)
-				.withDescription("Filename of results file. Output is appended if file exists.")
-				.withValueSeparator('=').create("o"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("configuration-id").withArgName("identifier").hasArg(true).isRequired(true)
+				.withDescription("Each line written to the CSV results file will start with this identifier.").withValueSeparator('=').create("c"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("recordedcalls").withArgName("calls").hasArg(true).isRequired(true)
+				.withDescription("Number of recorded Method-Calls performed.").withValueSeparator('=').create("r"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalcalls").withArgName("calls").hasArg(true).isRequired(true)
+				.withDescription("Number of total Method-Calls performed.").withValueSeparator('=').create("t"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("methodtime").withArgName("time").hasArg(true).isRequired(true)
+				.withDescription("Time a method call takes.").withValueSeparator('=').create("m"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalthreads").withArgName("threads").hasArg(true).isRequired(true)
+				.withDescription("Number of Threads started.").withValueSeparator('=').create("h"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("recursiondepth").withArgName("depth").hasArg(true).isRequired(true)
+				.withDescription("Depth of Recursion performed.").withValueSeparator('=').create("d"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("output-filename").withArgName("filename").hasArg(true).isRequired(true)
+				.withDescription("Filename of results file. Output is appended if file exists.").withValueSeparator('=').create("o"));
 		try {
 			CommandLine cmdl = null;
 			final CommandLineParser cmdlParser = new BasicParser();
@@ -129,7 +104,7 @@ public final class Benchmark {
 			configurationId = cmdl.getOptionValue("configuration-id");
 			recordedCalls = Integer.parseInt(cmdl.getOptionValue("recordedcalls"));
 			totalCalls = Integer.parseInt(cmdl.getOptionValue("totalcalls"));
-			if(totalCalls < recordedCalls) {
+			if (totalCalls < recordedCalls) {
 				recordedCalls = totalCalls;
 			}
 			methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
