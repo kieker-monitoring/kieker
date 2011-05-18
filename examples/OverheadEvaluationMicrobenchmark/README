@@ -1,0 +1,20 @@
+This example contains micro benchmarks to quantify the 
+performance overhead caused by the Kieker framework 
+components. 
+
+All experiments employ AspectJ for weaving the monitoring 
+probes into the application. The Java methods to be 
+instrumented are selected using Java annotations.
+
+The default execution of the benchmark requires a 64Bit JVM!
+
+Initially, the following steps are required:
+1. You should check whether you installed ant (http://ant.apache.org/), 
+   since the execution of all examples described in this 
+   README is based on the run-targets in the ant file build.xml.
+2. Make sure, that you've installed R (http://www.r-project.org/) to 
+   generate the results.
+3. Compile the application by calling ant   
+
+Execution of Microbenchmark:
+1. bin/run-benchmark-recursive.sh
