@@ -7,7 +7,7 @@ BINDIR=$(dirname $0)/
 BASEDIR=${BINDIR}../
 
 SLEEPTIME=30            ## 30
-NUM_LOOPS=1             ## 1
+NUM_LOOPS=5             ## 5
 THREADS=1               ## 1
 MAXRECURSIONDEPTH=10    ## 10
 TOTALCALLS=200000       ## 200000
@@ -52,7 +52,7 @@ JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver.jar -Dorg.aspec
 JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF}"
 JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=false -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=100000 -Dkieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=false -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=100000 -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt

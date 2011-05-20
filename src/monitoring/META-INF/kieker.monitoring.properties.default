@@ -76,7 +76,7 @@ kieker.monitoring.writer.filesystem.SyncFsWriter.storeInJavaIoTmpdir=true
 ## In order to use a custom directory, set storeInJavaIoTmpdir=false
 ## and set customStoragePath as desired. Examples:
 ## /var/kieker or "C:\KiekerData" (ensure the folder exists).
-kieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=
+kieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=.
 
 
 #####
@@ -89,7 +89,7 @@ kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=true
 ## In order to use a custom directory, set storeInJavaIoTmpdir=false
 ## and set customStoragePath as desired. Examples:
 ## /var/kieker or "C:\KiekerData" (ensure the folder exists).
-kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=
+kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=.
 #
 ## Asynchronous writers need to store monitoring records in an internal buffer.
 ## This parameter defines its capacity in terms of the number of records. 

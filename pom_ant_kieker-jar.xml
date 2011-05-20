@@ -9,7 +9,7 @@
   <parent>
   	<artifactId>base</artifactId>
   	<groupId>net.sf.kieker</groupId>
-  	<version>1.3-dev-20110518</version>
+  	<version>1.4-dev-SNAPSHOT-20110520</version>
   </parent>
 
 	<dependencies>

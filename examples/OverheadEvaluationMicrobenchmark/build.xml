@@ -6,10 +6,12 @@
 
   <target name="init" depends="">
     <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
-    <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpath="lib/aspectjtools.jar"/>
-    <fail message="Critical error: AspectJ library not found in ${aspectjtoolsjar}. Check your build.properties.">
-      <condition><not><available file="lib/aspectjtools.jar"/></not></condition>
-    </fail>
+    <path id="aspecttools-classpath">
+      <fileset dir="lib/">
+        <include name="aspectjtools-*.jar"/>
+      </fileset>
+    </path>
+    <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpathref="aspecttools-classpath"/>
     <mkdir dir="build"/>
     <mkdir dir="dist"/>
     <mkdir dir="tmp"/>
@@ -32,7 +34,7 @@
     <!-- WORKAROUND BEGIN -->
     <path id="compile-ajc-classpath">
       <fileset dir="lib/">
-        <include name="aspectjrt.jar"/>
+        <include name="aspectjrt-*.jar"/>
         <include name="commons-logging-*.jar"/>
         <include name="kieker-*.jar"/>
       </fileset>
