@@ -1,7 +1,7 @@
 #!/bin/bash
 
-BINDIR=$(dirname $0)/
-BASEDIR=${BINDIR}../
+BINDIR=bin/
+BASEDIR=
 
 RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 RESULTSFN="${RESULTSDIR}results.csv"

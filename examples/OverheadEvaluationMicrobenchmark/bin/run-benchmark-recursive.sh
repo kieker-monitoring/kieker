@@ -3,15 +3,14 @@
 #BINDJAVA="pfexec psrset -e 1"
 BINDJAVA=""
 
-BINDIR=$(dirname $0)/
-BASEDIR=${BINDIR}../
+BINDIR=bin/
+BASEDIR=
 
 SLEEPTIME=30            ## 30
-NUM_LOOPS=5             ## 5
+NUM_LOOPS=1             ## 5
 THREADS=1               ## 1
-MAXRECURSIONDEPTH=10    ## 10
+MAXRECURSIONDEPTH=1     ## 10
 TOTALCALLS=200000       ## 200000
-RECORDEDCALLS=100000    ## 100000
 METHODTIME=500000       ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
@@ -32,7 +31,7 @@ rm -f ${BASEDIR}kieker.log
 
 RESULTSFN="${RESULTSDIR}results.csv"
 # Write csv file headers:
-CSV_HEADER="configuration;iteration;order_index;recursion_depth;thread_id;duration_nsec"
+CSV_HEADER="iteration;order_index;recursion_depth;thread_id;duration_nsec"
 echo ${CSV_HEADER} > ${RESULTSFN}
 
 AOPXML_INSTR_DEACTPROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-deactivatedProbe.xml"
@@ -48,7 +47,7 @@ JAVAARGS="${JAVAARGS} -d64"
 JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
-JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver-1.6.11.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF}"
 JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
@@ -64,7 +63,6 @@ echo "" >>${RESULTSDIR}configuration.txt
 echo "SLEEPTIME=${SLEEPTIME}" >>${RESULTSDIR}configuration.txt
 echo "NUM_LOOPS=${NUM_LOOPS}" >>${RESULTSDIR}configuration.txt
 echo "TOTALCALLS=${TOTALCALLS}" >>${RESULTSDIR}configuration.txt
-echo "RECORDEDCALLS=${RECORDEDCALLS}" >>${RESULTSDIR}configuration.txt
 echo "METHODTIME=${METHODTIME}" >>${RESULTSDIR}configuration.txt
 echo "THREADS=${THREADS}" >>${RESULTSDIR}configuration.txt
 echo "MAXRECURSIONDEPTH=${MAXRECURSIONDEPTH}" >>${RESULTSDIR}configuration.txt
@@ -85,9 +83,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-1.txt &
         ${BINDJAVA} java  ${JAVAARGS_NOINSTR} ${JAR} \
             --output-filename ${RESULTSFN} \
-            --configuration-id "noinstr;${i};1;${j}" \
+            --configuration-id "${i};1;${j}" \
             --totalcalls ${TOTALCALLS} \
-            --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
@@ -106,9 +103,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-2.txt &
         ${BINDJAVA} java  ${JAVAARGS_KIEKER_DEACTV} ${JAR} \
             --output-filename ${RESULTSFN} \
-            --configuration-id "deact_probe;${i};2;${j}" \
+            --configuration-id "${i};2;${j}" \
             --totalcalls ${TOTALCALLS} \
-            --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
@@ -128,9 +124,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-3.txt &
         ${BINDJAVA} java  ${JAVAARGS_KIEKER_NOLOGGING} ${JAR} \
             --output-filename ${RESULTSFN} \
-            --configuration-id "no_logging;${i};3;${j}" \
+            --configuration-id "${i};3;${j}" \
             --totalcalls ${TOTALCALLS} \
-            --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}
@@ -150,9 +145,8 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-4.txt &
         ${BINDJAVA} java  ${JAVAARGS_KIEKER_LOGGING} ${JAR} \
             --output-filename ${RESULTSFN} \
-            --configuration-id "logging;${i};4;${j}" \
+            --configuration-id "${i};4;${j}" \
             --totalcalls ${TOTALCALLS} \
-            --recordedcalls ${RECORDEDCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
             --recursiondepth ${j}

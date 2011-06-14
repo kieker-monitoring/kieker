@@ -8,30 +8,23 @@ public final class BenchmarkingThread extends Thread {
 
 	private final MonitoredClass mc;
 	private final CountDownLatch doneSignal;
-	private final int recordedCalls;
 	private final int totalCalls;
 	private final long methodTime;
 	private final int recursionDepth;
 	private final long[] timings;
-	private int j = 0;
-
-	public final synchronized int getIndexOfTimings() {
-		return j;
-	}
 
 	public final synchronized long[] getTimings() {
 		return timings;
 	}
 
-	public BenchmarkingThread(final MonitoredClass mc, final int totalCalls, final int recordedCalls, final long methodTime, final int recursionDepth, final CountDownLatch doneSignal) {
+	public BenchmarkingThread(final MonitoredClass mc, final int totalCalls, final long methodTime, final int recursionDepth, final CountDownLatch doneSignal) {
 		super();
 		this.mc = mc;
 		this.doneSignal = doneSignal;
 		this.totalCalls = totalCalls;
-		this.recordedCalls = recordedCalls;
 		this.methodTime = methodTime;
 		this.recursionDepth = recursionDepth;
-		this.timings = new long[recordedCalls];
+		this.timings = new long[totalCalls];
 	}
 
 	@Override
@@ -41,8 +34,7 @@ public final class BenchmarkingThread extends Thread {
 			start_ns = System.nanoTime();
 			mc.monitoredMethod(methodTime, recursionDepth);
 			stop_ns = System.nanoTime();
-			timings[j] = stop_ns - start_ns;
-			j = (j + 1) % recordedCalls;
+			timings[i] = stop_ns - start_ns;
 		}
 		doneSignal.countDown();
 	}

@@ -22,7 +22,6 @@ public final class Benchmark {
 	private static String outputFn = null;
 	private static int totalThreads = 0;
 	private static int totalCalls = 0;
-	private static int recordedCalls = 0;
 	private static long methodTime = 0;
 	private static int recursionDepth = 0;
 
@@ -36,14 +35,13 @@ public final class Benchmark {
 		System.out.println(" # 2. Recursion Depth " + recursionDepth);
 		System.out.println(" # 3. Threads " + totalThreads);
 		System.out.println(" # 4. Total-Calls " + totalCalls);
-		System.out.println(" # 5. Recorded-Calls " + recordedCalls);
 
 		/* 2. Initialize Threads and Classes */
 		CountDownLatch doneSignal = new CountDownLatch(totalThreads);
 		MonitoredClass mc = new MonitoredClass();
 		BenchmarkingThread[] threads = new BenchmarkingThread[totalThreads];
 		for (int i = 0; i < totalThreads; i++) {
-			threads[i] = new BenchmarkingThread(mc, totalCalls, recordedCalls, methodTime, recursionDepth, doneSignal);
+			threads[i] = new BenchmarkingThread(mc, totalCalls, methodTime, recursionDepth, doneSignal);
 		}
 
 		/* 3. Starting Threads */
@@ -62,13 +60,11 @@ public final class Benchmark {
 		/* 5. Print experiment statistics */
 		System.out.print(" # 5. Writing results ... ");
 		// CSV Format: configuration;order_index;Thread-ID;duration_nsec
-		int j;
 		long[] timings;
 		for (int h = 0; h < totalThreads; h++) {
-			for (int i = 0; i < recordedCalls; i++) {
-				j = threads[h].getIndexOfTimings();
-				timings = threads[h].getTimings();
-				ps.println(configurationId + ";" + threads[h].getName() + ";" + timings[(j + i) % recordedCalls]);
+			timings = threads[h].getTimings();
+			for (int i = 0; i < totalCalls; i++) {
+				ps.println(configurationId + ";" + threads[h].getName() + ";" + timings[i]);
 			}
 		}
 		ps.close();
@@ -84,8 +80,6 @@ public final class Benchmark {
 		final Options cmdlOpts = new Options();
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("configuration-id").withArgName("identifier").hasArg(true).isRequired(true)
 				.withDescription("Each line written to the CSV results file will start with this identifier.").withValueSeparator('=').create("c"));
-		cmdlOpts.addOption(OptionBuilder.withLongOpt("recordedcalls").withArgName("calls").hasArg(true).isRequired(true)
-				.withDescription("Number of recorded Method-Calls performed.").withValueSeparator('=').create("r"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalcalls").withArgName("calls").hasArg(true).isRequired(true)
 				.withDescription("Number of total Method-Calls performed.").withValueSeparator('=').create("t"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("methodtime").withArgName("time").hasArg(true).isRequired(true)
@@ -102,11 +96,7 @@ public final class Benchmark {
 			cmdl = cmdlParser.parse(cmdlOpts, args);
 			outputFn = cmdl.getOptionValue("output-filename");
 			configurationId = cmdl.getOptionValue("configuration-id");
-			recordedCalls = Integer.parseInt(cmdl.getOptionValue("recordedcalls"));
 			totalCalls = Integer.parseInt(cmdl.getOptionValue("totalcalls"));
-			if (totalCalls < recordedCalls) {
-				recordedCalls = totalCalls;
-			}
 			methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
 			totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
 			recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
