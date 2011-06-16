@@ -1,6 +1,6 @@
 results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
 #output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
-results=read.csv2(results_fn,quote="",colClasses=c("integer","integer","integer","NULL","integer"))
+results=read.csv2(results_fn,quote="",colClasses=c("NULL","integer","integer","integer","NULL","integer"))
 rm(results_fn)
 results["rt_msec"]=results["duration_nsec"]/(1000)
 results$duration_nsec <- NULL
@@ -23,10 +23,10 @@ for (citer in iteration) {
     for (cc in configs) {
       results.temp = subset(results, iteration==citer & recursion_depth==crec & order_index==cc, select=c("rt_msec"))$"rt_msec"
       results.ts[cc,1] <- mean(results.temp[1:(1.5*buckets.size)])
-      for (ci in 2:buckets.count-1) {
-        results.ts[cc,ci] <- mean(results.temp[(((ci-1)*buckets.size)+1-(1.5*buckets.size)):((ci*buckets.size)+(1.5*buckets.size))])
+      for (ci in (2:(buckets.count-1))) {
+        results.ts[cc,ci] <- mean(results.temp[(((ci-1)*buckets.size)+1-(0.5*buckets.size)):((ci*buckets.size)+(0.5*buckets.size))])
       }
-      results.ts[cc,buckets.count] <- mean(results.temp[(((buckets.count-1)*buckets.size)+1-(1.5*buckets.size)):(buckets.count*buckets.size)])
+      results.ts[cc,buckets.count] <- mean(results.temp[(((buckets.count-1)*buckets.size)+1-(0.5*buckets.size)):(buckets.count*buckets.size)])
     }
   }
 }

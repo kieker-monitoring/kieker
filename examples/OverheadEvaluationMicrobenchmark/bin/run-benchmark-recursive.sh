@@ -10,7 +10,7 @@ SLEEPTIME=30            ## 30
 NUM_LOOPS=1             ## 5
 THREADS=1               ## 1
 MAXRECURSIONDEPTH=1     ## 10
-TOTALCALLS=200000       ## 200000
+TOTALCALLS=5000000       ## 200000
 METHODTIME=500000       ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
@@ -41,6 +41,7 @@ KIEKER_MONITORING_CONF="${BASEDIR}configuration/kieker.monitoring.properties"
 
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
+JAVAARGS="${JAVAARGS} -Xmx12G"
 #JAVAARGS="${JAVAARGS} -XX:+PrintCompilation -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
