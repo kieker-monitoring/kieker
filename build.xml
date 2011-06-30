@@ -246,8 +246,9 @@
 			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**" />
 			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**" />
 			<include name="lib/**" />
-			<include name="${eclipse-classpath.sample}" />
-			<include name="${eclipse-project.sample}" />
+			<!-- The following two files are included under a different name while packaging the archive -->
+			<!--<include name="${eclipse-classpath.sample}" />-->
+			<!--<include name="${eclipse-project.sample}" />-->
 			<include name="build.xml" />
 			<include name="build.properties" />
 			<include name="HISTORY" />
@@ -259,6 +260,8 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
+			<tarfileset file="${eclipse-project.sample}" fullpath="${kieker.dist.name}/.project" />
+			<tarfileset file="${eclipse-classpath.sample}" fullpath="${kieker.dist.name}/.classpath" />
 			<tarfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
@@ -272,6 +275,8 @@
 		<delete file="${release.dir}/${dist.kieker.srcBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
+			<zipfileset file="${eclipse-project.sample}" fullpath="${kieker.dist.name}/.project" />
+			<zipfileset file="${eclipse-classpath.sample}" fullpath="${kieker.dist.name}/.classpath" />
 			<zipfileset file="${kieker.monitoring.properties.default}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
