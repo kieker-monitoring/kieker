@@ -30,6 +30,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
 	public static final String CONFIG__PATH = AsyncFsWriter.PREFIX + "customStoragePath";
 	public static final String CONFIG__TEMP = AsyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
+	public static final String CONFIG__FLUSH = AsyncFsWriter.PREFIX + "flush";
 
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);
@@ -37,6 +38,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected void init() {
+		final boolean autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__FLUSH);
 		String path;
 		if (this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
@@ -68,7 +70,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 			AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
-		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path));
+		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, autoflush));
 	}
 
 }
@@ -84,6 +86,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 	// internal variables
 	private final String filenamePrefix;
 	private final MappingFileWriter mappingFileWriter;
+	private final boolean autoflush;
 	private PrintWriter pos = null;
 	private int entriesInCurrentFileCounter = FsWriterThread.maxEntriesInFile + 1; // Force to initialize first
 																					// file!
@@ -92,11 +95,12 @@ final class FsWriterThread extends AbstractAsyncThread {
 	private final String path;
 
 	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path) {
+			final MappingFileWriter mappingFileWriter, final String path, final boolean autoflush) {
 		super(monitoringController, writeQueue);
 		this.path = new File(path).getAbsolutePath();
 		this.filenamePrefix = path + File.separatorChar + "kieker";
 		this.mappingFileWriter = mappingFileWriter;
+		this.autoflush = autoflush;
 	}
 
 	// TODO: keep track of record type ID mapping!
@@ -113,7 +117,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 		// check if file exists and is not full
 		this.prepareFile(); // may throw FileNotFoundException
 
-		this.pos.write("$");
+		this.pos.write('$');
 		this.pos.write(Integer.toString((this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()))));
 		this.pos.write(';');
 		this.pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
@@ -148,10 +152,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			// TODO: where does this number come from?
 			// final int random = (new Random()).nextInt(100);
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
-			// log.debug("** " +
-			// java.util.Calendar.getInstance().currentTimeNanos().toString() +
-			// " new filename: " + filename);
-			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))));
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))),autoflush);
 			this.pos.flush();
 		}
 	}

@@ -77,6 +77,10 @@ kieker.monitoring.writer.filesystem.SyncFsWriter.storeInJavaIoTmpdir=true
 ## and set customStoragePath as desired. Examples:
 ## /var/kieker or "C:\KiekerData" (ensure the folder exists).
 kieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=.
+#
+## When flushing is disabled, it could require a lot of records before
+## finally any writing is done.
+kieker.monitoring.writer.filesystem.SyncFsWriter.flush=true
 
 
 #####
@@ -102,6 +106,10 @@ kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=10000
 ##  Be careful when using the value '1' since then, the asynchronous writer
 ##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior=0
+#
+## When flushing is disabled, it could require a lot of records before
+## finally any writing is done.
+kieker.monitoring.writer.filesystem.AsyncFsWriter.flush=true
 
 
 #####

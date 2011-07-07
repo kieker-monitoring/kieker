@@ -53,12 +53,14 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG__PATH = SyncFsWriter.PREFIX + "customStoragePath";
 	public static final String CONFIG__TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
+	public static final String CONFIG__FLUSH = SyncFsWriter.PREFIX + "flush";
 
 	// configuration parameters
 	private static final int maxEntriesInFile = 25000;
 
 	// internal variables
 	private String filenamePrefix;
+	private boolean autoflush;
 	private MappingFileWriter mappingFileWriter;
 	private PrintWriter pos = null;
 	// Force to initialize first file!
@@ -72,6 +74,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	@Override
 	protected void init() {
+		autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__FLUSH);
 		String path;
 		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
@@ -179,7 +182,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			// TODO: where does this number come from?
 			// final int random = (new Random()).nextInt(100);
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
-			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))));
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))),autoflush);
 		}
 	}
 }

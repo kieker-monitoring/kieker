@@ -26,7 +26,7 @@ public final class MappingFileWriter {
 		this.mappingFile = new File(mappingFileFn);
 		this.mappingFile.createNewFile();
 	}
-
+	
 	public final synchronized int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
 		Integer idObj = this.class2idMap.get(clazz);
 		if (idObj == null) {
@@ -38,21 +38,12 @@ public final class MappingFileWriter {
 
 	private final void writeMapping(final int id, final String className) {
 		MappingFileWriter.log.info("Registered monitoring record type with id '" + id + "':" + className);
-		FileOutputStream fos = null;
-		PrintWriter pw = null;
 		try {
-			fos = new FileOutputStream(this.mappingFile, true); // append
-			pw = new PrintWriter(fos);
+			final PrintWriter pw = new PrintWriter(new FileOutputStream(this.mappingFile, true));
 			pw.println("$" + id + "=" + className);
+			pw.close();
 		} catch (final Exception ex) {
 			MappingFileWriter.log.fatal("Failed to register record type", ex);
-		} finally {
-			try {
-				pw.close();
-				fos.close();
-			} catch (final IOException ex) {
-				MappingFileWriter.log.error("IO Exception", ex);
-			}
 		}
 	}
 }
