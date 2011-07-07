@@ -43,6 +43,19 @@ public final class Benchmark {
 		for (int i = 0; i < totalThreads; i++) {
 			threads[i] = new BenchmarkingThread(mc, totalCalls, methodTime, recursionDepth, doneSignal);
 		}
+		{// hopefully this works ;)
+			final long freeMemChunks = Runtime.getRuntime().freeMemory() >> 27;
+			//System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
+			final int memSize = 128 * 1024 * 128; // memSize * 8 = total Bytes -> 128MB
+			for (int j = 0; j < freeMemChunks; j++) {
+				final long[] grabMemory = new long[memSize];
+				for (int i = 0; i < memSize; i++) {
+					grabMemory[i] = System.nanoTime();
+				}
+			}
+			//System.out.println("done grabbing memory...");
+			//System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
+		}
 
 		/* 3. Starting Threads */
 		for (int i = 0; i < totalThreads; i++) {

@@ -35,6 +35,7 @@ public final class BenchmarkingThread extends Thread {
 			mc.monitoredMethod(methodTime, recursionDepth);
 			stop_ns = System.nanoTime();
 			timings[i] = stop_ns - start_ns;
+			if (i % 100000 == 0) System.out.println(i);
 		}
 		doneSignal.countDown();
 	}
