@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
 import javax.management.ObjectName;
+import javax.management.StandardMBean;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
@@ -18,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Jan Waller
  */
-public final class MonitoringController extends AbstractController implements IMonitoringController, MonitoringControllerMBean {
+public final class MonitoringController extends AbstractController implements IMonitoringController {
 	private final static Log log = LogFactory.getLog(MonitoringController.class);
 
 	private final StateController stateController;
@@ -57,7 +58,8 @@ public final class MonitoringController extends AbstractController implements IM
 		synchronized (monitoringController) {
 			if ((monitoringController.objectname != null) && !monitoringController.isTerminated()) {
 				try {
-					ManagementFactory.getPlatformMBeanServer().registerMBean(monitoringController, monitoringController.objectname);
+					final StandardMBean mbean = new StandardMBean(monitoringController, IMonitoringController.class, false);
+					ManagementFactory.getPlatformMBeanServer().registerMBean(mbean, monitoringController.objectname);
 				} catch (final Exception e) {
 					MonitoringController.log.warn("Unable to register MBean Server", e);
 				}
@@ -144,6 +146,16 @@ public final class MonitoringController extends AbstractController implements IM
 			sb.append("\tMBean available: '");
 			sb.append(this.objectname.getCanonicalName());
 			sb.append("'\n");
+//			final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+//			MBeanInfo info = null;
+//			try {
+//				info = mbs.getMBeanInfo(this.objectname);
+//			} catch (final Exception e) {
+//				sb.append("\t\tFailed to retrieve detailed MBean Information: ");
+//				sb.append(e.getMessage());
+//				sb.append("\n");
+//			}
+//			sb.append("\t\t" + System.getProperty("com.sun.management.jmxremote.localConnectorAddress")+"\n");
 		}
 		sb.append(this.writerController.toString());
 		sb.append("\n");
