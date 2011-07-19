@@ -1,10 +1,15 @@
 package kieker.monitoring.core.controller;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
+import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.StandardMBean;
+import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
+import javax.management.remote.JMXServiceURL;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
@@ -29,6 +34,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	/** Name of the MBean. */
 	private final ObjectName objectname;
+	private final JMXConnectorServer jmxserver;
 
 	// FACTORY
 	public final static IMonitoringController createInstance(final Configuration configuration) {
@@ -54,14 +60,29 @@ public final class MonitoringController extends AbstractController implements IM
 			monitoringController.terminate();
 			return monitoringController;
 		}
-		// Register MBean
-		synchronized (monitoringController) {
-			if ((monitoringController.objectname != null) && !monitoringController.isTerminated()) {
-				try {
-					final StandardMBean mbean = new StandardMBean(monitoringController, IMonitoringController.class, false);
-					ManagementFactory.getPlatformMBeanServer().registerMBean(mbean, monitoringController.objectname);
-				} catch (final Exception e) {
-					MonitoringController.log.warn("Unable to register MBean Server", e);
+		// Register JMX Interfaces
+		synchronized (monitoringController) { // TODO: why synchronized?
+			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX)) {
+				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+				if ((monitoringController.objectname != null) && !monitoringController.isTerminated()) {
+					try {
+						// MXBeans is currently not possible (getClasses in IRecord)
+						final StandardMBean mbean = new StandardMBean(monitoringController, IMonitoringController.class, false);
+						mbs.registerMBean(mbean, monitoringController.objectname);
+
+					} catch (final Exception e) {
+						MonitoringController.log.warn("Unable to register Monitoring Controller MBean", e);
+					}
+				}
+				if ((monitoringController.jmxserver != null) && !monitoringController.isTerminated()) {
+					try {
+						final ObjectName serverName = new ObjectName(configuration.getStringProperty(Configuration.ACTIVATE_JMX_DOMAIN), "type",
+								configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
+						mbs.registerMBean(monitoringController.jmxserver, serverName);
+						monitoringController.jmxserver.start();
+					} catch (final Exception e) {
+						MonitoringController.log.warn("Unable to register JMXServer", e);
+					}
 				}
 			}
 		}
@@ -92,15 +113,27 @@ public final class MonitoringController extends AbstractController implements IM
 	private MonitoringController(final Configuration configuration) {
 		// MBean
 		ObjectName objectname = null;
-		if (configuration.getBooleanProperty(Configuration.ACTIVATE_MBEAN)) {
-			try {
-				objectname = new ObjectName(configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_DOMAIN), "type",
-						configuration.getStringProperty(Configuration.ACTIVATE_MBEAN_TYPE));
-			} catch (final Exception e) {
-				MonitoringController.log.warn("Failed to initialize ObjectName", e);
+		JMXConnectorServer jmxserver = null;
+		if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX)) {
+			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_CONTROLLER)) {
+				try {
+					objectname = new ObjectName(configuration.getStringProperty(Configuration.ACTIVATE_JMX_DOMAIN), "type",
+							configuration.getStringProperty(Configuration.ACTIVATE_JMX_CONTROLLER_NAME));
+				} catch (final Exception e) {
+					MonitoringController.log.warn("Failed to initialize MonitoringController MBean", e);
+				}
+			}
+			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE)) {
+				try {
+					final JMXServiceURL serviceURL = new JMXServiceURL(configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_URL));
+					jmxserver = JMXConnectorServerFactory.newJMXConnectorServer(serviceURL, null, null);
+				} catch (final Exception e) {
+					MonitoringController.log.warn("Failed to initialize JMXServer", e);
+				}
 			}
 		}
 		this.objectname = objectname;
+		this.jmxserver = jmxserver;
 		this.stateController = new StateController(configuration);
 		this.writerController = new WriterController(configuration);
 		this.samplingController = new SamplingController(configuration);
@@ -132,6 +165,16 @@ public final class MonitoringController extends AbstractController implements IM
 		this.timeSourceController.terminate();
 		this.samplingController.terminate();
 		this.writerController.terminate();
+		synchronized (this) {
+			// TODO: correct placement? When do we want to shutdown all connections?
+			if (this.jmxserver != null) {
+				try {
+					this.jmxserver.stop();
+				} catch (final IOException e) {
+					MonitoringController.log.error("Failed to terminate JMXServer", e);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -142,20 +185,26 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append(") ");
 		sb.append(this.stateController.toString());
 		sb.append("\n");
+		if ((this.jmxserver != null) && (this.jmxserver.isActive())) {
+			sb.append("\tJMX remote access available\n");
+			sb.append("\t\tService URL: '");
+			sb.append(this.jmxserver.getAddress().toString());
+			sb.append("'\n");
+			final String[] connections = this.jmxserver.getConnectionIds();
+			if (connections.length == 0) {
+				sb.append("\t\tNo current remote connections\n");
+			} else {
+				for (String connection : connections) {
+					sb.append("\t\tRemote connection: '");
+					sb.append(connection);
+					sb.append("'\n");
+				}
+			}
+		}
 		if (this.objectname != null) {
-			sb.append("\tMBean available: '");
+			sb.append("\tMonitoringController MBean available: '");
 			sb.append(this.objectname.getCanonicalName());
 			sb.append("'\n");
-//			final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-//			MBeanInfo info = null;
-//			try {
-//				info = mbs.getMBeanInfo(this.objectname);
-//			} catch (final Exception e) {
-//				sb.append("\t\tFailed to retrieve detailed MBean Information: ");
-//				sb.append(e.getMessage());
-//				sb.append("\n");
-//			}
-//			sb.append("\t\t" + System.getProperty("com.sun.management.jmxremote.localConnectorAddress")+"\n");
 		}
 		sb.append(this.writerController.toString());
 		sb.append("\n");

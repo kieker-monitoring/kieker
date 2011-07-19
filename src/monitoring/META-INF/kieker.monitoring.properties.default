@@ -23,14 +23,18 @@ kieker.monitoring.hostname=
 # The initial ID associated with all experiments.
 kieker.monitoring.initialExperimentId=1
 
-# Whether the MonitoringController will be available as an MBean.
-kieker.monitoring.MBean=false
+# Whether any JMX functionality is available
+kieker.monitoring.jmx=false
+kieker.monitoring.jmx.domain=kieker.monitoring
 
-# These two properties are only evaluated if the MBean is activated.
-# They define the ObjectName used to access the MBean (usually you
-# don't have to change them).
-kieker.monitoring.MBean.domain=kieker.monitoring
-kieker.monitoring.MBean.name=MonitoringController
+# Enable/Disable the MonitoringController MBean
+kieker.monitoring.jmx.MonitoringController=true
+kieker.monitoring.jmx.MonitoringController.name=MonitoringController
+
+# Controls JMX remote access 
+kieker.monitoring.jmx.remote=false
+kieker.monitoring.jmx.remote.name=JMXServer
+kieker.monitoring.jmx.remote.url=service:jmx:rmi://
 
 # Enable/disable monitoring after startup (true|false; default: true)
 # If monitoring is disabled, the MonitoringController simply pauses.
@@ -194,3 +198,18 @@ kieker.monitoring.writer.database.AsyncDbWriter.numberOfConnections=4
 ## instead of using the value from the configuration.
 ## (Currently not implemented!) 
 kieker.monitoring.writer.database.AsyncDbWriter.loadInitialExperimentId=false
+
+
+#####
+#kieker.monitoring.writer=kieker.monitoring.writer.jmx.JMXWriter
+#
+## The domain used to register the MonitoringLog. Should probably be 
+## identical to the value of "kieker.monitoring.jmx.domain".
+kieker.monitoring.writer.jmx.JMXWriter.domain=kieker.monitoring
+#
+## The name of the MonitoringLog in the domain. If the domain is 
+## identical to the value of "kieker.monitoring.jmx.domain", the
+## value has to be different from the values of "kieker.monitoring.jmx.ControllerName"
+## and "kieker.monitoring.jmx.ServerName". 
+kieker.monitoring.writer.jmx.JMXWriter.logname=MonitoringLog
+

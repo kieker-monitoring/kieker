@@ -24,9 +24,15 @@ interface Keys {
 	public final static String CONTROLLER_NAME = Keys.PREFIX + "name";
 	public final static String HOST_NAME = Keys.PREFIX + "hostname";
 	public final static String EXPERIMENT_ID = Keys.PREFIX + "initialExperimentId";
-	public final static String ACTIVATE_MBEAN = Keys.PREFIX + "MBean";
-	public final static String ACTIVATE_MBEAN_DOMAIN = Keys.PREFIX + "MBean.domain";
-	public final static String ACTIVATE_MBEAN_TYPE = Keys.PREFIX + "MBean.name";
+	
+	// JMX
+	public final static String ACTIVATE_JMX = Keys.PREFIX + "jmx";
+	public final static String ACTIVATE_JMX_DOMAIN = Keys.PREFIX + "jmx.domain";
+	public final static String ACTIVATE_JMX_CONTROLLER = Keys.PREFIX + "jmx.MonitoringController";
+	public final static String ACTIVATE_JMX_CONTROLLER_NAME = Keys.PREFIX + "jmx.MonitoringController.name";
+	public final static String ACTIVATE_JMX_REMOTE = Keys.PREFIX + "jmx.remote";
+	public final static String ACTIVATE_JMX_REMOTE_NAME = Keys.PREFIX + "jmx.remote.name";
+	public final static String ACTIVATE_JMX_REMOTE_URL = Keys.PREFIX + "jmx.remote.url";
 
 	// Writer Controller
 	public final static String AUTO_SET_LOGGINGTSTAMP = Keys.PREFIX + "setLoggingTimestamp";
