@@ -32,16 +32,13 @@ kieker.monitoring.jmx.MonitoringController=true
 kieker.monitoring.jmx.MonitoringController.name=MonitoringController
 
 # Controls JMX remote access
-# If you use this parameter to enable rmi remote access, the application won't
-# shutdown unless you terminate the remote access with a remote client (e.g.
-# JConsole) by calling termianteMonitoring() by hand. (Ticket #70)
-# Use instead:
-# -Dcom.sun.management.jmxremote.port=59999
-# -Dcom.sun.management.jmxremote.authenticate=false
-# -Dcom.sun.management.jmxremote.ssl=false
+# This implementation is probably only compatible with SUN JDKs
 kieker.monitoring.jmx.remote=false
-kieker.monitoring.jmx.remote.name=JMXServer
-kieker.monitoring.jmx.remote.url=service:jmx:rmi://
+kieker.monitoring.jmx.remote.port=59999
+# These properties will be forwarded to configure the JMX server
+com.sun.management.jmxremote.local.only=false
+com.sun.management.jmxremote.authenticate=false
+com.sun.management.jmxremote.ssl=false
 
 # Enable/disable monitoring after startup (true|false; default: true)
 # If monitoring is disabled, the MonitoringController simply pauses.

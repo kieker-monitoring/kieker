@@ -31,8 +31,7 @@ interface Keys {
 	public final static String ACTIVATE_JMX_CONTROLLER = Keys.PREFIX + "jmx.MonitoringController";
 	public final static String ACTIVATE_JMX_CONTROLLER_NAME = Keys.PREFIX + "jmx.MonitoringController.name";
 	public final static String ACTIVATE_JMX_REMOTE = Keys.PREFIX + "jmx.remote";
-	public final static String ACTIVATE_JMX_REMOTE_NAME = Keys.PREFIX + "jmx.remote.name";
-	public final static String ACTIVATE_JMX_REMOTE_URL = Keys.PREFIX + "jmx.remote.url";
+	public final static String ACTIVATE_JMX_REMOTE_PORT = Keys.PREFIX + "jmx.remote.port";
 
 	// Writer Controller
 	public final static String AUTO_SET_LOGGINGTSTAMP = Keys.PREFIX + "setLoggingTimestamp";
