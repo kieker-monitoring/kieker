@@ -13,8 +13,7 @@ public interface IMonitoringReader {
 	 * AbstractMonitoringLogWriter includes convenient methods to extract
 	 * configuration values from an initString.
 	 * 
-	 * @param initString
-	 *            the initialization string
+	 * @param initString the initialization string
 	 * @return true if the initialization was successful; false if an error occurred
 	 */
 	public boolean init(String initString);
@@ -24,8 +23,7 @@ public interface IMonitoringReader {
 	 * and should not be called manually to register a receiver. Use an
 	 * AnalysisInstance instead.
 	 * 
-	 * @param receiver
-	 *            the receiver
+	 * @param receiver the receiver
 	 */
 	public void addRecordReceiver(IMonitoringRecordReceiver receiver);
 

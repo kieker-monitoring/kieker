@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * TODO: replace with Configuration, similar to Monitoring Component
  * @author Andre van Hoorn
  */
 public class PropertyMap {

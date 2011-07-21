@@ -58,7 +58,7 @@ public final class StateController extends AbstractController implements IStateC
 		sb.append(this.hostname);
 		sb.append("'; experimentID: '");
 		sb.append(this.getExperimentId());
-		sb.append("'");
+		sb.append("'\n");
 		return sb.toString();
 	}
 

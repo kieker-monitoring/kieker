@@ -12,11 +12,9 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public abstract class AbstractMonitoringReader implements
-		IMonitoringReader {
+public abstract class AbstractMonitoringReader implements IMonitoringReader {
 
-	private static final Log log = LogFactory
-			.getLog(AbstractMonitoringReader.class);
+	private static final Log log = LogFactory.getLog(AbstractMonitoringReader.class);
 
 	private final Vector<IMonitoringRecordReceiver> recordReceivers = new Vector<IMonitoringRecordReceiver>();
 
@@ -41,14 +39,12 @@ public abstract class AbstractMonitoringReader implements
 		try {
 			for (final IMonitoringRecordReceiver c : this.recordReceivers) {
 				if (!c.newMonitoringRecord(record)) {
-					AbstractMonitoringReader.log
-							.error("Consumer returned with error");
+					AbstractMonitoringReader.log.error("Consumer returned with error");
 					return false;
 				}
 			}
 		} catch (final Exception ex) {
-			AbstractMonitoringReader.log.fatal(
-					"Caught Exception while delivering record", ex);
+			AbstractMonitoringReader.log.fatal("Caught Exception while delivering record", ex);
 			return false;
 		}
 		return true;

@@ -31,7 +31,14 @@ kieker.monitoring.jmx.domain=kieker.monitoring
 kieker.monitoring.jmx.MonitoringController=true
 kieker.monitoring.jmx.MonitoringController.name=MonitoringController
 
-# Controls JMX remote access 
+# Controls JMX remote access
+# If you use this parameter to enable rmi remote access, the application won't
+# shutdown unless you terminate the remote access with a remote client (e.g.
+# JConsole) by calling termianteMonitoring() by hand. (Ticket #70)
+# Use instead:
+# -Dcom.sun.management.jmxremote.port=59999
+# -Dcom.sun.management.jmxremote.authenticate=false
+# -Dcom.sun.management.jmxremote.ssl=false
 kieker.monitoring.jmx.remote=false
 kieker.monitoring.jmx.remote.name=JMXServer
 kieker.monitoring.jmx.remote.url=service:jmx:rmi://
@@ -203,13 +210,10 @@ kieker.monitoring.writer.database.AsyncDbWriter.loadInitialExperimentId=false
 #####
 #kieker.monitoring.writer=kieker.monitoring.writer.jmx.JMXWriter
 #
-## The domain used to register the MonitoringLog. Should probably be 
-## identical to the value of "kieker.monitoring.jmx.domain".
-kieker.monitoring.writer.jmx.JMXWriter.domain=kieker.monitoring
+## The domain used to register the MonitoringLog. If emtpy, the value
+## of "kieker.monitoring.jmx.domain" will be used.
+kieker.monitoring.writer.jmx.JMXWriter.domain=
 #
-## The name of the MonitoringLog in the domain. If the domain is 
-## identical to the value of "kieker.monitoring.jmx.domain", the
-## value has to be different from the values of "kieker.monitoring.jmx.ControllerName"
-## and "kieker.monitoring.jmx.ServerName". 
+## The name of the MonitoringLog in the domain.
 kieker.monitoring.writer.jmx.JMXWriter.logname=MonitoringLog
 

@@ -67,9 +67,9 @@ public final class SamplingController extends AbstractController implements
 			sb.append(this.periodicSensorsPoolExecutor.getPoolSize());
 			sb.append("'; Scheduled Tasks: '");
 			sb.append(this.periodicSensorsPoolExecutor.getTaskCount());
-			sb.append("'");
+			sb.append("'\n");
 		} else {
-			sb.append("No periodic Sensor available");
+			sb.append("No periodic Sensor available\n");
 		}
 		return sb.toString();
 	}
