@@ -4,9 +4,13 @@ import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
+import javax.management.ListenerNotFoundException;
 import javax.management.MBeanServer;
+import javax.management.Notification;
+import javax.management.NotificationListener;
 import javax.management.ObjectName;
 import javax.management.StandardMBean;
+import javax.management.remote.JMXConnectionNotification;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXServiceURL;
 
@@ -23,16 +27,19 @@ import sun.management.jmxremote.ConnectorBootstrap;
 public final class JMXController extends AbstractController implements IJMXController {
 	private final static Log log = LogFactory.getLog(JMXController.class);
 
-	/** Name of the MBean. */
 	private final boolean jmxEnabled;
 	private final String domain;
 	private final ObjectName controllerObjectName;
+	private final ObjectName serverObjectName;
 	private final JMXConnectorServer server;
+	private final ServerNotificationListener serverNotificationListener;
 	private final String port;
 
 	protected JMXController(final Configuration configuration) {
 		ObjectName controllerObjectName = null;
+		ObjectName serverObjectName = null;
 		JMXConnectorServer server = null;
+		ServerNotificationListener serverNotificationListener = null;
 		String port = "0";
 		this.domain = configuration.getStringProperty(Configuration.ACTIVATE_JMX_DOMAIN);
 		this.jmxEnabled = configuration.getBooleanProperty(Configuration.ACTIVATE_JMX);
@@ -43,6 +50,8 @@ public final class JMXController extends AbstractController implements IJMXContr
 					// TODO: careful! This will probably only work in SUN VMs, what happens in other VMs?
 					port = configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_PORT);
 					server = ConnectorBootstrap.initialize(port, jmxProperties);
+					serverObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
+					serverNotificationListener = new ServerNotificationListener();
 				} catch (final Throwable e) {
 					JMXController.log.warn("Failed to initialize remote JMX server", e);
 				}
@@ -58,6 +67,8 @@ public final class JMXController extends AbstractController implements IJMXContr
 		this.port = port;
 		this.server = server;
 		this.controllerObjectName = controllerObjectName;
+		this.serverObjectName = serverObjectName;
+		this.serverNotificationListener = serverNotificationListener;
 	}
 
 	@Override
@@ -65,6 +76,13 @@ public final class JMXController extends AbstractController implements IJMXContr
 		synchronized (this) {
 			if (this.jmxEnabled && !this.isTerminated()) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+				if (this.serverObjectName != null) {
+					try {
+						mbs.registerMBean(server, this.serverObjectName);
+					} catch (final Exception e) {
+						JMXController.log.warn("Unable to register JMXServer MBean", e);
+					}
+				}
 				if (this.controllerObjectName != null) {
 					try {
 						// MXBeans is currently not possible (getClasses in IRecord)
@@ -73,6 +91,9 @@ public final class JMXController extends AbstractController implements IJMXContr
 					} catch (final Exception e) {
 						JMXController.log.warn("Unable to register Monitoring Controller MBean", e);
 					}
+				}
+				if ((this.server != null) && this.server.isActive()) {
+					this.server.addNotificationListener(serverNotificationListener, null, null);
 				}
 			}
 		}
@@ -91,7 +112,19 @@ public final class JMXController extends AbstractController implements IJMXContr
 						JMXController.log.error("Failed to terminate MBean", e);
 					}
 				}
+				if (this.serverObjectName != null) {
+					try {
+						mbs.unregisterMBean(this.serverObjectName);
+					} catch (final Exception e) {
+						JMXController.log.error("Failed to terminate MBean", e);
+					}
+				}
 				if (this.server != null) {
+					try {
+						server.removeNotificationListener(serverNotificationListener);
+					} catch (final ListenerNotFoundException e) {
+						JMXController.log.error("Failed to remove ServerNotificationListener", e);
+					}
 					try {
 						server.stop();
 					} catch (final Exception e) {
@@ -123,7 +156,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 			sb.append(this.controllerObjectName.getCanonicalName());
 			sb.append("'\n");
 		}
-		if ((this.server != null) && (this.server.isActive())) {
+		if ((this.server != null) && this.server.isActive()) {
 			sb.append("\tJMX remote access available:\n");
 			sb.append("\t\tService URL: '");
 			final JMXServiceURL url = this.server.getAddress();
@@ -146,5 +179,20 @@ public final class JMXController extends AbstractController implements IJMXContr
 			}
 		}
 		return sb.toString();
+	}
+
+	private final static class ServerNotificationListener implements NotificationListener {
+		@Override
+		public final void handleNotification(final Notification notification, final Object handback) {
+			final String notificationType = notification.getType();
+			if (notificationType == JMXConnectionNotification.OPENED) {
+				JMXController.log.info("New JMX remote connection initialized. Connection ID: " + ((JMXConnectionNotification) notification).getConnectionId());
+			} else if (notificationType == JMXConnectionNotification.CLOSED) {
+				JMXController.log.info("JMX remote connection closed. Connection ID: " + ((JMXConnectionNotification) notification).getConnectionId());
+			} else { // unknown message
+				JMXController.log.info(notificationType + ": " + notification.getMessage() + " (ID: "
+						+ ((JMXConnectionNotification) notification).getConnectionId() + ")");
+			}
+		}
 	}
 }

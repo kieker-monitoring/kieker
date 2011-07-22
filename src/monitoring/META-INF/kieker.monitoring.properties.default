@@ -35,6 +35,7 @@ kieker.monitoring.jmx.MonitoringController.name=MonitoringController
 # This implementation is probably only compatible with SUN JDKs
 kieker.monitoring.jmx.remote=false
 kieker.monitoring.jmx.remote.port=59999
+kieker.monitoring.jmx.remote.name=JMXServer
 # These properties will be forwarded to configure the JMX server
 com.sun.management.jmxremote.local.only=false
 com.sun.management.jmxremote.authenticate=false
@@ -207,7 +208,7 @@ kieker.monitoring.writer.database.AsyncDbWriter.loadInitialExperimentId=false
 #####
 #kieker.monitoring.writer=kieker.monitoring.writer.jmx.JMXWriter
 #
-## The domain used to register the MonitoringLog. If emtpy, the value
+## The domain used to register the MonitoringLog. If empty, the value
 ## of "kieker.monitoring.jmx.domain" will be used.
 kieker.monitoring.writer.jmx.JMXWriter.domain=
 #
