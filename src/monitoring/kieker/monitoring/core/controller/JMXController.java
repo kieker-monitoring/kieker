@@ -45,9 +45,9 @@ public final class JMXController extends AbstractController implements IJMXContr
 		this.jmxEnabled = configuration.getBooleanProperty(Configuration.ACTIVATE_JMX);
 		if (this.jmxEnabled) {
 			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE)) {
-				final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
 				try {
 					// TODO: careful! This will probably only work in SUN VMs, what happens in other VMs?
+					final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
 					port = configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_PORT);
 					server = ConnectorBootstrap.initialize(port, jmxProperties);
 					serverObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));

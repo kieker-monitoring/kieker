@@ -82,7 +82,7 @@ public class PropertyMap {
                 }
                 final String key = keyValTokens.nextToken().trim();
                 final String val = keyValTokens.nextToken().trim();
-                PropertyMap.log.info("Found key/value pair: " + key + "=" + val);
+                PropertyMap.log.debug("Found key/value pair: " + key + "=" + val);
                 this.map.put(key, val);
             }
         } catch (final Exception exc) {
