@@ -18,7 +18,6 @@ import org.apache.commons.cli.Options;
 public final class Benchmark {
 
 	private static PrintStream ps = null;
-	private static String configurationId = null;
 	private static String outputFn = null;
 	private static int totalThreads = 0;
 	private static int totalCalls = 0;
@@ -77,7 +76,7 @@ public final class Benchmark {
 		for (int h = 0; h < totalThreads; h++) {
 			timings = threads[h].getTimings();
 			for (int i = 0; i < totalCalls; i++) {
-				ps.println(configurationId + ";" + threads[h].getName() + ";" + timings[i]);
+				ps.println(threads[h].getName() + ";" + timings[i]);
 			}
 		}
 		ps.close();
@@ -91,8 +90,6 @@ public final class Benchmark {
 	@SuppressWarnings("static-access")
 	public static void parseAndInitializeArguments(String[] args) {
 		final Options cmdlOpts = new Options();
-		cmdlOpts.addOption(OptionBuilder.withLongOpt("configuration-id").withArgName("identifier").hasArg(true).isRequired(true)
-				.withDescription("Each line written to the CSV results file will start with this identifier.").withValueSeparator('=').create("c"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalcalls").withArgName("calls").hasArg(true).isRequired(true)
 				.withDescription("Number of total Method-Calls performed.").withValueSeparator('=').create("t"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("methodtime").withArgName("time").hasArg(true).isRequired(true)
@@ -108,7 +105,6 @@ public final class Benchmark {
 			final CommandLineParser cmdlParser = new BasicParser();
 			cmdl = cmdlParser.parse(cmdlOpts, args);
 			outputFn = cmdl.getOptionValue("output-filename");
-			configurationId = cmdl.getOptionValue("configuration-id");
 			totalCalls = Integer.parseInt(cmdl.getOptionValue("totalcalls"));
 			methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
 			totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));

@@ -1,5 +1,6 @@
 package kieker.analysis.reader.jmx;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import javax.management.InstanceNotFoundException;
@@ -32,12 +33,18 @@ public final class JMXReader extends AbstractMonitoringReader {
 
 	private JMXServiceURL serviceURL;
 	private ObjectName monitoringLog;
+	private final boolean silentreconnect;
 
 	/**
 	 * Constructor for JMXReader. Requires a subsequent call to the init method
 	 * in order to specify the input directory using the parameters
 	 */
 	public JMXReader() {
+		this(false);
+	}
+
+	public JMXReader(final boolean silentreconnect) {
+		this.silentreconnect = silentreconnect;
 	}
 
 	@Override
@@ -74,11 +81,18 @@ public final class JMXReader extends AbstractMonitoringReader {
 
 	@Override
 	public final boolean read() {
+		if (silentreconnect) return read2();
 		boolean ret = true;
 		JMXConnector jmx = null;
 		try {
 			// Connect to the Server
-			jmx = JMXConnectorFactory.connect(serviceURL);
+			try {
+				jmx = JMXConnectorFactory.connect(serviceURL);
+			} catch (final IOException e) {
+				JMXReader.log.error("Unable to connect to JMX Server (" + e.getMessage() + ")");
+				JMXReader.log.debug("Error in JMX connection!", e);
+				return false;
+			}
 			final ServerNotificationListener serverNotificationListener = new ServerNotificationListener();
 			jmx.addConnectionNotificationListener(serverNotificationListener, null, null);
 			final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
@@ -102,21 +116,63 @@ public final class JMXReader extends AbstractMonitoringReader {
 				JMXReader.log.debug("Failed to remove Listener!", e);
 			}
 		} catch (final InstanceNotFoundException e) {
-			JMXReader.log.error("No monitoring log found: " + this.monitoringLog.toString(), e);
+			JMXReader.log.error("No monitoring log found: " + this.monitoringLog.toString());
 			ret = false;
 		} catch (final Exception e) {
 			JMXReader.log.error("Error in JMX connection!", e);
 			ret = false;
 		} finally {
-			if (jmx != null) {
-				try {
-					jmx.close();
-				} catch (final Exception e) {
-					JMXReader.log.debug("Failed to close JMX connection!", e);
-				}
+			try {
+				jmx.close();
+			} catch (final Exception e) {
+				JMXReader.log.debug("Failed to close JMX connection!", e);
 			}
 		}
 		return ret;
+	}
+
+	private final boolean read2() {
+		JMXConnector jmx = null;
+		while (true) {
+			try {
+				// Connect to the Server
+				try {
+					jmx = JMXConnectorFactory.connect(serviceURL);
+				} catch (final IOException e) {
+					Thread.sleep(10000);
+					continue;
+				}
+				final ServerNotificationListener serverNotificationListener = new ServerNotificationListener();
+				jmx.addConnectionNotificationListener(serverNotificationListener, null, null);
+				final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
+				final LogNotificationListener logNotificationListener = new LogNotificationListener();
+				mbServer.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
+				JMXReader.log.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
+
+				// Waiting
+				block();
+
+				// Shutdown
+				JMXReader.log.info("Shutting down JMXReader");
+				try {
+					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
+				} catch (final Exception e) {
+				}
+				try {
+					jmx.removeConnectionNotificationListener(serverNotificationListener);
+				} catch (final ListenerNotFoundException e) {
+				}
+			} catch (final InstanceNotFoundException e) {
+			} catch (final Exception e) {
+				JMXReader.log.error("Error in JMX connection!", e);
+			} finally {
+				try {
+					jmx.close();
+					Thread.sleep(10000);
+				} catch (final Exception e) {
+				}
+			}
+		}
 	}
 
 	private final Object blockingObj = new Object();
@@ -154,10 +210,10 @@ public final class JMXReader extends AbstractMonitoringReader {
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType == JMXConnectionNotification.CLOSED) {
-				JMXReader.log.info("JMX connection closed.");
+				if (!silentreconnect) JMXReader.log.info("JMX connection closed.");
 				unblock();
 			} else if (notificationType == JMXConnectionNotification.FAILED) {
-				JMXReader.log.info("JMX connection lost.");
+				if (!silentreconnect) JMXReader.log.info("JMX connection lost.");
 				unblock();
 			} else if (notificationType == JMXConnectionNotification.NOTIFS_LOST) {
 				JMXReader.log.error("Monitoring record lost: " + notification.getMessage());
