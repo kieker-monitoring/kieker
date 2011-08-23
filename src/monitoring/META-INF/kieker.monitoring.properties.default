@@ -32,10 +32,15 @@ kieker.monitoring.jmx.MonitoringController=true
 kieker.monitoring.jmx.MonitoringController.name=MonitoringController
 
 # Controls JMX remote access
-# This implementation is probably only compatible with SUN JDKs
 kieker.monitoring.jmx.remote=false
 kieker.monitoring.jmx.remote.port=59999
 kieker.monitoring.jmx.remote.name=JMXServer
+# If the SUN-JMX Bootstrap class is not available, a fallback to the 
+# default implementation can be used. The fallback solution prevents 
+# the VM from terminating.
+# A graceful shutdown is done by connecting to the JMXServer, there to
+# kieker.monitoring.JMXServer and using the operation stop()
+kieker.monitoring.jmx.remote.fallback=true
 # These properties will be forwarded to configure the JMX server
 com.sun.management.jmxremote.local.only=false
 com.sun.management.jmxremote.authenticate=false

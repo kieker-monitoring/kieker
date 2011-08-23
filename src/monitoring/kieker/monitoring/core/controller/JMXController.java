@@ -12,6 +12,7 @@ import javax.management.ObjectName;
 import javax.management.StandardMBean;
 import javax.management.remote.JMXConnectionNotification;
 import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
 import kieker.monitoring.core.configuration.Configuration;
@@ -33,24 +34,46 @@ public final class JMXController extends AbstractController implements IJMXContr
 	private final ServerNotificationListener serverNotificationListener;
 	private final String port;
 
+	private final static int FallbackJMXImplementation = 0;
+	private final static int SunJMXImplementation = 1;
+	private final int usedJMXImplementation;
+
 	protected JMXController(final Configuration configuration) {
 		ObjectName controllerObjectName = null;
 		ObjectName serverObjectName = null;
 		JMXConnectorServer server = null;
 		ServerNotificationListener serverNotificationListener = null;
 		String port = "0";
+		int usedJMXImplementation = FallbackJMXImplementation;
 		this.domain = configuration.getStringProperty(Configuration.ACTIVATE_JMX_DOMAIN);
 		this.jmxEnabled = configuration.getBooleanProperty(Configuration.ACTIVATE_JMX);
 		if (this.jmxEnabled) {
 			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE)) {
 				try {
-					// TODO: careful! This will probably only work in SUN VMs, what happens in other VMs?
-					final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
 					port = configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_PORT);
-					// Reflection to suppress compiler warnings
-					server = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap").getMethod("initialize", String.class, Properties.class).invoke(null, port, jmxProperties);
-					serverObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
-					serverNotificationListener = new ServerNotificationListener();
+					try {
+						// Try using the "secret" SUN implementation
+						// Reflection to suppress compiler warnings
+						final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
+						server = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap")
+								.getMethod("initialize", String.class, Properties.class).invoke(null, port, jmxProperties);
+						usedJMXImplementation = SunJMXImplementation;
+					} catch (final Throwable ignoreErrors) {
+						if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE_FALLBACK)) {
+							JMXController.log.warn("Failed to initialize remote JMX server, falling back to default implementation");
+							// Fallback to default Implementation
+							final JMXServiceURL url = new JMXServiceURL("rmi", null, Integer.parseInt(port));
+							final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+							server = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbs);
+							server.start();
+						} else {
+							JMXController.log.warn("Failed to initialize remote JMX server and fallback is deactivated");
+						}
+					}
+					if ((server != null) && (server.isActive())) {
+						serverObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
+						serverNotificationListener = new ServerNotificationListener();
+					}
 				} catch (final Throwable e) {
 					JMXController.log.warn("Failed to initialize remote JMX server", e);
 				}
@@ -63,6 +86,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 				}
 			}
 		}
+		this.usedJMXImplementation = usedJMXImplementation;
 		this.port = port;
 		this.server = server;
 		this.controllerObjectName = controllerObjectName;
@@ -159,11 +183,18 @@ public final class JMXController extends AbstractController implements IJMXContr
 			sb.append("\tJMX remote access available:\n");
 			sb.append("\t\tService URL: '");
 			final JMXServiceURL url = this.server.getAddress();
-			try {
-				sb.append(new JMXServiceURL(url.getProtocol(), url.getHost(), url.getPort(), "/jndi/rmi://" + url.getHost() + ":" + this.port + "/" + "jmxrmi")
-						.toString());
-			} catch (final MalformedURLException e) {
-				// ignore, should not happen anyway
+			switch (this.usedJMXImplementation) {
+				case SunJMXImplementation:
+					try {
+						sb.append(new JMXServiceURL(url.getProtocol(), url.getHost(), url.getPort(), "/jndi/rmi://" + url.getHost() + ":" + this.port + "/"
+								+ "jmxrmi").toString());
+					} catch (final MalformedURLException ignoreErrors) {
+						// ignore, should not happen anyway
+					}
+					break;
+				default:
+					sb.append(url.toString());
+					break;
 			}
 			sb.append("'\n");
 			final String[] connections = this.server.getConnectionIds();
