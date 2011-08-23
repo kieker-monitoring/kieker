@@ -7,14 +7,19 @@ BINDIR=bin/
 BASEDIR=
 
 SLEEPTIME=30            ## 30
-NUM_LOOPS=1             ## 10
+NUM_LOOPS=1            ## 10
 THREADS=1               ## 1
-MAXRECURSIONDEPTH=1     ## 10
+MAXRECURSIONDEPTH=1    ## 10
 TOTALCALLS=2000000      ## 200000
 METHODTIME=500000       ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 2 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 2 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
 echo "Experiment will take circa ${TIME} seconds."
+
+# determine correct classpath separator
+CPSEPCHAR=":" # default :, ; for windows
+if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
+# echo "Classpath separator: '${CPSEPCHAR}'"
 
 RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 echo "Removing and recreating '$RESULTSDIR'"
@@ -43,9 +48,8 @@ JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/aspectjweaver-1.6.11.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF}"
-JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.jmx.JMXWriter"
+JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.jmx=true -Dkieker.monitoring.jmx.remote=true -Dkieker.monitoring.writer=kieker.monitoring.writer.jmx.JMXWriter"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt

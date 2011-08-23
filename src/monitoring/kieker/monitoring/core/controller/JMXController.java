@@ -33,7 +33,6 @@ public final class JMXController extends AbstractController implements IJMXContr
 	private final ServerNotificationListener serverNotificationListener;
 	private final String port;
 
-	@SuppressWarnings("all")
 	protected JMXController(final Configuration configuration) {
 		ObjectName controllerObjectName = null;
 		ObjectName serverObjectName = null;
@@ -48,7 +47,8 @@ public final class JMXController extends AbstractController implements IJMXContr
 					// TODO: careful! This will probably only work in SUN VMs, what happens in other VMs?
 					final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
 					port = configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_PORT);
-					server = sun.management.jmxremote.ConnectorBootstrap.initialize(port, jmxProperties);
+					// Reflection to suppress compiler warnings
+					server = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap").getMethod("initialize", String.class, Properties.class).invoke(null, port, jmxProperties);
 					serverObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
 					serverNotificationListener = new ServerNotificationListener();
 				} catch (final Throwable e) {

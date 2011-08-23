@@ -10,7 +10,7 @@ SLEEPTIME=30            ## 30
 NUM_LOOPS=1             ## 5
 THREADS=1               ## 1
 MAXRECURSIONDEPTH=1     ## 10
-TOTALCALLS=5000000       ## 200000
+TOTALCALLS=5000000      ## 200000
 METHODTIME=500000       ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
@@ -30,9 +30,6 @@ mkdir ${RESULTSDIR}stat/
 rm -f ${BASEDIR}kieker.log
 
 RESULTSFN="${RESULTSDIR}results.csv"
-# Write csv file headers:
-CSV_HEADER="iteration;order_index;recursion_depth;thread_id;duration_nsec"
-echo ${CSV_HEADER} > ${RESULTSFN}
 
 AOPXML_INSTR_DEACTPROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-deactivatedProbe.xml"
 AOPXML_INSTR_PROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-probe.xml"
@@ -41,8 +38,9 @@ KIEKER_MONITORING_CONF="${BASEDIR}configuration/kieker.monitoring.properties"
 
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
-JAVAARGS="${JAVAARGS} -Xmx12G"
-#JAVAARGS="${JAVAARGS} -XX:+PrintCompilation -XX:+PrintInlining"
+JAVAARGS="${JAVAARGS} -Xms512M -Xmx512M"
+JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
+#JAVAARGS="${JAVAARGS} -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
 JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
@@ -83,8 +81,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-1.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-1.txt &
         ${BINDJAVA} java  ${JAVAARGS_NOINSTR} ${JAR} \
-            --output-filename ${RESULTSFN} \
-            --configuration-id "${i};1;${j}" \
+            --output-filename ${RESULTSFN}-${i}-${j}-1.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
@@ -92,7 +89,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %mpstat
         kill %vmstat
         kill %iostat
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_1.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-1.log
         sync
         sleep ${SLEEPTIME}
 
@@ -103,8 +100,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-2.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-2.txt &
         ${BINDJAVA} java  ${JAVAARGS_KIEKER_DEACTV} ${JAR} \
-            --output-filename ${RESULTSFN} \
-            --configuration-id "${i};2;${j}" \
+            --output-filename ${RESULTSFN}-${i}-${j}-2.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
@@ -112,7 +108,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %mpstat
         kill %vmstat
         kill %iostat
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_2.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-2.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
         sync
@@ -124,8 +120,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-3.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-3.txt &
         ${BINDJAVA} java  ${JAVAARGS_KIEKER_NOLOGGING} ${JAR} \
-            --output-filename ${RESULTSFN} \
-            --configuration-id "${i};3;${j}" \
+            --output-filename ${RESULTSFN}-${i}-${j}-3.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
@@ -133,7 +128,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %mpstat
         kill %vmstat
         kill %iostat
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_3.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-3.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
         sync
@@ -145,8 +140,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-4.txt &
         iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-4.txt &
         ${BINDJAVA} java  ${JAVAARGS_KIEKER_LOGGING} ${JAR} \
-            --output-filename ${RESULTSFN} \
-            --configuration-id "${i};4;${j}" \
+            --output-filename ${RESULTSFN}-${i}-${j}-4.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
@@ -156,7 +150,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         kill %iostat
         mkdir -p ${RESULTSDIR}kiekerlog/
         mv ${BASEDIR}tmp/kieker-* ${RESULTSDIR}kiekerlog/
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot_${i}_4.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-4.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
         sync
@@ -172,6 +166,5 @@ tar cf ${RESULTSDIR}stat.tar ${RESULTSDIR}stat
 rm -rf ${RESULTSDIR}stat/
 gzip -9 ${RESULTSDIR}stat.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
-## ${BINDIR}run-r-benchmark-recursive.sh
-[ -f ${RESULTSDIR}hotspot_1_1.log ] && grep "<task " ${RESULTSDIR}hotspot_*.log >${RESULTSDIR}log.log
+[ -f ${RESULTSDIR}hotspot-1-1-1.log ] && grep "<task " ${RESULTSDIR}hotspot-*.log >${RESULTSDIR}log.log
 [ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}
