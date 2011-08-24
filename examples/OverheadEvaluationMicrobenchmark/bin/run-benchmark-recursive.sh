@@ -7,10 +7,10 @@ BINDIR=bin/
 BASEDIR=
 
 SLEEPTIME=30            ## 30
-NUM_LOOPS=1             ## 5
+NUM_LOOPS=10            ## 10
 THREADS=1               ## 1
-MAXRECURSIONDEPTH=1     ## 10
-TOTALCALLS=5000000      ## 200000
+MAXRECURSIONDEPTH=10    ## 10
+TOTALCALLS=2000000      ## 200000
 METHODTIME=500000       ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
@@ -38,8 +38,8 @@ KIEKER_MONITORING_CONF="${BASEDIR}configuration/kieker.monitoring.properties"
 
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
-JAVAARGS="${JAVAARGS} -Xms512M -Xmx512M"
-JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
+JAVAARGS="${JAVAARGS} -Xms1G -Xmx1G"
+#JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
 #JAVAARGS="${JAVAARGS} -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
