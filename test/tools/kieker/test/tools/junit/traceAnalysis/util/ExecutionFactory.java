@@ -39,8 +39,8 @@ public class ExecutionFactory {
      * @param tout
      * @param eoi
      * @param ess
-     * @throws NullPointerException iff one of the String args has the value null.
-     * @return
+     * @throws NullPointerException if one of the String args has the value null.
+     * @return the created Execution object
      */
     public Execution genExecution(
             final String componentTypeName,
@@ -126,7 +126,7 @@ public class ExecutionFactory {
      * @param tout
      * @param eoi
      * @param ess
-     * @return
+     * @return the created Execution object
      */
     public Execution genExecution(
             final long traceId,

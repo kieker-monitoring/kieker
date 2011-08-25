@@ -52,7 +52,7 @@ public class TestControllerConstruction extends TestCase {
 	}
 
 	/**
-	 * Make sure that {@link StateController#getInstance()} always returns the same instance.
+	 * Make sure that {@link MonitoringController#getInstance()} always returns the same instance.
 	 */
 	public void testSingletonGetterOnlyOneInstance() {
 		Assert.assertSame("singleton getter returned different objects", MonitoringController.getInstance(), MonitoringController.getInstance());

@@ -105,7 +105,7 @@ public class Execution implements IAnalysisEvent {
      * Returns the sessionId and a default sessionId if no sessionId assigned.
      * The return value won't be null.
      *
-     * @return
+     * @return the sessionId.
      */
     public final String getSessionId() {
         return sessionId;

@@ -32,7 +32,7 @@ private DotFactory(){
 /**
  * Constructs dot code for a directed graph (digraph) file header.
  * (Should be called only once per dot file.)
- * @param nodeId
+ * @param name
  * @param label text to show at the label locacion (specified elsewhere) with HTML braces (&lt;&gt;)
  * @param fontcolor
  * @param fontname
@@ -126,7 +126,7 @@ public static StringBuilder createNode( String prefix, String nodeId, String lab
  * <strong>ATTENTION: Without closing bracket!</strong>
  * ( "}" has to be appended by calling method.)
  * @param prefix usually spaces, dependent on hierarchy - only for nice ascii formatting inside the dot code
- * @param nodeId
+ * @param name
  * @param label
  * @param shape
  * @param style

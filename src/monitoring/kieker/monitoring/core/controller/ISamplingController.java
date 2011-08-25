@@ -13,7 +13,7 @@ public interface ISamplingController {
 	/**
 	 * Schedules the given {@link ISampler} with given initial delay, and period.
 	 * 
-	 * @param sigarLogger
+	 * @param sampler
 	 * @param initialDelay
 	 * @param period
 	 * @param timeUnit

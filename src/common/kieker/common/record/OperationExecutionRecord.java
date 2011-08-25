@@ -223,7 +223,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the experimentId to set
+	 * @param experimentId the experimentId to set
 	 */
 	public final void setExperimentId(final int experimentId) {
 		this.experimentId = experimentId;
@@ -237,7 +237,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the hostName to set
+	 * @param hostName the hostName to set
 	 */
 	public final void setHostName(final String hostName) {
 		this.hostName = hostName;
@@ -251,7 +251,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the className to set
+	 * @param className the className to set
 	 */
 	public final void setClassName(final String className) {
 		this.className = className;
@@ -265,7 +265,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the operationName to set
+	 * @param operationName the operationName to set
 	 */
 	public final void setOperationName(final String operationName) {
 		this.operationName = operationName;
@@ -279,7 +279,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the sessionId to set
+	 * @param sessionId the sessionId to set
 	 */
 	public final void setSessionId(final String sessionId) {
 		this.sessionId = sessionId;
@@ -293,7 +293,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the traceId to set
+	 * @param traceId the traceId to set
 	 */
 	public final void setTraceId(final long traceId) {
 		this.traceId = traceId;
@@ -307,7 +307,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the tin to set
+	 * @param tin the tin to set
 	 */
 	public final void setTin(final long tin) {
 		this.tin = tin;
@@ -321,7 +321,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the tout to set
+	 * @param tout the tout to set
 	 */
 	public final void setTout(final long tout) {
 		this.tout = tout;
@@ -335,7 +335,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the eoi to set
+	 * @param eoi the eoi to set
 	 */
 	public final void setEoi(final int eoi) {
 		this.eoi = eoi;
@@ -349,7 +349,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param the ess to set
+	 * @param ess the ess to set
 	 */
 	public final void setEss(final int ess) {
 		this.ess = ess;

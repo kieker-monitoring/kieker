@@ -24,7 +24,7 @@ public class TimestampEvent implements IAnalysisEvent {
 	/**
 	 * Returns the current time.
 	 * 
-	 * @return
+	 * @return the current time.
 	 */
 	public long getTimestamp() {
 		return this.timestamp;

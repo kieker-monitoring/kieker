@@ -60,7 +60,7 @@ public final class ControlFlowRegistry {
 	/**
 	 * This methods returns a globally unique trace id.
 	 * 
-	 * @return
+	 * @return a globally unique trace id.
 	 */
 	public final long getUniqueTraceId() {
 		long id = lastThreadId.incrementAndGet();

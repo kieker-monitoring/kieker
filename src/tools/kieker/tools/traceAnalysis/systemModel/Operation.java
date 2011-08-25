@@ -41,10 +41,10 @@ public class Operation {
 
 
     /**
-     * Two Operation objects are equal iff their ids are equal.
+     * Two Operation objects are equal if their ids are equal.
      *
      * @param obj
-     * @return
+     * @return true if the two objects are equal.
      */
     @Override
     public boolean equals(Object obj) {

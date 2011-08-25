@@ -27,7 +27,7 @@ public final class Configuration extends Properties implements Keys {
 	 * singleton instance, i.e., each call returns an equal but not same set of
 	 * {@link Properties}.
 	 * 
-	 * @return
+	 * @return the configuration for the singleton controller
 	 */
 	public final static Configuration createSingletonConfiguration() {
 		Configuration.log.debug("Searching for JVM argument '" + CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
@@ -64,7 +64,7 @@ public final class Configuration extends Properties implements Keys {
 	 * Creates a new configuration based on the given properties file with fallback on the default values.
 	 * 
 	 * @param configurationFile
-	 * @return
+	 * @return the created Configuration
 	 */
 	public final static Configuration createConfigurationFromFile(final String configurationFile) {
 		return loadConfigurationFromFile(configurationFile, defaultConfiguration());

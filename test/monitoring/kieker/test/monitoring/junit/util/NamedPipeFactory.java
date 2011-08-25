@@ -31,7 +31,7 @@ public class NamedPipeFactory {
 	 * {@link Configuration}s with {@link PipeWriter}s and {@link PipedReader}s
 	 * in order to avoid naming conflicts.
 	 * 
-	 * @return
+	 * @return a unique name
 	 */
 	public static String createPipeName() {
 		return NamedPipeFactory.PIPE_NAME_PREFIX
@@ -43,7 +43,7 @@ public class NamedPipeFactory {
 	 * being a {@link PipeWriter} with the given name.
 	 * 
 	 * @param pipeName
-	 * @return
+	 * @return the created IMonitoringController instance
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(
 			final String pipeName) {
@@ -59,7 +59,7 @@ public class NamedPipeFactory {
 	 * @param pipeName
 	 * @param additionalProperties
 	 *            additional configuration properties; null is allowed
-	 * @return
+	 * @return the created IMonitoringController instance
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(
 			final String pipeName, final Properties additionalProperties) {
@@ -88,7 +88,7 @@ public class NamedPipeFactory {
 	 * {@link Pipe} and collects these in the returned {@link List}.
 	 * 
 	 * @param pipeName
-	 * @return
+	 * @return a list which contains the collected records
 	 */
 	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(
 			final String pipeName) {

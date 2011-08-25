@@ -90,7 +90,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     /**
      * Returns a set of the IDs of invalid traces.
      *
-     * @return
+     * @return a set of the IDs of invalid traces
      */
     public Set<Long> getInvalidTraces() {
         return this.invalidTraces;
@@ -99,7 +99,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     /**
      * Returns the minimum tin timestamp of a processed execution.
      *
-     * @return
+     * @return the minimum tin timestamp of a processed execution
      */
     public final long getMinTin() {
         return this.minTin;
@@ -108,7 +108,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
     /**
      * Returns the maximum tout timestamp of a processed execution.
      *
-     * @return
+     * @return the maximum tout timestamp of a processed execution
      */
     public final long getMaxTout() {
         return this.maxTout;
@@ -238,7 +238,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
      * Return the number of nanoseconds after which a pending trace is 
      * considered to have timed out
      * 
-     * @return
+     * @return the timeout duration for a pending trace in nanoseconds
      */
     public final long getMaxTraceDurationNanos() {
         return maxTraceDurationNanos;

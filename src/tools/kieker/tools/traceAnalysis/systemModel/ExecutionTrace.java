@@ -183,7 +183,7 @@ public class ExecutionTrace extends Trace {
      * Returns the length of this trace in terms of the number of contained
      * executions.
      *
-     * @return
+     * @return the length of this trace.
      */
     public synchronized final int getLength() {
         return this.set.size();
@@ -232,7 +232,7 @@ public class ExecutionTrace extends Trace {
      * This value is the difference between the maximum tout and the minimum
      * tin value. 
      * 
-     * @return
+     * @return the duration of this trace in nanoseconds.
      */
     public synchronized long getDurationInNanos(){
         return this.getMaxTout() - this.minTin;
@@ -264,11 +264,11 @@ public class ExecutionTrace extends Trace {
 
     /**
      * Returns whether this Execution Trace and the passed Object are equal.
-     * Two execution traces are equal iff the set of contained executions is
+     * Two execution traces are equal if the set of contained executions is
      * equal.
      *
      * @param obj
-     * @return
+     * @return true if the two objects are equal.
      */
     @Override
     public synchronized boolean equals(Object obj) {

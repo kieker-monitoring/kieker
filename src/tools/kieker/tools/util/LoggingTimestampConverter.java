@@ -26,7 +26,7 @@ public class LoggingTimestampConverter {
      * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
      *
      * @param loggingTimestamp
-     * @return
+     * @return a human-readable datetime string (UTC timezone) which represents the passed timestamp
      */
     public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
         GregorianCalendar c = new GregorianCalendar();
@@ -45,7 +45,7 @@ public class LoggingTimestampConverter {
      * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
      *
      * @param loggingTimestamp
-     * @return
+     * @return a human-readable datetime string (local timezone) which represents the passed timestamp
      */
     public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
         GregorianCalendar c = new GregorianCalendar();
@@ -60,7 +60,7 @@ public class LoggingTimestampConverter {
      * since Jan 1, 1970 UTC.
      *
      * @param utcString
-     * @return
+     * @return a timestamp which represents the passed time
      * @throws ParseException
      */
     public static final long convertDatetimeStringToUTCLoggingTimestamp(final String utcString)
@@ -75,7 +75,7 @@ public class LoggingTimestampConverter {
      * into a Date object.
      *
      * @param utcString
-     * @return
+     * @return a Date object which represents the passed time
      * @throws ParseException
      */
     public static final Date convertDatetimeStringToUTCDate(final String utcString)

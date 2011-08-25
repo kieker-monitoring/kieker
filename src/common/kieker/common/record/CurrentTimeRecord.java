@@ -15,7 +15,7 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
     /**
      * Returns the current time.
      * 
-     * @return
+     * @return the current time.
      */
     public long getCurrentTime() {
 		return this.currentTime;

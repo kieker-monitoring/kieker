@@ -47,7 +47,6 @@ public class JMSReader extends AbstractMonitoringReader {
 	 * 			 = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
-	 * @return
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination,
 			final String jmsFactoryLookupName) {

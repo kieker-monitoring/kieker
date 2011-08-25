@@ -19,21 +19,21 @@ public interface ISigarSamplerFactory {
 	/**
 	 * Creates an instance of {@link MemSwapUsageSampler}.
 	 * 
-	 * @return
+	 * @return the created instance.
 	 */
 	public MemSwapUsageSampler createSensorMemSwapUsage();
 
 	/**
 	 * Creates an instance of {@link CPUsDetailedPercSampler}.
 	 * 
-	 * @return
+	 * @return the created instance.
 	 */
 	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc();
 
 	/**
 	 * Creates an instance of {@link CPUsCombinedPercSampler}.
 	 * 
-	 * @return
+	 * @return the created instance.
 	 */
 	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc();
 }

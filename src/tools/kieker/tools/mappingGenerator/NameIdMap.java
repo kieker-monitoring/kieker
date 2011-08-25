@@ -36,7 +36,7 @@ public class NameIdMap {
      * id is returned.
      *
      * @param name
-     * @return
+     * @return the id for the given name.
      */
     public int registerName(String name) {
         Integer idObj = this.name2IdMap.get(name);

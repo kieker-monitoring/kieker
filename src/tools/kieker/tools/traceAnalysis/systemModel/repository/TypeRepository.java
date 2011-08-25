@@ -36,7 +36,7 @@ public class TypeRepository extends AbstractSystemSubRepository {
      *
      * @param namedIdentifier
      * @param fullqualifiedName
-     * @return
+     * @return the created component type
      * @throws IllegalArgumentException if a component type with the given 
      * namedIdentifier has already been registered
      */
@@ -57,7 +57,7 @@ public class TypeRepository extends AbstractSystemSubRepository {
     /**
      * Returns a collection of all registered component types.
      *
-     * @return
+     * @return a collection of all registered component types.
      */
     public synchronized  final Collection<ComponentType> getComponentTypes(){
         return this.componentTypesById.values();

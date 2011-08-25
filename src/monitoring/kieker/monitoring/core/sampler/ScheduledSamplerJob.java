@@ -22,7 +22,7 @@ public class ScheduledSamplerJob implements Runnable {
 	 *            used to log the sampled data (represented as
 	 *            {@link IMonitoringRecord}s) via
 	 *            {@link IMonitoringController#newMonitoringRecord(IMonitoringRecord)}
-	 * @param sampler
+	 * @param sensor
 	 *            sampler to be trigger via
 	 *            {@link ISampler#sample(IMonitoringController)}
 	 */

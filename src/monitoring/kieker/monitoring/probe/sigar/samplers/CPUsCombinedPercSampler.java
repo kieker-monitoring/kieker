@@ -22,7 +22,7 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	 * Constructs a new {@link AbstractSigarSampler} with given
 	 * {@link SigarProxy} instance used to retrieve the sensor data. Users
 	 * should use the factory method
-	 * {@link SigarSamplerFactory#createSensorCPUsCombinedPerc()} to acquire an
+	 * {@link kieker.monitoring.probe.sigar.SigarSamplerFactory#createSensorCPUsCombinedPerc()} to acquire an
 	 * instance rather than calling this constructor directly.
 	 * 
 	 * @param sigar

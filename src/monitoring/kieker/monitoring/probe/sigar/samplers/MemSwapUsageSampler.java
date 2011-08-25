@@ -23,7 +23,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	 * Constructs a new {@link AbstractSigarSampler} with given
 	 * {@link SigarProxy} instance used to retrieve the sensor data. Users
 	 * should use the factory method
-	 * {@link SigarSamplerFactory#createSensorMemSwapUsage()} to acquire an
+	 * {@link kieker.monitoring.probe.sigar.SigarSamplerFactory#createSensorMemSwapUsage()} to acquire an
 	 * instance rather than calling this constructor directly.
 	 * 
 	 * @param sigar

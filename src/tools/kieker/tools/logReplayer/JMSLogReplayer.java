@@ -43,7 +43,6 @@ public class JMSLogReplayer {
 	 * 			 = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
-	 * @return
 	 */
 	public JMSLogReplayer(final IMonitoringRecordReceiver recordReceiver,
 			final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
