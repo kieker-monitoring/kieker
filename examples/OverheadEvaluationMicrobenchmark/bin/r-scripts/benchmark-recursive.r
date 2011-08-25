@@ -46,4 +46,4 @@ for (i in recdepth) {
   }
 }
 rm(output_fn,medianval,meanval,i,j,labeltext,density,angle)
-dev.off()
+invisible(dev.off())

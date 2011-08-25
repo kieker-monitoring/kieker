@@ -32,9 +32,9 @@ for (cl in (1:configs.loop)) {
     ts.plot(
       ts(results.ts[1,],end=results.count,deltat=buckets.size),
       ts(results.ts[2,],end=results.count,deltat=buckets.size),
-      gpars=list(ylim=c(500,506),col=configs.colors))
+      gpars=list(ylim=c(500,520),col=configs.colors))
       legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean execution time of ...",ncol=2)
-    title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr, sep=""),ylab="Execution Time (µs)")
+    title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr, sep=""),ylab="Execution Time (µs)",xlab="Executions")
   }
 }
-dev.off()
+invisible(dev.off())
