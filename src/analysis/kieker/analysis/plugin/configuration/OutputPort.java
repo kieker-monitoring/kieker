@@ -2,9 +2,8 @@ package kieker.analysis.plugin.configuration;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import kieker.analysis.plugin.IAnalysisEvent;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -12,13 +11,15 @@ import org.apache.commons.logging.LogFactory;
  */
 public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
 
-    private static final Log log = LogFactory.getLog(OutputPort.class);
+    //private static final Log log = LogFactory.getLog(OutputPort.class);
+    
     /** Should use "better" data structure from java.concurrent */
     private final Collection<IInputPort<T>> subscriber =
             new ArrayList<IInputPort<T>>();
     private final String description;
 
-    private OutputPort() {
+    @SuppressWarnings("unused")
+	private OutputPort() {
         this.description = null;
     }
 
@@ -26,21 +27,24 @@ public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
         this.description = description;
     }
 
-    public synchronized void deliver(T event) {
-        for (IInputPort<T> l : this.subscriber) {
+    public synchronized void deliver(final T event) {
+        for (final IInputPort<T> l : this.subscriber) {
             l.newEvent(event);
         }
     }
 
-    public synchronized void subscribe(IInputPort<T> subscriber) {
+    @Override
+	public synchronized void subscribe(final IInputPort<T> subscriber) {
         this.subscriber.add(subscriber);
     }
 
-    public synchronized void unsubscribe(IInputPort<T> subscriber) {
+    @Override
+	public synchronized void unsubscribe(final IInputPort<T> subscriber) {
         this.subscriber.remove(subscriber);
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return this.description;
     }
 }

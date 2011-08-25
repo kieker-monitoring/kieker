@@ -11,14 +11,15 @@ public class Execution implements IAnalysisEvent {
 
     private final Operation operation;
     private final AllocationComponent allocationComponent;
-    private long traceId;
-    private String sessionId;
+    private final long traceId;
+    private final String sessionId;
     private final int eoi;
     private final int ess;
     private final long tin;
     private final long tout;
 
-    private Execution() {
+    @SuppressWarnings("unused")
+	private Execution() {
         this.operation = null;
         this.allocationComponent = null;
         this.traceId = -1;
@@ -82,23 +83,23 @@ public class Execution implements IAnalysisEvent {
     public Execution(final Operation op, final AllocationComponent allocationComponent,
             final long traceId, final int eoi, final int ess,
             final long tin, final long tout) {
-        this(op, allocationComponent, traceId, NO_SESSION_ID, eoi, ess, tin, tout);
+        this(op, allocationComponent, traceId, Execution.NO_SESSION_ID, eoi, ess, tin, tout);
     }
 
     public final AllocationComponent getAllocationComponent() {
-        return allocationComponent;
+        return this.allocationComponent;
     }
 
     public final int getEoi() {
-        return eoi;
+        return this.eoi;
     }
 
     public final int getEss() {
-        return ess;
+        return this.ess;
     }
 
     public final Operation getOperation() {
-        return operation;
+        return this.operation;
     }
 
     /**
@@ -108,30 +109,30 @@ public class Execution implements IAnalysisEvent {
      * @return the sessionId.
      */
     public final String getSessionId() {
-        return sessionId;
+        return this.sessionId;
     }
 
     public final long getTin() {
-        return tin;
+        return this.tin;
     }
 
     public final long getTout() {
-        return tout;
+        return this.tout;
     }
 
     public final long getTraceId() {
-        return traceId;
+        return this.traceId;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof Execution)){
             return false;
         }
         if (this == obj) {
             return true;
         }
-        Execution other = (Execution)obj;
+        final Execution other = (Execution)obj;
         return this.allocationComponent.equals(other.allocationComponent)
                 && this.operation.equals(other.operation)
                 && this.sessionId.equals(other.sessionId)
@@ -158,7 +159,7 @@ public class Execution implements IAnalysisEvent {
 
     @Override
     public String toString(){
-        StringBuilder strBuild = new StringBuilder();
+        final StringBuilder strBuild = new StringBuilder();
             strBuild.append(this.traceId);
             strBuild.append("[").append(this.eoi)
                     .append(",").append(this.ess).append("]").append(" ");
@@ -166,7 +167,7 @@ public class Execution implements IAnalysisEvent {
             strBuild.append(this.allocationComponent.toString()).append(".");
             strBuild.append(this.operation.getSignature().getName()).append(" ");
 
-            strBuild.append((this.sessionId!=null)?this.sessionId:NO_SESSION_ID);
+            strBuild.append((this.sessionId!=null)?this.sessionId:Execution.NO_SESSION_ID);
 
             return strBuild.toString();
     }

@@ -2,15 +2,14 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
+
+import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
-import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -18,10 +17,10 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TestTraceIdFilter extends TestCase {
 
-    private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
+    //private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
 
     private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
-    private final ExecutionFactory eFactory = new ExecutionFactory(systemEntityFactory);
+    private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
     /**
      * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
@@ -29,19 +28,19 @@ public class TestTraceIdFilter extends TestCase {
      * <i>idsToPass</i> is not passed through the filter.
      */
     public void testAssertIgnoreTraceId() {
-        TreeSet<Long> idsToPass = new TreeSet<Long>();
+        final TreeSet<Long> idsToPass = new TreeSet<Long>();
         idsToPass.add(5l);
         idsToPass.add(7l);
         
-        TraceIdFilter filter =
+        final TraceIdFilter filter =
                 new TraceIdFilter(idsToPass);
 
-        final Execution exec = eFactory.genExecution(
+        final Execution exec = this.eFactory.genExecution(
                 11l,     // traceId (must not be element of idsToPass)
                 5,      // tin (value not important)
                 10,     // tout (value not important)
                 0, 0);  // eoi, ess (values not important)
-        assertTrue("Testcase invalid", !idsToPass.contains(exec.getTraceId()));
+        Assert.assertTrue("Testcase invalid", !idsToPass.contains(exec.getTraceId()));
 
         final AtomicReference<Boolean> filterPassedRecord =
                 new AtomicReference<Boolean>(Boolean.FALSE);
@@ -51,12 +50,13 @@ public class TestTraceIdFilter extends TestCase {
             /**
              * In this test, this method should not be called.
              */
-            public void newEvent(Execution event) {
+            @Override
+			public void newEvent(final Execution event) {
                 filterPassedRecord.set(Boolean.TRUE);
             }
         });
         filter.getExecutionInputPort().newEvent(exec);
-        assertFalse("Filter passed execution " + exec
+        Assert.assertFalse("Filter passed execution " + exec
             + " although traceId not element of " +
             idsToPass,
             filterPassedRecord.get());
@@ -68,19 +68,19 @@ public class TestTraceIdFilter extends TestCase {
      * <i>idsToPass</i> is passed through the filter.
      */
     public void testAssertPassTraceId() {
-        TreeSet<Long> idsToPass = new TreeSet<Long>();
+        final TreeSet<Long> idsToPass = new TreeSet<Long>();
         idsToPass.add(5l);
         idsToPass.add(7l);
 
-        TraceIdFilter filter =
+        final TraceIdFilter filter =
                 new TraceIdFilter(idsToPass);
 
-        final Execution exec = eFactory.genExecution(
+        final Execution exec = this.eFactory.genExecution(
                 7l,     // traceId (must be element of idsToPass)
                 5,      // tin (value not important)
                 10,     // tout (value not important)
                 0, 0);  // eoi, ess (values not important)
-        assertTrue("Testcase invalid", idsToPass.contains(exec.getTraceId()));
+        Assert.assertTrue("Testcase invalid", idsToPass.contains(exec.getTraceId()));
 
         final AtomicReference<Boolean> filterPassedRecord =
                 new AtomicReference<Boolean>(Boolean.FALSE);
@@ -90,13 +90,14 @@ public class TestTraceIdFilter extends TestCase {
             /**
              * In this test, this method must be called.
              */
-            public void newEvent(Execution event) {
+            @Override
+			public void newEvent(final Execution event) {
                 filterPassedRecord.set(Boolean.TRUE);
-                assertSame(exec, event);
+                Assert.assertSame(exec, event);
             }
         });
         filter.getExecutionInputPort().newEvent(exec);
-        assertTrue("Filter didn't pass execution " + exec
+        Assert.assertTrue("Filter didn't pass execution " + exec
             + " although traceId element of " +
             idsToPass,
             filterPassedRecord.get());

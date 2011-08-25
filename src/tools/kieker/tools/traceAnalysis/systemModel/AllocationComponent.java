@@ -11,7 +11,8 @@ public class AllocationComponent {
     private final AssemblyComponent assemblyComponent;
     private final ExecutionContainer executionContainer;
 
-    private AllocationComponent(){
+    @SuppressWarnings("unused")
+	private AllocationComponent(){
         this.id = -1;
         this.assemblyComponent = null;
         this.executionContainer = null;
@@ -40,7 +41,7 @@ public class AllocationComponent {
 
     @Override
     public final String toString(){
-        StringBuilder strBuild = new StringBuilder();
+        final StringBuilder strBuild = new StringBuilder();
         strBuild.append(this.executionContainer.getName())
                 .append("::").append(this.assemblyComponent.toString());
         return strBuild.toString();
@@ -52,11 +53,11 @@ public class AllocationComponent {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof AllocationComponent)){
             return false;
         }
-        AllocationComponent other = (AllocationComponent)obj;
+        final AllocationComponent other = (AllocationComponent)obj;
         return other.id == this.id;
     }
 }

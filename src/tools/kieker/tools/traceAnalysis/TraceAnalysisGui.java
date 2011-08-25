@@ -52,7 +52,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	private final JCheckBox plotSq = new JCheckBox(),
 	plotComp = new JCheckBox(), plotCont = new JCheckBox(),
 	plotOp = new JCheckBox(), plotAgg = new JCheckBox(),
-	plotCall = new JCheckBox(), printCall = new JCheckBox(),
+	plotCall = new JCheckBox(), //printCall = new JCheckBox(),
 	printMsg = new JCheckBox(), printExe = new JCheckBox(),
 	printInv = new JCheckBox(), printEquiv = new JCheckBox();
 	private GridBagLayout g;

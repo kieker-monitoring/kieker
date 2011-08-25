@@ -13,7 +13,8 @@ public class AssemblyComponentOperationPair {
 
     private final AssemblyComponent assemblyComponent;
 
-    private AssemblyComponentOperationPair (){
+    @SuppressWarnings("unused")
+	private AssemblyComponentOperationPair (){
         this.id = -1;
         this.operation = null;
         this.assemblyComponent = null;

@@ -11,14 +11,14 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import kieker.tools.mappingGenerator.filters.composite.NoInterfaceNoSuperclassFilter;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,7 +31,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public class MethodExtractorTool {
 
-    private static final Log log = LogFactory.getLog(MethodExtractorTool.class);
+    //private static final Log log = LogFactory.getLog(MethodExtractorTool.class);
+    
     private static CommandLine cmdl = null;
     private static final CommandLineParser cmdlParser = new BasicParser();
     private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
@@ -42,39 +43,39 @@ public class MethodExtractorTool {
 
 
     static {
-        cmdlOpts.addOption(OptionBuilder.withArgName("classpath").hasArg().withLongOpt("searchpath").isRequired(true).withDescription("Classpath to analyze. Multiple classpath elements can be separated by '" + File.pathSeparator + "'.").withValueSeparator('=').create("c"));
-        cmdlOpts.addOption(OptionBuilder.withArgName("classname").hasArg().withLongOpt("filter-classname").isRequired(false).withDescription("Classname of the filter to use.\n Defaults to " + NoInterfaceNoSuperclassFilter.class.getName()).withValueSeparator('=').create("f"));
-        cmdlOpts.addOption(OptionBuilder.withArgName("filename").hasArg().withLongOpt("mapping-file").isRequired(true).withDescription("Name of mapping file to be written").withValueSeparator('=').create("m"));
+        MethodExtractorTool.cmdlOpts.addOption(OptionBuilder.withArgName("classpath").hasArg().withLongOpt("searchpath").isRequired(true).withDescription("Classpath to analyze. Multiple classpath elements can be separated by '" + File.pathSeparator + "'.").withValueSeparator('=').create("c"));
+        MethodExtractorTool.cmdlOpts.addOption(OptionBuilder.withArgName("classname").hasArg().withLongOpt("filter-classname").isRequired(false).withDescription("Classname of the filter to use.\n Defaults to " + NoInterfaceNoSuperclassFilter.class.getName()).withValueSeparator('=').create("f"));
+        MethodExtractorTool.cmdlOpts.addOption(OptionBuilder.withArgName("filename").hasArg().withLongOpt("mapping-file").isRequired(true).withDescription("Name of mapping file to be written").withValueSeparator('=').create("m"));
     }
 
-    private static boolean parseArgs(String[] args) {
+    private static boolean parseArgs(final String[] args) {
         try {
-            cmdl = cmdlParser.parse(cmdlOpts, args);
-        } catch (ParseException e) {
+            MethodExtractorTool.cmdl = MethodExtractorTool.cmdlParser.parse(MethodExtractorTool.cmdlOpts, args);
+        } catch (final ParseException e) {
             System.err.println("Error parsing arguments: " + e.getMessage());
-            printUsage();
+            MethodExtractorTool.printUsage();
             return false;
         }
         return true;
     }
 
     private static void printUsage() {
-        cmdHelpFormatter.printHelp(MethodExtractorTool.class.getName(), cmdlOpts);
+        MethodExtractorTool.cmdHelpFormatter.printHelp(MethodExtractorTool.class.getName(), MethodExtractorTool.cmdlOpts);
     }
 
     private static boolean initFromArgs() {
-        cp = cmdl.getOptionValue("searchpath");
-        filter = cmdl.getOptionValue("filter-classname", NoInterfaceNoSuperclassFilter.class.getName());
-        mappingFile = cmdl.getOptionValue("mapping-file");
+        MethodExtractorTool.cp = MethodExtractorTool.cmdl.getOptionValue("searchpath");
+        MethodExtractorTool.filter = MethodExtractorTool.cmdl.getOptionValue("filter-classname", NoInterfaceNoSuperclassFilter.class.getName());
+        MethodExtractorTool.mappingFile = MethodExtractorTool.cmdl.getOptionValue("mapping-file");
         return true;
     }
 
     public static void main(final String[] args) throws ClassNotFoundException {
-        if (!parseArgs(args) || !initFromArgs()) {
+        if (!MethodExtractorTool.parseArgs(args) || !MethodExtractorTool.initFromArgs()) {
             System.exit(1);
         }
 
-        MethodExtractor extrInstance = new MethodExtractor(cp, filter, mappingFile);
+        final MethodExtractor extrInstance = new MethodExtractor(MethodExtractorTool.cp, MethodExtractorTool.filter, MethodExtractorTool.mappingFile);
         if (!extrInstance.execute()) {
             System.err.println("An error occured. See 'kieker.log' for details.");
             System.exit(1);
@@ -90,7 +91,7 @@ class MethodExtractor extends ClassLoader {
     private String mappingFile = null;
     private final NameIdMap map = new NameIdMap();
 
-    public MethodExtractor(String cp, String filtername, String mappingFile) {
+    public MethodExtractor(final String cp, final String filtername, final String mappingFile) {
         this.cp = cp;
         this.filtername = filtername;
         this.mappingFile = mappingFile;
@@ -100,30 +101,30 @@ class MethodExtractor extends ClassLoader {
     public boolean execute() {
         boolean retval = false;
         try {
-            String[] elem = cp.split(File.pathSeparator);
+            final String[] elem = this.cp.split(File.pathSeparator);
             Class<MethodFilter> filter = null;
             try {
-                filter = (Class<MethodFilter>) loadClass(this.filtername);
-            } catch (Exception e) {
-                log.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...");
+                filter = (Class<MethodFilter>) this.loadClass(this.filtername);
+            } catch (final Exception e) {
+                MethodExtractor.log.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...");
                 e.printStackTrace();
             }
-            Vector<File> directories = new Vector<File>();
-            Vector<File> jars = new Vector<File>();
-            for (String string : elem) {
-                File f = new File(string);
+            final Vector<File> directories = new Vector<File>();
+            final Vector<File> jars = new Vector<File>();
+            for (final String string : elem) {
+                final File f = new File(string);
                 if (f.isDirectory()) {
                     directories.add(f);
                 } else if (f.getName().endsWith(".jar")) {
                     jars.add(f);
                 }
             }
-            analyzeDirectory(directories, filter);
-            analyzeJars(jars, filter);
-            this.map.writeMapToFile(mappingFile);
+            this.analyzeDirectory(directories, filter);
+            this.analyzeJars(jars, filter);
+            this.map.writeMapToFile(this.mappingFile);
             retval = true;
-        } catch (IOException ex) {
-            log.error("IOException: ", ex);
+        } catch (final IOException ex) {
+            MethodExtractor.log.error("IOException: ", ex);
             retval = false;
         }
         return retval;
@@ -135,32 +136,32 @@ class MethodExtractor extends ClassLoader {
         if (filter != null) {
             try {
                 f = filter.newInstance();
-            } catch (InstantiationException e) {
+            } catch (final InstantiationException e) {
                 e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
         if (f == null) {
             f = new NullFilter();
         }
-        for (File file : jars) {
+        for (final File file : jars) {
             try {
-                JarFile jar = new JarFile(file.getAbsoluteFile().getName());
-                analyseJarFile(jar, f);
-            } catch (IOException e) {
+                final JarFile jar = new JarFile(file.getAbsoluteFile().getName());
+                this.analyseJarFile(jar, f);
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void analyseJarFile(final JarFile jar, final MethodFilter filter) {
-        Enumeration<JarEntry> es = jar.entries();
+        final Enumeration<JarEntry> es = jar.entries();
         while (es.hasMoreElements()) {
-            JarEntry e = es.nextElement();
-            log.error(e.getName());
+            final JarEntry e = es.nextElement();
+            MethodExtractor.log.error(e.getName());
             if (e.getName().endsWith(".class")) {
-                analyzeJarClassEntry(jar, e, "", filter);
+                this.analyzeJarClassEntry(jar, e, "", filter);
             }
         }
     }
@@ -168,23 +169,23 @@ class MethodExtractor extends ClassLoader {
     private void analyzeJarClassEntry(final JarFile jar, final JarEntry e,
             final String prefix, final MethodFilter filter) {
         byte[] data = null;
-        long size = e.getSize();
-        if (size == -1 || size > Integer.MAX_VALUE) {
-            log.error("Size of file \"" + jar.getName() + "/" + e.getName() + " out of range: size");
+        final long size = e.getSize();
+        if ((size == -1) || (size > Integer.MAX_VALUE)) {
+            MethodExtractor.log.error("Size of file \"" + jar.getName() + "/" + e.getName() + " out of range: size");
             return;
         }
         data = new byte[(int) size];
         try {
             jar.getInputStream(e).read(data);
-            String name = e.getName().substring(0, e.getName().length() - 6).replaceAll("/", ".");
+            final String name = e.getName().substring(0, e.getName().length() - 6).replaceAll("/", ".");
             Class<?> clazz = null;
             try {
-                clazz = defineClass(name, data, 0, data.length);
-                analyzeClass(clazz, filter);
-            } catch (LinkageError err) {
-                log.error("Linkage error", err);
+                clazz = this.defineClass(name, data, 0, data.length);
+                this.analyzeClass(clazz, filter);
+            } catch (final LinkageError err) {
+                MethodExtractor.log.error("Linkage error", err);
             }
-        } catch (IOException e1) {
+        } catch (final IOException e1) {
             e1.printStackTrace();
         }
     }
@@ -195,17 +196,17 @@ class MethodExtractor extends ClassLoader {
         if (filter != null) {
             try {
                 f = filter.newInstance();
-            } catch (InstantiationException e) {
+            } catch (final InstantiationException e) {
                 e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
                 e.printStackTrace();
             }
             if (f == null) {
                 f = new NullFilter();
             }
         }
-        for (File dir : dirs) {
-            descendAndAnalyseDir(dir, "", f);
+        for (final File dir : dirs) {
+            this.descendAndAnalyseDir(dir, "", f);
         }
     }
 
@@ -222,20 +223,22 @@ class MethodExtractor extends ClassLoader {
             final String packagePrefix, final MethodFilter filter) {
         File[] classes = dir.listFiles(new FilenameFilter() {
 
-            public boolean accept(final File dir, final String name) {
+            @Override
+			public boolean accept(final File dir, final String name) {
                 return name.endsWith(".class");
             }
         });
-        File[] descArray = dir.listFiles(new FilenameFilter() {
+        final File[] descArray = dir.listFiles(new FilenameFilter() {
 
-            public boolean accept(final File f, final String name) {
+            @Override
+			public boolean accept(final File f, final String name) {
                 return new File(f, name).isDirectory();
             }
         });
-        analyseClasses(classes, packagePrefix, filter);
+        this.analyseClasses(classes, packagePrefix, filter);
         classes = null;
-        for (File file : descArray) {
-            descendAndAnalyseDir(file, (packagePrefix + file.getName().replaceFirst(dir.getName(), "")).replaceAll(
+        for (final File file : descArray) {
+            this.descendAndAnalyseDir(file, (packagePrefix + file.getName().replaceFirst(dir.getName(), "")).replaceAll(
                     File.separator, ".") + ".", filter);
         }
     }
@@ -250,29 +253,29 @@ class MethodExtractor extends ClassLoader {
      */
     private void analyseClasses(final File[] classes,
             final String packagePrefix, final MethodFilter filter) {
-        for (File file : classes) {
+        for (final File file : classes) {
             int begIndex = file.getName().lastIndexOf(File.separatorChar);
             begIndex = begIndex == -1 ? 0 : begIndex;
-            int endIndex = file.getName().lastIndexOf('.');
+            final int endIndex = file.getName().lastIndexOf('.');
 //            log.info("analyzing " + packagePrefix + file.getName().substring(begIndex, endIndex));
             try {
-                Class<?> c = super.loadClass(packagePrefix + file.getName().substring(begIndex, endIndex));
-                analyzeClass(c, filter);
-            } catch (ClassNotFoundException e) {
-                log.error(packagePrefix + file.getName().substring(begIndex, endIndex), e);
-                log.error("packagePrefix: " + packagePrefix);
-                log.error("file.getName().substring(begIndex, endIndex): " + file.getName().substring(begIndex, endIndex));
+                final Class<?> c = super.loadClass(packagePrefix + file.getName().substring(begIndex, endIndex));
+                this.analyzeClass(c, filter);
+            } catch (final ClassNotFoundException e) {
+                MethodExtractor.log.error(packagePrefix + file.getName().substring(begIndex, endIndex), e);
+                MethodExtractor.log.error("packagePrefix: " + packagePrefix);
+                MethodExtractor.log.error("file.getName().substring(begIndex, endIndex): " + file.getName().substring(begIndex, endIndex));
             }
         }
     }
 
     private void analyzeClass(final Class<?> c, final MethodFilter filter) {
-        Method[] m = c.getDeclaredMethods();
-        for (Method method : m) {
+        final Method[] m = c.getDeclaredMethods();
+        for (final Method method : m) {
             if (!filter.accept(method, c)) {
                 continue;
             }
-            int mod = method.getModifiers();
+            final int mod = method.getModifiers();
             String prefix = "";
             if (Modifier.isPublic(mod)) {
                 prefix += "public ";
@@ -295,7 +298,7 @@ class MethodExtractor extends ClassLoader {
             if (Modifier.isFinal(mod)) {
                 prefix += "final ";
             }
-            map.registerName(/*+ prefix*/method.getDeclaringClass().getName() + "." + method.getName() + "(" + concat(method.getParameterTypes()) + ")");
+            this.map.registerName(/*+ prefix*/method.getDeclaringClass().getName() + "." + method.getName() + "(" + this.concat(method.getParameterTypes()) + ")");
             method.getAnnotation(Override.class);
         }
     }
@@ -308,8 +311,8 @@ class MethodExtractor extends ClassLoader {
      * @return formated parameter list
      */
     private String concat(final Class<?>[] parameterTypes) {
-        StringBuilder ret = new StringBuilder();
-        for (Class<?> class1 : parameterTypes) {
+        final StringBuilder ret = new StringBuilder();
+        for (final Class<?> class1 : parameterTypes) {
             ret.append(class1.getCanonicalName() + ",");
         }
         if (ret.length() == 0) {
@@ -321,7 +324,8 @@ class MethodExtractor extends ClassLoader {
 
 class NullFilter implements MethodFilter {
 
-    public boolean accept(final Method m, final Class<?> c) {
+    @Override
+	public boolean accept(final Method m, final Class<?> c) {
         return true;
     }
 }

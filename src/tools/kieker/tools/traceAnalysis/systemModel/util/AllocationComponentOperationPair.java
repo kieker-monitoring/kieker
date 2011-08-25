@@ -13,7 +13,8 @@ public class AllocationComponentOperationPair {
 
     private final AllocationComponent allocationComponent;
 
-    private AllocationComponentOperationPair (){
+    @SuppressWarnings("unused")
+	private AllocationComponentOperationPair (){
         this.id = -1;
         this.operation = null;
         this.allocationComponent = null;

@@ -5,7 +5,6 @@ import junit.framework.TestCase;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.StateController;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
 
 /**

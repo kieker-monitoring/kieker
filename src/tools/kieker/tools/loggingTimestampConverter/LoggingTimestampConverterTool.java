@@ -35,6 +35,7 @@ public class LoggingTimestampConverterTool {
 
     static {
         // TODO: OptionGroups?
+    	// FIXME: #81 
         options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME__TIMESTAMPS).withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
 
         for (Option o : options) {

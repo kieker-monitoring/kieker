@@ -36,7 +36,7 @@ boolean root;
  * @param parent parent object in the dependency structure
  * @param isRoot whether this element is considered a root element
  */
-StructureElement( StructureElement parent, boolean isRoot ){
+StructureElement( final StructureElement parent, final boolean isRoot ){
     this.parent = parent;
     this.incoming = new HashMap<StructureElement, Integer>();   // initialization instead above does not work !
     this.outgoing = new HashMap<StructureElement, Integer>();
@@ -67,18 +67,18 @@ public abstract String getShortName();
  * Adds an element that is part of this element.
  * @return true if actually added, false if set is unchanged
  */
-boolean addChild( StructureElement child ){
-    return children.add( child );
+boolean addChild( final StructureElement child ){
+    return this.children.add( child );
 }
 
 /**
  * Adds an element that depends on this element.
  * @param neighbor neighbor element that calls services of this operation
  */
-void addIncomingDependency( StructureElement neighbor ){
-    assert getClass().isInstance( neighbor );
-    Integer count = incoming.get( neighbor );
-    incoming.put( neighbor, count == null ? 1 : count + 1 );
+void addIncomingDependency( final StructureElement neighbor ){
+    assert this.getClass().isInstance( neighbor );
+    final Integer count = this.incoming.get( neighbor );
+    this.incoming.put( neighbor, count == null ? 1 : count + 1 );
 }
 
 /**
@@ -87,17 +87,17 @@ void addIncomingDependency( StructureElement neighbor ){
  * Also connects respective parent elements, if applicable.
  * @param neighbor neighbor element whose services are called by this element
  */
-void addOutgoingDependency( StructureElement neighbor ){
-    assert getClass().isInstance( neighbor );
-    Integer count = outgoing.get( neighbor );
+void addOutgoingDependency( final StructureElement neighbor ){
+    assert this.getClass().isInstance( neighbor );
+    final Integer count = this.outgoing.get( neighbor );
     if( count == null ){                                // not knowing this yet?
-        StructureElement par = neighbor.getParent();
-        if( par != null && !par.equals( parent ) ){     // children of different parents ?
-            parent.addOutgoingDependency( par );        // link
-            par.addIncomingDependency( parent );        // backlink
+        final StructureElement par = neighbor.getParent();
+        if( (par != null) && !par.equals( this.parent ) ){     // children of different parents ?
+            this.parent.addOutgoingDependency( par );        // link
+            par.addIncomingDependency( this.parent );        // backlink
         }
     }
-    outgoing.put( neighbor, count == null ? 1 : count + 1 );
+    this.outgoing.put( neighbor, count == null ? 1 : count + 1 );
 }
 
 /**
@@ -105,13 +105,13 @@ void addOutgoingDependency( StructureElement neighbor ){
  * Don't call before the absolute connections are complete!
  */
 void calculateRelativeEdgeWeights(){
-    long connectionSum = getIncomingConnectionCount( null );
-    for( StructureElement neighbor : incoming.keySet() ){
-        incomingRel.put( neighbor, (double) incoming.get( neighbor ) / connectionSum );
+    long connectionSum = this.getIncomingConnectionCount( null );
+    for( final StructureElement neighbor : this.incoming.keySet() ){
+        this.incomingRel.put( neighbor, (double) this.incoming.get( neighbor ) / connectionSum );
     }
-    connectionSum = getOutgoingConnectionCount( null );
-    for( StructureElement neighbor : outgoing.keySet() ){
-        outgoingRel.put( neighbor, (double) outgoing.get( neighbor ) / connectionSum );
+    connectionSum = this.getOutgoingConnectionCount( null );
+    for( final StructureElement neighbor : this.outgoing.keySet() ){
+        this.outgoingRel.put( neighbor, (double) this.outgoing.get( neighbor ) / connectionSum );
     }
 }
 
@@ -121,7 +121,7 @@ void calculateRelativeEdgeWeights(){
  * @return parent element
  */
 StructureElement getParent(){
-    return parent;
+    return this.parent;
 }
 
 /**
@@ -130,7 +130,7 @@ StructureElement getParent(){
  * @return child elements
  */
 Set<StructureElement> getChildren(){
-    return children;
+    return this.children;
 }
 
 /**
@@ -138,7 +138,7 @@ Set<StructureElement> getChildren(){
  * @return calling elements
  */
 Set<StructureElement> getCallers(){
-    return incoming.keySet();
+    return this.incoming.keySet();
 }
 
 /**
@@ -146,46 +146,46 @@ Set<StructureElement> getCallers(){
  * @return called elements
  */
 Set<StructureElement> getCallees(){
-    return outgoing.keySet();
+    return this.outgoing.keySet();
 }
 
 public double getAnomalyRating(){
-    return anomalyRating;
+    return this.anomalyRating;
 }
 
-void setAnomalyRating( double anomalyRating ){
+void setAnomalyRating( final double anomalyRating ){
     this.anomalyRating = anomalyRating;
 }
 
 public double getCauseRating(){
-    return causeRating;
+    return this.causeRating;
 }
 
-void setCauseRating( double causeRating ){
+void setCauseRating( final double causeRating ){
     this.causeRating = causeRating;
 }
 
 public double getPercent(){
-	return percent;
+	return this.percent;
 }
 
-void setPercent( double percent ){
+void setPercent( final double percent ){
 	this.percent = percent;
 }
 
 /**
  * @param max wether this is the component with the highest cause rating
  */
-void setMax( boolean max ){
+void setMax( final boolean max ){
     this.max = max;
 }
 
 boolean isMax(){
-    return max;
+    return this.max;
 }
 
 boolean isRoot(){
-    return root;
+    return this.root;
 }
 
 /**
@@ -204,41 +204,41 @@ boolean isOutlier(){
  * and it has only one outgoing connection (that should be me).
  */
 boolean isLonely(){
-    if( !outgoing.isEmpty() || incoming.size() > 1 ){   // anybody out there?
+    if( !this.outgoing.isEmpty() || (this.incoming.size() > 1) ){   // anybody out there?
         return false;                                   // I am not alone!
     }
-    StructureElement potentialNeighbor = incoming.keySet().iterator().next();
-    return potentialNeighbor.isRoot() && potentialNeighbor.outgoing.size() == 1;
+    final StructureElement potentialNeighbor = this.incoming.keySet().iterator().next();
+    return potentialNeighbor.isRoot() && (potentialNeighbor.outgoing.size() == 1);
 }
 
-/**
- * Fetches all sibling elements: they are &quot;besides&quot; the current element,
- * on the same structure level, but not directly connected.
- * Note: Neither tested nor used yet. Maybe helpful for future use.
- * @return set of sibling elements
- */
-private Set<StructureElement> getSiblings(){
-    Set<StructureElement> siblings = new HashSet<StructureElement>();
-    for( StructureElement in : incoming.keySet() ){
-        for( StructureElement sibling : in.outgoing.keySet() ){
-            if( this != sibling ){
-                siblings.add( sibling );
-            }
-        }
-    }
-    for( StructureElement out : outgoing.keySet() ){
-        for( StructureElement sibling : out.incoming.keySet() ){
-            if( this != sibling ){
-                siblings.add( sibling );
-            }
-        }
-    }
-    return siblings;
-}
+///**
+// * Fetches all sibling elements: they are &quot;besides&quot; the current element,
+// * on the same structure level, but not directly connected.
+// * Note: Neither tested nor used yet. Maybe helpful for future use.
+// * @return set of sibling elements
+// */
+//private Set<StructureElement> getSiblings(){
+//    final Set<StructureElement> siblings = new HashSet<StructureElement>();
+//    for( final StructureElement in : this.incoming.keySet() ){
+//        for( final StructureElement sibling : in.outgoing.keySet() ){
+//            if( this != sibling ){
+//                siblings.add( sibling );
+//            }
+//        }
+//    }
+//    for( final StructureElement out : this.outgoing.keySet() ){
+//        for( final StructureElement sibling : out.incoming.keySet() ){
+//            if( this != sibling ){
+//                siblings.add( sibling );
+//            }
+//        }
+//    }
+//    return siblings;
+//}
 
 long getOutlierCount(){
     long count = 0L;
-    for( StructureElement child : children ){
+    for( final StructureElement child : this.children ){
         count += child.getOutlierCount();
     }
     return count;
@@ -246,7 +246,7 @@ long getOutlierCount(){
 
 long getAnomalyCount(){
     long count = 0L;
-    for( StructureElement child : children ){
+    for( final StructureElement child : this.children ){
         count += child.getAnomalyCount();
     }
     return count;
@@ -254,7 +254,7 @@ long getAnomalyCount(){
 
 long getExecutionCount(){
     long count = 0L;
-    for( StructureElement child : children ){
+    for( final StructureElement child : this.children ){
         count += child.getExecutionCount();
     }
     return count;
@@ -265,8 +265,8 @@ long getExecutionCount(){
  * @return list of childrens' anomaly scores
  */
 List<Double> getChildrensAnomalyScores(){
-    List<Double> result = new ArrayList<Double>();
-    for( StructureElement child : children ){
+    final List<Double> result = new ArrayList<Double>();
+    for( final StructureElement child : this.children ){
         result.addAll( child.getChildrensAnomalyScores() );
     }
     return result;
@@ -277,8 +277,8 @@ List<Double> getChildrensAnomalyScores(){
  * @return list of childrens' response times
  */
 List<Long> getChildrensResponseTimes(){
-    List<Long> result = new ArrayList<Long>();
-    for( StructureElement child : children ){
+    final List<Long> result = new ArrayList<Long>();
+    for( final StructureElement child : this.children ){
         result.addAll( child.getChildrensResponseTimes() );
     }
     return result;
@@ -291,41 +291,41 @@ List<Long> getChildrensResponseTimes(){
  * @param type select 1 for anomaly score, or 2 for response times
  * @return array of percentages [0.0,1.0], all zeroes for root
  */
-@Deprecated
-private double[] getHistogram( int width, int type ){
-    double[] values = new double[ width ];
-    if( isRoot() ){
-        return values;                                  // return all zeroes
-    }
-    int column;
-    double perc;
-    switch( type ){
-        case 1:
-            for( Double rating : getChildrensAnomalyScores() ){
-                perc = Util.scaleRatingToPercent( rating );     // stretch to [ 0.0, 1.0 ]
-                column = (int) ( perc * ( width - 1 ) );        // find column in [ 0, width-1 ]
-                values[column]++;                               // increase column
-            }
-            break;
-        case 2:
-            List<Double> rts = Util.longListToDoubleList( getChildrensResponseTimes() );
-            double low = Util.getMin( rts );
-            double high = Util.getMax( rts );
-            for( Double rt : rts ){
-                perc = ( rt - low ) / ( high - low );           // stretch to [ 0.0, 1.0 ]
-                column = (int) ( perc * ( width - 1 ) );        // find column in [ 0, width-1 ]
-                values[column]++;                               // increase column
-            }
-            break;
-        default:
-            throw new IllegalArgumentException( "Invalid histogram type: " + type );
-    }
-    double maxValue = Util.getMax( values );
-    for( column = 0; column < width; column++ ){
-        values[column] /= maxValue;                     // stretch to [ 0.0, 1.0 ]
-    }
-    return values;
-}
+//@Deprecated
+//private double[] getHistogram( int width, int type ){
+//    double[] values = new double[ width ];
+//    if( isRoot() ){
+//        return values;                                  // return all zeroes
+//    }
+//    int column;
+//    double perc;
+//    switch( type ){
+//        case 1:
+//            for( Double rating : getChildrensAnomalyScores() ){
+//                perc = Util.scaleRatingToPercent( rating );     // stretch to [ 0.0, 1.0 ]
+//                column = (int) ( perc * ( width - 1 ) );        // find column in [ 0, width-1 ]
+//                values[column]++;                               // increase column
+//            }
+//            break;
+//        case 2:
+//            List<Double> rts = Util.longListToDoubleList( getChildrensResponseTimes() );
+//            double low = Util.getMin( rts );
+//            double high = Util.getMax( rts );
+//            for( Double rt : rts ){
+//                perc = ( rt - low ) / ( high - low );           // stretch to [ 0.0, 1.0 ]
+//                column = (int) ( perc * ( width - 1 ) );        // find column in [ 0, width-1 ]
+//                values[column]++;                               // increase column
+//            }
+//            break;
+//        default:
+//            throw new IllegalArgumentException( "Invalid histogram type: " + type );
+//    }
+//    double maxValue = Util.getMax( values );
+//    for( column = 0; column < width; column++ ){
+//        values[column] /= maxValue;                     // stretch to [ 0.0, 1.0 ]
+//    }
+//    return values;
+//}
 
 /**
  * Calculates the number of connections from the specified element to this element;
@@ -333,9 +333,9 @@ private double[] getHistogram( int width, int type ){
  * @param other element to be questioned (supposed to be a component, or deployment context), or null
  * @return number of connections from the specified element; or all connections, if other == null
  */
-long getIncomingConnectionCount( StructureElement other ){
+long getIncomingConnectionCount( final StructureElement other ){
     long count = 0L;
-    for( StructureElement child : children ){
+    for( final StructureElement child : this.children ){
         count += child.getIncomingConnectionCount( other );
     }
     return count;
@@ -347,9 +347,9 @@ long getIncomingConnectionCount( StructureElement other ){
  * @param other element to be questioned (supposed to be a component, or deployment context), or null
  * @return number of connections to the specified element; or all connections, if other == null
  */
-long getOutgoingConnectionCount( StructureElement other ){
+long getOutgoingConnectionCount( final StructureElement other ){
     long count = 0L;
-    for( StructureElement child : children ){
+    for( final StructureElement child : this.children ){
         count += child.getOutgoingConnectionCount( other );
     }
     return count;
@@ -370,7 +370,7 @@ long getOutgoingConnectionCount( StructureElement other ){
 int getTrueAnomalyStatus(){
     int status = -1;
     childrenLoop:
-    for( StructureElement child : children ){
+    for( final StructureElement child : this.children ){
         switch( child.getTrueAnomalyStatus() ){
             case -1:
                 continue childrenLoop;  // ignore
@@ -399,12 +399,12 @@ int getTrueAnomalyStatus(){
  * @return true if all subordinate checks return true
  */
 boolean check(){
-    if( !incoming.keySet().equals( incomingRel.keySet() ) ){
-        Util.writeOut( Util.LEVEL_WARNING, "< WARNING: incoming connection pools unequal in element " + getName() );
+    if( !this.incoming.keySet().equals( this.incomingRel.keySet() ) ){
+        Util.writeOut( Util.LEVEL_WARNING, "< WARNING: incoming connection pools unequal in element " + this.getName() );
         return false;
     }
-    if( !outgoing.keySet().equals( outgoingRel.keySet() ) ){
-        Util.writeOut( Util.LEVEL_WARNING, "< WARNING: outgoing connection pools unequal in element " + getName() );
+    if( !this.outgoing.keySet().equals( this.outgoingRel.keySet() ) ){
+        Util.writeOut( Util.LEVEL_WARNING, "< WARNING: outgoing connection pools unequal in element " + this.getName() );
         return false;
     }
     return true;
@@ -415,7 +415,8 @@ boolean check(){
  * @param other the StructureElement to be compared.
  * @return 1 if this' causeRating greater than other's; -1 else. 0 is returned if both have same causeRating.
  */
-public int compareTo( StructureElement other ){
+@Override
+public int compareTo( final StructureElement other ){
     if( this.getCauseRating() < other.getCauseRating() ){
         return -1;
     }

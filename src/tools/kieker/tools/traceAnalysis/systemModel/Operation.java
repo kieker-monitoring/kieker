@@ -12,7 +12,8 @@ public class Operation {
     private final ComponentType componentType;
     private final Signature signature;
 
-    private Operation (){
+    @SuppressWarnings("unused")
+	private Operation (){
         this.id = -1;
         this.componentType = null;
         this.signature = null;
@@ -35,7 +36,7 @@ public class Operation {
     }
 
     public final Signature getSignature() {
-        return signature;
+        return this.signature;
     }
 
 
@@ -47,11 +48,11 @@ public class Operation {
      * @return true if the two objects are equal.
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof Operation)){
             return false;
         }
-        Operation other = (Operation)obj;
+        final Operation other = (Operation)obj;
         return other.id == this.id;
     }
 
@@ -64,7 +65,7 @@ public class Operation {
 
     @Override
     public String toString() {
-        StringBuilder strBuild = new StringBuilder();
+        final StringBuilder strBuild = new StringBuilder();
         strBuild.append(this.componentType.getFullQualifiedName())
                 .append(".")
                 .append(this.signature.toString());

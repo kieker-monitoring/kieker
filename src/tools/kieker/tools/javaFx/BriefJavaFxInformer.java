@@ -1,16 +1,13 @@
 package kieker.tools.javaFx;
 
 import java.util.Collection;
-import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
-import kieker.common.record.IMonitoringRecord;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.common.record.OperationExecutionRecord;
+
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
  *
@@ -18,17 +15,17 @@ import org.apache.commons.logging.LogFactory;
  */
 public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin {
 
-    private static final Log log = LogFactory.getLog(BriefJavaFxInformer.class);
+    //private static final Log log = LogFactory.getLog(BriefJavaFxInformer.class);
 
     public BriefJavaFxInformer() {
         try {
             System.out.println("==> Trying to start JavaFx window");
-            String javaFxWindowClassname = "KiekerLiveAnalyzer.JavaMain";
-            Object obj = Class.forName(javaFxWindowClassname).newInstance();
-            jfxRc = (IMonitoringRecordConsumerPlugin) obj;
+            final String javaFxWindowClassname = "KiekerLiveAnalyzer.JavaMain";
+            final Object obj = Class.forName(javaFxWindowClassname).newInstance();
+            this.jfxRc = (IMonitoringRecordConsumerPlugin) obj;
 //            jfxTr = (IMessageTraceReceiver) obj; // dont wonder, its the same object twice
             System.out.println("==> Success to start JavaFx window (at least the class invocation)");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("==> Failed to execute JavaFx window = failed to execute Class.forName(KiekerLiveAnalyzer.JavaMain)  - most likely you do not have KiekerLiveAnalyzer.jar in the classpath (put it or link it in your tpan-plugins folder.) \n Message:"+e.getMessage());
             e.printStackTrace();
             System.out.println("==> Failed to start JavaFx window");
@@ -37,21 +34,23 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin {
     }
 
     /** Consuming only execution records */
-    private final static String[] recordTypeSubscriptionList = {
-        OperationExecutionRecord.class.getName()
-    };
+    //private final static String[] recordTypeSubscriptionList = {
+    //    OperationExecutionRecord.class.getName()
+    //};
 
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+    @Override
+	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
         return null; // receive records of any type
     }
 
-    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
+    @Override
+	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
        // System.out.println("BriefJavaFxInformer.consumeMonitoringRecord(...)");
-        if (jfxRc == null) {
+        if (this.jfxRc == null) {
             System.out.println("WARNING: BriefJavaFxInformer.consumeMonitoringRecord called without execute() first - ignoring message");
             return false;
         } else {
-            jfxRc.newMonitoringRecord(monitoringRecord);
+            this.jfxRc.newMonitoringRecord(monitoringRecord);
         }
         return true;
     }
@@ -88,7 +87,7 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin {
     public void terminate(final boolean error) {
         try{
         //jfxRc.terminate(error);
-        } catch(Exception e){}
+        } catch(final Exception e){}
         // nothing to do
     }
 
@@ -96,7 +95,7 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin {
             new AbstractInputPort<MessageTrace>("Broken execution traces") {
 
         @Override
-        public void newEvent(MessageTrace et) {
+        public void newEvent(final MessageTrace et) {
             // TODO: handle new events here
 //            try {
 //                //jfxUniqueTr.newEvent(et);
@@ -114,7 +113,7 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin {
             new AbstractInputPort<InvalidExecutionTrace>("Broken execution traces") {
 
         @Override
-        public void newEvent(InvalidExecutionTrace et) {
+        public void newEvent(final InvalidExecutionTrace et) {
               // TODO: handle new events here
 //            try {
 //                //jfxBrokenExecutionTraceReceiver.newEvent(et);
@@ -132,7 +131,7 @@ public class BriefJavaFxInformer implements IMonitoringRecordConsumerPlugin {
             new AbstractInputPort<MessageTrace>("Message traces") {
 
         @Override
-        public void newEvent(MessageTrace mt) {
+        public void newEvent(final MessageTrace mt) {
             // TODO: handle new events here
 //            try {
 //                //System.out.println("BJFX new Traces"+t.getTraceId());

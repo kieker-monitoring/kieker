@@ -4,14 +4,12 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +38,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
         super.printStatusMessage();
         final int numTraces = this.getSuccessCount();
         System.out.println("Wrote " + numTraces + " trace"
-                + (numTraces > 1 ? "s" : "") + " to file '" + outputFn
+                + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn
                 + "'");
     }
 
@@ -49,8 +47,8 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
         if (this.ps != null) {
             try {
                 this.ps.close();
-            } catch (IOException ex) {
-                log.error("IOException", ex);
+            } catch (final IOException ex) {
+                MessageTraceWriterPlugin.log.error("IOException", ex);
             }
         }
     }
@@ -68,13 +66,13 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
             new AbstractInputPort<MessageTrace>("Message traces") {
 
                 @Override
-                public void newEvent(MessageTrace mt) {
+                public void newEvent(final MessageTrace mt) {
                     try {
-                        ps.append(mt.toString());
-                        reportSuccess(mt.getTraceId());
-                    } catch (IOException ex) {
-                        log.error("IOException", ex);
-                        reportError(mt.getTraceId());
+                        MessageTraceWriterPlugin.this.ps.append(mt.toString());
+                        MessageTraceWriterPlugin.this.reportSuccess(mt.getTraceId());
+                    } catch (final IOException ex) {
+                        MessageTraceWriterPlugin.log.error("IOException", ex);
+                        MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
                     }
                 }
             };

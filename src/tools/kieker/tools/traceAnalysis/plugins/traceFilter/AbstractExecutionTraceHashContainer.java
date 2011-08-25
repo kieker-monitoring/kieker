@@ -10,7 +10,8 @@ abstract class AbstractExecutionTraceHashContainer {
 
     private final ExecutionTrace executionTrace;
 
-    private AbstractExecutionTraceHashContainer() {
+    @SuppressWarnings("unused")
+	private AbstractExecutionTraceHashContainer() {
         this.executionTrace = null;
     }
 
@@ -19,7 +20,7 @@ abstract class AbstractExecutionTraceHashContainer {
     }
 
     public ExecutionTrace getExecutionTrace() {
-        return executionTrace;
+        return this.executionTrace;
     }
 }
 

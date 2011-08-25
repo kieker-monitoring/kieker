@@ -13,7 +13,8 @@ public class ExecutionContainer {
     private final ExecutionContainer parent;
     private final Collection<ExecutionContainer> childContainers = new ArrayList<ExecutionContainer>();
 
-    private ExecutionContainer(){
+    @SuppressWarnings("unused")
+	private ExecutionContainer(){
         this.id = -1;
         this.parent = null;
         this.name = null; }
@@ -42,7 +43,7 @@ public class ExecutionContainer {
         return this.childContainers;
     }
 
-    public final void addChildContainer(ExecutionContainer container){
+    public final void addChildContainer(final ExecutionContainer container){
         this.childContainers.add(this);
     }
 
@@ -52,11 +53,11 @@ public class ExecutionContainer {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof ExecutionContainer)){
             return false;
         }
-        ExecutionContainer other = (ExecutionContainer)obj;
+        final ExecutionContainer other = (ExecutionContainer)obj;
         return other.id == this.id;
     }
 }

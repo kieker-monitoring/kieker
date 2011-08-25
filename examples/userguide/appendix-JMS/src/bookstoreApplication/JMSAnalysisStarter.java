@@ -16,7 +16,7 @@ public class JMSAnalysisStarter {
     private static final long MAX_RT_NANOS = 1700;
 
     private final static String CONNECTION_FACTORY_TYPE__OPEN_JMS = "org.exolab.jms.jndi.InitialContextFactory";
-    private final static String CONNECTION_FACTORY_TYPE__ACTIVE_MQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
+    //private final static String CONNECTION_FACTORY_TYPE__ACTIVE_MQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
     
     public static void main(final String[] args) throws MonitoringReaderException, MonitoringRecordConsumerException {
         final AnalysisController analysisInstance = new AnalysisController();

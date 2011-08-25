@@ -146,7 +146,7 @@ class FSDirectoryReader {
 	 * If true, we are reading a monitoring log from a Kieker version < 1.3 with
 	 * monitoring log files having the prefix 'tpmon' instead of 'kieker'
 	 */
-	private boolean legacyTpmonMode = false;
+	//private boolean legacyTpmonMode = false;
 
 	/**
 	 * Reads the mapping file located in the directory and loads the required
@@ -170,7 +170,7 @@ class FSDirectoryReader {
 						+ "' contains no file 'kieker.map'");
 				FSDirectoryReader.log
 						.info("Found 'tpmon.map' ... switching to legacy mode");
-				this.legacyTpmonMode = true;
+				//this.legacyTpmonMode = true;
 				this.filePrefix = FSDirectoryReader.legayFilePrefix;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old

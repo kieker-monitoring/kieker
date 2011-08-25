@@ -9,7 +9,8 @@ public class AssemblyComponent {
     private final String name;
     private final ComponentType type;
 
-    private AssemblyComponent(){
+    @SuppressWarnings("unused")
+	private AssemblyComponent(){
         this.id = -1;
         this.name = null;
         this.type = null;
@@ -37,7 +38,7 @@ public class AssemblyComponent {
 
     @Override
     public final String toString(){
-        StringBuilder strBuild = new StringBuilder();
+        final StringBuilder strBuild = new StringBuilder();
         strBuild.append(this.name).append(":")
                 .append(this.type.getFullQualifiedName());
         return strBuild.toString();
@@ -49,11 +50,11 @@ public class AssemblyComponent {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof AssemblyComponent)){
             return false;
         }
-        AssemblyComponent other = (AssemblyComponent)obj;
+        final AssemblyComponent other = (AssemblyComponent)obj;
         return other.id == this.id;
     }
 }

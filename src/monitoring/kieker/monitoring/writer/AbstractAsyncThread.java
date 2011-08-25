@@ -27,7 +27,7 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	public final void initShutdown() {
 		try {
-			this.writeQueue.put(END_OF_MONITORING_MARKER);
+			this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
 		} catch (final InterruptedException ex) {
 			AbstractAsyncThread.log.error("Error while trying to stop writer thread", ex);
 		}
@@ -46,17 +46,17 @@ public abstract class AbstractAsyncThread extends Thread {
 			while (!this.finished) {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();
-					if (monitoringRecord == END_OF_MONITORING_MARKER) {
+					if (monitoringRecord == AbstractAsyncThread.END_OF_MONITORING_MARKER) {
 						AbstractAsyncThread.log.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
 						monitoringRecord = writeQueue.poll();
 						while (monitoringRecord != null) {
-							if (monitoringRecord != END_OF_MONITORING_MARKER) {
+							if (monitoringRecord != AbstractAsyncThread.END_OF_MONITORING_MARKER) {
 								this.consume(monitoringRecord);
 							}
 							monitoringRecord = writeQueue.poll();
 						}
 						this.finished = true;
-						this.writeQueue.put(END_OF_MONITORING_MARKER);
+						this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
 						this.cleanup();
 						break;
 					} else {
@@ -96,5 +96,6 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
 
+	// FIXME: Java warning reported (#83)
 	protected abstract void cleanup();
 }

@@ -9,15 +9,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class AbstractSystemSubRepository {
     public final static int ROOT_ELEMENT_ID = 0;
 
-    private final AtomicInteger nextId = new AtomicInteger(ROOT_ELEMENT_ID+1);
+    private final AtomicInteger nextId = new AtomicInteger(AbstractSystemSubRepository.ROOT_ELEMENT_ID+1);
 
     private final SystemModelRepository systemFactory;
 
-    private AbstractSystemSubRepository(){
+    @SuppressWarnings("unused")
+	private AbstractSystemSubRepository(){
         this.systemFactory = null;
     }
 
-    public AbstractSystemSubRepository(SystemModelRepository systemFactory){
+    public AbstractSystemSubRepository(final SystemModelRepository systemFactory){
         this.systemFactory = systemFactory;
     }
 
@@ -26,6 +27,6 @@ public abstract class AbstractSystemSubRepository {
     }
 
     protected final SystemModelRepository getSystemFactory() {
-        return systemFactory;
+        return this.systemFactory;
     }
 }

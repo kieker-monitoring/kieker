@@ -1,6 +1,5 @@
 package kieker.tools.traceAnalysis.systemModel;
 
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -12,7 +11,8 @@ public class Signature {
     private final String returnType;
     private final String[] paramTypeList;
 
-    private Signature(){
+    @SuppressWarnings("unused")
+	private Signature(){
         this.name = null;
         this.returnType = null;
         this.paramTypeList = null;
@@ -39,10 +39,10 @@ public class Signature {
 
     @Override
     public String toString() {
-        StringBuilder strBuild = new StringBuilder();
+        final StringBuilder strBuild = new StringBuilder();
         strBuild.append(this.name).append("(");
         boolean first = true;
-        for (String t : this.paramTypeList){
+        for (final String t : this.paramTypeList){
             if (!first){
                 strBuild.append(",");
             } else {

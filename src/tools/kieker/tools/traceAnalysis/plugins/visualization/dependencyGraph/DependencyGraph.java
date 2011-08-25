@@ -2,8 +2,6 @@ package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
 import java.util.Collection;
 import java.util.TreeMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -11,21 +9,22 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DependencyGraph<T> {
 
-    private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
-    private TreeMap<Integer, DependencyGraphNode<T>> nodes =
+    //private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
+	
+    private final TreeMap<Integer, DependencyGraphNode<T>> nodes =
             new TreeMap<Integer, DependencyGraphNode<T>>();
-    private DependencyGraphNode<T> rootNode;
+    private final DependencyGraphNode<T> rootNode;
 
-    public DependencyGraph(int rootNodeId, T rootEntity) {
+    public DependencyGraph(final int rootNodeId, final T rootEntity) {
         this.rootNode = new DependencyGraphNode<T>(rootNodeId, rootEntity);
-        this.nodes.put(rootNodeId, rootNode);
+        this.nodes.put(rootNodeId, this.rootNode);
     }
 
-    protected final DependencyGraphNode<T> getNode (int i){
+    protected final DependencyGraphNode<T> getNode (final int i){
         return this.nodes.get(i);
     }
 
-    protected final void addNode (int i, DependencyGraphNode<T> node){
+    protected final void addNode (final int i, final DependencyGraphNode<T> node){
         this.nodes.put(i, node);
     }
 
@@ -34,7 +33,7 @@ public class DependencyGraph<T> {
     }
 
     public Collection<DependencyGraphNode<T>> getNodes() {
-        return nodes.values();
+        return this.nodes.values();
     }
 
     /** Return number of nodes */

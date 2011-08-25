@@ -9,10 +9,9 @@ public class WeightedDirectedCallTreeEdge<T> {
     private AbstractCallTreeNode<T> source;
     private AbstractCallTreeNode<T> destination;
 
-    private WeightedDirectedCallTreeEdge() {
+    @SuppressWarnings("unused")
+	private WeightedDirectedCallTreeEdge() {
     }
-
-    ;
 
     public WeightedDirectedCallTreeEdge(
             final AbstractCallTreeNode<T> source,

@@ -4,14 +4,12 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,8 +47,8 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
         if (this.ps != null) {
             try {
                 this.ps.close();
-            } catch (IOException ex) {
-                log.error("IOException", ex);
+            } catch (final IOException ex) {
+                InvalidExecutionTraceWriterPlugin.log.error("IOException", ex);
             }
         }
     }
@@ -68,13 +66,13 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
             new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
 
                 @Override
-                public void newEvent(InvalidExecutionTrace et) {
+                public void newEvent(final InvalidExecutionTrace et) {
                     try {
-                        ps.append(et.getInvalidExecutionTraceArtifacts().toString());
-                        reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
-                    } catch (IOException ex) {
-                        reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
-                        log.error(ex, ex);
+                        InvalidExecutionTraceWriterPlugin.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
+                        InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
+                    } catch (final IOException ex) {
+                        InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
+                        InvalidExecutionTraceWriterPlugin.log.error(ex, ex);
                     }
                 }
             };

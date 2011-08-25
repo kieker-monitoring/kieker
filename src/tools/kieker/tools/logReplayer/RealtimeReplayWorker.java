@@ -1,8 +1,7 @@
 package kieker.tools.logReplayer;
 
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.MonitoringRecordReceiverException;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,11 +25,12 @@ public class RealtimeReplayWorker implements Runnable {
         this.rd = rd;
     }
 
-    public void run() {
+    @Override
+	public void run() {
         if (this.monRec != null) {
-                if (!cons.newMonitoringRecord(this.monRec)) {
+                if (!this.cons.newMonitoringRecord(this.monRec)) {
                     // TODO: check what to do
-                    log.error("Consumer returned with error");
+                    RealtimeReplayWorker.log.error("Consumer returned with error");
                 }
             this.rd.decreaseActive();
         }
