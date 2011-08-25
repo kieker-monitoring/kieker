@@ -13,7 +13,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -21,6 +20,8 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Andre van Hoorn
  */
+// FIXME: Resolve issue with commons.cli.OptionBuilder (#81)
+@SuppressWarnings("static-access")
 public class LoggingTimestampConverterTool {
 
     private static final Log log = LogFactory.getLog(LoggingTimestampConverterTool.class);
@@ -36,19 +37,20 @@ public class LoggingTimestampConverterTool {
     static {
         // TODO: OptionGroups?
     	// FIXME: #81 
-        options.add(OptionBuilder.withLongOpt(CMD_OPT_NAME__TIMESTAMPS).withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
+        LoggingTimestampConverterTool.options.add(OptionBuilder.withLongOpt(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS).withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
 
-        for (Option o : options) {
-            cmdlOpts.addOption(o);
+        for (final Option o : LoggingTimestampConverterTool.options) {
+            LoggingTimestampConverterTool.cmdlOpts.addOption(o);
         }
-        cmdHelpFormatter.setOptionComparator(new Comparator() {
+        LoggingTimestampConverterTool.cmdHelpFormatter.setOptionComparator(new Comparator<Object>() {
 
-            public int compare(Object o1, Object o2) {
+            @Override
+			public int compare(final Object o1, final Object o2) {
                 if (o1 == o2) {
                     return 0;
                 }
-                int posO1 = options.indexOf(o1);
-                int posO2 = options.indexOf(o2);
+                final int posO1 = LoggingTimestampConverterTool.options.indexOf(o1);
+                final int posO2 = LoggingTimestampConverterTool.options.indexOf(o2);
                 if (posO1 < posO2) {
                     return -1;
                 }
@@ -60,13 +62,13 @@ public class LoggingTimestampConverterTool {
         });
     }
 
-    public static void main(String[] args) {
-        if (!parseArgs(args) || !initFromArgs()) {
+    public static void main(final String[] args) {
+        if (!LoggingTimestampConverterTool.parseArgs(args) || !LoggingTimestampConverterTool.initFromArgs()) {
             System.exit(1);
         }
 
-        for (long tstamp : timestampsLong) {
-            StringBuilder strB = new StringBuilder();
+        for (final long tstamp : LoggingTimestampConverterTool.timestampsLong) {
+            final StringBuilder strB = new StringBuilder();
             strB.append(tstamp).append(": ")
                     .append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(tstamp))
                     .append(" (").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp))
@@ -75,11 +77,11 @@ public class LoggingTimestampConverterTool {
         }
     }
 
-    private static boolean parseArgs(String[] args) {
+    private static boolean parseArgs(final String[] args) {
         try {
-            cmdl = cmdlParser.parse(cmdlOpts, args);
-        } catch (ParseException e) {
-            printUsage();
+            LoggingTimestampConverterTool.cmdl = LoggingTimestampConverterTool.cmdlParser.parse(LoggingTimestampConverterTool.cmdlOpts, args);
+        } catch (final ParseException e) {
+            LoggingTimestampConverterTool.printUsage();
             System.err.println("\nError parsing arguments: " + e.getMessage());
             return false;
         }
@@ -87,23 +89,23 @@ public class LoggingTimestampConverterTool {
     }
 
     private static void printUsage() {
-        cmdHelpFormatter.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", cmdlOpts, "", true);
+        LoggingTimestampConverterTool.cmdHelpFormatter.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", LoggingTimestampConverterTool.cmdlOpts, "", true);
     }
 
     private static boolean initFromArgs() {
-        timestampsStr = cmdl.getOptionValues(CMD_OPT_NAME__TIMESTAMPS);
-        if (timestampsStr == null) { // should not happen since marked as required opt
-            log.error("Missing value for option '" + CMD_OPT_NAME__TIMESTAMPS + "'");
+        LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS);
+        if (LoggingTimestampConverterTool.timestampsStr == null) { // should not happen since marked as required opt
+            LoggingTimestampConverterTool.log.error("Missing value for option '" + LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS + "'");
             return false;
         }
 
-        timestampsLong = new long[timestampsStr.length];
-        for (int curIdx = 0; curIdx<timestampsStr.length; curIdx++) {
+        LoggingTimestampConverterTool.timestampsLong = new long[LoggingTimestampConverterTool.timestampsStr.length];
+        for (int curIdx = 0; curIdx<LoggingTimestampConverterTool.timestampsStr.length; curIdx++) {
             try {
-                timestampsLong[curIdx] = Long.parseLong(timestampsStr[curIdx]);
-            } catch (NumberFormatException ex) {
-                log.error("Failed to parse timestamp:" + timestampsStr[curIdx], ex);
-                System.err.println("Failed to parse timestamp:" + timestampsStr[curIdx]);
+                LoggingTimestampConverterTool.timestampsLong[curIdx] = Long.parseLong(LoggingTimestampConverterTool.timestampsStr[curIdx]);
+            } catch (final NumberFormatException ex) {
+                LoggingTimestampConverterTool.log.error("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx], ex);
+                System.err.println("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx]);
                 return false;
             }
         }

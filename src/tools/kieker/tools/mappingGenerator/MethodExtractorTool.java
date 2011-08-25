@@ -29,6 +29,8 @@ import org.apache.commons.logging.LogFactory;
  * @author Robert von Massow
  * 
  */
+//FIXME: Resolve issue with commons.cli.OptionBuilder (#81)
+@SuppressWarnings("static-access")
 public class MethodExtractorTool {
 
     //private static final Log log = LogFactory.getLog(MethodExtractorTool.class);

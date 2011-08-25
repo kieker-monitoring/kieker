@@ -36,47 +36,47 @@ static {
 private PseudoColor(){
 }
 
-/**
- * Initialization for color stretching.
- * The parameters can be created by using <code>Util.extendExtrema</code>.
- * @param op smallest and largest expected value for operation level, as well as their difference
- * @param comp smallest and largest expected value for component level, as well as their difference
- * @param dc smallest and largest expected value for deployment context level, as well as their difference
- * @throws IllegalArgumentException
- */
-static void init( final double[] op, final double[] comp, final double[] dc ){
-	// FIXME: Dead code (ticket #82)
-    if( (PseudoColor.COLOR_MAX < PseudoColor.COLOR_MIN) || (PseudoColor.COLOR_MIN < 0) || (PseudoColor.COLOR_MAX > 255) ){
-        throw new RuntimeException( "Error in internal PseudoColor configuration." );
-    }
-    for( int level = Util.STRUCTURE_OPERATION; level <= Util.STRUCTURE_DEPLOYMENTCONTEXT; level++ ){
-        switch( level ){
-            case Util.STRUCTURE_OPERATION:
-                PseudoColor.minima[level] = op[Util.MIN];
-                PseudoColor.maxima[level] = op[Util.MAX];
-                PseudoColor.diffs[level] = op[Util.DIFF];
-                break;
-            case Util.STRUCTURE_COMPONENT:
-                PseudoColor.minima[level] = comp[Util.MIN];
-                PseudoColor.maxima[level] = comp[Util.MAX];
-                PseudoColor.diffs[level] = comp[Util.DIFF];
-                break;
-            case Util.STRUCTURE_DEPLOYMENTCONTEXT:
-                PseudoColor.minima[level] = dc[Util.MIN];
-                PseudoColor.maxima[level] = dc[Util.MAX];
-                PseudoColor.diffs[level] = dc[Util.DIFF];
-                break;
-            default:
-                throw new IndexOutOfBoundsException( "Invalid level: " + level + " (This should not happen.)" );
-        }
-        if( PseudoColor.maxima[level] < PseudoColor.minima[level] ){
-            throw new IllegalArgumentException( "Minimum value (" + PseudoColor.minima[level] + ") must not be greater than maximum value (" + PseudoColor.maxima[level] + ")" );
-        }
-        if( (PseudoColor.minima[level] < -1.0) || (PseudoColor.maxima[level] > 1.0) ){
-            throw new IllegalArgumentException( "Argument(s) out of range: " + PseudoColor.minima[level] + ", " + PseudoColor.maxima[level] + "  (must be in [-1 1])" );
-        }
-    }
-}
+///**
+// * Initialization for color stretching.
+// * The parameters can be created by using <code>Util.extendExtrema</code>.
+// * @param op smallest and largest expected value for operation level, as well as their difference
+// * @param comp smallest and largest expected value for component level, as well as their difference
+// * @param dc smallest and largest expected value for deployment context level, as well as their difference
+// * @throws IllegalArgumentException
+// */
+//static void init( final double[] op, final double[] comp, final double[] dc ){
+//	// FIXME: Dead code (ticket #82)
+//    if( (PseudoColor.COLOR_MAX < PseudoColor.COLOR_MIN) || (PseudoColor.COLOR_MIN < 0) || (PseudoColor.COLOR_MAX > 255) ){
+//        throw new RuntimeException( "Error in internal PseudoColor configuration." );
+//    }
+//    for( int level = Util.STRUCTURE_OPERATION; level <= Util.STRUCTURE_DEPLOYMENTCONTEXT; level++ ){
+//        switch( level ){
+//            case Util.STRUCTURE_OPERATION:
+//                PseudoColor.minima[level] = op[Util.MIN];
+//                PseudoColor.maxima[level] = op[Util.MAX];
+//                PseudoColor.diffs[level] = op[Util.DIFF];
+//                break;
+//            case Util.STRUCTURE_COMPONENT:
+//                PseudoColor.minima[level] = comp[Util.MIN];
+//                PseudoColor.maxima[level] = comp[Util.MAX];
+//                PseudoColor.diffs[level] = comp[Util.DIFF];
+//                break;
+//            case Util.STRUCTURE_DEPLOYMENTCONTEXT:
+//                PseudoColor.minima[level] = dc[Util.MIN];
+//                PseudoColor.maxima[level] = dc[Util.MAX];
+//                PseudoColor.diffs[level] = dc[Util.DIFF];
+//                break;
+//            default:
+//                throw new IndexOutOfBoundsException( "Invalid level: " + level + " (This should not happen.)" );
+//        }
+//        if( PseudoColor.maxima[level] < PseudoColor.minima[level] ){
+//            throw new IllegalArgumentException( "Minimum value (" + PseudoColor.minima[level] + ") must not be greater than maximum value (" + PseudoColor.maxima[level] + ")" );
+//        }
+//        if( (PseudoColor.minima[level] < -1.0) || (PseudoColor.maxima[level] > 1.0) ){
+//            throw new IllegalArgumentException( "Argument(s) out of range: " + PseudoColor.minima[level] + ", " + PseudoColor.maxima[level] + "  (must be in [-1 1])" );
+//        }
+//    }
+//}
 
 /**
  * Sets the flag whether to stretch colors to full spectrum, so that at least
