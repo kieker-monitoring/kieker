@@ -1,6 +1,5 @@
 package kieker.monitoring.probe.sigar;
 
-import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler;
 import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
@@ -19,12 +18,7 @@ public final class SigarSamplerFactory implements ISigarSamplerFactory {
         //private static final Log log = LogFactory.getLog(SigarSamplerFactory.class);
 
         /**
-         * Returns the singleton instance of the {@link SigarSamplerFactory} which
-         * uses the singleton instance of the {@link WriterController} retrieved via
-         * {@link WriterController#getInstance()}.
-         *
-         * The size of the internal thread pool used to serve the sensing and
-         * logging jobs is set to {@link SigarSamplerFactory#DEFAULT_EXECUTOR_THREAD_POOL_SIZE}.
+         * Returns the singleton instance of the {@link SigarSamplerFactory}.
          */
         public final static SigarSamplerFactory getInstance() {
                 return LazyHolder.INSTANCE;

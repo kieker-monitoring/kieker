@@ -56,10 +56,7 @@ public class JMSReader extends AbstractMonitoringReader {
 	}
 
 	/**
-	 * Constructor for JMSReader. Requires a subsequent call to the init method
-	 * in order to specify the input directory using the parameters
-	 * 
-	 * @a jmsServerLocation and @a jmsDestination.
+	 * Constructor for JMSReader. Requires a subsequent call to the init method.
 	 */
 	public JMSReader() {
 	}

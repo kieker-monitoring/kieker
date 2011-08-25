@@ -53,8 +53,8 @@ public final class ControlFlowRegistry {
 		 * log.info("Long.MIN_VALUE: " + Long.MIN_VALUE);
 		 * log.info("Long.MAX_VALUE+1: " + (Long.MAX_VALUE+1));
 		 */
-		lastThreadId = new AtomicLong(base);
-		log.info("First threadId will be " + (base + 1));
+		this.lastThreadId = new AtomicLong(base);
+		ControlFlowRegistry.log.info("First threadId will be " + (base + 1));
 	}
 	
 	/**
@@ -63,10 +63,12 @@ public final class ControlFlowRegistry {
 	 * @return a globally unique trace id.
 	 */
 	public final long getUniqueTraceId() {
-		long id = lastThreadId.incrementAndGet();
+		
+		final long id = this.lastThreadId.incrementAndGet();
 		// Since we use -1 as a marker for an invalid traceId,
 		// it must not be returned!
-		return (id == -1) ? lastThreadId.incrementAndGet() : id;
+		// TODO: this make no sense! and also not thread-safe? (avh)
+		return (id == -1) ? this.lastThreadId.incrementAndGet() : id;
 	}
 	
 	/**
@@ -76,7 +78,7 @@ public final class ControlFlowRegistry {
 	 * the method unsetThreadLocalTraceId()!
 	 */
 	public final long getAndStoreUniqueThreadLocalTraceId() {
-		long id = this.getUniqueTraceId();
+		final long id = this.getUniqueTraceId();
 		this.threadLocalTraceId.set(id);
 		return id;
 	}
@@ -86,7 +88,7 @@ public final class ControlFlowRegistry {
 	 * The thread is responsible for invalidating the stored curTraceId using
 	 * the method unsetThreadLocalTraceId()!
 	 */
-	public final void storeThreadLocalTraceId(long traceId) {
+	public final void storeThreadLocalTraceId(final long traceId) {
 		this.threadLocalTraceId.set(traceId);
 	}
 	
@@ -98,7 +100,7 @@ public final class ControlFlowRegistry {
 	 *         for this thread.
 	 */
 	public final long recallThreadLocalTraceId() {
-		Long traceIdObj = this.threadLocalTraceId.get();
+		final Long traceIdObj = this.threadLocalTraceId.get();
 		if (traceIdObj == null) {
 			return -1;
 		}
@@ -118,7 +120,7 @@ public final class ControlFlowRegistry {
 	 * the method unsetThreadLocalEOI()!
 	 */
 
-	public final void storeThreadLocalEOI(int eoi) {
+	public final void storeThreadLocalEOI(final int eoi) {
 		// log.info(Thread.currentThread().getId());
 		this.threadLocalEoi.set(eoi);
 	}
@@ -130,12 +132,12 @@ public final class ControlFlowRegistry {
 
 	public final int incrementAndRecallThreadLocalEOI() {
 		// log.info(Thread.currentThread().getId());
-		Integer curEoi = this.threadLocalEoi.get();
+		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			log.fatal("eoi has not been registered before");
+			ControlFlowRegistry.log.fatal("eoi has not been registered before");
 			return -1;
 		}
-		int newEoi = curEoi + 1;
+		final int newEoi = curEoi + 1;
 		this.threadLocalEoi.set(newEoi);
 		return newEoi;
 	}
@@ -148,9 +150,9 @@ public final class ControlFlowRegistry {
 	 */
 
 	public final int recallThreadLocalEOI() {
-		Integer curEoi = this.threadLocalEoi.get();
+		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			log.fatal("eoi has not been registered before");
+			ControlFlowRegistry.log.fatal("eoi has not been registered before");
 			return -1;
 		}
 		return curEoi;
@@ -171,7 +173,7 @@ public final class ControlFlowRegistry {
 	 * the method unsetThreadLocalSessionId()!
 	 */
 
-	public final void storeThreadLocalESS(int ess) {
+	public final void storeThreadLocalESS(final int ess) {
 		this.threadLocalEss.set(ess);
 	}
 
@@ -181,9 +183,9 @@ public final class ControlFlowRegistry {
 	 */
 
 	public final int recallAndIncrementThreadLocalESS() {
-		Integer curEss = this.threadLocalEss.get();
+		final Integer curEss = this.threadLocalEss.get();
 		if (curEss == null) {
-			log.fatal("ess has not been registered before");
+			ControlFlowRegistry.log.fatal("ess has not been registered before");
 			return -1;
 		}
 		this.threadLocalEss.set(curEss + 1);
@@ -198,9 +200,9 @@ public final class ControlFlowRegistry {
 	 */
 
 	public final int recallThreadLocalESS() {
-		Integer ess = this.threadLocalEss.get();
+		final Integer ess = this.threadLocalEss.get();
 		if (ess == null) {
-			log.fatal("ess has not been registered before");
+			ControlFlowRegistry.log.fatal("ess has not been registered before");
 			return -1;
 		}
 		return ess;

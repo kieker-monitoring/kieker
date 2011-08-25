@@ -61,9 +61,7 @@ public class RabbitMqReader extends AbstractMonitoringReader {
 
 	/**
 	 * Constructor for RabbitMqReader. Requires a subsequent call to the init
-	 * method in order to specify the input directory using the parameters
-	 * 
-	 * @a jmsServerLocation and @a jmsDestination.
+	 * method.
 	 */
 	public RabbitMqReader() {
 	}
@@ -72,7 +70,6 @@ public class RabbitMqReader extends AbstractMonitoringReader {
 	 * Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ |
 	 * jmsDestination=queue1
 	 */
-
 	@Override
 	public boolean init(final String initString) {
 		try {

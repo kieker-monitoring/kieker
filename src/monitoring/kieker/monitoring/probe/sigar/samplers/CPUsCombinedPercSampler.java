@@ -2,7 +2,6 @@ package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.ResourceUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;
@@ -11,7 +10,7 @@ import org.hyperic.sigar.SigarProxy;
 /**
  * Logs the combined (i.e., User + Sys + Nice + Wait) cpu utilization for each
  * CPU in the system, retrieved via {@link CpuPerc#getCombined()}, as {@link ResourceUtilizationRecord}s via
- * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
+ * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
  * 
  * @author Andre van Hoorn
  * 

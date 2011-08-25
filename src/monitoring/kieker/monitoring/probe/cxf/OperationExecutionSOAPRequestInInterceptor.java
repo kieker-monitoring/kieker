@@ -50,7 +50,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
             /* Store entry time tin for this trace.
                This value will be used by the corresponding invocation of the
                ResponseOutProbe. */
-            final long tin = timesource.getTime();
+            final long tin = OperationExecutionSOAPRequestInInterceptor.timesource.getTime();
             boolean isEntryCall = false; // set true below if is entry call
 
             /* 1.) Extract sessionId from SOAP header */
@@ -104,6 +104,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
                  * a host not equipped with the RequestOutProbe.
                  * We will now acquire a thread id which is stored (below)
                  * in the thread local variable! */
+            	// TODO: bug? it is not stored in the thread local variable ...
                 traceId = OperationExecutionSOAPRequestInInterceptor.cfRegistry.getUniqueTraceId();
                 sessionId = OperationExecutionSOAPRequestInInterceptor.NULL_SESSIONASYNCTRACE_STR;
                 isEntryCall = true;

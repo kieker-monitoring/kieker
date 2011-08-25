@@ -18,7 +18,7 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 /**
  * <p>
  * Starts and stops the periodic logging of CPU utilization employing the {@link SigarSamplerFactory} as the Servlet is initialized and destroyed respectively.
- * The statistics are logged with a period of {@value #SENSOR_INTERVAL_SECONDS} seconds.
+ * The statistics are logged with a period of {@value #DEFAULT_SENSOR_INTERVAL_SECONDS} seconds.
  * </p>
  * 
  * <p>
@@ -45,8 +45,8 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new ArrayList<ScheduledSamplerJob>();
 
-	private static final long SENSOR_INTERVAL_SECONDS = 15;
-	private static final long SENSOR_INITIAL_DELAY_SECONDS = 0;
+	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
+	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent arg0) {
@@ -70,13 +70,13 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		// Log utilization of each CPU every 30 seconds
 		final CPUsDetailedPercSampler cpuSensor = sigarFactory.createSensorCPUsDetailedPerc();
 		final ScheduledSamplerJob cpuSensorJob = this.monitoringController.schedulePeriodicSampler(cpuSensor,
-				CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS, CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
+				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS, CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
 		this.samplerJobs.add(cpuSensorJob);
 
 		// Log memory and swap statistics every 30 seconds
 		final MemSwapUsageSampler memSensor = sigarFactory.createSensorMemSwapUsage();
 		final ScheduledSamplerJob memSensorJob = this.monitoringController.schedulePeriodicSampler(memSensor,
-				CPUMemUsageServletContextListener.SENSOR_INITIAL_DELAY_SECONDS, CPUMemUsageServletContextListener.SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
+				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS, CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
 		this.samplerJobs.add(memSensorJob);
 	}
 }

@@ -23,15 +23,6 @@ public final class PipeReader extends AbstractMonitoringReader implements
 
 	private volatile Pipe pipe;
 
-	/**
-	 * Returns the pipe from which the reader receives its monitoring records.
-	 * One reason to require the pipe is to close it by a call to
-	 * {@link Pipe#close()}.
-	 */
-	public Pipe getPipe() {
-		return this.pipe;
-	}
-
 	public PipeReader() {
 	}
 

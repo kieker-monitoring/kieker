@@ -1,6 +1,7 @@
 package kieker.analysis.plugin;
 
 import java.util.Collection;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 
@@ -12,7 +13,7 @@ public interface IMonitoringRecordConsumerPlugin extends IMonitoringRecordReceiv
     /**
      * Simply return null to get records of all types.
      * 
-     * @return
+     * @return list of specific record types to subscribe to; null to subsribe to any type
      */
     public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList();
 }

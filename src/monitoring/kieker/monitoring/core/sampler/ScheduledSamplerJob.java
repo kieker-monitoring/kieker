@@ -21,14 +21,12 @@ public class ScheduledSamplerJob implements Runnable {
 	 * @param monitoringController
 	 *            used to log the sampled data (represented as
 	 *            {@link IMonitoringRecord}s) via
-	 *            {@link IMonitoringController#newMonitoringRecord(IMonitoringRecord)}
+	 *            {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(IMonitoringRecord)}.
 	 * @param sensor
 	 *            sampler to be trigger via
-	 *            {@link ISampler#sample(IMonitoringController)}
+	 *            {@link kieker.monitoring.core.sampler.ISampler#sample(IMonitoringController)}
 	 */
-	public ScheduledSamplerJob(
-			final IMonitoringController monitoringController,
-			final ISampler sensor) {
+	public ScheduledSamplerJob(final IMonitoringController monitoringController, final ISampler sensor) {
 		this.monitoringController = monitoringController;
 		this.sampler = sensor;
 	}
@@ -50,20 +48,21 @@ public class ScheduledSamplerJob implements Runnable {
 	}
 
 	private volatile ScheduledFuture<?> future = null;
-	
+
 	/**
 	 * 
 	 * @param future
 	 */
-	public void setFuture (final ScheduledFuture<?> future) {
+	public void setFuture(final ScheduledFuture<?> future) {
 		this.future = future;
 	}
-	
+
 	/**
 	 * 
-	 * @return
+	 * @return the {@link ScheduledFuture} which allows to cancel future
+	 *         executions of this {@link ScheduledSamplerJob}.
 	 */
-	public ScheduledFuture<?> getFuture () {
+	public ScheduledFuture<?> getFuture() {
 		return this.future;
 	}
 }

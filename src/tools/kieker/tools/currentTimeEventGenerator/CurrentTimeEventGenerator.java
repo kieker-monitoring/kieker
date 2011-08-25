@@ -12,9 +12,8 @@ import org.apache.commons.logging.LogFactory;
  * 
  * <ol>
  * <li>The first record received via
- * {@link #newMonitoringRecord(IMonitoringRecord)} immediately leads to a new
- * {@link TimestampEvent} with the timestamp
- * {@link IMonitoringRecord#getLoggingTimestamp()}</li>
+ * {@link #newTimestamp(long)} immediately leads to a new
+ * {@link TimestampEvent} with the given timestamp.</li>
  * <li>The timestamp of the first record is stored as {@link #firstTimestamp}
  * and future events are generated at {@link #firstTimestamp} + i *
  * {@link #timerResolution}.</li>

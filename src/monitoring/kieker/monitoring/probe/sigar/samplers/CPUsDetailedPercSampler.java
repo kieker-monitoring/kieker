@@ -1,8 +1,8 @@
 package kieker.monitoring.probe.sigar.samplers;
 
 import kieker.common.record.CPUUtilizationRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;
@@ -11,7 +11,7 @@ import org.hyperic.sigar.SigarProxy;
 /**
  * Logs detailed utilization statistics for each CPU in the system, retrieved
  * from {@link CpuPerc}, as {@link CPUUtilizationRecord}s via
- * {@link WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
+ * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(IMonitoringRecord)}
  * .
  * 
  * @author Andre van Hoorn

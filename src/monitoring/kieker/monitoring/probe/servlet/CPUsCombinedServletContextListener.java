@@ -17,7 +17,7 @@ import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
 /**
  * <p>
  * Starts and stops the periodic logging of CPU utilization employing the {@link SigarSamplerFactory} as the Servlet is
- * initialized and destroyed respectively. The statistics are logged with a period of {@value #SENSOR_INTERVAL_SECONDS}
+ * initialized and destroyed respectively. The statistics are logged with a period of {@value #DEFAULT_SENSOR_INTERVAL_SECONDS}
  * seconds.
  * </p>
  * 
@@ -45,8 +45,8 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new ArrayList<ScheduledSamplerJob>();
 
-	private static final long SENSOR_INTERVAL_SECONDS = 15;
-	private static final long SENSOR_INITIAL_DELAY_SECONDS = 0;
+	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
+	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent arg0) {
@@ -70,8 +70,8 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 		// Log utilization of each CPU every 30 seconds
 		final CPUsCombinedPercSampler cpuSensor = sigarFactory.createSensorCPUsCombinedPerc();
 		final ScheduledSamplerJob cpuSensorJob = this.samplingController.schedulePeriodicSampler(cpuSensor,
-				CPUsCombinedServletContextListener.SENSOR_INITIAL_DELAY_SECONDS,
-				CPUsCombinedServletContextListener.SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
+				CPUsCombinedServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS,
+				CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS, TimeUnit.SECONDS);
 		this.samplerJobs.add(cpuSensorJob);
 	}
 }
