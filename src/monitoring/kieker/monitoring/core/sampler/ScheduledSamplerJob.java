@@ -2,7 +2,6 @@ package kieker.monitoring.core.sampler;
 
 import java.util.concurrent.ScheduledFuture;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
@@ -20,8 +19,8 @@ public class ScheduledSamplerJob implements Runnable {
 	 * 
 	 * @param monitoringController
 	 *            used to log the sampled data (represented as
-	 *            {@link IMonitoringRecord}s) via
-	 *            {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(IMonitoringRecord)}.
+	 *            {@link kieker.common.record.IMonitoringRecord}s) via
+	 *            {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}.
 	 * @param sensor
 	 *            sampler to be trigger via
 	 *            {@link kieker.monitoring.core.sampler.ISampler#sample(IMonitoringController)}

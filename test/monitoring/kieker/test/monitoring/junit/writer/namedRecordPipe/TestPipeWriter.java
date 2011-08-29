@@ -4,11 +4,8 @@ import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.common.namedRecordPipe.Broker;
-import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 import kieker.test.monitoring.junit.util.DummyRecord;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
 
@@ -18,9 +15,9 @@ import kieker.test.monitoring.junit.util.NamedPipeFactory;
  */
 public class TestPipeWriter extends TestCase {	
 	/**
-	 * Tests whether the {@link PipeWriter} correctly passes received
-	 * {@link IMonitoringRecord}s to the {@link Broker} (which then passes these
-	 * to an {@link IPipeReader}).
+	 * Tests whether the {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter} correctly passes received
+	 * {@link IMonitoringRecord}s to the {@link kieker.common.namedRecordPipe.Broker} (which then passes these
+	 * to an {@link kieker.common.namedRecordPipe.IPipeReader}).
 	 */
 	public void testNamedPipeWriterPassesRecordsToPipe() {
 		final String pipeName = NamedPipeFactory.createPipeName();

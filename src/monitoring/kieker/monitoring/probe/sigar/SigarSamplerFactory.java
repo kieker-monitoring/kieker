@@ -1,6 +1,5 @@
 package kieker.monitoring.probe.sigar;
 
-import kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler;
 import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
@@ -10,7 +9,7 @@ import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarProxy;
 
 /**
- * Provides factory methods for {@link AbstractSigarSampler}s.
+ * Provides factory methods for {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s.
  *
  * @author Andre van Hoorn
  */

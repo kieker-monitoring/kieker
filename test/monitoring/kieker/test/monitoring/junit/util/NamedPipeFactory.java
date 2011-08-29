@@ -1,6 +1,5 @@
 package kieker.test.monitoring.junit.util;
 
-import java.io.PipedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -14,7 +13,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 /**
@@ -28,7 +26,7 @@ public class NamedPipeFactory {
 
 	/**
 	 * This method should be used in tests to generate unique names for
-	 * {@link Configuration}s with {@link PipeWriter}s and {@link PipedReader}s
+	 * {@link Configuration}s with {@link PipeWriter}s and {@link java.io.PipedReader}s
 	 * in order to avoid naming conflicts.
 	 * 
 	 * @return a unique name
@@ -84,7 +82,7 @@ public class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates an {@link IMonitoringWriter} that collects records from a
+	 * Creates an {@link kieker.monitoring.writer.IMonitoringWriter} that collects records from a
 	 * {@link Pipe} and collects these in the returned {@link List}.
 	 * 
 	 * @param pipeName

@@ -1,6 +1,5 @@
 package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.MemSwapUsageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
@@ -11,7 +10,7 @@ import org.hyperic.sigar.Swap;
 /**
  * Logs memory and swap statistics retrieved from {@link Mem} and {@link Swap},
  * as {@link MemSwapUsageRecord}s via
- * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(IMonitoringRecord)}
+ * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
  * .
  * 
  * @author Andre van Hoorn

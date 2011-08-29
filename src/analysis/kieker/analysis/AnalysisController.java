@@ -9,7 +9,6 @@ import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.common.record.MonitoringRecordReceiverException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -184,7 +183,7 @@ public class AnalysisController {
 	 *            if true, the method returns immediately when a consumer
 	 *            reports an error
 	 * @return
-	 * @throws MonitoringRecordReceiverException
+	 * @throws kieker.common.record.MonitoringRecordReceiverException
 	 *             true if no consumer reported an error; false if at least one
 	 *             consumer reported an error
 	 */

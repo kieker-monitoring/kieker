@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
-import kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,7 +20,7 @@ public final class SamplingController extends AbstractController implements
 		ISamplingController {
 	private final static Log log = LogFactory.getLog(SamplingController.class);
 
-	/** Executes the {@link AbstractSigarSampler}s. */
+	/** Executes the {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s. */
 	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
 
 	protected SamplingController(final Configuration configuration) {
