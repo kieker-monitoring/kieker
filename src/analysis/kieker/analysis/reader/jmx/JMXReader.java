@@ -73,7 +73,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 	private void initInstanceFromArgs(final String serviceURL, final String domain, final String logname) throws IllegalArgumentException,
 			MalformedURLException, MalformedObjectNameException {
 		if (serviceURL == null) {
-			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL ('" + serviceURL + "') is null");
+			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
 		}
 		this.serviceURL = new JMXServiceURL(serviceURL);
 		this.monitoringLog = new ObjectName(domain, "type", logname);
