@@ -159,7 +159,7 @@ public class FilesystemLogReplayerStarter {
 		}
 
 		/* log configuration */
-		if (retVal == true) {
+		if (retVal) {
 			FilesystemLogReplayerStarter.log.info("inputDirs: "
 					+ FilesystemLogReplayerStarter.StringArrayToDeliminedString(FilesystemLogReplayerStarter.inputDirs, ';'));
 			FilesystemLogReplayerStarter.log.info("Replaying in " + (FilesystemLogReplayerStarter.realtimeMode ? "" : "non-") + "realtime mode");

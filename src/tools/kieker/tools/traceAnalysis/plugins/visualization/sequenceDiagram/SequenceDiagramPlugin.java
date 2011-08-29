@@ -287,7 +287,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                 //    method = me.receiver.opname;
                 //}
                 //ps.print("step();"+"\n");
-                if (first == true) {
+                if (first) {
                     ps.print("async();"+"\n");
                     first = false;
                 } else {
