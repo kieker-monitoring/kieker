@@ -752,9 +752,22 @@ class SampleAndWeight implements Comparable<SampleAndWeight>{
     public int compareTo( SampleAndWeight other ){
         return Double.compare( this.sample, other.sample );
     }
-    public boolean equals( SampleAndWeight other ){
-        return compareTo( other ) == 0;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SampleAndWeight other = (SampleAndWeight) obj;
+		return compareTo( other ) == 0;
+	}
+	@Override
+	public int hashCode() {
+		  assert false : "hashCode not designed";
+		  return 42; // any arbitrary constant will do
+	}
 }
 
 /**
