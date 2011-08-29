@@ -3,7 +3,6 @@ package kieker.monitoring.probe.aspectJ.operationExecution;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.probe.aspectJ.operationExecution.AbstractOperationExecutionAspect;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

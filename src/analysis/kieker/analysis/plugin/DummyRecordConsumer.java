@@ -2,7 +2,6 @@ package kieker.analysis.plugin;
 
 import java.util.Collection;
 import kieker.common.record.IMonitoringRecord;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 
 /**
  *
