@@ -1,5 +1,7 @@
 package kieker.test.monitoring.aspectJ.compileTimeWeaving.twoConcurrentMethodsExample;
 
+import java.util.Random;
+
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
@@ -14,6 +16,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  */
 public class Starter extends Thread {
 
+	Random random = new Random();
+
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < 10000; i++) {
 			new Starter().start();
@@ -24,7 +28,7 @@ public class Starter extends Thread {
 
 	@Override
 	public void run() {
-		final double ranVal = Math.random();
+		final double ranVal = random.nextDouble();
 		if (ranVal < 0.5) {
 			if (ranVal < 0.25) {
 				// do nothing
@@ -53,7 +57,7 @@ public class Starter extends Thread {
 
 	@OperationExecutionMonitoringProbe()
 	private void work() {
-		int a = (int) (Math.random() * 5d);
+		int a = random.nextInt(6);
 		for (int i = 0; i < 2000000; i++) {
 			a += i / 1000;
 		}

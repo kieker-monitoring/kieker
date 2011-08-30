@@ -238,7 +238,6 @@ class MethodExtractor extends ClassLoader {
             }
         });
         this.analyseClasses(classes, packagePrefix, filter);
-        classes = null;
         for (final File file : descArray) {
             this.descendAndAnalyseDir(file, (packagePrefix + file.getName().replaceFirst(dir.getName(), "")).replaceAll(
                     File.separator, ".") + ".", filter);

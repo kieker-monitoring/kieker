@@ -284,4 +284,9 @@ public class ExecutionTrace extends Trace {
 
         return this.set.equals(other.set);
     }
+
+	@Override
+	public synchronized int hashCode() {
+		return this.set.hashCode();
+	}
 }
