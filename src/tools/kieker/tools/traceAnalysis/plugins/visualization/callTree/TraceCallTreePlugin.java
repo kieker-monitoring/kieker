@@ -137,7 +137,6 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
         ps.println(edgestringBuilder.toString());
         ps.println("}");
     }
-    private int numGraphsSaved = 0;
 
     private static void saveTreeToDotFile(final SystemModelRepository systemEntityFactory,
             final CallTreeNode root, final String outputFnBase, final boolean includeWeights,
@@ -151,7 +150,6 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
     public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights,
             final boolean shortLabels) throws FileNotFoundException {
         saveTreeToDotFile(this.systemEntityFactory, this.root, outputFnBase, includeWeights, shortLabels);
-        this.numGraphsSaved++;
         this.printMessage(new String[]{
                     "Wrote call tree to file '" + outputFnBase + ".dot" + "'",
                     "Dot file can be converted using the dot tool",

@@ -129,7 +129,9 @@ public final class JMXReader extends AbstractMonitoringReader {
 				JMXReader.log.debug("Failed to remove Listener!", e);
 			}
 			try {
-				jmx.close();
+				if (jmx != null) {
+					jmx.close();
+				}
 			} catch (final Exception e) {
 				JMXReader.log.debug("Failed to close JMX connection!", e);
 			}
@@ -179,7 +181,9 @@ public final class JMXReader extends AbstractMonitoringReader {
 				} catch (final ListenerNotFoundException e) {
 				}
 				try {
-					jmx.close();
+					if (jmx != null) {
+						jmx.close();
+					}
 					Thread.sleep(10000);
 				} catch (final Exception e) {
 				}

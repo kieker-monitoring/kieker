@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.jar.JarEntry;
@@ -276,6 +275,7 @@ class MethodExtractor extends ClassLoader {
             if (!filter.accept(method, c)) {
                 continue;
             }
+            /* currently not used
             final int mod = method.getModifiers();
             String prefix = "";
             if (Modifier.isPublic(mod)) {
@@ -298,7 +298,7 @@ class MethodExtractor extends ClassLoader {
             }
             if (Modifier.isFinal(mod)) {
                 prefix += "final ";
-            }
+            } */
             this.map.registerName(/*+ prefix*/method.getDeclaringClass().getName() + "." + method.getName() + "(" + this.concat(method.getParameterTypes()) + ")");
             method.getAnnotation(Override.class);
         }
