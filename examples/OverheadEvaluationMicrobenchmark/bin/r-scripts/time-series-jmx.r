@@ -1,5 +1,5 @@
 results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results"
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
+output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results-single.pdf"
 
 configs.loop=10
 configs.recursion=10
@@ -17,8 +17,8 @@ results.ts = matrix(nrow=configs.count,ncol=buckets.count,byrow=TRUE,dimnames=li
 
 pdf(output_fn, width=10, height=6.25, paper="special")
 
-for (cl in (1:configs.loop)) {
-  for (cr in (1:configs.recursion)) {
+for (cr in (1:configs.recursion)) {
+  for (cl in (1:configs.loop)) {
     for (cc in (1:configs.count)) {
       results_fn_temp=paste(results_fn, "-", cl, "-", cr, "-", cc, ".csv", sep="")
       results=read.csv2(results_fn_temp,quote="",colClasses=c("NULL","integer"),comment.char="",col.names=c("thread_id","duration_nsec"))
@@ -32,9 +32,9 @@ for (cl in (1:configs.loop)) {
     ts.plot(
       ts(results.ts[1,],end=results.count,deltat=buckets.size),
       ts(results.ts[2,],end=results.count,deltat=buckets.size),
-      gpars=list(ylim=c(500,520),col=configs.colors))
+      gpars=list(ylim=c(500,520),col=configs.colors,xlab="Executions"))
       legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean execution time of ...",ncol=2)
-    title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr, sep=""),ylab="Execution Time (µs)",xlab="Executions")
+    title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr, sep=""),ylab="Execution Time (µs)")
   }
 }
 invisible(dev.off())

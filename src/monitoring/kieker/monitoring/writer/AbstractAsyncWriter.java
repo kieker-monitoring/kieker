@@ -46,6 +46,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties properties = new Properties(super.getDefaultProperties());
+		//TODO: soll das hier wirklich eine neue Variable sein?
 		final String PREFIX = this.getClass().getName() + ".";
 		properties.setProperty(PREFIX + QUEUESIZE, "10000");
 		properties.setProperty(PREFIX + BEHAVIOR, "0");

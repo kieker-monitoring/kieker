@@ -22,7 +22,7 @@ rm(results_fn,baseresults,curvals,mcvs,i,j)
 
 pdf(output_fn, width=8, height=5, paper="special")
 plot.new()
-plot.window(xlim=c(min(recdepth)-0.5,max(recdepth)+0.5),ylim=c(min(medianvalues,meanvalues),max(medianvalues,meanvalues)),ylab="test")
+plot.window(xlim=c(min(recdepth)-0.5,max(recdepth)+0.5),ylim=c(min(medianvalues,meanvalues),max(medianvalues,meanvalues)))
 axis(1,at=recdepth)
 axis(2)
 title(xlab="Recursion Depth (Number of Executions)",ylab="Execution Time (µs)")

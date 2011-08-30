@@ -1,23 +1,22 @@
 results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
 output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
 
-
 configs.loop=5
 configs.recursion=1
 configs.count=4
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writing Data")
-configs.colors=c("black","red","yellow","green")
+configs.colors=c("black","red","blue","green")
 
 ## We assume same amount of data in each category
 results.count=5000000
 buckets.count=1000
 buckets.size=results.count/buckets.count
 
-results.ts = matrix(nrow=configs.count,ncol=buckets.count,byrow=TRUE,dimnames=list(configs.labels,c(1:buckets.count)))
 
 pdf(output_fn, width=10, height=6.25, paper="special")
 
 for (cl in (1:configs.loop)) {
+  results.ts = matrix(nrow=configs.count,ncol=buckets.count,byrow=TRUE,dimnames=list(configs.labels,c(1:buckets.count)))
   for (cr in (1:configs.recursion)) {
     for (cc in (1:configs.count)) {
       results_fn_temp=paste(results_fn, "-", cl, "-", cr, "-", cc, ".csv", sep="")
@@ -34,11 +33,9 @@ for (cl in (1:configs.loop)) {
       ts(results.ts[2,],end=results.count,deltat=buckets.size),
       ts(results.ts[3,],end=results.count,deltat=buckets.size),
       ts(results.ts[4,],end=results.count,deltat=buckets.size),
-      gpars=list(ylim=c(500,506), 
-                 col=configs.colors))
+      gpars=list(ylim=c(500,506),col=configs.colors,xlab="Executions"))
     legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean execution time of ...",ncol=2)
-    title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr),ylab="Execution Time (µs)",xlab="Executions")
+    title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr),ylab="Execution Time (µs)")
   }
 }
-dev.off()
 invisible(dev.off())

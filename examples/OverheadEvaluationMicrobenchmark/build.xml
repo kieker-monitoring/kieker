@@ -30,7 +30,8 @@
            debug="true"
            classpathref="compile-classpath"
            srcdir="src"
-           excludes="kieker/monitoring/probe/aspectJ/" />
+           excludes="kieker/monitoring/probe/aspectJ/"
+    	   includeAntRuntime="false" />
     <!-- WORKAROUND BEGIN -->
     <path id="compile-ajc-classpath">
       <fileset dir="lib/">
