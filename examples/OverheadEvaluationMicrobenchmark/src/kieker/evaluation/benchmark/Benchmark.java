@@ -20,10 +20,11 @@
 
 package kieker.evaluation.benchmark;
 
-import kieker.evaluation.monitoredApplication.MonitoredClass;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
+
+import kieker.evaluation.monitoredApplication.MonitoredClass;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
