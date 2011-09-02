@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
 
 /**
  * CXF InInterceptor to get the sessionIdentifier header from an incoming soap message
- * and associate it with the current thread id in TpmonController.
+ * and associate it with the current thread id.
  * 
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
  */
@@ -57,7 +57,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
-	protected static final ITimeSource timesource = ctrlInst.getTimeSource();
+	protected static final ITimeSource timesource = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getTimeSource();
 
 	private static final String componentName = OperationExecutionSOAPResponseInInterceptor.class.getName();
 	private static final String opName = "handleMessage(SoapMessage msg)";
@@ -129,7 +129,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final int myEoi = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalEOI();
 			final int myEss = OperationExecutionSOAPResponseInInterceptor.cfRegistry.recallThreadLocalESS();
 			final long myTin = OperationExecutionSOAPResponseInInterceptor.soapRegistry.recallThreadLocalOutRequestTin();
-			final long myTout = timesource.getTime();
+			final long myTout = OperationExecutionSOAPResponseInInterceptor.timesource.getTime();
 			// TODO: Remove following plausibility checks if implementation stable
 			if (myTraceId != traceId) {
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + ""

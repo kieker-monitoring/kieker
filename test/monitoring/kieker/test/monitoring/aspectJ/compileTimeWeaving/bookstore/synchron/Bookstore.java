@@ -21,8 +21,9 @@
 package kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.synchron;
 
 
-import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 import java.util.Vector;
+
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
  * A simple test and demonstration scenario for Kieker's 
@@ -60,32 +61,33 @@ public class Bookstore extends Thread{
      * by the local variables above the method.
      * (default: 100 requests; interRequestTime 5 (millisecs))
      * 
-     * This will be monitored by Tpmon, since it has the
-     * TpmonExecutionMonitoringProbe() annotation.
+     * This will be monitored by Kieker, since it has the
+     * @OperationExecutionMonitoringProbe() annotation.
      */
     @OperationExecutionMonitoringProbe()
-    public static void main(String[] args) throws InterruptedException {
-	for (int i = 0; i < numberOfRequests; i++) {
+    public static void main(final String[] args) throws InterruptedException {
+	for (int i = 0; i < Bookstore.numberOfRequests; i++) {
     		System.out.println("Bookstore.main: Starting request "+i);
-		Bookstore newBookstore = new Bookstore();
-		bookstoreScenarios.add(newBookstore);
+		final Bookstore newBookstore = new Bookstore();
+		Bookstore.bookstoreScenarios.add(newBookstore);
 		newBookstore.start();
-		Bookstore.waitabit(interRequestTime);
+		Bookstore.waitabit(Bookstore.interRequestTime);
 	}
         System.out.println("Bookstore.main: Finished with starting all requests.");
         System.out.println("Bookstore.main: Waiting for threads to terminate");
-        synchronized (bookstoreScenarios) {
-            while (!bookstoreScenarios.isEmpty()) {
-                bookstoreScenarios.wait();
+        synchronized (Bookstore.bookstoreScenarios) {
+            while (!Bookstore.bookstoreScenarios.isEmpty()) {
+                Bookstore.bookstoreScenarios.wait();
             }
         }
     }
 
-    public void run() {
+    @Override
+	public void run() {
     	Bookstore.searchBook();
-        synchronized (bookstoreScenarios) {
-            bookstoreScenarios.remove(this);
-            bookstoreScenarios.notify();
+        synchronized (Bookstore.bookstoreScenarios) {
+            Bookstore.bookstoreScenarios.remove(this);
+            Bookstore.bookstoreScenarios.notify();
         }
     }
 
@@ -98,11 +100,11 @@ public class Bookstore extends Thread{
     /**
      * Only encapsulates Thread.sleep()
      */
-    public static void waitabit(long waittime) {
+    public static void waitabit(final long waittime) {
     	if (waittime > 0) {
 		try{
 		Thread.sleep(waittime);
-		} catch(Exception e) {}
+		} catch(final Exception e) {}
 	}
     }
 } 
