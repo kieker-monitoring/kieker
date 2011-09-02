@@ -55,7 +55,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	 * Acts as a consumer to the rtDistributor and delegates incoming records to
 	 * the FSReaderRealtime instance.
 	 */
-	private class FSReaderRealtimeCons implements
+	private static class FSReaderRealtimeCons implements
 			IMonitoringRecordConsumerPlugin {
 
 		private final FSReaderRealtime master;
