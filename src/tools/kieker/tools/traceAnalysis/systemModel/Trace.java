@@ -37,6 +37,14 @@ public abstract class Trace implements IAnalysisEvent {
     }
 
     public final long getTraceId() {
-        return traceId;
+        return this.traceId;
     }
+    
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return (int)(this.traceId^(this.traceId>>>32));
+	}
 }
