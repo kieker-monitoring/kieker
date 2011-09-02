@@ -42,7 +42,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
  */
 public class NamedPipeFactory {
 	private final static AtomicInteger nextPipeId = new AtomicInteger(0);
-	private final static String PIPE_NAME_PREFIX = "pipeName_";
+	private final static String PIPE_NAME_PREFIX = "pipeName_"+NamedPipeFactory.class.getName()+"_";
 
 	/**
 	 * This method should be used in tests to generate unique names for

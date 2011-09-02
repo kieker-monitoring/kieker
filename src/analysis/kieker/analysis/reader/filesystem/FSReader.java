@@ -140,4 +140,10 @@ public class FSReader extends AbstractMonitoringReader {
 		}
 		return true;
 	}
+	
+	@Override
+	public void terminate() {
+		// TODO: Provide meaningful termination routine (#117)
+		FSReader.log.warn("Explicit termination not supported, yet (see ticket #117)");
+	}
 }

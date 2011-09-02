@@ -23,6 +23,7 @@ package kieker.analysis;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
@@ -59,11 +60,18 @@ public class AnalysisController {
 	 */
 	private final Vector<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
 	/** Contains all consumers which consume records of any type */
-	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new Vector<IMonitoringRecordConsumerPlugin>();
+	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers =
+			new Vector<IMonitoringRecordConsumerPlugin>();
 	/** Contains mapping of record types to subscribed consumers */
-	private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
+	private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers =
+			new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
 	private final Collection<IAnalysisPlugin> plugins = new Vector<IAnalysisPlugin>();
 
+	/**
+	 * Will be count down after the analysis is set-up.
+	 */
+	private final CountDownLatch initializationLatch = new CountDownLatch(1);
+	
 	/**
 	 * Starts an {@link AnalysisController} instance and returns after the
 	 * configured reader finished reading and all analysis plug-ins terminated;
@@ -121,6 +129,8 @@ public class AnalysisController {
 			 * Start reading
 			 */
 			if (success) {
+				// notify threads waiting for the initialization to be done
+				this.initializationLatch.countDown();  
 				if (!this.logReader.read()) {
 					AnalysisController.log
 							.error("Calling execute() on logReader returned false");
@@ -131,6 +141,8 @@ public class AnalysisController {
 			AnalysisController.log.fatal("Error occurred: " + exc.getMessage());
 			success = false;
 		} finally {
+			// to make sure that all waiting threads are released
+			this.initializationLatch.countDown();
 			try {
 				for (final IAnalysisPlugin c : this.plugins) {
 					c.terminate(!success); // normal termination (w/o error)
@@ -144,6 +156,26 @@ public class AnalysisController {
 		return success;
 	}
 
+    /**
+     * Initiates a termination of the analysis. 
+     */
+    public void terminate() {
+    	/* terminate the reader. After the reader has terminated, the run method()
+    	 * will terminate all plugins */
+    	AnalysisController.log.info("Explicit termination of the analysis. Terminating the reader ...");
+    	this.logReader.terminate();
+    }
+	
+	/**
+	 * Returns a {@link CountDownLatch} which has the value 0 after the
+	 * {@link AnalysisController} is initialized and the reader is running.
+	 * 
+	 * @return the initializationLatch
+	 */
+	protected final CountDownLatch getInitializationLatch() {
+		return this.initializationLatch;
+	}
+    
 	/**
 	 * Sets the log reader used as the source for monitoring records.
 	 * 

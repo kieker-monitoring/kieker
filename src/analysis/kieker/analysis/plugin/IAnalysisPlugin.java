@@ -28,7 +28,7 @@ public interface IAnalysisPlugin {
      * Initiates the start of a component.
      * This method is called once when a TpanInstance's run() method is called.
      * This implementation must not be blocking!
-     * Asynchronous consumers would spawn (an) aynchronous thread(s) in this
+     * Asynchronous consumers would spawn (an) asynchronous thread(s) in this
      * method.
      *
      * @return true on success; false otherwise.

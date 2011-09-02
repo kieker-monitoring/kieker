@@ -36,12 +36,14 @@ public class DummyLogReader extends AbstractMonitoringReader {
 
 	private final int i = 1;
 
+	private volatile boolean initShutdown = false;
+	
 	@Override
 	/**
 	 * It never finished to produce dummy data about each second
 	 */
 	public boolean read() {
-		while (true) {
+		while (!this.initShutdown) {
 			final long startTime = System.nanoTime();
 
 			// wait a bit
@@ -58,11 +60,17 @@ public class DummyLogReader extends AbstractMonitoringReader {
 					System.nanoTime());
 			this.deliverRecord(testRecord);
 		}
+		return true;
 	}
 
 	@Override
 	public boolean init(final String initString) throws IllegalArgumentException {
 		// nothing to do...
 		return true;
+	}
+	
+	@Override
+	public void terminate() {
+		this.initShutdown = true;
 	}
 }

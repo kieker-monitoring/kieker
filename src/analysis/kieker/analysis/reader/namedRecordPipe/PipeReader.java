@@ -110,4 +110,10 @@ public final class PipeReader extends AbstractMonitoringReader implements
 		/* Notify main thread */
 		this.terminationLatch.countDown();
 	}
+	
+	@Override
+	public void terminate() {
+		// will lead to notifyPipeClosed() and the subsequent termination of read()
+		this.pipe.close();  
+	}
 }

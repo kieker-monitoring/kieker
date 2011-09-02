@@ -101,8 +101,9 @@ public final class JMXReader extends AbstractMonitoringReader {
 
 	@Override
 	public final boolean read() {
-		if (silentreconnect)
-			return read2();
+		if (this.silentreconnect) {
+			return this.read2();
+		}
 		boolean ret = true;
 		JMXConnector jmx = null;
 		MBeanServerConnection mbServer = null;
@@ -111,7 +112,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 		try {
 			// Connect to the Server
 			try {
-				jmx = JMXConnectorFactory.connect(serviceURL);
+				jmx = JMXConnectorFactory.connect(this.serviceURL);
 			} catch (final IOException e) {
 				JMXReader.log.error("Unable to connect to JMX Server (" + e.getMessage() + ")");
 				JMXReader.log.debug("Error in JMX connection!", e);
@@ -125,7 +126,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 			JMXReader.log.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
 			// Waiting
-			block();
+			this.block();
 
 			// Shutdown
 			JMXReader.log.info("Shutting down JMXReader");
@@ -137,14 +138,16 @@ public final class JMXReader extends AbstractMonitoringReader {
 			ret = false;
 		} finally {
 			try {
-				if (logNotificationListener != null)
+				if (logNotificationListener != null) {
 					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
+				}
 			} catch (final Exception e) {
 				JMXReader.log.debug("Failed to remove Listener!", e);
 			}
 			try {
-				if (serverNotificationListener != null)
+				if (serverNotificationListener != null) {
 					jmx.removeConnectionNotificationListener(serverNotificationListener);
+				}
 			} catch (final ListenerNotFoundException e) {
 				JMXReader.log.debug("Failed to remove Listener!", e);
 			}
@@ -168,7 +171,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 			try {
 				// Connect to the Server
 				try {
-					jmx = JMXConnectorFactory.connect(serviceURL);
+					jmx = JMXConnectorFactory.connect(this.serviceURL);
 				} catch (final IOException e) {
 					Thread.sleep(10000);
 					continue;
@@ -181,7 +184,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 				JMXReader.log.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
 				// Waiting
-				block();
+				this.block();
 
 				// Shutdown
 				JMXReader.log.info("Shutting down JMXReader");
@@ -191,13 +194,15 @@ public final class JMXReader extends AbstractMonitoringReader {
 				JMXReader.log.error("Error in JMX connection!", e);
 			} finally {
 				try {
-					if (logNotificationListener != null)
+					if (logNotificationListener != null) {
 						mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
+					}
 				} catch (final Exception e) {
 				}
 				try {
-					if (serverNotificationListener != null)
+					if (serverNotificationListener != null) {
 						jmx.removeConnectionNotificationListener(serverNotificationListener);
+					}
 				} catch (final ListenerNotFoundException e) {
 				}
 				try {
@@ -217,27 +222,27 @@ public final class JMXReader extends AbstractMonitoringReader {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public final void run() {
-				unblock();
+				JMXReader.this.unblock();
 			}
 		});
-		synchronized (blockingObj) {
+		synchronized (this.blockingObj) {
 			try {
-				blockingObj.wait();
+				this.blockingObj.wait();
 			} catch (final InterruptedException e) { // ignore
 			}
 		}
 	}
 
 	private final void unblock() {
-		synchronized (blockingObj) {
-			blockingObj.notifyAll();
+		synchronized (this.blockingObj) {
+			this.blockingObj.notifyAll();
 		}
 	}
 
 	private final class LogNotificationListener implements NotificationListener {
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
-			deliverRecord((IMonitoringRecord) notification.getUserData());
+			JMXReader.this.deliverRecord((IMonitoringRecord) notification.getUserData());
 		}
 	}
 
@@ -246,18 +251,27 @@ public final class JMXReader extends AbstractMonitoringReader {
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType == JMXConnectionNotification.CLOSED) {
-				if (!silentreconnect)
+				if (!JMXReader.this.silentreconnect) {
 					JMXReader.log.info("JMX connection closed.");
-				unblock();
+				}
+				JMXReader.this.unblock();
 			} else if (notificationType == JMXConnectionNotification.FAILED) {
-				if (!silentreconnect)
+				if (!JMXReader.this.silentreconnect) {
 					JMXReader.log.info("JMX connection lost.");
-				unblock();
+				}
+				JMXReader.this.unblock();
 			} else if (notificationType == JMXConnectionNotification.NOTIFS_LOST) {
 				JMXReader.log.error("Monitoring record lost: " + notification.getMessage());
 			} else { // unknown message
 				JMXReader.log.info(notificationType + ": " + notification.getMessage());
 			}
 		}
+	}
+	
+	@Override
+	public void terminate() {
+		// TODO: Provide meaningful termination routine (#117)
+		//       (e.g. call to unblock)?
+		JMXReader.log.warn("Explicit termination not supported, yet (see ticket #117)");
 	}
 }

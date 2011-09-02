@@ -206,4 +206,9 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		}
 		return success;
 	}
+
+	@Override
+	public void terminate() {
+		this.tpanInstance.terminate();
+	}
 }

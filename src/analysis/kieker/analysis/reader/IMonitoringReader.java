@@ -20,6 +20,7 @@
 
 package kieker.analysis.reader;
 
+import kieker.analysis.AnalysisController;
 import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
@@ -30,7 +31,7 @@ public interface IMonitoringReader {
 	/**
 	 * Initialize instance from passed initialization string which is typically
 	 * a list of separated parameter/values pairs. The implementing class
-	 * AbstractMonitoringLogWriter includes convenient methods to extract
+	 * {@link AbstractMonitoringReader} includes convenient methods to extract
 	 * configuration values from an initString.
 	 * 
 	 * @param initString the initialization string
@@ -41,7 +42,7 @@ public interface IMonitoringReader {
 	/**
 	 * Adds the given record receiver. This method is only used by the framework
 	 * and should not be called manually to register a receiver. Use an
-	 * AnalysisInstance instead.
+	 * {@link AnalysisController} instead.
 	 * 
 	 * @param receiver the receiver
 	 */
@@ -52,7 +53,20 @@ public interface IMonitoringReader {
 	 * i.e., it is assumed that reading has finished before this method returns.
 	 * The method should indicate an error by the return value false.
 	 * 
+	 * In asynchronous scenarios, the {@link #terminate()} method can be used
+	 * to initiate the termination of this method.
+	 * 
 	 * @return true if reading was successful; false if an error occurred
 	 */
 	public boolean read();
+	
+    /**
+     * Initiates a termination of the reader. This method is only used by the 
+     * framework and should not be called manually to register a receiver. Use 
+     * the method {@link AnalysisController#terminate()} instead.
+     * 
+     * After receiving this notification, 
+     * the reader should terminate its {@link #read()} method. 
+     */
+    public void terminate();
 }

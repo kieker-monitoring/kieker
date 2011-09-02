@@ -245,4 +245,11 @@ public class JMSReader extends AbstractMonitoringReader {
 		}
 		return retVal;
 	}
+
+	@Override
+	public void terminate() {
+		// TODO: Provide meaningful termination routine (#117)
+		// (unblock according to JMXReader?)
+		JMSReader.log.warn("Explicit termination not supported, yet (see ticket #117)");
+	}
 }
