@@ -28,23 +28,23 @@ import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
-import java.util.Map.Entry;
 
 import kieker.analysis.AnalysisController;
-import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.analysis.reader.filesystem.FSReader;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
-import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
+import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.plugins.traceFilter.TraceEquivalenceClassFilter;
 import kieker.tools.traceAnalysis.plugins.traceFilter.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
@@ -60,10 +60,11 @@ import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.Componen
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ContainerDependencyGraphPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAllocation;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAssembly;
-import kieker.analysis.reader.filesystem.FSReader;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.visualization.sequenceDiagram.SequenceDiagramPlugin;
+import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 import org.apache.commons.cli.BasicParser;
@@ -158,9 +159,9 @@ public class TraceAnalysisTool {
                         + (numSelectedTraces > 1 ? "s" : "") + " selected");
             } catch (final Exception e) {
                 System.err.println("\nFailed to parse list of trace IDs: "
-                        + traceIdList + "(" + e.getMessage() + ")");
+                        + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")");
                 TraceAnalysisTool.log.error(
-                        "Failed to parse list of trace IDs: " + traceIdList, e);
+                        "Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
                 return false;
             }
         }
@@ -316,7 +317,7 @@ public class TraceAnalysisTool {
                         + ")";
                 dumpedOp = true;
             } else {
-                val = TraceAnalysisTool.cmdl.getOptionValues(longOpt).toString();
+                val = Arrays.toString(TraceAnalysisTool.cmdl.getOptionValues(longOpt));
                 TraceAnalysisTool.log.warn("Unformatted confguration output for option "
                         + longOpt);
             }
@@ -373,7 +374,7 @@ public class TraceAnalysisTool {
             final TraceEquivalenceClassFilter traceAllocationEquivClassFilter =
                     new TraceEquivalenceClassFilter(
                     Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME,
-                    systemEntityFactory,
+                    TraceAnalysisTool.systemEntityFactory,
                     TraceEquivalenceClassModes.ALLOCATION);
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
                 /** Currently, this filter is only used to print  an equivalence report.
@@ -386,7 +387,7 @@ public class TraceAnalysisTool {
             final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter =
                     new TraceEquivalenceClassFilter(
                     Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME,
-                    systemEntityFactory,
+                    TraceAnalysisTool.systemEntityFactory,
                     TraceEquivalenceClassModes.ASSEMBLY);
             if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
                 /** Currently, this filter is only used to print  an equivalence report.
@@ -442,7 +443,7 @@ public class TraceAnalysisTool {
                         TraceAnalysisTool.systemEntityFactory,
                         SequenceDiagramPlugin.SDModes.ALLOCATION,
                         new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(),
-                        shortLabels);
+                        TraceAnalysisTool.shortLabels);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAllocationSeqDiagr.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAllocationSeqDiagr);
                 allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
@@ -456,7 +457,7 @@ public class TraceAnalysisTool {
                         TraceAnalysisTool.systemEntityFactory,
                         SequenceDiagramPlugin.SDModes.ASSEMBLY,
                         new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(),
-                        shortLabels);
+                        TraceAnalysisTool.shortLabels);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblySeqDiagr.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAssemblySeqDiagr);
                 allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
@@ -475,8 +476,8 @@ public class TraceAnalysisTool {
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX),
                         true, // includeWeights,
-                        shortLabels,
-                        includeSelfLoops);
+                        TraceAnalysisTool.shortLabels,
+                        TraceAnalysisTool.includeSelfLoops);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAllocationComponentDepGraph.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAllocationComponentDepGraph);
                 allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
@@ -495,8 +496,8 @@ public class TraceAnalysisTool {
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX),
                         true, // includeWeights,
-                        shortLabels,
-                        includeSelfLoops);
+                        TraceAnalysisTool.shortLabels,
+                        TraceAnalysisTool.includeSelfLoops);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblyComponentDepGraph.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAssemblyComponentDepGraph);
                 allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
@@ -515,8 +516,8 @@ public class TraceAnalysisTool {
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX),
                         true, // includeWeights,
-                        shortLabels,
-                        includeSelfLoops);
+                        TraceAnalysisTool.shortLabels,
+                        TraceAnalysisTool.includeSelfLoops);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotContainerDepGraph.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotContainerDepGraph);
                 allTraceProcessingComponents.add(componentPlotContainerDepGraph);
@@ -535,8 +536,8 @@ public class TraceAnalysisTool {
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX),
                         true, // includeWeights,
-                        shortLabels,
-                        includeSelfLoops);
+                        TraceAnalysisTool.shortLabels,
+                        TraceAnalysisTool.includeSelfLoops);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAllocationOperationDepGraph.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAllocationOperationDepGraph);
                 allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
@@ -555,8 +556,8 @@ public class TraceAnalysisTool {
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX),
                         true, // includeWeights,
-                        shortLabels,
-                        includeSelfLoops);
+                        TraceAnalysisTool.shortLabels,
+                        TraceAnalysisTool.includeSelfLoops);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblyOperationDepGraph.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAssemblyOperationDepGraph);
                 allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
@@ -573,7 +574,7 @@ public class TraceAnalysisTool {
                         new File(TraceAnalysisTool.outputDir + File.separator
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
-                        shortLabels);
+                        TraceAnalysisTool.shortLabels);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotTraceCallTrees.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotTraceCallTrees);
                 allTraceProcessingComponents.add(componentPlotTraceCallTrees);
@@ -591,7 +592,7 @@ public class TraceAnalysisTool {
                         TraceAnalysisTool.outputDir + File.separator
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX),
-                        true, shortLabels);
+                        true, TraceAnalysisTool.shortLabels);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAggregatedCallTree.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAggregatedCallTree);
                 allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
@@ -609,7 +610,7 @@ public class TraceAnalysisTool {
                         TraceAnalysisTool.outputDir + File.separator
                         + TraceAnalysisTool.outputFnPrefix
                         + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX),
-                        true, shortLabels);
+                        true, TraceAnalysisTool.shortLabels);
                 mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAssemblyCallTree.getMessageTraceInputPort());
                 analysisInstance.registerPlugin(componentPlotAssemblyCallTree);
                 allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
@@ -621,7 +622,7 @@ public class TraceAnalysisTool {
             }
 
             if (numRequestedTasks == 0) {
-                log.warn("No task requested");
+                TraceAnalysisTool.log.warn("No task requested");
                 TraceAnalysisTool.printUsage();
                 System.err.println("");
                 System.err.println("No task requested");
@@ -643,7 +644,7 @@ public class TraceAnalysisTool {
                 }
             }
 
-            if (!TraceAnalysisTool.ignoreInvalidTraces && numErrorCount > 0) {
+            if (!TraceAnalysisTool.ignoreInvalidTraces && (numErrorCount > 0)) {
                 TraceAnalysisTool.log.error(numErrorCount
                         + " errors occured in trace processing components");
                 throw new Exception(numErrorCount
@@ -702,7 +703,7 @@ public class TraceAnalysisTool {
             TraceAnalysisTool.log.error("Exception", ex);
             retVal = false;
         } finally {
-            if (mtReconstrFilter != null && numRequestedTasks > 0) {
+            if ((mtReconstrFilter != null) && (numRequestedTasks > 0)) {
                 mtReconstrFilter.printStatusMessage();
             }
             System.out.println("");

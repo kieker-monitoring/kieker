@@ -20,6 +20,7 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
@@ -170,7 +171,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
 			throw new IllegalArgumentException("Invalid property value for "
 					+ FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":"
-					+ inputDirNames);
+					+ Arrays.toString(inputDirNames));
 		}
 
 		if (numWorkers <= 0) {
