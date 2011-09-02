@@ -31,7 +31,7 @@ public class ComponentType {
     private final int id;
     private final String packageName;
     private final String typeName;
-    private Collection<Operation> operations = new ArrayList<Operation>();
+    private final Collection<Operation> operations = new ArrayList<Operation>();
 
     public ComponentType(final int id, final String packageName,
             final String typeName) {
@@ -45,7 +45,7 @@ public class ComponentType {
         String tmpPackagName;
         String tmpTypeName;
         if (fullqualifiedTypeName.indexOf('.') != -1) {
-            String tmpComponentName = fullqualifiedTypeName;
+            final String tmpComponentName = fullqualifiedTypeName;
             int index = 0;
             for (index = tmpComponentName.length() - 1; index > 0; index--) {
                 if (tmpComponentName.charAt(index) == '.') {
@@ -75,14 +75,17 @@ public class ComponentType {
     }
 
     public final String getFullQualifiedName() {
-        return this.packageName + "." + typeName;
+    	if ((this.packageName == null) || (this.packageName.length() == 0)) {
+    		return this.typeName;
+    	}
+        return this.packageName + "." + this.typeName;
     }
 
     public final Collection<Operation> getOperations() {
         return this.operations;
     }
 
-    public final Operation addOperation(Operation op){
+    public final Operation addOperation(final Operation op){
         this.operations.add(op);
         return op;
     }
@@ -93,11 +96,11 @@ public class ComponentType {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof ComponentType)){
             return false;
         }
-        ComponentType other = (ComponentType)obj;
+        final ComponentType other = (ComponentType)obj;
         return other.id == this.id;
     }
 }
