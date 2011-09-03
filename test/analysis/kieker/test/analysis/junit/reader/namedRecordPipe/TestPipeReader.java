@@ -33,8 +33,8 @@ import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.test.monitoring.junit.util.DummyRecord;
-import kieker.test.monitoring.junit.util.NamedPipeFactory;
+import kieker.test.analysis.junit.util.DummyRecord;
+import kieker.test.analysis.junit.util.NamedPipeFactory;
 
 /**
  * 
