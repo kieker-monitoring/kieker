@@ -22,6 +22,7 @@ package kieker.monitoring.writer.jmx;
 
 import java.lang.management.ManagementFactory;
 
+import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
 import kieker.common.record.IMonitoringRecord;
@@ -56,7 +57,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 				domain = monitoringController.getJMXDomain();
 			}
 			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(CONFIG__LOGNAME));
-		} catch (final Exception ex) {
+		} catch (final MalformedObjectNameException ex) {
 			JMXWriter.log.error("The generated ObjectName is not correct! Check the following configuration values '" + CONFIG__DOMAIN + "="
 					+ this.configuration.getStringProperty(CONFIG__DOMAIN) + "' and '" + CONFIG__LOGNAME + "="
 					+ this.configuration.getStringProperty(CONFIG__LOGNAME) + "'");
