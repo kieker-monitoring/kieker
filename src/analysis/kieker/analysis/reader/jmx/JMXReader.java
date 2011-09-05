@@ -270,8 +270,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 	
 	@Override
 	public void terminate() {
-		// TODO: Provide meaningful termination routine (#117)
-		//       (e.g. call to unblock)?
-		JMXReader.log.warn("Explicit termination not supported, yet (see ticket #117)");
+		JMXReader.log.info("Shutdown of JMXReader requested.");
+		this.unblock();
 	}
 }
