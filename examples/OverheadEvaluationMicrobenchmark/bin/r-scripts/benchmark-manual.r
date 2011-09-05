@@ -44,7 +44,7 @@ for (ce in 1:experiments) {
   rect(ce-0.4,medianvalues[ce,1],ce+0.4,medianvalues[ce,2],angle=45,density=10)
   rect(ce-0.4,0,ce+0.4,medianvalues[ce,1],angle=135,density=5)
   for (cc in (2:configs.count)) {
-    labeltext=format(medianvalues[ce,cc]-medianvalues[ce,cc-1],digits=1,nsmall=1)
+    labeltext=formatC(medianvalues[ce,cc]-medianvalues[ce,cc-1],format = "f",digits=1)
       rect(ce-(strwidth(labeltext)*0.5),medianvalues[ce,cc]-strheight(labeltext),ce+(strwidth(labeltext)*0.5),medianvalues[ce,cc],col="white",border="black")
       text(ce,medianvalues[ce,cc],labels=labeltext,cex=0.75,col="black",pos=1,offset=0.1)
   }
