@@ -127,6 +127,12 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
+		try {
+			prepareFile();
+		} catch (final FileNotFoundException ex) {
+			SyncFsWriter.log.error("Failed to create log file.", ex);
+			throw new IllegalArgumentException("Failed to create log file.", ex);
+		}
 	}
 
 	// TODO: keep track of record type ID mapping!
@@ -200,7 +206,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
-			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))),autoflush);
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))), autoflush);
 		}
 	}
 }

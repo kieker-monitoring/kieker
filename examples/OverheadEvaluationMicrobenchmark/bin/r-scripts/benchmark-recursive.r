@@ -1,49 +1,49 @@
-#results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
-#output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.pdf"
-baseresults=read.csv2(results_fn,quote="",colClasses=c("NULL","NULL","integer","integer","NULL","integer"))
-baseresults["rt_msec"]=baseresults["duration_nsec"]/(1000)
-## order_index recursion_depth duration_nsec rt_msec
+results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
+output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results-bars.pdf"
 
-configs=unique(baseresults$order_index)
-configs.labels=c("Inactive Probe","Collecting Data","Writing Data")
-recdepth=unique(baseresults$recursion_depth)
+configs.loop=10
+configs.recursion=c(1)
+configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")
+configs.count=length(configs.labels)
+results.count=2000000
+results.skip =1000000
 
-meanvalues <- matrix(nrow=length(recdepth),ncol=length(configs),byrow=TRUE,dimnames=list(recdepth,configs))
-medianvalues <- matrix(nrow=length(recdepth),ncol=length(configs),byrow=TRUE,dimnames=list(recdepth,configs))
-for (i in recdepth){
-  curvals <- subset(baseresults, recursion_depth==i, select=c("order_index","rt_msec"))
-  for (j in configs){
-    mcvs <- subset(curvals, order_index==j)[["rt_msec"]]
-    meanvalues[(1:length(recdepth))[recdepth==i],(1:length(configs))[configs==j]] <- mean(mcvs)
-    medianvalues[(1:length(recdepth))[recdepth==i],(1:length(configs))[configs==j]] <- median(mcvs)
+## "[ recursion , config , loop ]"
+meanvalues <- array(dim=c(length(configs.recursion),configs.count,configs.loop),dimnames=list(configs.recursion,configs.labels,c(1:configs.loop)))
+medianvalues <- array(dim=c(length(configs.recursion),configs.count,configs.loop),dimnames=list(configs.recursion,configs.labels,c(1:configs.loop)))
+for (cr in configs.recursion) {
+  for (cc in (1:configs.count)) {
+    for (cl in (1:configs.loop)) {
+      results_fn_temp=paste(results_fn, "-", cl, "-", cr, "-", cc, ".csv", sep="")
+      results=read.csv2(results_fn_temp,nrows=(results.count-results.skip),skip=results.skip,quote="",colClasses=c("NULL","integer"),comment.char="",col.names=c("thread_id","duration_nsec"))
+      meanvalues[(1:length(configs.recursion))[configs.recursion==cr],cc,cl] <- mean(results[["duration_nsec"]])/(1000)
+      medianvalues[(1:length(configs.recursion))[configs.recursion==cr],cc,cl] <- median(results[["duration_nsec"]])/(1000)
+      rm(results,results_fn_temp)
+    }
   }
 }
-rm(results_fn,baseresults,curvals,mcvs,i,j)
 
 pdf(output_fn, width=8, height=5, paper="special")
 plot.new()
-plot.window(xlim=c(min(recdepth)-0.5,max(recdepth)+0.5),ylim=c(min(medianvalues,meanvalues),max(medianvalues,meanvalues)))
-axis(1,at=recdepth)
+plot.window(xlim=c(min(configs.recursion)-0.5,max(configs.recursion)+0.5),ylim=c(min(meanvalues),max(meanvalues)))
+axis(1,at=configs.recursion)
 axis(2)
 title(xlab="Recursion Depth (Number of Executions)",ylab="Execution Time (µs)")
-angle=rep(c(45,135),length(configs)/2,length.out=length(configs)-1)
-density=1:(length(configs)-1)*10
-#density=rep(0,length(configs)-1)
-#legend("topleft",inset=c(0.05,0.15),legend=rev(configs.labels),fill=TRUE,angle=rev(angle),density=rev(density),title="Overhead (median) of ...")
-legend("topleft",inset=c(0.05,0.15),legend=c(rev(configs.labels),"(mean values)"),fill=TRUE,angle=rev(angle),density=c(rev(density),0),title="Overhead (median) of ...",ncol=2)
-for (i in recdepth) {
-  meanval <- meanvalues[(1:length(recdepth))[recdepth==i],]
-  for (j in 1:(length(meanval)-1)) {
-    rect(i-0.35,meanval[j],i+0.5,meanval[j+1])
+for (cr in (1:length(configs.recursion))) {
+  rect(cr-0.4,mean(medianvalues[cr,3,]),cr+0.4,mean(medianvalues[cr,4,]),angle=45,density=30)
+  rect(cr-0.4,mean(medianvalues[cr,2,]),cr+0.4,mean(medianvalues[cr,3,]),angle=135,density=20)
+  rect(cr-0.4,mean(medianvalues[cr,1,]),cr+0.4,mean(medianvalues[cr,2,]),angle=45,density=10)
+  rect(cr-0.4,0,cr+0.4,mean(medianvalues[cr,1,]),angle=135,density=0)
+  for (cc in (2:configs.count)) {
+    labeltext=format(mean(medianvalues[cr,cc,])-mean(medianvalues[cr,cc-1,]),digits=1,nsmall=1)
+      rect(cr-(strwidth(labeltext)*0.5),mean(medianvalues[cr,cc,])-strheight(labeltext),cr+(strwidth(labeltext)*0.5),mean(medianvalues[cr,cc,]),col="white",border="black")
+      text(cr,mean(medianvalues[cr,cc,]),labels=labeltext,cex=0.75,col="black",pos=1,offset=0.1)
   }
-  medianval <- medianvalues[(1:length(recdepth))[recdepth==i],]
-  for (j in 1:(length(medianval)-1)) {
-    rect(i-0.4,medianval[j],i+0.4,medianval[j+1],col="white",border="black")
-    rect(i-0.4,medianval[j],i+0.4,medianval[j+1],angle=angle[j],density=density[j])
-    labeltext=format(medianval[j+1]-medianval[j],digits=1,nsmall=1)
-    rect(i-(strwidth(labeltext)*0.5),medianval[j+1]-strheight(labeltext),i+(strwidth(labeltext)*0.5),medianval[j+1],col="white",border="black")
-    text(i,medianval[j+1],labels=labeltext,cex=0.75,col="black",pos=1,offset=0.1)
+  printvalues = matrix(nrow=2,ncol=4,dimnames=list(c("mean","median")),c(1:configs.count))
+  for (cc in (1:configs.count)) {
+    printvalues["mean",cc] = mean(meanvalues[cr,cc,])
+    printvalues["median",cc] = mean(medianvalues[cr,cc,])
   }
+  print(printvalues)
 }
-rm(output_fn,medianval,meanval,i,j,labeltext,density,angle)
 invisible(dev.off())
