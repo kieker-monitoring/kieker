@@ -30,9 +30,9 @@ import org.apache.commons.logging.LogFactory;
  * {@link #AnalysisControllerThread(AnalysisController)} is started by calling
  * the {@link #start()} method. The analysis can be terminated by calling the
  * {@link #terminate()} method which delegates the call to the
- * {@link AnalysisController#terminate()} method.
+ * {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
- * @author avanhoorn
+ * @author Andre van Hoorn
  * 
  */
 public class AnalysisControllerThread extends Thread {

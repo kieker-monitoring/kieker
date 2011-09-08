@@ -63,7 +63,7 @@ public interface IMonitoringReader {
     /**
      * Initiates a termination of the reader. This method is only used by the 
      * framework and should not be called manually to register a receiver. Use 
-     * the method {@link AnalysisController#terminate()} instead.
+     * the method {@link kieker.analysis.AnalysisController#terminate()} instead.
      * 
      * After receiving this notification, 
      * the reader should terminate its {@link #read()} method. 
