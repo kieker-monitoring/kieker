@@ -40,6 +40,7 @@ public final class MappingFileWriter {
 	private final File mappingFile;
 	private int nextId = 1; // first ID is 1
 	// TODO instead of synchronized access better a concurrent structure?
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/177
 	private final Hashtable<Class<? extends IMonitoringRecord>, Integer> class2idMap = new Hashtable<Class<? extends IMonitoringRecord>, Integer>();
 
 	public MappingFileWriter(final String mappingFileFn) throws IOException {

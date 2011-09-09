@@ -91,6 +91,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		final String preparedQuery = "INSERT INTO " + tablename
 				+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)";
 		try {
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/168
 			/*
 			 * IS THIS STILL NEEDED? if
 			 * (this.configuration.getBooleanProperty(LOADID)) { final

@@ -85,6 +85,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		try {
 			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG__CONNECTIONSTRING));
 			final String tablename = this.configuration.getStringProperty(SyncDbWriter.CONFIG__TABLENAME);
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/169
 			/*
 			 * IS THIS STILL NEEDED? if
 			 * (this.configuration.getBooleanProperty(LOADID)) { final Statement

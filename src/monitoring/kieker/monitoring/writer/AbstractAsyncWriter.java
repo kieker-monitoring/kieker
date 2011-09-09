@@ -67,6 +67,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	protected Properties getDefaultProperties() {
 		final Properties properties = new Properties(super.getDefaultProperties());
 		//TODO: soll das hier wirklich eine neue Variable sein?
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/165
 		final String PREFIX = this.getClass().getName() + ".";
 		properties.setProperty(PREFIX + QUEUESIZE, "10000");
 		properties.setProperty(PREFIX + BEHAVIOR, "0");
@@ -100,6 +101,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				}
 				AbstractAsyncWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
 				// TODO: we should be able to abort this, perhaps a max time of repeats?
+				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/174
 			}
 		}
 		AbstractAsyncWriter.log.info("Writer shutdown complete");

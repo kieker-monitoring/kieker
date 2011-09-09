@@ -106,6 +106,7 @@ public final class SamplingController extends AbstractController implements
 			return null;
 		}
 		// TODO: should we check for NullPointer at getMonitoringController() ??
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/164
 		final ScheduledSamplerJob job =
 				new ScheduledSamplerJob(super.monitoringController, sensor);
 		// we need to keep the future for later cancellation/removal

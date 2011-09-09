@@ -88,6 +88,7 @@ public final class ControlFlowRegistry {
 		// Since we use -1 as a marker for an invalid traceId,
 		// it must not be returned!
 		// TODO: this make no sense! and also not thread-safe? (avh)
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/167
 		return (id == -1) ? this.lastThreadId.incrementAndGet() : id;
 	}
 	

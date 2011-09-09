@@ -668,6 +668,7 @@ public class TraceAnalysisTool {
             }
 
             // TODO: turn into plugin with output code in terminate(..) method
+            // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/170
             final String systemEntitiesHtmlFn = new File(
                     TraceAnalysisTool.outputDir + File.separator
                     + TraceAnalysisTool.outputFnPrefix
@@ -679,6 +680,7 @@ public class TraceAnalysisTool {
             System.out.println("Wrote table of system entities to file '"
                     + systemEntitiesHtmlFn + ".html'");
 
+            // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/166
             // TODO: these tasks should be moved to a decicated tool
             // if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADER)) {
             // numRequestedTasks++;

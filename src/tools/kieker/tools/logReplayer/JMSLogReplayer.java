@@ -104,6 +104,7 @@ public class JMSLogReplayer {
  * 
  * TODO: We need to extract this class and merge it with that of
  * {@link FilesystemLogReplayer}
+ * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/173
  * 
  * @author Andre van Hoorn
  * 

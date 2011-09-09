@@ -22,6 +22,7 @@ package kieker.monitoring.core.controller;
 
 /**
  * TODO: write JavaDoc
+ * See link http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/175
  * 
  * @author Jan Waller
  */

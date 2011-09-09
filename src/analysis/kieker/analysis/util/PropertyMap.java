@@ -28,6 +28,8 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * TODO: replace with Configuration, similar to Monitoring Component
+ * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/163
+ * 
  * @author Andre van Hoorn
  */
 public class PropertyMap {

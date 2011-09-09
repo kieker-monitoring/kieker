@@ -62,10 +62,12 @@ public class AnalysisControllerThread extends Thread {
 	public synchronized void start() {
 		super.start();
 		// TODO: wait until AnalysisController is initialized
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/171
 		try {
 			this.analysisInstance.getInitializationLatch().await();
 		} catch (final InterruptedException e) {
 			// TODO Auto-generated catch block
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/176
 			e.printStackTrace();
 		}
 	}
