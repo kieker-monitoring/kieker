@@ -39,6 +39,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 		// HostName may be empty!
 		// Assert.assertNotNull(Configuration.HOST_NAME + " must not be empty",
 		// configuration.getProperty(Configuration.HOST_NAME));
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/138
 		Assert.assertNotNull(Configuration.EXPERIMENT_ID + " must not be empty", configuration.getProperty(Configuration.EXPERIMENT_ID));
 		Assert.assertNotNull(Configuration.AUTO_SET_LOGGINGTSTAMP + " must not be empty", configuration.getProperty(Configuration.AUTO_SET_LOGGINGTSTAMP));
 		Assert.assertNotNull(Configuration.MONITORING_ENABLED + " must not be empty", configuration.getProperty(Configuration.MONITORING_ENABLED));
@@ -46,6 +47,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 		Assert.assertNotNull(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty",
 				configuration.getProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		// TODO: add other enforced values!
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/137
 	}
 
 	/**
@@ -76,6 +78,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Tests {@link Configuration#createSingletonConfiguration()}.
 	 * 
 	 * FIXME: "Missing test: Should test combinations of JVM-Params, Filenames, etc. How to do that?
+	 * 		See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/130
 	 */
 	public void testCreationSingletonConfigurationVariants() {
 	}
@@ -84,6 +87,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Tests {@link Configuration#createConfigurationFromFile(String)}.
 	 * 
 	 * FIXME: "File should be included correctly and it should be tested if the correct values are set"
+	 * 		See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/129
 	 */
 	public void testCreationfromFile() {
 		final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "META-INF/kieker.monitoring.properties.test";

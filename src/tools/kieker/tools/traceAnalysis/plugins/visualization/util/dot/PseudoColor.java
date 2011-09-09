@@ -38,7 +38,7 @@ private static final int COLOR_MIN = 95;        // lower this to get higher cont
 private static final int COLOR_MAX = 255;       // lower this to get lower intensity (you won't want this)
 private static final int COLOR_DIFF;
 
-private static double[] minima = new double[3]; /** @todo store these somewhere else, maybe static per level */
+private static double[] minima = new double[3]; /** @todo store these somewhere else, maybe static per level. See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/133*/
 private static double[] maxima = new double[3];
 private static double[] diffs = new double[3];
 
@@ -56,6 +56,7 @@ static {
 private PseudoColor(){
 }
 
+//See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/132
 ///**
 // * Initialization for color stretching.
 // * The parameters can be created by using <code>Util.extendExtrema</code>.
@@ -169,6 +170,7 @@ private static String intColorToHex( final int color ){
 //private static String booleanToRed( final boolean value ){
 //	return value ? "#ff5f5f" : "#ffffff";
 //}
+//See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/132
 
 /**
  * Maps a percent double value to a hex value that can be used in a color string.
@@ -178,5 +180,7 @@ private static String intColorToHex( final int color ){
 //	final int color = PseudoColor.COLOR_MIN + (int)( PseudoColor.COLOR_DIFF * ( 1.0 - value ) );
 //	return color < 0x10 ? "0" + Integer.toHexString( color ) : Integer.toHexString( color );
 //}
+//See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/132
+
 
 }

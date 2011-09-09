@@ -194,7 +194,8 @@ public class ExecutionTrace extends Trace {
 
     /**
      * TODO: It's not a good idea to return the internal data structure.
-     *
+     * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/152
+     * 
      * @return the sorted set of {@link Execution}s in this trace
      */
     public synchronized final SortedSet<Execution> getTraceAsSortedExecutionSet() {

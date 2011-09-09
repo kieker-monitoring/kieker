@@ -124,6 +124,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 	}
 
 	// TODO: keep track of record type ID mapping!
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/153
 	/**
 	 * Note that it's not necessary to synchronize this method since a file is
 	 * written at most by one thread.
@@ -147,6 +148,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
 			final Object val = recordFields[i];
 			// TODO: assert that val!=null and provide suitable log msg if null
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/140
 			this.pos.write(val.toString());
 			if (i < LAST_FIELD_INDEX) {
 				this.pos.write(';');

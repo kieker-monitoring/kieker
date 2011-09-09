@@ -37,6 +37,7 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
         int h = 0;
         // TODO: need a better hash function considering the order (e.g.,
         // MD5)
+        // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/157
         for (final Execution r : t.getTraceAsSortedExecutionSet()) {
             h ^= r.getOperation().getId();
             h ^= r.getAllocationComponent().getAssemblyComponent().getId();

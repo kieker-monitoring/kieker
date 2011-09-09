@@ -43,6 +43,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 // TODO: AVH: we have to clean this up and need to test the error handling!
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/142
 public class FSReaderCons implements IMonitoringRecordReceiver {
 
 	private static final Log log = LogFactory.getLog(FSReaderCons.class);

@@ -25,6 +25,7 @@ package kieker.monitoring.core.configuration;
  */
 interface Keys {
 	// TODO: if this changes, the default config file has to be adjusted! Ideally it would be created using this file!
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/151
 
 	/** prefix used for all kieker.monitoring components */
 	public final static String PREFIX = "kieker.monitoring.";

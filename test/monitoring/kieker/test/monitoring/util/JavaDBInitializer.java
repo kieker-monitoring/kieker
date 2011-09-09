@@ -39,6 +39,7 @@ public class JavaDBInitializer {
 	private static String dbTableName = "APP.kiekerdata";
 
 	// TODO: needs to be read from file
+	// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/158
 	private static String strCreateAddressTable = 
 		"CREATE table " + dbTableName + "(autoid INTEGER NOT NULL "
 			+ "   PRIMARY KEY GENERATED ALWAYS AS IDENTITY " + "   (START WITH 0, INCREMENT BY 1),"
@@ -47,6 +48,7 @@ public class JavaDBInitializer {
 			+ "vmname VARCHAR(40) NOT NULL DEFAULT ''," + "executionOrderIndex SMALLINT NOT NULL DEFAULT -1,"
 			+ "executionStackSize SMALLINT NOT NULL DEFAULT -1" +
 			// "INDEX (operation(16)), INDEX (traceid), INDEX (tin)" +
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/159
 			")";
 
 	public static void main(final String[] args) {
@@ -75,6 +77,7 @@ public class JavaDBInitializer {
 			statement.execute(JavaDBInitializer.strCreateAddressTable);
 			bCreatedTables = true;
 
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/146
 			// TODO: remove:
 			// statement = dbConnection.createStatement();
 			// statement.execute("INSERT INTO APP.kiekerdata (experimentid) VALUES (5)");

@@ -131,6 +131,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final long myTin = OperationExecutionSOAPResponseInInterceptor.soapRegistry.recallThreadLocalOutRequestTin();
 			final long myTout = OperationExecutionSOAPResponseInInterceptor.timesource.getTime();
 			// TODO: Remove following plausibility checks if implementation stable
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/162
 			if (myTraceId != traceId) {
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + ""
 						+ myTraceId + "(before) != " + traceId + "(after)");

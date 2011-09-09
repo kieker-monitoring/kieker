@@ -48,6 +48,7 @@ public final class SamplingController extends AbstractController implements
 				configuration
 						.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		// FIXME: caller should check in advance?
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/131
 		this.periodicSensorsPoolExecutor =
 				new ScheduledThreadPoolExecutor(threadPoolSize,
 						// Handler for failed sensor executions that simply logs

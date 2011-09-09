@@ -44,6 +44,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * TODO: refactor analysis readers similar to monitoring writers!
+ * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/161
  * 
  * @author Jan Waller
  * 
@@ -71,6 +72,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 	public final boolean init(final String initString) {
 		try {
 			// TODO: "=" may be part of the serviceURL -> @
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/135
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "@");
 			final String server = propertyMap.getProperty("server", "localhost");
 			final int port = Integer.valueOf(propertyMap.getProperty("port", "0")).intValue();

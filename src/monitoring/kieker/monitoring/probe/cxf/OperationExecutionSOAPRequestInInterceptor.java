@@ -125,6 +125,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
                  * We will now acquire a thread id which is stored (below)
                  * in the thread local variable! */
             	// TODO: bug? it is not stored in the thread local variable ...
+            	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/143
                 traceId = OperationExecutionSOAPRequestInInterceptor.cfRegistry.getUniqueTraceId();
                 sessionId = OperationExecutionSOAPRequestInInterceptor.NULL_SESSIONASYNCTRACE_STR;
                 isEntryCall = true;

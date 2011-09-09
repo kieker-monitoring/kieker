@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class Broker {
 	// TODO: change to lazy construction
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/144
 	private static final Broker INSTANCE = new Broker();
 	private static final Log log = LogFactory.getLog(Broker.class);
 

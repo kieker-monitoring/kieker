@@ -470,6 +470,7 @@ public class TestTraceReconstructionFilter extends TestCase {
                     receivedTheValidTriggerExecutionTrace.set(Boolean.TRUE);
                 } else {
                     // TODO: for consistency reasons we would need to set an additional flag here
+                	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/147
                     fail("Received an unexpected valid execution trace " + event);
                 }
             }
@@ -486,6 +487,7 @@ public class TestTraceReconstructionFilter extends TestCase {
                     receivedTheValidTriggerMessageTrace.set(Boolean.TRUE);
                 } else {
                     // TODO: for consistency reasons we would need to set an additional flag here
+                	// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/148
                     fail("Received an unexpected message trace " + event);
                 }
             }

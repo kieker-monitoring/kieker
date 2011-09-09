@@ -40,6 +40,7 @@ public final class KiekerJMXMonitoringLog extends NotificationBroadcasterSupport
 
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		// TODO: are there problems with these extremely short messages?
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/139
 		final Notification notification = new Notification(MESSAGE_TYPE, kiekerMonitoringLogName, 0L, 0L);
 		notification.setUserData(record);
 		super.sendNotification(notification);

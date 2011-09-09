@@ -136,6 +136,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	}
 
 	// TODO: keep track of record type ID mapping!
+	// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/154
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 
@@ -155,6 +156,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
 			final Object val = recordFields[i];
 			// TODO: assert that val!=null and provide suitable log msg if null
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/141
 			sb.append(val);
 			if (i < LAST_FIELD_INDEX) {
 				sb.append(';');
