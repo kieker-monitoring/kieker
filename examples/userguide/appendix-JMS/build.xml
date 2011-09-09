@@ -7,12 +7,16 @@
 	</path>
 
 	<condition property="not-all-files-available">
-		<not>
-			<and>
-				<available file="${lib.dir}/${jar.file.commons-logging}" />
-				<available file="${lib.dir}/${jar.file.kieker}" />
-			</and>
-		</not>
+		<resourcecount property="num.requiredLibsFound" when="ne" count="8">
+			<fileset dir="${lib.dir}">
+				<include name="${jar.file.commons-logging}" />
+				<include name="${jar.file.kieker}" />
+				<include name="${jar.file.jms}" />
+				<include name="${jar.file.jndikit}" />
+				<include name="${jar.file.concurrent}" />
+				<include name="${jar.files.openjms}" /> <!-- actually 3 files -->
+			</fileset>
+		</resourcecount>
 	</condition>
 
 	<target name="-check-files" if="not-all-files-available">
