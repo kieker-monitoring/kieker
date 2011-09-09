@@ -58,7 +58,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected void init() {
-		final boolean autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__FLUSH);
+		final boolean autoflush = this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH);
 		String path;
 		if (this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
@@ -99,7 +99,8 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 final class FsWriterThread extends AbstractAsyncThread {
-
+	//private static final Log log = LogFactory.getLog(FsWriterThread.class);
+	
 	// configuration parameters
 	private static final int maxEntriesInFile = 25000;
 
@@ -172,7 +173,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
-			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))),autoflush);
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))),this.autoflush);
 			this.pos.flush();
 		}
 	}
