@@ -71,4 +71,9 @@ public class MyPipeReader extends AbstractMonitoringReader {
         }
         return true;
     }
+
+	@Override
+	public void terminate() { 
+		// currently no termination code (could be refined)
+	}
 }
