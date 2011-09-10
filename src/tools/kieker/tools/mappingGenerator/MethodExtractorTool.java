@@ -51,6 +51,7 @@ import org.apache.commons.logging.LogFactory;
 public class MethodExtractorTool {
 
 	// private static final Log log = LogFactory.getLog(MethodExtractorTool.class);
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/197
 
 	private static CommandLine cmdl = null;
 	private static final CommandLineParser cmdlParser = new BasicParser();
@@ -281,6 +282,7 @@ class MethodExtractor extends ClassLoader {
 			begIndex = begIndex == -1 ? 0 : begIndex;
 			final int endIndex = file.getName().lastIndexOf('.');
 			// log.info("analyzing " + packagePrefix + file.getName().substring(begIndex, endIndex));
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/197
 			try {
 				final Class<?> c = super.loadClass(packagePrefix + file.getName().substring(begIndex, endIndex));
 				this.analyzeClass(c, filter);

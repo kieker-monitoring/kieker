@@ -86,6 +86,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
     private String componentNodeLabel(final AllocationComponent component,
             final boolean shortLabels) {
         //String resourceContainerName = component.getExecutionContainer().getName();
+    	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/203
         String assemblyComponentName = component.getAssemblyComponent().getName();
         String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();

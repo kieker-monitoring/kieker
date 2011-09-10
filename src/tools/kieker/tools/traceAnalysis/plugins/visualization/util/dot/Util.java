@@ -274,6 +274,7 @@ public class Util {
 	private static double[] padWithZeroes(double[] values) {
 		double[] result = new double[values.length + 2];
 		// result[ 0 ] = result[ values.length + 1 ] = 0.0; // does FindBugs yell on this? ;-)
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/215
 		for (int i = 0; i < values.length; i++) {
 			result[i + 1] = values[i];
 		}
@@ -617,6 +618,7 @@ public class Util {
 			throw new IllegalArgumentException("Parameter out of range [0.0,1.0]: " + v);
 		}
 		// return 1.022 / ( 1 + 90.0 * Math.exp( v * -9.0 ) ) - 0.011;
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/215
 		return 1.104 / (1 + 20.0 * Math.exp(v * -6.0)) - 0.0524; // sinus-like
 	}
 
@@ -753,6 +755,7 @@ public class Util {
 			color = PseudoColor.getColor(-1, scalePercentToRating(percent)).getRGB();
 			for (row = 0; row < height; row++) { // upper half
 			// image.setRGB( col, row, shade( upperBgColor, lowerBgColor, sigmoid( (double) row / stretchedHeight ) ).getRGB() );
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/215
 				image.setRGB(col, row, upperBgColor.getRGB());
 			}
 			for (row = height; row < stretchedHeight; row++) { // lower half

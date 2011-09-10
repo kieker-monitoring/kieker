@@ -37,6 +37,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTraceProcessingPlugin {
 
     //private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/199
 
     protected final DependencyGraph<T> dependencyGraph;
 

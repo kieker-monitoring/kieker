@@ -117,6 +117,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 
 			final Context context = new InitialContext(properties);
 
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/192
 			// final Context context = new InitialContext();
 			// context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY,
 			// contextFactoryType);
@@ -147,6 +148,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 				destination = this.session.createQueue(topic);
 				// Is the following required?
 				//context.bind(topic, destination);
+				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/192
 			}
 
 			this.sender = this.session.createProducer(destination);

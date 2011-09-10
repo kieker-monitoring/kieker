@@ -97,6 +97,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
                     null // misc
                     )).toString();
             //strBuild.append(node.getId()).append("[label =\"").append(componentNodeLabel(node, shortLabels)).append("\",shape=box];\n");
+            // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/201
             strBuild.append("\n");
         }
         ps.println(strBuild.toString());

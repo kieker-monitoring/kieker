@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.visualization.util.dot;
 
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/214
 //package kieker.tpan.plugins.util.dot;
 //
 //import java.util.ArrayList;

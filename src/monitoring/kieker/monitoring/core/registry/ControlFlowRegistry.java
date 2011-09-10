@@ -143,6 +143,7 @@ public final class ControlFlowRegistry {
 
 	public final void storeThreadLocalEOI(final int eoi) {
 		// log.info(Thread.currentThread().getId());
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/187
 		this.threadLocalEoi.set(eoi);
 	}
 
@@ -153,6 +154,7 @@ public final class ControlFlowRegistry {
 
 	public final int incrementAndRecallThreadLocalEOI() {
 		// log.info(Thread.currentThread().getId());
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/187
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
 			ControlFlowRegistry.log.fatal("eoi has not been registered before");

@@ -83,6 +83,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
     //private static final String outputFn = "SchedulingList";
     //private static PrintStream ps;
+    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/195
     @Override
 	public boolean newMonitoringRecord(
             final IMonitoringRecord monitoringRecord) {
@@ -161,6 +162,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
             @Override
 			public void run() {
+            	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/196
                 //ctrlnst.terminateMonitoring();
                 if (RealtimeReplayDistributor.this.terminationLatch != null) {
                     RealtimeReplayDistributor.this.terminationLatch.countDown(); // signal that last record has been scheduled

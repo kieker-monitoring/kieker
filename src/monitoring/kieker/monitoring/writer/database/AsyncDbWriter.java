@@ -71,6 +71,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public static final String CONFIG__NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
 
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/189
 
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);

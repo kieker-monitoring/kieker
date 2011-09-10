@@ -93,7 +93,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Matthias Rohr
  */
 public class TraceAnalysisTool {
-
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/221
     private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
     private static final SystemModelRepository systemEntityFactory = new SystemModelRepository();
     private static final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory = new AllocationComponentOperationPairFactory(

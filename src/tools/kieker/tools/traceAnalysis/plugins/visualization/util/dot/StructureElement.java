@@ -231,6 +231,7 @@ boolean isLonely(){
     return potentialNeighbor.isRoot() && (potentialNeighbor.outgoing.size() == 1);
 }
 
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/212
 ///**
 // * Fetches all sibling elements: they are &quot;besides&quot; the current element,
 // * on the same structure level, but not directly connected.
@@ -311,6 +312,7 @@ List<Long> getChildrensResponseTimes(){
  * @param type select 1 for anomaly score, or 2 for response times
  * @return array of percentages [0.0,1.0], all zeroes for root
  */
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/212
 //@Deprecated
 //private double[] getHistogram( int width, int type ){
 //    double[] values = new double[ width ];

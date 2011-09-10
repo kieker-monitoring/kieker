@@ -186,6 +186,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons,
 				this.terminationLatch);
 		// fsReader.addConsumer(rtDistributor, null);
+		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/194
 		this.tpanInstance.setReader(fsReader);
 		this.tpanInstance.registerPlugin(this.rtDistributor);
 	}

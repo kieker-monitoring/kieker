@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.visualization.util.dot;
 
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/213
 //package kieker.tpan.plugins.util.dot;
 //
 //import org.trustsoft.timingBehaviorAnomalyDetection.EvaluatedExecution;

@@ -149,6 +149,7 @@ public class ExecutionTrace extends Trace {
                 Execution curReturnReceiver; // receiverComponentName of return message
                 while (curStack.size() > curE.getEss()) {
                     final Message poppedCall = curStack.pop();
+                    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/218
                     prevE = poppedCall.getReceivingExecution(); //.execution;
                     curReturnReceiver = poppedCall.getSendingExecution(); //curStack.peek().getSendingExecution(); //.execution;
                     final Message m = new SynchronousReplyMessage(prevE.getTout(),

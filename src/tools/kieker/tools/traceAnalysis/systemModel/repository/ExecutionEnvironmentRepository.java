@@ -42,6 +42,7 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
         this.rootExecutionContainer = rootExecutionContainer;
         //this.executionContainersById.put(rootExecutionContainer.getId(),
         //        rootExecutionContainer);
+        // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/216
     }
 
    /** Returns the instance for the passed namedIdentifier; null if no instance

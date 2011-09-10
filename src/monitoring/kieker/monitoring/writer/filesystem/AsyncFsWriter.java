@@ -100,6 +100,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
  */
 final class FsWriterThread extends AbstractAsyncThread {
 	//private static final Log log = LogFactory.getLog(FsWriterThread.class);
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/191
 	
 	// configuration parameters
 	private static final int maxEntriesInFile = 25000;

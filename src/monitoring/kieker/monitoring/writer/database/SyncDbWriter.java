@@ -69,6 +69,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG__CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString";
 	public static final String CONFIG__TABLENAME = SyncDbWriter.PREFIX + "TableName";
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/190
 
 	private final Connection conn;
 	private final PreparedStatement psInsertMonitoringData;

@@ -167,6 +167,7 @@ class FSDirectoryReader {
 	 * monitoring log files having the prefix 'tpmon' instead of 'kieker'
 	 */
 	//private boolean legacyTpmonMode = false;
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/181
 
 	/**
 	 * Reads the mapping file located in the directory and loads the required
@@ -191,6 +192,7 @@ class FSDirectoryReader {
 				FSDirectoryReader.log
 						.info("Found 'tpmon.map' ... switching to legacy mode");
 				//this.legacyTpmonMode = true;
+				//See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/181
 				this.filePrefix = FSDirectoryReader.legayFilePrefix;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old
@@ -295,6 +297,7 @@ class FSDirectoryReader {
 					boolean haveTypeId = false;
 
 					for (int i = 0; st.hasMoreTokens(); i++) {
+						// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/182
 						// log.info("i:" + i + " numTokens:" + numTokens +
 						// " hasMoreTokens():" + st.hasMoreTokens());
 						String token = st.nextToken();

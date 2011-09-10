@@ -80,6 +80,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
         }
 
         //String resourceContainerName = component.getExecutionContainer().getName();
+        // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/200
         final String assemblyComponentName = component.getAssemblyComponent().getName();
         final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
@@ -160,6 +161,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
                             null // misc
                             )).toString();
                     //strBuild.append(node.getId()).append("[label =\"").append(componentNodeLabel(node, shortLabels)).append("\",shape=box];\n");
+                    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/200
                 }
                 strBuild.append("}\n");
             }

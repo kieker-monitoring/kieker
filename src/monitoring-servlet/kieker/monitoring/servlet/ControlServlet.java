@@ -191,6 +191,7 @@ public class ControlServlet extends HttpServlet {
 				 * action = switchFaultInjection
 				 */
 			} else if (action.equalsIgnoreCase("switchFaultInjection")) {
+				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/193
 				// final String activate = request.getParameter("activate");
 				// boolean enable = false;
 				// if ((activate != null) && activate.equalsIgnoreCase("true"))

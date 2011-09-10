@@ -28,8 +28,10 @@ import kieker.analysis.plugin.IAnalysisEvent;
  */
 public abstract class AbstractInputPort<T extends IAnalysisEvent> implements IInputPort<T> {
 
+	
     //private static final Log log = LogFactory.getLog(AbstractInputPort.class);
-
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/179
+	
     private final String description;
 
     @SuppressWarnings("unused")

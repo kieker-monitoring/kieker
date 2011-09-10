@@ -177,6 +177,7 @@ public class SystemModelRepository {
         Collection<Operation> operations = this.operationFactory.getOperations();
         for (Operation op : operations) {
             StringBuilder paramListStrBuild = new StringBuilder();
+            // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/217
             //paramListStrBuild.append("<ul>");
             for (String paramType : op.getSignature().getParamTypeList()) {
                 paramListStrBuild.append("<li>").append(paramType).append("</li>");

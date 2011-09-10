@@ -213,6 +213,7 @@ public static String createConnection( String prefix, String from, String to, St
     dot.append("]");
     return dot.toString();
     //return String.format( "%s\"%s\" -> \"%s\" [label=\"%d\"];\n", prefix, from, to, label );
+    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/209
 }
 
 /**

@@ -61,7 +61,7 @@ import javax.swing.border.TitledBorder;
  * 
  */
 public class TraceAnalysisGui extends JFrame implements ActionListener {
-
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/220
 	private static final long serialVersionUID = 11333L;
 	private final JFrame frame;
 	private final JButton remB, addB, run;

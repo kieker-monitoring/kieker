@@ -50,6 +50,7 @@ public class RealtimeReplayWorker implements Runnable {
         if (this.monRec != null) {
                 if (!this.cons.newMonitoringRecord(this.monRec)) {
                     // TODO: check what to do
+                	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/145
                     RealtimeReplayWorker.log.error("Consumer returned with error");
                 }
             this.rd.decreaseActive();

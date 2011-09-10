@@ -32,6 +32,7 @@ import java.util.TimeZone;
  * @author Andre van Hoorn
  */
 public class LoggingTimestampConverter {
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/222
     //private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);
 
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";

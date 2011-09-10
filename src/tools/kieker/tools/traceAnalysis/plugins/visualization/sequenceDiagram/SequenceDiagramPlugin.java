@@ -156,12 +156,14 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
                         SequenceDiagramPlugin.this.reportError(mt.getTraceId());
                         SequenceDiagramPlugin.log.error("File not found", ex);
                         //throw new TraceProcessingException("File not found", ex);
+                        // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/205
                     }
                 }
             };
 
     private static String assemblyComponentLabel(//final SystemEntityFactory systemEntityFactory,
             final AssemblyComponent component, final boolean shortLabels) {
+    	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/206
 //        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
 //            return "$";
 //        }
@@ -184,6 +186,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
     private static String allocationComponentLabel(//final SystemEntityFactory systemEntityFactory,
             final AllocationComponent component, final boolean shortLabels) {
+    	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/207
 //        if (component == systemEntityFactory.getAllocationFactory().rootAllocationComponent) {
 //            return "$";
 //        }
@@ -218,6 +221,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
     private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory,
             final MessageTrace messageTrace, final SDModes sdMode, final PrintStream ps,
             final boolean shortLabels) {
+    	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/208
         // dot node ID x component instance
         final Vector<Message> messages = messageTrace.getSequenceAsVector();
         //preamble:
