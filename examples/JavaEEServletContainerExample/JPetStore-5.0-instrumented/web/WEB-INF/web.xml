@@ -27,7 +27,8 @@
     <servlet-name>action</servlet-name>
     <url-pattern>*.shtml</url-pattern>
   </servlet-mapping>
-
+ 
+ <!-- Begin: Integration of kieker.monitoring.probe.servlet.OperationExecutionRegistrationAndLoggingFilter -->
  <filter>
   <filter-name>sessionRegistrationFilter</filter-name>
   <filter-class>kieker.monitoring.probe.servlet.OperationExecutionRegistrationAndLoggingFilter</filter-class>
@@ -36,6 +37,25 @@
   <filter-name>sessionRegistrationFilter</filter-name>
   <url-pattern>/*</url-pattern>
  </filter-mapping>
+ <!-- End: Integration of kieker.monitoring.probe.servlet.OperationExecutionRegistrationAndLoggingFilter -->
+
+ <!-- Begin: Example for kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener  -->
+ <!--<context-param>
+   <param-name>CPUMemUsageServletContextListener.samplingIntervalSeconds</param-name>
+   <param-value>15</param-value>
+ </context-param>
+
+ <context-param>
+   <param-name>CPUMemUsageServletContextListener.initialSamplingDelaySeconds</param-name>
+   <param-value>0</param-value>
+ </context-param>
+
+ <listener>
+   <listener-class>
+     kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener
+   </listener-class>
+ </listener>-->
+ <!-- End: Example for kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener -->
 
   <session-config>
     <session-timeout>1</session-timeout>
