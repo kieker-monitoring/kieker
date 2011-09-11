@@ -34,7 +34,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
 
     //private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/149
 
     private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
 
