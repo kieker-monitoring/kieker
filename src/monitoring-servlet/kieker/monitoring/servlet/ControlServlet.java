@@ -38,15 +38,14 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * @author Matthias Rohr, Andre van Hoorn
  * 
- *         History: 2008/09/04: Displays the global insert count 2008/09/02:
- *         Now it shows java.vm.name. Is Client JVM used on your server ? :)
+ *         History: 2008/09/04: Displays the global insert count 2008/09/02: Now
+ *         it shows java.vm.name. Is Client JVM used on your server ? :)
  *         Additionally, it shows the garbage collectors in use. 2008/09/01:
  *         Added some features to create dummy monitoring events 2008/05/29:
- *         Changed vmid to vmname (defaults to hostname) -- the
- *         control-servlet can change the vmname during runtime
- *         2008/01/14: Refactoring for the first release of Kieker and
- *         publication under an open source licence 2007/03/13: Initial
- *         Prototype
+ *         Changed vmid to vmname (defaults to hostname) -- the control-servlet
+ *         can change the vmname during runtime 2008/01/14: Refactoring for the
+ *         first release of Kieker and publication under an open source licence
+ *         2007/03/13: Initial Prototype
  */
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 689701318L;
@@ -187,32 +186,6 @@ public class ControlServlet extends HttpServlet {
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();
 				ControlServlet.sessionRegistry.unsetThreadLocalSessionId();
-				/*
-				 * action = switchFaultInjection
-				 */
-			} else if (action.equalsIgnoreCase("switchFaultInjection")) {
-				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/193
-				// final String activate = request.getParameter("activate");
-				// boolean enable = false;
-				// if ((activate != null) && activate.equalsIgnoreCase("true"))
-				// {
-				// enable = true;
-				// }
-				final String location = request.getParameter("location");
-				if (location != null) {
-					// if (location.equalsIgnoreCase("AccountSqlMapDao")) {
-					// com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultActivated
-					// = enable;
-					// com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultIntensity
-					// = 3; // observed 3.2~3.3
-					// }
-					// else if (location.equalsIgnoreCase("ItemSqlMapDao")) {
-					// com.ibatis.jpetstore.persistence.sqlmapdao.ItemSqlMapDao.faultActivated
-					// = enable;
-					// com.ibatis.jpetstore.persistence.sqlmapdao.AccountSqlMapDao.faultIntensity
-					// = 6; // observed 3.8~9.0
-					// }
-				}
 				/*
 				 * invalid action
 				 */
