@@ -43,6 +43,10 @@ public final class SamplingController extends AbstractController implements
 	/** Executes the {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s. */
 	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
 
+	/**
+	 * 
+	 * @param configuration
+	 */
 	protected SamplingController(final Configuration configuration) {
 		final int threadPoolSize =
 				configuration
