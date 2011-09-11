@@ -755,24 +755,6 @@ public class TraceAnalysisTool {
 			System.out.println("# Plugin: " + "System Entity Factory");
 			System.out.println("Wrote table of system entities to file '"
 					+ systemEntitiesHtmlFn + ".html'");
-
-			// See ticket
-			// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/166
-			// TODO: these tasks should be moved to a decicated tool
-			// if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADER)) {
-			// numRequestedTasks++;
-			// retVal = task_initBasicJmsReader("tcp://127.0.0.1:3035/",
-			// "queue1");
-			// System.out.println("Finished to start task_initBasicJmsReader");
-			// }
-			// if (retVal && cmdl.hasOption(CMD_OPT_NAME_TASK_INITJMSREADERJFX))
-			// {
-			// numRequestedTasks++;
-			// retVal = task_initBasicJmsReaderJavaFx("tcp://127.0.0.1:3035/",
-			// "queue1");
-			// System.out.println("Finished to start task_initBasicJmsReader");
-			// }
-
 			if (!retVal) {
 				System.err.println("A task failed");
 			}
