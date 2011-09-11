@@ -30,7 +30,8 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	private static final long serialVersionUID = 1180L;
 
 	/** Used to identify the type of CSV records */
-	private static final int numRecordFields = 9; //TODO: 10? See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/136
+	// Not 10 because className and operationName are serialized to a single filed (separated by '.')
+	private static final int numRecordFields = 9; 
 
 	public volatile int experimentId = -1;
 	public volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
