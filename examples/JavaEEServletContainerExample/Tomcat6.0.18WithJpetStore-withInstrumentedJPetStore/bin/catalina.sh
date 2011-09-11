@@ -70,32 +70,6 @@
 # $Id: catalina.sh 656834 2008-05-15 21:04:04Z markt $
 # -----------------------------------------------------------------------------
 
-JAVA_OPTS="-javaagent:lib/aspectjweaver-1.6.11.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$(dirname $0)/../lib/META-INF/kieker.monitoring.properties"
-
-HEAPSIZEINIT_DEFAULT=256m
-HEAPSIZEMAX_DEFAULT=384m
-LOCALJVMMEMCONF_FN="$(dirname $0)/catalina.sh.localjvmmem.conf"
-# If local memconf exists, use contained values
-if [ -f "${LOCALJVMMEMCONF_FN}" ]; then
-    # Read variables HEAPSIZEINIT, HEAPSIZEMAX
-    echo "Reading mem conf from file '${LOCALJVMMEMCONF_FN}'"
-    cat "${LOCALJVMMEMCONF_FN}"
-    source "${LOCALJVMMEMCONF_FN}"
-fi
-
-if [ -z "${HEAPSIZEINIT}" ]; then
-    echo "Using default value for HEAPSIZEINIT ${HEAPSIZEINIT_DEFAULT}"
-    HEAPSIZEINIT=${HEAPSIZEINIT_DEFAULT}
-fi
-if [ -z "${HEAPSIZEMAX}" ]; then
-    echo "Using default value for HEAPSIZEMAX ${HEAPSIZEMAX_DEFAULT}"
-    HEAPSIZEMAX=${HEAPSIZEMAX_DEFAULT}
-fi
-#Heap space: initial/max
-JAVA_OPTS="-server -Xms${HEAPSIZEINIT} -Xmx${HEAPSIZEMAX} $JAVA_OPTS"
-
-
 # OS specific support.  $var _must_ be set to either true or false.
 cygwin=false
 os400=false
@@ -210,6 +184,32 @@ if [ -r "$CATALINA_BASE"/conf/logging.properties ]; then
   JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
   LOGGING_CONFIG="-Djava.util.logging.config.file=$CATALINA_BASE/conf/logging.properties"
 fi
+
+# Activate Kieker with AspectJ load-time-weaving agent and custom conguration
+JAVA_OPTS="${JAVA_OPTS} -javaagent:$CATALINA_BASE/lib/aspectjweaver-1.6.11.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$CATALINA_BASE/lib/META-INF/kieker.monitoring.properties"
+
+HEAPSIZEINIT_DEFAULT=256m
+HEAPSIZEMAX_DEFAULT=384m
+LOCALJVMMEMCONF_FN="$CATALINA_BASE$/bin/catalina.sh.localjvmmem.conf"
+# If local memconf exists, use contained values
+if [ -f "${LOCALJVMMEMCONF_FN}" ]; then
+    # Read variables HEAPSIZEINIT, HEAPSIZEMAX
+    echo "Reading mem conf from file '${LOCALJVMMEMCONF_FN}'"
+    cat "${LOCALJVMMEMCONF_FN}"
+    source "${LOCALJVMMEMCONF_FN}"
+fi
+
+if [ -z "${HEAPSIZEINIT}" ]; then
+    echo "Using default value for HEAPSIZEINIT ${HEAPSIZEINIT_DEFAULT}"
+    HEAPSIZEINIT=${HEAPSIZEINIT_DEFAULT}
+fi
+if [ -z "${HEAPSIZEMAX}" ]; then
+    echo "Using default value for HEAPSIZEMAX ${HEAPSIZEMAX_DEFAULT}"
+    HEAPSIZEMAX=${HEAPSIZEMAX_DEFAULT}
+fi
+#Heap space: initial/max
+JAVA_OPTS="-server -Xms${HEAPSIZEINIT} -Xmx${HEAPSIZEMAX} $JAVA_OPTS"
 
 # ----- Execute The Requested Command -----------------------------------------
 

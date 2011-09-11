@@ -6,12 +6,6 @@ running in a Java~EE container---in this case, Apache Tomcat\footnote{\url{http:
 Monitoring probes based on the Java~EE Servlet API %
 and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}).
 
-\
-
-\WARNBOX{The example is currently only prepared for \UnixLikeSystems. However, %
-based on the descriptions below, it shouldn't be too difficult to run it under %
-Windows}
-
 \section{Preparation of the Tomcat Servlet Container}
 
 \begin{compactenum}
@@ -22,13 +16,24 @@ binary distribution to the Tomcat's \dir{webapps/} directory.
 \item Tomcat's \dir{lib/} directory contains the files \file{kieker.monitoring.properties} %
 and \file{aop.xml} --- the configuration of \KiekerMonitoringPart{} and the %
 AspectJ-based instrumentation. %
-\item Tomcat's \file{bin/catalina.sh} file was modified to add the location %
+\item
+ Tomcat's start script \file{bin/catalina.\{sh|bat\}} file was modified to add the location %
 of the \file{kieker.\-moni\-toring.properties} and the AspectJ agent to the argument %
 list of the JVM call:
 \end{compactenum}
 
+\enlargethispage{1cm}
+
 \setPropertiesListing
-\lstinputlisting[firstline=73,firstnumber=73,lastline=74,caption={Excerpt from catalina.sh},numbers=left]{\JavaEEServletExampleDir/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.sh}
+\lstinputlisting[firstline=188,firstnumber=188,lastline=190,caption={Excerpt from catalina.sh (for \UnixLikeSystems)},numbers=left]{\JavaEEServletExampleDir/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.sh}
+
+\setPropertiesListing
+\lstinputlisting[firstline=121,firstnumber=121,lastline=123,caption={Excerpt from catalina.bat (for Windows)},numbers=left]{\JavaEEServletExampleDir/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.bat}
+
+%% BEGIN: Windoof
+% set JAVA_HOME=%ProgramFiles%\Java\jdk1.6.0_23
+% start bin/startup.bat
+%% END: Windoof
 
 \begin{compactenum}\setcounter{enumi}{4}
 \item  A prepared \file{jpetstore.war} file is already located in the %
@@ -47,9 +52,9 @@ accessing the JPetStore web application.
 \enlargethispage{1.5cm}
 
 \begin{compactenum}
-\item Start the Tomcat server using the \file{bin/startup.sh} script in the 
-   Tomcat's \dir{bin/} directory (you may have to execute "\texttt{chmod +x bin/*.sh}" %
-   in order to set the executable flags of the shell scripts). %
+\item Start the Tomcat server using the \file{bin/startup.sh} or \file{bin/startup.bat} (\UnixLikeSystems/Windows) %
+   script in the Tomcat's \dir{bin/} directory.
+
    You should make sure, that the Tomcat started properly, by taking 
    a look at the \file{logs/catalina.out} file. %
    On error, the file \file{logs/localhost.<date>.log} may contain details % 
@@ -73,7 +78,7 @@ accessing the JPetStore web application.
 \includegraphics[width=0.45\textwidth]{images/jpetstore-example-FFscrsh}}
 \hfill
 \subfigure[\KiekerMonitoringPart{} control servlet]{\label{fig:controlServlet}%
-\includegraphics[width=0.45\textwidth]{images/kieker-servlet-FFscrsh}}
+\includegraphics[width=0.45\textwidth]{images/kieker-servlet-FFscrsh-version-obfuscated}}
 \hfill
 \caption{}
 \end{figure}
