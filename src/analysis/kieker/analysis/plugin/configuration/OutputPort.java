@@ -32,7 +32,6 @@ import kieker.analysis.plugin.IAnalysisEvent;
 public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
 
     //private static final Log log = LogFactory.getLog(OutputPort.class);
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/180
     
     /** Should use "better" data structure from java.concurrent */
     private final Collection<IInputPort<T>> subscriber =
