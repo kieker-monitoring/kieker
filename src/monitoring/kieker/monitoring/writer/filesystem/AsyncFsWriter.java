@@ -124,8 +124,6 @@ final class FsWriterThread extends AbstractAsyncThread {
 		this.autoflush = autoflush;
 	}
 
-	// TODO: keep track of record type ID mapping!
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/153
 	/**
 	 * Note that it's not necessary to synchronize this method since a file is
 	 * written at most by one thread.

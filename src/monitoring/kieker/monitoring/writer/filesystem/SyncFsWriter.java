@@ -135,8 +135,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 	}
 
-	// TODO: keep track of record type ID mapping!
-	// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/154
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 
