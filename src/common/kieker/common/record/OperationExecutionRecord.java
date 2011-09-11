@@ -30,7 +30,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	private static final long serialVersionUID = 1180L;
 
 	/** Used to identify the type of CSV records */
-	// Not 10 because className and operationName are serialized to a single filed (separated by '.')
+	// Not 10 because className and operationName are serialized to a single field (separated by '.')
 	private static final int numRecordFields = 9; 
 
 	public volatile int experimentId = -1;
@@ -223,7 +223,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 			return this.className.equals(ro.className) 
 					&& (this.eoi == ro.eoi) 
 					&& (this.ess == ro.ess)
-					// && this.experimentId == ro.experimentId
+					// not considering experimentId is this is seldomly used
 					&& this.operationName.equals(ro.operationName) 
 					&& this.sessionId.equals(ro.sessionId) 
 					&& (this.tin == ro.tin)
