@@ -94,7 +94,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	@Override
 	protected void init() {
-		autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__FLUSH);
+		this.autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__FLUSH);
 		String path;
 		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
@@ -128,7 +128,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
 		try {
-			prepareFile();
+			this.prepareFile();
 		} catch (final FileNotFoundException ex) {
 			SyncFsWriter.log.error("Failed to create log file.", ex);
 			throw new IllegalArgumentException("Failed to create log file.", ex);
@@ -155,9 +155,13 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
 			final Object val = recordFields[i];
-			// TODO: assert that val!=null and provide suitable log msg if null
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/141
-			sb.append(val);
+			if (val != null) {
+				sb.append(val);			
+			} else {
+				SyncFsWriter.log.error(i + "th field of record is null: " + monitoringRecord.toString());
+				// AbstractMonitoringRecord.toString handles null values correctly
+				sb.append("null");				
+			}
 			if (i < LAST_FIELD_INDEX) {
 				sb.append(';');
 			}
@@ -208,7 +212,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
-			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))), autoflush);
+			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))), this.autoflush);
 		}
 	}
 }
