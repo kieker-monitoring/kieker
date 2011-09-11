@@ -25,9 +25,7 @@ package kieker.common.record;
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
-	// private static final Log log =
-	// LogFactory.getLog(AbstractMonitoringRecord.class);
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/183
+	// private static final Log log = LogFactory.getLog(AbstractMonitoringRecord.class);
 
 	private volatile long loggingTimestamp = -1;
 
