@@ -30,9 +30,6 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class Broker {
-	// TODO: change to lazy construction
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/144
-	private static final Broker INSTANCE = new Broker();
 	private static final Log log = LogFactory.getLog(Broker.class);
 
 	/**
@@ -42,7 +39,7 @@ public class Broker {
 	private final HashMap<String, Pipe> pipeMap = new HashMap<String, Pipe>();
 
 	public static Broker getInstance() {
-		return Broker.INSTANCE;
+		return LazyHolder.INSTANCE;
 	}
 
 	/**
@@ -64,5 +61,15 @@ public class Broker {
 		}
 
 		return conn;
+	}
+	
+	/**
+	 * SINGLETON
+	 */
+	private final static class LazyHolder {
+		static {
+			INSTANCE = new Broker();
+		}
+		private final static Broker INSTANCE;
 	}
 }
