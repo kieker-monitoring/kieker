@@ -28,9 +28,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
  * @author Andre van Hoorn
  */
 public class ScheduledSamplerJob implements Runnable {
-	// private static final Log log =
-	// LogFactory.getLog(ScheduledSamplerJob.class);
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/188
+	// private static final Log log = LogFactory.getLog(ScheduledSamplerJob.class);
 
 	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
