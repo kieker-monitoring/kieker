@@ -139,6 +139,9 @@ final class FsWriterThread extends AbstractAsyncThread {
 		// check if file exists and is not full
 		this.prepareFile(); // may throw FileNotFoundException
 
+		// TODO: Shouldn't we use a StringBuilder here
+		// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/224
+		
 		this.pos.write('$');
 		this.pos.write(Integer.toString((this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()))));
 		this.pos.write(';');
