@@ -297,18 +297,12 @@ class FSDirectoryReader {
 					boolean haveTypeId = false;
 
 					for (int i = 0; st.hasMoreTokens(); i++) {
-						// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/182
-						// log.info("i:" + i + " numTokens:" + numTokens +
-						// " hasMoreTokens():" + st.hasMoreTokens());
 						String token = st.nextToken();
 						if ((i == 0) && token.startsWith("$")) {
 							/*
 							 * We found a record type ID and need to lookup the
 							 * class
 							 */
-							// log.info("i:" + i + " numTokens:" + numTokens +
-							// " hasMoreTokens():" + st.hasMoreTokens());
-
 							final Integer id = Integer.valueOf(token
 									.substring(1));
 
@@ -333,8 +327,6 @@ class FSDirectoryReader {
 							}
 							rec = clazz.newInstance();
 							token = st.nextToken();
-							// log.info("LoggingTimestamp: " +
-							// Long.valueOf(token) + " (" + token + ")");
 							rec.setLoggingTimestamp(Long.valueOf(token));
 							vec = new String[numTokens - 2];
 							haveTypeId = true;
@@ -343,8 +335,6 @@ class FSDirectoryReader {
 							rec = new OperationExecutionRecord();
 							vec = new String[numTokens];
 						}
-						// log.info("haveTypeId:" + haveTypeId + ";" + " token:"
-						// + token + " i:" + i);
 						if (!haveTypeId || (i > 0)) { // only if current field
 														// is not the id
 							vec[haveTypeId ? i - 1 : i] = token;
