@@ -99,8 +99,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 final class FsWriterThread extends AbstractAsyncThread {
-	//private static final Log log = LogFactory.getLog(FsWriterThread.class);
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/191
+	private static final Log log = LogFactory.getLog(FsWriterThread.class);
 	
 	// configuration parameters
 	private static final int maxEntriesInFile = 25000;
@@ -149,9 +148,14 @@ final class FsWriterThread extends AbstractAsyncThread {
 		}
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
 			final Object val = recordFields[i];
-			// TODO: assert that val!=null and provide suitable log msg if null
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/140
-			this.pos.write(val.toString());
+			if (val != null) {
+				this.pos.write(val.toString());			
+			} else {
+				FsWriterThread.log.error(i + "th field of record is null: " + monitoringRecord.toString());
+				// AbstractMonitoringRecord.toString handles null values correctly
+				this.pos.write("null");				
+			}
+
 			if (i < LAST_FIELD_INDEX) {
 				this.pos.write(';');
 			}
