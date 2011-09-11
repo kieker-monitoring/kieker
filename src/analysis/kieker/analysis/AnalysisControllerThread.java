@@ -65,9 +65,8 @@ public class AnalysisControllerThread extends Thread {
 			// wait until AnalysisController is initialized
 			this.analysisInstance.getInitializationLatch().await();
 		} catch (final InterruptedException e) {
-			// TODO Auto-generated catch block
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/176
-			e.printStackTrace();
+			AnalysisControllerThread.log.error("Interrupted while waiting for AnalysisController to be initialized: "
+					+ e.getMessage(), e);
 		}
 	}
 	
