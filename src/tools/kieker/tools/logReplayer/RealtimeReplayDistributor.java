@@ -81,25 +81,13 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
         this.terminationLatch = terminationLatch;
     }
 
-    //private static final String outputFn = "SchedulingList";
-    //private static PrintStream ps;
-    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/195
     @Override
 	public boolean newMonitoringRecord(
             final IMonitoringRecord monitoringRecord) {
         if (this.startTime == -1) { // init on first record
-            //try {
-            // init on first record
-            //ps = new PrintStream(new FileOutputStream(outputFn, false)); // do not append
-            //} catch (FileNotFoundException ex) {
-            //    log.info("FileNotFound:", ex);
-            //}
             this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance
             this.offset = (2 * 1000 * 1000 * 1000) - this.firstLoggingTimestamp;
-            this.startTime = timesource.getTime();
-            //log.info("firstLoggingTimeStamp: " + this.firstLoggingTimestamp);
-            //log.info("offset: " + this.offset);
-            //log.info("startTime" + this.startTime);
+            this.startTime = RealtimeReplayDistributor.timesource.getTime();
         }
         if (monitoringRecord.getLoggingTimestamp() < this.firstLoggingTimestamp) {
             final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("Timestamp of current record " + monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
@@ -107,11 +95,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             return false;
         }
         final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
-                - (timesource.getTime() - this.startTime); // substract elapsed time
-        //ps.println("curT.record: " + monitoringRecord.getLoggingTimestamp());ps.flush();
-        //ps.println("curT.ctrl: " + ctrlnst.currentTimeNanos());ps.flush();
-        //ps.println("elapsedT (nsec): " + (ctrlnst.currentTimeNanos() - this.startTime));
-        //ps.println("schedTime (nsec): " + schedTime);
+                - (RealtimeReplayDistributor.timesource.getTime() - this.startTime); // substract elapsed time
         if (schedTime < 0) {
             final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
             RealtimeReplayDistributor.log.error("RecordConsumerExecutionException", e);
@@ -119,7 +103,6 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
         }
         synchronized (this) {
             if (this.active > this.maxQueueSize) {
-                //log.info("this.active > this.maxQueueSize ("+this.active+"<"+this.maxQueueSize+")");
                 try {
                     this.wait();
                 } catch (final InterruptedException e) {
@@ -156,21 +139,17 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
     @Override
 	public void terminate(final boolean error) {
-        final long terminationDelay = (this.lTime + this.offset) - (timesource.getTime() - this.startTime) + 100000000;
+        final long terminationDelay = (this.lTime + this.offset) - (RealtimeReplayDistributor.timesource.getTime() - this.startTime) + 100000000;
         RealtimeReplayDistributor.log.info("Will terminate in " + terminationDelay + "nsecs from now");
         this.executor.schedule(new Runnable() {
 
             @Override
 			public void run() {
-            	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/196
-                //ctrlnst.terminateMonitoring();
                 if (RealtimeReplayDistributor.this.terminationLatch != null) {
                     RealtimeReplayDistributor.this.terminationLatch.countDown(); // signal that last record has been scheduled
                 } else {
                     RealtimeReplayDistributor.log.warn("terminationLatch == null");
                 }
-                //cons.terminate(error);
-                //log.info("Terminating Controller");
             }
         }, terminationDelay, TimeUnit.NANOSECONDS);
         this.executor.shutdown();
