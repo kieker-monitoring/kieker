@@ -41,7 +41,7 @@ public class JavaDBInitializer {
 	// TODO: needs to be read from file
 	// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/158
 	private static String strCreateAddressTable = 
-		"CREATE table " + dbTableName + "(autoid INTEGER NOT NULL "
+		"CREATE table " + JavaDBInitializer.dbTableName + "(autoid INTEGER NOT NULL "
 			+ "   PRIMARY KEY GENERATED ALWAYS AS IDENTITY " + "   (START WITH 0, INCREMENT BY 1),"
 			+ "experimentid SMALLINT NOT NULL DEFAULT 0," + "operation VARCHAR(160) NOT NULL," + "sessionid VARCHAR(34),"
 			+ "traceid BIGINT NOT NULL," + "tin BIGINT NOT NULL," + "tout BIGINT NOT NULL,"
@@ -53,7 +53,7 @@ public class JavaDBInitializer {
 
 	public static void main(final String[] args) {
 		try {
-			Class.forName(dbDriverClassname).newInstance();
+			Class.forName(JavaDBInitializer.dbDriverClassname).newInstance();
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}
@@ -76,19 +76,6 @@ public class JavaDBInitializer {
 			statement = dbConnection.createStatement();
 			statement.execute(JavaDBInitializer.strCreateAddressTable);
 			bCreatedTables = true;
-
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/146
-			// TODO: remove:
-			// statement = dbConnection.createStatement();
-			// statement.execute("INSERT INTO APP.kiekerdata (experimentid) VALUES (5)");
-			// statement.execute("INSERT INTO APP.kiekerdata (experimentid) VALUES (7)");
-			//
-			// statement = dbConnection.createStatement(); // TODO: FindBugs says this method may fail to close the database
-			// resource
-			// ResultSet res = statement.executeQuery("SELECT max(experimentid) FROM APP.kiekerdata");
-			// if (res.next()) {
-			// System.out.println(res.getInt(1));
-			// }
 		} catch (final SQLException ex) {
 			ex.printStackTrace();
 		}
