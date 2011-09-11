@@ -43,8 +43,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * TODO: refactor analysis readers similar to monitoring writers!
- * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/161
  * 
  * @author Jan Waller
  * 

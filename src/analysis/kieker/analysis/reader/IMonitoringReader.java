@@ -24,6 +24,9 @@ import kieker.analysis.AnalysisController;
 import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
+ * TODO: refactor analysis readers similar to monitoring writers!
+ * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/161
+ * 
  * @author Andre van Hoorn
  */
 public interface IMonitoringReader {
