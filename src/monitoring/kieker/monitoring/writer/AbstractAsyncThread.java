@@ -116,7 +116,5 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
 
-	// FIXME: Java warning reported (#83)
-	//		See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/134
 	protected abstract void cleanup();
 }
