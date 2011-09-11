@@ -117,11 +117,14 @@ final class JMSWriterThread extends AbstractAsyncThread {
 
 			final Context context = new InitialContext(properties);
 
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/192
+			// Leaving the following code snippet here in order to emphasize
+			// that it did NOT work in the past!
+			//
 			// final Context context = new InitialContext();
 			// context.addToEnvironment(Context.INITIAL_CONTEXT_FACTORY,
 			// contextFactoryType);
 			// context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
+			
 			final ConnectionFactory factory =
 					(ConnectionFactory) context.lookup(factoryLookupName);
 			this.connection = factory.createConnection();
