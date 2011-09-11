@@ -46,7 +46,6 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 	protected final void cleanup() {
 		TimeSourceController.log.debug("Shutting down TimeSource Controller");
 		// nothing to do
-		// timeSource.cleanup();
 	}
 
 	@Override
