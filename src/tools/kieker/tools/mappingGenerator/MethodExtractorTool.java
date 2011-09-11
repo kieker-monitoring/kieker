@@ -51,7 +51,6 @@ import org.apache.commons.logging.LogFactory;
 public class MethodExtractorTool {
 
 	// private static final Log log = LogFactory.getLog(MethodExtractorTool.class);
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/197
 
 	private static CommandLine cmdl = null;
 	private static final CommandLineParser cmdlParser = new BasicParser();
@@ -62,7 +61,7 @@ public class MethodExtractorTool {
 	private static String mappingFile = null;
 
 	static {
-		initializeOptions();
+		MethodExtractorTool.initializeOptions();
 	}
 
 	@SuppressWarnings("static-access")
@@ -246,7 +245,7 @@ class MethodExtractor extends ClassLoader {
 	 *            the packageprefix
 	 */
 	private void descendAndAnalyseDir(final File dir, final String packagePrefix, final MethodFilter filter) {
-		File[] classes = dir.listFiles(new FilenameFilter() {
+		final File[] classes = dir.listFiles(new FilenameFilter() {
 
 			@Override
 			public boolean accept(final File dir, final String name) {
@@ -281,8 +280,6 @@ class MethodExtractor extends ClassLoader {
 			int begIndex = file.getName().lastIndexOf(File.separatorChar);
 			begIndex = begIndex == -1 ? 0 : begIndex;
 			final int endIndex = file.getName().lastIndexOf('.');
-			// log.info("analyzing " + packagePrefix + file.getName().substring(begIndex, endIndex));
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/197
 			try {
 				final Class<?> c = super.loadClass(packagePrefix + file.getName().substring(begIndex, endIndex));
 				this.analyzeClass(c, filter);
