@@ -37,6 +37,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface OperationExecutionMonitoringProbe {
-	// String context();
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/185
 }
