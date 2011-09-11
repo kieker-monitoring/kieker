@@ -47,8 +47,6 @@ public class JavaDBInitializer {
 			+ "traceid BIGINT NOT NULL," + "tin BIGINT NOT NULL," + "tout BIGINT NOT NULL,"
 			+ "vmname VARCHAR(40) NOT NULL DEFAULT ''," + "executionOrderIndex SMALLINT NOT NULL DEFAULT -1,"
 			+ "executionStackSize SMALLINT NOT NULL DEFAULT -1" +
-			// "INDEX (operation(16)), INDEX (traceid), INDEX (tin)" +
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/159
 			")";
 
 	public static void main(final String[] args) {
