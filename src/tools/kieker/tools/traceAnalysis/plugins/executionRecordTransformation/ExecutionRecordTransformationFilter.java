@@ -98,8 +98,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
         final OperationExecutionRecord execRec = (OperationExecutionRecord) record;
 
         final String executionContainerName = execRec.hostName;
-        //(this.considerExecutionContainer) ? execRec.hostName : "DEFAULTCONTAINER";
-        // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/198
         final String componentTypeName = execRec.className;
         final String assemblyComponentName = componentTypeName;
         final String allocationComponentName =
