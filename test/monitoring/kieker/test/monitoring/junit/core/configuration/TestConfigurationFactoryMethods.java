@@ -75,19 +75,18 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Tests {@link Configuration#createSingletonConfiguration()}.
 	 * 
 	 * FIXME: "Missing test: Should test combinations of JVM-Params, Filenames, etc. How to do that?
-	 * 		See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/130
+	 * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/130
 	 */
 	public void testCreationSingletonConfigurationVariants() {
 	}
 
 	/**
 	 * Tests {@link Configuration#createConfigurationFromFile(String)}.
-	 * 
-	 * FIXME: "File should be included correctly and it should be tested if the correct values are set"
-	 * 		See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/129
 	 */
 	public void testCreationfromFile() {
-		final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "META-INF/kieker.monitoring.properties.test";
-		this.testValues(Configuration.createConfigurationFromFile(EXAMPLE_CONFIG_FILE_IN_TRUNK));
+		final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.properties.test";
+		final Configuration configuration = Configuration.createConfigurationFromFile(EXAMPLE_CONFIG_FILE_IN_TRUNK);
+		this.testValues(configuration);
+		Assert.assertEquals("KIEKER-TEST", configuration.getProperty(Configuration.CONTROLLER_NAME));
 	}
 }
