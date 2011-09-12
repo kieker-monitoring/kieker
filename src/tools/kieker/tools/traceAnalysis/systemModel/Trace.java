@@ -47,4 +47,7 @@ public abstract class Trace implements IAnalysisEvent {
 	public int hashCode() {
 		return (int)(this.traceId^(this.traceId>>>32));
 	}
+	
+	@Override
+	public abstract boolean equals(Object obj);
 }

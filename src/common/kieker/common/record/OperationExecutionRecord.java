@@ -201,6 +201,23 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		return;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((className == null) ? 0 : className.hashCode());
+		result = prime * result + eoi;
+		result = prime * result + ess;
+		result = prime * result + experimentId;
+		result = prime * result + ((hostName == null) ? 0 : hostName.hashCode());
+		result = prime * result + ((operationName == null) ? 0 : operationName.hashCode());
+		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+		result = prime * result + (int) (tin ^ (tin >>> 32));
+		result = prime * result + (int) (tout ^ (tout >>> 32));
+		result = prime * result + (int) (traceId ^ (traceId >>> 32));
+		return result;
+	}
+
 	/**
 	 * Compares two records.
 	 * 
