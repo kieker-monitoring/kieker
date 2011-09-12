@@ -138,8 +138,6 @@ public class JMSReader extends AbstractMonitoringReader {
 				JMSReader.log.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
 				JMSReader.log.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
-				// TODO: Is the following required?
-				// context.bind(this.jmsDestination, destination);
 			}
 
 			JMSReader.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
