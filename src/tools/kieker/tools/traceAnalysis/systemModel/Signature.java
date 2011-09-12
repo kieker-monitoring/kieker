@@ -50,7 +50,7 @@ public class Signature {
     }
 
     // TODO: We should not return the internal data structure
-    // See ticket 
+    // See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/232
     public final String[] getParamTypeList() {
         return this.paramTypeList;
     }
