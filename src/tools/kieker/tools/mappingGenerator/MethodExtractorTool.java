@@ -202,6 +202,8 @@ class MethodExtractor extends ClassLoader {
 		}
 		data = new byte[(int) size];
 		try {
+			// TODO: check return value of read
+			// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/230
 			jar.getInputStream(e).read(data);
 			final String name = e.getName().substring(0, e.getName().length() - 6).replaceAll("/", ".");
 			Class<?> clazz = null;
