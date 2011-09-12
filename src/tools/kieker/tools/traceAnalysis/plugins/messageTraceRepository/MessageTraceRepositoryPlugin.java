@@ -44,10 +44,6 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
         super(name, systemEntityFactory);
     }
 
-    public Hashtable<Long, MessageTrace> getMessageTraceRepository() {
-        return this.repo;
-    }
-
     private final IInputPort<MessageTrace> messageTraceInputPort =
             new AbstractInputPort<MessageTrace>("Message traces"){
 

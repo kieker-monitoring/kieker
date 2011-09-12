@@ -119,6 +119,8 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	/*
 	 * {@inheritdoc}
 	 */
+	// FindBugs complains about returning the internal data structure
+	// VALUE_TYPES but wontfix (unless s.o. has a better idea)
 	@Override
 	public Class<?>[] getValueTypes() {
 		return ResourceUtilizationRecord.VALUE_TYPES;

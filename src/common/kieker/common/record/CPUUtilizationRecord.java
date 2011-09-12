@@ -1,28 +1,24 @@
 /***************************************************************************
- * Copyright 2011 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * Copyright 2011 by + Christian-Albrechts-University of Kiel + Department of
+ * Computer Science + Software Engineering Group and others.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  ***************************************************************************/
 
 /**
  * 
  */
 package kieker.common.record;
-
 
 /**
  * @author Andre van Hoorn
@@ -87,8 +83,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 * the sum of {@link #user}, {@link #system}, {@link #wait}, and
 	 * {@link #nice}. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double totalUtilization =
-			CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double totalUtilization = CPUUtilizationRecord.UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was idle. The value should be in
@@ -105,12 +100,10 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void initFromArray(final Object[] values)
-			throws IllegalArgumentException {
+	public void initFromArray(final Object[] values) throws IllegalArgumentException {
 		try {
 			if (values.length != CPUUtilizationRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with "
-						+ CPUUtilizationRecord.VALUE_TYPES.length
+				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length
 						+ " elements but found:" + values.length);
 			}
 
@@ -153,10 +146,9 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 * @param totalUtilization
 	 * @param idle
 	 */
-	public CPUUtilizationRecord(final long timestamp, final String hostName,
-			final String cpuID, final double user, final double system,
-			final double wait, final double nice, final double irq,
-			final double totalUtilization, final double idle) {
+	public CPUUtilizationRecord(final long timestamp, final String hostName, final String cpuID, final double user,
+			final double system, final double wait, final double nice, final double irq, final double totalUtilization,
+			final double idle) {
 		this.timestamp = timestamp;
 		this.hostName = hostName;
 		this.cpuID = cpuID;
@@ -174,17 +166,18 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user,
-				this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
+		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice,
+				this.irq, this.totalUtilization, this.idle };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class,
-			String.class, double.class, double.class, double.class,
-			double.class, double.class, double.class, double.class };
+	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class,
+			double.class, double.class, double.class, double.class, double.class };
 
 	/*
 	 * {@inheritdoc}
 	 */
+	// FindBugs complains about returning the internal data structure
+	// VALUE_TYPES but wontfix (unless s.o. has a better idea)
 	@Override
 	public Class<?>[] getValueTypes() {
 		return CPUUtilizationRecord.VALUE_TYPES;
