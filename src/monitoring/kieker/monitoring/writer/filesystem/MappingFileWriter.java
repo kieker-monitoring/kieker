@@ -45,9 +45,9 @@ public final class MappingFileWriter {
 
 	public MappingFileWriter(final String mappingFileFn) throws IOException {
 		this.mappingFile = new File(mappingFileFn);
-		// TODO: Check return value of createNewFile and act accordingly
-		// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/227
-		this.mappingFile.createNewFile();
+		if (!this.mappingFile.createNewFile()) {
+			throw new IOException("Mapping File '"+ mappingFileFn + "' already exists.");
+		}
 	}
 
 	public final int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
