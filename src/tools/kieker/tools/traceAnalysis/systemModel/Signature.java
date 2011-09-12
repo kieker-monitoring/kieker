@@ -20,6 +20,8 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import java.util.Arrays;
+
 
 /**
  *
@@ -42,7 +44,7 @@ public class Signature {
             final String[] paramTypeList){
         this.name = name;
         this.returnType = returnType;
-        this.paramTypeList = paramTypeList;
+        this.paramTypeList = Arrays.copyOf(paramTypeList, paramTypeList.length);
     }
 
     public final String getName() {

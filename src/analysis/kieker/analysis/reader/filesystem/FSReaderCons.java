@@ -21,6 +21,7 @@
 package kieker.analysis.reader.filesystem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.TreeMap;
@@ -65,7 +66,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 			final String[] inputDirs,
 			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
 		this.master = master;
-		this.inputDirs = inputDirs;
+		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
 	}
 
@@ -104,9 +105,9 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	public boolean execute() throws MonitoringRecordConsumerException {
 		try {
 			{ // 1. init and start reader threads
-				for (int i = 0; i < this.inputDirs.length; i++) {
+				for (final String inputDir : this.inputDirs) {
 					final FSDirectoryReader directoryReader = new FSDirectoryReader(
-							this.inputDirs[i], this, this.readOnlyRecordsOfType);
+							inputDir, this, this.readOnlyRecordsOfType);
 					// consume records of any type and pass to this:
 					final Thread t = new Thread(new Runnable() {
 
@@ -122,7 +123,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 								FSReaderCons.this.reportReaderException(ex);
 							}
 						}
-					}, "Reader thread for " + this.inputDirs[i]);
+					}, "Reader thread for " + inputDir);
 					this.readerThreads.add(t);
 					t.start();
 				}

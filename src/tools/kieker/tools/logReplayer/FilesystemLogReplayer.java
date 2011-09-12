@@ -20,6 +20,7 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import kieker.analysis.AnalysisController;
@@ -102,7 +103,7 @@ public class FilesystemLogReplayer {
 			final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp) {
 		this.recordReceiver = monitoringController;
-		this.inputDirs = inputDirs;
+		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.realtimeMode = realtimeMode;
 		this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
