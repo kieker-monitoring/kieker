@@ -3,7 +3,7 @@ REM This script should NOT be called directly. Use logReplay.bat instead.
 REM
 REM @author Nils Christian Ehmke
 
-SET JAVAARGS="-Dlog4j.configuration=./log4j.properties -Dkieker.monitoring.asyncBlockOnFullQueue=true"
+SET JAVAARGS=-Dlog4j.configuration=./log4j.properties -Dkieker.monitoring.asyncBlockOnFullQueue=true
 SET MAINCLASSNAME=kieker.tools.logReplayer.FilesystemLogReplayerStarter
 
 REM Get the directory of this file and change the working directory to it.
