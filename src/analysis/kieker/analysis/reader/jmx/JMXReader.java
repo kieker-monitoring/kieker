@@ -66,11 +66,18 @@ public final class JMXReader extends AbstractMonitoringReader {
 		this.silentreconnect = silentreconnect;
 	}
 
+	/**
+	 * Expects an initString of the following format:
+	 *  "property1@value1|property2@value2|..."
+	 * known properties are
+	 * server, port, serviceURL, domain, logname
+	 * 
+	 * either port or serviceURL are mandatory 
+	 */
 	@Override
 	public final boolean init(final String initString) {
 		try {
-			// TODO: "=" may be part of the serviceURL -> @
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/135
+
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "@");
 			final String server = propertyMap.getProperty("server", "localhost");
 			final int port = Integer.valueOf(propertyMap.getProperty("port", "0")).intValue();
