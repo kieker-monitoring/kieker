@@ -41,11 +41,11 @@ public class MessageTrace extends Trace {
 
     @Override
     public String toString() {
-        StringBuilder strBuild =
+        final StringBuilder strBuild =
                 new StringBuilder("Trace " + this.getTraceId() + ":\n");
-        Iterator<Message> it = set.iterator();
+        final Iterator<Message> it = this.set.iterator();
         while (it.hasNext()) {
-            Message m = it.next();
+            final Message m = it.next();
             strBuild.append("<");
             strBuild.append(m.toString());
             strBuild.append(">\n");
@@ -53,15 +53,21 @@ public class MessageTrace extends Trace {
         return strBuild.toString();
     }
 
+    // Explicit delegation to super method to make FindBugs happy
     @Override
-    public boolean equals(Object obj) {
+    public int hashCode() {
+    	return super.hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object obj) {
        if (!(obj instanceof MessageTrace)){
             return false;
         }
         if (this == obj) {
             return true;
         }
-        MessageTrace other = (MessageTrace)obj;
+        final MessageTrace other = (MessageTrace)obj;
 
         return this.set.equals(other.set);
     }

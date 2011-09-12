@@ -67,14 +67,14 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	static {
 		final StringBuilder sb = new StringBuilder();
 		boolean error = true;
-		InputStream is = null;
+		BufferedReader reader = null;
 
 		try {
-			is =
+			final InputStream is =
 					SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(
 							SequenceDiagramPlugin.sequencePicPath);
 			String line;
-			final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+			reader = new BufferedReader(new InputStreamReader(is));
 			while ((line = reader.readLine()) != null) {
 				sb.append(line).append("\n");
 			}
@@ -82,18 +82,18 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		} catch (final IOException exc) {
 			SequenceDiagramPlugin.log.error("Error while reading " + SequenceDiagramPlugin.sequencePicPath, exc);
 		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (final IOException ex) {
+				SequenceDiagramPlugin.log.error("Failed to close input stream", ex);
+			}
 			if (error) {
 				/* sequence.pic must be provided on execution of pic2plot */
 				sequencePicContent = "copy \"sequence.pic\";";
 			} else {
 				sequencePicContent = sb.toString();
-			}
-			try {
-				if (is != null) {
-					is.close();
-				}
-			} catch (final IOException ex) {
-				SequenceDiagramPlugin.log.error("Failed to close input stream", ex);
 			}
 		}
 	}

@@ -285,6 +285,12 @@ public class ExecutionTrace extends Trace {
         return this.minTin;
     }
 
+    // Explicit delegation to super method to make FindBugs happy
+    @Override
+    public int hashCode() {
+    	return super.hashCode();
+    }
+    
     /**
      * Returns whether this Execution Trace and the passed Object are equal.
      * Two execution traces are equal if the set of contained executions is
