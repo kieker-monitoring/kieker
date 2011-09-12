@@ -20,6 +20,7 @@
 
 package kieker.analysis.reader.filesystem;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
@@ -62,7 +63,7 @@ public class FSReader extends AbstractMonitoringReader {
 	public FSReader(
 			final String[] inputDirs,
 			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
-		this.inputDirs = inputDirs;
+		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
 	}
 
