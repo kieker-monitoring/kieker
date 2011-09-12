@@ -236,9 +236,11 @@ public final class JMXController extends AbstractController implements IJMXContr
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType == JMXConnectionNotification.OPENED) {
-				JMXController.log.info("New JMX remote connection initialized. Connection ID: " + ((JMXConnectionNotification) notification).getConnectionId());
+				JMXController.log.info("New JMX remote connection initialized. Connection ID: "
+						+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification).getConnectionId() : "unknown"));
 			} else if (notificationType == JMXConnectionNotification.CLOSED) {
-				JMXController.log.info("JMX remote connection closed. Connection ID: " + ((JMXConnectionNotification) notification).getConnectionId());
+				JMXController.log.info("JMX remote connection closed. Connection ID: "
+						+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification).getConnectionId() : "unknown"));
 			} else { // unknown message
 				JMXController.log.info(notificationType + ": " + notification.getMessage() + " (ID: "
 						+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification).getConnectionId() : "unknown") + ")");
