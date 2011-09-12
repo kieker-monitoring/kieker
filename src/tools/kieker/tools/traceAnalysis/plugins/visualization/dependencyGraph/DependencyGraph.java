@@ -30,7 +30,6 @@ import java.util.TreeMap;
 public class DependencyGraph<T> {
 
     //private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/202
 	
     private final TreeMap<Integer, DependencyGraphNode<T>> nodes =
             new TreeMap<Integer, DependencyGraphNode<T>>();
