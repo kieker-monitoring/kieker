@@ -42,8 +42,6 @@ class Constants {
 	public static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
 	public static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
 	public static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/219
-	//public static final String CMD_OPT_NAME_TRACEEQUIVCLASSMODE = "trace-equivalence-mode";
 	public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
 	public static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
 	public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS = "plot-Deployment-Sequence-Diagrams";
@@ -80,10 +78,6 @@ class Constants {
 	public static final String TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX = "traceDeploymentEquivClasses";
 	public static final String TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX = "traceAssemblyEquivClasses";
 	public static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/219
-	//public static final String TRACE_EQUIVALENCE_MODE_STR_DISABLED = "disabled";
-	//public static final String TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY = "assembly";
-	//public static final String TRACE_EQUIVALENCE_MODE_STR_ALLOCATION = "allocation";
 	public static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
 	public static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
 	public static final String TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (deployment mode)";
@@ -117,9 +111,6 @@ class Constants {
 				Constants.CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("prefix").hasArg(true).isRequired(false).withDescription(
 				"Prefix for output filenames\n").withValueSeparator('=').create("p"));
 
-		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/219
-		// OptionGroup cmdlOptGroupTask = new OptionGroup();
-		// cmdlOptGroupTask.isRequired();
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
 				Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false).withDescription(
 				"Generate and store deployment-level sequence diagrams (.pic files)").create());
@@ -166,24 +157,9 @@ class Constants {
 				Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT).hasArg(false).withDescription(
 				"Output an overview about the assembly-level trace equivalence classes").create());
 
-		/*
-		 * These tasks should be moved to a dedicated tool, since this tool
-		 * covers trace analysis
-		 */
-		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/219
-		// cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADER).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line").create());
-		// cmdlOpts.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_INITJMSREADERJFX).hasArg(false).withDescription("Creates a jms reader and shows incomming data in the command line and visualizes with javafx").create());
-
-		// cmdlOpts.addOptionGroup(cmdlOptGroupTask);
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false).withDescription(
 		"Consider only the traces identified by the list of trace IDs. Defaults to all traces.").create());
-		//SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE).withArgName(
-		//        String.format(
-		//        "%s|%s|%s",
-		//        Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION,
-		//        Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY,
-		//        Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED)).hasArg(true).isRequired(false).withDescription(
-		//        "If selected, the selected tasks are performed on representatives of the equivalence classes only.").create());
+
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription(
 		"If selected, the execution aborts on the occurence of an invalid trace.").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription(
