@@ -59,8 +59,8 @@ private DotFactory(){
  * @param fontsize
  * @return digraph header as dot code
  */
-public static StringBuilder createHeader( String name, String label, String fontcolor, String fontname, double fontsize ){
-    StringBuilder dot = new StringBuilder( "digraph " + name );
+public static StringBuilder createHeader( final String name, final String label, final String fontcolor, final String fontname, final double fontsize ){
+    final StringBuilder dot = new StringBuilder( "digraph " + name );
     dot.append( " {\n label=<" + label );
     dot.append( ">;\n fontcolor=\"" + fontcolor );
     dot.append( "\";\n fontname=\"" + fontname );
@@ -80,8 +80,8 @@ public static StringBuilder createHeader( String name, String label, String font
  * @param fontsize
  * @return graph node defaults as dot code
  */
-public static StringBuilder createNodeDefaults( String style, String shape, String framecolor, String fontcolor, String fontname, double fontsize, String imagescale ){
-    StringBuilder dot = new StringBuilder( " node [" );
+public static StringBuilder createNodeDefaults( final String style, final String shape, final String framecolor, final String fontcolor, final String fontname, final double fontsize, final String imagescale ){
+    final StringBuilder dot = new StringBuilder( " node [" );
     dot.append( "style=\"" + style );
     dot.append( "\",shape=\"" + shape );
     dot.append( "\",color=\"" + framecolor );
@@ -101,8 +101,8 @@ public static StringBuilder createNodeDefaults( String style, String shape, Stri
  * @param labelfontname label font nodeId, works only for headlabel and taillabel, not simple label
  * @return graph edge defaults as dot code
  */
-public static StringBuilder createEdgeDefaults( String style, String arrowhead, String labelfontname ){
-    StringBuilder dot = new StringBuilder( " edge [" );
+public static StringBuilder createEdgeDefaults( final String style, final String arrowhead, final String labelfontname ){
+    final StringBuilder dot = new StringBuilder( " edge [" );
     dot.append( "style=\"" + style );
     dot.append( "\",arrowhead=\"" + arrowhead );
     dot.append( "\",labelfontname=\"" + labelfontname );
@@ -126,8 +126,8 @@ public static StringBuilder createEdgeDefaults( String style, String arrowhead, 
  * @param misc
  * @return graph node as dot code
  */
-public static StringBuilder createNode( String prefix, String nodeId, String label, String shape, String style, String framecolor, String fillcolor, String fontcolor, double fontsize, String imageFilename, String misc ){
-    StringBuilder dot = new StringBuilder( prefix == null ? "" : prefix );
+public static StringBuilder createNode( final String prefix, final String nodeId, final String label, final String shape, final String style, final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc ){
+    final StringBuilder dot = new StringBuilder( prefix == null ? "" : prefix );
     dot.append( "\"" + nodeId + "\" [" );
     dot.append( label == null ? "" : "label=\"" + label );
     dot.append( shape == null ? "" : "\",shape=\"" + shape );
@@ -135,7 +135,7 @@ public static StringBuilder createNode( String prefix, String nodeId, String lab
     dot.append( framecolor == null ? "" : "\",color=\"" + framecolor );
     dot.append( fillcolor == null ? "" : "\",fillcolor=\"" + fillcolor );
     dot.append( fontcolor == null ? "" : "\",fontcolor=\"" + fontcolor );
-    dot.append( fontsize == DOT_DEFAULT_FONTSIZE ? "" : "\",fontsize=\"" + Double.toString( fontsize ) );
+    dot.append( fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\",fontsize=\"" + Double.toString( fontsize ) );
     dot.append( imageFilename == null ? "" : "\",image=\"" + imageFilename );
     dot.append( "\"" + ( misc == null ? "" : misc ) + "]\n" );
     return dot;
@@ -157,15 +157,15 @@ public static StringBuilder createNode( String prefix, String nodeId, String lab
  * @param misc
  * @return graph cluster as dot code
  */
-public static StringBuilder createCluster( String prefix, String name, String label, String shape, String style, String framecolor, String fillcolor, String fontcolor, double fontsize, String misc ){
-    StringBuilder dot = new StringBuilder( prefix + "subgraph \"cluster_" + name );
+public static StringBuilder createCluster( final String prefix, final String name, final String label, final String shape, final String style, final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String misc ){
+    final StringBuilder dot = new StringBuilder( prefix + "subgraph \"cluster_" + name );
     dot.append( "\" {\n" + prefix + " label = \"" + label );
     dot.append( shape == null ? "" : "\";\n" + prefix + " shape = \"" + shape );
     dot.append( style == null ? "" : "\";\n" + prefix + " style = \"" + style );
     dot.append( framecolor == null ? "" : "\";\n" + prefix + " pencolor = \"" + framecolor );
     dot.append( fillcolor == null ? "" : "\";\n" + prefix + " fillcolor = \"" + fillcolor );
     dot.append( fontcolor == null ? "" : "\";\n" + prefix + " fontcolor = \"" + fontcolor );
-    dot.append( fontsize == DOT_DEFAULT_FONTSIZE ? "" : "\";\n" + prefix + " fontsize = \"" + Double.toString( fontsize ) );
+    dot.append( fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\";\n" + prefix + " fontsize = \"" + Double.toString( fontsize ) );
     dot.append( "\";" + ( misc == null ? "" : misc ) + "\n" );
     // closing bracket "}" has to be added by calling method !
     return dot;
@@ -178,8 +178,8 @@ public static StringBuilder createCluster( String prefix, String name, String la
  * @param to
  * @return graph connection as dot code
  */
-public static String createConnection( String prefix, String from, String to, String style, String arrowhead){
-   StringBuilder dot = new StringBuilder(prefix)
+public static String createConnection( final String prefix, final String from, final String to, final String style, final String arrowhead){
+   final StringBuilder dot = new StringBuilder(prefix)
             .append(String.format("%s->%s[", from, to));
      if (style != null) {
         dot.append(String.format("style=\"%s\"", style));
@@ -200,8 +200,8 @@ public static String createConnection( String prefix, String from, String to, St
  * @param label
  * @return graph connection as dot code
  */
-public static String createConnection( String prefix, String from, String to, String label, String style, String arrowhead){
-    StringBuilder dot = new StringBuilder(prefix)
+public static String createConnection( final String prefix, final String from, final String to, final String label, final String style, final String arrowhead){
+    final StringBuilder dot = new StringBuilder(prefix)
             .append(String.format("%s->%s", from, to))
             .append(String.format("[label=%s", label));
     if (style != null) {
@@ -212,8 +212,6 @@ public static String createConnection( String prefix, String from, String to, St
     }
     dot.append("]");
     return dot.toString();
-    //return String.format( "%s\"%s\" -> \"%s\" [label=\"%d\"];\n", prefix, from, to, label );
-    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/209
 }
 
 /**
@@ -226,7 +224,7 @@ public static String createConnection( String prefix, String from, String to, St
  * @param headlabel
  * @return graph connection as dot code
  */
-public static String createConnection( String prefix, String from, String to, double taillabel, double headlabel ){
+public static String createConnection( final String prefix, final String from, final String to, final double taillabel, final double headlabel ){
     return String.format( "%s\"%s\" -> \"%s\" [label=\" \",taillabel=\"%1.1f%%\",headlabel=\"%1.1f%%\"];\n", prefix, from, to, taillabel * 100.0, headlabel * 100.0 );
 }
 
