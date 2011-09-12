@@ -183,7 +183,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			JMSReader.log.info("JMSReader started and waits for incomming monitoring events!");
 			this.block();
 			JMSReader.log.info("Woke up by shutdown");
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // FindBugs complains but wontfix
 			JMSReader.log.fatal(ex.getMessage(), ex);
 			retVal = false;
 		}
