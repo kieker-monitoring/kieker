@@ -93,7 +93,6 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Matthias Rohr
  */
 public class TraceAnalysisTool {
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/221
 	private static final Log log = LogFactory.getLog(TraceAnalysisTool.class);
 	private static final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 	private static final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory =
@@ -108,8 +107,6 @@ public class TraceAnalysisTool {
 	private static String outputDir = null;
 	private static String outputFnPrefix = null;
 	private static TreeSet<Long> selectedTraces = null; // null means select all
-	// private static TraceEquivalenceClassModes traceEquivalenceClassMode =
-	// TraceEquivalenceClassModes.DISABLED;
 	private static boolean shortLabels = true;
 	private static boolean includeSelfLoops = false;
 	private static boolean ignoreInvalidTraces = false;
@@ -121,10 +118,7 @@ public class TraceAnalysisTool {
 																														// usage
 																														// info
 
-	// private static final String CMD_OPT_NAME_TASK_INITJMSREADER =
-	// "init-basic-JMS-reader";
-	// private static final String CMD_OPT_NAME_TASK_INITJMSREADERJFX =
-	// "init-basic-JMS-readerJavaFx";
+
 
 	private static boolean parseArgs(final String[] args) {
 		try {
@@ -179,34 +173,6 @@ public class TraceAnalysisTool {
 		TraceAnalysisTool.shortLabels = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
 		TraceAnalysisTool.ignoreInvalidTraces =
 				TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
-
-		// final String traceEquivClassModeStr =
-		// TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE,
-		// null);
-		// if (traceEquivClassModeStr == null
-		// ||
-		// traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED))
-		// {
-		// TraceAnalysisTool.traceEquivalenceClassMode =
-		// TraceEquivalenceClassModes.DISABLED;
-		// } else {
-		// if
-		// (traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION))
-		// {
-		// TraceAnalysisTool.traceEquivalenceClassMode =
-		// TraceEquivalenceClassModes.ALLOCATION;
-		// } else if
-		// (traceEquivClassModeStr.equals(Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY))
-		// {
-		// TraceAnalysisTool.traceEquivalenceClassMode =
-		// TraceEquivalenceClassModes.ASSEMBLY;
-		// } else {
-		// TraceAnalysisTool.log.error("Invalid value for property "
-		// + Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE + ":"
-		// + traceEquivClassModeStr);
-		// return false;
-		// }
-		// }
 
 		final String maxTraceDurationStr =
 				TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
@@ -308,20 +274,6 @@ public class TraceAnalysisTool {
 				}
 
 				dumpedOp = true;
-				// } else if
-				// (longOpt.equals(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE))
-				// {
-				// if (TraceAnalysisTool.traceEquivalenceClassMode ==
-				// TraceEquivalenceClassModes.ALLOCATION) {
-				// val = Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION;
-				// } else if (TraceAnalysisTool.traceEquivalenceClassMode ==
-				// TraceEquivalenceClassModes.ASSEMBLY) {
-				// val = Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY;
-				// } else if (TraceAnalysisTool.traceEquivalenceClassMode ==
-				// TraceEquivalenceClassModes.DISABLED) {
-				// val = Constants.TRACE_EQUIVALENCE_MODE_STR_DISABLED;
-				// }
-				// dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
 				val = TraceAnalysisTool.shortLabels ? "true" : "false";
 				dumpedOp = true;
@@ -860,129 +812,4 @@ public class TraceAnalysisTool {
 
 		return retVal;
 	}
-	// private static boolean task_initBasicJmsReader(final String
-	// jmsProviderUrl,
-	// final String jmsDestination) throws IOException,
-	// MonitoringLogReaderException, MonitoringRecordConsumerException {
-	// final boolean retVal = true;
-	//
-	// TraceAnalysisTool.log.info("Trying to start JMS Listener to "
-	// + jmsProviderUrl + " " + jmsDestination);
-	// /* Read log data and collect execution traces */
-	// final AnalysisController analysisInstance = new AnalysisController();
-	// analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
-	// jmsDestination));
-	//
-	// final MonitoringRecordTypeLogger recordTypeLogger = new
-	// MonitoringRecordTypeLogger();
-	// analysisInstance.registerPlugin(recordTypeLogger);
-	//
-	// // MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
-	// // analysisInstance.addRecordConsumer(seqRepConsumer);
-	//
-	// /* @Matthias: Deactivated this, since the ant task didn't run (Andre) */
-	// // BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
-	// // analysisInstance.addRecordConsumer(bjfx);
-	//
-	// analysisInstance.run();
-	// return retVal;
-	// }
-	// private static boolean task_initBasicJmsReaderJavaFx(
-	// final String jmsProviderUrl, final String jmsDestination)
-	// throws IOException, MonitoringLogReaderException,
-	// MonitoringRecordConsumerException {
-	// final boolean retVal = true;
-	//
-	// TraceAnalysisTool.log.info("Trying to start JMS Listener to "
-	// + jmsProviderUrl + " " + jmsDestination);
-	// /* Read log data and collect execution traces */
-	// final AnalysisController analysisInstance = new AnalysisController();
-	// analysisInstance.setLogReader(new JMSReader(jmsProviderUrl,
-	// jmsDestination));
-	//
-	// final MonitoringRecordTypeLogger recordTypeLogger = new
-	// MonitoringRecordTypeLogger();
-	// analysisInstance.registerPlugin(recordTypeLogger);
-	//
-	// // MessageTraceRepository seqRepConsumer = new MessageTraceRepository();
-	// // analysisInstance.addRecordConsumer(seqRepConsumer);
-	//
-	// /* @Matthias: Deactivated this, since the ant task didn't run (Andre) */
-	// final BriefJavaFxInformer bjfx = new BriefJavaFxInformer();
-	//
-	// analysisInstance.run();
-	// return retVal;
-	// }
-	/**
-	 * This method is used to initialize a typical set of filters, required for
-	 * message trace analysis. Every new trace object is passed to the
-	 * messageTraceListener.
-	 * 
-	 * Kieker Live Analysis adds itself as listener.
-	 * 
-	 * TO BE REMOVED INTO
-	 * 
-	 * You'll need a tpanInstance (with a reader) before invoking this method.
-	 */
-	// public static void
-	// createMessageTraceFiltersAndRegisterMessageTraceListener(
-	// AnalysisController tpanInstance,
-	// final BriefJavaFxInformer messageTraceListener) {
-	// if (tpanInstance == null) {
-	// tpanInstance = new AnalysisController();
-	// }
-	//
-	// TraceReconstructionPlugin mtReconstrFilter = null;
-	// mtReconstrFilter = new TraceReconstructionPlugin(
-	// TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
-	// TraceAnalysisTool.systemEntityFactory, 60 * 1000, //
-	// maxTraceDurationMillis,
-	// true, // ignoreInvalidTraces,
-	// TraceEquivalenceClassModes.DISABLED, // traceEquivalenceClassMode,
-	// // // = every trace
-	// // passes, not only
-	// // unique trace classes
-	// null, // selectedTraces, // null means all
-	// TraceAnalysisTool.ignoreRecordsBeforeTimestamp, // default
-	// // Long.MIN
-	// TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
-	// // Long.MAX
-	// mtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getMessageTraceInputPort());
-	// mtReconstrFilter.getInvalidExecutionTraceOutputPort().subsribe(messageTraceListener.getJfxBrokenExecutionTraceInputPort());
-	// // i
-	// // know
-	// // that
-	// // its
-	// // dirty
-	//
-	// TraceReconstructionPlugin uniqueMtReconstrFilter = null;
-	// uniqueMtReconstrFilter = new TraceReconstructionPlugin(
-	// TraceAnalysisTool.TRACERECONSTR_COMPONENT_NAME,
-	// TraceAnalysisTool.systemEntityFactory, 60 * 1000, //
-	// maxTraceDurationMillis,
-	// true, // ignoreInvalidTraces,
-	// TraceEquivalenceClassModes.ALLOCATION, // traceEquivalenceClassMode,
-	// // // = every trace
-	// // passes, not only
-	// // unique trace classes
-	// null, // selectedTraces, // null means all
-	// TraceAnalysisTool.ignoreRecordsBeforeTimestamp, // default
-	// // Long.MIN
-	// TraceAnalysisTool.ignoreRecordsAfterTimestamp); // default
-	// // Long.MAX
-	// uniqueMtReconstrFilter.getMessageTraceOutputPort().subsribe(messageTraceListener.getJfxUniqueMessageTraceInputPort());
-	// // i know that its
-	// // dirty; i (andre) like
-	// // it because it's
-	// // basically a port
-	//
-	// final ExecutionRecordTransformationPlugin execRecTransformer = new
-	// ExecutionRecordTransformationPlugin(
-	// TraceAnalysisTool.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
-	// TraceAnalysisTool.systemEntityFactory);
-	// execRecTransformer.getExecutionOutputPort().subsribe(mtReconstrFilter.getExecutionInputPort());
-	// execRecTransformer.getExecutionOutputPort().subsribe(uniqueMtReconstrFilter.getExecutionInputPort());
-	// tpanInstance.registerPlugin(execRecTransformer);
-	// System.out.println("MessageTraceListener registered");
-	// }
 }
