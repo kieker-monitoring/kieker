@@ -49,6 +49,8 @@ public class Signature {
         return this.name;
     }
 
+    // TODO: We should not return the internal data structure
+    // See ticket 
     public final String[] getParamTypeList() {
         return this.paramTypeList;
     }
