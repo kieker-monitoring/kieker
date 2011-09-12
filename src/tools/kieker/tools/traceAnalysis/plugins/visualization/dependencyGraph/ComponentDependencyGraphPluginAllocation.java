@@ -79,13 +79,11 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
             return "$";
         }
 
-        //String resourceContainerName = component.getExecutionContainer().getName();
-        // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/200
         final String assemblyComponentName = component.getAssemblyComponent().getName();
         final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
         final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT + "\\n");//(resourceContainerName).append("::")
+        final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT + "\\n");
         strBuild.append(assemblyComponentName).append(":");
         if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx).append(".");
@@ -160,8 +158,6 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
                             null, // imagefilename
                             null // misc
                             )).toString();
-                    //strBuild.append(node.getId()).append("[label =\"").append(componentNodeLabel(node, shortLabels)).append("\",shape=box];\n");
-                    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/200
                 }
                 strBuild.append("}\n");
             }
