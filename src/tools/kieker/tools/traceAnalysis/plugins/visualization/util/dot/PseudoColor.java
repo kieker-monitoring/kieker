@@ -111,42 +111,6 @@ static void setColorStretching( final boolean stretch ){
 }
 
 /**
- * Maps a rating in <code>[-1,1]</code> to a color from green over yellow and orange to red.
- * The range is limited by hierarchy level minima and maxima.
- * <pre>
- *  yellow..orange..red:	R 255		G 255..0	B 0
- *  yellow..green:			R 255..0	G 255		B 0
- *   more light: higher low values
- *   less satur: higher low values & lower high values -- e.g. 63..222
- * </pre>
- * @param level hierarchy level in graph as defined by the STRUCTURE constants in {@link Util};
- *      use -1 for unlimited boundaries [-1,1]
- * @param value rating in level's boundaries, or [-1,1] if level==-1
- * @return color object
- */
-static Color getColor( final int level, double value ){
-    PseudoColor.min = level == -1 ? -1.0 : PseudoColor.minima[level];
-    PseudoColor.max = level == -1 ? 1.0 : PseudoColor.maxima[level];
-    PseudoColor.diff = level == -1 ? 2.0 : PseudoColor.diffs[level];
-    if( (value < PseudoColor.min) || (value > PseudoColor.max) ){
-        throw new IllegalArgumentException( "Argument out of range: " + value + "  (must be in [" + PseudoColor.min + " " + PseudoColor.max + "])" );
-    }
-    if( PseudoColor.stretchToFullSpectrum ){
-        value = ( value - PseudoColor.min ) / PseudoColor.diff;                                 // stretch to [0,1]
-        value = Util.scalePercentToRating( value );                     // stretch to [-1,1]
-    }
-    int color;
-    if( value > 0.0 ){              // upper half -- yellow..orange..red -- decrease green
-        color = PseudoColor.COLOR_MIN + (int) ( PseudoColor.COLOR_DIFF * ( 1.0 - value ) );     // stretch to [COLOR_MIN,COLOR_MAX]
-        return new Color( PseudoColor.COLOR_MAX, color, PseudoColor.COLOR_MIN );
-    }
-    else{                           // lower half -- yellow..green -- decrease red
-        color = PseudoColor.COLOR_MIN + (int) ( PseudoColor.COLOR_DIFF * ( 1.0 + value ) );     // stretch to [COLOR_MIN,COLOR_MAX]
-        return new Color( color, PseudoColor.COLOR_MAX, PseudoColor.COLOR_MIN );
-    }
-}
-
-/**
  * Converts a <code>Color</code> object to hexadecimal string.
  * @param color color to convert
  * @return hexadecimal RGB color string, e.g. "#de583e"
