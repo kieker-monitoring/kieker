@@ -24,17 +24,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
-import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
+import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.Message;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
@@ -66,27 +67,28 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
         this.includeSelfLoops = includeSelfLoops;
     }
 
-    private String nodeLabel(AssemblyComponent curComponent){
+    private String nodeLabel(final AssemblyComponent curComponent){
         if (this.shortLabels){
-            return STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName()+":.."+curComponent.getType().getTypeName();
+            return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName()+":.."+curComponent.getType().getTypeName();
         } else {
-            return STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName()+":"+curComponent.getType().getFullQualifiedName();
+            return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName()+":"+curComponent.getType().getFullQualifiedName();
         }
     }
 
-    protected void dotEdges(Collection<DependencyGraphNode<AssemblyComponent>> nodes,
-            PrintStream ps, final boolean shortLabels) {
+    @Override
+	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes,
+            final PrintStream ps, final boolean shortLabels) {
 
-        AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
-        int rootComponentId = rootComponent.getId();
-        StringBuilder strBuild = new StringBuilder();
+        final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
+        final int rootComponentId = rootComponent.getId();
+        final StringBuilder strBuild = new StringBuilder();
         // dot code for contained components
-        for (DependencyGraphNode<AssemblyComponent> node : nodes) {
-            AssemblyComponent curComponent = node.getEntity();
-            int curComponentId = node.getId();
+        for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
+            final AssemblyComponent curComponent = node.getEntity();
+            final int curComponentId = node.getId();
             strBuild.append(DotFactory.createNode("",
-                    getNodeId(node),
-                    (curComponentId == rootComponentId) ? "$" : nodeLabel(curComponent),
+                    this.getNodeId(node),
+                    (curComponentId == rootComponentId) ? "$" : this.nodeLabel(curComponent),
                     (curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX,
                     (curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style
                     null, // framecolor
@@ -96,8 +98,6 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
                     null, // imagefilename
                     null // misc
                     )).toString();
-            //strBuild.append(node.getId()).append("[label =\"").append(componentNodeLabel(node, shortLabels)).append("\",shape=box];\n");
-            // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/201
             strBuild.append("\n");
         }
         ps.println(strBuild.toString());
@@ -114,7 +114,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
      * @param error
      */
     @Override
-    public void terminate(boolean error) {
+    public void terminate(final boolean error) {
         if (!error) {
             try {
                 this.saveToDotFile(
@@ -122,8 +122,8 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
                         this.includeWeights,
                         this.shortLabels,
                         this.includeSelfLoops);
-            } catch (IOException ex) {
-                log.error("IOException", ex);
+            } catch (final IOException ex) {
+                ComponentDependencyGraphPluginAssembly.log.error("IOException", ex);
             }
         }
     }
@@ -136,27 +136,27 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
             new AbstractInputPort<MessageTrace>("Message traces") {
 
                 @Override
-                public void newEvent(MessageTrace t) {
-                    for (Message m : t.getSequenceAsVector()) {
+                public void newEvent(final MessageTrace t) {
+                    for (final Message m : t.getSequenceAsVector()) {
                         if (m instanceof SynchronousReplyMessage) {
                             continue;
                         }
-                        AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
-                        AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-                        DependencyGraphNode<AssemblyComponent> senderNode = dependencyGraph.getNode(senderComponent.getId());
-                        DependencyGraphNode<AssemblyComponent> receiverNode = dependencyGraph.getNode(receiverComponent.getId());
+                        final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+                        final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+                        DependencyGraphNode<AssemblyComponent> senderNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderComponent.getId());
+                        DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverComponent.getId());
                         if (senderNode == null) {
                             senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
-                            dependencyGraph.addNode(senderNode.getId(), senderNode);
+                            ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
                         }
                         if (receiverNode == null) {
                             receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
-                            dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+                            ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
                         }
                         senderNode.addOutgoingDependency(receiverNode);
                         receiverNode.addIncomingDependency(senderNode);
                     }
-                    reportSuccess(t.getTraceId());
+                    ComponentDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
                 }
             };
 }
