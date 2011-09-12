@@ -20,12 +20,12 @@
 
 package kieker.monitoring.writer.filesystem;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -62,10 +62,6 @@ import org.apache.commons.logging.LogFactory;
  * than one thread into a single file is not considered a save option.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
- * 
- *         History: 2008/01/04: Refactoring for the first release of Kieker and
- *         publication under an open source license 2007/03/13: Refactoring
- *         2006/12/20: Initial Prototype
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final Log log = LogFactory.getLog(SyncFsWriter.class);
@@ -154,11 +150,11 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
 			final Object val = recordFields[i];
 			if (val != null) {
-				sb.append(val);			
+				sb.append(val);
 			} else {
 				SyncFsWriter.log.error(i + "th field of record is null: " + monitoringRecord.toString());
 				// AbstractMonitoringRecord.toString handles null values correctly
-				sb.append("null");				
+				sb.append("null");
 			}
 			if (i < LAST_FIELD_INDEX) {
 				sb.append(';');
@@ -179,7 +175,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	@Override
 	public final void terminate() {
 		if (this.pos != null) {
-			this.pos.flush();
 			this.pos.close();
 		}
 		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
@@ -201,7 +196,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private final void prepareFile() throws FileNotFoundException {
 		if (this.entriesInCurrentFileCounter++ > SyncFsWriter.maxEntriesInFile) {
 			if (this.pos != null) {
-				this.pos.flush();
 				this.pos.close();
 			}
 			this.entriesInCurrentFileCounter = 0;
@@ -210,7 +204,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
-			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))), this.autoflush);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), this.autoflush);
 		}
 	}
 }

@@ -47,7 +47,7 @@ public final class MappingFileWriter {
 		this.mappingFile = new File(mappingFileFn);
 		this.mappingFile.createNewFile();
 	}
-	
+
 	public final synchronized int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
 		Integer idObj = this.class2idMap.get(clazz);
 		if (idObj == null) {
