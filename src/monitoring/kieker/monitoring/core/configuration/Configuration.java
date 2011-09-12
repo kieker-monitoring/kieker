@@ -82,6 +82,8 @@ public final class Configuration extends Properties implements Keys {
 	
 	/**
 	 * Creates a new configuration based on the given properties file with fallback on the default values.
+	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
+	 * the default configuration is returned.
 	 * 
 	 * @param configurationFile
 	 * @return the created Configuration
@@ -100,7 +102,9 @@ public final class Configuration extends Properties implements Keys {
 	}
 	
 	/**
-	 * Returns the properties loaded from file propertiesFn.
+	 * Returns the properties loaded from file propertiesFn with fallback on the default values.
+	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
+	 * the default configuration is returned.
 	 * 
 	 * @param propertiesFn
 	 * @param defaultValues
@@ -120,7 +124,9 @@ public final class Configuration extends Properties implements Keys {
 	}
 
 	/**
-	 * Returns the properties loaded from the resource name or null if the resource could not be found.
+	 * Returns the properties loaded from the resource name with fallback on the default values.
+	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
+	 * the default configuration is returned.
 	 * 
 	 * @param propertiesFn
 	 * @param defaultValues
