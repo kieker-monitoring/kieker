@@ -81,8 +81,6 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 
     private String componentNodeLabel(final AssemblyComponent component,
             final boolean shortLabels) {
-        //String resourceContainerName = component.getExecutionContainer().getName();
-    	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/204
         final String assemblyComponentName = component.getName();
         final String componentTypePackagePrefx = component.getType().getPackageName();
         final String componentTypeIdentifier = component.getType().getTypeName();
