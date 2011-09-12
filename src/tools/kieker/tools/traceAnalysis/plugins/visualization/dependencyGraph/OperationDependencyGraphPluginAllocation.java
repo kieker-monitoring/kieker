@@ -22,27 +22,29 @@ package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
 import java.io.File;
 import java.io.IOException;
-import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
-import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map.Entry;
+
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.analysis.plugin.configuration.IInputPort;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import kieker.tools.traceAnalysis.systemModel.Message;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
+import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
@@ -80,18 +82,16 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
     }
 
     private String containerNodeLabel(final ExecutionContainer container) {
-        return String.format("%s\\n%s", STEREOTYPE_EXECUTION_CONTAINER, container.getName());
+        return String.format("%s\\n%s", AbstractDependencyGraphPlugin.STEREOTYPE_EXECUTION_CONTAINER, container.getName());
     }
 
     private String componentNodeLabel(final AllocationComponent component,
             final boolean shortLabels) {
-        //String resourceContainerName = component.getExecutionContainer().getName();
-    	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/203
-        String assemblyComponentName = component.getAssemblyComponent().getName();
-        String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
-        String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
+        final String assemblyComponentName = component.getAssemblyComponent().getName();
+        final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
+        final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-        StringBuilder strBuild = new StringBuilder(STEREOTYPE_ALLOCATION_COMPONENT + "\\n");
+        final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT + "\\n");
         strBuild.append(assemblyComponentName).append(":");
         if (!shortLabels) {
             strBuild.append(componentTypePackagePrefx).append(".");
@@ -102,21 +102,22 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
         return strBuild.toString();
     }
 
-    protected void dotEdges(Collection<DependencyGraphNode<AllocationComponentOperationPair>> nodes,
-            PrintStream ps, final boolean shortLabels) {
+    @Override
+	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponentOperationPair>> nodes,
+            final PrintStream ps, final boolean shortLabels) {
 
         /* Execution container ID x contained components  */
-        Hashtable<Integer, Collection<AllocationComponent>> containerId2componentMapping =
+        final Hashtable<Integer, Collection<AllocationComponent>> containerId2componentMapping =
                 new Hashtable<Integer, Collection<AllocationComponent>>();
-        Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping =
+        final Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping =
                 new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>>();
 
         // Derive container / component / operation hieraŕchy
-        for (DependencyGraphNode<AllocationComponentOperationPair> pairNode : nodes) {
-            AllocationComponent curComponent = pairNode.getEntity().getAllocationComponent();
-            ExecutionContainer curContainer = curComponent.getExecutionContainer();
-            int componentId = curComponent.getId();
-            int containerId = curContainer.getId();
+        for (final DependencyGraphNode<AllocationComponentOperationPair> pairNode : nodes) {
+            final AllocationComponent curComponent = pairNode.getEntity().getAllocationComponent();
+            final ExecutionContainer curContainer = curComponent.getExecutionContainer();
+            final int componentId = curComponent.getId();
+            final int containerId = curContainer.getId();
 
             Collection<DependencyGraphNode<AllocationComponentOperationPair>> containedPairs =
                     componentId2pairMapping.get(componentId);
@@ -136,16 +137,16 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
             containedPairs.add(pairNode);
         }
 
-        ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
-        int rootContainerId = rootContainer.getId();
-        StringBuilder strBuild = new StringBuilder();
-        for (Entry<Integer, Collection<AllocationComponent>> containerComponentEntry : containerId2componentMapping.entrySet()) {
-            int curContainerId = containerComponentEntry.getKey();
-            ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().lookupExecutionContainerByContainerId(curContainerId);
+        final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+        final int rootContainerId = rootContainer.getId();
+        final StringBuilder strBuild = new StringBuilder();
+        for (final Entry<Integer, Collection<AllocationComponent>> containerComponentEntry : containerId2componentMapping.entrySet()) {
+            final int curContainerId = containerComponentEntry.getKey();
+            final ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().lookupExecutionContainerByContainerId(curContainerId);
 
             if (curContainerId == rootContainerId) {
                 strBuild.append(DotFactory.createNode("",
-                        getNodeId(this.dependencyGraph.getRootNode()),
+                        this.getNodeId(this.dependencyGraph.getRootNode()),
                         "$",
                         DotFactory.DOT_SHAPE_NONE,
                         null, // style
@@ -158,8 +159,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
                         )).toString();
             } else {
                 strBuild.append(DotFactory.createCluster("",
-                        CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
-                        containerNodeLabel(curContainer),
+                        this.CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
+                        this.containerNodeLabel(curContainer),
                         DotFactory.DOT_SHAPE_BOX, // shape
                         DotFactory.DOT_STYLE_FILLED, // style
                         null, // framecolor
@@ -168,11 +169,11 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null));  // misc
                 // dot code for contained components
-                for (AllocationComponent curComponent : containerComponentEntry.getValue()) {
-                    int curComponentId = curComponent.getId();
+                for (final AllocationComponent curComponent : containerComponentEntry.getValue()) {
+                    final int curComponentId = curComponent.getId();
                     strBuild.append(DotFactory.createCluster("",
-                            COMPONENT_NODE_ID_PREFIX + curComponentId,
-                            componentNodeLabel(curComponent, shortLabels),
+                            this.COMPONENT_NODE_ID_PREFIX + curComponentId,
+                            this.componentNodeLabel(curComponent, shortLabels),
                             DotFactory.DOT_SHAPE_BOX,
                             DotFactory.DOT_STYLE_FILLED, // style
                             null, // framecolor
@@ -181,17 +182,17 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
                             DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                             null // misc
                             ));
-                    for (DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) {
-                        Signature sig = curPair.getEntity().getOperation().getSignature();
-                        StringBuilder opLabel = new StringBuilder(sig.getName());
+                    for (final DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) {
+                        final Signature sig = curPair.getEntity().getOperation().getSignature();
+                        final StringBuilder opLabel = new StringBuilder(sig.getName());
                         opLabel.append("(");
-                        String[] paramList = sig.getParamTypeList();
-                        if (paramList != null && paramList.length > 0) {
+                        final String[] paramList = sig.getParamTypeList();
+                        if ((paramList != null) && (paramList.length > 0)) {
                             opLabel.append("..");
                         }
                         opLabel.append(")");
                         strBuild.append(DotFactory.createNode("",
-                                getNodeId(curPair),
+                                this.getNodeId(curPair),
                                 opLabel.toString(),
                                 DotFactory.DOT_SHAPE_OVAL,
                                 DotFactory.DOT_STYLE_FILLED, // style
@@ -222,7 +223,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
      * @param error
      */
     @Override
-    public void terminate(boolean error) {
+    public void terminate(final boolean error) {
         if (!error) {
             try {
                 this.saveToDotFile(
@@ -230,8 +231,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
                         this.includeWeights,
                         this.shortLabels,
                         this.includeSelfLoops);
-            } catch (IOException ex) {
-                log.error("IOException", ex);
+            } catch (final IOException ex) {
+                OperationDependencyGraphPluginAllocation.log.error("IOException", ex);
             }
         }
     }
@@ -239,36 +240,36 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
             new AbstractInputPort<MessageTrace>("Message traces") {
 
                 @Override
-                public void newEvent(MessageTrace t) {
-                    for (Message m : t.getSequenceAsVector()) {
+                public void newEvent(final MessageTrace t) {
+                    for (final Message m : t.getSequenceAsVector()) {
                         if (m instanceof SynchronousReplyMessage) {
                             continue;
                         }
-                        AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-                        AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-                        int rootOperationId = getSystemEntityFactory().getOperationFactory().rootOperation.getId();
-                        Operation senderOperation = m.getSendingExecution().getOperation();
-                        Operation receiverOperation = m.getReceivingExecution().getOperation();
+                        final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+                        final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+                        final int rootOperationId = OperationDependencyGraphPluginAllocation.this.getSystemEntityFactory().getOperationFactory().rootOperation.getId();
+                        final Operation senderOperation = m.getSendingExecution().getOperation();
+                        final Operation receiverOperation = m.getReceivingExecution().getOperation();
                         /* The following two get-calls to the factory return s.th. in either case */
-                        AllocationComponentOperationPair senderPair =
-                                (senderOperation.getId() == rootOperationId) ? dependencyGraph.getRootNode().getEntity() : pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
-                        AllocationComponentOperationPair receiverPair =
-                                (receiverOperation.getId() == rootOperationId) ? dependencyGraph.getRootNode().getEntity() : pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
+                        final AllocationComponentOperationPair senderPair =
+                                (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph.getRootNode().getEntity() : OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+                        final AllocationComponentOperationPair receiverPair =
+                                (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph.getRootNode().getEntity() : OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
-                        DependencyGraphNode<AllocationComponentOperationPair> senderNode = dependencyGraph.getNode(senderPair.getId());
-                        DependencyGraphNode<AllocationComponentOperationPair> receiverNode = dependencyGraph.getNode(receiverPair.getId());
+                        DependencyGraphNode<AllocationComponentOperationPair> senderNode = OperationDependencyGraphPluginAllocation.this.dependencyGraph.getNode(senderPair.getId());
+                        DependencyGraphNode<AllocationComponentOperationPair> receiverNode = OperationDependencyGraphPluginAllocation.this.dependencyGraph.getNode(receiverPair.getId());
                         if (senderNode == null) {
                             senderNode = new DependencyGraphNode<AllocationComponentOperationPair>(senderPair.getId(), senderPair);
-                            dependencyGraph.addNode(senderNode.getId(), senderNode);
+                            OperationDependencyGraphPluginAllocation.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
                         }
                         if (receiverNode == null) {
                             receiverNode = new DependencyGraphNode<AllocationComponentOperationPair>(receiverPair.getId(), receiverPair);
-                            dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+                            OperationDependencyGraphPluginAllocation.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
                         }
                         senderNode.addOutgoingDependency(receiverNode);
                         receiverNode.addIncomingDependency(senderNode);
                     }
-                    reportSuccess(t.getTraceId());
+                    OperationDependencyGraphPluginAllocation.this.reportSuccess(t.getTraceId());
                 }
             };
 
