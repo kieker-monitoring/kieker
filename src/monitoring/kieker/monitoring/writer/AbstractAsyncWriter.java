@@ -50,14 +50,14 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		this.PREFIX = this.getClass().getName() + ".";
 
-		final int queueFullBehavior = this.configuration.getIntProperty(this.PREFIX + BEHAVIOR);
+		final int queueFullBehavior = this.configuration.getIntProperty(this.PREFIX + AbstractAsyncWriter.BEHAVIOR);
 		if ((queueFullBehavior < 0) || (queueFullBehavior > 2)) {
-			AbstractAsyncWriter.log.warn("Unknown value '" + queueFullBehavior + "' for " + this.PREFIX + BEHAVIOR + "; using default value 0");
+			AbstractAsyncWriter.log.warn("Unknown value '" + queueFullBehavior + "' for " + this.PREFIX + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehavior;
 		}
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.PREFIX + QUEUESIZE));
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.PREFIX + AbstractAsyncWriter.QUEUESIZE));
 	}
 
 	/**
@@ -67,8 +67,8 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	protected Properties getDefaultProperties() {
 		final Properties properties = new Properties(super.getDefaultProperties());
 		final String PREFIX = this.getClass().getName() + "."; //can't use this.PREFIX, maybe uninitialized
-		properties.setProperty(PREFIX + QUEUESIZE, "10000");
-		properties.setProperty(PREFIX + BEHAVIOR, "0");
+		properties.setProperty(PREFIX + AbstractAsyncWriter.QUEUESIZE, "10000");
+		properties.setProperty(PREFIX + AbstractAsyncWriter.BEHAVIOR, "0");
 		return properties;
 	}
 
@@ -113,6 +113,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 					this.blockingQueue.put(monitoringRecord);
 					break;
 				case 2: // does nothing if queue is full
+					// offer returns true iff element has been added (FindBugs: wontfix)
 					this.blockingQueue.offer(monitoringRecord);
 					break;
 				default: // tries to add immediately (error if full)
