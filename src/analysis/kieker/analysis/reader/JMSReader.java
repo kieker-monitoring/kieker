@@ -190,6 +190,8 @@ public class JMSReader extends AbstractMonitoringReader {
 		return retVal;
 	}
 
+	// TODO: We should use a CountDownLatch instead
+	// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/228
 	private final Object blockingObj = new Object();
 
 	private final void block() {

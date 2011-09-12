@@ -216,6 +216,8 @@ public final class JMXReader extends AbstractMonitoringReader {
 		}
 	}
 
+	// TODO: We should use a CountDownLatch instead
+	// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/228
 	private final Object blockingObj = new Object();
 
 	private final void block() {
