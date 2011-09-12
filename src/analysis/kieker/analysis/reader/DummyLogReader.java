@@ -27,21 +27,19 @@ import kieker.common.record.OperationExecutionRecord;
 
 /**
  * This is a logReader for testing. It creates just some random data. All have
- * the same operation and component and some random wait time of approx. a
- * second. It never terminates.
+ * the same operation and component and some random wait time of approximately a
+ * second.
  * 
  * @author matthias
  */
 public class DummyLogReader extends AbstractMonitoringReader {
-
 	private final int i = 1;
-
 	private volatile boolean initShutdown = false;
-	
-	@Override
+
 	/**
-	 * It never finished to produce dummy data about each second
+	 * Produces dummy data about once each second
 	 */
+	@Override
 	public boolean read() {
 		while (!this.initShutdown) {
 			final long startTime = System.nanoTime();
@@ -51,13 +49,10 @@ public class DummyLogReader extends AbstractMonitoringReader {
 			try {
 				Thread.sleep(sleeptime);
 			} catch (final InterruptedException ex) {
-				Logger.getLogger(DummyLogReader.class.getName()).log(
-						Level.SEVERE, null, ex);
+				Logger.getLogger(DummyLogReader.class.getName()).log(Level.SEVERE, null, ex);
 			}
 
-			final OperationExecutionRecord testRecord = new OperationExecutionRecord(
-					"ComponentA", "OperationA", this.i, startTime,
-					System.nanoTime());
+			final OperationExecutionRecord testRecord = new OperationExecutionRecord("ComponentA", "OperationA", this.i, startTime, System.nanoTime());
 			this.deliverRecord(testRecord);
 		}
 		return true;
@@ -68,7 +63,7 @@ public class DummyLogReader extends AbstractMonitoringReader {
 		// nothing to do...
 		return true;
 	}
-	
+
 	@Override
 	public void terminate() {
 		this.initShutdown = true;
