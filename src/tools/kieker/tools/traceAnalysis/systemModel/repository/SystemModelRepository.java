@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
@@ -50,24 +51,24 @@ public class SystemModelRepository {
     }
 
     public SystemModelRepository() {
-        ComponentType rootComponentType =
+        final ComponentType rootComponentType =
                 new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$");
         this.typeRepositoryFactory = new TypeRepository(this, rootComponentType);
-        AssemblyComponent rootAssemblyComponentInstance =
+        final AssemblyComponent rootAssemblyComponentInstance =
                 new AssemblyComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$", rootComponentType);
         this.assemblyFactory = new AssemblyRepository(this, rootAssemblyComponentInstance);
-        ExecutionContainer rootExecutionContainer =
+        final ExecutionContainer rootExecutionContainer =
                 new ExecutionContainer(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, "$");
         this.executionEnvironmentFactory = new ExecutionEnvironmentRepository(this, rootExecutionContainer);
-        AllocationComponent rootAllocation =
+        final AllocationComponent rootAllocation =
                 new AllocationComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootAssemblyComponentInstance, rootExecutionContainer);
         this.allocationFactory = new AllocationRepository(this, rootAllocation);
-        Signature rootSignature = new Signature("$", "<>", new String[]{});
-        Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
+        final Signature rootSignature = new Signature("$", "<>", new String[]{});
+        final Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
         this.operationFactory = new OperationRepository(this, rootOperation);
         this.rootExecution = new Execution(
-                operationFactory.rootOperation,
-                allocationFactory.rootAllocationComponent,
+                this.operationFactory.rootOperation,
+                this.allocationFactory.rootAllocationComponent,
                 -1, "-1", -1, -1, -1, -1);
     }
 
@@ -97,21 +98,21 @@ public class SystemModelRepository {
         ALLOCATION_COMPONENT, EXECUTION_CONTAINER
     };
 
-    private String htmlEntityLabel(int id, String caption, EntityType entityType) {
-        StringBuilder strBuild = new StringBuilder();
+    private String htmlEntityLabel(final int id, final String caption, final EntityType entityType) {
+        final StringBuilder strBuild = new StringBuilder();
         strBuild.append("<a name=\"").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
         return strBuild.toString();
     }
 
-    private String htmlEntityRef(int id, String caption, EntityType entityType) {
-        StringBuilder strBuild = new StringBuilder();
+    private String htmlEntityRef(final int id, final String caption, final EntityType entityType) {
+        final StringBuilder strBuild = new StringBuilder();
         strBuild.append("<a href=\"#").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
         return strBuild.toString();
     }
 
     private void printOpenHtmlTable(final PrintStream ps, final String[] columnTitle) {
         ps.println("<table border=\"1\"><tr>");
-        for (String cell : columnTitle) {
+        for (final String cell : columnTitle) {
             ps.println("<th class=\"colTitle\">" + cell + "</th>");
         }
         ps.println("</tr>");
@@ -119,7 +120,7 @@ public class SystemModelRepository {
 
     private void printHtmlTableRow(final PrintStream ps, final String[] cells) {
         ps.println("<tr class=\"cell\">");
-        for (String cell : cells) {
+        for (final String cell : cells) {
             ps.println("<td>" + ((cell.length() == 0) ? "&nbsp;" : cell) + "</td>");
         }
         ps.println("</tr>");
@@ -133,7 +134,7 @@ public class SystemModelRepository {
         if (numLines <= 0) {
             return;
         }
-        StringBuilder strBuild = new StringBuilder("<pre>\n");
+        final StringBuilder strBuild = new StringBuilder("<pre>\n");
         for (int i = 0; i < numLines; i++) {
             strBuild.append(".\n");
         }
@@ -142,7 +143,7 @@ public class SystemModelRepository {
     }
 
     public void saveSystemToHTMLFile(final String outputFnBase) throws FileNotFoundException {
-        PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".html"));
+        final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".html"));
         ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
         ps.println("<style type=\"text/css\">\n"
                 + ".colTitle { font-family:sans; font-size:11px; }\n"
@@ -150,84 +151,79 @@ public class SystemModelRepository {
                 + "h1 { font-family:sans; font-size:14px; }\n"
                 + "</style>");
         ps.println("</head><body>");
-        htmlHSpace(ps, 10);
+        this.htmlHSpace(ps, 10);
         ps.println("<h1>Component Types</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "Package", "Name", "Operations"});
-        Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
-        for (ComponentType type : componentTypes) {
-            StringBuilder opListBuilder = new StringBuilder();
+        this.printOpenHtmlTable(ps, new String[]{"ID", "Package", "Name", "Operations"});
+        final Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
+        for (final ComponentType type : componentTypes) {
+            final StringBuilder opListBuilder = new StringBuilder();
             if (type.getOperations().size() > 0) {
-                //opListBuilder.append("<ul>");
-                for (Operation op : type.getOperations()) {
-                    opListBuilder.append("<li>").append(htmlEntityRef(op.getId(), op.getSignature().toString(), EntityType.OPERATION)).append("</li>");
+                for (final Operation op : type.getOperations()) {
+                    opListBuilder.append("<li>").append(this.htmlEntityRef(op.getId(), op.getSignature().toString(), EntityType.OPERATION)).append("</li>");
                 }
-                //opListBuilder.append("</ul>");
             }
-            String[] cells = new String[]{
-                htmlEntityLabel(type.getId(), type.getId() + "", EntityType.COMPONENT_TYPE),
+            final String[] cells = new String[]{
+                this.htmlEntityLabel(type.getId(), type.getId() + "", EntityType.COMPONENT_TYPE),
                 type.getPackageName(),
                 type.getTypeName(),
                 opListBuilder.toString()
             };
-            printHtmlTableRow(ps, cells);
+            this.printHtmlTableRow(ps, cells);
         }
-        printCloseHtmlTable(ps);
+        this.printCloseHtmlTable(ps);
         ps.println("<h1>Operations</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "Component type", "Name", "Parameter types", "Return type"});
-        Collection<Operation> operations = this.operationFactory.getOperations();
-        for (Operation op : operations) {
-            StringBuilder paramListStrBuild = new StringBuilder();
-            // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/217
-            //paramListStrBuild.append("<ul>");
-            for (String paramType : op.getSignature().getParamTypeList()) {
+        this.printOpenHtmlTable(ps, new String[]{"ID", "Component type", "Name", "Parameter types", "Return type"});
+        final Collection<Operation> operations = this.operationFactory.getOperations();
+        for (final Operation op : operations) {
+            final StringBuilder paramListStrBuild = new StringBuilder();
+            for (final String paramType : op.getSignature().getParamTypeList()) {
                 paramListStrBuild.append("<li>").append(paramType).append("</li>");
             }
-            //paramListStrBuild.append("</ul>");
-            String[] cells = new String[]{
-                htmlEntityLabel(op.getId(), op.getId() + "", EntityType.OPERATION),
-                htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),
+            final String[] cells = new String[]{
+                this.htmlEntityLabel(op.getId(), op.getId() + "", EntityType.OPERATION),
+                this.htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),
                 op.getSignature().getName(),
                 paramListStrBuild.toString(),
                 op.getSignature().getReturnType()
             };
-            printHtmlTableRow(ps, cells);
+            this.printHtmlTableRow(ps, cells);
         }
-        printCloseHtmlTable(ps);
+        this.printCloseHtmlTable(ps);
         ps.println("<h1>Assembly Components</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "Name", "Component type"});
-        Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
-        for (AssemblyComponent ac : assemblyComponents) {
-            String[] cells = new String[]{
-                htmlEntityLabel(ac.getId(), ac.getId() + "", EntityType.ASSEMBLY_COMPONENT),
+        this.printOpenHtmlTable(ps, new String[]{"ID", "Name", "Component type"});
+        final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
+        for (final AssemblyComponent ac : assemblyComponents) {
+            final String[] cells = new String[]{
+                this.htmlEntityLabel(ac.getId(), ac.getId() + "", EntityType.ASSEMBLY_COMPONENT),
                 ac.getName(),
-                htmlEntityRef(ac.getType().getId(), ac.getType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),};
-            printHtmlTableRow(ps, cells);
+                this.htmlEntityRef(ac.getType().getId(), ac.getType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),};
+            this.printHtmlTableRow(ps, cells);
         }
-        printCloseHtmlTable(ps);
+        this.printCloseHtmlTable(ps);
         ps.println("<h1>Execution Containers</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "Name"});
-        Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
-        for (ExecutionContainer container : containers) {
-            String[] cells = new String[]{
-                htmlEntityLabel(container.getId(), container.getId() + "", EntityType.EXECUTION_CONTAINER),
+        this.printOpenHtmlTable(ps, new String[]{"ID", "Name"});
+        final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
+        for (final ExecutionContainer container : containers) {
+            final String[] cells = new String[]{
+                this.htmlEntityLabel(container.getId(), container.getId() + "", EntityType.EXECUTION_CONTAINER),
                 container.getName()
             };
-            printHtmlTableRow(ps, cells);
+            this.printHtmlTableRow(ps, cells);
         }
-        printCloseHtmlTable(ps);
+        this.printCloseHtmlTable(ps);
         ps.println("<h1>Deployment Components</h1>");
-        printOpenHtmlTable(ps, new String[]{"ID", "Assembly component", "Execution container"});
-        Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
-        for (AllocationComponent allocationComponent : allocationComponentInstances) {
-            String[] cells = new String[]{
-                htmlEntityLabel(allocationComponent.getId(), allocationComponent.getId() + "", EntityType.ALLOCATION_COMPONENT),
-                htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(), EntityType.ALLOCATION_COMPONENT),
-                htmlEntityRef(allocationComponent.getExecutionContainer().getId(), allocationComponent.getExecutionContainer().getName(), EntityType.EXECUTION_CONTAINER)
+        this.printOpenHtmlTable(ps, new String[]{"ID", "Assembly component", "Execution container"});
+        final Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
+        for (final AllocationComponent allocationComponent : allocationComponentInstances) {
+            final String[] cells = new String[]{
+                this.htmlEntityLabel(allocationComponent.getId(), allocationComponent.getId() + "", EntityType.ALLOCATION_COMPONENT),
+                this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(), EntityType.ALLOCATION_COMPONENT),
+                this.htmlEntityRef(allocationComponent.getExecutionContainer().getId(), allocationComponent.getExecutionContainer().getName(), EntityType.EXECUTION_CONTAINER)
             };
-            printHtmlTableRow(ps, cells);
+            this.printHtmlTableRow(ps, cells);
         }
-        printCloseHtmlTable(ps);
-        htmlHSpace(ps, 50);
+        this.printCloseHtmlTable(ps);
+        this.htmlHSpace(ps, 50);
         ps.println("</body></html>");
         ps.flush();
         ps.close();
