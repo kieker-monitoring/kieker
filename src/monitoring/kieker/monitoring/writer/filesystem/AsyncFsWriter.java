@@ -20,12 +20,12 @@
 
 package kieker.monitoring.writer.filesystem;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,7 +100,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
  */
 final class FsWriterThread extends AbstractAsyncThread {
 	private static final Log log = LogFactory.getLog(FsWriterThread.class);
-	
+
 	// configuration parameters
 	private static final int maxEntriesInFile = 25000;
 
@@ -109,8 +109,8 @@ final class FsWriterThread extends AbstractAsyncThread {
 	private final MappingFileWriter mappingFileWriter;
 	private final boolean autoflush;
 	private PrintWriter pos = null;
-	private int entriesInCurrentFileCounter = FsWriterThread.maxEntriesInFile + 1; // Force to initialize first
-																					// file!
+	// Force to initialize first file!
+	private int entriesInCurrentFileCounter = FsWriterThread.maxEntriesInFile + 1;
 
 	// to get that info later
 	private final String path;
@@ -139,7 +139,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 
 		// TODO: Shouldn't we use a StringBuilder here
 		// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/224
-		
+
 		this.pos.write('$');
 		this.pos.write(Integer.toString((this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()))));
 		this.pos.write(';');
@@ -150,11 +150,11 @@ final class FsWriterThread extends AbstractAsyncThread {
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
 			final Object val = recordFields[i];
 			if (val != null) {
-				this.pos.write(val.toString());			
+				this.pos.write(val.toString());
 			} else {
 				FsWriterThread.log.error(i + "th field of record is null: " + monitoringRecord.toString());
 				// AbstractMonitoringRecord.toString handles null values correctly
-				this.pos.write("null");				
+				this.pos.write("null");
 			}
 
 			if (i < LAST_FIELD_INDEX) {
@@ -179,7 +179,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
-			this.pos = new PrintWriter(new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename))),this.autoflush);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), this.autoflush);
 			this.pos.flush();
 		}
 	}
