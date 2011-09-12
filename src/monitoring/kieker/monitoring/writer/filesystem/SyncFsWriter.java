@@ -80,7 +80,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private MappingFileWriter mappingFileWriter;
 	private PrintWriter pos = null;
 	// Force to initialize first file!
-	private int entriesInCurrentFileCounter = SyncFsWriter.maxEntriesInFile + 1;
+	private int entriesInCurrentFileCounter = SyncFsWriter.maxEntriesInFile;
 	// only to get that information later
 	private String path;
 
@@ -123,39 +123,22 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
-		try {
-			this.prepareFile();
-		} catch (final FileNotFoundException ex) {
-			SyncFsWriter.log.error("Failed to create log file.", ex);
-			throw new IllegalArgumentException("Failed to create log file.", ex);
-		}
 	}
 
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-
-		final StringBuilder sb = new StringBuilder();
 		final Object[] recordFields = monitoringRecord.toArray();
 		final int LAST_FIELD_INDEX = recordFields.length - 1;
-		// check if file exists and is not full
-
-		sb.append("$");
-		final int idForRecordType = this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass());
-		sb.append(idForRecordType);
+		final StringBuilder sb = new StringBuilder(256);
+		sb.append('$');
+		sb.append(this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()));
 		sb.append(';');
 		sb.append(monitoringRecord.getLoggingTimestamp());
 		if (LAST_FIELD_INDEX > 0) {
 			sb.append(';');
 		}
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
-			final Object val = recordFields[i];
-			if (val != null) {
-				sb.append(val);
-			} else {
-				SyncFsWriter.log.error(i + "th field of record is null: " + monitoringRecord.toString());
-				// AbstractMonitoringRecord.toString handles null values correctly
-				sb.append("null");
-			}
+			sb.append(recordFields[i]);
 			if (i < LAST_FIELD_INDEX) {
 				sb.append(';');
 			}
@@ -166,10 +149,33 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 				this.pos.println(sb);
 			}
 		} catch (final IOException ex) {
-			SyncFsWriter.log.error("Failed to write data", ex);
+			SyncFsWriter.log.error("Failed to write monitoring record", ex);
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Determines and sets a new filename
+	 */
+	private final void prepareFile() throws FileNotFoundException {
+		if (++this.entriesInCurrentFileCounter > SyncFsWriter.maxEntriesInFile) {
+			if (this.pos != null) {
+				this.pos.close();
+			}
+			this.entriesInCurrentFileCounter = 1;
+
+			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
+			if (this.autoflush) {
+				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);
+			} else {
+				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), false);
+			}
+			this.pos.flush();
+		}
 	}
 
 	@Override
@@ -188,23 +194,5 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		sb.append(this.path);
 		sb.append("'");
 		return sb.toString();
-	}
-
-	/**
-	 * Determines and sets a new Filename
-	 */
-	private final void prepareFile() throws FileNotFoundException {
-		if (this.entriesInCurrentFileCounter++ > SyncFsWriter.maxEntriesInFile) {
-			if (this.pos != null) {
-				this.pos.close();
-			}
-			this.entriesInCurrentFileCounter = 0;
-
-			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
-			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), this.autoflush);
-		}
 	}
 }

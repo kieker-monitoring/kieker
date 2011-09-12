@@ -99,7 +99,6 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 final class FsWriterThread extends AbstractAsyncThread {
-	private static final Log log = LogFactory.getLog(FsWriterThread.class);
 
 	// configuration parameters
 	private static final int maxEntriesInFile = 25000;
@@ -110,7 +109,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 	private final boolean autoflush;
 	private PrintWriter pos = null;
 	// Force to initialize first file!
-	private int entriesInCurrentFileCounter = FsWriterThread.maxEntriesInFile + 1;
+	private int entriesInCurrentFileCounter = FsWriterThread.maxEntriesInFile;
 
 	// to get that info later
 	private final String path;
@@ -134,50 +133,44 @@ final class FsWriterThread extends AbstractAsyncThread {
 	protected final void consume(final IMonitoringRecord monitoringRecord) throws IOException {
 		final Object[] recordFields = monitoringRecord.toArray();
 		final int LAST_FIELD_INDEX = recordFields.length - 1;
-		// check if file exists and is not full
-		this.prepareFile(); // may throw FileNotFoundException
-
-		// No StringBuilder required, Buffered Stream handles this (#224)
-		this.pos.write('$');
-		this.pos.write(Integer.toString((this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()))));
-		this.pos.write(';');
-		this.pos.write(Long.toString(monitoringRecord.getLoggingTimestamp()));
+		final StringBuilder sb = new StringBuilder(256);
+		sb.append('$');
+		sb.append(this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()));
+		sb.append(';');
+		sb.append(monitoringRecord.getLoggingTimestamp());
 		if (LAST_FIELD_INDEX > 0) {
-			this.pos.write(';');
+			sb.append(';');
 		}
 		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
-			final Object val = recordFields[i];
-			if (val != null) {
-				this.pos.write(val.toString());
-			} else {
-				FsWriterThread.log.error(i + "th field of record is null: " + monitoringRecord.toString());
-				// AbstractMonitoringRecord.toString handles null values correctly
-				this.pos.write("null");
-			}
-
+			sb.append(recordFields[i]);
 			if (i < LAST_FIELD_INDEX) {
-				this.pos.write(';');
+				sb.append(';');
 			}
 		}
-		this.pos.println();
+		// check if file exists and is not full
+		this.prepareFile(); // may throw FileNotFoundException
+		this.pos.println(sb.toString());
 	}
 
 	/**
-	 * Determines and sets a new Filename
+	 * Determines and sets a new filename
 	 */
 	private final void prepareFile() throws FileNotFoundException {
-		if (this.entriesInCurrentFileCounter++ > FsWriterThread.maxEntriesInFile) {
+		if (++this.entriesInCurrentFileCounter > FsWriterThread.maxEntriesInFile) {
 			if (this.pos != null) {
-				this.pos.flush();
 				this.pos.close();
 			}
-			this.entriesInCurrentFileCounter = 0;
+			this.entriesInCurrentFileCounter = 1;
 
 			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), this.autoflush);
+			if (this.autoflush) {
+				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);
+			} else {
+				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), false);
+			}
 			this.pos.flush();
 		}
 	}
@@ -185,7 +178,6 @@ final class FsWriterThread extends AbstractAsyncThread {
 	@Override
 	protected void cleanup() {
 		if (this.pos != null) {
-			this.pos.flush();
 			this.pos.close();
 		}
 	}
