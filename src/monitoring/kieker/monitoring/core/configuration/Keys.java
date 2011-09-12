@@ -21,12 +21,12 @@
 package kieker.monitoring.core.configuration;
 
 /**
+ * If this file changes, the default config file has to be adjusted!
+ * Ideally it would be created using this file! (#151)
+ * 
  * @author Andre van Hoorn, Jan Waller
  */
 interface Keys {
-	// TODO: if this changes, the default config file has to be adjusted! Ideally it would be created using this file!
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/151
-
 	/** prefix used for all kieker.monitoring components */
 	public final static String PREFIX = "kieker.monitoring.";
 
@@ -45,7 +45,7 @@ interface Keys {
 	public final static String CONTROLLER_NAME = Keys.PREFIX + "name";
 	public final static String HOST_NAME = Keys.PREFIX + "hostname";
 	public final static String EXPERIMENT_ID = Keys.PREFIX + "initialExperimentId";
-	
+
 	// JMX
 	public final static String ACTIVATE_JMX = Keys.PREFIX + "jmx";
 	public final static String ACTIVATE_JMX_DOMAIN = Keys.PREFIX + "jmx.domain";
