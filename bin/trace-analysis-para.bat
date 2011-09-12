@@ -19,7 +19,6 @@ SET CLASSPATH=!CLASSPATH!;%%i
 for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\dist\*.jar"') do (
 SET CLASSPATH=!CLASSPATH!;%%i
 )
-SET CLASSPATH=!CLASSPATH!
 
 REM Now start the tool, but don't forget to deliver the parameters.
 java %JAVAARGS% -cp "%CLASSPATH%" %MAINCLASSNAME% %*
