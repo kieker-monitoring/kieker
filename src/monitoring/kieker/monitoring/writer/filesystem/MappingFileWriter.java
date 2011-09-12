@@ -24,7 +24,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.record.IMonitoringRecord;
 
@@ -38,10 +40,8 @@ public final class MappingFileWriter {
 	private static final Log log = LogFactory.getLog(MappingFileWriter.class);
 
 	private final File mappingFile;
-	private int nextId = 1; // first ID is 1
-	// TODO instead of synchronized access better a concurrent structure?
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/177
-	private final Hashtable<Class<? extends IMonitoringRecord>, Integer> class2idMap = new Hashtable<Class<? extends IMonitoringRecord>, Integer>();
+	private final AtomicInteger nextId = new AtomicInteger(1); // first ID is 1
+	private final Map<Class<? extends IMonitoringRecord>, Integer> class2idMap = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Integer>();
 
 	public MappingFileWriter(final String mappingFileFn) throws IOException {
 		this.mappingFile = new File(mappingFileFn);
@@ -50,11 +50,13 @@ public final class MappingFileWriter {
 		this.mappingFile.createNewFile();
 	}
 
-	public final synchronized int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
-		Integer idObj = this.class2idMap.get(clazz);
+	public final int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
+		final Integer idObj = this.class2idMap.get(clazz);
 		if (idObj == null) {
-			this.class2idMap.put(clazz, idObj = this.nextId++);
-			this.writeMapping(idObj.intValue(), clazz.getName());
+			final int id = nextId.getAndIncrement();
+			this.class2idMap.put(clazz, id);
+			this.writeMapping(id, clazz.getName());
+			return id;
 		}
 		return idObj;
 	}
