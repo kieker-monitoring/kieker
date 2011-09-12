@@ -1,20 +1,7 @@
 #!/bin/bash
 
-BINDJAVA="pfexec psrset -e 1"
-#BINDJAVA=""
-
 BINDIR=bin/
 BASEDIR=
-
-SLEEPTIME=30            ## 30
-NUM_LOOPS=10            ## 10
-THREADS=1               ## 1
-MAXRECURSIONDEPTH=1     ## 10
-TOTALCALLS=2000000      ## 200000
-METHODTIME=500000       ## 500000
-
-TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
-echo "Experiment will take circa ${TIME} seconds."
 
 # determine correct classpath separator
 CPSEPCHAR=":" # default :, ; for windows
@@ -94,7 +81,6 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         sync
         sleep ${SLEEPTIME}
 
-
         # 2 Deactivated probe
         echo " # ${i}.2 Deactivated probe"
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-2.txt &
@@ -168,4 +154,5 @@ rm -rf ${RESULTSDIR}stat/
 gzip -9 ${RESULTSDIR}stat.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
 [ -f ${RESULTSDIR}hotspot-1-1-1.log ] && grep "<task " ${RESULTSDIR}hotspot-*.log >${RESULTSDIR}log.log
-[ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}
+[ -f ${BASEDIR}nohup.out ] && cp ${BASEDIR}nohup.out ${RESULTSDIR}
+echo -n "" > ${BASEDIR}nohup.out

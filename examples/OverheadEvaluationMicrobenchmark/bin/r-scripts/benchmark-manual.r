@@ -2,22 +2,22 @@ output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\
 
 configs.labels=c("Instrumentation (I)","Collecting (C)","Writing (W)")
 configs.count=4
-experiments.labels=c("A1","S1","A2","S2","A3","A4","A5")
+experiments.labels=c("S1","S2","A1","A2","A3","A4","A5")
 experiments=length(experiments.labels)
 meanvalues <- matrix(ncol=configs.count,nrow=experiments,byrow=TRUE,data=c(
+  500.7039,500.8062,501.8528,509.5831,  ## SingleThread, 1-Core, SyncFS
+  500.7046,500.7976,501.8133,509.6133,  ## SingleThread, 2-Core (same core), SyncFS
   500.7039,500.8062,501.8528,509.1181,  ## SingleThread, 1-Core, AsyncFS
-  500,500,500,500,  ## SingleThread, 1-Core, SyncFS
   500.7046,500.7976,501.8133,503.9674,  ## SingleThread, 2-Core (same core), AsyncFS
-  500,500,500,500,  ## SingleThread, 2-Core (same core), SyncFS
   500.9020,500.9395,502.0425,503.6669,  ## SingleThread, 2-Core (same chip), AsyncFS
   500.7165,500.7509,501.8327,504.5564,  ## SingleThread, 2-Core (2 chips), AsyncFS
   500.7626,500.8171,501.8406,504.5803   ## SingleThread, 16-Core (2 chips), AsyncFS
 ));
 medianvalues <- matrix(ncol=configs.count,nrow=experiments,byrow=TRUE,data=c(
+  500.7010,500.7941,501.7895,509.0938,  ## SingleThread, 1-Core, SyncFS
+  500.7010,500.7922,501.7766,509.1253,  ## SingleThread, 2-Core (same core), SyncFS
   500.7010,500.7941,501.7895,508.2885,  ## SingleThread, 1-Core, AsyncFS
-  500,500,500,500,  ## SingleThread, 1-Core, SyncFS
   500.7010,500.7922,501.7766,503.8637,  ## SingleThread, 2-Core (same core), AsyncFS
-  500,500,500,500,  ## SingleThread, 2-Core (same core), SyncFS
   500.7010,500.7724,501.7931,502.9627,  ## SingleThread, 2-Core (same chip), AsyncFS
   500.7010,500.7579,501.7950,504.4907,  ## SingleThread, 2-Core (2 chips), AsyncFS
   500.7010,500.7759,501.7688,504.4701   ## SingleThread, 16-Core (2 chips), AsyncFS
