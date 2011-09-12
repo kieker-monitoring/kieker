@@ -656,7 +656,7 @@ public class TraceAnalysisTool {
 			int numErrorCount = 0;
 			try {
 				analysisInstance.run();
-			} catch (final Exception exc) {
+			} catch (final Exception exc) { // FindBugs reports that Exception is never trown; but wontfix (#44)!
 				TraceAnalysisTool.log.error(
 						"Error occured while running analysis", exc);
 				throw new Exception("Error occured while running analysis", exc);
