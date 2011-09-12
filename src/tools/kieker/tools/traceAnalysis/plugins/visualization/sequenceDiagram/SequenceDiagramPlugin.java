@@ -65,13 +65,15 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	 * diagram .pic file
 	 */
 	static {
-		final InputStream is =
-				SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(SequenceDiagramPlugin.sequencePicPath);
 		final StringBuilder sb = new StringBuilder();
-		String line;
 		boolean error = true;
+		InputStream is = null;
 
 		try {
+			is =
+					SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(
+							SequenceDiagramPlugin.sequencePicPath);
+			String line;
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 			while ((line = reader.readLine()) != null) {
 				sb.append(line).append("\n");
@@ -87,7 +89,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				sequencePicContent = sb.toString();
 			}
 			try {
-				is.close();
+				if (is != null) {
+					is.close();
+				}
 			} catch (final IOException ex) {
 				SequenceDiagramPlugin.log.error("Failed to close input stream", ex);
 			}
@@ -156,14 +160,12 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				}
 			};
 
-	private static String assemblyComponentLabel(
-			final AssemblyComponent component, final boolean shortLabels) {
+	private static String assemblyComponentLabel(final AssemblyComponent component, final boolean shortLabels) {
 		final String assemblyComponentName = component.getName();
 		final String componentTypePackagePrefx = component.getType().getPackageName();
 		final String componentTypeIdentifier = component.getType().getTypeName();
 
-		final StringBuilder strBuild = 
-				new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append(".");
 		} else {
@@ -173,14 +175,12 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		return strBuild.toString();
 	}
 
-	private static String allocationComponentLabel(
-			final AllocationComponent component, final boolean shortLabels) {
+	private static String allocationComponentLabel(final AllocationComponent component, final boolean shortLabels) {
 		final String assemblyComponentName = component.getAssemblyComponent().getName();
 		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-		final StringBuilder strBuild = 
-				new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append(".");
 		} else {
