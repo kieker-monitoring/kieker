@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
+
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 
 /**
@@ -40,9 +41,6 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
             final ExecutionContainer rootExecutionContainer){
         super(systemFactory);
         this.rootExecutionContainer = rootExecutionContainer;
-        //this.executionContainersById.put(rootExecutionContainer.getId(),
-        //        rootExecutionContainer);
-        // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/216
     }
 
    /** Returns the instance for the passed namedIdentifier; null if no instance
@@ -68,7 +66,7 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
             if (this.executionContainersByName.containsKey(namedIdentifier)){
                 throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
             }
-            int id = this.getAndIncrementNextId();
+            final int id = this.getAndIncrementNextId();
             newInst = new ExecutionContainer(id, null, name);
             this.executionContainersById.put(id, newInst);
             this.executionContainersByName.put(namedIdentifier, newInst);
