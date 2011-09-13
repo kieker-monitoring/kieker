@@ -23,32 +23,24 @@ package kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore;
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
- * A simple test and demonstration scenario for Kieker's 
- * monitoring component. 
- *
- * @author Matthias Rohr
- * History:
- * 2008/01/09: Refactoring for the first release of
- *             Kieker and publication under an open source licence
- * 2007-04-18: Initial version
- *
+ * A simple test and demonstration scenario for Kieker's monitoring component.
+ * 
+ * @author Matthias Rohr History: 2008/01/09: Refactoring for the first release
+ *         of Kieker and publication under an open source licence 2007-04-18:
+ *         Initial version
+ * 
  */
 
-
 public class Catalog {
-    
-    @OperationExecutionMonitoringProbe()
-    public static void getBook(boolean complexQuery){
-    	if (complexQuery) {
-    	//See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/238
-		//System.out.println("  complex query");
-		Bookstore.waitabit(20);
-	}
-	else 	{			
-		//System.out.println("  simple query"); 
-		Bookstore.waitabit(2);	
-	}
 
-    }
-   
+	@OperationExecutionMonitoringProbe()
+	public static void getBook(final boolean complexQuery) {
+		if (complexQuery) {
+			// complex query
+			Bookstore.waitabit(20);
+		} else {
+			// simple query
+			Bookstore.waitabit(2);
+		}
+	}
 }
