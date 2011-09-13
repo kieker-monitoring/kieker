@@ -41,6 +41,8 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+// TODO: This tool should be (re-)activated
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/247
 /**
  * This Program extracts all method signatures from a given input path in
  * classpath style.
