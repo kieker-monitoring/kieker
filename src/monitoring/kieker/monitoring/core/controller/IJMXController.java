@@ -21,15 +21,22 @@
 package kieker.monitoring.core.controller;
 
 /**
- * TODO: write JavaDoc
- * See link http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/175
+ * This controller publishes all interface methods of IMonitoringController as a MBean.
  * 
  * @author Jan Waller
  */
 public interface IJMXController {
-	// to ensure its publication in the Bean!
+
+	/**
+	 * This method is used to log the status of the controllers to the console.
+	 * It is included in this interface to ensure its publication over JMX.
+	 * 
+	 * @return a String representation of the current controller
+	 */
 	public String toString();
 
+	/**
+	 * @return the JMX domain used
+	 */
 	public String getJMXDomain();
-
 }
