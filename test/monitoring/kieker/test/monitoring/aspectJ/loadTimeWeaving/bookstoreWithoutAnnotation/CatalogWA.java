@@ -21,29 +21,22 @@
 package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotation;
 
 /**
- * A simple test and demonstration scenario for Kieker's 
- * monitoring component.
- *
- * @author Matthias Rohr
- * History:
- * 2008/08/30: Created based on Catalog.java without Annotations
- *
+ * A simple test and demonstration scenario for Kieker's monitoring component.
+ * 
+ * @author Matthias Rohr History: 2008/08/30: Created based on Catalog.java
+ *         without Annotations
+ * 
  */
 
-
 public class CatalogWA {
-    
-    public static void getBook(boolean complexQuery){
-    	if (complexQuery) {
-		//System.out.println("  complex query");
-    	// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/240
-		BookstoreWA.waitabit(20);
-	}
-	else 	{			
-		//System.out.println("  simple query"); 
-		BookstoreWA.waitabit(2);	
-	}
 
-    }
-   
+	public static void getBook(final boolean complexQuery) {
+		if (complexQuery) {
+			// complex query
+			BookstoreWA.waitabit(20);
+		} else {
+			// simple query
+			BookstoreWA.waitabit(2);
+		}
+	}
 }
