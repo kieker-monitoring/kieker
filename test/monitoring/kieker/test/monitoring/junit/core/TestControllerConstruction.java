@@ -47,10 +47,6 @@ public class TestControllerConstruction extends TestCase {
 			Assert.assertEquals("monitoringEnabled values differ",
 					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
 					kieker.isMonitoringEnabled());
-//			Assert.assertSame("log writers differ",
-//					configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
-//					kieker.getMonitoringWriter().getClass().getName());
-			// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/242
 			kieker.terminateMonitoring();
 		}
 
@@ -64,9 +60,6 @@ public class TestControllerConstruction extends TestCase {
 			Assert.assertEquals("monitoringEnabled values differ",
 					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
 					kieker.isMonitoringEnabled());
-//			Assert.assertSame("log writers differ",
-//					configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
-//					kieker.getMonitoringWriter().getClass().getName());
 			kieker.terminateMonitoring();
 		}
 	}
