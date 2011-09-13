@@ -21,7 +21,11 @@
 package kieker.test.tools.junit.traceAnalysis.systemModel;
 
 import java.util.Vector;
+
+import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.Message;
@@ -29,8 +33,6 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
-import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,7 +45,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 
     private static final Log log = LogFactory.getLog(TestExecutionTraceBookstore.class);
     private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
-    private final ExecutionFactory eFactory = new ExecutionFactory(systemEntityFactory);
+    private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
     private final long traceId = 69898l;
     private final long minTin;
     private final long maxTout;
@@ -60,33 +62,33 @@ public class TestExecutionTraceBookstore extends TestCase {
 
         /* Manually create Executions for a trace */
         numExecutions_l++;
-        exec0_0__bookstore_searchBook = eFactory.genExecution(
+        this.exec0_0__bookstore_searchBook = this.eFactory.genExecution(
                 "Bookstore", "bookstore", "searchBook",
-                traceId,
+                this.traceId,
                 1, // tin
                 10, // tout
                 0, 0);  // eoi, ess
-        this.minTin = exec0_0__bookstore_searchBook.getTin();
-        this.maxTout = exec0_0__bookstore_searchBook.getTout();
+        this.minTin = this.exec0_0__bookstore_searchBook.getTin();
+        this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
         numExecutions_l++;
-        exec1_1__catalog_getBook = eFactory.genExecution(
+        this.exec1_1__catalog_getBook = this.eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
-                traceId,
+                this.traceId,
                 2, // tin
                 4, // tout
                 1, 1);  // eoi, ess
         numExecutions_l++;
-        exec2_1__crm_getOrders = eFactory.genExecution(
+        this.exec2_1__crm_getOrders = this.eFactory.genExecution(
                 "CRM", "crm", "getOrders",
-                traceId,
+                this.traceId,
                 5, // tin
                 8, // tout
                 2, 1);  // eoi, ess
         numExecutions_l++;
-        exec3_2__catalog_getBook = eFactory.genExecution(
+        this.exec3_2__catalog_getBook = this.eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
-                traceId,
+                this.traceId,
                 6, // tin
                 7, // tout
                 3, 2);  // eoi, ess
@@ -98,12 +100,12 @@ public class TestExecutionTraceBookstore extends TestCase {
          * Create an Execution Trace and add Executions in
          * arbitrary order
          */
-        ExecutionTrace executionTrace = new ExecutionTrace(traceId);
+        final ExecutionTrace executionTrace = new ExecutionTrace(this.traceId);
 
-        executionTrace.add(exec3_2__catalog_getBook);
-        executionTrace.add(exec2_1__crm_getOrders);
-        executionTrace.add(exec0_0__bookstore_searchBook);
-        executionTrace.add(exec1_1__catalog_getBook);
+        executionTrace.add(this.exec3_2__catalog_getBook);
+        executionTrace.add(this.exec2_1__crm_getOrders);
+        executionTrace.add(this.exec0_0__bookstore_searchBook);
+        executionTrace.add(this.exec1_1__catalog_getBook);
 
         return executionTrace;
     }
@@ -114,16 +116,16 @@ public class TestExecutionTraceBookstore extends TestCase {
      */
     public void testValidExecutionTrace() {
         try {
-            ExecutionTrace executionTrace = genValidBookstoreTrace();
+            final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
             /* Perform some validity checks on the execution trace object */
-            assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), numExecutions);
-            assertEquals("Invalid maximum stack depth", executionTrace.getMaxEss(), 2);
-            assertEquals("Invalid minimum tin timestamp", executionTrace.getMinTin(), minTin);
-            assertEquals("Invalid maximum tout timestamp", executionTrace.getMaxTout(), maxTout);
+            Assert.assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), this.numExecutions);
+            Assert.assertEquals("Invalid maximum stack depth", executionTrace.getMaxEss(), 2);
+            Assert.assertEquals("Invalid minimum tin timestamp", executionTrace.getMinTin(), this.minTin);
+            Assert.assertEquals("Invalid maximum tout timestamp", executionTrace.getMaxTout(), this.maxTout);
 
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
     }
@@ -134,12 +136,12 @@ public class TestExecutionTraceBookstore extends TestCase {
      */
     public void testEqualMethodEqualTraces() {
         try {
-            ExecutionTrace execTrace1 = genValidBookstoreTrace();
-            ExecutionTrace execTrace2 = genValidBookstoreTrace();
-            assertEquals(execTrace1, execTrace2);
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+            final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
+            final ExecutionTrace execTrace2 = this.genValidBookstoreTrace();
+            Assert.assertEquals(execTrace1, execTrace2);
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
     }
@@ -150,12 +152,12 @@ public class TestExecutionTraceBookstore extends TestCase {
      */
     public void testEqualMethodDifferentTraces() {
         try {
-            ExecutionTrace execTrace1 = genValidBookstoreTrace();
-            ExecutionTrace execTrace2 = genBrokenBookstoreTraceEoiSkip();
-            assertFalse(execTrace1.equals(execTrace2));
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+            final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
+            final ExecutionTrace execTrace2 = this.genBrokenBookstoreTraceEoiSkip();
+            Assert.assertFalse(execTrace1.equals(execTrace2));
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
     }
@@ -168,10 +170,10 @@ public class TestExecutionTraceBookstore extends TestCase {
 
         ExecutionTrace executionTrace;
         try {
-            executionTrace = genValidBookstoreTrace();
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+            executionTrace = this.genValidBookstoreTrace();
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
 
@@ -180,90 +182,90 @@ public class TestExecutionTraceBookstore extends TestCase {
          */
         MessageTrace messageTrace;
         try {
-            messageTrace = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail("Transformation to Message Trace failed: " + ex.getMessage());
+            messageTrace = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail("Transformation to Message Trace failed: " + ex.getMessage());
             return;
         }
 
         /*
          * Validate Message Trace representation.
          */
-        assertEquals("Invalid traceId", messageTrace.getTraceId(), traceId);
-        Vector<Message> msgVector = messageTrace.getSequenceAsVector();
-        assertEquals("Invalid number of messages in trace", msgVector.size(), numExecutions * 2);
-        Message[] msgArray = msgVector.toArray(new Message[0]);
-        assertEquals(msgArray.length, numExecutions * 2);
+        Assert.assertEquals("Invalid traceId", messageTrace.getTraceId(), this.traceId);
+        final Vector<Message> msgVector = messageTrace.getSequenceAsVector();
+        Assert.assertEquals("Invalid number of messages in trace", msgVector.size(), this.numExecutions * 2);
+        final Message[] msgArray = msgVector.toArray(new Message[0]);
+        Assert.assertEquals(msgArray.length, this.numExecutions * 2);
 
         int curIdx = 0;
         { /* 1.: [0,0].Call $->bookstore.searchBook(..) */
-            Message call0_0___root__bookstore_searchBook = msgArray[curIdx++];
-            assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
-            assertEquals("Sending execution is not root execution",
+            final Message call0_0___root__bookstore_searchBook = msgArray[curIdx++];
+            Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
+            Assert.assertEquals("Sending execution is not root execution",
                     call0_0___root__bookstore_searchBook.getSendingExecution(), this.systemEntityFactory.getRootExecution());
-            assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
-            assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), exec0_0__bookstore_searchBook.getTin());
+            Assert.assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
+            Assert.assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), this.exec0_0__bookstore_searchBook.getTin());
         }
         { /* 2.: [1,1].Call bookstore.searchBook(..)->catalog.getBook(..) */
-            Message call1_1___bookstore_searchBook_catalog_getBook = msgArray[curIdx++];
-            assertTrue("Message is not a call",
+            final Message call1_1___bookstore_searchBook_catalog_getBook = msgArray[curIdx++];
+            Assert.assertTrue("Message is not a call",
                     call1_1___bookstore_searchBook_catalog_getBook instanceof SynchronousCallMessage);
-            assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getSendingExecution(), exec0_0__bookstore_searchBook);
-            assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getReceivingExecution(), exec1_1__catalog_getBook);
-            assertEquals("Message has wrong timestamp",
+            Assert.assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getSendingExecution(), this.exec0_0__bookstore_searchBook);
+            Assert.assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getReceivingExecution(), this.exec1_1__catalog_getBook);
+            Assert.assertEquals("Message has wrong timestamp",
                     call1_1___bookstore_searchBook_catalog_getBook.getTimestamp(),
-                    exec1_1__catalog_getBook.getTin());
+                    this.exec1_1__catalog_getBook.getTin());
         }
         { /* 2.: [1,1].Return catalog.getBook(..)->bookstore.searchBook(..) */
-            Message return1_1___catalog_getBook__bookstore_searchBook = msgArray[curIdx++];
-            assertTrue("Message is not a reply",
+            final Message return1_1___catalog_getBook__bookstore_searchBook = msgArray[curIdx++];
+            Assert.assertTrue("Message is not a reply",
                     return1_1___catalog_getBook__bookstore_searchBook instanceof SynchronousReplyMessage);
-            assertEquals(return1_1___catalog_getBook__bookstore_searchBook.getSendingExecution(), exec1_1__catalog_getBook);
-            assertEquals(return1_1___catalog_getBook__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
-            assertEquals("Message has wrong timestamp",
+            Assert.assertEquals(return1_1___catalog_getBook__bookstore_searchBook.getSendingExecution(), this.exec1_1__catalog_getBook);
+            Assert.assertEquals(return1_1___catalog_getBook__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
+            Assert.assertEquals("Message has wrong timestamp",
                     return1_1___catalog_getBook__bookstore_searchBook.getTimestamp(),
-                    exec1_1__catalog_getBook.getTout());
+                    this.exec1_1__catalog_getBook.getTout());
         }
         { /* 3.: [2,1].Call bookstore.searchBook(..)->crm.getOrders(..) */
-            Message call2_1___bookstore_searchBook__crm_getOrders = msgArray[curIdx++];
-            assertTrue("Message is not a call",
+            final Message call2_1___bookstore_searchBook__crm_getOrders = msgArray[curIdx++];
+            Assert.assertTrue("Message is not a call",
                     call2_1___bookstore_searchBook__crm_getOrders instanceof SynchronousCallMessage);
-            assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getSendingExecution(), exec0_0__bookstore_searchBook);
-            assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getReceivingExecution(), exec2_1__crm_getOrders);
-            assertEquals("Message has wrong timestamp",
+            Assert.assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getSendingExecution(), this.exec0_0__bookstore_searchBook);
+            Assert.assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getReceivingExecution(), this.exec2_1__crm_getOrders);
+            Assert.assertEquals("Message has wrong timestamp",
                     call2_1___bookstore_searchBook__crm_getOrders.getTimestamp(),
-                    exec2_1__crm_getOrders.getTin());
+                    this.exec2_1__crm_getOrders.getTin());
         }
         { /* 4.: [3,2].Call crm.getOrders(..)->catalog.getBook(..) */
-            Message call3_2___bookstore_searchBook__catalog_getBook = msgArray[curIdx++];
-            assertTrue("Message is not a call",
+            final Message call3_2___bookstore_searchBook__catalog_getBook = msgArray[curIdx++];
+            Assert.assertTrue("Message is not a call",
                     call3_2___bookstore_searchBook__catalog_getBook instanceof SynchronousCallMessage);
-            assertEquals(call3_2___bookstore_searchBook__catalog_getBook.getSendingExecution(), exec2_1__crm_getOrders);
-            assertEquals(call3_2___bookstore_searchBook__catalog_getBook.getReceivingExecution(), exec3_2__catalog_getBook);
-            assertEquals("Message has wrong timestamp",
+            Assert.assertEquals(call3_2___bookstore_searchBook__catalog_getBook.getSendingExecution(), this.exec2_1__crm_getOrders);
+            Assert.assertEquals(call3_2___bookstore_searchBook__catalog_getBook.getReceivingExecution(), this.exec3_2__catalog_getBook);
+            Assert.assertEquals("Message has wrong timestamp",
                     call3_2___bookstore_searchBook__catalog_getBook.getTimestamp(),
-                    exec3_2__catalog_getBook.getTin());
+                    this.exec3_2__catalog_getBook.getTin());
         }
         { /* 5.: [3,2].Return catalog.getBook(..)->crm.getOrders(..) */
-            Message return3_2___catalog_getBook__crm_getOrders = msgArray[curIdx++];
-            assertTrue("Message is not a reply",
+            final Message return3_2___catalog_getBook__crm_getOrders = msgArray[curIdx++];
+            Assert.assertTrue("Message is not a reply",
                     return3_2___catalog_getBook__crm_getOrders instanceof SynchronousReplyMessage);
-            assertEquals(return3_2___catalog_getBook__crm_getOrders.getSendingExecution(), exec3_2__catalog_getBook);
-            assertEquals(return3_2___catalog_getBook__crm_getOrders.getReceivingExecution(), exec2_1__crm_getOrders);
-            assertEquals("Message has wrong timestamp",
+            Assert.assertEquals(return3_2___catalog_getBook__crm_getOrders.getSendingExecution(), this.exec3_2__catalog_getBook);
+            Assert.assertEquals(return3_2___catalog_getBook__crm_getOrders.getReceivingExecution(), this.exec2_1__crm_getOrders);
+            Assert.assertEquals("Message has wrong timestamp",
                     return3_2___catalog_getBook__crm_getOrders.getTimestamp(),
-                    exec3_2__catalog_getBook.getTout());
+                    this.exec3_2__catalog_getBook.getTout());
         }
         { /* 6.: [2,1].Return crm.getOrders(..)->bookstore.searchBook */
-            Message return2_1___crm_getOrders__bookstore_searchBook = msgArray[curIdx++];
-            assertTrue("Message is not a reply",
+            final Message return2_1___crm_getOrders__bookstore_searchBook = msgArray[curIdx++];
+            Assert.assertTrue("Message is not a reply",
                     return2_1___crm_getOrders__bookstore_searchBook instanceof SynchronousReplyMessage);
-            assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getSendingExecution(), exec2_1__crm_getOrders);
-            assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getReceivingExecution(), exec0_0__bookstore_searchBook);
-            assertEquals("Message has wrong timestamp",
+            Assert.assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getSendingExecution(), this.exec2_1__crm_getOrders);
+            Assert.assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
+            Assert.assertEquals("Message has wrong timestamp",
                     return2_1___crm_getOrders__bookstore_searchBook.getTimestamp(),
-                    exec2_1__crm_getOrders.getTout());
+                    this.exec2_1__crm_getOrders.getTout());
         }
     }
 
@@ -273,17 +275,17 @@ public class TestExecutionTraceBookstore extends TestCase {
      */
     public void testMessageTraceTransformationOnlyOnce() {
         try {
-            ExecutionTrace executionTrace = genValidBookstoreTrace();
+            final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
             /*
              * Transform Execution Trace to Message Trace representation (twice)
              * and make sure, that the instances are the same.
              */
-            MessageTrace messageTrace1 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
-            MessageTrace messageTrace2 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
-            assertSame(messageTrace1, messageTrace2);
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+            final MessageTrace messageTrace1 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+            final MessageTrace messageTrace2 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+            Assert.assertSame(messageTrace1, messageTrace2);
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
     }
@@ -294,21 +296,21 @@ public class TestExecutionTraceBookstore extends TestCase {
      */
     public void testMessageTraceTransformationTwiceOnChange() {
         try {
-            ExecutionTrace executionTrace = genValidBookstoreTrace();
+            final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
-            final Execution exec4_1__catalog_getBook = eFactory.genExecution(
+            final Execution exec4_1__catalog_getBook = this.eFactory.genExecution(
                     "Catalog", "catalog", "getBook",
-                    traceId,
+                    this.traceId,
                     9, // tin
                     10, // tout
                     4, 1);  // eoi, ess
-            MessageTrace messageTrace1 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
+            final MessageTrace messageTrace1 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
             executionTrace.add(exec4_1__catalog_getBook);
-            MessageTrace messageTrace2 = executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
-            assertNotSame(messageTrace1, messageTrace2);
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+            final MessageTrace messageTrace2 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+            Assert.assertNotSame(messageTrace1, messageTrace2);
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
     }
@@ -330,19 +332,19 @@ public class TestExecutionTraceBookstore extends TestCase {
          * arbitrary order
          */
         final ExecutionTrace executionTrace =
-                new ExecutionTrace(traceId);
+                new ExecutionTrace(this.traceId);
         final Execution exec1_1__catalog_getBook__broken =
-                eFactory.genExecution(
+                this.eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
-                traceId,
+                this.traceId,
                 2, // tin
                 4, // tout
                 1, 3);  // eoi, ess
-        assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(exec1_1__catalog_getBook));
+        Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
 
-        executionTrace.add(exec3_2__catalog_getBook);
-        executionTrace.add(exec2_1__crm_getOrders);
-        executionTrace.add(exec0_0__bookstore_searchBook);
+        executionTrace.add(this.exec3_2__catalog_getBook);
+        executionTrace.add(this.exec2_1__crm_getOrders);
+        executionTrace.add(this.exec0_0__bookstore_searchBook);
         executionTrace.add(exec1_1__catalog_getBook__broken);
 
         return executionTrace;
@@ -359,10 +361,10 @@ public class TestExecutionTraceBookstore extends TestCase {
     public void testMessageTraceTransformationBrokenTraceEssSkip() {
         final ExecutionTrace executionTrace;
         try {
-            executionTrace = genBrokenBookstoreTraceEssSkip();
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+            executionTrace = this.genBrokenBookstoreTraceEssSkip();
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
 
@@ -371,9 +373,9 @@ public class TestExecutionTraceBookstore extends TestCase {
          */
         try {
             /* The following call must throw an Exception in this test case */
-            executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
-            fail("An invalid execution has been transformed to a message trace");
-        } catch (InvalidTraceException ex) {
+            executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+            Assert.fail("An invalid execution has been transformed to a message trace");
+        } catch (final InvalidTraceException ex) {
             /* we wanted this exception to happen */
         }
 
@@ -396,21 +398,19 @@ public class TestExecutionTraceBookstore extends TestCase {
          * arbitrary order
          */
         final ExecutionTrace executionTrace =
-                new ExecutionTrace(traceId);
-        final Execution exec3_2__catalog_getBook__broken = eFactory.genExecution(
+                new ExecutionTrace(this.traceId);
+        final Execution exec3_2__catalog_getBook__broken = this.eFactory.genExecution(
                 "Catalog", "catalog", "getBook",
-                traceId,
+                this.traceId,
                 6, // tin
                 7, // tout
                 4, 2);  // eoi, ess
-        assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(exec3_2__catalog_getBook));
+        Assert.assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(this.exec3_2__catalog_getBook));
 
-        //executionTrace.add(exec3_2__catalog_getBook);
-        //See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/243
         executionTrace.add(exec3_2__catalog_getBook__broken);
-        executionTrace.add(exec2_1__crm_getOrders);
-        executionTrace.add(exec0_0__bookstore_searchBook);
-        executionTrace.add(exec1_1__catalog_getBook);
+        executionTrace.add(this.exec2_1__crm_getOrders);
+        executionTrace.add(this.exec0_0__bookstore_searchBook);
+        executionTrace.add(this.exec1_1__catalog_getBook);
 
         return executionTrace;
     }
@@ -430,10 +430,10 @@ public class TestExecutionTraceBookstore extends TestCase {
          */
         final ExecutionTrace executionTrace;
         try {
-            executionTrace = genBrokenBookstoreTraceEoiSkip();
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail(ex.getMessage());
+            executionTrace = this.genBrokenBookstoreTraceEoiSkip();
+        } catch (final InvalidTraceException ex) {
+            TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
+            Assert.fail(ex.getMessage());
             return;
         }
 
@@ -442,9 +442,9 @@ public class TestExecutionTraceBookstore extends TestCase {
          */
         try {
             /* The following call must throw an Exception in this test case */
-            executionTrace.toMessageTrace(systemEntityFactory.getRootExecution());
-            fail("An invalid execution has been transformed to a message trace");
-        } catch (InvalidTraceException ex) {
+            executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+            Assert.fail("An invalid execution has been transformed to a message trace");
+        } catch (final InvalidTraceException ex) {
             /* we wanted this exception to happen */
         }
 
