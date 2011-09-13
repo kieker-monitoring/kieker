@@ -91,6 +91,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 																																			 */);
 		execData.isEntryPoint = false;
 		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if
+		// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/245
 		// entry point
 		if (execData.traceId == -1) {
 			execData.traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.getAndStoreUniqueThreadLocalTraceId();

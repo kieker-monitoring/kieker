@@ -42,6 +42,7 @@ public class Main {
 	        helloKieker(true);
 		} catch(Exception e){}
 	
+		// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/241
 		//try{ 
 	        //helloKieker(false);
 		//} catch(Exception e){}

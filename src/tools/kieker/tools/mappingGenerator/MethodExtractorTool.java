@@ -300,6 +300,7 @@ class MethodExtractor extends ClassLoader {
 				continue;
 			}
 			/*
+			 * See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/246
 			 * currently not used
 			 * final int mod = method.getModifiers();
 			 * String prefix = "";

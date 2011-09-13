@@ -50,6 +50,7 @@ public class TestControllerConstruction extends TestCase {
 //			Assert.assertSame("log writers differ",
 //					configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
 //					kieker.getMonitoringWriter().getClass().getName());
+			// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/242
 			kieker.terminateMonitoring();
 		}
 

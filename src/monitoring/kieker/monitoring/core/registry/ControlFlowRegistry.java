@@ -59,6 +59,7 @@ public final class ControlFlowRegistry {
 		final Random r = new Random();
 		final long base = ((long) r.nextInt(65536) << (Long.SIZE - 16 - 1));
 		/*
+		 * See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/244
 		 * can be removed if considered stable
 		 * log.info("base 0:" + ((long)0 << (Long.SIZE-16-1)));
 		 * log.info("base 65535:" + ((long)65535 << (Long.SIZE-16-1)));

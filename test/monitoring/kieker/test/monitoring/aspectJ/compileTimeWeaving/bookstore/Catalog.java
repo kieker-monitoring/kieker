@@ -40,6 +40,7 @@ public class Catalog {
     @OperationExecutionMonitoringProbe()
     public static void getBook(boolean complexQuery){
     	if (complexQuery) {
+    	//See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/238
 		//System.out.println("  complex query");
 		Bookstore.waitabit(20);
 	}

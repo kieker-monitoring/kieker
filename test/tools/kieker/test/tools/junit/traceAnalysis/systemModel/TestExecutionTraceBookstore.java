@@ -406,6 +406,7 @@ public class TestExecutionTraceBookstore extends TestCase {
         assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(exec3_2__catalog_getBook));
 
         //executionTrace.add(exec3_2__catalog_getBook);
+        //See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/243
         executionTrace.add(exec3_2__catalog_getBook__broken);
         executionTrace.add(exec2_1__crm_getOrders);
         executionTrace.add(exec0_0__bookstore_searchBook);

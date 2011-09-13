@@ -36,6 +36,7 @@ public class CatalogWA {
     public static void getBook(boolean complexQuery){
     	if (complexQuery) {
 		//System.out.println("  complex query");
+    	// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/240
 		BookstoreWA.waitabit(20);
 	}
 	else 	{			
