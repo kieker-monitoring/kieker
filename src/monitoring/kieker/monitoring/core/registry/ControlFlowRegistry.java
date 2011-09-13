@@ -58,22 +58,7 @@ public final class ControlFlowRegistry {
 		 */
 		final Random r = new Random();
 		final long base = ((long) r.nextInt(65536) << (Long.SIZE - 16 - 1));
-		/*
-		 * See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/244
-		 * can be removed if considered stable
-		 * log.info("base 0:" + ((long)0 << (Long.SIZE-16-1)));
-		 * log.info("base 65535:" + ((long)65535 << (Long.SIZE-16-1)));
-		 * log.info("base 65534:" + ((long)65534 << (Long.SIZE-16-1)));
-		 * log.info("base 65534+1:" + ((long)65534+1 << (Long.SIZE-16-1)));
-		 * log.info("base 65534+2:" + ((long)65534+2 << (Long.SIZE-16-1)));
-		 * log.info("base r:" + ((long)r.nextInt(65536) << (Long.SIZE-16-1)));
-		 * log.info("overflow?: " + (((long)65535 << (Long.SIZE-16-1))+ 140737488355328L));
-		 * log.info("Long.SIZE: " + Long.SIZE);
-		 * log.info("2^47="+Math.pow(2, 47));
-		 * log.info("Long.MAX_VALUE: " + Long.MAX_VALUE);
-		 * log.info("Long.MIN_VALUE: " + Long.MIN_VALUE);
-		 * log.info("Long.MAX_VALUE+1: " + (Long.MAX_VALUE+1));
-		 */
+
 		this.lastThreadId = new AtomicLong(base);
 		ControlFlowRegistry.log.info("First threadId will be " + (base + 1));
 	}
