@@ -40,7 +40,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	protected static final IMonitoringController controller = MonitoringController.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-	protected static final ITimeSource timesource = controller.getTimeSource();
+	protected static final ITimeSource timesource = AbstractOperationExecutionMethodInvocationInterceptor.controller.getTimeSource();
 	protected static final String vmName = AbstractOperationExecutionMethodInvocationInterceptor.controller.getHostName();
 
 	/**
@@ -90,10 +90,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 																																			 * point
 																																			 */);
 		execData.isEntryPoint = false;
-		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if
-		// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/245
-		// entry point
-		if (execData.traceId == -1) {
+		if (execData.traceId == -1) { // -1 if entry points
 			execData.traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.getAndStoreUniqueThreadLocalTraceId();
 			execData.isEntryPoint = true;
 		}
@@ -117,14 +114,14 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	public abstract Object invoke(MethodInvocation invocation) throws Throwable;
 
 	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData) throws Throwable {
-		execData.tin = timesource.getTime();
+		execData.tin = AbstractOperationExecutionMethodInvocationInterceptor.timesource.getTime();
 		try {
 			// executing the intercepted method call
 			execData.retVal = invocation.proceed();
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = timesource.getTime();
+			execData.tout = AbstractOperationExecutionMethodInvocationInterceptor.timesource.getTime();
 			if (execData.isEntryPoint) {
 				AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.unsetThreadLocalTraceId();
 			}
