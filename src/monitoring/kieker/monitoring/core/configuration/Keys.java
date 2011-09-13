@@ -46,7 +46,7 @@ interface Keys {
 	public final static String HOST_NAME = Keys.PREFIX + "hostname";
 	public final static String EXPERIMENT_ID = Keys.PREFIX + "initialExperimentId";
 
-	// JMX
+	// JMX Controller
 	public final static String ACTIVATE_JMX = Keys.PREFIX + "jmx";
 	public final static String ACTIVATE_JMX_DOMAIN = Keys.PREFIX + "jmx.domain";
 	public final static String ACTIVATE_JMX_CONTROLLER = Keys.PREFIX + "jmx.MonitoringController";
@@ -59,7 +59,10 @@ interface Keys {
 	// Writer Controller
 	public final static String AUTO_SET_LOGGINGTSTAMP = Keys.PREFIX + "setLoggingTimestamp";
 	public final static String WRITER_CLASSNAME = Keys.PREFIX + "writer";
+	
+	// TimeSource Controller
 	public final static String TIMER_CLASSNAME = Keys.PREFIX + "timer";
+	
 	// Sampling Controller
 	public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = Keys.PREFIX + "periodicSensorsExecutorPoolSize";
 }

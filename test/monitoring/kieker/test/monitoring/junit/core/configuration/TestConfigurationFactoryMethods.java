@@ -35,16 +35,20 @@ public class TestConfigurationFactoryMethods extends TestCase {
 
 	private void testValues(final Configuration configuration) {
 		Assert.assertNotNull("Configuration is null", configuration);
+		// Monitoring controller
+		Assert.assertNotNull(Configuration.MONITORING_ENABLED + " must not be empty", configuration.getProperty(Configuration.MONITORING_ENABLED));
 		Assert.assertNotNull(Configuration.CONTROLLER_NAME + " must not be empty", configuration.getProperty(Configuration.CONTROLLER_NAME));
 		// HostName may be empty!
 		Assert.assertNotNull(Configuration.EXPERIMENT_ID + " must not be empty", configuration.getProperty(Configuration.EXPERIMENT_ID));
+		// JMX controller
+		Assert.assertNotNull(Configuration.ACTIVATE_JMX + " must not be empty", configuration.getProperty(Configuration.ACTIVATE_JMX));
+		// Writer controller
 		Assert.assertNotNull(Configuration.AUTO_SET_LOGGINGTSTAMP + " must not be empty", configuration.getProperty(Configuration.AUTO_SET_LOGGINGTSTAMP));
-		Assert.assertNotNull(Configuration.MONITORING_ENABLED + " must not be empty", configuration.getProperty(Configuration.MONITORING_ENABLED));
 		Assert.assertNotNull(Configuration.WRITER_CLASSNAME + " must not be empty", configuration.getProperty(Configuration.WRITER_CLASSNAME));
-		Assert.assertNotNull(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty",
-				configuration.getProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
-		// TODO: add other enforced values!
-		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/137
+		// TimeSource controller
+		Assert.assertNotNull(Configuration.TIMER_CLASSNAME + " must not be empty", configuration.getProperty(Configuration.TIMER_CLASSNAME));
+		// Sampling controller
+		Assert.assertNotNull(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty", configuration.getProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 	}
 
 	/**
@@ -68,7 +72,23 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Tests {@link Configuration#createDefaultConfiguration()}.
 	 */
 	public void testCreationDefaultConfiguration() {
-		this.testValues(Configuration.createDefaultConfiguration());
+		final Configuration configuration = Configuration.createDefaultConfiguration(); 
+		this.testValues(configuration);
+		// check for correct default values of required parameters
+		// Monitoring controller
+		Assert.assertEquals(true, configuration.getBooleanProperty(Configuration.MONITORING_ENABLED));
+		Assert.assertEquals("KIEKER", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		Assert.assertEquals("", configuration.getStringProperty(Configuration.HOST_NAME));
+		Assert.assertEquals(1, configuration.getIntProperty(Configuration.EXPERIMENT_ID));
+		// JMX controller
+		Assert.assertEquals(false, configuration.getBooleanProperty(Configuration.ACTIVATE_JMX));
+		// Writer controller
+		Assert.assertEquals(true, configuration.getBooleanProperty(Configuration.AUTO_SET_LOGGINGTSTAMP));
+		Assert.assertEquals("kieker.monitoring.writer.filesystem.AsyncFsWriter", configuration.getStringProperty(Configuration.WRITER_CLASSNAME));
+		// TimeSource controller
+		Assert.assertEquals("kieker.monitoring.timer.DefaultSystemTimer", configuration.getStringProperty(Configuration.TIMER_CLASSNAME));
+		// Sampling controller
+		Assert.assertEquals(1, configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 	}
 
 	/**
