@@ -1,7 +1,7 @@
-results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results-bars.pdf"
+results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-A{15}\\results.csv"
+output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-A{15}\\results-bars.pdf"
 
-configs.loop=10
+configs.loop=1
 configs.recursion=c(1)
 configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")
 configs.count=length(configs.labels)
