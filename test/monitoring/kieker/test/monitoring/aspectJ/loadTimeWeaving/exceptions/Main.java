@@ -35,33 +35,28 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class Main {
     
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
       
 	for(int i = 0; i < 10; i++) {
 		try{ 
-	        helloKieker(true);
-		} catch(Exception e){}
-	
-		// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/241
-		//try{ 
-	        //helloKieker(false);
-		//} catch(Exception e){}
+	        Main.helloKieker(true);
+		} catch(final Exception e){}
 	}
 
 	for(int i = 0; i < 10; i++) {
 		try{ 
-	        helloKieker(true);
-		} catch(Exception e){}
+	        Main.helloKieker(true);
+		} catch(final Exception e){}
 	
 		try{ 
-	        helloKieker(false);
-		} catch(Exception e){}
+	        Main.helloKieker(false);
+		} catch(final Exception e){}
 	}
 
     }
     
     @OperationExecutionMonitoringProbe()
-    public static void helloKieker(boolean throwException) throws Exception{
+    public static void helloKieker(final boolean throwException) throws Exception{
         System.out.println("Hello World (look at your monitoring log ...)."+Thread.currentThread().getId()+" ");        
 	if (throwException) {
 		System.out.println("For test purposes, I will throw an exception now");
