@@ -115,12 +115,11 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		this.filenamePrefix = path + File.separatorChar + "kieker";
 		this.path = f.getAbsolutePath();
-
 		final String mappingFileFn = path + File.separatorChar + "kieker.map";
 		try {
 			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
 		} catch (final Exception ex) {
-			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
+			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'");
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
 	}
@@ -144,7 +143,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			}
 		}
 		try {
-			synchronized (this.pos) {
+			synchronized (this) { // we must not synch on pos, it changes within!
 				this.prepareFile(); // may throw FileNotFoundException
 				this.pos.println(sb);
 			}

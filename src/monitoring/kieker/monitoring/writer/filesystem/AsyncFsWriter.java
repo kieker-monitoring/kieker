@@ -87,7 +87,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		try {
 			mappingFileWriter = new MappingFileWriter(mappingFileFn);
 		} catch (final Exception ex) {
-			AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'", ex);
+			AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'");
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
 		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, autoflush));
