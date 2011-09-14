@@ -8,22 +8,42 @@ meanvalues <- matrix(ncol=configs.count,nrow=experiments,byrow=TRUE,data=c(
   500.7039,500.8062,501.8528,509.5831,  ## SingleThread, 1-Core, SyncFS
   500.7046,500.7976,501.8133,509.6133,  ## SingleThread, 2-Core (same core), SyncFS
   
-  500.7039,500.8062,501.8528,516.5481,  ## SingleThread, 1-Core, AsyncFS
+  500.7039,500.8062,501.8528,516.8180,  ## SingleThread, 1-Core, AsyncFS
   500.7046,500.7976,501.8133,504.5507,  ## SingleThread, 2-Core (same core), AsyncFS
   500.9020,500.9395,502.0425,503.6665,  ## SingleThread, 2-Core (same chip), AsyncFS
-  500.7165,500.7509,501.8327,504.4998,  ## SingleThread, 2-Core (2 chips), AsyncFS
+  500.7165,500.7509,501.8327,504.4420,  ## SingleThread, 2-Core (2 chips), AsyncFS
   500.7626,500.8171,501.8406,504.6068   ## SingleThread, 16-Core (2 chips), AsyncFS
 ));
 medianvalues <- matrix(ncol=configs.count,nrow=experiments,byrow=TRUE,data=c(
   500.7010,500.7941,501.7895,509.0938,  ## SingleThread, 1-Core, SyncFS
   500.7010,500.7922,501.7766,509.1253,  ## SingleThread, 2-Core (same core), SyncFS
   
-  500.7010,500.7941,501.7895,516.0032,  ## SingleThread, 1-Core, AsyncFS
+  500.7010,500.7941,501.7895,516.2629,  ## SingleThread, 1-Core, AsyncFS
   500.7010,500.7922,501.7766,504.5013,  ## SingleThread, 2-Core (same core), AsyncFS
   500.7010,500.7724,501.7931,502.9865,  ## SingleThread, 2-Core (same chip), AsyncFS
-  500.7010,500.7579,501.7950,504.4580,  ## SingleThread, 2-Core (2 chips), AsyncFS
+  500.7010,500.7579,501.7950,504.3822,  ## SingleThread, 2-Core (2 chips), AsyncFS
   500.7010,500.7759,501.7688,504.4528   ## SingleThread, 16-Core (2 chips), AsyncFS
 ));
+#meanvalues <- matrix(ncol=configs.count,nrow=experiments,byrow=TRUE,data=c(
+#  500.7039,500.8062,501.8528,509.5831,  ## SingleThread, 1-Core, SyncFS
+#  500.7046,500.7976,501.8133,509.6133,  ## SingleThread, 2-Core (same core), SyncFS
+#  
+#  500.7039,500.8062,501.8528,516.5481,  ## SingleThread, 1-Core, AsyncFS
+#  500.7046,500.7976,501.8133,504.5507,  ## SingleThread, 2-Core (same core), AsyncFS
+#  500.9020,500.9395,502.0425,503.6665,  ## SingleThread, 2-Core (same chip), AsyncFS
+#  500.7165,500.7509,501.8327,504.4998,  ## SingleThread, 2-Core (2 chips), AsyncFS
+#  500.7626,500.8171,501.8406,504.6068   ## SingleThread, 16-Core (2 chips), AsyncFS
+#));
+#medianvalues <- matrix(ncol=configs.count,nrow=experiments,byrow=TRUE,data=c(
+#  500.7010,500.7941,501.7895,509.0938,  ## SingleThread, 1-Core, SyncFS
+#  500.7010,500.7922,501.7766,509.1253,  ## SingleThread, 2-Core (same core), SyncFS
+#  
+#  500.7010,500.7941,501.7895,516.0032,  ## SingleThread, 1-Core, AsyncFS
+#  500.7010,500.7922,501.7766,504.5013,  ## SingleThread, 2-Core (same core), AsyncFS
+#  500.7010,500.7724,501.7931,502.9865,  ## SingleThread, 2-Core (same chip), AsyncFS
+#  500.7010,500.7579,501.7950,504.4580,  ## SingleThread, 2-Core (2 chips), AsyncFS
+#  500.7010,500.7759,501.7688,504.4528   ## SingleThread, 16-Core (2 chips), AsyncFS
+#));
 
 pdf(output_fn, width=8, height=5, paper="special")
 plot.new()
