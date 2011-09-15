@@ -25,7 +25,7 @@
         <include name="kieker-*.jar"/>
       </fileset>
     </path>
-    <javac source="1.5" target="1.5"
+    <javac source="1.6" target="1.6"
            destDir="build"
            debug="true"
            classpathref="compile-classpath"
@@ -41,7 +41,7 @@
       </fileset>
       <pathelement location="build"/>
     </path>
-    <iajc source="1.5" target="1.5"
+    <iajc source="1.6" target="1.6"
           destdir="build"
           Xlint="ignore"
           debug="true"

@@ -20,13 +20,17 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}" includeAntRuntime="false" />
 		<mkdir dir="${build.dir}/${meta.dir}" />
 	</target>
 
-	<target name="init">
+	<target name="init" depends="clean">
 		<delete dir="${build.dir}" />
 		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="clean">
+		<delete file="${jar.file}" />
 	</target>
 
 </project>

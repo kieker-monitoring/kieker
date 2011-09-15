@@ -55,12 +55,16 @@
 	</target>
 
 	<target name="-compile" depends="-init">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeAntRuntime="false" />
 	</target>
 
-	<target name="-init">
+	<target name="-init" depends="clean">
 		<delete dir="${build.dir}" />
 		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="clean">
+		<delete file="${jar.file}" />
 	</target>
 
 </project>

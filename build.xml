@@ -443,7 +443,80 @@
 		</zip>
 	</target>
 
-	<target name="dist-examples" depends="-init,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
+	<target name="clean-userguide-examples" description="Removes artifacts from previous builds">
+		<ant antfile="build.xml" dir="${src.userguide.example.bookstore.dir}" target="clean"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="clean"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="clean"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="clean"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="clean"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="clean"/>
+	</target>
+	
+	<target name="-build-userguide-examples" depends="-init,build-all,clean-userguide-examples" description="Builds all userguide examples">
+		<!-- src.userguide.example.bookstore.dir -->
+		<ant antfile="build.xml" dir="${src.userguide.example.bookstore.dir}" target="build-jar"/>
+		<!-- src.userguide.example.manual.dir -->
+		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.manual.dir}/lib/commons-logging-1.1.1.jar" />
+		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.manual.dir}/lib/${dist.kieker.main.jar}" />
+		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="-check-files"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="-build-jar-monitoring"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="-build-jar-analysis"/>
+		<delete file="${src.userguide.example.manual.dir}/lib/commons-logging-1.1.1.jar" />
+		<delete file="${src.userguide.example.manual.dir}/lib/${dist.kieker.main.jar}" />
+		<!-- src.userguide.example.extended.dir -->
+		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.extended.dir}/lib/commons-logging-1.1.1.jar" />
+		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.extended.dir}/lib/${dist.kieker.main.jar}" />
+		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="-check-files"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="-build-jar"/>
+		<delete file="${src.userguide.example.extended.dir}/lib/commons-logging-1.1.1.jar" />
+		<delete file="${src.userguide.example.extended.dir}/lib/${dist.kieker.main.jar}" />
+		<!-- src.userguide.example.aspectj.dir -->
+		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.aspectj.dir}/lib/commons-logging-1.1.1.jar" />
+		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.aspectj.dir}/lib/${dist.kieker.main.jar}" />
+		<copy file="${aspectjweaverjar}" tofile="${src.userguide.example.aspectj.dir}/${aspectjweaverjar}" />
+		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="-check-files"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="-build-jar"/>
+		<delete file="${src.userguide.example.aspectj.dir}/lib/commons-logging-1.1.1.jar" />
+		<delete file="${src.userguide.example.aspectj.dir}/lib/${dist.kieker.main.jar}" />
+		<delete file="${src.userguide.example.aspectj.dir}/${aspectjweaverjar}" />
+		<!-- src.userguide.example.jms.dir -->
+		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.jms.dir}/lib/commons-logging-1.1.1.jar" />
+		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.jms.dir}/lib/${dist.kieker.main.jar}" />
+		<copy file="${lib.dir}/jms-1.1.jar" tofile="${src.userguide.example.jms.dir}/lib/jms-1.1.jar" />
+		<copy file="${lib.dir}/spice-jndikit-1.2.jar" tofile="${src.userguide.example.jms.dir}/lib/spice-jndikit-1.2.jar" />
+		<copy file="${lib.dir}/concurrent-1.3.4.jar" tofile="${src.userguide.example.jms.dir}/lib/concurrent-1.3.4.jar" />
+		<copy file="${lib.dir}/openjms-0.7.7-beta-1.jar" tofile="${src.userguide.example.jms.dir}/lib/openjms-0.7.7-beta-1.jar" />
+		<copy file="${lib.dir}/openjms-common-0.7.7-beta-1.jar" tofile="${src.userguide.example.jms.dir}/lib/openjms-common-0.7.7-beta-1.jar" />
+		<copy file="${lib.dir}/openjms-net-0.7.7-beta-1.jar" tofile="${src.userguide.example.jms.dir}/lib/openjms-net-0.7.7-beta-1.jar" />
+		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-check-files"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-build-jar-monitoring"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-build-jar-analysis"/>
+		<delete file="${src.userguide.example.jms.dir}/lib/commons-logging-1.1.1.jar" />
+		<delete file="${src.userguide.example.jms.dir}/lib/${dist.kieker.main.jar}" />
+		<delete file="${src.userguide.example.jms.dir}/lib/jms-1.1.jar" />
+		<delete file="${src.userguide.example.jms.dir}/lib/spice-jndikit-1.2.jar" />
+		<delete file="${src.userguide.example.jms.dir}/lib/concurrent-1.3.4.jar" />
+		<delete file="${src.userguide.example.jms.dir}/lib/openjms-0.7.7-beta-1.jar" />
+		<delete file="${src.userguide.example.jms.dir}/lib/openjms-common-0.7.7-beta-1.jar" />
+		<delete file="${src.userguide.example.jms.dir}/lib/openjms-net-0.7.7-beta-1.jar" />
+		<!-- src.userguide.example.sigar.dir -->
+		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.sigar.dir}/lib/commons-logging-1.1.1.jar" />
+		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.sigar.dir}/lib/${dist.kieker.main.jar}" />
+		<copy file="${lib.dir}/sigar-1.6.3.jar" tofile="${src.userguide.example.sigar.dir}/lib/sigar-1.6.3.jar" />
+		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="-check-files"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="-build-jar-monitoring"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="-build-jar-analysis"/>
+		<delete file="${src.userguide.example.sigar.dir}/lib/commons-logging-1.1.1.jar" />
+		<delete file="${src.userguide.example.sigar.dir}/lib/${dist.kieker.main.jar}" />
+		<delete file="${src.userguide.example.sigar.dir}/lib/sigar-1.6.3.jar" />
+	</target>
+	
+	<target name="dist-userguide-examples" depends="-build-userguide-examples" description="Packages the Userguide example archives (.zip|.tar.gz) for a release">
+			
+	</target>
+	
+	<target name="dist-examples" depends="dist-userguide-examples,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
+		
 	</target>
 
 	<target name="-build-userguide" description="Creates the Kieker user guide PDF from the LaTeX sources">
@@ -458,7 +531,7 @@
 		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease" />
 	</target>
 
-	<target name="clean" description="Removes artifacts from previous builds">
+	<target name="clean" depends="clean-userguide-examples" description="Removes artifacts from previous builds">
 		<!-- <delete dir="tmp"/>-->
 		<delete dir="${dist.dir}" />
 		<delete dir="${release.dir}" />

@@ -48,7 +48,7 @@
 		</java>
 	</target>
 
-	<target name="-build-jar-monitoring" depends="-compile">
+	<target name="-build-jar-monitoring" depends="clean.monitoring, -compile">
 		<jar destfile="${jar.file.monitoring}" basedir="${build.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="${main-class-monitoring}" />
@@ -57,7 +57,7 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="-build-jar-analysis" depends="-compile">
+	<target name="-build-jar-analysis" depends="clean.analysis, -compile">
 		<jar destfile="${jar.file.analysis}" basedir="${build.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="${main-class-analysis}" />
@@ -67,7 +67,7 @@
 	</target>
 
 	<target name="-compile" depends="-init">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeAntRuntime="false" />
 		<mkdir dir="${build.dir}/${meta.dir}" />
                 <copy file="${log4j.properties.example}" tofile="${build.dir}/${meta.dir}/log4j.properties"/>
 	</target>
@@ -76,5 +76,16 @@
 		<delete dir="${build.dir}" />
 		<mkdir dir="${build.dir}" />
 	</target>
+	
+	<target name="clean.monitoring">
+		<delete file="${jar.file.monitoring}" />
+	</target>
 
+	<target name="clean.analysis">
+		<delete file="${jar.file.analysis}" />
+	</target>
+	
+	<target name="clean" depends="clean.monitoring, clean.analysis">
+	</target>
+	
 </project>
