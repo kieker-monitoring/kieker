@@ -20,22 +20,26 @@
 
 package kieker.evaluation.monitoredApplication;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
  * @author Jan Waller
  */
 public final class MonitoredClass {
+	final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 
 	@OperationExecutionMonitoringProbe()
 	public final long monitoredMethod(final long methodTime, final int recDepth) {
 		if (recDepth > 1) {
 			return monitoredMethod(methodTime, recDepth - 1);
 		} else {
-			final long exitTime = System.nanoTime() + methodTime;
-			long currentTime = System.nanoTime();
+			final long exitTime = threadMXBean.getCurrentThreadUserTime() + methodTime;
+			long currentTime = threadMXBean.getCurrentThreadUserTime();
 			while (currentTime < exitTime) {
-				currentTime = System.nanoTime();
+				currentTime = threadMXBean.getCurrentThreadUserTime();
 			}
 			return currentTime;
 		}

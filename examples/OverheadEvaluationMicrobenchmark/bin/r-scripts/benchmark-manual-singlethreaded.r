@@ -1,6 +1,6 @@
 output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-singelthreaded.pdf"
 
-configs.labels=c("Instrumentation (I)","Collecting (C)","Writing (W)")
+configs.labels=c("Method Time (T)","Instrumentation (I)","Collecting (C)","Writing (W)")
 configs.count=4
 experiments.labels=c("S1","S2","A1","A2","A3","A4","A5")
 experiments=length(experiments.labels)
@@ -49,7 +49,8 @@ pdf(output_fn, width=8, height=5, paper="special")
 plot.new()
 plot.window(xlim=c(0.5,experiments+0.5),ylim=c(500,max(meanvalues,medianvalues)))
 title(xlab="Experiment",ylab="Execution time (µs)")
-legend("topright",inset=c(0.05,0.15),legend=c(rev(configs.labels),"(mean values)"),fill=TRUE,angle=c(45,135,45,135),density=c(30,20,10,0),title="Overhead (median) of ...",ncol=2)
+legend.labels=c("Writing (W)","Instrumentation (I)","(mean values)","Collecting (C)","Method Time (T)")
+legend("topright",inset=c(0.05,0.15),legend=legend.labels,fill=TRUE,angle=c(45,45,0,135,135),density=c(30,10,0,20,5),title="Overhead (median) of ...",ncol=2)
 for (ce in 1:experiments) {
   #meanvalues
   rect(ce-0.35,meanvalues[ce,3],ce+0.5,meanvalues[ce,4])
