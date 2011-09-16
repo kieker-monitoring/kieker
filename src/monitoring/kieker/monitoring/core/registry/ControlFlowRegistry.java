@@ -31,19 +31,19 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class ControlFlowRegistry {
 	private static final Log log = LogFactory.getLog(ControlFlowRegistry.class);
-	
+
 	private final AtomicLong lastThreadId;
 	private final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
 	private final ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
 	private final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
-	
+
 	/**
 	 * @return the singleton instance of ControlFlowRegistry
 	 */
 	public final static ControlFlowRegistry getInstance() {
 		return LazyHolder.INSTANCE;
 	}
-	
+
 	private ControlFlowRegistry() {
 		/*
 		 * In order to (probabilistically!) avoid that other instances in our
@@ -51,9 +51,9 @@ public final class ControlFlowRegistry {
 		 * ids, we fill the left-most 16 bits of the thread id with a uniquely
 		 * distributed random number (0,0000152587890625 = 0,00152587890625 %).
 		 * As a consequence, this constitutes a uniquely distributed offset of
-		 * size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case.
-		 * Note that we restrict ourselves to the positive long values so far.
-		 * Of course, negative values may occur (as a result of an overflow) --
+		 * size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note
+		 * that we restrict ourselves to the positive long values so far. Of
+		 * course, negative values may occur (as a result of an overflow) --
 		 * this does not hurt!
 		 */
 		final Random r = new Random();
@@ -62,49 +62,65 @@ public final class ControlFlowRegistry {
 		this.lastThreadId = new AtomicLong(base);
 		ControlFlowRegistry.log.info("First threadId will be " + (base + 1));
 	}
-	
+
 	/**
 	 * This methods returns a globally unique trace id.
 	 * 
 	 * @return a globally unique trace id.
 	 */
 	public final long getUniqueTraceId() {
-		
+
 		final long id = this.lastThreadId.incrementAndGet();
 		// Since we use -1 as a marker for an invalid traceId,
 		// it must not be returned!
-		// TODO: this make no sense! and also not thread-safe? (avh)
-		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/167
-		return (id == -1) ? this.lastThreadId.incrementAndGet() : id;
+
+		if (id == -1) {
+			/*
+			 * in this case, choose a valid threadId. Note, that this is not
+			 * necessarily 0 due to concurrent executions of this method.
+			 * 
+			 * Example: like the following one, but it seems to fine:
+			 * 
+			 * (this.lastThreadId = -2) Thread A: id = -1 (inc&get -2)
+			 * (this.lastThreadId = -1) Thread B: id = 0 (inc&get -1)
+			 * (this.lastThreadId = 0)  Thread A: returns 1 (because id == -1,
+			 * and this.lastThreadId=0 in the meantime) (this.lastThreadId = 1)
+			 * Thread B: returns 0 (because id != -1)
+			 */
+			return this.lastThreadId.incrementAndGet();
+		} else {
+			/* i.e., id <> 1 */
+			return id;
+		}
 	}
-	
+
 	/**
-	 * This method returns a thread-local traceid which is globally
-	 * unique and stored it local for the thread.
-	 * The thread is responsible for invalidating the stored curTraceId using
-	 * the method unsetThreadLocalTraceId()!
+	 * This method returns a thread-local traceid which is globally unique and
+	 * stored it local for the thread. The thread is responsible for
+	 * invalidating the stored curTraceId using the method
+	 * unsetThreadLocalTraceId()!
 	 */
 	public final long getAndStoreUniqueThreadLocalTraceId() {
 		final long id = this.getUniqueTraceId();
 		this.threadLocalTraceId.set(id);
 		return id;
 	}
-	
+
 	/**
-	 * This method stores a thread-local curTraceId.
-	 * The thread is responsible for invalidating the stored curTraceId using
-	 * the method unsetThreadLocalTraceId()!
+	 * This method stores a thread-local curTraceId. The thread is responsible
+	 * for invalidating the stored curTraceId using the method
+	 * unsetThreadLocalTraceId()!
 	 */
 	public final void storeThreadLocalTraceId(final long traceId) {
 		this.threadLocalTraceId.set(traceId);
 	}
-	
+
 	/**
-	 * This method returns the thread-local traceid previously
-	 * registered using the method registerTraceId(curTraceId).
+	 * This method returns the thread-local traceid previously registered using
+	 * the method registerTraceId(curTraceId).
 	 * 
-	 * @return the traceid. -1 if no curTraceId has been registered
-	 *         for this thread.
+	 * @return the traceid. -1 if no curTraceId has been registered for this
+	 *         thread.
 	 */
 	public final long recallThreadLocalTraceId() {
 		final Long traceIdObj = this.threadLocalTraceId.get();
@@ -113,7 +129,7 @@ public final class ControlFlowRegistry {
 		}
 		return traceIdObj;
 	}
-	
+
 	/**
 	 * This method unsets a previously registered traceid.
 	 */
@@ -122,9 +138,9 @@ public final class ControlFlowRegistry {
 	}
 
 	/**
-	 * Used to explicitly register an curEoi.
-	 * The thread is responsible for invalidating the stored curTraceId using
-	 * the method unsetThreadLocalEOI()!
+	 * Used to explicitly register an curEoi. The thread is responsible for
+	 * invalidating the stored curTraceId using the method
+	 * unsetThreadLocalEOI()!
 	 */
 
 	public final void storeThreadLocalEOI(final int eoi) {
@@ -132,8 +148,8 @@ public final class ControlFlowRegistry {
 	}
 
 	/**
-	 * Since this method accesses a ThreadLocal variable,
-	 * it is not (necessary to be) thread-safe.
+	 * Since this method accesses a ThreadLocal variable, it is not (necessary
+	 * to be) thread-safe.
 	 */
 
 	public final int incrementAndRecallThreadLocalEOI() {
@@ -148,8 +164,8 @@ public final class ControlFlowRegistry {
 	}
 
 	/**
-	 * This method returns the thread-local curEoi previously
-	 * registered using the method registerTraceId(curTraceId).
+	 * This method returns the thread-local curEoi previously registered using
+	 * the method registerTraceId(curTraceId).
 	 * 
 	 * @return the sessionid. -1 if no curEoi registered.
 	 */
@@ -172,10 +188,10 @@ public final class ControlFlowRegistry {
 	}
 
 	/**
-	 * Used to explicitly register a sessionid that is to be collected within
-	 * a servlet method (that knows the request object).
-	 * The thread is responsible for invalidating the stored curTraceId using
-	 * the method unsetThreadLocalSessionId()!
+	 * Used to explicitly register a sessionid that is to be collected within a
+	 * servlet method (that knows the request object). The thread is responsible
+	 * for invalidating the stored curTraceId using the method
+	 * unsetThreadLocalSessionId()!
 	 */
 
 	public final void storeThreadLocalESS(final int ess) {
@@ -183,8 +199,8 @@ public final class ControlFlowRegistry {
 	}
 
 	/**
-	 * Since this method accesses a ThreadLocal variable,
-	 * it is not (necessary to be) thread-safe.
+	 * Since this method accesses a ThreadLocal variable, it is not (necessary
+	 * to be) thread-safe.
 	 */
 
 	public final int recallAndIncrementThreadLocalESS() {
@@ -198,8 +214,8 @@ public final class ControlFlowRegistry {
 	}
 
 	/**
-	 * This method returns the thread-local curEss previously
-	 * registered using the method registerTraceId(curTraceId).
+	 * This method returns the thread-local curEss previously registered using
+	 * the method registerTraceId(curTraceId).
 	 * 
 	 * @return the sessionid. -1 if no curEss registered.
 	 */
