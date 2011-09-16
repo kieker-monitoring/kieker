@@ -299,7 +299,7 @@
 			<include name="dist/*.jar" />
 			<include name="dist/*.war" />
 			<include name="META-INF/*" />
-			<!-- a file META-INF/kieker.monitoring.properties will be during packaging -->
+			<!-- a file META-INF/kieker.monitoring.properties will added be during packaging the tar.gz|.zip archives below -->
 			<include name="lib/*" />
 			<exclude name="lib/maven/" />
 			<exclude name="lib/pmd/" />
@@ -500,12 +500,20 @@
 		<delete file="${src.userguide.example.sigar.dir}/lib/${dist.kieker.main.jar}" />
 		<delete file="${src.userguide.example.sigar.dir}/lib/sigar-1.6.3.jar" />
 	</target>
-	
-	<target name="dist-userguide-examples" depends="-build-userguide-examples" description="Packages the Userguide example archives (.zip|.tar.gz) for a release">
-			
+
+	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
+		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />		
+		<replaceregexp file="${src.userguide.example.manual.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
+		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
+		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
+		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
 	</target>
 	
-	<target name="dist-examples" depends="dist-userguide-examples,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
+	<target name="dist-userguide-examples" depends="-build-userguide-examples" description="Packages the Userguide example archives (.zip|.tar.gz) for a release">			
+	</target>
+	
+	<target name="dist-examples" depends="-update-version.examples,dist-userguide-examples,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
 		
 	</target>
 
