@@ -19,17 +19,40 @@
 		<fail message="${msg.filesNotFound.common}" />
 	</target>
 
-	<target name="run-monitoring" depends="-check-files, -build-jar-monitoring">
+	<target name="run-monitoring-activemq" depends="-check-files, -build-jar-monitoring">
 		<java fork="true" classname="${main-class-monitoring}">
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.monitoring}" />
                                 <path location="." />
 			</classpath>
-                   	<jvmarg value="-Dkieker.monitoring.properties=${meta.dir}/${properties.file}" />
+                   	<jvmarg value="-Dkieker.monitoring.properties=${monitoring.configuration.activemq}" />
                         <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
+	</target>
+		
+	<target name="run-monitoring-hornetq" depends="-check-files, -build-jar-monitoring">
+		<java fork="true" classname="${main-class-monitoring}">
+			<classpath>
+				<path refid="classpath" />
+				<path location="${jar.file.monitoring}" />
+                                <path location="." />
+			</classpath>
+                   	<jvmarg value="-Dkieker.monitoring.properties=${monitoring.configuration.hornetq}" />
+                        <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+		</java>
+	</target>
 
+	<target name="run-monitoring-openjms" depends="-check-files, -build-jar-monitoring">
+		<java fork="true" classname="${main-class-monitoring}">
+			<classpath>
+				<path refid="classpath" />
+				<path location="${jar.file.monitoring}" />
+                                <path location="." />
+			</classpath>
+                   	<jvmarg value="-Dkieker.monitoring.properties=${monitoring.configuration.openjms}" />
+                        <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+		</java>
 	</target>
 
 	<condition property="not-all-files-available-activemq">
@@ -52,9 +75,9 @@
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />
-                <path location="." />
+				<path location="." />
 			</classpath>
-            <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+			<jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
 
@@ -79,16 +102,20 @@
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />
-                <path location="." />
+				<path location="." />
 			</classpath>
-            <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+			<jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
 	
 	<condition property="not-all-files-available-hornetq">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="0">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="5">
 			<fileset dir="${lib.dir}">
-				<!--<include name="${jar.file.jms}" />-->
+				<include name="${jar.file.hornetq.jms-client}" />
+				<include name="${jar.file.hornetq.jms-api}" />
+				<include name="${jar.file.hornetq.core-client}" />
+				<include name="${jar.file.hornetq.netty}" />
+				<include name="${jar.file.hornetq.jnp-client}" />
 			</fileset>
 		</resourcecount>
 	</condition>
@@ -97,15 +124,15 @@
 		<fail message="${msg.filesNotFound.hornetq}" />
 	</target>
 	
-	<target name="run-analysis-hornetq" depends="-check-files, -check-files-openjms, -build-jar-analysis">
+	<target name="run-analysis-hornetq" depends="-check-files, -check-files-hornetq, -build-jar-analysis">
 		<java fork="true" classname="${main-class-analysis}">
 			<arg line="${connection-factory.hornetq} ${provider-url.hornetq} ${queue.hornetq}" />
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />
-                <path location="." />
+				<path location="." />
 			</classpath>
-            <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+			<jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
 	

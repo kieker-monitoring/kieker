@@ -344,7 +344,9 @@
 			<include name="${src.userguide.example.jms.dir}/lib/" />
 			<exclude name="${src.userguide.example.jms.dir}/lib/*" />
 			<include name="${src.userguide.example.jms.dir}/src/**/*.java" />
-			<include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties" />
+			<include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties-activemq" />
+			<include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties-hornetq" />
+			<include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties-openjms" />
 			<include name="${src.userguide.example.jms.dir}/META-INF/log4j.properties" />
 			<include name="${src.userguide.example.sigar.dir}/build.xml" />
 			<include name="${src.userguide.example.sigar.dir}/build.properties" />
@@ -353,8 +355,6 @@
 			<include name="${src.userguide.example.sigar.dir}/lib/" />
 			<exclude name="${src.userguide.example.sigar.dir}/lib/*" />
 			<include name="${src.userguide.example.sigar.dir}/src/**/*.java" />
-			<include name="${src.userguide.example.sigar.dir}/META-INF/kieker.monitoring.properties" />
-			<include name="${src.userguide.example.sigar.dir}/META-INF/log4j.properties" />
 			<include name="${src.userguide.example.sigar.dir}/testdata/**" />
 			<include name="${example.microbenchmark.dir}/**" />
 			<exclude name="${example.microbenchmark.dir}/results/**/*" />
@@ -483,22 +483,12 @@
 		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.jms.dir}/lib/commons-logging-1.1.1.jar" />
 		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.jms.dir}/lib/${dist.kieker.main.jar}" />
 		<copy file="${lib.dir}/jms-1.1.jar" tofile="${src.userguide.example.jms.dir}/lib/jms-1.1.jar" />
-		<copy file="${lib.dir}/spice-jndikit-1.2.jar" tofile="${src.userguide.example.jms.dir}/lib/spice-jndikit-1.2.jar" />
-		<copy file="${lib.dir}/concurrent-1.3.4.jar" tofile="${src.userguide.example.jms.dir}/lib/concurrent-1.3.4.jar" />
-		<copy file="${lib.dir}/openjms-0.7.7-beta-1.jar" tofile="${src.userguide.example.jms.dir}/lib/openjms-0.7.7-beta-1.jar" />
-		<copy file="${lib.dir}/openjms-common-0.7.7-beta-1.jar" tofile="${src.userguide.example.jms.dir}/lib/openjms-common-0.7.7-beta-1.jar" />
-		<copy file="${lib.dir}/openjms-net-0.7.7-beta-1.jar" tofile="${src.userguide.example.jms.dir}/lib/openjms-net-0.7.7-beta-1.jar" />
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-check-files"/>
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-build-jar-monitoring"/>
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-build-jar-analysis"/>
 		<delete file="${src.userguide.example.jms.dir}/lib/commons-logging-1.1.1.jar" />
 		<delete file="${src.userguide.example.jms.dir}/lib/${dist.kieker.main.jar}" />
 		<delete file="${src.userguide.example.jms.dir}/lib/jms-1.1.jar" />
-		<delete file="${src.userguide.example.jms.dir}/lib/spice-jndikit-1.2.jar" />
-		<delete file="${src.userguide.example.jms.dir}/lib/concurrent-1.3.4.jar" />
-		<delete file="${src.userguide.example.jms.dir}/lib/openjms-0.7.7-beta-1.jar" />
-		<delete file="${src.userguide.example.jms.dir}/lib/openjms-common-0.7.7-beta-1.jar" />
-		<delete file="${src.userguide.example.jms.dir}/lib/openjms-net-0.7.7-beta-1.jar" />
 		<!-- src.userguide.example.sigar.dir -->
 		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.sigar.dir}/lib/commons-logging-1.1.1.jar" />
 		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.sigar.dir}/lib/${dist.kieker.main.jar}" />

@@ -3,25 +3,203 @@ classes. The directory \dir{\JMSBookstoreApplicationDirDistro/} contains the %
 sources, ant scripts etc.\ used in this example. It is based on the Bookstore %
 application with manual instrumentation presented in Chapter~\ref{chap:example}. %
 
-% \paragraph*{Preparation}
-
+The procedure for running the example, is the following:
 \begin{compactenum}
-\item Copy the files \file{\mainJar} and \file{\commonsLoggingJar} from the %
-binary distribution to the example's \dir{lib/} directory.
-\item The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties} %
-is already configured to use the \class{AsyncJMSWriter}:
+ \item Download and prepare a JMS server implementation
+ \item Copy required libraries to the example
+ \item Start the JMS server
+ \item Start the analysis instance which receives record via JMS
+ \item Start the monitoring instance which sends records via JMS
 \end{compactenum}
 
-\enlargethispage{1cm}
+The following sections provide step-by-step instruction for the %
+JMS server implementations ActiveMQ (Section~\ref{example:jms:activemq}), %
+HornetQ~\ref{example:jms:hornetq}, and OpenJMS~\ref{example:jms:openjms}.
+
+\section{ActiveMQ}\label{example:jms:activemq}
+
+\subsection{Download and Prepare ActiveMQ}
+
+Download an ActiveMQ archive from \url{http://activemq.apache.org/activemq-550-release.html} %
+and decompress it to the root directory of the example. Note, that there are two different %
+distributions, one for Unix/Linux/Cygwin and another one for Windows. 
+
+Under \UnixLikeSystems{}, you'll need to set the executable-bit of the start script:
+
+\setBashListing
+\begin{lstlisting}[caption=]
+ #\lstshellprompt{}# chmod +x bin/activemq
+\end{lstlisting}
+
+Also under \UnixLikeSystems{}, make sure that the file \file{bin/activemq} %
+include Unix line endings (e.g., using your favorite editor or the \textit{dos2unix} tool).
+
+\subsection{Copy Kieker and OpenJMS Libraries}
+
+\paragraph*{Kieker Libraries}
+
+Copy the following files from Kieker's binary distribution to %
+the example's \dir{lib/} directory.
+
+\begin{compactenum}
+ \item \file{\mainJar} (from \dir{dist/})
+ \item \file{\commonsLoggingJar} (from \dir{lib/})
+\end{compactenum}
+
+\paragraph*{ActiveMQ Libraries}
+
+Copy the following files from the ActiveMQ release to the %
+\dir{lib/} directory of this example:
+
+\begin{compactenum}
+\item \file{activemq-all-<version>.jar} (from ActiveMQ's base directory)
+\item \file{slf4j-log4j<version>.jar} (from ActiveMQ's \dir{lib/optional} directory)
+\item \file{log4j-<version>.jar} (from ActiveMQ's \dir{lib/optional} directory)
+\end{compactenum}
+
+\subsection{Kieker Monitoring Configuration for ActiveMQ}
+
+The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties-activeMQ} %
+is already configured to use the \class{AsyncJMSWriter} via ActiveMQ. The important properties are %
+the definition of the provider URL and the context factory:
 
 \setPropertiesListing
-\lstinputlisting[firstline=114,lastline=144,caption=Excerpt from \file{kieker.monitoring.properties} configuring the JMS writer]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties}
+\lstinputlisting[firstline=121,lastline=121,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the provider URL of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
 
-\begin{compactenum}\setcounter{enumi}{2}
-\item Download an OpenJMS install archive from \url{http://openjms.sourceforge.net} %
+\setPropertiesListing
+\lstinputlisting[firstline=130,lastline=130,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the connection factory of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
+
+\subsection{Running the Example}
+
+% \paragraph*{Execution}%
+ The execution of the example is performed by the following three steps:
+\begin{enumerate}
+\item Start the JMS server (you may have to set your \class{JAVA\_HOME} variable first):
+
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# bin/activemq start
+\end{lstlisting}
+\item Start the analysis part (in a new terminal):
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# ant run-analysis-activemq
+\end{lstlisting}
+\item Start the instrumented Bookstore (in a new terminal):
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# ant run-monitoring-activemq
+\end{lstlisting}
+\end{enumerate}
+
+
+\section{HornetQ}\label{example:jms:hornetq}
+
+\subsection{Download and Prepare HornetQ}
+
+Download a HornetQ archive from \url{http://www.jboss.org/hornetq/downloads.html} %
 and decompress it to the root directory of the example. 
-\item Copy the following files from the OpenJMS \dir{lib/} folder to the \dir{lib/} directory 
-   of this example:
+
+For this example, you need to create a queue in the HornetQ configuration file %
+\file{config/stand-alone/non-clustered/hornetq-jms.xml}, as shown in Listing~\ref{lst:hornetq:config:queue}.
+
+\setXMLListing
+\begin{lstlisting}[caption=Queue definition in the HornetQ configuration file,label=lst:hornetq:config:queue]
+  <queue name="ExampleQueue">
+      <entry name="/queue/queue1"/>
+  </queue>
+\end{lstlisting}
+
+\subsection{Copy Kieker and HornetQ Libraries}
+
+\paragraph*{Kieker Libraries}
+
+Copy the following files from Kieker's binary distribution to %
+the example's \dir{lib/} directory.
+
+\begin{compactenum}
+ \item \file{\mainJar} (from \dir{dist/})
+ \item \file{\commonsLoggingJar} (from \dir{lib/})
+\end{compactenum}
+
+\paragraph*{HornetQ Libraries}
+
+Copy the following files from the HornetQ \dir{lib/} folder to the %
+\dir{lib/} directory of this example:
+
+\begin{compactenum}
+\item \file{hornetq-jms-client.jar}
+\item \file{hornetq-core-client.jar}
+\item \file{jboss-jms-api.jar}
+\item \file{jnp-client.jar}
+\item \file{netty.jar}
+\end{compactenum}
+
+\subsection{Kieker Monitoring Configuration for HornetQ}
+
+The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties-hornetq} %
+is already configured to use the \class{AsyncJMSWriter} via HornetQ. The important properties are %
+the definition of the provider URL, the context factory, and the queue:
+
+\setPropertiesListing
+\lstinputlisting[firstline=121,lastline=121,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+
+\setPropertiesListing
+\lstinputlisting[firstline=130,lastline=130,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the connection factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
+
+\setPropertiesListing
+\lstinputlisting[firstline=124,lastline=124,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the queue of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
+
+\subsection{Running the Example}
+
+% \paragraph*{Execution}%
+ The execution of the example is performed by the following three steps:
+\begin{enumerate}
+\item Start the JMS server:
+
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# ./run.sh
+\end{lstlisting}
+
+Note that the script must be called from within HornetQ's \dir{bin/} directory.
+
+\item Start the analysis part (in a new terminal):
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# ant run-analysis-hornetq
+\end{lstlisting}
+\item Start the instrumented Bookstore (in a new terminal):
+\setBashListing
+\begin{lstlisting}[caption=]
+#\lstshellprompt{}# ant run-monitoring-hornetq
+\end{lstlisting}
+\end{enumerate}
+
+\section{OpenJMS}\label{example:jms:openjms}
+
+\subsection{Download and Prepare OpenJMS}
+
+Download an OpenJMS install archive from \url{http://openjms.sourceforge.net} %
+and decompress it to the root directory of the example. 
+
+\subsection{Copy Kieker and OpenJMS Libraries}
+
+\paragraph*{Kieker Libraries}
+
+Copy the following files from Kieker's binary distribution to %
+the example's \dir{lib/} directory.
+
+\begin{compactenum}
+ \item \file{\mainJar} (from \dir{dist/})
+ \item \file{\commonsLoggingJar} (from \dir{lib/})
+\end{compactenum}
+
+\paragraph*{OpenJMS Libraries}
+
+Copy the following files from the OpenJMS \dir{lib/} folder to the %
+\dir{lib/} directory of this example:
+
 \begin{compactenum}
 \item \file{openjms-<version>.jar}
 \item \file{openjms-common-<version>.jar}
@@ -30,11 +208,20 @@ and decompress it to the root directory of the example.
 \item \file{concurrent-<version>.jar}
 \item \file{spice-jndikit-<version>.jar}
 \end{compactenum}
-\end{compactenum}
 
-\enlargethispage{2cm}
+\subsection{Kieker Monitoring Configuration for OpenJMS}
 
-\
+The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties-openjms} %
+is already configured to use the \class{AsyncJMSWriter} via OpenJMS. The important properties are %
+the definition of the provider URL and the context factory:
+
+\setPropertiesListing
+\lstinputlisting[firstline=121,lastline=121,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the provider URL of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+
+\setPropertiesListing
+\lstinputlisting[firstline=130,lastline=130,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the connection factory of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+
+\subsection{Running the Example}
 
 % \paragraph*{Execution}%
  The execution of the example is performed by the following three steps:
@@ -48,11 +235,11 @@ and decompress it to the root directory of the example.
 \item Start the analysis part (in a new terminal):
 \setBashListing
 \begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-analysis
+#\lstshellprompt{}# ant run-analysis-openjms
 \end{lstlisting}
 \item Start the instrumented Bookstore (in a new terminal):
 \setBashListing
 \begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-monitoring
+#\lstshellprompt{}# ant run-monitoring-openjms
 \end{lstlisting}
 \end{enumerate}

@@ -71,7 +71,7 @@ kieker.monitoring.setLoggingTimestamp=true
 ## The value must be a fully-qualified classname of a class implementing 
 ## kieker.monitoring.IMonitoringWriter and providing a constructor that 
 ## accepts an IMonitoringController and a single Configuration. 
-kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter
+kieker.monitoring.writer=kieker.monitoring.writer.jms.AsyncJMSWriter
 
 #####
 #kieker.monitoring.writer=kieker.monitoring.writer.DummyWriter
@@ -140,7 +140,7 @@ kieker.monitoring.writer.namedRecordPipe.PipeWriter.pipeName=kieker-pipe
 ## - ActiveMQ: tcp://127.0.0.1:61616/
 ## - HornetQ:  jnp://localhost:1099/
 ## - OpenJMS:  tcp://127.0.0.1:3035/
-kieker.monitoring.writer.jms.AsyncJMSWriter.ProviderUrl=tcp://127.0.0.1:61616/
+kieker.monitoring.writer.jms.AsyncJMSWriter.ProviderUrl=jnp://localhost:1099/
 #
 ## The topic at the jms server which is used in the publisher/subscribe communication.
 kieker.monitoring.writer.jms.AsyncJMSWriter.Topic=queue1
@@ -149,7 +149,7 @@ kieker.monitoring.writer.jms.AsyncJMSWriter.Topic=queue1
 ## - ActiveMQ: org.apache.activemq.jndi.ActiveMQInitialContextFactory
 ## - HornetQ:  org.jnp.interfaces.NamingContextFactory
 ## - OpenJMS:  org.exolab.jms.jndi.InitialContextFactory
-kieker.monitoring.writer.jms.AsyncJMSWriter.ContextFactoryType=org.apache.activemq.jndi.ActiveMQInitialContextFactory
+kieker.monitoring.writer.jms.AsyncJMSWriter.ContextFactoryType=org.jnp.interfaces.NamingContextFactory
 #
 ## The service name for the jms connection factory.
 kieker.monitoring.writer.jms.AsyncJMSWriter.FactoryLookupName=ConnectionFactory
