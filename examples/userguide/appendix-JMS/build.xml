@@ -6,21 +6,17 @@
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
 	</path>
 
-	<condition property="not-all-files-available">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="8">
+	<condition property="not-all-files-available-common">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="2">
 			<fileset dir="${lib.dir}">
 				<include name="${jar.file.commons-logging}" />
 				<include name="${jar.file.kieker}" />
-				<include name="${jar.file.jms}" />
-				<include name="${jar.file.jndikit}" />
-				<include name="${jar.file.concurrent}" />
-				<include name="${jar.files.openjms}" /> <!-- actually 3 files -->
 			</fileset>
 		</resourcecount>
 	</condition>
 
-	<target name="-check-files" if="not-all-files-available">
-		<fail message="${msg.filesNotFound}" />
+	<target name="-check-files" if="not-all-files-available-common">
+		<fail message="${msg.filesNotFound.common}" />
 	</target>
 
 	<target name="run-monitoring" depends="-check-files, -build-jar-monitoring">
@@ -36,18 +32,83 @@
 
 	</target>
 
-	<target name="run-analysis" depends="-check-files, -build-jar-analysis">
+	<condition property="not-all-files-available-activemq">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="3">
+			<fileset dir="${lib.dir}">
+				<include name="${jar.file.activemq}" />
+				<include name="${jar.file.sl4j-log4j}" />
+				<include name="${jar.file.log4j}" />
+			</fileset>
+		</resourcecount>
+	</condition>
+
+	<target name="-check-files-activemq" if="not-all-files-available-activemq">
+		<fail message="${msg.filesNotFound.activemq}" />
+	</target>
+	
+	<target name="run-analysis-activemq" depends="-check-files, -check-files-activemq, -build-jar-analysis">
 		<java fork="true" classname="${main-class-analysis}">
-			<arg line="${analysis.directory}" />
+			<arg line="${connection-factory.activemq} ${provider-url.activemq} ${queue.activemq}" />
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />
-                                <path location="." />
+                <path location="." />
 			</classpath>
-                        <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+            <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
 
+	<condition property="not-all-files-available-openjms">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="6">
+			<fileset dir="${lib.dir}">
+				<include name="${jar.file.jms}" />
+				<include name="${jar.file.jndikit}" />
+				<include name="${jar.file.concurrent}" />
+				<include name="${jar.files.openjms}" /> <!-- actually 3 files -->
+			</fileset>
+		</resourcecount>
+	</condition>
+	
+	<target name="-check-files-openjms" if="not-all-files-available-openjms">
+		<fail message="${msg.filesNotFound.openjms}" />
+	</target>
+	
+	<target name="run-analysis-openjms" depends="-check-files, -check-files-openjms, -build-jar-analysis">
+		<java fork="true" classname="${main-class-analysis}">
+			<arg line="${connection-factory.openjms} ${provider-url.openjms} ${queue.openjms}" />
+			<classpath>
+				<path refid="classpath" />
+				<path location="${jar.file.analysis}" />
+                <path location="." />
+			</classpath>
+            <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+		</java>
+	</target>
+	
+	<condition property="not-all-files-available-hornetq">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="0">
+			<fileset dir="${lib.dir}">
+				<!--<include name="${jar.file.jms}" />-->
+			</fileset>
+		</resourcecount>
+	</condition>
+	
+	<target name="-check-files-hornetq" if="not-all-files-available-hornetq">
+		<fail message="${msg.filesNotFound.hornetq}" />
+	</target>
+	
+	<target name="run-analysis-hornetq" depends="-check-files, -check-files-openjms, -build-jar-analysis">
+		<java fork="true" classname="${main-class-analysis}">
+			<arg line="${connection-factory.hornetq} ${provider-url.hornetq} ${queue.hornetq}" />
+			<classpath>
+				<path refid="classpath" />
+				<path location="${jar.file.analysis}" />
+                <path location="." />
+			</classpath>
+            <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
+		</java>
+	</target>
+	
 	<target name="-build-jar-monitoring" depends="clean.monitoring, -compile">
 		<jar destfile="${jar.file.monitoring}" basedir="${build.dir}">
 			<manifest>
@@ -56,7 +117,7 @@
 		</jar>
 		<delete dir="${build.dir}" />
 	</target>
-
+	
 	<target name="-build-jar-analysis" depends="clean.analysis, -compile">
 		<jar destfile="${jar.file.analysis}" basedir="${build.dir}">
 			<manifest>

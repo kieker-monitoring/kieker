@@ -118,6 +118,9 @@ public class JMSReader extends AbstractMonitoringReader {
 
 			// JMS initialization
 			properties.put(Context.PROVIDER_URL, this.jmsProviderUrl);
+			/* TODO: remove */ 
+			// properties.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
+			/* */ 
 			final Context context = new InitialContext(properties);
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 			final Connection connection = factory.createConnection();

@@ -34,20 +34,72 @@ import kieker.analysis.reader.MonitoringReaderException;
 public class JMSAnalysisStarter {
 
     private static final long MAX_RT_NANOS = 1700;
+    
+    private final static String CONNECTION_FACTORY_TYPE__ACTIVEMQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
+    private final static String CONNECTION_FACTORY_TYPE__HORNETQ = "org.jnp.interfaces.NamingContextFactory";
+    private final static String CONNECTION_FACTORY_TYPE__OPENJMS = "org.exolab.jms.jndi.InitialContextFactory";
 
-    private final static String CONNECTION_FACTORY_TYPE__OPEN_JMS = "org.exolab.jms.jndi.InitialContextFactory";
-    //private final static String CONNECTION_FACTORY_TYPE__ACTIVE_MQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
+    /** Default provider URL used by ActiveMQ  */
+    private final static String PROVIDER_URL__ACTIVEMQ = "tcp://127.0.0.1:61616/";
+    /** Default provider URL used by HornetQ */
+    private final static String PROVIDER_URL__HORNETQ = "jnp://localhost:1099/";
+    /** Default provider URL used by OpenJMS */
+    private final static String PROVIDER_URL__OPENJMS = "tcp://127.0.0.1:3035/";
+    
+    private final static String QUEUE_ACTIVEMQ = "queue1";
+    private final static String QUEUE_HORNETQ = "queue1";
+    private final static String QUEUE_OPENJMS = "queue1";
+    
+    private static String connectionFactory;
+    private static String providerUrl;
+    private static String queue;
     
     public static void main(final String[] args) throws MonitoringReaderException, MonitoringRecordConsumerException {
+    	if (!JMSAnalysisStarter.parseArguments(args)) {
+    		// invalid parameters
+    		JMSAnalysisStarter.printUsage();
+    		System.exit(1);
+    	}
+    	
         final AnalysisController analysisInstance = new AnalysisController();
         final IMonitoringReader logReader =
-				new JMSReader("tcp://127.0.0.1:3035/", "queue1",
-						JMSAnalysisStarter.CONNECTION_FACTORY_TYPE__OPEN_JMS);
+				new JMSReader(JMSAnalysisStarter.providerUrl, JMSAnalysisStarter.queue,
+						JMSAnalysisStarter.connectionFactory);
         analysisInstance.setReader(logReader);
         final IMonitoringRecordConsumerPlugin consumer =
                 new Consumer(JMSAnalysisStarter.MAX_RT_NANOS);
         analysisInstance.registerPlugin(consumer);
 
         analysisInstance.run();
+    }
+
+    /**
+     * Parses the given arguments and initializes the variables {@link #connectionFactory} and {@link #providerUrl}.
+     * 
+     * @return true iff valid parameters were passed 
+     */
+    private static boolean parseArguments (final String[] args) {
+    	if (args.length != 3) {
+    		System.err.println("Invalid number of arguments: " + args.length);
+    		return false;
+    	}
+    	
+    	JMSAnalysisStarter.connectionFactory = args[0];
+    	System.out.println("jms-connection-factory:" + JMSAnalysisStarter.connectionFactory);
+    	JMSAnalysisStarter.providerUrl = args[1];
+    	System.out.println("jms-provider-url:      " + JMSAnalysisStarter.providerUrl );
+    	JMSAnalysisStarter.queue = args[2];
+    	System.out.println("jms-queue:             " + JMSAnalysisStarter.queue);
+    	System.out.println();
+    	return true;
+    }
+    
+    private static void printUsage () {
+    	System.out.println("Usage: " + JMSAnalysisStarter.class.getName() + " <jms-connection-factory> <jms-provider-url> <jms-queue>");
+    	System.out.println();
+    	System.out.println("Examples:");
+    	System.out.println(" - ActiveMQ: " + JMSAnalysisStarter.CONNECTION_FACTORY_TYPE__ACTIVEMQ + " " + JMSAnalysisStarter.PROVIDER_URL__ACTIVEMQ + " " + JMSAnalysisStarter.QUEUE_ACTIVEMQ);
+    	System.out.println(" - HornetQ:  " + JMSAnalysisStarter.CONNECTION_FACTORY_TYPE__HORNETQ + " " + JMSAnalysisStarter.PROVIDER_URL__HORNETQ + " " + JMSAnalysisStarter.QUEUE_HORNETQ);
+    	System.out.println(" - OpenJMS:  " + JMSAnalysisStarter.CONNECTION_FACTORY_TYPE__OPENJMS + " " + JMSAnalysisStarter.PROVIDER_URL__OPENJMS + " " + JMSAnalysisStarter.QUEUE_OPENJMS);
     }
 }
