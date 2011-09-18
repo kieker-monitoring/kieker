@@ -985,4 +985,25 @@
 			<pom refid="mavenproject" />
 		</artifact:deploy>
 	</target>
+	
+	<property name="findbugs.home" value="${lib.dir}/findbugs" />
+	<property name="findbugs.task" value="${findbugs.home}/lib/findbugs-ant.jar" />
+
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.task}"/>
+	
+	<target name="findbugs" depends="build-all,compile-tests" description="Creates a report about found bugs by findbugs">
+		<findbugs home="${findbugs.home}"
+				reportLevel="medium"
+				excludeFilter="fb-filter.xml"
+				output="html"
+				outputFile="tmp/kieker-fb.html" >
+			<auxClasspath>
+				<fileset dir="${lib.dir}" includes="*.jar"/>
+			</auxClasspath>
+			<sourcePath path="${src.dir}" />
+			<sourcePath path="${test.dir}" />
+			<class location="${build.dir}" />
+		</findbugs>
+	</target>
+	
 </project>

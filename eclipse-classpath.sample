@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 			<!-- Sample eclipse .classpath file. Copy this file to ".classpath". -->
 			<classpath>
-				<classpathentry kind="src" path="src/common/"/>
-				<classpathentry kind="src" path="src/analysis/"/>
-				<classpathentry kind="src" path="src/monitoring/"/>
-				<classpathentry kind="src" path="src/monitoring-servlet/"/>
-				<classpathentry kind="src" path="src/tools/"/>
+				<classpathentry kind="src" path="src//common/"/>
+				<classpathentry kind="src" path="src//analysis/"/>
+				<classpathentry kind="src" path="src//monitoring/"/>
+				<classpathentry kind="src" path="src//monitoring-servlet/"/>
+				<classpathentry kind="src" path="src//tools/"/>
 				<classpathentry kind="src" path="test//common/"/>
 				<classpathentry kind="src" path="test//analysis/"/>
 				<classpathentry kind="src" path="test//monitoring/"/>
