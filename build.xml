@@ -987,8 +987,8 @@
 		<findbugs home="${findbugs.home}"
 				reportLevel="medium"
 				excludeFilter="fb-filter.xml"
-				output="html"
-				outputFile="tmp/kieker-fb.html" >
+				output="xml"
+				outputFile="tmp/kieker-fb.xml" >
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar"/>
 			</auxClasspath>
@@ -1003,9 +1003,9 @@
 		<pmd shortFilenames="true">
 			<ruleset>rulesets/favorites.xml</ruleset>
 			<ruleset>basic</ruleset>
-			<formatter type="html" toFile="tmp/pmd_report.html" />
+			<formatter type="xml" toFile="tmp/pmd_report.xml" />
 			<fileset dir="src/" includes="**/*.java" />
 		</pmd>
-		<echo message="PMD report written to tmp/pmd_report.html" />			
+		<echo message="PMD report written to 'tmp/pmd_report.xml'" />			
 	</target>
 </project>
