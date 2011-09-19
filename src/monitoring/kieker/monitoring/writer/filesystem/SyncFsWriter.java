@@ -179,8 +179,10 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public final void terminate() {
-		if (this.pos != null) {
-			this.pos.close();
+		synchronized (this) {
+			if (this.pos != null) {
+				this.pos.close();
+			}
 		}
 		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
 	}
