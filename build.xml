@@ -453,52 +453,52 @@
 	</target>
 	
 	<target name="-build-userguide-examples" depends="-init,build-all,clean-userguide-examples" description="Builds all userguide examples">
+		<path id="classpath">
+			<fileset dir="${lib.dir}" includes="**/*.jar" />
+			<fileset dir="${dist.dir}" includes="${dist.kieker.main.jar}" />
+		</path>
 		<!-- src.userguide.example.bookstore.dir -->
-		<ant antfile="build.xml" dir="${src.userguide.example.bookstore.dir}" target="build-jar"/>
+		<ant antfile="build.xml" dir="${src.userguide.example.bookstore.dir}">
+			<reference refid="classpath" />
+			<target name="build-jar" />
+		</ant>
 		<!-- src.userguide.example.manual.dir -->
-		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.manual.dir}/lib/commons-logging-1.1.1.jar" />
-		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.manual.dir}/lib/${dist.kieker.main.jar}" />
-		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="-check-files"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="-build-jar-monitoring"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="-build-jar-analysis"/>
-		<delete file="${src.userguide.example.manual.dir}/lib/commons-logging-1.1.1.jar" />
-		<delete file="${src.userguide.example.manual.dir}/lib/${dist.kieker.main.jar}" />
+		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-analysis" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-monitoring" />
+		</ant>
 		<!-- src.userguide.example.extended.dir -->
-		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.extended.dir}/lib/commons-logging-1.1.1.jar" />
-		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.extended.dir}/lib/${dist.kieker.main.jar}" />
-		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="-check-files"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="-build-jar"/>
-		<delete file="${src.userguide.example.extended.dir}/lib/commons-logging-1.1.1.jar" />
-		<delete file="${src.userguide.example.extended.dir}/lib/${dist.kieker.main.jar}" />
+		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
 		<!-- src.userguide.example.aspectj.dir -->
-		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.aspectj.dir}/lib/commons-logging-1.1.1.jar" />
-		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.aspectj.dir}/lib/${dist.kieker.main.jar}" />
-		<copy file="${aspectjweaverjar}" tofile="${src.userguide.example.aspectj.dir}/${aspectjweaverjar}" />
-		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="-check-files"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="-build-jar"/>
-		<delete file="${src.userguide.example.aspectj.dir}/lib/commons-logging-1.1.1.jar" />
-		<delete file="${src.userguide.example.aspectj.dir}/lib/${dist.kieker.main.jar}" />
-		<delete file="${src.userguide.example.aspectj.dir}/${aspectjweaverjar}" />
+		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
 		<!-- src.userguide.example.jms.dir -->
-		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.jms.dir}/lib/commons-logging-1.1.1.jar" />
-		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.jms.dir}/lib/${dist.kieker.main.jar}" />
-		<copy file="${lib.dir}/jms-1.1.jar" tofile="${src.userguide.example.jms.dir}/lib/jms-1.1.jar" />
-		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-check-files"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-build-jar-monitoring"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="-build-jar-analysis"/>
-		<delete file="${src.userguide.example.jms.dir}/lib/commons-logging-1.1.1.jar" />
-		<delete file="${src.userguide.example.jms.dir}/lib/${dist.kieker.main.jar}" />
-		<delete file="${src.userguide.example.jms.dir}/lib/jms-1.1.jar" />
+		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-analysis" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-monitoring" />
+		</ant>
 		<!-- src.userguide.example.sigar.dir -->
-		<copy file="${lib.dir}/commons-logging-1.1.1.jar" tofile="${src.userguide.example.sigar.dir}/lib/commons-logging-1.1.1.jar" />
-		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${src.userguide.example.sigar.dir}/lib/${dist.kieker.main.jar}" />
-		<copy file="${lib.dir}/sigar-1.6.3.jar" tofile="${src.userguide.example.sigar.dir}/lib/sigar-1.6.3.jar" />
-		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="-check-files"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="-build-jar-monitoring"/>
-		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="-build-jar-analysis"/>
-		<delete file="${src.userguide.example.sigar.dir}/lib/commons-logging-1.1.1.jar" />
-		<delete file="${src.userguide.example.sigar.dir}/lib/${dist.kieker.main.jar}" />
-		<delete file="${src.userguide.example.sigar.dir}/lib/sigar-1.6.3.jar" />
+		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-analysis" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-monitoring" />
+		</ant>
 	</target>
 
 	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
