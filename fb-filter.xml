@@ -1,4 +1,11 @@
 <FindBugsFilter>
 <!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
+     <!-- #44 (FindBugs: wontfix) -->
+     <Match>
+       <Class name="kieker.monitoring.writer.AbstractAsyncWriter" />
+       <Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
+       <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />
+     </Match>
+
 </FindBugsFilter>
