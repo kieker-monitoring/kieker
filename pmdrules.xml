@@ -9,8 +9,12 @@
   </description>
   
   <!-- We'll use the following rulesets -->
-  <rule ref="rulesets/favorites.xml"/>
   <rule ref="rulesets/basic.xml">
+    <exclude name="UnnecessaryFinalModifier"/>
+    <exclude name="UnusedModifier"/>
+  </rule>
+  <!-- replace this one with copying the nec. contents here -->
+  <rule ref="rulesets/favorites.xml">
     <exclude name="UnnecessaryFinalModifier"/>
     <exclude name="UnusedModifier"/>
   </rule>
