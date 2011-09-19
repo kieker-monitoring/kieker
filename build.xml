@@ -1017,9 +1017,7 @@
 	
 	<target name="pmd" description="Performs a source code analysis employing PMD">
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
-		<pmd shortFilenames="true">
-			<ruleset>rulesets/favorites.xml</ruleset>
-			<ruleset>basic</ruleset>
+		<pmd shortFilenames="true" rulesetfiles="pmdrules.xml">
 			<formatter type="xml" toFile="tmp/pmd_report.xml" />
 			<fileset dir="src/" includes="**/*.java" />
 		</pmd>
