@@ -944,16 +944,6 @@
         </echo>
 	</target>
 
-	<target name="pmd">
-		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
-		<pmd shortFilenames="true">
-			<ruleset>rulesets/favorites.xml</ruleset>
-			<ruleset>basic</ruleset>
-			<formatter type="html" toFile="pmd_report.html" />
-			<fileset dir="src/" includes="**/*.java" />
-		</pmd>
-	</target>
-
 	<target name="-mvn-init" depends="-update-version">
 		<xmlproperty file="pom.xml" prefix="pom.xml" />
 		<path id="maven-ant-tasks.classpath" path="lib/maven/maven-ant-tasks-2.1.0.jar" />
@@ -985,13 +975,15 @@
 			<pom refid="mavenproject" />
 		</artifact:deploy>
 	</target>
+
+	<target name="static-analysis" depends="findbugs, pmd" description="Performs static analysis of Kieker's source and binary code employing FindBugs and PMD" />
 	
 	<property name="findbugs.home" value="${lib.dir}/findbugs" />
 	<property name="findbugs.task" value="${findbugs.home}/lib/findbugs-ant.jar" />
 
 	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.task}"/>
 	
-	<target name="findbugs" depends="build-all,compile-tests" description="Creates a report about found bugs by findbugs">
+	<target name="findbugs" depends="build-all,compile-tests" description="Performs a byte code analysis to find potential bugs employing findbugs">
 		<findbugs home="${findbugs.home}"
 				reportLevel="medium"
 				excludeFilter="fb-filter.xml"
@@ -1006,4 +998,14 @@
 		</findbugs>
 	</target>
 	
+	<target name="pmd" description="Performs a source code analysis employing PMD">
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
+		<pmd shortFilenames="true">
+			<ruleset>rulesets/favorites.xml</ruleset>
+			<ruleset>basic</ruleset>
+			<formatter type="html" toFile="tmp/pmd_report.html" />
+			<fileset dir="src/" includes="**/*.java" />
+		</pmd>
+		<echo message="PMD report written to tmp/pmd_report.html" />			
+	</target>
 </project>
