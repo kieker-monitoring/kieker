@@ -13,11 +13,26 @@
     <exclude name="UnnecessaryFinalModifier"/>
     <exclude name="UnusedModifier"/>
   </rule>
-  <!-- replace this one with copying the nec. contents here -->
-  <rule ref="rulesets/favorites.xml">
-    <exclude name="UnnecessaryFinalModifier"/>
-    <exclude name="UnusedModifier"/>
+
+  <rule ref="rulesets/unusedcode.xml"/>
+
+  <rule ref="rulesets/braces.xml/WhileLoopsMustUseBraces"/>
+  <rule ref="rulesets/braces.xml/ForLoopsMustUseBraces"/>
+
+  <rule ref="rulesets/design.xml/SimplifyBooleanReturns"/>
+  <rule ref="rulesets/design.xml/SwitchStmtsShouldHaveDefault"/>
+
+  <rule ref="rulesets/strings.xml/StringToString"/>
+  <rule ref="rulesets/strings.xml/StringInstantiation"/>
+
+  <rule ref="rulesets/controversial.xml/UnnecessaryConstructor"/>
+  <rule ref="rulesets/controversial.xml/NullAssignment"/>
+  <rule ref="rulesets/controversial.xml/UnusedModifier"/>
+
+  <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
+    <properties>
+       <property name="reportLevel" value="5"/>
+    </properties>
   </rule>
-  <!--<rule ref="rulesets/braces.xml"/>-->
   
 </ruleset>

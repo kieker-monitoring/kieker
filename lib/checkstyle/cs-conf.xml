@@ -42,7 +42,7 @@ Furthermore I added the checks from
 	<property name="severity" value="warning"/>
 
 	<module name="SuppressionFilter">
-		<property name="file" value="cs-filter.xml"/>
+		<property name="file" value="lib/checkstyle/cs-filter.xml"/>
 	</module>
 	
     <!-- Checks that a package.html file exists for each package.     -->
