@@ -1,12 +1,12 @@
-results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-S1\\results.csv"
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-S1\\results-bars.pdf"
+results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-A16\\results.csv"
+output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-A16\\results-bars.pdf"
 
-configs.loop=10
+configs.loop=1
 configs.recursion=c(1)
 configs.labels=c("Writing Data")
 configs.count=length(configs.labels)
-results.count=2000000
-results.skip =1000000
+results.count=100000
+results.skip =50000
 
 ## "[ recursion , config , loop ]"
 meanvalues <- array(dim=c(length(configs.recursion),configs.count,configs.loop),dimnames=list(configs.recursion,configs.labels,c(1:configs.loop)))
