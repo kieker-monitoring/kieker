@@ -44,7 +44,7 @@
 
   <rule ref="rulesets/naming.xml"/>
 
-  <rule ref="rulesets/optimization.xml"/>
+  <rule ref="rulesets/optimizations.xml"/>
   
   <rule ref="rulesets/strictexception.xml"/>
 
