@@ -1008,6 +1008,7 @@
 				outputFile="tmp/kieker-fb.xml" >
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar"/>
+				<fileset dir="${lib.dir}/findbugs/aux­lib" includes="*.jar"/>
 			</auxClasspath>
 			<sourcePath path="${src.dir}" />
 			<sourcePath path="${test.dir}" />
