@@ -1019,8 +1019,20 @@
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
 		<pmd shortFilenames="true" rulesetfiles="pmdrules.xml">
 			<formatter type="xml" toFile="tmp/pmd_report.xml" />
-			<fileset dir="src/" includes="**/*.java" />
+			<fileset dir="${src.dir}" includes="**/*.java" />
+			<fileset dir="${test.dir}" includes="**/*.java" />
 		</pmd>
 		<echo message="PMD report written to 'tmp/pmd_report.xml'" />			
 	</target>
+	
+	<taskdef resource="checkstyletask.properties" classpath="${lib.dir}/checkstyle/checkstyle-5.4-all.jar"/>
+	
+	<target name="checkstyle" depends="build-all,compile-tests" description="Uses Checkstyle to find potential problems">
+		<checkstyle config="cs-conf.xml" >
+			<fileset dir="${src.dir}" includes="**/*.java"/>
+			<fileset dir="${test.dir}" includes="**/*.java"/>
+			<formatter type="xml" toFile="tmp/cs_report.xml"/>
+		</checkstyle>
+	</target>
+	
 </project>
