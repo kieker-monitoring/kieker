@@ -100,7 +100,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException {
+	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:23
 		try {
 			if (values.length != CPUUtilizationRecord.VALUE_TYPES.length) {
 				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length
@@ -121,7 +121,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
-		return;
 	}
 
 	/**

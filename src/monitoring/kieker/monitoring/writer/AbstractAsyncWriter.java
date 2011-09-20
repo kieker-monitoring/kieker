@@ -20,6 +20,7 @@
 
 package kieker.monitoring.writer;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -35,14 +36,14 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
-	private static final Log log = LogFactory.getLog(AbstractAsyncWriter.class);
+	private static final Log LOG = LogFactory.getLog(AbstractAsyncWriter.class);
 
 	private static final String QUEUESIZE = "QueueSize";
 	private static final String BEHAVIOR = "QueueFullBehavior";
 
 	// internal variables
 	private final String PREFIX;
-	private final Vector<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
+	private final List<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final int queueFullBehavior;
 
@@ -52,7 +53,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 		final int queueFullBehavior = this.configuration.getIntProperty(this.PREFIX + AbstractAsyncWriter.BEHAVIOR);
 		if ((queueFullBehavior < 0) || (queueFullBehavior > 2)) {
-			AbstractAsyncWriter.log.warn("Unknown value '" + queueFullBehavior + "' for " + this.PREFIX + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
+			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehavior + "' for " + this.PREFIX + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehavior;
@@ -97,12 +98,12 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				} catch (final InterruptedException ex) {
 					// we should be able to ignore an interrupted wait
 				}
-				AbstractAsyncWriter.log.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
+				AbstractAsyncWriter.LOG.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
 				// TODO: we should be able to abort this, perhaps a max time of repeats?
 				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/174
 			}
 		}
-		AbstractAsyncWriter.log.info("Writer shutdown complete");
+		AbstractAsyncWriter.LOG.info("Writer shutdown complete");
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 					break;
 			}
 		} catch (final Exception ex) {
-			AbstractAsyncWriter.log.error("Failed to retrieve new monitoring record." + ex);
+			AbstractAsyncWriter.LOG.error("Failed to retrieve new monitoring record." + ex);
 			return false;
 		}
 		return true;

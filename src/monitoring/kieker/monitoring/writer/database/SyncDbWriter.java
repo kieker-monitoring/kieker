@@ -62,7 +62,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
-	private static final Log log = LogFactory.getLog(SyncDbWriter.class);
+	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
 	private static final String PREFIX = SyncDbWriter.class.getName() + ".";
 	public static final String CONFIG__DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname";
@@ -80,7 +80,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			// register correct Driver
 			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG__DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
-			SyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
+			SyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
 		try {
@@ -99,9 +99,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			this.psInsertMonitoringData = this.conn.prepareStatement("INSERT INTO " + tablename
 					+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)");
 		} catch (final SQLException ex) {
-			SyncDbWriter.log.error("SQLException: " + ex.getMessage());
-			SyncDbWriter.log.error("SQLState: " + ex.getSQLState());
-			SyncDbWriter.log.error("VendorError: " + ex.getErrorCode());
+			SyncDbWriter.LOG.error("SQLException: " + ex.getMessage());
+			SyncDbWriter.LOG.error("SQLState: " + ex.getSQLState());
+			SyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode());
 			throw ex;
 		}
 	}
@@ -126,14 +126,14 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			this.psInsertMonitoringData.setLong(9, execRecord.ess);
 			this.psInsertMonitoringData.execute();
 		} catch (final Exception ex) {
-			SyncDbWriter.log.error("Failed to write new monitoring record:", ex);
+			SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);
 			return false;
 		} finally {
 			try {
 				this.psInsertMonitoringData.clearParameters();
 			} catch (final Exception ex) {
-				SyncDbWriter.log.error(ex);
-				return false;
+				SyncDbWriter.LOG.error(ex);
+				return false; // NOPMD
 			}
 		}
 		return true;
@@ -146,11 +146,11 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				this.conn.close();
 			}
 		} catch (final SQLException ex) {
-			SyncDbWriter.log.error("SQLException: " + ex.getMessage());
-			SyncDbWriter.log.error("SQLState: " + ex.getSQLState());
-			SyncDbWriter.log.error("VendorError: " + ex.getErrorCode());
+			SyncDbWriter.LOG.error("SQLException: " + ex.getMessage());
+			SyncDbWriter.LOG.error("SQLState: " + ex.getSQLState());
+			SyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode());
 		}
-		SyncDbWriter.log.info("Writer: SyncDbWriter shutdown complete");
+		SyncDbWriter.LOG.info("Writer: SyncDbWriter shutdown complete");
 	}
 
 	@Override

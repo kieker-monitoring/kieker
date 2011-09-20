@@ -64,7 +64,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
-	private static final Log log = LogFactory.getLog(SyncFsWriter.class);
+	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG__PATH = SyncFsWriter.PREFIX + "customStoragePath";
@@ -72,7 +72,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG__FLUSH = SyncFsWriter.PREFIX + "flush";
 
 	// configuration parameters
-	private static final int maxEntriesInFile = 25000;
+	private static final int MAXENTRIESINFILE = 25000;
 
 	// internal variables
 	private String filenamePrefix;
@@ -80,7 +80,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private MappingFileWriter mappingFileWriter;
 	private PrintWriter pos = null;
 	// Force to initialize first file!
-	private int entriesInCurrentFileCounter = SyncFsWriter.maxEntriesInFile;
+	private int entriesInCurrentFileCounter = SyncFsWriter.MAXENTRIESINFILE;
 	// only to get that information later
 	private String path;
 
@@ -99,18 +99,18 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {
-			SyncFsWriter.log.error("'" + path + "' is not a directory.");
+			SyncFsWriter.LOG.error("'" + path + "' is not a directory.");
 			throw new IllegalArgumentException("'" + path + "' is not a directory.");
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+		final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+		date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final String dateStr = date_ISO8601UTC.format(new java.util.Date());
 		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
-			SyncFsWriter.log.error("Failed to create directory '" + path + "'");
+			SyncFsWriter.LOG.error("Failed to create directory '" + path + "'");
 			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
 		this.filenamePrefix = path + File.separatorChar + "kieker";
@@ -119,7 +119,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		try {
 			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
 		} catch (final Exception ex) {
-			SyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'");
+			SyncFsWriter.LOG.error("Failed to create mapping file '" + mappingFileFn + "'");
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
 	}
@@ -148,7 +148,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 				this.pos.println(sb);
 			}
 		} catch (final IOException ex) {
-			SyncFsWriter.log.error("Failed to write monitoring record", ex);
+			SyncFsWriter.LOG.error("Failed to write monitoring record", ex);
 			return false;
 		}
 		return true;
@@ -158,15 +158,15 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 * Determines and sets a new filename
 	 */
 	private final void prepareFile() throws FileNotFoundException {
-		if (++this.entriesInCurrentFileCounter > SyncFsWriter.maxEntriesInFile) {
+		if (++this.entriesInCurrentFileCounter > SyncFsWriter.MAXENTRIESINFILE) {
 			if (this.pos != null) {
 				this.pos.close();
 			}
 			this.entriesInCurrentFileCounter = 1;
 
-			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+			final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+			date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+			final String dateStr = date_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);
@@ -184,7 +184,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 				this.pos.close();
 			}
 		}
-		SyncFsWriter.log.info("Writer: SyncFsWriter shutdown complete");
+		SyncFsWriter.LOG.info("Writer: SyncFsWriter shutdown complete");
 	}
 
 	@Override

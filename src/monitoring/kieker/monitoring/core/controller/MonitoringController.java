@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public final class MonitoringController extends AbstractController implements IMonitoringController {
-	private final static Log log = LogFactory.getLog(MonitoringController.class);
+	private final static Log LOG = LogFactory.getLog(MonitoringController.class);
 
 	private final StateController stateController;
 	private final JMXController jmxController;
@@ -84,15 +84,15 @@ public final class MonitoringController extends AbstractController implements IM
 				public void run() {
 					if (!monitoringController.isMonitoringTerminated()) {
 						// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
-						MonitoringController.log.info("ShutdownHook notifies controller to initiate shutdown");
+						MonitoringController.LOG.info("ShutdownHook notifies controller to initiate shutdown");
 						monitoringController.terminateMonitoring();
 					}
 				}
 			});
 		} catch (final Exception e) {
-			MonitoringController.log.warn("Failed to add shutdownHook");
+			MonitoringController.LOG.warn("Failed to add shutdownHook");
 		}
-		MonitoringController.log.info(monitoringController.toString());
+		MonitoringController.LOG.info(monitoringController.toString());
 		return monitoringController;
 	}
 
@@ -115,8 +115,13 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
+	protected final void init() {
+		// do nothing
+	}
+	
+	@Override
 	protected final void cleanup() {
-		MonitoringController.log.info("Shutting down Monitoring Controller (" + this.getName() + ")");
+		MonitoringController.LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
 		this.stateController.terminate();
 		this.jmxController.terminate();
 		this.timeSourceController.terminate();

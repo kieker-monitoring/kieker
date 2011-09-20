@@ -28,19 +28,19 @@ import org.apache.commons.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
 
 public abstract class AbstractTimeSource implements ITimeSource {
-	private static final Log log = LogFactory.getLog(AbstractTimeSource.class);
+	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);
 
 	protected final Configuration configuration; 
 
 	protected AbstractTimeSource(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			Properties defaultProps = getDefaultProperties();
+			final Properties defaultProps = getDefaultProperties(); // NOPMD by jwa on 20.09.11 15:19
 			if (defaultProps != null) {
 				configuration.setDefaultProperties(defaultProps);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractTimeSource.log.error("Unable to set timer custom default properties");
+			AbstractTimeSource.LOG.error("Unable to set timer custom default properties");
 		}
 		this.configuration = configuration;
 	}
@@ -51,7 +51,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	 * 
 	 * @return
 	 */
-	protected Properties getDefaultProperties() {
+	protected Properties getDefaultProperties() { // NOPMD
 		return null;
 	}
 	

@@ -40,7 +40,7 @@ public final class SessionRegistry {
 	 * The thread is responsible for invalidating the stored curTraceId using
 	 * the method unsetThreadLocalSessionId()!
 	 */
-	public final void storeThreadLocalSessionId(String sessionId) {
+	public final void storeThreadLocalSessionId(final String sessionId) {
 		this.threadLocalSessionId.set(sessionId);
 	}
 

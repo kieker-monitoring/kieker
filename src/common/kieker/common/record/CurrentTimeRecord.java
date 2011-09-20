@@ -68,7 +68,7 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
     }
 
     @Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException {
+	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:24
         try {
             if (values.length != CurrentTimeRecord.numRecordFields) {
                 throw new IllegalArgumentException("Expecting vector with "
@@ -78,7 +78,6 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
         } catch (final Exception exc) {
             throw new IllegalArgumentException("Failed to init", exc);
         }
-        return;
     }
 
     @Override

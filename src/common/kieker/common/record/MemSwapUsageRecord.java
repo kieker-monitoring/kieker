@@ -23,7 +23,6 @@
  */
 package kieker.common.record;
 
-
 /**
  * @author Andre van Hoorn
  * 
@@ -47,6 +46,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	private volatile String hostName = MemSwapUsageRecord.DEFAULT_VALUE;
 
 	private volatile long memTotal = MemSwapUsageRecord.UNDEFINED_LONG;
+
 	/**
 	 * @return the memTotal
 	 */
@@ -143,13 +143,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void initFromArray(final Object[] values)
-			throws IllegalArgumentException {
+	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:24
 		try {
 			if (values.length != MemSwapUsageRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with "
-						+ MemSwapUsageRecord.VALUE_TYPES.length
-						+ " elements but found:" + values.length);
+				throw new IllegalArgumentException("Expecting vector with " + MemSwapUsageRecord.VALUE_TYPES.length + " elements but found:" + values.length);
 			}
 
 			this.timestamp = (Long) values[0];
@@ -164,7 +161,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
-		return;
 	}
 
 	/**
@@ -175,13 +171,11 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 
 	/**
 	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If
-	 * certain values shall remain undefined, use the constants
-	 * {@link #UNDEFINED_DOUBLE} and {@link #UNDEFINED_LONG}.
+	 * certain values shall remain undefined, use the constants {@link #UNDEFINED_DOUBLE} and {@link #UNDEFINED_LONG}.
 	 * 
 	 */
-	public MemSwapUsageRecord(final long timestamp, final String hostName,
-			final long memTotal, final long memUsed, final long memFree,
-			final long swapTotal, final long swapUsed, final long swapFree) {
+	public MemSwapUsageRecord(final long timestamp, final String hostName, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
+			final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
 		this.hostName = hostName;
 		this.memTotal = memTotal;
@@ -197,14 +191,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.memTotal,
-				this.memUsed, this.memFree, this.swapTotal, this.swapUsed,
-				this.swapFree };
+		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class,
-			long.class, long.class, long.class, long.class, long.class,
-			long.class };
+	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class };
 
 	/*
 	 * {@inheritdoc}

@@ -21,6 +21,7 @@
 package kieker.common.namedRecordPipe;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,13 +31,13 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class Broker {
-	private static final Log log = LogFactory.getLog(Broker.class);
+	private static final Log LOG = LogFactory.getLog(Broker.class);
 
 	/**
 	 * Access synchronized through synchronized method
 	 * {@link #acquirePipe(String)} !
 	 */
-	private final HashMap<String, Pipe> pipeMap = new HashMap<String, Pipe>();
+	private final Map<String, Pipe> pipeMap = new HashMap<String, Pipe>();
 
 	public static Broker getInstance() {
 		return LazyHolder.INSTANCE;
@@ -51,7 +52,7 @@ public class Broker {
 		if ((pipeName == null) || (pipeName.isEmpty())) {
 			final String errorMsg = "pipeName must not be null or empty!  (Found: "
 					+ pipeName + ")";
-			Broker.log.error(errorMsg);
+			Broker.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		}
 		Pipe conn = this.pipeMap.get(pipeName);

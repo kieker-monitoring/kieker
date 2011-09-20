@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public final class AsyncFsWriter extends AbstractAsyncWriter {
-	private static final Log log = LogFactory.getLog(AsyncFsWriter.class);
+	private static final Log LOG = LogFactory.getLog(AsyncFsWriter.class);
 
 	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
 	public static final String CONFIG__PATH = AsyncFsWriter.PREFIX + "customStoragePath";
@@ -58,7 +58,6 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected void init() {
-		final boolean autoflush = this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH);
 		String path;
 		if (this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
@@ -67,32 +66,31 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {
-			AsyncFsWriter.log.error("'" + path + "' is not a directory.");
+			AsyncFsWriter.LOG.error("'" + path + "' is not a directory.");
 			throw new IllegalArgumentException("'" + path + "' is not a directory.");
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+		final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+		date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final String dateStr = date_ISO8601UTC.format(new java.util.Date());
 		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
-			AsyncFsWriter.log.error("Failed to create directory '" + path + "'");
+			AsyncFsWriter.LOG.error("Failed to create directory '" + path + "'");
 			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
 
 		final String mappingFileFn = path + File.separatorChar + "kieker.map";
 		final MappingFileWriter mappingFileWriter;
 		try {
-			mappingFileWriter = new MappingFileWriter(mappingFileFn);
+			mappingFileWriter = new MappingFileWriter(mappingFileFn); // NOPMD
 		} catch (final Exception ex) {
-			AsyncFsWriter.log.error("Failed to create mapping file '" + mappingFileFn + "'");
+			AsyncFsWriter.LOG.error("Failed to create mapping file '" + mappingFileFn + "'");
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
-		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, autoflush));
+		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH)));
 	}
-
 }
 
 /**
@@ -101,7 +99,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 final class FsWriterThread extends AbstractAsyncThread {
 
 	// configuration parameters
-	private static final int maxEntriesInFile = 25000;
+	private static final int MAXENTRIESINFILE = 25000;
 
 	// internal variables
 	private final String filenamePrefix;
@@ -109,13 +107,14 @@ final class FsWriterThread extends AbstractAsyncThread {
 	private final boolean autoflush;
 	private PrintWriter pos = null;
 	// Force to initialize first file!
-	private int entriesInCurrentFileCounter = FsWriterThread.maxEntriesInFile;
+	private int entriesInCurrentFileCounter = FsWriterThread.MAXENTRIESINFILE;
 
 	// to get that info later
 	private final String path;
 
-	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final boolean autoflush) {
+	public FsWriterThread(final IMonitoringController monitoringController,
+			final BlockingQueue<IMonitoringRecord> writeQueue, final MappingFileWriter mappingFileWriter,
+			final String path, final boolean autoflush) {
 		super(monitoringController, writeQueue);
 		this.path = new File(path).getAbsolutePath();
 		this.filenamePrefix = path + File.separatorChar + "kieker";
@@ -156,20 +155,21 @@ final class FsWriterThread extends AbstractAsyncThread {
 	 * Determines and sets a new filename
 	 */
 	private final void prepareFile() throws FileNotFoundException {
-		if (++this.entriesInCurrentFileCounter > FsWriterThread.maxEntriesInFile) {
+		if (++this.entriesInCurrentFileCounter > FsWriterThread.MAXENTRIESINFILE) {
 			if (this.pos != null) {
 				this.pos.close();
 			}
 			this.entriesInCurrentFileCounter = 1;
 
-			final DateFormat m_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-			m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = m_ISO8601UTC.format(new java.util.Date());
+			final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
+			date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+			final String dateStr = date_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);
 			} else {
-				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), false);
+				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))),
+						false);
 			}
 			this.pos.flush();
 		}

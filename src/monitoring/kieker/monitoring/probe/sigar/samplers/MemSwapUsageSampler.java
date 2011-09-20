@@ -24,6 +24,7 @@ import kieker.common.record.MemSwapUsageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 import org.hyperic.sigar.Mem;
+import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarProxy;
 import org.hyperic.sigar.Swap;
 
@@ -52,8 +53,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	}
 
 	@Override
-	public void sample(final IMonitoringController monitoringController)
-			throws Exception {
+	public void sample(final IMonitoringController monitoringController) throws SigarException {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r =

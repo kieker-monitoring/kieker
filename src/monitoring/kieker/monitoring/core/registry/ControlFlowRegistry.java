@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class ControlFlowRegistry {
-	private static final Log log = LogFactory.getLog(ControlFlowRegistry.class);
+	private static final Log LOG = LogFactory.getLog(ControlFlowRegistry.class);
 
 	private final AtomicLong lastThreadId;
 	private final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
@@ -60,7 +60,7 @@ public final class ControlFlowRegistry {
 		final long base = ((long) r.nextInt(65536) << (Long.SIZE - 16 - 1));
 
 		this.lastThreadId = new AtomicLong(base);
-		ControlFlowRegistry.log.info("First threadId will be " + (base + 1));
+		ControlFlowRegistry.LOG.info("First threadId will be " + (base + 1));
 	}
 
 	/**
@@ -155,7 +155,7 @@ public final class ControlFlowRegistry {
 	public final int incrementAndRecallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.log.fatal("eoi has not been registered before");
+			ControlFlowRegistry.LOG.fatal("eoi has not been registered before");
 			return -1;
 		}
 		final int newEoi = curEoi + 1;
@@ -173,7 +173,7 @@ public final class ControlFlowRegistry {
 	public final int recallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.log.fatal("eoi has not been registered before");
+			ControlFlowRegistry.LOG.fatal("eoi has not been registered before");
 			return -1;
 		}
 		return curEoi;
@@ -206,7 +206,7 @@ public final class ControlFlowRegistry {
 	public final int recallAndIncrementThreadLocalESS() {
 		final Integer curEss = this.threadLocalEss.get();
 		if (curEss == null) {
-			ControlFlowRegistry.log.fatal("ess has not been registered before");
+			ControlFlowRegistry.LOG.fatal("ess has not been registered before");
 			return -1;
 		}
 		this.threadLocalEss.set(curEss + 1);
@@ -223,7 +223,7 @@ public final class ControlFlowRegistry {
 	public final int recallThreadLocalESS() {
 		final Integer ess = this.threadLocalEss.get();
 		if (ess == null) {
-			ControlFlowRegistry.log.fatal("ess has not been registered before");
+			ControlFlowRegistry.LOG.fatal("ess has not been registered before");
 			return -1;
 		}
 		return ess;

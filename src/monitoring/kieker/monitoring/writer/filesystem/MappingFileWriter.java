@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class MappingFileWriter {
-	private static final Log log = LogFactory.getLog(MappingFileWriter.class);
+	private static final Log LOG = LogFactory.getLog(MappingFileWriter.class);
 
 	private final File mappingFile;
 	private final AtomicInteger nextId = new AtomicInteger(1); // first ID is 1
@@ -62,13 +62,13 @@ public final class MappingFileWriter {
 	}
 
 	private final void writeMapping(final int id, final String className) {
-		MappingFileWriter.log.info("Registered monitoring record type with id '" + id + "':" + className);
+		MappingFileWriter.LOG.info("Registered monitoring record type with id '" + id + "':" + className);
 		try {
 			final PrintWriter pw = new PrintWriter(new FileOutputStream(this.mappingFile, true));
 			pw.println("$" + id + "=" + className);
 			pw.close();
 		} catch (final Exception ex) {
-			MappingFileWriter.log.fatal("Failed to register record type", ex);
+			MappingFileWriter.LOG.fatal("Failed to register record type", ex);
 		}
 	}
 }

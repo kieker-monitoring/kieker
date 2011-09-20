@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public abstract class AbstractController {
-	private static final Log log = LogFactory.getLog(AbstractController.class);
+	private static final Log LOG = LogFactory.getLog(AbstractController.class);
 
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 	protected volatile MonitoringController monitoringController = null;
@@ -72,9 +72,7 @@ public abstract class AbstractController {
 	/**
 	 * inits
 	 */
-	protected void init() {
-		//default does nothing!
-	}
+	protected abstract void init();
 	
 	/**
 	 * cleans up
@@ -86,20 +84,20 @@ public abstract class AbstractController {
 
 	@SuppressWarnings("unchecked")
 	protected final static <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		C createdClass = null;
+		C createdClass = null;  // NOPMD
 		try {
 			final Class<?> clazz = Class.forName(classname);
 			if (c.isAssignableFrom(clazz)) {
 				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
 			} else {
-				AbstractController.log.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
+				AbstractController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
 			}
 		} catch (final ClassNotFoundException e) {
-			AbstractController.log.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
+			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
 		} catch (final NoSuchMethodException e) {
-			AbstractController.log.error(c.getSimpleName() + ": Class '" + classname + "' has to implement a (public) constructor that accepts a single Configuration", e);
-		} catch (final Throwable e) { // SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			AbstractController.log.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
+			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' has to implement a (public) constructor that accepts a single Configuration", e);
+		} catch (final Exception e) { // SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
+			AbstractController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
 		}
 		return createdClass;
 	}

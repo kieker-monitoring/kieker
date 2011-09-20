@@ -25,6 +25,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.hyperic.sigar.CpuPerc;
+import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarProxy;
 
 /**
@@ -53,7 +54,7 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	private final static String CPU_RESOURCE_NAME_PREFIX = "cpu-";
 
 	@Override
-	public void sample(final IMonitoringController samplingController) throws Exception {
+	public void sample(final IMonitoringController samplingController) throws SigarException {
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
 		final ITimeSource timesource = samplingController.getTimeSource();
 		for (int i = 0; i < cpus.length; i++) {

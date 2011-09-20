@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public final class JMXWriter extends AbstractMonitoringWriter {
-	private static final Log log = LogFactory.getLog(JMXWriter.class);
+	private static final Log LOG = LogFactory.getLog(JMXWriter.class);
 
 	private final static String PREFIX = JMXWriter.class.getName() + ".";
 	public final static String CONFIG__DOMAIN = JMXWriter.PREFIX + "domain";
@@ -53,22 +53,20 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	protected void init() throws Exception {
 		try {
 			String domain = this.configuration.getStringProperty(CONFIG__DOMAIN);
-			if (domain.equals("")) {
+			if ("".equals(domain)) {
 				domain = monitoringController.getJMXDomain();
 			}
 			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(CONFIG__LOGNAME));
 		} catch (final MalformedObjectNameException ex) {
-			JMXWriter.log.error("The generated ObjectName is not correct! Check the following configuration values '" + CONFIG__DOMAIN + "="
+			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + CONFIG__DOMAIN + "="
 					+ this.configuration.getStringProperty(CONFIG__DOMAIN) + "' and '" + CONFIG__LOGNAME + "="
-					+ this.configuration.getStringProperty(CONFIG__LOGNAME) + "'");
-			throw new IllegalArgumentException("The generated ObjectName is not correct!");
+					+ this.configuration.getStringProperty(CONFIG__LOGNAME) + "'", ex);
 		}
 		this.kiekerJMXMonitoringLog = new KiekerJMXMonitoringLog(this.monitoringLogName);
 		try {
 			ManagementFactory.getPlatformMBeanServer().registerMBean(this.kiekerJMXMonitoringLog, this.monitoringLogName);
 		} catch (final Exception ex) {
-			JMXWriter.log.error("Failed to inititialize JMXWriter.");
-			throw ex;
+			throw new Exception("Failed to inititialize JMXWriter.", ex);
 		}
 	}
 
@@ -82,7 +80,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);
 		} catch (final Exception ex) {
-			log.error("Failed to terminate writer", ex);
+			LOG.error("Failed to terminate writer", ex);
 		}
 	}
 }

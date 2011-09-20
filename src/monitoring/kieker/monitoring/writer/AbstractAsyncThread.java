@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public abstract class AbstractAsyncThread extends Thread {
-	private static final Log log = LogFactory.getLog(AbstractAsyncThread.class);
+	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
 
 	private final static IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 	private volatile boolean finished = false;
@@ -49,7 +49,7 @@ public abstract class AbstractAsyncThread extends Thread {
 		try {
 			this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
 		} catch (final InterruptedException ex) {
-			AbstractAsyncThread.log.error("Error while trying to stop writer thread", ex);
+			AbstractAsyncThread.LOG.error("Error while trying to stop writer thread", ex);
 		}
 	}
 
@@ -59,15 +59,15 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	@Override
 	public final void run() {
-		AbstractAsyncThread.log.debug(this.getClass().getName() + " running");
+		AbstractAsyncThread.LOG.debug(this.getClass().getName() + " running");
 		// making it a local variable for faster access
-		final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue;
 		try {
+			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue; // NOPMD
 			while (!this.finished) {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();
 					if (monitoringRecord == AbstractAsyncThread.END_OF_MONITORING_MARKER) {
-						AbstractAsyncThread.log.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
+						AbstractAsyncThread.LOG.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
 						monitoringRecord = writeQueue.poll();
 						while (monitoringRecord != null) {
 							if (monitoringRecord != AbstractAsyncThread.END_OF_MONITORING_MARKER) {
@@ -88,10 +88,10 @@ public abstract class AbstractAsyncThread extends Thread {
 					// but normally we should be able to continue
 				}
 			}
-			AbstractAsyncThread.log.debug("Writer thread finished");
+			AbstractAsyncThread.LOG.debug("Writer thread finished");
 		} catch (final Exception ex) {
 			// e.g. Interrupted Exception or IOException
-			AbstractAsyncThread.log.error("Writer thread will halt", ex);
+			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);
 			this.finished = true;
 			this.cleanup();
 			this.monitoringController.terminateMonitoring();

@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public class TimeSourceController extends AbstractController implements ITimeSourceController {
-	private static final Log log = LogFactory.getLog(TimeSourceController.class);
+	private static final Log LOG = LogFactory.getLog(TimeSourceController.class);
 
 	/** the ITimeSource used by this instance */
 	private final ITimeSource timeSource;
@@ -43,8 +43,13 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 	}
 
 	@Override
+	protected void init() {
+		// do nothing
+	}
+	
+	@Override
 	protected final void cleanup() {
-		TimeSourceController.log.debug("Shutting down TimeSource Controller");
+		TimeSourceController.LOG.debug("Shutting down TimeSource Controller");
 		// nothing to do
 	}
 

@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class Configuration extends Properties implements Keys {
 	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(Configuration.class);
+	private static final Log LOG = LogFactory.getLog(Configuration.class);
 
 	/*
 	 * factory methods
@@ -50,7 +50,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @return the configuration for the singleton controller
 	 */
 	public final static Configuration createSingletonConfiguration() {
-		Configuration.log.debug("Searching for JVM argument '" + CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+		Configuration.LOG.debug("Searching for JVM argument '" + CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		// Searching for configuration file location passed to JVM
 		String configurationFile = System.getProperty(CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
@@ -58,17 +58,16 @@ public final class Configuration extends Properties implements Keys {
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(CONTROLLER_NAME, "KIEKER-SINGLETON");
 		if (configurationFile != null) {
-			Configuration.log.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
+			Configuration.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
 			loadConfiguration = loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-			Configuration.log.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
+			Configuration.LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
 			loadConfiguration = loadConfigurationFromResource(configurationFile, defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
-		final Configuration configuration = getSystemPropertiesStartingWith(PREFIX, loadConfiguration);
-		return configuration;
+		return getSystemPropertiesStartingWith(PREFIX, loadConfiguration);
 	}
 
 	/**
@@ -112,21 +111,21 @@ public final class Configuration extends Properties implements Keys {
 	 */
 	private final static Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
-		FileInputStream is = null;
+		FileInputStream is = null; //NOPMD
 		try {
 			is = new FileInputStream(propertiesFn);
 			properties.load(is);
 			return properties;
 		} catch (final FileNotFoundException ex) {
-			Configuration.log.warn("File '" + propertiesFn + "' not found");
+			Configuration.LOG.warn("File '" + propertiesFn + "' not found");
 		} catch (final Exception ex) {
-			Configuration.log.error("Error reading file '" + propertiesFn + "'", ex);
+			Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex);
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					Configuration.log.warn("Failed to close FileInputStream", ex);
+					Configuration.LOG.warn("Failed to close FileInputStream", ex);
 				}
 			}
 		}
@@ -145,19 +144,19 @@ public final class Configuration extends Properties implements Keys {
 	private final static Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
-			Configuration.log.warn("File '" + propertiesFn + "' not found in classpath");
+			Configuration.LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
 			try {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
 			} catch (final Exception ex) {
-				Configuration.log.error("Error reading file '" + propertiesFn + "'", ex);
+				Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex);
 			} finally {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					Configuration.log.warn("Failed to close RessourceInputStream", ex);
+					Configuration.LOG.warn("Failed to close RessourceInputStream", ex);
 				}
 			}
 		}
@@ -186,7 +185,7 @@ public final class Configuration extends Properties implements Keys {
 	 * member methods
 	 */
 
-	private Configuration(Configuration defaultValues) {
+	private Configuration(final Configuration defaultValues) {
 		super(defaultValues);
 	}
 
@@ -197,7 +196,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @param defaultProperties
 	 * @throws IllegalAccessException
 	 */
-	public final void setDefaultProperties(Properties defaultProperties) throws IllegalAccessException {
+	public final void setDefaultProperties(final Properties defaultProperties) throws IllegalAccessException {
 		if (this.defaults == null) {
 			this.defaults = defaultProperties;
 		} else if (defaultProperties != null) {
@@ -229,7 +228,7 @@ public final class Configuration extends Properties implements Keys {
 		try {
 			return Integer.parseInt(s);
 		} catch (final NumberFormatException ex) {
-			Configuration.log.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
+			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
 			return 0;
 		}
 	}
@@ -239,7 +238,7 @@ public final class Configuration extends Properties implements Keys {
 		try {
 			return Long.parseLong(s);
 		} catch (final NumberFormatException ex) {
-			Configuration.log.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
+			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
 			return 0;
 		}
 	}

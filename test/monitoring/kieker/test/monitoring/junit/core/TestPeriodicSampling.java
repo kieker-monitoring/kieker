@@ -23,6 +23,8 @@ package kieker.test.monitoring.junit.core;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.hyperic.sigar.SigarException;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.monitoring.core.configuration.Configuration;
@@ -49,8 +51,7 @@ public class TestPeriodicSampling extends TestCase {
 		final ISampler samplingCounter = new ISampler() {
 
 			@Override
-			public void sample(final IMonitoringController monitoringController)
-					throws Exception {
+			public void sample(final IMonitoringController monitoringController) {
 				numTriggers.incrementAndGet();
 			}
 		};

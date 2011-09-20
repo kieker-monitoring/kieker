@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller, Robert von Massow
  */
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
-	private static final Log log = LogFactory.getLog(AbstractMonitoringWriter.class);
+	private static final Log LOG = LogFactory.getLog(AbstractMonitoringWriter.class);
 
 	protected final Configuration configuration;
 	protected IMonitoringController monitoringController;
@@ -47,12 +47,12 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	protected AbstractMonitoringWriter(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			final Properties defaultProps = this.getDefaultProperties();
+			final Properties defaultProps = this.getDefaultProperties(); // NOPMD
 			if (defaultProps != null) {
 				configuration.setDefaultProperties(defaultProps);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractMonitoringWriter.log.error("Unable to set writer custom default properties");
+			AbstractMonitoringWriter.LOG.error("Unable to set writer custom default properties");
 		}
 		this.configuration = configuration;
 	}
@@ -63,7 +63,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 * 
 	 * @return
 	 */
-	protected Properties getDefaultProperties() {
+	protected Properties getDefaultProperties() { //NOPMD
 		return null; 
 	}
 

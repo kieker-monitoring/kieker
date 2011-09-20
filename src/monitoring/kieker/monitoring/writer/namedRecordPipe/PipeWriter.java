@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public final class PipeWriter extends AbstractMonitoringWriter {
-	private static final Log log = LogFactory.getLog(PipeWriter.class);
+	private static final Log LOG = LogFactory.getLog(PipeWriter.class);
 
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
 	public static final String CONFIG__PIPENAME = PipeWriter.PREFIX + "pipeName";
@@ -45,12 +45,12 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		final String pipeName = this.configuration.getStringProperty(PipeWriter.CONFIG__PIPENAME);
 		if (pipeName.isEmpty()) {
-			PipeWriter.log.error("Invalid or missing value for property '" + PipeWriter.CONFIG__PIPENAME + "': '" + pipeName + "'");
+			PipeWriter.LOG.error("Invalid or missing value for property '" + PipeWriter.CONFIG__PIPENAME + "': '" + pipeName + "'");
 			throw new IllegalArgumentException("Invalid or missing value for property '" + PipeWriter.CONFIG__PIPENAME + "': '" + pipeName + "'");
 		}
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
-			PipeWriter.log.error("Failed to get pipe with name:" + pipeName);
+			PipeWriter.LOG.error("Failed to get pipe with name:" + pipeName);
 			throw new IllegalArgumentException("Failed to get pipe with name:" + pipeName);
 		}
 	}

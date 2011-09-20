@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class SamplingController extends AbstractController implements ISamplingController {
-	private final static Log log = LogFactory.getLog(SamplingController.class);
+	private final static Log LOG = LogFactory.getLog(SamplingController.class);
 
 	/** Executes the {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s. */
 	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
@@ -53,7 +53,7 @@ public final class SamplingController extends AbstractController implements ISam
 				new RejectedExecutionHandler() {
 					@Override
 					public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
-						SamplingController.log.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
+						SamplingController.LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
 					}
 				});
 		this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
@@ -61,8 +61,13 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	@Override
+	protected void init() {
+		// do nothing
+	}
+
+	@Override
 	protected final void cleanup() {
-		SamplingController.log.debug("Shutting down Sampling Controller");
+		SamplingController.LOG.debug("Shutting down Sampling Controller");
 		if (this.periodicSensorsPoolExecutor != null) {
 			this.periodicSensorsPoolExecutor.shutdown();
 		}
@@ -88,7 +93,7 @@ public final class SamplingController extends AbstractController implements ISam
 	public final synchronized ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period,
 			final TimeUnit timeUnit) {
 		if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
-			SamplingController.log.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
+			SamplingController.LOG.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
 			return null;
 		}
 		final ScheduledSamplerJob job = new ScheduledSamplerJob(super.monitoringController, sensor);
@@ -104,7 +109,7 @@ public final class SamplingController extends AbstractController implements ISam
 		if (future != null) {
 			future.cancel(false); // do not interrupt when running
 		} else {
-			SamplingController.log.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
+			SamplingController.LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
 		}
 		final boolean success = this.periodicSensorsPoolExecutor.remove(sensorJob);
 		this.periodicSensorsPoolExecutor.purge();

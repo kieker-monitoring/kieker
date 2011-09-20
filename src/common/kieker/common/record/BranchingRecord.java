@@ -91,7 +91,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
     }
 
     @Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException {
+	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:20
         try {
             if (values.length != BranchingRecord.numRecordFields) {
                 throw new IllegalArgumentException("Expecting vector with "
@@ -103,7 +103,6 @@ public class BranchingRecord extends AbstractMonitoringRecord {
         } catch (final Exception exc) {
             throw new IllegalArgumentException("Failed to init", exc);
         }
-        return;
     }
 
     @Override

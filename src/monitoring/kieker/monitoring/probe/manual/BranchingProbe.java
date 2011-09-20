@@ -34,17 +34,17 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class BranchingProbe implements IMonitoringProbe {
-	private static final Log log = LogFactory.getLog(BranchingProbe.class);
-	private static final IMonitoringController ctrlInst = MonitoringController.getInstance();
-	private static final ITimeSource timesource = ctrlInst.getTimeSource();
+public abstract class BranchingProbe implements IMonitoringProbe {
+	private static final Log LOG = LogFactory.getLog(BranchingProbe.class);
+	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
+	private static final ITimeSource TIMESOURCE = CTRLINST.getTimeSource();
 
 	public static void monitorBranch(final int branchID, final int branchingOutcome) {
 		// try-catch in order to avoid that any exception is propagated to the application code.
 		try {
-			BranchingProbe.ctrlInst.newMonitoringRecord(new BranchingRecord(timesource.getTime(), branchID, branchingOutcome));
+			BranchingProbe.CTRLINST.newMonitoringRecord(new BranchingRecord(TIMESOURCE.getTime(), branchID, branchingOutcome));
 		} catch (final Exception ex) {
-			BranchingProbe.log.error("Error monitoring branching", ex);
+			BranchingProbe.LOG.error("Error monitoring branching", ex);
 		}
 	}
 }

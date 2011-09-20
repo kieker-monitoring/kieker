@@ -31,7 +31,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 
 	/** Used to identify the type of CSV records */
 	// Not 10 because className and operationName are serialized to a single field (separated by '.')
-	private static final int numRecordFields = 9; 
+	private static final int NUMRECORDFIELDS = 9; 
 
 	public volatile int experimentId = -1;
 	public volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
@@ -164,10 +164,10 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	@Override
-	public final void initFromArray(final Object[] values) throws IllegalArgumentException {
+	public final void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:30
 		try {
-			if (values.length != OperationExecutionRecord.numRecordFields) {
-				throw new IllegalArgumentException("Expecting vector with " + OperationExecutionRecord.numRecordFields
+			if (values.length != OperationExecutionRecord.NUMRECORDFIELDS) {
+				throw new IllegalArgumentException("Expecting vector with " + OperationExecutionRecord.NUMRECORDFIELDS
 						+ " elements but found:" + values.length);
 			}
 			this.experimentId = (Integer) values[0];
@@ -198,13 +198,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
-		return;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = 1; // NOPMD
 		result = prime * result + ((className == null) ? 0 : className.hashCode());
 		result = prime * result + eoi;
 		result = prime * result + ess;

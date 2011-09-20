@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class TerminationServletContextListener implements ServletContextListener {
-	private static final Log log = LogFactory.getLog(TerminationServletContextListener.class);
+	private static final Log LOG = LogFactory.getLog(TerminationServletContextListener.class);
 
 	private final IStateController ctrl;
 
@@ -57,7 +57,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	@Override
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
-		TerminationServletContextListener.log.info("context destroyed");
+		TerminationServletContextListener.LOG.info("context destroyed");
 	}
 
 	/*
@@ -69,6 +69,6 @@ public class TerminationServletContextListener implements ServletContextListener
 	 */
 	@Override
 	public void contextInitialized(final ServletContextEvent evt) {
-		TerminationServletContextListener.log.info("context initialized");
+		TerminationServletContextListener.LOG.info("context initialized");
 	}
 }

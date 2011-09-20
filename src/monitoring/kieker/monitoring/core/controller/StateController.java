@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class StateController extends AbstractController implements IStateController {
-	private final static Log log = LogFactory.getLog(StateController.class);
+	private final static Log LOG = LogFactory.getLog(StateController.class);
 
 	private volatile boolean monitoringEnabled = false;
 	private final String name;
@@ -49,15 +49,20 @@ public final class StateController extends AbstractController implements IStateC
 			try {
 				hostname = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
-				StateController.log.warn("Failed to retrieve hostname");
+				StateController.LOG.warn("Failed to retrieve hostname");
 			}
 		}
 		this.hostname = hostname;
 	}
 
 	@Override
+	protected void init() {
+		// do nothing
+	}
+	
+	@Override
 	protected final void cleanup() {
-		StateController.log.debug("Shutting down State Controller");
+		StateController.LOG.debug("Shutting down State Controller");
 	}
 
 	@Override
@@ -88,7 +93,7 @@ public final class StateController extends AbstractController implements IStateC
 		if (monitoringController != null) {
 			return monitoringController.terminate();
 		} else {
-			StateController.log.warn("Shutting down Monitoring before it is correctly initialized");
+			StateController.LOG.warn("Shutting down Monitoring before it is correctly initialized");
 			return false;
 		}
 	}
@@ -101,17 +106,17 @@ public final class StateController extends AbstractController implements IStateC
 	@Override
 	public final boolean enableMonitoring() {
 		if (this.isMonitoringTerminated()) {
-			StateController.log.error("Refused to enable monitoring because monitoring has been permanently terminated");
+			StateController.LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
 			return false;
 		}
-		StateController.log.info("Enabling monitoring");
+		StateController.LOG.info("Enabling monitoring");
 		this.monitoringEnabled = true;
 		return true;
 	}
 
 	@Override
 	public final boolean disableMonitoring() {
-		StateController.log.info("Disabling monitoring");
+		StateController.LOG.info("Disabling monitoring");
 		this.monitoringEnabled = false;
 		return true;
 	}

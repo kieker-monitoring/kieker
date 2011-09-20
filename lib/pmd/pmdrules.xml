@@ -19,15 +19,19 @@
   
   <!--<rule ref="rulesets/codesize.xml">-->
 
-  <!--<rule ref="rulesets/controversial.xml/UnnecessaryConstructor"/>
-  <rule ref="rulesets/controversial.xml/NullAssignment"/>-->
-  <rule ref="rulesets/controversial.xml"/>
+  <rule ref="rulesets/controversial.xml">
+    <exclude name="AvoidFinalLocalVariable"/>
+    <exclude name="AvoidUsingVolatile"/>
+    <exclude name="CallSuperInConstructor"/>
+    <exclude name="OnlyOneReturn"/>
+    <exclude name="UnusedModifier"/>
+  </rule>
   
   <!--<rule ref="rulesets/coupling.xml">-->
 
-  <!--<rule ref="rulesets/design.xml/SimplifyBooleanReturns"/>
-  <rule ref="rulesets/design.xml/SwitchStmtsShouldHaveDefault"/>-->
-  <rule ref="rulesets/design.xml"/>-->
+  <rule ref="rulesets/design.xml">
+    <exclude name="ConfusingTernary"/>
+  </rule>
   
   <rule ref="rulesets/finalizers.xml"/>
 
@@ -42,17 +46,26 @@
   <rule ref="rulesets/migrating_to_15.xml"/>
   <rule ref="rulesets/migrating_to_junit4.xml"/>
 
-  <rule ref="rulesets/naming.xml"/>
+  <rule ref="rulesets/naming.xml">
+    <exclude name="LongVariable"/>
+    <exclude name="PackageCase"/>
+    <exclude name="ShortVariable"/>
+  </rule>
 
   <rule ref="rulesets/optimizations.xml"/>
   
-  <rule ref="rulesets/strictexception.xml"/>
+  <rule ref="rulesets/strictexception.xml">
+    <exclude name="AvoidCatchingNPE"/>
+    <exclude name="SignatureDeclareThrowsException"/>
+  </rule>
 
   <rule ref="rulesets/strings.xml"/>
 
   <rule ref="rulesets/sunsecure.xml"/>
   
-  <rule ref="rulesets/typeresolution.xml"/>
+  <rule ref="rulesets/typeresolution.xml">
+    <exclude name="SignatureDeclareThrowsException"/>
+  </rule>
 
   <rule ref="rulesets/unusedcode.xml"/>
   

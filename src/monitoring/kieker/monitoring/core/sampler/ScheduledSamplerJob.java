@@ -28,7 +28,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
  * @author Andre van Hoorn
  */
 public class ScheduledSamplerJob implements Runnable {
-	// private static final Log log = LogFactory.getLog(ScheduledSamplerJob.class);
+	// private static final Log LOG = LogFactory.getLog(ScheduledSamplerJob.class);
 
 	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
@@ -61,7 +61,7 @@ public class ScheduledSamplerJob implements Runnable {
 			this.sampler.sample(this.monitoringController);
 		} catch (final Exception ex) {
 			/* Re-throw exception because run must throw RuntimeException */
-			throw new RuntimeException(ex.getMessage(), ex);
+			throw new RuntimeException(ex.getMessage(), ex); // NOPMD
 		}
 	}
 

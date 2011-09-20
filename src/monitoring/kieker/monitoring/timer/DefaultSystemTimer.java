@@ -28,7 +28,7 @@ public class DefaultSystemTimer extends AbstractTimeSource {
 	 * is necessary since System.nanoTime() returns the elapsed nanoseconds
 	 * since *some* fixed but arbitrary time.)
 	 */
-	private static final long offsetA = System.currentTimeMillis() * 1000000 - System.nanoTime();
+	private static final long OFFSET = System.currentTimeMillis() * 1000000 - System.nanoTime();
 		
 	public DefaultSystemTimer(final Configuration configuration) {
 		super(configuration);
@@ -43,7 +43,7 @@ public class DefaultSystemTimer extends AbstractTimeSource {
 	
 	@Override
 	public long getTime() {
-		return System.nanoTime() + offsetA;
+		return System.nanoTime() + OFFSET;
 	}
 
 	/**

@@ -62,7 +62,7 @@ import org.apache.commons.logging.LogFactory;
  *         be changed during runtime 2007/07/30: Initial Prototype
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
-	private static final Log log = LogFactory.getLog(AsyncDbWriter.class);
+	private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
 
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
 	public static final String CONFIG__DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
@@ -84,7 +84,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			// register correct Driver
 			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG__DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) {
-			AsyncDbWriter.log.error("DB driver registration failed. Perhaps the driver jar is missing?");
+			AsyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
 		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONFIG__CONNECTIONSTRING);
@@ -108,9 +108,9 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {
-			AsyncDbWriter.log.error("SQLException: " + ex.getMessage());
-			AsyncDbWriter.log.error("SQLState: " + ex.getSQLState());
-			AsyncDbWriter.log.error("VendorError: " + ex.getErrorCode());
+			AsyncDbWriter.LOG.error("SQLException: " + ex.getMessage());
+			AsyncDbWriter.LOG.error("SQLState: " + ex.getSQLState());
+			AsyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode());
 			throw ex;
 		}
 	}
@@ -120,7 +120,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
  * @author Matthias Rohr, Jan Waller
  */
 final class DbWriterThread extends AbstractAsyncThread {
-	private static final Log log = LogFactory.getLog(DbWriterThread.class);
+	private static final Log LOG = LogFactory.getLog(DbWriterThread.class);
 
 	private final Connection conn;
 	private final PreparedStatement psInsertMonitoringData;
@@ -155,9 +155,9 @@ final class DbWriterThread extends AbstractAsyncThread {
 				this.conn.close();
 			}
 		} catch (final SQLException ex) {
-			DbWriterThread.log.error("SQLException: " + ex.getMessage());
-			DbWriterThread.log.error("SQLState: " + ex.getSQLState());
-			DbWriterThread.log.error("VendorError: " + ex.getErrorCode());
+			DbWriterThread.LOG.error("SQLException: " + ex.getMessage());
+			DbWriterThread.LOG.error("SQLState: " + ex.getSQLState());
+			DbWriterThread.LOG.error("VendorError: " + ex.getErrorCode());
 		}
 	}
 

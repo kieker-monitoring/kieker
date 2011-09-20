@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public class DummyWriter extends AbstractMonitoringWriter {
-	private static final Log log = LogFactory.getLog(DummyWriter.class);
+	private static final Log LOG = LogFactory.getLog(DummyWriter.class);
 
 	public DummyWriter(final Configuration configuration) {
 		super(configuration);
@@ -45,7 +45,7 @@ public class DummyWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void terminate() {
-		DummyWriter.log.info(this.getClass().getName() + " shutting down");
+		DummyWriter.LOG.info(this.getClass().getName() + " shutting down");
 	}
 
 	@Override

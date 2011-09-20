@@ -62,7 +62,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void initFromArray(final Object[] values)
+	public void initFromArray(final Object[] values) // NOPMD by jwa on 20.09.11 14:32
 			throws IllegalArgumentException {
 		try {
 			if (values.length != ResourceUtilizationRecord.VALUE_TYPES.length) {
@@ -79,7 +79,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
-		return;
 	}
 	
 	/**

@@ -20,7 +20,7 @@
 
 package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecord; // NOPMD
 import kieker.monitoring.core.sampler.ISampler;
 
 import org.hyperic.sigar.SigarProxy;

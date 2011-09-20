@@ -31,7 +31,7 @@ public class MonitoringRecordTypeClassnameMapping implements Serializable {
     public final int typeId;
     public final String classname;
 
-    public MonitoringRecordTypeClassnameMapping(int id, String classname){
+    public MonitoringRecordTypeClassnameMapping(final int id, final String classname){
         this.typeId = id;
         this.classname = classname;
     }

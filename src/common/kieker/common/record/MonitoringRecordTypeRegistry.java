@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class MonitoringRecordTypeRegistry {
 
-    private static final Log log = LogFactory.getLog(MonitoringRecordTypeRegistry.class);
+    private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeRegistry.class);
     /** recordTypeId x class object */
     private final Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
 
@@ -67,25 +67,26 @@ public class MonitoringRecordTypeRegistry {
      * @param classname
      * @throws ClassNotFoundException
      */
-    public final void registerRecordTypeIdMapping(int recordTypeId, String classname) throws ClassNotFoundException {
+    public final void registerRecordTypeIdMapping(final int recordTypeId, final String classname) throws ClassNotFoundException {
         try {
             if (this.recordTypeMap.get(recordTypeId) != null) {
-                log.warn("Record type with id " + recordTypeId + " already registered.");
+                LOG.warn("Record type with id " + recordTypeId + " already registered.");
                 return;
             }
-
+            String myClassname;
             /**
              * If the compatibility mode for the old execution record name is
              * enables, map old name to new name. */
             if (this.oldKiekerExecutionRecordCompatibilityMode && classname.equals(OLD_KIEKEREXECUTIONRECORD_CLASSNAME)){
-                classname = OperationExecutionRecord.class.getName();
+            	myClassname = OperationExecutionRecord.class.getName();
+            } else {
+            	myClassname = classname;
             }
 
-            Class<? extends IMonitoringRecord> recordClass = Class.forName(classname).asSubclass(IMonitoringRecord.class);
-            this.recordTypeMap.put(recordTypeId, recordClass);
-            log.info("Registered record type mapping " + recordTypeId + "/" + classname);
+            this.recordTypeMap.put(recordTypeId, Class.forName(myClassname).asSubclass(IMonitoringRecord.class));
+            LOG.info("Registered record type mapping " + recordTypeId + "/" + myClassname);
         } catch (ClassNotFoundException ex) {
-            log.error("Error loading record type class by name", ex);
+            LOG.error("Error loading record type class by name", ex);
             throw ex;
         }
     }
@@ -100,7 +101,7 @@ public class MonitoringRecordTypeRegistry {
      * @param recordTypeId the record type ID
      * @return the class object
      */
-    public final Class<? extends IMonitoringRecord> fetchClassForRecordTypeId(int recordTypeId) {
+    public final Class<? extends IMonitoringRecord> fetchClassForRecordTypeId(final int recordTypeId) {
         return this.recordTypeMap.get(recordTypeId);
     }
 }

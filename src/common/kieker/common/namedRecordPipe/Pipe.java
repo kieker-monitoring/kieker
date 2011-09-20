@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public final class Pipe {
-	private static final Log log = LogFactory.getLog(Pipe.class);
+	private static final Log LOG = LogFactory.getLog(Pipe.class);
 
 	private final String name;
 	private volatile IPipeReader pipeReader;
@@ -38,7 +38,7 @@ public final class Pipe {
 
 	public void setPipeReader(final IPipeReader pipeReader) {
 		this.pipeReader = pipeReader;
-		Pipe.log.debug("PipeReader initialized");
+		Pipe.LOG.debug("PipeReader initialized");
 	}
 
 	public String getName() {
@@ -48,7 +48,7 @@ public final class Pipe {
 	/** No construction employing default constructor */
 	@SuppressWarnings("unused")
 	private Pipe() {
-		this.name = null;
+		this.name = null; //NOPMD
 	}
 
 	public Pipe(final String name) {
@@ -66,12 +66,12 @@ public final class Pipe {
 			final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {
 			final String errorMsg = "trying to write to closed pipe";
-			Pipe.log.error(errorMsg);
+			Pipe.LOG.error(errorMsg);
 			return false;
 		}
 		if (this.pipeReader == null) {
 			final String errorMsg = "pipeReader is null, i.e., no pipe reader has been registered.";
-			Pipe.log.error(errorMsg);
+			Pipe.LOG.error(errorMsg);
 			return false;
 		}
 

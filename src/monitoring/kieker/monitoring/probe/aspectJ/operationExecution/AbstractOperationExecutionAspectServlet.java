@@ -33,20 +33,20 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractOperationExecutionAspectServlet extends AbstractOperationExecutionAspect {
 
-    protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
-
+    protected static final SessionRegistry SESSIONREGISTRY = SessionRegistry.getInstance();
     
     public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         final HttpServletRequest req = (HttpServletRequest)thisJoinPoint.getArgs()[0];
-        final String sessionId = (req!=null) ? req.getSession(true).getId() : null;
-        Object retVal = null;
-        AbstractOperationExecutionAspectServlet.sessionRegistry.storeThreadLocalSessionId(sessionId);
+        final String sessionId = (req!=null) ? req.getSession(true).getId() : null; //NOPMD
+        Object retVal = null; // NOPMD
+        AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
         try{
-            retVal = thisJoinPoint.proceed(); // does pass the args!
-        } catch (final Exception exc){
+        	// does pass the args!
+            retVal = thisJoinPoint.proceed(); // NOPMD
+        } catch (final Exception exc) { // NOPMD
             throw exc;
         } finally {
-            AbstractOperationExecutionAspectServlet.sessionRegistry.unsetThreadLocalSessionId();
+            AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.unsetThreadLocalSessionId();
         }
         return retVal;
     }

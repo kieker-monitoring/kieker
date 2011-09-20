@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller, Robert von Massow
  */
 public final class WriterController extends AbstractController implements IWriterController {
-	private static final Log log = LogFactory.getLog(WriterController.class);
+	private static final Log LOG = LogFactory.getLog(WriterController.class);
 
 	/** the total number of monitoring records received */
 	private final AtomicLong numberOfInserts = new AtomicLong(0);
@@ -57,7 +57,7 @@ public final class WriterController extends AbstractController implements IWrite
 			try {
 				this.monitoringWriter.setController(super.monitoringController);
 			} catch (final Exception e) {
-				WriterController.log.error("Error initializing writer", e);
+				WriterController.LOG.error("Error initializing writer", e);
 				this.terminate();
 			}
 		}
@@ -65,7 +65,7 @@ public final class WriterController extends AbstractController implements IWrite
 	
 	@Override
 	protected final void cleanup() {
-		WriterController.log.debug("Shutting down Writer Controller");
+		WriterController.LOG.debug("Shutting down Writer Controller");
 		if (this.monitoringWriter != null) {
 			this.monitoringWriter.terminate();
 		}
@@ -101,13 +101,13 @@ public final class WriterController extends AbstractController implements IWrite
 			this.numberOfInserts.incrementAndGet();
 			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {
-				WriterController.log.fatal("Error writing the monitoring data. Will terminate monitoring!");
+				WriterController.LOG.fatal("Error writing the monitoring data. Will terminate monitoring!");
 				this.terminate();
 				return false;
 			}
 			return true;
-		} catch (final Throwable ex) {
-			WriterController.log.fatal("Exception detected. Will terminate monitoring", ex);
+		} catch (final Exception ex) {
+			WriterController.LOG.fatal("Exception detected. Will terminate monitoring", ex);
 			this.terminate();
 			return false;
 		}
