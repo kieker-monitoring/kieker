@@ -51,7 +51,7 @@
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${release.dir}" />
 		<mkdir dir="${build.tests.dir}" />
-		<mkdir dir="tmp" />
+		<mkdir dir="${tmp.dir}" />
 	</target>
 
 	<!-- Compile classpaths used for javac and javadoc -->
@@ -186,6 +186,16 @@
 			<fileset dir="${build.kieker.analysis.dir}" />
 			<fileset dir="${build.kieker.monitoring.dir}" />
 			<fileset dir="${build.kieker.tools.dir}" />
+			<fileset dir="." includes="LICENSE" />
+		</jar>
+	</target>
+	
+	<target name="kieker-src-jar" description="Creates a Jar which contains the KIEKER source code">
+		<jar destfile="${tmp.dir}/${src.jar}">
+			<fileset dir="${src.kieker.common.dir}" />
+			<fileset dir="${src.kieker.analysis.dir}" />
+			<fileset dir="${src.kieker.monitoring.dir}" />
+			<fileset dir="${src.kieker.tools.dir}" />
 			<fileset dir="." includes="LICENSE" />
 		</jar>
 	</target>
@@ -725,16 +735,16 @@
 			</fileset>
 		</path>
 
-		<delete dir="tmp/aspects/" />
-		<mkdir dir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspect.java" todir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/${TestAspect}" todir="tmp/aspects/" />
+		<delete dir="${tmp.dir}/aspects/" />
+		<mkdir dir="${tmp.dir}/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspect.java" todir="${tmp.dir}/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="${tmp.dir}/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/${TestAspect}" todir="${tmp.dir}/aspects/" />
 		<copy file="${tests.log4j.properties}" tofile="${build.dir}/log4j.properties" />
 		<iajc destdir="${build.tests.dir}" source="1.6" target="1.6" verbose="true" classpathref="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
 			<sourceroots>
 				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/bookstore/" />
-				<pathelement location="tmp/aspects/" />
+				<pathelement location="${tmp.dir}/aspects/" />
 			</sourceroots>
 		</iajc>
 	</target>
@@ -752,16 +762,16 @@
 			</fileset>
 		</path>
 
-		<delete dir="tmp/aspects/" />
-		<mkdir dir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspect.java" todir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="tmp/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/${TestAspect}" todir="tmp/aspects/" />
+		<delete dir="${tmp.dir}/aspects/" />
+		<mkdir dir="${tmp.dir}/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspect.java" todir="${tmp.dir}/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="${tmp.dir}/aspects/" />
+		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/${TestAspect}" todir="${tmp.dir}/aspects/" />
 		<copy file="${tests.log4j.properties}" tofile="${build.dir}/log4j.properties" />
 		<iajc destdir="${build.tests.dir}" source="1.6" target="1.6" verbose="true" classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
 			<sourceroots>
 				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/twoConcurrentMethodsExample/" />
-				<pathelement location="tmp/aspects/" />
+				<pathelement location="${tmp.dir}/aspects/" />
 			</sourceroots>
 		</iajc>
 	</target>
@@ -861,7 +871,7 @@
 
 	<target name="compile-tests" depends="-compile-tests-common,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components" />
 
-	<target name="run-tests-junit" depends="compile-tests" description="Runs the JUnit tests">
+	<target name="run-tests-junit" depends="compile-tests,kieker-src-jar" description="Runs the JUnit tests">
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-logging-*.jar" />
@@ -876,10 +886,18 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
-		<junit printsummary="yes" haltonfailure="no">
+		<junit fork="true" printsummary="yes" haltonfailure="no" forkmode="once">
 			<classpath refid="kieker.test-junit-run-classpath" />
 
 			<formatter type="xml" />
+			
+			<!-- Serenity system properties. -->
+			<sysproperty key="included.packages" value="kieker" />
+			<sysproperty key="included.adapters" value="coverage,complexity,dependency" />
+			<sysproperty key="included.jars" value="${tmp.dir}/${src.jar}" />
+
+			<!-- Serenity JVM command line. -->
+			<jvmarg line="-javaagent:${lib.dir}/serenity/serenity.jar" />
 
 			<batchtest fork="yes" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
@@ -995,7 +1013,7 @@
 				reportLevel="medium"
 				excludeFilter="${lib.dir}/findbugs/fb-filter.xml"
 				output="xml"
-				outputFile="tmp/kieker-fb.xml" >
+				outputFile="${tmp.dir}/kieker-fb.xml" >
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar"/>
 				<fileset dir="${lib.dir}/findbugs/aux­lib" includes="*.jar"/>
@@ -1014,11 +1032,11 @@
     </path>
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
 		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd/pmdrules.xml">
-			<formatter type="xml" toFile="tmp/pmd_report.xml" />
+			<formatter type="xml" toFile="${tmp.dir}/pmd_report.xml" />
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
 		</pmd>
-		<echo message="PMD report written to 'tmp/pmd_report.xml'" />
+		<echo message="PMD report written to '${tmp.dir}/pmd_report.xml'" />
 	</target>
 	
 	<target name="checkstyle" depends="build-all,compile-tests" description="Uses Checkstyle to find potential problems">
@@ -1026,8 +1044,8 @@
 		<checkstyle config="${lib.dir}/checkstyle/cs-conf.xml" >
 			<fileset dir="${src.dir}" includes="**/*.java"/>
 			<fileset dir="${test.dir}" includes="**/*.java"/>
-			<formatter type="xml" toFile="tmp/cs_report.xml"/>
+			<formatter type="xml" toFile="${tmp.dir}/cs_report.xml"/>
 		</checkstyle>
-		<echo message="Checkstyle report written to 'tmp/cs_report.xml'" />
+		<echo message="Checkstyle report written to '${tmp.dir}/cs_report.xml'" />
 	</target>
 </project>
