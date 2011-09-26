@@ -110,7 +110,7 @@ public class TraceAnalysisTool {
 	private static boolean shortLabels = true;
 	private static boolean includeSelfLoops = false;
 	private static boolean ignoreInvalidTraces = false;
-	private static int maxTraceDurationMillis = TraceReconstructionFilter.MAX_DURATION_MILLIS; // infinite
+	private static int maxTraceDurationMillis = 10*60*1000; // 10 minutes
 	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.MIN_TIMESTAMP;
 	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.MAX_TIMESTAMP;
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only

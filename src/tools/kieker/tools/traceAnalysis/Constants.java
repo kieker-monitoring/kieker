@@ -163,7 +163,7 @@ class Constants {
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false).withDescription(
 		"If selected, the execution aborts on the occurence of an invalid trace.").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false).withDescription(
-		"Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to infinity.").create());
+		"Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to 600000 (10 minutes).").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(
 				Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE).withArgName(
 						TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false).withDescription(
