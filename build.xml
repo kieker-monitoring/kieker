@@ -245,7 +245,7 @@
 			<include name="bin/log4j.properties" />
 			<include name="bin/*.bat" />
 			<include name="META-INF/*" />
-			<!-- a file META-INF/kieker.monitoring.properties will be during packaging -->
+			<!-- a file META-INF/kieker.monitoring.properties will be added during packaging -->
 			<include name="src/**/*.java" />
 			<include name="src/**/META-INF/*" />
 			<include name="test/**/*.java" />
@@ -305,8 +305,11 @@
 			<include name="META-INF/*" />
 			<!-- a file META-INF/kieker.monitoring.properties will added be during packaging the tar.gz|.zip archives below -->
 			<include name="lib/*" />
+			<exclude name="lib/checkstyle/" />	
+			<exclude name="lib/findbugs/" />			
 			<exclude name="lib/maven/" />
 			<exclude name="lib/pmd/" />
+			<exclude name="lib/serenity/" />
 			<include name="HISTORY" />
 			<include name="LICENSE" />
 			<include name="${src.userguide.dist.pdf}" />
@@ -550,7 +553,7 @@
 		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease" />
 	</target>
 
-	<target name="clean" depends="clean-userguide-examples" description="Removes artifacts from previous builds">
+	<target name="clean" description="Removes artifacts from previous builds">
 		<!-- <delete dir="tmp"/>-->
 		<delete dir="${dist.dir}" />
 		<delete dir="${release.dir}" />

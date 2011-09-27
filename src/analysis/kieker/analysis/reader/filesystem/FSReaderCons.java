@@ -105,9 +105,9 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	public boolean execute() throws MonitoringRecordConsumerException {
 		try {
 			{ // 1. init and start reader threads
-				for (final String inputDir : this.inputDirs) {
+				for (int i = 0; i < this.inputDirs.length; i++) {
 					final FSDirectoryReader directoryReader = new FSDirectoryReader(
-							inputDir, this, this.readOnlyRecordsOfType);
+							this.inputDirs[i], this, this.readOnlyRecordsOfType);
 					// consume records of any type and pass to this:
 					final Thread t = new Thread(new Runnable() {
 
@@ -123,7 +123,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 								FSReaderCons.this.reportReaderException(ex);
 							}
 						}
-					}, "Reader thread for " + inputDir);
+					}, "Reader thread for " + this.inputDirs[i]);
 					this.readerThreads.add(t);
 					t.start();
 				}
