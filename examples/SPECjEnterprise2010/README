@@ -1,0 +1,13 @@
+
+Files required in lib:
+  kieker-*.jar         (a current build of Kieker)
+  servlet-api.jar
+  commons-logging-*.jar
+  aspectjrt-*.jar
+  aspectjtools-*.jar
+
+Files to deploy on the server:
+  KiekerInstr.jar      (the build of this example)
+  kieker-*.jar         (a current build of Kieker)
+  commons-logging-*.jar
+  aspectjweaver-*.jar
