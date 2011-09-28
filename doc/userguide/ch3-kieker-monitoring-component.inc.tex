@@ -83,16 +83,16 @@ of the \class{MemSwapUsageSampler} which can be used to monitor memory %
 and swap usage employing the Sigar library~\cite{HypericSigarWebsite}. %
 Likewise to other monitoring probes described in this user guide (see for %
 example Sections~\ref{sec:monitoring:probe} and \ref{sec:example:monitoring}), 
-it collects the data of interest (lines~39--40), creates a monitoring record~%
-(lines~41--46), and passes this monitoring record to the monitoring controller~%
-(line~47). %
+it collects the data of interest (lines~57--58), creates a monitoring record~%
+(lines~59--64), and passes this monitoring record to the monitoring controller~%
+(line~65). %
 The available Sigar-based samplers for monitoring system-level monitoring %
 data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}. %
 
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=36, lastline=48, firstnumber=36, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
+\lstinputlisting[firstline=55, lastline=66, firstnumber=55, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
 
 \subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
 
@@ -229,7 +229,7 @@ Listing~\ref{listing:MyRecord}, is an example of a custom monitoring record type
 that can be used to monitor response times of method executions.
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeRecord.java}
+\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyResponseTimeRecord.java}
 
 \pagebreak
 
@@ -244,13 +244,13 @@ shows a similar manual monitoring probe which uses the monitoring record type %
 
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-\lstinputlisting[firstline=15, lastline=26, firstnumber=15, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[firstline=35, lastline=46, firstnumber=35, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
 \class{MonitoringController} class, singleton instances should be stored %
 in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:finalStaticController}.
 
-\lstinputlisting[firstline=10, lastline=11, firstnumber=10, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[firstline=30, lastline=31, firstnumber=30, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
 
 \noindent When manually instrumenting an application, the monitoring probe is implemented %
 by mixing monitoring logic with business logic, which is often not desired since %
@@ -303,7 +303,7 @@ write the given records into a buffer located in the memory. The source code of 
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter,float]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipeWriter.java}
+\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter,float,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipeWriter.java}
 
 \noindent The monitoring writer to be used is selected and configured by the \KiekerMonitoringPart{} %
 configuration properties (Section~\ref{chap:componentsMonitoring}) %
