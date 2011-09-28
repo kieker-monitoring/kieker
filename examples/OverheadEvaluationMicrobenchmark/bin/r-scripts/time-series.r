@@ -1,8 +1,8 @@
-results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results.csv"
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results-ts-single.pdf"
+results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive-linear\\results.csv"
+output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive-linear\\results-ts-single.pdf"
 
-configs.loop=1
-configs.recursion=1
+configs.loop=3
+configs.recursion=7
 configs.count=4
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writing Data")
 configs.colors=c("black","red","blue","green")
@@ -15,9 +15,9 @@ buckets.size=results.count/buckets.count
 
 pdf(output_fn, width=10, height=6.25, paper="special")
 
-for (cl in (1:configs.loop)) {
-  results.ts = matrix(nrow=configs.count,ncol=buckets.count,byrow=TRUE,dimnames=list(configs.labels,c(1:buckets.count)))
-  for (cr in (1:configs.recursion)) {
+for (cr in (1:configs.recursion)) {
+  for (cl in (1:configs.loop)) {
+    results.ts = matrix(nrow=configs.count,ncol=buckets.count,byrow=TRUE,dimnames=list(configs.labels,c(1:buckets.count)))
     for (cc in (1:configs.count)) {
       results_fn_temp=paste(results_fn, "-", cl, "-", cr, "-", cc, ".csv", sep="")
       results=read.csv2(results_fn_temp,quote="",colClasses=c("NULL","integer"),comment.char="",col.names=c("thread_id","duration_nsec"),nrows=results.count)
@@ -33,7 +33,7 @@ for (cl in (1:configs.loop)) {
       ts(results.ts[2,],end=results.count,deltat=buckets.size),
       ts(results.ts[3,],end=results.count,deltat=buckets.size),
       ts(results.ts[4,],end=results.count,deltat=buckets.size),
-      gpars=list(ylim=c(500,515),col=configs.colors,xlab="Executions"))
+      gpars=list(ylim=c(500,600),col=configs.colors,xlab="Executions"))
     legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean execution time of ...",ncol=2)
     title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr),ylab="Execution Time (µs)")
   }
