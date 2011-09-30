@@ -8,7 +8,7 @@ doitall: clean document
 
 document:
 #	java -jar make-libraries.jar libraries_descriptions ../../lib/ Libraries.tex
-	./make-libraries.sh
+# TO BE RE-ACTIVATED IF FIXED:	./make-libraries.sh
 	pdflatex $(DOCBASEFN)
 #	makeindex $(DOCBASEFN)
 #	if [ -x "$(BIBGEN_SH)" ]; then $(BIBGEN_SH) $$(find -name "*.aux")  > bibliography.bib; fi
