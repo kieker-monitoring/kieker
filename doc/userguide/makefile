@@ -27,5 +27,5 @@ document:
 
 clean:
 	for f in aux bbl blg glo idx log toc snm out nav bak vrb backup; do \
-	if [ -z "$$(ls *.$$f)" ]; then true; else rm *.$$f; fi \
+	rm -f *.$$f ; \
 	done
