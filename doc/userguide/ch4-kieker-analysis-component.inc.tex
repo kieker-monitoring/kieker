@@ -54,13 +54,17 @@ with these custom components:
 \lstinputlisting[caption=Code snippet setting up and running a \KiekerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=46, lastline=53, firstnumber=46]%
 {\customComponentsBookstoreApplicationDir/src/bookstoreApplication/Starter.java}
 
+\enlargethispage{1.2cm}
+
 \noindent On invocation of the \method{run} method, the \class{Analysis Controller} %
 calls the \method{execute} method of all analysis plugins allowing them to initialize. %
 Then, it starts the configured monitoring reader by calling its \method{read} %
 method. Monitoring record consumers receive the monitoring records provided by %
 the reader. As soon as the reader returns from the execution of its \method{read} 
 method, the method \method{terminate} of each registered plugin is called by the %
-\class{Analysis Controller}.
+\class{Analysis Controller}. %
+In order to support the asynchronous execution of the \class{AnalysisController} instance, %
+we provide the \class{AnalysisControllerThread} class.
 
 \section{Monitoring Readers}\label{sec:analysis:reader}
 
@@ -75,6 +79,9 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 \caption{Interface \class{IMonitoringReader} and implementing classes}
 \label{Figure:ReaderHierarchy}
 \end{figure}
+
+\pagebreak
+
 % \
 % 
 % \WARNBOX{This means that whenever a new writer is implemented, a corresponding reader has to be implemented as well. If one want for example to store the recorded informations in a database, one should be capable of reading these saved informations from the database again.}
@@ -83,7 +90,7 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 
 % \enlargethispage{1cm}
 
-\noindent There are already some readers implemented in \Kieker\  as shown in the %
+\noindent There are already some readers implemented in \Kieker,  as shown in the %
 class diagram in Figure \ref{Figure:ReaderHierarchy}. %
 The \class{FSReader} has already been used in Section~\ref{sec:example:analysis}. %
 The \class{FSReaderRealtime} can be used to simulate continuous monitoring of a %
@@ -93,7 +100,7 @@ timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
 A brief description of how to use the \class{JMSReader} can be found in Appendix~\ref{appendix:usingJMS}. %
 
 \noindent The implementation of a custom reader is similar to implementating a %
-monitoring writer. Custom reader should extend the class \class{AbstractKiekerMonitoringReader} %
+monitoring writer. Custom readers should extend the class \class{AbstractKiekerMonitoringReader} %
 which already provides an implementation of the observer pattern. %
 By invoking the method \method{deliverRecord},  the delivery of records is then %
 delegated to the super class.
@@ -117,7 +124,7 @@ must implement these methods for initialization and termination.
 
 The monitoring record consumer plugins described in the following %
 Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
-the monitoring records provided by the monitoring log reader. %
+the monitoring records provided by the monitoring reader. %
 Starting with these monitoring record plugins, analysis plugins can be connected %
 in a pipe-and-filter style to implement more complex analyses. %
 \Kieker{} provides input and output port interfaces and implementing classes %
@@ -128,7 +135,7 @@ based on this pattern.
 \section{Monitoring Record Consumer Plugins}\label{sec:analysis:consumer}
 
 As just mentioned, consumer plugins are special analysis plugins which receive %
-the records provided by the monitoring log reader and implement analyses or %
+the records provided by the monitoring reader and implement analyses or %
 visualizations based on these records. %
 Consumer plugins must implement the interface \class{IMonitoringRecordConsumerPlugin} %
 (see Figure~\ref{fig:analysisController:classdiagram}). %

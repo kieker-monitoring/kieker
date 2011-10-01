@@ -13,7 +13,7 @@ This chapter provides a brief introduction to \Kieker{} based on a simple Bookst
 %%
 \section{Download and Installation}\label{sec:example:downloadInstall}
 
-The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of the binary and source distribution, the Javadoc~API, as well as additional examples. For this quick start guide \Kieker{}'s binary distribution, e.g., \file{\binaryFileForDownload}, is required and must be downloaded. After having extracted the archive, you'll find the directory structure and contents shown in Figure~\ref{fig:binary-layout}.
+The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of the binary and source distribution, the Javadoc~API, as well as additional examples. For this quick start guide, \Kieker{}'s binary distribution, e.g., \file{\binaryFileForDownload}, is required and must be downloaded. After having extracted the archive, you'll find the directory structure and contents shown in Figure~\ref{fig:binary-layout}.
 
 \enlargethispage{0.8cm}
 
@@ -92,7 +92,7 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 \label{fig:PlainBookstoreExample}
 \end{figure}
 
-\NOTIFYBOX{The Java sources of the not instrumented Bookstore application can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
+\NOTIFYBOX{The Java sources of the uninstrumented Bookstore application can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
 
 \quad\
 
@@ -238,6 +238,8 @@ Finally, a record is created (see lines 43--46) and stored by calling the monito
 \noindent %
 The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
 
+\enlargethispage{1cm}
+
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
 
@@ -245,7 +247,9 @@ The next step after instrumenting the code is running the instrumented applicati
 
 \WARNBOX{%
 Under Windows it is necessary to separate the classpath elements by %
-a semicolon instead of a colon.}
+a semicolon instead of a colon. Also, we recommend to use the Windows shell %
+\file{cmd.exe} for this tutorial since problems have been reported for the %
+Windows PowerShell.}
 
 \pagebreak
 
@@ -253,11 +257,13 @@ a semicolon instead of a colon.}
 
 \quad\
 
-\noindent If everything worked correctly, a new directory for the monitoring data with a name similar to \dir{kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/} is created (see Figure~\ref{fig:logtree}). %
-% in the default temporary directory ). 
-The numbers in the directory name represent the time and date of the monitoring. %Thus, they will be different numbers for every run.
-In \Kieker's default configuration, the log directory can be found in the default temporary directory: under \UnixLikeSystems{}, this is typically \dir{/tmp/}; %
-check the environment variable \dir{\%temp\%} for the location  under Windows. %
+\noindent If everything worked correctly, a new directory for the monitoring data with a name similar to \dir{kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/} is created % in the default temporary directory
+(see Figure~\ref{fig:logtree}). %
+% The numbers in the directory name represent the time and date of the monitoring. %Thus, they will be different numbers for every run.
+In \Kieker's default configuration, the log directory can be found in the default temporary directory: %
+under \UnixLikeSystems{}, this is typically \dir{/tmp/}; %
+check the environment variables \dir{\$TMPDIR} or \dir{\%temp\%} for the location under Mac OS or Windows respectively. %
+The exact location of the created monitoring log is reported in \Kieker's console output (see for example Appendix~\ref{sec:appendix:manualInstrumentation:output}).
 %it \dir{C:\textbackslash{}users\textbackslash{}[\ldots]\textbackslash{}temp} under Windows.
 The monitoring directory contains two types of files: \dir{.dat} files containing text representations of the monitoring records and a %single 
 file named \dir{kieker.map} which contains information on the types of monitoring records used. 

@@ -230,7 +230,7 @@ the \class{OperationExecutionRegistrationAndLoggingFilter}.
 \pagebreak
 
 \setXMLListing
-\lstinputlisting[xleftmargin=0mm,firstline=31,lastline=38,numbers=none,%
+\lstinputlisting[xleftmargin=0mm,firstline=31,lastline=39,numbers=none,%
 caption=\class{OperationExecutionRegistrationAndLoggingFilter} in a \file{web.xml} file,%
 label=lst:OperationExecutionRegistrationAndLoggingFilterInWebXML]%
 {\JavaEEServletExampleDir/JPetStore-5.0-instrumented/web/WEB-INF/web.xml}
@@ -248,7 +248,9 @@ AspectJ-based probes described in the previous section and monitors method %
 executions as well as corresponding trace and session information. %
 The \class{OperationExecutionWebRequestRegistrationInterceptor} intercepts %
 incoming Web requests and initializes the trace and session data for this %
-trace.
+trace. If you are not using the \class{OperationExecutionWebRequestRegistrationInterceptor}, %
+it is important to use one of the previously described Servlet filters %
+(Section~\ref{sec:traceAnalysis:instr:servlet}).
 
 See the Spring documentation for instructions how to add the interceptors %
 to the server configuration.
@@ -277,7 +279,7 @@ to the server configuration.
 Monitoring data including trace information can be analyzed and visualized with the \KiekerTraceAnalysis{} tool which is included in the \Kieker{} binary as well.\\
 
 \WARNBOX{
-In order to use this tool, it is necessary to install two other programs:
+In order to use this tool, it is necessary to install two third-party programs:
 \begin{enumerate}
 \item \textbf{Graphviz} A graph visualization software which can be downloaded from \url{http://www.graphviz.org/}. 
 \item \textbf{GNU PlotUtils} A set of tools for generating 2D plot graphics which can be downloaded from \url{http://www.gnu.org/software/plotutils/} (for Linux) and from \url{http://gnuwin32.sourceforge.net/packages/plotutils.htm} (for Windows).
@@ -285,7 +287,7 @@ In order to use this tool, it is necessary to install two other programs:
 Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
 } \vspace{3mm}
 
-\noindent Once both have been installed, the \KiekerTraceAnalysis{} tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or \file{trace-analysis.bat} (Windows) in the \dir{bin/} directory. Non-parameterized calls of the scripts print all possible options on the screen, as listed in Appendix~\ref{appendix:wrapperScripts:traceAnalysis}.
+\noindent Once both programs have been installed, the \KiekerTraceAnalysis{} tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or \file{trace-analysis.bat} (Windows) in the \dir{bin/} directory. Non-parameterized calls of the scripts print all possible options on the screen, as listed in Appendix~\ref{appendix:wrapperScripts:traceAnalysis}.
 
 The commands shown in Listings~\ref{lst:traceAnalysis:sequenceDiagram} and \ref{lst:traceAnalysis:sequenceDiagramWin} generate a sequence diagram as well as a call tree to an existing directory named \dir{out/}. The monitoring data is assumed to be located in the directory \dir{/tmp/kieker-20110428-142829399-UTC-Kaapstad-KIEKER/} or \dir{\%temp\%$\backslash{}$kieker-20100813-121041532-UTC-virus-KIEKER} under Windows. %
 
