@@ -54,7 +54,7 @@ kieker.monitoring.enabled=true
 
 # The Timer used by Kieker. You usually don't want to change the value.
 kieker.monitoring.timer=kieker.monitoring.timer.DefaultSystemTimer
-# You can specify additional parameters send to the Timer, e.g.
+# You can specify additional parameters sent to the Timer, e.g.
 #kieker.monitoring.timer.DefaultSystemTimer.KEY=VALUE
 
 # The size of the thread pool used to execute registered periodic sensor jobs.

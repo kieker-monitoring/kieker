@@ -3,25 +3,27 @@ classes. The directory \dir{\JMSBookstoreApplicationDirDistro/} contains the %
 sources, ant scripts etc.\ used in this example. It is based on the Bookstore %
 application with manual instrumentation presented in Chapter~\ref{chap:example}. %
 
-The procedure for running the example, is the following:
+The following sections provide step-by-step instructions for the %
+JMS server implementations ActiveMQ (Section~\ref{example:jms:activemq}), %
+HornetQ~(\ref{example:jms:hornetq}), and OpenJMS~(\ref{example:jms:openjms}).
+The general procedure for each example is the following:
+
+\medskip
+
 \begin{compactenum}
- \item Download and prepare a JMS server implementation
- \item Copy required libraries to the example
+ \item Download and prepare the respective JMS server implementation
+ \item Copy required libraries to the example directory
  \item Start the JMS server
- \item Start the analysis instance which receives record via JMS
+ \item Start the analysis instance which receives records via JMS
  \item Start the monitoring instance which sends records via JMS
 \end{compactenum}
-
-The following sections provide step-by-step instruction for the %
-JMS server implementations ActiveMQ (Section~\ref{example:jms:activemq}), %
-HornetQ~\ref{example:jms:hornetq}, and OpenJMS~\ref{example:jms:openjms}.
 
 \section{ActiveMQ}\label{example:jms:activemq}
 
 \subsection{Download and Prepare ActiveMQ}
 
 Download an ActiveMQ archive from \url{http://activemq.apache.org/activemq-550-release.html} %
-and decompress it to the root directory of the example. Note, that there are two different %
+and decompress it to the base directory of the example. Note, that there are two different %
 distributions, one for Unix/Linux/Cygwin and another one for Windows. 
 
 Under \UnixLikeSystems{}, you'll need to set the executable-bit of the start script:
@@ -31,8 +33,8 @@ Under \UnixLikeSystems{}, you'll need to set the executable-bit of the start scr
  #\lstshellprompt{}# chmod +x bin/activemq
 \end{lstlisting}
 
-Also under \UnixLikeSystems{}, make sure that the file \file{bin/activemq} %
-include Unix line endings (e.g., using your favorite editor or the \textit{dos2unix} tool).
+\noindent Also under \UnixLikeSystems{}, make sure that the file \file{bin/activemq} %
+includes UNIX line endings (e.g., using your favorite editor or the \textit{dos2unix} tool).
 
 \subsection{Copy Kieker and OpenJMS Libraries}
 
@@ -40,6 +42,8 @@ include Unix line endings (e.g., using your favorite editor or the \textit{dos2u
 
 Copy the following files from Kieker's binary distribution to %
 the example's \dir{lib/} directory.
+
+\medskip
 
 \begin{compactenum}
  \item \file{\mainJar} (from \dir{dist/})
@@ -50,6 +54,8 @@ the example's \dir{lib/} directory.
 
 Copy the following files from the ActiveMQ release to the %
 \dir{lib/} directory of this example:
+
+\medskip
 
 \begin{compactenum}
 \item \file{activemq-all-<version>.jar} (from ActiveMQ's base directory)
@@ -64,10 +70,10 @@ is already configured to use the \class{AsyncJMSWriter} via ActiveMQ. The import
 the definition of the provider URL and the context factory:
 
 \setPropertiesListing
-\lstinputlisting[firstline=121,lastline=121,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the provider URL of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
+\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the provider URL of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
 
 \setPropertiesListing
-\lstinputlisting[firstline=130,lastline=130,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the connection factory of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
+\lstinputlisting[firstline=152,lastline=152,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the connection factory of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
 
 \subsection{Running the Example}
 
@@ -100,11 +106,13 @@ the definition of the provider URL and the context factory:
 Download a HornetQ archive from \url{http://www.jboss.org/hornetq/downloads.html} %
 and decompress it to the root directory of the example. 
 
-For this example, you need to create a queue in the HornetQ configuration file %
+\pagebreak
+
+\noindent You need to create a queue in the HornetQ configuration file %
 \file{config/stand-alone/non-clustered/hornetq-jms.xml}, as shown in Listing~\ref{lst:hornetq:config:queue}.
 
 \setXMLListing
-\begin{lstlisting}[caption=Queue definition in the HornetQ configuration file,label=lst:hornetq:config:queue]
+\begin{lstlisting}[caption=Queue definition to be added to the the HornetQ configuration file,label=lst:hornetq:config:queue,numbers=none]
   <queue name="ExampleQueue">
       <entry name="/queue/queue1"/>
   </queue>
@@ -117,6 +125,8 @@ For this example, you need to create a queue in the HornetQ configuration file %
 Copy the following files from Kieker's binary distribution to %
 the example's \dir{lib/} directory.
 
+\medskip
+
 \begin{compactenum}
  \item \file{\mainJar} (from \dir{dist/})
  \item \file{\commonsLoggingJar} (from \dir{lib/})
@@ -126,6 +136,8 @@ the example's \dir{lib/} directory.
 
 Copy the following files from the HornetQ \dir{lib/} folder to the %
 \dir{lib/} directory of this example:
+
+\medskip
 
 \begin{compactenum}
 \item \file{hornetq-jms-client.jar}
@@ -142,13 +154,10 @@ is already configured to use the \class{AsyncJMSWriter} via HornetQ. The importa
 the definition of the provider URL, the context factory, and the queue:
 
 \setPropertiesListing
-\lstinputlisting[firstline=121,lastline=121,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
 
 \setPropertiesListing
-\lstinputlisting[firstline=130,lastline=130,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the connection factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
-
-\setPropertiesListing
-\lstinputlisting[firstline=124,lastline=124,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the queue of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
+\lstinputlisting[firstline=152,lastline=152,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the connection factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
 
 \subsection{Running the Example}
 
@@ -190,6 +199,8 @@ and decompress it to the root directory of the example.
 Copy the following files from Kieker's binary distribution to %
 the example's \dir{lib/} directory.
 
+\medskip
+
 \begin{compactenum}
  \item \file{\mainJar} (from \dir{dist/})
  \item \file{\commonsLoggingJar} (from \dir{lib/})
@@ -199,6 +210,8 @@ the example's \dir{lib/} directory.
 
 Copy the following files from the OpenJMS \dir{lib/} folder to the %
 \dir{lib/} directory of this example:
+
+\medskip
 
 \begin{compactenum}
 \item \file{openjms-<version>.jar}
@@ -216,10 +229,10 @@ is already configured to use the \class{AsyncJMSWriter} via OpenJMS. The importa
 the definition of the provider URL and the context factory:
 
 \setPropertiesListing
-\lstinputlisting[firstline=121,lastline=121,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the provider URL of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the provider URL of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
 
 \setPropertiesListing
-\lstinputlisting[firstline=130,lastline=130,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the connection factory of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=152,lastline=152,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the connection factory of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
 
 \subsection{Running the Example}
 

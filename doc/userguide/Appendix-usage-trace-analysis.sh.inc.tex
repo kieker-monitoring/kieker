@@ -14,7 +14,8 @@ usage: kieker.tools.traceAnalysis.TraceAnalysisTool -i <dir1 ... dirN> -o <dir>
        [--print-Assembly-Equivalence-Classes] [--select-traces <id0 ... idn>]
        [--ignore-invalid-traces] [--max-trace-duration <duration in ms>]
        [--ignore-executions-before-date <yyyyMMdd-HHmmss>]
-       [--ignore-executions-after-date <yyyyMMdd-HHmmss>] [--short-labels]
+       [--ignore-executions-after-date <yyyyMMdd-HHmmss>] 
+       [--short-labels]
  -i,--inputdirs <dir1 ... dirN>                         Log directories to read
                                                         data from
  -o,--outputdir <dir>                                   Directory for the
@@ -87,7 +88,8 @@ usage: kieker.tools.traceAnalysis.TraceAnalysisTool -i <dir1 ... dirN> -o <dir>
                                                         milliseconds) after
                                                         which an incomplete
                                                         trace becomes invalid.
-                                                        Defaults to infinity.
+                                                        Defaults to 600000 (10
+                                                        minutes).
     --ignore-executions-before-date <yyyyMMdd-HHmmss>   Executions starting
                                                         before this date (UTC
                                                         timezone) are ignored.
