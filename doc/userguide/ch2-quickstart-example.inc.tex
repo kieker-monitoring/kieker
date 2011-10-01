@@ -236,14 +236,15 @@ Finally, a record is created (see lines 43--46) and stored by calling the monito
 % \enlargethispage{0.5cm}
 
 \noindent %
-The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows.
+The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the two commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows. The expected working directory is the base directory of this example, i.e. %
+ \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
 
 \enlargethispage{1cm}
 
 \setBashListing 		
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}	
 
-\quad\
+% \quad\
 
 \WARNBOX{%
 Under Windows it is necessary to separate the classpath elements by %
