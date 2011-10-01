@@ -22,7 +22,7 @@ continuous monitoring in production systems inducing only a very low overhead. F
 The present version of \Kieker{} is a monitoring and analysis framework for %
 Java applications. %
 Support for other platforms, such as Visual Basic~6 and .NET, is currently under development.%
-\footnote{\href{http://kieker.sourceforge.net/support}{Contact us} directly if you are interested in Kieker support for Visual Basic~6 and .NET} %
+\footnote{\href{http://kieker.sourceforge.net/support}{Contact us} directly if you are interested in \Kieker{} support for Visual Basic~6 and .NET} %
 Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based %
 on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
 
@@ -61,24 +61,57 @@ monitoring records to a monitoring log or stream. %
 For analyzing purposes, a monitoring reader reads the records from the monitoring log/stream. %
 These records can then be further processed by the analysis plugins.
 
-%%
-% \section{Features}
+\section{Framework Components and Extension Points}
 
-Kieker includes monitoring writers and readers for filesystems, SQL %
-databases, and the Java Messaging Service~(JMS)~\cite{JMS-WebSite}. %
-A special feature of \Kieker{} is the ability to monitor and analyze (distributed) %
+\begin{figure}\centering
+\includegraphics[width=\textwidth]{images/framework-figure}
+\caption{Kieker framework components and extension points for custom components}
+\label{fig:frameworkComponentsExtensionPoints}
+\end{figure}
+
+Figure~\ref{fig:frameworkComponentsExtensionPoints} depicts the possible %
+extension points for custom components as well as the components which %
+are already included in the \Kieker{} distribution and detailed below. %
+
+\medskip
+
+\begin{compactitem}
+ \item \textbf{Monitoring writers and corresponding readers} for %
+file systems and SQL databases, %
+for in-memory record streams (named pipes), %
+as well writer and readers employing Java Management %
+Extensions (JMX)~\cite{JMX-Website} and %
+Java Messaging Service~(JMS)~\cite{JMS-WebSite} technology. %
+A special reader allows to replay existing persistent %
+monitoring logs, for example to emulate incoming monitoring %
+data---also in real-time.
+ \item A \textbf{time source} utilizing Java's \method{System.nanoTime()} method.
+ \item \textbf{Monitoring record types} allowing to store %
+monitoring data about operation executions (including timing, control-flow, %
+and session information), CPU and resource utilization, memory/swap usage, as well as %
+a record type which can be used to store the current time.
+\item \textbf{Monitoring probes}: A special feature of \Kieker{} is the ability to monitor (distributed) %
 traces of method executions and corresponding timing information. %
 For monitoring this data, Kieker includes monitoring probes employing %
 AspectJ~\cite{AspectJ-WebSite}, %
 Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
 Spring~\cite{Spring-WebSite}, and %
-Apache~CXF~\cite{CXF-WebSite} technology. %
-The \KiekerTraceAnalysis{} tool, itself implemented as a \KiekerAnalysisPart{} %
-plugin (Figure~\ref{fig:KiekerComponentDiagram}), allows to reconstruct and visualize architectural models of the monitored %
-systems, e.g., as sequence and dependency diagrams.
+Apache~CXF~\cite{CXF-WebSite} technology. % 
+Additionally, Kieker includes probes for (periodic) system-level resource %
+monitoring employing the Sigar library~\cite{HypericSigarWebsite}.
+\item \textbf{Analysis/Visualization plugins} can be assembled to %
+pipe-and-filter architectures based on input and output ports. The %
+\KiekerTraceAnalysis{} tool (Figure~\ref{fig:KiekerComponentDiagram}) %
+is itself implemented based on a re-usable set of \KiekerAnalysisPart{} %
+plugins allowing to reconstruct and visualize architectural models of the %
+monitored systems, e.g., as dependency graphs, sequence diagrams, and call %
+trees. %
+\end{compactitem}
+
+
 
 %%
-\pagebreak
+% \pagebreak
 
 \section{Licensing}
 
