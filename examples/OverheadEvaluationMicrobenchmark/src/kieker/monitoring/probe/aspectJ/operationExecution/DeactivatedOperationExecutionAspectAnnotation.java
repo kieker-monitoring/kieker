@@ -59,7 +59,7 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")
 	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
-		if (!AbstractOperationExecutionAspect.ctrlInst.isMonitoringEnabled()
+		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()
 				|| deactivatedProbes.containsKey(thisJoinPoint.getStaticPart().getSignature().toString())) {
 			return thisJoinPoint.proceed();
 		}
@@ -67,20 +67,20 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 		int eoi = 0; // this is executionOrderIndex-th execution in this trace
 		int ess = 0; // this is the height in the dynamic call tree of this execution
 		if (execData.isEntryPoint) {
-			AbstractOperationExecutionAspect.cfRegistry.storeThreadLocalEOI(0);
+			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
 			// current execution's eoi is 0
-			AbstractOperationExecutionAspect.cfRegistry.storeThreadLocalESS(1);
+			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(1);
 			// current execution's ess is 0
 		} else {
-			eoi = AbstractOperationExecutionAspect.cfRegistry.incrementAndRecallThreadLocalEOI(); // ess > 1
-			ess = AbstractOperationExecutionAspect.cfRegistry.recallAndIncrementThreadLocalESS(); // ess >= 0
+			eoi = AbstractOperationExecutionAspect.CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
+			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
 			this.proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				DeactivatedOperationExecutionAspectAnnotation.log.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				DeactivatedOperationExecutionAspectAnnotation.log.fatal("Terminating!");
-				AbstractOperationExecutionAspect.ctrlInst.terminateMonitoring();
+				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
@@ -91,12 +91,12 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 			 */
 			execData.eoi = eoi;
 			execData.ess = ess;
-			AbstractOperationExecutionAspect.ctrlInst.newMonitoringRecord(execData);
+			AbstractOperationExecutionAspect.CTRLINST.newMonitoringRecord(execData);
 			if (execData.isEntryPoint) {
-				AbstractOperationExecutionAspect.cfRegistry.unsetThreadLocalEOI();
-				AbstractOperationExecutionAspect.cfRegistry.unsetThreadLocalESS();
+				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalEOI();
+				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalESS();
 			} else {
-				AbstractOperationExecutionAspect.cfRegistry.storeThreadLocalESS(ess);
+				AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(ess);
 			}
 		}
 		return execData.retVal;
