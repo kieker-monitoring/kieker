@@ -62,7 +62,7 @@ The current time is maintained by a so-called time source. The \class{Monitoring
 \method{getTime}. \Kieker{}'s default time source (\class{DefaultSystemTimer}) returns the current system %
 time as the number of nanoseconds elapsed since 1 Jan 1970 00:00~UTC. %
 The easiest way to use a custom time source is to extend the \class{AbstractTimeSource} and %
-to implement the method \method{getTime()}. Custom time sources make sense, for instance, %
+to implement the method \method{getTime()}. Custom time sources make sense, for example, %
 in simulations where not the current system time but the current simulation time is %
 relevant. The configuration needs to be adjusted to use a custom time source class. %
 
@@ -216,7 +216,7 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 
 \pagebreak
 
-\noindent Employing the abstract class for implementing your own monitoring record type, you need to:
+\noindent In order to use the abstract class for implementing your own monitoring record type, you need to:
 
 \begin{enumerate}
 \item Create a class that extends \class{AbstractMonitoringRecord}  and
@@ -235,8 +235,8 @@ that can be used to monitor response times of method executions.
 
 \section{Monitoring Probes}\label{sec:monitoring:probe}
 
-The probes are responsible for collecting the monitoring data and passing this %
-monitoring data to the monitoring controller. %
+The probes are responsible for collecting the monitoring data and passing it %
+to the monitoring controller. %
 In Chapter~\ref{sec:example:monitoring}, we have already demonstrated how to %
 manually instrument a Java application. Listing~\ref{listing:cuttingBookstore} %
 shows a similar manual monitoring probe which uses the monitoring record type %
