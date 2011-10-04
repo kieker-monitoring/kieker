@@ -25,6 +25,7 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
@@ -46,6 +47,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	private final List<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final int queueFullBehavior;
+	private final AtomicInteger missedRecords;
 
 	protected AbstractAsyncWriter(final Configuration configuration) {
 		super(configuration);
@@ -58,6 +60,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		} else {
 			this.queueFullBehavior = queueFullBehavior;
 		}
+		this.missedRecords = new AtomicInteger(0);
 		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.PREFIX + AbstractAsyncWriter.QUEUESIZE));
 	}
 
@@ -114,15 +117,19 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 					this.blockingQueue.put(monitoringRecord);
 					break;
 				case 2: // does nothing if queue is full
-					// offer returns true iff element has been added (FindBugs: wontfix)
-					this.blockingQueue.offer(monitoringRecord);
+					if (!this.blockingQueue.offer(monitoringRecord)) {
+						// warn on missed records
+						if (missedRecords.getAndIncrement() % 1000 == 0) {
+							AbstractAsyncWriter.LOG.warn("Queue is full, dropping records.");
+						}
+					}
 					break;
 				default: // tries to add immediately (error if full)
 					this.blockingQueue.add(monitoringRecord);
 					break;
 			}
 		} catch (final Exception ex) {
-			AbstractAsyncWriter.LOG.error("Failed to retrieve new monitoring record." + ex);
+			AbstractAsyncWriter.LOG.error("Failed to retrieve new monitoring record.", ex);
 			return false;
 		}
 		return true;
@@ -132,6 +139,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
+		sb.append("\n\tRecords lost (");
+		sb.append(this.missedRecords.intValue());
+		sb.append("): ");
 		sb.append("\n\tWriter Threads (");
 		sb.append(this.workers.size());
 		sb.append("): ");
