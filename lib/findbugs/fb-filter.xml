@@ -24,4 +24,8 @@
     <Bug pattern="REC_CATCH_EXCEPTION" />
   </Match>
 
+  <Match>
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+  </Match>
+
 </FindBugsFilter>
