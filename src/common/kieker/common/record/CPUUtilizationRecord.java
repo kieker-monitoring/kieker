@@ -175,11 +175,9 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	/*
 	 * {@inheritdoc}
 	 */
-	// FindBugs complains about returning the internal data structure
-	// VALUE_TYPES but wontfix (unless s.o. has a better idea)
 	@Override
 	public Class<?>[] getValueTypes() {
-		return CPUUtilizationRecord.VALUE_TYPES;
+		return CPUUtilizationRecord.VALUE_TYPES.clone();
 	}
 
 	/**

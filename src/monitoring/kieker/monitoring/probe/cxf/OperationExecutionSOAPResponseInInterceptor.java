@@ -113,7 +113,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
-			long traceId = -1;
+			long traceId;
 			try {
 				traceId = Long.parseLong(traceIdStr);
 			} catch (final Exception exc) {

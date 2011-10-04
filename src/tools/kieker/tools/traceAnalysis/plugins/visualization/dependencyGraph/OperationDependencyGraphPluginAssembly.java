@@ -139,7 +139,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null, // imagefilename
                         null // misc
-                        )).toString();
+                        ));
             } else {
                 strBuild.append(DotFactory.createCluster("",
                         this.COMPONENT_NODE_ID_PREFIX + curComponentId,
@@ -171,7 +171,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
                             DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                             null, // imagefilename
                             null // misc
-                            )).toString();
+                            ));
                 }
                 strBuild.append("}\n");
             }

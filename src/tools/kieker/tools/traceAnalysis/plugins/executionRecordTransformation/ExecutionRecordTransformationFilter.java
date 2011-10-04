@@ -94,6 +94,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
         if (!(record instanceof OperationExecutionRecord)) {
             ExecutionRecordTransformationFilter.log.error("Can only process records of type"
                     + OperationExecutionRecord.class.getName() + " but received" + record.getClass().getName());
+            return false;
         }
         final OperationExecutionRecord execRec = (OperationExecutionRecord) record;
 

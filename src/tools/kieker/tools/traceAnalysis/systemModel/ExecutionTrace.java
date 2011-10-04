@@ -237,7 +237,7 @@ public class ExecutionTrace extends Trace {
      *
      * @return the maximum eoi; -1 if the trace contains no executions.
      */
-    public int getMaxEoi() {
+    public synchronized int getMaxEoi() {
         return this.maxEoi;
     }
 
@@ -246,7 +246,7 @@ public class ExecutionTrace extends Trace {
      *
      * @return the minimum eoi; -1 if the trace contains no executions.
      */
-    public int getMinEoi() {
+    public synchronized int getMinEoi() {
         return this.minEoi;
     }
 

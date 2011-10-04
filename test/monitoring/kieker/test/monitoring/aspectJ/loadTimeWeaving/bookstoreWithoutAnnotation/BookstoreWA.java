@@ -75,7 +75,7 @@ public class BookstoreWA extends Thread{
     	BookstoreWA.searchBook();
         synchronized (bookstoreScenarios) {
             bookstoreScenarios.remove(this);
-            bookstoreScenarios.notify();
+            bookstoreScenarios.notifyAll();
         }
     }
 

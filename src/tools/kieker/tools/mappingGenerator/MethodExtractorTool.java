@@ -196,17 +196,16 @@ class MethodExtractor extends ClassLoader {
 	}
 
 	private void analyzeJarClassEntry(final JarFile jar, final JarEntry e, final String prefix, final MethodFilter filter) {
-		byte[] data = null;
 		final long size = e.getSize();
 		if ((size == -1) || (size > Integer.MAX_VALUE)) {
 			MethodExtractor.log.error("Size of file \"" + jar.getName() + "/" + e.getName() + " out of range: size");
 			return;
 		}
-		data = new byte[(int) size];
+		byte[] data = new byte[(int) size];
 		try {
-			// TODO: check return value of read
-			// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/230
-			jar.getInputStream(e).read(data);
+			if (jar.getInputStream(e).read(data) == -1) {
+				throw new IOException("Unexpected end of file.");
+			}
 			final String name = e.getName().substring(0, e.getName().length() - 6).replaceAll("/", ".");
 			Class<?> clazz = null;
 			try {

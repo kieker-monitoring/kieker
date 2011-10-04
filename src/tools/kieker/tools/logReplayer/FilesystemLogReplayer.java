@@ -57,12 +57,6 @@ public class FilesystemLogReplayer {
 	private final boolean realtimeMode;
 	private final int numRealtimeWorkerThreads;
 
-	/** Must not be used for construction */
-	@SuppressWarnings("unused")
-	private FilesystemLogReplayer() {
-		this(null, null);
-	}
-
 	/** Normal replay mode (i.e., non-real-time). */
 	public FilesystemLogReplayer(
 			final IMonitoringRecordReceiver monitoringController,

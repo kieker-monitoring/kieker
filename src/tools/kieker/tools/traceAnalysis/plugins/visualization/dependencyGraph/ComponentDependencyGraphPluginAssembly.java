@@ -97,7 +97,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
                     DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                     null, // imagefilename
                     null // misc
-                    )).toString();
+                    ));
             strBuild.append("\n");
         }
         ps.println(strBuild.toString());

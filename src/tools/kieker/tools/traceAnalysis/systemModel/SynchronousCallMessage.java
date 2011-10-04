@@ -50,4 +50,9 @@ public class SynchronousCallMessage extends Message {
                 && this.getSendingExecution().equals(other.getSendingExecution())
                 && this.getReceivingExecution().equals(other.getReceivingExecution());
     }
+    
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

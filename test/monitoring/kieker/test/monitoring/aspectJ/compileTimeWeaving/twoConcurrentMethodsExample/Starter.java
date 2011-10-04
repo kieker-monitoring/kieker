@@ -73,7 +73,7 @@ public class Starter extends Thread {
 		}
 	}
 
-	static boolean boolvar = true;
+	static volatile boolean boolvar = true;
 
 	@OperationExecutionMonitoringProbe()
 	private void work() {
@@ -82,7 +82,7 @@ public class Starter extends Thread {
 			a += i / 1000;
 		}
 		if (a % 10000 == 0) {
-			Starter.boolvar = false;
+			Starter.boolvar = !Starter.boolvar;
 		}
 	}
 }

@@ -181,7 +181,7 @@ public class FilesystemLogReplayerStarter {
 		/* log configuration */
 		if (retVal) {
 			FilesystemLogReplayerStarter.log.info("inputDirs: "
-					+ FilesystemLogReplayerStarter.StringArrayToDeliminedString(FilesystemLogReplayerStarter.inputDirs, ';'));
+					+ FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(FilesystemLogReplayerStarter.inputDirs, ';'));
 			FilesystemLogReplayerStarter.log.info("Replaying in " + (FilesystemLogReplayerStarter.realtimeMode ? "" : "non-") + "realtime mode");
 			if (FilesystemLogReplayerStarter.realtimeMode) {
 				FilesystemLogReplayerStarter.log.info("Using " + FilesystemLogReplayerStarter.numRealtimeWorkerThreads + " realtime worker thread"
@@ -192,7 +192,7 @@ public class FilesystemLogReplayerStarter {
 		return retVal;
 	}
 
-	private static String StringArrayToDeliminedString(final String[] array, final char delimiter) {
+	private static String fromStringArrayToDeliminedString(final String[] array, final char delimiter) {
 		final StringBuilder arTostr = new StringBuilder();
 		if (array.length > 0) {
 			arTostr.append(array[0]);

@@ -73,7 +73,7 @@ public class Bookstore extends Thread{
     	Bookstore.searchBook();
         synchronized (bookstoreScenarios) {
             bookstoreScenarios.remove(this);
-            bookstoreScenarios.notify();
+            bookstoreScenarios.notifyAll();
         }
     }
 

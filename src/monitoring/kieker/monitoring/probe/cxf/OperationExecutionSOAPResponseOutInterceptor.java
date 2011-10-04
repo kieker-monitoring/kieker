@@ -72,7 +72,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	public void handleMessage(final SoapMessage msg) throws Fault {
 		String sessionID;
 		final long traceId = OperationExecutionSOAPResponseOutInterceptor.cfRegistry.recallThreadLocalTraceId();
-		long tin = -1, tout = -1;
+		long tin, tout;
 		boolean isEntryCall = true;
 		int eoi = -1;
 		// final int ess = -1;

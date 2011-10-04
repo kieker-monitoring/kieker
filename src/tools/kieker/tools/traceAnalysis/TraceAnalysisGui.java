@@ -146,7 +146,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				final int ret = fc.showOpenDialog(TraceAnalysisGui.this.frame);
 				if (JFileChooser.APPROVE_OPTION == ret) {
-					TraceAnalysisGui.this.outdir.setText(fc.getSelectedFile().getAbsolutePath().toString());
+					TraceAnalysisGui.this.outdir.setText(fc.getSelectedFile().getAbsolutePath());
 				}
 			}
 		});
@@ -480,7 +480,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 			if (this.ignInvalid.isSelected()) {
 				this.appendCmd(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES, b);
 			}
-			TraceAnalysisTool.main(b.toArray(new String[]{}));
+			TraceAnalysisTool.main(b.toArray(new String[b.size()]));
 			/*
 			 * usage: [--plot-Sequence-Diagrams]
 			 * [--plot-Component-Dependency-Graph]

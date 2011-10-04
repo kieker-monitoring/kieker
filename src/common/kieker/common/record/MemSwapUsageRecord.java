@@ -199,11 +199,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	/*
 	 * {@inheritdoc}
 	 */
-	// FindBugs complains about returning the internal data structure
-	// VALUE_TYPES but wontfix (unless s.o. has a better idea)
 	@Override
 	public Class<?>[] getValueTypes() {
-		return MemSwapUsageRecord.VALUE_TYPES;
+		return MemSwapUsageRecord.VALUE_TYPES.clone();
 	}
 
 	/**

@@ -195,7 +195,7 @@ public class TestExecutionTraceBookstore extends TestCase {
         Assert.assertEquals("Invalid traceId", messageTrace.getTraceId(), this.traceId);
         final Vector<Message> msgVector = messageTrace.getSequenceAsVector();
         Assert.assertEquals("Invalid number of messages in trace", msgVector.size(), this.numExecutions * 2);
-        final Message[] msgArray = msgVector.toArray(new Message[0]);
+        final Message[] msgArray = msgVector.toArray(new Message[msgVector.size()]);
         Assert.assertEquals(msgArray.length, this.numExecutions * 2);
 
         int curIdx = 0;

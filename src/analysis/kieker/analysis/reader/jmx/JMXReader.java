@@ -22,6 +22,7 @@ package kieker.analysis.reader.jmx;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.concurrent.CountDownLatch;
 
 import javax.management.InstanceNotFoundException;
 import javax.management.ListenerNotFoundException;
@@ -68,16 +69,15 @@ public final class JMXReader extends AbstractMonitoringReader {
 
 	/**
 	 * Expects an initString of the following format:
-	 *  "property1@value1|property2@value2|..."
+	 * "property1@value1|property2@value2|..."
 	 * known properties are
 	 * server, port, serviceURL, domain, logname
 	 * 
-	 * either port or serviceURL are mandatory 
+	 * either port or serviceURL are mandatory
 	 */
 	@Override
 	public final boolean init(final String initString) {
 		try {
-
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "@");
 			final String server = propertyMap.getProperty("server", "localhost");
 			final int port = Integer.valueOf(propertyMap.getProperty("port", "0")).intValue();
@@ -90,15 +90,21 @@ public final class JMXReader extends AbstractMonitoringReader {
 			final String domain = propertyMap.getProperty("domain", "kieker.monitoring");
 			final String logname = propertyMap.getProperty("logname", "MonitoringLog");
 			this.initInstanceFromArgs(serviceURL, domain, logname);
-		} catch (final Exception e) {
+		} catch (final IllegalArgumentException e) {
+			JMXReader.log.error("Failed to parse initString '" + initString + "': " + e.getMessage());
+			return false;
+		} catch (final MalformedObjectNameException e) {
+			JMXReader.log.error("Failed to parse initString '" + initString + "': " + e.getMessage());
+			return false;
+		} catch (final MalformedURLException e) {
 			JMXReader.log.error("Failed to parse initString '" + initString + "': " + e.getMessage());
 			return false;
 		}
 		return true;
 	}
 
-	private void initInstanceFromArgs(final String serviceURL, final String domain, final String logname) throws IllegalArgumentException,
-			MalformedURLException, MalformedObjectNameException {
+	private void initInstanceFromArgs(final String serviceURL, final String domain, final String logname)
+			throws IllegalArgumentException, MalformedURLException, MalformedObjectNameException {
 		if (serviceURL == null) {
 			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
 		}
@@ -204,7 +210,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 					if (logNotificationListener != null) {
 						mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 					}
-				} catch (final Exception e) {
+				} catch (final Exception e) {// ignore
 				}
 				try {
 					if (serverNotificationListener != null) {
@@ -223,9 +229,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 		}
 	}
 
-	// TODO: We should use a CountDownLatch instead
-	// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/228
-	private final Object blockingObj = new Object();
+	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	private final void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -234,18 +238,14 @@ public final class JMXReader extends AbstractMonitoringReader {
 				JMXReader.this.unblock();
 			}
 		});
-		synchronized (this.blockingObj) {
-			try {
-				this.blockingObj.wait();
-			} catch (final InterruptedException e) { // ignore
-			}
+		try {
+			this.cdLatch.await();
+		} catch (final InterruptedException e) { // ignore
 		}
 	}
 
 	private final void unblock() {
-		synchronized (this.blockingObj) {
-			this.blockingObj.notifyAll();
-		}
+		this.cdLatch.countDown();
 	}
 
 	private final class LogNotificationListener implements NotificationListener {
@@ -259,24 +259,24 @@ public final class JMXReader extends AbstractMonitoringReader {
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
-			if (notificationType == JMXConnectionNotification.CLOSED) {
+			if (notificationType.equals(JMXConnectionNotification.CLOSED)) {
 				if (!JMXReader.this.silentreconnect) {
 					JMXReader.log.info("JMX connection closed.");
 				}
 				JMXReader.this.unblock();
-			} else if (notificationType == JMXConnectionNotification.FAILED) {
+			} else if (notificationType.equals(JMXConnectionNotification.FAILED)) {
 				if (!JMXReader.this.silentreconnect) {
 					JMXReader.log.info("JMX connection lost.");
 				}
 				JMXReader.this.unblock();
-			} else if (notificationType == JMXConnectionNotification.NOTIFS_LOST) {
+			} else if (notificationType.equals(JMXConnectionNotification.NOTIFS_LOST)) {
 				JMXReader.log.error("Monitoring record lost: " + notification.getMessage());
 			} else { // unknown message
 				JMXReader.log.info(notificationType + ": " + notification.getMessage());
 			}
 		}
 	}
-	
+
 	@Override
 	public void terminate() {
 		JMXReader.log.info("Shutdown of JMXReader requested.");

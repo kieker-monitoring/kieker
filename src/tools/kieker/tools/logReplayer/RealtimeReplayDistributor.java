@@ -101,14 +101,11 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
             RealtimeReplayDistributor.log.error("RecordConsumerExecutionException", e);
             return false;
         }
-        // TODO: Use higher-level synchronizatio mechanism
-        // See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/229
         synchronized (this) {
-            if (this.active > this.maxQueueSize) {
+            while (this.active > this.maxQueueSize) {
                 try {
                     this.wait();
-                } catch (final InterruptedException e) {
-                    e.printStackTrace();
+                } catch (final InterruptedException e) { //ignore
                 }
             }
             this.active++;
@@ -159,6 +156,6 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
     public synchronized void decreaseActive() {
         this.active--;
-        this.notify();
+        this.notifyAll();
     }
 }

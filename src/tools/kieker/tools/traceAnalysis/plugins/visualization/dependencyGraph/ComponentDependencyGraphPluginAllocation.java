@@ -132,7 +132,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
                         DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                         null, // imagefilename
                         null // misc
-                        )).toString();
+                        ));
             } else {
                 strBuild.append(DotFactory.createCluster("",
                         this.CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
@@ -157,7 +157,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
                             DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
                             null, // imagefilename
                             null // misc
-                            )).toString();
+                            ));
                 }
                 strBuild.append("}\n");
             }

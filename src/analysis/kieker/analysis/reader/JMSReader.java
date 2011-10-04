@@ -22,6 +22,7 @@ package kieker.analysis.reader;
 
 import java.io.Serializable;
 import java.util.Hashtable;
+import java.util.concurrent.CountDownLatch;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -94,11 +95,13 @@ public class JMSReader extends AbstractMonitoringReader {
 		return true;
 	}
 
-	private void initInstanceFromArgs(final String jmsProviderUrl, final String jmsDestination, final String factoryLookupName) throws IllegalArgumentException {
-		if ((jmsProviderUrl == null) || jmsProviderUrl.equals("") || (jmsDestination == null) || jmsDestination.equals("") || (factoryLookupName == null)
-				|| (factoryLookupName.equals(""))) {
-			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + jmsProviderUrl + "'), jmsDestination ('"
-					+ jmsDestination + "'), or factoryLookupName ('" + factoryLookupName + "') is null");
+	private void initInstanceFromArgs(final String jmsProviderUrl, final String jmsDestination,
+			final String factoryLookupName) throws IllegalArgumentException {
+		if ((jmsProviderUrl == null) || jmsProviderUrl.equals("") || (jmsDestination == null)
+				|| jmsDestination.equals("") || (factoryLookupName == null) || (factoryLookupName.equals(""))) {
+			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('"
+					+ jmsProviderUrl + "'), jmsDestination ('" + jmsDestination + "'), or factoryLookupName ('"
+					+ factoryLookupName + "') is null");
 		}
 
 		this.jmsProviderUrl = jmsProviderUrl;
@@ -118,9 +121,9 @@ public class JMSReader extends AbstractMonitoringReader {
 
 			// JMS initialization
 			properties.put(Context.PROVIDER_URL, this.jmsProviderUrl);
-			/* TODO: remove */ 
+			/* TODO: remove */
 			// properties.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
-			/* */ 
+			/* */
 			final Context context = new InitialContext(properties);
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 			final Connection connection = factory.createConnection();
@@ -138,12 +141,14 @@ public class JMSReader extends AbstractMonitoringReader {
 				 * JNDI lookup failed, try manual creation (this seems to fail
 				 * with ActiveMQ sometimes)
 				 */
-				JMSReader.log.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
+				JMSReader.log
+						.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
 				JMSReader.log.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
 			}
 
-			JMSReader.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			JMSReader.log
+					.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
@@ -193,9 +198,7 @@ public class JMSReader extends AbstractMonitoringReader {
 		return retVal;
 	}
 
-	// TODO: We should use a CountDownLatch instead
-	// See ticket http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/228
-	private final Object blockingObj = new Object();
+	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	private final void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -204,18 +207,14 @@ public class JMSReader extends AbstractMonitoringReader {
 				JMSReader.this.unblock();
 			}
 		});
-		synchronized (this.blockingObj) {
-			try {
-				this.blockingObj.wait();
-			} catch (final InterruptedException e) { // ignore
-			}
+		try {
+			this.cdLatch.await();
+		} catch (final InterruptedException e) { // ignore
 		}
 	}
 
 	private final void unblock() {
-		synchronized (this.blockingObj) {
-			this.blockingObj.notifyAll();
-		}
+		this.cdLatch.countDown();
 	}
 
 	@Override

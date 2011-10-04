@@ -84,16 +84,14 @@ public final class JMXController extends AbstractController implements IJMXContr
 						usedJMXImplementation = JMXImplementation.Sun;
 					} catch (final Exception ignoreErrors) {
 						if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE_FALLBACK)) {
-							JMXController.LOG
-									.warn("Failed to initialize remote JMX server, falling back to default implementation");
+							JMXController.LOG.warn("Failed to initialize remote JMX server, falling back to default implementation");
 							// Fallback to default Implementation
 							final JMXServiceURL url = new JMXServiceURL("rmi", null, Integer.parseInt(port));
 							final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 							server = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbs);
 							server.start();
 						} else {
-							JMXController.LOG
-									.warn("Failed to initialize remote JMX server and fallback is deactivated");
+							JMXController.LOG.warn("Failed to initialize remote JMX server and fallback is deactivated");
 						}
 					}
 					if ((server != null) && (server.isActive())) {
@@ -244,12 +242,12 @@ public final class JMXController extends AbstractController implements IJMXContr
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
-			if (notificationType == JMXConnectionNotification.OPENED) {
+			if (notificationType.equals(JMXConnectionNotification.OPENED)) {
 				JMXController.LOG
 						.info("New JMX remote connection initialized. Connection ID: "
 								+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification)
 										.getConnectionId() : "unknown"));
-			} else if (notificationType == JMXConnectionNotification.CLOSED) {
+			} else if (notificationType.equals(JMXConnectionNotification.CLOSED)) {
 				JMXController.LOG
 						.info("JMX remote connection closed. Connection ID: "
 								+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification)

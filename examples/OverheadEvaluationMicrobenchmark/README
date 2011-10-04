@@ -18,3 +18,10 @@ Initially, the following steps are required:
 
 Execution of Microbenchmark:
 1. bin/run-benchmark-recursive.sh
+
+Files required in lib:
+  kieker-*.jar         (a current build of Kieker)
+  commons-cli-1.2.jar
+  commons-logging-1.1.1.jar
+  aspectjrt-*.jar
+  aspectjtools-*.jar
