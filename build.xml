@@ -1018,7 +1018,8 @@
   <target name="findbugs" depends="build-all,compile-tests" description="Performs a byte code analysis to find potential bugs employing findbugs">
     <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${lib.dir}/findbugs/lib/findbugs-ant.jar"/>
 		<findbugs home="${lib.dir}/findbugs"
-				reportLevel="medium"
+				reportLevel="low"
+				effort="max"
 				excludeFilter="${lib.dir}/findbugs/fb-filter.xml"
 				output="xml"
 				outputFile="${tmp.dir}/kieker-fb.xml" >
