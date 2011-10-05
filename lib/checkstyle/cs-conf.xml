@@ -41,8 +41,8 @@
     <!-- See http://checkstyle.sf.net/config_header.html   !-->
     <module name="Header">
         <property name="headerFile"     value="lib/checkstyle/header.txt"/>
-        <property name="charset"        value=""/>
-        <property name="header"         value=""/>
+        <!--<property name="charset"        value=""/>-->
+        <!--<property name="header"         value=""/>-->
         <property name="ignoreLines"    value="2"/>
         <property name="fileExtensions" value="java"/>
     </module>

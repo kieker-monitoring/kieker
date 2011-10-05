@@ -139,9 +139,8 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
-		sb.append("\n\tRecords lost (");
+		sb.append("\n\tRecords lost: ");
 		sb.append(this.missedRecords.intValue());
-		sb.append("): ");
 		sb.append("\n\tWriter Threads (");
 		sb.append(this.workers.size());
 		sb.append("): ");
