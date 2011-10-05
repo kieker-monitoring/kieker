@@ -26,7 +26,7 @@
 				<path location="${jar.file.monitoring}" />
                                 <path location="." />
 			</classpath>
-                   	<jvmarg value="-Dkieker.monitoring.properties=${monitoring.configuration.activemq}" />
+                   	<jvmarg value="-Dkieker.monitoring.configuration=${monitoring.configuration.activemq}" />
                         <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
@@ -38,7 +38,7 @@
 				<path location="${jar.file.monitoring}" />
                                 <path location="." />
 			</classpath>
-                   	<jvmarg value="-Dkieker.monitoring.properties=${monitoring.configuration.hornetq}" />
+                   	<jvmarg value="-Dkieker.monitoring.configuration=${monitoring.configuration.hornetq}" />
                         <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
@@ -50,7 +50,7 @@
 				<path location="${jar.file.monitoring}" />
                                 <path location="." />
 			</classpath>
-                   	<jvmarg value="-Dkieker.monitoring.properties=${monitoring.configuration.openjms}" />
+                   	<jvmarg value="-Dkieker.monitoring.configuration=${monitoring.configuration.openjms}" />
                         <jvmarg value="-Dlog4j.configuration=META-INF/log4j.properties"/> <!-- included in the jar -->
 		</java>
 	</target>
