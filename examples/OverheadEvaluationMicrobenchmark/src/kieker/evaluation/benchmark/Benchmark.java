@@ -45,23 +45,23 @@ public final class Benchmark {
 	private static long methodTime = 0;
 	private static int recursionDepth = 0;
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(final String[] args) throws InterruptedException {
 
 		/* 1. Preparations */
-		parseAndInitializeArguments(args);
+		Benchmark.parseAndInitializeArguments(args);
 
 		System.out.println(" # Experiment run configuration:");
-		System.out.println(" # 1. Output filename " + outputFn);
-		System.out.println(" # 2. Recursion Depth " + recursionDepth);
-		System.out.println(" # 3. Threads " + totalThreads);
-		System.out.println(" # 4. Total-Calls " + totalCalls);
+		System.out.println(" # 1. Output filename " + Benchmark.outputFn);
+		System.out.println(" # 2. Recursion Depth " + Benchmark.recursionDepth);
+		System.out.println(" # 3. Threads " + Benchmark.totalThreads);
+		System.out.println(" # 4. Total-Calls " + Benchmark.totalCalls);
 
 		/* 2. Initialize Threads and Classes */
-		CountDownLatch doneSignal = new CountDownLatch(totalThreads);
-		MonitoredClass mc = new MonitoredClass();
-		BenchmarkingThread[] threads = new BenchmarkingThread[totalThreads];
-		for (int i = 0; i < totalThreads; i++) {
-			threads[i] = new BenchmarkingThread(mc, totalCalls, methodTime, recursionDepth, doneSignal);
+		final CountDownLatch doneSignal = new CountDownLatch(Benchmark.totalThreads);
+		final MonitoredClass mc = new MonitoredClass();
+		final BenchmarkingThread[] threads = new BenchmarkingThread[Benchmark.totalThreads];
+		for (int i = 0; i < Benchmark.totalThreads; i++) {
+			threads[i] = new BenchmarkingThread(mc, Benchmark.totalCalls, Benchmark.methodTime, Benchmark.recursionDepth, doneSignal);
 		}
 		for (int l = 0; l < 4; l++) {
 			{// hopefully this works ;)
@@ -80,14 +80,14 @@ public final class Benchmark {
 			Thread.sleep(5000);
 		}
 		/* 3. Starting Threads */
-		for (int i = 0; i < totalThreads; i++) {
+		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i].start();
 		}
 
 		/* 4. Wait for all Threads */
 		try {
 			doneSignal.await();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -96,13 +96,13 @@ public final class Benchmark {
 		System.out.print(" # 5. Writing results ... ");
 		// CSV Format: configuration;order_index;Thread-ID;duration_nsec
 		long[] timings;
-		for (int h = 0; h < totalThreads; h++) {
+		for (int h = 0; h < Benchmark.totalThreads; h++) {
 			timings = threads[h].getTimings();
-			for (int i = 0; i < totalCalls; i++) {
-				ps.println(threads[h].getName() + ";" + timings[i]);
+			for (int i = 0; i < Benchmark.totalCalls; i++) {
+				Benchmark.ps.println(threads[h].getName() + ";" + timings[i]);
 			}
 		}
-		ps.close();
+		Benchmark.ps.close();
 
 		System.out.println("done");
 		System.out.println(" # ");
@@ -111,12 +111,12 @@ public final class Benchmark {
 	}
 
 	@SuppressWarnings("static-access")
-	public static void parseAndInitializeArguments(String[] args) {
+	public static void parseAndInitializeArguments(final String[] args) {
 		final Options cmdlOpts = new Options();
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalcalls").withArgName("calls").hasArg(true).isRequired(true)
 				.withDescription("Number of total Method-Calls performed.").withValueSeparator('=').create("t"));
-		cmdlOpts.addOption(OptionBuilder.withLongOpt("methodtime").withArgName("time").hasArg(true).isRequired(true)
-				.withDescription("Time a method call takes.").withValueSeparator('=').create("m"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("methodtime").withArgName("time").hasArg(true).isRequired(true).withDescription("Time a method call takes.")
+				.withValueSeparator('=').create("m"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("totalthreads").withArgName("threads").hasArg(true).isRequired(true)
 				.withDescription("Number of Threads started.").withValueSeparator('=').create("h"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("recursiondepth").withArgName("depth").hasArg(true).isRequired(true)
@@ -127,13 +127,13 @@ public final class Benchmark {
 			CommandLine cmdl = null;
 			final CommandLineParser cmdlParser = new BasicParser();
 			cmdl = cmdlParser.parse(cmdlOpts, args);
-			outputFn = cmdl.getOptionValue("output-filename");
-			totalCalls = Integer.parseInt(cmdl.getOptionValue("totalcalls"));
-			methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
-			totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
-			recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
-			ps = new PrintStream(new FileOutputStream(outputFn, true));
-		} catch (Exception ex) {
+			Benchmark.outputFn = cmdl.getOptionValue("output-filename");
+			Benchmark.totalCalls = Integer.parseInt(cmdl.getOptionValue("totalcalls"));
+			Benchmark.methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
+			Benchmark.totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
+			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
+			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true));
+		} catch (final Exception ex) {
 			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace();
 			System.exit(-1);

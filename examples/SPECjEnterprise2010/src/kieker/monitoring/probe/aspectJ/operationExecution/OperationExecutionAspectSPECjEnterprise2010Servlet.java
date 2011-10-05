@@ -40,8 +40,7 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectSPECjEnterprise2010Servlet.class);
 
 	@Pointcut("execution(* org.spec.jent.servlet.SpecAppServlet.do*(..)) && args(request,response)")
-	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {
-	}
+	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {}
 
 	@Override
 	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
@@ -50,8 +49,7 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 	}
 
 	@Pointcut("execution(* org.spec.jent..*(..)) && !execution(* _persistence*(..)) && !execution(void set*(..)) && !execution(* get*(..)) && !execution(boolean is*(..))")
-	public void monitoredMethod() {
-	}
+	public void monitoredMethod() {}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")
@@ -59,7 +57,7 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
 		execData.sessionId = AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId(); // may be null
 		int eoi; // this is executionOrderIndex-th execution in this trace
 		int ess; // this is the height in the dynamic call tree of this execution
@@ -73,7 +71,7 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			this.proceedAndMeasure(thisJoinPoint, execData);
+			proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				OperationExecutionAspectSPECjEnterprise2010Servlet.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectSPECjEnterprise2010Servlet.LOG.fatal("Terminating!");

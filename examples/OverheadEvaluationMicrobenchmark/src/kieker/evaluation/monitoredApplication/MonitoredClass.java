@@ -36,10 +36,10 @@ public final class MonitoredClass {
 		if (recDepth > 1) {
 			return monitoredMethod(methodTime, recDepth - 1);
 		} else {
-			final long exitTime = threadMXBean.getCurrentThreadUserTime() + methodTime;
-			long currentTime = threadMXBean.getCurrentThreadUserTime();
+			final long exitTime = this.threadMXBean.getCurrentThreadUserTime() + methodTime;
+			long currentTime = this.threadMXBean.getCurrentThreadUserTime();
 			while (currentTime < exitTime) {
-				currentTime = threadMXBean.getCurrentThreadUserTime();
+				currentTime = this.threadMXBean.getCurrentThreadUserTime();
 			}
 			return currentTime;
 		}

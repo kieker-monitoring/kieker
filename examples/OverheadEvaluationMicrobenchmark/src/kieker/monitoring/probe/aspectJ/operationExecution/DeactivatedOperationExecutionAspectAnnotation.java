@@ -43,27 +43,27 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 	private static final ConcurrentHashMap<String, Boolean> deactivatedProbes = new ConcurrentHashMap<String, Boolean>();
 	{
 		final int mapSize = 10000;
-		for (int i = 0; i < mapSize / 2; i++) {
-			deactivatedProbes.put(Long.toHexString(Double.doubleToLongBits(Math.random())), Boolean.TRUE);
+		for (int i = 0; i < (mapSize / 2); i++) {
+			DeactivatedOperationExecutionAspectAnnotation.deactivatedProbes.put(Long.toHexString(Double.doubleToLongBits(Math.random())), Boolean.TRUE);
 		}
-		deactivatedProbes.put("long kieker.evaluation.monitoredApplication.MonitoredClass.monitoredMethod(long, int)", Boolean.TRUE);
-		for (int i = 0; i < mapSize / 2; i++) {
-			deactivatedProbes.put(Long.toHexString(Double.doubleToLongBits(Math.random())), Boolean.TRUE);
+		DeactivatedOperationExecutionAspectAnnotation.deactivatedProbes.put("long kieker.evaluation.monitoredApplication.MonitoredClass.monitoredMethod(long, int)",
+				Boolean.TRUE);
+		for (int i = 0; i < (mapSize / 2); i++) {
+			DeactivatedOperationExecutionAspectAnnotation.deactivatedProbes.put(Long.toHexString(Double.doubleToLongBits(Math.random())), Boolean.TRUE);
 		}
 	}
 
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..))")
-	public void monitoredMethod() {
-	}
+	public void monitoredMethod() {}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")
 	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()
-				|| deactivatedProbes.containsKey(thisJoinPoint.getStaticPart().getSignature().toString())) {
+				|| DeactivatedOperationExecutionAspectAnnotation.deactivatedProbes.containsKey(thisJoinPoint.getStaticPart().getSignature().toString())) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
 		int eoi = 0; // this is executionOrderIndex-th execution in this trace
 		int ess = 0; // this is the height in the dynamic call tree of this execution
 		if (execData.isEntryPoint) {
@@ -76,7 +76,7 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			this.proceedAndMeasure(thisJoinPoint, execData);
+			proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				DeactivatedOperationExecutionAspectAnnotation.log.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				DeactivatedOperationExecutionAspectAnnotation.log.fatal("Terminating!");
