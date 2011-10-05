@@ -18,6 +18,10 @@ The general procedure for each example is the following:
  \item Start the monitoring instance which sends records via JMS
 \end{compactenum}
 
+\
+
+\WARNBOX{Due to a bug in the JMS-server some executions of the following examples could be problematic if paths with space characters are used. Try to avoid such paths.}
+
 \section{ActiveMQ}\label{example:jms:activemq}
 
 \subsection{Download and Prepare ActiveMQ}
@@ -113,7 +117,7 @@ and decompress it to the root directory of the example.
 
 \setXMLListing
 \begin{lstlisting}[caption=Queue definition to be added to the the HornetQ configuration file,label=lst:hornetq:config:queue,numbers=none]
-  <queue name="ExampleQueue">
+  <queue name="queue1">
       <entry name="/queue/queue1"/>
   </queue>
 \end{lstlisting}
@@ -154,7 +158,7 @@ is already configured to use the \class{AsyncJMSWriter} via HornetQ. The importa
 the definition of the provider URL, the context factory, and the queue:
 
 \setPropertiesListing
-\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
 
 \setPropertiesListing
 \lstinputlisting[firstline=152,lastline=152,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the connection factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
@@ -190,7 +194,7 @@ Note that the script must be called from within HornetQ's \dir{bin/} directory.
 \subsection{Download and Prepare OpenJMS}
 
 Download an OpenJMS install archive from \url{http://openjms.sourceforge.net} %
-and decompress it to the root directory of the example. 
+and decompress it to the root directory of the example. Unter UNIX-like systems, make sure that the executable-bit of all scripts within the \dir{bin/} directory are set.
 
 \subsection{Copy Kieker and OpenJMS Libraries}
 
@@ -239,7 +243,7 @@ the definition of the provider URL and the context factory:
 % \paragraph*{Execution}%
  The execution of the example is performed by the following three steps:
 \begin{enumerate}
-\item Start the JMS server (you may have to set your \class{JAVA\_HOME} variable first):
+\item Start the JMS server (you may have to set your \class{JAVA\_HOME} and \class{OPENJMS\_HOME} variables first):
 
 \setBashListing
 \begin{lstlisting}[caption=]
