@@ -60,8 +60,8 @@ public abstract class AbstractAsyncThread extends Thread {
 	@Override
 	public final void run() {
 		AbstractAsyncThread.LOG.debug(this.getClass().getName() + " running");
-		// making it a local variable for faster access
 		try {
+			// making it a local variable for faster access
 			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue; // NOPMD
 			while (!this.finished) {
 				try {

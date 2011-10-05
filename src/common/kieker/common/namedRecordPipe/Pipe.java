@@ -45,12 +45,6 @@ public final class Pipe {
 		return this.name;
 	}
 
-	/** No construction employing default constructor */
-	@SuppressWarnings("unused")
-	private Pipe() {
-		this.name = null; // NOPMD
-	}
-
 	public Pipe(final String name) {
 		this.name = name;
 	}

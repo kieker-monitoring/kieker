@@ -147,12 +147,13 @@
      !-->
     <!-- Checks that there are no tab characters ('\t') in the source code. !-->
     <!-- See http://checkstyle.sourceforge.net/config_whitespace.html#FileTabCharacter !-->
-    <!-- we use TABs in Kieker -->
+    <!-- we use TABs in Kieker !-->
+    <!--
     <module name="FileTabCharacter">
         <property name="eachLine"       value="false"/>
         <property name="fileExtensions" value=""/>
     </module>
-
+    -->
 
     <module name="TreeWalker">
 
@@ -779,9 +780,9 @@
         <!-- Checks correct indentation of Java Code. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
         <module name="Indentation">
-            <property name="basicOffset"     value="4"/>
+            <property name="basicOffset"     value="8"/>
             <property name="braceAdjustment" value="0"/>
-            <property name="caseIndent"      value="4"/>
+            <property name="caseIndent"      value="0"/>
         </module>
 
         <!-- Checks that the outer type name and the file name match. !-->
