@@ -56,12 +56,12 @@ accessing the JPetStore web application.
    script in the Tomcat's \dir{bin/} directory.
 
    You should make sure, that the Tomcat started properly, by taking 
-   a look at the \file{logs/catalina.out} file. %
+   a look at the \file{logs/catalina.out} file, \file{logs/catalina.<date>.log} file respectively. %
    On error, the file \file{logs/localhost.<date>.log} may contain details % 
    to resolve the issue.
 \item Now, you can access the JPetStore application by opening the URL
    \url{http://localhost:8080/jpetstore/} (Figure~\ref{fig:jpetstore}). %
-   \Kieker{} intialization messages should appear in \file{logs/catalina.out}. %
+   \Kieker{} intialization messages should appear in \file{logs/catalina.out}, \file{logs/catalina.<date>.log} respectively. %
    The output includes the information where the monitoring data is written to
    (should be Tomcat's \dir{temp/kieker-<DATE-TIME>/} directory).
 \item  Browse through the application to generate some monitoring data. %
