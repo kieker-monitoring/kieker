@@ -31,19 +31,13 @@ import org.apache.commons.logging.LogFactory;
  * incoming {@link IMonitoringRecord}s.
  * 
  * <ol>
- * <li>The first record received via
- * {@link #newTimestamp(long)} immediately leads to a new
- * {@link TimestampEvent} with the given timestamp.</li>
- * <li>The timestamp of the first record is stored as {@link #firstTimestamp}
- * and future events are generated at {@link #firstTimestamp} + i *
+ * <li>The first record received via {@link #newTimestamp(long)} immediately leads to a new {@link TimestampEvent} with the given timestamp.</li>
+ * <li>The timestamp of the first record is stored as {@link #firstTimestamp} and future events are generated at {@link #firstTimestamp} + i *
  * {@link #timerResolution}.</li>
- * <li>Future {@link IMonitoringRecord} may lead to future
- * {@link TimestampEvent} as follows:
+ * <li>Future {@link IMonitoringRecord} may lead to future {@link TimestampEvent} as follows:
  * <ol>
- * <li>A newly incoming {@link IMonitoringRecord} with logging timestamp
- * {@literal tstamp} leads to the new timer events satisfying
- * {@link #firstTimestamp} + i * {@link #timerResolution} {@literal <}
- * {@literal tstamp}.</li>
+ * <li>A newly incoming {@link IMonitoringRecord} with logging timestamp {@literal tstamp} leads to the new timer events satisfying {@link #firstTimestamp} + i *
+ * {@link #timerResolution} {@literal <} {@literal tstamp}.</li>
  * </ol>
  * </li>
  * </ol>
@@ -56,8 +50,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class CurrentTimeEventGenerator {
 
-	private static final Log log = LogFactory
-			.getLog(CurrentTimeEventGenerator.class);
+	private static final Log log = LogFactory.getLog(CurrentTimeEventGenerator.class);
 
 	/**
 	 * Timestamp of the record that was received first. Notice, that this is not
@@ -88,8 +81,7 @@ public class CurrentTimeEventGenerator {
 
 	/**
 	 * Creates an event generator which generates time events with the given
-	 * resolution in nanoseconds via the output port
-	 * {@link #getCurrentTimeOutputPort()}.
+	 * resolution in nanoseconds via the output port {@link #getCurrentTimeOutputPort()}.
 	 * 
 	 * @param timeResolution
 	 */
@@ -104,8 +96,7 @@ public class CurrentTimeEventGenerator {
 	 */
 	public void newTimestamp(final long timestamp) {
 		if (timestamp < 0) {
-			CurrentTimeEventGenerator.log
-					.warn("Received timestamp value < 0: " + timestamp);
+			CurrentTimeEventGenerator.log.warn("Received timestamp value < 0: " + timestamp);
 			return;
 		}
 
@@ -115,26 +106,22 @@ public class CurrentTimeEventGenerator {
 			 */
 			this.maxTimestamp = timestamp;
 			this.firstTimestamp = timestamp;
-			this.getCurrentTimeOutputPort().deliver(
-					new TimestampEvent(timestamp));
+			getCurrentTimeOutputPort().deliver(new TimestampEvent(timestamp));
 			this.mostRecentEventFired = timestamp;
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
 			/**
 			 * Fire timer event(s) if required.
 			 */
-			for (long nextTimerEventAt =
-					this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt =
-					this.mostRecentEventFired + this.timerResolution) {
-				this.getCurrentTimeOutputPort().deliver(
-						new TimestampEvent(nextTimerEventAt));
+			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
+					+ this.timerResolution) {
+				getCurrentTimeOutputPort().deliver(new TimestampEvent(nextTimerEventAt));
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}
 	}
 
-	private final OutputPort<TimestampEvent> currentTimeOutputPort =
-			new OutputPort<TimestampEvent>("Provides current time events");
+	private final OutputPort<TimestampEvent> currentTimeOutputPort = new OutputPort<TimestampEvent>("Provides current time events");
 
 	public OutputPort<TimestampEvent> getCurrentTimeOutputPort() {
 		return this.currentTimeOutputPort;

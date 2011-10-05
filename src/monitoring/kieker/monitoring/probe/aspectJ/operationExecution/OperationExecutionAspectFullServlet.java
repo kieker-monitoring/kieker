@@ -41,8 +41,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectAnnotation.class);
 
 	@Pointcut("execution(* *.do*(..)) && args(request,response)")
-	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {
-	}
+	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {}
 
 	@Override
 	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
@@ -51,8 +50,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 	}
 
 	@Pointcut("execution(* *.*(..))")
-	public void monitoredMethod() {
-	}
+	public void monitoredMethod() {}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")
@@ -60,7 +58,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
 		execData.sessionId = AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId(); // may
 		// be
 		// null
@@ -76,10 +74,9 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			this.proceedAndMeasure(thisJoinPoint, execData);
+			proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
-				OperationExecutionAspectFullServlet.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi
-						+ " ess == " + ess);
+				OperationExecutionAspectFullServlet.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectFullServlet.LOG.fatal("Terminating!");
 				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}

@@ -144,7 +144,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		try {
 			synchronized (this) { // we must not synch on pos, it changes within!
-				this.prepareFile(); // may throw FileNotFoundException
+				prepareFile(); // may throw FileNotFoundException
 				this.pos.println(sb);
 			}
 		} catch (final IOException ex) {

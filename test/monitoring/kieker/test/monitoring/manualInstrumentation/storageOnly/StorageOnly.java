@@ -39,7 +39,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  * If in kieker.monitoring.properties file system storage (store in database = false) is
  * selected, a new file (kieker*.dat) with monitoring data should be created in
  * the folder specified in kieker.monitoring.properties (default: /tmp).
- *
+ * 
  * @author Matthias Rohr
  * 
  *         History: 2008-05-05 small refactoring for first release
@@ -54,8 +54,8 @@ public class StorageOnly {
 		try {
 			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.numberOfEvents);
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component", i % 4 + "method", "sessionid", 3333, 123123L,
-						123124L, StorageOnly.ctrl.getHostName(), i, i);
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L,
+						StorageOnly.ctrl.getHostName(), i, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
 			}
@@ -63,8 +63,8 @@ public class StorageOnly {
 			Thread.sleep(8000);
 			System.out.printf("%d more monitoring points\n", StorageOnly.numberOfEvents);
 			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord(i % 2 + "component", i % 4 + "method", "sessionid", 3333, 123123L,
-						123124L, StorageOnly.ctrl.getHostName(), i + 10000, i);
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L,
+						StorageOnly.ctrl.getHostName(), i + 10000, i);
 				record.hostName = StorageOnly.vmName;
 				StorageOnly.ctrl.newMonitoringRecord(record);
 			}

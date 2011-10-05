@@ -46,16 +46,16 @@ public final class MappingFileWriter {
 	public MappingFileWriter(final String mappingFileFn) throws IOException {
 		this.mappingFile = new File(mappingFileFn);
 		if (!this.mappingFile.createNewFile()) {
-			throw new IOException("Mapping File '"+ mappingFileFn + "' already exists.");
+			throw new IOException("Mapping File '" + mappingFileFn + "' already exists.");
 		}
 	}
 
 	public final int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
 		final Integer idObj = this.class2idMap.get(clazz);
 		if (idObj == null) {
-			final int id = nextId.getAndIncrement();
+			final int id = this.nextId.getAndIncrement();
 			this.class2idMap.put(clazz, id);
-			this.writeMapping(id, clazz.getName());
+			writeMapping(id, clazz.getName());
 			return id;
 		}
 		return idObj;

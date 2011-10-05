@@ -53,8 +53,7 @@ class FSDirectoryReader {
 
 	private static final boolean OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE = true;
 
-	private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(
-			FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE);
+	private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE);
 	private volatile boolean recordTypeIdMapInitialized = false; // will read it
 																	// "on-demand"
 	private File inputDir = null;
@@ -88,7 +87,7 @@ class FSDirectoryReader {
 	 */
 	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
 			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
-		this.initInputDir(inputDirName); // throws IllegalArgumentException
+		initInputDir(inputDirName); // throws IllegalArgumentException
 		this.recordReceiver = recordReceiver;
 		if (readOnlyRecordsOfType != null) {
 			this.recordTypeSelector = new HashSet<String>();
@@ -119,7 +118,7 @@ class FSDirectoryReader {
 	 * 
 	 */
 	public void read() throws Exception {
-		this.readMappingFile();
+		readMappingFile();
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
 			@Override
@@ -130,18 +129,17 @@ class FSDirectoryReader {
 		});
 
 		if (inputFiles == null) {
-			throw new MonitoringReaderException("Directory '" + this.inputDir
-					+ "' does not exist or an I/O error occured.");
+			throw new MonitoringReaderException("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		}
 
 		if (inputFiles.length == 0) {
-			throw new MonitoringReaderException("Directory '" + this.inputDir + "' contains no files starting with '"
-					+ this.filePrefix + "' and ending with '" + this.filePostfix + "' could be found.");
+			throw new MonitoringReaderException("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
+					+ this.filePostfix + "' could be found.");
 		}
 
 		Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
-		for (int i = 0; i < inputFiles.length; i++) {
-			this.processInputFile(inputFiles[i]);
+		for (final File inputFile : inputFiles) {
+			processInputFile(inputFile);
 		}
 	}
 
@@ -202,12 +200,10 @@ class FSDirectoryReader {
 						FSDirectoryReader.log.info("Ignoring record type for mapping " + line);
 					}
 				} catch (final ClassNotFoundException e) {
-					FSDirectoryReader.log.error(
-							"Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
+					FSDirectoryReader.log.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
 					break;
 				} catch (final IllegalArgumentException e) {
-					FSDirectoryReader.log.error(
-							"Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
+					FSDirectoryReader.log.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
 					break;
 				}
 			}
@@ -245,7 +241,7 @@ class FSDirectoryReader {
 				IMonitoringRecord rec = null;
 				try {
 					if (!this.recordTypeIdMapInitialized && line.startsWith("$")) {
-						this.readMappingFile();
+						readMappingFile();
 						this.recordTypeIdMapInitialized = true;
 					}
 					st = new StringTokenizer(line, ";");
@@ -270,13 +266,10 @@ class FSDirectoryReader {
 								continue curRecord;
 							}
 
-							final Class<? extends IMonitoringRecord> clazz = this.typeRegistry
-									.fetchClassForRecordTypeId(id);
+							final Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
 							if (clazz == null) {
-								FSDirectoryReader.log.fatal("Missing classname mapping for record type id " + "'" + id
-										+ "'");
-								throw new IllegalStateException("Missing classname mapping for record type id " + "'"
-										+ id + "'");
+								FSDirectoryReader.log.fatal("Missing classname mapping for record type id " + "'" + id + "'");
+								throw new IllegalStateException("Missing classname mapping for record type id " + "'" + id + "'");
 							}
 							rec = clazz.newInstance();
 							token = st.nextToken();
@@ -296,22 +289,19 @@ class FSDirectoryReader {
 						vec = new String[0];
 					}
 
-					final Object[] typedArray = this.fromStringToTypedArray(vec, rec.getValueTypes());
+					final Object[] typedArray = fromStringToTypedArray(vec, rec.getValueTypes());
 					rec.initFromArray(typedArray);
 
 				} catch (final InstantiationException e) {
-					FSDirectoryReader.log.error(
-							"Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
+					FSDirectoryReader.log.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
 					FSDirectoryReader.log.error("Abort reading");
 					throw new MonitoringReaderException("LogReaderExecutionException ", e);
 				} catch (final IllegalAccessException e) {
-					FSDirectoryReader.log.error(
-							"Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
+					FSDirectoryReader.log.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
 					FSDirectoryReader.log.error("Abort reading");
 					throw new MonitoringReaderException("LogReaderExecutionException ", e);
 				} catch (final IllegalStateException e) {
-					FSDirectoryReader.log.error(
-							"Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
+					FSDirectoryReader.log.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
 					FSDirectoryReader.log.error("Abort reading");
 					throw new MonitoringReaderException("LogReaderExecutionException ", e);
 				}
@@ -334,8 +324,7 @@ class FSDirectoryReader {
 		}
 	}
 
-	private Object[] fromStringToTypedArray(final String[] vec, final Class<?>[] valueTypes)
-			throws IllegalArgumentException {
+	private Object[] fromStringToTypedArray(final String[] vec, final Class<?>[] valueTypes) throws IllegalArgumentException {
 		final Object[] typedArray = new Object[vec.length];
 		int curIdx = -1;
 		for (final Class<?> clazz : valueTypes) {

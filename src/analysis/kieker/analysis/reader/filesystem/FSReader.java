@@ -60,9 +60,7 @@ public class FSReader extends AbstractMonitoringReader {
 	 * @param readOnlyRecordsOfType
 	 *            select only records of this type; null selects all
 	 */
-	public FSReader(
-			final String[] inputDirs,
-			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
+	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
 		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
 	}
@@ -80,8 +78,7 @@ public class FSReader extends AbstractMonitoringReader {
 
 	/**
 	 * Receives records from the {@link #concurrentConsumer} and delegates them
-	 * to the registered consumers via the
-	 * {@link #deliverRecord(IMonitoringRecord)} method.
+	 * to the registered consumers via the {@link #deliverRecord(IMonitoringRecord)} method.
 	 */
 	private final IMonitoringRecordReceiver delegator = new IMonitoringRecordReceiver() {
 
@@ -93,8 +90,7 @@ public class FSReader extends AbstractMonitoringReader {
 
 	@Override
 	public boolean read() {
-		this.concurrentConsumer = new FSReaderCons(this.delegator,
-				this.inputDirs, this.readOnlyRecordsOfType);
+		this.concurrentConsumer = new FSReaderCons(this.delegator, this.inputDirs, this.readOnlyRecordsOfType);
 		boolean success = false;
 		try {
 			success = this.concurrentConsumer.execute();
@@ -118,30 +114,26 @@ public class FSReader extends AbstractMonitoringReader {
 		String dirList = null;
 		try {
 			/* throws IllegalArgumentException: */
-			final PropertyMap propertyMap = new PropertyMap(initString, "|",
-					"=");
+			final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
 			dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
 
 			if (dirList == null) {
-				FSReader.log.error("Missing value for property "
-						+ FSReader.PROP_NAME_INPUTDIRS);
+				FSReader.log.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
 				return false;
 			} // parse inputDir property value
 
-			final StringTokenizer dirNameTokenizer = new StringTokenizer(
-					dirList, ";");
+			final StringTokenizer dirNameTokenizer = new StringTokenizer(dirList, ";");
 			this.inputDirs = new String[dirNameTokenizer.countTokens()];
 			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
 				this.inputDirs[i] = dirNameTokenizer.nextToken().trim();
 			}
 		} catch (final Exception exc) {
-			FSReader.log.error("Error parsing list of input directories'"
-					+ dirList + "':" + exc.getMessage(), exc);
+			FSReader.log.error("Error parsing list of input directories'" + dirList + "':" + exc.getMessage(), exc);
 			return false;
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void terminate() {
 		// TODO: Provide meaningful termination routine (#117)

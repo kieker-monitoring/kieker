@@ -32,7 +32,7 @@ public interface IStateController {
 	 * @return true if now terminated; false if already terminated
 	 */
 	public abstract boolean terminateMonitoring();
-		
+
 	/**
 	 * Returns whether monitoring is permanently terminated.
 	 * 

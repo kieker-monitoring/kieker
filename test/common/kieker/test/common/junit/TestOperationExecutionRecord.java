@@ -20,260 +20,261 @@
 
 package kieker.test.common.junit;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.record.OperationExecutionRecord;
 
 /**
- *@author Andre van Hoorn
+ * @author Andre van Hoorn
  */
 public class TestOperationExecutionRecord extends TestCase {
-    
-    /**
-     * Tests the toArray(..) and initFromArray(..) methods of
-     * OperationExecutionRecord.
-     *
-     * Assert that a record instance r1 equals an
-     * instance r2 created by serializing r1 to an
-     * array a1 and using a1 to init r2.
-     *
-     */
-    public void testSerializeDeserializeEquals(){
-        OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.className = "p1.p2.p3.componentname";
-        r1.eoi=1;
-        r1.ess=2;
-        r1.experimentId=55;
-        r1.isEntryPoint=true;
-        r1.operationName="operation(boolean arg1, int arg2)";
-        r1.retVal=new Object();
-        r1.sessionId="XXLJHDJHDHF";
-        r1.tin=5577376;
-        r1.tout=7544522;
-        r1.traceId=882287444;
-        r1.hostName="myVM";
 
-        Object[] r1Array = r1.toArray();
+	/**
+	 * Tests the toArray(..) and initFromArray(..) methods of
+	 * OperationExecutionRecord.
+	 * 
+	 * Assert that a record instance r1 equals an
+	 * instance r2 created by serializing r1 to an
+	 * array a1 and using a1 to init r2.
+	 * 
+	 */
+	public void testSerializeDeserializeEquals() {
+		final OperationExecutionRecord r1 = new OperationExecutionRecord();
+		r1.className = "p1.p2.p3.componentname";
+		r1.eoi = 1;
+		r1.ess = 2;
+		r1.experimentId = 55;
+		r1.isEntryPoint = true;
+		r1.operationName = "operation(boolean arg1, int arg2)";
+		r1.retVal = new Object();
+		r1.sessionId = "XXLJHDJHDHF";
+		r1.tin = 5577376;
+		r1.tout = 7544522;
+		r1.traceId = 882287444;
+		r1.hostName = "myVM";
 
-        OperationExecutionRecord r2 = new OperationExecutionRecord();
-        r2.initFromArray(r1Array);
+		final Object[] r1Array = r1.toArray();
 
-        assertEquals(r1, r2);
-    }
+		final OperationExecutionRecord r2 = new OperationExecutionRecord();
+		r2.initFromArray(r1Array);
 
-    /**
-     * Tests the equals(..) method of OperationExecutionRecord.
-     *
-     * Assert that two record instances with equal variables values
-     * are equal.
-     */
-    public void testEqualsEqualVariablesValues(){
-        OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.className = "p1.p2.p3.componentname";
-        r1.eoi=1;
-        r1.ess=2;
-        r1.experimentId=55;
-        r1.isEntryPoint=true;
-        r1.operationName="operation(boolean arg1, int arg2)";
-        r1.retVal=new Object();
-        r1.sessionId="XXLJHDJHDHF";
-        r1.tin=5577376;
-        r1.tout=7544522;
-        r1.traceId=882287444;
-        r1.hostName="myVM";
+		Assert.assertEquals(r1, r2);
+	}
 
-        OperationExecutionRecord r2 = new OperationExecutionRecord();
-        r2.className = "p1.p2.p3.componentname";
-        r2.eoi=1;
-        r2.ess=2;
-        r2.experimentId=55;
-        r2.isEntryPoint=true;
-        r2.operationName="operation(boolean arg1, int arg2)";
-        r2.retVal=new Object();
-        r2.sessionId="XXLJHDJHDHF";
-        r2.tin=5577376;
-        r2.tout=7544522;
-        r2.traceId=882287444;
-        r2.hostName="myVM";
+	/**
+	 * Tests the equals(..) method of OperationExecutionRecord.
+	 * 
+	 * Assert that two record instances with equal variables values
+	 * are equal.
+	 */
+	public void testEqualsEqualVariablesValues() {
+		final OperationExecutionRecord r1 = new OperationExecutionRecord();
+		r1.className = "p1.p2.p3.componentname";
+		r1.eoi = 1;
+		r1.ess = 2;
+		r1.experimentId = 55;
+		r1.isEntryPoint = true;
+		r1.operationName = "operation(boolean arg1, int arg2)";
+		r1.retVal = new Object();
+		r1.sessionId = "XXLJHDJHDHF";
+		r1.tin = 5577376;
+		r1.tout = 7544522;
+		r1.traceId = 882287444;
+		r1.hostName = "myVM";
 
-        assertEquals(r1, r2);
-    }
+		final OperationExecutionRecord r2 = new OperationExecutionRecord();
+		r2.className = "p1.p2.p3.componentname";
+		r2.eoi = 1;
+		r2.ess = 2;
+		r2.experimentId = 55;
+		r2.isEntryPoint = true;
+		r2.operationName = "operation(boolean arg1, int arg2)";
+		r2.retVal = new Object();
+		r2.sessionId = "XXLJHDJHDHF";
+		r2.tin = 5577376;
+		r2.tout = 7544522;
+		r2.traceId = 882287444;
+		r2.hostName = "myVM";
 
-    /**
-     * Tests the equals(..) method of OperationExecutionRecord.
-     *
-     * Assert that two record instances with null variables values
-     * are not equal.
-     */
-    public void testEqualsNullVariableValues(){
-        OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.className = "p1.p2.p3.componentname";
-        r1.eoi=1;
-        r1.ess=2;
-        r1.experimentId=55;
-        r1.isEntryPoint=true;
-        r1.operationName="operation(boolean arg1, int arg2)";
-        r1.retVal=new Object();
-        r1.sessionId="XXLJHDJHDHF";
-        r1.tin=5577376;
-        r1.tout=7544522;
-        r1.traceId=882287444;
-        r1.hostName="myVM";
+		Assert.assertEquals(r1, r2);
+	}
 
-        OperationExecutionRecord r2 = new OperationExecutionRecord();
-        r2.className = "p1.p2.p3.componentname";
-        r2.eoi=1;
-        r2.ess=2;
-        r2.experimentId=55;
-        r2.isEntryPoint=true;
-        r2.operationName="operation(boolean arg1, int arg2)";
-        r2.retVal=new Object();
-        r2.sessionId="XXLJHDJHDHF";
-        r2.tin=5577376;
-        r2.tout=7544522;
-        r2.traceId=882287444;
-        r2.hostName="myVM";
+	/**
+	 * Tests the equals(..) method of OperationExecutionRecord.
+	 * 
+	 * Assert that two record instances with null variables values
+	 * are not equal.
+	 */
+	public void testEqualsNullVariableValues() {
+		final OperationExecutionRecord r1 = new OperationExecutionRecord();
+		r1.className = "p1.p2.p3.componentname";
+		r1.eoi = 1;
+		r1.ess = 2;
+		r1.experimentId = 55;
+		r1.isEntryPoint = true;
+		r1.operationName = "operation(boolean arg1, int arg2)";
+		r1.retVal = new Object();
+		r1.sessionId = "XXLJHDJHDHF";
+		r1.tin = 5577376;
+		r1.tout = 7544522;
+		r1.traceId = 882287444;
+		r1.hostName = "myVM";
 
-        assertEquals(r1, r2);
+		final OperationExecutionRecord r2 = new OperationExecutionRecord();
+		r2.className = "p1.p2.p3.componentname";
+		r2.eoi = 1;
+		r2.ess = 2;
+		r2.experimentId = 55;
+		r2.isEntryPoint = true;
+		r2.operationName = "operation(boolean arg1, int arg2)";
+		r2.retVal = new Object();
+		r2.sessionId = "XXLJHDJHDHF";
+		r2.tin = 5577376;
+		r2.tout = 7544522;
+		r2.traceId = 882287444;
+		r2.hostName = "myVM";
 
-        /* Modification of className */
-        String oldComponentName1 = r1.className;
-        String oldComponentName2 = r2.className;
-        r1.className = null;
-        r2.className = null;
-        assertFalse(r1.equals(r2));
-        r1.className = oldComponentName1;
-        r2.className = oldComponentName2;
-        assertEquals(r1, r2);
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of operationName */
-        String oldOpname1 = r1.operationName;
-        String oldOpname2 = r2.operationName;
-        r1.operationName = null;
-        r2.operationName = null;
-        assertFalse(r1.equals(r2));
-        r1.operationName = oldOpname1;
-        r2.operationName = oldOpname2;
-        assertEquals(r1, r2);
+		/* Modification of className */
+		final String oldComponentName1 = r1.className;
+		final String oldComponentName2 = r2.className;
+		r1.className = null;
+		r2.className = null;
+		Assert.assertFalse(r1.equals(r2));
+		r1.className = oldComponentName1;
+		r2.className = oldComponentName2;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of sessionId */
-        String oldSessionId1 = r1.sessionId;
-        String oldSessionId2 = r2.sessionId;
-        r1.sessionId = null;
-        r2.sessionId = null;
-        assertFalse(r1.equals(r2));
-        r1.sessionId = oldSessionId1;
-        r2.sessionId = oldSessionId2;
-        assertEquals(r1, r2);
+		/* Modification of operationName */
+		final String oldOpname1 = r1.operationName;
+		final String oldOpname2 = r2.operationName;
+		r1.operationName = null;
+		r2.operationName = null;
+		Assert.assertFalse(r1.equals(r2));
+		r1.operationName = oldOpname1;
+		r2.operationName = oldOpname2;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of hostName */
-        String oldVmName1 = r1.hostName;
-        String oldVmName2 = r2.hostName;
-        r1.hostName = null;
-        r2.hostName = null;
-        assertFalse(r1.equals(r2));
-        r1.hostName = oldVmName1;
-        r2.hostName = oldVmName2;
-        assertEquals(r1, r2);
-    }
+		/* Modification of sessionId */
+		final String oldSessionId1 = r1.sessionId;
+		final String oldSessionId2 = r2.sessionId;
+		r1.sessionId = null;
+		r2.sessionId = null;
+		Assert.assertFalse(r1.equals(r2));
+		r1.sessionId = oldSessionId1;
+		r2.sessionId = oldSessionId2;
+		Assert.assertEquals(r1, r2);
 
-    /**
-     * Tests the equals(..) method of OperationExecutionRecord.
-     *
-     * Assert that two record instances with differing variables values
-     * are not equal.
-     */
-    public void testEqualsDifferentVariablesValues(){
-        OperationExecutionRecord r1 = new OperationExecutionRecord();
-        r1.className = "p1.p2.p3.componentname";
-        r1.eoi=1;
-        r1.ess=2;
-        r1.experimentId=55;
-        r1.isEntryPoint=true;
-        r1.operationName="operation(boolean arg1, int arg2)";
-        r1.retVal=new Object();
-        r1.sessionId="XXLJHDJHDHF";
-        r1.tin=5577376;
-        r1.tout=7544522;
-        r1.traceId=882287444;
-        r1.hostName="myVM";
+		/* Modification of hostName */
+		final String oldVmName1 = r1.hostName;
+		final String oldVmName2 = r2.hostName;
+		r1.hostName = null;
+		r2.hostName = null;
+		Assert.assertFalse(r1.equals(r2));
+		r1.hostName = oldVmName1;
+		r2.hostName = oldVmName2;
+		Assert.assertEquals(r1, r2);
+	}
 
-        OperationExecutionRecord r2 = new OperationExecutionRecord();
-        r2.className = "p1.p2.p3.componentname";
-        r2.eoi=1;
-        r2.ess=2;
-        r2.experimentId=55;
-        r2.isEntryPoint=true;
-        r2.operationName="operation(boolean arg1, int arg2)";
-        r2.retVal=new Object();
-        r2.sessionId="XXLJHDJHDHF";
-        r2.tin=5577376;
-        r2.tout=7544522;
-        r2.traceId=882287444;
-        r2.hostName="myVM";
+	/**
+	 * Tests the equals(..) method of OperationExecutionRecord.
+	 * 
+	 * Assert that two record instances with differing variables values
+	 * are not equal.
+	 */
+	public void testEqualsDifferentVariablesValues() {
+		final OperationExecutionRecord r1 = new OperationExecutionRecord();
+		r1.className = "p1.p2.p3.componentname";
+		r1.eoi = 1;
+		r1.ess = 2;
+		r1.experimentId = 55;
+		r1.isEntryPoint = true;
+		r1.operationName = "operation(boolean arg1, int arg2)";
+		r1.retVal = new Object();
+		r1.sessionId = "XXLJHDJHDHF";
+		r1.tin = 5577376;
+		r1.tout = 7544522;
+		r1.traceId = 882287444;
+		r1.hostName = "myVM";
 
-        assertEquals(r1, r2);
+		final OperationExecutionRecord r2 = new OperationExecutionRecord();
+		r2.className = "p1.p2.p3.componentname";
+		r2.eoi = 1;
+		r2.ess = 2;
+		r2.experimentId = 55;
+		r2.isEntryPoint = true;
+		r2.operationName = "operation(boolean arg1, int arg2)";
+		r2.retVal = new Object();
+		r2.sessionId = "XXLJHDJHDHF";
+		r2.tin = 5577376;
+		r2.tout = 7544522;
+		r2.traceId = 882287444;
+		r2.hostName = "myVM";
 
-        /* Modification of className */
-        String oldComponentName = r2.className;
-        r2.className = r2.className+"_";
-        assertFalse(r1.equals(r2));
-        r2.className = oldComponentName;
-        assertEquals(r1, r2);
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of eoi */
-        int oldEoi = r2.eoi;
-        r2.eoi++;
-        assertFalse(r1.equals(r2));
-        r2.eoi = oldEoi;
-        assertEquals(r1, r2);
+		/* Modification of className */
+		final String oldComponentName = r2.className;
+		r2.className = r2.className + "_";
+		Assert.assertFalse(r1.equals(r2));
+		r2.className = oldComponentName;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of ess */
-        int oldEss = r2.ess;
-        r2.ess++;
-        assertFalse(r1.equals(r2));
-        r2.ess = oldEss;
-        assertEquals(r1, r2);
+		/* Modification of eoi */
+		final int oldEoi = r2.eoi;
+		r2.eoi++;
+		Assert.assertFalse(r1.equals(r2));
+		r2.eoi = oldEoi;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of operationName */
-        String oldOpname = r2.operationName;
-        r2.operationName = r2.operationName+"_";
-        assertFalse(r1.equals(r2));
-        r2.operationName = oldOpname;
-        assertEquals(r1, r2);
+		/* Modification of ess */
+		final int oldEss = r2.ess;
+		r2.ess++;
+		Assert.assertFalse(r1.equals(r2));
+		r2.ess = oldEss;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of sessionId */
-        String oldsessionId = r2.sessionId;
-        r2.sessionId = r2.sessionId+"_";
-        assertFalse(r1.equals(r2));
-        r2.sessionId = oldsessionId;
-        assertEquals(r1, r2);
+		/* Modification of operationName */
+		final String oldOpname = r2.operationName;
+		r2.operationName = r2.operationName + "_";
+		Assert.assertFalse(r1.equals(r2));
+		r2.operationName = oldOpname;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of tin */
-        long oldTin = r2.tin;
-        r2.tin++;
-        assertFalse(r1.equals(r2));
-        r2.tin = oldTin;
-        assertEquals(r1, r2);
+		/* Modification of sessionId */
+		final String oldsessionId = r2.sessionId;
+		r2.sessionId = r2.sessionId + "_";
+		Assert.assertFalse(r1.equals(r2));
+		r2.sessionId = oldsessionId;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of tout */
-        long oldTout = r2.tout;
-        r2.tout++;
-        assertFalse(r1.equals(r2));
-        r2.tout = oldTout;
-        assertEquals(r1, r2);
+		/* Modification of tin */
+		final long oldTin = r2.tin;
+		r2.tin++;
+		Assert.assertFalse(r1.equals(r2));
+		r2.tin = oldTin;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of traceId */
-        long oldTraceId = r2.traceId;
-        r2.traceId++;
-        assertFalse(r1.equals(r2));
-        r2.traceId = oldTraceId;
-        assertEquals(r1, r2);
+		/* Modification of tout */
+		final long oldTout = r2.tout;
+		r2.tout++;
+		Assert.assertFalse(r1.equals(r2));
+		r2.tout = oldTout;
+		Assert.assertEquals(r1, r2);
 
-        /* Modification of hostName */
-        String oldVmName = r2.hostName;
-        r2.hostName = r2.hostName+"_";
-        assertFalse(r1.equals(r2));
-        r2.hostName = oldVmName;
-        assertEquals(r1, r2);
-    }
+		/* Modification of traceId */
+		final long oldTraceId = r2.traceId;
+		r2.traceId++;
+		Assert.assertFalse(r1.equals(r2));
+		r2.traceId = oldTraceId;
+		Assert.assertEquals(r1, r2);
+
+		/* Modification of hostName */
+		final String oldVmName = r2.hostName;
+		r2.hostName = r2.hostName + "_";
+		Assert.assertFalse(r1.equals(r2));
+		r2.hostName = oldVmName;
+		Assert.assertEquals(r1, r2);
+	}
 }

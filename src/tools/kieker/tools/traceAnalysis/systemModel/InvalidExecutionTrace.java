@@ -29,7 +29,7 @@ public class InvalidExecutionTrace implements IAnalysisEvent {
 	private final ExecutionTrace invalidExecutionTraceArtifacts;
 
 	public ExecutionTrace getInvalidExecutionTraceArtifacts() {
-		return invalidExecutionTraceArtifacts;
+		return this.invalidExecutionTraceArtifacts;
 	}
 
 	public InvalidExecutionTrace(final ExecutionTrace invalidExecutionTrace) {
@@ -38,18 +38,18 @@ public class InvalidExecutionTrace implements IAnalysisEvent {
 
 	@Override
 	public String toString() {
-		StringBuilder strBuild = new StringBuilder("Invalid Trace: ");
+		final StringBuilder strBuild = new StringBuilder("Invalid Trace: ");
 		strBuild.append(this.invalidExecutionTraceArtifacts.toString());
 		return strBuild.toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return ((invalidExecutionTraceArtifacts == null) ? 0 : invalidExecutionTraceArtifacts.hashCode());
+		return ((this.invalidExecutionTraceArtifacts == null) ? 0 : this.invalidExecutionTraceArtifacts.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (!(obj instanceof InvalidExecutionTrace)) {
 			return false;
 		}

@@ -39,15 +39,12 @@ public interface ISamplingController {
 	 * @param period
 	 * @param timeUnit
 	 * @return a {@link ScheduledSamplerJob} as a handler for removing the
-	 *         scheduled sampler later on by using the method
-	 *         {@link #removeScheduledSampler(ScheduledSamplerJob)}.
+	 *         scheduled sampler later on by using the method {@link #removeScheduledSampler(ScheduledSamplerJob)}.
 	 */
-	public abstract ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay,
-			final long period, final TimeUnit timeUnit);
+	public abstract ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit);
 
 	/**
-	 * Stops future executions of the given periodic {@link ScheduledSamplerJob}
-	 * .
+	 * Stops future executions of the given periodic {@link ScheduledSamplerJob} .
 	 * 
 	 * @param sampler
 	 * @return true if the sensor is not registered

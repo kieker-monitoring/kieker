@@ -44,119 +44,106 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponent> {
 
-    private static final Log log = LogFactory.getLog(ComponentDependencyGraphPluginAssembly.class);
-    private final File dotOutputFile;
-    private final boolean includeWeights;
-    private final boolean shortLabels;
-    private final boolean includeSelfLoops;
+	private static final Log log = LogFactory.getLog(ComponentDependencyGraphPluginAssembly.class);
+	private final File dotOutputFile;
+	private final boolean includeWeights;
+	private final boolean shortLabels;
+	private final boolean includeSelfLoops;
 
-    public ComponentDependencyGraphPluginAssembly(
-            final String name,
-            final SystemModelRepository systemEntityFactory,
-            final File dotOutputFile,
-            final boolean includeWeights,
-            final boolean shortLabels,
-            final boolean includeSelfLoops) {
-        super(name, systemEntityFactory,
-                new DependencyGraph<AssemblyComponent>(
-                systemEntityFactory.getAssemblyFactory().rootAssemblyComponent.getId(),
-                systemEntityFactory.getAssemblyFactory().rootAssemblyComponent));
-        this.dotOutputFile = dotOutputFile;
-        this.includeWeights = includeWeights;
-        this.shortLabels = shortLabels;
-        this.includeSelfLoops = includeSelfLoops;
-    }
+	public ComponentDependencyGraphPluginAssembly(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
+			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
+		super(name, systemEntityFactory, new DependencyGraph<AssemblyComponent>(systemEntityFactory.getAssemblyFactory().rootAssemblyComponent.getId(),
+				systemEntityFactory.getAssemblyFactory().rootAssemblyComponent));
+		this.dotOutputFile = dotOutputFile;
+		this.includeWeights = includeWeights;
+		this.shortLabels = shortLabels;
+		this.includeSelfLoops = includeSelfLoops;
+	}
 
-    private String nodeLabel(final AssemblyComponent curComponent){
-        if (this.shortLabels){
-            return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName()+":.."+curComponent.getType().getTypeName();
-        } else {
-            return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName()+":"+curComponent.getType().getFullQualifiedName();
-        }
-    }
+	private String nodeLabel(final AssemblyComponent curComponent) {
+		if (this.shortLabels) {
+			return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":.." + curComponent.getType().getTypeName();
+		} else {
+			return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":"
+					+ curComponent.getType().getFullQualifiedName();
+		}
+	}
 
-    @Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes,
-            final PrintStream ps, final boolean shortLabels) {
+	@Override
+	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes, final PrintStream ps, final boolean shortLabels) {
 
-        final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
-        final int rootComponentId = rootComponent.getId();
-        final StringBuilder strBuild = new StringBuilder();
-        // dot code for contained components
-        for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
-            final AssemblyComponent curComponent = node.getEntity();
-            final int curComponentId = node.getId();
-            strBuild.append(DotFactory.createNode("",
-                    this.getNodeId(node),
-                    (curComponentId == rootComponentId) ? "$" : this.nodeLabel(curComponent),
-                    (curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX,
-                    (curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style
-                    null, // framecolor
-                    (curComponentId == rootComponentId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
-                    null, // fontcolor
-                    DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-                    null, // imagefilename
-                    null // misc
-                    ));
-            strBuild.append("\n");
-        }
-        ps.println(strBuild.toString());
-    }
+		final AssemblyComponent rootComponent = getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
+		final int rootComponentId = rootComponent.getId();
+		final StringBuilder strBuild = new StringBuilder();
+		// dot code for contained components
+		for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
+			final AssemblyComponent curComponent = node.getEntity();
+			final int curComponentId = node.getId();
+			strBuild.append(DotFactory.createNode("", getNodeId(node), (curComponentId == rootComponentId) ? "$" : nodeLabel(curComponent),
+					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, (curComponentId == rootComponentId) ? null
+							: DotFactory.DOT_STYLE_FILLED, // style
+					null, // framecolor
+					(curComponentId == rootComponentId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
+					null, // fontcolor
+					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
+					null, // imagefilename
+					null // misc
+					));
+			strBuild.append("\n");
+		}
+		ps.println(strBuild.toString());
+	}
 
-    @Override
-    public boolean execute() {
-        return true; // no need to do anything here
-    }
+	@Override
+	public boolean execute() {
+		return true; // no need to do anything here
+	}
 
-    /**
-     * Saves the dependency graph to the dot file if error is not true.
-     *
-     * @param error
-     */
-    @Override
-    public void terminate(final boolean error) {
-        if (!error) {
-            try {
-                this.saveToDotFile(
-                        this.dotOutputFile.getCanonicalPath(),
-                        this.includeWeights,
-                        this.shortLabels,
-                        this.includeSelfLoops);
-            } catch (final IOException ex) {
-                ComponentDependencyGraphPluginAssembly.log.error("IOException", ex);
-            }
-        }
-    }
+	/**
+	 * Saves the dependency graph to the dot file if error is not true.
+	 * 
+	 * @param error
+	 */
+	@Override
+	public void terminate(final boolean error) {
+		if (!error) {
+			try {
+				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+			} catch (final IOException ex) {
+				ComponentDependencyGraphPluginAssembly.log.error("IOException", ex);
+			}
+		}
+	}
 
-    @Override
-    public IInputPort<MessageTrace> getMessageTraceInputPort() {
-        return this.messageTraceInputPort;
-    }
-    private final IInputPort<MessageTrace> messageTraceInputPort =
-            new AbstractInputPort<MessageTrace>("Message traces") {
+	@Override
+	public IInputPort<MessageTrace> getMessageTraceInputPort() {
+		return this.messageTraceInputPort;
+	}
 
-                @Override
-                public void newEvent(final MessageTrace t) {
-                    for (final Message m : t.getSequenceAsVector()) {
-                        if (m instanceof SynchronousReplyMessage) {
-                            continue;
-                        }
-                        final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
-                        final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-                        DependencyGraphNode<AssemblyComponent> senderNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderComponent.getId());
-                        DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverComponent.getId());
-                        if (senderNode == null) {
-                            senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
-                            ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-                        }
-                        if (receiverNode == null) {
-                            receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
-                            ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-                        }
-                        senderNode.addOutgoingDependency(receiverNode);
-                        receiverNode.addIncomingDependency(senderNode);
-                    }
-                    ComponentDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
-                }
-            };
+	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+
+		@Override
+		public void newEvent(final MessageTrace t) {
+			for (final Message m : t.getSequenceAsVector()) {
+				if (m instanceof SynchronousReplyMessage) {
+					continue;
+				}
+				final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+				final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+				DependencyGraphNode<AssemblyComponent> senderNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderComponent.getId());
+				DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverComponent.getId());
+				if (senderNode == null) {
+					senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
+					ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+				}
+				if (receiverNode == null) {
+					receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
+					ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+				}
+				senderNode.addOutgoingDependency(receiverNode);
+				receiverNode.addIncomingDependency(senderNode);
+			}
+			ComponentDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
+		}
+	};
 }

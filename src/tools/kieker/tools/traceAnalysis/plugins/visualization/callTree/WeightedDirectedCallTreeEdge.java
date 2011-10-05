@@ -21,48 +21,46 @@
 package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 /**
- *
+ * 
  * @author Andre van Hoorn
  */
 public class WeightedDirectedCallTreeEdge<T> {
 
-    private AbstractCallTreeNode<T> source;
-    private AbstractCallTreeNode<T> destination;
+	private AbstractCallTreeNode<T> source;
+	private AbstractCallTreeNode<T> destination;
 
-    @SuppressWarnings("unused")
-	private WeightedDirectedCallTreeEdge() {
-    }
+	@SuppressWarnings("unused")
+	private WeightedDirectedCallTreeEdge() {}
 
-    public WeightedDirectedCallTreeEdge(
-            final AbstractCallTreeNode<T> source,
-            final AbstractCallTreeNode<T> destination) {
-        this.source = source;
-        this.destination = destination;
-    }
+	public WeightedDirectedCallTreeEdge(final AbstractCallTreeNode<T> source, final AbstractCallTreeNode<T> destination) {
+		this.source = source;
+		this.destination = destination;
+	}
 
-    public final AbstractCallTreeNode<T> getDestination() {
-        return this.destination;
-    }
+	public final AbstractCallTreeNode<T> getDestination() {
+		return this.destination;
+	}
 
-    public final AbstractCallTreeNode<T> getSource() {
-        return this.source;
-    }
-    private int outgoingWeight = 0;
-    private int incomingWeight = 0;
+	public final AbstractCallTreeNode<T> getSource() {
+		return this.source;
+	}
 
-    public final int getIncomingWeight() {
-        return this.incomingWeight;
-    }
+	private int outgoingWeight = 0;
+	private int incomingWeight = 0;
 
-    public final int getOutgoingWeight() {
-        return this.outgoingWeight;
-    }
+	public final int getIncomingWeight() {
+		return this.incomingWeight;
+	}
 
-    public final void incOutgoingWeight() {
-        this.outgoingWeight++;
-    }
+	public final int getOutgoingWeight() {
+		return this.outgoingWeight;
+	}
 
-    public final void incIncomingWeight() {
-        this.incomingWeight++;
-    }
+	public final void incOutgoingWeight() {
+		this.outgoingWeight++;
+	}
+
+	public final void incIncomingWeight() {
+		this.incomingWeight++;
+	}
 }

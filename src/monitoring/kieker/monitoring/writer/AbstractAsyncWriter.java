@@ -70,7 +70,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties properties = new Properties(super.getDefaultProperties());
-		final String PREFIX = this.getClass().getName() + "."; //can't use this.PREFIX, maybe uninitialized
+		final String PREFIX = this.getClass().getName() + "."; // can't use this.PREFIX, maybe uninitialized
 		properties.setProperty(PREFIX + AbstractAsyncWriter.QUEUESIZE, "10000");
 		properties.setProperty(PREFIX + AbstractAsyncWriter.BEHAVIOR, "0");
 		return properties;
@@ -113,20 +113,20 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			switch (this.queueFullBehavior) {
-				case 1: // blocks when queue full
-					this.blockingQueue.put(monitoringRecord);
-					break;
-				case 2: // does nothing if queue is full
-					if (!this.blockingQueue.offer(monitoringRecord)) {
-						// warn on missed records
-						if (missedRecords.getAndIncrement() % 1000 == 0) {
-							AbstractAsyncWriter.LOG.warn("Queue is full, dropping records.");
-						}
+			case 1: // blocks when queue full
+				this.blockingQueue.put(monitoringRecord);
+				break;
+			case 2: // does nothing if queue is full
+				if (!this.blockingQueue.offer(monitoringRecord)) {
+					// warn on missed records
+					if ((this.missedRecords.getAndIncrement() % 1000) == 0) {
+						AbstractAsyncWriter.LOG.warn("Queue is full, dropping records.");
 					}
-					break;
-				default: // tries to add immediately (error if full)
-					this.blockingQueue.add(monitoringRecord);
-					break;
+				}
+				break;
+			default: // tries to add immediately (error if full)
+				this.blockingQueue.add(monitoringRecord);
+				break;
 			}
 		} catch (final Exception ex) {
 			AbstractAsyncWriter.LOG.error("Failed to retrieve new monitoring record.", ex);

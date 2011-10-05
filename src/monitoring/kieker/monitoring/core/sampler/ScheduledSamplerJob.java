@@ -37,12 +37,10 @@ public class ScheduledSamplerJob implements Runnable {
 	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.
 	 * 
 	 * @param monitoringController
-	 *            used to log the sampled data (represented as
-	 *            {@link kieker.common.record.IMonitoringRecord}s) via
+	 *            used to log the sampled data (represented as {@link kieker.common.record.IMonitoringRecord}s) via
 	 *            {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}.
 	 * @param sensor
-	 *            sampler to be trigger via
-	 *            {@link kieker.monitoring.core.sampler.ISampler#sample(IMonitoringController)}
+	 *            sampler to be trigger via {@link kieker.monitoring.core.sampler.ISampler#sample(IMonitoringController)}
 	 */
 	public ScheduledSamplerJob(final IMonitoringController monitoringController, final ISampler sensor) {
 		this.monitoringController = monitoringController;

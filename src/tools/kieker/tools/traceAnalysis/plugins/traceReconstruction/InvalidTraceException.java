@@ -21,18 +21,18 @@
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
 
 /**
- *
+ * 
  * @author avanhoorn
  */
 public class InvalidTraceException extends Exception {
 
-    private static final long serialVersionUID = 1893L;
+	private static final long serialVersionUID = 1893L;
 
-    public InvalidTraceException(String message) {
-        super(message);
-    }
+	public InvalidTraceException(final String message) {
+		super(message);
+	}
 
-    public InvalidTraceException(String message, Throwable t) {
-        super(message, t);
-    }
+	public InvalidTraceException(final String message, final Throwable t) {
+		super(message, t);
+	}
 }

@@ -30,24 +30,22 @@ public class SynchronousReplyMessage extends Message {
 		super();
 	}
 
-	public SynchronousReplyMessage(final long timestamp, final Execution sendingExecution,
-			final Execution receivingExecution) {
+	public SynchronousReplyMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		super(timestamp, sendingExecution, receivingExecution);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (!(obj instanceof SynchronousReplyMessage)) {
 			return false;
 		}
 		if (this == obj) {
 			return true;
 		}
-		SynchronousReplyMessage other = (SynchronousReplyMessage) obj;
+		final SynchronousReplyMessage other = (SynchronousReplyMessage) obj;
 
-		return this.getTimestamp() == other.getTimestamp()
-				&& this.getSendingExecution().equals(other.getSendingExecution())
-				&& this.getReceivingExecution().equals(other.getReceivingExecution());
+		return (getTimestamp() == other.getTimestamp()) && getSendingExecution().equals(other.getSendingExecution())
+				&& getReceivingExecution().equals(other.getReceivingExecution());
 	}
 
 	@Override

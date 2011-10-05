@@ -38,8 +38,7 @@ public class OperationExecutionAspectFull extends AbstractOperationExecutionAspe
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectFull.class);
 
 	@Pointcut("execution(* *.*(..))")
-	public void monitoredMethod() {
-	}
+	public void monitoredMethod() {}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")
@@ -47,9 +46,9 @@ public class OperationExecutionAspectFull extends AbstractOperationExecutionAspe
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
-		int eoi; //this is executionOrderIndex-th execution in this trace
-		int ess; //this is the height in the dynamic call tree of this execution
+		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
+		int eoi; // this is executionOrderIndex-th execution in this trace
+		int ess; // this is the height in the dynamic call tree of this execution
 		if (execData.isEntryPoint) {
 			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
 			eoi = 0;
@@ -60,10 +59,9 @@ public class OperationExecutionAspectFull extends AbstractOperationExecutionAspe
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			this.proceedAndMeasure(thisJoinPoint, execData);
+			proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
-				OperationExecutionAspectFull.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi
-						+ " ess == " + ess);
+				OperationExecutionAspectFull.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectFull.LOG.fatal("Terminating!");
 				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}

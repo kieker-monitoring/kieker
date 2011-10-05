@@ -21,6 +21,7 @@
 package kieker.monitoring.probe.servlet;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -49,37 +50,33 @@ import kieker.monitoring.probe.IMonitoringProbe;
  * <filter-name>sessionRegistrationFilter</filter-name>
  * <url-pattern>/*</url-pattern>
  * </filter-mapping>
- *
+ * 
  * @author Marco Luebcke
  */
 public class OperationExecutionRegistrationFilter implements Filter, IMonitoringProbe {
 
-    private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
-    private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+	private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
+	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 
+	@Override
+	public void init(final FilterConfig config) throws ServletException {}
 
-    @Override
-    public void init(FilterConfig config) throws ServletException {
-    }
+	@Override
+	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+		if (request instanceof HttpServletRequest) {
+			final HttpSession session = ((HttpServletRequest) request).getSession(false);
+			if (session != null) {
+				OperationExecutionRegistrationFilter.sessionRegistry.storeThreadLocalSessionId(session.getId());
+			}
+		}
+		try {
+			chain.doFilter(request, response);
+		} finally {
+			OperationExecutionRegistrationFilter.cfRegistry.unsetThreadLocalTraceId(); // actually, this should not be necessary
+			OperationExecutionRegistrationFilter.sessionRegistry.unsetThreadLocalSessionId();
+		}
+	}
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
-        if (request instanceof HttpServletRequest) {
-            HttpSession session = ((HttpServletRequest) request).getSession(false);
-            if (session != null) {
-                sessionRegistry.storeThreadLocalSessionId(session.getId());
-            }
-        }
-        try {
-            chain.doFilter(request, response);
-        } finally {
-            cfRegistry.unsetThreadLocalTraceId(); // actually, this should not be necessary
-            sessionRegistry.unsetThreadLocalSessionId();
-        }
-    }
-
-    @Override
-    public void destroy() {
-    }
+	@Override
+	public void destroy() {}
 }

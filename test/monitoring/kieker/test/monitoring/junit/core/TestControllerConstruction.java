@@ -41,25 +41,16 @@ public class TestControllerConstruction extends TestCase {
 		{
 			// Test with default values
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
-			Assert.assertEquals("monitoring should not be terminated",
-					false,
-					kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ",
-					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
-					kieker.isMonitoringEnabled());
+			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());
+			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(Configuration.MONITORING_ENABLED), kieker.isMonitoringEnabled());
 			kieker.terminateMonitoring();
 		}
 
 		{
-			configuration.setProperty(Configuration.MONITORING_ENABLED,
-					Boolean.toString(!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED)));
+			configuration.setProperty(Configuration.MONITORING_ENABLED, Boolean.toString(!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED)));
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
-			Assert.assertEquals("monitoring should not be terminated",
-					false,
-					kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ",
-					configuration.getBooleanProperty(Configuration.MONITORING_ENABLED),
-					kieker.isMonitoringEnabled());
+			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());
+			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(Configuration.MONITORING_ENABLED), kieker.isMonitoringEnabled());
 			kieker.terminateMonitoring();
 		}
 	}
@@ -69,8 +60,6 @@ public class TestControllerConstruction extends TestCase {
 	 */
 	public void testSingletonGetterOnlyOneInstance() {
 		Assert.assertSame("singleton getter returned different objects", MonitoringController.getInstance(), MonitoringController.getInstance());
-		Assert.assertEquals("monitoring should not be terminated",
-				false,
-				MonitoringController.getInstance().isMonitoringTerminated());
+		Assert.assertEquals("monitoring should not be terminated", false, MonitoringController.getInstance().isMonitoringTerminated());
 	}
 }

@@ -21,36 +21,33 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 /**
- *
+ * 
  * @author Andre van Hoorn
  */
 public class SynchronousCallMessage extends Message {
 
-    public SynchronousCallMessage() {
-        super();
-    }
+	public SynchronousCallMessage() {
+		super();
+	}
 
-    public SynchronousCallMessage(final long timestamp,
-            final Execution sendingExecution,
-            final Execution receivingExecution){
-        super(timestamp, sendingExecution, receivingExecution);
-    }
+	public SynchronousCallMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
+		super(timestamp, sendingExecution, receivingExecution);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof SynchronousCallMessage)){
-            return false;
-        }
-        if (this == obj) {
-            return true;
-        }
-        SynchronousCallMessage other = (SynchronousCallMessage)obj;
+	@Override
+	public boolean equals(final Object obj) {
+		if (!(obj instanceof SynchronousCallMessage)) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		final SynchronousCallMessage other = (SynchronousCallMessage) obj;
 
-        return this.getTimestamp() == other.getTimestamp()
-                && this.getSendingExecution().equals(other.getSendingExecution())
-                && this.getReceivingExecution().equals(other.getReceivingExecution());
-    }
-    
+		return (getTimestamp() == other.getTimestamp()) && getSendingExecution().equals(other.getSendingExecution())
+				&& getReceivingExecution().equals(other.getReceivingExecution());
+	}
+
 	@Override
 	public int hashCode() {
 		return super.hashCode();

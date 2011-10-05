@@ -83,7 +83,7 @@ public final class ControlFlowRegistry {
 			 * 
 			 * (this.lastThreadId = -2) Thread A: id = -1 (inc&get -2)
 			 * (this.lastThreadId = -1) Thread B: id = 0 (inc&get -1)
-			 * (this.lastThreadId = 0)  Thread A: returns 1 (because id == -1,
+			 * (this.lastThreadId = 0) Thread A: returns 1 (because id == -1,
 			 * and this.lastThreadId=0 in the meantime) (this.lastThreadId = 1)
 			 * Thread B: returns 0 (because id != -1)
 			 */
@@ -101,7 +101,7 @@ public final class ControlFlowRegistry {
 	 * unsetThreadLocalTraceId()!
 	 */
 	public final long getAndStoreUniqueThreadLocalTraceId() {
-		final long id = this.getUniqueTraceId();
+		final long id = getUniqueTraceId();
 		this.threadLocalTraceId.set(id);
 		return id;
 	}

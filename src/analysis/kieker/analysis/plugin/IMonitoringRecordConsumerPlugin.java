@@ -30,10 +30,10 @@ import kieker.common.record.IMonitoringRecordReceiver;
  */
 public interface IMonitoringRecordConsumerPlugin extends IMonitoringRecordReceiver, IAnalysisPlugin {
 
-    /**
-     * Simply return null to get records of all types.
-     * 
-     * @return list of specific record types to subscribe to; null to subsribe to any type
-     */
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList();
+	/**
+	 * Simply return null to get records of all types.
+	 * 
+	 * @return list of specific record types to subscribe to; null to subsribe to any type
+	 */
+	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList();
 }

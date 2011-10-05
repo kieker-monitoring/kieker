@@ -50,7 +50,6 @@ public final class Version {
 	private static final String VERSION = "1.4-dev-SNAPSHOT-20111004"; // NOPMD
 	private static final String COPYRIGHT = "Copyright (c) 2006-2011 Kieker Project";
 
-
 	/**
 	 * Returns the version String.
 	 * 
@@ -59,7 +58,7 @@ public final class Version {
 	public final static String getVERSION() {
 		return Version.VERSION;
 	}
-	
+
 	/**
 	 * Returns the version String.
 	 * 

@@ -59,29 +59,25 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	private volatile double system = CPUUtilizationRecord.UNDEFINED_DOUBLE;
 
 	/**
-	 * Fraction of CPU wait time. The value should be in the range
-	 * <code>[0,1]</code>
+	 * Fraction of CPU wait time. The value should be in the range <code>[0,1]</code>
 	 */
 	private volatile double wait = CPUUtilizationRecord.UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was used by user space processes
-	 * with a high nice value. The value should be in the range
-	 * <code>[0,1]</code>
+	 * with a high nice value. The value should be in the range <code>[0,1]</code>
 	 */
 	private volatile double nice = CPUUtilizationRecord.UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was used by user space processes
-	 * with a high nice value. The value should be in the range
-	 * <code>[0,1]</code>
+	 * with a high nice value. The value should be in the range <code>[0,1]</code>
 	 */
 	private volatile double irq = CPUUtilizationRecord.UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was utilized. Typically, this is
-	 * the sum of {@link #user}, {@link #system}, {@link #wait}, and
-	 * {@link #nice}. The value should be in the range <code>[0,1]</code>
+	 * the sum of {@link #user}, {@link #system}, {@link #wait}, and {@link #nice}. The value should be in the range <code>[0,1]</code>
 	 */
 	private volatile double totalUtilization = CPUUtilizationRecord.UNDEFINED_DOUBLE;
 
@@ -103,8 +99,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:23
 		try {
 			if (values.length != CPUUtilizationRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length
-						+ " elements but found:" + values.length);
+				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
 			}
 
 			this.timestamp = (Long) values[0];
@@ -126,13 +121,11 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	/**
 	 * 
 	 */
-	public CPUUtilizationRecord() {
-	}
+	public CPUUtilizationRecord() {}
 
 	/**
 	 * Constructs a new {@link CPUUtilizationRecord} with the given values. If
-	 * certain values shall remain undefined, use the constant
-	 * {@link #UNDEFINED_DOUBLE}.
+	 * certain values shall remain undefined, use the constant {@link #UNDEFINED_DOUBLE}.
 	 * 
 	 * @param timestamp
 	 * @param hostName
@@ -145,9 +138,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 * @param totalUtilization
 	 * @param idle
 	 */
-	public CPUUtilizationRecord(final long timestamp, final String hostName, final String cpuID, final double user,
-			final double system, final double wait, final double nice, final double irq, final double totalUtilization,
-			final double idle) {
+	public CPUUtilizationRecord(final long timestamp, final String hostName, final String cpuID, final double user, final double system, final double wait,
+			final double nice, final double irq, final double totalUtilization, final double idle) {
 		this.timestamp = timestamp;
 		this.hostName = hostName;
 		this.cpuID = cpuID;
@@ -165,12 +157,11 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice,
-				this.irq, this.totalUtilization, this.idle };
+		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class,
-			double.class, double.class, double.class, double.class, double.class };
+	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
+			double.class, double.class };
 
 	/*
 	 * {@inheritdoc}

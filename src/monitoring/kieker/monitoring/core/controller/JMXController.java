@@ -76,11 +76,9 @@ public final class JMXController extends AbstractController implements IJMXContr
 					try {
 						// Try using the "secret" SUN implementation
 						// Reflection to suppress compiler warnings
-						final Properties jmxProperties = configuration
-								.getPropertiesStartingWith("com.sun.management.jmxremote");
+						final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
 						server = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap")
-								.getMethod("initialize", String.class, Properties.class)
-								.invoke(null, port, jmxProperties);
+								.getMethod("initialize", String.class, Properties.class).invoke(null, port, jmxProperties);
 						usedJMXImplementation = JMXImplementation.Sun;
 					} catch (final Exception ignoreErrors) {
 						if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE_FALLBACK)) {
@@ -95,8 +93,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 						}
 					}
 					if ((server != null) && (server.isActive())) {
-						serverObjectName = new ObjectName(this.domain, "type",
-								configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
+						serverObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
 						serverNotificationListener = new ServerNotificationListener();
 					}
 				} catch (final Exception e) {
@@ -105,8 +102,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 			}
 			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_CONTROLLER)) {
 				try {
-					controllerObjectName = new ObjectName(this.domain, "type",
-							configuration.getStringProperty(Configuration.ACTIVATE_JMX_CONTROLLER_NAME));
+					controllerObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_CONTROLLER_NAME));
 				} catch (final Exception e) {
 					JMXController.LOG.warn("Failed to initialize MonitoringController MBean", e);
 				}
@@ -123,11 +119,11 @@ public final class JMXController extends AbstractController implements IJMXContr
 	@Override
 	protected void init() {
 		synchronized (this) {
-			if (this.jmxEnabled && !this.isTerminated()) {
+			if (this.jmxEnabled && !isTerminated()) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); // NOPMD
 				if (this.serverObjectName != null) {
 					try {
-						mbs.registerMBean(server, this.serverObjectName);
+						mbs.registerMBean(this.server, this.serverObjectName);
 					} catch (final Exception e) {
 						JMXController.LOG.warn("Unable to register JMXServer MBean", e);
 					}
@@ -135,15 +131,14 @@ public final class JMXController extends AbstractController implements IJMXContr
 				if (this.controllerObjectName != null) {
 					try {
 						// MXBeans is currently not possible (getClasses in IRecord)
-						final StandardMBean mbean = new StandardMBean(monitoringController,
-								IMonitoringController.class, false);
+						final StandardMBean mbean = new StandardMBean(this.monitoringController, IMonitoringController.class, false);
 						mbs.registerMBean(mbean, this.controllerObjectName);
 					} catch (final Exception e) {
 						JMXController.LOG.warn("Unable to register Monitoring Controller MBean", e);
 					}
 				}
 				if ((this.server != null) && this.server.isActive()) {
-					this.server.addNotificationListener(serverNotificationListener, null, null);
+					this.server.addNotificationListener(this.serverNotificationListener, null, null);
 				}
 			}
 		}
@@ -171,12 +166,12 @@ public final class JMXController extends AbstractController implements IJMXContr
 				}
 				if (this.server != null) {
 					try {
-						server.removeNotificationListener(serverNotificationListener);
+						this.server.removeNotificationListener(this.serverNotificationListener);
 					} catch (final ListenerNotFoundException e) {
 						JMXController.LOG.error("Failed to remove ServerNotificationListener", e);
 					}
 					try {
-						server.stop();
+						this.server.stop();
 					} catch (final Exception e) {
 						JMXController.LOG.error("Failed to terminate JMX Server", e);
 					}
@@ -211,24 +206,24 @@ public final class JMXController extends AbstractController implements IJMXContr
 			sb.append("\t\tService URL: '");
 			final JMXServiceURL url = this.server.getAddress();
 			switch (this.usedJMXImplementation) { // NOPMD (extend in the future)
-				case Sun:
-					try {
-						sb.append(new JMXServiceURL(url.getProtocol(), url.getHost(), url.getPort(), "/jndi/rmi://"
-								+ url.getHost() + ":" + this.port + "/" + "jmxrmi").toString());
-					} catch (final MalformedURLException ignoreErrors) {
-						sb.append("unable to determine JMXServiceURL (" + ignoreErrors.toString() + ")");
-					}
-					break;
-				default:
-					sb.append(url.toString());
-					break;
+			case Sun:
+				try {
+					sb.append(new JMXServiceURL(url.getProtocol(), url.getHost(), url.getPort(), "/jndi/rmi://" + url.getHost() + ":" + this.port + "/" + "jmxrmi")
+							.toString());
+				} catch (final MalformedURLException ignoreErrors) {
+					sb.append("unable to determine JMXServiceURL (" + ignoreErrors.toString() + ")");
+				}
+				break;
+			default:
+				sb.append(url.toString());
+				break;
 			}
 			sb.append("'\n");
 			final String[] connections = this.server.getConnectionIds();
 			if (connections.length == 0) {
 				sb.append("\t\tNo current remote connections\n");
 			} else {
-				for (String connection : connections) {
+				for (final String connection : connections) {
 					sb.append("\t\tRemote connection: '");
 					sb.append(connection);
 					sb.append("'\n");
@@ -243,23 +238,14 @@ public final class JMXController extends AbstractController implements IJMXContr
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.OPENED)) {
-				JMXController.LOG
-						.info("New JMX remote connection initialized. Connection ID: "
-								+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification)
-										.getConnectionId() : "unknown"));
+				JMXController.LOG.info("New JMX remote connection initialized. Connection ID: "
+						+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification).getConnectionId() : "unknown"));
 			} else if (notificationType.equals(JMXConnectionNotification.CLOSED)) {
-				JMXController.LOG
-						.info("JMX remote connection closed. Connection ID: "
-								+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification)
-										.getConnectionId() : "unknown"));
+				JMXController.LOG.info("JMX remote connection closed. Connection ID: "
+						+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification).getConnectionId() : "unknown"));
 			} else { // unknown message
-				JMXController.LOG
-						.info(notificationType
-								+ ": "
-								+ notification.getMessage()
-								+ " (ID: "
-								+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification)
-										.getConnectionId() : "unknown") + ")");
+				JMXController.LOG.info(notificationType + ": " + notification.getMessage() + " (ID: "
+						+ (notification instanceof JMXConnectionNotification ? ((JMXConnectionNotification) notification).getConnectionId() : "unknown") + ")");
 			}
 		}
 	}

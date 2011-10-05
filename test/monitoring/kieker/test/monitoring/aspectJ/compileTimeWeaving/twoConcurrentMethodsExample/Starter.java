@@ -42,25 +42,25 @@ public class Starter extends Thread {
 		for (int i = 0; i < 10000; i++) {
 			new Starter().start();
 			// wait between requests
-			Thread.sleep((int) (Math.max(0, Math.random() * 115d - (i / 142d)) + 1));
+			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1));
 		}
 	}
 
 	@Override
 	public void run() {
-		final double ranVal = random.nextDouble();
+		final double ranVal = this.random.nextDouble();
 		if (ranVal < 0.5) {
 			if (ranVal < 0.25) {
 				// do nothing
 			} else {
-				this.waitP(300);
+				waitP(300);
 			}
 		} else {
 			if (ranVal > 0.75) {
-				this.work();
-				this.waitP(300);
+				work();
+				waitP(300);
 			} else {
-				this.work();
+				work();
 			}
 		}
 	}
@@ -69,19 +69,18 @@ public class Starter extends Thread {
 	public void waitP(final long sleeptime) {
 		try {
 			Thread.sleep(sleeptime);
-		} catch (final Exception e) {
-		}
+		} catch (final Exception e) {}
 	}
 
 	static volatile boolean boolvar = true;
 
 	@OperationExecutionMonitoringProbe()
 	private void work() {
-		int a = random.nextInt(6);
+		int a = this.random.nextInt(6);
 		for (int i = 0; i < 2000000; i++) {
 			a += i / 1000;
 		}
-		if (a % 10000 == 0) {
+		if ((a % 10000) == 0) {
 			Starter.boolvar = !Starter.boolvar;
 		}
 	}

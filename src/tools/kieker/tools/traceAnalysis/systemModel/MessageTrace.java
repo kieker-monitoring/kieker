@@ -28,47 +28,46 @@ import java.util.Vector;
  */
 public class MessageTrace extends Trace {
 
-    private final Vector<Message> set;
+	private final Vector<Message> set;
 
-    public MessageTrace(final long traceId, final Vector<Message> seq) {
-        super(traceId);
-        this.set = seq;
-    }
+	public MessageTrace(final long traceId, final Vector<Message> seq) {
+		super(traceId);
+		this.set = seq;
+	}
 
-    public final Vector<Message> getSequenceAsVector() {
-        return this.set;
-    }
+	public final Vector<Message> getSequenceAsVector() {
+		return this.set;
+	}
 
-    @Override
-    public String toString() {
-        final StringBuilder strBuild =
-                new StringBuilder("Trace " + this.getTraceId() + ":\n");
-        final Iterator<Message> it = this.set.iterator();
-        while (it.hasNext()) {
-            final Message m = it.next();
-            strBuild.append("<");
-            strBuild.append(m.toString());
-            strBuild.append(">\n");
-        }
-        return strBuild.toString();
-    }
+	@Override
+	public String toString() {
+		final StringBuilder strBuild = new StringBuilder("Trace " + getTraceId() + ":\n");
+		final Iterator<Message> it = this.set.iterator();
+		while (it.hasNext()) {
+			final Message m = it.next();
+			strBuild.append("<");
+			strBuild.append(m.toString());
+			strBuild.append(">\n");
+		}
+		return strBuild.toString();
+	}
 
-    // Explicit delegation to super method to make FindBugs happy
-    @Override
-    public int hashCode() {
-    	return super.hashCode();
-    }
-    
-    @Override
-    public boolean equals(final Object obj) {
-       if (!(obj instanceof MessageTrace)){
-            return false;
-        }
-        if (this == obj) {
-            return true;
-        }
-        final MessageTrace other = (MessageTrace)obj;
+	// Explicit delegation to super method to make FindBugs happy
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 
-        return this.set.equals(other.set);
-    }
+	@Override
+	public boolean equals(final Object obj) {
+		if (!(obj instanceof MessageTrace)) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		final MessageTrace other = (MessageTrace) obj;
+
+		return this.set.equals(other.set);
+	}
 }

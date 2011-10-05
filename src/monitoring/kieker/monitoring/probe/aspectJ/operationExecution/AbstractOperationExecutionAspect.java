@@ -37,9 +37,9 @@ import org.aspectj.lang.annotation.Aspect;
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
 
 	protected static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	protected static final String VMNAME = CTRLINST.getHostName();
+	protected static final String VMNAME = AbstractOperationExecutionAspect.CTRLINST.getHostName();
 	protected static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.getInstance();
-	protected static final ITimeSource TIMESOURCE = CTRLINST.getTimeSource();
+	protected static final ITimeSource TIMESOURCE = AbstractOperationExecutionAspect.CTRLINST.getTimeSource();
 
 	protected OperationExecutionRecord initExecutionData(final ProceedingJoinPoint thisJoinPoint) {
 		final String methodname = thisJoinPoint.getSignature().getName();
@@ -64,13 +64,13 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable;
 
 	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData) throws Throwable {
-		execData.tin = TIMESOURCE.getTime(); // startint stopwatch
+		execData.tin = AbstractOperationExecutionAspect.TIMESOURCE.getTime(); // startint stopwatch
 		try {
 			execData.retVal = thisJoinPoint.proceed();
 		} catch (final Exception e) { // NOPMD
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = TIMESOURCE.getTime();
+			execData.tout = AbstractOperationExecutionAspect.TIMESOURCE.getTime();
 			if (execData.isEntryPoint) {
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalTraceId();
 			}

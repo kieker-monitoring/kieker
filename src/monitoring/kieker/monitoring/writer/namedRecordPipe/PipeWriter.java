@@ -20,7 +20,6 @@
 
 package kieker.monitoring.writer.namedRecordPipe;
 
-
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
@@ -77,6 +76,5 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 	 * Nothing to do
 	 */
 	@Override
-	protected void init() {
-	}
+	protected void init() {}
 }

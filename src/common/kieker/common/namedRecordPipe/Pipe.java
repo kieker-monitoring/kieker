@@ -48,7 +48,7 @@ public final class Pipe {
 	/** No construction employing default constructor */
 	@SuppressWarnings("unused")
 	private Pipe() {
-		this.name = null; //NOPMD
+		this.name = null; // NOPMD
 	}
 
 	public Pipe(final String name) {
@@ -62,8 +62,7 @@ public final class Pipe {
 	 * @throws PipeException
 	 *             if the pipe is closed or no pipe reader is registered
 	 */
-	public boolean writeMonitoringRecord(
-			final IMonitoringRecord monitoringRecord) {
+	public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {
 			final String errorMsg = "trying to write to closed pipe";
 			Pipe.LOG.error(errorMsg);

@@ -84,8 +84,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		}
 
 		@Override
-		public void terminate(final boolean error) {
-		}
+		public void terminate(final boolean error) {}
 	}
 
 	/**
@@ -93,8 +92,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	 * method in order to specify the input directory and number of workers
 	 * using the parameter @a inputDirName.
 	 */
-	public FSReaderRealtime() {
-	}
+	public FSReaderRealtime() {}
 
 	/**
 	 * Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN |
@@ -107,17 +105,14 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			final String numWorkersString = propertyMap.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
 			int numWorkers = -1;
 			if (numWorkersString == null) {
-				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS
-						+ "'");
+				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
 			}
 			try {
 				numWorkers = Integer.parseInt(numWorkersString);
 			} catch (final NumberFormatException ex) { // value of numWorkers remains -1
 			}
 
-			this.initInstanceFromArgs(
-					this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)),
-					numWorkers);
+			initInstanceFromArgs(inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
 		} catch (final IllegalArgumentException exc) {
 			FSReaderRealtime.log.error("Failed to initString '" + initString + "': " + exc.getMessage());
 			return false;
@@ -126,7 +121,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	}
 
 	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		this.initInstanceFromArgs(inputDirNames, numWorkers);
+		initInstanceFromArgs(inputDirNames, numWorkers);
 	}
 
 	private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
@@ -149,16 +144,13 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		return dirNameArray;
 	}
 
-	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers)
-			throws IllegalArgumentException {
+	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES
-					+ ":" + Arrays.toString(inputDirNames));
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames));
 		}
 
 		if (numWorkers <= 0) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS
-					+ ": " + numWorkers);
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers);
 		}
 
 		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);

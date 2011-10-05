@@ -45,8 +45,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	/**
 	 * Name of the resource.
 	 */
-	private volatile String resourceName =
-			ResourceUtilizationRecord.DEFAULT_VALUE;
+	private volatile String resourceName = ResourceUtilizationRecord.DEFAULT_VALUE;
 
 	/**
 	 * Value of utilization. The value should be in the range <code>[0,1]</code>
@@ -66,9 +65,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 			throws IllegalArgumentException {
 		try {
 			if (values.length != ResourceUtilizationRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with "
-						+ ResourceUtilizationRecord.VALUE_TYPES.length
-						+ " elements but found:" + values.length);
+				throw new IllegalArgumentException("Expecting vector with " + ResourceUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
 			}
 
 			this.timestamp = (Long) values[0];
@@ -80,14 +77,11 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
-	public ResourceUtilizationRecord() {
-	}
-
-
+	public ResourceUtilizationRecord() {}
 
 	/**
 	 * @param timestamp
@@ -95,8 +89,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	 * @param resourceName
 	 * @param utilization
 	 */
-	public ResourceUtilizationRecord(final long timestamp, final String hostName,
-			final String resourceName, final double utilization) {
+	public ResourceUtilizationRecord(final long timestamp, final String hostName, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;
 		this.hostName = hostName;
 		this.resourceName = resourceName;
@@ -108,12 +101,10 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.resourceName,
-				this.utilization };
+		return new Object[] { this.timestamp, this.hostName, this.resourceName, this.utilization };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class,
-			String.class, double.class };
+	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class };
 
 	/*
 	 * {@inheritdoc}

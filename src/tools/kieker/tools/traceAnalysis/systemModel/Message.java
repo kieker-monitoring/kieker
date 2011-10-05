@@ -55,7 +55,7 @@ public abstract class Message {
 
 	@Override
 	public String toString() {
-		StringBuilder strBuild = new StringBuilder();
+		final StringBuilder strBuild = new StringBuilder();
 
 		if (this instanceof SynchronousCallMessage) {
 			strBuild.append("SYNC-CALL").append(" ");
@@ -65,16 +65,16 @@ public abstract class Message {
 
 		strBuild.append(this.timestamp);
 		strBuild.append(" ");
-		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
+		if (getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append("$");
 		} else {
-			strBuild.append(this.getSendingExecution());
+			strBuild.append(getSendingExecution());
 		}
 		strBuild.append(" --> ");
-		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
+		if (getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append("$");
 		} else {
-			strBuild.append(this.getReceivingExecution());
+			strBuild.append(getReceivingExecution());
 		}
 		return strBuild.toString();
 	}
@@ -84,6 +84,6 @@ public abstract class Message {
 
 	@Override
 	public int hashCode() {
-		return (int) (timestamp ^ (timestamp >>> 32));
+		return (int) (this.timestamp ^ (this.timestamp >>> 32));
 	}
 }

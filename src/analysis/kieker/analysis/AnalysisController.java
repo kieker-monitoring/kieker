@@ -60,18 +60,16 @@ public class AnalysisController {
 	 */
 	private final Vector<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
 	/** Contains all consumers which consume records of any type */
-	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers =
-			new Vector<IMonitoringRecordConsumerPlugin>();
+	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new Vector<IMonitoringRecordConsumerPlugin>();
 	/** Contains mapping of record types to subscribed consumers */
-	private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers =
-			new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
+	private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
 	private final Collection<IAnalysisPlugin> plugins = new Vector<IAnalysisPlugin>();
 
 	/**
 	 * Will be count down after the analysis is set-up.
 	 */
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
-	
+
 	/**
 	 * Starts an {@link AnalysisController} instance and returns after the
 	 * configured reader finished reading and all analysis plug-ins terminated;
@@ -88,8 +86,7 @@ public class AnalysisController {
 			 */
 			for (final IAnalysisPlugin c : this.plugins) {
 				if (!c.execute()) {
-					AnalysisController.log
-							.error("A plug-in's execute message failed");
+					AnalysisController.log.error("A plug-in's execute message failed");
 					success = false;
 				}
 			}
@@ -106,23 +103,19 @@ public class AnalysisController {
 			 * Add delegation receiver to reader.
 			 */
 			if (success) {
-				this.logReader
-						.addRecordReceiver(new IMonitoringRecordReceiver() {
+				this.logReader.addRecordReceiver(new IMonitoringRecordReceiver() {
 
-							/**
-							 * Delegates the records provided by the reader to
-							 * the registered record consumers
-							 */
-							@Override
-							public boolean newMonitoringRecord(
-									final IMonitoringRecord monitoringRecord) {
-								return AnalysisController.this
-										.deliverRecordToConsumers(
-												monitoringRecord,
-												/* abort on consumer error */
-												true);
-							}
-						});
+					/**
+					 * Delegates the records provided by the reader to
+					 * the registered record consumers
+					 */
+					@Override
+					public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+						return AnalysisController.this.deliverRecordToConsumers(monitoringRecord,
+						/* abort on consumer error */
+						true);
+					}
+				});
 			}
 
 			/**
@@ -130,10 +123,9 @@ public class AnalysisController {
 			 */
 			if (success) {
 				// notify threads waiting for the initialization to be done
-				this.initializationLatch.countDown();  
+				this.initializationLatch.countDown();
 				if (!this.logReader.read()) {
-					AnalysisController.log
-							.error("Calling execute() on logReader returned false");
+					AnalysisController.log.error("Calling execute() on logReader returned false");
 					success = false;
 				}
 			}
@@ -148,34 +140,34 @@ public class AnalysisController {
 					c.terminate(!success); // normal termination (w/o error)
 				}
 			} catch (final Exception e) {
-				AnalysisController.log.error(
-						"Error during termination: " + e.getMessage(), e);
+				AnalysisController.log.error("Error during termination: " + e.getMessage(), e);
 			}
 		}
 
 		return success;
 	}
 
-    /**
-     * Initiates a termination of the analysis. 
-     */
-    public void terminate() {
-    	/* terminate the reader. After the reader has terminated, the run method()
-    	 * will terminate all plugins */
-    	AnalysisController.log.info("Explicit termination of the analysis. Terminating the reader ...");
-    	this.logReader.terminate();
-    }
-	
 	/**
-	 * Returns a {@link CountDownLatch} which has the value 0 after the
-	 * {@link AnalysisController} is initialized and the reader is running.
+	 * Initiates a termination of the analysis.
+	 */
+	public void terminate() {
+		/*
+		 * terminate the reader. After the reader has terminated, the run method()
+		 * will terminate all plugins
+		 */
+		AnalysisController.log.info("Explicit termination of the analysis. Terminating the reader ...");
+		this.logReader.terminate();
+	}
+
+	/**
+	 * Returns a {@link CountDownLatch} which has the value 0 after the {@link AnalysisController} is initialized and the reader is running.
 	 * 
 	 * @return the initializationLatch
 	 */
 	protected final CountDownLatch getInitializationLatch() {
 		return this.initializationLatch;
 	}
-    
+
 	/**
 	 * Sets the log reader used as the source for monitoring records.
 	 * 
@@ -190,17 +182,14 @@ public class AnalysisController {
 	 * 
 	 * @param consumer
 	 */
-	private void addRecordConsumer(
-			final IMonitoringRecordConsumerPlugin consumer) {
+	private void addRecordConsumer(final IMonitoringRecordConsumerPlugin consumer) {
 		this.consumers.add(consumer);
-		final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer
-				.getRecordTypeSubscriptionList();
+		final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
 		if (recordTypeSubscriptionList == null) {
 			this.anyTypeConsumers.add(consumer);
 		} else {
 			for (final Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
-				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers
-						.get(recordType);
+				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(recordType);
 				if (cList == null) {
 					cList = new Vector<IMonitoringRecordConsumerPlugin>(0);
 					this.specificTypeConsumers.put(recordType, cList);
@@ -220,9 +209,8 @@ public class AnalysisController {
 		AnalysisController.log.debug("Registered plugin " + plugin);
 
 		if (plugin instanceof IMonitoringRecordConsumerPlugin) {
-			AnalysisController.log.debug("Plugin " + plugin
-					+ " also registered as record consumer");
-			this.addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
+			AnalysisController.log.debug("Plugin " + plugin + " also registered as record consumer");
+			addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
 		}
 	}
 
@@ -239,9 +227,7 @@ public class AnalysisController {
 	 *             true if no consumer reported an error; false if at least one
 	 *             consumer reported an error
 	 */
-	private final boolean deliverRecordToConsumers(
-			final IMonitoringRecord monitoringRecord,
-			final boolean abortOnConsumerError) {
+	private final boolean deliverRecordToConsumers(final IMonitoringRecord monitoringRecord, final boolean abortOnConsumerError) {
 
 		boolean success = true;
 
@@ -249,21 +235,18 @@ public class AnalysisController {
 			if (!c.newMonitoringRecord(monitoringRecord)) {
 				success = false;
 				if (abortOnConsumerError) {
-					AnalysisController.log
-							.warn("Consumer returned false. Aborting delivery of record. ");
+					AnalysisController.log.warn("Consumer returned false. Aborting delivery of record. ");
 					return false;
 				}
 			}
 		}
-		final Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers
-				.get(monitoringRecord.getClass());
+		final Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(monitoringRecord.getClass());
 		if (cList != null) {
 			for (final IMonitoringRecordConsumerPlugin c : cList) {
 				if (!c.newMonitoringRecord(monitoringRecord)) {
 					success = false;
 					if (abortOnConsumerError) {
-						AnalysisController.log
-								.warn("Consumer returned false. Aborting delivery of record. ");
+						AnalysisController.log.warn("Consumer returned false. Aborting delivery of record. ");
 						return false;
 					}
 				}

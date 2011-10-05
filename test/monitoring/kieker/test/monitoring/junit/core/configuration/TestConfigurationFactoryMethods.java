@@ -48,7 +48,8 @@ public class TestConfigurationFactoryMethods extends TestCase {
 		// TimeSource controller
 		Assert.assertNotNull(Configuration.TIMER_CLASSNAME + " must not be empty", configuration.getProperty(Configuration.TIMER_CLASSNAME));
 		// Sampling controller
-		Assert.assertNotNull(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty", configuration.getProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
+		Assert.assertNotNull(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty",
+				configuration.getProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 	}
 
 	/**
@@ -56,7 +57,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 */
 	public void testCreationDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		this.testValues(configuration);
+		testValues(configuration);
 		Assert.assertEquals("Writer must be " + DefaultConfigurationFactory.writerName, DefaultConfigurationFactory.writerName,
 				configuration.getStringProperty(Configuration.WRITER_CLASSNAME));
 	}
@@ -65,15 +66,15 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Tests {@link Configuration#createSingletonConfiguration()}.
 	 */
 	public void testCreationSingletonConfiguration() {
-		this.testValues(Configuration.createSingletonConfiguration());
+		testValues(Configuration.createSingletonConfiguration());
 	}
 
 	/**
 	 * Tests {@link Configuration#createDefaultConfiguration()}.
 	 */
 	public void testCreationDefaultConfiguration() {
-		final Configuration configuration = Configuration.createDefaultConfiguration(); 
-		this.testValues(configuration);
+		final Configuration configuration = Configuration.createDefaultConfiguration();
+		testValues(configuration);
 		// check for correct default values of required parameters
 		// Monitoring controller
 		Assert.assertEquals(true, configuration.getBooleanProperty(Configuration.MONITORING_ENABLED));
@@ -97,8 +98,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * FIXME: "Missing test: Should test combinations of JVM-Params, Filenames, etc. How to do that?
 	 * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/130
 	 */
-	public void testCreationSingletonConfigurationVariants() {
-	}
+	public void testCreationSingletonConfigurationVariants() {}
 
 	/**
 	 * Tests {@link Configuration#createConfigurationFromFile(String)}.
@@ -106,7 +106,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	public void testCreationfromFile() {
 		final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.properties.test";
 		final Configuration configuration = Configuration.createConfigurationFromFile(EXAMPLE_CONFIG_FILE_IN_TRUNK);
-		this.testValues(configuration);
+		testValues(configuration);
 		Assert.assertEquals("KIEKER-TEST", configuration.getProperty(Configuration.CONTROLLER_NAME));
 	}
 }

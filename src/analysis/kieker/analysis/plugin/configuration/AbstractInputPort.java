@@ -23,27 +23,26 @@ package kieker.analysis.plugin.configuration;
 import kieker.analysis.plugin.IAnalysisEvent;
 
 /**
- *
+ * 
  * @author Andre van Hoorn
  */
 public abstract class AbstractInputPort<T extends IAnalysisEvent> implements IInputPort<T> {
 
-	
-    //private static final Log log = LogFactory.getLog(AbstractInputPort.class);
-	
-    private final String description;
+	// private static final Log log = LogFactory.getLog(AbstractInputPort.class);
 
-    @SuppressWarnings("unused")
+	private final String description;
+
+	@SuppressWarnings("unused")
 	private AbstractInputPort() {
-        this.description = null;
-    }
+		this.description = null;
+	}
 
-    public AbstractInputPort(final String description) {
-        this.description = description;
-    }
+	public AbstractInputPort(final String description) {
+		this.description = description;
+	}
 
-    @Override
+	@Override
 	public String getDescription() {
-        return this.description;
-    }
+		return this.description;
+	}
 }

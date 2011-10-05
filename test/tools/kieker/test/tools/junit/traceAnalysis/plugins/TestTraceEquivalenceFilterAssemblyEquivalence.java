@@ -20,6 +20,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
@@ -33,98 +34,85 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * 
  * @author Andre van Hoorn
  */
 public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 
-    private static final Log log = LogFactory.getLog(TestTraceReconstructionFilter.class);
-    private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
-    private final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
-    
-    public void testEqualTrace(){
-        final ExecutionTrace trace0, trace1;
+	private static final Log log = LogFactory.getLog(TestTraceReconstructionFilter.class);
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
-        try {
-            trace0 = genValidBookstoreTrace(45653l, 17);
-            trace1 = genValidBookstoreTrace(45653l, 17);
-        } catch (InvalidTraceException ex) {
-            log.error("InvalidTraceException", ex);
-            fail("InvalidTraceException" + ex);
-            return;
-        }
-        assertEquals(trace0, trace1);
+	public void testEqualTrace() {
+		final ExecutionTrace trace0, trace1;
 
-        TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter(
-                "TraceEquivalenceClassFilter",
-                this.systemEntityFactory,
-                TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY);
+		try {
+			trace0 = genValidBookstoreTrace(45653l, 17);
+			trace1 = genValidBookstoreTrace(45653l, 17);
+		} catch (final InvalidTraceException ex) {
+			TestTraceEquivalenceFilterAssemblyEquivalence.log.error("InvalidTraceException", ex);
+			Assert.fail("InvalidTraceException" + ex);
+			return;
+		}
+		Assert.assertEquals(trace0, trace1);
 
-        /*
-         * Register a handler for equivalence class representatives.
-         */
-        filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort<ExecutionTrace>("Execution traces") {
+		final TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter("TraceEquivalenceClassFilter", this.systemEntityFactory,
+				TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY);
 
-            public void newEvent(ExecutionTrace event) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });
-    }
+		/*
+		 * Register a handler for equivalence class representatives.
+		 */
+		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort<ExecutionTrace>("Execution traces") {
 
-    private ExecutionTrace genValidBookstoreTrace(final long traceId, final long offset) throws InvalidTraceException {
-        /* Executions of a valid trace */
-        final Execution exec0_0__bookstore_searchBook;
-        final Execution exec1_1__catalog_getBook;
-        final Execution exec2_1__crm_getOrders;
-        final Execution exec3_2__catalog_getBook;
+			@Override
+			public void newEvent(final ExecutionTrace event) {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		});
+	}
 
-        /* Manually create Executions for a trace */
-        exec0_0__bookstore_searchBook = executionFactory.genExecution(
-                "Bookstore", "bookstore", "searchBook",
-                traceId,
-                1 * (1000 * 1000) + offset, // tin
-                10 * (1000 * 1000) + offset, // tout
-                0, 0);  // eoi, ess
+	private ExecutionTrace genValidBookstoreTrace(final long traceId, final long offset) throws InvalidTraceException {
+		/* Executions of a valid trace */
+		final Execution exec0_0__bookstore_searchBook;
+		final Execution exec1_1__catalog_getBook;
+		final Execution exec2_1__crm_getOrders;
+		final Execution exec3_2__catalog_getBook;
 
-        exec1_1__catalog_getBook = executionFactory.genExecution(
-                "Catalog", "catalog", "getBook",
-                traceId,
-                2 * (1000 * 1000) + offset, // tin
-                4 * (1000 * 1000) + offset, // tout
-                1, 1);  // eoi, ess
-        exec2_1__crm_getOrders = executionFactory.genExecution(
-                "CRM", "crm", "getOrders",
-                traceId,
-                5 * (1000 * 1000) + offset, // tin
-                8 * (1000 * 1000) + offset, // tout
-                2, 1);  // eoi, ess
-        exec3_2__catalog_getBook = executionFactory.genExecution(
-                "Catalog", "catalog", "getBook",
-                traceId,
-                6 * (1000 * 1000) + offset, // tin
-                7 * (1000 * 1000) + offset, // tout
-                3, 2);  // eoi, ess
+		/* Manually create Executions for a trace */
+		exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId, (1 * (1000 * 1000)) + offset, // tin
+				(10 * (1000 * 1000)) + offset, // tout
+				0, 0); // eoi, ess
 
-        /*
-         * Create an Execution Trace and add Executions in
-         * arbitrary order
-         */
-        ExecutionTrace executionTrace = new ExecutionTrace(traceId);
+		exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId, (2 * (1000 * 1000)) + offset, // tin
+				(4 * (1000 * 1000)) + offset, // tout
+				1, 1); // eoi, ess
+		exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", traceId, (5 * (1000 * 1000)) + offset, // tin
+				(8 * (1000 * 1000)) + offset, // tout
+				2, 1); // eoi, ess
+		exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId, (6 * (1000 * 1000)) + offset, // tin
+				(7 * (1000 * 1000)) + offset, // tout
+				3, 2); // eoi, ess
 
-        executionTrace.add(exec3_2__catalog_getBook);
-        executionTrace.add(exec2_1__crm_getOrders);
-        executionTrace.add(exec0_0__bookstore_searchBook);
-        executionTrace.add(exec1_1__catalog_getBook);
+		/*
+		 * Create an Execution Trace and add Executions in
+		 * arbitrary order
+		 */
+		final ExecutionTrace executionTrace = new ExecutionTrace(traceId);
 
-        try {
-            /* Make sure that trace is valid: */
-            executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
-        } catch (InvalidTraceException ex) {
-            log.error(ex);
-            fail("Test invalid since used trace invalid");
-            throw new InvalidTraceException("Test invalid since used trace invalid", ex);
-        }
+		executionTrace.add(exec3_2__catalog_getBook);
+		executionTrace.add(exec2_1__crm_getOrders);
+		executionTrace.add(exec0_0__bookstore_searchBook);
+		executionTrace.add(exec1_1__catalog_getBook);
 
-        return executionTrace;
-    }
+		try {
+			/* Make sure that trace is valid: */
+			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+		} catch (final InvalidTraceException ex) {
+			TestTraceEquivalenceFilterAssemblyEquivalence.log.error(ex);
+			Assert.fail("Test invalid since used trace invalid");
+			throw new InvalidTraceException("Test invalid since used trace invalid", ex);
+		}
+
+		return executionTrace;
+	}
 }

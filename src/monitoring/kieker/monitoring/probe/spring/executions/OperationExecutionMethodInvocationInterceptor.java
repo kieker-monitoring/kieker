@@ -39,11 +39,9 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class OperationExecutionMethodInvocationInterceptor extends
-		AbstractOperationExecutionMethodInvocationInterceptor {
+public class OperationExecutionMethodInvocationInterceptor extends AbstractOperationExecutionMethodInvocationInterceptor {
 
-	private static final Log log = LogFactory
-			.getLog(OperationExecutionMethodInvocationInterceptor.class);
+	private static final Log log = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);
 
 	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
@@ -51,39 +49,29 @@ public class OperationExecutionMethodInvocationInterceptor extends
 
 	@Override
 	public Object invoke(final MethodInvocation invocation) throws Throwable {
-		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
-				.recallThreadLocalTraceId();
+		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.recallThreadLocalTraceId();
 		// Only go on if a traceId has been registered before
-		if ((traceId == -1)
-				|| !AbstractOperationExecutionMethodInvocationInterceptor.controller
-						.isMonitoringEnabled()) {
+		if ((traceId == -1) || !AbstractOperationExecutionMethodInvocationInterceptor.controller.isMonitoringEnabled()) {
 			return invocation.proceed();
 		}
 
-		final OperationExecutionRecord execData = this
-				.initExecutionData(invocation);
-		execData.eoi = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
-				.incrementAndRecallThreadLocalEOI();
+		final OperationExecutionRecord execData = initExecutionData(invocation);
+		execData.eoi = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.incrementAndRecallThreadLocalEOI();
 		/*
 		 * this is executionOrderIndex-th execution in this trace
 		 */
-		execData.ess = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
-				.recallAndIncrementThreadLocalESS();
+		execData.ess = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.recallAndIncrementThreadLocalESS();
 		/*
 		 * this is the height in the dynamic call tree of this execution
 		 */
 
 		try {
-			this.proceedAndMeasure(invocation, execData);
+			proceedAndMeasure(invocation, execData);
 			if ((execData.eoi == -1) || (execData.ess == -1)) {
-				OperationExecutionMethodInvocationInterceptor.log
-						.fatal("eoi and/or ess have invalid values:"
-								+ " eoi == " + execData.eoi + " ess == "
-								+ execData.ess);
-				OperationExecutionMethodInvocationInterceptor.log
-						.fatal("Terminating Kieker.Monitoring!");
-				AbstractOperationExecutionMethodInvocationInterceptor.controller
-						.terminateMonitoring();
+				OperationExecutionMethodInvocationInterceptor.log.fatal("eoi and/or ess have invalid values:" + " eoi == " + execData.eoi + " ess == "
+						+ execData.ess);
+				OperationExecutionMethodInvocationInterceptor.log.fatal("Terminating Kieker.Monitoring!");
+				AbstractOperationExecutionMethodInvocationInterceptor.controller.terminateMonitoring();
 			}
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
@@ -92,10 +80,8 @@ public class OperationExecutionMethodInvocationInterceptor extends
 			 * note that proceedAndMeasure(...) even sets the variable name in
 			 * case the execution of the joint point resulted in an exception!
 			 */
-			AbstractOperationExecutionMethodInvocationInterceptor.controller
-					.newMonitoringRecord(execData);
-			AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry
-					.storeThreadLocalESS(execData.ess);
+			AbstractOperationExecutionMethodInvocationInterceptor.controller.newMonitoringRecord(execData);
+			AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.storeThreadLocalESS(execData.ess);
 		}
 		return execData.retVal;
 	}

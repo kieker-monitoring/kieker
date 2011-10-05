@@ -61,8 +61,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	private final AtomicBoolean errorOccurred = new AtomicBoolean(false);
 	private final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
 
-	public FSReaderCons(final IMonitoringRecordReceiver master, final String[] inputDirs,
-			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
+	public FSReaderCons(final IMonitoringRecordReceiver master, final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
 		this.master = master;
 		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
@@ -102,9 +101,8 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	public boolean execute() throws MonitoringRecordConsumerException {
 		try {
 			{ // 1. init and start reader threads
-				for (int i = 0; i < this.inputDirs.length; i++) {
-					final FSDirectoryReader directoryReader = new FSDirectoryReader(this.inputDirs[i], this,
-							this.readOnlyRecordsOfType);
+				for (final String inputDir : this.inputDirs) {
+					final FSDirectoryReader directoryReader = new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType);
 					// consume records of any type and pass to this:
 					final Thread t = new Thread(new Runnable() {
 
@@ -120,7 +118,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 								FSReaderCons.this.reportReaderException(ex);
 							}
 						}
-					}, "Reader thread for " + this.inputDirs[i]);
+					}, "Reader thread for " + inputDir);
 					this.readerThreads.add(t);
 					t.start();
 				}
@@ -164,8 +162,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 							/*
 							 * now, we'll remove
 							 */
-							FSReaderCons.log.warn("failed to remove nextRecord " + nextRecord + "\n"
-									+ "consumerLatch: " + consumerLatch + "\n" + "first key: "
+							FSReaderCons.log.warn("failed to remove nextRecord " + nextRecord + "\n" + "consumerLatch: " + consumerLatch + "\n" + "first key: "
 									+ this.orderRecordBuffer.firstKey());
 							throw new MonitoringRecordConsumerException("failed to remove nextRecord " + nextRecord);
 						}

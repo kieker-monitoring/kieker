@@ -75,7 +75,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
-		this.init();
+		init();
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			 * /*
 			 */
 			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG__NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
+				addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {
 			AsyncDbWriter.LOG.error("SQLException: " + ex.getMessage());
@@ -125,8 +125,8 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final Connection conn;
 	private final PreparedStatement psInsertMonitoringData;
 
-	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue,
-			final String connectionString, final String preparedQuery) throws SQLException {
+	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue, final String connectionString,
+			final String preparedQuery) throws SQLException {
 		super(monitoringController, blockingQueue);
 		this.conn = DriverManager.getConnection(connectionString);
 		this.psInsertMonitoringData = this.conn.prepareStatement(preparedQuery);

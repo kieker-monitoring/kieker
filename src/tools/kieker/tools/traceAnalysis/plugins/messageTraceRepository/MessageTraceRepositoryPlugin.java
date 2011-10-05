@@ -33,38 +33,37 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
 
-    //private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
+	// private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
 
-    private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
+	private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
 
-    // TODO: handle equivalence classes
-    // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150
+	// TODO: handle equivalence classes
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150
 
-    public MessageTraceRepositoryPlugin(final String name, final SystemModelRepository systemEntityFactory) {
-        super(name, systemEntityFactory);
-    }
+	public MessageTraceRepositoryPlugin(final String name, final SystemModelRepository systemEntityFactory) {
+		super(name, systemEntityFactory);
+	}
 
-    private final IInputPort<MessageTrace> messageTraceInputPort =
-            new AbstractInputPort<MessageTrace>("Message traces"){
+	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
 
-        @Override
-        public void newEvent(final MessageTrace mt) {
-            MessageTraceRepositoryPlugin.this.repo.put(mt.getTraceId(), mt);
-        }
-    };
+		@Override
+		public void newEvent(final MessageTrace mt) {
+			MessageTraceRepositoryPlugin.this.repo.put(mt.getTraceId(), mt);
+		}
+	};
 
-    @Override
-    public IInputPort<MessageTrace> getMessageTraceInputPort() {
-        return this.messageTraceInputPort;
-    }
+	@Override
+	public IInputPort<MessageTrace> getMessageTraceInputPort() {
+		return this.messageTraceInputPort;
+	}
 
-    @Override
-    public boolean execute() {
-        return true; // no need to do anything here
-    }
+	@Override
+	public boolean execute() {
+		return true; // no need to do anything here
+	}
 
-    @Override
-    public void terminate(final boolean error) {
-        // no need to do anything here
-    }
+	@Override
+	public void terminate(final boolean error) {
+		// no need to do anything here
+	}
 }

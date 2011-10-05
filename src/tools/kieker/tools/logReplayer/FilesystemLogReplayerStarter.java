@@ -131,13 +131,13 @@ public class FilesystemLogReplayerStarter {
 		FilesystemLogReplayerStarter.realtimeMode = realtimeOptValStr.equals("true");
 
 		/* 4.) init numRealtimeWorkerThreads */
-		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
-				FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS, "1");
+		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS,
+				"1");
 		try {
 			FilesystemLogReplayerStarter.numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
 		} catch (final NumberFormatException exc) {
-			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '"
-					+ numRealtimeWorkerThreadsStr + "'");
+			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr
+					+ "'");
 			FilesystemLogReplayerStarter.log.error("NumberFormatException: ", exc);
 			retVal = false;
 		}
@@ -223,7 +223,7 @@ public class FilesystemLogReplayerStarter {
 		 * monitoring records.
 		 */
 		final Configuration configuration = Configuration.createDefaultConfiguration();
-		
+
 		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {
 			configuration.setProperty(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
 		} else {
@@ -231,7 +231,7 @@ public class FilesystemLogReplayerStarter {
 		}
 
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
-		
+
 		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringController, FilesystemLogReplayerStarter.inputDirs,
 				FilesystemLogReplayerStarter.realtimeMode, FilesystemLogReplayerStarter.numRealtimeWorkerThreads,
 				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp, FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp);

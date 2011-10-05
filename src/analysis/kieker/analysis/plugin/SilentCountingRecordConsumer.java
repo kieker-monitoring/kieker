@@ -31,25 +31,28 @@ import kieker.common.record.IMonitoringRecord;
  */
 public final class SilentCountingRecordConsumer implements IMonitoringRecordConsumerPlugin {
 
-	private AtomicLong counter = new AtomicLong();
+	private final AtomicLong counter = new AtomicLong();
 
+	@Override
 	public final Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
 		return null;
 	}
 
+	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		counter.incrementAndGet();
+		this.counter.incrementAndGet();
 		return true;
 	}
 
+	@Override
 	public final boolean execute() {
 		return true;
 	}
 
-	public final void terminate(final boolean error) {
-	}
+	@Override
+	public final void terminate(final boolean error) {}
 
 	public final long getMessageCount() {
-		return counter.get();
+		return this.counter.get();
 	}
 }

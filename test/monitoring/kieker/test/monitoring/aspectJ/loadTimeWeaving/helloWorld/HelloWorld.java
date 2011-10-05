@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 package kieker.test.monitoring.aspectJ.loadTimeWeaving.helloWorld;
+
 /**
  * Simple example, used in the tutorial for
  * illustration the instrumentation and monitoring
@@ -27,12 +28,12 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.helloWorld;
  * @author Matthias Rohr
  */
 public class HelloWorld {
-	public static void main (String args[]) {
+	public static void main(final String args[]) {
 		System.out.println("Hello");
-		doSomething();
+		HelloWorld.doSomething();
 	}
 
-	public static void doSomething(){
+	public static void doSomething() {
 		System.out.println("doing something");
 	}
-}        
+}

@@ -89,7 +89,8 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 			AsyncFsWriter.LOG.error("Failed to create mapping file '" + mappingFileFn + "'");
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
-		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH)));
+		addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path,
+				this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH)));
 	}
 }
 
@@ -112,9 +113,8 @@ final class FsWriterThread extends AbstractAsyncThread {
 	// to get that info later
 	private final String path;
 
-	public FsWriterThread(final IMonitoringController monitoringController,
-			final BlockingQueue<IMonitoringRecord> writeQueue, final MappingFileWriter mappingFileWriter,
-			final String path, final boolean autoflush) {
+	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
+			final MappingFileWriter mappingFileWriter, final String path, final boolean autoflush) {
 		super(monitoringController, writeQueue);
 		this.path = new File(path).getAbsolutePath();
 		this.filenamePrefix = path + File.separatorChar + "kieker";
@@ -147,7 +147,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			}
 		}
 		// check if file exists and is not full
-		this.prepareFile(); // may throw FileNotFoundException
+		prepareFile(); // may throw FileNotFoundException
 		this.pos.println(sb.toString());
 	}
 
@@ -164,12 +164,11 @@ final class FsWriterThread extends AbstractAsyncThread {
 			final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 			date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = date_ISO8601UTC.format(new java.util.Date());
-			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
+			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + getName() + ".dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);
 			} else {
-				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))),
-						false);
+				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), false);
 			}
 			this.pos.flush();
 		}

@@ -24,17 +24,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
+
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.analysis.plugin.configuration.IInputPort;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import kieker.tools.traceAnalysis.systemModel.Message;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
@@ -43,113 +45,102 @@ import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
  */
 public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugin<ExecutionContainer> {
 
-    private static final Log log = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
+	private static final Log log = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
 
-    private final File dotOutputFile;
-    private final boolean includeWeights;
-    private final boolean shortLabels;
-    private final boolean includeSelfLoops;
+	private final File dotOutputFile;
+	private final boolean includeWeights;
+	private final boolean shortLabels;
+	private final boolean includeSelfLoops;
 
-    public ContainerDependencyGraphPlugin(final String name,
-            final SystemModelRepository systemEntityFactory,
-            final File dotOutputFile,
-            final boolean includeWeights,
-            final boolean shortLabels,
-            final boolean includeSelfLoops) {
-        super(name, systemEntityFactory,
-                new DependencyGraph<ExecutionContainer>(
-                systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer.getId(),
-                systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer));
-        this.dotOutputFile = dotOutputFile;
-        this.includeWeights = includeWeights;
-        this.shortLabels = shortLabels;
-        this.includeSelfLoops = includeSelfLoops;
-    }
+	public ContainerDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
+			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
+		super(name, systemEntityFactory, new DependencyGraph<ExecutionContainer>(
+				systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer.getId(),
+				systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer));
+		this.dotOutputFile = dotOutputFile;
+		this.includeWeights = includeWeights;
+		this.shortLabels = shortLabels;
+		this.includeSelfLoops = includeSelfLoops;
+	}
 
-    protected void dotEdges(Collection<DependencyGraphNode<ExecutionContainer>> nodes,
-            PrintStream ps, final boolean shortLabels) {
+	@Override
+	protected void dotEdges(final Collection<DependencyGraphNode<ExecutionContainer>> nodes, final PrintStream ps, final boolean shortLabels) {
 
-        ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
-        int rootContainerId = rootContainer.getId();
-        StringBuilder strBuild = new StringBuilder();
-        for (DependencyGraphNode<ExecutionContainer> node : nodes) {
-            ExecutionContainer curContainer = node.getEntity();
-            int curContainerId = node.getId();
-            strBuild.append(DotFactory.createNode("",
-                    getNodeId(node),
-                    (curContainerId == rootContainerId) ? "$" : STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
-                    (curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D,
-                    (curContainerId == rootContainerId) ? null : DotFactory.DOT_STYLE_FILLED, // style
-                    null, // framecolor
-                    (curContainerId == rootContainerId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
-                    null, // fontcolor
-                    DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-                    null, // imagefilename
-                    null // misc
-                    ));
-            strBuild.append("\n");
-        }
-        ps.println(strBuild.toString());
-    }
+		final ExecutionContainer rootContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+		final int rootContainerId = rootContainer.getId();
+		final StringBuilder strBuild = new StringBuilder();
+		for (final DependencyGraphNode<ExecutionContainer> node : nodes) {
+			final ExecutionContainer curContainer = node.getEntity();
+			final int curContainerId = node.getId();
+			strBuild.append(DotFactory.createNode("", getNodeId(node), (curContainerId == rootContainerId) ? "$"
+					: AbstractDependencyGraphPlugin.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
+					(curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D, (curContainerId == rootContainerId) ? null
+							: DotFactory.DOT_STYLE_FILLED, // style
+					null, // framecolor
+					(curContainerId == rootContainerId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
+					null, // fontcolor
+					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
+					null, // imagefilename
+					null // misc
+					));
+			strBuild.append("\n");
+		}
+		ps.println(strBuild.toString());
+	}
 
-    @Override
-    public boolean execute() {
-        return true; // no need to do anything here
-    }
+	@Override
+	public boolean execute() {
+		return true; // no need to do anything here
+	}
 
-    /**
-     * Saves the dependency graph to the dot file if error is not true.
-     *
-     * @param error
-     */
-    @Override
-    public void terminate(boolean error) {
-        if (!error){
-            try {
-                this.saveToDotFile(
-                        this.dotOutputFile.getCanonicalPath(),
-                        this.includeWeights,
-                        this.shortLabels,
-                        this.includeSelfLoops);
-            } catch (IOException ex) {
-               log.error("IOException", ex);
-            }
-        }
-    }
-    
-    private final IInputPort<MessageTrace> messageTraceInputPort =
-            new AbstractInputPort<MessageTrace>("Message traces") {
+	/**
+	 * Saves the dependency graph to the dot file if error is not true.
+	 * 
+	 * @param error
+	 */
+	@Override
+	public void terminate(final boolean error) {
+		if (!error) {
+			try {
+				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+			} catch (final IOException ex) {
+				ContainerDependencyGraphPlugin.log.error("IOException", ex);
+			}
+		}
+	}
 
-                @Override
-                public void newEvent(MessageTrace t) {
-                    for (Message m : t.getSequenceAsVector()) {
-                        if (m instanceof SynchronousReplyMessage) {
-                            continue;
-                        }
-                        AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-                        AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-                        ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
-                        ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
-                        DependencyGraphNode<ExecutionContainer> senderNode = dependencyGraph.getNode(senderContainer.getId());
-                        DependencyGraphNode<ExecutionContainer> receiverNode = dependencyGraph.getNode(receiverContainer.getId());
+	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
 
-                        if (senderNode == null) {
-                            senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
-                            dependencyGraph.addNode(senderContainer.getId(), senderNode);
-                        }
-                        if (receiverNode == null) {
-                            receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
-                            dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
-                        }
-                        senderNode.addOutgoingDependency(receiverNode);
-                        receiverNode.addIncomingDependency(senderNode);
-                    }
-                    reportSuccess(t.getTraceId());
-                }
-            };
+		@Override
+		public void newEvent(final MessageTrace t) {
+			for (final Message m : t.getSequenceAsVector()) {
+				if (m instanceof SynchronousReplyMessage) {
+					continue;
+				}
+				final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+				final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+				final ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
+				final ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
+				DependencyGraphNode<ExecutionContainer> senderNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(senderContainer.getId());
+				DependencyGraphNode<ExecutionContainer> receiverNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(receiverContainer.getId());
 
-    @Override
-    public IInputPort<MessageTrace> getMessageTraceInputPort() {
-        return this.messageTraceInputPort;
-    }
+				if (senderNode == null) {
+					senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
+					ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
+				}
+				if (receiverNode == null) {
+					receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
+					ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
+				}
+				senderNode.addOutgoingDependency(receiverNode);
+				receiverNode.addIncomingDependency(senderNode);
+			}
+			reportSuccess(t.getTraceId());
+		}
+	};
+
+	@Override
+	public IInputPort<MessageTrace> getMessageTraceInputPort() {
+		return this.messageTraceInputPort;
+	}
 }

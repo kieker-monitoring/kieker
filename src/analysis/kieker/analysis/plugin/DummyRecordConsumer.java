@@ -21,31 +21,35 @@
 package kieker.analysis.plugin;
 
 import java.util.Collection;
+
 import kieker.common.record.IMonitoringRecord;
 
 /**
- *
+ * 
  * @author matthias
  */
 public class DummyRecordConsumer implements IMonitoringRecordConsumerPlugin {
 
+	@Override
+	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+		return null; // receive records of any type
+	}
 
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-        return null; // receive records of any type
-    }
+	@Override
+	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+		System.out.println("DummyRecordConsumer consumed " + monitoringRecord);
+		return true;
+	}
 
-    public boolean newMonitoringRecord(IMonitoringRecord monitoringRecord) {
-        System.out.println("DummyRecordConsumer consumed "+monitoringRecord);
-        return true;
-    }
+	@Override
+	public boolean execute() {
+		System.out.println("DummyRecordConsumer.execute()");
+		return true;
+	}
 
-    public boolean execute() {
-        System.out.println("DummyRecordConsumer.execute()");
-        return true;
-    }
-
-    public void terminate(final boolean error) {
-        // nothing to do
-    }
+	@Override
+	public void terminate(final boolean error) {
+		// nothing to do
+	}
 
 }

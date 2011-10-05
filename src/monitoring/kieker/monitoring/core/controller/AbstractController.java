@@ -39,7 +39,7 @@ public abstract class AbstractController {
 	protected final synchronized void setMonitoringController(final MonitoringController monitoringController) {
 		if (this.monitoringController == null) {
 			this.monitoringController = monitoringController;
-			this.init();
+			init();
 		}
 	}
 
@@ -50,7 +50,7 @@ public abstract class AbstractController {
 	 */
 	protected final boolean terminate() {
 		if (!this.terminated.getAndSet(true)) {
-			this.cleanup();
+			cleanup();
 			if (this.monitoringController != null) {
 				this.monitoringController.terminate();
 			}
@@ -73,7 +73,7 @@ public abstract class AbstractController {
 	 * inits
 	 */
 	protected abstract void init();
-	
+
 	/**
 	 * cleans up
 	 */
@@ -84,7 +84,7 @@ public abstract class AbstractController {
 
 	@SuppressWarnings("unchecked")
 	protected final static <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		C createdClass = null;  // NOPMD
+		C createdClass = null; // NOPMD
 		try {
 			final Class<?> clazz = Class.forName(classname);
 			if (c.isAssignableFrom(clazz)) {
@@ -95,7 +95,8 @@ public abstract class AbstractController {
 		} catch (final ClassNotFoundException e) {
 			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
 		} catch (final NoSuchMethodException e) {
-			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' has to implement a (public) constructor that accepts a single Configuration", e);
+			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname
+					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
 		} catch (final Exception e) { // SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
 			AbstractController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
 		}

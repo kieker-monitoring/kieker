@@ -21,18 +21,18 @@
 package kieker.common.record;
 
 /**
- *
+ * 
  * @author Andre van Hoorn
  */
 public class MonitoringRecordReceiverException extends Exception {
 
-    private static final long serialVersionUID = 76576L;
+	private static final long serialVersionUID = 76576L;
 
-    public MonitoringRecordReceiverException(final String messString) {
-        super(messString);
-    }
+	public MonitoringRecordReceiverException(final String messString) {
+		super(messString);
+	}
 
-    public MonitoringRecordReceiverException(final String messString, final Throwable cause) {
-        super(messString, cause);
-    }
+	public MonitoringRecordReceiverException(final String messString, final Throwable cause) {
+		super(messString, cause);
+	}
 }

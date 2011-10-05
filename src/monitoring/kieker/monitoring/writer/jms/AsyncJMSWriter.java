@@ -62,12 +62,11 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected void init() throws NamingException, JMSException {
-		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration
-				.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE), this.configuration
-				.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL), this.configuration
-				.getStringProperty(AsyncJMSWriter.CONFIG__FACTORYLOOKUPNAME), this.configuration
-				.getStringProperty(AsyncJMSWriter.CONFIG__TOPIC), this.configuration
-				.getLongProperty(AsyncJMSWriter.CONFIG__MESSAGETTL)));
+		addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue,
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE),
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL),
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__FACTORYLOOKUPNAME), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__TOPIC),
+				this.configuration.getLongProperty(AsyncJMSWriter.CONFIG__MESSAGETTL)));
 	}
 }
 
@@ -92,10 +91,8 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	private Connection connection;
 	private MessageProducer sender;
 
-	public JMSWriterThread(final IMonitoringController monitoringController,
-			final BlockingQueue<IMonitoringRecord> writeQueue, final String contextFactoryType,
-			final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive)
-			throws NamingException, JMSException {
+	public JMSWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue, final String contextFactoryType,
+			final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive) throws NamingException, JMSException {
 		super(monitoringController, writeQueue);
 		try {
 			final Hashtable<String, String> properties = new Hashtable<String, String>();

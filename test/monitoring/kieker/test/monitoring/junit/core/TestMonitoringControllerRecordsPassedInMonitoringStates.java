@@ -36,17 +36,14 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 
 	public void testRecordsPassedToWriterWhenEnabled() {
 		final String pipeName = NamedPipeFactory.createPipeName();
-		final IMonitoringController monitoringController =
-				NamedPipeFactory
-						.createMonitoringControllerWithNamedPipe(pipeName);
+		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);
 
 		/*
 		 * We will now register a custom IPipeReader which receives records
 		 * through the pipe and collects these in a list. On purpose, we are not
 		 * using the corresponding PipeReader that comes with Kieker.
 		 */
-		final List<IMonitoringRecord> receivedRecords =
-				NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
+		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		Assert.assertTrue("Failed to enable monitoring", monitoringController.enableMonitoring());
 		monitoringController.newMonitoringRecord(new DummyRecord());
@@ -56,17 +53,14 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 
 	public void testNoRecordsPassedToWriterWhenDisabled() {
 		final String pipeName = NamedPipeFactory.createPipeName();
-		final IMonitoringController monitoringController =
-				NamedPipeFactory
-						.createMonitoringControllerWithNamedPipe(pipeName);
+		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);
 
 		/*
 		 * We will now register a custom IPipeReader which receives records
 		 * through the pipe and collects these in a list. On purpose, we are not
 		 * using the corresponding PipeReader that comes with Kieker.
 		 */
-		final List<IMonitoringRecord> receivedRecords =
-				NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
+		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		Assert.assertTrue("Failed to disable monitoring", monitoringController.disableMonitoring());
 		monitoringController.newMonitoringRecord(new DummyRecord());
@@ -76,17 +70,14 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 
 	public void testNoRecordsPassedToWriterWhenTerminated() {
 		final String pipeName = NamedPipeFactory.createPipeName();
-		final IMonitoringController monitoringController =
-				NamedPipeFactory
-						.createMonitoringControllerWithNamedPipe(pipeName);
+		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);
 
 		/*
 		 * We will now register a custom IPipeReader which receives records
 		 * through the pipe and collects these in a list. On purpose, we are not
 		 * using the corresponding PipeReader that comes with Kieker.
 		 */
-		final List<IMonitoringRecord> receivedRecords =
-				NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
+		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		monitoringController.terminateMonitoring();
 		monitoringController.newMonitoringRecord(new DummyRecord());

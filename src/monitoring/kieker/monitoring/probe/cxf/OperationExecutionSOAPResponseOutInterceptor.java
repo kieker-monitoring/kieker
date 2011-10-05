@@ -64,7 +64,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
-	protected static final ITimeSource timesource = ctrlInst.getTimeSource();
+	protected static final ITimeSource timesource = OperationExecutionSOAPResponseOutInterceptor.ctrlInst.getTimeSource();
 
 	protected static final String vmName = OperationExecutionSOAPResponseOutInterceptor.ctrlInst.getHostName();
 
@@ -85,7 +85,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			 */
 			OperationExecutionSOAPResponseOutInterceptor.LOG.log(Level.WARNING, "Kieker traceId not registered. "
 					+ "Will unset all threadLocal variables and return.");
-			this.unsetKiekerThreadLocalData(); // unset all variables
+			unsetKiekerThreadLocalData(); // unset all variables
 			return;
 		} else {
 			/*
@@ -97,12 +97,12 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			myEoi = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestEOI();
 			myEss = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestESS();
 			tin = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestTin();
-			tout = timesource.getTime();
+			tout = OperationExecutionSOAPResponseOutInterceptor.timesource.getTime();
 			isEntryCall = OperationExecutionSOAPResponseOutInterceptor.soapRegistry.recallThreadLocalInRequestIsEntryCall();
 		}
 
 		/* The trace is leaving this node, thus we need to clean up the thread-local variables. */
-		this.unsetKiekerThreadLocalData();
+		unsetKiekerThreadLocalData();
 
 		/* Log this execution */
 		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.componentName,

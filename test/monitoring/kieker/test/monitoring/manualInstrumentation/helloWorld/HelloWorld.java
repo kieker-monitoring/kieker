@@ -30,16 +30,16 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public class HelloWorld {
 
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 		System.out.println("Hello");
 
 		final IMonitoringController monitoringController = MonitoringController.getInstance();
 		final ITimeSource timeSource = monitoringController.getTimeSource();
 
 		/* recording of the start time of doSomething */
-		long startTime = timeSource.getTime();
-		doSomething();
-		long endTime = timeSource.getTime();
+		final long startTime = timeSource.getTime();
+		HelloWorld.doSomething();
+		final long endTime = timeSource.getTime();
 		monitoringController.newMonitoringRecord(new OperationExecutionRecord("kieker.component", "method", 1, startTime, endTime));
 	}
 

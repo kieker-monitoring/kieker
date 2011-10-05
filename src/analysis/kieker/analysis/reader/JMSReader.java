@@ -59,20 +59,23 @@ public class JMSReader extends AbstractMonitoringReader {
 	private String jmsFactoryLookupName = null;
 
 	/**
-	 * @param jmsProviderUrl = for instance "tcp://127.0.0.1:3035/"
-	 * @param jmsDestination = for instance "queue1"
-	 * @param jmsFactoryLookupName = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
-	 * @throws IllegalArgumentException if passed parameters are null or empty.
+	 * @param jmsProviderUrl
+	 *            = for instance "tcp://127.0.0.1:3035/"
+	 * @param jmsDestination
+	 *            = for instance "queue1"
+	 * @param jmsFactoryLookupName
+	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
+	 * @throws IllegalArgumentException
+	 *             if passed parameters are null or empty.
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		this.initInstanceFromArgs(jmsProviderUrl, jmsDestination, jmsFactoryLookupName); // throws IllegalArgumentException
+		initInstanceFromArgs(jmsProviderUrl, jmsDestination, jmsFactoryLookupName); // throws IllegalArgumentException
 	}
 
 	/**
 	 * Constructor for JMSReader. Requires a subsequent call to the init method.
 	 */
-	public JMSReader() {
-	}
+	public JMSReader() {}
 
 	/**
 	 * Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 | jmsFactoryLookupName=org.exolab.jms.jndi.InitialContextFactory
@@ -86,7 +89,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			final String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
 			final String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
 			final String jmsFactoryLookupNameP = propertyMap.getProperty("jmsFactoryLookupName", null);
-			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws
+			initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws
 			// IllegalArgumentException
 		} catch (final Exception exc) {
 			JMSReader.log.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
@@ -95,13 +98,11 @@ public class JMSReader extends AbstractMonitoringReader {
 		return true;
 	}
 
-	private void initInstanceFromArgs(final String jmsProviderUrl, final String jmsDestination,
-			final String factoryLookupName) throws IllegalArgumentException {
-		if ((jmsProviderUrl == null) || jmsProviderUrl.equals("") || (jmsDestination == null)
-				|| jmsDestination.equals("") || (factoryLookupName == null) || (factoryLookupName.equals(""))) {
-			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('"
-					+ jmsProviderUrl + "'), jmsDestination ('" + jmsDestination + "'), or factoryLookupName ('"
-					+ factoryLookupName + "') is null");
+	private void initInstanceFromArgs(final String jmsProviderUrl, final String jmsDestination, final String factoryLookupName) throws IllegalArgumentException {
+		if ((jmsProviderUrl == null) || jmsProviderUrl.equals("") || (jmsDestination == null) || jmsDestination.equals("") || (factoryLookupName == null)
+				|| (factoryLookupName.equals(""))) {
+			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + jmsProviderUrl + "'), jmsDestination ('"
+					+ jmsDestination + "'), or factoryLookupName ('" + factoryLookupName + "') is null");
 		}
 
 		this.jmsProviderUrl = jmsProviderUrl;
@@ -141,14 +142,12 @@ public class JMSReader extends AbstractMonitoringReader {
 				 * JNDI lookup failed, try manual creation (this seems to fail
 				 * with ActiveMQ sometimes)
 				 */
-				JMSReader.log
-						.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
+				JMSReader.log.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
 				JMSReader.log.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
 			}
 
-			JMSReader.log
-					.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			JMSReader.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
@@ -189,7 +188,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			connection.start();
 
 			JMSReader.log.info("JMSReader started and waits for incomming monitoring events!");
-			this.block();
+			block();
 			JMSReader.log.info("Woke up by shutdown");
 		} catch (final Exception ex) { // FindBugs complains but wontfix
 			JMSReader.log.fatal(ex.getMessage(), ex);
@@ -220,6 +219,6 @@ public class JMSReader extends AbstractMonitoringReader {
 	@Override
 	public void terminate() {
 		JMSReader.log.info("Shutdown of JMSReader requested.");
-		this.unblock();
+		unblock();
 	}
 }

@@ -75,15 +75,14 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 			/* 2.) Extract eoi from SOAP header */
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
-			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
+			final String eoiStr = getStringContentFromHeader(hdr); // null if hdr==null
 			if (eoiStr == null) {
 				/*
 				 * No Kieker eoi in header.
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
-				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker eoi in response header. "
-						+ "Will unset all threadLocal variables");
-				this.unsetKiekerThreadLocalData();
+				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker eoi in response header. " + "Will unset all threadLocal variables");
+				unsetKiekerThreadLocalData();
 				return;
 			}
 			int eoi = 0;
@@ -92,7 +91,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			} catch (final Exception exc) {
 				/* invalid eoi! */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
-				this.unsetKiekerThreadLocalData();
+				unsetKiekerThreadLocalData();
 				return;
 			}
 
@@ -102,7 +101,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 			/* 4. Extract traceId from SOAP header */
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
-			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
+			final String traceIdStr = getStringContentFromHeader(hdr); // null if hdr==null
 			if (traceIdStr == null) {
 				/*
 				 * No Kieker trace Id in header.
@@ -110,7 +109,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker traceId in response header. "
 						+ "Will unset all threadLocal variables");
-				this.unsetKiekerThreadLocalData();
+				unsetKiekerThreadLocalData();
 				return;
 			}
 			long traceId;
@@ -119,7 +118,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			} catch (final Exception exc) {
 				/* Invalid trace id! */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
-				this.unsetKiekerThreadLocalData();
+				unsetKiekerThreadLocalData();
 				return;
 			}
 
@@ -133,14 +132,14 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			// TODO: Remove following plausibility checks if implementation stable
 			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/162
 			if (myTraceId != traceId) {
-				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + ""
-						+ myTraceId + "(before) != " + traceId + "(after)");
+				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + "" + myTraceId
+						+ "(before) != " + traceId + "(after)");
 			}
 
 			// Log this execution
 			final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.componentName,
-					OperationExecutionSOAPResponseInInterceptor.opName, mySessionId, myTraceId, myTin, myTout,
-					OperationExecutionSOAPResponseInInterceptor.vmName, myEoi, myEss);
+					OperationExecutionSOAPResponseInInterceptor.opName, mySessionId, myTraceId, myTin, myTout, OperationExecutionSOAPResponseInInterceptor.vmName,
+					myEoi, myEss);
 			rec.experimentId = OperationExecutionSOAPResponseInInterceptor.ctrlInst.getExperimentId();
 			OperationExecutionSOAPResponseInInterceptor.ctrlInst.newMonitoringRecord(rec);
 
@@ -151,7 +150,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			OperationExecutionSOAPResponseInInterceptor.cfRegistry.storeThreadLocalEOI(eoi);
 
 			if (isEntryCall) { // clean up iff trace's origin was right before the call!
-				this.unsetKiekerThreadLocalData();
+				unsetKiekerThreadLocalData();
 			}
 		}
 	}

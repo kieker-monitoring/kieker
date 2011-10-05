@@ -52,15 +52,15 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	@Override
 	protected void init() throws Exception {
 		try {
-			String domain = this.configuration.getStringProperty(CONFIG__DOMAIN);
+			String domain = this.configuration.getStringProperty(JMXWriter.CONFIG__DOMAIN);
 			if ("".equals(domain)) {
-				domain = monitoringController.getJMXDomain();
+				domain = this.monitoringController.getJMXDomain();
 			}
-			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(CONFIG__LOGNAME));
+			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(JMXWriter.CONFIG__LOGNAME));
 		} catch (final MalformedObjectNameException ex) {
-			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + CONFIG__DOMAIN + "="
-					+ this.configuration.getStringProperty(CONFIG__DOMAIN) + "' and '" + CONFIG__LOGNAME + "="
-					+ this.configuration.getStringProperty(CONFIG__LOGNAME) + "'", ex);
+			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + JMXWriter.CONFIG__DOMAIN
+					+ "=" + this.configuration.getStringProperty(JMXWriter.CONFIG__DOMAIN) + "' and '" + JMXWriter.CONFIG__LOGNAME + "="
+					+ this.configuration.getStringProperty(JMXWriter.CONFIG__LOGNAME) + "'", ex);
 		}
 		this.kiekerJMXMonitoringLog = new KiekerJMXMonitoringLog(this.monitoringLogName);
 		try {
@@ -80,7 +80,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);
 		} catch (final Exception ex) {
-			LOG.error("Failed to terminate writer", ex);
+			JMXWriter.LOG.error("Failed to terminate writer", ex);
 		}
 	}
 }

@@ -36,8 +36,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Replays a filesystem monitoring log and simply passes each record to a
- * specified {@link IMonitoringRecordReceiver}. The
- * {@link FilesystemLogReplayer} can replay monitoring logs in real-time.
+ * specified {@link IMonitoringRecordReceiver}. The {@link FilesystemLogReplayer} can replay monitoring logs in real-time.
  * 
  * @author Andre van Hoorn
  */
@@ -49,8 +48,7 @@ public class FilesystemLogReplayer {
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
 
-	private static final Log log = LogFactory
-			.getLog(FilesystemLogReplayer.class);
+	private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
 	/** Each record is delegated to this receiver. */
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final String[] inputDirs;
@@ -58,9 +56,7 @@ public class FilesystemLogReplayer {
 	private final int numRealtimeWorkerThreads;
 
 	/** Normal replay mode (i.e., non-real-time). */
-	public FilesystemLogReplayer(
-			final IMonitoringRecordReceiver monitoringController,
-			final String[] inputDirs) {
+	public FilesystemLogReplayer(final IMonitoringRecordReceiver monitoringController, final String[] inputDirs) {
 		this(monitoringController, inputDirs, false, -1);
 	}
 
@@ -71,13 +67,9 @@ public class FilesystemLogReplayer {
 	 * @param realtimeMode
 	 * @param numRealtimeWorkerThreads
 	 */
-	public FilesystemLogReplayer(
-			final IMonitoringRecordReceiver monitoringController,
-			final String[] inputDirs, final boolean realtimeMode,
+	public FilesystemLogReplayer(final IMonitoringRecordReceiver monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads) {
-		this(monitoringController, inputDirs, realtimeMode,
-				numRealtimeWorkerThreads, FilesystemLogReplayer.MIN_TIMESTAMP,
-				FilesystemLogReplayer.MAX_TIMESTAMP);
+		this(monitoringController, inputDirs, realtimeMode, numRealtimeWorkerThreads, FilesystemLogReplayer.MIN_TIMESTAMP, FilesystemLogReplayer.MAX_TIMESTAMP);
 	}
 
 	/**
@@ -90,12 +82,8 @@ public class FilesystemLogReplayer {
 	 * @param ignoreRecordsBeforeTimestamp
 	 * @param ignoreRecordsAfterTimestamp
 	 */
-	public FilesystemLogReplayer(
-			final IMonitoringRecordReceiver monitoringController,
-			final String[] inputDirs, final boolean realtimeMode,
-			final int numRealtimeWorkerThreads,
-			final long ignoreRecordsBeforeTimestamp,
-			final long ignoreRecordsAfterTimestamp) {
+	public FilesystemLogReplayer(final IMonitoringRecordReceiver monitoringController, final String[] inputDirs, final boolean realtimeMode,
+			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
 		this.recordReceiver = monitoringController;
 		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.realtimeMode = realtimeMode;
@@ -115,17 +103,13 @@ public class FilesystemLogReplayer {
 
 		AbstractMonitoringReader fsReader;
 		if (this.realtimeMode) {
-			fsReader =
-					new FSReaderRealtime(this.inputDirs,
-							this.numRealtimeWorkerThreads);
+			fsReader = new FSReaderRealtime(this.inputDirs, this.numRealtimeWorkerThreads);
 		} else {
 			fsReader = new FSReader(this.inputDirs);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(fsReader);
-		tpanInstance.registerPlugin(new RecordDelegationPlugin(
-				this.recordReceiver, this.ignoreRecordsBeforeTimestamp,
-				this.ignoreRecordsAfterTimestamp));
+		tpanInstance.registerPlugin(new RecordDelegationPlugin(this.recordReceiver, this.ignoreRecordsBeforeTimestamp, this.ignoreRecordsAfterTimestamp));
 		try {
 			tpanInstance.run();
 			success = true;
@@ -138,20 +122,16 @@ public class FilesystemLogReplayer {
 }
 
 /**
- * Kieker analysis plugin that delegates each record to the configured
- * {@link IMonitoringRecordReceiver}.
+ * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.
  * 
- * TODO: We need to extract this class and merge it with that of
- * {@link JMSLogReplayer}
- * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/172
+ * TODO: We need to extract this class and merge it with that of {@link JMSLogReplayer} See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/172
  * 
  * @author Andre van Hoorn
  * 
  */
 class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log log = LogFactory
-			.getLog(RecordDelegationPlugin.class);
+	private static final Log log = LogFactory.getLog(RecordDelegationPlugin.class);
 
 	private final IMonitoringRecordReceiver rec;
 
@@ -163,13 +143,10 @@ class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 	 */
 	@SuppressWarnings("unused")
 	private RecordDelegationPlugin() {
-		this(null, FilesystemLogReplayer.MIN_TIMESTAMP,
-				FilesystemLogReplayer.MAX_TIMESTAMP);
+		this(null, FilesystemLogReplayer.MIN_TIMESTAMP, FilesystemLogReplayer.MAX_TIMESTAMP);
 	}
 
-	public RecordDelegationPlugin(final IMonitoringRecordReceiver rec,
-			final long ignoreRecordsBeforeTimestamp,
-			final long ignoreRecordsAfterTimestamp) {
+	public RecordDelegationPlugin(final IMonitoringRecordReceiver rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
 		this.rec = rec;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
@@ -180,8 +157,7 @@ class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 	 */
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		if ((record.getLoggingTimestamp() < this.ignoreRecordsBeforeTimestamp)
-				|| (record.getLoggingTimestamp() > this.ignoreRecordsAfterTimestamp)) {
+		if ((record.getLoggingTimestamp() < this.ignoreRecordsBeforeTimestamp) || (record.getLoggingTimestamp() > this.ignoreRecordsAfterTimestamp)) {
 			return true;
 		}
 		return this.rec.newMonitoringRecord(record);
@@ -192,16 +168,10 @@ class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 	 */
 	@Override
 	public boolean execute() {
-		RecordDelegationPlugin.log.debug(RecordDelegationPlugin.class.getName()
-				+ " starting ...");
+		RecordDelegationPlugin.log.debug(RecordDelegationPlugin.class.getName() + " starting ...");
 		RecordDelegationPlugin.log
-				.info("Ignoring records before "
-						+ LoggingTimestampConverter
-								.convertLoggingTimestampToUTCString(this.ignoreRecordsBeforeTimestamp));
-		RecordDelegationPlugin.log
-				.info("Ignoring records after "
-						+ LoggingTimestampConverter
-								.convertLoggingTimestampToUTCString(this.ignoreRecordsAfterTimestamp));
+				.info("Ignoring records before " + LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreRecordsBeforeTimestamp));
+		RecordDelegationPlugin.log.info("Ignoring records after " + LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreRecordsAfterTimestamp));
 		return true;
 	}
 

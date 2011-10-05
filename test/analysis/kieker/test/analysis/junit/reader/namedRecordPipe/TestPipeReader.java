@@ -51,11 +51,9 @@ public class TestPipeReader extends TestCase {
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final PipeReader pipeReader = new PipeReader(pipeName);
 
-		final List<IMonitoringRecord> receivedRecords =
-				Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
+		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 
-		final IMonitoringRecordReceiver writer =
-				kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
+		final IMonitoringRecordReceiver writer = kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
 		final IMonitoringRecordConsumerPlugin receiver = new IMonitoringRecordConsumerPlugin() {
 
@@ -100,7 +98,6 @@ public class TestPipeReader extends TestCase {
 		/*
 		 * Make sure that numRecordsToSend where read.
 		 */
-		Assert.assertEquals("Unexpected number of records received",
-				numRecordsToSend, receivedRecords.size());
+		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());
 	}
 }

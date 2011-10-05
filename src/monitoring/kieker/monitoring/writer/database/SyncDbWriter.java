@@ -107,17 +107,17 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public final void init() throws Exception, SQLException {
-	}
+	public final void init() throws Exception, SQLException {}
 
 	@Override
 	public final synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			// connector only supports execution records so far
 			if (!(monitoringRecord instanceof OperationExecutionRecord)) {
-				SyncDbWriter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received" + monitoringRecord.getClass().getName());
-	            return false;
-	        }
+				SyncDbWriter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
+						+ monitoringRecord.getClass().getName());
+				return false;
+			}
 			final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
 			this.psInsertMonitoringData.setInt(1, execRecord.experimentId);
 			this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName);

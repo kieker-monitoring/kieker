@@ -50,24 +50,24 @@ public final class Configuration extends Properties implements Keys {
 	 * @return the configuration for the singleton controller
 	 */
 	public final static Configuration createSingletonConfiguration() {
-		Configuration.LOG.debug("Searching for JVM argument '" + CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+		Configuration.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		// Searching for configuration file location passed to JVM
-		String configurationFile = System.getProperty(CUSTOM_PROPERTIES_LOCATION_JVM);
+		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
-		final Configuration defaultConfiguration = defaultConfiguration();
+		final Configuration defaultConfiguration = Configuration.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
-		defaultConfiguration.setProperty(CONTROLLER_NAME, "KIEKER-SINGLETON");
+		defaultConfiguration.setProperty(Keys.CONTROLLER_NAME, "KIEKER-SINGLETON");
 		if (configurationFile != null) {
 			Configuration.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
-			loadConfiguration = loadConfigurationFromFile(configurationFile, defaultConfiguration);
+			loadConfiguration = Configuration.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
-			configurationFile = CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+			configurationFile = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
 			Configuration.LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
-			loadConfiguration = loadConfigurationFromResource(configurationFile, defaultConfiguration);
+			loadConfiguration = Configuration.loadConfigurationFromResource(configurationFile, defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
-		return getSystemPropertiesStartingWith(PREFIX, loadConfiguration);
+		return Configuration.getSystemPropertiesStartingWith(Keys.PREFIX, loadConfiguration);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @return default configuration
 	 */
 	public final static Configuration createDefaultConfiguration() {
-		return new Configuration(defaultConfiguration());
+		return new Configuration(Configuration.defaultConfiguration());
 	}
 
 	/**
@@ -88,7 +88,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @return the created Configuration
 	 */
 	public final static Configuration createConfigurationFromFile(final String configurationFile) {
-		return loadConfigurationFromFile(configurationFile, defaultConfiguration());
+		return Configuration.loadConfigurationFromFile(configurationFile, Configuration.defaultConfiguration());
 	}
 
 	/**
@@ -97,7 +97,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @return
 	 */
 	private final static Configuration defaultConfiguration() {
-		return loadConfigurationFromResource(DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
+		return Configuration.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public final class Configuration extends Properties implements Keys {
 	 */
 	private final static Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
-		FileInputStream is = null; //NOPMD
+		FileInputStream is = null; // NOPMD
 		try {
 			is = new FileInputStream(propertiesFn);
 			properties.load(is);
@@ -173,7 +173,7 @@ public final class Configuration extends Properties implements Keys {
 	private final static Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);
 		final Properties properties = System.getProperties();
-		for (String property : properties.stringPropertyNames()) {
+		for (final String property : properties.stringPropertyNames()) {
 			if (property.startsWith(prefix)) {
 				configuration.setProperty(property, properties.getProperty(property));
 			}
@@ -206,7 +206,7 @@ public final class Configuration extends Properties implements Keys {
 
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
-		for (String property : this.stringPropertyNames()) {
+		for (final String property : stringPropertyNames()) {
 			if (property.startsWith(prefix)) {
 				configuration.setProperty(property, this.getProperty(property));
 			}
@@ -220,7 +220,7 @@ public final class Configuration extends Properties implements Keys {
 	}
 
 	public final boolean getBooleanProperty(final String key) {
-		return Boolean.parseBoolean(this.getStringProperty(key));
+		return Boolean.parseBoolean(getStringProperty(key));
 	}
 
 	public final int getIntProperty(final String key) {

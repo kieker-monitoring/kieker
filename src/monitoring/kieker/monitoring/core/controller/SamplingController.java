@@ -90,8 +90,7 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	@Override
-	public final synchronized ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period,
-			final TimeUnit timeUnit) {
+	public final synchronized ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
 			SamplingController.LOG.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
 			return null;

@@ -35,65 +35,61 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * 
  * @author Andre van Hoorn
  */
 public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionTraceProcessingPlugin {
 
-    private static final Log log = LogFactory.getLog(InvalidExecutionTraceWriterPlugin.class);
-    private final String outputFn;
-    private final BufferedWriter ps;
+	private static final Log log = LogFactory.getLog(InvalidExecutionTraceWriterPlugin.class);
+	private final String outputFn;
+	private final BufferedWriter ps;
 
-    public InvalidExecutionTraceWriterPlugin(
-            final String name,
-            final SystemModelRepository systemEntityFactory,
-            final String outputFn) throws FileNotFoundException, IOException {
-        super(name, systemEntityFactory);
-        this.outputFn = outputFn;
-        this.ps = new BufferedWriter(new FileWriter(outputFn));
-    }
+	public InvalidExecutionTraceWriterPlugin(final String name, final SystemModelRepository systemEntityFactory, final String outputFn)
+			throws FileNotFoundException, IOException {
+		super(name, systemEntityFactory);
+		this.outputFn = outputFn;
+		this.ps = new BufferedWriter(new FileWriter(outputFn));
+	}
 
-    @Override
-    public void printStatusMessage() {
-        super.printStatusMessage();
-        final int numTraces = this.getSuccessCount();
-        System.out.println("Wrote " + numTraces + " execution trace artifact"
-                + (numTraces > 1 ? "s" : "") + " to file '"
-                + this.outputFn + "'");
-    }
+	@Override
+	public void printStatusMessage() {
+		super.printStatusMessage();
+		final int numTraces = getSuccessCount();
+		System.out.println("Wrote " + numTraces + " execution trace artifact" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'");
+	}
 
-    @Override
-    public void terminate(final boolean error) {
-        if (this.ps != null) {
-            try {
-                this.ps.close();
-            } catch (final IOException ex) {
-                InvalidExecutionTraceWriterPlugin.log.error("IOException", ex);
-            }
-        }
-    }
+	@Override
+	public void terminate(final boolean error) {
+		if (this.ps != null) {
+			try {
+				this.ps.close();
+			} catch (final IOException ex) {
+				InvalidExecutionTraceWriterPlugin.log.error("IOException", ex);
+			}
+		}
+	}
 
-    @Override
-    public boolean execute() {
-        return true; // no need to do anything here
-    }
+	@Override
+	public boolean execute() {
+		return true; // no need to do anything here
+	}
 
-    @Override
-    public IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort() {
-        return this.InvalidExecutionTraceInputPort;
-    }
-    private final IInputPort<InvalidExecutionTrace> InvalidExecutionTraceInputPort =
-            new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
+	@Override
+	public IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort() {
+		return this.InvalidExecutionTraceInputPort;
+	}
 
-                @Override
-                public void newEvent(final InvalidExecutionTrace et) {
-                    try {
-                        InvalidExecutionTraceWriterPlugin.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
-                        InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
-                    } catch (final IOException ex) {
-                        InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
-                        InvalidExecutionTraceWriterPlugin.log.error(ex, ex);
-                    }
-                }
-            };
+	private final IInputPort<InvalidExecutionTrace> InvalidExecutionTraceInputPort = new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
+
+		@Override
+		public void newEvent(final InvalidExecutionTrace et) {
+			try {
+				InvalidExecutionTraceWriterPlugin.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
+				InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
+			} catch (final IOException ex) {
+				InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
+				InvalidExecutionTraceWriterPlugin.log.error(ex, ex);
+			}
+		}
+	};
 }

@@ -67,6 +67,6 @@ public final class SessionRegistry {
 	private final static class LazyHolder {
 		private static final SessionRegistry INSTANCE = new SessionRegistry();
 	}
-	private SessionRegistry() {
-	}
+
+	private SessionRegistry() {}
 }

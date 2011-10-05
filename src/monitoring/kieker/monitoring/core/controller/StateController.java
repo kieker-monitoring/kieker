@@ -59,7 +59,7 @@ public final class StateController extends AbstractController implements IStateC
 	protected void init() {
 		// do nothing
 	}
-	
+
 	@Override
 	protected final void cleanup() {
 		StateController.LOG.debug("Shutting down State Controller");
@@ -69,9 +69,9 @@ public final class StateController extends AbstractController implements IStateC
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Status: '");
-		if (this.isMonitoringTerminated()) {
+		if (isMonitoringTerminated()) {
 			sb.append("terminated");
-		} else if (this.isMonitoringEnabled()) {
+		} else if (isMonitoringEnabled()) {
 			sb.append("enabled");
 		} else {
 			sb.append("disabled");
@@ -82,7 +82,7 @@ public final class StateController extends AbstractController implements IStateC
 		sb.append("'; Hostname: '");
 		sb.append(this.hostname);
 		sb.append("'; experimentID: '");
-		sb.append(this.getExperimentId());
+		sb.append(getExperimentId());
 		sb.append("'\n");
 		return sb.toString();
 	}
@@ -105,7 +105,7 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	public final boolean enableMonitoring() {
-		if (this.isMonitoringTerminated()) {
+		if (isMonitoringTerminated()) {
 			StateController.LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
 			return false;
 		}

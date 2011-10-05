@@ -61,7 +61,7 @@ import javax.swing.border.TitledBorder;
  * 
  */
 public class TraceAnalysisGui extends JFrame implements ActionListener {
-// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/220
+	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/220
 	private static final long serialVersionUID = 11333L;
 	private final JFrame frame;
 	private final JButton remB, addB, run;
@@ -69,19 +69,14 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	final DefaultListModel lm = new DefaultListModel();
 	private final JTextField outdir;
 	private final JTextField prefix;
-	private final JCheckBox plotSq = new JCheckBox(),
-	plotComp = new JCheckBox(), plotCont = new JCheckBox(),
-	plotOp = new JCheckBox(), plotAgg = new JCheckBox(),
-	plotCall = new JCheckBox(), //printCall = new JCheckBox(),
-	printMsg = new JCheckBox(), printExe = new JCheckBox(),
-	printInv = new JCheckBox(), printEquiv = new JCheckBox();
+	private final JCheckBox plotSq = new JCheckBox(), plotComp = new JCheckBox(), plotCont = new JCheckBox(), plotOp = new JCheckBox(), plotAgg = new JCheckBox(),
+			plotCall = new JCheckBox(), // printCall = new JCheckBox(),
+			printMsg = new JCheckBox(), printExe = new JCheckBox(), printInv = new JCheckBox(), printEquiv = new JCheckBox();
 	private GridBagLayout g;
 	private final JTextField traces = new JTextField(36);
-	private final JRadioButton disabled = new JRadioButton(),
-	allocation = new JRadioButton(), assembly = new JRadioButton();
+	private final JRadioButton disabled = new JRadioButton(), allocation = new JRadioButton(), assembly = new JRadioButton();
 	private final ButtonGroup bg = new ButtonGroup();
-	private final JTextField from = new JTextField("-1", 8),
-	to = new JTextField("-1", 8), duration = new JTextField("-1", 8);
+	private final JTextField from = new JTextField("-1", 8), to = new JTextField("-1", 8), duration = new JTextField("-1", 8);
 	private final JCheckBox shrtlbls = new JCheckBox();
 	private final JCheckBox ignInvalid = new JCheckBox();
 
@@ -93,9 +88,9 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	 */
 	public TraceAnalysisGui() {
 		this.frame = this;
-		this.setResizable(false);
-		final JPanel p = (JPanel) this.getContentPane();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		final JPanel p = (JPanel) getContentPane();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		p.setLayout(new GridBagLayout());
 		JLabel label = new JLabel("Input:");
 
@@ -210,11 +205,11 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 			p.add(this.ignInvalid, gc);
 			gc.gridwidth = 6;
 			gc.gridx = 0;
-			p.add(this.plotDiags(), gc);
-			p.add(this.treePanel(), gc);
-			p.add(this.tracePanel(), gc);
-			p.add(this.equivSelect(), gc);
-			p.add(this.ignorePanel(), gc);
+			p.add(plotDiags(), gc);
+			p.add(treePanel(), gc);
+			p.add(tracePanel(), gc);
+			p.add(equivSelect(), gc);
+			p.add(ignorePanel(), gc);
 		}
 
 		this.run = new JButton();
@@ -226,13 +221,13 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		gc.gridheight = 17;
 		p.add(this.run, gc);
 
-		this.pack();
-		this.setVisible(true);
+		pack();
+		setVisible(true);
 	}
 
 	private Component ignorePanel() {
 		final JPanel ign = new JPanel(this.g);
-		final TitledBorder b = this.tBorder();
+		final TitledBorder b = tBorder();
 		b.setTitle("Temporal Selection");
 
 		final GridBagConstraints g = new GridBagConstraints();
@@ -242,10 +237,8 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		g.anchor = GridBagConstraints.NORTH;
 		g.gridheight = 1;
 		ign.add(new JLabel("Select Traces between"), g);
-		this.from.setToolTipText(Constants.DATE_FORMAT_PATTERN
-				+ " or -1 to disable filter");
-		this.to.setToolTipText(Constants.DATE_FORMAT_PATTERN
-				+ " or -1 to disable filter");
+		this.from.setToolTipText(Constants.DATE_FORMAT_PATTERN + " or -1 to disable filter");
+		this.to.setToolTipText(Constants.DATE_FORMAT_PATTERN + " or -1 to disable filter");
 		g.gridheight = 1;
 		ign.add(this.from, g);
 		ign.add(new JLabel("and"), g);
@@ -266,7 +259,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	 */
 	private Component equivSelect() {
 		final JPanel equ = new JPanel(this.g);
-		final TitledBorder b = this.tBorder();
+		final TitledBorder b = tBorder();
 		b.setTitle("Equivalence Mode");
 		this.bg.add(this.assembly);
 		this.bg.add(this.allocation);
@@ -296,7 +289,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 
 	private Component tracePanel() {
 		final JPanel deps = new JPanel(this.g);// new GridBagLayout());
-		final TitledBorder b = this.tBorder();
+		final TitledBorder b = tBorder();
 		b.setTitle("Traces");
 		final GridBagConstraints g = new GridBagConstraints();
 		g.gridwidth = 1;
@@ -321,7 +314,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 
 	private Component treePanel() {
 		final JPanel deps = new JPanel(this.g);// new GridBagLayout());
-		final TitledBorder b = this.tBorder();
+		final TitledBorder b = tBorder();
 		b.setTitle("Call Trees");
 		final GridBagConstraints g = new GridBagConstraints();
 		g.gridwidth = 1;
@@ -345,7 +338,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 
 	private Component plotDiags() {
 		final JPanel deps = new JPanel(this.g = new GridBagLayout());
-		final TitledBorder b = this.tBorder();
+		final TitledBorder b = tBorder();
 		b.setTitle("Dependency Graphs");
 		final GridBagConstraints g = new GridBagConstraints();
 		g.insets = new Insets(5, 5, 5, 8);
@@ -397,88 +390,77 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 			}
 		} else if (e.getSource() == this.run) {
 			final Vector<String> b = new Vector<String>();
-			this.appendCmd(Constants.CMD_OPT_NAME_INPUTDIRS, b);
+			appendCmd(Constants.CMD_OPT_NAME_INPUTDIRS, b);
 			for (final Object s : new IterableEnumeration(this.lm.elements())) {
-				this.appendStr(s.toString(), b);
+				appendStr(s.toString(), b);
 			}
-			this.appendCmd(Constants.CMD_OPT_NAME_OUTPUTDIR, b);
-			this.appendStr(this.outdir.getText(), b);
+			appendCmd(Constants.CMD_OPT_NAME_OUTPUTDIR, b);
+			appendStr(this.outdir.getText(), b);
 			if (this.prefix.getText().matches("\\w")) {
-				this.appendCmd(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, b);
-				this.appendStr(this.prefix.getText(), b);
+				appendCmd(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, b);
+				appendStr(this.prefix.getText(), b);
 			}
 			if (this.plotSq.isSelected()) {
-				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS, b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS, b);
 			}
 			if (this.plotComp.isSelected()) {
-				this.appendCmd(
-						Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG,
-						b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG, b);
 			}
 			if (this.plotCont.isSelected()) {
-				this.appendCmd(
-						Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG,
-						b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG, b);
 			}
 			if (this.plotOp.isSelected()) {
-				this.appendCmd(
-						Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG,
-						b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG, b);
 			}
 			if (this.plotAgg.isSelected()) {
-				this.appendCmd(
-						Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE, b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE, b);
 			}
 			if (this.plotCall.isSelected()) {
-				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES, b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES, b);
 			}
 			if (this.printMsg.isSelected()) {
-				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES, b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES, b);
 			}
 			if (this.printExe.isSelected()) {
-				this.appendCmd(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES, b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES, b);
 			}
 			if (this.printInv.isSelected()) {
-				this.appendCmd(
-						Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES, b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES, b);
 			}
 			if (this.printEquiv.isSelected()) {
-				this.appendCmd(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT, b);
+				appendCmd(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT, b);
 			}
-			//            if (this.allocation.isSelected()) {
-			//                this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
-			//                this.appendStr(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION,
-			//                        b);
-			//            } else if (this.assembly.isSelected()) {
-			//                this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
-			//                this.appendStr(
-			//                        Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY,
-			//                        b);
-			//            }
+			// if (this.allocation.isSelected()) {
+			// this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
+			// this.appendStr(Constants.TRACE_EQUIVALENCE_MODE_STR_ALLOCATION,
+			// b);
+			// } else if (this.assembly.isSelected()) {
+			// this.appendCmd(Constants.CMD_OPT_NAME_TRACEEQUIVCLASSMODE, b);
+			// this.appendStr(
+			// Constants.TRACE_EQUIVALENCE_MODE_STR_ASSEMBLY,
+			// b);
+			// }
 			if (this.traces.getText().matches("\\d")) {
-				this.appendCmd(Constants.CMD_OPT_NAME_SELECTTRACES, b);
-				this.appendStr(this.traces.getText(), b);
+				appendCmd(Constants.CMD_OPT_NAME_SELECTTRACES, b);
+				appendStr(this.traces.getText(), b);
 			}
 			if (!this.from.getText().matches("^-1")) {
-				this.appendCmd(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE,
-						b);
+				appendCmd(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE, b);
 				this.from.getText();
 			}
 			if (!this.to.getText().matches("^-1")) {
-				this.appendCmd(
-						Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE,
-						b);
-				this.appendStr(this.to.getText(), b);
+				appendCmd(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, b);
+				appendStr(this.to.getText(), b);
 			}
 			if (!this.duration.getText().matches("^-1")) {
-				this.appendCmd(Constants.CMD_OPT_NAME_MAXTRACEDURATION, b);
-				this.appendStr(this.duration.getText(), b);
+				appendCmd(Constants.CMD_OPT_NAME_MAXTRACEDURATION, b);
+				appendStr(this.duration.getText(), b);
 			}
 			if (this.shrtlbls.isSelected()) {
-				this.appendCmd(Constants.CMD_OPT_NAME_SHORTLABELS, b);
+				appendCmd(Constants.CMD_OPT_NAME_SHORTLABELS, b);
 			}
 			if (this.ignInvalid.isSelected()) {
-				this.appendCmd(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES, b);
+				appendCmd(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES, b);
 			}
 			TraceAnalysisTool.main(b.toArray(new String[b.size()]));
 			/*

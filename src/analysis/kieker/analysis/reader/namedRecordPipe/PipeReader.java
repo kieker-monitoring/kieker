@@ -36,32 +36,27 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public final class PipeReader extends AbstractMonitoringReader implements
-		IPipeReader {
+public final class PipeReader extends AbstractMonitoringReader implements IPipeReader {
 	public static final String PROPERTY_PIPE_NAME = "pipeName";
 	private static final Log log = LogFactory.getLog(PipeReader.class);
 
 	private volatile Pipe pipe;
 
-	public PipeReader() {
-	}
+	public PipeReader() {}
 
 	public PipeReader(final String pipeName) {
-		this.initPipe(pipeName);
+		initPipe(pipeName);
 	}
 
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
-	private void initPipe(final String pipeName)
-			throws IllegalArgumentException {
+	private void initPipe(final String pipeName) throws IllegalArgumentException {
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
 			PipeReader.log.error("Failed to get Pipe with name " + pipeName);
-			throw new IllegalArgumentException("Failed to get Pipe with name "
-					+ pipeName);
+			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
 		} else {
-			PipeReader.log.debug("Connectod to named pipe '"
-					+ this.pipe.getName() + "'");
+			PipeReader.log.debug("Connectod to named pipe '" + this.pipe.getName() + "'");
 		}
 		this.pipe.setPipeReader(this);
 	}
@@ -85,16 +80,12 @@ public final class PipeReader extends AbstractMonitoringReader implements
 	@Override
 	public boolean init(final String initString) {
 		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|",
-					"="); // throws
+			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
 			// IllegalArgumentException
-			this.initPipe(propertyMap
-					.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-			PipeReader.log.debug("Connected to pipe '" + this.pipe.getName()
-					+ "'" + " (" + this.pipe + ")");
+			initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
+			PipeReader.log.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")");
 		} catch (final Exception exc) {
-			PipeReader.log.error("Failed to parse initString '" + initString
-					+ "': " + exc.getMessage());
+			PipeReader.log.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}
 		return true;
@@ -110,10 +101,10 @@ public final class PipeReader extends AbstractMonitoringReader implements
 		/* Notify main thread */
 		this.terminationLatch.countDown();
 	}
-	
+
 	@Override
 	public void terminate() {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
-		this.pipe.close();  
+		this.pipe.close();
 	}
 }

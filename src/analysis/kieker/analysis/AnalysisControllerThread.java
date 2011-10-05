@@ -24,12 +24,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Allows spwan the execution of an {@link AnalysisController} into a separate
- * {@link Thread}. The thread with the {@link AnalysisController} instance
- * provided in the constructor
- * {@link #AnalysisControllerThread(AnalysisController)} is started by calling
- * the {@link #start()} method. The analysis can be terminated by calling the
- * {@link #terminate()} method which delegates the call to the
+ * Allows spwan the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
+ * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling
+ * the {@link #start()} method. The analysis can be terminated by calling the {@link #terminate()} method which delegates the call to the
  * {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
  * @author Andre van Hoorn
@@ -53,8 +50,7 @@ public class AnalysisControllerThread extends Thread {
 	@Override
 	public void run() {
 		if (!this.analysisInstance.run()) {
-			AnalysisControllerThread.log
-					.error("Analysis returned with error");
+			AnalysisControllerThread.log.error("Analysis returned with error");
 		}
 	}
 
@@ -65,11 +61,10 @@ public class AnalysisControllerThread extends Thread {
 			// wait until AnalysisController is initialized
 			this.analysisInstance.getInitializationLatch().await();
 		} catch (final InterruptedException e) {
-			AnalysisControllerThread.log.error("Interrupted while waiting for AnalysisController to be initialized: "
-					+ e.getMessage(), e);
+			AnalysisControllerThread.log.error("Interrupted while waiting for AnalysisController to be initialized: " + e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * Initiates a termination of the executed {@link AnalysisController}.
 	 */

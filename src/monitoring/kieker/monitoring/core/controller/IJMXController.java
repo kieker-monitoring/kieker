@@ -33,6 +33,7 @@ public interface IJMXController {
 	 * 
 	 * @return a String representation of the current controller
 	 */
+	@Override
 	public String toString();
 
 	/**

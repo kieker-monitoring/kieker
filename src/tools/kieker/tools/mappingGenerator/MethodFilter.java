@@ -30,6 +30,6 @@ import java.lang.reflect.Method;
  * 
  */
 public interface MethodFilter {
-    
+
 	public abstract boolean accept(Method m, Class<?> c);
 }

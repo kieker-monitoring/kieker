@@ -55,7 +55,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param memTotal the memTotal to set
+	 * @param memTotal
+	 *            the memTotal to set
 	 */
 	public final void setMemTotal(final long memTotal) {
 		this.memTotal = memTotal;
@@ -69,7 +70,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param memUsed the memUsed to set
+	 * @param memUsed
+	 *            the memUsed to set
 	 */
 	public final void setMemUsed(final long memUsed) {
 		this.memUsed = memUsed;
@@ -83,7 +85,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param memFree the memFree to set
+	 * @param memFree
+	 *            the memFree to set
 	 */
 	public final void setMemFree(final long memFree) {
 		this.memFree = memFree;
@@ -97,7 +100,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param swapTotal the swapTotal to set
+	 * @param swapTotal
+	 *            the swapTotal to set
 	 */
 	public final void setSwapTotal(final long swapTotal) {
 		this.swapTotal = swapTotal;
@@ -111,7 +115,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param swapUsed the swapUsed to set
+	 * @param swapUsed
+	 *            the swapUsed to set
 	 */
 	public final void setSwapUsed(final long swapUsed) {
 		this.swapUsed = swapUsed;
@@ -125,7 +130,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param swapFree the swapFree to set
+	 * @param swapFree
+	 *            the swapFree to set
 	 */
 	public final void setSwapFree(final long swapFree) {
 		this.swapFree = swapFree;
@@ -166,8 +172,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	/**
 	 * 
 	 */
-	public MemSwapUsageRecord() {
-	}
+	public MemSwapUsageRecord() {}
 
 	/**
 	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If

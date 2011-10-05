@@ -41,11 +41,9 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>
- * Starts and stops the periodic logging of CPU utilization and Memory usage
- * employing the {@link SigarSamplerFactory} as the Servlet is initialized and
- * destroyed respectively. <br/>
- * The initial delay and the sampling period (both given in seconds) can be
- * configured via context-params in the web.xml file, as shown below.
+ * Starts and stops the periodic logging of CPU utilization and Memory usage employing the {@link SigarSamplerFactory} as the Servlet is initialized and destroyed
+ * respectively. <br/>
+ * The initial delay and the sampling period (both given in seconds) can be configured via context-params in the web.xml file, as shown below.
  * </p>
  * 
  * <p>
@@ -86,8 +84,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	private final IMonitoringController monitoringController = MonitoringController.getInstance();
 
 	/**
-	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in
-	 * {@link #contextInitialized(ServletContextEvent)} and removed from the
+	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in {@link #contextInitialized(ServletContextEvent)} and removed from the
 	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new ArrayList<ScheduledSamplerJob>();
@@ -99,11 +96,11 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS =
-			CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX + ".samplingIntervalSeconds";
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS =
-			CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX + ".initialSamplingDelaySeconds";
+	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+			+ ".initialSamplingDelaySeconds";
 
 	private volatile long sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
@@ -117,16 +114,14 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 
 	@Override
 	public void contextInitialized(final ServletContextEvent sce) {
-		this.initParameters(sce.getServletContext());
-		this.initSensors();
+		initParameters(sce.getServletContext());
+		initSensors();
 	}
 
 	/**
-	 * Initializes the variables {@link #sensorIntervalSeconds} and
-	 * {@link #initialDelaySeconds} based on the values given in the web.xml
+	 * Initializes the variables {@link #sensorIntervalSeconds} and {@link #initialDelaySeconds} based on the values given in the web.xml
 	 * file. If no parameter values are defined in the web.xml, the default
-	 * values {@link #DEFAULT_SENSOR_INTERVAL_SECONDS} and
-	 * {@link #DEFAULT_SENSOR_INITIAL_DELAY_SECONDS} are used.
+	 * values {@link #DEFAULT_SENSOR_INTERVAL_SECONDS} and {@link #DEFAULT_SENSOR_INITIAL_DELAY_SECONDS} are used.
 	 * 
 	 * @param c
 	 *            the {@link ServletContext} providing access to the parameter
@@ -139,23 +134,19 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 			// declaration.
 			return;
 		}
-		
+
 		this.initialDelaySeconds = // allowed values: Int>=0
-				this.readLongInitParameter(c,
-						CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
-						CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
+		readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
+				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
 
 		this.sensorIntervalSeconds =
-				// allows values: Int>0
-				this.readLongInitParameter(c,
-						CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
-						CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
+		// allows values: Int>0
+		readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
+				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
 			CPUMemUsageServletContextListener.log.warn("values for the init-param '"
-					+ CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS
-					+ "' must be >0; found: " + this.sensorIntervalSeconds);
-			CPUMemUsageServletContextListener.log.warn("Using default value: "
-					+ CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
+					+ CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds);
+			CPUMemUsageServletContextListener.log.warn("Using default value: " + CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 			this.sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
 
@@ -175,8 +166,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		}
 
 		if (val < 0) {
-			CPUMemUsageServletContextListener.log.warn("Invalid or missing value for context-param '" + paramName + "': "
-					+ valStr);
+			CPUMemUsageServletContextListener.log.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr);
 			CPUMemUsageServletContextListener.log.warn("Using default value: " + defaultValue);
 			val = defaultValue;
 		}
@@ -193,18 +183,14 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 
 		// Log utilization of each CPU every X seconds
 		final CPUsDetailedPercSampler cpuSensor = sigarFactory.createSensorCPUsDetailedPerc();
-		final ScheduledSamplerJob cpuSensorJob =
-				this.monitoringController.schedulePeriodicSampler(cpuSensor,
-						this.initialDelaySeconds,
-						this.sensorIntervalSeconds, TimeUnit.SECONDS);
+		final ScheduledSamplerJob cpuSensorJob = this.monitoringController.schedulePeriodicSampler(cpuSensor, this.initialDelaySeconds, this.sensorIntervalSeconds,
+				TimeUnit.SECONDS);
 		this.samplerJobs.add(cpuSensorJob);
 
 		// Log memory and swap statistics every Y seconds
 		final MemSwapUsageSampler memSensor = sigarFactory.createSensorMemSwapUsage();
-		final ScheduledSamplerJob memSensorJob =
-				this.monitoringController.schedulePeriodicSampler(memSensor,
-						this.initialDelaySeconds,
-						this.sensorIntervalSeconds, TimeUnit.SECONDS);
+		final ScheduledSamplerJob memSensorJob = this.monitoringController.schedulePeriodicSampler(memSensor, this.initialDelaySeconds, this.sensorIntervalSeconds,
+				TimeUnit.SECONDS);
 		this.samplerJobs.add(memSensorJob);
 	}
 }

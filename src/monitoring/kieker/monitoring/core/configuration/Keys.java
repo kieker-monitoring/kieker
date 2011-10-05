@@ -26,7 +26,7 @@ package kieker.monitoring.core.configuration;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-interface Keys { //NOPMD
+interface Keys { // NOPMD
 	/** prefix used for all kieker.monitoring components */
 	public final static String PREFIX = "kieker.monitoring.";
 
@@ -59,10 +59,10 @@ interface Keys { //NOPMD
 	// Writer Controller
 	public final static String AUTO_SET_LOGGINGTSTAMP = Keys.PREFIX + "setLoggingTimestamp";
 	public final static String WRITER_CLASSNAME = Keys.PREFIX + "writer";
-	
+
 	// TimeSource Controller
 	public final static String TIMER_CLASSNAME = Keys.PREFIX + "timer";
-	
+
 	// Sampling Controller
 	public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = Keys.PREFIX + "periodicSensorsExecutorPoolSize";
 }

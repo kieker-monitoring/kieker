@@ -90,8 +90,7 @@ public class ControlServlet extends HttpServlet {
 	 * @param response
 	 *            servlet response
 	 */
-	protected void processRequest(final HttpServletRequest request, final HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
@@ -107,10 +106,9 @@ public class ControlServlet extends HttpServlet {
 		out.println("<title>Kieker's ControlServlet</title>");
 		out.println("</head>");
 		out.println("<body>");
-		this.printHeader(out);
+		printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
-		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.timesource.getTime()
-				+ "<br>");
+		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.timesource.getTime() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
 		out.println("Vmname:\"" + ControlServlet.ctrlInst.getHostName() + "\"<br>");
 
@@ -130,7 +128,7 @@ public class ControlServlet extends HttpServlet {
 						}
 
 					} catch (final NumberFormatException ne) {
-						this.dumpError(out, ne.getMessage());
+						dumpError(out, ne.getMessage());
 					}
 				}
 				/*
@@ -160,12 +158,10 @@ public class ControlServlet extends HttpServlet {
 				ControlServlet.sessionRegistry.storeThreadLocalSessionId(request.getSession(true).getId());
 				ControlServlet.cfRegistry.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) {
-					ControlServlet.ctrlInst.newMonitoringRecord(new OperationExecutionRecord(
-							"kieker.monitoring.controlServlet.ControlServlet",
-							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.sessionRegistry
-									.recallThreadLocalSessionId(),
-							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ControlServlet.timesource.getTime(),
-							ControlServlet.timesource.getTime(), ControlServlet.ctrlInst.getHostName(), i, i));
+					ControlServlet.ctrlInst.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet",
+							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.sessionRegistry.recallThreadLocalSessionId(),
+							ControlServlet.cfRegistry.recallThreadLocalTraceId(), ControlServlet.timesource.getTime(), ControlServlet.timesource.getTime(),
+							ControlServlet.ctrlInst.getHostName(), i, i));
 				}
 				ControlServlet.cfRegistry.unsetThreadLocalTraceId();
 				ControlServlet.sessionRegistry.unsetThreadLocalSessionId();
@@ -173,7 +169,7 @@ public class ControlServlet extends HttpServlet {
 				 * invalid action
 				 */
 			} else if (!(action.length() == 0)) {
-				this.dumpError(out, "Invalid action: '" + action + "'");
+				dumpError(out, "Invalid action: '" + action + "'");
 			}
 		}
 
@@ -203,28 +199,24 @@ public class ControlServlet extends HttpServlet {
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");
 		bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">");
-		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\""
-				+ ControlServlet.ctrlInst.getExperimentId() + "\"/>");
+		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"" + ControlServlet.ctrlInst.getExperimentId() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
 		bu.append("</FORM> <br><br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
 		bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
-		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\""
-				+ ControlServlet.ctrlInst.getHostName() + "\"/>");
+		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ControlServlet.ctrlInst.getHostName() + "\"/>");
 		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
 		bu.append(" Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
-		bu.append(" Kieker monitoring events since last execution environment restart = "
-				+ ControlServlet.ctrlInst.getNumberOfInserts() + " <br>");
+		bu.append(" Kieker monitoring events since last execution environment restart = " + ControlServlet.ctrlInst.getNumberOfInserts() + " <br>");
 		bu.append(" java.vm.name = " + System.getProperty("java.vm.name") + " <br>");
 		try {
 			final String youngGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
-			final String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1)
-					.getName();
+			final String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
 			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC + "<br>");
 		} catch (final RuntimeException e) { // ignore
 		}
 		out.println(bu.toString());
-		this.printFooter(out);
+		printFooter(out);
 		out.println("</body>");
 		out.println("</html>");
 		out.close();
@@ -241,12 +233,11 @@ public class ControlServlet extends HttpServlet {
 	 *            servlet response
 	 */
 	@Override
-	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-			IOException {
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
-		this.processRequest(request, response);
+		processRequest(request, response);
 	}
 
 	/**
@@ -258,12 +249,11 @@ public class ControlServlet extends HttpServlet {
 	 *            servlet response
 	 */
 	@Override
-	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
-		this.processRequest(request, response);
+		processRequest(request, response);
 	}
 
 	/**

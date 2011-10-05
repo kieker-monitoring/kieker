@@ -70,9 +70,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		BufferedReader reader = null;
 
 		try {
-			final InputStream is =
-					SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(
-							SequenceDiagramPlugin.sequencePicPath);
+			final InputStream is = SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(SequenceDiagramPlugin.sequencePicPath);
 			String line;
 			reader = new BufferedReader(new InputStreamReader(is));
 			while ((line = reader.readLine()) != null) {
@@ -105,8 +103,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 	private final SDModes sdmode;
 
-	public SequenceDiagramPlugin(final String name, final SystemModelRepository systemEntityFactory,
-			final SDModes sdmode, final String outputFnBase, final boolean shortLabels) {
+	public SequenceDiagramPlugin(final String name, final SystemModelRepository systemEntityFactory, final SDModes sdmode, final String outputFnBase,
+			final boolean shortLabels) {
 		super(name, systemEntityFactory);
 		this.sdmode = sdmode;
 		this.outputFnBase = outputFnBase;
@@ -116,14 +114,13 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		final int numPlots = this.getSuccessCount();
-		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-		System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") + " to file"
-				+ (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'");
+		final int numPlots = getSuccessCount();
+		final long lastSuccessTracesId = getLastTraceIdSuccess();
+		System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '"
+				+ this.outputFnBase + "-<traceId>.pic'");
 		System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-		System.out.println("Example: pic2plot -T svg " + this.outputFnBase + "-"
-				+ ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".pic > " + this.outputFnBase + "-"
-				+ ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg");
+		System.out.println("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".pic > "
+				+ this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg");
 	}
 
 	@Override
@@ -141,24 +138,20 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		return this.messageTraceInputPort;
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort =
-			new AbstractInputPort<MessageTrace>("Message traces") {
+	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
 
-				@Override
-				public void newEvent(final MessageTrace mt) {
-					try {
-						SequenceDiagramPlugin.writePicForMessageTrace(
-								SequenceDiagramPlugin.this.getSystemEntityFactory(), mt,
-								SequenceDiagramPlugin.this.sdmode,
-								SequenceDiagramPlugin.this.outputFnBase + "-" + mt.getTraceId() + ".pic",
-								SequenceDiagramPlugin.this.shortLabels);
-						SequenceDiagramPlugin.this.reportSuccess(mt.getTraceId());
-					} catch (final FileNotFoundException ex) {
-						SequenceDiagramPlugin.this.reportError(mt.getTraceId());
-						SequenceDiagramPlugin.log.error("File not found", ex);
-					}
-				}
-			};
+		@Override
+		public void newEvent(final MessageTrace mt) {
+			try {
+				SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), mt, SequenceDiagramPlugin.this.sdmode,
+						SequenceDiagramPlugin.this.outputFnBase + "-" + mt.getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
+				SequenceDiagramPlugin.this.reportSuccess(mt.getTraceId());
+			} catch (final FileNotFoundException ex) {
+				SequenceDiagramPlugin.this.reportError(mt.getTraceId());
+				SequenceDiagramPlugin.log.error("File not found", ex);
+			}
+		}
+	};
 
 	private static String assemblyComponentLabel(final AssemblyComponent component, final boolean shortLabels) {
 		final String assemblyComponentName = component.getName();
@@ -201,8 +194,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	 * @param ps
 	 * @param shortLabels
 	 */
-	private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory,
-			final MessageTrace messageTrace, final SDModes sdMode, final PrintStream ps, final boolean shortLabels) {
+	private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace messageTrace, final SDModes sdMode,
+			final PrintStream ps, final boolean shortLabels) {
 		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/208
 		// dot node ID x component instance
 		final Vector<Message> messages = messageTrace.getSequenceAsVector();
@@ -214,8 +207,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 		final TreeSet<Integer> plottedComponentIds = new TreeSet<Integer>();
 
-		final AllocationComponent rootAllocationComponent =
-				systemEntityFactory.getAllocationFactory().rootAllocationComponent;
+		final AllocationComponent rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
 		final String rootDotId = "O" + rootAllocationComponent.getId();
 		ps.print("actor(O" + rootAllocationComponent.getId() + ",\"\");" + "\n");
 		plottedComponentIds.add(rootAllocationComponent.getId());
@@ -225,36 +217,28 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
 				if (!plottedComponentIds.contains(senderComponent.getId())) {
-					ps.print("object(O" + senderComponent.getId() + ",\""
-							+ senderComponent.getExecutionContainer().getName() + "::\",\""
-							+ SequenceDiagramPlugin.allocationComponentLabel(senderComponent, shortLabels) + "\");"
-							+ "\n");
+					ps.print("object(O" + senderComponent.getId() + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\""
+							+ SequenceDiagramPlugin.allocationComponentLabel(senderComponent, shortLabels) + "\");" + "\n");
 					plottedComponentIds.add(senderComponent.getId());
 				}
 				if (!plottedComponentIds.contains(receiverComponent.getId())) {
-					ps.print("object(O" + receiverComponent.getId() + ",\""
-							+ receiverComponent.getExecutionContainer().getName() + "::\",\""
-							+ SequenceDiagramPlugin.allocationComponentLabel(receiverComponent, shortLabels) + "\");"
-							+ "\n");
+					ps.print("object(O" + receiverComponent.getId() + ",\"" + receiverComponent.getExecutionContainer().getName() + "::\",\""
+							+ SequenceDiagramPlugin.allocationComponentLabel(receiverComponent, shortLabels) + "\");" + "\n");
 					plottedComponentIds.add(receiverComponent.getId());
 				}
 			}
 		} else if (sdMode == SDModes.ASSEMBLY) {
 			for (final Message me : messages) {
-				final AssemblyComponent senderComponent =
-						me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
-				final AssemblyComponent receiverComponent =
-						me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+				final AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+				final AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 				if (!plottedComponentIds.contains(senderComponent.getId())) {
-					ps.print("object(O" + senderComponent.getId() + ",\"\",\""
-							+ SequenceDiagramPlugin.assemblyComponentLabel(senderComponent, shortLabels) + "\");"
+					ps.print("object(O" + senderComponent.getId() + ",\"\",\"" + SequenceDiagramPlugin.assemblyComponentLabel(senderComponent, shortLabels) + "\");"
 							+ "\n");
 					plottedComponentIds.add(senderComponent.getId());
 				}
 				if (!plottedComponentIds.contains(receiverComponent.getId())) {
-					ps.print("object(O" + receiverComponent.getId() + ",\"\",\""
-							+ SequenceDiagramPlugin.assemblyComponentLabel(receiverComponent, shortLabels) + "\");"
-							+ "\n");
+					ps.print("object(O" + receiverComponent.getId() + ",\"\",\"" + SequenceDiagramPlugin.assemblyComponentLabel(receiverComponent, shortLabels)
+							+ "\");" + "\n");
 					plottedComponentIds.add(receiverComponent.getId());
 				}
 			}
@@ -275,10 +259,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else if (sdMode == SDModes.ASSEMBLY) {
-				final AssemblyComponent senderComponent =
-						me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
-				final AssemblyComponent receiverComponent =
-						me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+				final AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+				final AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
@@ -324,9 +306,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		ps.print(".PE" + "\n");
 	}
 
-	public static void writePicForMessageTrace(final SystemModelRepository systemEntityFactory,
-			final MessageTrace msgTrace, final SDModes sdMode, final String outputFilename, final boolean shortLabels)
-			throws FileNotFoundException {
+	public static void writePicForMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace msgTrace, final SDModes sdMode,
+			final String outputFilename, final boolean shortLabels) throws FileNotFoundException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
 		SequenceDiagramPlugin.picFromMessageTrace(systemEntityFactory, msgTrace, sdMode, ps, shortLabels);
 		ps.flush();

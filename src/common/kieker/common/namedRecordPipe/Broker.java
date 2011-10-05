@@ -34,8 +34,7 @@ public class Broker {
 	private static final Log LOG = LogFactory.getLog(Broker.class);
 
 	/**
-	 * Access synchronized through synchronized method
-	 * {@link #acquirePipe(String)} !
+	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
 	 */
 	private final Map<String, Pipe> pipeMap = new HashMap<String, Pipe>();
 
@@ -47,11 +46,9 @@ public class Broker {
 	 * Returns a connection with name @a pipeName. If a connection with this
 	 * name does not exist prior to the call, it is created.
 	 */
-	public synchronized Pipe acquirePipe(final String pipeName)
-			throws IllegalArgumentException {
+	public synchronized Pipe acquirePipe(final String pipeName) throws IllegalArgumentException {
 		if ((pipeName == null) || (pipeName.isEmpty())) {
-			final String errorMsg = "pipeName must not be null or empty!  (Found: "
-					+ pipeName + ")";
+			final String errorMsg = "pipeName must not be null or empty!  (Found: " + pipeName + ")";
 			Broker.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		}
@@ -63,7 +60,7 @@ public class Broker {
 
 		return conn;
 	}
-	
+
 	/**
 	 * SINGLETON
 	 */

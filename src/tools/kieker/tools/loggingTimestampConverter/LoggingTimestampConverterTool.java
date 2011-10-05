@@ -59,8 +59,7 @@ public class LoggingTimestampConverterTool {
 	@SuppressWarnings("static-access")
 	private final static void initializeOptions() {
 		LoggingTimestampConverterTool.options.add(OptionBuilder.withLongOpt(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS)
-				.withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert")
-				.create("t"));
+				.withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
 		for (final Option o : LoggingTimestampConverterTool.options) {
 			LoggingTimestampConverterTool.cmdlOpts.addOption(o);
 		}
@@ -109,13 +108,12 @@ public class LoggingTimestampConverterTool {
 	}
 
 	private static void printUsage() {
-		LoggingTimestampConverterTool.cmdHelpFormatter.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", LoggingTimestampConverterTool.cmdlOpts,
-				"", true);
+		LoggingTimestampConverterTool.cmdHelpFormatter.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", LoggingTimestampConverterTool.cmdlOpts, "",
+				true);
 	}
 
 	private static boolean initFromArgs() {
-		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl
-				.getOptionValues(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS);
+		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS);
 		if (LoggingTimestampConverterTool.timestampsStr == null) { // should not happen since marked as required opt
 			LoggingTimestampConverterTool.log.error("Missing value for option '" + LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS + "'");
 			return false;

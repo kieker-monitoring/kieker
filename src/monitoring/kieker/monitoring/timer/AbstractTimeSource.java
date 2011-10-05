@@ -22,15 +22,15 @@ package kieker.monitoring.timer;
 
 import java.util.Properties;
 
+import kieker.monitoring.core.configuration.Configuration;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import kieker.monitoring.core.configuration.Configuration;
 
 public abstract class AbstractTimeSource implements ITimeSource {
 	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);
 
-	protected final Configuration configuration; 
+	protected final Configuration configuration;
 
 	protected AbstractTimeSource(final Configuration configuration) {
 		try {
@@ -44,7 +44,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 		}
 		this.configuration = configuration;
 	}
-	
+
 	/**
 	 * This method should be overwritten, iff the timer is external to Kieker and
 	 * thus its default configuration is not included in the default config file.
@@ -54,7 +54,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	protected Properties getDefaultProperties() { // NOPMD
 		return null;
 	}
-	
+
 	@Override
 	public abstract long getTime();
 }

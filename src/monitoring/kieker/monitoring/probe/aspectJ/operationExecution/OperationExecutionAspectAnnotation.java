@@ -37,8 +37,7 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectAnnotation.class);
 
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..))")
-	public void monitoredMethod() {
-	}
+	public void monitoredMethod() {}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")
@@ -46,7 +45,7 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
 		int eoi; // this is executionOrderIndex-th execution in this trace
 		int ess; // this is the height in the dynamic call tree of this execution
 		if (execData.isEntryPoint) {
@@ -59,10 +58,9 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			this.proceedAndMeasure(thisJoinPoint, execData);
+			proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
-				OperationExecutionAspectAnnotation.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi
-						+ " ess == " + ess);
+				OperationExecutionAspectAnnotation.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectAnnotation.LOG.fatal("Terminating!");
 				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}

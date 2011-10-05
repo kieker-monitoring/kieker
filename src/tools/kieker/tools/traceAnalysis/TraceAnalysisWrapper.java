@@ -42,8 +42,7 @@ public class TraceAnalysisWrapper {
 	public static void main(final String[] args) {
 		String uDir;
 		uDir = System.getProperty("user.dir");
-		final File libDir = new File(uDir + File.separatorChar
-				+ File.separatorChar + "lib" + File.separatorChar);
+		final File libDir = new File(uDir + File.separatorChar + File.separatorChar + "lib" + File.separatorChar);
 		final File[] libs = libDir.listFiles(new FilenameFilter() {
 
 			@Override
@@ -52,8 +51,7 @@ public class TraceAnalysisWrapper {
 			}
 		});
 
-		final File binDir = new File(uDir + File.separatorChar
-				+ File.separatorChar + "dist" + File.separatorChar);
+		final File binDir = new File(uDir + File.separatorChar + File.separatorChar + "dist" + File.separatorChar);
 		final File[] bins = binDir.listFiles(new FilenameFilter() {
 
 			@Override
@@ -70,14 +68,14 @@ public class TraceAnalysisWrapper {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		for (int i = 1; i < libs.length + 1; i++) {
+		for (int i = 1; i < (libs.length + 1); i++) {
 			try {
 				urls[i] = libs[i - 1].getCanonicalFile().toURI().toURL();
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
-		for (int i = libs.length + 1; i < bins.length + libs.length + 1; i++) {
+		for (int i = libs.length + 1; i < (bins.length + libs.length + 1); i++) {
 			try {
 				urls[i] = bins[i - libs.length - 1].getCanonicalFile().toURI().toURL();
 			} catch (final IOException e) {
@@ -86,8 +84,7 @@ public class TraceAnalysisWrapper {
 		}
 
 		try {
-			final URLClassLoader cl = URLClassLoader.newInstance(urls,
-					TraceAnalysisWrapper.class.getClassLoader());
+			final URLClassLoader cl = URLClassLoader.newInstance(urls, TraceAnalysisWrapper.class.getClassLoader());
 			final Class<?> mainclass = cl.loadClass("kieker.tools.traceAnalysis.TraceAnalysisTool");
 			final Method main = mainclass.getMethod("main", String[].class);
 			main.invoke(null, (Object) args);

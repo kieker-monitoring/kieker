@@ -23,69 +23,68 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 public class CallTreeNode {
 
-    private CallTreeNode parent;
-    private List<CallTreeNode> children =
-            new ArrayList<CallTreeNode>();
-    private final CallTreeOperationHashKey opInfo;
+	private final CallTreeNode parent;
+	private final List<CallTreeNode> children = new ArrayList<CallTreeNode>();
+	private final CallTreeOperationHashKey opInfo;
 
-    public CallTreeNode(final CallTreeNode parent, CallTreeOperationHashKey opInfo) {
-        this.parent = parent;
-        if (opInfo == null) {
-            throw new IllegalArgumentException("opInfo must not be null");
-        }
-        this.opInfo = opInfo;
-    }
+	public CallTreeNode(final CallTreeNode parent, final CallTreeOperationHashKey opInfo) {
+		this.parent = parent;
+		if (opInfo == null) {
+			throw new IllegalArgumentException("opInfo must not be null");
+		}
+		this.opInfo = opInfo;
+	}
 
-    public final Collection<CallTreeNode> getChildren() {
-        return children;
-    }
+	public final Collection<CallTreeNode> getChildren() {
+		return this.children;
+	}
 
-    /** Creates a new child and adds it to the nodes list of children */
-    public final CallTreeNode createNewChild(final AllocationComponent allocationComponent,
-            final Operation operation) {
-        CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
-        CallTreeNode node = new CallTreeNode(this, k);
-        this.children.add(node);
-        return node;
-    }
+	/** Creates a new child and adds it to the nodes list of children */
+	public final CallTreeNode createNewChild(final AllocationComponent allocationComponent, final Operation operation) {
+		final CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
+		final CallTreeNode node = new CallTreeNode(this, k);
+		this.children.add(node);
+		return node;
+	}
 
-    /** Returns the child node with given operation, name, and vmName.
-     *  The node is created if it doesn't exist. */
-    public final CallTreeNode getChild(final AllocationComponent allocationComponent,
-            final Operation operation) {
-        CallTreeOperationHashKey k =
-                new CallTreeOperationHashKey(allocationComponent, operation);
-        CallTreeNode node = null;
-        for (CallTreeNode n : children) {
-            if (n.opInfo.equals(k)) {
-                node = n;
-            }
-        }
-        if (node == null) {
-            node = new CallTreeNode(this, k);
-            this.children.add(node);
-        }
-        return node;
-    }
+	/**
+	 * Returns the child node with given operation, name, and vmName.
+	 * The node is created if it doesn't exist.
+	 */
+	public final CallTreeNode getChild(final AllocationComponent allocationComponent, final Operation operation) {
+		final CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
+		CallTreeNode node = null;
+		for (final CallTreeNode n : this.children) {
+			if (n.opInfo.equals(k)) {
+				node = n;
+			}
+		}
+		if (node == null) {
+			node = new CallTreeNode(this, k);
+			this.children.add(node);
+		}
+		return node;
+	}
 
-    public final AllocationComponent getAllocationComponent() {
-        return opInfo.getAllocationComponent();
-    }
+	public final AllocationComponent getAllocationComponent() {
+		return this.opInfo.getAllocationComponent();
+	}
 
-    public final Operation getOperation() {
-        return opInfo.getOperation();
-    }
+	public final Operation getOperation() {
+		return this.opInfo.getOperation();
+	}
 
-    public final CallTreeNode getParent() {
-        return parent;
-    }
+	public final CallTreeNode getParent() {
+		return this.parent;
+	}
 
-    public final boolean isRootNode(){
-        return this.parent == null;
-    }
+	public final boolean isRootNode() {
+		return this.parent == null;
+	}
 }

@@ -33,8 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Listens to a JMS queue and simply passes each record to a specified
- * {@link IMonitoringRecordReceiver}.
+ * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.
  * 
  * @author Andre van Hoorn
  */
@@ -60,12 +59,11 @@ public class JMSLogReplayer {
 	 * @param jmsDestination
 	 *            = for instance "queue1"
 	 * @param jmsFactoryLookupName
-	 * 			 = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
+	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
 	 */
-	public JMSLogReplayer(final IMonitoringRecordReceiver recordReceiver,
-			final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+	public JMSLogReplayer(final IMonitoringRecordReceiver recordReceiver, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		this.recordReceiver = recordReceiver;
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
@@ -81,12 +79,10 @@ public class JMSLogReplayer {
 	public boolean replay() {
 		boolean success = true;
 
-		final IMonitoringReader logReader =
-				new JMSReader(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
+		final IMonitoringReader logReader = new JMSReader(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(logReader);
-		tpanInstance.registerPlugin(new RecordDelegationPlugin2(
-				this.recordReceiver));
+		tpanInstance.registerPlugin(new RecordDelegationPlugin2(this.recordReceiver));
 		try {
 			tpanInstance.run();
 			success = true;
@@ -99,20 +95,16 @@ public class JMSLogReplayer {
 }
 
 /**
- * Kieker analysis plugin that delegates each record to the configured
- * {@link IMonitoringRecordReceiver}.
+ * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.
  * 
- * TODO: We need to extract this class and merge it with that of
- * {@link FilesystemLogReplayer}
- * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/173
+ * TODO: We need to extract this class and merge it with that of {@link FilesystemLogReplayer} See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/173
  * 
  * @author Andre van Hoorn
  * 
  */
 class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log log = LogFactory
-			.getLog(RecordDelegationPlugin.class);
+	private static final Log log = LogFactory.getLog(RecordDelegationPlugin.class);
 
 	private final IMonitoringRecordReceiver rec;
 
@@ -141,8 +133,7 @@ class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 	 */
 	@Override
 	public boolean execute() {
-		RecordDelegationPlugin2.log.info(RecordDelegationPlugin.class.getName()
-				+ " starting ...");
+		RecordDelegationPlugin2.log.info(RecordDelegationPlugin.class.getName() + " starting ...");
 		return true;
 	}
 

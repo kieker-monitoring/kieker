@@ -28,28 +28,29 @@ public class DefaultSystemTimer extends AbstractTimeSource {
 	 * is necessary since System.nanoTime() returns the elapsed nanoseconds
 	 * since *some* fixed but arbitrary time.)
 	 */
-	private static final long OFFSET = System.currentTimeMillis() * 1000000 - System.nanoTime();
-		
+	private static final long OFFSET = (System.currentTimeMillis() * 1000000) - System.nanoTime();
+
 	public DefaultSystemTimer(final Configuration configuration) {
 		super(configuration);
 	}
-	
+
 	/**
 	 * @return the singleton instance of DefaultSystemTimer
 	 */
 	public final static DefaultSystemTimer getInstance() {
 		return LazyHolder.INSTANCE;
 	}
-	
+
 	@Override
 	public long getTime() {
-		return System.nanoTime() + OFFSET;
+		return System.nanoTime() + DefaultSystemTimer.OFFSET;
 	}
 
 	/**
 	 * SINGLETON
 	 */
 	private final static class LazyHolder {
-		private static final DefaultSystemTimer INSTANCE = new DefaultSystemTimer(Configuration.createDefaultConfiguration().getPropertiesStartingWith(DefaultSystemTimer.class.getName()));
+		private static final DefaultSystemTimer INSTANCE = new DefaultSystemTimer(Configuration.createDefaultConfiguration().getPropertiesStartingWith(
+				DefaultSystemTimer.class.getName()));
 	}
 }

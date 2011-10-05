@@ -36,7 +36,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 	 * 
 	 */
 	public void testFirstRecordGeneratesEvent() {
-		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 });
+		compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 });
 	}
 
 	/**
@@ -45,8 +45,8 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 	public void testSecondWithinBoundNoEvent() {
 		final long resolution = 1000;
 		final long firstT = 15;
-		final long secondT = firstT + resolution - 1;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT });
+		final long secondT = (firstT + resolution) - 1;
+		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT });
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT });
+		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT });
 	}
 
 	/**
@@ -66,8 +66,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution + 1;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT },
-				new long[] { firstT, firstT + resolution });
+		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution });
 	}
 
 	/**
@@ -79,17 +78,15 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long secondT = firstT + 1;
 		final long thirdT = secondT + 4;
 		final long fourthT = firstT + resolution; // triggers next event
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT,
-				fourthT });
+		compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT });
 	}
 
 	public void testGapIntermediateEvents() {
 		final long resolution = 6;
 		final long firstT = 5;
-		final long secondT = firstT + 5 * resolution + 1;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT,
-				firstT + resolution, firstT + 2 * resolution, firstT + 3 * resolution, firstT + 4 * resolution,
-				firstT + 5 * resolution });
+		final long secondT = firstT + (5 * resolution) + 1;
+		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
+				firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution) });
 	}
 
 	/**
@@ -102,8 +99,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 	 * @param inputTimestamps
 	 * @param expectedOutputTimerEvents
 	 */
-	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps,
-			final long[] expectedOutputTimerEvents) {
+	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents) {
 		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution);
 
 		final List<Long> receivedTimestamps = new ArrayList<Long>();
@@ -122,8 +118,8 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final Long[] receivedTimestampsArr = receivedTimestamps.toArray(new Long[receivedTimestamps.size()]);
 
 		if (expectedOutputTimerEvents.length != receivedTimestamps.size()) {
-			Assert.fail("Mismatach in sequence length while comparing timer event sequences" + "Expected: "
-					+ Arrays.toString(expectedOutputTimerEvents) + " Found: " + Arrays.toString(receivedTimestampsArr));
+			Assert.fail("Mismatach in sequence length while comparing timer event sequences" + "Expected: " + Arrays.toString(expectedOutputTimerEvents)
+					+ " Found: " + Arrays.toString(receivedTimestampsArr));
 		}
 
 		int firstMismatchIdx = -1;
@@ -135,9 +131,8 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		}
 
 		if (firstMismatchIdx >= 0) {
-			Assert.fail("Mismatch at index " + firstMismatchIdx + " while comparing timer event sequences"
-					+ "Expected: " + Arrays.toString(expectedOutputTimerEvents) + " Found: "
-					+ Arrays.toString(receivedTimestampsArr));
+			Assert.fail("Mismatch at index " + firstMismatchIdx + " while comparing timer event sequences" + "Expected: "
+					+ Arrays.toString(expectedOutputTimerEvents) + " Found: " + Arrays.toString(receivedTimestampsArr));
 		}
 	}
 }

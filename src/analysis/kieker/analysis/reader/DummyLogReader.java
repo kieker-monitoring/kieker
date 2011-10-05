@@ -45,7 +45,7 @@ public class DummyLogReader extends AbstractMonitoringReader {
 			final long startTime = System.nanoTime();
 
 			// wait a bit
-			final long sleeptime = Math.round(Math.random() * 750d + 250d);
+			final long sleeptime = Math.round((Math.random() * 750d) + 250d);
 			try {
 				Thread.sleep(sleeptime);
 			} catch (final InterruptedException ex) {
@@ -53,7 +53,7 @@ public class DummyLogReader extends AbstractMonitoringReader {
 			}
 
 			final OperationExecutionRecord testRecord = new OperationExecutionRecord("ComponentA", "OperationA", this.i, startTime, System.nanoTime());
-			this.deliverRecord(testRecord);
+			deliverRecord(testRecord);
 		}
 		return true;
 	}

@@ -63,14 +63,13 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
 	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
 	private static final IMonitoringController ctrlInst = MonitoringController.getInstance();
-	private static final ITimeSource timesource = ctrlInst.getTimeSource();
+	private static final ITimeSource timesource = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getTimeSource();
 	private static final String vmName = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getHostName();
 
 	private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
 
 	@Override
-	public void init(final FilterConfig config) throws ServletException {
-	}
+	public void init(final FilterConfig config) throws ServletException {}
 
 	/**
 	 * Returns the session ID from request @r or null if no session in @r.
@@ -94,7 +93,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 			execData = new OperationExecutionRecord(OperationExecutionRegistrationAndLoggingFilter.componentName,
 					OperationExecutionRegistrationAndLoggingFilter.opName,
 					OperationExecutionRegistrationAndLoggingFilter.cfRegistry.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point */);
-			execData.sessionId = this.getSessionId((HttpServletRequest) request);
+			execData.sessionId = getSessionId((HttpServletRequest) request);
 			if (execData.sessionId == null) {
 				execData.sessionId = OperationExecutionRegistrationAndLoggingFilter.NULL_SESSION_STR;
 			}
@@ -104,19 +103,19 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 			OperationExecutionRegistrationAndLoggingFilter.cfRegistry.storeThreadLocalESS(1); // *current* execution's ess is 0
 			execData.hostName = OperationExecutionRegistrationAndLoggingFilter.vmName;
 			execData.experimentId = OperationExecutionRegistrationAndLoggingFilter.ctrlInst.getExperimentId();
-			execData.tin = timesource.getTime();
+			execData.tin = OperationExecutionRegistrationAndLoggingFilter.timesource.getTime();
 		}
 		try {
 			chain.doFilter(request, response);
 		} finally {
 			if (execData != null) {
-				execData.tout = timesource.getTime();
+				execData.tout = OperationExecutionRegistrationAndLoggingFilter.timesource.getTime();
 				execData.eoi = eoi;
 				execData.ess = ess;
 				// if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)
 				if (execData.sessionId == null) {
 					// log.info("TraceID" + execData.traceId + "had no sessionId so far. Now?");
-					execData.sessionId = this.getSessionId((HttpServletRequest) request);
+					execData.sessionId = getSessionId((HttpServletRequest) request);
 					// log.info("New sessionId? " + execData.sessionId);
 				}
 				// TOOD: ?only log record if cfRegistry.recallThreadLocalEOI > 0?
@@ -131,6 +130,5 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	}
 
 	@Override
-	public void destroy() {
-	}
+	public void destroy() {}
 }
