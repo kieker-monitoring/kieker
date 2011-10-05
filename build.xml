@@ -351,9 +351,9 @@
 			<include name="${src.userguide.example.jms.dir}/lib/" />
 			<exclude name="${src.userguide.example.jms.dir}/lib/*" />
 			<include name="${src.userguide.example.jms.dir}/src/**/*.java" />
-			<include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties-activemq" />
-			<include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties-hornetq" />
-			<include name="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties-openjms" />
+			<include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties-activemq" />
+			<include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties-hornetq" />
+			<include name="${src.userguide.example.jms.dir}/META-INF/kieker.monitoring.properties-openjms" />
 			<include name="${src.userguide.example.jms.dir}/META-INF/log4j.properties" />
 			<include name="${src.userguide.example.sigar.dir}/build.xml" />
 			<include name="${src.userguide.example.sigar.dir}/build.properties" />
