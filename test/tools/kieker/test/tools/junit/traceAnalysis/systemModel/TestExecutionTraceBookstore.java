@@ -104,7 +104,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 */
 	public void testValidExecutionTrace() {
 		try {
-			final ExecutionTrace executionTrace = genValidBookstoreTrace();
+			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 			/* Perform some validity checks on the execution trace object */
 			Assert.assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), this.numExecutions);
 			Assert.assertEquals("Invalid maximum stack depth", executionTrace.getMaxEss(), 2);
@@ -124,8 +124,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 */
 	public void testEqualMethodEqualTraces() {
 		try {
-			final ExecutionTrace execTrace1 = genValidBookstoreTrace();
-			final ExecutionTrace execTrace2 = genValidBookstoreTrace();
+			final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
+			final ExecutionTrace execTrace2 = this.genValidBookstoreTrace();
 			Assert.assertEquals(execTrace1, execTrace2);
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
@@ -140,8 +140,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 */
 	public void testEqualMethodDifferentTraces() {
 		try {
-			final ExecutionTrace execTrace1 = genValidBookstoreTrace();
-			final ExecutionTrace execTrace2 = genBrokenBookstoreTraceEoiSkip();
+			final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
+			final ExecutionTrace execTrace2 = this.genBrokenBookstoreTraceEoiSkip();
 			Assert.assertFalse(execTrace1.equals(execTrace2));
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
@@ -158,7 +158,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 
 		ExecutionTrace executionTrace;
 		try {
-			executionTrace = genValidBookstoreTrace();
+			executionTrace = this.genValidBookstoreTrace();
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
 			Assert.fail(ex.getMessage());
@@ -247,7 +247,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 */
 	public void testMessageTraceTransformationOnlyOnce() {
 		try {
-			final ExecutionTrace executionTrace = genValidBookstoreTrace();
+			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 			/*
 			 * Transform Execution Trace to Message Trace representation (twice)
 			 * and make sure, that the instances are the same.
@@ -268,7 +268,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 */
 	public void testMessageTraceTransformationTwiceOnChange() {
 		try {
-			final ExecutionTrace executionTrace = genValidBookstoreTrace();
+			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
 			final Execution exec4_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 9, // tin
 					10, // tout
@@ -325,7 +325,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	public void testMessageTraceTransformationBrokenTraceEssSkip() {
 		final ExecutionTrace executionTrace;
 		try {
-			executionTrace = genBrokenBookstoreTraceEssSkip();
+			executionTrace = this.genBrokenBookstoreTraceEssSkip();
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
 			Assert.fail(ex.getMessage());
@@ -337,12 +337,12 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 */
 		try {
 			/* The following call must throw an Exception in this test case */
+    		TestExecutionTraceBookstore.log.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 			Assert.fail("An invalid execution has been transformed to a message trace");
 		} catch (final InvalidTraceException ex) {
 			/* we wanted this exception to happen */
 		}
-
 	}
 
 	/**
@@ -390,7 +390,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 */
 		final ExecutionTrace executionTrace;
 		try {
-			executionTrace = genBrokenBookstoreTraceEoiSkip();
+			executionTrace = this.genBrokenBookstoreTraceEoiSkip();
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.log.error("InvalidTraceException", ex);
 			Assert.fail(ex.getMessage());

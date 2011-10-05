@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
+ 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -118,7 +118,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final ExecutionTrace validExecutionTrace;
 		final MessageTrace validMessageTrace;
 		try {
-			validExecutionTrace = genValidBookstoreTrace();
+			validExecutionTrace = this.genValidBookstoreTrace();
 			validMessageTrace = validExecutionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 		} catch (final InvalidTraceException ex) {
 			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
@@ -246,7 +246,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 */
 		final ExecutionTrace invalidExecutionTrace;
 		try {
-			invalidExecutionTrace = genBrokenBookstoreTraceEssSkip();
+			invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip();
 		} catch (final InvalidTraceException ex) {
 			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
@@ -312,6 +312,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			filter.getExecutionInputPort().newEvent(curExec);
 		}
 
+		TestTraceReconstructionFilter.log.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 		filter.terminate(false);
 
 		/* Analyse result of test case execution */
@@ -364,7 +365,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 */
 		final ExecutionTrace incompleteExecutionTrace;
 		try {
-			incompleteExecutionTrace = genBookstoreTraceWithoutEntryExecution();
+			incompleteExecutionTrace = this.genBookstoreTraceWithoutEntryExecution();
 		} catch (final InvalidTraceException ex) {
 			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
