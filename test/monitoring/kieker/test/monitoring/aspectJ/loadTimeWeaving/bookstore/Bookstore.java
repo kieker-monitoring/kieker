@@ -55,7 +55,7 @@ public class Bookstore extends Thread {
 	 * This will be monitored by Kieker, since it has the
 	 * OperationExecutionMonitoringProbe annotation.
 	 */
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) {
 
 		final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
@@ -78,7 +78,7 @@ public class Bookstore extends Thread {
 		Bookstore.searchBook();
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);
 		CRM.getOffers();

@@ -36,7 +36,7 @@ import kieker.monitoring.probe.manual.BranchingProbe;
  * 
  */
 public class Catalog {
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			BranchingProbe.monitorBranch(1, 0);

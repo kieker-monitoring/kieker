@@ -55,7 +55,7 @@ public class Main {
 
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void helloKieker(final boolean throwException) throws Exception {
 		System.out.println("Hello World (look at your monitoring log ...)." + Thread.currentThread().getId() + " ");
 		if (throwException) {

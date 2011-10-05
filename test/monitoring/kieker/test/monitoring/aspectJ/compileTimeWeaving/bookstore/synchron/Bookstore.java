@@ -64,7 +64,7 @@ public class Bookstore extends Thread {
 	 * 
 	 * @OperationExecutionMonitoringProbe() annotation.
 	 */
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < Bookstore.numberOfRequests; i++) {
 			System.out.println("Bookstore.main: Starting request " + i);

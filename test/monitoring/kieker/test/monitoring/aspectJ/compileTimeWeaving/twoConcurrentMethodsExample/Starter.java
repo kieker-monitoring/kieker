@@ -65,7 +65,7 @@ public class Starter extends Thread {
 		}
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public void waitP(final long sleeptime) {
 		try {
 			Thread.sleep(sleeptime);
@@ -74,7 +74,7 @@ public class Starter extends Thread {
 
 	static volatile boolean boolvar = true;
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	private void work() {
 		int a = this.random.nextInt(6);
 		for (int i = 0; i < 2000000; i++) {

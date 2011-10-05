@@ -79,7 +79,7 @@ public class Bookstore extends Thread {
 		}
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);
 		CRM.getOffers();

@@ -33,7 +33,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  */
 
 public class ExecutionOrderTest {
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	private static void a(final boolean b) {
 		if (b) {
 			ExecutionOrderTest.a2(b);
@@ -43,14 +43,14 @@ public class ExecutionOrderTest {
 		}
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	private static void a2(final boolean b) {
 		if (b) {
 			ExecutionOrderTest.b();
 		}
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	private static void b() {
 		double d = 12 + (System.currentTimeMillis() / 1000d);
 		for (int i = 0; i < 10000; i++) {
@@ -64,17 +64,17 @@ public class ExecutionOrderTest {
 		ExecutionOrderTest.d1();
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void d1() {
 		ExecutionOrderTest.d2();
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void d2() {
 		ExecutionOrderTest.d3();
 	}
 
-	@OperationExecutionMonitoringProbe()
+	@OperationExecutionMonitoringProbe
 	public static void d3() {
 		System.out.println("d3()");
 	}
