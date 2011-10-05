@@ -265,7 +265,7 @@ monitor trace information in distributed applications.
 
 \section{Monitoring Writers}\label{sec:monitoring-log-writers}
 
-Monitoring log writers serialize monitoring records to the monitoring log and  % and persist the recorded informations into files, databases etc. %
+Monitoring writers serialize monitoring records to the monitoring log/stream and  % and persist the recorded informations into files, databases etc. %
 must implement the interface \class{IMonitoringWriter}. The monitoring %
 controller passes the received records to the writer by calling the method %
 \method{newMonitoringRecord}. Writers can use the methods to serialize the %
@@ -320,7 +320,7 @@ monitoringDataWriterInitString=pipeName=somePipe
 
 \enlargethispage{1cm}
 
-\noindent As the data structure for this kind of monitoring log, we created a %
+\noindent As the data structure of this kind of monitoring stream, we created a %
 class \class{PipeData} in order to demonstrate the use of the \method{toArray} and %
 \method{initFromArray} (in Section~\ref{sec:analysis:reader}) methods. %
 A \class{PipeData} object holds a logging timestamp and an \class{Object} array %
