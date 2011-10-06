@@ -46,6 +46,7 @@
 
 	<target name="-build-jar" depends="-compile">
 		<copy file="META-INF/aop.xml" tofile="${build.dir}/META-INF/aop.xml" />
+		<copy file="META-INF/kieker.monitoring.properties" tofile="${build.dir}/META-INF/kieker.monitoring.properties" />
 		<jar destfile="${jar.file}" basedir="${build.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="${main-class}" />
