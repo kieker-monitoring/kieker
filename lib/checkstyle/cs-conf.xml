@@ -2,6 +2,14 @@
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN" "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
 
 <module name="Checker">
+
+    <!-- KIEKER Filter -->
+    <module name="SuppressWithNearbyCommentFilter">
+        <property name="commentFormat" value="NOCS"/>
+        <property name="checkFormat" value=".*"/>
+        <property name="influenceFormat" value="0"/>
+    </module>
+
     <!--
     <property name="basedir"        value=""/>
     <property name="localeCountry"  value=""/> JVM locale country
@@ -155,11 +163,6 @@
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <module name="FileContentsHolder"/>
-        <module name="SuppressWithNearbyCommentFilter">
-            <property name="commentFormat" value="NOCS"/>
-            <property name="checkFormat" value=".*"/>
-            <property name="influenceFormat" value="0"/>
-        </module>
 
         <!--
          !________________________________________________________________________________________
