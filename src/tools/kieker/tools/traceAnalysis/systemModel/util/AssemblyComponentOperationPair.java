@@ -40,10 +40,10 @@ public class AssemblyComponentOperationPair {
 		this.assemblyComponent = null;
 	}
 
-	public AssemblyComponentOperationPair(final int id, final Operation operation, final AssemblyComponent AssemblyComponent) {
+	public AssemblyComponentOperationPair(final int id, final Operation operation, final AssemblyComponent assemblyComponent) {
 		this.id = id;
 		this.operation = operation;
-		this.assemblyComponent = AssemblyComponent;
+		this.assemblyComponent = assemblyComponent;
 	}
 
 	public final int getId() {
