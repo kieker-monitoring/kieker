@@ -83,16 +83,16 @@ of the \class{MemSwapUsageSampler} which can be used to monitor memory %
 and swap usage employing the Sigar library~\cite{HypericSigarWebsite}. %
 Likewise to other monitoring probes described in this user guide (see for %
 example Sections~\ref{sec:monitoring:probe} and \ref{sec:example:monitoring}), 
-it collects the data of interest (lines~57--58), creates a monitoring record~%
-(lines~59--64), and passes this monitoring record to the monitoring controller~%
-(line~65). %
+it collects the data of interest (lines~56--57), creates a monitoring record~%
+(lines~58--59), and passes this monitoring record to the monitoring controller~%
+(line~60). %
 The available Sigar-based samplers for monitoring system-level monitoring %
 data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}. %
 
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=55, lastline=66, firstnumber=55, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
+\lstinputlisting[firstline=52, lastline=66, firstnumber=55, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
 
 \subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
 
