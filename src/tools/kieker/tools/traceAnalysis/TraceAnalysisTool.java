@@ -173,7 +173,7 @@ public class TraceAnalysisTool {
 			return false;
 		}
 
-		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN); //NOCS
+		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN); // NOCS
 		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {

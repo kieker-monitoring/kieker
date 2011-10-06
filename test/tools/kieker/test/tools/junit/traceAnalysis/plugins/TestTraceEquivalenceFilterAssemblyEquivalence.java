@@ -73,10 +73,10 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 
 	private ExecutionTrace genValidBookstoreTrace(final long traceId, final long offset) throws InvalidTraceException {
 		/* Executions of a valid trace */
-		final Execution exec0_0__bookstore_searchBook; //NOCS
-		final Execution exec1_1__catalog_getBook; //NOCS
-		final Execution exec2_1__crm_getOrders; //NOCS
-		final Execution exec3_2__catalog_getBook; //NOCS
+		final Execution exec0_0__bookstore_searchBook; // NOCS
+		final Execution exec1_1__catalog_getBook; // NOCS
+		final Execution exec2_1__crm_getOrders; // NOCS
+		final Execution exec3_2__catalog_getBook; // NOCS
 
 		/* Manually create Executions for a trace */
 		exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId, (1 * (1000 * 1000)) + offset, // tin
