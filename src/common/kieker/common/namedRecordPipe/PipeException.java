@@ -28,7 +28,7 @@ public class PipeException extends Exception {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 56l;
+	private static final long serialVersionUID = 56L;
 
 	public PipeException(final String msg) {
 		super(msg);

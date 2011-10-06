@@ -46,7 +46,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	private static final Log LOG = LogFactory.getLog(TestExecutionTraceBookstore.class);
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
-	private static final long TRACE_ID = 69898l;
+	private static final long TRACE_ID = 69898L;
 	private final long minTin;
 	private final long maxTout;
 	private final int numExecutions;

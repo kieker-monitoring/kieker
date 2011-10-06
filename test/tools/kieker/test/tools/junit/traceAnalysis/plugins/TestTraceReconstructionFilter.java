@@ -52,7 +52,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 	private final Execution exec1_1__catalog_getBook; // NOCS
 	private final Execution exec2_1__crm_getOrders; // NOCS
 	private final Execution exec3_2__catalog_getBook; // NOCS
-	private static final long TRACE_ID = 62298l;
+	private static final long TRACE_ID = 62298L;
 
 	public TestTraceReconstructionFilter() {
 		/* Manually create Executions for a trace */

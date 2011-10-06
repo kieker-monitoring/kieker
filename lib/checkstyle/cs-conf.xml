@@ -840,6 +840,7 @@
         <!-- Checks for uncommented main() methods (debugging leftovers). !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
         <module name="UncommentedMain">
+            <property name="severity" value="info"/> 
             <property name="excludedClasses" value="Main$"/>
         </module>
 
