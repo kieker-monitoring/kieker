@@ -391,11 +391,10 @@
 
         <!-- Checks for illegal instantiations where a factory method is preferred. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <!-- Default: OFF
+        <!-- KIEKER on for ??? !-->
         <module name="IllegalInstantiation">
-            <property name="classes" value=""/>
+            <property name="classes" value="java.lang.Boolean"/>
         </module>
-        !-->
 
         <!-- This check can be used to ensure that types are not declared to be thrown. !-->
         <!-- Declaring to throw java.lang.Error or java.lang.RuntimeException is almost never acceptable. !-->
@@ -423,6 +422,7 @@
 
         <!-- Checks that particular classes are never used as types in variable declarations, return values or parameters. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
+        <!-- KIEKER removed format value="^(.*[\\.])?Abstract.*$" !-->
         <module name="IllegalType">
              <property name="tokens"                 value="PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF"/>
              <property name="illegalClassNames"      value="java.util.GregorianCalendar, java.util.Hashtable,
@@ -432,8 +432,7 @@
                                                             java.util.TreeMap, java.util.Vector"/>
             <property name="legalAbstractClassNames" value=""/>
             <property name="ignoredMethodNames"      value="getInitialContext, getEnvironment"/>
-            <property name="format"                  value="^(.*[\\.])?Abstract.*$"/>
-
+            <property name="format"                  value=""/>
         </module>
 
         <!-- Checks for assignments in subexpressions, such as in String s = Integer.toString(i = 2);. !-->
@@ -781,14 +780,13 @@
 
         <!-- A generic check for code problems - the user can search for any pattern. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
-        <!-- Default: OFF
+        <!-- KIEKER on !-->
         <module name="GenericIllegalRegexp">
             <property name="format"         value="\S\s+$"/>
             <property name="message"        value="Line has trailing spaces."/>
             <property name="ignoreCase"     value="false"/>
             <property name="ignoreComments" value="false"/>
         </module>
-        !-->
 
         <!-- Checks correct indentation of Java Code. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
@@ -842,8 +840,9 @@
 
         <!-- Checks that there are no redundant modifiers. !-->
         <!-- See http://checkstyle.sf.net/config_modifiers.html !-->
+        <!-- KIEKER removed METHOD_DEF !-->
         <module name="RedundantModifier">
-            <property name="tokens" value="METHOD_DEF, VARIABLE_DEF, ANNOTATION_FIELD_DEF"/>
+            <property name="tokens" value="VARIABLE_DEF, ANNOTATION_FIELD_DEF"/>
         </module>
 
 
