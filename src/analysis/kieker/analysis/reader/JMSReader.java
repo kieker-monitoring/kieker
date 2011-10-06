@@ -59,7 +59,7 @@ public class JMSReader extends AbstractMonitoringReader {
 	private String jmsFactoryLookupName = null;
 
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
-	
+
 	/**
 	 * @param jmsProviderUrl
 	 *            = for instance "tcp://127.0.0.1:3035/"
@@ -167,7 +167,7 @@ public class JMSReader extends AbstractMonitoringReader {
 							if (omo instanceof IMonitoringRecord) {
 								final IMonitoringRecord rec = (IMonitoringRecord) omo;
 								if (!JMSReader.this.deliverRecord(rec)) {
-									final String errorMsg = "deliverRecord returned false"; 
+									final String errorMsg = "deliverRecord returned false";
 									JMSReader.LOG.error(errorMsg);
 									throw new MonitoringReaderException(errorMsg);
 								}

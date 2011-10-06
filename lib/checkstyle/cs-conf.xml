@@ -715,6 +715,7 @@
         <!-- Restrict the number of number of &&, || and ^ in an expression. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
         <module name="BooleanExpressionComplexity">
+            <property name="severity" value="info"/>
             <property name="max"    value="3"/>
             <property name="tokens" value="LAND, BAND, LOR, BOR, BXOR"/>
         </module>
@@ -722,24 +723,28 @@
         <!-- This metric measures the number of instantiations of other classes within the given class. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
         <module name="ClassDataAbstractionCoupling">
+            <property name="severity" value="info"/>
             <property name="max" value="7"/>
         </module>
 
         <!-- The number of other classes a given class relies on. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
         <module name="ClassFanOutComplexity">
+            <property name="severity" value="info"/>
             <property name="max" value="20"/>
         </module>
 
         <!-- Checks cyclomatic complexity against a specified limit. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
         <module name="CyclomaticComplexity">
+            <property name="severity" value="info"/>
             <property name="max" value="10"/>
         </module>
 
         <!-- Determines complexity of methods, classes and files by counting the Non Commenting Source Statements (NCSS). !-->
         <!-- See http://checkstyle.sourceforge.net/config_metrics.html#JavaNCSS !-->
         <module name="JavaNCSS">
+            <property name="severity" value="info"/>
             <property name="methodMaximum" value="50"/>
             <property name="classMaximum"  value="1500"/>
             <property name="fileMaximum"   value="2000"/>
@@ -748,6 +753,7 @@
         <!-- The NPATH metric computes the number of possible execution paths through a function. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
         <module name="NPathComplexity">
+            <property name="severity" value="info"/>
             <property name="max" value="200"/>
         </module>
 
@@ -812,8 +818,9 @@
 
         <!-- A check for TODO: comments. Actually it is a generic regular expression matcher on Java comments. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
+        <!-- Kieker !-->
         <module name="TodoComment">
-            <property name="format" value="TODO:"/>
+            <property name="format" value="TODO"/>
         </module>
 
         <!-- The check to ensure that requires that comments be the only thing on a line. !-->

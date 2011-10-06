@@ -120,7 +120,7 @@ public class FilesystemLogReplayerStarter {
 		}
 		FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestampsOptValStr.equals("true");
 		FilesystemLogReplayerStarter.LOG.info("Keeping original logging timestamps: "
-				+ (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? "true" : "false")); //NOCS
+				+ (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
 
 		/* 3.) init realtimeMode */
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME, "false");
@@ -182,10 +182,10 @@ public class FilesystemLogReplayerStarter {
 		if (retVal) {
 			FilesystemLogReplayerStarter.LOG.info("inputDirs: "
 					+ FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(FilesystemLogReplayerStarter.inputDirs, ';'));
-			FilesystemLogReplayerStarter.LOG.info("Replaying in " + (FilesystemLogReplayerStarter.realtimeMode ? "" : "non-") + "realtime mode"); //NOCS
+			FilesystemLogReplayerStarter.LOG.info("Replaying in " + (FilesystemLogReplayerStarter.realtimeMode ? "" : "non-") + "realtime mode"); // NOCS
 			if (FilesystemLogReplayerStarter.realtimeMode) {
 				FilesystemLogReplayerStarter.LOG.info("Using " + FilesystemLogReplayerStarter.numRealtimeWorkerThreads + " realtime worker thread"
-						+ (FilesystemLogReplayerStarter.numRealtimeWorkerThreads > 1 ? "s" : "")); //NOCS
+						+ (FilesystemLogReplayerStarter.numRealtimeWorkerThreads > 1 ? "s" : "")); // NOCS
 			}
 		}
 

@@ -216,7 +216,7 @@ public final class Configuration extends Properties implements Keys {
 
 	public final String getStringProperty(final String key) {
 		final String s = this.getProperty(key);
-		return (s == null) ? "" : s; //NOCS
+		return (s == null) ? "" : s; // NOCS
 	}
 
 	public final boolean getBooleanProperty(final String key) {

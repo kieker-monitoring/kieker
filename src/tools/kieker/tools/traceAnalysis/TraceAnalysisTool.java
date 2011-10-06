@@ -242,7 +242,7 @@ public class TraceAnalysisTool {
 				val = TraceAnalysisTool.shortLabels ? "true" : "false"; // NOCS
 				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
-				val = TraceAnalysisTool.ignoreInvalidTraces ? "true" : "false"; //NOCS
+				val = TraceAnalysisTool.ignoreInvalidTraces ? "true" : "false"; // NOCS
 				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
 				val = TraceAnalysisTool.maxTraceDurationMillis + " ms";

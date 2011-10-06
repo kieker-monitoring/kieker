@@ -194,13 +194,13 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1; // NOPMD
-		result = (prime * result) + ((this.className == null) ? 0 : this.className.hashCode()); //NOCS
+		result = (prime * result) + ((this.className == null) ? 0 : this.className.hashCode()); // NOCS
 		result = (prime * result) + this.eoi;
 		result = (prime * result) + this.ess;
 		result = (prime * result) + this.experimentId;
-		result = (prime * result) + ((this.hostName == null) ? 0 : this.hostName.hashCode()); //NOCS
-		result = (prime * result) + ((this.operationName == null) ? 0 : this.operationName.hashCode()); //NOCS
-		result = (prime * result) + ((this.sessionId == null) ? 0 : this.sessionId.hashCode()); //NOCS
+		result = (prime * result) + ((this.hostName == null) ? 0 : this.hostName.hashCode()); // NOCS
+		result = (prime * result) + ((this.operationName == null) ? 0 : this.operationName.hashCode()); // NOCS
+		result = (prime * result) + ((this.sessionId == null) ? 0 : this.sessionId.hashCode()); // NOCS
 		result = (prime * result) + (int) (this.tin ^ (this.tin >>> 32));
 		result = (prime * result) + (int) (this.tout ^ (this.tout >>> 32));
 		result = (prime * result) + (int) (this.traceId ^ (this.traceId >>> 32));

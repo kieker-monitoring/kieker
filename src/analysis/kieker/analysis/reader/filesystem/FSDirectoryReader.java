@@ -200,10 +200,11 @@ class FSDirectoryReader {
 						FSDirectoryReader.LOG.info("Ignoring record type for mapping " + line);
 					}
 				} catch (final ClassNotFoundException e) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); //NOCS
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS
 					break;
 				} catch (final IllegalArgumentException e) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); //NOCS (equal string as above)
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS (equal string as
+																																		// above)
 					break;
 				}
 			}
@@ -212,7 +213,7 @@ class FSDirectoryReader {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) { //NOCS
+				} catch (final Exception e) { // NOCS
 					FSDirectoryReader.LOG.error("Exception while closing input stream for mapping file", e);
 				}
 			}
@@ -237,7 +238,8 @@ class FSDirectoryReader {
 			in = new BufferedReader(new FileReader(input));
 			String line;
 
-			curRecord: while ((line = in.readLine()) != null) {
+			curRecord:
+			while ((line = in.readLine()) != null) {
 				IMonitoringRecord rec = null;
 				try {
 					if (!this.recordTypeIdMapInitialized && line.startsWith("$")) {
@@ -282,7 +284,7 @@ class FSDirectoryReader {
 						}
 						if (!haveTypeId || (i > 0)) { // only if current field
 														// is not the id
-							vec[haveTypeId ? i - 1 : i] = token; //NOCS
+							vec[haveTypeId ? i - 1 : i] = token; // NOCS
 						}
 					}
 					if (vec == null) {
