@@ -282,7 +282,7 @@ class FSDirectoryReader {
 						}
 						if (!haveTypeId || (i > 0)) { // only if current field
 														// is not the id
-							vec[haveTypeId ? i - 1 : i] = token;
+							vec[haveTypeId ? i - 1 : i] = token; //NOCS
 						}
 					}
 					if (vec == null) {

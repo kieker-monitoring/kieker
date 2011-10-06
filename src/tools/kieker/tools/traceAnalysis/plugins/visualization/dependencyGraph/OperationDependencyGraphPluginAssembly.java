@@ -192,11 +192,12 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 				final Operation senderOperation = m.getSendingExecution().getOperation();
 				final Operation receiverOperation = m.getReceivingExecution().getOperation();
 				/* The following two get-calls to the factory return s.th. in either case */
-				final AssemblyComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph
-						.getRootNode().getEntity() : OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
-				final AssemblyComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph
-						.getRootNode().getEntity() : OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(receiverComponent,
-						receiverOperation);
+				final AssemblyComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
+						.getRootNode().getEntity()
+						: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+				final AssemblyComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
+						.getRootNode().getEntity()
+						: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
 				DependencyGraphNode<AssemblyComponentOperationPair> senderNode = OperationDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderPair
 						.getId());

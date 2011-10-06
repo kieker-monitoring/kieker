@@ -37,7 +37,7 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 
 	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
-		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD
+		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD NOCS
 		Object retVal = null; // NOPMD
 		AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
 		try {

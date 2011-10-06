@@ -78,9 +78,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			 * we take the traceId as a second ordering key.
 			 */
 			if (t1LowestTin != t2LowestTin) {
-				return t1LowestTin < t2LowestTin ? -1 : 1;
+				return t1LowestTin < t2LowestTin ? -1 : 1; // NOCS
 			}
-			return t1.getTraceId() < t2.getTraceId() ? -1 : 1;
+			return t1.getTraceId() < t2.getTraceId() ? -1 : 1; // NOCS
 		}
 	});
 
@@ -134,8 +134,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private void newExecution(final Execution execution) {
 		final long traceId = execution.getTraceId();
 
-		this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin;
-		this.maxTout = execution.getTout() > this.maxTout ? execution.getTout() : this.maxTout;
+		this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin; // NOCS
+		this.maxTout = execution.getTout() > this.maxTout ? execution.getTout() : this.maxTout; // NOCS
 
 		ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 		if (executionTrace != null) { /* trace (artifacts) exists already; */

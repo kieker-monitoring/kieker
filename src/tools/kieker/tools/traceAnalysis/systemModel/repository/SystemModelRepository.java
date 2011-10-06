@@ -114,7 +114,7 @@ public class SystemModelRepository {
 	private void printHtmlTableRow(final PrintStream ps, final String[] cells) {
 		ps.println("<tr class=\"cell\">");
 		for (final String cell : cells) {
-			ps.println("<td>" + ((cell.length() == 0) ? "&nbsp;" : cell) + "</td>");
+			ps.println("<td>" + ((cell.length() == 0) ? "&nbsp;" : cell) + "</td>"); // NOCS
 		}
 		ps.println("</tr>");
 	}

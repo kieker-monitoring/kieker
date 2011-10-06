@@ -135,17 +135,17 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createNode(final String prefix, final String nodeId, final String label, final String shape, final String style,
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc) {
-		final StringBuilder dot = new StringBuilder(prefix == null ? "" : prefix);
+		final StringBuilder dot = new StringBuilder(prefix == null ? "" : prefix); // NOCS
 		dot.append("\"" + nodeId + "\" [");
-		dot.append(label == null ? "" : "label=\"" + label);
-		dot.append(shape == null ? "" : "\",shape=\"" + shape);
-		dot.append(style == null ? "" : "\",style=\"" + style);
-		dot.append(framecolor == null ? "" : "\",color=\"" + framecolor);
-		dot.append(fillcolor == null ? "" : "\",fillcolor=\"" + fillcolor);
-		dot.append(fontcolor == null ? "" : "\",fontcolor=\"" + fontcolor);
-		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\",fontsize=\"" + Double.toString(fontsize));
-		dot.append(imageFilename == null ? "" : "\",image=\"" + imageFilename);
-		dot.append("\"" + (misc == null ? "" : misc) + "]\n");
+		dot.append(label == null ? "" : "label=\"" + label); // NOCS
+		dot.append(shape == null ? "" : "\",shape=\"" + shape); // NOCS
+		dot.append(style == null ? "" : "\",style=\"" + style); // NOCS
+		dot.append(framecolor == null ? "" : "\",color=\"" + framecolor); // NOCS
+		dot.append(fillcolor == null ? "" : "\",fillcolor=\"" + fillcolor); // NOCS
+		dot.append(fontcolor == null ? "" : "\",fontcolor=\"" + fontcolor); // NOCS
+		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\",fontsize=\"" + Double.toString(fontsize)); // NOCS
+		dot.append(imageFilename == null ? "" : "\",image=\"" + imageFilename); // NOCS
+		dot.append("\"" + (misc == null ? "" : misc) + "]\n"); // NOCS
 		return dot;
 	}
 
@@ -171,13 +171,13 @@ public final class DotFactory {
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String misc) {
 		final StringBuilder dot = new StringBuilder(prefix + "subgraph \"cluster_" + name);
 		dot.append("\" {\n" + prefix + " label = \"" + label);
-		dot.append(shape == null ? "" : "\";\n" + prefix + " shape = \"" + shape);
-		dot.append(style == null ? "" : "\";\n" + prefix + " style = \"" + style);
-		dot.append(framecolor == null ? "" : "\";\n" + prefix + " pencolor = \"" + framecolor);
-		dot.append(fillcolor == null ? "" : "\";\n" + prefix + " fillcolor = \"" + fillcolor);
-		dot.append(fontcolor == null ? "" : "\";\n" + prefix + " fontcolor = \"" + fontcolor);
-		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\";\n" + prefix + " fontsize = \"" + Double.toString(fontsize));
-		dot.append("\";" + (misc == null ? "" : misc) + "\n");
+		dot.append(shape == null ? "" : "\";\n" + prefix + " shape = \"" + shape); // NOCS
+		dot.append(style == null ? "" : "\";\n" + prefix + " style = \"" + style); // NOCS
+		dot.append(framecolor == null ? "" : "\";\n" + prefix + " pencolor = \"" + framecolor); // NOCS
+		dot.append(fillcolor == null ? "" : "\";\n" + prefix + " fillcolor = \"" + fillcolor); // NOCS
+		dot.append(fontcolor == null ? "" : "\";\n" + prefix + " fontcolor = \"" + fontcolor); // NOCS
+		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\";\n" + prefix + " fontsize = \"" + Double.toString(fontsize)); // NOCS
+		dot.append("\";" + (misc == null ? "" : misc) + "\n"); // NOCS
 		// closing bracket "}" has to be added by calling method !
 		return dot;
 	}
@@ -197,7 +197,7 @@ public final class DotFactory {
 			dot.append(String.format("style=\"%s\"", style));
 		}
 		if (arrowhead != null) {
-			dot.append(String.format("%s arrowhead=\"%s\"", style == null ? "" : ",", arrowhead));
+			dot.append(String.format("%s arrowhead=\"%s\"", style == null ? "" : ",", arrowhead)); // NOCS
 		}
 		dot.append("]");
 		return dot.toString();
@@ -219,7 +219,7 @@ public final class DotFactory {
 			dot.append(String.format(", style=\"%s\"", style));
 		}
 		if (arrowhead != null) {
-			dot.append(String.format("%s arrowhead=\"%s\"", style == null ? "" : ",", arrowhead));
+			dot.append(String.format("%s arrowhead=\"%s\"", style == null ? "" : ",", arrowhead)); // NOCS
 		}
 		dot.append("]");
 		return dot.toString();

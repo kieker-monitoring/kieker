@@ -150,7 +150,7 @@ public class TraceAnalysisTool {
 				for (final String idStr : traceIdList) {
 					TraceAnalysisTool.selectedTraces.add(Long.valueOf(idStr));
 				}
-				TraceAnalysisTool.LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected");
+				TraceAnalysisTool.LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
 			} catch (final Exception e) {
 				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")");
 				TraceAnalysisTool.LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
@@ -228,7 +228,7 @@ public class TraceAnalysisTool {
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
-				val = TraceAnalysisTool.cmdl.hasOption(longOpt) ? "true" : "false";
+				val = TraceAnalysisTool.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
 				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
 				if (TraceAnalysisTool.selectedTraces != null) {
@@ -239,10 +239,10 @@ public class TraceAnalysisTool {
 
 				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
-				val = TraceAnalysisTool.shortLabels ? "true" : "false";
+				val = TraceAnalysisTool.shortLabels ? "true" : "false"; // NOCS
 				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
-				val = TraceAnalysisTool.ignoreInvalidTraces ? "true" : "false";
+				val = TraceAnalysisTool.ignoreInvalidTraces ? "true" : "false"; //NOCS
 				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
 				val = TraceAnalysisTool.maxTraceDurationMillis + " ms";
@@ -604,7 +604,7 @@ public class TraceAnalysisTool {
 			System.out.println("");
 			System.out.println("#");
 			System.out.println("# Plugin: " + "Trace equivalence report");
-			System.out.println("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'");
+			System.out.println("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS
 		} catch (final FileNotFoundException e) {
 			TraceAnalysisTool.LOG.error("File not found", e);
 			retVal = false;

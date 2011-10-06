@@ -72,10 +72,10 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 		for (final DependencyGraphNode<ExecutionContainer> node : nodes) {
 			final ExecutionContainer curContainer = node.getEntity();
 			final int curContainerId = node.getId();
-			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curContainerId == rootContainerId) ? "$"
+			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curContainerId == rootContainerId) ? "$" // NOCS
 					: AbstractDependencyGraphPlugin.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
-					(curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D, (curContainerId == rootContainerId) ? null
-							: DotFactory.DOT_STYLE_FILLED, // style
+					(curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D, // NOCS 
+							(curContainerId == rootContainerId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS
 					null, // framecolor
 					(curContainerId == rootContainerId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 					null, // fontcolor

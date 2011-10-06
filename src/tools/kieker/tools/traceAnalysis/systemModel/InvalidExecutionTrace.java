@@ -45,7 +45,7 @@ public class InvalidExecutionTrace implements IAnalysisEvent {
 
 	@Override
 	public int hashCode() {
-		return ((this.invalidExecutionTraceArtifacts == null) ? 0 : this.invalidExecutionTraceArtifacts.hashCode());
+		return ((this.invalidExecutionTraceArtifacts == null) ? 0 : this.invalidExecutionTraceArtifacts.hashCode()); // NOCS
 	}
 
 	@Override

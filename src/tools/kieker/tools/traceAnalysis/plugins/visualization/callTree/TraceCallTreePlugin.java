@@ -208,11 +208,11 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		super.printStatusMessage();
 		final int numPlots = this.getSuccessCount();
 		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-		System.out.println("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '"
+		System.out.println("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
 				+ this.outputFnBase + "-<traceId>.dot'");
 		System.out.println("Dot files can be converted using the dot tool");
-		System.out.println("Example: dot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " + this.outputFnBase
-				+ "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg");
+		System.out.println("Example: dot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
+				+ this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
 	}
 
 	@Override

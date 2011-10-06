@@ -160,10 +160,10 @@ public class Execution implements IAnalysisEvent {
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0);
-		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0);
+		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0); // NOCS
+		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS
 		hash = (43 * hash) + (int) (this.traceId ^ (this.traceId >>> 32));
-		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0);
+		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0); // NOCS
 		hash = (43 * hash) + this.eoi;
 		hash = (43 * hash) + this.ess;
 		hash = (43 * hash) + (int) (this.tin ^ (this.tin >>> 32));
@@ -180,7 +180,7 @@ public class Execution implements IAnalysisEvent {
 		strBuild.append(this.allocationComponent.toString()).append(".");
 		strBuild.append(this.operation.getSignature().getName()).append(" ");
 
-		strBuild.append((this.sessionId != null) ? this.sessionId : Execution.NO_SESSION_ID);
+		strBuild.append((this.sessionId != null) ? this.sessionId : Execution.NO_SESSION_ID); // NOCS
 
 		return strBuild.toString();
 	}

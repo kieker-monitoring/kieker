@@ -102,6 +102,6 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : ""));
+		System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 	}
 }

@@ -222,12 +222,12 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 				final Operation senderOperation = m.getSendingExecution().getOperation();
 				final Operation receiverOperation = m.getReceivingExecution().getOperation();
 				/* The following two get-calls to the factory return s.th. in either case */
-				final AllocationComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph
-						.getRootNode().getEntity() : OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(senderComponent,
-						senderOperation);
-				final AllocationComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph
-						.getRootNode().getEntity() : OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(receiverComponent,
-						receiverOperation);
+				final AllocationComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph // NOCS
+						.getRootNode().getEntity()
+						: OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+				final AllocationComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph // NOCS
+						.getRootNode().getEntity()
+						: OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
 				DependencyGraphNode<AllocationComponentOperationPair> senderNode = OperationDependencyGraphPluginAllocation.this.dependencyGraph.getNode(senderPair
 						.getId());

@@ -110,7 +110,7 @@ public class NameIdMap {
 					}
 					final String idStr = st.nextToken();
 					// the leading $ is optional
-					final Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr);
+					final Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr); // NOCS
 					final String name = st.nextToken();
 					inst.id2NameMap.put(id, name);
 					inst.name2IdMap.put(name, id);

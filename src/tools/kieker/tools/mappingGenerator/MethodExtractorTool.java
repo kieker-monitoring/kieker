@@ -265,7 +265,7 @@ class MethodExtractor extends ClassLoader {
 		this.analyseClasses(classes, packagePrefix, filter);
 		for (final File file : descArray) {
 			this.descendAndAnalyseDir(file,
-					(packagePrefix + file.getName().replaceFirst(dir.getName(), "")).replaceAll(File.separatorChar == '\\' ? "\\\\" : File.separator, ".") + ".",
+					(packagePrefix + file.getName().replaceFirst(dir.getName(), "")).replaceAll(File.separatorChar == '\\' ? "\\\\" : File.separator, ".") + ".", // NOCS
 					filter);
 		}
 	}
@@ -281,7 +281,7 @@ class MethodExtractor extends ClassLoader {
 	private void analyseClasses(final File[] classes, final String packagePrefix, final IMethodFilter filter) {
 		for (final File file : classes) {
 			int begIndex = file.getName().lastIndexOf(File.separatorChar);
-			begIndex = begIndex == -1 ? 0 : begIndex;
+			begIndex = begIndex == -1 ? 0 : begIndex; // NOCS
 			final int endIndex = file.getName().lastIndexOf('.');
 			try {
 				final Class<?> c = super.loadClass(packagePrefix + file.getName().substring(begIndex, endIndex));

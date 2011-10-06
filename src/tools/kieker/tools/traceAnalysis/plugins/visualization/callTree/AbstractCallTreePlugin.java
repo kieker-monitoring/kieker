@@ -138,7 +138,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			final Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds, final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder();
 		nodeIds.put(n, nextNodeId.i);
-		strBuild.append(nextNodeId.i++).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreePlugin.nodeLabel(n, shortLabels))
+		strBuild.append(nextNodeId.i++).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreePlugin.nodeLabel(n, shortLabels)) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
@@ -174,7 +174,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 		final Hashtable<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>();
 
 		AbstractCallTreePlugin.dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
-		AbstractCallTreePlugin.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights);
+		AbstractCallTreePlugin.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights); // NOCS
 
 		ps.println(edgestringBuilder.toString());
 		ps.println("}");

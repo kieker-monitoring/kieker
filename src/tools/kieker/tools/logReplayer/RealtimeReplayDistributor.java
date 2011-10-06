@@ -115,7 +115,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons), schedTime, TimeUnit.NANOSECONDS); // *relative* delay from now
 
 		}
-		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord.getLoggingTimestamp() : this.lTime;
+		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord.getLoggingTimestamp() : this.lTime; //NOCS
 		return true;
 	}
 

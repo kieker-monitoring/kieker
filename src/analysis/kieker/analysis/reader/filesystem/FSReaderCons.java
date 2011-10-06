@@ -264,14 +264,14 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 						 * elements in a deterministic way.
 						 */
 						// log.info("Elements have equal timestamp; ordering by wrapper id.");
-						return (e.getElementId() < e1.getElementId()) ? -1 : 1;
+						return (e.getElementId() < e1.getElementId()) ? -1 : 1; //NOCS
 					}
 
 					/*
 					 * In every case, the timestamps are different at this
 					 * place!
 					 */
-					return t.getLoggingTimestamp() < t1.getLoggingTimestamp() ? -1 : 1;
+					return t.getLoggingTimestamp() < t1.getLoggingTimestamp() ? -1 : 1; //NOCS 
 				}
 			});
 }
