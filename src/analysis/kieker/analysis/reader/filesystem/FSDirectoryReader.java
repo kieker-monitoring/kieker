@@ -108,7 +108,7 @@ class FSDirectoryReader {
 
 	private String filePrefix = "kieker";
 	private static final String LEGAY_FILE_PREFIX = "tpmon";
-	private final String filePostfix = ".dat";
+	private static final String FILE_POSTFIX = ".dat";
 
 	/**
 	 * Starts reading and returns after each record has been passed to the
@@ -124,7 +124,7 @@ class FSDirectoryReader {
 			@Override
 			public boolean accept(final File pathname) {
 				return pathname.isFile() && pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
-						&& pathname.getName().endsWith(FSDirectoryReader.this.filePostfix);
+						&& pathname.getName().endsWith(FSDirectoryReader.this.FILE_POSTFIX);
 			}
 		});
 
@@ -134,7 +134,7 @@ class FSDirectoryReader {
 
 		if (inputFiles.length == 0) {
 			throw new MonitoringReaderException("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
-					+ this.filePostfix + "' could be found.");
+					+ this.FILE_POSTFIX + "' could be found.");
 		}
 
 		Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically

@@ -52,21 +52,21 @@ public class TestTraceReconstructionFilter extends TestCase {
 	private final Execution exec1_1__catalog_getBook;
 	private final Execution exec2_1__crm_getOrders;
 	private final Execution exec3_2__catalog_getBook;
-	private final long traceId = 62298l;
+	private static final long TRACE_ID = 62298l;
 
 	public TestTraceReconstructionFilter() {
 		/* Manually create Executions for a trace */
-		this.exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", this.traceId, 1 * (1000 * 1000), // tin
+		this.exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", this.TRACE_ID, 1 * (1000 * 1000), // tin
 				10 * (1000 * 1000), // tout
 				0, 0); // eoi, ess
 
-		this.exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 2 * (1000 * 1000), // tin
+		this.exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 2 * (1000 * 1000), // tin
 				4 * (1000 * 1000), // tout
 				1, 1); // eoi, ess
-		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", this.traceId, 5 * (1000 * 1000), // tin
+		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", this.TRACE_ID, 5 * (1000 * 1000), // tin
 				8 * (1000 * 1000), // tout
 				2, 1); // eoi, ess
-		this.exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 6 * (1000 * 1000), // tin
+		this.exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 6 * (1000 * 1000), // tin
 				7 * (1000 * 1000), // tout
 				3, 2); // eoi, ess
 	}
@@ -83,7 +83,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(this.traceId);
+		final ExecutionTrace executionTrace = new ExecutionTrace(this.TRACE_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -217,8 +217,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(this.traceId);
-		final Execution exec1_1__catalog_getBook__broken = this.executionFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 2 * (1000 * 1000), // tin
+		final ExecutionTrace executionTrace = new ExecutionTrace(this.TRACE_ID);
+		final Execution exec1_1__catalog_getBook__broken = this.executionFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 2 * (1000 * 1000), // tin
 				4 * (1000 * 1000), // tout
 				1, 3); // eoi, ess
 		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
@@ -340,7 +340,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(this.traceId);
+		final ExecutionTrace executionTrace = new ExecutionTrace(this.TRACE_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -393,7 +393,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * pending traces within the filter.
 		 */
 		final int TRIGGER_TRACE_LENGTH_MILLIS = 1;
-		final long triggerTraceId = this.traceId + 1;
+		final long triggerTraceId = this.TRACE_ID + 1;
 		final Execution exec0_0__bookstore_searchBook__trigger = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId,
 				incompleteExecutionTrace.getMaxTout(), // tin
 				incompleteExecutionTrace.getMaxTout() + (TRIGGER_TRACE_LENGTH_MILLIS * (1000 * 1000)), // tout

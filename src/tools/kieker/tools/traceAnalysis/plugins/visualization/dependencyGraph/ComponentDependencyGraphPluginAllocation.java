@@ -49,7 +49,7 @@ import org.apache.commons.logging.LogFactory;
 public class ComponentDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponent> {
 
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
-	private final String CONTAINER_NODE_ID_PREFIX = "container";
+	private static final String CONTAINER_NODE_ID_PREFIX = "container";
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;

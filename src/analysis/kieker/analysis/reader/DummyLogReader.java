@@ -33,7 +33,7 @@ import kieker.common.record.OperationExecutionRecord;
  * @author matthias
  */
 public class DummyLogReader extends AbstractMonitoringReader {
-	private final int i = 1;
+	private static final int I = 1;
 	private volatile boolean initShutdown = false;
 
 	/**
@@ -52,7 +52,7 @@ public class DummyLogReader extends AbstractMonitoringReader {
 				Logger.getLogger(DummyLogReader.class.getName()).log(Level.SEVERE, null, ex);
 			}
 
-			final OperationExecutionRecord testRecord = new OperationExecutionRecord("ComponentA", "OperationA", this.i, startTime, System.nanoTime());
+			final OperationExecutionRecord testRecord = new OperationExecutionRecord("ComponentA", "OperationA", this.I, startTime, System.nanoTime());
 			deliverRecord(testRecord);
 		}
 		return true;

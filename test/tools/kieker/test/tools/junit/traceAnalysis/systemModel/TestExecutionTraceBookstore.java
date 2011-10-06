@@ -46,7 +46,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	private static final Log LOG = LogFactory.getLog(TestExecutionTraceBookstore.class);
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
-	private final long traceId = 69898l;
+	private static final long TRACE_ID = 69898l;
 	private final long minTin;
 	private final long maxTout;
 	private final int numExecutions;
@@ -62,22 +62,22 @@ public class TestExecutionTraceBookstore extends TestCase {
 
 		/* Manually create Executions for a trace */
 		numExecutions_l++;
-		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", this.traceId, 1, // tin
+		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", this.TRACE_ID, 1, // tin
 				10, // tout
 				0, 0); // eoi, ess
 		this.minTin = this.exec0_0__bookstore_searchBook.getTin();
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
 		numExecutions_l++;
-		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 2, // tin
+		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 2, // tin
 				4, // tout
 				1, 1); // eoi, ess
 		numExecutions_l++;
-		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", this.traceId, 5, // tin
+		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", this.TRACE_ID, 5, // tin
 				8, // tout
 				2, 1); // eoi, ess
 		numExecutions_l++;
-		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 6, // tin
+		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 6, // tin
 				7, // tout
 				3, 2); // eoi, ess
 		this.numExecutions = numExecutions_l;
@@ -88,7 +88,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(this.traceId);
+		final ExecutionTrace executionTrace = new ExecutionTrace(this.TRACE_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -180,7 +180,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		/*
 		 * Validate Message Trace representation.
 		 */
-		Assert.assertEquals("Invalid traceId", messageTrace.getTraceId(), this.traceId);
+		Assert.assertEquals("Invalid traceId", messageTrace.getTraceId(), this.TRACE_ID);
 		final Vector<Message> msgVector = messageTrace.getSequenceAsVector();
 		Assert.assertEquals("Invalid number of messages in trace", msgVector.size(), this.numExecutions * 2);
 		final Message[] msgArray = msgVector.toArray(new Message[msgVector.size()]);
@@ -270,7 +270,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		try {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
-			final Execution exec4_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 9, // tin
+			final Execution exec4_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 9, // tin
 					10, // tout
 					4, 1); // eoi, ess
 			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
@@ -300,8 +300,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(this.traceId);
-		final Execution exec1_1__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 2, // tin
+		final ExecutionTrace executionTrace = new ExecutionTrace(this.TRACE_ID);
+		final Execution exec1_1__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 2, // tin
 				4, // tout
 				1, 3); // eoi, ess
 		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
@@ -361,8 +361,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(this.traceId);
-		final Execution exec3_2__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.traceId, 6, // tin
+		final ExecutionTrace executionTrace = new ExecutionTrace(this.TRACE_ID);
+		final Execution exec3_2__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", this.TRACE_ID, 6, // tin
 				7, // tout
 				4, 2); // eoi, ess
 		Assert.assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(this.exec3_2__catalog_getBook));

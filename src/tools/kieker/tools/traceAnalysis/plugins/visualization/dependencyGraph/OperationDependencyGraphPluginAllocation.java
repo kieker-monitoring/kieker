@@ -54,9 +54,9 @@ import org.apache.commons.logging.LogFactory;
 public class OperationDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponentOperationPair> {
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAllocation.class);
+	private final static String COMPONENT_NODE_ID_PREFIX = "component_";
+	private final static String CONTAINER_NODE_ID_PREFIX = "container_";
 	private final AllocationComponentOperationPairFactory pairFactory;
-	private final String COMPONENT_NODE_ID_PREFIX = "component_";
-	private final String CONTAINER_NODE_ID_PREFIX = "container_";
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
