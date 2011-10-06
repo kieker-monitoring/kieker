@@ -410,9 +410,11 @@
 
         <!-- Checks for illegal tokens. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
+        <!-- KIEKER off
         <module name="IllegalToken">
             <property name="tokens" value="LITERAL_SWITCH, POST_INC, POST_DEC"/>
         </module>
+        !-->
 
         <!-- Checks for illegal token text. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->

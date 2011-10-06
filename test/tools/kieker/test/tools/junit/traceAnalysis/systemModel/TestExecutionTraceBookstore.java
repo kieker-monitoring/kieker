@@ -266,7 +266,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		try {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
-			final Execution exec4_1__catalog_getBook = this.eFactory
+			final Execution exec4_1__catalog_getBook = this.eFactory // NOCS
 					.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, 10, 4, 1); // NOCS (MagicNumberCheck)
 			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 			executionTrace.add(exec4_1__catalog_getBook);
