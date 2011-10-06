@@ -21,20 +21,19 @@
 package kieker.tools.currentTimeEventGenerator;
 
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  * Generates time events with a given resolution based on the timestamps of
- * incoming {@link IMonitoringRecord}s.
+ * incoming {@link kieker.common.record.IMonitoringRecord}s.
  * 
  * <ol>
  * <li>The first record received via {@link #newTimestamp(long)} immediately leads to a new {@link TimestampEvent} with the given timestamp.</li>
  * <li>The timestamp of the first record is stored as {@link #firstTimestamp} and future events are generated at {@link #firstTimestamp} + i *
  * {@link #timerResolution}.</li>
- * <li>Future {@link IMonitoringRecord} may lead to future {@link TimestampEvent} as follows:
+ * <li>Future {@link kieker.common.record.IMonitoringRecord} may lead to future {@link TimestampEvent} as follows:
  * <ol>
  * <li>A newly incoming {@link IMonitoringRecord} with logging timestamp {@literal tstamp} leads to the new timer events satisfying {@link #firstTimestamp} + i *
  * {@link #timerResolution} {@literal <} {@literal tstamp}.</li>

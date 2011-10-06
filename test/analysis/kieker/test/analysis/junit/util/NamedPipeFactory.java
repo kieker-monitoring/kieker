@@ -26,8 +26,6 @@ import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 /**
  * 
@@ -39,7 +37,7 @@ public class NamedPipeFactory {
 	private final static String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
 
 	/**
-	 * This method should be used in tests to generate unique names for {@link Configuration}s with {@link PipeWriter}s and {@link java.io.PipedReader}s
+	 * This method should be used in tests to generate unique names for {@link kieker.monitoring.core.configuration.Configuration}s with {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter}s and {@link java.io.PipedReader}s
 	 * in order to avoid naming conflicts.
 	 * 
 	 * @return a unique name

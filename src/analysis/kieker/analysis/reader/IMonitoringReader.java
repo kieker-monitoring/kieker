@@ -20,7 +20,6 @@
 
 package kieker.analysis.reader;
 
-import kieker.analysis.AnalysisController;
 import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
@@ -44,7 +43,7 @@ public interface IMonitoringReader {
 
 	/**
 	 * Adds the given record receiver. This method is only used by the framework
-	 * and should not be called manually to register a receiver. Use an {@link AnalysisController} instead.
+	 * and should not be called manually to register a receiver. Use an {@link kieker.analysis.AnalysisController} instead.
 	 * 
 	 * @param receiver
 	 *            the receiver
