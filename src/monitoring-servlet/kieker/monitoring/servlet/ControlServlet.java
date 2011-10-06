@@ -118,7 +118,7 @@ public class ControlServlet extends HttpServlet {
 		}
 
 		if (!connectorError) {
-			if (action.equals("setExperimentId")) {
+			if (action.equals("setExperimentId")) { // NOCS (EqualsAvoidNullCheck)
 				final String expimentIdString = request.getParameter("experimentID");
 				if ((expimentIdString != null) && (expimentIdString.length() != 0)) {
 					try {
@@ -134,27 +134,27 @@ public class ControlServlet extends HttpServlet {
 				/*
 				 * action = incExperimentId
 				 */
-			} else if (action.equals("incExperimentId")) {
+			} else if (action.equals("incExperimentId")) { // NOCS (EqualsAvoidNullCheck)
 				ControlServlet.CTRL_INST.incExperimentId();
 				/*
 				 * action = enable
 				 */
-			} else if (action.equals("enable")) {
+			} else if (action.equals("enable")) { // NOCS (EqualsAvoidNullCheck)
 				ControlServlet.CTRL_INST.enableMonitoring();
 				/*
 				 * action = disable
 				 */
-			} else if (action.equals("disable")) {
+			} else if (action.equals("disable")) { // NOCS (EqualsAvoidNullCheck)
 				ControlServlet.CTRL_INST.disableMonitoring();
 				/*
 				 * action = terminate
 				 */
-			} else if (action.equals("terminate")) {
+			} else if (action.equals("terminate")) { // NOCS (EqualsAvoidNullCheck)
 				ControlServlet.CTRL_INST.terminateMonitoring();
 				/*
 				 * action = ...
 				 */
-			} else if (action.equals("insertTestData")) {
+			} else if (action.equals("insertTestData")) { // NOCS (EqualsAvoidNullCheck)
 				ControlServlet.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSession(true).getId());
 				ControlServlet.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) { // NOCS

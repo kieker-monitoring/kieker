@@ -113,22 +113,22 @@ public class FilesystemLogReplayerStarter {
 		/* 2.) init keepOriginalLoggingTimestamps */
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 				FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
-		if (!(keepOriginalLoggingTimestampsOptValStr.equals("true") || keepOriginalLoggingTimestampsOptValStr.equals("false"))) {
+		if (!(keepOriginalLoggingTimestampsOptValStr.equals("true") || keepOriginalLoggingTimestampsOptValStr.equals("false"))) { // NOCS (EqualsAvoidNullCheck)
 			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '"
 					+ keepOriginalLoggingTimestampsOptValStr + "'");
 			retVal = false;
 		}
-		FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestampsOptValStr.equals("true");
+		FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestampsOptValStr.equals("true"); // NOCS (EqualsAvoidNullCheck)
 		FilesystemLogReplayerStarter.LOG.info("Keeping original logging timestamps: "
 				+ (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
 
 		/* 3.) init realtimeMode */
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME, "false");
-		if (!(realtimeOptValStr.equals("true") || realtimeOptValStr.equals("false"))) {
+		if (!(realtimeOptValStr.equals("true") || realtimeOptValStr.equals("false"))) { // NOCS (EqualsAvoidNullCheck)
 			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
 			retVal = false;
 		}
-		FilesystemLogReplayerStarter.realtimeMode = realtimeOptValStr.equals("true");
+		FilesystemLogReplayerStarter.realtimeMode = realtimeOptValStr.equals("true"); // NOCS (EqualsAvoidNullCheck)
 
 		/* 4.) init numRealtimeWorkerThreads */
 		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS,
