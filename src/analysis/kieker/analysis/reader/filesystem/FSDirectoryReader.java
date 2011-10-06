@@ -353,7 +353,7 @@ class FSDirectoryReader {
 				typedArray[curIdx] = Byte.valueOf(vec[curIdx]);
 				continue;
 			}
-			if ((clazz == short.class) || (clazz == Short.class)) {
+			if ((clazz == short.class) || (clazz == Short.class)) { // NOPMD
 				typedArray[curIdx] = Short.valueOf(vec[curIdx]); // NOPMD
 				continue;
 			}

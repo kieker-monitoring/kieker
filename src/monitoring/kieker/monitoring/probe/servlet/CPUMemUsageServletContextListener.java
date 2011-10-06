@@ -135,13 +135,12 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 			return;
 		}
 
-		this.initialDelaySeconds = // allowed values: Int>=0
-		this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
+		// allowed values: Int>=0
+		this.initialDelaySeconds = this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
 				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
 
-		this.sensorIntervalSeconds =
 		// allows values: Int>0
-		this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
+		this.sensorIntervalSeconds = this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
 				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
 			CPUMemUsageServletContextListener.LOG.warn("values for the init-param '"

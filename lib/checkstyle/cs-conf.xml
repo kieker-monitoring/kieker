@@ -1091,9 +1091,10 @@
 
         <!-- Checks that there is no whitespace after a token. !-->
         <!-- See http://checkstyle.sf.net/config_whitespace.html !-->
+        <!-- KIEKER removed ARRAY_INIT !-->
         <module name="NoWhitespaceAfter">
             <property name="allowLineBreaks" value="true"/>
-            <property name="tokens"          value="ARRAY_INIT, BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS"/>
+            <property name="tokens"          value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS"/>
         </module>
 
         <!-- Checks that there is no whitespace before a token. !-->
