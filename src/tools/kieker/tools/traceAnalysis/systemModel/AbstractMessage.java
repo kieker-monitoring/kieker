@@ -27,7 +27,8 @@ package kieker.tools.traceAnalysis.systemModel;
 public abstract class AbstractMessage {
 
 	private final long timestamp;
-	private final Execution sendingExecution, receivingExecution;
+	private final Execution sendingExecution;
+	private final Execution receivingExecution;
 
 	protected AbstractMessage() {
 		this.timestamp = -1;

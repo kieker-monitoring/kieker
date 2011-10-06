@@ -34,6 +34,11 @@ public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumerPlug
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 
+	/**
+	 * Constructs a {@link MonitoringRecordTypeLogger}.
+	 */
+	public MonitoringRecordTypeLogger() { }
+	
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
 		return null; // receive records of any type

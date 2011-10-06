@@ -33,6 +33,11 @@ public final class SilentCountingRecordConsumer implements IMonitoringRecordCons
 
 	private final AtomicLong counter = new AtomicLong();
 
+	/**
+	 * Constructs a {@link SilentCountingRecordConsumer}.
+	 */
+	public SilentCountingRecordConsumer() {	}
+	
 	@Override
 	public final Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
 		return null;

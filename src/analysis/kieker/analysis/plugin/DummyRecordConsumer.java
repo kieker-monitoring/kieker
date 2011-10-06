@@ -30,6 +30,11 @@ import kieker.common.record.IMonitoringRecord;
  */
 public class DummyRecordConsumer implements IMonitoringRecordConsumerPlugin {
 
+	/**
+	 * Constructs a {@link DummyRecordConsumer}.
+	 */
+	public DummyRecordConsumer() {}
+
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
 		return null; // receive records of any type

@@ -22,6 +22,7 @@ package kieker.analysis;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
@@ -58,11 +59,11 @@ public class AnalysisController {
 	 * this are the consumers for data that are coming into kieker by readers
 	 * (files or system under monitoring)
 	 */
-	private final Vector<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
+	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
 	/** Contains all consumers which consume records of any type */
 	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new Vector<IMonitoringRecordConsumerPlugin>();
 	/** Contains mapping of record types to subscribed consumers */
-	private final HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
+	private final Map<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
 	private final Collection<IAnalysisPlugin> plugins = new Vector<IAnalysisPlugin>();
 
 	/**
@@ -70,6 +71,11 @@ public class AnalysisController {
 	 */
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
+	/**
+	 * Constructs an {@link AnalysisController} instance.
+	 */
+	public AnalysisController() { }
+	
 	/**
 	 * Starts an {@link AnalysisController} instance and returns after the
 	 * configured reader finished reading and all analysis plug-ins terminated;
@@ -129,7 +135,7 @@ public class AnalysisController {
 					success = false;
 				}
 			}
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { //NOCS
 			AnalysisController.LOG.fatal("Error occurred: " + exc.getMessage());
 			success = false;
 		} finally {
@@ -139,7 +145,7 @@ public class AnalysisController {
 				for (final IAnalysisPlugin c : this.plugins) {
 					c.terminate(!success); // normal termination (w/o error)
 				}
-			} catch (final Exception e) {
+			} catch (final Exception e) { //NOCS
 				AnalysisController.LOG.error("Error during termination: " + e.getMessage(), e);
 			}
 		}
@@ -228,14 +234,15 @@ public class AnalysisController {
 	 *             consumer reported an error
 	 */
 	private final boolean deliverRecordToConsumers(final IMonitoringRecord monitoringRecord, final boolean abortOnConsumerError) {
-
+		final String consumerErrorMsg = "Consumer returned false. Aborting delivery of record. ";
+		
 		boolean success = true;
 
 		for (final IMonitoringRecordConsumerPlugin c : this.anyTypeConsumers) {
 			if (!c.newMonitoringRecord(monitoringRecord)) {
 				success = false;
 				if (abortOnConsumerError) {
-					AnalysisController.LOG.warn("Consumer returned false. Aborting delivery of record. ");
+					AnalysisController.LOG.warn(consumerErrorMsg);
 					return false;
 				}
 			}
@@ -246,7 +253,7 @@ public class AnalysisController {
 				if (!c.newMonitoringRecord(monitoringRecord)) {
 					success = false;
 					if (abortOnConsumerError) {
-						AnalysisController.LOG.warn("Consumer returned false. Aborting delivery of record. ");
+						AnalysisController.LOG.warn(consumerErrorMsg);
 						return false;
 					}
 				}
