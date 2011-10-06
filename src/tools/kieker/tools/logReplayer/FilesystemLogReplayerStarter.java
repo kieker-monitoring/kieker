@@ -150,8 +150,8 @@ public class FilesystemLogReplayerStarter {
 		}
 
 		/* 5.) init ignoreRecordsBefore/After */
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat(FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN);
-		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN); //NOCS
+		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
 			final String ignoreRecordsBeforeTimestampString = FilesystemLogReplayerStarter.cmdl.getOptionValue(
@@ -159,15 +159,15 @@ public class FilesystemLogReplayerStarter {
 			final String ignoreRecordsAfterTimestampString = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 					FilesystemLogReplayerStarter.CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
-				final Date ignoreBeforeDate = m_ISO8601UTC.parse(ignoreRecordsBeforeTimestampString);
+				final Date ignoreBeforeDate = dateFormat_ISO8601UTC.parse(ignoreRecordsBeforeTimestampString);
 				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-				FilesystemLogReplayerStarter.LOG.info("Ignoring records before " + m_ISO8601UTC.format(ignoreBeforeDate) + " ("
+				FilesystemLogReplayerStarter.LOG.info("Ignoring records before " + dateFormat_ISO8601UTC.format(ignoreBeforeDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp + ")");
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
-				final Date ignoreAfterDate = m_ISO8601UTC.parse(ignoreRecordsAfterTimestampString);
+				final Date ignoreAfterDate = dateFormat_ISO8601UTC.parse(ignoreRecordsAfterTimestampString);
 				FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-				FilesystemLogReplayerStarter.LOG.info("Ignoring records after " + m_ISO8601UTC.format(ignoreAfterDate) + " ("
+				FilesystemLogReplayerStarter.LOG.info("Ignoring records after " + dateFormat_ISO8601UTC.format(ignoreAfterDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp + ")");
 			}
 		} catch (final java.text.ParseException ex) {

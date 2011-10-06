@@ -70,9 +70,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties properties = new Properties(super.getDefaultProperties());
-		final String PREFIX = this.getClass().getName() + "."; // can't use this.PREFIX, maybe uninitialized
-		properties.setProperty(PREFIX + AbstractAsyncWriter.QUEUESIZE, "10000");
-		properties.setProperty(PREFIX + AbstractAsyncWriter.BEHAVIOR, "0");
+		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
+		properties.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
+		properties.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
 		return properties;
 	}
 

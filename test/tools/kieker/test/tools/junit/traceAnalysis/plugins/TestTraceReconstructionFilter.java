@@ -396,11 +396,11 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * We will use this execution to trigger the timeout check for
 		 * pending traces within the filter.
 		 */
-		final int TRIGGER_TRACE_LENGTH_MILLIS = 1;
+		final int triggerTraceLengthMillis = 1;
 		final long triggerTraceId = TestTraceReconstructionFilter.TRACE_ID + 1;
 		final Execution exec0_0__bookstore_searchBook__trigger = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId,
 				incompleteExecutionTrace.getMaxTout(), // tin
-				incompleteExecutionTrace.getMaxTout() + (TRIGGER_TRACE_LENGTH_MILLIS * (1000 * 1000)), // tout
+				incompleteExecutionTrace.getMaxTout() + (triggerTraceLengthMillis * (1000 * 1000)), // tout
 				0, 0); // eoi, ess
 		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId);
 		final MessageTrace triggerMessageTrace;

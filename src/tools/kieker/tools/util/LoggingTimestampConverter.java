@@ -51,9 +51,9 @@ public class LoggingTimestampConverter {
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
 		final GregorianCalendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2);
-		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return m_ISO8601UTC.format(c.getTime()) + " (UTC)";
+		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2); //NOCS
+		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		return dateFormat_ISO8601UTC.format(c.getTime()) + " (UTC)";
 	}
 
 	/**
@@ -70,8 +70,8 @@ public class LoggingTimestampConverter {
 	public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
 		final GregorianCalendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2);
-		return m_ISO8601UTC.format(c.getTime()) + " (local time)";
+		final DateFormat dateFormat_ISO8601LOCAL = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2); //NOCS
+		return dateFormat_ISO8601LOCAL.format(c.getTime()) + " (local time)";
 	}
 
 	/**
@@ -84,9 +84,9 @@ public class LoggingTimestampConverter {
 	 * @throws ParseException
 	 */
 	public static final long convertDatetimeStringToUTCLoggingTimestamp(final String utcString) throws ParseException {
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN);
-		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return m_ISO8601UTC.parse(utcString).getTime();
+		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN); //NOCS
+		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC")); //NOCS
+		return dateFormat_ISO8601UTC.parse(utcString).getTime();
 	}
 
 	/**
@@ -98,8 +98,8 @@ public class LoggingTimestampConverter {
 	 * @throws ParseException
 	 */
 	public static final Date convertDatetimeStringToUTCDate(final String utcString) throws ParseException {
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN);
-		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return m_ISO8601UTC.parse(utcString);
+		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN);
+		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC")); //NOCS
+		return dateFormat_ISO8601UTC.parse(utcString);
 	}
 }

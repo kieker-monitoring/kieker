@@ -104,9 +104,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-		date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date_ISO8601UTC.format(new java.util.Date());
+		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); //NOCS
+		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final String dateStr = dateFormat_ISO8601UTC.format(new java.util.Date());
 		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
@@ -127,18 +127,18 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		final Object[] recordFields = monitoringRecord.toArray();
-		final int LAST_FIELD_INDEX = recordFields.length - 1;
+		final int lastFieldIndex = recordFields.length - 1;
 		final StringBuilder sb = new StringBuilder(256);
 		sb.append('$');
 		sb.append(this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()));
 		sb.append(';');
 		sb.append(monitoringRecord.getLoggingTimestamp());
-		if (LAST_FIELD_INDEX > 0) {
+		if (lastFieldIndex > 0) {
 			sb.append(';');
 		}
-		for (int i = 0; i <= LAST_FIELD_INDEX; i++) {
+		for (int i = 0; i <= lastFieldIndex; i++) {
 			sb.append(recordFields[i]);
-			if (i < LAST_FIELD_INDEX) {
+			if (i < lastFieldIndex) {
 				sb.append(';');
 			}
 		}
@@ -164,9 +164,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			}
 			this.entriesInCurrentFileCounter = 1;
 
-			final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
-			date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = date_ISO8601UTC.format(new java.util.Date());
+			final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); //NOCS
+			dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+			final String dateStr = dateFormat_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);

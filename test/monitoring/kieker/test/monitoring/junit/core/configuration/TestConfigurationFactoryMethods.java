@@ -33,6 +33,8 @@ import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
  */
 public class TestConfigurationFactoryMethods extends TestCase {
 
+	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.properties.test";
+	
 	private void testValues(final Configuration configuration) {
 		Assert.assertNotNull("Configuration is null", configuration);
 		// Monitoring controller
@@ -104,8 +106,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Tests {@link Configuration#createConfigurationFromFile(String)}.
 	 */
 	public void testCreationfromFile() {
-		final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.properties.test";
-		final Configuration configuration = Configuration.createConfigurationFromFile(EXAMPLE_CONFIG_FILE_IN_TRUNK);
+		final Configuration configuration = Configuration.createConfigurationFromFile(TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
 		this.testValues(configuration);
 		Assert.assertEquals("KIEKER-TEST", configuration.getProperty(Configuration.CONTROLLER_NAME));
 	}

@@ -56,10 +56,10 @@ class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregate
 
 	@Override
 	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final SynchronousCallMessage callMsg) {
-		final AssemblyComponent AssemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
 		final AssemblyComponentOperationPair destination = // will never be null!
-		this.pairFactory.getPairInstanceByPair(AssemblyComponent, op);
+		this.pairFactory.getPairInstanceByPair(assemblyComponent, op);
 		WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AssemblyComponentOperationPair> n;
 		if (e != null) {
