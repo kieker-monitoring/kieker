@@ -432,7 +432,7 @@
                                                             java.util.TreeMap, java.util.Vector"/>
             <property name="legalAbstractClassNames" value=""/>
             <property name="ignoredMethodNames"      value="getInitialContext, getEnvironment"/>
-            <property name="format"                  value=""/>
+            <property name="format"                  value="XXX"/>
         </module>
 
         <!-- Checks for assignments in subexpressions, such as in String s = Integer.toString(i = 2);. !-->
