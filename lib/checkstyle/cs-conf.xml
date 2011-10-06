@@ -77,6 +77,7 @@
     <!-- Checks that each Java package has a Javadoc file used for commenting. !-->
     <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocPackage !-->
     <module name="JavadocPackage">
+        <property name="severity" value="info"/>
         <property name="allowLegacy" value="false"/>
     </module>
 
@@ -634,6 +635,7 @@
         <!-- Checks to ensure that the javadoc tags exist (if required) !-->
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocMethod !-->
         <module name="JavadocMethod">
+            <property name="severity" value="info"/>
             <property name="scope"                        value="private"/>
             <!--
             <property name="excludeScope"                 value=""/>
@@ -653,6 +655,7 @@
         <!-- Validates Javadoc comments to help ensure they are well formed. !-->
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocStyle !-->
         <module name="JavadocStyle">
+            <property name="severity" value="info"/>
             <property name="scope"               value="private"/>
             <!--
             <property name="excludeScope"        value=""/>
@@ -667,6 +670,7 @@
         <!-- Checks Javadoc comments for class and interface definitions. !-->
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocType !-->
         <module name="JavadocType">
+            <property name="severity" value="info"/>
             <property name="scope"                 value="private"/>
             <!--
             <property name="excludeScope"          value=""/>
@@ -681,6 +685,7 @@
         <!-- Checks that variables have Javadoc comments. !-->
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocVariable !-->
         <module name="JavadocVariable">
+            <property name="severity" value="info"/>
             <property name="scope"        value="private"/>
             <!--
             <property name="excludeScope" value=""/>
@@ -691,6 +696,7 @@
         <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#WriteTag !-->
         <!-- KIEKER
         <module name="WriteTag">
+            <property name="severity" value="info"/>
             <property name="tag"         value=""/>
             <property name="tagFormat"   value=""/>
             <property name="tagSeverity" value="info"/>
