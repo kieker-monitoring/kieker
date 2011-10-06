@@ -180,7 +180,6 @@ class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		return;
 	}
 
 	/*

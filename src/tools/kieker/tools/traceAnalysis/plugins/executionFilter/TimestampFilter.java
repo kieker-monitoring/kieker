@@ -85,7 +85,7 @@ public class TimestampFilter implements IAnalysisPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		return; // do nothing
+		// do nothing
 	}
 
 }

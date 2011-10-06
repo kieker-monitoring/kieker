@@ -128,7 +128,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	@Override
 	public void terminate(final boolean error) {
-		return; // do nothing
+		// do nothing
 	}
 
 	public HashMap<ExecutionTrace, Integer> getEquivalenceClassMap() {
