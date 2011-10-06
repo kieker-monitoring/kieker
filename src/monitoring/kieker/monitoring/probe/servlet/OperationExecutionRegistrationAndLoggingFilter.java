@@ -76,7 +76,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	 * 
 	 */
 	public final String getSessionId(final HttpServletRequest httpReq) {
-		final HttpSession session = (httpReq).getSession(false);
+		final HttpSession session = httpReq.getSession(false);
 		if (session != null) {
 			return session.getId();
 		} else {

@@ -100,6 +100,6 @@ public class LoggingTimestampConverter {
 	public static final Date convertDatetimeStringToUTCDate(final String utcString) throws ParseException {
 		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN);
 		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return (m_ISO8601UTC.parse(utcString));
+		return m_ISO8601UTC.parse(utcString);
 	}
 }
