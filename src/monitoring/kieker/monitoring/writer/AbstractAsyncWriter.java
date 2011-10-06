@@ -43,7 +43,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	private static final String BEHAVIOR = "QueueFullBehavior";
 
 	// internal variables
-	private final String PREFIX;
+	private final String prefix;
 	private final List<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final int queueFullBehavior;
@@ -51,17 +51,17 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	protected AbstractAsyncWriter(final Configuration configuration) {
 		super(configuration);
-		this.PREFIX = this.getClass().getName() + ".";
+		this.prefix = this.getClass().getName() + ".";
 
-		final int queueFullBehavior = this.configuration.getIntProperty(this.PREFIX + AbstractAsyncWriter.BEHAVIOR);
+		final int queueFullBehavior = this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.BEHAVIOR);
 		if ((queueFullBehavior < 0) || (queueFullBehavior > 2)) {
-			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehavior + "' for " + this.PREFIX + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
+			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehavior + "' for " + this.prefix + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehavior;
 		}
 		this.missedRecords = new AtomicInteger(0);
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.PREFIX + AbstractAsyncWriter.QUEUESIZE));
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.QUEUESIZE));
 	}
 
 	/**

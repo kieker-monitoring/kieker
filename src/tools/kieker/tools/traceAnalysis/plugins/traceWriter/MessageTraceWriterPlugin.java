@@ -76,10 +76,10 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 
 	@Override
 	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.MessageTraceInputPort;
+		return this.messageTraceInputPort;
 	}
 
-	private final IInputPort<MessageTrace> MessageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
 
 		@Override
 		public void newEvent(final MessageTrace mt) {

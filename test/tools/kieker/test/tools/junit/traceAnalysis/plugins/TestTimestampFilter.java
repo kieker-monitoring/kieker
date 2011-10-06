@@ -38,8 +38,8 @@ public class TestTimestampFilter extends TestCase {
 
 	// private static final Log log = LogFactory.getLog(TestTimestampFilter.class);
 
-	private volatile long IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = 50;
-	private volatile long IGNORE_EXECUTIONS_AFTER_TIMESTAMP = 100;
+	private static final long IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = 50;
+	private static final long IGNORE_EXECUTIONS_AFTER_TIMESTAMP = 100;
 
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
@@ -50,11 +50,11 @@ public class TestTimestampFilter extends TestCase {
 	 * &gt; a </i>, <i>r.tout &lt; b</i> does not pass the filter.
 	 */
 	public void testRecordTinBeforeToutWithinIgnored() {
-		final TimestampFilter filter = new TimestampFilter(this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
-				this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
-				this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
+				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
 				0, 0); // eoi, ess
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
@@ -70,7 +70,7 @@ public class TestTimestampFilter extends TestCase {
 			}
 		});
 		filter.getExecutionInputPort().newEvent(exec);
-		Assert.assertFalse("Filter passed execution " + exec + " although tin timestamp before" + this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, filterPassedRecord.get());
+		Assert.assertFalse("Filter passed execution " + exec + " although tin timestamp before" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, filterPassedRecord.get());
 	}
 
 	/**
@@ -79,11 +79,11 @@ public class TestTimestampFilter extends TestCase {
 	 * &lt; b</i> and <i>r.tout &gt; b </i> does not pass the filter.
 	 */
 	public void testRecordTinWithinToutAfterIgnored() {
-		final TimestampFilter filter = new TimestampFilter(this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 
 		final Execution exec = this.eFactory.genExecution(15, // traceId (value not important)
-				this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
-				this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + 1, // tout
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
+				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + 1, // tout
 				0, 0); // eoi, ess
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
@@ -99,7 +99,7 @@ public class TestTimestampFilter extends TestCase {
 			}
 		});
 		filter.getExecutionInputPort().newEvent(exec);
-		Assert.assertFalse("Filter passed execution " + exec + " although tout timestamp after" + this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, filterPassedRecord.get());
+		Assert.assertFalse("Filter passed execution " + exec + " although tout timestamp after" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, filterPassedRecord.get());
 	}
 
 	/**
@@ -108,11 +108,11 @@ public class TestTimestampFilter extends TestCase {
 	 * does pass the filter.
 	 */
 	public void testRecordTinToutOnBordersPassed() {
-		final TimestampFilter filter = new TimestampFilter(this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
-				this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, // tin
-				this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, // tout
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, // tin
+				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, // tout
 				0, 0); // eoi, ess
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
@@ -129,8 +129,8 @@ public class TestTimestampFilter extends TestCase {
 			}
 		});
 		filter.getExecutionInputPort().newEvent(exec);
-		Assert.assertTrue("Filter didn't pass execution " + exec + " although timestamps within range [" + this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + ","
-				+ this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]", filterPassedRecord.get());
+		Assert.assertTrue("Filter didn't pass execution " + exec + " although timestamps within range [" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + ","
+				+ TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]", filterPassedRecord.get());
 	}
 
 	/**
@@ -139,11 +139,11 @@ public class TestTimestampFilter extends TestCase {
 	 * and <i>r.tout &lt; b </i>, <i>r.tout &gt; a </i> does pass the filter.
 	 */
 	public void testRecordTinToutWithinRangePassed() {
-		final TimestampFilter filter = new TimestampFilter(this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
-				this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
-				this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
+				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
 				0, 0); // eoi, ess
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
@@ -160,7 +160,7 @@ public class TestTimestampFilter extends TestCase {
 			}
 		});
 		filter.getExecutionInputPort().newEvent(exec);
-		Assert.assertTrue("Filter didn't pass execution " + exec + " although timestamps within range [" + this.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + ","
-				+ this.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]", filterPassedRecord.get());
+		Assert.assertTrue("Filter didn't pass execution " + exec + " although timestamps within range [" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + ","
+				+ TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]", filterPassedRecord.get());
 	}
 }

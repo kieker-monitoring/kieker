@@ -59,7 +59,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	// private final AtomicBoolean isTerminated = new AtomicBoolean(false);
 	private final AtomicBoolean errorOccurred = new AtomicBoolean(false);
-	private final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
+	private final static IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
 
 	public FSReaderCons(final IMonitoringRecordReceiver master, final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
 		this.master = master;
@@ -86,7 +86,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 				this.orderRecordBuffer.notifyAll(); // notify main thread of
 													// new record
 			}
-			if (monitoringRecord != this.FS_READER_TERMINATION_MARKER) {
+			if (monitoringRecord != FSReaderCons.FS_READER_TERMINATION_MARKER) {
 				myLatch.await(); // countDown will be called by main thread
 			}
 
@@ -112,7 +112,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 								directoryReader.read(); // throws an Exception
 														// on error
 								// signal termination:
-								FSReaderCons.this.newMonitoringRecord(FSReaderCons.this.FS_READER_TERMINATION_MARKER);
+								FSReaderCons.this.newMonitoringRecord(FSReaderCons.FS_READER_TERMINATION_MARKER);
 							} catch (final Exception ex) {
 								FSReaderCons.LOG.error(directoryReader, ex);
 								FSReaderCons.this.reportReaderException(ex);
@@ -150,7 +150,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 					// this.nextRecordsFromReaders.firstEntry(); // do not
 					// poll since FS_READER_TERMINATION_MARKER remains in
 					// list
-					if (nextRecord == this.FS_READER_TERMINATION_MARKER) {
+					if (nextRecord == FSReaderCons.FS_READER_TERMINATION_MARKER) {
 						FSReaderCons.LOG.info("All reader threads provided FS_READER_TERMINATION_MARKER");
 						/**
 						 * This must remain the only place we leave this method!
@@ -242,10 +242,10 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 					final IMonitoringRecord t = e.getRecord();
 					final IMonitoringRecord t1 = e1.getRecord();
 
-					if (t == FSReaderCons.this.FS_READER_TERMINATION_MARKER) {
+					if (t == FSReaderCons.FS_READER_TERMINATION_MARKER) {
 						return 1;
 					}
-					if (t1 == FSReaderCons.this.FS_READER_TERMINATION_MARKER) {
+					if (t1 == FSReaderCons.FS_READER_TERMINATION_MARKER) {
 						return -1;
 					}
 					/*

@@ -76,10 +76,10 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 
 	@Override
 	public IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort() {
-		return this.InvalidExecutionTraceInputPort;
+		return this.invalidExecutionTraceInputPort;
 	}
 
-	private final IInputPort<InvalidExecutionTrace> InvalidExecutionTraceInputPort = new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
+	private final IInputPort<InvalidExecutionTrace> invalidExecutionTraceInputPort = new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
 
 		@Override
 		public void newEvent(final InvalidExecutionTrace et) {
