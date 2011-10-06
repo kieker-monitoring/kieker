@@ -234,7 +234,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	// }
 	// }
 
-	private final TreeMap<OrderRecordBufferElement, CountDownLatch> orderRecordBuffer = new TreeMap<OrderRecordBufferElement, CountDownLatch>(
+	private final TreeMap<OrderRecordBufferElement, CountDownLatch> orderRecordBuffer = new TreeMap<OrderRecordBufferElement, CountDownLatch>( // NOCS (IllegalTypeCheck)
 			new Comparator<OrderRecordBufferElement>() {
 
 				@Override

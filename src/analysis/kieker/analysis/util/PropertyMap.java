@@ -21,6 +21,7 @@
 package kieker.analysis.util;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
@@ -35,12 +36,12 @@ import org.apache.commons.logging.LogFactory;
 public class PropertyMap {
 	private static final Log LOG = LogFactory.getLog(PropertyMap.class);
 
-	private final HashMap<String, String> map = new HashMap<String, String>();
+	private final Map<String, String> map = new HashMap<String, String>();
 
 	/**
 	 * @return the map
 	 */
-	public final HashMap<String, String> getMap() {
+	public final Map<String, String> getMap() {
 		return this.map;
 	}
 

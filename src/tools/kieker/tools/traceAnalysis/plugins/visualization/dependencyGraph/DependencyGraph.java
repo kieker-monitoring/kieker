@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -31,7 +32,7 @@ public class DependencyGraph<T> {
 
 	// private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
 
-	private final TreeMap<Integer, DependencyGraphNode<T>> nodes = new TreeMap<Integer, DependencyGraphNode<T>>();
+	private final Map<Integer, DependencyGraphNode<T>> nodes = new TreeMap<Integer, DependencyGraphNode<T>>();
 	private final DependencyGraphNode<T> rootNode;
 
 	public DependencyGraph(final int rootNodeId, final T rootEntity) {

@@ -26,6 +26,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -92,7 +93,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabels) {
 
 		/* Component ID x contained operations */
-		final Hashtable<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentId2pairMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>>();
+		final Map<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentId2pairMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>>();
 
 		// Derive component / operation hierarchy
 		for (final DependencyGraphNode<AssemblyComponentOperationPair> pairNode : nodes) {

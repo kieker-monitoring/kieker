@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
@@ -35,7 +36,7 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 
 	// private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
 
-	private final Hashtable<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
+	private final Map<Long, MessageTrace> repo = new Hashtable<Long, MessageTrace>();
 
 	// TODO: handle equivalence classes
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150

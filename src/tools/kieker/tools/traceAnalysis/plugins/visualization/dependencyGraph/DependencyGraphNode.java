@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -31,8 +32,8 @@ public class DependencyGraphNode<T> {
 
 	private final T entity;
 	private final int id;
-	private final TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
-	private final TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
 
 	public DependencyGraphNode(final int id, final T entity) {
 		this.id = id;

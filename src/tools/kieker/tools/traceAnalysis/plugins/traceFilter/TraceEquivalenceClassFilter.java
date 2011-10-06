@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.traceFilter;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -54,7 +55,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	private final Execution rootExecution;
 	private final TraceEquivalenceClassModes equivalenceMode;
 	/** Representative x # of equivalents */
-	private final HashMap<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
+	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
 
 	public TraceEquivalenceClassFilter(final String name, final SystemModelRepository systemEntityFactory, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		super(name, systemEntityFactory);
@@ -131,8 +132,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		// do nothing
 	}
 
-	public HashMap<ExecutionTrace, Integer> getEquivalenceClassMap() {
-		final HashMap<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>();
+	public Map<ExecutionTrace, Integer> getEquivalenceClassMap() {
+		final Map<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>();
 		for (final Entry<AbstractExecutionTraceHashContainer, AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()) {
 			map.put(entry.getKey().getExecutionTrace(), entry.getValue().intValue());
 		}

@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.plugins.traceReconstruction;
 
 import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -51,7 +52,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	/** TraceId x trace */
-	private final Hashtable<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
+	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
 	/** We need to keep track of invalid trace's IDs */
 	private final Set<Long> invalidTraces = new TreeSet<Long>();
 	private volatile long minTin = -1;
@@ -61,7 +62,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
 	/** Pending traces sorted by tin timestamps */
-	private final TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
+	private final TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() { // NOCS (IllegalTypeCheck)
 
 		/** Order traces by tins */
 		@Override

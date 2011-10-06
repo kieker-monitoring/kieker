@@ -27,8 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
@@ -201,14 +202,14 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 			final PrintStream ps, final boolean shortLabels) {
 		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/208
 		// dot node ID x component instance
-		final Vector<AbstractMessage> messages = messageTrace.getSequenceAsVector();
+		final Collection<AbstractMessage> messages = messageTrace.getSequenceAsVector();
 		// preamble:
 		ps.print(".PS" + "\n");
 		ps.print(SequenceDiagramPlugin.SEQUENCE_PIC_CONTENT + "\n");
 		ps.print("boxwid = 1.1;" + "\n");
 		ps.print("movewid = 0.5;" + "\n");
 
-		final TreeSet<Integer> plottedComponentIds = new TreeSet<Integer>();
+		final Set<Integer> plottedComponentIds = new TreeSet<Integer>();
 
 		final AllocationComponent rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
 		final String rootDotId = "O" + rootAllocationComponent.getId();

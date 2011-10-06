@@ -26,6 +26,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -90,7 +91,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponent>> nodes, final PrintStream ps, final boolean shortLabels) {
 
 		/* Execution container ID x DependencyGraphNode */
-		final Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>>();
+		final Map<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>>();
 
 		for (final DependencyGraphNode<AllocationComponent> node : nodes) {
 			final int containerId = node.getEntity().getExecutionContainer().getId();

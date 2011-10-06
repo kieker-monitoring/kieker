@@ -23,9 +23,10 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Stack;
-import java.util.Vector;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
@@ -108,7 +109,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	/** Traverse tree recursively and generate dot code for edges. */
-	private static void dotEdgesFromSubTree(final SystemModelRepository systemEntityFactory, final CallTreeNode n, final Hashtable<CallTreeNode, Integer> nodeIds,
+	private static void dotEdgesFromSubTree(final SystemModelRepository systemEntityFactory, final CallTreeNode n, final Map<CallTreeNode, Integer> nodeIds,
 			final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder();
 		nodeIds.put(n, nextNodeId.i);
@@ -121,7 +122,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	/** Traverse tree recursively and generate dot code for vertices. */
-	private static void dotVerticesFromSubTree(final CallTreeNode n, final Hashtable<CallTreeNode, Integer> nodeIds, final PrintStream ps,
+	private static void dotVerticesFromSubTree(final CallTreeNode n, final Map<CallTreeNode, Integer> nodeIds, final PrintStream ps,
 			final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
 		for (final CallTreeNode child : n.getChildren()) {
@@ -143,7 +144,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		ps.println("digraph G {");
 		final StringBuilder edgestringBuilder = new StringBuilder();
 
-		final Hashtable<CallTreeNode, Integer> nodeIds = new Hashtable<CallTreeNode, Integer>();
+		final Map<CallTreeNode, Integer> nodeIds = new Hashtable<CallTreeNode, Integer>();
 
 		TraceCallTreePlugin.dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
 		TraceCallTreePlugin.dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);
@@ -169,7 +170,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	private static void addTraceToTree(final CallTreeNode root, final MessageTrace t, final boolean aggregated) throws TraceProcessingException {
 		final Stack<CallTreeNode> curStack = new Stack<CallTreeNode>();
 
-		final Vector<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
+		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
 		CallTreeNode curNode = root;
 		curStack.push(curNode);
 		for (final AbstractMessage m : msgTraceVec) {

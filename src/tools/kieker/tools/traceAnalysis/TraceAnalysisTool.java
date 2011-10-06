@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.TreeSet;
@@ -596,7 +596,7 @@ public class TraceAnalysisTool {
 		try {
 			ps = new PrintStream(new FileOutputStream(outputFn));
 			int numClasses = 0;
-			final HashMap<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap();
+			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap();
 			for (final Entry<ExecutionTrace, Integer> e : classMap.entrySet()) {
 				final ExecutionTrace t = e.getKey();
 				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()
