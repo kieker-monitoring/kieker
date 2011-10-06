@@ -3,6 +3,9 @@
 
 <module name="Checker">
 
+    <!-- KIEKER default is warning instead of error -->
+    <property name="severity" value="warning"/>
+    
     <!-- KIEKER Filter -->
     <module name="SuppressWithNearbyCommentFilter">
         <property name="commentFormat" value="NOCS"/>
@@ -851,8 +854,9 @@
          !-->
         <!-- Checks for abstract class name naming conventions. !-->
         <!-- See http://checkstyle.sf.net/config_naming.html !-->
+        <!-- KIEKER removed |^.*Factory$ -->
         <module name="AbstractClassName">
-            <property name="format"         value="^Abstract.*$|^.*Factory$"/>
+            <property name="format"         value="^Abstract.*$"/>
             <property name="ignoreModifier" value="false"/>
             <property name="ignoreName"     value="false"/>
         </module>
