@@ -288,7 +288,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	}
 
 	private Component tracePanel() {
-		final JPanel deps = new JPanel(this.g);// new GridBagLayout());
+		final JPanel deps = new JPanel(this.g); // new GridBagLayout());
 		final TitledBorder b = this.tBorder();
 		b.setTitle("Traces");
 		final GridBagConstraints g = new GridBagConstraints();
@@ -313,7 +313,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	}
 
 	private Component treePanel() {
-		final JPanel deps = new JPanel(this.g);// new GridBagLayout());
+		final JPanel deps = new JPanel(this.g); // new GridBagLayout());
 		final TitledBorder b = this.tBorder();
 		b.setTitle("Call Trees");
 		final GridBagConstraints g = new GridBagConstraints();
