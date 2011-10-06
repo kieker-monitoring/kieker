@@ -48,7 +48,7 @@ public class FilesystemLogReplayer {
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
 
-	private static final Log log = LogFactory.getLog(FilesystemLogReplayer.class);
+	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
 	/** Each record is delegated to this receiver. */
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final String[] inputDirs;
@@ -114,7 +114,7 @@ public class FilesystemLogReplayer {
 			tpanInstance.run();
 			success = true;
 		} catch (final Exception ex) {
-			FilesystemLogReplayer.log.error("Exception", ex);
+			FilesystemLogReplayer.LOG.error("Exception", ex);
 			success = false;
 		}
 		return success;
@@ -131,7 +131,7 @@ public class FilesystemLogReplayer {
  */
 class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log log = LogFactory.getLog(RecordDelegationPlugin.class);
+	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
 	private final IMonitoringRecordReceiver rec;
 
@@ -168,10 +168,10 @@ class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 	 */
 	@Override
 	public boolean execute() {
-		RecordDelegationPlugin.log.debug(RecordDelegationPlugin.class.getName() + " starting ...");
-		RecordDelegationPlugin.log
+		RecordDelegationPlugin.LOG.debug(RecordDelegationPlugin.class.getName() + " starting ...");
+		RecordDelegationPlugin.LOG
 				.info("Ignoring records before " + LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreRecordsBeforeTimestamp));
-		RecordDelegationPlugin.log.info("Ignoring records after " + LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreRecordsAfterTimestamp));
+		RecordDelegationPlugin.LOG.info("Ignoring records after " + LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreRecordsAfterTimestamp));
 		return true;
 	}
 

@@ -38,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class PipeReader extends AbstractMonitoringReader implements IPipeReader {
 	public static final String PROPERTY_PIPE_NAME = "pipeName";
-	private static final Log log = LogFactory.getLog(PipeReader.class);
+	private static final Log LOG = LogFactory.getLog(PipeReader.class);
 
 	private volatile Pipe pipe;
 
@@ -53,10 +53,10 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	private void initPipe(final String pipeName) throws IllegalArgumentException {
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
-			PipeReader.log.error("Failed to get Pipe with name " + pipeName);
+			PipeReader.LOG.error("Failed to get Pipe with name " + pipeName);
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
 		} else {
-			PipeReader.log.debug("Connectod to named pipe '" + this.pipe.getName() + "'");
+			PipeReader.LOG.debug("Connectod to named pipe '" + this.pipe.getName() + "'");
 		}
 		this.pipe.setPipeReader(this);
 	}
@@ -69,9 +69,9 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 		// No need to initialize since we receive asynchronously
 		try {
 			this.terminationLatch.await();
-			PipeReader.log.info("Pipe closed. Will terminate.");
+			PipeReader.LOG.info("Pipe closed. Will terminate.");
 		} catch (final InterruptedException e) {
-			PipeReader.log.error("Received InterruptedException", e);
+			PipeReader.LOG.error("Received InterruptedException", e);
 			return false;
 		}
 		return true;
@@ -83,9 +83,9 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
 			// IllegalArgumentException
 			initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-			PipeReader.log.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")");
+			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")");
 		} catch (final Exception exc) {
-			PipeReader.log.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
+			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}
 		return true;

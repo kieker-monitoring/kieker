@@ -43,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log log = LogFactory.getLog(RealtimeReplayDistributor.class);
+	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 	public final int numWorkers;
 	private final IMonitoringRecordConsumerPlugin cons;
 	private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
@@ -52,7 +52,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	private volatile int active;
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
-	private final static ITimeSource timesource = DefaultSystemTimer.getInstance();
+	private final static ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
 
 	/** Private constructor must not be used */
 	@SuppressWarnings("unused")
@@ -89,19 +89,19 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 		if (this.startTime == -1) { // init on first record
 			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance
 			this.offset = (2 * 1000 * 1000 * 1000) - this.firstLoggingTimestamp;
-			this.startTime = RealtimeReplayDistributor.timesource.getTime();
+			this.startTime = RealtimeReplayDistributor.TIMESOURCE.getTime();
 		}
 		if (monitoringRecord.getLoggingTimestamp() < this.firstLoggingTimestamp) {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("Timestamp of current record "
 					+ monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
-			RealtimeReplayDistributor.log.error("RecordConsumerExecutionException", e);
+			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
 			return false;
 		}
 		final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
-				- (RealtimeReplayDistributor.timesource.getTime() - this.startTime); // substract elapsed time
+				- (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime); // substract elapsed time
 		if (schedTime < 0) {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
-			RealtimeReplayDistributor.log.error("RecordConsumerExecutionException", e);
+			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
 			return false;
 		}
 		synchronized (this) {
@@ -139,8 +139,8 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
 	@Override
 	public void terminate(final boolean error) {
-		final long terminationDelay = ((this.lTime + this.offset) - (RealtimeReplayDistributor.timesource.getTime() - this.startTime)) + 100000000;
-		RealtimeReplayDistributor.log.info("Will terminate in " + terminationDelay + "nsecs from now");
+		final long terminationDelay = ((this.lTime + this.offset) - (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime)) + 100000000;
+		RealtimeReplayDistributor.LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
 		this.executor.schedule(new Runnable() {
 
 			@Override
@@ -148,7 +148,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 				if (RealtimeReplayDistributor.this.terminationLatch != null) {
 					RealtimeReplayDistributor.this.terminationLatch.countDown(); // signal that last record has been scheduled
 				} else {
-					RealtimeReplayDistributor.log.warn("terminationLatch == null");
+					RealtimeReplayDistributor.LOG.warn("terminationLatch == null");
 				}
 			}
 		}, terminationDelay, TimeUnit.NANOSECONDS);

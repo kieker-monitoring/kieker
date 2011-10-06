@@ -53,7 +53,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class OperationDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponentOperationPair> {
 
-	private static final Log log = LogFactory.getLog(OperationDependencyGraphPluginAllocation.class);
+	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAllocation.class);
 	private final AllocationComponentOperationPairFactory pairFactory;
 	private final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private final String CONTAINER_NODE_ID_PREFIX = "container_";
@@ -201,7 +201,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 			try {
 				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				OperationDependencyGraphPluginAllocation.log.error("IOException", ex);
+				OperationDependencyGraphPluginAllocation.LOG.error("IOException", ex);
 			}
 		}
 	}

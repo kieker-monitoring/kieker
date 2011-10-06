@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class RealtimeReplayWorker implements Runnable {
 
-	private static final Log log = LogFactory.getLog(RealtimeReplayWorker.class);
+	private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private final IMonitoringRecord monRec;
 	private final IMonitoringRecordConsumerPlugin cons;
 	private final RealtimeReplayDistributor rd;
@@ -51,7 +51,7 @@ public class RealtimeReplayWorker implements Runnable {
 			if (!this.cons.newMonitoringRecord(this.monRec)) {
 				// TODO: check what to do
 				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/145
-				RealtimeReplayWorker.log.error("Consumer returned with error");
+				RealtimeReplayWorker.LOG.error("Consumer returned with error");
 			}
 			this.rd.decreaseActive();
 		}

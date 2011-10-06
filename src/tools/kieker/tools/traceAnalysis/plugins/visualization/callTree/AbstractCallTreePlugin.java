@@ -54,7 +54,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProcessingPlugin {
 
-	private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
+	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 
 	public AbstractCallTreePlugin(final String name, final SystemModelRepository systemEntityFactory) {
 		super(name, systemEntityFactory);
@@ -208,7 +208,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			}
 		}
 		if (curStack.pop() != root) {
-			AbstractCallTreePlugin.log.fatal("Stack not empty after processing trace");
+			AbstractCallTreePlugin.LOG.fatal("Stack not empty after processing trace");
 			throw new TraceProcessingException("Stack not empty after processing trace");
 		}
 	}

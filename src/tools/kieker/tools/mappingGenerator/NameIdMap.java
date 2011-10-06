@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class NameIdMap {
 
-	private static final Log log = LogFactory.getLog(NameIdMap.class);
+	private static final Log LOG = LogFactory.getLog(NameIdMap.class);
 	private final Hashtable<String, Integer> name2IdMap = new Hashtable<String, Integer>();
 	private final TreeMap<Integer, String> id2NameMap = new TreeMap<Integer, String>();
 	private final AtomicInteger nextId = new AtomicInteger(0);
@@ -80,7 +80,7 @@ public class NameIdMap {
 			}
 		}
 		pw.close();
-		NameIdMap.log.info("Wrote mapping file to " + f.getCanonicalPath());
+		NameIdMap.LOG.info("Wrote mapping file to " + f.getCanonicalPath());
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class NameIdMap {
 					inst.id2NameMap.put(id, name);
 					inst.name2IdMap.put(name, id);
 				} catch (final RuntimeException e) {
-					NameIdMap.log.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
+					NameIdMap.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
 					break;
 				}
 			}
@@ -124,7 +124,7 @@ public class NameIdMap {
 				try {
 					in.close();
 				} catch (final Exception e) {
-					NameIdMap.log.error("Exception", e);
+					NameIdMap.LOG.error("Exception", e);
 				}
 			}
 		}

@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugin<ExecutionContainer> {
 
-	private static final Log log = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
+	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
 
 	private final File dotOutputFile;
 	private final boolean includeWeights;
@@ -104,7 +104,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 			try {
 				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ContainerDependencyGraphPlugin.log.error("IOException", ex);
+				ContainerDependencyGraphPlugin.LOG.error("IOException", ex);
 			}
 		}
 	}

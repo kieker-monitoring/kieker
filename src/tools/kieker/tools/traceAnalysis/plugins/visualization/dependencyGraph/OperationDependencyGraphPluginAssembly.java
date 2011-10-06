@@ -52,7 +52,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponentOperationPair> {
 
-	private static final Log log = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
+	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
 	private final AssemblyComponentOperationPairFactory pairFactory;
 	private final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private final File dotOutputFile;
@@ -173,7 +173,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 			try {
 				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				OperationDependencyGraphPluginAssembly.log.error("IOException", ex);
+				OperationDependencyGraphPluginAssembly.LOG.error("IOException", ex);
 			}
 		}
 	}

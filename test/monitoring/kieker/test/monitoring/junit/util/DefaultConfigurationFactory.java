@@ -28,14 +28,14 @@ import kieker.monitoring.writer.DummyWriter;
  * 
  */
 public class DefaultConfigurationFactory {
-	public static final String writerName = DummyWriter.class.getName();
+	public static final String WRITER_NAME = DummyWriter.class.getName();
 
 	public static Configuration createDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = Configuration.createDefaultConfiguration();
 		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
-		configuration.setProperty(Configuration.WRITER_CLASSNAME, DefaultConfigurationFactory.writerName);
+		configuration.setProperty(Configuration.WRITER_CLASSNAME, DefaultConfigurationFactory.WRITER_NAME);
 		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
-		configuration.setProperty(DefaultConfigurationFactory.writerName + ".jUnit", "true");
+		configuration.setProperty(DefaultConfigurationFactory.WRITER_NAME + ".jUnit", "true");
 		return configuration;
 	}
 }

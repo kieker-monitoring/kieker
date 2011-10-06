@@ -46,31 +46,31 @@ import kieker.monitoring.core.controller.MonitoringController;
  *         2008-03-30 initial version
  */
 public class StorageOnly {
-	private static final int numberOfEvents = 1000;
-	private static final IMonitoringController ctrl = MonitoringController.getInstance();
-	private static final String vmName = StorageOnly.ctrl.getHostName();
+	private static final int NUMBER_OF_EVENTS = 1000;
+	private static final IMonitoringController CTRL = MonitoringController.getInstance();
+	private static final String VM_NAME = StorageOnly.CTRL.getHostName();
 
 	public static void main(final String args[]) {
 		try {
-			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.numberOfEvents);
-			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
+			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.NUMBER_OF_EVENTS);
+			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L,
-						StorageOnly.ctrl.getHostName(), i, i);
-				record.hostName = StorageOnly.vmName;
-				StorageOnly.ctrl.newMonitoringRecord(record);
+						StorageOnly.CTRL.getHostName(), i, i);
+				record.hostName = StorageOnly.VM_NAME;
+				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 8 seconds");
 			Thread.sleep(8000);
-			System.out.printf("%d more monitoring points\n", StorageOnly.numberOfEvents);
-			for (int i = 0; i < StorageOnly.numberOfEvents; i++) {
+			System.out.printf("%d more monitoring points\n", StorageOnly.NUMBER_OF_EVENTS);
+			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L,
-						StorageOnly.ctrl.getHostName(), i + 10000, i);
-				record.hostName = StorageOnly.vmName;
-				StorageOnly.ctrl.newMonitoringRecord(record);
+						StorageOnly.CTRL.getHostName(), i + 10000, i);
+				record.hostName = StorageOnly.VM_NAME;
+				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 60 seconds");
 			Thread.sleep(10000);
-			StorageOnly.ctrl.terminateMonitoring();
+			StorageOnly.CTRL.terminateMonitoring();
 		} catch (final InterruptedException ex) {
 			System.out.println("Exception:" + ex);
 			ex.printStackTrace();

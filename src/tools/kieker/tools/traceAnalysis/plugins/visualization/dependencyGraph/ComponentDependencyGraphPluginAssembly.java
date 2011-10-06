@@ -44,7 +44,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponent> {
 
-	private static final Log log = LogFactory.getLog(ComponentDependencyGraphPluginAssembly.class);
+	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAssembly.class);
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
@@ -110,7 +110,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 			try {
 				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ComponentDependencyGraphPluginAssembly.log.error("IOException", ex);
+				ComponentDependencyGraphPluginAssembly.LOG.error("IOException", ex);
 			}
 		}
 	}

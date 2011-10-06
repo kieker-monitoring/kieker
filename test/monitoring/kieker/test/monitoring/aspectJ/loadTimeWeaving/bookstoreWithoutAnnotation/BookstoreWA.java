@@ -39,7 +39,7 @@ public class BookstoreWA extends Thread {
 	static int numberOfRequests = 100;
 	static int interRequestTime = 5;
 
-	public static final Vector<BookstoreWA> bookstoreScenarios = new Vector<BookstoreWA>();
+	public static final Vector<BookstoreWA> BOOKSTORE_SCENARIOS = new Vector<BookstoreWA>();
 
 	/**
 	 * 
@@ -58,15 +58,15 @@ public class BookstoreWA extends Thread {
 		for (int i = 0; i < BookstoreWA.numberOfRequests; i++) {
 			System.out.println("BookstoreWA.main: Starting request " + i);
 			final BookstoreWA newBookstore = new BookstoreWA();
-			BookstoreWA.bookstoreScenarios.add(newBookstore);
+			BookstoreWA.BOOKSTORE_SCENARIOS.add(newBookstore);
 			newBookstore.start();
 			BookstoreWA.waitabit(BookstoreWA.interRequestTime);
 		}
 		System.out.println("Bookstore.main: Finished with starting all requests.");
 		System.out.println("Bookstore.main: Waiting for threads to terminate");
-		synchronized (BookstoreWA.bookstoreScenarios) {
-			while (!BookstoreWA.bookstoreScenarios.isEmpty()) {
-				BookstoreWA.bookstoreScenarios.wait();
+		synchronized (BookstoreWA.BOOKSTORE_SCENARIOS) {
+			while (!BookstoreWA.BOOKSTORE_SCENARIOS.isEmpty()) {
+				BookstoreWA.BOOKSTORE_SCENARIOS.wait();
 			}
 		}
 	}
@@ -74,9 +74,9 @@ public class BookstoreWA extends Thread {
 	@Override
 	public void run() {
 		BookstoreWA.searchBook();
-		synchronized (BookstoreWA.bookstoreScenarios) {
-			BookstoreWA.bookstoreScenarios.remove(this);
-			BookstoreWA.bookstoreScenarios.notifyAll();
+		synchronized (BookstoreWA.BOOKSTORE_SCENARIOS) {
+			BookstoreWA.BOOKSTORE_SCENARIOS.remove(this);
+			BookstoreWA.BOOKSTORE_SCENARIOS.notifyAll();
 		}
 	}
 

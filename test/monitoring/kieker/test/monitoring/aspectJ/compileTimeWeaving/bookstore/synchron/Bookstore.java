@@ -43,7 +43,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  */
 
 public class Bookstore extends Thread {
-	public static final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+	public static final Vector<Bookstore> BOOKSTORE_SCENARIOS = new Vector<Bookstore>();
 
 	static int numberOfRequests = 5000;
 	static int interRequestTime = 5;
@@ -69,15 +69,15 @@ public class Bookstore extends Thread {
 		for (int i = 0; i < Bookstore.numberOfRequests; i++) {
 			System.out.println("Bookstore.main: Starting request " + i);
 			final Bookstore newBookstore = new Bookstore();
-			Bookstore.bookstoreScenarios.add(newBookstore);
+			Bookstore.BOOKSTORE_SCENARIOS.add(newBookstore);
 			newBookstore.start();
 			Bookstore.waitabit(Bookstore.interRequestTime);
 		}
 		System.out.println("Bookstore.main: Finished with starting all requests.");
 		System.out.println("Bookstore.main: Waiting for threads to terminate");
-		synchronized (Bookstore.bookstoreScenarios) {
-			while (!Bookstore.bookstoreScenarios.isEmpty()) {
-				Bookstore.bookstoreScenarios.wait();
+		synchronized (Bookstore.BOOKSTORE_SCENARIOS) {
+			while (!Bookstore.BOOKSTORE_SCENARIOS.isEmpty()) {
+				Bookstore.BOOKSTORE_SCENARIOS.wait();
 			}
 		}
 	}
@@ -85,9 +85,9 @@ public class Bookstore extends Thread {
 	@Override
 	public void run() {
 		Bookstore.searchBook();
-		synchronized (Bookstore.bookstoreScenarios) {
-			Bookstore.bookstoreScenarios.remove(this);
-			Bookstore.bookstoreScenarios.notifyAll();
+		synchronized (Bookstore.BOOKSTORE_SCENARIOS) {
+			Bookstore.BOOKSTORE_SCENARIOS.remove(this);
+			Bookstore.BOOKSTORE_SCENARIOS.notifyAll();
 		}
 	}
 

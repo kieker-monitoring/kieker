@@ -44,7 +44,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingPlugin {
 
-	private static final Log log = LogFactory.getLog(TraceEquivalenceClassFilter.class);
+	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
 	public enum TraceEquivalenceClassModes {
 
@@ -74,7 +74,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 				} else if (this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
 					polledTraceHashContainer = new ExecutionTraceHashContainerAllocationEquivalence(et);
 				} else { // just to make sure
-					TraceEquivalenceClassFilter.log.error("Invalid trace equivalence mode: " + this.equivalenceMode);
+					TraceEquivalenceClassFilter.LOG.error("Invalid trace equivalence mode: " + this.equivalenceMode);
 					reportError(et.getTraceId());
 					return;
 				}
@@ -91,7 +91,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			}
 			reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			TraceEquivalenceClassFilter.log.error("InvalidTraceException", ex);
+			TraceEquivalenceClassFilter.LOG.error("InvalidTraceException", ex);
 			reportError(et.getTraceId());
 		}
 	}

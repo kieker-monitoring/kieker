@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class PropertyMap {
-	private static final Log log = LogFactory.getLog(PropertyMap.class);
+	private static final Log LOG = LogFactory.getLog(PropertyMap.class);
 
 	private final HashMap<String, String> map = new HashMap<String, String>();
 
@@ -63,7 +63,7 @@ public class PropertyMap {
 
 	public final String getProperty(final String propName, final String defaultVal) {
 		if (!this.initStringProcessed) {
-			PropertyMap.log.error("InitString not yet processed. " + " Call method initVarsFromInitString(..) first.");
+			PropertyMap.LOG.error("InitString not yet processed. " + " Call method initVarsFromInitString(..) first.");
 			return null;
 		}
 
@@ -109,7 +109,7 @@ public class PropertyMap {
 				}
 				final String key = keyValTokens.nextToken().trim();
 				final String val = keyValTokens.nextToken().trim();
-				PropertyMap.log.debug("Found key/value pair: " + key + "=" + val);
+				PropertyMap.LOG.debug("Found key/value pair: " + key + "=" + val);
 				this.map.put(key, val);
 			}
 		} catch (final Exception exc) {

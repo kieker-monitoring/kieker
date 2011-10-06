@@ -53,10 +53,10 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
 
-	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
-	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-	protected static final SOAPTraceRegistry soapRegistry = SOAPTraceRegistry.getInstance();
-	protected static final ITimeSource timesource = DefaultSystemTimer.getInstance();
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
+	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
+	protected static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
 
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
@@ -71,7 +71,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			 * This value will be used by the corresponding invocation of the
 			 * ResponseOutProbe.
 			 */
-			final long tin = OperationExecutionSOAPRequestInInterceptor.timesource.getTime();
+			final long tin = OperationExecutionSOAPRequestInInterceptor.TIMESOURCE.getTime();
 			boolean isEntryCall = false; // set true below if is entry call
 
 			/* 1.) Extract sessionId from SOAP header */
@@ -127,7 +127,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				 * We will now acquire a thread id which is stored (below!!)
 				 * in the thread local variable!
 				 */
-				traceId = OperationExecutionSOAPRequestInInterceptor.cfRegistry.getUniqueTraceId();
+				traceId = OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.getUniqueTraceId();
 				sessionId = OperationExecutionSOAPRequestInInterceptor.NULL_SESSIONASYNCTRACE_STR;
 				isEntryCall = true;
 				eoi = 0; // EOI of this execution
@@ -135,15 +135,15 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			}
 
 			/* Store thread-local values */
-			OperationExecutionSOAPRequestInInterceptor.cfRegistry.storeThreadLocalTraceId(traceId);
-			OperationExecutionSOAPRequestInInterceptor.cfRegistry.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
+			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalTraceId(traceId);
+			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
 																							// incrementAndRecall
-			OperationExecutionSOAPRequestInInterceptor.cfRegistry.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
-			OperationExecutionSOAPRequestInInterceptor.sessionRegistry.storeThreadLocalSessionId(sessionId);
-			OperationExecutionSOAPRequestInInterceptor.soapRegistry.storeThreadLocalInRequestIsEntryCall(isEntryCall);
-			OperationExecutionSOAPRequestInInterceptor.soapRegistry.storeThreadLocalInRequestTin(tin);
-			OperationExecutionSOAPRequestInInterceptor.soapRegistry.storeThreadLocalInRequestEOI(eoi); // eoi for this execution
-			OperationExecutionSOAPRequestInInterceptor.soapRegistry.storeThreadLocalInRequestESS(ess); // ess for this execution
+			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
+			OperationExecutionSOAPRequestInInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
+			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestIsEntryCall(isEntryCall);
+			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestTin(tin);
+			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestEOI(eoi); // eoi for this execution
+			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestESS(ess); // ess for this execution
 		}
 	}
 

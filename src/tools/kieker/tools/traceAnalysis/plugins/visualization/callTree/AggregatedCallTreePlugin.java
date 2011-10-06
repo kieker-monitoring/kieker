@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 
-	private static final Log log = LogFactory.getLog(AbstractCallTreePlugin.class);
+	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 	private final AbstractAggregatedCallTreeNode<T> root;
 	private final File dotOutputFile;
 	private final boolean includeWeights;
@@ -86,7 +86,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 			try {
 				this.saveTreeToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels);
 			} catch (final IOException ex) {
-				AggregatedCallTreePlugin.log.error("IOException", ex);
+				AggregatedCallTreePlugin.LOG.error("IOException", ex);
 			}
 		}
 	}
@@ -104,7 +104,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 				AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
 				reportSuccess(t.getTraceId());
 			} catch (final TraceProcessingException ex) {
-				AggregatedCallTreePlugin.log.error("TraceProcessingException", ex);
+				AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);
 				reportError(t.getTraceId());
 			}
 		}

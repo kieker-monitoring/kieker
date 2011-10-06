@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log log = LogFactory.getLog(MonitoringRecordTypeLogger.class);
+	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
@@ -41,8 +41,8 @@ public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumerPlug
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		MonitoringRecordTypeLogger.log.info("Consumed record:" + monitoringRecord.getClass().getName());
-		MonitoringRecordTypeLogger.log.info(monitoringRecord.toString());
+		MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
+		MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
 		return true;
 	}
 

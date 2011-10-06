@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class CurrentTimeEventGenerator {
 
-	private static final Log log = LogFactory.getLog(CurrentTimeEventGenerator.class);
+	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerator.class);
 
 	/**
 	 * Timestamp of the record that was received first. Notice, that this is not
@@ -96,7 +96,7 @@ public class CurrentTimeEventGenerator {
 	 */
 	public void newTimestamp(final long timestamp) {
 		if (timestamp < 0) {
-			CurrentTimeEventGenerator.log.warn("Received timestamp value < 0: " + timestamp);
+			CurrentTimeEventGenerator.LOG.warn("Received timestamp value < 0: " + timestamp);
 			return;
 		}
 

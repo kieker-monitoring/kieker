@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessingPlugin {
 
-	private static final Log log = LogFactory.getLog(ExecutionTraceWriterPlugin.class);
+	private static final Log LOG = LogFactory.getLog(ExecutionTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
 
@@ -64,7 +64,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 			try {
 				this.ps.close();
 			} catch (final IOException ex) {
-				ExecutionTraceWriterPlugin.log.error("IOException", ex);
+				ExecutionTraceWriterPlugin.LOG.error("IOException", ex);
 			}
 		}
 	}
@@ -88,7 +88,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 				reportSuccess(et.getTraceId());
 			} catch (final IOException ex) {
 				reportError(et.getTraceId());
-				ExecutionTraceWriterPlugin.log.error(ex, ex);
+				ExecutionTraceWriterPlugin.LOG.error(ex, ex);
 			}
 		}
 	};

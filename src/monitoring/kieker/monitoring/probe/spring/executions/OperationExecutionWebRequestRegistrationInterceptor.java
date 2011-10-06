@@ -32,23 +32,23 @@ import org.springframework.web.context.request.WebRequestInterceptor;
  */
 public class OperationExecutionWebRequestRegistrationInterceptor implements WebRequestInterceptor {
 
-	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
-	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 
 	@Override
 	public void preHandle(final WebRequest request) throws Exception {
-		OperationExecutionWebRequestRegistrationInterceptor.cfRegistry.getAndStoreUniqueThreadLocalTraceId();
-		OperationExecutionWebRequestRegistrationInterceptor.sessionRegistry.storeThreadLocalSessionId(request.getSessionId());
-		OperationExecutionWebRequestRegistrationInterceptor.cfRegistry.storeThreadLocalEOI(0);
-		OperationExecutionWebRequestRegistrationInterceptor.cfRegistry.storeThreadLocalESS(1);
+		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+		OperationExecutionWebRequestRegistrationInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
+		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.storeThreadLocalEOI(0);
+		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.storeThreadLocalESS(1);
 	}
 
 	@Override
 	public void postHandle(final WebRequest request, final ModelMap map) throws Exception {
-		OperationExecutionWebRequestRegistrationInterceptor.cfRegistry.unsetThreadLocalTraceId();
-		OperationExecutionWebRequestRegistrationInterceptor.sessionRegistry.unsetThreadLocalSessionId();
-		OperationExecutionWebRequestRegistrationInterceptor.cfRegistry.unsetThreadLocalEOI();
-		OperationExecutionWebRequestRegistrationInterceptor.cfRegistry.unsetThreadLocalESS();
+		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
+		OperationExecutionWebRequestRegistrationInterceptor.SESSION_REGISTRY.unsetThreadLocalSessionId();
+		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalEOI();
+		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalESS();
 	}
 
 	@Override

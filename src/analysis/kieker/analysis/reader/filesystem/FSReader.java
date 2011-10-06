@@ -41,7 +41,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FSReader extends AbstractMonitoringReader {
 
-	private static final Log log = LogFactory.getLog(FSReader.class);
+	private static final Log LOG = LogFactory.getLog(FSReader.class);
 	/*
 	 * Semicolon-separated list of directories
 	 */
@@ -95,7 +95,7 @@ public class FSReader extends AbstractMonitoringReader {
 		try {
 			success = this.concurrentConsumer.execute();
 		} catch (final MonitoringRecordConsumerException ex) {
-			FSReader.log.error("RecordConsumerExecutionException occured", ex);
+			FSReader.LOG.error("RecordConsumerExecutionException occured", ex);
 			success = false;
 		}
 		return success;
@@ -118,7 +118,7 @@ public class FSReader extends AbstractMonitoringReader {
 			dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
 
 			if (dirList == null) {
-				FSReader.log.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
+				FSReader.LOG.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
 				return false;
 			} // parse inputDir property value
 
@@ -128,7 +128,7 @@ public class FSReader extends AbstractMonitoringReader {
 				this.inputDirs[i] = dirNameTokenizer.nextToken().trim();
 			}
 		} catch (final Exception exc) {
-			FSReader.log.error("Error parsing list of input directories'" + dirList + "':" + exc.getMessage(), exc);
+			FSReader.LOG.error("Error parsing list of input directories'" + dirList + "':" + exc.getMessage(), exc);
 			return false;
 		}
 		return true;
@@ -137,6 +137,6 @@ public class FSReader extends AbstractMonitoringReader {
 	@Override
 	public void terminate() {
 		// TODO: Provide meaningful termination routine (#117)
-		FSReader.log.warn("Explicit termination not supported, yet (see ticket #117)");
+		FSReader.LOG.warn("Explicit termination not supported, yet (see ticket #117)");
 	}
 }

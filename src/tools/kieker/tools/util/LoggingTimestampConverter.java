@@ -35,7 +35,7 @@ public class LoggingTimestampConverter {
 	// private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);
 
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
-	private static final String dateFormatPattern = "EEE, d MMM yyyy HH:mm:ss Z";
+	private static final String DATE_FORMAT_PATTERN2 = "EEE, d MMM yyyy HH:mm:ss Z";
 
 	/**
 	 * Converts a timestamp representing the number of nanoseconds since Jan 1,
@@ -51,7 +51,7 @@ public class LoggingTimestampConverter {
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
 		final GregorianCalendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.dateFormatPattern);
+		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2);
 		m_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return m_ISO8601UTC.format(c.getTime()) + " (UTC)";
 	}
@@ -70,7 +70,7 @@ public class LoggingTimestampConverter {
 	public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
 		final GregorianCalendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.dateFormatPattern);
+		final DateFormat m_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2);
 		return m_ISO8601UTC.format(c.getTime()) + " (local time)";
 	}
 

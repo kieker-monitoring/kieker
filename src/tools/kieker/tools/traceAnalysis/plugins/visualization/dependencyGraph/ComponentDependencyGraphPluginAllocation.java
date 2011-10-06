@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ComponentDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponent> {
 
-	private static final Log log = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
+	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
 	private final String CONTAINER_NODE_ID_PREFIX = "container";
 	private final File dotOutputFile;
 	private final boolean includeWeights;
@@ -161,7 +161,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			try {
 				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ComponentDependencyGraphPluginAllocation.log.error("IOException", ex);
+				ComponentDependencyGraphPluginAllocation.LOG.error("IOException", ex);
 			}
 		}
 	}

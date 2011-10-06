@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class JavaDBInitializer {
-	private static final Log log = LogFactory.getLog(JavaDBInitializer.class);
+	private static final Log LOG = LogFactory.getLog(JavaDBInitializer.class);
 
 	private static String dbDriverClassname = "org.apache.derby.jdbc.EmbeddedDriver";
 	private static String dbConnectionAddress = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS";
@@ -58,10 +58,10 @@ public class JavaDBInitializer {
 			JavaDBInitializer.createTables(dbConnection);
 			dbConnection.close();
 		} catch (final SQLException ex) {
-			JavaDBInitializer.log.error(ex);
+			JavaDBInitializer.LOG.error(ex);
 			System.exit(1);
 		}
-		JavaDBInitializer.log.info(JavaDBInitializer.class.getName() + ".main(..) done");
+		JavaDBInitializer.LOG.info(JavaDBInitializer.class.getName() + ".main(..) done");
 	}
 
 	private static boolean createTables(final Connection dbConnection) {

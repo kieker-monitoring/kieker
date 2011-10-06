@@ -52,7 +52,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class AnalysisController {
 
-	private static final Log log = LogFactory.getLog(AnalysisController.class);
+	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 	private IMonitoringReader logReader;
 	/**
 	 * this are the consumers for data that are coming into kieker by readers
@@ -86,7 +86,7 @@ public class AnalysisController {
 			 */
 			for (final IAnalysisPlugin c : this.plugins) {
 				if (!c.execute()) {
-					AnalysisController.log.error("A plug-in's execute message failed");
+					AnalysisController.LOG.error("A plug-in's execute message failed");
 					success = false;
 				}
 			}
@@ -95,7 +95,7 @@ public class AnalysisController {
 			 * Make sure that log reader is not null
 			 */
 			if (this.logReader == null) {
-				AnalysisController.log.error("No log reader registered.");
+				AnalysisController.LOG.error("No log reader registered.");
 				success = false;
 			}
 
@@ -125,12 +125,12 @@ public class AnalysisController {
 				// notify threads waiting for the initialization to be done
 				this.initializationLatch.countDown();
 				if (!this.logReader.read()) {
-					AnalysisController.log.error("Calling execute() on logReader returned false");
+					AnalysisController.LOG.error("Calling execute() on logReader returned false");
 					success = false;
 				}
 			}
 		} catch (final Exception exc) {
-			AnalysisController.log.fatal("Error occurred: " + exc.getMessage());
+			AnalysisController.LOG.fatal("Error occurred: " + exc.getMessage());
 			success = false;
 		} finally {
 			// to make sure that all waiting threads are released
@@ -140,7 +140,7 @@ public class AnalysisController {
 					c.terminate(!success); // normal termination (w/o error)
 				}
 			} catch (final Exception e) {
-				AnalysisController.log.error("Error during termination: " + e.getMessage(), e);
+				AnalysisController.LOG.error("Error during termination: " + e.getMessage(), e);
 			}
 		}
 
@@ -155,7 +155,7 @@ public class AnalysisController {
 		 * terminate the reader. After the reader has terminated, the run method()
 		 * will terminate all plugins
 		 */
-		AnalysisController.log.info("Explicit termination of the analysis. Terminating the reader ...");
+		AnalysisController.LOG.info("Explicit termination of the analysis. Terminating the reader ...");
 		this.logReader.terminate();
 	}
 
@@ -206,10 +206,10 @@ public class AnalysisController {
 	 */
 	public void registerPlugin(final IAnalysisPlugin plugin) {
 		this.plugins.add(plugin);
-		AnalysisController.log.debug("Registered plugin " + plugin);
+		AnalysisController.LOG.debug("Registered plugin " + plugin);
 
 		if (plugin instanceof IMonitoringRecordConsumerPlugin) {
-			AnalysisController.log.debug("Plugin " + plugin + " also registered as record consumer");
+			AnalysisController.LOG.debug("Plugin " + plugin + " also registered as record consumer");
 			addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
 		}
 	}
@@ -235,7 +235,7 @@ public class AnalysisController {
 			if (!c.newMonitoringRecord(monitoringRecord)) {
 				success = false;
 				if (abortOnConsumerError) {
-					AnalysisController.log.warn("Consumer returned false. Aborting delivery of record. ");
+					AnalysisController.LOG.warn("Consumer returned false. Aborting delivery of record. ");
 					return false;
 				}
 			}
@@ -246,7 +246,7 @@ public class AnalysisController {
 				if (!c.newMonitoringRecord(monitoringRecord)) {
 					success = false;
 					if (abortOnConsumerError) {
-						AnalysisController.log.warn("Consumer returned false. Aborting delivery of record. ");
+						AnalysisController.LOG.warn("Consumer returned false. Aborting delivery of record. ");
 						return false;
 					}
 				}

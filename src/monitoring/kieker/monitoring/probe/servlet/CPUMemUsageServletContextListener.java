@@ -79,7 +79,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class CPUMemUsageServletContextListener implements ServletContextListener {
-	private static final Log log = LogFactory.getLog(CPUMemUsageServletContextListener.class);
+	private static final Log LOG = LogFactory.getLog(CPUMemUsageServletContextListener.class);
 
 	private final IMonitoringController monitoringController = MonitoringController.getInstance();
 
@@ -129,7 +129,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	 */
 	private void initParameters(final ServletContext c) {
 		if (c == null) {
-			CPUMemUsageServletContextListener.log.warn("ServletContext == null");
+			CPUMemUsageServletContextListener.LOG.warn("ServletContext == null");
 			// we are using the default values assigned during variable
 			// declaration.
 			return;
@@ -144,9 +144,9 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
 				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
-			CPUMemUsageServletContextListener.log.warn("values for the init-param '"
+			CPUMemUsageServletContextListener.LOG.warn("values for the init-param '"
 					+ CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds);
-			CPUMemUsageServletContextListener.log.warn("Using default value: " + CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
+			CPUMemUsageServletContextListener.LOG.warn("Using default value: " + CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 			this.sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
 
@@ -166,8 +166,8 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		}
 
 		if (val < 0) {
-			CPUMemUsageServletContextListener.log.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr);
-			CPUMemUsageServletContextListener.log.warn("Using default value: " + defaultValue);
+			CPUMemUsageServletContextListener.LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr);
+			CPUMemUsageServletContextListener.LOG.warn("Using default value: " + defaultValue);
 			val = defaultValue;
 		}
 

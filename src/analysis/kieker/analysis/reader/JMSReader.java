@@ -53,7 +53,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class JMSReader extends AbstractMonitoringReader {
 
-	private static final Log log = LogFactory.getLog(JMSReader.class);
+	private static final Log LOG = LogFactory.getLog(JMSReader.class);
 	private String jmsProviderUrl = null;
 	private String jmsDestination = null;
 	private String jmsFactoryLookupName = null;
@@ -92,7 +92,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws
 			// IllegalArgumentException
 		} catch (final Exception exc) {
-			JMSReader.log.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
+			JMSReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}
 		return true;
@@ -142,12 +142,12 @@ public class JMSReader extends AbstractMonitoringReader {
 				 * JNDI lookup failed, try manual creation (this seems to fail
 				 * with ActiveMQ sometimes)
 				 */
-				JMSReader.log.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
-				JMSReader.log.info("Attempting to create queue ...");
+				JMSReader.LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
+				JMSReader.LOG.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
 			}
 
-			JMSReader.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			JMSReader.LOG.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
@@ -156,7 +156,7 @@ public class JMSReader extends AbstractMonitoringReader {
 				public void onMessage(final Message jmsMessage) {
 					if (jmsMessage instanceof TextMessage) {
 						final TextMessage text = (TextMessage) jmsMessage;
-						JMSReader.log.info("Received text message: " + text);
+						JMSReader.LOG.info("Received text message: " + text);
 
 					} else {
 						try {
@@ -165,20 +165,20 @@ public class JMSReader extends AbstractMonitoringReader {
 							if (omo instanceof IMonitoringRecord) {
 								final IMonitoringRecord rec = (IMonitoringRecord) omo;
 								if (!JMSReader.this.deliverRecord(rec)) {
-									JMSReader.log.error("deliverRecord returned false");
+									JMSReader.LOG.error("deliverRecord returned false");
 									throw new MonitoringReaderException("deliverRecord returned false");
 								}
 							} else {
-								JMSReader.log.info("Unknown type of message " + om);
+								JMSReader.LOG.info("Unknown type of message " + om);
 							}
 						} catch (final MessageFormatException em) {
-							JMSReader.log.fatal("MessageFormatException:" + em.getMessage(), em);
+							JMSReader.LOG.fatal("MessageFormatException:" + em.getMessage(), em);
 						} catch (final JMSException ex) {
-							JMSReader.log.fatal("JMSException: " + ex.getMessage(), ex);
+							JMSReader.LOG.fatal("JMSException: " + ex.getMessage(), ex);
 						} catch (final MonitoringReaderException ex) {
-							JMSReader.log.error("LogReaderExecutionException: " + ex.getMessage(), ex);
+							JMSReader.LOG.error("LogReaderExecutionException: " + ex.getMessage(), ex);
 						} catch (final Exception ex) {
-							JMSReader.log.error("Exception", ex);
+							JMSReader.LOG.error("Exception", ex);
 						}
 					}
 				}
@@ -187,11 +187,11 @@ public class JMSReader extends AbstractMonitoringReader {
 			// start the connection to enable message delivery
 			connection.start();
 
-			JMSReader.log.info("JMSReader started and waits for incomming monitoring events!");
+			JMSReader.LOG.info("JMSReader started and waits for incomming monitoring events!");
 			block();
-			JMSReader.log.info("Woke up by shutdown");
+			JMSReader.LOG.info("Woke up by shutdown");
 		} catch (final Exception ex) { // FindBugs complains but wontfix
-			JMSReader.log.fatal(ex.getMessage(), ex);
+			JMSReader.LOG.fatal(ex.getMessage(), ex);
 			retVal = false;
 		}
 		return retVal;
@@ -218,7 +218,7 @@ public class JMSReader extends AbstractMonitoringReader {
 
 	@Override
 	public void terminate() {
-		JMSReader.log.info("Shutdown of JMSReader requested.");
+		JMSReader.LOG.info("Shutdown of JMSReader requested.");
 		unblock();
 	}
 }

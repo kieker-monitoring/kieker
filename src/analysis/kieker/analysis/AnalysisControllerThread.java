@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class AnalysisControllerThread extends Thread {
-	private static final Log log = LogFactory.getLog(AnalysisController.class);
+	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final AnalysisController analysisInstance;
 
@@ -50,7 +50,7 @@ public class AnalysisControllerThread extends Thread {
 	@Override
 	public void run() {
 		if (!this.analysisInstance.run()) {
-			AnalysisControllerThread.log.error("Analysis returned with error");
+			AnalysisControllerThread.LOG.error("Analysis returned with error");
 		}
 	}
 
@@ -61,7 +61,7 @@ public class AnalysisControllerThread extends Thread {
 			// wait until AnalysisController is initialized
 			this.analysisInstance.getInitializationLatch().await();
 		} catch (final InterruptedException e) {
-			AnalysisControllerThread.log.error("Interrupted while waiting for AnalysisController to be initialized: " + e.getMessage(), e);
+			AnalysisControllerThread.LOG.error("Interrupted while waiting for AnalysisController to be initialized: " + e.getMessage(), e);
 		}
 	}
 

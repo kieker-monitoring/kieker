@@ -47,7 +47,7 @@ import org.apache.commons.logging.LogFactory;
 // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/142
 public class FSReaderCons implements IMonitoringRecordReceiver {
 
-	private static final Log log = LogFactory.getLog(FSReaderCons.class);
+	private static final Log LOG = LogFactory.getLog(FSReaderCons.class);
 
 	// FSReaderConsData data = new FSReaderConsData(new AtomicBoolean(false),
 	// new AtomicBoolean(false),
@@ -91,7 +91,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 			}
 
 		} catch (final InterruptedException ex) {
-			FSReaderCons.log.error("Reader thread has been interrupted.", ex);
+			FSReaderCons.LOG.error("Reader thread has been interrupted.", ex);
 			this.errorOccurred.set(true);
 			return false;
 		}
@@ -114,7 +114,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 								// signal termination:
 								FSReaderCons.this.newMonitoringRecord(FSReaderCons.this.FS_READER_TERMINATION_MARKER);
 							} catch (final Exception ex) {
-								FSReaderCons.log.error(directoryReader, ex);
+								FSReaderCons.LOG.error(directoryReader, ex);
 								FSReaderCons.this.reportReaderException(ex);
 							}
 						}
@@ -138,7 +138,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 						} catch (final InterruptedException e) { // ignore
 						}
 						if (this.errorOccurred.get()) {
-							FSReaderCons.log.error("Found error flag set");
+							FSReaderCons.LOG.error("Found error flag set");
 							throw new MonitoringReaderException("An error occured");
 						}
 					}
@@ -151,7 +151,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 					// poll since FS_READER_TERMINATION_MARKER remains in
 					// list
 					if (nextRecord == this.FS_READER_TERMINATION_MARKER) {
-						FSReaderCons.log.info("All reader threads provided FS_READER_TERMINATION_MARKER");
+						FSReaderCons.LOG.info("All reader threads provided FS_READER_TERMINATION_MARKER");
 						/**
 						 * This must remain the only place we leave this method!
 						 */
@@ -162,7 +162,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 							/*
 							 * now, we'll remove
 							 */
-							FSReaderCons.log.warn("failed to remove nextRecord " + nextRecord + "\n" + "consumerLatch: " + consumerLatch + "\n" + "first key: "
+							FSReaderCons.LOG.warn("failed to remove nextRecord " + nextRecord + "\n" + "consumerLatch: " + consumerLatch + "\n" + "first key: "
 									+ this.orderRecordBuffer.firstKey());
 							throw new MonitoringRecordConsumerException("failed to remove nextRecord " + nextRecord);
 						}
@@ -177,32 +177,32 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 					/* wake up blocked thread (in consume...()) */
 					consumerLatch.countDown();
 				} else {
-					FSReaderCons.log.warn("consumerLatch == null");
+					FSReaderCons.LOG.warn("consumerLatch == null");
 				}
 			}
 		} catch (final MonitoringRecordConsumerException ex) {
-			FSReaderCons.log.error("Exception while reading. Terminating.", ex);
+			FSReaderCons.LOG.error("Exception while reading. Terminating.", ex);
 			this.errorOccurred.set(true);
 			/**
 			 * There may be threads in #newMonitoringRecord() waiting for there
 			 * latch to count down.
 			 */
 			synchronized (this.orderRecordBuffer) {
-				FSReaderCons.log.info("Shutting down possibly waiting threads ...");
+				FSReaderCons.LOG.info("Shutting down possibly waiting threads ...");
 				for (final CountDownLatch latch : this.orderRecordBuffer.values()) {
 					latch.countDown();
 				}
 			}
 			return false;
 		} catch (final MonitoringReaderException ex) {
-			FSReaderCons.log.error("Exception while reading. Terminating.", ex);
+			FSReaderCons.LOG.error("Exception while reading. Terminating.", ex);
 			this.errorOccurred.set(true);
 			/**
 			 * There may be threads in #newMonitoringRecord() waiting for there
 			 * latch to count down.
 			 */
 			synchronized (this.orderRecordBuffer) {
-				FSReaderCons.log.info("Shutting down possibly waiting threads ...");
+				FSReaderCons.LOG.info("Shutting down possibly waiting threads ...");
 				for (final CountDownLatch latch : this.orderRecordBuffer.values()) {
 					latch.countDown();
 				}
@@ -213,7 +213,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 
 	private void reportReaderException(final Exception ex) {
 		final Thread t = Thread.currentThread();
-		FSReaderCons.log.error("FSReader thread '" + t.getName() + "' reports exception", ex);
+		FSReaderCons.LOG.error("FSReader thread '" + t.getName() + "' reports exception", ex);
 		this.errorOccurred.set(true);
 		synchronized (this.orderRecordBuffer) {
 			this.orderRecordBuffer.notifyAll(); // notify main thread of
@@ -282,9 +282,9 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
  */
 final class OrderRecordBufferElement {
 
-	private static final AtomicLong nextOrderRecordBufferElementId = new AtomicLong(0);
+	private static final AtomicLong NEXT_ORDER_RECORD_BUFFER_ELEMENT_ID = new AtomicLong(0);
 
-	private final long elementId = OrderRecordBufferElement.nextOrderRecordBufferElementId.getAndIncrement();
+	private final long elementId = OrderRecordBufferElement.NEXT_ORDER_RECORD_BUFFER_ELEMENT_ID.getAndIncrement();
 
 	/**
 	 * Wrapped record

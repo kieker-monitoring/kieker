@@ -35,7 +35,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
  * 
  */
 public class NamedPipeFactory {
-	private final static AtomicInteger nextPipeId = new AtomicInteger(0);
+	private final static AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
 	private final static String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
 
 	/**
@@ -45,7 +45,7 @@ public class NamedPipeFactory {
 	 * @return a unique name
 	 */
 	public static String createPipeName() {
-		return NamedPipeFactory.PIPE_NAME_PREFIX + NamedPipeFactory.nextPipeId.getAndIncrement();
+		return NamedPipeFactory.PIPE_NAME_PREFIX + NamedPipeFactory.NEXT_PIPE_ID.getAndIncrement();
 	}
 
 	/**

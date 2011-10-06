@@ -58,7 +58,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	public void testCreationDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		testValues(configuration);
-		Assert.assertEquals("Writer must be " + DefaultConfigurationFactory.writerName, DefaultConfigurationFactory.writerName,
+		Assert.assertEquals("Writer must be " + DefaultConfigurationFactory.WRITER_NAME, DefaultConfigurationFactory.WRITER_NAME,
 				configuration.getStringProperty(Configuration.WRITER_CLASSNAME));
 	}
 

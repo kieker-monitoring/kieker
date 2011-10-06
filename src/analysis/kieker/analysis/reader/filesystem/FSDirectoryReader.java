@@ -49,7 +49,7 @@ import org.apache.commons.logging.LogFactory;
  */
 class FSDirectoryReader {
 
-	private static final Log log = LogFactory.getLog(FSDirectoryReader.class);
+	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
 
 	private static final boolean OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE = true;
 
@@ -107,7 +107,7 @@ class FSDirectoryReader {
 	}
 
 	private String filePrefix = "kieker";
-	private static final String legayFilePrefix = "tpmon";
+	private static final String LEGAY_FILE_PREFIX = "tpmon";
 	private final String filePostfix = ".dat";
 
 	/**
@@ -158,13 +158,13 @@ class FSDirectoryReader {
 			 */
 			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
 			if (mappingFile.exists()) {
-				FSDirectoryReader.log.warn("directory '" + this.inputDir + "' contains no file 'kieker.map'");
-				FSDirectoryReader.log.info("Found 'tpmon.map' ... switching to legacy mode");
-				this.filePrefix = FSDirectoryReader.legayFilePrefix;
+				FSDirectoryReader.LOG.warn("directory '" + this.inputDir + "' contains no file 'kieker.map'");
+				FSDirectoryReader.LOG.info("Found 'tpmon.map' ... switching to legacy mode");
+				this.filePrefix = FSDirectoryReader.LEGAY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old
 				// monitoring logs. Hence, only dump a log.warn
-				FSDirectoryReader.log.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				FSDirectoryReader.LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
 			}
 		}
 
@@ -193,17 +193,17 @@ class FSDirectoryReader {
 						this.typeRegistry.registerRecordTypeIdMapping(id, classname);
 					} else if (FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE
 							&& classname.equals(MonitoringRecordTypeRegistry.OLD_KIEKEREXECUTIONRECORD_CLASSNAME)) {
-						FSDirectoryReader.log.info("Using compatibility mode for mapping " + classname);
+						FSDirectoryReader.LOG.info("Using compatibility mode for mapping " + classname);
 						this.typeRegistry.registerRecordTypeIdMapping(id, classname);
 					} else {
 						this.recordTypeIdIgnoreList.add(id);
-						FSDirectoryReader.log.info("Ignoring record type for mapping " + line);
+						FSDirectoryReader.LOG.info("Ignoring record type for mapping " + line);
 					}
 				} catch (final ClassNotFoundException e) {
-					FSDirectoryReader.log.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
 					break;
 				} catch (final IllegalArgumentException e) {
-					FSDirectoryReader.log.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
 					break;
 				}
 			}
@@ -213,7 +213,7 @@ class FSDirectoryReader {
 				try {
 					in.close();
 				} catch (final Exception e) {
-					FSDirectoryReader.log.error("Exception", e);
+					FSDirectoryReader.LOG.error("Exception", e);
 				}
 			}
 		}
@@ -228,7 +228,7 @@ class FSDirectoryReader {
 	 * @throws MonitoringReaderException
 	 */
 	private void processInputFile(final File input) throws IOException, MonitoringReaderException {
-		FSDirectoryReader.log.info("< Loading " + input.getAbsolutePath());
+		FSDirectoryReader.LOG.info("< Loading " + input.getAbsolutePath());
 
 		BufferedReader in = null;
 		StringTokenizer st = null;
@@ -268,7 +268,7 @@ class FSDirectoryReader {
 
 							final Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
 							if (clazz == null) {
-								FSDirectoryReader.log.fatal("Missing classname mapping for record type id " + "'" + id + "'");
+								FSDirectoryReader.LOG.fatal("Missing classname mapping for record type id " + "'" + id + "'");
 								throw new IllegalStateException("Missing classname mapping for record type id " + "'" + id + "'");
 							}
 							rec = clazz.newInstance();
@@ -293,23 +293,23 @@ class FSDirectoryReader {
 					rec.initFromArray(typedArray);
 
 				} catch (final InstantiationException e) {
-					FSDirectoryReader.log.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
-					FSDirectoryReader.log.error("Abort reading");
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
+					FSDirectoryReader.LOG.error("Abort reading");
 					throw new MonitoringReaderException("LogReaderExecutionException ", e);
 				} catch (final IllegalAccessException e) {
-					FSDirectoryReader.log.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
-					FSDirectoryReader.log.error("Abort reading");
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
+					FSDirectoryReader.LOG.error("Abort reading");
 					throw new MonitoringReaderException("LogReaderExecutionException ", e);
 				} catch (final IllegalStateException e) {
-					FSDirectoryReader.log.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
-					FSDirectoryReader.log.error("Abort reading");
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
+					FSDirectoryReader.LOG.error("Abort reading");
 					throw new MonitoringReaderException("LogReaderExecutionException ", e);
 				}
 
 				/* Deliver record */
 				if (!this.recordReceiver.newMonitoringRecord(rec)) {
 					final String errorMsg = "failed to deliver record. Will terminate";
-					FSDirectoryReader.log.error(errorMsg);
+					FSDirectoryReader.LOG.error(errorMsg);
 					throw new MonitoringReaderException(errorMsg);
 				}
 			}
@@ -318,7 +318,7 @@ class FSDirectoryReader {
 				try {
 					in.close();
 				} catch (final Exception e) {
-					FSDirectoryReader.log.error("Exception", e);
+					FSDirectoryReader.LOG.error("Exception", e);
 				}
 			}
 		}

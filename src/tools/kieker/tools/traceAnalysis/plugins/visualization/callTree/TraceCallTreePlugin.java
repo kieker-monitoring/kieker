@@ -55,7 +55,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 
-	private static final Log log = LogFactory.getLog(TraceCallTreePlugin.class);
+	private static final Log LOG = LogFactory.getLog(TraceCallTreePlugin.class);
 	private final CallTreeNode root;
 	private final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory;
 	private final SystemModelRepository systemEntityFactory;
@@ -190,7 +190,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 			}
 		}
 		if (curStack.pop() != root) {
-			TraceCallTreePlugin.log.fatal("Stack not empty after processing trace");
+			TraceCallTreePlugin.LOG.fatal("Stack not empty after processing trace");
 			throw new TraceProcessingException("Stack not empty after processing trace");
 		}
 	}
@@ -243,10 +243,10 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 				reportSuccess(mt.getTraceId());
 			} catch (final TraceProcessingException ex) {
 				reportError(mt.getTraceId());
-				TraceCallTreePlugin.log.error("TraceProcessingException", ex);
+				TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
 			} catch (final FileNotFoundException ex) {
 				reportError(mt.getTraceId());
-				TraceCallTreePlugin.log.error("File not found", ex);
+				TraceCallTreePlugin.LOG.error("File not found", ex);
 			}
 		}
 	};

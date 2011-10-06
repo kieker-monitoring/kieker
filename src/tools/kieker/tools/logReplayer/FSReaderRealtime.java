@@ -41,7 +41,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FSReaderRealtime extends AbstractMonitoringReader {
 
-	private static final Log log = LogFactory.getLog(FSReaderRealtime.class);
+	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController tpanInstance = new AnalysisController();
@@ -71,7 +71,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		@Override
 		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 			if (!this.master.deliverRecord(monitoringRecord)) {
-				FSReaderRealtime.log.error("LogReaderExecutionException");
+				FSReaderRealtime.LOG.error("LogReaderExecutionException");
 				return false;
 			}
 			return true;
@@ -114,7 +114,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 			initInstanceFromArgs(inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
 		} catch (final IllegalArgumentException exc) {
-			FSReaderRealtime.log.error("Failed to initString '" + initString + "': " + exc.getMessage());
+			FSReaderRealtime.LOG.error("Failed to initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}
 		return true;
@@ -129,7 +129,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 		// parse inputDir property value
 		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) {
-			FSReaderRealtime.log.error("Invalid argument value for inputDirNameList:" + inputDirNameList);
+			FSReaderRealtime.LOG.error("Invalid argument value for inputDirNameList:" + inputDirNameList);
 			throw new IllegalArgumentException("Invalid argument value for inputDirNameList:" + inputDirNameList);
 		}
 		try {
@@ -171,7 +171,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			this.tpanInstance.run();
 			this.terminationLatch.await();
 		} catch (final Exception ex) {
-			FSReaderRealtime.log.error("An error occured while reading", ex);
+			FSReaderRealtime.LOG.error("An error occured while reading", ex);
 			return false;
 		}
 		return success;

@@ -49,21 +49,21 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log log = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
+	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
 		super(name, systemFactory);
 	}
 
-	private final static Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = new ArrayList<Class<? extends IMonitoringRecord>>();
+	private final static Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
 
 	static {
-		ExecutionRecordTransformationFilter.recordTypeSubscriptionList.add(OperationExecutionRecord.class);
+		ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST.add(OperationExecutionRecord.class);
 	}
 
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return ExecutionRecordTransformationFilter.recordTypeSubscriptionList;
+		return ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST;
 	}
 
 	private Signature createSignature(final String operationSignatureStr) {
@@ -89,7 +89,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		if (!(record instanceof OperationExecutionRecord)) {
-			ExecutionRecordTransformationFilter.log.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
+			ExecutionRecordTransformationFilter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
 					+ record.getClass().getName());
 			return false;
 		}

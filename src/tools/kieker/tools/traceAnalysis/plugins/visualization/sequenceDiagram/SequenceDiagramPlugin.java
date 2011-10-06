@@ -49,15 +49,15 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin {
 
-	private static final Log log = LogFactory.getLog(SequenceDiagramPlugin.class);
+	private static final Log LOG = LogFactory.getLog(SequenceDiagramPlugin.class);
 	private final String outputFnBase;
 	private final boolean shortLabels;
 	/**
 	 * Path to the sequence.pic macros used to plot UML sequence diagrams. The
 	 * file must be in the classpath -- typically inside the jar.
 	 */
-	private final static String sequencePicPath = "META-INF/sequence.pic";
-	private final static String sequencePicContent;
+	private final static String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
+	private final static String SEQUENCE_PIC_CONTENT;
 
 	/*
 	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String
@@ -70,7 +70,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		BufferedReader reader = null;
 
 		try {
-			final InputStream is = SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(SequenceDiagramPlugin.sequencePicPath);
+			final InputStream is = SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(SequenceDiagramPlugin.SEQUENCE_PIC_PATH);
 			String line;
 			reader = new BufferedReader(new InputStreamReader(is));
 			while ((line = reader.readLine()) != null) {
@@ -78,20 +78,20 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 			}
 			error = false;
 		} catch (final IOException exc) {
-			SequenceDiagramPlugin.log.error("Error while reading " + SequenceDiagramPlugin.sequencePicPath, exc);
+			SequenceDiagramPlugin.LOG.error("Error while reading " + SequenceDiagramPlugin.SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				SequenceDiagramPlugin.log.error("Failed to close input stream", ex);
+				SequenceDiagramPlugin.LOG.error("Failed to close input stream", ex);
 			}
 			if (error) {
 				/* sequence.pic must be provided on execution of pic2plot */
-				sequencePicContent = "copy \"sequence.pic\";";
+				SEQUENCE_PIC_CONTENT = "copy \"sequence.pic\";";
 			} else {
-				sequencePicContent = sb.toString();
+				SEQUENCE_PIC_CONTENT = sb.toString();
 			}
 		}
 	}
@@ -148,7 +148,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				SequenceDiagramPlugin.this.reportSuccess(mt.getTraceId());
 			} catch (final FileNotFoundException ex) {
 				SequenceDiagramPlugin.this.reportError(mt.getTraceId());
-				SequenceDiagramPlugin.log.error("File not found", ex);
+				SequenceDiagramPlugin.LOG.error("File not found", ex);
 			}
 		}
 	};
@@ -201,7 +201,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		final Vector<Message> messages = messageTrace.getSequenceAsVector();
 		// preamble:
 		ps.print(".PS" + "\n");
-		ps.print(SequenceDiagramPlugin.sequencePicContent + "\n");
+		ps.print(SequenceDiagramPlugin.SEQUENCE_PIC_CONTENT + "\n");
 		ps.print("boxwid = 1.1;" + "\n");
 		ps.print("movewid = 0.5;" + "\n");
 
@@ -243,7 +243,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			SequenceDiagramPlugin.log.error("Invalid mode: " + sdMode);
+			SequenceDiagramPlugin.LOG.error("Invalid mode: " + sdMode);
 		}
 
 		ps.print("step()" + "\n");
@@ -264,7 +264,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				SequenceDiagramPlugin.log.error("Invalid mode: " + sdMode);
+				SequenceDiagramPlugin.LOG.error("Invalid mode: " + sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -292,7 +292,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");" + "\n");
 				ps.print("inactive(" + senderDotId + ");" + "\n");
 			} else {
-				SequenceDiagramPlugin.log.error("Message type not supported: " + me.getClass().getName());
+				SequenceDiagramPlugin.LOG.error("Message type not supported: " + me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");" + "\n");

@@ -47,7 +47,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
-	private static final Log log = LogFactory.getLog(TraceReconstructionFilter.class);
+	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	/** TraceId x trace */
@@ -140,8 +140,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 		if (executionTrace != null) { /* trace (artifacts) exists already; */
 			if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
-				TraceReconstructionFilter.log.fatal("Missing entry for trace in timeoutMap: " + executionTrace);
-				TraceReconstructionFilter.log.fatal("pendingTraces and timeoutMap are now longer consistent!");
+				TraceReconstructionFilter.LOG.fatal("Missing entry for trace in timeoutMap: " + executionTrace);
+				TraceReconstructionFilter.LOG.fatal("pendingTraces and timeoutMap are now longer consistent!");
 				reportError(traceId);
 			}
 		} else { /* create and add new trace */
@@ -151,13 +151,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		try {
 			executionTrace.add(execution);
 			if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-				TraceReconstructionFilter.log.error("Equal entry existed in timeoutMap already:" + executionTrace);
+				TraceReconstructionFilter.LOG.error("Equal entry existed in timeoutMap already:" + executionTrace);
 			}
 			processTimeoutQueue();
 		} catch (final InvalidTraceException ex) { // this would be a bug!
-			TraceReconstructionFilter.log.fatal("Attempt to add record to wrong trace", ex);
+			TraceReconstructionFilter.LOG.fatal("Attempt to add record to wrong trace", ex);
 		} catch (final ExecutionEventProcessingException ex) {
-			TraceReconstructionFilter.log.error("ExecutionEventProcessingException occured while processing " + "the timeout queue. ", ex);
+			TraceReconstructionFilter.LOG.error("ExecutionEventProcessingException occured while processing " + "the timeout queue. ", ex);
 		}
 	}
 
@@ -207,7 +207,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 				reportError(curTraceId);
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
-					TraceReconstructionFilter.log.error("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace, ex);
+					TraceReconstructionFilter.LOG.error("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace, ex);
 					throw new ExecutionEventProcessingException("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace,
 							ex);
 				}
@@ -254,10 +254,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			if (!error) {
 				processTimeoutQueue();
 			} else {
-				TraceReconstructionFilter.log.info("terminate called with error flag set; won't process timeoutqueue any more.");
+				TraceReconstructionFilter.LOG.info("terminate called with error flag set; won't process timeoutqueue any more.");
 			}
 		} catch (final ExecutionEventProcessingException ex) {
-			TraceReconstructionFilter.log.error("Error processing queue", ex);
+			TraceReconstructionFilter.LOG.error("Error processing queue", ex);
 		}
 	}
 

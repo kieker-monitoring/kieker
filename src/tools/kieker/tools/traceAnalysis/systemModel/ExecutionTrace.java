@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ExecutionTrace extends Trace {
 
-	private static final Log log = LogFactory.getLog(ExecutionTrace.class);
+	private static final Log LOG = LogFactory.getLog(ExecutionTrace.class);
 	private final AtomicReference<MessageTrace> messageTrace = new AtomicReference<MessageTrace>();
 	private int minEoi = -1;
 	private int maxEoi = -1;
@@ -130,13 +130,13 @@ public class ExecutionTrace extends Trace {
 			if ((itNum++ == 0) && (curE.getEss() != 0)) {
 				final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss()
 						+ ")\n Causing execution: " + curE);
-				ExecutionTrace.log.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+				ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 				throw ex;
 			}
 			if (prevEoi != (curE.getEoi() - 1)) {
 				final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi + "," + curE.getEoi()
 						+ ">" + "(Execution: " + curE + ")");
-				ExecutionTrace.log.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+				ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 				throw ex;
 			}
 			prevEoi = curE.getEoi();
@@ -166,7 +166,7 @@ public class ExecutionTrace extends Trace {
 			} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
 				final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --" + "but found sequence <" + prevE.getEss()
 						+ "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
-				ExecutionTrace.log.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+				ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 				throw ex;
 			}
 			if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions

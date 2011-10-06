@@ -43,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TestTraceReconstructionFilter extends TestCase {
 
-	private static final Log log = LogFactory.getLog(TestTraceReconstructionFilter.class);
+	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
@@ -94,7 +94,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			/* Make sure that trace is valid: */
 			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.log.error(ex);
+			TestTraceReconstructionFilter.LOG.error(ex);
 			Assert.fail("Test invalid since used trace invalid");
 			throw new InvalidTraceException("Test invalid since used trace invalid", ex);
 		}
@@ -121,7 +121,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			validExecutionTrace = this.genValidBookstoreTrace();
 			validMessageTrace = validExecutionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
+			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
 			return;
 		}
@@ -248,7 +248,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		try {
 			invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip();
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
+			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
 			return;
 		}
@@ -312,7 +312,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			filter.getExecutionInputPort().newEvent(curExec);
 		}
 
-		TestTraceReconstructionFilter.log.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
+		TestTraceReconstructionFilter.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 		filter.terminate(false);
 
 		/* Analyse result of test case execution */
@@ -367,7 +367,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		try {
 			incompleteExecutionTrace = this.genBookstoreTraceWithoutEntryExecution();
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
+			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
 			return;
 		}
@@ -383,7 +383,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		try {
 			completingExecutionTrace.add(this.exec0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
+			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
 			return;
 		}
@@ -404,7 +404,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			triggerExecutionTrace.add(exec0_0__bookstore_searchBook__trigger);
 			triggerMessageTrace = triggerExecutionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.log.error("InvalidTraceException", ex);
+			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
 			return;
 		}

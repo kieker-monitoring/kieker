@@ -55,8 +55,8 @@ import kieker.monitoring.probe.IMonitoringProbe;
  */
 public class OperationExecutionRegistrationFilter implements Filter, IMonitoringProbe {
 
-	private static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
-	private static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
+	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
+	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 
 	@Override
 	public void init(final FilterConfig config) throws ServletException {}
@@ -66,14 +66,14 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
 		if (request instanceof HttpServletRequest) {
 			final HttpSession session = ((HttpServletRequest) request).getSession(false);
 			if (session != null) {
-				OperationExecutionRegistrationFilter.sessionRegistry.storeThreadLocalSessionId(session.getId());
+				OperationExecutionRegistrationFilter.SESSION_REGISTRY.storeThreadLocalSessionId(session.getId());
 			}
 		}
 		try {
 			chain.doFilter(request, response);
 		} finally {
-			OperationExecutionRegistrationFilter.cfRegistry.unsetThreadLocalTraceId(); // actually, this should not be necessary
-			OperationExecutionRegistrationFilter.sessionRegistry.unsetThreadLocalSessionId();
+			OperationExecutionRegistrationFilter.CF_REGISTRY.unsetThreadLocalTraceId(); // actually, this should not be necessary
+			OperationExecutionRegistrationFilter.SESSION_REGISTRY.unsetThreadLocalSessionId();
 		}
 	}
 

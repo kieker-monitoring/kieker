@@ -37,11 +37,11 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 public abstract class AbstractOperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
 
-	protected static final IMonitoringController controller = MonitoringController.getInstance();
-	protected static final SessionRegistry sessionRegistry = SessionRegistry.getInstance();
-	protected static final ControlFlowRegistry cfRegistry = ControlFlowRegistry.getInstance();
-	protected static final ITimeSource timesource = AbstractOperationExecutionMethodInvocationInterceptor.controller.getTimeSource();
-	protected static final String vmName = AbstractOperationExecutionMethodInvocationInterceptor.controller.getHostName();
+	protected static final IMonitoringController CONTROLLER = MonitoringController.getInstance();
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
+	protected static final ITimeSource TIMESOURCE = AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.getTimeSource();
+	protected static final String VM_NAME = AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.getHostName();
 
 	/**
 	 * Iff true, the name of the runtime class is used, iff false, the name of
@@ -58,7 +58,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	}
 
 	protected OperationExecutionRecord initExecutionData(final MethodInvocation invocation) {
-		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.recallThreadLocalTraceId();
+		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
 
 		final StringBuilder sb = new StringBuilder().append(invocation.getMethod().getName());
 		sb.append("(");
@@ -91,7 +91,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 																																			 */);
 		execData.isEntryPoint = false;
 		if (execData.traceId == -1) { // -1 if entry points
-			execData.traceId = AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.getAndStoreUniqueThreadLocalTraceId();
+			execData.traceId = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			execData.isEntryPoint = true;
 		}
 		// here we can collect the sessionid, which may for instance be
@@ -100,9 +100,9 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 		// threadid) from a method
 		// that knowns the request object (e.g. a servlet or a spring MVC
 		// controller).
-		execData.sessionId = AbstractOperationExecutionMethodInvocationInterceptor.sessionRegistry.recallThreadLocalSessionId();
-		execData.experimentId = AbstractOperationExecutionMethodInvocationInterceptor.controller.getExperimentId();
-		execData.hostName = AbstractOperationExecutionMethodInvocationInterceptor.vmName;
+		execData.sessionId = AbstractOperationExecutionMethodInvocationInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId();
+		execData.experimentId = AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.getExperimentId();
+		execData.hostName = AbstractOperationExecutionMethodInvocationInterceptor.VM_NAME;
 		return execData;
 	}
 
@@ -114,16 +114,16 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	public abstract Object invoke(MethodInvocation invocation) throws Throwable;
 
 	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData) throws Throwable {
-		execData.tin = AbstractOperationExecutionMethodInvocationInterceptor.timesource.getTime();
+		execData.tin = AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
 		try {
 			// executing the intercepted method call
 			execData.retVal = invocation.proceed();
 		} catch (final Exception e) {
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = AbstractOperationExecutionMethodInvocationInterceptor.timesource.getTime();
+			execData.tout = AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
 			if (execData.isEntryPoint) {
-				AbstractOperationExecutionMethodInvocationInterceptor.cfRegistry.unsetThreadLocalTraceId();
+				AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
 			}
 		}
 	}

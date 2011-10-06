@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class JMSLogReplayer {
 
-	private static final Log log = LogFactory.getLog(JMSLogReplayer.class);
+	private static final Log LOG = LogFactory.getLog(JMSLogReplayer.class);
 	/** Each record is delegated to this receiver. */
 	private final IMonitoringRecordReceiver recordReceiver;
 
@@ -87,7 +87,7 @@ public class JMSLogReplayer {
 			tpanInstance.run();
 			success = true;
 		} catch (final Exception ex) {
-			JMSLogReplayer.log.error("Exception", ex);
+			JMSLogReplayer.LOG.error("Exception", ex);
 			success = false;
 		}
 		return success;
@@ -104,7 +104,7 @@ public class JMSLogReplayer {
  */
 class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log log = LogFactory.getLog(RecordDelegationPlugin.class);
+	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
 	private final IMonitoringRecordReceiver rec;
 
@@ -133,7 +133,7 @@ class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 	 */
 	@Override
 	public boolean execute() {
-		RecordDelegationPlugin2.log.info(RecordDelegationPlugin.class.getName() + " starting ...");
+		RecordDelegationPlugin2.LOG.info(RecordDelegationPlugin.class.getName() + " starting ...");
 		return true;
 	}
 

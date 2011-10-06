@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlugin {
 
-	private static final Log log = LogFactory.getLog(MessageTraceWriterPlugin.class);
+	private static final Log LOG = LogFactory.getLog(MessageTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
 
@@ -64,7 +64,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 			try {
 				this.ps.close();
 			} catch (final IOException ex) {
-				MessageTraceWriterPlugin.log.error("IOException", ex);
+				MessageTraceWriterPlugin.LOG.error("IOException", ex);
 			}
 		}
 	}
@@ -87,7 +87,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 				MessageTraceWriterPlugin.this.ps.append(mt.toString());
 				MessageTraceWriterPlugin.this.reportSuccess(mt.getTraceId());
 			} catch (final IOException ex) {
-				MessageTraceWriterPlugin.log.error("IOException", ex);
+				MessageTraceWriterPlugin.LOG.error("IOException", ex);
 				MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
 			}
 		}

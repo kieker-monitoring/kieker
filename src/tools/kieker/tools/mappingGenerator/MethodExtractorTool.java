@@ -55,9 +55,9 @@ public class MethodExtractorTool {
 	// private static final Log log = LogFactory.getLog(MethodExtractorTool.class);
 
 	private static CommandLine cmdl = null;
-	private static final CommandLineParser cmdlParser = new BasicParser();
-	private static final HelpFormatter cmdHelpFormatter = new HelpFormatter();
-	private static final Options cmdlOpts = new Options();
+	private static final CommandLineParser CMDL_PARSER = new BasicParser();
+	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
+	private static final Options CMDL_OPTS = new Options();
 	private static String filter = null;
 	private static String cp = null;
 	private static String mappingFile = null;
@@ -68,19 +68,19 @@ public class MethodExtractorTool {
 
 	@SuppressWarnings("static-access")
 	private final static void initializeOptions() {
-		MethodExtractorTool.cmdlOpts.addOption(OptionBuilder.withArgName("classpath").hasArg().withLongOpt("searchpath").isRequired(true)
+		MethodExtractorTool.CMDL_OPTS.addOption(OptionBuilder.withArgName("classpath").hasArg().withLongOpt("searchpath").isRequired(true)
 				.withDescription("Classpath to analyze. Multiple classpath elements can be separated by '" + File.pathSeparator + "'.").withValueSeparator('=')
 				.create("c"));
-		MethodExtractorTool.cmdlOpts.addOption(OptionBuilder.withArgName("classname").hasArg().withLongOpt("filter-classname").isRequired(false)
+		MethodExtractorTool.CMDL_OPTS.addOption(OptionBuilder.withArgName("classname").hasArg().withLongOpt("filter-classname").isRequired(false)
 				.withDescription("Classname of the filter to use.\n Defaults to " + NoInterfaceNoSuperclassFilter.class.getName()).withValueSeparator('=')
 				.create("f"));
-		MethodExtractorTool.cmdlOpts.addOption(OptionBuilder.withArgName("filename").hasArg().withLongOpt("mapping-file").isRequired(true)
+		MethodExtractorTool.CMDL_OPTS.addOption(OptionBuilder.withArgName("filename").hasArg().withLongOpt("mapping-file").isRequired(true)
 				.withDescription("Name of mapping file to be written").withValueSeparator('=').create("m"));
 	}
 
 	private static boolean parseArgs(final String[] args) {
 		try {
-			MethodExtractorTool.cmdl = MethodExtractorTool.cmdlParser.parse(MethodExtractorTool.cmdlOpts, args);
+			MethodExtractorTool.cmdl = MethodExtractorTool.CMDL_PARSER.parse(MethodExtractorTool.CMDL_OPTS, args);
 		} catch (final ParseException e) {
 			System.err.println("Error parsing arguments: " + e.getMessage());
 			MethodExtractorTool.printUsage();
@@ -90,7 +90,7 @@ public class MethodExtractorTool {
 	}
 
 	private static void printUsage() {
-		MethodExtractorTool.cmdHelpFormatter.printHelp(MethodExtractorTool.class.getName(), MethodExtractorTool.cmdlOpts);
+		MethodExtractorTool.CMD_HELP_FORMATTER.printHelp(MethodExtractorTool.class.getName(), MethodExtractorTool.CMDL_OPTS);
 	}
 
 	private static boolean initFromArgs() {
@@ -115,7 +115,7 @@ public class MethodExtractorTool {
 
 class MethodExtractor extends ClassLoader {
 
-	private static final Log log = LogFactory.getLog(MethodExtractor.class);
+	private static final Log LOG = LogFactory.getLog(MethodExtractor.class);
 	private String filtername = null;
 	private String cp = null;
 	private String mappingFile = null;
@@ -136,7 +136,7 @@ class MethodExtractor extends ClassLoader {
 			try {
 				filter = (Class<MethodFilter>) this.loadClass(this.filtername);
 			} catch (final Exception e) {
-				MethodExtractor.log.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...");
+				MethodExtractor.LOG.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...");
 				e.printStackTrace();
 			}
 			final Vector<File> directories = new Vector<File>();
@@ -154,7 +154,7 @@ class MethodExtractor extends ClassLoader {
 			this.map.writeMapToFile(this.mappingFile);
 			retval = true;
 		} catch (final IOException ex) {
-			MethodExtractor.log.error("IOException: ", ex);
+			MethodExtractor.LOG.error("IOException: ", ex);
 			retval = false;
 		}
 		return retval;
@@ -188,7 +188,7 @@ class MethodExtractor extends ClassLoader {
 		final Enumeration<JarEntry> es = jar.entries();
 		while (es.hasMoreElements()) {
 			final JarEntry e = es.nextElement();
-			MethodExtractor.log.error(e.getName());
+			MethodExtractor.LOG.error(e.getName());
 			if (e.getName().endsWith(".class")) {
 				analyzeJarClassEntry(jar, e, "", filter);
 			}
@@ -198,7 +198,7 @@ class MethodExtractor extends ClassLoader {
 	private void analyzeJarClassEntry(final JarFile jar, final JarEntry e, final String prefix, final MethodFilter filter) {
 		final long size = e.getSize();
 		if ((size == -1) || (size > Integer.MAX_VALUE)) {
-			MethodExtractor.log.error("Size of file \"" + jar.getName() + "/" + e.getName() + " out of range: size");
+			MethodExtractor.LOG.error("Size of file \"" + jar.getName() + "/" + e.getName() + " out of range: size");
 			return;
 		}
 		final byte[] data = new byte[(int) size];
@@ -212,7 +212,7 @@ class MethodExtractor extends ClassLoader {
 				clazz = this.defineClass(name, data, 0, data.length);
 				analyzeClass(clazz, filter);
 			} catch (final LinkageError err) {
-				MethodExtractor.log.error("Linkage error", err);
+				MethodExtractor.LOG.error("Linkage error", err);
 			}
 		} catch (final IOException e1) {
 			e1.printStackTrace();
@@ -287,9 +287,9 @@ class MethodExtractor extends ClassLoader {
 				final Class<?> c = super.loadClass(packagePrefix + file.getName().substring(begIndex, endIndex));
 				analyzeClass(c, filter);
 			} catch (final ClassNotFoundException e) {
-				MethodExtractor.log.error(packagePrefix + file.getName().substring(begIndex, endIndex), e);
-				MethodExtractor.log.error("packagePrefix: " + packagePrefix);
-				MethodExtractor.log.error("file.getName().substring(begIndex, endIndex): " + file.getName().substring(begIndex, endIndex));
+				MethodExtractor.LOG.error(packagePrefix + file.getName().substring(begIndex, endIndex), e);
+				MethodExtractor.LOG.error("packagePrefix: " + packagePrefix);
+				MethodExtractor.LOG.error("file.getName().substring(begIndex, endIndex): " + file.getName().substring(begIndex, endIndex));
 			}
 		}
 	}
