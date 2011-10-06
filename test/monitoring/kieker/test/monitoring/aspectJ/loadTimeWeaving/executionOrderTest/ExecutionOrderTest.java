@@ -58,7 +58,7 @@ public class ExecutionOrderTest {
 		}
 	}
 
-	public static void main(final String args[]) {
+	public static void main(final String[] args) {
 		ExecutionOrderTest.a(true);
 		ExecutionOrderTest.a(false);
 		ExecutionOrderTest.d1();

@@ -28,7 +28,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.helloWorld;
  * @author Matthias Rohr
  */
 public class HelloWorld {
-	public static void main(final String args[]) {
+	public static void main(final String[] args) {
 		System.out.println("Hello");
 		HelloWorld.doSomething();
 	}

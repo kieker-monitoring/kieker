@@ -50,7 +50,7 @@ public class StorageOnly {
 	private static final IMonitoringController CTRL = MonitoringController.getInstance();
 	private static final String VM_NAME = StorageOnly.CTRL.getHostName();
 
-	public static void main(final String args[]) {
+	public static void main(final String[] args) {
 		try {
 			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.NUMBER_OF_EVENTS);
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {

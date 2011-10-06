@@ -570,7 +570,7 @@ public class TraceAnalysisTool {
 		return true;
 	}
 
-	public static void main(final String args[]) {
+	public static void main(final String[] args) {
 		try {
 			if (!TraceAnalysisTool.parseArgs(args) || !TraceAnalysisTool.initFromArgs() || !TraceAnalysisTool.assertOutputDirExists()) {
 				System.exit(1);

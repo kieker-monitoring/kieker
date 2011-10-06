@@ -60,7 +60,7 @@ public class TraceAnalysisWrapper {
 			}
 		});
 
-		final URL urls[] = new URL[bins.length + libs.length + 1];
+		final URL[] urls = new URL[bins.length + libs.length + 1];
 		try {
 			urls[0] = new File(uDir).getCanonicalFile().toURI().toURL();
 		} catch (final MalformedURLException e1) {
