@@ -99,7 +99,7 @@ public class LoggingTimestampConverter {
 	 */
 	public static final Date convertDatetimeStringToUTCDate(final String utcString) throws ParseException {
 		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN); // NOCS
-		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC")); 
+		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat_ISO8601UTC.parse(utcString);
 	}
 }

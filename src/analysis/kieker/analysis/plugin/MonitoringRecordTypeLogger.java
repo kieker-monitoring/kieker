@@ -37,8 +37,8 @@ public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumerPlug
 	/**
 	 * Constructs a {@link MonitoringRecordTypeLogger}.
 	 */
-	public MonitoringRecordTypeLogger() { }
-	
+	public MonitoringRecordTypeLogger() {}
+
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
 		return null; // receive records of any type

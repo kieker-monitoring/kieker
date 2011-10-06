@@ -74,8 +74,8 @@ public class AnalysisController {
 	/**
 	 * Constructs an {@link AnalysisController} instance.
 	 */
-	public AnalysisController() { }
-	
+	public AnalysisController() {}
+
 	/**
 	 * Starts an {@link AnalysisController} instance and returns after the
 	 * configured reader finished reading and all analysis plug-ins terminated;
@@ -135,7 +135,7 @@ public class AnalysisController {
 					success = false;
 				}
 			}
-		} catch (final Exception exc) { //NOCS
+		} catch (final Exception exc) { // NOCS
 			AnalysisController.LOG.fatal("Error occurred: " + exc.getMessage());
 			success = false;
 		} finally {
@@ -145,7 +145,7 @@ public class AnalysisController {
 				for (final IAnalysisPlugin c : this.plugins) {
 					c.terminate(!success); // normal termination (w/o error)
 				}
-			} catch (final Exception e) { //NOCS
+			} catch (final Exception e) { // NOCS
 				AnalysisController.LOG.error("Error during termination: " + e.getMessage(), e);
 			}
 		}
@@ -235,7 +235,7 @@ public class AnalysisController {
 	 */
 	private final boolean deliverRecordToConsumers(final IMonitoringRecord monitoringRecord, final boolean abortOnConsumerError) {
 		final String consumerErrorMsg = "Consumer returned false. Aborting delivery of record. ";
-		
+
 		boolean success = true;
 
 		for (final IMonitoringRecordConsumerPlugin c : this.anyTypeConsumers) {
