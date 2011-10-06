@@ -372,13 +372,14 @@
 
         <!-- Checks that a local variable or a parameter does not shadow a field that is defined in the same class. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
+        <!-- KIEKER ignoreConstructorParameter, ignoreSetter -->
         <module name="HiddenField">
             <property name="tokens"                     value="PARAMETER_DEF, VARIABLE_DEF"/>
             <!--
             <property name="ignoreFormat"               value=""/>
             !-->
-            <property name="ignoreConstructorParameter" value="false"/>
-            <property name="ignoreSetter"               value="false"/>
+            <property name="ignoreConstructorParameter" value="true"/>
+            <property name="ignoreSetter"               value="true"/>
             <property name="ignoreAbstractMethods"      value="false"/>
         </module>
 
