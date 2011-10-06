@@ -1054,7 +1054,7 @@
 	
 	<target name="checkstyle" depends="build-all,compile-tests" description="Uses Checkstyle to find potential problems">
     <taskdef resource="checkstyletask.properties" classpath="${lib.dir}/checkstyle/lib/checkstyle-5.4-all.jar"/>
-		<checkstyle config="${lib.dir}/checkstyle/cs-conf.xml" >
+		<checkstyle config="${lib.dir}/checkstyle/cs-conf.xml" failOnViolation="false">
 			<fileset dir="${src.dir}" includes="**/*.java"/>
 			<fileset dir="${test.dir}" includes="**/*.java"/>
 			<formatter type="xml" toFile="${tmp.dir}/cs_report.xml"/>
