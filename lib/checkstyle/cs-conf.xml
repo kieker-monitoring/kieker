@@ -686,11 +686,13 @@
 
         <!-- Outputs a JavaDoc tag as information. !-->
         <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#WriteTag !-->
+        <!-- KIEKER
         <module name="WriteTag">
             <property name="tag"         value=""/>
             <property name="tagFormat"   value=""/>
             <property name="tagSeverity" value="info"/>
         </module>
+        -->
 
 
         <!--
@@ -805,12 +807,12 @@
 
         <!-- The check to ensure that requires that comments be the only thing on a line. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
+        <!-- KIEKER we use them
         <module name="TrailingComment">
             <property name="format"       value="^[\\s\\}\\);]*$"/>
-            <!--
             <property name="legalComment" value=""/>
-            !-->
         </module>
+        -->
 
         <!-- Checks for uncommented main() methods (debugging leftovers). !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
