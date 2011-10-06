@@ -849,11 +849,11 @@
 
         <!-- Checks that there are no redundant modifiers. !-->
         <!-- See http://checkstyle.sf.net/config_modifiers.html !-->
-        <!-- KIEKER removed METHOD_DEF !-->
+        <!-- KIEKER off
         <module name="RedundantModifier">
-            <property name="tokens" value="VARIABLE_DEF, ANNOTATION_FIELD_DEF"/>
+            <property name="tokens" value="METHOD_DEF, VARIABLE_DEF, ANNOTATION_FIELD_DEF"/>
         </module>
-
+        !-->
 
         <!--
          !________________________________________________________________________________________
@@ -1014,14 +1014,17 @@
 
         <!-- Restricts the number of executable statements to a specified limit. !-->
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
+        <!-- KIEKER off
         <module name="ExecutableStatementCount">
             <property name="max"    value="30"/>
             <property name="tokens" value="CTOR_DEF, METHOD_DEF, INSTANCE_INIT, STATIC_INIT"/>
         </module>
+        !-->
 
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
         <!-- Checks for long lines. !-->
         <module name="LineLength">
+            <property name="severity" value="info"/>
             <property name="ignorePattern" value="^$"/>
             <property name="max"           value="165"/>
         </module>
@@ -1047,16 +1050,19 @@
 
         <!-- Checks for the number of types declared at the outer (or root) level in a file. !-->
         <!-- See http://checkstyle.sourceforge.net/config_sizes.html#OuterTypeNumber !-->
+        <!-- KIEKER 2 !-->
         <module name="OuterTypeNumber">
-            <property name="max" value="1"/>
+            <property name="max" value="2"/>
         </module>
 
         <!-- Checks the number of parameters of a method or constructor. !-->
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
+        <!-- KIEKER off
         <module name="ParameterNumber">
             <property name="max"    value="7"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
         </module>
+        !-->
 
         <!--
          !________________________________________________________________________________________
