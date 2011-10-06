@@ -162,9 +162,9 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 							/*
 							 * now, we'll remove
 							 */
-							FSReaderCons.LOG.warn("failed to remove nextRecord " + nextRecord + "\n" + "consumerLatch: " + consumerLatch + "\n" + "first key: "
-									+ this.orderRecordBuffer.firstKey());
-							throw new MonitoringRecordConsumerException("failed to remove nextRecord " + nextRecord);
+							FSReaderCons.LOG.warn("failed to remove nextRecord " + nextRecord + "\n" + "consumerLatch: " // NOCS (MultipleStringLiteralsCheck)
+									+ consumerLatch + "\n" + "first key: " + this.orderRecordBuffer.firstKey());
+							throw new MonitoringRecordConsumerException("failed to remove nextRecord " + nextRecord); // NOCS (MultipleStringLiteralsCheck)
 						}
 						if (!this.master.newMonitoringRecord(nextRecord)) {
 							// we cannot simply return. We have to shutdown the

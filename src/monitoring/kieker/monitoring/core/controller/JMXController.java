@@ -93,7 +93,8 @@ public final class JMXController extends AbstractController implements IJMXContr
 						}
 					}
 					if ((server != null) && (server.isActive())) {
-						serverObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
+						serverObjectName = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
+								configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
 						serverNotificationListener = new ServerNotificationListener();
 					}
 				} catch (final Exception e) {
@@ -102,7 +103,8 @@ public final class JMXController extends AbstractController implements IJMXContr
 			}
 			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_CONTROLLER)) {
 				try {
-					controllerObjectName = new ObjectName(this.domain, "type", configuration.getStringProperty(Configuration.ACTIVATE_JMX_CONTROLLER_NAME));
+					controllerObjectName = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
+							configuration.getStringProperty(Configuration.ACTIVATE_JMX_CONTROLLER_NAME));
 				} catch (final Exception e) {
 					JMXController.LOG.warn("Failed to initialize MonitoringController MBean", e);
 				}
@@ -154,14 +156,14 @@ public final class JMXController extends AbstractController implements IJMXContr
 					try {
 						mbs.unregisterMBean(this.controllerObjectName);
 					} catch (final Exception e) {
-						JMXController.LOG.error("Failed to terminate MBean", e);
+						JMXController.LOG.error("Failed to terminate MBean", e); // NOCS (MultipleStringLiteralsCheck)
 					}
 				}
 				if (this.serverObjectName != null) {
 					try {
 						mbs.unregisterMBean(this.serverObjectName);
 					} catch (final Exception e) {
-						JMXController.LOG.error("Failed to terminate MBean", e);
+						JMXController.LOG.error("Failed to terminate MBean", e); // NOCS (MultipleStringLiteralsCheck)
 					}
 				}
 				if (this.server != null) {
@@ -192,14 +194,14 @@ public final class JMXController extends AbstractController implements IJMXContr
 		if (this.jmxEnabled) {
 			sb.append("JMX enabled (Domain: '");
 			sb.append(this.domain);
-			sb.append("')\n");
+			sb.append("')\n"); // NOCS (MultipleStringLiteralsCheck)
 		} else {
 			sb.append("JMX disabled\n");
 		}
 		if (this.controllerObjectName != null) {
 			sb.append("\tMonitoringController MBean available: '");
 			sb.append(this.controllerObjectName.getCanonicalName());
-			sb.append("'\n");
+			sb.append("'\n"); // NOCS (MultipleStringLiteralsCheck)
 		}
 		if ((this.server != null) && this.server.isActive()) {
 			sb.append("\tJMX remote access available:\n");
@@ -211,14 +213,14 @@ public final class JMXController extends AbstractController implements IJMXContr
 					sb.append(new JMXServiceURL(url.getProtocol(), url.getHost(), url.getPort(), "/jndi/rmi://" + url.getHost() + ":" + this.port + "/" + "jmxrmi")
 							.toString());
 				} catch (final MalformedURLException ignoreErrors) {
-					sb.append("unable to determine JMXServiceURL (" + ignoreErrors.toString() + ")");
+					sb.append("unable to determine JMXServiceURL (" + ignoreErrors.toString() + ")"); // NOCS (MultipleStringLiteralsCheck)
 				}
 				break;
 			default:
 				sb.append(url.toString());
 				break;
 			}
-			sb.append("'\n");
+			sb.append("'\n"); // NOCS (MultipleStringLiteralsCheck)
 			final String[] connections = this.server.getConnectionIds();
 			if (connections.length == 0) {
 				sb.append("\t\tNo current remote connections\n");
@@ -226,7 +228,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 				for (final String connection : connections) {
 					sb.append("\t\tRemote connection: '");
 					sb.append(connection);
-					sb.append("'\n");
+					sb.append("'\n"); // NOCS (MultipleStringLiteralsCheck)
 				}
 			}
 		}

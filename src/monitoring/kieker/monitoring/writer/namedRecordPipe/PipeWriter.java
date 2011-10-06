@@ -44,8 +44,9 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		final String pipeName = this.configuration.getStringProperty(PipeWriter.CONFIG__PIPENAME);
 		if (pipeName.isEmpty()) {
-			PipeWriter.LOG.error("Invalid or missing value for property '" + PipeWriter.CONFIG__PIPENAME + "': '" + pipeName + "'");
-			throw new IllegalArgumentException("Invalid or missing value for property '" + PipeWriter.CONFIG__PIPENAME + "': '" + pipeName + "'");
+			final String errorMsg = "Invalid or missing value for property '" + PipeWriter.CONFIG__PIPENAME + "': '" + pipeName + "'";
+			PipeWriter.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 	}

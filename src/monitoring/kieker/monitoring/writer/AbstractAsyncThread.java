@@ -62,7 +62,7 @@ public abstract class AbstractAsyncThread extends Thread {
 		AbstractAsyncThread.LOG.debug(this.getClass().getName() + " running");
 		try {
 			// making it a local variable for faster access
-			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue; // NOPMD
+			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue; // NOPMD // NOCS
 			while (!this.finished) {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();

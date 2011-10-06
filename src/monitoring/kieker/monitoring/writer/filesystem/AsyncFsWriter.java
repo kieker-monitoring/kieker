@@ -66,8 +66,9 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {
-			AsyncFsWriter.LOG.error("'" + path + "' is not a directory.");
-			throw new IllegalArgumentException("'" + path + "' is not a directory.");
+			final String errorMsg = "'" + path + "' is not a directory.";
+			AsyncFsWriter.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
@@ -77,8 +78,9 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
-			AsyncFsWriter.LOG.error("Failed to create directory '" + path + "'");
-			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
+			final String errorMsg = "Failed to create directory '" + path + "'";
+			AsyncFsWriter.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 
 		final String mappingFileFn = path + File.separatorChar + "kieker.map";
@@ -86,8 +88,9 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		try {
 			mappingFileWriter = new MappingFileWriter(mappingFileFn); // NOPMD
 		} catch (final Exception ex) {
-			AsyncFsWriter.LOG.error("Failed to create mapping file '" + mappingFileFn + "'");
-			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
+			final String errorMsg = "Failed to create mapping file '" + mappingFileFn + "'";
+			AsyncFsWriter.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg, ex);
 		}
 
 		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.configuration

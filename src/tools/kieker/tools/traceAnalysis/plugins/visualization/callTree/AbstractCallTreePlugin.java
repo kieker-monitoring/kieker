@@ -208,8 +208,9 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			}
 		}
 		if (curStack.pop() != root) {
-			AbstractCallTreePlugin.LOG.fatal("Stack not empty after processing trace");
-			throw new TraceProcessingException("Stack not empty after processing trace");
+			final String errorMsg = "Stack not empty after processing trace";
+			AbstractCallTreePlugin.LOG.fatal(errorMsg);
+			throw new TraceProcessingException(errorMsg);
 		}
 	}
 

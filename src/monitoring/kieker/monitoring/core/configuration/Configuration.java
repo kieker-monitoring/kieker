@@ -58,7 +58,7 @@ public final class Configuration extends Properties implements Keys {
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(Keys.CONTROLLER_NAME, "KIEKER-SINGLETON");
 		if (configurationFile != null) {
-			Configuration.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
+			Configuration.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'"); // NOCS (MultipleStringLiteralsCheck)
 			loadConfiguration = Configuration.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
@@ -117,9 +117,9 @@ public final class Configuration extends Properties implements Keys {
 			properties.load(is);
 			return properties;
 		} catch (final FileNotFoundException ex) {
-			Configuration.LOG.warn("File '" + propertiesFn + "' not found");
+			Configuration.LOG.warn("File '" + propertiesFn + "' not found"); // NOCS (MultipleStringLiteralsCheck)
 		} catch (final Exception ex) {
-			Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex);
+			Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 		} finally {
 			if (is != null) {
 				try {
@@ -144,14 +144,14 @@ public final class Configuration extends Properties implements Keys {
 	private final static Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
-			Configuration.LOG.warn("File '" + propertiesFn + "' not found in classpath");
+			Configuration.LOG.warn("File '" + propertiesFn + "' not found in classpath"); // NOCS (MultipleStringLiteralsCheck)
 		} else {
 			try {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
 			} catch (final Exception ex) {
-				Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex);
+				Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 			} finally {
 				try {
 					is.close();

@@ -207,9 +207,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 				this.reportError(curTraceId);
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
-					TraceReconstructionFilter.LOG.error("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace, ex);
-					throw new ExecutionEventProcessingException("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace,
-							ex);
+					final String errorMsg = "Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace;
+					TraceReconstructionFilter.LOG.error(errorMsg, ex);
+					throw new ExecutionEventProcessingException(errorMsg, ex);
 				}
 			}
 		}

@@ -64,7 +64,7 @@ import org.apache.commons.logging.LogFactory;
 public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
 
-	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
+	private static final String PREFIX = AsyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
 	public static final String CONFIG__DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
 	public static final String CONFIG__CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
 	public static final String CONFIG__TABLENAME = AsyncDbWriter.PREFIX + "TableName";
@@ -108,9 +108,9 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {
-			AsyncDbWriter.LOG.error("SQLException: " + ex.getMessage());
-			AsyncDbWriter.LOG.error("SQLState: " + ex.getSQLState());
-			AsyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode());
+			AsyncDbWriter.LOG.error("SQLException: " + ex.getMessage()); // NOCS (MultipleStringLiteralsCheck)
+			AsyncDbWriter.LOG.error("SQLState: " + ex.getSQLState()); // NOCS (MultipleStringLiteralsCheck)
+			AsyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode()); // NOCS (MultipleStringLiteralsCheck)
 			throw ex;
 		}
 	}
@@ -155,9 +155,9 @@ final class DbWriterThread extends AbstractAsyncThread {
 				this.conn.close();
 			}
 		} catch (final SQLException ex) {
-			DbWriterThread.LOG.error("SQLException: " + ex.getMessage());
-			DbWriterThread.LOG.error("SQLState: " + ex.getSQLState());
-			DbWriterThread.LOG.error("VendorError: " + ex.getErrorCode());
+			DbWriterThread.LOG.error("SQLException: " + ex.getMessage()); // NOCS (MultipleStringLiteralsCheck)
+			DbWriterThread.LOG.error("SQLState: " + ex.getSQLState()); // NOCS (MultipleStringLiteralsCheck)
+			DbWriterThread.LOG.error("VendorError: " + ex.getErrorCode()); // NOCS (MultipleStringLiteralsCheck)
 		}
 	}
 

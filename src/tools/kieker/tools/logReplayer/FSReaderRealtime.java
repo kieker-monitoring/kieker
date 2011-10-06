@@ -44,7 +44,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
 	/* manages the life-cycle of the reader and consumers */
-	private final AnalysisController tpanInstance = new AnalysisController();
+	private final AnalysisController analysis = new AnalysisController();
 	private RealtimeReplayDistributor rtDistributor = null;
 	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
 	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
@@ -129,8 +129,9 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 		// parse inputDir property value
 		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) {
-			FSReaderRealtime.LOG.error("Invalid argument value for inputDirNameList:" + inputDirNameList);
-			throw new IllegalArgumentException("Invalid argument value for inputDirNameList:" + inputDirNameList);
+			final String errorMsg = "Invalid argument value for inputDirNameList:" + inputDirNameList;
+			FSReaderRealtime.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 		try {
 			final StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
@@ -156,8 +157,8 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);
 		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
-		this.tpanInstance.setReader(fsReader);
-		this.tpanInstance.registerPlugin(this.rtDistributor);
+		this.analysis.setReader(fsReader);
+		this.analysis.registerPlugin(this.rtDistributor);
 	}
 
 	/**
@@ -168,7 +169,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	public boolean read() {
 		final boolean success = true;
 		try {
-			this.tpanInstance.run();
+			this.analysis.run();
 			this.terminationLatch.await();
 		} catch (final Exception ex) {
 			FSReaderRealtime.LOG.error("An error occured while reading", ex);
@@ -179,6 +180,6 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 	@Override
 	public void terminate() {
-		this.tpanInstance.terminate();
+		this.analysis.terminate();
 	}
 }

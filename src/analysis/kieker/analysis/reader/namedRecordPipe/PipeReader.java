@@ -53,10 +53,11 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	private void initPipe(final String pipeName) throws IllegalArgumentException {
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
-			PipeReader.LOG.error("Failed to get Pipe with name " + pipeName);
-			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
+			final String errorMsg = "Failed to get Pipe with name " + pipeName;
+			PipeReader.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		} else {
-			PipeReader.LOG.debug("Connectod to named pipe '" + this.pipe.getName() + "'");
+			PipeReader.LOG.debug("Connectod to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
 		}
 		this.pipe.setPipeReader(this);
 	}
@@ -83,7 +84,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
 			// IllegalArgumentException
 			this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")");
+			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
 		} catch (final Exception exc) {
 			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;

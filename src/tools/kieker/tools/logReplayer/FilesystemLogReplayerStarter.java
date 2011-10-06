@@ -171,10 +171,10 @@ public class FilesystemLogReplayerStarter {
 						+ FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp + ")");
 			}
 		} catch (final java.text.ParseException ex) {
-			System.err.println("Error parsing date/time string. Please use the following pattern: "
-					+ FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
-			FilesystemLogReplayerStarter.LOG.error("Error parsing date/time string. Please use the following pattern: "
-					+ FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN_CMD_USAGE_HELP, ex);
+			final String erorMsg = "Error parsing date/time string. Please use the following pattern: "
+				+ FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
+			System.err.println(erorMsg);
+			FilesystemLogReplayerStarter.LOG.error(erorMsg, ex);
 			return false;
 		}
 

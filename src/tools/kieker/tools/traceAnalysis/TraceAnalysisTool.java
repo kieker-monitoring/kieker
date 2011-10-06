@@ -192,9 +192,9 @@ public class TraceAnalysisTool {
 						+ TraceAnalysisTool.ignoreExecutionsAfterTimestamp + ")");
 			}
 		} catch (final java.text.ParseException ex) {
-			System.err.println("Error parsing date/time string. Please use the following pattern: " + TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
-			TraceAnalysisTool.LOG.error("Error parsing date/time string. Please use the following pattern: " + TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP,
-					ex);
+			final String errorMsg = "Error parsing date/time string. Please use the following pattern: " + TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP; 
+			System.err.println(errorMsg);
+			TraceAnalysisTool.LOG.error(errorMsg, ex);
 			return false;
 		}
 		return true;
@@ -488,7 +488,7 @@ public class TraceAnalysisTool {
 				analysisInstance.run();
 			} catch (final Exception exc) { // FindBugs reports that Exception is never trown; but wontfix (#44)!
 				TraceAnalysisTool.LOG.error("Error occured while running analysis", exc);
-				throw new Exception("Error occured while running analysis", exc);
+				throw exc;
 			} finally {
 				for (final AbstractTraceProcessingPlugin c : allTraceProcessingComponents) {
 					numErrorCount += c.getErrorCount();
@@ -497,8 +497,9 @@ public class TraceAnalysisTool {
 			}
 
 			if (!TraceAnalysisTool.ignoreInvalidTraces && (numErrorCount > 0)) {
-				TraceAnalysisTool.LOG.error(numErrorCount + " errors occured in trace processing components");
-				throw new Exception(numErrorCount + " errors occured in trace processing components");
+				final String errorMsg = numErrorCount + " errors occured in trace processing components";
+				TraceAnalysisTool.LOG.error(errorMsg);
+				throw new Exception(errorMsg);
 			}
 
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {

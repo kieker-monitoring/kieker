@@ -110,8 +110,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
-			SyncFsWriter.LOG.error("Failed to create directory '" + path + "'");
-			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
+			final String errorMsg = "Failed to create directory '" + path + "'";
+			SyncFsWriter.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 		this.filenamePrefix = path + File.separatorChar + "kieker";
 		this.path = f.getAbsolutePath();

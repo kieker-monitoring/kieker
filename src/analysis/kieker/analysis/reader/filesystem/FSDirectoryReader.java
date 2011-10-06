@@ -129,12 +129,12 @@ class FSDirectoryReader {
 		});
 
 		if (inputFiles == null) {
-			throw new MonitoringReaderException("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
+			throw new MonitoringReaderException("Directory '" + this.inputDir + "' does not exist or an I/O error occured."); // NOCS (MultipleStringLiteralsCheck)
 		}
 
 		if (inputFiles.length == 0) {
-			throw new MonitoringReaderException("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
-					+ FSDirectoryReader.FILE_POSTFIX + "' could be found.");
+			throw new MonitoringReaderException("Directory '" + this.inputDir + "' contains no files starting with '" // NOCS (MultipleStringLiteralsCheck)
+					+ this.filePrefix + "' and ending with '" + FSDirectoryReader.FILE_POSTFIX + "' could be found.");
 		}
 
 		Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
@@ -164,7 +164,7 @@ class FSDirectoryReader {
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old
 				// monitoring logs. Hence, only dump a log.warn
-				FSDirectoryReader.LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				FSDirectoryReader.LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'"); // NOCS (MultipleStringLiteralsCheck)
 			}
 		}
 
@@ -270,8 +270,9 @@ class FSDirectoryReader {
 
 							final Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
 							if (clazz == null) {
-								FSDirectoryReader.LOG.fatal("Missing classname mapping for record type id " + "'" + id + "'");
-								throw new IllegalStateException("Missing classname mapping for record type id " + "'" + id + "'");
+								final String errorMsg = "Missing classname mapping for record type id " + "'" + id + "'";
+								FSDirectoryReader.LOG.fatal(errorMsg);
+								throw new IllegalStateException(errorMsg);
 							}
 							rec = clazz.newInstance();
 							token = st.nextToken();
@@ -295,17 +296,17 @@ class FSDirectoryReader {
 					rec.initFromArray(typedArray);
 
 				} catch (final InstantiationException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
-					FSDirectoryReader.LOG.error("Abort reading");
-					throw new MonitoringReaderException("LogReaderExecutionException ", e);
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS (MultipleStringLiteralsCheck)
+					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
+					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
 				} catch (final IllegalAccessException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
-					FSDirectoryReader.LOG.error("Abort reading");
-					throw new MonitoringReaderException("LogReaderExecutionException ", e);
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS (MultipleStringLiteralsCheck)
+					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
+					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
 				} catch (final IllegalStateException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e);
-					FSDirectoryReader.LOG.error("Abort reading");
-					throw new MonitoringReaderException("LogReaderExecutionException ", e);
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS (MultipleStringLiteralsCheck)
+					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
+					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
 				}
 
 				/* Deliver record */
