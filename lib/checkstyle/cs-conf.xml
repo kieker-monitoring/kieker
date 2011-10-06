@@ -2,11 +2,6 @@
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN" "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
 
 <module name="Checker">
-    <property name="severity" value="warning"/>
-
-    <module name="SuppressionFilter">
-      <property name="file" value="lib/checkstyle/cs-filter.xml"/>
-    </module>
     <!--
     <property name="basedir"        value=""/>
     <property name="localeCountry"  value=""/> JVM locale country
@@ -159,6 +154,12 @@
     <module name="TreeWalker">
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
+        <module name="FileContentsHolder"/>
+        <module name="SuppressWithNearbyCommentFilter">
+            <property name="commentFormat" value="NOCS"/>
+            <property name="checkFormat" value=".*"/>
+            <property name="influenceFormat" value="0"/>
+        </module>
 
         <!--
          !________________________________________________________________________________________
