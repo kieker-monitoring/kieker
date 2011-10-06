@@ -36,8 +36,14 @@ The following listing shows the command to convert two logging timestamps as %
 well as the resulting output.
 
 \setTextListing
-\begin{lstlisting}
+\begin{lstlisting}[caption=Execution under UNIX-like systems]
 $\lstshellprompt{}$ $\textbf{bin/convertLoggingTimestamp.sh}$ $\textbf{-\,-timestamps}$ 1283156545581511026 1283156546127117246 
+1283156545581511026: Mo, 30 Aug 2010 08:22:25 +0000 (UTC) (Mo, 30 Aug 2010 10:22:25 +0200 (local time))
+1283156546127117246: Mo, 30 Aug 2010 08:22:26 +0000 (UTC) (Mo, 30 Aug 2010 10:22:26 +0200 (local time))
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Execution under Windows]
+$\lstshellprompt{}$ $\textbf{convertLoggingTimestamp.bat}$ $\textbf{-\,-timestamps}$ 1283156545581511026 1283156546127117246 
 1283156545581511026: Mo, 30 Aug 2010 08:22:25 +0000 (UTC) (Mo, 30 Aug 2010 10:22:25 +0200 (local time))
 1283156546127117246: Mo, 30 Aug 2010 08:22:26 +0000 (UTC) (Mo, 30 Aug 2010 10:22:26 +0200 (local time))
 \end{lstlisting}
@@ -72,10 +78,18 @@ incoming monitoring data from a running system, e.g., via JMS~(see also Appendix
 \noindent The following command replays the monitoring testdata included in %
 the binary release to another directory:
 
+\pagebreak
+
 \setTextListing
-\begin{lstlisting}
+\begin{lstlisting}[caption=Execution under UNIX-like systems]
 $\lstshellprompt{}$ $\textbf{bin/logReplay.sh}$
   $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistro$ 
+  $\textbf{-\,-keep-logging-timestamps}$ $true$ 
+  $\textbf{-\,-realtime}$ $false$
+\end{lstlisting}
+\begin{lstlisting}[caption=Execution under Windows]
+$\lstshellprompt{}$ $\textbf{logReplay.bat}$
+  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistroWin$ 
   $\textbf{-\,-keep-logging-timestamps}$ $true$ 
   $\textbf{-\,-realtime}$ $false$
 \end{lstlisting}
@@ -108,9 +122,17 @@ graph and convert it to pdf format:
 \enlargethispage{1cm}
 
 \setTextListing
-\begin{lstlisting}
+\begin{lstlisting}[caption=Execution under UNIX-like systems]
 $\lstshellprompt{}$ $\textbf{bin/trace-analysis.sh}$
   $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistro$ 
+  $\textbf{-\,-outputdir}$ . 
+  $\textbf{-\,-plot-Deployment-Operation-Dependency-Graph}$
+$\lstshellprompt{}$ $\textbf{dot}$ $\textbf{-T}$ pdf  deploymentOperationDependencyGraph.dot > deploymentOperationDependencyGraph.pdf
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}[caption=Execution under Windows]
+$\lstshellprompt{}$ $\textbf{trace-analysis.bat}$
+  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistroWin$ 
   $\textbf{-\,-outputdir}$ . 
   $\textbf{-\,-plot-Deployment-Operation-Dependency-Graph}$
 $\lstshellprompt{}$ $\textbf{dot}$ $\textbf{-T}$ pdf  deploymentOperationDependencyGraph.dot > deploymentOperationDependencyGraph.pdf
@@ -136,6 +158,9 @@ This scripts simply calls the \textit{Graphviz} and \textit{PlotUtils} tools \fi
 directory \dir{out/} to files in \file{.pdf} and \file{.png} format:
 
 \setTextListing
-\begin{lstlisting}
+\begin{lstlisting}[caption=Execution under UNIX-like systems]
 $\lstshellprompt{}$ $\textbf{bin/dotPic-fileConverter.sh}$ out/ pdf png
+\end{lstlisting}
+\begin{lstlisting}[caption=Execution under Windows]
+$\lstshellprompt{}$ $\textbf{dotPic-fileConverter.bat}$ out\ pdf png
 \end{lstlisting}
