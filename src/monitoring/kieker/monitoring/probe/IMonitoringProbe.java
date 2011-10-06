@@ -25,4 +25,5 @@ package kieker.monitoring.probe;
  * 
  * @author Andre van Hoorn
  */
-public interface IMonitoringProbe {}
+public interface IMonitoringProbe {
+}

@@ -202,26 +202,29 @@ public final class JMXReader extends AbstractMonitoringReader {
 				// Shutdown
 				JMXReader.LOG.info("Shutting down JMXReader");
 
-			} catch (final InstanceNotFoundException e) {} catch (final Exception e) {
+			} catch (final InstanceNotFoundException e) { // ignore
+			} catch (final Exception e) {
 				JMXReader.LOG.error("Error in JMX connection!", e);
 			} finally {
 				try {
 					if (logNotificationListener != null) {
 						mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 					}
-				} catch (final Exception e) {// ignore
+				} catch (final Exception e) { // ignore
 				}
 				try {
 					if (serverNotificationListener != null) {
 						jmx.removeConnectionNotificationListener(serverNotificationListener);
 					}
-				} catch (final ListenerNotFoundException e) {}
+				} catch (final ListenerNotFoundException e) { // ignore
+				}
 				try {
 					if (jmx != null) {
 						jmx.close();
 					}
 					Thread.sleep(10000);
-				} catch (final Exception e) {}
+				} catch (final Exception e) { // ignore
+				}
 			}
 		}
 	}

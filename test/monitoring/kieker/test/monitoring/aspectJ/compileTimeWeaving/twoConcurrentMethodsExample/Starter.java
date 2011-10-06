@@ -69,7 +69,8 @@ public class Starter extends Thread {
 	public void waitP(final long sleeptime) {
 		try {
 			Thread.sleep(sleeptime);
-		} catch (final Exception e) {}
+		} catch (final Exception e) {
+		}
 	}
 
 	static volatile boolean boolvar = true;

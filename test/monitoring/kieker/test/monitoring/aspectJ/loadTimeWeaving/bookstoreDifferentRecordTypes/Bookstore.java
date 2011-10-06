@@ -96,7 +96,8 @@ public class Bookstore extends Thread {
 		if (waittime > 0) {
 			try {
 				Thread.sleep(waittime);
-			} catch (final Exception e) {}
+			} catch (final Exception e) {
+			}
 		}
 	}
 }

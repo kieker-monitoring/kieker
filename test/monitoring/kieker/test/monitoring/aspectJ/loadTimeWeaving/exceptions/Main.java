@@ -40,17 +40,20 @@ public class Main {
 		for (int i = 0; i < 10; i++) {
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) {}
+			} catch (final Exception e) {
+			}
 		}
 
 		for (int i = 0; i < 10; i++) {
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) {}
+			} catch (final Exception e) {
+			}
 
 			try {
 				Main.helloKieker(false);
-			} catch (final Exception e) {}
+			} catch (final Exception e) {
+			}
 		}
 
 	}
