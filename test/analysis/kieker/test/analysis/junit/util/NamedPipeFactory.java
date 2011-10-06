@@ -32,17 +32,20 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * @author Andre van Hoorn
  * 
  */
-public class NamedPipeFactory {
-	private final static AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
-	private final static String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
+public final class NamedPipeFactory {
+	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
+	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
+
+	private NamedPipeFactory() {}
 
 	/**
-	 * This method should be used in tests to generate unique names for {@link kieker.monitoring.core.configuration.Configuration}s with {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter}s and {@link java.io.PipedReader}s
+	 * This method should be used in tests to generate unique names for {@link kieker.monitoring.core.configuration.Configuration}s with
+	 * {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter}s and {@link java.io.PipedReader}s
 	 * in order to avoid naming conflicts.
 	 * 
 	 * @return a unique name
 	 */
-	public static String createPipeName() {
+	public static final String createPipeName() {
 		return NamedPipeFactory.PIPE_NAME_PREFIX + NamedPipeFactory.NEXT_PIPE_ID.getAndIncrement();
 	}
 
@@ -53,17 +56,14 @@ public class NamedPipeFactory {
 	 * @param pipeName
 	 * @return the {@link kieker.common.record.IMonitoringRecordReceiver}
 	 */
-	public static IMonitoringRecordReceiver createAndRegisterNamedPipeRecordWriter(final String pipeName) {
+	public static final IMonitoringRecordReceiver createAndRegisterNamedPipeRecordWriter(final String pipeName) {
 		final Pipe namedPipe = Broker.getInstance().acquirePipe(pipeName);
-
 		final IMonitoringRecordReceiver writer = new IMonitoringRecordReceiver() {
-
 			@Override
 			public boolean newMonitoringRecord(final IMonitoringRecord record) {
 				return namedPipe.writeMonitoringRecord(record);
 			}
 		};
-
 		return writer;
 	}
 }

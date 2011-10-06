@@ -215,15 +215,17 @@
          !-->
         <!-- Finds nested blocks, i.e. blocks that are used freely in the code. !-->
         <!-- See http://checkstyle.sf.net/config_blocks.html !-->
+        <!-- KIEKER allowInSwitchCase !-->
         <module name="AvoidNestedBlocks">
-            <property name="allowInSwitchCase" value="false"/>
+            <property name="allowInSwitchCase" value="true"/>
         </module>
 
         <!-- Checks for empty blocks. !-->
         <!-- See http://checkstyle.sf.net/config_blocks.html !-->
+        <!-- KIEKER removed LITERAL_CATCH !-->
         <module name="EmptyBlock">
             <property name="option" value="stmt"/>
-            <property name="tokens" value="LITERAL_CATCH, LITERAL_DO,
+            <property name="tokens" value="LITERAL_DO,
                                            LITERAL_ELSE, LITERAL_FINALLY, LITERAL_IF, LITERAL_FOR,
                                            LITERAL_TRY, LITERAL_WHILE, INSTANCE_INIT, STATIC_INIT"/>
         </module>
