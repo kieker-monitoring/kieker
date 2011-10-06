@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import kieker.analysis.reader.MonitoringReaderException;
@@ -52,11 +53,14 @@ class FSDirectoryReader {
 	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
 
 	private static final boolean OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE = true;
+	private static final String LEGAY_FILE_PREFIX = "tpmon";
+	private static final String FILE_POSTFIX = ".dat";
 
 	private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE);
-	private volatile boolean recordTypeIdMapInitialized = false; // will read it
-																	// "on-demand"
+	private volatile boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
 	private File inputDir = null;
+	private String filePrefix = "kieker";
+
 	/**
 	 * Together with the member recordTypeIdIgnoreList, used to filter only
 	 * records of a specific type. The value null means all record types are
@@ -64,9 +68,9 @@ class FSDirectoryReader {
 	 * 
 	 * @see #recordTypeIdIgnoreList
 	 */
-	private final HashSet<String> recordTypeSelector; // Set of classnames
+	private final Set<String> recordTypeSelector; // Set of classnames
 	/** Records whose ID is in this list are simply skipped by the reader */
-	private final HashSet<Integer> recordTypeIdIgnoreList = new HashSet<Integer>();
+	private final Set<Integer> recordTypeIdIgnoreList = new HashSet<Integer>();
 
 	private final IMonitoringRecordReceiver recordReceiver;
 
@@ -100,15 +104,11 @@ class FSDirectoryReader {
 	}
 
 	private void initInputDir(final String inputDirName) throws IllegalArgumentException {
-		if ((inputDirName == null) || inputDirName.equals("")) {
+		if ((inputDirName == null) || inputDirName.isEmpty()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
 		}
 		this.inputDir = new File(inputDirName);
 	}
-
-	private String filePrefix = "kieker";
-	private static final String LEGAY_FILE_PREFIX = "tpmon";
-	private static final String FILE_POSTFIX = ".dat";
 
 	/**
 	 * Starts reading and returns after each record has been passed to the
@@ -186,7 +186,7 @@ class FSDirectoryReader {
 					}
 					final String idStr = st.nextToken();
 					// the leading $ is optional
-					final Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr);
+					final Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr); // NOCS
 					final String classname = st.nextToken();
 
 					if ((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) {
@@ -200,10 +200,10 @@ class FSDirectoryReader {
 						FSDirectoryReader.LOG.info("Ignoring record type for mapping " + line);
 					}
 				} catch (final ClassNotFoundException e) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); //NOCS
 					break;
 				} catch (final IllegalArgumentException e) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); //NOCS (equal string as above)
 					break;
 				}
 			}
@@ -212,8 +212,8 @@ class FSDirectoryReader {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) {
-					FSDirectoryReader.LOG.error("Exception", e);
+				} catch (final Exception e) { //NOCS
+					FSDirectoryReader.LOG.error("Exception while closing input stream for mapping file", e);
 				}
 			}
 		}
@@ -318,7 +318,7 @@ class FSDirectoryReader {
 				try {
 					in.close();
 				} catch (final Exception e) {
-					FSDirectoryReader.LOG.error("Exception", e);
+					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", e);
 				}
 			}
 		}

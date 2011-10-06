@@ -34,7 +34,7 @@ public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
 	// private static final Log log = LogFactory.getLog(OutputPort.class);
 
 	/** Should use "better" data structure from java.concurrent */
-	private final Collection<IInputPort<T>> subscriber = new ArrayList<IInputPort<T>>();
+	private final Collection<IInputPort<T>> subscribers = new ArrayList<IInputPort<T>>();
 	private final String description;
 
 	@SuppressWarnings("unused")
@@ -47,19 +47,19 @@ public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
 	}
 
 	public synchronized void deliver(final T event) {
-		for (final IInputPort<T> l : this.subscriber) {
+		for (final IInputPort<T> l : this.subscribers) {
 			l.newEvent(event);
 		}
 	}
 
 	@Override
 	public synchronized void subscribe(final IInputPort<T> subscriber) {
-		this.subscriber.add(subscriber);
+		this.subscribers.add(subscriber);
 	}
 
 	@Override
 	public synchronized void unsubscribe(final IInputPort<T> subscriber) {
-		this.subscriber.remove(subscriber);
+		this.subscribers.remove(subscriber);
 	}
 
 	@Override

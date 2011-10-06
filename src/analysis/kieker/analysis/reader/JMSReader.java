@@ -58,6 +58,8 @@ public class JMSReader extends AbstractMonitoringReader {
 	private String jmsDestination = null;
 	private String jmsFactoryLookupName = null;
 
+	private final CountDownLatch cdLatch = new CountDownLatch(1);
+	
 	/**
 	 * @param jmsProviderUrl
 	 *            = for instance "tcp://127.0.0.1:3035/"
@@ -91,7 +93,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			final String jmsFactoryLookupNameP = propertyMap.getProperty("jmsFactoryLookupName", null);
 			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws
 			// IllegalArgumentException
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS
 			JMSReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}
@@ -99,8 +101,8 @@ public class JMSReader extends AbstractMonitoringReader {
 	}
 
 	private void initInstanceFromArgs(final String jmsProviderUrl, final String jmsDestination, final String factoryLookupName) throws IllegalArgumentException {
-		if ((jmsProviderUrl == null) || jmsProviderUrl.equals("") || (jmsDestination == null) || jmsDestination.equals("") || (factoryLookupName == null)
-				|| (factoryLookupName.equals(""))) {
+		if ((jmsProviderUrl == null) || jmsProviderUrl.isEmpty() || (jmsDestination == null) || jmsDestination.isEmpty() || (factoryLookupName == null)
+				|| (factoryLookupName.isEmpty())) {
 			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + jmsProviderUrl + "'), jmsDestination ('"
 					+ jmsDestination + "'), or factoryLookupName ('" + factoryLookupName + "') is null");
 		}
@@ -117,7 +119,7 @@ public class JMSReader extends AbstractMonitoringReader {
 	public boolean read() {
 		boolean retVal = false;
 		try {
-			final Hashtable<String, String> properties = new Hashtable<String, String>();
+			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOCS (InitialContext expects Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsFactoryLookupName);
 
 			// JMS initialization
@@ -165,8 +167,9 @@ public class JMSReader extends AbstractMonitoringReader {
 							if (omo instanceof IMonitoringRecord) {
 								final IMonitoringRecord rec = (IMonitoringRecord) omo;
 								if (!JMSReader.this.deliverRecord(rec)) {
-									JMSReader.LOG.error("deliverRecord returned false");
-									throw new MonitoringReaderException("deliverRecord returned false");
+									final String errorMsg = "deliverRecord returned false"; 
+									JMSReader.LOG.error(errorMsg);
+									throw new MonitoringReaderException(errorMsg);
 								}
 							} else {
 								JMSReader.LOG.info("Unknown type of message " + om);
@@ -177,7 +180,7 @@ public class JMSReader extends AbstractMonitoringReader {
 							JMSReader.LOG.fatal("JMSException: " + ex.getMessage(), ex);
 						} catch (final MonitoringReaderException ex) {
 							JMSReader.LOG.error("LogReaderExecutionException: " + ex.getMessage(), ex);
-						} catch (final Exception ex) {
+						} catch (final Exception ex) { // NOCS
 							JMSReader.LOG.error("Exception", ex);
 						}
 					}
@@ -196,8 +199,6 @@ public class JMSReader extends AbstractMonitoringReader {
 		}
 		return retVal;
 	}
-
-	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	private final void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {

@@ -20,6 +20,7 @@
 
 package kieker.analysis.reader;
 
+import java.util.Collection;
 import java.util.Vector;
 
 import kieker.common.record.IMonitoringRecord;
@@ -36,7 +37,7 @@ public abstract class AbstractMonitoringReader implements IMonitoringReader {
 
 	private static final Log LOG = LogFactory.getLog(AbstractMonitoringReader.class);
 
-	private final Vector<IMonitoringRecordReceiver> recordReceivers = new Vector<IMonitoringRecordReceiver>();
+	private final Collection<IMonitoringRecordReceiver> recordReceivers = new Vector<IMonitoringRecordReceiver>();
 
 	@Override
 	public final void addRecordReceiver(final IMonitoringRecordReceiver receiver) {
@@ -63,7 +64,7 @@ public abstract class AbstractMonitoringReader implements IMonitoringReader {
 					return false;
 				}
 			}
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { //NOCS
 			AbstractMonitoringReader.LOG.fatal("Caught Exception while delivering record", ex);
 			return false;
 		}
