@@ -355,7 +355,9 @@
 
         <!-- Checks if any class or object member explicitly initialized to default for its type value. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
+        <!-- KIEKER off
         <module name="ExplicitInitialization"/>
+        !-->
 
         <!-- Checks for fall through in switch statements Finds locations where a case contains Java code ... !-->
         <!-- but lacks a break, return, throw or continue statement. !-->
@@ -526,7 +528,7 @@
         <!-- unchecked exceptions or subclasses of another declared exception. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
         <module name="RedundantThrows">
-            <property name="allowUnchecked"     value="false"/>
+            <property name="allowUnchecked"     value="true"/>
             <property name="allowSubclasses"    value="false"/>
             <property name="logLoadErrors"      value="true"/>
             <property name="suppressLoadErrors" value="false"/>
