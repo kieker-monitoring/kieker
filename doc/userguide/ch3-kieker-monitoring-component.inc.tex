@@ -292,7 +292,7 @@ can be found in Appendix~\ref{appendix:usingJMS}. %
 \begin{figure}[H]
 \begin{centering}
 \includegraphics[scale=0.7]{images/kieker_writerimplsuserguide-modified}
-\caption{Interface \class{IMonitoringLogWriter} and  the implementing classes}
+\caption{Interface \class{IMonitoringWriter} and  the implementing classes}
 \label{figure:monitoringLogWritersHierarchy}
 \end{centering}
 \end{figure}
@@ -303,7 +303,7 @@ write the given records into a buffer located in the memory. The source code of 
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyWriter.java, label=listing:MyWriter,float,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipeWriter.java}
+\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,float,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/bookstoreApplication/MyPipeWriter.java}
 
 \noindent The monitoring writer to be used is selected and configured by the \KiekerMonitoringPart{} %
 configuration properties (Section~\ref{chap:componentsMonitoring}) %
