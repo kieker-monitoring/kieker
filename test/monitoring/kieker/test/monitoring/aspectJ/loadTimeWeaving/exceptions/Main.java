@@ -35,6 +35,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class Main {
 
+	private Main() {}
+
 	public static void main(final String[] args) {
 
 		for (int i = 0; i < 10; i++) {

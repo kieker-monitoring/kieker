@@ -106,7 +106,6 @@ class Constants {
 				.withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("prefix").hasArg(true).isRequired(false)
 				.withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
-
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false)
 				.withDescription("Generate and store deployment-level sequence diagrams (.pic files)").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS).hasArg(false)
@@ -137,10 +136,8 @@ class Constants {
 				.withDescription("Output an overview about the deployment-level trace equivalence classes").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT).hasArg(false)
 				.withDescription("Output an overview about the assembly-level trace equivalence classes").create());
-
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false)
 				.withDescription("Consider only the traces identified by the list of trace IDs. Defaults to all traces.").create());
-
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false)
 				.withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false)
@@ -176,6 +173,8 @@ class Constants {
 			}
 		});
 	}
+
+	private Constants() {}
 
 	public static String stringArrToStringList(final String[] strs) {
 		final StringBuilder strB = new StringBuilder();

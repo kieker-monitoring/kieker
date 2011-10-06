@@ -32,6 +32,8 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotatio
 
 public class CRMWA {
 
+	private CRMWA() {}
+
 	public static void getOffers() {
 		CatalogWA.getBook(true);
 	}

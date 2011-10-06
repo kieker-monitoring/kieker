@@ -108,13 +108,12 @@ public class TraceAnalysisTool {
 	private static boolean shortLabels = true;
 	private static boolean includeSelfLoops = false;
 	private static boolean ignoreInvalidTraces = false;
-	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes // NOCS (MagicNumberCheck)
+	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default // NOCS (MagicNumberCheck)
 	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.MIN_TIMESTAMP;
 	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.MAX_TIMESTAMP;
-	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only
-																														// for
-																														// usage
-																														// info
+	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
+
+	private TraceAnalysisTool() {}
 
 	private static boolean parseArgs(final String[] args) {
 		try {
@@ -192,7 +191,7 @@ public class TraceAnalysisTool {
 						+ TraceAnalysisTool.ignoreExecutionsAfterTimestamp + ")");
 			}
 		} catch (final java.text.ParseException ex) {
-			final String errorMsg = "Error parsing date/time string. Please use the following pattern: " + TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP; 
+			final String errorMsg = "Error parsing date/time string. Please use the following pattern: " + TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
 			System.err.println(errorMsg);
 			TraceAnalysisTool.LOG.error(errorMsg, ex);
 			return false;

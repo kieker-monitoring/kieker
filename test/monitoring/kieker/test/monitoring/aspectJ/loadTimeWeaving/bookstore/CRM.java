@@ -36,6 +36,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class CRM {
 
+	private CRM() {}
+
 	/**
 	 * This method will be monitored, since it has an annotation.
 	 */

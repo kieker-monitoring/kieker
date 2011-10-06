@@ -66,6 +66,8 @@ public class MethodExtractorTool {
 		MethodExtractorTool.initializeOptions();
 	}
 
+	private MethodExtractorTool() {}
+
 	@SuppressWarnings("static-access")
 	private final static void initializeOptions() {
 		MethodExtractorTool.CMDL_OPTS.addOption(OptionBuilder.withArgName("classpath").hasArg().withLongOpt("searchpath").isRequired(true)

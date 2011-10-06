@@ -36,6 +36,9 @@ import java.net.URLClassLoader;
  * 
  */
 public class TraceAnalysisWrapper {
+
+	private TraceAnalysisWrapper() {}
+
 	/**
 	 * @param args
 	 */

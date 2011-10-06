@@ -37,6 +37,8 @@ public class LoggingTimestampConverter {
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
 	private static final String DATE_FORMAT_PATTERN2 = "EEE, d MMM yyyy HH:mm:ss Z";
 
+	private LoggingTimestampConverter() {}
+
 	/**
 	 * Converts a timestamp representing the number of nanoseconds since Jan 1,
 	 * 1970 UTC into a human-readable datetime string given in the UTC timezone.

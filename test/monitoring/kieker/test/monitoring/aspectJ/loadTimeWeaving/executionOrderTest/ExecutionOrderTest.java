@@ -33,6 +33,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  */
 
 public class ExecutionOrderTest {
+
+	private ExecutionOrderTest() {}
+
 	@OperationExecutionMonitoringProbe
 	private static void a(final boolean b) {
 		if (b) {

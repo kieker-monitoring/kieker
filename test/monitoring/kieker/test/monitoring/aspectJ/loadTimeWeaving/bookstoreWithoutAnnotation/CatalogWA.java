@@ -30,6 +30,8 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotatio
 
 public class CatalogWA {
 
+	private CatalogWA() {}
+
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			// complex query
