@@ -238,7 +238,7 @@ class FSDirectoryReader {
 			in = new BufferedReader(new FileReader(input));
 			String line;
 
-			curRecord:
+			curRecord: // NOCS
 			while ((line = in.readLine()) != null) {
 				IMonitoringRecord rec = null;
 				try {
