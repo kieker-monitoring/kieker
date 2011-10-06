@@ -66,7 +66,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 				}
 				final StringBuilder strBuild = new StringBuilder();
 				if (includeWeights) {
-					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode), "" + outgoingDependency.getOutgoingWeight(),
+					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode), Integer.toString(outgoingDependency.getOutgoingWeight()),
 							DotFactory.DOT_STYLE_DASHED, DotFactory.DOT_ARROWHEAD_OPEN));
 				} else {
 					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode), DotFactory.DOT_STYLE_DASHED,

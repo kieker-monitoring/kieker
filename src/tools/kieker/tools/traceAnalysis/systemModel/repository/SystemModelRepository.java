@@ -152,7 +152,7 @@ public class SystemModelRepository {
 					opListBuilder.append("<li>").append(htmlEntityRef(op.getId(), op.getSignature().toString(), EntityType.OPERATION)).append("</li>");
 				}
 			}
-			final String[] cells = new String[] { htmlEntityLabel(type.getId(), type.getId() + "", EntityType.COMPONENT_TYPE), type.getPackageName(),
+			final String[] cells = new String[] { htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE), type.getPackageName(),
 					type.getTypeName(), opListBuilder.toString() };
 			printHtmlTableRow(ps, cells);
 		}
@@ -165,7 +165,7 @@ public class SystemModelRepository {
 			for (final String paramType : op.getSignature().getParamTypeList()) {
 				paramListStrBuild.append("<li>").append(paramType).append("</li>");
 			}
-			final String[] cells = new String[] { htmlEntityLabel(op.getId(), op.getId() + "", EntityType.OPERATION),
+			final String[] cells = new String[] { htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
 					htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),
 					op.getSignature().getName(), paramListStrBuild.toString(), op.getSignature().getReturnType() };
 			printHtmlTableRow(ps, cells);
@@ -175,7 +175,7 @@ public class SystemModelRepository {
 		printOpenHtmlTable(ps, new String[] { "ID", "Name", "Component type" });
 		final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
 		for (final AssemblyComponent ac : assemblyComponents) {
-			final String[] cells = new String[] { htmlEntityLabel(ac.getId(), ac.getId() + "", EntityType.ASSEMBLY_COMPONENT), ac.getName(),
+			final String[] cells = new String[] { htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT), ac.getName(),
 					htmlEntityRef(ac.getType().getId(), ac.getType().getFullQualifiedName(), EntityType.COMPONENT_TYPE), };
 			printHtmlTableRow(ps, cells);
 		}
@@ -184,7 +184,7 @@ public class SystemModelRepository {
 		printOpenHtmlTable(ps, new String[] { "ID", "Name" });
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
-			final String[] cells = new String[] { htmlEntityLabel(container.getId(), container.getId() + "", EntityType.EXECUTION_CONTAINER), container.getName() };
+			final String[] cells = new String[] { htmlEntityLabel(container.getId(), Integer.toString(container.getId()), EntityType.EXECUTION_CONTAINER), container.getName() };
 			printHtmlTableRow(ps, cells);
 		}
 		printCloseHtmlTable(ps);
@@ -193,7 +193,7 @@ public class SystemModelRepository {
 		final Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
 		for (final AllocationComponent allocationComponent : allocationComponentInstances) {
 			final String[] cells = new String[] {
-					htmlEntityLabel(allocationComponent.getId(), allocationComponent.getId() + "", EntityType.ALLOCATION_COMPONENT),
+					htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()), EntityType.ALLOCATION_COMPONENT),
 					htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(),
 							EntityType.ALLOCATION_COMPONENT),
 					htmlEntityRef(allocationComponent.getExecutionContainer().getId(), allocationComponent.getExecutionContainer().getName(),

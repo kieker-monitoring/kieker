@@ -60,6 +60,6 @@ public class AssemblyComponentOperationPair {
 
 	@Override
 	public String toString() {
-		return +this.assemblyComponent.getId() + ":" + this.operation.getId() + "@" + this.id + "";
+		return +this.assemblyComponent.getId() + ":" + this.operation.getId() + "@" + this.id;
 	}
 }

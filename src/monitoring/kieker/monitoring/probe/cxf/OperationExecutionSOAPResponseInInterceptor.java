@@ -132,7 +132,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			// TODO: Remove following plausibility checks if implementation stable
 			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/162
 			if (myTraceId != traceId) {
-				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + "" + myTraceId
+				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + myTraceId
 						+ "(before) != " + traceId + "(after)");
 			}
 

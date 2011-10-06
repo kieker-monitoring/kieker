@@ -60,6 +60,6 @@ public class AllocationComponentOperationPair {
 
 	@Override
 	public String toString() {
-		return +this.allocationComponent.getId() + ":" + this.operation.getId() + "@" + this.id + "";
+		return +this.allocationComponent.getId() + ":" + this.operation.getId() + "@" + this.id;
 	}
 }
