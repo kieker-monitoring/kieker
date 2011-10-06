@@ -296,9 +296,11 @@
 
         <!-- Restricts throws statements to a specified count. !-->
         <!-- See http://checkstyle.sf.net/config_design.html !-->
+        <!-- KIEKER off
         <module name="ThrowsCount">
             <property name="max" value="1"/>
         </module>
+        !-->
 
         <!-- Checks visibility of class members. !-->
         <!-- See http://checkstyle.sf.net/config_design.html !-->

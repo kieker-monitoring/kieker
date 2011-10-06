@@ -113,6 +113,12 @@ public final class JMXReader extends AbstractMonitoringReader {
 	}
 
 	@Override
+	public void terminate() {
+		JMXReader.LOG.info("Shutdown of JMXReader requested.");
+		this.unblock();
+	}
+
+	@Override
 	public final boolean read() {
 		if (this.silentreconnect) {
 			return this.read2();
@@ -275,11 +281,5 @@ public final class JMXReader extends AbstractMonitoringReader {
 				JMXReader.LOG.info(notificationType + ": " + notification.getMessage());
 			}
 		}
-	}
-
-	@Override
-	public void terminate() {
-		JMXReader.LOG.info("Shutdown of JMXReader requested.");
-		this.unblock();
 	}
 }

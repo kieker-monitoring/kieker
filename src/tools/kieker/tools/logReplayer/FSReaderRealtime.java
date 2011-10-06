@@ -52,42 +52,6 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	/**
-	 * Acts as a consumer to the rtDistributor and delegates incoming records to
-	 * the FSReaderRealtime instance.
-	 */
-	private static class FSReaderRealtimeCons implements IMonitoringRecordConsumerPlugin {
-
-		private final FSReaderRealtime master;
-
-		public FSReaderRealtimeCons(final FSReaderRealtime master) {
-			this.master = master;
-		}
-
-		@Override
-		public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-			return null;
-		}
-
-		@Override
-		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-			if (!this.master.deliverRecord(monitoringRecord)) {
-				FSReaderRealtime.LOG.error("LogReaderExecutionException");
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public boolean execute() {
-			/* do nothing */
-			return true;
-		}
-
-		@Override
-		public void terminate(final boolean error) {}
-	}
-
-	/**
 	 * Constructor for FSReaderRealtime. Requires a subsequent call to the init
 	 * method in order to specify the input directory and number of workers
 	 * using the parameter @a inputDirName.
@@ -181,5 +145,41 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	@Override
 	public void terminate() {
 		this.analysis.terminate();
+	}
+
+	/**
+	 * Acts as a consumer to the rtDistributor and delegates incoming records to
+	 * the FSReaderRealtime instance.
+	 */
+	private static class FSReaderRealtimeCons implements IMonitoringRecordConsumerPlugin {
+
+		private final FSReaderRealtime master;
+
+		public FSReaderRealtimeCons(final FSReaderRealtime master) {
+			this.master = master;
+		}
+
+		@Override
+		public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+			return null;
+		}
+
+		@Override
+		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+			if (!this.master.deliverRecord(monitoringRecord)) {
+				FSReaderRealtime.LOG.error("LogReaderExecutionException");
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean execute() {
+			/* do nothing */
+			return true;
+		}
+
+		@Override
+		public void terminate(final boolean error) {}
 	}
 }

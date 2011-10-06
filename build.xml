@@ -1043,8 +1043,8 @@
         <include name="*.jar" />
       </fileset>
     </path>
-		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
-		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd/pmdrules.xml">
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
+		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd/pmdrules.xml" targetjdk="1.6" >
 			<formatter type="xml" toFile="${tmp.dir}/pmd_report.xml" />
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
