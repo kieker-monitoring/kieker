@@ -141,7 +141,7 @@ public class SystemModelRepository {
 		ps.println("<style type=\"text/css\">\n" + ".colTitle { font-family:sans; font-size:11px; }\n" + ".cell { font-family:monospace; font-size:10px; }\n"
 				+ "h1 { font-family:sans; font-size:14px; }\n" + "</style>");
 		ps.println("</head><body>");
-		this.htmlHSpace(ps, 10);
+		this.htmlHSpace(ps, 10); // NOCS (MagicNumberCheck)
 		ps.println("<h1>Component Types</h1>");
 		this.printOpenHtmlTable(ps, new String[] { "ID", "Package", "Name", "Operations" });
 		final Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();

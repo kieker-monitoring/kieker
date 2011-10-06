@@ -186,7 +186,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 				try {
 					jmx = JMXConnectorFactory.connect(this.serviceURL);
 				} catch (final IOException e) {
-					Thread.sleep(10000);
+					Thread.sleep(10000); // NOCS
 					continue;
 				}
 				serverNotificationListener = new ServerNotificationListener();
@@ -222,7 +222,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 					if (jmx != null) {
 						jmx.close();
 					}
-					Thread.sleep(10000);
+					Thread.sleep(10000); // NOCS
 				} catch (final Exception e) { // ignore
 				}
 			}

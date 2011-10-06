@@ -157,7 +157,7 @@ public class ControlServlet extends HttpServlet {
 			} else if (action.equals("insertTestData")) {
 				ControlServlet.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSession(true).getId());
 				ControlServlet.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
-				for (int i = 0; i < 12; i++) {
+				for (int i = 0; i < 12; i++) { // NOCS
 					ControlServlet.CTRL_INST.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet",
 							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.SESSION_REGISTRY.recallThreadLocalSessionId(),
 							ControlServlet.CF_REGISTRY.recallThreadLocalTraceId(), ControlServlet.TIMESOURCE.getTime(), ControlServlet.TIMESOURCE.getTime(),

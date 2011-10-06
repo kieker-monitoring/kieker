@@ -39,7 +39,7 @@ public class Starter extends Thread {
 	Random random = new Random();
 
 	public static void main(final String[] args) throws InterruptedException {
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
 			new Starter().start();
 			// wait between requests
 			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1));

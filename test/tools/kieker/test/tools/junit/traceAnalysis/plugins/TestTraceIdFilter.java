@@ -49,15 +49,15 @@ public class TestTraceIdFilter extends TestCase {
 	 */
 	public void testAssertIgnoreTraceId() {
 		final TreeSet<Long> idsToPass = new TreeSet<Long>();
-		idsToPass.add(5l);
-		idsToPass.add(7l);
+		idsToPass.add(5l); // NOCS (MagicNumberCheck)
+		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
 		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
 
-		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass)
-				5, // tin (value not important)
-				10, // tout (value not important)
-				0, 0); // eoi, ess (values not important)
+		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass) // NOCS (MagicNumberCheck)
+				5, // tin (value not important) // NOCS (MagicNumberCheck)
+				10, // tout (value not important) // NOCS (MagicNumberCheck)
+				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
 		Assert.assertTrue("Testcase invalid", !idsToPass.contains(exec.getTraceId()));
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
@@ -83,15 +83,15 @@ public class TestTraceIdFilter extends TestCase {
 	 */
 	public void testAssertPassTraceId() {
 		final TreeSet<Long> idsToPass = new TreeSet<Long>();
-		idsToPass.add(5l);
-		idsToPass.add(7l);
+		idsToPass.add(5l); // NOCS (MagicNumberCheck)
+		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
 		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
 
-		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass)
-				5, // tin (value not important)
-				10, // tout (value not important)
-				0, 0); // eoi, ess (values not important)
+		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
+				5, // tin (value not important) // NOCS (MagicNumberCheck)
+				10, // tout (value not important) // NOCS (MagicNumberCheck)
+				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
 		Assert.assertTrue("Testcase invalid", idsToPass.contains(exec.getTraceId()));
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);

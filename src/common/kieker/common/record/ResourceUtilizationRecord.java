@@ -68,10 +68,10 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 				throw new IllegalArgumentException("Expecting vector with " + ResourceUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
 			}
 
-			this.timestamp = (Long) values[0];
-			this.hostName = (String) values[1];
-			this.resourceName = (String) values[2];
-			this.utilization = (Double) values[3];
+			this.timestamp = (Long) values[0]; // NOCS
+			this.hostName = (String) values[1]; // NOCS
+			this.resourceName = (String) values[2]; // NOCS
+			this.utilization = (Double) values[3]; // NOCS
 
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);

@@ -97,7 +97,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		for (final AbstractAsyncThread worker : this.workers) {
 			while (!worker.isFinished()) {
 				try {
-					Thread.sleep(500);
+					Thread.sleep(500); // NOCS
 				} catch (final InterruptedException ex) {
 					// we should be able to ignore an interrupted wait
 				}
@@ -119,7 +119,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
 					// warn on missed records
-					if ((this.missedRecords.getAndIncrement() % 1000) == 0) {
+					if ((this.missedRecords.getAndIncrement() % 1000) == 0) { // NOCS
 						AbstractAsyncWriter.LOG.warn("Queue is full, dropping records.");
 					}
 				}

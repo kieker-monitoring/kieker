@@ -119,15 +119,15 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				return false;
 			}
 			final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-			this.psInsertMonitoringData.setInt(1, execRecord.experimentId);
-			this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName);
-			this.psInsertMonitoringData.setString(3, execRecord.sessionId);
-			this.psInsertMonitoringData.setLong(4, execRecord.traceId);
-			this.psInsertMonitoringData.setLong(5, execRecord.tin);
-			this.psInsertMonitoringData.setLong(6, execRecord.tout);
-			this.psInsertMonitoringData.setString(7, execRecord.hostName);
-			this.psInsertMonitoringData.setLong(8, execRecord.eoi);
-			this.psInsertMonitoringData.setLong(9, execRecord.ess);
+			this.psInsertMonitoringData.setInt(1, execRecord.experimentId); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setString(3, execRecord.sessionId); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(4, execRecord.traceId); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(5, execRecord.tin); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(6, execRecord.tout); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setString(7, execRecord.hostName); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(8, execRecord.eoi); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(9, execRecord.ess); // NOCS (MagicNumberCheck)
 			this.psInsertMonitoringData.execute();
 		} catch (final Exception ex) {
 			SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);

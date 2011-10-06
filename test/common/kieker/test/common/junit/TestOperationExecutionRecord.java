@@ -41,16 +41,16 @@ public class TestOperationExecutionRecord extends TestCase {
 	public void testSerializeDeserializeEquals() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
 		r1.className = "p1.p2.p3.componentname";
-		r1.eoi = 1;
-		r1.ess = 2;
-		r1.experimentId = 55;
+		r1.eoi = 1; // NOCS (MagicNumberCheck)
+		r1.ess = 2; // NOCS (MagicNumberCheck)
+		r1.experimentId = 55; // NOCS (MagicNumberCheck)
 		r1.isEntryPoint = true;
 		r1.operationName = "operation(boolean arg1, int arg2)";
 		r1.retVal = new Object();
 		r1.sessionId = "XXLJHDJHDHF";
-		r1.tin = 5577376;
-		r1.tout = 7544522;
-		r1.traceId = 882287444;
+		r1.tin = 5577376; // NOCS (MagicNumberCheck)
+		r1.tout = 7544522; // NOCS (MagicNumberCheck)
+		r1.traceId = 882287444; // NOCS (MagicNumberCheck)
 		r1.hostName = "myVM";
 
 		final Object[] r1Array = r1.toArray();
@@ -70,30 +70,30 @@ public class TestOperationExecutionRecord extends TestCase {
 	public void testEqualsEqualVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
 		r1.className = "p1.p2.p3.componentname";
-		r1.eoi = 1;
-		r1.ess = 2;
-		r1.experimentId = 55;
+		r1.eoi = 1; // NOCS (MagicNumberCheck)
+		r1.ess = 2; // NOCS (MagicNumberCheck)
+		r1.experimentId = 55; // NOCS (MagicNumberCheck)
 		r1.isEntryPoint = true;
 		r1.operationName = "operation(boolean arg1, int arg2)";
 		r1.retVal = new Object();
 		r1.sessionId = "XXLJHDJHDHF";
-		r1.tin = 5577376;
-		r1.tout = 7544522;
-		r1.traceId = 882287444;
+		r1.tin = 5577376; // NOCS (MagicNumberCheck)
+		r1.tout = 7544522; // NOCS (MagicNumberCheck)
+		r1.traceId = 882287444; // NOCS (MagicNumberCheck)
 		r1.hostName = "myVM";
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord();
 		r2.className = "p1.p2.p3.componentname";
-		r2.eoi = 1;
-		r2.ess = 2;
-		r2.experimentId = 55;
+		r2.eoi = 1; // NOCS (MagicNumberCheck)
+		r2.ess = 2; // NOCS (MagicNumberCheck)
+		r2.experimentId = 55; // NOCS (MagicNumberCheck)
 		r2.isEntryPoint = true;
 		r2.operationName = "operation(boolean arg1, int arg2)";
 		r2.retVal = new Object();
 		r2.sessionId = "XXLJHDJHDHF";
-		r2.tin = 5577376;
-		r2.tout = 7544522;
-		r2.traceId = 882287444;
+		r2.tin = 5577376; // NOCS (MagicNumberCheck)
+		r2.tout = 7544522; // NOCS (MagicNumberCheck)
+		r2.traceId = 882287444; // NOCS (MagicNumberCheck)
 		r2.hostName = "myVM";
 
 		Assert.assertEquals(r1, r2);
@@ -108,30 +108,30 @@ public class TestOperationExecutionRecord extends TestCase {
 	public void testEqualsNullVariableValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
 		r1.className = "p1.p2.p3.componentname";
-		r1.eoi = 1;
-		r1.ess = 2;
-		r1.experimentId = 55;
+		r1.eoi = 1; // NOCS (MagicNumberCheck)
+		r1.ess = 2; // NOCS (MagicNumberCheck)
+		r1.experimentId = 55; // NOCS (MagicNumberCheck)
 		r1.isEntryPoint = true;
 		r1.operationName = "operation(boolean arg1, int arg2)";
 		r1.retVal = new Object();
 		r1.sessionId = "XXLJHDJHDHF";
-		r1.tin = 5577376;
-		r1.tout = 7544522;
-		r1.traceId = 882287444;
+		r1.tin = 5577376; // NOCS (MagicNumberCheck)
+		r1.tout = 7544522; // NOCS (MagicNumberCheck)
+		r1.traceId = 882287444; // NOCS (MagicNumberCheck)
 		r1.hostName = "myVM";
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord();
 		r2.className = "p1.p2.p3.componentname";
-		r2.eoi = 1;
-		r2.ess = 2;
-		r2.experimentId = 55;
+		r2.eoi = 1; // NOCS (MagicNumberCheck)
+		r2.ess = 2; // NOCS (MagicNumberCheck)
+		r2.experimentId = 55; // NOCS (MagicNumberCheck)
 		r2.isEntryPoint = true;
 		r2.operationName = "operation(boolean arg1, int arg2)";
 		r2.retVal = new Object();
 		r2.sessionId = "XXLJHDJHDHF";
-		r2.tin = 5577376;
-		r2.tout = 7544522;
-		r2.traceId = 882287444;
+		r2.tin = 5577376; // NOCS (MagicNumberCheck)
+		r2.tout = 7544522; // NOCS (MagicNumberCheck)
+		r2.traceId = 882287444; // NOCS (MagicNumberCheck)
 		r2.hostName = "myVM";
 
 		Assert.assertEquals(r1, r2);
@@ -186,30 +186,30 @@ public class TestOperationExecutionRecord extends TestCase {
 	public void testEqualsDifferentVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
 		r1.className = "p1.p2.p3.componentname";
-		r1.eoi = 1;
-		r1.ess = 2;
-		r1.experimentId = 55;
+		r1.eoi = 1; // NOCS (MagicNumberCheck)
+		r1.ess = 2; // NOCS (MagicNumberCheck)
+		r1.experimentId = 55; // NOCS (MagicNumberCheck)
 		r1.isEntryPoint = true;
 		r1.operationName = "operation(boolean arg1, int arg2)";
 		r1.retVal = new Object();
 		r1.sessionId = "XXLJHDJHDHF";
-		r1.tin = 5577376;
-		r1.tout = 7544522;
-		r1.traceId = 882287444;
+		r1.tin = 5577376; // NOCS (MagicNumberCheck)
+		r1.tout = 7544522; // NOCS (MagicNumberCheck)
+		r1.traceId = 882287444; // NOCS (MagicNumberCheck)
 		r1.hostName = "myVM";
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord();
 		r2.className = "p1.p2.p3.componentname";
-		r2.eoi = 1;
-		r2.ess = 2;
-		r2.experimentId = 55;
+		r2.eoi = 1; // NOCS (MagicNumberCheck)
+		r2.ess = 2; // NOCS (MagicNumberCheck)
+		r2.experimentId = 55; // NOCS (MagicNumberCheck)
 		r2.isEntryPoint = true;
 		r2.operationName = "operation(boolean arg1, int arg2)";
 		r2.retVal = new Object();
 		r2.sessionId = "XXLJHDJHDHF";
-		r2.tin = 5577376;
-		r2.tout = 7544522;
-		r2.traceId = 882287444;
+		r2.tin = 5577376; // NOCS (MagicNumberCheck)
+		r2.tout = 7544522; // NOCS (MagicNumberCheck)
+		r2.traceId = 882287444; // NOCS (MagicNumberCheck)
 		r2.hostName = "myVM";
 
 		Assert.assertEquals(r1, r2);

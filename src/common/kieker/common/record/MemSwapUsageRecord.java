@@ -155,14 +155,14 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 				throw new IllegalArgumentException("Expecting vector with " + MemSwapUsageRecord.VALUE_TYPES.length + " elements but found:" + values.length);
 			}
 
-			this.timestamp = (Long) values[0];
-			this.hostName = (String) values[1];
-			this.memTotal = (Long) values[2];
-			this.memUsed = (Long) values[3];
-			this.memFree = (Long) values[4];
-			this.swapTotal = (Long) values[5];
-			this.swapUsed = (Long) values[6];
-			this.swapFree = (Long) values[7];
+			this.timestamp = (Long) values[0]; // NOCS
+			this.hostName = (String) values[1]; // NOCS
+			this.memTotal = (Long) values[2]; // NOCS
+			this.memUsed = (Long) values[3]; // NOCS
+			this.memFree = (Long) values[4]; // NOCS
+			this.swapTotal = (Long) values[5]; // NOCS
+			this.swapUsed = (Long) values[6]; // NOCS
+			this.swapFree = (Long) values[7]; // NOCS
 
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);

@@ -40,10 +40,10 @@ public class Catalog {
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			BranchingProbe.monitorBranch(1, 0);
-			Bookstore.waitabit(20);
+			Bookstore.waitabit(20); // NOCS (MagicNumberCheck)
 		} else {
 			BranchingProbe.monitorBranch(1, 1);
-			Bookstore.waitabit(2000); //
+			Bookstore.waitabit(2000); // NOCS (MagicNumberCheck)
 		}
 	}
 }

@@ -108,7 +108,8 @@ public class LoggingTimestampConverterTool {
 	}
 
 	private static void printUsage() {
-		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", LoggingTimestampConverterTool.CMDL_OPTS,
+		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", // NOCS (MagicNumberCheck) 
+				LoggingTimestampConverterTool.CMDL_OPTS,
 				"", true);
 	}
 

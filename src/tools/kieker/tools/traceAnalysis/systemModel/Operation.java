@@ -74,8 +74,8 @@ public class Operation {
 
 	@Override
 	public int hashCode() {
-		int hash = 5;
-		hash = (17 * hash) + this.id;
+		int hash = 5; // NOCS (MagicNumberCheck)
+		hash = (17 * hash) + this.id; // NOCS (MagicNumberCheck)
 		return hash;
 	}
 

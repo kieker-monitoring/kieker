@@ -33,10 +33,10 @@ public class CatalogWA {
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			// complex query
-			BookstoreWA.waitabit(20);
+			BookstoreWA.waitabit(20); // NOCS (MagicNumberCheck)
 		} else {
 			// simple query
-			BookstoreWA.waitabit(2);
+			BookstoreWA.waitabit(2); // NOCS (MagicNumberCheck)
 		}
 	}
 }

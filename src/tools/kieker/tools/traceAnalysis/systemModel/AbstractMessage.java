@@ -85,6 +85,6 @@ public abstract class AbstractMessage {
 
 	@Override
 	public int hashCode() {
-		return (int) (this.timestamp ^ (this.timestamp >>> 32));
+		return (int) (this.timestamp ^ (this.timestamp >>> 32)); // NOCS (MagicNumberCheck)
 	}
 }

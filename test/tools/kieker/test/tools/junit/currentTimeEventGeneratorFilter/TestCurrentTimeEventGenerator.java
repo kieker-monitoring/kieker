@@ -36,7 +36,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 	 * 
 	 */
 	public void testFirstRecordGeneratesEvent() {
-		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 });
+		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }); // NOCS (MagicNumberCheck)
 	}
 
 	/**

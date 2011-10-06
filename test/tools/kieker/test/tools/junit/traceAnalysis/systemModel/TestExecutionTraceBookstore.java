@@ -62,24 +62,24 @@ public class TestExecutionTraceBookstore extends TestCase {
 
 		/* Manually create Executions for a trace */
 		numExecutions_l++;
-		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID, 1, // tin
-				10, // tout
-				0, 0); // eoi, ess
+		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID, 1, // tin // NOCS (MagicNumberCheck)
+				10, // tout // NOCS (MagicNumberCheck)
+				0, 0); // eoi, ess // NOCS (MagicNumberCheck)
 		this.minTin = this.exec0_0__bookstore_searchBook.getTin();
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
 		numExecutions_l++;
-		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 2, // tin
-				4, // tout
-				1, 1); // eoi, ess
+		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 2, // tin // NOCS (MagicNumberCheck)
+				4, // tout // NOCS (MagicNumberCheck)
+				1, 1); // eoi, ess // NOCS (MagicNumberCheck)
 		numExecutions_l++;
-		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID, 5, // tin
-				8, // tout
-				2, 1); // eoi, ess
+		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID, 5, // tin // NOCS (MagicNumberCheck)
+				8, // tout // NOCS (MagicNumberCheck)
+				2, 1); // eoi, ess // NOCS (MagicNumberCheck)
 		numExecutions_l++;
-		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 6, // tin
-				7, // tout
-				3, 2); // eoi, ess
+		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 6, // tin // NOCS (MagicNumberCheck)
+				7, // tout // NOCS (MagicNumberCheck)
+				3, 2); // eoi, ess // NOCS (MagicNumberCheck)
 		this.numExecutions = numExecutions_l;
 	}
 
@@ -271,9 +271,9 @@ public class TestExecutionTraceBookstore extends TestCase {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
 			final Execution exec4_1__catalog_getBook // NOCS
-			= this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, // tin
-					10, // tout
-					4, 1); // eoi, ess
+			= this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, // tin // NOCS (MagicNumberCheck)
+					10, // tout // NOCS (MagicNumberCheck)
+					4, 1); // eoi, ess // NOCS (MagicNumberCheck)
 			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 			executionTrace.add(exec4_1__catalog_getBook);
 			final MessageTrace messageTrace2 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
@@ -365,9 +365,9 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 */
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID);
 		final Execution exec3_2__catalog_getBook__broken // NOCS
-		= this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 6, // tin
-				7, // tout
-				4, 2); // eoi, ess
+		= this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 6, // tin // NOCS (MagicNumberCheck)
+				7, // tout // NOCS (MagicNumberCheck)
+				4, 2); // eoi, ess // NOCS (MagicNumberCheck)
 		Assert.assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(this.exec3_2__catalog_getBook));
 
 		executionTrace.add(exec3_2__catalog_getBook__broken);

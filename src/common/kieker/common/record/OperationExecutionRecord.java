@@ -178,13 +178,13 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 					this.operationName = name.substring(posDot + 1);
 				}
 			}
-			this.sessionId = (String) values[2];
-			this.traceId = (Long) values[3];
-			this.tin = (Long) values[4];
-			this.tout = (Long) values[5];
-			this.hostName = (String) values[6];
-			this.eoi = (Integer) values[7];
-			this.ess = (Integer) values[8];
+			this.sessionId = (String) values[2]; // NOCS
+			this.traceId = (Long) values[3]; // NOCS
+			this.tin = (Long) values[4]; // NOCS
+			this.tout = (Long) values[5]; // NOCS
+			this.hostName = (String) values[6]; // NOCS
+			this.eoi = (Integer) values[7]; // NOCS
+			this.ess = (Integer) values[8]; // NOCS
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
@@ -201,9 +201,9 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		result = (prime * result) + ((this.hostName == null) ? 0 : this.hostName.hashCode()); // NOCS
 		result = (prime * result) + ((this.operationName == null) ? 0 : this.operationName.hashCode()); // NOCS
 		result = (prime * result) + ((this.sessionId == null) ? 0 : this.sessionId.hashCode()); // NOCS
-		result = (prime * result) + (int) (this.tin ^ (this.tin >>> 32));
-		result = (prime * result) + (int) (this.tout ^ (this.tout >>> 32));
-		result = (prime * result) + (int) (this.traceId ^ (this.traceId >>> 32));
+		result = (prime * result) + (int) (this.tin ^ (this.tin >>> 32)); // NOCS
+		result = (prime * result) + (int) (this.tout ^ (this.tout >>> 32)); // NOCS
+		result = (prime * result) + (int) (this.traceId ^ (this.traceId >>> 32)); // NOCS
 		return result;
 	}
 

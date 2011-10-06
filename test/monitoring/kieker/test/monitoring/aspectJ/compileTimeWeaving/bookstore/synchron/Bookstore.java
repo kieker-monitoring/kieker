@@ -45,8 +45,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 public class Bookstore extends Thread {
 	public static final Vector<Bookstore> BOOKSTORE_SCENARIOS = new Vector<Bookstore>();
 
-	static int numberOfRequests = 5000;
-	static int interRequestTime = 5;
+	private static final int NUM_REQUESTS = 5000;
+	private static final int INTER_REQUEST_TIME = 5;
 
 	/**
 	 * 
@@ -66,12 +66,12 @@ public class Bookstore extends Thread {
 	 */
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) throws InterruptedException {
-		for (int i = 0; i < Bookstore.numberOfRequests; i++) {
+		for (int i = 0; i < Bookstore.NUM_REQUESTS; i++) {
 			System.out.println("Bookstore.main: Starting request " + i);
 			final Bookstore newBookstore = new Bookstore();
 			Bookstore.BOOKSTORE_SCENARIOS.add(newBookstore);
 			newBookstore.start();
-			Bookstore.waitabit(Bookstore.interRequestTime);
+			Bookstore.waitabit(Bookstore.INTER_REQUEST_TIME);
 		}
 		System.out.println("Bookstore.main: Finished with starting all requests.");
 		System.out.println("Bookstore.main: Waiting for threads to terminate");

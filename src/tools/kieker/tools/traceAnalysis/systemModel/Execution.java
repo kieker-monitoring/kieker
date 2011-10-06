@@ -159,15 +159,15 @@ public class Execution implements IAnalysisEvent {
 
 	@Override
 	public int hashCode() {
-		int hash = 3;
-		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0); // NOCS
-		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS
-		hash = (43 * hash) + (int) (this.traceId ^ (this.traceId >>> 32));
-		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0); // NOCS
-		hash = (43 * hash) + this.eoi;
-		hash = (43 * hash) + this.ess;
-		hash = (43 * hash) + (int) (this.tin ^ (this.tin >>> 32));
-		hash = (43 * hash) + (int) (this.tout ^ (this.tout >>> 32));
+		int hash = 3; // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0); // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + (int) (this.traceId ^ (this.traceId >>> 32)); // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0); // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + this.eoi; // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + this.ess; // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + (int) (this.tin ^ (this.tin >>> 32)); // NOCS (MagicNumberCheck)
+		hash = (43 * hash) + (int) (this.tout ^ (this.tout >>> 32)); // NOCS (MagicNumberCheck)
 		return hash;
 	}
 

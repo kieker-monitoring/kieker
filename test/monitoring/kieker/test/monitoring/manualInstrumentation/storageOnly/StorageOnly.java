@@ -54,7 +54,7 @@ public class StorageOnly {
 		try {
 			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.NUMBER_OF_EVENTS);
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L,
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L, // NOCS (MagicNumberCheck)
 						StorageOnly.CTRL.getHostName(), i, i);
 				record.hostName = StorageOnly.VM_NAME;
 				StorageOnly.CTRL.newMonitoringRecord(record);
@@ -63,13 +63,13 @@ public class StorageOnly {
 			Thread.sleep(8000);
 			System.out.printf("%d more monitoring points\n", StorageOnly.NUMBER_OF_EVENTS);
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L,
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid", 3333, 123123L, 123124L, // NOCS (MagicNumberCheck)
 						StorageOnly.CTRL.getHostName(), i + 10000, i);
 				record.hostName = StorageOnly.VM_NAME;
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 60 seconds");
-			Thread.sleep(10000);
+			Thread.sleep(10000); // NOCS (MagicNumberCheck)
 			StorageOnly.CTRL.terminateMonitoring();
 		} catch (final InterruptedException ex) {
 			System.out.println("Exception:" + ex);

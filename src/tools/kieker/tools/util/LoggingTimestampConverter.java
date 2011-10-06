@@ -50,7 +50,7 @@ public class LoggingTimestampConverter {
 	 */
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
 		final GregorianCalendar c = new GregorianCalendar();
-		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
+		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000)); // NOCS (MagicNumberCheck)
 		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2); // NOCS
 		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat_ISO8601UTC.format(c.getTime()) + " (UTC)";
@@ -69,7 +69,7 @@ public class LoggingTimestampConverter {
 	 */
 	public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
 		final GregorianCalendar c = new GregorianCalendar();
-		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
+		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000)); // NOCS (MagicNumberCheck)
 		final DateFormat dateFormat_ISO8601LOCAL = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2); // NOCS
 		return dateFormat_ISO8601LOCAL.format(c.getTime()) + " (local time)";
 	}

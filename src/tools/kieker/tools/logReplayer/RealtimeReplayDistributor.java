@@ -87,7 +87,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
-			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance
+			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance // NOCS (MagicNumberCheck)
 			this.offset = (2 * 1000 * 1000 * 1000) - this.firstLoggingTimestamp;
 			this.startTime = RealtimeReplayDistributor.TIMESOURCE.getTime();
 		}

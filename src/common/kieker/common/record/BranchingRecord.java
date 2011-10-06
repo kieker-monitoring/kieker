@@ -71,7 +71,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	}
 
 	private static final long serialVersionUID = 1113L;
-	private static int numRecordFields = 3;
+	private static int numRecordFields = 3; // NOCS
 	private volatile long timestamp = -1;
 	private volatile int branchID = -1;
 	private volatile int branchingOutcome = -1;

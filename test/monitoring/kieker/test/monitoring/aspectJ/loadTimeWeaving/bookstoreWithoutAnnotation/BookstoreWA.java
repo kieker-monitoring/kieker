@@ -36,8 +36,8 @@ import java.util.Vector;
  */
 
 public class BookstoreWA extends Thread {
-	static int numberOfRequests = 100;
-	static int interRequestTime = 5;
+	private static final int NUM_REQUESTS = 100;
+	private static final int INTER_REQUEST_TIME = 5;
 
 	public static final Vector<BookstoreWA> BOOKSTORE_SCENARIOS = new Vector<BookstoreWA>();
 
@@ -55,12 +55,12 @@ public class BookstoreWA extends Thread {
 	 * 
 	 */
 	public static void main(final String[] args) throws InterruptedException {
-		for (int i = 0; i < BookstoreWA.numberOfRequests; i++) {
+		for (int i = 0; i < BookstoreWA.NUM_REQUESTS; i++) {
 			System.out.println("BookstoreWA.main: Starting request " + i);
 			final BookstoreWA newBookstore = new BookstoreWA();
 			BookstoreWA.BOOKSTORE_SCENARIOS.add(newBookstore);
 			newBookstore.start();
-			BookstoreWA.waitabit(BookstoreWA.interRequestTime);
+			BookstoreWA.waitabit(BookstoreWA.INTER_REQUEST_TIME);
 		}
 		System.out.println("Bookstore.main: Finished with starting all requests.");
 		System.out.println("Bookstore.main: Waiting for threads to terminate");

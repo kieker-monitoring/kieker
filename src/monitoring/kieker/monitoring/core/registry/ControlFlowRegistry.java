@@ -57,7 +57,7 @@ public final class ControlFlowRegistry {
 		 * this does not hurt!
 		 */
 		final Random r = new Random();
-		final long base = ((long) r.nextInt(65536) << (Long.SIZE - 16 - 1));
+		final long base = ((long) r.nextInt(65536) << (Long.SIZE - 16 - 1)); // NOCS
 
 		this.lastThreadId = new AtomicLong(base);
 		ControlFlowRegistry.LOG.info("First threadId will be " + (base + 1));

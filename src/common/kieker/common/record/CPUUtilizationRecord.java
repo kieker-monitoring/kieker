@@ -102,16 +102,16 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
 			}
 
-			this.timestamp = (Long) values[0];
-			this.hostName = (String) values[1];
-			this.cpuID = (String) values[2];
-			this.user = (Double) values[3];
-			this.system = (Double) values[4];
-			this.wait = (Double) values[5];
-			this.nice = (Double) values[6];
-			this.irq = (Double) values[7];
-			this.totalUtilization = (Double) values[8];
-			this.idle = (Double) values[9];
+			this.timestamp = (Long) values[0]; // NOCS
+			this.hostName = (String) values[1]; // NOCS
+			this.cpuID = (String) values[2]; // NOCS
+			this.user = (Double) values[3]; // NOCS
+			this.system = (Double) values[4]; // NOCS
+			this.wait = (Double) values[5]; // NOCS
+			this.nice = (Double) values[6]; // NOCS
+			this.irq = (Double) values[7]; // NOCS
+			this.totalUtilization = (Double) values[8]; // NOCS
+			this.idle = (Double) values[9]; // NOCS
 
 		} catch (final Exception exc) {
 			throw new IllegalArgumentException("Failed to init", exc);
