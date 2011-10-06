@@ -47,7 +47,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	protected AbstractMonitoringWriter(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			final Properties defaultProps = getDefaultProperties(); // NOPMD
+			final Properties defaultProps = this.getDefaultProperties(); // NOPMD
 			if (defaultProps != null) {
 				configuration.setDefaultProperties(defaultProps);
 			}
@@ -97,7 +97,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	@Override
 	public final void setController(final IMonitoringController monitoringController) throws Exception {
 		this.monitoringController = monitoringController;
-		init();
+		this.init();
 	}
 
 	public final Configuration getConfiguration() {

@@ -89,8 +89,8 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 			AsyncFsWriter.LOG.error("Failed to create mapping file '" + mappingFileFn + "'");
 			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
 		}
-		addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path,
-				this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH)));
+		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.configuration
+				.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH)));
 	}
 }
 
@@ -147,7 +147,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			}
 		}
 		// check if file exists and is not full
-		prepareFile(); // may throw FileNotFoundException
+		this.prepareFile(); // may throw FileNotFoundException
 		this.pos.println(sb.toString());
 	}
 
@@ -164,7 +164,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS");
 			date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = date_ISO8601UTC.format(new java.util.Date());
-			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + getName() + ".dat";
+			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);
 			} else {

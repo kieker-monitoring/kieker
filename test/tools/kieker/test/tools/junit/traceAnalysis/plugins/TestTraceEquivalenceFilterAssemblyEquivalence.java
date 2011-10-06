@@ -47,8 +47,8 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 		final ExecutionTrace trace0, trace1;
 
 		try {
-			trace0 = genValidBookstoreTrace(45653l, 17);
-			trace1 = genValidBookstoreTrace(45653l, 17);
+			trace0 = this.genValidBookstoreTrace(45653l, 17);
+			trace1 = this.genValidBookstoreTrace(45653l, 17);
 		} catch (final InvalidTraceException ex) {
 			TestTraceEquivalenceFilterAssemblyEquivalence.log.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);

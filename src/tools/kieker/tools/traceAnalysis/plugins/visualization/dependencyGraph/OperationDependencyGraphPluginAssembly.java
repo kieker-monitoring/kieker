@@ -108,15 +108,15 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 			containedPairs.add(pairNode);
 		}
 
-		final AssemblyComponent rootComponent = getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
+		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
 		final int rootComponentId = rootComponent.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentOperationEntry : componentId2pairMapping.entrySet()) {
 			final int curComponentId = componentOperationEntry.getKey();
-			final AssemblyComponent curComponent = getSystemEntityFactory().getAssemblyFactory().lookupAssemblyComponentById(curComponentId);
+			final AssemblyComponent curComponent = this.getSystemEntityFactory().getAssemblyFactory().lookupAssemblyComponentById(curComponentId);
 
 			if (curComponentId == rootComponentId) {
-				strBuild.append(DotFactory.createNode("", getNodeId(this.dependencyGraph.getRootNode()), "$", DotFactory.DOT_SHAPE_NONE, null, // style
+				strBuild.append(DotFactory.createNode("", this.getNodeId(this.dependencyGraph.getRootNode()), "$", DotFactory.DOT_SHAPE_NONE, null, // style
 						null, // framecolor
 						null, // fillcolor
 						null, // fontcolor
@@ -125,8 +125,8 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 						null // misc
 						));
 			} else {
-				strBuild.append(DotFactory.createCluster("", this.COMPONENT_NODE_ID_PREFIX + curComponentId, componentNodeLabel(curComponent, this.shortLabels),
-						DotFactory.DOT_SHAPE_BOX, // shape
+				strBuild.append(DotFactory.createCluster("", OperationDependencyGraphPluginAssembly.COMPONENT_NODE_ID_PREFIX + curComponentId,
+						this.componentNodeLabel(curComponent, this.shortLabels), DotFactory.DOT_SHAPE_BOX, // shape
 						DotFactory.DOT_STYLE_FILLED, // style
 						null, // framecolor
 						DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
@@ -142,7 +142,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 						opLabel.append("..");
 					}
 					opLabel.append(")");
-					strBuild.append(DotFactory.createNode("", getNodeId(curPair), opLabel.toString(), DotFactory.DOT_SHAPE_OVAL, DotFactory.DOT_STYLE_FILLED, // style
+					strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), opLabel.toString(), DotFactory.DOT_SHAPE_OVAL, DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
 							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 							null, // fontcolor
@@ -171,7 +171,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				OperationDependencyGraphPluginAssembly.LOG.error("IOException", ex);
 			}

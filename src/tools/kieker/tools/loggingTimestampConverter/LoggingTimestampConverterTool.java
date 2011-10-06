@@ -108,8 +108,8 @@ public class LoggingTimestampConverterTool {
 	}
 
 	private static void printUsage() {
-		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", LoggingTimestampConverterTool.CMDL_OPTS, "",
-				true);
+		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", LoggingTimestampConverterTool.CMDL_OPTS,
+				"", true);
 	}
 
 	private static boolean initFromArgs() {

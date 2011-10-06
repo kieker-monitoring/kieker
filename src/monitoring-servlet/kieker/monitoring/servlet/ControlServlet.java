@@ -106,7 +106,7 @@ public class ControlServlet extends HttpServlet {
 		out.println("<title>Kieker's ControlServlet</title>");
 		out.println("</head>");
 		out.println("<body>");
-		printHeader(out);
+		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
 		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.TIMESOURCE.getTime() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
@@ -128,7 +128,7 @@ public class ControlServlet extends HttpServlet {
 						}
 
 					} catch (final NumberFormatException ne) {
-						dumpError(out, ne.getMessage());
+						this.dumpError(out, ne.getMessage());
 					}
 				}
 				/*
@@ -169,7 +169,7 @@ public class ControlServlet extends HttpServlet {
 				 * invalid action
 				 */
 			} else if (!(action.length() == 0)) {
-				dumpError(out, "Invalid action: '" + action + "'");
+				this.dumpError(out, "Invalid action: '" + action + "'");
 			}
 		}
 
@@ -216,7 +216,7 @@ public class ControlServlet extends HttpServlet {
 		} catch (final RuntimeException e) { // ignore
 		}
 		out.println(bu.toString());
-		printFooter(out);
+		this.printFooter(out);
 		out.println("</body>");
 		out.println("</html>");
 		out.close();
@@ -237,7 +237,7 @@ public class ControlServlet extends HttpServlet {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
-		processRequest(request, response);
+		this.processRequest(request, response);
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class ControlServlet extends HttpServlet {
 		if (!ControlServlet.initialized) {
 			ControlServlet.initialize();
 		}
-		processRequest(request, response);
+		this.processRequest(request, response);
 	}
 
 	/**

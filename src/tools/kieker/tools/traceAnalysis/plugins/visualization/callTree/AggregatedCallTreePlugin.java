@@ -60,7 +60,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		AbstractCallTreePlugin.saveTreeToDotFile(super.getSystemEntityFactory(), this.root, outputFnBase, includeWeights, false, // do not include EOIs
 				shortLabels);
 		this.numGraphsSaved++;
-		printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
+		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
 				"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
 	}
 
@@ -102,10 +102,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		public void newEvent(final MessageTrace t) {
 			try {
 				AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
-				reportSuccess(t.getTraceId());
+				AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
 			} catch (final TraceProcessingException ex) {
 				AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);
-				reportError(t.getTraceId());
+				AggregatedCallTreePlugin.this.reportError(t.getTraceId());
 			}
 		}
 	};

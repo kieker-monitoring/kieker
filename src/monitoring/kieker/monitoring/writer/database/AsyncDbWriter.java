@@ -75,7 +75,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
-		init();
+		this.init();
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			 * /*
 			 */
 			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG__NRCONN); i++) {
-				addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
+				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {
 			AsyncDbWriter.LOG.error("SQLException: " + ex.getMessage());

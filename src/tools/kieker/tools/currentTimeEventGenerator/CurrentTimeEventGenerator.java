@@ -106,7 +106,7 @@ public class CurrentTimeEventGenerator {
 			 */
 			this.maxTimestamp = timestamp;
 			this.firstTimestamp = timestamp;
-			getCurrentTimeOutputPort().deliver(new TimestampEvent(timestamp));
+			this.getCurrentTimeOutputPort().deliver(new TimestampEvent(timestamp));
 			this.mostRecentEventFired = timestamp;
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
@@ -115,7 +115,7 @@ public class CurrentTimeEventGenerator {
 			 */
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
 					+ this.timerResolution) {
-				getCurrentTimeOutputPort().deliver(new TimestampEvent(nextTimerEventAt));
+				this.getCurrentTimeOutputPort().deliver(new TimestampEvent(nextTimerEventAt));
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}

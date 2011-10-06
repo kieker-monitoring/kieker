@@ -57,7 +57,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 */
 	public void testCreationDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		testValues(configuration);
+		this.testValues(configuration);
 		Assert.assertEquals("Writer must be " + DefaultConfigurationFactory.WRITER_NAME, DefaultConfigurationFactory.WRITER_NAME,
 				configuration.getStringProperty(Configuration.WRITER_CLASSNAME));
 	}
@@ -66,7 +66,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Tests {@link Configuration#createSingletonConfiguration()}.
 	 */
 	public void testCreationSingletonConfiguration() {
-		testValues(Configuration.createSingletonConfiguration());
+		this.testValues(Configuration.createSingletonConfiguration());
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 */
 	public void testCreationDefaultConfiguration() {
 		final Configuration configuration = Configuration.createDefaultConfiguration();
-		testValues(configuration);
+		this.testValues(configuration);
 		// check for correct default values of required parameters
 		// Monitoring controller
 		Assert.assertEquals(true, configuration.getBooleanProperty(Configuration.MONITORING_ENABLED));
@@ -106,7 +106,7 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	public void testCreationfromFile() {
 		final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.properties.test";
 		final Configuration configuration = Configuration.createConfigurationFromFile(EXAMPLE_CONFIG_FILE_IN_TRUNK);
-		testValues(configuration);
+		this.testValues(configuration);
 		Assert.assertEquals("KIEKER-TEST", configuration.getProperty(Configuration.CONTROLLER_NAME));
 	}
 }

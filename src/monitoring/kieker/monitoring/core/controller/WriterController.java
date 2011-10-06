@@ -47,7 +47,7 @@ public final class WriterController extends AbstractController implements IWrite
 		this.monitoringWriter = AbstractController.createAndInitialize(IMonitoringWriter.class, configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
 				configuration);
 		if (this.monitoringWriter == null) {
-			terminate();
+			this.terminate();
 			return;
 		}
 	}
@@ -59,7 +59,7 @@ public final class WriterController extends AbstractController implements IWrite
 				this.monitoringWriter.setController(super.monitoringController);
 			} catch (final Exception e) {
 				WriterController.LOG.error("Error initializing writer", e);
-				terminate();
+				this.terminate();
 			}
 		}
 	}
@@ -76,7 +76,7 @@ public final class WriterController extends AbstractController implements IWrite
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("WriterController:\n\tNumber of Inserts: '");
-		sb.append(getNumberOfInserts());
+		sb.append(this.getNumberOfInserts());
 		sb.append("'\n\tAutomatic assignment of logging timestamps: '");
 		sb.append(this.autoSetLoggingTimestamp);
 		sb.append("'\n");
@@ -103,13 +103,13 @@ public final class WriterController extends AbstractController implements IWrite
 			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {
 				WriterController.LOG.fatal("Error writing the monitoring data. Will terminate monitoring!");
-				terminate();
+				this.terminate();
 				return false;
 			}
 			return true;
 		} catch (final Exception ex) {
 			WriterController.LOG.fatal("Exception detected. Will terminate monitoring", ex);
-			terminate();
+			this.terminate();
 			return false;
 		}
 	}

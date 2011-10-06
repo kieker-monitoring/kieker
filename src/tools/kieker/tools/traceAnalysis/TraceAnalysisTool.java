@@ -161,7 +161,8 @@ public class TraceAnalysisTool {
 		TraceAnalysisTool.shortLabels = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
 		TraceAnalysisTool.ignoreInvalidTraces = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 
-		final String maxTraceDurationStr = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION, Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
+		final String maxTraceDurationStr = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
+				Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 		try {
 			TraceAnalysisTool.maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
 		} catch (final NumberFormatException exc) {
@@ -362,9 +363,10 @@ public class TraceAnalysisTool {
 			SequenceDiagramPlugin componentPlotAllocationSeqDiagr = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)) {
 				numRequestedTasks++;
-				componentPlotAllocationSeqDiagr = new SequenceDiagramPlugin(Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY,
-						SequenceDiagramPlugin.SDModes.ALLOCATION, new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(), TraceAnalysisTool.shortLabels);
+				componentPlotAllocationSeqDiagr = new SequenceDiagramPlugin(Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME,
+						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY, SequenceDiagramPlugin.SDModes.ALLOCATION, new File(TraceAnalysisTool.outputDir + File.separator
+								+ TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(),
+						TraceAnalysisTool.shortLabels);
 				mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPlotAllocationSeqDiagr.getMessageTraceInputPort());
 				analysisInstance.registerPlugin(componentPlotAllocationSeqDiagr);
 				allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);

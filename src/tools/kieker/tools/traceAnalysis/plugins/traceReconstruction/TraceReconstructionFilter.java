@@ -142,7 +142,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
 				TraceReconstructionFilter.LOG.fatal("Missing entry for trace in timeoutMap: " + executionTrace);
 				TraceReconstructionFilter.LOG.fatal("pendingTraces and timeoutMap are now longer consistent!");
-				reportError(traceId);
+				this.reportError(traceId);
 			}
 		} else { /* create and add new trace */
 			executionTrace = new ExecutionTrace(traceId);
@@ -153,7 +153,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
 				TraceReconstructionFilter.LOG.error("Equal entry existed in timeoutMap already:" + executionTrace);
 			}
-			processTimeoutQueue();
+			this.processTimeoutQueue();
 		} catch (final InvalidTraceException ex) { // this would be a bug!
 			TraceReconstructionFilter.LOG.fatal("Attempt to add record to wrong trace", ex);
 		} catch (final ExecutionEventProcessingException ex) {
@@ -191,7 +191,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 				/* Not completing part of an invalid trace */
 				this.messageTraceOutputPort.deliver(mt);
 				this.executionTraceOutputPort.deliver(executionTrace);
-				reportSuccess(curTraceId);
+				this.reportSuccess(curTraceId);
 			} else {
 				/* mt is the completing part of an invalid trace */
 				this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
@@ -204,7 +204,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
-				reportError(curTraceId);
+				this.reportError(curTraceId);
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
 					TraceReconstructionFilter.LOG.error("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace, ex);
@@ -227,7 +227,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 				final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
-				processExecutionTrace(polledTrace);
+				this.processExecutionTrace(polledTrace);
 			}
 		}
 	}
@@ -252,7 +252,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		try {
 			this.terminate = true;
 			if (!error) {
-				processTimeoutQueue();
+				this.processTimeoutQueue();
 			} else {
 				TraceReconstructionFilter.LOG.info("terminate called with error flag set; won't process timeoutqueue any more.");
 			}
@@ -282,7 +282,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
 		@Override
 		public void newEvent(final Execution event) {
-			newExecution(event);
+			TraceReconstructionFilter.this.newExecution(event);
 		}
 	};
 

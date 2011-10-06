@@ -210,7 +210,7 @@ public class AnalysisController {
 
 		if (plugin instanceof IMonitoringRecordConsumerPlugin) {
 			AnalysisController.LOG.debug("Plugin " + plugin + " also registered as record consumer");
-			addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
+			this.addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
 		}
 	}
 

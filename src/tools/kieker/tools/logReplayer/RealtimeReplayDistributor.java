@@ -157,6 +157,6 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
 	public synchronized void decreaseActive() {
 		this.active--;
-		notifyAll();
+		this.notifyAll();
 	}
 }

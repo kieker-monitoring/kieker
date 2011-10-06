@@ -65,16 +65,16 @@ public abstract class Message {
 
 		strBuild.append(this.timestamp);
 		strBuild.append(" ");
-		if (getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
+		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append("$");
 		} else {
-			strBuild.append(getSendingExecution());
+			strBuild.append(this.getSendingExecution());
 		}
 		strBuild.append(" --> ");
-		if (getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
+		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append("$");
 		} else {
-			strBuild.append(getReceivingExecution());
+			strBuild.append(this.getReceivingExecution());
 		}
 		return strBuild.toString();
 	}

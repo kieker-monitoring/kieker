@@ -41,12 +41,12 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 		super(systemFactory);
 		final AllocationComponent rootAllocation = systemFactory.getAllocationFactory().rootAllocationComponent;
 		final Operation rootOperation = systemFactory.getOperationFactory().rootOperation;
-		this.rootPair = getPairInstanceByPair(rootAllocation, rootOperation);
+		this.rootPair = this.getPairInstanceByPair(rootAllocation, rootOperation);
 	}
 
 	/** Returns a corresponding pair instance (existing or newly created) */
 	public final AllocationComponentOperationPair getPairInstanceByPair(final AllocationComponent allocationComponent, final Operation operation) {
-		final AllocationComponentOperationPair inst = getPairByNamedIdentifier(allocationComponent.getId() + "-" + operation.getId());
+		final AllocationComponentOperationPair inst = this.getPairByNamedIdentifier(allocationComponent.getId() + "-" + operation.getId());
 		if (inst == null) {
 			return this.createAndRegisterPair(operation, allocationComponent);
 		}
@@ -79,7 +79,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 		if (this.pairsByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
-		final int id = getAndIncrementNextId();
+		final int id = this.getAndIncrementNextId();
 		newInst = new AllocationComponentOperationPair(id, operation, allocationComponent);
 		this.pairsById.put(id, newInst);
 		this.pairsByName.put(namedIdentifier, newInst);

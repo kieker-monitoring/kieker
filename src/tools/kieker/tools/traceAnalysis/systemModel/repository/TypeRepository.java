@@ -64,7 +64,7 @@ public class TypeRepository extends AbstractSystemSubRepository {
 		if (this.componentTypesByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
-		final int id = getAndIncrementNextId();
+		final int id = this.getAndIncrementNextId();
 		newInst = new ComponentType(id, fullqualifiedName);
 		this.componentTypesById.put(id, newInst);
 		this.componentTypesByName.put(namedIdentifier, newInst);

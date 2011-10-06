@@ -39,7 +39,7 @@ public abstract class AbstractController {
 	protected final synchronized void setMonitoringController(final MonitoringController monitoringController) {
 		if (this.monitoringController == null) {
 			this.monitoringController = monitoringController;
-			init();
+			this.init();
 		}
 	}
 
@@ -50,7 +50,7 @@ public abstract class AbstractController {
 	 */
 	protected final boolean terminate() {
 		if (!this.terminated.getAndSet(true)) {
-			cleanup();
+			this.cleanup();
 			if (this.monitoringController != null) {
 				this.monitoringController.terminate();
 			}

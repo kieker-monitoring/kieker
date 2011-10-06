@@ -61,7 +61,7 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 		if (this.executionContainersByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
-		final int id = getAndIncrementNextId();
+		final int id = this.getAndIncrementNextId();
 		newInst = new ExecutionContainer(id, null, name);
 		this.executionContainersById.put(id, newInst);
 		this.executionContainersByName.put(namedIdentifier, newInst);

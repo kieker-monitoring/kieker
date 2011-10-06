@@ -119,7 +119,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 	@Override
 	protected void init() {
 		synchronized (this) {
-			if (this.jmxEnabled && !isTerminated()) {
+			if (this.jmxEnabled && !this.isTerminated()) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); // NOPMD
 				if (this.serverObjectName != null) {
 					try {

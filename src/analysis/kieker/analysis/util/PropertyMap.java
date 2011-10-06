@@ -52,7 +52,7 @@ public class PropertyMap {
 	 *             if the initString couldn't be parsed.
 	 */
 	public PropertyMap(final String initString, final String pairDelimiter, final String keyValueDelimiter) {
-		initFromDelimitedString(initString, pairDelimiter, keyValueDelimiter);
+		this.initFromDelimitedString(initString, pairDelimiter, keyValueDelimiter);
 	}
 
 	/**

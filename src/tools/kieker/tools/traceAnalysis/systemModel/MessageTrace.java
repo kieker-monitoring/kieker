@@ -41,7 +41,7 @@ public class MessageTrace extends Trace {
 
 	@Override
 	public String toString() {
-		final StringBuilder strBuild = new StringBuilder("Trace " + getTraceId() + ":\n");
+		final StringBuilder strBuild = new StringBuilder("Trace " + this.getTraceId() + ":\n");
 		final Iterator<Message> it = this.set.iterator();
 		while (it.hasNext()) {
 			final Message m = it.next();

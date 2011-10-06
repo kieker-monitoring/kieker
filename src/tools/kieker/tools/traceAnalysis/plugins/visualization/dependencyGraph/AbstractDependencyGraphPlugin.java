@@ -66,8 +66,8 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 				}
 				final StringBuilder strBuild = new StringBuilder();
 				if (includeWeights) {
-					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode), Integer.toString(outgoingDependency.getOutgoingWeight()),
-							DotFactory.DOT_STYLE_DASHED, DotFactory.DOT_ARROWHEAD_OPEN));
+					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode),
+							Integer.toString(outgoingDependency.getOutgoingWeight()), DotFactory.DOT_STYLE_DASHED, DotFactory.DOT_ARROWHEAD_OPEN));
 				} else {
 					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode), DotFactory.DOT_STYLE_DASHED,
 							DotFactory.DOT_ARROWHEAD_OPEN));
@@ -95,7 +95,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		ps.flush();
 		ps.close();
 		this.numGraphsSaved++;
-		printMessage(new String[] { "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
+		this.printMessage(new String[] { "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
 				"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
 	}
 

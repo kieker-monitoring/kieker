@@ -55,7 +55,7 @@ public final class MappingFileWriter {
 		if (idObj == null) {
 			final int id = this.nextId.getAndIncrement();
 			this.class2idMap.put(clazz, id);
-			writeMapping(id, clazz.getName());
+			this.writeMapping(id, clazz.getName());
 			return id;
 		}
 		return idObj;

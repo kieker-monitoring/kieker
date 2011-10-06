@@ -38,7 +38,7 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 	protected TimeSourceController(final Configuration configuration) {
 		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
 		if (this.timeSource == null) {
-			terminate();
+			this.terminate();
 		}
 	}
 
@@ -59,7 +59,7 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 		sb.append("TimeSourceController: ");
 		if (this.timeSource != null) {
 			sb.append("TimeSource: '");
-			sb.append(getTimeSource().getClass().getName());
+			sb.append(this.getTimeSource().getClass().getName());
 			sb.append("'");
 		} else {
 			sb.append("No TimeSource available");

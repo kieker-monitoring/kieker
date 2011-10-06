@@ -141,8 +141,7 @@ class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void terminate(final boolean error) {
-	}
+	public void terminate(final boolean error) {}
 
 	/*
 	 * {@inheritdoc}

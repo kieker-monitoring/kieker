@@ -101,7 +101,7 @@ public final class ControlFlowRegistry {
 	 * unsetThreadLocalTraceId()!
 	 */
 	public final long getAndStoreUniqueThreadLocalTraceId() {
-		final long id = getUniqueTraceId();
+		final long id = this.getUniqueTraceId();
 		this.threadLocalTraceId.set(id);
 		return id;
 	}

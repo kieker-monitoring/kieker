@@ -61,7 +61,7 @@ public class TimestampFilter implements IAnalysisPlugin {
 
 		@Override
 		public void newEvent(final Execution event) {
-			newExecution(event);
+			TimestampFilter.this.newExecution(event);
 		}
 	};
 

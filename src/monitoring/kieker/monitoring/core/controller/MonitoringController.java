@@ -121,7 +121,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	protected final void cleanup() {
-		MonitoringController.LOG.info("Shutting down Monitoring Controller (" + getName() + ")");
+		MonitoringController.LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
 		this.stateController.terminate();
 		this.jmxController.terminate();
 		this.timeSourceController.terminate();

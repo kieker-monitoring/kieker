@@ -141,67 +141,68 @@ public class SystemModelRepository {
 		ps.println("<style type=\"text/css\">\n" + ".colTitle { font-family:sans; font-size:11px; }\n" + ".cell { font-family:monospace; font-size:10px; }\n"
 				+ "h1 { font-family:sans; font-size:14px; }\n" + "</style>");
 		ps.println("</head><body>");
-		htmlHSpace(ps, 10);
+		this.htmlHSpace(ps, 10);
 		ps.println("<h1>Component Types</h1>");
-		printOpenHtmlTable(ps, new String[] { "ID", "Package", "Name", "Operations" });
+		this.printOpenHtmlTable(ps, new String[] { "ID", "Package", "Name", "Operations" });
 		final Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
 		for (final ComponentType type : componentTypes) {
 			final StringBuilder opListBuilder = new StringBuilder();
 			if (type.getOperations().size() > 0) {
 				for (final Operation op : type.getOperations()) {
-					opListBuilder.append("<li>").append(htmlEntityRef(op.getId(), op.getSignature().toString(), EntityType.OPERATION)).append("</li>");
+					opListBuilder.append("<li>").append(this.htmlEntityRef(op.getId(), op.getSignature().toString(), EntityType.OPERATION)).append("</li>");
 				}
 			}
-			final String[] cells = new String[] { htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE), type.getPackageName(),
-					type.getTypeName(), opListBuilder.toString() };
-			printHtmlTableRow(ps, cells);
+			final String[] cells = new String[] { this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
+					type.getPackageName(), type.getTypeName(), opListBuilder.toString() };
+			this.printHtmlTableRow(ps, cells);
 		}
-		printCloseHtmlTable(ps);
+		this.printCloseHtmlTable(ps);
 		ps.println("<h1>Operations</h1>");
-		printOpenHtmlTable(ps, new String[] { "ID", "Component type", "Name", "Parameter types", "Return type" });
+		this.printOpenHtmlTable(ps, new String[] { "ID", "Component type", "Name", "Parameter types", "Return type" });
 		final Collection<Operation> operations = this.operationFactory.getOperations();
 		for (final Operation op : operations) {
 			final StringBuilder paramListStrBuild = new StringBuilder();
 			for (final String paramType : op.getSignature().getParamTypeList()) {
 				paramListStrBuild.append("<li>").append(paramType).append("</li>");
 			}
-			final String[] cells = new String[] { htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
-					htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),
+			final String[] cells = new String[] { this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
+					this.htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),
 					op.getSignature().getName(), paramListStrBuild.toString(), op.getSignature().getReturnType() };
-			printHtmlTableRow(ps, cells);
+			this.printHtmlTableRow(ps, cells);
 		}
-		printCloseHtmlTable(ps);
+		this.printCloseHtmlTable(ps);
 		ps.println("<h1>Assembly Components</h1>");
-		printOpenHtmlTable(ps, new String[] { "ID", "Name", "Component type" });
+		this.printOpenHtmlTable(ps, new String[] { "ID", "Name", "Component type" });
 		final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
 		for (final AssemblyComponent ac : assemblyComponents) {
-			final String[] cells = new String[] { htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT), ac.getName(),
-					htmlEntityRef(ac.getType().getId(), ac.getType().getFullQualifiedName(), EntityType.COMPONENT_TYPE), };
-			printHtmlTableRow(ps, cells);
+			final String[] cells = new String[] { this.htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT), ac.getName(),
+					this.htmlEntityRef(ac.getType().getId(), ac.getType().getFullQualifiedName(), EntityType.COMPONENT_TYPE), };
+			this.printHtmlTableRow(ps, cells);
 		}
-		printCloseHtmlTable(ps);
+		this.printCloseHtmlTable(ps);
 		ps.println("<h1>Execution Containers</h1>");
-		printOpenHtmlTable(ps, new String[] { "ID", "Name" });
+		this.printOpenHtmlTable(ps, new String[] { "ID", "Name" });
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
-			final String[] cells = new String[] { htmlEntityLabel(container.getId(), Integer.toString(container.getId()), EntityType.EXECUTION_CONTAINER), container.getName() };
-			printHtmlTableRow(ps, cells);
+			final String[] cells = new String[] { this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()), EntityType.EXECUTION_CONTAINER),
+					container.getName() };
+			this.printHtmlTableRow(ps, cells);
 		}
-		printCloseHtmlTable(ps);
+		this.printCloseHtmlTable(ps);
 		ps.println("<h1>Deployment Components</h1>");
-		printOpenHtmlTable(ps, new String[] { "ID", "Assembly component", "Execution container" });
+		this.printOpenHtmlTable(ps, new String[] { "ID", "Assembly component", "Execution container" });
 		final Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
 		for (final AllocationComponent allocationComponent : allocationComponentInstances) {
 			final String[] cells = new String[] {
-					htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()), EntityType.ALLOCATION_COMPONENT),
-					htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(),
+					this.htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()), EntityType.ALLOCATION_COMPONENT),
+					this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(),
 							EntityType.ALLOCATION_COMPONENT),
-					htmlEntityRef(allocationComponent.getExecutionContainer().getId(), allocationComponent.getExecutionContainer().getName(),
+					this.htmlEntityRef(allocationComponent.getExecutionContainer().getId(), allocationComponent.getExecutionContainer().getName(),
 							EntityType.EXECUTION_CONTAINER) };
-			printHtmlTableRow(ps, cells);
+			this.printHtmlTableRow(ps, cells);
 		}
-		printCloseHtmlTable(ps);
-		htmlHSpace(ps, 50);
+		this.printCloseHtmlTable(ps);
+		this.htmlHSpace(ps, 50);
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();

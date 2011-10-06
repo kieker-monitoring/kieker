@@ -91,10 +91,10 @@ public class TestAutoSetLoggingTimestamp extends TestCase {
 	}
 
 	public void testSetLoggingTimestampEnabled() {
-		testSetLoggingTimestamp(true);
+		this.testSetLoggingTimestamp(true);
 	}
 
 	public void testSetLoggingTimestampDisabled() {
-		testSetLoggingTimestamp(false);
+		this.testSetLoggingTimestamp(false);
 	}
 }

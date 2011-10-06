@@ -93,7 +93,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 			execData = new OperationExecutionRecord(OperationExecutionRegistrationAndLoggingFilter.COMPONENT_NAME,
 					OperationExecutionRegistrationAndLoggingFilter.OP_NAME,
 					OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point */);
-			execData.sessionId = getSessionId((HttpServletRequest) request);
+			execData.sessionId = this.getSessionId((HttpServletRequest) request);
 			if (execData.sessionId == null) {
 				execData.sessionId = OperationExecutionRegistrationAndLoggingFilter.NULL_SESSION_STR;
 			}
@@ -115,7 +115,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 				// if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)
 				if (execData.sessionId == null) {
 					// log.info("TraceID" + execData.traceId + "had no sessionId so far. Now?");
-					execData.sessionId = getSessionId((HttpServletRequest) request);
+					execData.sessionId = this.getSessionId((HttpServletRequest) request);
 					// log.info("New sessionId? " + execData.sessionId);
 				}
 				// TOOD: ?only log record if cfRegistry.recallThreadLocalEOI > 0?

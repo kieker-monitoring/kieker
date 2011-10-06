@@ -44,8 +44,8 @@ public class SynchronousCallMessage extends Message {
 		}
 		final SynchronousCallMessage other = (SynchronousCallMessage) obj;
 
-		return (getTimestamp() == other.getTimestamp()) && getSendingExecution().equals(other.getSendingExecution())
-				&& getReceivingExecution().equals(other.getReceivingExecution());
+		return (this.getTimestamp() == other.getTimestamp()) && this.getSendingExecution().equals(other.getSendingExecution())
+				&& this.getReceivingExecution().equals(other.getReceivingExecution());
 	}
 
 	@Override

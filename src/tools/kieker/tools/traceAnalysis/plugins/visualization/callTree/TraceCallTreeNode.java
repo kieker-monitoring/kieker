@@ -43,7 +43,7 @@ public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentO
 	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final SynchronousCallMessage callMsg) {
 		final AllocationComponentOperationPair destPair = this.pairFactory.getPairInstanceByPair(callMsg.getReceivingExecution().getAllocationComponent(), callMsg
 				.getReceivingExecution().getOperation());
-		final TraceCallTreeNode destNode = new TraceCallTreeNode(destPair.getId(), getSystemEntityFactory(), this.pairFactory, destPair, false);
+		final TraceCallTreeNode destNode = new TraceCallTreeNode(destPair.getId(), this.getSystemEntityFactory(), this.pairFactory, destPair, false);
 		final WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, destNode);
 		super.appendChildEdge(e);
 		return destNode;

@@ -102,15 +102,16 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			containedComponents.add(node);
 		}
 
-		final ExecutionContainer rootContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<DependencyGraphNode<AllocationComponent>>> entry : component2containerMapping.entrySet()) {
 			final int curContainerId = entry.getKey();
-			final ExecutionContainer curContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().lookupExecutionContainerByContainerId(curContainerId);
+			final ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory()
+					.lookupExecutionContainerByContainerId(curContainerId);
 			if (curContainerId == rootContainerId) {
-				strBuild.append(DotFactory.createNode("", getNodeId(this.dependencyGraph.getRootNode()),
-						componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabels), DotFactory.DOT_SHAPE_NONE, null, // style
+				strBuild.append(DotFactory.createNode("", this.getNodeId(this.dependencyGraph.getRootNode()),
+						this.componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabels), DotFactory.DOT_SHAPE_NONE, null, // style
 						null, // framecolor
 						null, // fillcolor
 						null, // fontcolor
@@ -119,7 +120,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 						null // misc
 						));
 			} else {
-				strBuild.append(DotFactory.createCluster("", this.CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
+				strBuild.append(DotFactory.createCluster("", ComponentDependencyGraphPluginAllocation.CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
 						AbstractDependencyGraphPlugin.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(), DotFactory.DOT_SHAPE_BOX, // shape
 						DotFactory.DOT_STYLE_FILLED, // style
 						null, // framecolor
@@ -129,7 +130,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 						null)); // misc
 				// dot code for contained components
 				for (final DependencyGraphNode<AllocationComponent> node : entry.getValue()) {
-					strBuild.append(DotFactory.createNode("", getNodeId(node), componentNodeLabel(node, shortLabels), DotFactory.DOT_SHAPE_BOX,
+					strBuild.append(DotFactory.createNode("", this.getNodeId(node), this.componentNodeLabel(node, shortLabels), DotFactory.DOT_SHAPE_BOX,
 							DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
 							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
@@ -159,7 +160,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				ComponentDependencyGraphPluginAllocation.LOG.error("IOException", ex);
 			}

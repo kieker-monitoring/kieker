@@ -114,8 +114,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		final int numPlots = getSuccessCount();
-		final long lastSuccessTracesId = getLastTraceIdSuccess();
+		final int numPlots = this.getSuccessCount();
+		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
 		System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '"
 				+ this.outputFnBase + "-<traceId>.pic'");
 		System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");

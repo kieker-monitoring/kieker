@@ -62,9 +62,8 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected void init() throws NamingException, JMSException {
-		addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue,
-				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE),
-				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL),
+		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration
+				.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL),
 				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__FACTORYLOOKUPNAME), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__TOPIC),
 				this.configuration.getLongProperty(AsyncJMSWriter.CONFIG__MESSAGETTL)));
 	}

@@ -66,13 +66,13 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<ExecutionContainer>> nodes, final PrintStream ps, final boolean shortLabels) {
 
-		final ExecutionContainer rootContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final DependencyGraphNode<ExecutionContainer> node : nodes) {
 			final ExecutionContainer curContainer = node.getEntity();
 			final int curContainerId = node.getId();
-			strBuild.append(DotFactory.createNode("", getNodeId(node), (curContainerId == rootContainerId) ? "$"
+			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curContainerId == rootContainerId) ? "$"
 					: AbstractDependencyGraphPlugin.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
 					(curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D, (curContainerId == rootContainerId) ? null
 							: DotFactory.DOT_STYLE_FILLED, // style
@@ -102,7 +102,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				ContainerDependencyGraphPlugin.LOG.error("IOException", ex);
 			}
@@ -135,7 +135,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 				senderNode.addOutgoingDependency(receiverNode);
 				receiverNode.addIncomingDependency(senderNode);
 			}
-			reportSuccess(t.getTraceId());
+			ContainerDependencyGraphPlugin.this.reportSuccess(t.getTraceId());
 		}
 	};
 

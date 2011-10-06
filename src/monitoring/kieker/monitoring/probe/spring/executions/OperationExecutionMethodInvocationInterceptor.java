@@ -55,7 +55,7 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 			return invocation.proceed();
 		}
 
-		final OperationExecutionRecord execData = initExecutionData(invocation);
+		final OperationExecutionRecord execData = this.initExecutionData(invocation);
 		execData.eoi = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI();
 		/*
 		 * this is executionOrderIndex-th execution in this trace
@@ -66,7 +66,7 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 		 */
 
 		try {
-			proceedAndMeasure(invocation, execData);
+			this.proceedAndMeasure(invocation, execData);
 			if ((execData.eoi == -1) || (execData.ess == -1)) {
 				OperationExecutionMethodInvocationInterceptor.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + execData.eoi + " ess == "
 						+ execData.ess);

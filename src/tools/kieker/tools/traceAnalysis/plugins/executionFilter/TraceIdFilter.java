@@ -56,7 +56,7 @@ public class TraceIdFilter implements IAnalysisPlugin {
 
 		@Override
 		public void newEvent(final Execution event) {
-			newExecution(event);
+			TraceIdFilter.this.newExecution(event);
 		}
 	};
 

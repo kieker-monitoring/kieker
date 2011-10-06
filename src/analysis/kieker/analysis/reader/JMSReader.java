@@ -69,7 +69,7 @@ public class JMSReader extends AbstractMonitoringReader {
 	 *             if passed parameters are null or empty.
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		initInstanceFromArgs(jmsProviderUrl, jmsDestination, jmsFactoryLookupName); // throws IllegalArgumentException
+		this.initInstanceFromArgs(jmsProviderUrl, jmsDestination, jmsFactoryLookupName); // throws IllegalArgumentException
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			final String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
 			final String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
 			final String jmsFactoryLookupNameP = propertyMap.getProperty("jmsFactoryLookupName", null);
-			initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws
+			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws
 			// IllegalArgumentException
 		} catch (final Exception exc) {
 			JMSReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
@@ -188,7 +188,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			connection.start();
 
 			JMSReader.LOG.info("JMSReader started and waits for incomming monitoring events!");
-			block();
+			this.block();
 			JMSReader.LOG.info("Woke up by shutdown");
 		} catch (final Exception ex) { // FindBugs complains but wontfix
 			JMSReader.LOG.fatal(ex.getMessage(), ex);
@@ -219,6 +219,6 @@ public class JMSReader extends AbstractMonitoringReader {
 	@Override
 	public void terminate() {
 		JMSReader.LOG.info("Shutdown of JMSReader requested.");
-		unblock();
+		this.unblock();
 	}
 }

@@ -47,7 +47,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	@Override
 	public final String toString() {
-		final Object[] recordVector = toArray();
+		final Object[] recordVector = this.toArray();
 		final StringBuilder sb = new StringBuilder();
 		sb.append(this.loggingTimestamp);
 		for (final Object curStr : recordVector) {

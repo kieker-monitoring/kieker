@@ -75,14 +75,14 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 			/* 2.) Extract eoi from SOAP header */
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
-			final String eoiStr = getStringContentFromHeader(hdr); // null if hdr==null
+			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (eoiStr == null) {
 				/*
 				 * No Kieker eoi in header.
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker eoi in response header. " + "Will unset all threadLocal variables");
-				unsetKiekerThreadLocalData();
+				this.unsetKiekerThreadLocalData();
 				return;
 			}
 			int eoi = 0;
@@ -91,7 +91,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			} catch (final Exception exc) {
 				/* invalid eoi! */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
-				unsetKiekerThreadLocalData();
+				this.unsetKiekerThreadLocalData();
 				return;
 			}
 
@@ -101,7 +101,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 			/* 4. Extract traceId from SOAP header */
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
-			final String traceIdStr = getStringContentFromHeader(hdr); // null if hdr==null
+			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (traceIdStr == null) {
 				/*
 				 * No Kieker trace Id in header.
@@ -109,7 +109,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker traceId in response header. "
 						+ "Will unset all threadLocal variables");
-				unsetKiekerThreadLocalData();
+				this.unsetKiekerThreadLocalData();
 				return;
 			}
 			long traceId;
@@ -118,7 +118,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			} catch (final Exception exc) {
 				/* Invalid trace id! */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
-				unsetKiekerThreadLocalData();
+				this.unsetKiekerThreadLocalData();
 				return;
 			}
 
@@ -150,7 +150,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			OperationExecutionSOAPResponseInInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi);
 
 			if (isEntryCall) { // clean up iff trace's origin was right before the call!
-				unsetKiekerThreadLocalData();
+				this.unsetKiekerThreadLocalData();
 			}
 		}
 	}

@@ -83,8 +83,8 @@ public class ExecutionTrace extends Trace {
 	 *             object is not the same as the traceId of this ExecutionTrace object.
 	 */
 	public synchronized void add(final Execution execution) throws InvalidTraceException {
-		if (getTraceId() != execution.getTraceId()) {
-			throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + getTraceId() + ")");
+		if (this.getTraceId() != execution.getTraceId()) {
+			throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
 		}
 		if ((this.minTin < 0) || (execution.getTin() < this.minTin)) {
 			this.minTin = execution.getTin();
@@ -182,7 +182,7 @@ public class ExecutionTrace extends Trace {
 			}
 			prevE = curE; // prepair next loop
 		}
-		mt = new MessageTrace(getTraceId(), mSeq);
+		mt = new MessageTrace(this.getTraceId(), mSeq);
 		this.messageTrace.set(mt);
 		return mt;
 	}
@@ -209,7 +209,7 @@ public class ExecutionTrace extends Trace {
 
 	@Override
 	public synchronized String toString() {
-		final StringBuilder strBuild = new StringBuilder("TraceId " + getTraceId()).append(" (minTin=").append(this.minTin).append(" (")
+		final StringBuilder strBuild = new StringBuilder("TraceId " + this.getTraceId()).append(" (minTin=").append(this.minTin).append(" (")
 				.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")").append("; maxTout=").append(this.maxTout)
 				.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")").append("; maxEss=").append(this.maxEss)
 				.append("):\n");
@@ -256,7 +256,7 @@ public class ExecutionTrace extends Trace {
 	 * @return the duration of this trace in nanoseconds.
 	 */
 	public synchronized long getDurationInNanos() {
-		return getMaxTout() - this.minTin;
+		return this.getMaxTout() - this.minTin;
 	}
 
 	/**

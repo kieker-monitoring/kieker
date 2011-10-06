@@ -76,7 +76,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 			/* 1.) Extract sessionId from SOAP header */
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
-			String sessionId = getStringContentFromHeader(hdr); // null if hdr==null
+			String sessionId = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (sessionId == null) {
 				/* no Kieker session id in header */
 				sessionId = OperationExecutionSOAPRequestInInterceptor.NULL_SESSION_STR;
@@ -84,7 +84,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 			/* 2.) Extract eoi from SOAP header */
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
-			final String eoiStr = getStringContentFromHeader(hdr); // null if hdr==null
+			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			int eoi = -1;
 			if (eoiStr != null) {
 				try {
@@ -97,7 +97,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 			/* 3.) Extract ess from SOAP header */
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.ESS_IDENTIFIER_QNAME);
-			final String essStr = getStringContentFromHeader(hdr); // null if hdr==null
+			final String essStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			int ess = -1;
 			if (essStr != null) {
 				try {
@@ -110,7 +110,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 			/* 4. Extract traceId from SOAP header */
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
-			final String traceIdStr = getStringContentFromHeader(hdr); // null if hdr==null
+			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			long traceId = -1;
 			if (traceIdStr != null) {
 				try {
@@ -137,7 +137,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			/* Store thread-local values */
 			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalTraceId(traceId);
 			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
-																							// incrementAndRecall
+																								// incrementAndRecall
 			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
 			OperationExecutionSOAPRequestInInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestIsEntryCall(isEntryCall);

@@ -123,15 +123,16 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 			containedPairs.add(pairNode);
 		}
 
-		final ExecutionContainer rootContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<AllocationComponent>> containerComponentEntry : containerId2componentMapping.entrySet()) {
 			final int curContainerId = containerComponentEntry.getKey();
-			final ExecutionContainer curContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().lookupExecutionContainerByContainerId(curContainerId);
+			final ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory()
+					.lookupExecutionContainerByContainerId(curContainerId);
 
 			if (curContainerId == rootContainerId) {
-				strBuild.append(DotFactory.createNode("", getNodeId(this.dependencyGraph.getRootNode()), "$", DotFactory.DOT_SHAPE_NONE, null, // style
+				strBuild.append(DotFactory.createNode("", this.getNodeId(this.dependencyGraph.getRootNode()), "$", DotFactory.DOT_SHAPE_NONE, null, // style
 						null, // framecolor
 						null, // fillcolor
 						null, // fontcolor
@@ -140,8 +141,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 						null // misc
 						));
 			} else {
-				strBuild.append(DotFactory.createCluster("", this.CONTAINER_NODE_ID_PREFIX + curContainer.getId(), containerNodeLabel(curContainer),
-						DotFactory.DOT_SHAPE_BOX, // shape
+				strBuild.append(DotFactory.createCluster("", OperationDependencyGraphPluginAllocation.CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
+						this.containerNodeLabel(curContainer), DotFactory.DOT_SHAPE_BOX, // shape
 						DotFactory.DOT_STYLE_FILLED, // style
 						null, // framecolor
 						DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
@@ -151,8 +152,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 				// dot code for contained components
 				for (final AllocationComponent curComponent : containerComponentEntry.getValue()) {
 					final int curComponentId = curComponent.getId();
-					strBuild.append(DotFactory.createCluster("", this.COMPONENT_NODE_ID_PREFIX + curComponentId, componentNodeLabel(curComponent, shortLabels),
-							DotFactory.DOT_SHAPE_BOX, DotFactory.DOT_STYLE_FILLED, // style
+					strBuild.append(DotFactory.createCluster("", OperationDependencyGraphPluginAllocation.COMPONENT_NODE_ID_PREFIX + curComponentId,
+							this.componentNodeLabel(curComponent, shortLabels), DotFactory.DOT_SHAPE_BOX, DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
 							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 							null, // fontcolor
@@ -168,7 +169,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 							opLabel.append("..");
 						}
 						opLabel.append(")");
-						strBuild.append(DotFactory.createNode("", getNodeId(curPair), opLabel.toString(), DotFactory.DOT_SHAPE_OVAL, DotFactory.DOT_STYLE_FILLED, // style
+						strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), opLabel.toString(), DotFactory.DOT_SHAPE_OVAL,
+								DotFactory.DOT_STYLE_FILLED, // style
 								null, // framecolor
 								DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 								null, // fontcolor
@@ -199,7 +201,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				OperationDependencyGraphPluginAllocation.LOG.error("IOException", ex);
 			}

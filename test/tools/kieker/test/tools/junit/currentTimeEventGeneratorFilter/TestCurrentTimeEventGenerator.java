@@ -36,7 +36,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 	 * 
 	 */
 	public void testFirstRecordGeneratesEvent() {
-		compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 });
+		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 });
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = (firstT + resolution) - 1;
-		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT });
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution;
-		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT });
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution + 1;
-		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution });
 	}
 
 	/**
@@ -78,14 +78,14 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long secondT = firstT + 1;
 		final long thirdT = secondT + 4;
 		final long fourthT = firstT + resolution; // triggers next event
-		compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT });
 	}
 
 	public void testGapIntermediateEvents() {
 		final long resolution = 6;
 		final long firstT = 5;
 		final long secondT = firstT + (5 * resolution) + 1;
-		compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
 				firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution) });
 	}
 

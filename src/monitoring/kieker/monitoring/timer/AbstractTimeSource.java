@@ -35,7 +35,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	protected AbstractTimeSource(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			final Properties defaultProps = getDefaultProperties(); // NOPMD by jwa on 20.09.11 15:19
+			final Properties defaultProps = this.getDefaultProperties(); // NOPMD by jwa on 20.09.11 15:19
 			if (defaultProps != null) {
 				configuration.setDefaultProperties(defaultProps);
 			}

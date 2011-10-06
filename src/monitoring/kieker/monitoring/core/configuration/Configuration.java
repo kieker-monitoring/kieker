@@ -206,7 +206,7 @@ public final class Configuration extends Properties implements Keys {
 
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
-		for (final String property : stringPropertyNames()) {
+		for (final String property : this.stringPropertyNames()) {
 			if (property.startsWith(prefix)) {
 				configuration.setProperty(property, this.getProperty(property));
 			}
@@ -220,11 +220,11 @@ public final class Configuration extends Properties implements Keys {
 	}
 
 	public final boolean getBooleanProperty(final String key) {
-		return Boolean.parseBoolean(getStringProperty(key));
+		return Boolean.parseBoolean(this.getStringProperty(key));
 	}
 
 	public final int getIntProperty(final String key) {
-		final String s = getStringProperty(key);
+		final String s = this.getStringProperty(key);
 		try {
 			return Integer.parseInt(s);
 		} catch (final NumberFormatException ex) {
@@ -234,7 +234,7 @@ public final class Configuration extends Properties implements Keys {
 	}
 
 	public final long getLongProperty(final String key) {
-		final String s = getStringProperty(key);
+		final String s = this.getStringProperty(key);
 		try {
 			return Long.parseLong(s);
 		} catch (final NumberFormatException ex) {

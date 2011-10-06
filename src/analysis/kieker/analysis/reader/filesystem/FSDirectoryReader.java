@@ -87,7 +87,7 @@ class FSDirectoryReader {
 	 */
 	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
 			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
-		initInputDir(inputDirName); // throws IllegalArgumentException
+		this.initInputDir(inputDirName); // throws IllegalArgumentException
 		this.recordReceiver = recordReceiver;
 		if (readOnlyRecordsOfType != null) {
 			this.recordTypeSelector = new HashSet<String>();
@@ -118,13 +118,13 @@ class FSDirectoryReader {
 	 * 
 	 */
 	public void read() throws Exception {
-		readMappingFile();
+		this.readMappingFile();
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
 			@Override
 			public boolean accept(final File pathname) {
 				return pathname.isFile() && pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
-						&& pathname.getName().endsWith(FSDirectoryReader.this.FILE_POSTFIX);
+						&& pathname.getName().endsWith(FSDirectoryReader.FILE_POSTFIX);
 			}
 		});
 
@@ -134,12 +134,12 @@ class FSDirectoryReader {
 
 		if (inputFiles.length == 0) {
 			throw new MonitoringReaderException("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
-					+ this.FILE_POSTFIX + "' could be found.");
+					+ FSDirectoryReader.FILE_POSTFIX + "' could be found.");
 		}
 
 		Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
 		for (final File inputFile : inputFiles) {
-			processInputFile(inputFile);
+			this.processInputFile(inputFile);
 		}
 	}
 
@@ -241,7 +241,7 @@ class FSDirectoryReader {
 				IMonitoringRecord rec = null;
 				try {
 					if (!this.recordTypeIdMapInitialized && line.startsWith("$")) {
-						readMappingFile();
+						this.readMappingFile();
 						this.recordTypeIdMapInitialized = true;
 					}
 					st = new StringTokenizer(line, ";");
@@ -289,7 +289,7 @@ class FSDirectoryReader {
 						vec = new String[0];
 					}
 
-					final Object[] typedArray = fromStringToTypedArray(vec, rec.getValueTypes());
+					final Object[] typedArray = this.fromStringToTypedArray(vec, rec.getValueTypes());
 					rec.initFromArray(typedArray);
 
 				} catch (final InstantiationException e) {

@@ -71,16 +71,16 @@ public abstract class AbstractAsyncThread extends Thread {
 						monitoringRecord = writeQueue.poll();
 						while (monitoringRecord != null) {
 							if (monitoringRecord != AbstractAsyncThread.END_OF_MONITORING_MARKER) {
-								consume(monitoringRecord);
+								this.consume(monitoringRecord);
 							}
 							monitoringRecord = writeQueue.poll();
 						}
 						this.finished = true;
 						this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
-						cleanup();
+						this.cleanup();
 						break;
 					} else {
-						consume(monitoringRecord);
+						this.consume(monitoringRecord);
 					}
 				} catch (final InterruptedException ex) {
 					continue;
@@ -93,7 +93,7 @@ public abstract class AbstractAsyncThread extends Thread {
 			// e.g. Interrupted Exception or IOException
 			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);
 			this.finished = true;
-			cleanup();
+			this.cleanup();
 			this.monitoringController.terminateMonitoring();
 		} finally {
 			this.finished = true;
@@ -109,7 +109,7 @@ public abstract class AbstractAsyncThread extends Thread {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Finished: '");
-		sb.append(isFinished());
+		sb.append(this.isFinished());
 		sb.append("'");
 		return sb.toString();
 	}

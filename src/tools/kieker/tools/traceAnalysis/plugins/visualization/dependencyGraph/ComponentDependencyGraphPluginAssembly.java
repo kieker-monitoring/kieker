@@ -72,14 +72,14 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes, final PrintStream ps, final boolean shortLabels) {
 
-		final AssemblyComponent rootComponent = getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
+		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
 		final int rootComponentId = rootComponent.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		// dot code for contained components
 		for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
 			final AssemblyComponent curComponent = node.getEntity();
 			final int curComponentId = node.getId();
-			strBuild.append(DotFactory.createNode("", getNodeId(node), (curComponentId == rootComponentId) ? "$" : nodeLabel(curComponent),
+			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(curComponent),
 					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, (curComponentId == rootComponentId) ? null
 							: DotFactory.DOT_STYLE_FILLED, // style
 					null, // framecolor
@@ -108,7 +108,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				ComponentDependencyGraphPluginAssembly.LOG.error("IOException", ex);
 			}

@@ -80,7 +80,7 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
 		final Iterator<Execution> otherIterator = otherTrace.getTraceAsSortedExecutionSet().iterator();
 		for (final Execution r1 : super.getExecutionTrace().getTraceAsSortedExecutionSet()) {
 			final Execution r2 = otherIterator.next();
-			if (!executionsEqual(r1, r2)) {
+			if (!this.executionsEqual(r1, r2)) {
 				return false;
 			}
 		}

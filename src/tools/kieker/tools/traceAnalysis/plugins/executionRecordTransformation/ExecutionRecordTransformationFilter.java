@@ -102,33 +102,35 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		final String operationFactoryName = new StringBuilder(assemblyComponentName).append(".").append(execRec.operationName).toString();
 		final String operationSignatureStr = execRec.operationName;
 
-		AllocationComponent allocInst = getSystemEntityFactory().getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
+		AllocationComponent allocInst = this.getSystemEntityFactory().getAllocationFactory()
+				.lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
 		if (allocInst == null) { /* Allocation component instance doesn't exist */
-			AssemblyComponent assemblyComponent = getSystemEntityFactory().getAssemblyFactory().lookupAssemblyComponentInstanceByNamedIdentifier(
-					assemblyComponentName);
+			AssemblyComponent assemblyComponent = this.getSystemEntityFactory().getAssemblyFactory()
+					.lookupAssemblyComponentInstanceByNamedIdentifier(assemblyComponentName);
 			if (assemblyComponent == null) { // assembly instance doesn't exist
-				ComponentType componentType = getSystemEntityFactory().getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(componentTypeName);
+				ComponentType componentType = this.getSystemEntityFactory().getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(componentTypeName);
 				if (componentType == null) {
 					/* Component type doesn't exist */
-					componentType = getSystemEntityFactory().getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
+					componentType = this.getSystemEntityFactory().getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
 				}
-				assemblyComponent = getSystemEntityFactory().getAssemblyFactory().createAndRegisterAssemblyComponentInstance(assemblyComponentName, componentType);
+				assemblyComponent = this.getSystemEntityFactory().getAssemblyFactory()
+						.createAndRegisterAssemblyComponentInstance(assemblyComponentName, componentType);
 			}
-			ExecutionContainer execContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().lookupExecutionContainerByNamedIdentifier(
-					executionContainerName);
+			ExecutionContainer execContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory()
+					.lookupExecutionContainerByNamedIdentifier(executionContainerName);
 			if (execContainer == null) { /* doesn't exist, yet */
-				execContainer = getSystemEntityFactory().getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName,
-						executionContainerName);
+				execContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory()
+						.createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
 			}
-			allocInst = getSystemEntityFactory().getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent,
-					execContainer);
+			allocInst = this.getSystemEntityFactory().getAllocationFactory()
+					.createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
 		}
 
-		Operation op = getSystemEntityFactory().getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
+		Operation op = this.getSystemEntityFactory().getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
 		if (op == null) { /* Operation doesn't exist */
-			final Signature signature = createSignature(operationSignatureStr);
-			op = getSystemEntityFactory().getOperationFactory().createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(),
-					signature);
+			final Signature signature = this.createSignature(operationSignatureStr);
+			op = this.getSystemEntityFactory().getOperationFactory()
+					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);
 		}
 

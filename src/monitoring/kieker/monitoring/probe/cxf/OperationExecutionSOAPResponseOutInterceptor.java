@@ -85,7 +85,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			 */
 			OperationExecutionSOAPResponseOutInterceptor.LOG.log(Level.WARNING, "Kieker traceId not registered. "
 					+ "Will unset all threadLocal variables and return.");
-			unsetKiekerThreadLocalData(); // unset all variables
+			this.unsetKiekerThreadLocalData(); // unset all variables
 			return;
 		} else {
 			/*
@@ -102,7 +102,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		}
 
 		/* The trace is leaving this node, thus we need to clean up the thread-local variables. */
-		unsetKiekerThreadLocalData();
+		this.unsetKiekerThreadLocalData();
 
 		/* Log this execution */
 		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.COMPONENT_NAME,

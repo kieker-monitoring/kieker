@@ -41,12 +41,12 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 		super(systemFactory);
 		final AssemblyComponent rootAssembly = systemFactory.getAssemblyFactory().rootAssemblyComponent;
 		final Operation rootOperation = systemFactory.getOperationFactory().rootOperation;
-		this.rootPair = getPairInstanceByPair(rootAssembly, rootOperation);
+		this.rootPair = this.getPairInstanceByPair(rootAssembly, rootOperation);
 	}
 
 	/** Returns a corresponding pair instance (existing or newly created) */
 	public final AssemblyComponentOperationPair getPairInstanceByPair(final AssemblyComponent assemblyComponent, final Operation operation) {
-		final AssemblyComponentOperationPair inst = getPairByNamedIdentifier(assemblyComponent.getId() + "-" + operation.getId());
+		final AssemblyComponentOperationPair inst = this.getPairByNamedIdentifier(assemblyComponent.getId() + "-" + operation.getId());
 		if (inst == null) {
 			return this.createAndRegisterPair(operation, assemblyComponent);
 		}
@@ -78,7 +78,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 		if (this.pairsByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
-		final int id = getAndIncrementNextId();
+		final int id = this.getAndIncrementNextId();
 		newInst = new AssemblyComponentOperationPair(id, operation, assemblyComponent);
 		this.pairsById.put(id, newInst);
 		this.pairsByName.put(namedIdentifier, newInst);

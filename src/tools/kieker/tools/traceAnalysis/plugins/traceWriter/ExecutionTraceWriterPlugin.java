@@ -54,7 +54,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		final int numTraces = getSuccessCount();
+		final int numTraces = this.getSuccessCount();
 		System.out.println("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'");
 	}
 
@@ -85,9 +85,9 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		public void newEvent(final ExecutionTrace et) {
 			try {
 				ExecutionTraceWriterPlugin.this.ps.append(et.toString());
-				reportSuccess(et.getTraceId());
+				ExecutionTraceWriterPlugin.this.reportSuccess(et.getTraceId());
 			} catch (final IOException ex) {
-				reportError(et.getTraceId());
+				ExecutionTraceWriterPlugin.this.reportError(et.getTraceId());
 				ExecutionTraceWriterPlugin.LOG.error(ex, ex);
 			}
 		}

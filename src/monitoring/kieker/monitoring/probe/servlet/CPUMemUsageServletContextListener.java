@@ -114,8 +114,8 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 
 	@Override
 	public void contextInitialized(final ServletContextEvent sce) {
-		initParameters(sce.getServletContext());
-		initSensors();
+		this.initParameters(sce.getServletContext());
+		this.initSensors();
 	}
 
 	/**
@@ -136,12 +136,12 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		}
 
 		this.initialDelaySeconds = // allowed values: Int>=0
-		readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
+		this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
 				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
 
 		this.sensorIntervalSeconds =
 		// allows values: Int>0
-		readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
+		this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
 				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
 			CPUMemUsageServletContextListener.LOG.warn("values for the init-param '"

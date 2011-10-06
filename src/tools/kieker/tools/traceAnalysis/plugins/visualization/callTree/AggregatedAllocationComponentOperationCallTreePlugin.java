@@ -66,8 +66,8 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 		if (e != null) {
 			n = e.getDestination();
 		} else {
-			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), getSystemEntityFactory(), this.pairFactory, destination, false); // !
-																																								// rootNode
+			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), this.getSystemEntityFactory(), this.pairFactory, destination, false); // !
+																																									// rootNode
 			e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, n);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);

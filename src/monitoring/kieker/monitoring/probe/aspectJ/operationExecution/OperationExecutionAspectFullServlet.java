@@ -58,7 +58,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
+		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
 		execData.sessionId = AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId(); // may
 		// be
 		// null
@@ -74,7 +74,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			proceedAndMeasure(thisJoinPoint, execData);
+			this.proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				OperationExecutionAspectFullServlet.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectFullServlet.LOG.fatal("Terminating!");

@@ -112,7 +112,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			} catch (final NumberFormatException ex) { // value of numWorkers remains -1
 			}
 
-			initInstanceFromArgs(inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
+			this.initInstanceFromArgs(this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
 		} catch (final IllegalArgumentException exc) {
 			FSReaderRealtime.LOG.error("Failed to initString '" + initString + "': " + exc.getMessage());
 			return false;
@@ -121,7 +121,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	}
 
 	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		initInstanceFromArgs(inputDirNames, numWorkers);
+		this.initInstanceFromArgs(inputDirNames, numWorkers);
 	}
 
 	private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {

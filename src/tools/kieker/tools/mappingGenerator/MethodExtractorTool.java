@@ -149,8 +149,8 @@ class MethodExtractor extends ClassLoader {
 					jars.add(f);
 				}
 			}
-			analyzeDirectory(directories, filter);
-			analyzeJars(jars, filter);
+			this.analyzeDirectory(directories, filter);
+			this.analyzeJars(jars, filter);
 			this.map.writeMapToFile(this.mappingFile);
 			retval = true;
 		} catch (final IOException ex) {
@@ -177,7 +177,7 @@ class MethodExtractor extends ClassLoader {
 		for (final File file : jars) {
 			try {
 				final JarFile jar = new JarFile(file.getAbsoluteFile().getName());
-				analyseJarFile(jar, f);
+				this.analyseJarFile(jar, f);
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
@@ -190,7 +190,7 @@ class MethodExtractor extends ClassLoader {
 			final JarEntry e = es.nextElement();
 			MethodExtractor.LOG.error(e.getName());
 			if (e.getName().endsWith(".class")) {
-				analyzeJarClassEntry(jar, e, "", filter);
+				this.analyzeJarClassEntry(jar, e, "", filter);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ class MethodExtractor extends ClassLoader {
 			Class<?> clazz = null;
 			try {
 				clazz = this.defineClass(name, data, 0, data.length);
-				analyzeClass(clazz, filter);
+				this.analyzeClass(clazz, filter);
 			} catch (final LinkageError err) {
 				MethodExtractor.LOG.error("Linkage error", err);
 			}
@@ -234,7 +234,7 @@ class MethodExtractor extends ClassLoader {
 			}
 		}
 		for (final File dir : dirs) {
-			descendAndAnalyseDir(dir, "", f);
+			this.descendAndAnalyseDir(dir, "", f);
 		}
 	}
 
@@ -262,9 +262,9 @@ class MethodExtractor extends ClassLoader {
 				return new File(f, name).isDirectory();
 			}
 		});
-		analyseClasses(classes, packagePrefix, filter);
+		this.analyseClasses(classes, packagePrefix, filter);
 		for (final File file : descArray) {
-			descendAndAnalyseDir(file,
+			this.descendAndAnalyseDir(file,
 					(packagePrefix + file.getName().replaceFirst(dir.getName(), "")).replaceAll(File.separatorChar == '\\' ? "\\\\" : File.separator, ".") + ".",
 					filter);
 		}
@@ -285,7 +285,7 @@ class MethodExtractor extends ClassLoader {
 			final int endIndex = file.getName().lastIndexOf('.');
 			try {
 				final Class<?> c = super.loadClass(packagePrefix + file.getName().substring(begIndex, endIndex));
-				analyzeClass(c, filter);
+				this.analyzeClass(c, filter);
 			} catch (final ClassNotFoundException e) {
 				MethodExtractor.LOG.error(packagePrefix + file.getName().substring(begIndex, endIndex), e);
 				MethodExtractor.LOG.error("packagePrefix: " + packagePrefix);
@@ -327,7 +327,7 @@ class MethodExtractor extends ClassLoader {
 			 * prefix += "final ";
 			 * }
 			 */
-			this.map.registerName(/* + prefix */method.getDeclaringClass().getName() + "." + method.getName() + "(" + concat(method.getParameterTypes()) + ")");
+			this.map.registerName(/* + prefix */method.getDeclaringClass().getName() + "." + method.getName() + "(" + this.concat(method.getParameterTypes()) + ")");
 			method.getAnnotation(Override.class);
 		}
 	}

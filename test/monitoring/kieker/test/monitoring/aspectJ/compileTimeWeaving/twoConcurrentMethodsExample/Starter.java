@@ -53,14 +53,14 @@ public class Starter extends Thread {
 			if (ranVal < 0.25) {
 				// do nothing
 			} else {
-				waitP(300);
+				this.waitP(300);
 			}
 		} else {
 			if (ranVal > 0.75) {
-				work();
-				waitP(300);
+				this.work();
+				this.waitP(300);
 			} else {
-				work();
+				this.work();
 			}
 		}
 	}

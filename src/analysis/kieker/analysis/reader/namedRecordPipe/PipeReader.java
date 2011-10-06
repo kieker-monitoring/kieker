@@ -45,7 +45,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	public PipeReader() {}
 
 	public PipeReader(final String pipeName) {
-		initPipe(pipeName);
+		this.initPipe(pipeName);
 	}
 
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
@@ -82,7 +82,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 		try {
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
 			// IllegalArgumentException
-			initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
+			this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
 			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")");
 		} catch (final Exception exc) {
 			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());

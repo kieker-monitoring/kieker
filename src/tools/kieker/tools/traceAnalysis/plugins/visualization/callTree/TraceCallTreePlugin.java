@@ -162,7 +162,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 
 	public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException {
 		TraceCallTreePlugin.saveTreeToDotFile(this.systemEntityFactory, this.root, outputFnBase, includeWeights, shortLabels);
-		printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
+		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
 				"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
 	}
 
@@ -206,8 +206,8 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		final int numPlots = getSuccessCount();
-		final long lastSuccessTracesId = getLastTraceIdSuccess();
+		final int numPlots = this.getSuccessCount();
+		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
 		System.out.println("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '"
 				+ this.outputFnBase + "-<traceId>.dot'");
 		System.out.println("Dot files can be converted using the dot tool");
@@ -240,12 +240,12 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 						true); // rootNode
 				AbstractCallTreePlugin.writeDotForMessageTrace(TraceCallTreePlugin.this.systemEntityFactory, rootNode, mt, TraceCallTreePlugin.this.outputFnBase
 						+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
-				reportSuccess(mt.getTraceId());
+				TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
 			} catch (final TraceProcessingException ex) {
-				reportError(mt.getTraceId());
+				TraceCallTreePlugin.this.reportError(mt.getTraceId());
 				TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
 			} catch (final FileNotFoundException ex) {
-				reportError(mt.getTraceId());
+				TraceCallTreePlugin.this.reportError(mt.getTraceId());
 				TraceCallTreePlugin.LOG.error("File not found", ex);
 			}
 		}

@@ -55,7 +55,7 @@ public class OperationRepository extends AbstractSystemSubRepository {
 		if (this.operationsByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
-		final int id = getAndIncrementNextId();
+		final int id = this.getAndIncrementNextId();
 		newInst = new Operation(id, componentType, signature);
 		this.operationsById.put(id, newInst);
 		this.operationsByName.put(namedIdentifier, newInst);

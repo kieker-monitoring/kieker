@@ -75,7 +75,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 					polledTraceHashContainer = new ExecutionTraceHashContainerAllocationEquivalence(et);
 				} else { // just to make sure
 					TraceEquivalenceClassFilter.LOG.error("Invalid trace equivalence mode: " + this.equivalenceMode);
-					reportError(et.getTraceId());
+					this.reportError(et.getTraceId());
 					return;
 				}
 
@@ -89,10 +89,10 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 					numOccurences.incrementAndGet();
 				}
 			}
-			reportSuccess(et.getTraceId());
+			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			TraceEquivalenceClassFilter.LOG.error("InvalidTraceException", ex);
-			reportError(et.getTraceId());
+			this.reportError(et.getTraceId());
 		}
 	}
 
@@ -105,7 +105,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 		@Override
 		public void newEvent(final ExecutionTrace mt) {
-			newExecutionTrace(mt);
+			TraceEquivalenceClassFilter.this.newExecutionTrace(mt);
 		}
 	};
 
