@@ -354,7 +354,7 @@ class FSDirectoryReader {
 				continue;
 			}
 			if ((clazz == short.class) || (clazz == Short.class)) {
-				typedArray[curIdx] = Short.valueOf(vec[curIdx]);
+				typedArray[curIdx] = Short.valueOf(vec[curIdx]); // NOPMD
 				continue;
 			}
 			if ((clazz == boolean.class) || (clazz == Boolean.class)) {

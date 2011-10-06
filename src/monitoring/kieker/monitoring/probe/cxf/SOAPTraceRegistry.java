@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class SOAPTraceRegistry {
+public final class SOAPTraceRegistry {
 	private static final Log LOG = LogFactory.getLog(SOAPTraceRegistry.class);
 
 	private static final SOAPTraceRegistry INSTACNE = new SOAPTraceRegistry();

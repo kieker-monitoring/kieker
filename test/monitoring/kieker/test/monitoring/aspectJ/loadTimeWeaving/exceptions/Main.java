@@ -60,7 +60,7 @@ public class Main {
 		System.out.println("Hello World (look at your monitoring log ...)." + Thread.currentThread().getId() + " ");
 		if (throwException) {
 			System.out.println("For test purposes, I will throw an exception now");
-			throw new Exception("");
+			throw new Exception(""); // NOPMD
 		}
 	}
 }

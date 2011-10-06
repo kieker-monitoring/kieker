@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 
-	private static final Log log = LogFactory.getLog(TestTraceReconstructionFilter.class);
+	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
@@ -50,7 +50,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 			trace0 = this.genValidBookstoreTrace(45653l, 17);
 			trace1 = this.genValidBookstoreTrace(45653l, 17);
 		} catch (final InvalidTraceException ex) {
-			TestTraceEquivalenceFilterAssemblyEquivalence.log.error("InvalidTraceException", ex);
+			TestTraceEquivalenceFilterAssemblyEquivalence.LOG.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
 			return;
 		}
@@ -108,7 +108,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 			/* Make sure that trace is valid: */
 			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 		} catch (final InvalidTraceException ex) {
-			TestTraceEquivalenceFilterAssemblyEquivalence.log.error(ex);
+			TestTraceEquivalenceFilterAssemblyEquivalence.LOG.error(ex);
 			Assert.fail("Test invalid since used trace invalid");
 			throw new InvalidTraceException("Test invalid since used trace invalid", ex);
 		}

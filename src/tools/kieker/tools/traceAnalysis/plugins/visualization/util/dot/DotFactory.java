@@ -30,7 +30,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.util.dot;
  * 
  * @author Nina Marwede
  */
-public class DotFactory {
+public final class DotFactory {
 
 	public static final String DOT_SHAPE_BOX = "box";
 	public static final String DOT_SHAPE_BOX3D = "box3d";
