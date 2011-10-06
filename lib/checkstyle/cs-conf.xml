@@ -780,13 +780,14 @@
 
         <!-- A generic check for code problems - the user can search for any pattern. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
-        <!-- KIEKER on !-->
+        <!-- Default: OFF
         <module name="GenericIllegalRegexp">
             <property name="format"         value="\S\s+$"/>
             <property name="message"        value="Line has trailing spaces."/>
             <property name="ignoreCase"     value="false"/>
             <property name="ignoreComments" value="false"/>
         </module>
+        !-->
 
         <!-- Checks correct indentation of Java Code. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
