@@ -809,6 +809,7 @@
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
         <!-- KIEKER -->
         <module name="Indentation">
+            <property name="severity" value="info"/>        
             <property name="basicOffset"     value="4"/>
             <property name="braceAdjustment" value="0"/>
             <property name="caseIndent"      value="0"/>

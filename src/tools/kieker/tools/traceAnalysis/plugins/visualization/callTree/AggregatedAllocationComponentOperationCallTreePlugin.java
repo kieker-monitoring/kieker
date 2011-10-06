@@ -59,8 +59,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final SynchronousCallMessage callMsg) {
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AllocationComponentOperationPair destination = // will never be null!
-		this.pairFactory.getPairInstanceByPair(allocationComponent, op);
+		final AllocationComponentOperationPair destination = this.pairFactory.getPairInstanceByPair(allocationComponent, op); // will never be null!
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AllocationComponentOperationPair> n;
 		if (e != null) {

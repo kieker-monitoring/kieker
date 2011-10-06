@@ -57,21 +57,14 @@ public class TestTraceReconstructionFilter extends TestCase {
 	public TestTraceReconstructionFilter() {
 		/* Manually create Executions for a trace */
 		this.exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
-				1 * (1000 * 1000), // tin // NOCS (MagicNumberCheck)
-				10 * (1000 * 1000), // tout // NOCS (MagicNumberCheck)
-				0, 0); // eoi, ess // NOCS (MagicNumberCheck)
+				1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0); // NOCS (MagicNumberCheck)
 
 		this.exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
-				2 * (1000 * 1000), // tin // NOCS (MagicNumberCheck)
-				4 * (1000 * 1000), // tout // NOCS (MagicNumberCheck)
-				1, 1); // eoi, ess // NOCS (MagicNumberCheck)
-		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID, 5 * (1000 * 1000), // tin
-				8 * (1000 * 1000), // tout // NOCS (MagicNumberCheck)
-				2, 1); // eoi, ess // NOCS (MagicNumberCheck)
+				2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1); // NOCS (MagicNumberCheck)
+		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
+				5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1); // NOCS (MagicNumberCheck)
 		this.exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
-				6 * (1000 * 1000), // tin // NOCS (MagicNumberCheck)
-				7 * (1000 * 1000), // tout // NOCS (MagicNumberCheck)
-				3, 2); // eoi, ess // NOCS (MagicNumberCheck)
+				6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2); // NOCS (MagicNumberCheck)
 	}
 
 	/**
@@ -221,10 +214,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * arbitrary order
 		 */
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID);
-		final Execution exec1_1__catalog_getBook__broken = // NOCS
-		this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID, 2 * (1000 * 1000), // tin // NOCS (MagicNumberCheck)
-				4 * (1000 * 1000), // tout // NOCS (MagicNumberCheck)
-				1, 3); // eoi, ess // NOCS (MagicNumberCheck)
+		final Execution exec1_1__catalog_getBook__broken = this.executionFactory.genExecution("Catalog", "catalog", "getBook", // NOCS
+				TestTraceReconstructionFilter.TRACE_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 3); // NOCS (MagicNumberCheck)
 		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
@@ -398,10 +389,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 */
 		final int triggerTraceLengthMillis = 1;
 		final long triggerTraceId = TestTraceReconstructionFilter.TRACE_ID + 1;
-		final Execution exec0_0__bookstore_searchBook__trigger // NOCS
-		= this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, incompleteExecutionTrace.getMaxTout(), // tin
-				incompleteExecutionTrace.getMaxTout() + (triggerTraceLengthMillis * (1000 * 1000)), // tout // NOCS (MagicNumberCheck)
-				0, 0); // eoi, ess // NOCS (MagicNumberCheck)
+		final Execution exec0_0__bookstore_searchBook__trigger = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, // NOCS
+				incompleteExecutionTrace.getMaxTout(), incompleteExecutionTrace.getMaxTout() + (triggerTraceLengthMillis * (1000 * 1000)), 0, 0); // NOCS
 		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId);
 		final MessageTrace triggerMessageTrace;
 		try {
@@ -417,9 +406,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Instantiate reconstruction filter with timeout.
 		 */
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter("TraceReconstructionFilter", this.systemEntityFactory,
-		/* Force timeout on reception of trigger execution */
-		((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1, // maxTraceDurationMillis // NOCS (MagicNumberCheck)
-				true); // ignoreInvalidTraces
+				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1, true); // NOCS
 
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"

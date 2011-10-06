@@ -61,8 +61,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void initFromArray(final Object[] values) // NOPMD by jwa on 20.09.11 14:32
-			throws IllegalArgumentException {
+	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:32
 		try {
 			if (values.length != ResourceUtilizationRecord.VALUE_TYPES.length) {
 				throw new IllegalArgumentException("Expecting vector with " + ResourceUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);

@@ -50,9 +50,7 @@ public class Starter extends Thread {
 	public void run() {
 		final double ranVal = this.random.nextDouble();
 		if (ranVal < 0.5) {
-			if (ranVal < 0.25) {
-				// do nothing
-			} else {
+			if (ranVal >= 0.25) {
 				this.waitP(300);
 			}
 		} else {

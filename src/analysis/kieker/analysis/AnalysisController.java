@@ -117,9 +117,8 @@ public class AnalysisController {
 					 */
 					@Override
 					public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-						return AnalysisController.this.deliverRecordToConsumers(monitoringRecord,
-						/* abort on consumer error */
-						true);
+						// abort on consumer error
+						return AnalysisController.this.deliverRecordToConsumers(monitoringRecord, true);
 					}
 				});
 			}

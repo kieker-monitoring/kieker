@@ -69,9 +69,16 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	final DefaultListModel lm = new DefaultListModel();
 	private final JTextField outdir;
 	private final JTextField prefix;
-	private final JCheckBox plotSq = new JCheckBox(), plotComp = new JCheckBox(), plotCont = new JCheckBox(), plotOp = new JCheckBox(), plotAgg = new JCheckBox(),
-			plotCall = new JCheckBox(), // printCall = new JCheckBox(),
-			printMsg = new JCheckBox(), printExe = new JCheckBox(), printInv = new JCheckBox(), printEquiv = new JCheckBox();
+	private final JCheckBox plotSq = new JCheckBox();
+	private final JCheckBox plotComp = new JCheckBox();
+	private final JCheckBox plotCont = new JCheckBox();
+	private final JCheckBox plotOp = new JCheckBox();
+	private final JCheckBox plotAgg = new JCheckBox();
+	private final JCheckBox plotCall = new JCheckBox();
+	private final JCheckBox printMsg = new JCheckBox();
+	private final JCheckBox printExe = new JCheckBox();
+	private final JCheckBox printInv = new JCheckBox();
+	private final JCheckBox printEquiv = new JCheckBox();
 	private GridBagLayout g;
 	private final JTextField traces = new JTextField(36);
 	private final JRadioButton disabled = new JRadioButton(), allocation = new JRadioButton(), assembly = new JRadioButton();
