@@ -24,18 +24,18 @@ package kieker.tools.traceAnalysis.systemModel;
  * 
  * @author Andre van Hoorn
  */
-public abstract class Message {
+public abstract class AbstractMessage {
 
 	private final long timestamp;
 	private final Execution sendingExecution, receivingExecution;
 
-	protected Message() {
+	protected AbstractMessage() {
 		this.timestamp = -1;
 		this.sendingExecution = null;
 		this.receivingExecution = null;
 	}
 
-	public Message(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
+	public AbstractMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		this.timestamp = timestamp;
 		this.sendingExecution = sendingExecution;
 		this.receivingExecution = receivingExecution;

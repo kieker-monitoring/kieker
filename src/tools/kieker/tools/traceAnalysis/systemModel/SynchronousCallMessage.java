@@ -24,7 +24,7 @@ package kieker.tools.traceAnalysis.systemModel;
  * 
  * @author Andre van Hoorn
  */
-public class SynchronousCallMessage extends Message {
+public class SynchronousCallMessage extends AbstractMessage {
 
 	public SynchronousCallMessage() {
 		super();

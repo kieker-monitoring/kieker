@@ -34,7 +34,7 @@ import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingExc
 import kieker.tools.traceAnalysis.plugins.visualization.util.IntContainer;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.Message;
+import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
@@ -169,10 +169,10 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	private static void addTraceToTree(final CallTreeNode root, final MessageTrace t, final boolean aggregated) throws TraceProcessingException {
 		final Stack<CallTreeNode> curStack = new Stack<CallTreeNode>();
 
-		final Vector<Message> msgTraceVec = t.getSequenceAsVector();
+		final Vector<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
 		CallTreeNode curNode = root;
 		curStack.push(curNode);
-		for (final Message m : msgTraceVec) {
+		for (final AbstractMessage m : msgTraceVec) {
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
 				CallTreeNode child;

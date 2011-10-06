@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class ExecutionTrace extends Trace {
+public class ExecutionTrace extends AbstractTrace {
 
 	private static final Log LOG = LogFactory.getLog(ExecutionTrace.class);
 	private final AtomicReference<MessageTrace> messageTrace = new AtomicReference<MessageTrace>();
@@ -119,8 +119,8 @@ public class ExecutionTrace extends Trace {
 			return mt;
 		}
 
-		final Vector<Message> mSeq = new Vector<Message>();
-		final Stack<Message> curStack = new Stack<Message>();
+		final Vector<AbstractMessage> mSeq = new Vector<AbstractMessage>();
+		final Stack<AbstractMessage> curStack = new Stack<AbstractMessage>();
 		final Iterator<Execution> eSeqIt = this.set.iterator();
 
 		Execution prevE = rootExecution;
@@ -146,21 +146,21 @@ public class ExecutionTrace extends Trace {
 			if ((prevE != rootExecution) && (prevE.getEss() >= curE.getEss())) {
 				Execution curReturnReceiver; // receiverComponentName of return message
 				while (curStack.size() > curE.getEss()) {
-					final Message poppedCall = curStack.pop();
+					final AbstractMessage poppedCall = curStack.pop();
 					prevE = poppedCall.getReceivingExecution();
 					curReturnReceiver = poppedCall.getSendingExecution();
-					final Message m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
+					final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
 					mSeq.add(m);
 					prevE = curReturnReceiver;
 				}
 			}
 			// Now, we handle the current execution callMessage
 			if (prevE == rootExecution) { // initial execution callMessage
-				final Message m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
+				final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
 				mSeq.add(m);
 				curStack.push(m);
 			} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
-				final Message m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
+				final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
 				mSeq.add(m);
 				curStack.push(m);
 			} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
@@ -172,10 +172,10 @@ public class ExecutionTrace extends Trace {
 			if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
 				Execution curReturnReceiver; // receiverComponentName of return message
 				while (!curStack.empty()) {
-					final Message poppedCall = curStack.pop();
+					final AbstractMessage poppedCall = curStack.pop();
 					prevE = poppedCall.getReceivingExecution();
 					curReturnReceiver = poppedCall.getSendingExecution();
-					final Message m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
+					final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
 					mSeq.add(m);
 					prevE = curReturnReceiver;
 				}

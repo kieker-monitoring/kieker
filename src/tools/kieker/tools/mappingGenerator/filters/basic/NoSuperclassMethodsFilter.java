@@ -22,7 +22,7 @@ package kieker.tools.mappingGenerator.filters.basic;
 
 import java.lang.reflect.Method;
 
-import kieker.tools.mappingGenerator.MethodFilter;
+import kieker.tools.mappingGenerator.IMethodFilter;
 
 /**
  * 
@@ -31,7 +31,7 @@ import kieker.tools.mappingGenerator.MethodFilter;
  * @author Robert von Massow
  * 
  */
-public class NoSuperclassMethodsFilter implements MethodFilter {
+public class NoSuperclassMethodsFilter implements IMethodFilter {
 
 	@Override
 	public boolean accept(final Method m, final Class<?> c) {

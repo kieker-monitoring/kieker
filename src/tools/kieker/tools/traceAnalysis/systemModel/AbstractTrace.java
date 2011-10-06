@@ -18,18 +18,39 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.mappingGenerator;
+package kieker.tools.traceAnalysis.systemModel;
 
-import java.lang.reflect.Method;
+import kieker.analysis.plugin.IAnalysisEvent;
 
 /**
- * Implementing classes can be used to filter the methods found in the analyzed
- * classes.
- * 
- * @author Robert von Massow
- * 
+ * @author Andre van Hoorn
  */
-public interface MethodFilter {
+public abstract class AbstractTrace implements IAnalysisEvent {
 
-	public abstract boolean accept(Method m, Class<?> c);
+	private final long traceId; // convenience field. All executions have this traceId.
+
+	protected AbstractTrace() {
+		this.traceId = -1;
+	}
+
+	public AbstractTrace(final long traceId) {
+		this.traceId = traceId;
+	}
+
+	public final long getTraceId() {
+		return this.traceId;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return (int) (this.traceId ^ (this.traceId >>> 32));
+	}
+
+	@Override
+	public abstract boolean equals(Object obj);
 }

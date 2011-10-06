@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public abstract class BranchingProbe implements IMonitoringProbe {
+public class BranchingProbe implements IMonitoringProbe {
 	private static final Log LOG = LogFactory.getLog(BranchingProbe.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIMESOURCE = BranchingProbe.CTRLINST.getTimeSource();

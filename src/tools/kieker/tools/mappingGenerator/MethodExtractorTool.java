@@ -132,9 +132,9 @@ class MethodExtractor extends ClassLoader {
 		boolean retval = false;
 		try {
 			final String[] elem = this.cp.split(File.pathSeparator);
-			Class<MethodFilter> filter = null;
+			Class<IMethodFilter> filter = null;
 			try {
-				filter = (Class<MethodFilter>) this.loadClass(this.filtername);
+				filter = (Class<IMethodFilter>) this.loadClass(this.filtername);
 			} catch (final Exception e) {
 				MethodExtractor.LOG.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...");
 				e.printStackTrace();
@@ -160,8 +160,8 @@ class MethodExtractor extends ClassLoader {
 		return retval;
 	}
 
-	private void analyzeJars(final Vector<File> jars, final Class<MethodFilter> filter) {
-		MethodFilter f = null;
+	private void analyzeJars(final Vector<File> jars, final Class<IMethodFilter> filter) {
+		IMethodFilter f = null;
 		if (filter != null) {
 			try {
 				f = filter.newInstance();
@@ -184,7 +184,7 @@ class MethodExtractor extends ClassLoader {
 		}
 	}
 
-	private void analyseJarFile(final JarFile jar, final MethodFilter filter) {
+	private void analyseJarFile(final JarFile jar, final IMethodFilter filter) {
 		final Enumeration<JarEntry> es = jar.entries();
 		while (es.hasMoreElements()) {
 			final JarEntry e = es.nextElement();
@@ -195,7 +195,7 @@ class MethodExtractor extends ClassLoader {
 		}
 	}
 
-	private void analyzeJarClassEntry(final JarFile jar, final JarEntry e, final String prefix, final MethodFilter filter) {
+	private void analyzeJarClassEntry(final JarFile jar, final JarEntry e, final String prefix, final IMethodFilter filter) {
 		final long size = e.getSize();
 		if ((size == -1) || (size > Integer.MAX_VALUE)) {
 			MethodExtractor.LOG.error("Size of file \"" + jar.getName() + "/" + e.getName() + " out of range: size");
@@ -219,8 +219,8 @@ class MethodExtractor extends ClassLoader {
 		}
 	}
 
-	private void analyzeDirectory(final Vector<File> dirs, final Class<MethodFilter> filter) {
-		MethodFilter f = null;
+	private void analyzeDirectory(final Vector<File> dirs, final Class<IMethodFilter> filter) {
+		IMethodFilter f = null;
 		if (filter != null) {
 			try {
 				f = filter.newInstance();
@@ -247,7 +247,7 @@ class MethodExtractor extends ClassLoader {
 	 * @param packagePrefix
 	 *            the packageprefix
 	 */
-	private void descendAndAnalyseDir(final File dir, final String packagePrefix, final MethodFilter filter) {
+	private void descendAndAnalyseDir(final File dir, final String packagePrefix, final IMethodFilter filter) {
 		final File[] classes = dir.listFiles(new FilenameFilter() {
 
 			@Override
@@ -278,7 +278,7 @@ class MethodExtractor extends ClassLoader {
 	 * @param packagePrefix
 	 *            the current package
 	 */
-	private void analyseClasses(final File[] classes, final String packagePrefix, final MethodFilter filter) {
+	private void analyseClasses(final File[] classes, final String packagePrefix, final IMethodFilter filter) {
 		for (final File file : classes) {
 			int begIndex = file.getName().lastIndexOf(File.separatorChar);
 			begIndex = begIndex == -1 ? 0 : begIndex;
@@ -294,7 +294,7 @@ class MethodExtractor extends ClassLoader {
 		}
 	}
 
-	private void analyzeClass(final Class<?> c, final MethodFilter filter) {
+	private void analyzeClass(final Class<?> c, final IMethodFilter filter) {
 		final Method[] m = c.getDeclaredMethods();
 		for (final Method method : m) {
 			if (!filter.accept(method, c)) {
@@ -351,7 +351,7 @@ class MethodExtractor extends ClassLoader {
 	}
 }
 
-class NullFilter implements MethodFilter {
+class NullFilter implements IMethodFilter {
 
 	@Override
 	public boolean accept(final Method m, final Class<?> c) {

@@ -26,25 +26,25 @@ import java.util.Vector;
 /**
  * @author Andre van Hoorn
  */
-public class MessageTrace extends Trace {
+public class MessageTrace extends AbstractTrace {
 
-	private final Vector<Message> set;
+	private final Vector<AbstractMessage> set;
 
-	public MessageTrace(final long traceId, final Vector<Message> seq) {
+	public MessageTrace(final long traceId, final Vector<AbstractMessage> seq) {
 		super(traceId);
 		this.set = seq;
 	}
 
-	public final Vector<Message> getSequenceAsVector() {
+	public final Vector<AbstractMessage> getSequenceAsVector() {
 		return this.set;
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder("Trace " + this.getTraceId() + ":\n");
-		final Iterator<Message> it = this.set.iterator();
+		final Iterator<AbstractMessage> it = this.set.iterator();
 		while (it.hasNext()) {
-			final Message m = it.next();
+			final AbstractMessage m = it.next();
 			strBuild.append("<");
 			strBuild.append(m.toString());
 			strBuild.append(">\n");

@@ -33,7 +33,7 @@ import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.tools.traceAnalysis.systemModel.Message;
+import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -176,7 +176,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 
 		@Override
 		public void newEvent(final MessageTrace t) {
-			for (final Message m : t.getSequenceAsVector()) {
+			for (final AbstractMessage m : t.getSequenceAsVector()) {
 				if (m instanceof SynchronousReplyMessage) {
 					continue;
 				}

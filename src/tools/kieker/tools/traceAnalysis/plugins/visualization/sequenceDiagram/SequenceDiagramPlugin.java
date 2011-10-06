@@ -32,7 +32,7 @@ import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
-import kieker.tools.traceAnalysis.systemModel.Message;
+import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
@@ -198,7 +198,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 			final PrintStream ps, final boolean shortLabels) {
 		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/208
 		// dot node ID x component instance
-		final Vector<Message> messages = messageTrace.getSequenceAsVector();
+		final Vector<AbstractMessage> messages = messageTrace.getSequenceAsVector();
 		// preamble:
 		ps.print(".PS" + "\n");
 		ps.print(SequenceDiagramPlugin.SEQUENCE_PIC_CONTENT + "\n");
@@ -213,7 +213,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		plottedComponentIds.add(rootAllocationComponent.getId());
 
 		if (sdMode == SDModes.ALLOCATION) {
-			for (final Message me : messages) {
+			for (final AbstractMessage me : messages) {
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
 				if (!plottedComponentIds.contains(senderComponent.getId())) {
@@ -228,7 +228,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				}
 			}
 		} else if (sdMode == SDModes.ASSEMBLY) {
-			for (final Message me : messages) {
+			for (final AbstractMessage me : messages) {
 				final AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 				final AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 				if (!plottedComponentIds.contains(senderComponent.getId())) {
@@ -249,7 +249,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		ps.print("step()" + "\n");
 		ps.print("active(" + rootDotId + ");" + "\n");
 		boolean first = true;
-		for (final Message me : messages) {
+		for (final AbstractMessage me : messages) {
 			String senderDotId = "-1";
 			String receiverDotId = "-1";
 
