@@ -161,7 +161,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	}
 
 	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
-			double.class, double.class };
+		double.class, double.class };
 
 	/*
 	 * {@inheritdoc}

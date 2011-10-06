@@ -96,7 +96,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		ps.close();
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
-				"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
+			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
 	}
 
 	@Override

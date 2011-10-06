@@ -35,8 +35,8 @@ import org.apache.commons.logging.LogFactory;
  * {@link #timerResolution}.</li>
  * <li>Future {@link kieker.common.record.IMonitoringRecord} may lead to future {@link TimestampEvent} as follows:
  * <ol>
- * <li>A newly incoming {@link IMonitoringRecord} with logging timestamp {@literal tstamp} leads to the new timer events satisfying {@link #firstTimestamp} + i *
- * {@link #timerResolution} {@literal <} {@literal tstamp}.</li>
+ * <li>A newly incoming {@link kieker.common.record.IMonitoringRecord} with logging timestamp {@literal tstamp} leads to the new timer events satisfying
+ * {@link #firstTimestamp} + i * {@link #timerResolution} {@literal <} {@literal tstamp}.</li>
  * </ol>
  * </li>
  * </ol>

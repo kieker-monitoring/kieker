@@ -87,8 +87,8 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	@Override
 	public Class<?>[] getValueTypes() {
 		return new Class[] { long.class, // timestamp
-				int.class, // branchId
-				int.class // branchingOutcome
+			int.class, // branchId
+			int.class // branchingOutcome
 		};
 	}
 

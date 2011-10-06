@@ -61,7 +61,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 				shortLabels);
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
-				"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
+			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
 	}
 
 	@Override
