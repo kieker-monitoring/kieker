@@ -34,7 +34,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 public class Catalog {
 
 	private Catalog() {}
-	
+
 	@OperationExecutionMonitoringProbe
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {

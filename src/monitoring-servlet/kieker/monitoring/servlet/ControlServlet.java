@@ -108,9 +108,9 @@ public class ControlServlet extends HttpServlet {
 		out.println("<body>");
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
-		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.TIMESOURCE.getTime() + "<br>"); 
-		out.println("Host:\"" + ControlServlet.hostname + "\"<br>"); 
-		out.println("Vmname:\"" + ControlServlet.CTRL_INST.getHostName() + "\"<br>"); 
+		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.TIMESOURCE.getTime() + "<br>");
+		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
+		out.println("Vmname:\"" + ControlServlet.CTRL_INST.getHostName() + "\"<br>");
 
 		String action = request.getParameter("action");
 		if (action == null) {

@@ -66,7 +66,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 		JMXConnectorServer server = null;
 		ServerNotificationListener serverNotificationListener = null;
 		String port = "0";
-		JMXImplementation usedJMXImplementation = JMXImplementation.Fallback;
+		JMXController.JMXImplementation usedJMXImplementation = JMXController.JMXImplementation.Fallback;
 		this.domain = configuration.getStringProperty(Configuration.ACTIVATE_JMX_DOMAIN);
 		this.jmxEnabled = configuration.getBooleanProperty(Configuration.ACTIVATE_JMX);
 		if (this.jmxEnabled) {
@@ -79,7 +79,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 						final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
 						server = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap")
 								.getMethod("initialize", String.class, Properties.class).invoke(null, port, jmxProperties);
-						usedJMXImplementation = JMXImplementation.Sun;
+						usedJMXImplementation = JMXController.JMXImplementation.Sun;
 					} catch (final Exception ignoreErrors) {
 						if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE_FALLBACK)) {
 							JMXController.LOG.warn("Failed to initialize remote JMX server, falling back to default implementation");

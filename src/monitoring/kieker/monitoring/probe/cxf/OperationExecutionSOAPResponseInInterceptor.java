@@ -81,7 +81,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 * No Kieker eoi in header.
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
-				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker eoi in response header. " 
+				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker eoi in response header. "
 						+ "Will unset all threadLocal variables"); // NOCS (MultipleStringLiteralsCheck)
 				this.unsetKiekerThreadLocalData();
 				return;

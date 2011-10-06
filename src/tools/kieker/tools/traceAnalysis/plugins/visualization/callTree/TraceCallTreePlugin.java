@@ -191,7 +191,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 			}
 		}
 		if (curStack.pop() != root) {
-			final String errorMsg =  "Stack not empty after processing trace";
+			final String errorMsg = "Stack not empty after processing trace";
 			TraceCallTreePlugin.LOG.fatal(errorMsg);
 			throw new TraceProcessingException(errorMsg);
 		}

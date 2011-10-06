@@ -296,15 +296,18 @@ class FSDirectoryReader {
 					rec.initFromArray(typedArray);
 
 				} catch (final InstantiationException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS (MultipleStringLiteralsCheck)
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS
+																																	// (MultipleStringLiteralsCheck)
 					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
 					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
 				} catch (final IllegalAccessException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS (MultipleStringLiteralsCheck)
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS
+																																	// (MultipleStringLiteralsCheck)
 					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
 					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
 				} catch (final IllegalStateException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS (MultipleStringLiteralsCheck)
+					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS
+																																	// (MultipleStringLiteralsCheck)
 					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
 					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
 				}

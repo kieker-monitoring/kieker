@@ -79,17 +79,22 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 		final Execution exec3_2__catalog_getBook; // NOCS
 
 		/* Manually create Executions for a trace */
-		exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId, (1 * (1000 * 1000)) + offset, // tin // NOCS (MagicNumberCheck)
+		exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId, (1 * (1000 * 1000)) + offset, // tin //
+																																							// NOCS
+																																							// (MagicNumberCheck)
 				(10 * (1000 * 1000)) + offset, // tout // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess
 
-		exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId, (2 * (1000 * 1000)) + offset, // tin // NOCS (MagicNumberCheck)
+		exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId, (2 * (1000 * 1000)) + offset, // tin // NOCS
+																																				// (MagicNumberCheck)
 				(4 * (1000 * 1000)) + offset, // tout // NOCS (MagicNumberCheck)
 				1, 1); // eoi, ess
-		exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", traceId, (5 * (1000 * 1000)) + offset, // tin // NOCS (MagicNumberCheck)
+		exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", traceId, (5 * (1000 * 1000)) + offset, // tin // NOCS
+																																		// (MagicNumberCheck)
 				(8 * (1000 * 1000)) + offset, // tout // NOCS (MagicNumberCheck)
 				2, 1); // eoi, ess
-		exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId, (6 * (1000 * 1000)) + offset, // tin // NOCS (MagicNumberCheck)
+		exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId, (6 * (1000 * 1000)) + offset, // tin // NOCS
+																																				// (MagicNumberCheck)
 				(7 * (1000 * 1000)) + offset, // tout // NOCS (MagicNumberCheck)
 				3, 2); // eoi, ess
 

@@ -28,9 +28,9 @@ import kieker.monitoring.writer.DummyWriter;
  * 
  */
 public class DefaultConfigurationFactory {
-	
+
 	private DefaultConfigurationFactory() {}
-	
+
 	public static final String WRITER_NAME = DummyWriter.class.getName();
 
 	public static Configuration createDefaultConfigurationWithDummyWriter() {

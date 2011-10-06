@@ -143,7 +143,7 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 		if (this.sensorIntervalSeconds == 0) {
 			CPUsCombinedServletContextListener.LOG.warn("values for the init-param '"
 					+ CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds);
-			CPUsCombinedServletContextListener.LOG.warn("Using default value: " // NOCS (MultipleStringLiteralsCheck) 
+			CPUsCombinedServletContextListener.LOG.warn("Using default value: " // NOCS (MultipleStringLiteralsCheck)
 					+ CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 			this.sensorIntervalSeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
