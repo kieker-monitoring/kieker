@@ -87,8 +87,11 @@ the definition of the provider URL and the context factory:
 \item Start the JMS server (you may have to set your \class{JAVA\_HOME} variable first):
 
 \setBashListing
-\begin{lstlisting}[caption=]
+\begin{lstlisting}[caption=Start of the JMS server under UNIX-like systems]
 #\lstshellprompt{}# bin/activemq start
+\end{lstlisting}
+\begin{lstlisting}[caption=Start of the JMS server under Windows]
+#\lstshellprompt{}# bin\#activemq
 \end{lstlisting}
 \item Start the analysis part (in a new terminal):
 \setBashListing
@@ -109,8 +112,6 @@ the definition of the provider URL and the context factory:
 
 Download a HornetQ archive from \url{http://www.jboss.org/hornetq/downloads.html} %
 and decompress it to the root directory of the example. 
-
-\pagebreak
 
 \noindent You need to create a queue in the HornetQ configuration file %
 \file{config/stand-alone/non-clustered/hornetq-jms.xml}, as shown in Listing~\ref{lst:hornetq:config:queue}.
@@ -171,8 +172,11 @@ the definition of the provider URL, the context factory, and the queue:
 \item Start the JMS server:
 
 \setBashListing
-\begin{lstlisting}[caption=]
+\begin{lstlisting}[caption=Start of the JMS server under UNIX-like systems]
 #\lstshellprompt{}# ./run.sh
+\end{lstlisting}
+\begin{lstlisting}[caption=Start of the JMS server under Windows]
+#\lstshellprompt{}# run.bat
 \end{lstlisting}
 
 Note that the script must be called from within HornetQ's \dir{bin/} directory.
@@ -246,8 +250,11 @@ the definition of the provider URL and the context factory:
 \item Start the JMS server (you may have to set your \class{JAVA\_HOME} and \class{OPENJMS\_HOME} variables first):
 
 \setBashListing
-\begin{lstlisting}[caption=]
+\begin{lstlisting}[caption=Start of the JMS server under UNIX-like systems]
 #\lstshellprompt{}# openjms-<version>/bin/startup.sh
+\end{lstlisting}
+\begin{lstlisting}[caption=Start of the JMS server under Windows]
+#\lstshellprompt{}# openjms-<version>\bin\startup.bat
 \end{lstlisting}
 \item Start the analysis part (in a new terminal):
 \setBashListing
