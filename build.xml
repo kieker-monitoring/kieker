@@ -364,6 +364,7 @@
 			<exclude name="${src.userguide.example.sigar.dir}/lib/*" />
 			<include name="${src.userguide.example.sigar.dir}/src/**/*.java" />
 			<include name="${src.userguide.example.sigar.dir}/testdata/**" />
+			<include name="${example.specjenterprise.dir}/**" />
 			<include name="${example.microbenchmark.dir}/**" />
 			<exclude name="${example.microbenchmark.dir}/results/**/*" />
 			<exclude name="${example.microbenchmark.dir}/tmp/**/*" />
