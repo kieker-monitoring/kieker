@@ -61,11 +61,16 @@ public final class DotFactory {
 	 * @return digraph header as dot code
 	 */
 	public static StringBuilder createHeader(final String name, final String label, final String fontcolor, final String fontname, final double fontsize) {
-		final StringBuilder dot = new StringBuilder("digraph " + name);
-		dot.append(" {\n label=<" + label);
-		dot.append(">;\n fontcolor=\"" + fontcolor);
-		dot.append("\";\n fontname=\"" + fontname);
-		dot.append("\";\n fontsize=\"" + Double.toString(fontsize));
+		final StringBuilder dot = new StringBuilder("digraph ");
+		dot.append(name);
+		dot.append(" {\n label=<");
+		dot.append(label);
+		dot.append(">;\n fontcolor=\"");
+		dot.append(fontcolor);
+		dot.append("\";\n fontname=\"");
+		dot.append(fontname);
+		dot.append("\";\n fontsize=\"");
+		dot.append(Double.toString(fontsize));
 		dot.append("\";\n");
 		return dot;
 	}
@@ -169,15 +174,39 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createCluster(final String prefix, final String name, final String label, final String shape, final String style,
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String misc) {
-		final StringBuilder dot = new StringBuilder(prefix + "subgraph \"cluster_" + name);
-		dot.append("\" {\n" + prefix + " label = \"" + label);
-		dot.append(shape == null ? "" : "\";\n" + prefix + " shape = \"" + shape); // NOCS
-		dot.append(style == null ? "" : "\";\n" + prefix + " style = \"" + style); // NOCS
-		dot.append(framecolor == null ? "" : "\";\n" + prefix + " pencolor = \"" + framecolor); // NOCS
-		dot.append(fillcolor == null ? "" : "\";\n" + prefix + " fillcolor = \"" + fillcolor); // NOCS
-		dot.append(fontcolor == null ? "" : "\";\n" + prefix + " fontcolor = \"" + fontcolor); // NOCS
-		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\";\n" + prefix + " fontsize = \"" + Double.toString(fontsize)); // NOCS
-		dot.append("\";" + (misc == null ? "" : misc) + "\n"); // NOCS
+		final StringBuilder dot = new StringBuilder(prefix + "subgraph \"cluster_");
+		dot.append(name);
+		dot.append("\" {\n");
+		dot.append(prefix);
+		dot.append(" label = \"");
+		dot.append(label);
+		dot.append(shape == null ? "" : "\";\n"); // NOCS
+		dot.append(prefix);
+		dot.append(" shape = \"");
+		dot.append(shape);
+		dot.append(style == null ? "" : "\";\n"); // NOCS
+		dot.append(prefix);
+		dot.append(" style = \"");
+		dot.append(style);
+		dot.append(framecolor == null ? "" : "\";\n"); // NOCS
+		dot.append(prefix);
+		dot.append(" pencolor = \"");
+		dot.append(framecolor);
+		dot.append(fillcolor == null ? "" : "\";\n"); // NOCS
+		dot.append(prefix);
+		dot.append(" fillcolor = \"");
+		dot.append(fillcolor);
+		dot.append(fontcolor == null ? "" : "\";\n"); // NOCS
+		dot.append(prefix);
+		dot.append(" fontcolor = \"");
+		dot.append(fontcolor);
+		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\";\n"); // NOCS
+		dot.append(prefix);
+		dot.append(" fontsize = \"");
+		dot.append(Double.toString(fontsize));
+		dot.append("\";");
+		dot.append(misc == null ? "" : misc); // NOCS
+		dot.append("\n");
 		// closing bracket "}" has to be added by calling method !
 		return dot;
 	}

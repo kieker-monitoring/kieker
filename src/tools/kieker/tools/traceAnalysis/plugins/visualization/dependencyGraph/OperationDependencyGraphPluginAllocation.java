@@ -84,7 +84,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT + "\\n");
+		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT);
+		strBuild.append("\\n");
 		strBuild.append(assemblyComponentName).append(":");
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append(".");

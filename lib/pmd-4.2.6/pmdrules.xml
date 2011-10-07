@@ -25,6 +25,7 @@
     <exclude name="CallSuperInConstructor"/>
     <exclude name="OnlyOneReturn"/>
     <exclude name="UnusedModifier"/>
+    <exclude name="UnnecessaryConstructor"/>
   </rule>
   
   <!--<rule ref="rulesets/coupling.xml">-->

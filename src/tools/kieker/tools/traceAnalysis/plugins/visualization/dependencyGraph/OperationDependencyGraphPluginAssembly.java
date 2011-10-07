@@ -78,7 +78,8 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 		final String componentTypePackagePrefx = component.getType().getPackageName();
 		final String componentTypeIdentifier = component.getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n");
+		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT);
+		strBuild.append("\\n");
 		strBuild.append(assemblyComponentName).append(":");
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append(".");

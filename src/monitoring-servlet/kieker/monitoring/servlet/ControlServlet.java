@@ -198,7 +198,7 @@ public class ControlServlet extends HttpServlet {
 			out.println("</pre></td></tr>");
 			out.println("</table>");
 		}
-		final StringBuffer bu = new StringBuffer();
+		final StringBuffer bu = new StringBuffer(2048);
 		bu.append("<br><h3>Options:</h3>");
 		bu.append(" enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> / <a href=\"index?action=terminate\"> terminate</a><br>");
 		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");

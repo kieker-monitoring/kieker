@@ -191,12 +191,12 @@ class MethodExtractor extends ClassLoader {
 			final JarEntry e = es.nextElement();
 			MethodExtractor.LOG.error(e.getName());
 			if (e.getName().endsWith(".class")) {
-				this.analyzeJarClassEntry(jar, e, "", filter);
+				this.analyzeJarClassEntry(jar, e, filter);
 			}
 		}
 	}
 
-	private void analyzeJarClassEntry(final JarFile jar, final JarEntry e, final String prefix, final IMethodFilter filter) {
+	private void analyzeJarClassEntry(final JarFile jar, final JarEntry e, final IMethodFilter filter) {
 		final long size = e.getSize();
 		if ((size == -1) || (size > Integer.MAX_VALUE)) {
 			MethodExtractor.LOG.error("Size of file \"" + jar.getName() + "/" + e.getName() + " out of range: size");
