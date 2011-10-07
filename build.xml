@@ -65,7 +65,7 @@
 		<path id="kieker.monitoring-servlet-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-logging-*.jar" />
-				<include name="servlet-api.jar" />
+				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
@@ -73,16 +73,17 @@
 
 		<path id="kieker.monitoring-compile-classpath">
 			<fileset dir="${lib.dir}">
+        <include name="aopalliance-*.jar" />
 				<include name="commons-logging-*.jar" />
 				<include name="cxf-api-*.jar" />
 				<include name="cxf-common-utilities-*.jar" />
 				<include name="cxf-rt-core-*.jar" />
 				<include name="cxf-rt-bindings-soap-*.jar" />
-				<include name="jms-*.jar" />
-				<include name="servlet-api.jar" />
+				<include name="javax.jms-*.jar" />
+				<include name="javax.servlet-*.jar" />
 				<include name="sigar-*.jar" />
-				<include name="spring.jar" />
-				<include name="spring-web.jar" />
+				<include name="springframework.context-*.jar" />
+				<include name="springframework.web-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
@@ -91,7 +92,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="aspectjrt-*.jar" />
 				<include name="commons-logging-*.jar" />
-				<include name="servlet-api.jar" />
+				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}" />
@@ -101,7 +102,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="commons-logging-*.jar" />
 				<include name="rabbitmq-client.jar" />
-				<include name="jms-1.1.jar" />
+				<include name="javax.jms-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
@@ -730,7 +731,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="aspectjrt-*.jar" />
 				<include name="commons-logging-*.jar" />
-				<include name="servlet-api.jar" />
+				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -757,7 +758,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="aspectjrt-*.jar" />
 				<include name="commons-logging-*.jar" />
-				<include name="servlet-api.jar" />
+				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -803,7 +804,7 @@
 		<path id="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjweaver-*.jar" />
-				<include name="derby.jar" />
+				<include name="derby-*.jar" />
 				<include name="mysql-connector-java-*-bin.jar" />
 				<!--needed for some reason ...-->
 				<include name="commons-logging-*.jar" />
@@ -905,7 +906,7 @@
 			<sysproperty key="included.jars" value="${tmp.dir}/${src.jar}" />
 
 			<!-- Serenity JVM command line. -->
-			<jvmarg line="-javaagent:${lib.dir}/serenity/serenity.jar" />
+			<jvmarg line="-javaagent:${lib.dir}/serenity/serenity-0.4.jar" />
 
 			<batchtest fork="yes" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
@@ -931,7 +932,7 @@
 
 	<!-- Generates sample files for .classpath and .project Eclipse files -->
 	<target name="create-eclipse-sample-files" depends="-init" description="Creates sample Eclipse .project and .classpath files">
-		<pathconvert property="eclipse.entries" refid="eclipse-external-jars" dirsep="/" pathsep="&quot;/&gt;&#10;    &lt;classpathentry kind=&quot;lib&quot; path=&quot;">
+		<pathconvert property="eclipse.entries" refid="eclipse-external-jars" dirsep="/" pathsep="&quot;/&gt;&#10;&#09;&#09;&#09;&#09;&lt;classpathentry kind=&quot;lib&quot; path=&quot;">
 			<map from="${user.dir}/" to="" />
 			<!-- change absolute path back to relative path -->
 		</pathconvert>
