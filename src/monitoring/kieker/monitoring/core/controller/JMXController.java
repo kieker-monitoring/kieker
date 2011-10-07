@@ -60,7 +60,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	private final JMXImplementation usedJMXImplementation;
 
-	// http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/293: Check error handling in JMX controller
+	// The error handling in this block is corrent, see ticket #293
 	protected JMXController(final Configuration configuration) {
 		ObjectName controllerObjectNameTmp = null;
 		ObjectName serverObjectNameTmp = null;
@@ -119,7 +119,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 		this.serverNotificationListener = serverNotificationListenerTmp;
 	}
 
-	// http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/293: Check error handling in JMX controller
+	// The error handling in this block is corrent, see ticket #293
 	@Override
 	protected void init() {
 		synchronized (this) {
@@ -128,7 +128,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 				if (this.serverObjectName != null) {
 					try {
 						mbs.registerMBean(this.server, this.serverObjectName);
-					} catch (final Exception e) {
+					} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 						JMXController.LOG.warn("Unable to register JMXServer MBean", e);
 					}
 				}
@@ -238,13 +238,12 @@ public final class JMXController extends AbstractController implements IJMXContr
 	}
 
 	private final static class ServerNotificationListener implements NotificationListener {
-		
+
 		/**
 		 * Constructs a {@link ServerNotificationListener}.
 		 */
-		public ServerNotificationListener() {
-		}
-		
+		public ServerNotificationListener() {}
+
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
