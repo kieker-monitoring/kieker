@@ -157,8 +157,8 @@ probe \class{OperationExecutionAspectAnnotation} is used. It requires that %
 methods intended to be instrumented are annotated by %
 \lstinline[language=Java]{@OperationExecutionMonitoringProbe}, as mentioned before. 
 
-Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and %
-\ref{lst:traceAnalysisCompileRunExample1} show how to compile and run the annotated %
+Listings~\ref{lst:traceAnalysisCompileRunExample1} and %
+\ref{lst:traceAnalysisCompileRunExample1Win} show how to compile and run the annotated %
 Bookstore application. The \file{\aopConfigFile} must be located in a %
 \dir{META-INF/} directory in the classpath---in this case the \dir{build/} directory. %
 The AspectJ weaver has to be loaded as a so-called Java-agent. It weaves the %
@@ -195,8 +195,8 @@ method within the included classes/packages will be instrumented and monitored. 
 Listing \ref{lst:aopConfigFileFull} demonstrates how to limit the %
 instrumented methods to those of the class \class{BookstoreStarter}.
 
-The commands shown in the Listings~\ref{lst:traceAnalysisCompileRunExample1Win} and %
-\ref{lst:traceAnalysisCompileRunExample1} can again be used to compile and execute %
+The commands shown in the Listings~\ref{lst:traceAnalysisCompileRunExample1} and %
+\ref{lst:traceAnalysisCompileRunExample1Win} can again be used to compile and execute %
 the example. Note that the annotations within the source code have no effect %
 when using this aspect.
 
@@ -225,7 +225,7 @@ demonstrates how to integrate the \class{OperationExecutionRegistrationAndLoggin
 in the \file{web.xml} file of a web application. 
 
 The Java~EE Servlet container example described in Appendix~\label{appendix:JavaEEServletExample} employs the %
-the \class{OperationExecutionRegistrationAndLoggingFilter}.
+\class{OperationExecutionRegistrationAndLoggingFilter}.
 
 \pagebreak
 
