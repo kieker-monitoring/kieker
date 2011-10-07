@@ -85,7 +85,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 			// IllegalArgumentException
 			this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
 			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}

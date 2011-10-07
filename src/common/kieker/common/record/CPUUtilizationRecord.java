@@ -113,7 +113,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 			this.totalUtilization = (Double) values[8]; // NOCS
 			this.idle = (Double) values[9]; // NOCS
 
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}
@@ -161,7 +161,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	}
 
 	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
-		double.class, double.class };
+		double.class, double.class, };
 
 	/*
 	 * {@inheritdoc}

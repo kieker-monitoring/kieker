@@ -152,7 +152,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 		} catch (final InstanceNotFoundException e) {
 			JMXReader.LOG.error("No monitoring log found: " + this.monitoringLog.toString());
 			ret = false;
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 			JMXReader.LOG.error("Error in JMX connection!", e); // NOCS (MultipleStringLiteralsCheck)
 			ret = false;
 		} finally {
@@ -174,7 +174,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 				if (jmx != null) {
 					jmx.close();
 				}
-			} catch (final Exception e) {
+			} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 				JMXReader.LOG.debug("Failed to close JMX connection!", e);
 			}
 		}
@@ -209,14 +209,14 @@ public final class JMXReader extends AbstractMonitoringReader {
 				JMXReader.LOG.info("Shutting down JMXReader");
 
 			} catch (final InstanceNotFoundException e) { // ignore
-			} catch (final Exception e) {
+			} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 				JMXReader.LOG.error("Error in JMX connection!", e); // NOCS (MultipleStringLiteralsCheck)
 			} finally {
 				try {
 					if (logNotificationListener != null) {
 						mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 					}
-				} catch (final Exception e) { // ignore
+				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck)
 				}
 				try {
 					if (serverNotificationListener != null) {
@@ -229,7 +229,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 						jmx.close();
 					}
 					Thread.sleep(10000); // NOCS
-				} catch (final Exception e) { // ignore
+				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck)
 				}
 			}
 		}
@@ -262,6 +262,13 @@ public final class JMXReader extends AbstractMonitoringReader {
 	}
 
 	private final class ServerNotificationListener implements NotificationListener {
+		
+		/**
+		 * Constructs a {@link ServerNotificationListener}.
+		 */
+		public ServerNotificationListener() {
+		}
+		
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();

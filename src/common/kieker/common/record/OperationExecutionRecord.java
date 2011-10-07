@@ -150,7 +150,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 			long.class, // tout
 			String.class, // hostName
 			int.class, // eoi
-			int.class // ess
+			int.class, // ess
 		};
 	}
 
@@ -185,7 +185,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 			this.hostName = (String) values[6]; // NOCS
 			this.eoi = (Integer) values[7]; // NOCS
 			this.ess = (Integer) values[8]; // NOCS
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

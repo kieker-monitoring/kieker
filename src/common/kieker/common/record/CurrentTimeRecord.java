@@ -73,7 +73,7 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
 				throw new IllegalArgumentException("Expecting vector with " + CurrentTimeRecord.numRecordFields + " elements but found:" + values.length);
 			}
 			this.currentTime = (Long) values[0];
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

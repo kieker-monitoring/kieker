@@ -27,6 +27,12 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord {
 
 	private static final long serialVersionUID = 11767633L;
 
+	/**
+	 * Constructs a {@link DummyMonitoringRecord}.
+	 */
+	public DummyMonitoringRecord() {
+	}
+	
 	@Override
 	public void initFromArray(final Object[] values) {}
 

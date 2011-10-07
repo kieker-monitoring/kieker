@@ -164,7 +164,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 			this.swapUsed = (Long) values[6]; // NOCS
 			this.swapFree = (Long) values[7]; // NOCS
 
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}
@@ -196,10 +196,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree };
+		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class };
+	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class, };
 
 	/*
 	 * {@inheritdoc}

@@ -38,6 +38,11 @@ public class Broker {
 	 */
 	private final Map<String, Pipe> pipeMap = new HashMap<String, Pipe>();
 
+	/**
+	 * Used for constructing the singleton instance {@link #getInstance()}.
+	 */
+	private Broker() {}
+
 	public static Broker getInstance() {
 		return LazyHolder.INSTANCE;
 	}
@@ -64,7 +69,7 @@ public class Broker {
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder {
+	private final static class LazyHolder { // NOCS (MissingCtorCheck)
 		static {
 			INSTANCE = new Broker();
 		}

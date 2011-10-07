@@ -88,7 +88,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	public Class<?>[] getValueTypes() {
 		return new Class[] { long.class, // timestamp
 			int.class, // branchId
-			int.class // branchingOutcome
+			int.class, // branchingOutcome
 		};
 	}
 
@@ -101,7 +101,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 			this.timestamp = (Long) values[0];
 			this.branchID = (Integer) values[1];
 			this.branchingOutcome = (Integer) values[2];
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

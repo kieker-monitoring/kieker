@@ -323,7 +323,7 @@ class FSDirectoryReader {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) {
+				} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", e);
 				}
 			}

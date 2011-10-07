@@ -60,64 +60,66 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	private final JMXImplementation usedJMXImplementation;
 
+	// http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/293: Check error handling in JMX controller
 	protected JMXController(final Configuration configuration) {
-		ObjectName controllerObjectName = null;
-		ObjectName serverObjectName = null;
-		JMXConnectorServer server = null;
-		ServerNotificationListener serverNotificationListener = null;
-		String port = "0";
-		JMXController.JMXImplementation usedJMXImplementation = JMXController.JMXImplementation.Fallback;
+		ObjectName controllerObjectNameTmp = null;
+		ObjectName serverObjectNameTmp = null;
+		JMXConnectorServer serverTmp = null;
+		ServerNotificationListener serverNotificationListenerTmp = null;
+		String portTmp = "0";
+		JMXController.JMXImplementation usedJMXImplementationTmp = JMXController.JMXImplementation.Fallback;
 		this.domain = configuration.getStringProperty(Configuration.ACTIVATE_JMX_DOMAIN);
 		this.jmxEnabled = configuration.getBooleanProperty(Configuration.ACTIVATE_JMX);
 		if (this.jmxEnabled) {
 			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE)) {
 				try {
-					port = configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_PORT);
+					portTmp = configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_PORT);
 					try {
 						// Try using the "secret" SUN implementation
 						// Reflection to suppress compiler warnings
 						final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
-						server = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap")
-								.getMethod("initialize", String.class, Properties.class).invoke(null, port, jmxProperties);
-						usedJMXImplementation = JMXController.JMXImplementation.Sun;
-					} catch (final Exception ignoreErrors) {
+						serverTmp = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap")
+								.getMethod("initialize", String.class, Properties.class).invoke(null, portTmp, jmxProperties);
+						usedJMXImplementationTmp = JMXController.JMXImplementation.Sun;
+					} catch (final Exception ignoreErrors) { // NOCS (IllegalCatchCheck)
 						if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE_FALLBACK)) {
 							JMXController.LOG.warn("Failed to initialize remote JMX server, falling back to default implementation");
 							// Fallback to default Implementation
-							final JMXServiceURL url = new JMXServiceURL("rmi", null, Integer.parseInt(port));
+							final JMXServiceURL url = new JMXServiceURL("rmi", null, Integer.parseInt(portTmp));
 							final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-							server = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbs);
-							server.start();
+							serverTmp = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbs);
+							serverTmp.start();
 						} else {
 							JMXController.LOG.warn("Failed to initialize remote JMX server and fallback is deactivated");
 						}
 					}
-					if ((server != null) && (server.isActive())) {
-						serverObjectName = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
+					if ((serverTmp != null) && (serverTmp.isActive())) {
+						serverObjectNameTmp = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
 								configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
-						serverNotificationListener = new ServerNotificationListener();
+						serverNotificationListenerTmp = new ServerNotificationListener();
 					}
-				} catch (final Exception e) {
+				} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 					JMXController.LOG.warn("Failed to initialize remote JMX server", e);
 				}
 			}
 			if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_CONTROLLER)) {
 				try {
-					controllerObjectName = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
+					controllerObjectNameTmp = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
 							configuration.getStringProperty(Configuration.ACTIVATE_JMX_CONTROLLER_NAME));
-				} catch (final Exception e) {
+				} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 					JMXController.LOG.warn("Failed to initialize MonitoringController MBean", e);
 				}
 			}
 		}
-		this.usedJMXImplementation = usedJMXImplementation;
-		this.port = port;
-		this.server = server;
-		this.controllerObjectName = controllerObjectName;
-		this.serverObjectName = serverObjectName;
-		this.serverNotificationListener = serverNotificationListener;
+		this.usedJMXImplementation = usedJMXImplementationTmp;
+		this.port = portTmp;
+		this.server = serverTmp;
+		this.controllerObjectName = controllerObjectNameTmp;
+		this.serverObjectName = serverObjectNameTmp;
+		this.serverNotificationListener = serverNotificationListenerTmp;
 	}
 
+	// http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/293: Check error handling in JMX controller
 	@Override
 	protected void init() {
 		synchronized (this) {
@@ -135,7 +137,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 						// MXBeans is currently not possible (getClasses in IRecord)
 						final StandardMBean mbean = new StandardMBean(this.monitoringController, IMonitoringController.class, false);
 						mbs.registerMBean(mbean, this.controllerObjectName);
-					} catch (final Exception e) {
+					} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 						JMXController.LOG.warn("Unable to register Monitoring Controller MBean", e);
 					}
 				}
@@ -155,14 +157,14 @@ public final class JMXController extends AbstractController implements IJMXContr
 				if (this.controllerObjectName != null) {
 					try {
 						mbs.unregisterMBean(this.controllerObjectName);
-					} catch (final Exception e) {
+					} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 						JMXController.LOG.error("Failed to terminate MBean", e); // NOCS (MultipleStringLiteralsCheck)
 					}
 				}
 				if (this.serverObjectName != null) {
 					try {
 						mbs.unregisterMBean(this.serverObjectName);
-					} catch (final Exception e) {
+					} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 						JMXController.LOG.error("Failed to terminate MBean", e); // NOCS (MultipleStringLiteralsCheck)
 					}
 				}
@@ -174,7 +176,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 					}
 					try {
 						this.server.stop();
-					} catch (final Exception e) {
+					} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 						JMXController.LOG.error("Failed to terminate JMX Server", e);
 					}
 				}
@@ -236,6 +238,13 @@ public final class JMXController extends AbstractController implements IJMXContr
 	}
 
 	private final static class ServerNotificationListener implements NotificationListener {
+		
+		/**
+		 * Constructs a {@link ServerNotificationListener}.
+		 */
+		public ServerNotificationListener() {
+		}
+		
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();

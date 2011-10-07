@@ -72,7 +72,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 			this.resourceName = (String) values[2]; // NOCS
 			this.utilization = (Double) values[3]; // NOCS
 
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}
@@ -100,7 +100,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.resourceName, this.utilization };
+		return new Object[] { this.timestamp, this.hostName, this.resourceName, this.utilization, };
 	}
 
 	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class };

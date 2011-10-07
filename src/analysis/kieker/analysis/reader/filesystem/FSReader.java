@@ -127,7 +127,7 @@ public class FSReader extends AbstractMonitoringReader {
 			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
 				this.inputDirs[i] = dirNameTokenizer.nextToken().trim();
 			}
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			FSReader.LOG.error("Error parsing list of input directories'" + dirList + "':" + exc.getMessage(), exc);
 			return false;
 		}

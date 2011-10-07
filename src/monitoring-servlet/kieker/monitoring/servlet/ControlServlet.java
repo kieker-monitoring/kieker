@@ -83,6 +83,12 @@ public class ControlServlet extends HttpServlet {
 	}
 
 	/**
+	 * Constructs a {@link ControlServlet}.
+	 */
+	public ControlServlet() {
+	}
+	
+	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 * 
 	 * @param request
@@ -180,7 +186,7 @@ public class ControlServlet extends HttpServlet {
 		String monitoringControllerStatus = "";
 		try {
 			monitoringControllerStatus = ControlServlet.CTRL_INST.toString();
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 			out.println(e.getMessage());
 		}
 
@@ -213,7 +219,7 @@ public class ControlServlet extends HttpServlet {
 			final String youngGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
 			final String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
 			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC + "<br>");
-		} catch (final RuntimeException e) { // ignore
+		} catch (final RuntimeException e) { // ignore // NOCS (IllegalCatchCheck)
 		}
 		out.println(bu.toString());
 		this.printFooter(out);
