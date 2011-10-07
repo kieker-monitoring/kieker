@@ -906,7 +906,7 @@
 			<sysproperty key="included.jars" value="${tmp.dir}/${src.jar}" />
 
 			<!-- Serenity JVM command line. -->
-			<jvmarg line="-javaagent:${lib.dir}/serenity/serenity-0.4.jar" />
+			<jvmarg line="-javaagent:${lib.dir}/serenity/serenity.jar" />
 
 			<batchtest fork="yes" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
