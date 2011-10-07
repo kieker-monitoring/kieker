@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 r9760"
-   sodipodi:docname="framework-figure.svg">
+   sodipodi:docname="framework-figure-gray.svg">
   <defs
      id="defs4">
     <clipPath
@@ -1103,16 +1103,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="422.66787"
-     inkscape:cy="620.5945"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="727.64944"
+     inkscape:cy="536.68932"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
-     inkscape:window-height="928"
-     inkscape:window-x="-4"
-     inkscape:window-y="35"
+     inkscape:window-height="1004"
+     inkscape:window-x="1362"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -1138,14 +1138,14 @@
      id="layer1"
      transform="translate(435.83964,-1878.3928)">
     <rect
-       style="fill:#eca14f;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-7"
        width="268.043"
        height="262.69006"
        x="456.16849"
        y="2348.2192" />
     <rect
-       style="fill:#eca14f;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-7-8"
        width="268.043"
        height="35.547001"
@@ -1164,7 +1164,7 @@
          style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
          id="tspan6757-1">Monitoring Records</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-5"
        width="40"
        height="427.50546"
@@ -1184,7 +1184,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-2-1-1-2">Current time</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6"
        width="40"
        height="427.50546"
@@ -1204,7 +1204,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-2-6-0-2">Memory/swap usage</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7"
        width="40"
        height="427.50546"
@@ -1224,7 +1224,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-2-6-7-7-1">CPU utilization</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1"
        width="40"
        height="427.50546"
@@ -1244,7 +1244,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-3-4-8">Operation execution</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0"
        width="40"
        height="427.50546"
@@ -1264,7 +1264,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-2-3-5">Resource utilization</tspan></text>
     <rect
-       style="opacity:0.39272724;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-1"
        width="40"
        height="427.50546"
@@ -1284,28 +1284,28 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8-9">&lt;your monitoring record type&gt;</tspan></text>
     <rect
-       style="fill:#f2bc2e;fill-opacity:0.85098249;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-0-59"
        width="369.45401"
        height="35.547207"
        x="80.372192"
        y="2309.8149" />
     <rect
-       style="fill:#f2bc2e;fill-opacity:0.85098249;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-0"
        width="361.129"
        height="35.547207"
        x="-412.01016"
        y="2309.8149" />
     <rect
-       style="fill:#f2bc2e;fill-opacity:0.85098249;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-8"
        width="591.55286"
        height="262.69006"
        x="730.55383"
        y="2348.2192" />
     <rect
-       style="fill:#f2bc2e;fill-opacity:0.85098249;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80"
        width="862.13861"
        height="262.69006"
@@ -3549,7 +3549,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:22px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial Italic"
+       style="font-size:22px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial Italic"
        x="18.198303"
        y="2603.4399"
        id="text3777-8-0-3-5-0-2-3-8-2"
@@ -3557,7 +3557,7 @@
          sodipodi:role="line"
          x="18.198303"
          y="2603.4399"
-         style="font-size:22px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold Italic"
+         style="font-size:22px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold Italic"
          id="tspan4561-1-7-4">Kieker.Monitoring</tspan></text>
     <text
        xml:space="preserve"
@@ -3569,12 +3569,12 @@
          sodipodi:role="line"
          x="-152.84464"
          y="2547.7852"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan5612-9">Periodic </tspan><tspan
          sodipodi:role="line"
          x="-155.89542"
          y="2569.7852"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan3950">Sampling</tspan></text>
     <text
        xml:space="preserve"
@@ -3586,12 +3586,12 @@
          sodipodi:role="line"
          x="26.440224"
          y="2555.9031"
-         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle"
+         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle;fill:#000000"
          id="tspan3781-2-6-2-34-9-3">JMX </tspan><tspan
          sodipodi:role="line"
          x="23.389442"
          y="2577.9031"
-         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle"
+         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle;fill:#000000"
          id="tspan5702-3">Interface</tspan></text>
     <text
        xml:space="preserve"
@@ -3603,7 +3603,7 @@
          sodipodi:role="line"
          x="-156.20694"
          y="2488.0046"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan5612-9-4">Logging</tspan></text>
     <g
        id="g4102"
@@ -3640,12 +3640,12 @@
          sodipodi:role="line"
          x="-153.12393"
          y="2381.5938"
-         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle"
+         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle;fill:#000000"
          id="tspan3781-2-6-2-34-9-3-2">Time </tspan><tspan
          sodipodi:role="line"
          x="-156.17471"
          y="2403.5938"
-         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle"
+         style="font-size:22px;text-align:center;line-height:100%;text-anchor:middle;fill:#000000"
          id="tspan5702-3-8">Source</tspan></text>
     <g
        id="g4092"
@@ -4012,7 +4012,7 @@
          sodipodi:role="line"
          x="179.98323"
          y="2500.0046"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan5612-9-4-3">Logging</tspan></text>
     <text
        xml:space="preserve"
@@ -4024,12 +4024,12 @@
          sodipodi:role="line"
          x="449.57809"
          y="2504.4226"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan5612-9-4-3-5">Seria-</tspan><tspan
          sodipodi:role="line"
          x="449.57809"
          y="2526.4226"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan5645">lization</tspan></text>
     <text
        xml:space="preserve"
@@ -4041,12 +4041,12 @@
          sodipodi:role="line"
          x="735.09717"
          y="2512.5039"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan5612-9-4-3-5-5">Deseria-</tspan><tspan
          sodipodi:role="line"
          x="735.09717"
          y="2534.5039"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000"
          id="tspan5645-5">lization</tspan></text>
     <path
        inkscape:connector-curvature="0"
@@ -4243,7 +4243,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:22px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial Italic"
+       style="font-size:22px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial Italic"
        x="1025.949"
        y="2603.4397"
        id="text3777-8-0-3-5-0-2-3-8-2-7"
@@ -4251,7 +4251,7 @@
          sodipodi:role="line"
          x="1025.949"
          y="2603.4397"
-         style="font-size:22px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold Italic"
+         style="font-size:22px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold Italic"
          id="tspan4561-1-7-4-8">Kieker.Analysis</tspan></text>
     <g
        id="g4092-6"
@@ -4496,7 +4496,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
+       style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
        x="264.90759"
        y="2333.7847"
        id="text7265-8-4-9-2-9-9-1-5-3"
@@ -4504,11 +4504,11 @@
          sodipodi:role="line"
          x="264.90759"
          y="2333.7847"
-         style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
          id="tspan4352-3-5-4-7">Monitoring  Writers</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
+       style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
        x="-231.63727"
        y="2333.7847"
        id="text7265-8-4-9-2-9-9-1-5-3-7"
@@ -4516,33 +4516,29 @@
          sodipodi:role="line"
          x="-231.63727"
          y="2333.7847"
-         style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
          id="tspan4352-3-5-4-7-6">Monitoring Probes/Samplers</tspan></text>
-    <g
-       id="g9762"
-       transform="translate(13.213203,0)">
-      <rect
-         y="2309.8149"
-         x="-58.587433"
-         height="35.547207"
-         width="121.72285"
-         id="rect4850-3-80-0-6"
-         style="fill:#f2bc2e;fill-opacity:0.85098249;fill-rule:nonzero;stroke:none" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text7265-8-4-9-2-9-9-1-5-3-3"
-         y="2333.7847"
-         x="2.51244"
-         style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         xml:space="preserve"><tspan
-           id="tspan4352-3-5-4-7-3"
-           style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
-           y="2333.7847"
-           x="2.5124404"
-           sodipodi:role="line">Time Sources</tspan></text>
-    </g>
     <rect
-       style="fill:#f2bc2e;fill-opacity:0.85098249;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
+       id="rect4850-3-80-0-6"
+       width="121.72285"
+       height="35.547207"
+       x="-45.374229"
+       y="2309.8149" />
+    <text
+       xml:space="preserve"
+       style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
+       x="15.725643"
+       y="2333.7847"
+       id="text7265-8-4-9-2-9-9-1-5-3-3"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="15.725643"
+         y="2333.7847"
+         style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4352-3-5-4-7-3">Time Sources</tspan></text>
+    <rect
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-0-5"
        width="268.043"
        height="35.547207"
@@ -4573,7 +4569,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4111-0-4-0-6">Mem. usage</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745"
        width="40"
        height="380.71432"
@@ -4593,42 +4589,42 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-2-3-5-6">File system</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3"
        width="40"
        height="380.71432"
        x="127.87845"
        y="1879.3777" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1"
        width="40"
        height="380.71432"
        x="175.38438"
        y="1879.3777" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5"
        width="40"
        height="380.71432"
        x="80.372498"
        y="1879.3777" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6"
        width="40"
        height="380.71432"
        x="222.89037"
        y="1879.3777" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4"
        width="40"
        height="380.71432"
        x="270.39633"
        y="1879.3777" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7"
        width="40"
        height="380.71432"
@@ -4648,7 +4644,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-2-3-4-8-4-0">Database (SQL)</tspan></text>
     <rect
-       style="opacity:0.39272724;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4"
        width="40"
        height="427.50546"
@@ -4668,7 +4664,7 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8">&lt;your monitoring writer&gt;</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7"
        width="40"
        height="182.51801"
@@ -4688,7 +4684,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-2-3-4-8-4-0-7">Asynchr. writers</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7-1"
        width="40"
        height="135.041"
@@ -4708,7 +4704,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-2-3-4-8-4-0-7-2">Syncr.</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2"
        width="40"
        height="427.50546"
@@ -4728,7 +4724,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-5-3-3">System time (nanos)</tspan></text>
     <rect
-       style="opacity:0.39299999;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39299999000000002;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-3"
        width="40"
        height="427.50546"
@@ -4748,7 +4744,7 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8-7">&lt;your time source&gt;</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7-10"
        width="62.223354"
        height="177.65601"
@@ -4773,7 +4769,7 @@
          style="font-size:24px;text-align:start;line-height:100%;text-anchor:start"
          id="tspan4020-4">tracing</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-8"
        width="40"
        height="246.57562"
@@ -4793,7 +4789,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-6-8-1-6-3-6-2">Spring</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39"
        width="40"
        height="108.31882"
@@ -4813,7 +4809,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-6-7-6">AspectJ</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-7"
        width="40"
        height="108.31882"
@@ -4833,7 +4829,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-6-8-1-6-33-5">Servlet</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-8-3"
        width="40"
        height="246.57562"
@@ -4853,7 +4849,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-6-8-4-7">CXF/SOAP</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-8-7"
        width="40"
        height="360.00003"
@@ -4873,7 +4869,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-6-8-1-4-9">Manual instrumentation</tspan></text>
     <rect
-       style="opacity:0.39299999;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39299999000000002;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-39-1"
        width="40"
        height="360.00003"
@@ -4893,7 +4889,7 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8-7-3">&lt;your interception  technology&gt;</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7-10-8"
        width="62.223354"
        height="131.685"
@@ -4918,7 +4914,7 @@
          style="font-size:24px;text-align:start;line-height:100%;text-anchor:start"
          id="tspan4111-02-7">monitoring</tspan></text>
     <rect
-       style="opacity:0.39299999;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39299999000000002;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-39-1-3"
        width="40"
        height="360.00003"
@@ -4938,7 +4934,7 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8-7-3-2">&lt;your technology&gt;</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-8-1"
        width="40"
        height="270.38409"
@@ -4958,7 +4954,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-6-8-1-6-3-6-2-5">CPU utilization</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-8-1-7"
        width="40"
        height="270.38409"
@@ -4978,7 +4974,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-6-8-1-6-3-6-2-5-5">Memory usage</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-8-19"
        width="40"
        height="85.971001"
@@ -4998,7 +4994,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4111-0-5-2">Sigar</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-39-8-19-8"
        width="40"
        height="85.971001"
@@ -5018,7 +5014,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4111-0-5-2-7">Servlet</tspan></text>
     <rect
-       style="opacity:0.39299999;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39299999000000002;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-3-5"
        width="40"
        height="427.50546"
@@ -5103,42 +5099,42 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-2-2-3-4-2-0-6">Named pipe</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-5-0"
        width="40"
        height="427.50546"
        x="912.98779"
        y="1879.3779" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-4"
        width="40"
        height="427.50546"
        x="867.37927"
        y="1879.3779" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-1"
        width="40"
        height="427.50546"
        x="821.77075"
        y="1879.3779" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-4"
        width="40"
        height="427.50546"
        x="730.55377"
        y="1879.3779" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-2"
        width="40"
        height="427.50546"
        x="776.16235"
        y="1879.3779" />
     <rect
-       style="opacity:0.39272724;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-1-6"
        width="40"
        height="427.50546"
@@ -5198,7 +5194,7 @@
          id="tspan4629-7-9">Real-time replayer</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
+       style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
        x="864.38354"
        y="2333.7847"
        id="text7265-8-4-9-2-9-9-1-5-3-5"
@@ -5206,17 +5202,17 @@
          sodipodi:role="line"
          x="864.38354"
          y="2333.7847"
-         style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
          id="tspan4352-3-5-4-7-31">Monitoring  Readers</tspan></text>
     <rect
-       style="fill:#f2bc2e;fill-opacity:0.85098249;fill-rule:nonzero;stroke:none"
+       style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-0-5-0"
        width="317.586"
        height="35.547207"
        x="1004.5206"
        y="2309.8149" />
     <rect
-       style="opacity:0.39272724;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-1-6-2"
        width="40"
        height="244.89307"
@@ -5236,21 +5232,21 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8-9-6-7-6">&lt;your visualization&gt;</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-5-0-4"
        width="40"
        height="244.89307"
        x="1095.7378"
        y="1879.3777" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-4-0"
        width="40"
        height="244.89307"
        x="1050.1293"
        y="1879.3777" />
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-1-6"
        width="40"
        height="244.89307"
@@ -5296,7 +5292,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan3781-2-6-9-5-8-8-9-3-9-8-6">Call graphs</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7-1-2"
        width="40"
        height="176.826"
@@ -5316,7 +5312,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-4-4-6">Visualization</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7-1-2-7"
        width="40"
        height="271.01501"
@@ -5336,7 +5332,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-4-4-6-1">Architecture reconstr.</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7-1-2-7-8"
        width="40"
        height="317.586"
@@ -5357,7 +5353,7 @@
          id="tspan4020-4-4-6-1-3">Pipe and filter framework</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
+       style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
        x="1163.7394"
        y="2333.7847"
        id="text7265-8-4-9-2-9-9-1-5-3-7-8"
@@ -5365,10 +5361,10 @@
          sodipodi:role="line"
          x="1163.7394"
          y="2333.7847"
-         style="font-size:17.4408989px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
          id="tspan4352-3-5-4-7-6-8">Analysis/Visualization Plug-Ins</tspan></text>
     <rect
-       style="opacity:0.39272724;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-1-6-3"
        width="40"
        height="289.72498"
@@ -5388,7 +5384,7 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8-9-6-6">&lt;your trace analysis&gt;</tspan></text>
     <rect
-       style="fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-7-1-2-7-9"
        width="40"
        height="223.892"
@@ -5408,7 +5404,7 @@
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-4-4-6-1-6">Trace analysis</tspan></text>
     <rect
-       style="opacity:0.39272724;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-1-6-3-3"
        width="40"
        height="335.439"
@@ -5428,7 +5424,7 @@
          style="font-size:24px;font-style:italic;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial Italic"
          id="tspan3781-2-6-2-2-3-4-2-7-5-4-9-8-9-6-6-1">&lt;your reconstruction plug-in&gt;</tspan></text>
     <rect
-       style="opacity:0.39272724;fill:#6699cc;fill-opacity:0.85098039;stroke:none"
+       style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-1-6-3-3-6"
        width="40"
        height="381.0383"
