@@ -86,7 +86,7 @@ public class SystemModelRepository {
 		return this.typeRepositoryFactory;
 	}
 
-	private enum EntityType {
+	private static enum EntityType {
 
 		COMPONENT_TYPE, OPERATION, ASSEMBLY_COMPONENT, ALLOCATION_COMPONENT, EXECUTION_CONTAINER
 	};
@@ -153,7 +153,7 @@ public class SystemModelRepository {
 				}
 			}
 			final String[] cells = new String[] { this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
-				type.getPackageName(), type.getTypeName(), opListBuilder.toString() };
+				type.getPackageName(), type.getTypeName(), opListBuilder.toString(), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -167,7 +167,7 @@ public class SystemModelRepository {
 			}
 			final String[] cells = new String[] { this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
 				this.htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),
-				op.getSignature().getName(), paramListStrBuild.toString(), op.getSignature().getReturnType() };
+				op.getSignature().getName(), paramListStrBuild.toString(), op.getSignature().getReturnType(), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -185,7 +185,7 @@ public class SystemModelRepository {
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
 			final String[] cells = new String[] { this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()), EntityType.EXECUTION_CONTAINER),
-				container.getName() };
+				container.getName(), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -198,7 +198,7 @@ public class SystemModelRepository {
 				this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(),
 						EntityType.ALLOCATION_COMPONENT),
 				this.htmlEntityRef(allocationComponent.getExecutionContainer().getId(), allocationComponent.getExecutionContainer().getName(),
-						EntityType.EXECUTION_CONTAINER) };
+						EntityType.EXECUTION_CONTAINER), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);

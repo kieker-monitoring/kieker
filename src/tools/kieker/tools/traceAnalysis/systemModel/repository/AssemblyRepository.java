@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
@@ -31,8 +32,8 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  * @author Andre van Hoorn
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
-	private final Hashtable<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>();
-	private final Hashtable<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>();
+	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>();
+	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>();
 
 	public final AssemblyComponent rootAssemblyComponent;
 

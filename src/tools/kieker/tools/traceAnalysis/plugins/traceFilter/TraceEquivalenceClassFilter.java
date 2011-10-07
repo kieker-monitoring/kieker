@@ -47,7 +47,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
-	public enum TraceEquivalenceClassModes {
+	public static enum TraceEquivalenceClassModes {
 
 		DISABLED, ASSEMBLY, ALLOCATION
 	}

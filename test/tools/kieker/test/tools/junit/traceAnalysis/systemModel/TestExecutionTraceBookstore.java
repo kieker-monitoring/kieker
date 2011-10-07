@@ -20,7 +20,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.systemModel;
 
-import java.util.Vector;
+import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -177,7 +177,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 * Validate Message Trace representation.
 		 */
 		Assert.assertEquals("Invalid traceId", messageTrace.getTraceId(), TestExecutionTraceBookstore.TRACE_ID);
-		final Vector<AbstractMessage> msgVector = messageTrace.getSequenceAsVector();
+		final List<AbstractMessage> msgVector = messageTrace.getSequenceAsVector();
 		Assert.assertEquals("Invalid number of messages in trace", msgVector.size(), this.numExecutions * 2);
 		final AbstractMessage[] msgArray = msgVector.toArray(new AbstractMessage[msgVector.size()]);
 		Assert.assertEquals(msgArray.length, this.numExecutions * 2);

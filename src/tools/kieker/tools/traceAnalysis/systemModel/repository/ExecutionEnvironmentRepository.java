@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 
@@ -30,8 +31,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
-	private final Hashtable<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>();
-	private final Hashtable<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>();
+	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>();
+	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>();
 
 	public final ExecutionContainer rootExecutionContainer;
 

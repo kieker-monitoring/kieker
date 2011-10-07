@@ -72,6 +72,6 @@ public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysi
 
 	public void printStatusMessage() {
 		this.printMessage(new String[] { "Trace processing summary: " + this.numTracesProcessed + " total; " + this.numTracesSucceeded + " succeeded; "
-				+ this.numTracesFailed + " failed." });
+				+ this.numTracesFailed + " failed.", });
 	}
 }

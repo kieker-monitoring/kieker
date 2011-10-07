@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -104,7 +105,7 @@ public class TraceAnalysisTool {
 	private static String[] inputDirs = null;
 	private static String outputDir = null;
 	private static String outputFnPrefix = null;
-	private static TreeSet<Long> selectedTraces = null; // null means select all
+	private static Set<Long> selectedTraces = null; // null means select all
 	private static boolean shortLabels = true;
 	private static boolean includeSelfLoops = false;
 	private static boolean ignoreInvalidTraces = false;
@@ -150,7 +151,7 @@ public class TraceAnalysisTool {
 					TraceAnalysisTool.selectedTraces.add(Long.valueOf(idStr));
 				}
 				TraceAnalysisTool.LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
-			} catch (final Exception e) {
+			} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")");
 				TraceAnalysisTool.LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
 				return false;
@@ -524,7 +525,7 @@ public class TraceAnalysisTool {
 			if (!retVal) {
 				System.err.println("A task failed");
 			}
-		} catch (final Exception ex) {
+		} catch (final Exception ex) {  // NOCS (IllegalCatchCheck)
 			System.err.println("An error occured: " + ex.getMessage());
 			System.err.println("");
 			TraceAnalysisTool.LOG.error("Exception", ex);
@@ -582,7 +583,7 @@ public class TraceAnalysisTool {
 				System.exit(1);
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			System.err.println("An error occured. See 'kieker.log' for details");
 			TraceAnalysisTool.LOG.fatal(args, exc);
 		}

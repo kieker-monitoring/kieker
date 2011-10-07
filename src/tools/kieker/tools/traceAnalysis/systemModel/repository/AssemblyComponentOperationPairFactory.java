@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
@@ -32,8 +33,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Andre van Hoorn
  */
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
-	private final Hashtable<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>();
-	private final Hashtable<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>();
+	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>();
+	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>();
 
 	public final AssemblyComponentOperationPair rootPair;
 

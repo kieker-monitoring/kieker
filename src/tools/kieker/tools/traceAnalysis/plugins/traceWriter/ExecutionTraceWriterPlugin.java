@@ -21,7 +21,6 @@
 package kieker.tools.traceAnalysis.plugins.traceWriter;
 
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -44,8 +43,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public ExecutionTraceWriterPlugin(final String name, final SystemModelRepository systemEntityFactory, final String outputFn) throws FileNotFoundException,
-			IOException {
+	public ExecutionTraceWriterPlugin(final String name, final SystemModelRepository systemEntityFactory, final String outputFn) throws IOException {
 		super(name, systemEntityFactory);
 		this.outputFn = outputFn;
 		this.ps = new BufferedWriter(new FileWriter(outputFn));

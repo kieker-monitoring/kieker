@@ -41,7 +41,7 @@ import kieker.test.analysis.junit.util.NamedPipeFactory;
  * @author Andre van Hoorn
  * 
  */
-public class TestPipeReader extends TestCase {
+public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
 
 	/**

@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.Operation;
@@ -32,8 +33,8 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
  * @author Andre van Hoorn
  */
 public class OperationRepository extends AbstractSystemSubRepository {
-	private final Hashtable<String, Operation> operationsByName = new Hashtable<String, Operation>();
-	private final Hashtable<Integer, Operation> operationsById = new Hashtable<Integer, Operation>();
+	private final Map<String, Operation> operationsByName = new Hashtable<String, Operation>();
+	private final Map<Integer, Operation> operationsById = new Hashtable<Integer, Operation>();
 
 	public final Operation rootOperation;
 

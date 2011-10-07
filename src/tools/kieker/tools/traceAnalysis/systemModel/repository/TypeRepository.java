@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
 
@@ -31,8 +32,8 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  */
 public class TypeRepository extends AbstractSystemSubRepository {
 
-	private final Hashtable<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>();
-	private final Hashtable<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>();
+	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>();
+	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>();
 
 	public final ComponentType rootComponent;
 

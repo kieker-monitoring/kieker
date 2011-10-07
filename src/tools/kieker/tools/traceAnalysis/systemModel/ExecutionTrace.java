@@ -20,12 +20,13 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
@@ -119,7 +120,7 @@ public class ExecutionTrace extends AbstractTrace {
 			return mt;
 		}
 
-		final Vector<AbstractMessage> mSeq = new Vector<AbstractMessage>();
+		final List<AbstractMessage> mSeq = new ArrayList<AbstractMessage>();
 		final Stack<AbstractMessage> curStack = new Stack<AbstractMessage>();
 		final Iterator<Execution> eSeqIt = this.set.iterator();
 

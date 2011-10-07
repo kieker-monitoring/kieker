@@ -21,21 +21,21 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * @author Andre van Hoorn
  */
 public class MessageTrace extends AbstractTrace {
 
-	private final Vector<AbstractMessage> set;
+	private final List<AbstractMessage> set;
 
-	public MessageTrace(final long traceId, final Vector<AbstractMessage> seq) {
+	public MessageTrace(final long traceId, final List<AbstractMessage> seq) {
 		super(traceId);
 		this.set = seq;
 	}
 
-	public final Vector<AbstractMessage> getSequenceAsVector() {
+	public final List<AbstractMessage> getSequenceAsVector() {
 		return this.set;
 	}
 

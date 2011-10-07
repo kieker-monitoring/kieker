@@ -20,7 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
-import java.util.TreeSet;
+import java.util.Set;
 
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -36,7 +36,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  */
 public class TraceIdFilter implements IAnalysisPlugin {
 
-	private final TreeSet<Long> selectedTraces;
+	private final Set<Long> selectedTraces;
 
 	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
@@ -44,7 +44,7 @@ public class TraceIdFilter implements IAnalysisPlugin {
 	 * 
 	 * @param selectedTraces
 	 */
-	public TraceIdFilter(final TreeSet<Long> selectedTraces) {
+	public TraceIdFilter(final Set<Long> selectedTraces) {
 		this.selectedTraces = selectedTraces;
 	}
 

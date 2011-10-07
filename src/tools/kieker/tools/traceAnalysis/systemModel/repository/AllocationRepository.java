@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -32,8 +33,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
-	private final Hashtable<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>();
-	private final Hashtable<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>();
+	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>();
+	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>();
 
 	public final AllocationComponent rootAllocationComponent;
 

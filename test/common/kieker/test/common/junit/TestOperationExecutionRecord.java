@@ -27,7 +27,7 @@ import kieker.common.record.OperationExecutionRecord;
 /**
  * @author Andre van Hoorn
  */
-public class TestOperationExecutionRecord extends TestCase {
+public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCtorCheck)
 
 	/**
 	 * Tests the toArray(..) and initFromArray(..) methods of
