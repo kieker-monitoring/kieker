@@ -54,7 +54,7 @@ public class MessageTrace extends AbstractTrace {
 
 	// Explicit delegation to super method to make FindBugs happy
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD
 		return super.hashCode();
 	}
 

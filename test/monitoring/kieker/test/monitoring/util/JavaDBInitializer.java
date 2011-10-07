@@ -40,7 +40,7 @@ public class JavaDBInitializer {
 
 	// TODO: needs to be read from file
 	// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/158
-	private static final String strCreateAddressTable = "CREATE table " + JavaDBInitializer.dbTableName + "(autoid INTEGER NOT NULL "
+	private static final String STR_CREATE_ADDRESS_TABLE = "CREATE table " + JavaDBInitializer.dbTableName + "(autoid INTEGER NOT NULL "
 			+ "   PRIMARY KEY GENERATED ALWAYS AS IDENTITY " + "   (START WITH 0, INCREMENT BY 1)," + "experimentid SMALLINT NOT NULL DEFAULT 0,"
 			+ "operation VARCHAR(160) NOT NULL," + "sessionid VARCHAR(34)," + "traceid BIGINT NOT NULL," + "tin BIGINT NOT NULL," + "tout BIGINT NOT NULL,"
 			+ "vmname VARCHAR(40) NOT NULL DEFAULT ''," + "executionOrderIndex SMALLINT NOT NULL DEFAULT -1," + "executionStackSize SMALLINT NOT NULL DEFAULT -1"
@@ -71,7 +71,7 @@ public class JavaDBInitializer {
 		Statement statement = null;
 		try {
 			statement = dbConnection.createStatement();
-			statement.execute(JavaDBInitializer.strCreateAddressTable);
+			statement.execute(JavaDBInitializer.STR_CREATE_ADDRESS_TABLE);
 			bCreatedTables = true;
 		} catch (final SQLException ex) {
 			ex.printStackTrace();

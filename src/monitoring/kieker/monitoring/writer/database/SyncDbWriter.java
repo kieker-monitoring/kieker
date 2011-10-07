@@ -135,7 +135,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		} finally {
 			try {
 				this.psInsertMonitoringData.clearParameters();
-			} catch (final Exception ex) {  // NOCS (IllegalCatchCheck)
+			} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 				SyncDbWriter.LOG.error(ex);
 				return false; // NOPMD
 			}

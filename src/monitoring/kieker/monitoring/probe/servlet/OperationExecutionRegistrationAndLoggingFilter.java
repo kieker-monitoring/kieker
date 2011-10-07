@@ -71,9 +71,8 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	/**
 	 * Constructs an {@link OperationExecutionRegistrationAndLoggingFilter}.
 	 */
-	public OperationExecutionRegistrationAndLoggingFilter() {
-	}
-	
+	public OperationExecutionRegistrationAndLoggingFilter() {}
+
 	@Override
 	public void init(final FilterConfig config) throws ServletException {}
 

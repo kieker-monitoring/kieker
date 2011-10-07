@@ -55,7 +55,8 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 		final int queueFullBehaviorTmp = this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
-			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + this.prefix + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
+			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + this.prefix + AbstractAsyncWriter.BEHAVIOR
+					+ "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehaviorTmp;

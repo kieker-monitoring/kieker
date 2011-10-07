@@ -262,13 +262,12 @@ public final class JMXReader extends AbstractMonitoringReader {
 	}
 
 	private final class ServerNotificationListener implements NotificationListener {
-		
+
 		/**
 		 * Constructs a {@link ServerNotificationListener}.
 		 */
-		public ServerNotificationListener() {
-		}
-		
+		public ServerNotificationListener() {}
+
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();

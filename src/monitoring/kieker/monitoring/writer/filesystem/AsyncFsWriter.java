@@ -87,7 +87,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		final MappingFileWriter mappingFileWriter;
 		try {
 			mappingFileWriter = new MappingFileWriter(mappingFileFn); // NOPMD
-		} catch (final Exception ex) {  // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			final String errorMsg = "Failed to create mapping file '" + mappingFileFn + "'";
 			AsyncFsWriter.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg, ex);

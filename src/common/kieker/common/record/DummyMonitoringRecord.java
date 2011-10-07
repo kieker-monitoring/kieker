@@ -30,9 +30,8 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord {
 	/**
 	 * Constructs a {@link DummyMonitoringRecord}.
 	 */
-	public DummyMonitoringRecord() {
-	}
-	
+	public DummyMonitoringRecord() {}
+
 	@Override
 	public void initFromArray(final Object[] values) {}
 

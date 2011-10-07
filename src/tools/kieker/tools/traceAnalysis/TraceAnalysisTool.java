@@ -525,7 +525,7 @@ public class TraceAnalysisTool {
 			if (!retVal) {
 				System.err.println("A task failed");
 			}
-		} catch (final Exception ex) {  // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			System.err.println("An error occured: " + ex.getMessage());
 			System.err.println("");
 			TraceAnalysisTool.LOG.error("Exception", ex);

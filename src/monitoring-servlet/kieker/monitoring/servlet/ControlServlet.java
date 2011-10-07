@@ -85,9 +85,8 @@ public class ControlServlet extends HttpServlet {
 	/**
 	 * Constructs a {@link ControlServlet}.
 	 */
-	public ControlServlet() {
-	}
-	
+	public ControlServlet() {}
+
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 * 

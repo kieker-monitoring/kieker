@@ -61,9 +61,8 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
 	/**
 	 * Constructs an {@link OperationExecutionRegistrationFilter}.
 	 */
-	public OperationExecutionRegistrationFilter() {
-	}
-	
+	public OperationExecutionRegistrationFilter() {}
+
 	@Override
 	public void init(final FilterConfig config) throws ServletException {}
 

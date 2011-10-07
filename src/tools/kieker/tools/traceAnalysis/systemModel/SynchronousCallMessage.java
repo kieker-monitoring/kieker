@@ -49,7 +49,7 @@ public class SynchronousCallMessage extends AbstractMessage {
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD
 		return super.hashCode();
 	}
 }
