@@ -53,12 +53,12 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		this.prefix = this.getClass().getName() + "."; // NOCS (MultipleStringLiteralsCheck)
 
-		final int queueFullBehavior = this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.BEHAVIOR);
-		if ((queueFullBehavior < 0) || (queueFullBehavior > 2)) {
-			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehavior + "' for " + this.prefix + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
+		final int queueFullBehaviorTmp = this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.BEHAVIOR);
+		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
+			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + this.prefix + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
-			this.queueFullBehavior = queueFullBehavior;
+			this.queueFullBehavior = queueFullBehaviorTmp;
 		}
 		this.missedRecords = new AtomicInteger(0);
 		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.QUEUESIZE));
@@ -70,9 +70,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties properties = new Properties(super.getDefaultProperties());
-		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		properties.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
-		properties.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
+		final String prefixTmp = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
+		properties.setProperty(prefixTmp + AbstractAsyncWriter.QUEUESIZE, "10000");
+		properties.setProperty(prefixTmp + AbstractAsyncWriter.BEHAVIOR, "0");
 		return properties;
 	}
 
@@ -128,7 +128,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				this.blockingQueue.add(monitoringRecord);
 				break;
 			}
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			AbstractAsyncWriter.LOG.error("Failed to retrieve new monitoring record.", ex);
 			return false;
 		}

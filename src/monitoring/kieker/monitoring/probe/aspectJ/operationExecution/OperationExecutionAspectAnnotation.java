@@ -41,7 +41,7 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")
-	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (IllegalCatchCheck)
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
@@ -64,7 +64,7 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 				OperationExecutionAspectAnnotation.LOG.fatal("Terminating!");
 				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}
-		} catch (final Exception e) { // NOPMD
+		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)
 			throw e; // exceptions are forwarded
 		} finally {
 			/*

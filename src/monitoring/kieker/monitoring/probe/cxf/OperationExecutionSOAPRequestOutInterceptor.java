@@ -60,7 +60,8 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	public void handleMessage(final SoapMessage msg) throws Fault {
 		String sessionID = null;
 		long traceId = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
-		int eoi, ess;
+		int eoi;
+		int ess;
 
 		/*
 		 * Store entry time tin for this trace.

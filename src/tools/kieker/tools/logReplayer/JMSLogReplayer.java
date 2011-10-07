@@ -86,7 +86,7 @@ public class JMSLogReplayer {
 		try {
 			tpanInstance.run();
 			success = true;
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			JMSLogReplayer.LOG.error("Exception", ex);
 			success = false;
 		}

@@ -89,7 +89,7 @@ public abstract class AbstractAsyncThread extends Thread {
 				}
 			}
 			AbstractAsyncThread.LOG.debug("Writer thread finished");
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			// e.g. Interrupted Exception or IOException
 			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);
 			this.finished = true;

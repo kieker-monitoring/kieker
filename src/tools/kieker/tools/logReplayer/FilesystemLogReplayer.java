@@ -113,7 +113,7 @@ public class FilesystemLogReplayer {
 		try {
 			tpanInstance.run();
 			success = true;
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			FilesystemLogReplayer.LOG.error("Exception", ex);
 			success = false;
 		}

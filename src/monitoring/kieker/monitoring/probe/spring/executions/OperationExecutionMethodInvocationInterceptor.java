@@ -48,7 +48,7 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 	 */
 
 	@Override
-	public Object invoke(final MethodInvocation invocation) throws Throwable {
+	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
 		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
 		// Only go on if a traceId has been registered before
 		if ((traceId == -1) || !AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.isMonitoringEnabled()) {
@@ -73,7 +73,7 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 				OperationExecutionMethodInvocationInterceptor.LOG.fatal("Terminating Kieker.Monitoring!");
 				AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
 			}
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 			throw e; // exceptions are forwarded
 		} finally {
 			/*

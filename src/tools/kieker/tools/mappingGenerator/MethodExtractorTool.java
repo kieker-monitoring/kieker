@@ -137,9 +137,8 @@ class MethodExtractor extends ClassLoader {
 			Class<IMethodFilter> filter = null;
 			try {
 				filter = (Class<IMethodFilter>) this.loadClass(this.filtername);
-			} catch (final Exception e) {
-				MethodExtractor.LOG.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...");
-				e.printStackTrace();
+			} catch (final ClassNotFoundException e) {
+				MethodExtractor.LOG.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...", e);
 			}
 			final Vector<File> directories = new Vector<File>();
 			final Vector<File> jars = new Vector<File>();

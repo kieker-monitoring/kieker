@@ -49,7 +49,7 @@ public class DefaultSystemTimer extends AbstractTimeSource {
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder {
+	private final static class LazyHolder { // NOCS (MissingCtorCheck)
 		private static final DefaultSystemTimer INSTANCE = new DefaultSystemTimer(Configuration.createDefaultConfiguration().getPropertiesStartingWith(
 				DefaultSystemTimer.class.getName()));
 	}

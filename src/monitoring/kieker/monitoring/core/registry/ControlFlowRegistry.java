@@ -240,7 +240,7 @@ public final class ControlFlowRegistry {
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder {
+	private final static class LazyHolder { // NOCS (MissingCtorCheck)
 		private static final ControlFlowRegistry INSTANCE = new ControlFlowRegistry();
 	}
 }

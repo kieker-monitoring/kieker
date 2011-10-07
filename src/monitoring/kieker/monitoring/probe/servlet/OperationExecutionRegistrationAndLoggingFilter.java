@@ -68,6 +68,12 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 
 	private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
 
+	/**
+	 * Constructs an {@link OperationExecutionRegistrationAndLoggingFilter}.
+	 */
+	public OperationExecutionRegistrationAndLoggingFilter() {
+	}
+	
 	@Override
 	public void init(final FilterConfig config) throws ServletException {}
 

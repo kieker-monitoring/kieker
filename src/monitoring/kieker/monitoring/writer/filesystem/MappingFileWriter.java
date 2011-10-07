@@ -67,7 +67,7 @@ public final class MappingFileWriter {
 			final PrintWriter pw = new PrintWriter(new FileOutputStream(this.mappingFile, true));
 			pw.println("$" + id + "=" + className);
 			pw.close();
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			MappingFileWriter.LOG.fatal("Failed to register record type", ex);
 		}
 	}

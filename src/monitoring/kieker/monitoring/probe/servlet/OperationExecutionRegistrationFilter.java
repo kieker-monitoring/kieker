@@ -58,6 +58,12 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 
+	/**
+	 * Constructs an {@link OperationExecutionRegistrationFilter}.
+	 */
+	public OperationExecutionRegistrationFilter() {
+	}
+	
 	@Override
 	public void init(final FilterConfig config) throws ServletException {}
 

@@ -83,7 +83,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		try {
 			// register correct Driver
 			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG__DRIVERCLASSNAME)).newInstance();
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			AsyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}

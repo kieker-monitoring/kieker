@@ -46,7 +46,9 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 	public final int numWorkers;
 	private final IMonitoringRecordConsumerPlugin cons;
-	private volatile long startTime = -1, offset = -1, firstLoggingTimestamp;
+	private volatile long startTime = -1;
+	private volatile long offset = -1;
+	private volatile long firstLoggingTimestamp;
 	private final ScheduledThreadPoolExecutor executor;
 	private long lTime;
 	private volatile int active;

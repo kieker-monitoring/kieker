@@ -91,37 +91,39 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	@Override
 	protected void init() {
 		this.autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__FLUSH);
-		String path;
+		String pathTmp;
 		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__TEMP)) {
-			path = System.getProperty("java.io.tmpdir");
+			pathTmp = System.getProperty("java.io.tmpdir");
 		} else {
-			path = this.configuration.getStringProperty(SyncFsWriter.CONFIG__PATH);
+			pathTmp = this.configuration.getStringProperty(SyncFsWriter.CONFIG__PATH);
 		}
-		File f = new File(path);
+		File f = new File(pathTmp);
 		if (!f.isDirectory()) {
-			SyncFsWriter.LOG.error("'" + path + "' is not a directory.");
-			throw new IllegalArgumentException("'" + path + "' is not a directory.");
+			final String errorMsg = "'" + pathTmp + "' is not a directory.";
+			SyncFsWriter.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
 		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); // NOCS
 		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = dateFormat_ISO8601UTC.format(new java.util.Date());
-		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
-		f = new File(path);
+		pathTmp = pathTmp + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
+		f = new File(pathTmp);
 		if (!f.mkdir()) {
-			final String errorMsg = "Failed to create directory '" + path + "'";
+			final String errorMsg = "Failed to create directory '" + pathTmp + "'";
 			SyncFsWriter.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		}
-		this.filenamePrefix = path + File.separatorChar + "kieker";
+		this.filenamePrefix = pathTmp + File.separatorChar + "kieker";
 		this.path = f.getAbsolutePath();
-		final String mappingFileFn = path + File.separatorChar + "kieker.map";
+		final String mappingFileFn = pathTmp + File.separatorChar + "kieker.map";
 		try {
 			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
-		} catch (final Exception ex) {
-			SyncFsWriter.LOG.error("Failed to create mapping file '" + mappingFileFn + "'");
-			throw new IllegalArgumentException("Failed to create mapping file '" + mappingFileFn + "'", ex);
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+			final String errorMsg = "Failed to create mapping file '" + mappingFileFn + "'";
+			SyncFsWriter.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg, ex);
 		}
 	}
 

@@ -103,7 +103,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
 				dirNameArray[i] = dirNameTokenizer.nextToken().trim();
 			}
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
 		}
 		return dirNameArray;

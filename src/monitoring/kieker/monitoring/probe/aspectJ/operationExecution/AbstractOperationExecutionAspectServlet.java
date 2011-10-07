@@ -35,7 +35,7 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 
 	protected static final SessionRegistry SESSIONREGISTRY = SessionRegistry.getInstance();
 
-	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOPMD // NOCS (IllegalThrowsCheck)
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
 		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD NOCS
 		Object retVal = null; // NOPMD
@@ -43,7 +43,7 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 		try {
 			// does pass the args!
 			retVal = thisJoinPoint.proceed(); // NOPMD
-		} catch (final Exception exc) { // NOPMD
+		} catch (final Exception exc) { // NOPMD // NOCS (IllegalCatchCheck)
 			throw exc;
 		} finally {
 			AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.unsetThreadLocalSessionId();

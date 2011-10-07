@@ -65,7 +65,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 		this.kiekerJMXMonitoringLog = new KiekerJMXMonitoringLog(this.monitoringLogName);
 		try {
 			ManagementFactory.getPlatformMBeanServer().registerMBean(this.kiekerJMXMonitoringLog, this.monitoringLogName);
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			throw new Exception("Failed to inititialize JMXWriter.", ex);
 		}
 	}
@@ -79,7 +79,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	public void terminate() {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			JMXWriter.LOG.error("Failed to terminate writer", ex);
 		}
 	}

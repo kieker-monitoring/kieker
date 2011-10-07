@@ -89,7 +89,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			int eoi = 0;
 			try {
 				eoi = Integer.parseInt(eoiStr);
-			} catch (final Exception exc) {
+			} catch (final NumberFormatException exc) {
 				/* invalid eoi! */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
 				this.unsetKiekerThreadLocalData();
@@ -116,7 +116,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			long traceId;
 			try {
 				traceId = Long.parseLong(traceIdStr);
-			} catch (final Exception exc) {
+			} catch (final NumberFormatException exc) {
 				/* Invalid trace id! */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
 				this.unsetKiekerThreadLocalData();

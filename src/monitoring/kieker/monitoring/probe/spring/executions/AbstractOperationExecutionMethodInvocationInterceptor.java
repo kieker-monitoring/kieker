@@ -111,14 +111,14 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	 */
 
 	@Override
-	public abstract Object invoke(MethodInvocation invocation) throws Throwable;
+	public abstract Object invoke(MethodInvocation invocation) throws Throwable; // NOCS (IllegalThrowsCheck)
 
-	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData) throws Throwable {
+	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData) throws Throwable { // NOCS (IllegalThrowsCheck)
 		execData.tin = AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
 		try {
 			// executing the intercepted method call
 			execData.retVal = invocation.proceed();
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 			throw e; // exceptions are forwarded
 		} finally {
 			execData.tout = AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();

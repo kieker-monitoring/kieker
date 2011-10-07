@@ -89,7 +89,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			if (eoiStr != null) {
 				try {
 					eoi = 1 + Integer.parseInt(eoiStr);
-				} catch (final Exception exc) {
+				} catch (final NumberFormatException exc) {
 					/* invalid eoi! */
 					OperationExecutionSOAPRequestInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
 				}
@@ -102,7 +102,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			if (essStr != null) {
 				try {
 					ess = Integer.parseInt(essStr);
-				} catch (final Exception exc) {
+				} catch (final NumberFormatException exc) {
 					/* invalid ess! */
 					OperationExecutionSOAPRequestInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
 				}
@@ -115,7 +115,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			if (traceIdStr != null) {
 				try {
 					traceId = Long.parseLong(traceIdStr);
-				} catch (final Exception exc) {
+				} catch (final NumberFormatException exc) {
 					/* Invalid trace id! */
 					OperationExecutionSOAPRequestInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
 				}

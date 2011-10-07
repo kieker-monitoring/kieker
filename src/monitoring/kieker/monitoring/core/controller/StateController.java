@@ -43,16 +43,16 @@ public final class StateController extends AbstractController implements IStateC
 		this.name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
 		this.experimentId.set(configuration.getIntProperty(Configuration.EXPERIMENT_ID));
 		this.monitoringEnabled = configuration.getBooleanProperty(Configuration.MONITORING_ENABLED);
-		String hostname = configuration.getStringProperty(Configuration.HOST_NAME);
-		if (hostname.isEmpty()) {
-			hostname = "<UNKNOWN>";
+		String hostnameTmp = configuration.getStringProperty(Configuration.HOST_NAME);
+		if (hostnameTmp.isEmpty()) {
+			hostnameTmp = "<UNKNOWN>";
 			try {
-				hostname = java.net.InetAddress.getLocalHost().getHostName();
+				hostnameTmp = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
 				StateController.LOG.warn("Failed to retrieve hostname");
 			}
 		}
-		this.hostname = hostname;
+		this.hostname = hostnameTmp;
 	}
 
 	@Override
