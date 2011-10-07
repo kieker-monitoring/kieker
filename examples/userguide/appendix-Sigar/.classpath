@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/sigar-1.6.3.jar"/>
 	<classpathentry kind="lib" path="lib/kieker-1.4-dev-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
