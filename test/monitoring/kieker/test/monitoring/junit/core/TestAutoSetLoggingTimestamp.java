@@ -45,19 +45,17 @@ public class TestAutoSetLoggingTimestamp extends TestCase {
 	private void testSetLoggingTimestamp(final boolean setLoggingTimestampEnabled) {
 		final String pipeName = NamedPipeFactory.createPipeName();
 
-		final Properties additionalConfigurationProperties;
-		{ /*
+		/*
 		 * We will pass the property Configuration.AUTO_SET_LOGGINGTSTAMP as
 		 * and additional configuration property
 		 */
-			additionalConfigurationProperties = new Properties();
-			if (setLoggingTimestampEnabled) {
-				// auto set logging timestamps enabled
-				additionalConfigurationProperties.put(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
-			} else {
-				// auto set logging timestamps disabled
-				additionalConfigurationProperties.put(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
-			}
+		final Properties additionalConfigurationProperties = new Properties();
+		if (setLoggingTimestampEnabled) {
+			// auto set logging timestamps enabled
+			additionalConfigurationProperties.put(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
+		} else {
+			// auto set logging timestamps disabled
+			additionalConfigurationProperties.put(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
 		}
 
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName, additionalConfigurationProperties);

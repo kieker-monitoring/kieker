@@ -480,11 +480,13 @@
 
         <!-- Checks for multiple occurrences of the same string literal within a single file. !-->
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#MultipleStringLiterals !-->
+        <!-- KIEKER off for now
         <module name="MultipleStringLiterals">
             <property name="allowedDuplicates"       value="1"/>
             <property name="ignoreStringsRegexp"     value='^""$'/>
             <property name="ignoreOccurrenceContext" value="ANNOTATION"/>
         </module>
+        !-->
 
         <!-- Checks that each variable declaration is in its own statement and on its own line. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->

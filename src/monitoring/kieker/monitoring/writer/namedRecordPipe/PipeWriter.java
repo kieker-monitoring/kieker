@@ -34,10 +34,10 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public final class PipeWriter extends AbstractMonitoringWriter {
+	private static final String PREFIX = PipeWriter.class.getName() + ".";
 	public static final String CONFIG_PIPENAME = PipeWriter.PREFIX + "pipeName";
 	private static final Log LOG = LogFactory.getLog(PipeWriter.class);
 
-	private static final String PREFIX = PipeWriter.class.getName() + ".";
 	private final Pipe pipe;
 
 	public PipeWriter(final Configuration configuration) {

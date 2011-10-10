@@ -97,10 +97,27 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	/**
 	 * Tests {@link Configuration#createSingletonConfiguration()}.
 	 * 
-	 * FIXME: "Missing test: Should test combinations of JVM-Params, Filenames, etc. How to do that?
-	 * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/130
+	 * Test combinations of JVM-Params, Filenames, etc.
 	 */
-	public void testCreationSingletonConfigurationVariants() {}
+	public void testCreationSingletonConfigurationVariants() {
+		{ // NOCS (Block to check the default singleton configuration)
+			final Configuration configuration = Configuration.createSingletonConfiguration();
+			Assert.assertEquals("KIEKER-SINGLETON", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		}
+		/*
+		 * how to do this check? copy file to correct location?
+		 * { // NOCS (adding properties file in default location)
+		 * final Configuration configuration = Configuration.createSingletonConfiguration();
+		 * Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		 * }
+		 */
+		{ // NOCS (adding properties file in custom location)
+			// System.setProperty(Configuration.CUSTOM_PROPERTIES_LOCATION_JVM, "kieker.monitoring.properties.test");
+			final Configuration configuration = Configuration.createSingletonConfiguration();
+			Assert.assertEquals("KIEKER-TEST", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		}
+
+	}
 
 	/**
 	 * Tests {@link Configuration#createConfigurationFromFile(String)}.

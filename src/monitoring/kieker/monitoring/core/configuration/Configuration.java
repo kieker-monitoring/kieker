@@ -51,12 +51,12 @@ public final class Configuration extends Properties implements Keys {
 	 */
 	public static final Configuration createSingletonConfiguration() {
 		Configuration.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
-		// Searching for configuration file location passed to JVM
-		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
-		final Configuration loadConfiguration;
 		final Configuration defaultConfiguration = Configuration.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(Keys.CONTROLLER_NAME, "KIEKER-SINGLETON");
+		// Searching for configuration file location passed to JVM
+		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
+		final Configuration loadConfiguration;
 		if (configurationFile != null) {
 			Configuration.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'"); // NOCS (MultipleStringLiteralsCheck)
 			loadConfiguration = Configuration.loadConfigurationFromFile(configurationFile, defaultConfiguration);
