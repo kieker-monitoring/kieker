@@ -21,6 +21,7 @@
 
   <rule ref="rulesets/controversial.xml">
     <exclude name="AvoidFinalLocalVariable"/>
+    <exclude name="AvoidLiteralsInIfCondition"/>
     <exclude name="AvoidUsingVolatile"/>
     <exclude name="CallSuperInConstructor"/>
     <exclude name="OnlyOneReturn"/>
