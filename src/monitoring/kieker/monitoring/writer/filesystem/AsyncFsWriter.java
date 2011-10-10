@@ -45,13 +45,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public final class AsyncFsWriter extends AbstractAsyncWriter {
+	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_PATH = AsyncFsWriter.PREFIX + "customStoragePath";
 	public static final String CONFIG_TEMP = AsyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
 	public static final String CONFIG_FLUSH = AsyncFsWriter.PREFIX + "flush";
 
 	private static final Log LOG = LogFactory.getLog(AsyncFsWriter.class);
-
-	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
 
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);

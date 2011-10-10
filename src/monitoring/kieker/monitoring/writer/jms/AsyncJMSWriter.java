@@ -49,12 +49,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
+	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
 	public static final String CONFIG_PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
 	public static final String CONFIG_TOPIC = AsyncJMSWriter.PREFIX + "Topic";
 	public static final String CONFIG_CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
 	public static final String CONFIG_FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
 	public static final String CONFIG_MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
-	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
 
 	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);

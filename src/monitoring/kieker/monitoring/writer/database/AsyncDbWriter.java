@@ -62,15 +62,14 @@ import org.apache.commons.logging.LogFactory;
  *         be changed during runtime 2007/07/30: Initial Prototype
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
+	private static final String PREFIX = AsyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
 	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
 	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
 	public static final String CONFIG_TABLENAME = AsyncDbWriter.PREFIX + "TableName";
 	public static final String CONFIG_NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
-	
+
 	private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
 
-	private static final String PREFIX = AsyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
-	
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/189
 

@@ -64,13 +64,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
+	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_PATH = SyncFsWriter.PREFIX + "customStoragePath";
 	public static final String CONFIG_TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
 	public static final String CONFIG_FLUSH = SyncFsWriter.PREFIX + "flush";
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
-
-	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 
 	// configuration parameters
 	private static final int MAXENTRIESINFILE = 25000;
