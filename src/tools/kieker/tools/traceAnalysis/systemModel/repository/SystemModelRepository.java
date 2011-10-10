@@ -46,10 +46,6 @@ public class SystemModelRepository {
 	private final OperationRepository operationFactory;
 	private final Execution rootExecution;
 
-	public Execution getRootExecution() {
-		return this.rootExecution;
-	}
-
 	public SystemModelRepository() {
 		final ComponentType rootComponentType = new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$");
 		this.typeRepositoryFactory = new TypeRepository(this, rootComponentType);
@@ -64,6 +60,10 @@ public class SystemModelRepository {
 		final Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
 		this.operationFactory = new OperationRepository(this, rootOperation);
 		this.rootExecution = new Execution(this.operationFactory.getRootOperation(), this.allocationFactory.getRootAllocationComponent(), -1, "-1", -1, -1, -1, -1);
+	}
+
+	public Execution getRootExecution() {
+		return this.rootExecution;
 	}
 
 	public final AllocationRepository getAllocationFactory() {
@@ -202,7 +202,7 @@ public class SystemModelRepository {
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
-		this.htmlHSpace(ps, 50);
+		this.htmlHSpace(ps, 50); // NOCS (MagicNumberCheck)
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();

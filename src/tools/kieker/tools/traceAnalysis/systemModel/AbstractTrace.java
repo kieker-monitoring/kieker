@@ -48,7 +48,7 @@ public abstract class AbstractTrace implements IAnalysisEvent {
 	 */
 	@Override
 	public int hashCode() {
-		return (int) (this.traceId ^ (this.traceId >>> 32));
+		return (int) (this.traceId ^ (this.traceId >>> 32)); // NOCS (MagicNumber)
 	}
 
 	@Override

@@ -82,7 +82,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 								.getMethod("initialize", String.class, Properties.class).invoke(null, portTmp, jmxProperties);
 						usedJMXImplementationTmp = JMXController.JMXImplementation.Sun;
 					} catch (final Exception ignoreErrors) { // NOCS (IllegalCatchCheck)
-						if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE_FALLBACK)) {
+						if (configuration.getBooleanProperty(Configuration.ACTIVATE_JMX_REMOTE_FALLBACK)) { // NOCS (NestedIf)
 							JMXController.LOG.warn("Failed to initialize remote JMX server, falling back to default implementation");
 							// Fallback to default Implementation
 							final JMXServiceURL url = new JMXServiceURL("rmi", null, Integer.parseInt(portTmp));
@@ -93,7 +93,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 							JMXController.LOG.warn("Failed to initialize remote JMX server and fallback is deactivated");
 						}
 					}
-					if ((serverTmp != null) && (serverTmp.isActive())) {
+					if ((serverTmp != null) && (serverTmp.isActive())) { // NOCS (NestedIf)
 						serverObjectNameTmp = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
 								configuration.getStringProperty(Configuration.ACTIVATE_JMX_REMOTE_NAME));
 						serverNotificationListenerTmp = new ServerNotificationListener();

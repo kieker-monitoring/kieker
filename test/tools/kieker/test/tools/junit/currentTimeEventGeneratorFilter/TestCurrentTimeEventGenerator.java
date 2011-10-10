@@ -76,7 +76,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final long resolution = 10;
 		final long firstT = 5;
 		final long secondT = firstT + 1;
-		final long thirdT = secondT + 4;
+		final long thirdT = secondT + 4; // NOCS (MagicNumberCheck)
 		final long fourthT = firstT + resolution; // triggers next event
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT });
 	}
@@ -84,9 +84,9 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	public void testGapIntermediateEvents() {
 		final long resolution = 6;
 		final long firstT = 5;
-		final long secondT = firstT + (5 * resolution) + 1;
+		final long secondT = firstT + (5 * resolution) + 1; // NOCS (MagicNumberCheck)
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), });
+			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }); // NOCS (MagicNumberCheck)
 	}
 
 	/**

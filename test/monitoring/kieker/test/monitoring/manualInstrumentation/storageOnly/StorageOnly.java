@@ -56,17 +56,17 @@ public final class StorageOnly {
 		try {
 			System.out.printf("Starting test by adding %d monitoring events\n", StorageOnly.NUMBER_OF_EVENTS);
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid",
-						3333, 123123L, 123124L, StorageOnly.CTRL.getHostName(), i, i); // NOCS (MagicNumberCheck)
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component",
+						(i % 4) + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.CTRL.getHostName(), i, i); // NOCS (MagicNumberCheck)
 				record.setHostName(StorageOnly.VM_NAME);
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 8 seconds");
-			Thread.sleep(8000);
+			Thread.sleep(8000); // NOCS (MagicNumberCheck)
 			System.out.printf("%d more monitoring points\n", StorageOnly.NUMBER_OF_EVENTS);
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid",
-						3333, 123123L, 123124L, StorageOnly.CTRL.getHostName(), i + 10000, i); // NOCS (MagicNumberCheck)
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component",
+						(i % 4) + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.CTRL.getHostName(), i + 10000, i); // NOCS (MagicNumberCheck)
 				record.setHostName(StorageOnly.VM_NAME);
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}

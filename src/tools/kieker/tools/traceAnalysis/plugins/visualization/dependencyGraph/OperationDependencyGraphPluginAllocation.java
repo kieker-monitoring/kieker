@@ -162,7 +162,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 							null // misc
 							));
-					for (final DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) {
+					for (final DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) { // NOCS (NestedFor)
 						final Signature sig = curPair.getEntity().getOperation().getSignature();
 						final StringBuilder opLabel = new StringBuilder(sig.getName());
 						opLabel.append("(");

@@ -109,7 +109,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 					.lookupAssemblyComponentInstanceByNamedIdentifier(assemblyComponentName);
 			if (assemblyComponent == null) { // assembly instance doesn't exist
 				ComponentType componentType = this.getSystemEntityFactory().getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(componentTypeName);
-				if (componentType == null) {
+				if (componentType == null) { // NOCS (NestedIf)
 					/* Component type doesn't exist */
 					componentType = this.getSystemEntityFactory().getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
 				}

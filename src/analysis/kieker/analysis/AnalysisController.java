@@ -251,7 +251,7 @@ public class AnalysisController {
 			for (final IMonitoringRecordConsumerPlugin c : cList) {
 				if (!c.newMonitoringRecord(monitoringRecord)) {
 					success = false;
-					if (abortOnConsumerError) {
+					if (abortOnConsumerError) { // NOCS (NestedIf)
 						AnalysisController.LOG.warn(consumerErrorMsg);
 						return false;
 					}

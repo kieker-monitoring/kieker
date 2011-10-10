@@ -42,9 +42,13 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugin {
-
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
+
 	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
+	private static final int QUEUE_SIZE_FACTOR = 1000;
+	private static final int MILLISECOND = 1000 * 1000;
+	private static final int REPLAY_OFFSET = 2 * 1000 * RealtimeReplayDistributor.MILLISECOND;
+
 	private final int numWorkers;
 	private final IMonitoringRecordConsumerPlugin cons;
 	private volatile long startTime = -1;
@@ -79,7 +83,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	public RealtimeReplayDistributor(final int numWorkers, final IMonitoringRecordConsumerPlugin cons, final CountDownLatch terminationLatch) {
 		this.numWorkers = numWorkers;
 		this.cons = cons;
-		this.maxQueueSize = numWorkers * 1000;
+		this.maxQueueSize = numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
 		this.executor = new ScheduledThreadPoolExecutor(numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
@@ -89,8 +93,8 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
-			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * 1000 * 1000); // 1 millisecond tolerance // NOCS (MagicNumberCheck)
-			this.offset = (2 * 1000 * 1000 * 1000) - this.firstLoggingTimestamp;
+			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * RealtimeReplayDistributor.MILLISECOND);
+			this.offset = RealtimeReplayDistributor.REPLAY_OFFSET - this.firstLoggingTimestamp;
 			this.startTime = RealtimeReplayDistributor.TIMESOURCE.getTime();
 		}
 		if (monitoringRecord.getLoggingTimestamp() < this.firstLoggingTimestamp) {
@@ -141,7 +145,8 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
 	@Override
 	public void terminate(final boolean error) {
-		final long terminationDelay = ((this.lTime + this.offset) - (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime)) + 100000000;
+		final long terminationDelay = ((this.lTime + this.offset) - (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime))
+				+ (100 * RealtimeReplayDistributor.MILLISECOND); // NOCS (MagicNumber)
 		RealtimeReplayDistributor.LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
 		this.executor.schedule(new Runnable() {
 

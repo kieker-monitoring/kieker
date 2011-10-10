@@ -207,7 +207,7 @@ class MethodExtractor extends ClassLoader {
 			if (jar.getInputStream(e).read(data) == -1) {
 				throw new IOException("Unexpected end of file.");
 			}
-			final String name = e.getName().substring(0, e.getName().length() - 6).replaceAll("/", ".");
+			final String name = e.getName().substring(0, e.getName().length() - 6).replaceAll("/", "."); // NOCS (MagicNumber)
 			Class<?> clazz = null;
 			try {
 				clazz = this.defineClass(name, data, 0, data.length);

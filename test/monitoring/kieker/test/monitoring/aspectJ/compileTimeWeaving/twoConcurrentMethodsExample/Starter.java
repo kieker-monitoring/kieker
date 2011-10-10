@@ -45,21 +45,21 @@ public class Starter extends Thread {
 		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
 			new Starter().start();
 			// wait between requests
-			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1));
+			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1)); // NOCS (MagicNumberCheck)
 		}
 	}
 
 	@Override
 	public void run() {
 		final double ranVal = this.random.nextDouble();
-		if (ranVal < 0.5) {
-			if (ranVal >= 0.25) {
-				this.waitP(300);
+		if (ranVal < 0.5) { // NOCS (MagicNumberCheck)
+			if (ranVal >= 0.25) { // NOCS (MagicNumberCheck)
+				this.waitP(300); // NOCS (MagicNumberCheck)
 			}
 		} else {
-			if (ranVal > 0.75) {
+			if (ranVal > 0.75) { // NOCS (MagicNumberCheck)
 				this.work();
-				this.waitP(300);
+				this.waitP(300); // NOCS (MagicNumberCheck)
 			} else {
 				this.work();
 			}
@@ -76,11 +76,11 @@ public class Starter extends Thread {
 
 	@OperationExecutionMonitoringProbe
 	private void work() {
-		int a = this.random.nextInt(6);
+		int a = this.random.nextInt(6); // NOCS (MagicNumberCheck)
 		for (int i = 0; i < 2000000; i++) { // NOCS (MagicNumberCheck)
-			a += i / 1000;
+			a += i / 1000; // NOCS (MagicNumberCheck)
 		}
-		if ((a % 10000) == 0) {
+		if ((a % 10000) == 0) { // NOCS (MagicNumberCheck)
 			Starter.boolvar = !Starter.boolvar;
 		}
 	}

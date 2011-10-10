@@ -61,6 +61,11 @@ public class ControlServlet extends HttpServlet {
 
 	private static boolean initialized = false;
 
+	/**
+	 * Constructs a {@link ControlServlet}.
+	 */
+	public ControlServlet() {}
+
 	protected void dumpError(final PrintWriter out, final String msg) {
 		out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
 	}
@@ -82,11 +87,6 @@ public class ControlServlet extends HttpServlet {
 		System.out.println("ControlServlet initializes.");
 		ControlServlet.initialized = true;
 	}
-
-	/**
-	 * Constructs a {@link ControlServlet}.
-	 */
-	public ControlServlet() {}
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -124,15 +124,14 @@ public class ControlServlet extends HttpServlet {
 		}
 
 		if (!connectorError) {
-			if (action.equals("setExperimentId")) { // NOCS (EqualsAvoidNullCheck)
+			if ("setExperimentId".equals(action)) {
 				final String expimentIdString = request.getParameter("experimentID");
-				if ((expimentIdString != null) && (expimentIdString.length() != 0)) {
+				if ((expimentIdString != null) && (expimentIdString.length() != 0)) { // NOCS (NestedIf)
 					try {
 						experimentID = Integer.parseInt(expimentIdString);
-						if (experimentID >= 0) {
+						if (experimentID >= 0) { // NOCS (NestedIf)
 							ControlServlet.CTRL_INST.setExperimentId(experimentID);
 						}
-
 					} catch (final NumberFormatException ne) {
 						this.dumpError(out, ne.getMessage());
 					}
