@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class PipeWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
-	public static final String CONFIG_PIPENAME = PipeWriter.PREFIX + "pipeName";
+	public static final String CONFIG_PIPENAME = PipeWriter.PREFIX + "pipeName"; // NOCS (afterPREFIX)
 	private static final Log LOG = LogFactory.getLog(PipeWriter.class);
 
 	private final Pipe pipe;

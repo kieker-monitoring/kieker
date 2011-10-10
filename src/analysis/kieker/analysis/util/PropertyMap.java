@@ -38,6 +38,8 @@ public class PropertyMap {
 
 	private final Map<String, String> map = new HashMap<String, String>();
 
+	private boolean initStringProcessed = false;
+
 	/**
 	 * Constructs an object from the given initString using the given delimiters.
 	 * 
@@ -84,8 +86,6 @@ public class PropertyMap {
 	public final String getProperty(final String propName) {
 		return this.getProperty(propName, null);
 	}
-
-	private boolean initStringProcessed = false;
 
 	/**
 	 * Parses the initialization string @a initString for this component.

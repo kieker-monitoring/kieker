@@ -53,6 +53,8 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
 
+	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output stream");
+
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
 		super(name, systemFactory);
 	}
@@ -147,8 +149,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	@Override
 	public void terminate(final boolean error) {}
-
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output stream");
 
 	public IOutputPort<Execution> getExecutionOutputPort() {
 		return this.executionOutputPort;

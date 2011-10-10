@@ -61,6 +61,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final boolean ignoreInvalidTraces;
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
+
+	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Reconstructed Message Traces");
+	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Reconstructed Execution Traces");
+	private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort = new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
+
 	/** Pending traces sorted by tin timestamps */
 	private final TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() { // NOCS (IllegalTypeCheck)
 
@@ -291,17 +296,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		return this.messageTraceOutputPort;
 	}
 
-	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Reconstructed Message Traces");
-
 	public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
 		return this.executionTraceOutputPort;
 	}
 
-	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Reconstructed Execution Traces");
-
 	public IOutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort() {
 		return this.invalidExecutionTraceOutputPort;
 	}
-
-	private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort = new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
 }

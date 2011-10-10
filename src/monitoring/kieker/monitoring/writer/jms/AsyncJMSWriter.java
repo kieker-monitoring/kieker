@@ -50,11 +50,11 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
-	public static final String CONFIG_PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
-	public static final String CONFIG_TOPIC = AsyncJMSWriter.PREFIX + "Topic";
-	public static final String CONFIG_CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
-	public static final String CONFIG_FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
-	public static final String CONFIG_MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
+	public static final String CONFIG_PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl"; // NOCS (afterPREFIX)
+	public static final String CONFIG_TOPIC = AsyncJMSWriter.PREFIX + "Topic"; // NOCS (afterPREFIX)
+	public static final String CONFIG_CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType"; // NOCS (afterPREFIX)
+	public static final String CONFIG_FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
 
 	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);

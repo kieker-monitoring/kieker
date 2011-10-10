@@ -65,9 +65,9 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
-	public static final String CONFIG_PATH = SyncFsWriter.PREFIX + "customStoragePath";
-	public static final String CONFIG_TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
-	public static final String CONFIG_FLUSH = SyncFsWriter.PREFIX + "flush";
+	public static final String CONFIG_PATH = SyncFsWriter.PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
+	public static final String CONFIG_TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
+	public static final String CONFIG_FLUSH = SyncFsWriter.PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 

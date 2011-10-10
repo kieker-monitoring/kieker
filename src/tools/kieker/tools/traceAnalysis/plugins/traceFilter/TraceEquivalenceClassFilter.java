@@ -57,6 +57,9 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/** Representative x # of equivalents */
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
 
+	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Message Traces");
+	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Execution Traces");
+
 	public TraceEquivalenceClassFilter(final String name, final SystemModelRepository systemEntityFactory, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		super(name, systemEntityFactory);
 		this.rootExecution = systemEntityFactory.getRootExecution();
@@ -114,13 +117,9 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		return this.messageTraceOutputPort;
 	}
 
-	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Message Traces");
-
 	public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
 		return this.executionTraceOutputPort;
 	}
-
-	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Execution Traces");
 
 	@Override
 	public boolean execute() {

@@ -62,12 +62,12 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
-	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
-
 	private static final String PREFIX = SyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
-	public static final String CONFIG_DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname";
-	public static final String CONFIG_CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString";
-	public static final String CONFIG_TABLENAME = SyncDbWriter.PREFIX + "TableName";
+	public static final String CONFIG_DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_TABLENAME = SyncDbWriter.PREFIX + "TableName"; // NOCS (AfterPREFIX)
+
+	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/190
@@ -89,11 +89,11 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			final String tablename = this.configuration.getStringProperty(SyncDbWriter.CONFIG_TABLENAME);
 			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/169
 			/*
-			 * IS THIS STILL NEEDED? if
+			 * TODO: IS THIS STILL NEEDED? if
 			 * (this.configuration.getBooleanProperty(LOADID)) { final Statement
 			 * stm = this.conn.createStatement(); final ResultSet res =
 			 * stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
-			 * if (res.next()) { //TODO: this may not be fully constructed!!!!
+			 * if (res.next()) { //this may not be fully constructed!!!!
 			 * But it should mostly work?!?
 			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } }
 			 */

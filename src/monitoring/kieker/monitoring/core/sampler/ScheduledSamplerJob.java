@@ -32,6 +32,7 @@ public class ScheduledSamplerJob implements Runnable {
 
 	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
+	private volatile ScheduledFuture<?> future = null;
 
 	/**
 	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.
@@ -62,8 +63,6 @@ public class ScheduledSamplerJob implements Runnable {
 			throw new RuntimeException(ex.getMessage(), ex); // NOPMD
 		}
 	}
-
-	private volatile ScheduledFuture<?> future = null;
 
 	/**
 	 * 

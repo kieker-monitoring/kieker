@@ -63,10 +63,10 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
-	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
-	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
-	public static final String CONFIG_TABLENAME = AsyncDbWriter.PREFIX + "TableName";
-	public static final String CONFIG_NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
+	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_TABLENAME = AsyncDbWriter.PREFIX + "TableName"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections"; // NOCS (AfterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
 
@@ -94,12 +94,12 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		try {
 			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/168
 			/*
-			 * IS THIS STILL NEEDED? if
+			 * TODO: IS THIS STILL NEEDED? if
 			 * (this.configuration.getBooleanProperty(LOADID)) { final
 			 * Connection conn = DriverManager.getConnection(connectionString);
 			 * final Statement stm = conn.createStatement(); final ResultSet res
 			 * = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
-			 * if (res.next()) { //TODO: this may not be fully constructed!!!!
+			 * if (res.next()) { // this may not be fully constructed!!!!
 			 * But it should mostly work?!?
 			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } conn.close(); }
 			 * /*

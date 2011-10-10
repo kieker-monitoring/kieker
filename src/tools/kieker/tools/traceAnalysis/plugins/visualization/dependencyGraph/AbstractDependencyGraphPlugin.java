@@ -45,6 +45,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	private static final String NODE_PREFIX = "depNode_";
 
 	protected final DependencyGraph<T> dependencyGraph;
+	private int numGraphsSaved = 0;
 
 	public AbstractDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final DependencyGraph<T> dependencyGraph) {
 		super(name, systemEntityFactory);
@@ -85,8 +86,6 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		this.dotVertices(this.dependencyGraph.getNodes(), ps, includeWeights, plotSelfLoops);
 		ps.println("}");
 	}
-
-	private int numGraphsSaved = 0;
 
 	public final void saveToDotFile(final String outputFnBase, final boolean includeWeights, final boolean shortLabels, final boolean plotSelfLoops)
 			throws FileNotFoundException {

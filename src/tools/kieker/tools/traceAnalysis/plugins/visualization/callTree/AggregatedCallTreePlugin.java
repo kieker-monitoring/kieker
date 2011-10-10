@@ -44,6 +44,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
+	private int numGraphsSaved = 0;
 
 	public AggregatedCallTreePlugin(final String name, final SystemModelRepository systemEntityFactory, final AbstractAggregatedCallTreeNode<T> root,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
@@ -53,8 +54,6 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
 	}
-
-	private int numGraphsSaved = 0;
 
 	public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException {
 		AbstractCallTreePlugin.saveTreeToDotFile(super.getSystemEntityFactory(), this.root, outputFnBase, includeWeights, false, // do not include EOIs

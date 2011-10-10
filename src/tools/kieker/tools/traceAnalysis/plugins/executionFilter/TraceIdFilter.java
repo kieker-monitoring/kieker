@@ -38,6 +38,8 @@ public class TraceIdFilter implements IAnalysisPlugin {
 
 	private final Set<Long> selectedTraces;
 
+	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output");
+
 	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
 	 * whose traceId (<i>e.traceId</i>) is element of the set <i>selectedTraces</i>.
@@ -63,8 +65,6 @@ public class TraceIdFilter implements IAnalysisPlugin {
 	public IOutputPort<Execution> getExecutionOutputPort() {
 		return this.executionOutputPort;
 	}
-
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output");
 
 	private void newExecution(final Execution execution) {
 		if ((this.selectedTraces != null) && !this.selectedTraces.contains(execution.getTraceId())) {

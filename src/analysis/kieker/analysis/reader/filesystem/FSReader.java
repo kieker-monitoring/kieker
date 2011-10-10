@@ -50,6 +50,12 @@ public class FSReader extends AbstractMonitoringReader {
 
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 
+	/**
+	 * Acts as a consumer to the FSDirectoryReader and delegates incoming
+	 * records to the {@link #delegator}
+	 */
+	private FSReaderCons concurrentConsumer;
+
 	public FSReader(final String[] inputDirs) {
 		this(inputDirs, null);
 	}
@@ -69,12 +75,6 @@ public class FSReader extends AbstractMonitoringReader {
 	public FSReader() {
 		this.readOnlyRecordsOfType = null;
 	}
-
-	/**
-	 * Acts as a consumer to the FSDirectoryReader and delegates incoming
-	 * records to the {@link #delegator}
-	 */
-	private FSReaderCons concurrentConsumer;
 
 	/**
 	 * Receives records from the {@link #concurrentConsumer} and delegates them

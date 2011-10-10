@@ -26,11 +26,11 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
  */
 public class WeightedDirectedCallTreeEdge<T> {
 
-	private AbstractCallTreeNode<T> source;
-	private AbstractCallTreeNode<T> destination;
+	private final AbstractCallTreeNode<T> source;
+	private final AbstractCallTreeNode<T> destination;
 
-	@SuppressWarnings("unused")
-	private WeightedDirectedCallTreeEdge() {}
+	private int outgoingWeight = 0;
+	private int incomingWeight = 0;
 
 	public WeightedDirectedCallTreeEdge(final AbstractCallTreeNode<T> source, final AbstractCallTreeNode<T> destination) {
 		this.source = source;
@@ -44,9 +44,6 @@ public class WeightedDirectedCallTreeEdge<T> {
 	public final AbstractCallTreeNode<T> getSource() {
 		return this.source;
 	}
-
-	private int outgoingWeight = 0;
-	private int incomingWeight = 0;
 
 	public final int getIncomingWeight() {
 		return this.incomingWeight;

@@ -40,6 +40,8 @@ public class TimestampFilter implements IAnalysisPlugin {
 	private final long ignoreExecutionsBeforeTimestamp;
 	private final long ignorExecutionsAfterTimestamp;
 
+	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output");
+
 	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
 	 * with the property <i>e.tin &gt;= ignoreExecutionsBeforeTimestamp</i> and
@@ -68,8 +70,6 @@ public class TimestampFilter implements IAnalysisPlugin {
 	public IOutputPort<Execution> getExecutionOutputPort() {
 		return this.executionOutputPort;
 	}
-
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output");
 
 	private void newExecution(final Execution execution) {
 		if ((execution.getTin() < this.ignoreExecutionsBeforeTimestamp) || (execution.getTout() > this.ignorExecutionsAfterTimestamp)) {

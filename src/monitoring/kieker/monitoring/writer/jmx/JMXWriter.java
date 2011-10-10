@@ -37,8 +37,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class JMXWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = JMXWriter.class.getName() + ".";
-	public static final String CONFIG_DOMAIN = JMXWriter.PREFIX + "domain";
-	public static final String CONFIG_LOGNAME = JMXWriter.PREFIX + "logname";
+	public static final String CONFIG_DOMAIN = JMXWriter.PREFIX + "domain"; // NOCS (afterPREFIX)
+	public static final String CONFIG_LOGNAME = JMXWriter.PREFIX + "logname"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(JMXWriter.class);
 

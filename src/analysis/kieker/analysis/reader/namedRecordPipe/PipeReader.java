@@ -41,14 +41,13 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
 
 	private volatile Pipe pipe;
+	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	public PipeReader() {}
 
 	public PipeReader(final String pipeName) {
 		this.initPipe(pipeName);
 	}
-
-	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	private void initPipe(final String pipeName) throws IllegalArgumentException {
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);

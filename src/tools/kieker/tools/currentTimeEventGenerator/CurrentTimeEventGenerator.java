@@ -48,7 +48,6 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class CurrentTimeEventGenerator {
-
 	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerator.class);
 
 	/**
@@ -69,14 +68,7 @@ public class CurrentTimeEventGenerator {
 
 	private final long timerResolution;
 
-	/**
-	 * Must not be used for construction.
-	 */
-	@SuppressWarnings("unused")
-	private CurrentTimeEventGenerator() {
-		this.timerResolution = -1;
-
-	}
+	private final OutputPort<TimestampEvent> currentTimeOutputPort = new OutputPort<TimestampEvent>("Provides current time events");
 
 	/**
 	 * Creates an event generator which generates time events with the given
@@ -119,8 +111,6 @@ public class CurrentTimeEventGenerator {
 			}
 		}
 	}
-
-	private final OutputPort<TimestampEvent> currentTimeOutputPort = new OutputPort<TimestampEvent>("Provides current time events");
 
 	public OutputPort<TimestampEvent> getCurrentTimeOutputPort() {
 		return this.currentTimeOutputPort;
