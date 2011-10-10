@@ -33,6 +33,16 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
 	private volatile long currentTime = -1;
 
 	/**
+	 * Constructs a new {@link CurrentTimeRecord} with the
+	 * without setting the current time value.
+	 */
+	public CurrentTimeRecord() {};
+
+	public CurrentTimeRecord(final long timestamp) {
+		this.currentTime = timestamp;
+	}
+
+	/**
 	 * Returns the current time.
 	 * 
 	 * @return the current time.
@@ -48,16 +58,6 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
 	 */
 	public void setCurrentTime(final long currentTime) {
 		this.currentTime = currentTime;
-	}
-
-	/**
-	 * Constructs a new {@link CurrentTimeRecord} with the
-	 * without setting the current time value.
-	 */
-	public CurrentTimeRecord() {};
-
-	public CurrentTimeRecord(final long timestamp) {
-		this.currentTime = timestamp;
 	}
 
 	@Override

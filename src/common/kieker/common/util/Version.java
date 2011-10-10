@@ -46,9 +46,10 @@ public final class Version {
 	 * The VERSION string is updated by the Ant build file, which looks for the
 	 * pattern: VERSION = <quote>.*<quote>
 	 */
-
 	private static final String VERSION = "1.4-dev-SNAPSHOT-20111010"; // NOPMD
 	private static final String COPYRIGHT = "Copyright (c) 2006-2011 Kieker Project";
+
+	private Version() {}
 
 	/**
 	 * Returns the version String.
@@ -67,6 +68,4 @@ public final class Version {
 	public static final String getCOPYRIGHT() {
 		return Version.COPYRIGHT;
 	}
-
-	private Version() {}
 }

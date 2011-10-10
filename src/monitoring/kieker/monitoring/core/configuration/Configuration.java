@@ -38,6 +38,10 @@ public final class Configuration extends Properties implements Keys {
 	private static final long serialVersionUID = 1L;
 	private static final Log LOG = LogFactory.getLog(Configuration.class);
 
+	private Configuration(final Configuration defaultValues) {
+		super(defaultValues);
+	}
+
 	/*
 	 * factory methods
 	 */
@@ -184,10 +188,6 @@ public final class Configuration extends Properties implements Keys {
 	/*
 	 * member methods
 	 */
-
-	private Configuration(final Configuration defaultValues) {
-		super(defaultValues);
-	}
 
 	/**
 	 * You should know what you do if you use this method!

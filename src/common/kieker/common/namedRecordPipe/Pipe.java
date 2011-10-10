@@ -36,6 +36,10 @@ public final class Pipe {
 	private volatile IPipeReader pipeReader;
 	private volatile boolean closed;
 
+	public Pipe(final String name) {
+		this.name = name;
+	}
+
 	public void setPipeReader(final IPipeReader pipeReader) {
 		this.pipeReader = pipeReader;
 		Pipe.LOG.debug("PipeReader initialized");
@@ -43,10 +47,6 @@ public final class Pipe {
 
 	public String getName() {
 		return this.name;
-	}
-
-	public Pipe(final String name) {
-		this.name = name;
 	}
 
 	/**

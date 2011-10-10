@@ -58,6 +58,28 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	private volatile long memTotal = MemSwapUsageRecord.UNDEFINED_LONG;
 
 	/**
+	 * 
+	 */
+	public MemSwapUsageRecord() {}
+
+	/**
+	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If
+	 * certain values shall remain undefined, use the constants {@link #UNDEFINED_DOUBLE} and {@link #UNDEFINED_LONG}.
+	 * 
+	 */
+	public MemSwapUsageRecord(final long timestamp, final String hostName, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
+			final long swapUsed, final long swapFree) {
+		this.timestamp = timestamp;
+		this.hostName = hostName;
+		this.memTotal = memTotal;
+		this.memUsed = memUsed;
+		this.memFree = memFree;
+		this.swapTotal = swapTotal;
+		this.swapUsed = swapUsed;
+		this.swapFree = swapFree;
+	}
+
+	/**
 	 * @return the memTotal
 	 */
 	public final long getMemTotal() {
@@ -169,28 +191,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
-	}
-
-	/**
-	 * 
-	 */
-	public MemSwapUsageRecord() {}
-
-	/**
-	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If
-	 * certain values shall remain undefined, use the constants {@link #UNDEFINED_DOUBLE} and {@link #UNDEFINED_LONG}.
-	 * 
-	 */
-	public MemSwapUsageRecord(final long timestamp, final String hostName, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
-			final long swapUsed, final long swapFree) {
-		this.timestamp = timestamp;
-		this.hostName = hostName;
-		this.memTotal = memTotal;
-		this.memUsed = memUsed;
-		this.memFree = memFree;
-		this.swapTotal = swapTotal;
-		this.swapUsed = swapUsed;
-		this.swapFree = swapFree;
 	}
 
 	/*

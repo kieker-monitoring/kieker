@@ -31,6 +31,11 @@ public class MonitoringRecordTypeClassnameMapping implements Serializable {
 	private final int typeId;
 	private final String classname;
 
+	public MonitoringRecordTypeClassnameMapping(final int id, final String classname) {
+		this.typeId = id;
+		this.classname = classname;
+	}
+
 	public int getTypeId() {
 		return this.typeId;
 	}
@@ -39,8 +44,4 @@ public class MonitoringRecordTypeClassnameMapping implements Serializable {
 		return this.classname;
 	}
 
-	public MonitoringRecordTypeClassnameMapping(final int id, final String classname) {
-		this.typeId = id;
-		this.classname = classname;
-	}
 }

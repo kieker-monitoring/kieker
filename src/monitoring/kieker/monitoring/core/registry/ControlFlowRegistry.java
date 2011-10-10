@@ -37,13 +37,6 @@ public final class ControlFlowRegistry {
 	private final ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
 	private final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
-	/**
-	 * @return the singleton instance of ControlFlowRegistry
-	 */
-	public static final ControlFlowRegistry getInstance() {
-		return LazyHolder.INSTANCE;
-	}
-
 	private ControlFlowRegistry() {
 		/*
 		 * In order to (probabilistically!) avoid that other instances in our
@@ -61,6 +54,13 @@ public final class ControlFlowRegistry {
 
 		this.lastThreadId = new AtomicLong(base);
 		ControlFlowRegistry.LOG.info("First threadId will be " + (base + 1));
+	}
+
+	/**
+	 * @return the singleton instance of ControlFlowRegistry
+	 */
+	public static final ControlFlowRegistry getInstance() {
+		return LazyHolder.INSTANCE;
 	}
 
 	/**

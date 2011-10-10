@@ -39,13 +39,6 @@ public class PropertyMap {
 	private final Map<String, String> map = new HashMap<String, String>();
 
 	/**
-	 * @return the map
-	 */
-	public final Map<String, String> getMap() {
-		return this.map;
-	}
-
-	/**
 	 * Constructs an object from the given initString using the given delimiters.
 	 * 
 	 * @param initString
@@ -54,6 +47,13 @@ public class PropertyMap {
 	 */
 	public PropertyMap(final String initString, final String pairDelimiter, final String keyValueDelimiter) {
 		this.initFromDelimitedString(initString, pairDelimiter, keyValueDelimiter);
+	}
+
+	/**
+	 * @return the map
+	 */
+	public final Map<String, String> getMap() {
+		return this.map;
 	}
 
 	/**

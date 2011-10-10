@@ -27,6 +27,8 @@ public final class SessionRegistry {
 
 	private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
 
+	private SessionRegistry() {}
+
 	/**
 	 * @return the singleton instance of SessionRegistry
 	 */
@@ -67,6 +69,4 @@ public final class SessionRegistry {
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
 		private static final SessionRegistry INSTANCE = new SessionRegistry();
 	}
-
-	private SessionRegistry() {}
 }

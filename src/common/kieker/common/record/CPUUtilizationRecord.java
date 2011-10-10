@@ -95,32 +95,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 */
 	private volatile double idle = CPUUtilizationRecord.UNDEFINED_DOUBLE;
 
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:23
-		try {
-			if (values.length != CPUUtilizationRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
-			}
-
-			this.timestamp = (Long) values[0]; // NOCS
-			this.hostName = (String) values[1]; // NOCS
-			this.cpuID = (String) values[2]; // NOCS
-			this.user = (Double) values[3]; // NOCS
-			this.system = (Double) values[4]; // NOCS
-			this.wait = (Double) values[5]; // NOCS
-			this.nice = (Double) values[6]; // NOCS
-			this.irq = (Double) values[7]; // NOCS
-			this.totalUtilization = (Double) values[8]; // NOCS
-			this.idle = (Double) values[9]; // NOCS
-
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
-	}
-
 	/**
 	 * 
 	 */
@@ -153,6 +127,32 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 		this.irq = irq;
 		this.totalUtilization = totalUtilization;
 		this.idle = idle;
+	}
+
+	/*
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:23
+		try {
+			if (values.length != CPUUtilizationRecord.VALUE_TYPES.length) {
+				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
+			}
+
+			this.timestamp = (Long) values[0]; // NOCS
+			this.hostName = (String) values[1]; // NOCS
+			this.cpuID = (String) values[2]; // NOCS
+			this.user = (Double) values[3]; // NOCS
+			this.system = (Double) values[4]; // NOCS
+			this.wait = (Double) values[5]; // NOCS
+			this.nice = (Double) values[6]; // NOCS
+			this.irq = (Double) values[7]; // NOCS
+			this.totalUtilization = (Double) values[8]; // NOCS
+			this.idle = (Double) values[9]; // NOCS
+
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+			throw new IllegalArgumentException("Failed to init", exc);
+		}
 	}
 
 	/*

@@ -59,6 +59,24 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	 */
 	private volatile double utilization = -1;
 
+	/**
+	 * 
+	 */
+	public ResourceUtilizationRecord() {}
+
+	/**
+	 * @param timestamp
+	 * @param hostName
+	 * @param resourceName
+	 * @param utilization
+	 */
+	public ResourceUtilizationRecord(final long timestamp, final String hostName, final String resourceName, final double utilization) {
+		this.timestamp = timestamp;
+		this.hostName = hostName;
+		this.resourceName = resourceName;
+		this.utilization = utilization;
+	}
+
 	/*
 	 * {@inheritdoc}
 	 */
@@ -77,24 +95,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
-	}
-
-	/**
-	 * 
-	 */
-	public ResourceUtilizationRecord() {}
-
-	/**
-	 * @param timestamp
-	 * @param hostName
-	 * @param resourceName
-	 * @param utilization
-	 */
-	public ResourceUtilizationRecord(final long timestamp, final String hostName, final String resourceName, final double utilization) {
-		this.timestamp = timestamp;
-		this.hostName = hostName;
-		this.resourceName = resourceName;
-		this.utilization = utilization;
 	}
 
 	/*

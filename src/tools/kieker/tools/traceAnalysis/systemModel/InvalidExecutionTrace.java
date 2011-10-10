@@ -28,12 +28,12 @@ import kieker.analysis.plugin.IAnalysisEvent;
 public class InvalidExecutionTrace implements IAnalysisEvent {
 	private final ExecutionTrace invalidExecutionTraceArtifacts;
 
-	public ExecutionTrace getInvalidExecutionTraceArtifacts() {
-		return this.invalidExecutionTraceArtifacts;
-	}
-
 	public InvalidExecutionTrace(final ExecutionTrace invalidExecutionTrace) {
 		this.invalidExecutionTraceArtifacts = invalidExecutionTrace;
+	}
+
+	public ExecutionTrace getInvalidExecutionTraceArtifacts() {
+		return this.invalidExecutionTraceArtifacts;
 	}
 
 	@Override
