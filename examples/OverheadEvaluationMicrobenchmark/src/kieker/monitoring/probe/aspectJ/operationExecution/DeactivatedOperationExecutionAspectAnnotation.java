@@ -63,10 +63,10 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 				|| DeactivatedOperationExecutionAspectAnnotation.deactivatedProbes.containsKey(thisJoinPoint.getStaticPart().getSignature().toString())) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
+		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
 		int eoi = 0; // this is executionOrderIndex-th execution in this trace
 		int ess = 0; // this is the height in the dynamic call tree of this execution
-		if (execData.isEntryPoint) {
+		if (execData.isEntryPoint()) {
 			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
 			// current execution's eoi is 0
 			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(1);
@@ -76,7 +76,7 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			proceedAndMeasure(thisJoinPoint, execData);
+			this.proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				DeactivatedOperationExecutionAspectAnnotation.log.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				DeactivatedOperationExecutionAspectAnnotation.log.fatal("Terminating!");
@@ -89,16 +89,16 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 			 * note that proceedAndMeasure(...) even sets the variable name in
 			 * case the execution of the joint point resulted in an exception!
 			 */
-			execData.eoi = eoi;
-			execData.ess = ess;
+			execData.setEoi(eoi);
+			execData.setEss(ess);
 			AbstractOperationExecutionAspect.CTRLINST.newMonitoringRecord(execData);
-			if (execData.isEntryPoint) {
+			if (execData.isEntryPoint()) {
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalEOI();
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalESS();
 			} else {
 				AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(ess);
 			}
 		}
-		return execData.retVal;
+		return execData.getRetVal();
 	}
 }

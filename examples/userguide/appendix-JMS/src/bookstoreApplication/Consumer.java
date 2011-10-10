@@ -28,9 +28,9 @@ import kieker.common.record.OperationExecutionRecord;
 
 public class Consumer implements IMonitoringRecordConsumerPlugin {
 
-	private long maxResponseTime;
+	private final long maxResponseTime;
 
-	public Consumer(long maxResponseTime) {
+	public Consumer(final long maxResponseTime) {
 		this.maxResponseTime = maxResponseTime;
 	}
 
@@ -40,29 +40,31 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 	}
 
 	@Override
-	public boolean newMonitoringRecord(IMonitoringRecord record) {
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		if (!(record instanceof OperationExecutionRecord)) {
 			return true;
 		}
-		OperationExecutionRecord rec = (OperationExecutionRecord) record;
+		final OperationExecutionRecord rec = (OperationExecutionRecord) record;
 		/* Derive response time from the record. */
-		long responseTime = rec.tout - rec.tin;
+		final long responseTime = rec.getTout() - rec.getTin();
 		/* Now compare with the response responseTime threshold: */
-		if (responseTime > maxResponseTime) {
+		if (responseTime > this.maxResponseTime) {
 			System.err.println("maximum response time exceeded by "
-					+ (responseTime - maxResponseTime) + " ns: " + rec.className
-					+ "." + rec.operationName);
+					+ (responseTime - this.maxResponseTime) + " ns: " + rec.getClassName()
+					+ "." + rec.getOperationName());
 		} else {
-			System.out.println("response time accepted: " + rec.className
-					+ "." + rec.operationName);
+			System.out.println("response time accepted: " + rec.getClassName()
+					+ "." + rec.getOperationName());
 		}
 		return true;
 	}
 
 	@Override
-	public boolean execute() { return true;	}
+	public boolean execute() {
+		return true;
+	}
 
 	@Override
-	public void terminate(boolean error) {	}
+	public void terminate(final boolean error) {}
 
 }

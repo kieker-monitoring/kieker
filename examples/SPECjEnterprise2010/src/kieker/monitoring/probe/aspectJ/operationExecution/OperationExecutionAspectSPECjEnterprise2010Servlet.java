@@ -57,11 +57,11 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final OperationExecutionRecord execData = initExecutionData(thisJoinPoint);
-		execData.sessionId = AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId(); // may be null
+		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
+		execData.setSessionId(AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId()); // may be null
 		int eoi; // this is executionOrderIndex-th execution in this trace
 		int ess; // this is the height in the dynamic call tree of this execution
-		if (execData.isEntryPoint) {
+		if (execData.isEntryPoint()) {
 			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
 			eoi = 0;
 			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(1);
@@ -71,7 +71,7 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 		}
 		try {
-			proceedAndMeasure(thisJoinPoint, execData);
+			this.proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				OperationExecutionAspectSPECjEnterprise2010Servlet.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				OperationExecutionAspectSPECjEnterprise2010Servlet.LOG.fatal("Terminating!");
@@ -84,16 +84,16 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 			 * note that proceedAndMeasure(...) even sets the variable name in
 			 * case the execution of the joint point resulted in an exception!
 			 */
-			execData.eoi = eoi;
-			execData.ess = ess;
+			execData.setEoi(eoi);
+			execData.setEss(ess);
 			AbstractOperationExecutionAspect.CTRLINST.newMonitoringRecord(execData);
-			if (execData.isEntryPoint) {
+			if (execData.isEntryPoint()) {
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalEOI();
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalESS();
 			} else {
 				AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(ess);
 			}
 		}
-		return execData.retVal;
+		return execData.getRetVal();
 	}
 }

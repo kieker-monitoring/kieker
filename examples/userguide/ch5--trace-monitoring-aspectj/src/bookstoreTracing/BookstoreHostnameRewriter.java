@@ -36,79 +36,80 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class BookstoreHostnameRewriter {
 
-    public static void main(final String[] args)
-            throws MonitoringReaderException, MonitoringRecordConsumerException {
+	public static void main(final String[] args)
+			throws MonitoringReaderException, MonitoringRecordConsumerException {
 
-        if (args.length == 0) {
-            return;
-        }
+		if (args.length == 0) {
+			return;
+		}
 
-        /* Create Kieker.Analysis instance */
-        final AnalysisController analysisInstance = new AnalysisController();
-        analysisInstance.registerPlugin(new HostNameRewriterPlugin());
+		/* Create Kieker.Analysis instance */
+		final AnalysisController analysisInstance = new AnalysisController();
+		analysisInstance.registerPlugin(new HostNameRewriterPlugin());
 
-        /* Set filesystem monitoring log input directory for our analysis */
-        final String inputDirs[] = {args[0]};
-        analysisInstance.setReader(new FSReader(inputDirs));
+		/* Set filesystem monitoring log input directory for our analysis */
+		final String inputDirs[] = { args[0] };
+		analysisInstance.setReader(new FSReader(inputDirs));
 
-        /* Start the analysis */
-        analysisInstance.run();
-    }
+		/* Start the analysis */
+		analysisInstance.run();
+	}
 }
 
 class HostNameRewriterPlugin implements IMonitoringRecordConsumerPlugin {
 
-    private static final IMonitoringController MONITORING_CTRL =
-            MonitoringController.getInstance();
-    private static final Collection<Class<? extends IMonitoringRecord>> RECORDTYPE_SUBSCR_LIST =
-            new ArrayList<Class<? extends IMonitoringRecord>>();
+	private static final IMonitoringController MONITORING_CTRL =
+			MonitoringController.getInstance();
+	private static final Collection<Class<? extends IMonitoringRecord>> RECORDTYPE_SUBSCR_LIST =
+			new ArrayList<Class<? extends IMonitoringRecord>>();
 
-    static {
-        HostNameRewriterPlugin.RECORDTYPE_SUBSCR_LIST.add(OperationExecutionRecord.class);
-    }
+	static {
+		HostNameRewriterPlugin.RECORDTYPE_SUBSCR_LIST.add(OperationExecutionRecord.class);
+	}
 
-    @Override
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-        return HostNameRewriterPlugin.RECORDTYPE_SUBSCR_LIST;
-    }
-    private static final String BOOKSTORE_HOSTNAME = "SRV0";
-    private static final Random rnd = new Random();
-    private static final int RND_PERCENTILE_HOST_IDX_1 = 34;
-    private static final String[] CATALOG_HOSTNAMES = {"SRV0", "SRV1"};
-    private static final String CRM_HOSTNAME = "SRV0";
+	@Override
+	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+		return HostNameRewriterPlugin.RECORDTYPE_SUBSCR_LIST;
+	}
 
-    @Override
-    public boolean newMonitoringRecord(final IMonitoringRecord record) {
-        if (!(record instanceof OperationExecutionRecord)) {
-            return true;
-        }
+	private static final String BOOKSTORE_HOSTNAME = "SRV0";
+	private static final Random rnd = new Random();
+	private static final int RND_PERCENTILE_HOST_IDX_1 = 34;
+	private static final String[] CATALOG_HOSTNAMES = { "SRV0", "SRV1" };
+	private static final String CRM_HOSTNAME = "SRV0";
 
-        final OperationExecutionRecord execution =
-                (OperationExecutionRecord) record;
+	@Override
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+		if (!(record instanceof OperationExecutionRecord)) {
+			return true;
+		}
 
-        if (execution.className.equals(Bookstore.class.getName())) {
-            execution.hostName = HostNameRewriterPlugin.BOOKSTORE_HOSTNAME;
-        } else if (execution.className.equals(CRM.class.getName())) {
-            execution.hostName = HostNameRewriterPlugin.CRM_HOSTNAME;
-        } else if (execution.className.equals(Catalog.class.getName())) {
-            if (HostNameRewriterPlugin.rnd.nextInt(99) < HostNameRewriterPlugin.RND_PERCENTILE_HOST_IDX_1) {
-                execution.hostName = HostNameRewriterPlugin.CATALOG_HOSTNAMES[0];
-            } else {
-                execution.hostName = HostNameRewriterPlugin.CATALOG_HOSTNAMES[1];
-            }
-        }
-        HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(record);
+		final OperationExecutionRecord execution =
+				(OperationExecutionRecord) record;
 
-        return true;
-    }
+		if (execution.getClassName().equals(Bookstore.class.getName())) {
+			execution.setHostName(HostNameRewriterPlugin.BOOKSTORE_HOSTNAME);
+		} else if (execution.getClassName().equals(CRM.class.getName())) {
+			execution.setHostName(HostNameRewriterPlugin.CRM_HOSTNAME);
+		} else if (execution.getClassName().equals(Catalog.class.getName())) {
+			if (HostNameRewriterPlugin.rnd.nextInt(99) < HostNameRewriterPlugin.RND_PERCENTILE_HOST_IDX_1) {
+				execution.setHostName(HostNameRewriterPlugin.CATALOG_HOSTNAMES[0]);
+			} else {
+				execution.setHostName(HostNameRewriterPlugin.CATALOG_HOSTNAMES[1]);
+			}
+		}
+		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(record);
 
-    @Override
-    public boolean execute() {
-        return true; // do nothing
-    }
+		return true;
+	}
 
-    @Override
-    public void terminate(final boolean error) {
-        return; // do nothing
-    }
+	@Override
+	public boolean execute() {
+		return true; // do nothing
+	}
+
+	@Override
+	public void terminate(final boolean error) {
+		return; // do nothing
+	}
 }
