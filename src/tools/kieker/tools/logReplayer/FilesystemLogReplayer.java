@@ -45,10 +45,11 @@ public class FilesystemLogReplayer {
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;
 
+	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
+
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
 
-	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
 	/** Each record is delegated to this receiver. */
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final String[] inputDirs;

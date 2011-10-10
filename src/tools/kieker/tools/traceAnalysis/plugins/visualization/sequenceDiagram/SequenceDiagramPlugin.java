@@ -54,14 +54,16 @@ import org.apache.commons.logging.LogFactory;
 public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(SequenceDiagramPlugin.class);
-	private final String outputFnBase;
-	private final boolean shortLabels;
+	
 	/**
 	 * Path to the sequence.pic macros used to plot UML sequence diagrams. The
 	 * file must be in the classpath -- typically inside the jar.
 	 */
 	private static final String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
 	private static final String SEQUENCE_PIC_CONTENT;
+	
+	private final String outputFnBase;
+	private final boolean shortLabels;
 
 	/*
 	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String

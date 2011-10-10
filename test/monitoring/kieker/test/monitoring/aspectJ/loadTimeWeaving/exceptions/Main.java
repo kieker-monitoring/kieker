@@ -33,7 +33,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  */
 
-public class Main {
+public final class Main {
 
 	private Main() {}
 

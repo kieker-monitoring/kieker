@@ -34,7 +34,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  */
 
-public class CRM {
+public final class CRM {
 
 	private CRM() {}
 

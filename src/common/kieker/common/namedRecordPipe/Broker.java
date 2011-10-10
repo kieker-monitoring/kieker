@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class Broker {
+public final class Broker {
 	private static final Log LOG = LogFactory.getLog(Broker.class);
 
 	/**

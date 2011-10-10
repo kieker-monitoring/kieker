@@ -35,7 +35,7 @@ import java.net.URLClassLoader;
  * @author Robert von Massow
  * 
  */
-public class TraceAnalysisWrapper {
+public final class TraceAnalysisWrapper {
 
 	private TraceAnalysisWrapper() {}
 

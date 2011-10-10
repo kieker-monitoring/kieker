@@ -28,7 +28,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotatio
  * 
  */
 
-public class CatalogWA {
+public final class CatalogWA {
 
 	private CatalogWA() {}
 

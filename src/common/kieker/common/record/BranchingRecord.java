@@ -25,6 +25,12 @@ package kieker.common.record;
  */
 public class BranchingRecord extends AbstractMonitoringRecord {
 
+	private static final long serialVersionUID = 1113L;
+	private static int numRecordFields = 3; // NOCS
+	private volatile long timestamp = -1;
+	private volatile int branchID = -1;
+	private volatile int branchingOutcome = -1;
+	
 	/**
 	 * @return the timestamp
 	 */
@@ -69,12 +75,6 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	public final void setBranchingOutcome(final int branchingOutcome) {
 		this.branchingOutcome = branchingOutcome;
 	}
-
-	private static final long serialVersionUID = 1113L;
-	private static int numRecordFields = 3; // NOCS
-	private volatile long timestamp = -1;
-	private volatile int branchID = -1;
-	private volatile int branchingOutcome = -1;
 
 	public BranchingRecord() {};
 

@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Robert von Massow
  * 
  */
-public class MethodExtractorTool {
+public final class MethodExtractorTool {
 
 	// private static final Log log = LogFactory.getLog(MethodExtractorTool.class);
 

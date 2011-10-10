@@ -29,7 +29,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstore;
  * 
  */
 
-public class Catalog {
+public final class Catalog {
 
 	private Catalog() {}
 

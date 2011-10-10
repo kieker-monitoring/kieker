@@ -40,7 +40,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
  * @author Andre van Hoorn
  * 
  */
-public class NamedPipeFactory {
+public final class NamedPipeFactory {
 	
 	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
 	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";

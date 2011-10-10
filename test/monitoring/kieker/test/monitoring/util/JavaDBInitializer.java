@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Andre van Hoorn
  */
-public class JavaDBInitializer {
+public final class JavaDBInitializer {
 	private static final Log LOG = LogFactory.getLog(JavaDBInitializer.class);
 
 	private static String dbDriverClassname = "org.apache.derby.jdbc.EmbeddedDriver";

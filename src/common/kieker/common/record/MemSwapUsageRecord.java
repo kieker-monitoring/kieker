@@ -34,6 +34,16 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	
 	private static final String DEFAULT_VALUE = "N/A";
 
+	private static final long serialVersionUID = 1762476L;
+
+	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class, };
+	
+	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
+	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
+	private volatile long swapTotal = MemSwapUsageRecord.UNDEFINED_LONG;
+	private volatile long swapUsed = MemSwapUsageRecord.UNDEFINED_LONG;
+	private volatile long swapFree = MemSwapUsageRecord.UNDEFINED_LONG;
+
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
 	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.
@@ -137,14 +147,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		this.swapFree = swapFree;
 	}
 
-	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long swapTotal = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long swapUsed = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long swapFree = MemSwapUsageRecord.UNDEFINED_LONG;
-
-	private static final long serialVersionUID = 1762476L;
-
 	/*
 	 * {@inheritdoc}
 	 */
@@ -198,8 +200,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
 	}
-
-	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class, };
 
 	/*
 	 * {@inheritdoc}

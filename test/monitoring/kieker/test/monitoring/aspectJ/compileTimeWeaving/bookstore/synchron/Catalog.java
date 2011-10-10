@@ -36,7 +36,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         open source licence 2007-04-18: Initial version
  * 
  */
-public class Catalog {
+public final class Catalog {
 
 	private Catalog() {}
 

@@ -45,7 +45,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  *         History: 2008-05-05 small refactoring for first release
  *         2008-03-30 initial version
  */
-public class StorageOnly {
+public final class StorageOnly {
 	private static final int NUMBER_OF_EVENTS = 1000;
 	private static final IMonitoringController CTRL = MonitoringController.getInstance();
 	private static final String VM_NAME = StorageOnly.CTRL.getHostName();

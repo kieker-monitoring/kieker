@@ -36,10 +36,10 @@ import java.util.Vector;
  */
 
 public class BookstoreWA extends Thread {
+	public static final Vector<BookstoreWA> BOOKSTORE_SCENARIOS = new Vector<BookstoreWA>();
+
 	private static final int NUM_REQUESTS = 100;
 	private static final int INTER_REQUEST_TIME = 5;
-
-	public static final Vector<BookstoreWA> BOOKSTORE_SCENARIOS = new Vector<BookstoreWA>();
 
 	/**
 	 * 

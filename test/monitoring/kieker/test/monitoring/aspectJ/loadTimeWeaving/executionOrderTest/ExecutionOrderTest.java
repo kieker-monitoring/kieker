@@ -32,7 +32,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  */
 
-public class ExecutionOrderTest {
+public final class ExecutionOrderTest {
 
 	private ExecutionOrderTest() {}
 

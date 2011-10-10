@@ -31,7 +31,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  */
 
-public class Catalog {
+public final class Catalog {
 
 	private Catalog() {}
 

@@ -35,6 +35,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  */
 public class Starter extends Thread {
+	
+	static volatile boolean boolvar = true;
 
 	Random random = new Random();
 
@@ -70,8 +72,6 @@ public class Starter extends Thread {
 		} catch (final Exception e) {
 		}
 	}
-
-	static volatile boolean boolvar = true;
 
 	@OperationExecutionMonitoringProbe
 	private void work() {

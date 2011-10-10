@@ -30,7 +30,7 @@ package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotatio
  * 
  */
 
-public class CRMWA {
+public final class CRMWA {
 
 	private CRMWA() {}
 

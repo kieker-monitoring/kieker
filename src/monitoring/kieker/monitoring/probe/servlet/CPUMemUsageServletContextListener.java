@@ -90,6 +90,9 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	+ ".initialSamplingDelaySeconds";
 	
 	private static final Log LOG = LogFactory.getLog(CPUMemUsageServletContextListener.class);
+	
+	/** Prefix for parameters used in the web.xml file */
+	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	private final IMonitoringController monitoringController = MonitoringController.getInstance();
 
@@ -98,9 +101,6 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new ArrayList<ScheduledSamplerJob>();
-
-	/** Prefix for parameters used in the web.xml file */
-	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	private volatile long sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;

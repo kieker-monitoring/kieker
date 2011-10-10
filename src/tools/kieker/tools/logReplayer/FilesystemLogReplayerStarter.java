@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 @SuppressWarnings("static-access")
-public class FilesystemLogReplayerStarter {
+public final class FilesystemLogReplayerStarter {
 
 	private static CommandLine cmdl = null;
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();

@@ -28,8 +28,16 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 
 	public static final double UNDEFINED_DOUBLE = -1;
 
-	private static final String DEFAULT_VALUE = "N/A";
+	private static final String DEFAULT_VALUE = "N/A";	
 
+	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
+		double.class, double.class, };
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 17677676L;
+	
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
 	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.
@@ -86,11 +94,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 * the range <code>[0,1]</code>
 	 */
 	private volatile double idle = CPUUtilizationRecord.UNDEFINED_DOUBLE;
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 17677676L;
 
 	/*
 	 * {@inheritdoc}
@@ -159,9 +162,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
 	}
-
-	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
-		double.class, double.class, };
 
 	/*
 	 * {@inheritdoc}

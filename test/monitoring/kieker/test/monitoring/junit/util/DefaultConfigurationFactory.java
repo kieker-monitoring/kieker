@@ -27,11 +27,11 @@ import kieker.monitoring.writer.DummyWriter;
  * @author Andre van Hoorn, Jan Waller
  * 
  */
-public class DefaultConfigurationFactory {
-
-	private DefaultConfigurationFactory() {}
+public final class DefaultConfigurationFactory {
 
 	public static final String WRITER_NAME = DummyWriter.class.getName();
+
+	private DefaultConfigurationFactory() {}
 
 	public static Configuration createDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = Configuration.createDefaultConfiguration();

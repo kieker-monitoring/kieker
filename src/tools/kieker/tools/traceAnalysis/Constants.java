@@ -36,7 +36,7 @@ import org.apache.commons.cli.Options;
  * 
  */
 @SuppressWarnings("static-access")
-class Constants {
+final class Constants {
 
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	public static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";

@@ -50,12 +50,12 @@ import org.apache.commons.logging.LogFactory;
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
 
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
+	
+	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
 
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
 		super(name, systemFactory);
 	}
-
-	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
 
 	static {
 		ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST.add(OperationExecutionRecord.class);

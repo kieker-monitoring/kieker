@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-public class LoggingTimestampConverterTool {
+public final class LoggingTimestampConverterTool {
 
 	private static final Log LOG = LogFactory.getLog(LoggingTimestampConverterTool.class);
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();

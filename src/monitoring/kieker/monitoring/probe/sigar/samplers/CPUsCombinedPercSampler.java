@@ -38,6 +38,8 @@ import org.hyperic.sigar.SigarProxy;
  */
 public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 
+	private static final String CPU_RESOURCE_NAME_PREFIX = "cpu-";
+
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
 	 * should use the factory method {@link kieker.monitoring.probe.sigar.SigarSamplerFactory#createSensorCPUsCombinedPerc()} to acquire an
@@ -48,8 +50,6 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	public CPUsCombinedPercSampler(final SigarProxy sigar) {
 		super(sigar);
 	}
-
-	private static final String CPU_RESOURCE_NAME_PREFIX = "cpu-";
 
 	@Override
 	public void sample(final IMonitoringController samplingController) throws SigarException {

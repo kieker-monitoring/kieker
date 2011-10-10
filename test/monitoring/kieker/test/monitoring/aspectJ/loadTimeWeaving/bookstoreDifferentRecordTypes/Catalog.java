@@ -35,7 +35,7 @@ import kieker.monitoring.probe.manual.BranchingProbe;
  *         2007-04-18: Initial version
  * 
  */
-public class Catalog {
+public final class Catalog {
 
 	private Catalog() {}
 
