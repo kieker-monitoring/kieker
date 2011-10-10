@@ -34,17 +34,17 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public final class PipeWriter extends AbstractMonitoringWriter {
+	public static final String CONFIG_PIPENAME = PipeWriter.PREFIX + "pipeName";
 	private static final Log LOG = LogFactory.getLog(PipeWriter.class);
 
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
-	public static final String CONFIG__PIPENAME = PipeWriter.PREFIX + "pipeName";
 	private final Pipe pipe;
 
 	public PipeWriter(final Configuration configuration) {
 		super(configuration);
-		final String pipeName = this.configuration.getStringProperty(PipeWriter.CONFIG__PIPENAME);
+		final String pipeName = this.configuration.getStringProperty(PipeWriter.CONFIG_PIPENAME);
 		if (pipeName.isEmpty()) {
-			final String errorMsg = "Invalid or missing value for property '" + PipeWriter.CONFIG__PIPENAME + "': '" + pipeName + "'";
+			final String errorMsg = "Invalid or missing value for property '" + PipeWriter.CONFIG_PIPENAME + "': '" + pipeName + "'";
 			PipeWriter.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		}

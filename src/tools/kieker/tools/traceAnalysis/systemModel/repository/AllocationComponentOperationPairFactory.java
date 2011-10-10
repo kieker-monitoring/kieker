@@ -33,10 +33,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Andre van Hoorn
  */
 public class AllocationComponentOperationPairFactory extends AbstractSystemSubRepository {
+	public final AllocationComponentOperationPair rootPair;
+	
 	private final Map<String, AllocationComponentOperationPair> pairsByName = new Hashtable<String, AllocationComponentOperationPair>();
 	private final Map<Integer, AllocationComponentOperationPair> pairsById = new Hashtable<Integer, AllocationComponentOperationPair>();
-
-	public final AllocationComponentOperationPair rootPair;
 
 	public AllocationComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);

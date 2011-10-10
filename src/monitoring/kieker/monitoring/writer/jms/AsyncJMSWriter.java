@@ -49,12 +49,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
+	public static final String CONFIG_PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
+	public static final String CONFIG_TOPIC = AsyncJMSWriter.PREFIX + "Topic";
+	public static final String CONFIG_CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
+	public static final String CONFIG_FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
+	public static final String CONFIG_MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
-	public static final String CONFIG__PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl";
-	public static final String CONFIG__TOPIC = AsyncJMSWriter.PREFIX + "Topic";
-	public static final String CONFIG__CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType";
-	public static final String CONFIG__FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName";
-	public static final String CONFIG__MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive";
 
 	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);
@@ -63,9 +63,9 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	@Override
 	protected void init() throws NamingException, JMSException {
 		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration
-				.getStringProperty(AsyncJMSWriter.CONFIG__CONTEXTFACTORYTYPE), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__PROVIDERURL),
-				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__FACTORYLOOKUPNAME), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG__TOPIC),
-				this.configuration.getLongProperty(AsyncJMSWriter.CONFIG__MESSAGETTL)));
+				.getStringProperty(AsyncJMSWriter.CONFIG_CONTEXTFACTORYTYPE), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_PROVIDERURL),
+				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_FACTORYLOOKUPNAME), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_TOPIC),
+				this.configuration.getLongProperty(AsyncJMSWriter.CONFIG_MESSAGETTL)));
 	}
 }
 

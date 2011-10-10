@@ -41,18 +41,19 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FSReader extends AbstractMonitoringReader {
 
-	private static final Log LOG = LogFactory.getLog(FSReader.class);
 	/*
 	 * Semicolon-separated list of directories
 	 */
 	public static final String PROP_NAME_INPUTDIRS = "inputDirs";
+	private static final Log LOG = LogFactory.getLog(FSReader.class);
 	private String[] inputDirs = null;
+
+	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 
 	public FSReader(final String[] inputDirs) {
 		this(inputDirs, null);
 	}
 
-	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 
 	/**
 	 * 

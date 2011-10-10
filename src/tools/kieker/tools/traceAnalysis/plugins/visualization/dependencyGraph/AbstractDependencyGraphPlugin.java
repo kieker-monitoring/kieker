@@ -38,13 +38,13 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 
 	// private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
 
-	protected final DependencyGraph<T> dependencyGraph;
-
 	public static final String STEREOTYPE_EXECUTION_CONTAINER = "<<execution container>>";
 	public static final String STEREOTYPE_ASSEMBLY_COMPONENT = "<<assembly component>>";
 	public static final String STEREOTYPE_ALLOCATION_COMPONENT = "<<deployment component>>";
 
 	private static final String NODE_PREFIX = "depNode_";
+	
+	protected final DependencyGraph<T> dependencyGraph;
 
 	public AbstractDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final DependencyGraph<T> dependencyGraph) {
 		super(name, systemEntityFactory);
@@ -96,7 +96,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		ps.close();
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
-			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg" });
+			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg", });
 	}
 
 	@Override

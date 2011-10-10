@@ -54,19 +54,19 @@ import org.w3c.dom.Element;
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
 public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
-
-	private static final String COMPONENT_NAME = OperationExecutionSOAPResponseOutInterceptor.class.getName();
-	private static final String OP_NAME = "handleMessage(SoapMessage msg)";
-
-	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
-
-	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getTimeSource();
 
 	protected static final String VM_NAME = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getHostName();
+	
+	private static final String COMPONENT_NAME = OperationExecutionSOAPResponseOutInterceptor.class.getName();
+	private static final String OP_NAME = "handleMessage(SoapMessage msg)";
+
+	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
+
+	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {

@@ -36,11 +36,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public final class JMXWriter extends AbstractMonitoringWriter {
+	public final static String CONFIG_DOMAIN = JMXWriter.PREFIX + "domain";
+	public final static String CONFIG_LOGNAME = JMXWriter.PREFIX + "logname";
+
 	private static final Log LOG = LogFactory.getLog(JMXWriter.class);
 
 	private final static String PREFIX = JMXWriter.class.getName() + ".";
-	public final static String CONFIG__DOMAIN = JMXWriter.PREFIX + "domain";
-	public final static String CONFIG__LOGNAME = JMXWriter.PREFIX + "logname";
 
 	private KiekerJMXMonitoringLog kiekerJMXMonitoringLog;
 	private ObjectName monitoringLogName;
@@ -52,15 +53,15 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	@Override
 	protected void init() throws Exception {
 		try {
-			String domain = this.configuration.getStringProperty(JMXWriter.CONFIG__DOMAIN);
+			String domain = this.configuration.getStringProperty(JMXWriter.CONFIG_DOMAIN);
 			if ("".equals(domain)) {
 				domain = this.monitoringController.getJMXDomain();
 			}
-			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(JMXWriter.CONFIG__LOGNAME));
+			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(JMXWriter.CONFIG_LOGNAME));
 		} catch (final MalformedObjectNameException ex) {
-			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + JMXWriter.CONFIG__DOMAIN
-					+ "=" + this.configuration.getStringProperty(JMXWriter.CONFIG__DOMAIN) + "' and '" + JMXWriter.CONFIG__LOGNAME + "="
-					+ this.configuration.getStringProperty(JMXWriter.CONFIG__LOGNAME) + "'", ex);
+			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + JMXWriter.CONFIG_DOMAIN
+					+ "=" + this.configuration.getStringProperty(JMXWriter.CONFIG_DOMAIN) + "' and '" + JMXWriter.CONFIG_LOGNAME + "="
+					+ this.configuration.getStringProperty(JMXWriter.CONFIG_LOGNAME) + "'", ex);
 		}
 		this.kiekerJMXMonitoringLog = new KiekerJMXMonitoringLog(this.monitoringLogName);
 		try {

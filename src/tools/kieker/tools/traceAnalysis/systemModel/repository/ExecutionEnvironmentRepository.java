@@ -31,10 +31,10 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
+	public final ExecutionContainer rootExecutionContainer;
+	
 	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>();
 	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>();
-
-	public final ExecutionContainer rootExecutionContainer;
 
 	public ExecutionEnvironmentRepository(final SystemModelRepository systemFactory, final ExecutionContainer rootExecutionContainer) {
 		super(systemFactory);

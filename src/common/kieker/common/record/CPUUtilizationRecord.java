@@ -26,9 +26,9 @@ package kieker.common.record;
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 
-	private static final String DEFAULT_VALUE = "N/A";
-
 	public static final double UNDEFINED_DOUBLE = -1;
+
+	private static final String DEFAULT_VALUE = "N/A";
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number

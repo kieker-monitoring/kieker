@@ -49,15 +49,15 @@ import org.w3c.dom.Element;
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
-	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
-
-	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
 
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 	protected static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
 
+	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
+	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
+	
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
 

@@ -77,7 +77,20 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class CPUsCombinedServletContextListener implements ServletContextListener {
+	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
+	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
+
+	/** Parameter name for the sampling interval to be used in the web.xml file */
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+			+ ".samplingIntervalSeconds";
+	/** Parameter name for the initial delay to be used in the web.xml file */
+	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+			+ ".initialSamplingDelaySeconds";
+	
 	private static final Log LOG = LogFactory.getLog(CPUsCombinedServletContextListener.class);
+
+	/** Prefix for parameters used in the web.xml file */
+	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUsCombinedServletContextListener.class.getSimpleName();
 
 	private final ISamplingController samplingController = MonitoringController.getInstance();
 
@@ -86,20 +99,7 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new ArrayList<ScheduledSamplerJob>();
-
-	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
-	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
-
-	/** Prefix for parameters used in the web.xml file */
-	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUsCombinedServletContextListener.class.getSimpleName();
-
-	/** Parameter name for the sampling interval to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_PREFIX
-			+ ".samplingIntervalSeconds";
-	/** Parameter name for the initial delay to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_PREFIX
-			+ ".initialSamplingDelaySeconds";
-
+	
 	private volatile long sensorIntervalSeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 

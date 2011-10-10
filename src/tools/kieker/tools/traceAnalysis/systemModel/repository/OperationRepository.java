@@ -33,10 +33,10 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
  * @author Andre van Hoorn
  */
 public class OperationRepository extends AbstractSystemSubRepository {
+	public final Operation rootOperation;
+
 	private final Map<String, Operation> operationsByName = new Hashtable<String, Operation>();
 	private final Map<Integer, Operation> operationsById = new Hashtable<Integer, Operation>();
-
-	public final Operation rootOperation;
 
 	public OperationRepository(final SystemModelRepository systemFactory, final Operation rootOperation) {
 		super(systemFactory);

@@ -52,16 +52,16 @@ import org.w3c.dom.Element;
 public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 
-	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
-	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getTimeSource();
+	protected static final String VM_NAME = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getHostName();
 
+	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
+	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	private static final String COMPONENT_NAME = OperationExecutionSOAPResponseInInterceptor.class.getName();
 	private static final String OP_NAME = "handleMessage(SoapMessage msg)";
-	protected static final String VM_NAME = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getHostName();
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {

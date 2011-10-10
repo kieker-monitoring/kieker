@@ -32,10 +32,10 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  * @author Andre van Hoorn
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
+	public final AssemblyComponent rootAssemblyComponent;
+
 	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>();
 	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>();
-
-	public final AssemblyComponent rootAssemblyComponent;
 
 	public AssemblyRepository(final SystemModelRepository systemFactory, final AssemblyComponent rootAssemblyComponent) {
 		super(systemFactory);

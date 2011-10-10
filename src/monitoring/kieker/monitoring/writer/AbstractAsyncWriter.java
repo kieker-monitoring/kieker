@@ -43,9 +43,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	private static final String BEHAVIOR = "QueueFullBehavior";
 
 	// internal variables
+	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final String prefix;
 	private final List<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
-	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final int queueFullBehavior;
 	private final AtomicInteger missedRecords;
 

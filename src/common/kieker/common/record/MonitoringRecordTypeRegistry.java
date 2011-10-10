@@ -31,12 +31,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class MonitoringRecordTypeRegistry {
+	public final static String OLD_KIEKEREXECUTIONRECORD_CLASSNAME = "kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord";
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeRegistry.class);
 	/** recordTypeId x class object */
 	private final Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
 
-	public final static String OLD_KIEKEREXECUTIONRECORD_CLASSNAME = "kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord";
 	/**
 	 * If true, the classname ${@value #OLD_KIEKEREXECUTIONRECORD_CLASSNAME} is automatically mapped to the new classname of ${@link OperationExecutionRecord}.
 	 */

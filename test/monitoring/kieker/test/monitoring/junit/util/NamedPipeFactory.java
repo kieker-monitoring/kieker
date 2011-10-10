@@ -41,11 +41,11 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
  * 
  */
 public class NamedPipeFactory {
+	
+	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
+	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
 
 	private NamedPipeFactory() {}
-
-	private final static AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
-	private final static String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
 
 	/**
 	 * This method should be used in tests to generate unique names for {@link Configuration}s with {@link PipeWriter}s and {@link java.io.PipedReader}s
@@ -81,7 +81,7 @@ public class NamedPipeFactory {
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
 		final Configuration configuration = Configuration.createDefaultConfiguration();
 		configuration.setProperty(Configuration.WRITER_CLASSNAME, PipeWriter.class.getName());
-		configuration.setProperty(PipeWriter.CONFIG__PIPENAME, pipeName);
+		configuration.setProperty(PipeWriter.CONFIG_PIPENAME, pipeName);
 
 		if (additionalProperties != null) {
 			for (final Entry<Object, Object> property : additionalProperties.entrySet()) {

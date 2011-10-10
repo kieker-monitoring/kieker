@@ -33,10 +33,10 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
+	public final AllocationComponent rootAllocationComponent;
+	
 	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>();
 	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>();
-
-	public final AllocationComponent rootAllocationComponent;
 
 	public AllocationRepository(final SystemModelRepository systemFactory, final AllocationComponent rootAllocationComponent) {
 		super(systemFactory);

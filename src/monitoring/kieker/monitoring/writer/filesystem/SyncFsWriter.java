@@ -64,12 +64,13 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
+	public static final String CONFIG_PATH = SyncFsWriter.PREFIX + "customStoragePath";
+	public static final String CONFIG_TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
+	public static final String CONFIG_FLUSH = SyncFsWriter.PREFIX + "flush";
+
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
-	public static final String CONFIG__PATH = SyncFsWriter.PREFIX + "customStoragePath";
-	public static final String CONFIG__TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
-	public static final String CONFIG__FLUSH = SyncFsWriter.PREFIX + "flush";
 
 	// configuration parameters
 	private static final int MAXENTRIESINFILE = 25000;
@@ -90,12 +91,12 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	@Override
 	protected void init() {
-		this.autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__FLUSH);
+		this.autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG_FLUSH);
 		String pathTmp;
-		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG__TEMP)) {
+		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG_TEMP)) {
 			pathTmp = System.getProperty("java.io.tmpdir");
 		} else {
-			pathTmp = this.configuration.getStringProperty(SyncFsWriter.CONFIG__PATH);
+			pathTmp = this.configuration.getStringProperty(SyncFsWriter.CONFIG_PATH);
 		}
 		File f = new File(pathTmp);
 		if (!f.isDirectory()) {

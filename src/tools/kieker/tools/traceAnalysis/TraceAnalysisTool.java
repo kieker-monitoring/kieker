@@ -94,6 +94,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Matthias Rohr
  */
 public class TraceAnalysisTool {
+	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
 	private static final SystemModelRepository SYSTEM_ENTITY_FACTORY = new SystemModelRepository();
 	private static final AllocationComponentOperationPairFactory ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY = new AllocationComponentOperationPairFactory(
@@ -112,7 +113,6 @@ public class TraceAnalysisTool {
 	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default // NOCS (MagicNumberCheck)
 	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.MIN_TIMESTAMP;
 	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.MAX_TIMESTAMP;
-	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 
 	private TraceAnalysisTool() {}
 

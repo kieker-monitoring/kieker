@@ -62,12 +62,13 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
+	public static final String CONFIG_DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname";
+	public static final String CONFIG_CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString";
+	public static final String CONFIG_TABLENAME = SyncDbWriter.PREFIX + "TableName";
+
 	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
 	private static final String PREFIX = SyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
-	public static final String CONFIG__DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname";
-	public static final String CONFIG__CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString";
-	public static final String CONFIG__TABLENAME = SyncDbWriter.PREFIX + "TableName";
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/190
 
@@ -78,14 +79,14 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		try {
 			// register correct Driver
-			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG__DRIVERCLASSNAME)).newInstance();
+			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			SyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
 		try {
-			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG__CONNECTIONSTRING));
-			final String tablename = this.configuration.getStringProperty(SyncDbWriter.CONFIG__TABLENAME);
+			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING));
+			final String tablename = this.configuration.getStringProperty(SyncDbWriter.CONFIG_TABLENAME);
 			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/169
 			/*
 			 * IS THIS STILL NEEDED? if

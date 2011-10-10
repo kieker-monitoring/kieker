@@ -49,14 +49,18 @@ import kieker.monitoring.timer.ITimeSource;
  *         2007/03/13: Initial Prototype
  */
 public class ControlServlet extends HttpServlet {
+	static String hostname = "unknown";
+
 	private static final long serialVersionUID = 689701318L;
 
-	private final static IMonitoringController CTRL_INST = MonitoringController.getInstance();
-	private final static ITimeSource TIMESOURCE = ControlServlet.CTRL_INST.getTimeSource();
+	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
+	private static final ITimeSource TIMESOURCE = ControlServlet.CTRL_INST.getTimeSource();
 
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 
+	private static boolean initialized = false;
+	
 	protected void dumpError(final PrintWriter out, final String msg) {
 		out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
 	}
@@ -68,9 +72,6 @@ public class ControlServlet extends HttpServlet {
 	private void printFooter(final PrintWriter out) {
 		out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" bgcolor=\"#00478e\" border=\"0\" cellpadding=\"2\"  frame=\"void\"> <tr><td align=\"left\"><td color=\"#ffffff\" style=\"font-size:80%\" valign=\"top\" width=\"70\">	 <br>	Powered by:<br>	<a href=\"http://sourceforge.net\"><img src=\"http://sflogo.sourceforge.net/sflogo.php?group_id=212691&amp;type=4\" width=\"125\" height=\"37\" border=\"0\" alt=\"SourceForge.net Logo\" /></a><br></td><td style=\"font-size:80%\" align=\"right\">	SourceForge, and SourceForge.net are registered trademarks of <br> SourceForge, Inc. in the United States and other countries.</td></tr></table>");
 	}
-
-	static String hostname = "unknown";
-	private static boolean initialized = false;
 
 	public static void initialize() {
 		try {

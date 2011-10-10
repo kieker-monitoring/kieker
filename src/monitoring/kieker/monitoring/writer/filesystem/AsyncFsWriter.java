@@ -45,12 +45,13 @@ import org.apache.commons.logging.LogFactory;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller, Robert von Massow
  */
 public final class AsyncFsWriter extends AbstractAsyncWriter {
+	public static final String CONFIG_PATH = AsyncFsWriter.PREFIX + "customStoragePath";
+	public static final String CONFIG_TEMP = AsyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
+	public static final String CONFIG_FLUSH = AsyncFsWriter.PREFIX + "flush";
+
 	private static final Log LOG = LogFactory.getLog(AsyncFsWriter.class);
 
 	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
-	public static final String CONFIG__PATH = AsyncFsWriter.PREFIX + "customStoragePath";
-	public static final String CONFIG__TEMP = AsyncFsWriter.PREFIX + "storeInJavaIoTmpdir";
-	public static final String CONFIG__FLUSH = AsyncFsWriter.PREFIX + "flush";
 
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);
@@ -59,10 +60,10 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 	@Override
 	protected void init() {
 		String path;
-		if (this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG__TEMP)) {
+		if (this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG_TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
 		} else {
-			path = this.configuration.getStringProperty(AsyncFsWriter.CONFIG__PATH);
+			path = this.configuration.getStringProperty(AsyncFsWriter.CONFIG_PATH);
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {
@@ -94,7 +95,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		}
 
 		this.addWorker(new FsWriterThread(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.configuration
-				.getBooleanProperty(AsyncFsWriter.CONFIG__FLUSH)));
+				.getBooleanProperty(AsyncFsWriter.CONFIG_FLUSH)));
 	}
 }
 

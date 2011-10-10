@@ -33,8 +33,8 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractController {
 	private static final Log LOG = LogFactory.getLog(AbstractController.class);
 
-	private final AtomicBoolean terminated = new AtomicBoolean(false);
 	protected volatile MonitoringController monitoringController = null;
+	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
 	protected final synchronized void setMonitoringController(final MonitoringController monitoringController) {
 		if (this.monitoringController == null) {

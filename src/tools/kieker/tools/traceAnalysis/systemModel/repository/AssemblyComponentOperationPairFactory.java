@@ -33,10 +33,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Andre van Hoorn
  */
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
+	public final AssemblyComponentOperationPair rootPair;
+
 	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>();
 	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>();
-
-	public final AssemblyComponentOperationPair rootPair;
 
 	public AssemblyComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);

@@ -62,14 +62,15 @@ import org.apache.commons.logging.LogFactory;
  *         be changed during runtime 2007/07/30: Initial Prototype
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
+	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
+	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
+	public static final String CONFIG_TABLENAME = AsyncDbWriter.PREFIX + "TableName";
+	public static final String CONFIG_NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
+	
 	private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
 
 	private static final String PREFIX = AsyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
-	public static final String CONFIG__DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname";
-	public static final String CONFIG__CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString";
-	public static final String CONFIG__TABLENAME = AsyncDbWriter.PREFIX + "TableName";
-	public static final String CONFIG__NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections";
-
+	
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/189
 
@@ -82,13 +83,13 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public void init() throws Exception {
 		try {
 			// register correct Driver
-			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG__DRIVERCLASSNAME)).newInstance();
+			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			AsyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
-		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONFIG__CONNECTIONSTRING);
-		final String tablename = this.configuration.getStringProperty(AsyncDbWriter.CONFIG__TABLENAME);
+		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING);
+		final String tablename = this.configuration.getStringProperty(AsyncDbWriter.CONFIG_TABLENAME);
 		final String preparedQuery = "INSERT INTO " + tablename
 				+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)";
 		try {
@@ -104,7 +105,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } conn.close(); }
 			 * /*
 			 */
-			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG__NRCONN); i++) {
+			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG_NRCONN); i++) {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {

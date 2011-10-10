@@ -63,11 +63,11 @@ import javax.swing.border.TitledBorder;
 public class TraceAnalysisGui extends JFrame implements ActionListener {
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/220
 	private static final long serialVersionUID = 11333L;
-	private final JFrame frame;
-	private final JButton remB, addB, run;
 	final JList l;
 	final DefaultListModel lm = new DefaultListModel();
 	private final JTextField outdir;
+	private final JFrame frame;
+	private final JButton remB, addB, run;
 	private final JTextField prefix;
 	private final JCheckBox plotSq = new JCheckBox();
 	private final JCheckBox plotComp = new JCheckBox();
