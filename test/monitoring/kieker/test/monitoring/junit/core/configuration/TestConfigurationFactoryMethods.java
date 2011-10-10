@@ -100,6 +100,9 @@ public class TestConfigurationFactoryMethods extends TestCase {
 	 * Test combinations of JVM-Params, Filenames, etc.
 	 */
 	public void testCreationSingletonConfigurationVariants() {
+		// check no config parameters are set
+		Assert.assertNull(System.getProperty(Configuration.CUSTOM_PROPERTIES_LOCATION_JVM));
+		Assert.assertNull(System.getProperty(Configuration.CONTROLLER_NAME));
 		{ // NOCS (Block to check the default singleton configuration)
 			final Configuration configuration = Configuration.createSingletonConfiguration();
 			Assert.assertEquals("KIEKER-SINGLETON", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
@@ -112,11 +115,19 @@ public class TestConfigurationFactoryMethods extends TestCase {
 		 * }
 		 */
 		{ // NOCS (adding properties file in custom location)
-			// System.setProperty(Configuration.CUSTOM_PROPERTIES_LOCATION_JVM, "kieker.monitoring.properties.test");
+			System.setProperty(Configuration.CUSTOM_PROPERTIES_LOCATION_JVM, TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
 			final Configuration configuration = Configuration.createSingletonConfiguration();
 			Assert.assertEquals("KIEKER-TEST", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
 		}
-
+		{ // NOCS (adding JVM property)
+			final String ctrlName = "KIEKER-TEST-JVMPARAM";
+			System.setProperty(Configuration.CONTROLLER_NAME, ctrlName);
+			final Configuration configuration = Configuration.createSingletonConfiguration();
+			Assert.assertEquals(ctrlName, configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		}
+		// clean up after us
+		System.clearProperty(Configuration.CUSTOM_PROPERTIES_LOCATION_JVM);
+		System.clearProperty(Configuration.CONTROLLER_NAME);
 	}
 
 	/**
