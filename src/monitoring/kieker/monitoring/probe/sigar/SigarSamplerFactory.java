@@ -39,7 +39,7 @@ public final class SigarSamplerFactory implements ISigarSamplerFactory {
 	/**
 	 * Returns the singleton instance of the {@link SigarSamplerFactory}.
 	 */
-	public final static SigarSamplerFactory getInstance() {
+	public static final SigarSamplerFactory getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
@@ -91,7 +91,7 @@ public final class SigarSamplerFactory implements ISigarSamplerFactory {
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder { // NOCS (MissingCtorCheck)
+	private static final class LazyHolder { // NOCS (MissingCtorCheck)
 		private static final SigarSamplerFactory INSTANCE = new SigarSamplerFactory();
 	}
 }

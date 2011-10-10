@@ -60,8 +60,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	 * Path to the sequence.pic macros used to plot UML sequence diagrams. The
 	 * file must be in the classpath -- typically inside the jar.
 	 */
-	private final static String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
-	private final static String SEQUENCE_PIC_CONTENT;
+	private static final String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
+	private static final String SEQUENCE_PIC_CONTENT;
 
 	/*
 	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String

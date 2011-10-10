@@ -53,13 +53,14 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	// new AtomicBoolean(false),
 	// new ArrayList<Thread>(), new DummyMonitoringRecord());
 
+	private static final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
+
 	private final Collection<Thread> readerThreads = new ArrayList<Thread>();
 	private final IMonitoringRecordReceiver master;
 	private final String[] inputDirs;
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	// private final AtomicBoolean isTerminated = new AtomicBoolean(false);
 	private final AtomicBoolean errorOccurred = new AtomicBoolean(false);
-	private final static IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
 
 	public FSReaderCons(final IMonitoringRecordReceiver master, final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
 		this.master = master;

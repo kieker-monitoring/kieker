@@ -36,12 +36,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public final class JMXWriter extends AbstractMonitoringWriter {
-	public final static String CONFIG_DOMAIN = JMXWriter.PREFIX + "domain";
-	public final static String CONFIG_LOGNAME = JMXWriter.PREFIX + "logname";
+	public static final String CONFIG_DOMAIN = JMXWriter.PREFIX + "domain";
+	public static final String CONFIG_LOGNAME = JMXWriter.PREFIX + "logname";
 
 	private static final Log LOG = LogFactory.getLog(JMXWriter.class);
 
-	private final static String PREFIX = JMXWriter.class.getName() + ".";
+	private static final String PREFIX = JMXWriter.class.getName() + ".";
 
 	private KiekerJMXMonitoringLog kiekerJMXMonitoringLog;
 	private ObjectName monitoringLogName;

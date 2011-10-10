@@ -55,7 +55,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		super(name, systemFactory);
 	}
 
-	private final static Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
+	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
 
 	static {
 		ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST.add(OperationExecutionRecord.class);

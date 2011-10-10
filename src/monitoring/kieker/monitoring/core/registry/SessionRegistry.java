@@ -30,7 +30,7 @@ public final class SessionRegistry {
 	/**
 	 * @return the singleton instance of SessionRegistry
 	 */
-	public final static SessionRegistry getInstance() {
+	public static final SessionRegistry getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
@@ -64,7 +64,7 @@ public final class SessionRegistry {
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder { // NOCS (MissingCtorCheck)
+	private static final class LazyHolder { // NOCS (MissingCtorCheck)
 		private static final SessionRegistry INSTANCE = new SessionRegistry();
 	}
 

@@ -160,7 +160,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
+	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
 		double.class, double.class, };
 
 	/*

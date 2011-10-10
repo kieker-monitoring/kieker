@@ -35,7 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class ExecutionFactory {
 
-	private final static String DEFAULT_STRING = "N/A";
+	private static final String DEFAULT_STRING = "N/A";
 	private final SystemModelRepository systemEntityFactory;
 
 	@SuppressWarnings("unused")

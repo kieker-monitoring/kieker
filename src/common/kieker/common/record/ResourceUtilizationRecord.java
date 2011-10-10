@@ -103,7 +103,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 		return new Object[] { this.timestamp, this.hostName, this.resourceName, this.utilization, };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class };
+	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class };
 
 	/*
 	 * {@inheritdoc}

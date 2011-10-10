@@ -194,7 +194,7 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
-	public synchronized final SortedSet<Execution> getTraceAsSortedExecutionSet() {
+	public final synchronized SortedSet<Execution> getTraceAsSortedExecutionSet() {
 		return this.set;
 	}
 
@@ -204,7 +204,7 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the length of this trace.
 	 */
-	public synchronized final int getLength() {
+	public final synchronized int getLength() {
 		return this.set.size();
 	}
 

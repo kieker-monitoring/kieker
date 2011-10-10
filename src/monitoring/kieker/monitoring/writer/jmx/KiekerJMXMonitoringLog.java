@@ -31,7 +31,7 @@ import kieker.common.record.IMonitoringRecord;
  */
 public final class KiekerJMXMonitoringLog extends NotificationBroadcasterSupport implements KiekerJMXMonitoringLogMBean {
 
-	private final static String MESSAGE_TYPE = null;
+	private static final String MESSAGE_TYPE = null;
 	private final ObjectName kiekerMonitoringLogName;
 
 	public KiekerJMXMonitoringLog(final ObjectName kiekerMonitoringLogName) {

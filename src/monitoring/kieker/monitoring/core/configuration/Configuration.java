@@ -49,7 +49,7 @@ public final class Configuration extends Properties implements Keys {
 	 * 
 	 * @return the configuration for the singleton controller
 	 */
-	public final static Configuration createSingletonConfiguration() {
+	public static final Configuration createSingletonConfiguration() {
 		Configuration.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		// Searching for configuration file location passed to JVM
 		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
@@ -75,7 +75,7 @@ public final class Configuration extends Properties implements Keys {
 	 * 
 	 * @return default configuration
 	 */
-	public final static Configuration createDefaultConfiguration() {
+	public static final Configuration createDefaultConfiguration() {
 		return new Configuration(Configuration.defaultConfiguration());
 	}
 
@@ -87,7 +87,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @param configurationFile
 	 * @return the created Configuration
 	 */
-	public final static Configuration createConfigurationFromFile(final String configurationFile) {
+	public static final Configuration createConfigurationFromFile(final String configurationFile) {
 		return Configuration.loadConfigurationFromFile(configurationFile, Configuration.defaultConfiguration());
 	}
 
@@ -96,7 +96,7 @@ public final class Configuration extends Properties implements Keys {
 	 * 
 	 * @return
 	 */
-	private final static Configuration defaultConfiguration() {
+	private static final Configuration defaultConfiguration() {
 		return Configuration.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
 	}
 
@@ -109,7 +109,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @param defaultValues
 	 * @return
 	 */
-	private final static Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
+	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
 		FileInputStream is = null; // NOPMD
 		try {
@@ -141,7 +141,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @param defaultValues
 	 * @return
 	 */
-	private final static Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
+	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
 			Configuration.LOG.warn("File '" + propertiesFn + "' not found in classpath"); // NOCS (MultipleStringLiteralsCheck)
@@ -170,7 +170,7 @@ public final class Configuration extends Properties implements Keys {
 	 * @param defaultValues
 	 * @return
 	 */
-	private final static Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
+	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);
 		final Properties properties = System.getProperties();
 		for (final String property : properties.stringPropertyNames()) {

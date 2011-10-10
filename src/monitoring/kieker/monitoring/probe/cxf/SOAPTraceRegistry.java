@@ -45,7 +45,7 @@ public final class SOAPTraceRegistry {
 
 	private SOAPTraceRegistry() {}
 
-	public synchronized static final SOAPTraceRegistry getInstance() {
+	public static final synchronized SOAPTraceRegistry getInstance() {
 		return SOAPTraceRegistry.INSTACNE;
 	}
 

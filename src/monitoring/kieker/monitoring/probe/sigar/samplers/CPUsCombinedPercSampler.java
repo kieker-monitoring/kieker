@@ -49,7 +49,7 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 		super(sigar);
 	}
 
-	private final static String CPU_RESOURCE_NAME_PREFIX = "cpu-";
+	private static final String CPU_RESOURCE_NAME_PREFIX = "cpu-";
 
 	@Override
 	public void sample(final IMonitoringController samplingController) throws SigarException {

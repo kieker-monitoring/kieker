@@ -59,7 +59,7 @@ public class LoggingTimestampConverterTool {
 	private LoggingTimestampConverterTool() {}
 
 	@SuppressWarnings("static-access")
-	private final static void initializeOptions() {
+	private static final void initializeOptions() {
 		LoggingTimestampConverterTool.OPTIONS.add(OptionBuilder.withLongOpt(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS)
 				.withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
 		for (final Option o : LoggingTimestampConverterTool.OPTIONS) {

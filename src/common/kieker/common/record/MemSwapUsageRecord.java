@@ -199,7 +199,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
 	}
 
-	private final static Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class, };
+	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class, };
 
 	/*
 	 * {@inheritdoc}

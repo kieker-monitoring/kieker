@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class StateController extends AbstractController implements IStateController {
-	private final static Log LOG = LogFactory.getLog(StateController.class);
+	private static final Log LOG = LogFactory.getLog(StateController.class);
 
 	private volatile boolean monitoringEnabled = false;
 	private final String name;

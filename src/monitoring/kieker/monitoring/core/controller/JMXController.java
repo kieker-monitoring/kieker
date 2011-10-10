@@ -44,7 +44,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public final class JMXController extends AbstractController implements IJMXController {
-	private final static Log LOG = LogFactory.getLog(JMXController.class);
+	private static final Log LOG = LogFactory.getLog(JMXController.class);
 
 	private final boolean jmxEnabled;
 	private final String domain;
@@ -237,7 +237,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 		return sb.toString();
 	}
 
-	private final static class ServerNotificationListener implements NotificationListener {
+	private static final class ServerNotificationListener implements NotificationListener {
 
 		/**
 		 * Constructs a {@link ServerNotificationListener}.

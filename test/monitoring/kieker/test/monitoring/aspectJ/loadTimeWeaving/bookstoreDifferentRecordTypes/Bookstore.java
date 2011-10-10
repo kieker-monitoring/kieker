@@ -37,8 +37,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  */
 public class Bookstore extends Thread {
 
-	private final static int NUM_REQUESTS = 3;
-	private final static int INTER_REQUEST_TIME = 1000;
+	private static final int NUM_REQUESTS = 3;
+	private static final int INTER_REQUEST_TIME = 1000;
 
 	public static final Vector<Bookstore> BOOKSTORE_SCENARIOS = new Vector<Bookstore>();
 

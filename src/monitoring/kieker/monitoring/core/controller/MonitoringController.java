@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Waller
  */
 public final class MonitoringController extends AbstractController implements IMonitoringController {
-	private final static Log LOG = LogFactory.getLog(MonitoringController.class);
+	private static final Log LOG = LogFactory.getLog(MonitoringController.class);
 
 	private final StateController stateController;
 	private final JMXController jmxController;
@@ -45,7 +45,7 @@ public final class MonitoringController extends AbstractController implements IM
 	private final TimeSourceController timeSourceController;
 
 	// FACTORY
-	public final static IMonitoringController createInstance(final Configuration configuration) {
+	public static final IMonitoringController createInstance(final Configuration configuration) {
 		final MonitoringController monitoringController = new MonitoringController(configuration);
 		// Initialize and handle early Termination (once for each Controller!)
 		monitoringController.stateController.setMonitoringController(monitoringController);
@@ -110,7 +110,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 * 
 	 * @return the version name
 	 */
-	public final static String getVersion() {
+	public static final String getVersion() {
 		return Version.getVERSION();
 	}
 
@@ -227,17 +227,17 @@ public final class MonitoringController extends AbstractController implements IM
 
 	// GET SINGLETON INSTANCE
 	// #############################
-	public final static IMonitoringController getInstance() {
+	public static final IMonitoringController getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder {
+	private static final class LazyHolder {
 		static {
 			INSTANCE = MonitoringController.createInstance(Configuration.createSingletonConfiguration());
 		}
-		private final static IMonitoringController INSTANCE;
+		private static final IMonitoringController INSTANCE;
 	}
 }

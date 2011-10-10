@@ -83,7 +83,7 @@ public abstract class AbstractController {
 	public abstract String toString();
 
 	@SuppressWarnings("unchecked")
-	protected final static <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
+	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
 		C createdClass = null; // NOPMD
 		try {
 			final Class<?> clazz = Class.forName(classname);

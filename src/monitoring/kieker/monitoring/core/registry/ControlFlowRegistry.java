@@ -40,7 +40,7 @@ public final class ControlFlowRegistry {
 	/**
 	 * @return the singleton instance of ControlFlowRegistry
 	 */
-	public final static ControlFlowRegistry getInstance() {
+	public static final ControlFlowRegistry getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
@@ -240,7 +240,7 @@ public final class ControlFlowRegistry {
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder { // NOCS (MissingCtorCheck)
+	private static final class LazyHolder { // NOCS (MissingCtorCheck)
 		private static final ControlFlowRegistry INSTANCE = new ControlFlowRegistry();
 	}
 }

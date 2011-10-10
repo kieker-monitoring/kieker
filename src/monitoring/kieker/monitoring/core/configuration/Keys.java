@@ -28,41 +28,41 @@ package kieker.monitoring.core.configuration;
  */
 interface Keys { // NOPMD NOCS
 	/** prefix used for all kieker.monitoring components */
-	public final static String PREFIX = "kieker.monitoring.";
+	public static final String PREFIX = "kieker.monitoring.";
 
 	/** Location of the custom properties file (in classpath) */
-	public final static String CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + Keys.PREFIX + "properties";
+	public static final String CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + Keys.PREFIX + "properties";
 	/** Location of the default properties file (in classpath) */
-	public final static String DEFAULT_PROPERTIES_LOCATION_CLASSPATH = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH + ".default";
+	public static final String DEFAULT_PROPERTIES_LOCATION_CLASSPATH = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH + ".default";
 
 	/** JVM-parameter to specify a custom properties file */
-	public final static String CUSTOM_PROPERTIES_LOCATION_JVM = Keys.PREFIX + "configuration";
+	public static final String CUSTOM_PROPERTIES_LOCATION_JVM = Keys.PREFIX + "configuration";
 
 	// these MUST be declared in the file DEFAULT_PROPERTIES_LOCATION_CLASSPATH
 
 	// Monitoring Controller
-	public final static String MONITORING_ENABLED = Keys.PREFIX + "enabled";
-	public final static String CONTROLLER_NAME = Keys.PREFIX + "name";
-	public final static String HOST_NAME = Keys.PREFIX + "hostname";
-	public final static String EXPERIMENT_ID = Keys.PREFIX + "initialExperimentId";
+	public static final String MONITORING_ENABLED = Keys.PREFIX + "enabled";
+	public static final String CONTROLLER_NAME = Keys.PREFIX + "name";
+	public static final String HOST_NAME = Keys.PREFIX + "hostname";
+	public static final String EXPERIMENT_ID = Keys.PREFIX + "initialExperimentId";
 
 	// JMX Controller
-	public final static String ACTIVATE_JMX = Keys.PREFIX + "jmx";
-	public final static String ACTIVATE_JMX_DOMAIN = Keys.PREFIX + "jmx.domain";
-	public final static String ACTIVATE_JMX_CONTROLLER = Keys.PREFIX + "jmx.MonitoringController";
-	public final static String ACTIVATE_JMX_CONTROLLER_NAME = Keys.PREFIX + "jmx.MonitoringController.name";
-	public final static String ACTIVATE_JMX_REMOTE = Keys.PREFIX + "jmx.remote";
-	public final static String ACTIVATE_JMX_REMOTE_PORT = Keys.PREFIX + "jmx.remote.port";
-	public final static String ACTIVATE_JMX_REMOTE_NAME = Keys.PREFIX + "jmx.remote.name";
-	public final static String ACTIVATE_JMX_REMOTE_FALLBACK = Keys.PREFIX + "jmx.remote.fallback";
+	public static final String ACTIVATE_JMX = Keys.PREFIX + "jmx";
+	public static final String ACTIVATE_JMX_DOMAIN = Keys.PREFIX + "jmx.domain";
+	public static final String ACTIVATE_JMX_CONTROLLER = Keys.PREFIX + "jmx.MonitoringController";
+	public static final String ACTIVATE_JMX_CONTROLLER_NAME = Keys.PREFIX + "jmx.MonitoringController.name";
+	public static final String ACTIVATE_JMX_REMOTE = Keys.PREFIX + "jmx.remote";
+	public static final String ACTIVATE_JMX_REMOTE_PORT = Keys.PREFIX + "jmx.remote.port";
+	public static final String ACTIVATE_JMX_REMOTE_NAME = Keys.PREFIX + "jmx.remote.name";
+	public static final String ACTIVATE_JMX_REMOTE_FALLBACK = Keys.PREFIX + "jmx.remote.fallback";
 
 	// Writer Controller
-	public final static String AUTO_SET_LOGGINGTSTAMP = Keys.PREFIX + "setLoggingTimestamp";
-	public final static String WRITER_CLASSNAME = Keys.PREFIX + "writer";
+	public static final String AUTO_SET_LOGGINGTSTAMP = Keys.PREFIX + "setLoggingTimestamp";
+	public static final String WRITER_CLASSNAME = Keys.PREFIX + "writer";
 
 	// TimeSource Controller
-	public final static String TIMER_CLASSNAME = Keys.PREFIX + "timer";
+	public static final String TIMER_CLASSNAME = Keys.PREFIX + "timer";
 
 	// Sampling Controller
-	public final static String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = Keys.PREFIX + "periodicSensorsExecutorPoolSize";
+	public static final String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = Keys.PREFIX + "periodicSensorsExecutorPoolSize";
 }

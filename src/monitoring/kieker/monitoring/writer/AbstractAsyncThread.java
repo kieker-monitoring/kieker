@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
 
-	private final static IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
+	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 	private volatile boolean finished = false;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
 	private final IMonitoringController monitoringController;

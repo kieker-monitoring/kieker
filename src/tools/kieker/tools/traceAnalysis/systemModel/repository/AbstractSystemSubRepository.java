@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Andre van Hoorn
  */
 public abstract class AbstractSystemSubRepository {
-	public final static int ROOT_ELEMENT_ID = 0;
+	public static final int ROOT_ELEMENT_ID = 0;
 
 	private final AtomicInteger nextId = new AtomicInteger(AbstractSystemSubRepository.ROOT_ELEMENT_ID + 1);
 

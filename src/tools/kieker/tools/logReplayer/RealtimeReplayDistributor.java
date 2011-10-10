@@ -44,6 +44,7 @@ import org.apache.commons.logging.LogFactory;
 public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugin {
 
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
+	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
 	public final int numWorkers;
 	private final IMonitoringRecordConsumerPlugin cons;
 	private volatile long startTime = -1;
@@ -54,7 +55,6 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	private volatile int active;
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
-	private final static ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
 
 	/** Private constructor must not be used */
 	@SuppressWarnings("unused")

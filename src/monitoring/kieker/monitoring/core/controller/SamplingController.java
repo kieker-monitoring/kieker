@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class SamplingController extends AbstractController implements ISamplingController {
-	private final static Log LOG = LogFactory.getLog(SamplingController.class);
+	private static final Log LOG = LogFactory.getLog(SamplingController.class);
 
 	/** Executes the {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s. */
 	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;

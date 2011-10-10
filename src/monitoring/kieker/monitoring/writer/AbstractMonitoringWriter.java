@@ -110,5 +110,5 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 * 
 	 * @throws Exception
 	 */
-	abstract protected void init() throws Exception;
+	protected abstract void init() throws Exception;
 }

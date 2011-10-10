@@ -54,7 +54,7 @@ import org.apache.commons.logging.LogFactory;
 public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponentOperationPair> {
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
-	private final static String COMPONENT_NODE_ID_PREFIX = "component_";
+	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private final AssemblyComponentOperationPairFactory pairFactory;
 	private final File dotOutputFile;
 	private final boolean includeWeights;

@@ -69,10 +69,10 @@ public class Broker {
 	/**
 	 * SINGLETON
 	 */
-	private final static class LazyHolder { // NOCS (MissingCtorCheck)
+	private static final class LazyHolder { // NOCS (MissingCtorCheck)
 		static {
 			INSTANCE = new Broker();
 		}
-		private final static Broker INSTANCE;
+		private static final Broker INSTANCE;
 	}
 }

@@ -48,13 +48,13 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	 * Used by probes to store the return value of executed operations.
 	 * The field is marked transient as it must not be serialized.
 	 */
-	public volatile transient Object retVal = null;
+	public transient volatile Object retVal = null;
 
 	/**
 	 * Used by probes to intermediate information.
 	 * The field is marked transient as it must not be serialized.
 	 */
-	public volatile transient boolean isEntryPoint = false;
+	public transient volatile boolean isEntryPoint = false;
 
 	/**
 	 * Returns an instance of OperationExecutionRecord.

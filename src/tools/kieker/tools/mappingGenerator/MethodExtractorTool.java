@@ -69,7 +69,7 @@ public class MethodExtractorTool {
 	private MethodExtractorTool() {}
 
 	@SuppressWarnings("static-access")
-	private final static void initializeOptions() {
+	private static final void initializeOptions() {
 		MethodExtractorTool.CMDL_OPTS.addOption(OptionBuilder.withArgName("classpath").hasArg().withLongOpt("searchpath").isRequired(true)
 				.withDescription("Classpath to analyze. Multiple classpath elements can be separated by '" + File.pathSeparator + "'.").withValueSeparator('=')
 				.create("c"));

@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class MonitoringRecordTypeRegistry {
-	public final static String OLD_KIEKEREXECUTIONRECORD_CLASSNAME = "kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord";
+	public static final String OLD_KIEKEREXECUTIONRECORD_CLASSNAME = "kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord";
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeRegistry.class);
 	/** recordTypeId x class object */
