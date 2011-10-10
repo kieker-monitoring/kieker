@@ -149,10 +149,12 @@ public class SystemModelRepository {
 			final StringBuilder opListBuilder = new StringBuilder();
 			if (type.getOperations().size() > 0) {
 				for (final Operation op : type.getOperations()) {
-					opListBuilder.append("<li>").append(this.htmlEntityRef(op.getId(), op.getSignature().toString(), EntityType.OPERATION)).append("</li>");
+					opListBuilder.append("<li>").append(this.htmlEntityRef(op.getId(), op.getSignature().toString(), SystemModelRepository.EntityType.OPERATION))
+							.append("</li>");
 				}
 			}
-			final String[] cells = new String[] { this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
+			final String[] cells = new String[] {
+				this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), SystemModelRepository.EntityType.COMPONENT_TYPE),
 				type.getPackageName(), type.getTypeName(), opListBuilder.toString(), };
 			this.printHtmlTableRow(ps, cells);
 		}
@@ -165,8 +167,8 @@ public class SystemModelRepository {
 			for (final String paramType : op.getSignature().getParamTypeList()) {
 				paramListStrBuild.append("<li>").append(paramType).append("</li>");
 			}
-			final String[] cells = new String[] { this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
-				this.htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), EntityType.COMPONENT_TYPE),
+			final String[] cells = new String[] { this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), SystemModelRepository.EntityType.OPERATION),
+				this.htmlEntityRef(op.getComponentType().getId(), op.getComponentType().getFullQualifiedName(), SystemModelRepository.EntityType.COMPONENT_TYPE),
 				op.getSignature().getName(), paramListStrBuild.toString(), op.getSignature().getReturnType(), };
 			this.printHtmlTableRow(ps, cells);
 		}
@@ -175,8 +177,9 @@ public class SystemModelRepository {
 		this.printOpenHtmlTable(ps, new String[] { "ID", "Name", "Component type" });
 		final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
 		for (final AssemblyComponent ac : assemblyComponents) {
-			final String[] cells = new String[] { this.htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT), ac.getName(),
-				this.htmlEntityRef(ac.getType().getId(), ac.getType().getFullQualifiedName(), EntityType.COMPONENT_TYPE), };
+			final String[] cells = new String[] {
+				this.htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), SystemModelRepository.EntityType.ASSEMBLY_COMPONENT), ac.getName(),
+				this.htmlEntityRef(ac.getType().getId(), ac.getType().getFullQualifiedName(), SystemModelRepository.EntityType.COMPONENT_TYPE), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -184,7 +187,8 @@ public class SystemModelRepository {
 		this.printOpenHtmlTable(ps, new String[] { "ID", "Name" });
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
-			final String[] cells = new String[] { this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()), EntityType.EXECUTION_CONTAINER),
+			final String[] cells = new String[] {
+				this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()), SystemModelRepository.EntityType.EXECUTION_CONTAINER),
 				container.getName(), };
 			this.printHtmlTableRow(ps, cells);
 		}
@@ -194,11 +198,12 @@ public class SystemModelRepository {
 		final Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
 		for (final AllocationComponent allocationComponent : allocationComponentInstances) {
 			final String[] cells = new String[] {
-				this.htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()), EntityType.ALLOCATION_COMPONENT),
+				this.htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()),
+						SystemModelRepository.EntityType.ALLOCATION_COMPONENT),
 				this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(), allocationComponent.getAssemblyComponent().toString(),
-						EntityType.ALLOCATION_COMPONENT),
+						SystemModelRepository.EntityType.ALLOCATION_COMPONENT),
 				this.htmlEntityRef(allocationComponent.getExecutionContainer().getId(), allocationComponent.getExecutionContainer().getName(),
-						EntityType.EXECUTION_CONTAINER), };
+						SystemModelRepository.EntityType.EXECUTION_CONTAINER), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);

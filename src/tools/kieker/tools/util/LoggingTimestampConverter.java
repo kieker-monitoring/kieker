@@ -23,6 +23,7 @@ package kieker.tools.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -51,7 +52,7 @@ public final class LoggingTimestampConverter {
 	 * @return a human-readable datetime string (UTC timezone) which represents the passed timestamp
 	 */
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
-		final GregorianCalendar c = new GregorianCalendar();
+		final Calendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000)); // NOCS (MagicNumberCheck)
 		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2); // NOCS
 		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -70,7 +71,7 @@ public final class LoggingTimestampConverter {
 	 * @return a human-readable datetime string (local timezone) which represents the passed timestamp
 	 */
 	public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
-		final GregorianCalendar c = new GregorianCalendar();
+		final Calendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000)); // NOCS (MagicNumberCheck)
 		final DateFormat dateFormat_ISO8601LOCAL = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2); // NOCS
 		return dateFormat_ISO8601LOCAL.format(c.getTime()) + " (local time)";

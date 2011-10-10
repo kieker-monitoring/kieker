@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,8 +41,8 @@ import org.apache.commons.logging.LogFactory;
 public class NameIdMap {
 
 	private static final Log LOG = LogFactory.getLog(NameIdMap.class);
-	private final Hashtable<String, Integer> name2IdMap = new Hashtable<String, Integer>();
-	private final TreeMap<Integer, String> id2NameMap = new TreeMap<Integer, String>();
+	private final Map<String, Integer> name2IdMap = new Hashtable<String, Integer>();
+	private final Map<Integer, String> id2NameMap = new TreeMap<Integer, String>();
 	private final AtomicInteger nextId = new AtomicInteger(0);
 
 	/**

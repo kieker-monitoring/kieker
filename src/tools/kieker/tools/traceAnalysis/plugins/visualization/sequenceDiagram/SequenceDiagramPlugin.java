@@ -95,9 +95,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 			}
 			if (error) {
 				/* sequence.pic must be provided on execution of pic2plot */
-				SEQUENCE_PIC_CONTENT = "copy \"sequence.pic\";";
+				SEQUENCE_PIC_CONTENT = "copy \"sequence.pic\";"; // NOCS (this)
 			} else {
-				SEQUENCE_PIC_CONTENT = sb.toString();
+				SEQUENCE_PIC_CONTENT = sb.toString(); // NOCS (this)
 			}
 		}
 	}
@@ -219,7 +219,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		ps.print("actor(O" + rootAllocationComponent.getId() + ",\"\");" + "\n");
 		plottedComponentIds.add(rootAllocationComponent.getId());
 
-		if (sdMode == SDModes.ALLOCATION) {
+		if (sdMode == SequenceDiagramPlugin.SDModes.ALLOCATION) {
 			for (final AbstractMessage me : messages) {
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
@@ -234,7 +234,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 					plottedComponentIds.add(receiverComponent.getId());
 				}
 			}
-		} else if (sdMode == SDModes.ASSEMBLY) {
+		} else if (sdMode == SequenceDiagramPlugin.SDModes.ASSEMBLY) {
 			for (final AbstractMessage me : messages) {
 				final AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 				final AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
@@ -260,12 +260,12 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 			String senderDotId = "-1";
 			String receiverDotId = "-1";
 
-			if (sdMode == SDModes.ALLOCATION) {
+			if (sdMode == SequenceDiagramPlugin.SDModes.ALLOCATION) {
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
-			} else if (sdMode == SDModes.ASSEMBLY) {
+			} else if (sdMode == SequenceDiagramPlugin.SDModes.ASSEMBLY) {
 				final AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 				final AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 				senderDotId = "O" + senderComponent.getId();

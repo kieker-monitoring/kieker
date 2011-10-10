@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -121,24 +122,24 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		gc.gridx = 3; // NOCS (MagicNumberCheck)
 		gc.gridwidth = 3; // NOCS (MagicNumberCheck)
 		final JPanel pa = new JPanel();
-		{
-			final JPanel p2 = new JPanel(new BorderLayout());
-			this.l = new JList(this.lm);
-			this.l.setPreferredSize(new Dimension(300, 100)); // NOCS (MagicNumberCheck)
-			final JScrollPane sp = new JScrollPane(this.l);
-			sp.setPreferredSize(new Dimension(320, 100)); // NOCS (MagicNumberCheck)
-			pa.setLayout(new BorderLayout());
-			// sp.add(this.l);
-			sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			this.addB = new JButton("add");
-			this.addB.addActionListener(this);
-			this.remB = new JButton("remove");
-			this.remB.addActionListener(this);
-			p2.add(this.addB, BorderLayout.NORTH);
-			p2.add(this.remB, BorderLayout.SOUTH);
-			pa.add(p2, BorderLayout.EAST);
-			pa.add(sp, BorderLayout.CENTER);
-		}
+
+		final JPanel p2 = new JPanel(new BorderLayout());
+		this.l = new JList(this.lm);
+		this.l.setPreferredSize(new Dimension(300, 100)); // NOCS (MagicNumberCheck)
+		final JScrollPane sp = new JScrollPane(this.l);
+		sp.setPreferredSize(new Dimension(320, 100)); // NOCS (MagicNumberCheck)
+		pa.setLayout(new BorderLayout());
+		// sp.add(this.l);
+		sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		this.addB = new JButton("add");
+		this.addB.addActionListener(this);
+		this.remB = new JButton("remove");
+		this.remB.addActionListener(this);
+		p2.add(this.addB, BorderLayout.NORTH);
+		p2.add(this.remB, BorderLayout.SOUTH);
+		pa.add(p2, BorderLayout.EAST);
+		pa.add(sp, BorderLayout.CENTER);
+
 		p.add(pa, gc);
 		gc.gridx = 0; // NOCS (MagicNumberCheck)
 		gc.gridwidth = 2; // NOCS (MagicNumberCheck)
@@ -188,42 +189,41 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		p.add(new JSeparator(SwingConstants.HORIZONTAL), gc);
 
 		gc.insets = new Insets(8, 8, 8, 8); // NOCS (MagicNumberCheck)
-		{
-			gc.anchor = GridBagConstraints.WEST;
-			gc.gridwidth = 4; // NOCS (MagicNumberCheck)
-			p.add(new JLabel("Operations:"), gc);
-			gc.gridx = 4; // NOCS (MagicNumberCheck)
-			gc.gridwidth = 1; // NOCS (MagicNumberCheck)
-			gc.anchor = GridBagConstraints.LINE_END;
-			label = new JLabel("Shrt Lbls");
-			label.setToolTipText("Short Labels");
-			p.add(label, gc);
-			gc.gridwidth = 1; // NOCS (MagicNumberCheck)
-			gc.gridx = 5; // NOCS (MagicNumberCheck)
-			gc.weightx = 0; // NOCS (MagicNumberCheck)
-			p.add(this.shrtlbls, gc);
-			gc.gridx = 0; // NOCS (MagicNumberCheck)
-			gc.gridwidth = 2; // NOCS (MagicNumberCheck)
-			gc.weightx = 1; // NOCS (MagicNumberCheck)
-			p.add(new JLabel("Plot Sequence Diagrams"), gc);
-			gc.gridx = 3; // NOCS (MagicNumberCheck)
-			gc.gridwidth = 1; // NOCS (MagicNumberCheck)
-			p.add(this.plotSq, gc);
-			gc.gridx = 4; // NOCS (MagicNumberCheck)
-			gc.gridwidth = 1; // NOCS (MagicNumberCheck)
-			gc.weightx = 1; // NOCS (MagicNumberCheck)
-			p.add(new JLabel("Ignore invalid traces"), gc);
-			gc.gridwidth = 1; // NOCS (MagicNumberCheck)
-			gc.gridx = 5; // NOCS (MagicNumberCheck)
-			p.add(this.ignInvalid, gc);
-			gc.gridwidth = 6; // NOCS (MagicNumberCheck)
-			gc.gridx = 0; // NOCS (MagicNumberCheck)
-			p.add(this.plotDiags(), gc);
-			p.add(this.treePanel(), gc);
-			p.add(this.tracePanel(), gc);
-			p.add(this.equivSelect(), gc);
-			p.add(this.ignorePanel(), gc);
-		}
+
+		gc.anchor = GridBagConstraints.WEST;
+		gc.gridwidth = 4; // NOCS (MagicNumberCheck)
+		p.add(new JLabel("Operations:"), gc);
+		gc.gridx = 4; // NOCS (MagicNumberCheck)
+		gc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		gc.anchor = GridBagConstraints.LINE_END;
+		label = new JLabel("Shrt Lbls");
+		label.setToolTipText("Short Labels");
+		p.add(label, gc);
+		gc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		gc.gridx = 5; // NOCS (MagicNumberCheck)
+		gc.weightx = 0; // NOCS (MagicNumberCheck)
+		p.add(this.shrtlbls, gc);
+		gc.gridx = 0; // NOCS (MagicNumberCheck)
+		gc.gridwidth = 2; // NOCS (MagicNumberCheck)
+		gc.weightx = 1; // NOCS (MagicNumberCheck)
+		p.add(new JLabel("Plot Sequence Diagrams"), gc);
+		gc.gridx = 3; // NOCS (MagicNumberCheck)
+		gc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		p.add(this.plotSq, gc);
+		gc.gridx = 4; // NOCS (MagicNumberCheck)
+		gc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		gc.weightx = 1; // NOCS (MagicNumberCheck)
+		p.add(new JLabel("Ignore invalid traces"), gc);
+		gc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		gc.gridx = 5; // NOCS (MagicNumberCheck)
+		p.add(this.ignInvalid, gc);
+		gc.gridwidth = 6; // NOCS (MagicNumberCheck)
+		gc.gridx = 0; // NOCS (MagicNumberCheck)
+		p.add(this.plotDiags(), gc);
+		p.add(this.treePanel(), gc);
+		p.add(this.tracePanel(), gc);
+		p.add(this.equivSelect(), gc);
+		p.add(this.ignorePanel(), gc);
 
 		this.run = new JButton();
 		this.run.addActionListener(this);
@@ -403,7 +403,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 				this.lm.remove(this.l.getSelectedIndex());
 			}
 		} else if (e.getSource() == this.run) {
-			final Vector<String> b = new Vector<String>();
+			final List<String> b = new Vector<String>();
 			this.appendCmd(Constants.CMD_OPT_NAME_INPUTDIRS, b);
 			for (final Object s : new IterableEnumeration(this.lm.elements())) {
 				this.appendStr(s.toString(), b);
@@ -494,11 +494,11 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		}
 	}
 
-	private void appendCmd(final String cmdName, final Vector<String> b) {
+	private void appendCmd(final String cmdName, final List<String> b) {
 		b.add("--" + cmdName);
 	}
 
-	private void appendStr(final String str, final Vector<String> b) {
+	private void appendStr(final String str, final List<String> b) {
 		b.add(str);
 	}
 }

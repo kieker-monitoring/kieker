@@ -20,6 +20,7 @@
 
 package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstore;
 
+import java.util.List;
 import java.util.Vector;
 
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
@@ -60,7 +61,7 @@ public class Bookstore extends Thread {
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) {
 
-		final Vector<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+		final List<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
 
 		for (int i = 0; i < Bookstore.NUM_REQUESTS; i++) {
 			System.out.println("Bookstore.main: Starting request " + i);

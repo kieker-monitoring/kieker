@@ -48,7 +48,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
 	public static enum TraceEquivalenceClassModes {
-
 		DISABLED, ASSEMBLY, ALLOCATION
 	}
 
@@ -68,14 +67,14 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	private void newExecutionTrace(final ExecutionTrace et) {
 		try {
-			if (this.equivalenceMode == TraceEquivalenceClassModes.DISABLED) {
+			if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.DISABLED) {
 				this.executionTraceOutputPort.deliver(et);
 				this.messageTraceOutputPort.deliver(et.toMessageTrace(this.rootExecution));
 			} else { // mode is ASSEMBLY or ALLOCATION
 				final AbstractExecutionTraceHashContainer polledTraceHashContainer;
-				if (this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) {
+				if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY) {
 					polledTraceHashContainer = new ExecutionTraceHashContainerAssemblyEquivalence(et);
-				} else if (this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
+				} else if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ALLOCATION) {
 					polledTraceHashContainer = new ExecutionTraceHashContainerAllocationEquivalence(et);
 				} else { // just to make sure
 					TraceEquivalenceClassFilter.LOG.error("Invalid trace equivalence mode: " + this.equivalenceMode);
@@ -127,9 +126,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	}
 
 	@Override
-	public void terminate(final boolean error) {
-		// do nothing
-	}
+	public void terminate(final boolean error) {} // do nothing
 
 	public Map<ExecutionTrace, Integer> getEquivalenceClassMap() {
 		final Map<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>();

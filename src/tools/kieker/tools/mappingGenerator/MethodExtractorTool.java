@@ -25,6 +25,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -140,8 +141,8 @@ class MethodExtractor extends ClassLoader {
 			} catch (final ClassNotFoundException e) {
 				MethodExtractor.LOG.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...", e);
 			}
-			final Vector<File> directories = new Vector<File>();
-			final Vector<File> jars = new Vector<File>();
+			final List<File> directories = new Vector<File>();
+			final List<File> jars = new Vector<File>();
 			for (final String string : elem) {
 				final File f = new File(string);
 				if (f.isDirectory()) {
@@ -161,7 +162,7 @@ class MethodExtractor extends ClassLoader {
 		return retval;
 	}
 
-	private void analyzeJars(final Vector<File> jars, final Class<IMethodFilter> filter) {
+	private void analyzeJars(final List<File> jars, final Class<IMethodFilter> filter) {
 		IMethodFilter f = null;
 		if (filter != null) {
 			try {
@@ -220,7 +221,7 @@ class MethodExtractor extends ClassLoader {
 		}
 	}
 
-	private void analyzeDirectory(final Vector<File> dirs, final Class<IMethodFilter> filter) {
+	private void analyzeDirectory(final List<File> dirs, final Class<IMethodFilter> filter) {
 		IMethodFilter f = null;
 		if (filter != null) {
 			try {

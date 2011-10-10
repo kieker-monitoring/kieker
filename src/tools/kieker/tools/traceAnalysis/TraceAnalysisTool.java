@@ -274,7 +274,7 @@ public final class TraceAnalysisTool {
 		try {
 			final AnalysisController analysisInstance = new AnalysisController();
 
-			{
+			{ // NOCS (NestedBlock)
 				/*
 				 * Register an FSReader which only reads records of type
 				 * OperationExecutionRecord

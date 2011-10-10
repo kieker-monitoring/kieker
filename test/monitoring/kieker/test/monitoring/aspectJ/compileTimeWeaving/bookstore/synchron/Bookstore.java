@@ -20,6 +20,7 @@
 
 package kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.synchron;
 
+import java.util.List;
 import java.util.Vector;
 
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
@@ -43,7 +44,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  */
 
 public class Bookstore extends Thread {
-	public static final Vector<Bookstore> BOOKSTORE_SCENARIOS = new Vector<Bookstore>();
+	public static final List<Bookstore> BOOKSTORE_SCENARIOS = new Vector<Bookstore>();
 
 	private static final int NUM_REQUESTS = 5000;
 	private static final int INTER_REQUEST_TIME = 5;

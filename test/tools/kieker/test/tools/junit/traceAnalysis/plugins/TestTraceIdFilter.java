@@ -20,6 +20,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
+import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -48,7 +49,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 * <i>idsToPass</i> is not passed through the filter.
 	 */
 	public void testAssertIgnoreTraceId() {
-		final TreeSet<Long> idsToPass = new TreeSet<Long>();
+		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
@@ -82,7 +83,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 * <i>idsToPass</i> is passed through the filter.
 	 */
 	public void testAssertPassTraceId() {
-		final TreeSet<Long> idsToPass = new TreeSet<Long>();
+		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
