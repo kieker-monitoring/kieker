@@ -45,7 +45,7 @@ public class OperationExecutionAspectAnnotationServlet extends AbstractOperation
 
 	@Override
 	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
-	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {// NOPMD // NOCS (IllegalThrowsCheck)
 		return super.doServletEntryProfiling(thisJoinPoint);
 	}
 

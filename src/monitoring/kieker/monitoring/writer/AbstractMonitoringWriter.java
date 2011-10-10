@@ -95,8 +95,8 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	public abstract void terminate();
 
 	@Override
-	public final void setController(final IMonitoringController monitoringController) throws Exception {
-		this.monitoringController = monitoringController;
+	public final void setController(final IMonitoringController controller) throws Exception {
+		this.monitoringController = controller;
 		this.init();
 	}
 

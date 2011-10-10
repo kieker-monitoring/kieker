@@ -45,7 +45,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 
 	@Override
 	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
-	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOPMD // NOCS (IllegalThrowsCheck)
 		return super.doServletEntryProfiling(thisJoinPoint);
 	}
 
@@ -59,9 +59,7 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 			return thisJoinPoint.proceed();
 		}
 		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
-		execData.setSessionId(AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId()); // may
-		// be
-		// null
+		execData.setSessionId(AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId()); // may be null
 		int eoi; // this is executionOrderIndex-th execution in this trace
 		int ess; // this is the height in the dynamic call tree of this execution
 		if (execData.isEntryPoint()) {

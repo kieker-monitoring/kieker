@@ -40,13 +40,13 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class OperationExecutionMethodInvocationInterceptor extends AbstractOperationExecutionMethodInvocationInterceptor {
-
 	private static final Log LOG = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);
+
+	public OperationExecutionMethodInvocationInterceptor() {}
 
 	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
-
 	@Override
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
 		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
@@ -68,8 +68,8 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 		try {
 			this.proceedAndMeasure(invocation, execData);
 			if ((execData.getEoi() == -1) || (execData.getEss() == -1)) {
-				OperationExecutionMethodInvocationInterceptor.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + execData.getEoi() +
-						" ess == " + execData.getEss());
+				OperationExecutionMethodInvocationInterceptor.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + execData.getEoi()
+						+ " ess == " + execData.getEss());
 				OperationExecutionMethodInvocationInterceptor.LOG.fatal("Terminating Kieker.Monitoring!");
 				AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
 			}

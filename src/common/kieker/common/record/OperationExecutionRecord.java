@@ -161,22 +161,20 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 				throw new IllegalArgumentException("Expecting vector with " + OperationExecutionRecord.NUMRECORDFIELDS + " elements but found:" + values.length);
 			}
 			this.experimentId = (Integer) values[0];
-			{ // divide name into component and operation name
-				final String name = (String) values[1];
-				final int posParen = name.lastIndexOf('(');
-				int posDot;
-				if (posParen != -1) {
-					posDot = name.substring(0, posParen).lastIndexOf('.');
-				} else {
-					posDot = name.lastIndexOf('.');
-				}
-				if (posDot == -1) {
-					this.className = "";
-					this.operationName = name;
-				} else {
-					this.className = name.substring(0, posDot);
-					this.operationName = name.substring(posDot + 1);
-				}
+			final String name = (String) values[1];
+			final int posParen = name.lastIndexOf('(');
+			int posDot;
+			if (posParen != -1) {
+				posDot = name.substring(0, posParen).lastIndexOf('.');
+			} else {
+				posDot = name.lastIndexOf('.');
+			}
+			if (posDot == -1) {
+				this.className = "";
+				this.operationName = name;
+			} else {
+				this.className = name.substring(0, posDot);
+				this.operationName = name.substring(posDot + 1);
 			}
 			this.sessionId = (String) values[2]; // NOCS
 			this.traceId = (Long) values[3]; // NOCS
@@ -398,7 +396,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		return this.isEntryPoint;
 	}
 
-	public void setEntryPoint(final boolean isEntryPoint) {
-		this.isEntryPoint = isEntryPoint;
+	public void setEntryPoint(final boolean entryPoint) {
+		this.isEntryPoint = entryPoint;
 	}
 }

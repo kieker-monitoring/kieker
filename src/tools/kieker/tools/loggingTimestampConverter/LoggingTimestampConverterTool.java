@@ -47,7 +47,7 @@ public final class LoggingTimestampConverterTool {
 	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
 	private static final Vector<Option> OPTIONS = new Vector<Option>();
-	private static final String CMD_OPT_NAME__TIMESTAMPS = "timestamps";
+	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
 	private static CommandLine cmdl = null;
 	private static String[] timestampsStr;
 	private static long[] timestampsLong;
@@ -60,7 +60,7 @@ public final class LoggingTimestampConverterTool {
 
 	@SuppressWarnings("static-access")
 	private static final void initializeOptions() {
-		LoggingTimestampConverterTool.OPTIONS.add(OptionBuilder.withLongOpt(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS)
+		LoggingTimestampConverterTool.OPTIONS.add(OptionBuilder.withLongOpt(LoggingTimestampConverterTool.CMD_OPT_NAME_TIMESTAMPS)
 				.withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
 		for (final Option o : LoggingTimestampConverterTool.OPTIONS) {
 			LoggingTimestampConverterTool.CMDL_OPTS.addOption(o);
@@ -116,9 +116,9 @@ public final class LoggingTimestampConverterTool {
 	}
 
 	private static boolean initFromArgs() {
-		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS);
+		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(LoggingTimestampConverterTool.CMD_OPT_NAME_TIMESTAMPS);
 		if (LoggingTimestampConverterTool.timestampsStr == null) { // should not happen since marked as required opt
-			LoggingTimestampConverterTool.LOG.error("Missing value for option '" + LoggingTimestampConverterTool.CMD_OPT_NAME__TIMESTAMPS + "'");
+			LoggingTimestampConverterTool.LOG.error("Missing value for option '" + LoggingTimestampConverterTool.CMD_OPT_NAME_TIMESTAMPS + "'");
 			return false;
 		}
 

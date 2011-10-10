@@ -54,6 +54,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 	private JMXServiceURL serviceURL;
 	private ObjectName monitoringLog;
 	private final boolean silentreconnect;
+	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	/**
 	 * Constructor for JMXReader. Requires a subsequent call to the init method
@@ -81,15 +82,19 @@ public final class JMXReader extends AbstractMonitoringReader {
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "@");
 			final String server = propertyMap.getProperty("server", "localhost");
 			final int port = Integer.valueOf(propertyMap.getProperty("port", "0")).intValue();
-			final String serviceURL;
+			final String tmpServiceURL;
 			if (port > 0) {
-				serviceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
+				tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
 			} else {
-				serviceURL = propertyMap.getProperty("serviceURL", null);
+				tmpServiceURL = propertyMap.getProperty("serviceURL", null);
 			}
 			final String domain = propertyMap.getProperty("domain", "kieker.monitoring");
 			final String logname = propertyMap.getProperty("logname", "MonitoringLog");
-			this.initInstanceFromArgs(serviceURL, domain, logname);
+			if (tmpServiceURL == null) {
+				throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
+			}
+			this.serviceURL = new JMXServiceURL(tmpServiceURL);
+			this.monitoringLog = new ObjectName(domain, "type", logname);
 		} catch (final IllegalArgumentException e) {
 			JMXReader.LOG.error("Failed to parse initString '" + initString + "': " + e.getMessage()); // NOCS (MultipleStringLiteralsCheck)
 			return false;
@@ -101,15 +106,6 @@ public final class JMXReader extends AbstractMonitoringReader {
 			return false;
 		}
 		return true;
-	}
-
-	private void initInstanceFromArgs(final String serviceURL, final String domain, final String logname) throws IllegalArgumentException, MalformedURLException,
-			MalformedObjectNameException {
-		if (serviceURL == null) {
-			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
-		}
-		this.serviceURL = new JMXServiceURL(serviceURL);
-		this.monitoringLog = new ObjectName(domain, "type", logname);
 	}
 
 	@Override
@@ -160,7 +156,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 				if (logNotificationListener != null) {
 					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 				}
-			} catch (final Exception e) {
+			} catch (final Exception e) { // NOCS
 				JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
 			}
 			try {
@@ -235,8 +231,6 @@ public final class JMXReader extends AbstractMonitoringReader {
 		}
 	}
 
-	private final CountDownLatch cdLatch = new CountDownLatch(1);
-
 	private final void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
@@ -255,6 +249,9 @@ public final class JMXReader extends AbstractMonitoringReader {
 	}
 
 	private final class LogNotificationListener implements NotificationListener {
+
+		public LogNotificationListener() {}
+
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			JMXReader.this.deliverRecord((IMonitoringRecord) notification.getUserData());

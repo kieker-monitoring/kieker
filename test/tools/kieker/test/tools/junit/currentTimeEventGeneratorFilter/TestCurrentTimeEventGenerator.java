@@ -86,7 +86,7 @@ public class TestCurrentTimeEventGenerator extends TestCase {
 		final long firstT = 5;
 		final long secondT = firstT + (5 * resolution) + 1;
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution) });
+			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), });
 	}
 
 	/**

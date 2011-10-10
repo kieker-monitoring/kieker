@@ -73,7 +73,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 		this.includeSelfLoops = includeSelfLoops;
 	}
 
-	private String componentNodeLabel(final AssemblyComponent component, final boolean shortLabels) {
+	private String componentNodeLabel(final AssemblyComponent component) {
 		final String assemblyComponentName = component.getName();
 		final String componentTypePackagePrefx = component.getType().getPackageName();
 		final String componentTypeIdentifier = component.getType().getTypeName();
@@ -81,7 +81,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT);
 		strBuild.append("\\n");
 		strBuild.append(assemblyComponentName).append(":");
-		if (!shortLabels) {
+		if (!this.shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append(".");
 		} else {
 			strBuild.append("..");
@@ -91,7 +91,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	}
 
 	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabels) {
+	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabelsUNUSED) {
 
 		/* Component ID x contained operations */
 		final Map<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentId2pairMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>>();
@@ -128,7 +128,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 						));
 			} else {
 				strBuild.append(DotFactory.createCluster("", OperationDependencyGraphPluginAssembly.COMPONENT_NODE_ID_PREFIX + curComponentId,
-						this.componentNodeLabel(curComponent, this.shortLabels), DotFactory.DOT_SHAPE_BOX, // shape
+						this.componentNodeLabel(curComponent), DotFactory.DOT_SHAPE_BOX, // shape
 						DotFactory.DOT_STYLE_FILLED, // style
 						null, // framecolor
 						DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor

@@ -62,12 +62,12 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
+	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
+
 	private static final String PREFIX = SyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
 	public static final String CONFIG_DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname";
 	public static final String CONFIG_CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString";
 	public static final String CONFIG_TABLENAME = SyncDbWriter.PREFIX + "TableName";
-
-	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/190
@@ -108,7 +108,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public final void init() throws Exception, SQLException {}
+	public final void init() throws Exception {}
 
 	@Override
 	public final synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {

@@ -243,19 +243,19 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		final TitledBorder b = this.tBorder();
 		b.setTitle("Temporal Selection");
 
-		final GridBagConstraints g = new GridBagConstraints();
-		g.gridwidth = 1; // NOCS (MagicNumberCheck)
-		g.insets = new Insets(4, 4, 4, 4); // NOCS (MagicNumberCheck)
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		gbc.insets = new Insets(4, 4, 4, 4); // NOCS (MagicNumberCheck)
 
-		g.anchor = GridBagConstraints.NORTH;
-		g.gridheight = 1; // NOCS (MagicNumberCheck)
-		ign.add(new JLabel("Select Traces between"), g);
+		gbc.anchor = GridBagConstraints.NORTH;
+		gbc.gridheight = 1; // NOCS (MagicNumberCheck)
+		ign.add(new JLabel("Select Traces between"), gbc);
 		this.from.setToolTipText(Constants.DATE_FORMAT_PATTERN + " or -1 to disable filter");
 		this.to.setToolTipText(Constants.DATE_FORMAT_PATTERN + " or -1 to disable filter");
-		g.gridheight = 1; // NOCS (MagicNumberCheck)
-		ign.add(this.from, g);
-		ign.add(new JLabel("and"), g);
-		ign.add(this.to, g);
+		gbc.gridheight = 1; // NOCS (MagicNumberCheck)
+		ign.add(this.from, gbc);
+		ign.add(new JLabel("and"), gbc);
+		ign.add(this.to, gbc);
 
 		this.duration.setToolTipText("in ms, -1 to disable filter");
 		ign.add(new JLabel("Max. trace duration"));
@@ -278,24 +278,24 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		this.bg.add(this.allocation);
 		this.bg.add(this.disabled);
 
-		final GridBagConstraints g = new GridBagConstraints();
-		g.gridwidth = 1;
-		g.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
-		g.weightx = 1.25; // NOCS (MagicNumberCheck)
-		equ.add(new JLabel("Messages"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		equ.add(this.allocation, g);
-		g.weightx = 1.3; // NOCS (MagicNumberCheck)
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = 1;
+		gbc.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
+		gbc.weightx = 1.25; // NOCS (MagicNumberCheck)
+		equ.add(new JLabel("Messages"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		equ.add(this.allocation, gbc);
+		gbc.weightx = 1.3; // NOCS (MagicNumberCheck)
 		// g.gridy = 1;
-		equ.add(new JLabel("Executions"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		equ.add(this.assembly, g);
-		g.weightx = 1.3; // NOCS (MagicNumberCheck)
-		equ.add(new JLabel("Disabled"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		equ.add(this.disabled, g);
+		equ.add(new JLabel("Executions"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		equ.add(this.assembly, gbc);
+		gbc.weightx = 1.3; // NOCS (MagicNumberCheck)
+		equ.add(new JLabel("Disabled"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		equ.add(this.disabled, gbc);
 		this.disabled.setSelected(true);
-		g.fill = GridBagConstraints.BOTH;
+		gbc.fill = GridBagConstraints.BOTH;
 		equ.setBorder(b);
 		return equ;
 	}
@@ -304,23 +304,23 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		final JPanel deps = new JPanel(this.g); // new GridBagLayout());
 		final TitledBorder b = this.tBorder();
 		b.setTitle("Traces");
-		final GridBagConstraints g = new GridBagConstraints();
-		g.gridwidth = 1; // NOCS (MagicNumberCheck)
-		g.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
-		g.weightx = 1.2; // NOCS (MagicNumberCheck)
-		deps.add(new JLabel("Messages"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		deps.add(this.printMsg, g);
-		g.weightx = 1.3; // NOCS (MagicNumberCheck)
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		gbc.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
+		gbc.weightx = 1.2; // NOCS (MagicNumberCheck)
+		deps.add(new JLabel("Messages"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		deps.add(this.printMsg, gbc);
+		gbc.weightx = 1.3; // NOCS (MagicNumberCheck)
 		// g.gridy = 1;
-		deps.add(new JLabel("Executions"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		deps.add(this.printExe, g);
-		g.weightx = .5; // NOCS (MagicNumberCheck)
-		deps.add(new JLabel("Invalid Executions"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		deps.add(this.printInv, g);
-		g.fill = GridBagConstraints.BOTH;
+		deps.add(new JLabel("Executions"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		deps.add(this.printExe, gbc);
+		gbc.weightx = .5; // NOCS (MagicNumberCheck)
+		deps.add(new JLabel("Invalid Executions"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		deps.add(this.printInv, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
 		deps.setBorder(b);
 		return deps;
 	}
@@ -329,44 +329,45 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		final JPanel deps = new JPanel(this.g); // new GridBagLayout());
 		final TitledBorder b = this.tBorder();
 		b.setTitle("Call Trees");
-		final GridBagConstraints g = new GridBagConstraints();
-		g.gridwidth = 1; // NOCS (MagicNumberCheck)
-		g.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
-		g.weightx = 1; // NOCS (MagicNumberCheck)
-		deps.add(new JLabel("Single"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		deps.add(this.plotCall, g);
-		g.weightx = .8; // NOCS (MagicNumberCheck)
-		deps.add(new JLabel("Aggregated"), g);
-		g.weightx = 0; // NOCS (MagicNumberCheck)
-		deps.add(this.plotAgg, g);
-		g.weightx = 1.6; // NOCS (MagicNumberCheck)
-		g.fill = GridBagConstraints.BOTH;
-		g.gridwidth = 3; // NOCS (MagicNumberCheck)
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = 1; // NOCS (MagicNumberCheck)
+		gbc.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
+		gbc.weightx = 1; // NOCS (MagicNumberCheck)
+		deps.add(new JLabel("Single"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		deps.add(this.plotCall, gbc);
+		gbc.weightx = .8; // NOCS (MagicNumberCheck)
+		deps.add(new JLabel("Aggregated"), gbc);
+		gbc.weightx = 0; // NOCS (MagicNumberCheck)
+		deps.add(this.plotAgg, gbc);
+		gbc.weightx = 1.6; // NOCS (MagicNumberCheck)
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridwidth = 3; // NOCS (MagicNumberCheck)
 		final JPanel p = new JPanel();
-		deps.add(p, g);
+		deps.add(p, gbc);
 		deps.setBorder(b);
 		return deps;
 	}
 
 	private Component plotDiags() {
-		final JPanel deps = new JPanel(this.g = new GridBagLayout());
+		this.g = new GridBagLayout();
+		final JPanel deps = new JPanel(this.g);
 		final TitledBorder b = this.tBorder();
 		b.setTitle("Dependency Graphs");
-		final GridBagConstraints g = new GridBagConstraints();
-		g.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
-		g.weightx = 1; // NOCS (MagicNumberCheck)
-		deps.add(new JLabel("Container Level"), g);
-		g.weightx = 0;
-		deps.add(this.plotCont, g);
-		g.weightx = 1;
-		deps.add(new JLabel("Component Level"), g);
-		g.weightx = 0;
-		deps.add(this.plotComp, g);
-		g.weightx = 1;
-		deps.add(new JLabel("Operation Level"), g);
-		g.weightx = 0;
-		deps.add(this.plotOp, g);
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 8); // NOCS (MagicNumberCheck)
+		gbc.weightx = 1; // NOCS (MagicNumberCheck)
+		deps.add(new JLabel("Container Level"), gbc);
+		gbc.weightx = 0;
+		deps.add(this.plotCont, gbc);
+		gbc.weightx = 1;
+		deps.add(new JLabel("Component Level"), gbc);
+		gbc.weightx = 0;
+		deps.add(this.plotComp, gbc);
+		gbc.weightx = 1;
+		deps.add(new JLabel("Operation Level"), gbc);
+		gbc.weightx = 0;
+		deps.add(this.plotOp, gbc);
 		deps.setBorder(b);
 		return deps;
 	}

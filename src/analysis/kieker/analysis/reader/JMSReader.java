@@ -91,8 +91,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			final String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
 			final String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
 			final String jmsFactoryLookupNameP = propertyMap.getProperty("jmsFactoryLookupName", null);
-			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws
-			// IllegalArgumentException
+			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws IllegalArgumentException
 		} catch (final Exception exc) { // NOCS
 			JMSReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
@@ -100,15 +99,16 @@ public class JMSReader extends AbstractMonitoringReader {
 		return true;
 	}
 
-	private void initInstanceFromArgs(final String jmsProviderUrl, final String jmsDestination, final String factoryLookupName) throws IllegalArgumentException {
-		if ((jmsProviderUrl == null) || jmsProviderUrl.isEmpty() || (jmsDestination == null) || jmsDestination.isEmpty() || (factoryLookupName == null)
+	private void initInstanceFromArgs(final String tmpJmsProviderUrl, final String tmpJmsDestination, final String factoryLookupName)
+			throws IllegalArgumentException {
+		if ((tmpJmsProviderUrl == null) || tmpJmsProviderUrl.isEmpty() || (tmpJmsDestination == null) || tmpJmsDestination.isEmpty() || (factoryLookupName == null)
 				|| (factoryLookupName.isEmpty())) {
-			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + jmsProviderUrl + "'), jmsDestination ('"
-					+ jmsDestination + "'), or factoryLookupName ('" + factoryLookupName + "') is null");
+			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + tmpJmsProviderUrl + "'), jmsDestination ('"
+					+ tmpJmsDestination + "'), or factoryLookupName ('" + factoryLookupName + "') is null");
 		}
 
-		this.jmsProviderUrl = jmsProviderUrl;
-		this.jmsDestination = jmsDestination;
+		this.jmsProviderUrl = tmpJmsProviderUrl;
+		this.jmsDestination = tmpJmsDestination;
 		this.jmsFactoryLookupName = factoryLookupName;
 	}
 
@@ -124,9 +124,6 @@ public class JMSReader extends AbstractMonitoringReader {
 
 			// JMS initialization
 			properties.put(Context.PROVIDER_URL, this.jmsProviderUrl);
-			/* TODO: remove */
-			// properties.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
-			/* */
 			final Context context = new InitialContext(properties);
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 			final Connection connection = factory.createConnection();
@@ -164,13 +161,10 @@ public class JMSReader extends AbstractMonitoringReader {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
-							if (omo instanceof IMonitoringRecord) {
-								final IMonitoringRecord rec = (IMonitoringRecord) omo;
-								if (!JMSReader.this.deliverRecord(rec)) {
-									final String errorMsg = "deliverRecord returned false";
-									JMSReader.LOG.error(errorMsg);
-									throw new MonitoringReaderException(errorMsg);
-								}
+							if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverRecord((IMonitoringRecord) omo))) {
+								final String errorMsg = "deliverRecord returned false";
+								JMSReader.LOG.error(errorMsg);
+								throw new MonitoringReaderException(errorMsg);
 							} else {
 								JMSReader.LOG.info("Unknown type of message " + om);
 							}
