@@ -59,6 +59,10 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	 */
 	public FSReaderRealtime() {}
 
+	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
+		this.initInstanceFromArgs(inputDirNames, numWorkers);
+	}
+
 	/**
 	 * Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN |
 	 * numWorkers=XX
@@ -83,10 +87,6 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			return false;
 		}
 		return true;
-	}
-
-	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		this.initInstanceFromArgs(inputDirNames, numWorkers);
 	}
 
 	private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
@@ -136,7 +136,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		try {
 			this.analysis.run();
 			this.terminationLatch.await();
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (Catch everything!)
 			FSReaderRealtime.LOG.error("An error occured while reading", ex);
 			return false;
 		}

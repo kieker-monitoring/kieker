@@ -35,6 +35,8 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 
+	public OperationExecutionWebRequestRegistrationInterceptor() {}
+
 	@Override
 	public void preHandle(final WebRequest request) throws Exception {
 		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();

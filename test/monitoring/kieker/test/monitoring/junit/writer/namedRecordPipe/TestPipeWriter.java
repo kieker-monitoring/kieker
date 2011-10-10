@@ -33,7 +33,7 @@ import kieker.test.monitoring.junit.util.NamedPipeFactory;
  * @author Andre van Hoorn
  * 
  */
-public class TestPipeWriter extends TestCase {
+public class TestPipeWriter extends TestCase { // NOCS
 	/**
 	 * Tests whether the {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter} correctly passes received {@link IMonitoringRecord}s to the
 	 * {@link kieker.common.namedRecordPipe.Broker} (which then passes these

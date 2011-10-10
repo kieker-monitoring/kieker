@@ -30,7 +30,7 @@ import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestControllerConstruction extends TestCase {
+public class TestControllerConstruction extends TestCase { // NOCS
 
 	/**
 	 * 
@@ -38,15 +38,13 @@ public class TestControllerConstruction extends TestCase {
 	public void testConstructionFromConfig() {
 
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		{
-			// Test with default values
+		{// Test with default values // NOCS
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());
 			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(Configuration.MONITORING_ENABLED), kieker.isMonitoringEnabled());
 			kieker.terminateMonitoring();
 		}
-
-		{
+		{// NOCS
 			configuration.setProperty(Configuration.MONITORING_ENABLED, Boolean.toString(!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED)));
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());

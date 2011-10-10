@@ -31,7 +31,7 @@ import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestConfigurationFactoryMethods extends TestCase {
+public class TestConfigurationFactoryMethods extends TestCase { // NOCS
 
 	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.properties.test";
 

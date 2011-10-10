@@ -32,7 +32,7 @@ import kieker.test.monitoring.junit.util.NamedPipeFactory;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestMonitoringControllerRecordsPassedInMonitoringStates extends TestCase {
+public class TestMonitoringControllerRecordsPassedInMonitoringStates extends TestCase { // NOCS
 
 	public void testRecordsPassedToWriterWhenEnabled() {
 		final String pipeName = NamedPipeFactory.createPipeName();

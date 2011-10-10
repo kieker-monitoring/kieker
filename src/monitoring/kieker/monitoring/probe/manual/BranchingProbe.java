@@ -45,7 +45,7 @@ public final class BranchingProbe implements IMonitoringProbe {
 		// try-catch in order to avoid that any exception is propagated to the application code.
 		try {
 			BranchingProbe.CTRLINST.newMonitoringRecord(new BranchingRecord(BranchingProbe.TIMESOURCE.getTime(), branchID, branchingOutcome));
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS
 			BranchingProbe.LOG.error("Error monitoring branching", ex);
 		}
 	}

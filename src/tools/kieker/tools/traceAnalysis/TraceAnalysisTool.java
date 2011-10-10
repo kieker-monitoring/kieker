@@ -274,10 +274,11 @@ public final class TraceAnalysisTool {
 		try {
 			final AnalysisController analysisInstance = new AnalysisController();
 
-			{ /*
-			 * Register an FSReader which only reads records of type
-			 * OperationExecutionRecord
-			 */
+			{
+				/*
+				 * Register an FSReader which only reads records of type
+				 * OperationExecutionRecord
+				 */
 				final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet = new ArrayList<Class<? extends IMonitoringRecord>>();
 				recordTypeSelectorSet.add(OperationExecutionRecord.class);
 				analysisInstance.setReader(new FSReader(TraceAnalysisTool.inputDirs, recordTypeSelectorSet));
@@ -486,7 +487,7 @@ public final class TraceAnalysisTool {
 			int numErrorCount = 0;
 			try {
 				analysisInstance.run();
-			} catch (final Exception exc) { // FindBugs reports that Exception is never trown; but wontfix (#44)!
+			} catch (final Exception exc) { // NOCS (FindBugs reports that Exception is never trown; but wontfix (#44)!)
 				TraceAnalysisTool.LOG.error("Error occured while running analysis", exc);
 				throw exc;
 			} finally {
@@ -513,8 +514,7 @@ public final class TraceAnalysisTool {
 			}
 
 			// TODO: turn into plugin with output code in terminate(..) method
-			// See ticket
-			// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/170
+			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/170
 			final String systemEntitiesHtmlFn = new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "system-entities")
 					.getAbsolutePath();
 			TraceAnalysisTool.SYSTEM_ENTITY_FACTORY.saveSystemToHTMLFile(systemEntitiesHtmlFn);

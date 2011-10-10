@@ -68,6 +68,8 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
 
+	public OperationExecutionSOAPResponseOutInterceptor() {}
+
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
 		String sessionID;

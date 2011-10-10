@@ -32,6 +32,8 @@ import kieker.tools.mappingGenerator.IMethodFilter;
  */
 public class NoInterfacesFilter implements IMethodFilter {
 
+	public NoInterfacesFilter() {}
+
 	@Override
 	public boolean accept(final Method m, final Class<?> c) {
 		return !c.isInterface();

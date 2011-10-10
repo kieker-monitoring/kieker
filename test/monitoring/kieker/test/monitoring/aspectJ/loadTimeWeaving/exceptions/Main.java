@@ -39,22 +39,22 @@ public final class Main {
 
 	public static void main(final String[] args) {
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 10; i++) { // NOCS (MagicNumber)
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) {
+			} catch (final Exception e) { // NOCS
 			}
 		}
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 10; i++) { // NOCS (MagicNumber)
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) {
+			} catch (final Exception e) { // NOCS
 			}
 
 			try {
 				Main.helloKieker(false);
-			} catch (final Exception e) {
+			} catch (final Exception e) { // NOCS
 			}
 		}
 

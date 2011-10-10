@@ -40,6 +40,8 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectAnnotation.class);
 
+	public OperationExecutionAspectFullServlet() {}
+
 	@Pointcut("execution(* *.do*(..)) && args(request,response)")
 	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {}
 

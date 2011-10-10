@@ -34,7 +34,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-public class TestTimestampFilter extends TestCase {
+public class TestTimestampFilter extends TestCase { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTimestampFilter.class);
 

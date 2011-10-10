@@ -350,12 +350,14 @@ class MethodExtractor extends ClassLoader {
 		}
 		return ret.delete(ret.length() - 1, ret.length()).toString();
 	}
-}
 
-class NullFilter implements IMethodFilter {
+	private static class NullFilter implements IMethodFilter {
 
-	@Override
-	public boolean accept(final Method m, final Class<?> c) {
-		return true;
+		public NullFilter() {}
+
+		@Override
+		public boolean accept(final Method m, final Class<?> c) {
+			return true;
+		}
 	}
 }

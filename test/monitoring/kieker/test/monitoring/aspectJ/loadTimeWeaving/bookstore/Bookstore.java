@@ -40,6 +40,8 @@ public class Bookstore extends Thread {
 	private static final int NUM_REQUESTS = 1000;
 	private static final int INTER_REQUEST_TIME = 5;
 
+	public Bookstore() {}
+
 	/**
 	 * 
 	 * main is the load driver for the Bookstore. It creates
@@ -69,7 +71,7 @@ public class Bookstore extends Thread {
 		}
 		System.out.println("Bookstore.main: Finished with starting all requests.");
 		System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-		Bookstore.waitabit(5000);
+		Bookstore.waitabit(5000); // NOCS (MagicNumber)
 		System.exit(0);
 	}
 
@@ -91,7 +93,7 @@ public class Bookstore extends Thread {
 		if (waittime > 0) {
 			try {
 				Thread.sleep(waittime);
-			} catch (final Exception e) {
+			} catch (final InterruptedException e) {
 			}
 		}
 	}

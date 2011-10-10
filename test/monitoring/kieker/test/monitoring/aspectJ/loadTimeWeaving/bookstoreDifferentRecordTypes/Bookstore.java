@@ -42,6 +42,8 @@ public class Bookstore extends Thread {
 	private static final int NUM_REQUESTS = 3;
 	private static final int INTER_REQUEST_TIME = 1000;
 
+	public Bookstore() {}
+
 	/**
 	 * 
 	 * main is the load driver for the Bookstore. It creates
@@ -96,7 +98,7 @@ public class Bookstore extends Thread {
 		if (waittime > 0) {
 			try {
 				Thread.sleep(waittime);
-			} catch (final Exception e) {
+			} catch (final InterruptedException e) {
 			}
 		}
 	}

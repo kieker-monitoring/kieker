@@ -35,7 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-public class TestTraceIdFilter extends TestCase {
+public class TestTraceIdFilter extends TestCase { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
 

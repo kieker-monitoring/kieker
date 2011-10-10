@@ -36,6 +36,8 @@ import org.aspectj.lang.annotation.Pointcut;
 public class OperationExecutionAspectAnnotation extends AbstractOperationExecutionAspect {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectAnnotation.class);
 
+	public OperationExecutionAspectAnnotation() {}
+
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..))")
 	public void monitoredMethod() {}
 

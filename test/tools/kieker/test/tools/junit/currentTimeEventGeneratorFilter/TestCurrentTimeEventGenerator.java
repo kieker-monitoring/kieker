@@ -30,7 +30,7 @@ import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
 
-public class TestCurrentTimeEventGenerator extends TestCase {
+public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 	/**
 	 * 

@@ -33,6 +33,8 @@ import kieker.tools.mappingGenerator.IMethodFilter;
  */
 public class NoSuperclassMethodsFilter implements IMethodFilter {
 
+	public NoSuperclassMethodsFilter() {}
+
 	@Override
 	public boolean accept(final Method m, final Class<?> c) {
 		return m.getDeclaringClass().equals(c);

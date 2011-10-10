@@ -44,6 +44,15 @@ public final class MonitoringController extends AbstractController implements IM
 	private final SamplingController samplingController;
 	private final TimeSourceController timeSourceController;
 
+	// private Constructor
+	private MonitoringController(final Configuration configuration) {
+		this.stateController = new StateController(configuration);
+		this.jmxController = new JMXController(configuration);
+		this.writerController = new WriterController(configuration);
+		this.samplingController = new SamplingController(configuration);
+		this.timeSourceController = new TimeSourceController(configuration);
+	}
+
 	// FACTORY
 	public static final IMonitoringController createInstance(final Configuration configuration) {
 		final MonitoringController monitoringController = new MonitoringController(configuration);
@@ -89,20 +98,11 @@ public final class MonitoringController extends AbstractController implements IM
 					}
 				}
 			});
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS
 			MonitoringController.LOG.warn("Failed to add shutdownHook");
 		}
 		MonitoringController.LOG.info(monitoringController.toString());
 		return monitoringController;
-	}
-
-	// private Constructor
-	private MonitoringController(final Configuration configuration) {
-		this.stateController = new StateController(configuration);
-		this.jmxController = new JMXController(configuration);
-		this.writerController = new WriterController(configuration);
-		this.samplingController = new SamplingController(configuration);
-		this.timeSourceController = new TimeSourceController(configuration);
 	}
 
 	/**
@@ -234,7 +234,7 @@ public final class MonitoringController extends AbstractController implements IM
 	/**
 	 * SINGLETON
 	 */
-	private static final class LazyHolder {
+	private static final class LazyHolder { // NOCS
 		static {
 			INSTANCE = MonitoringController.createInstance(Configuration.createSingletonConfiguration());
 		}

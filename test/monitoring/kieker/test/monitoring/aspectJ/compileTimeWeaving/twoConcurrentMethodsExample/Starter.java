@@ -37,8 +37,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 public class Starter extends Thread {
 
 	private static volatile boolean boolvar = true;
-
 	private final Random random = new Random();
+
+	public Starter() {}
 
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
@@ -69,14 +70,14 @@ public class Starter extends Thread {
 	public void waitP(final long sleeptime) {
 		try {
 			Thread.sleep(sleeptime);
-		} catch (final Exception e) {
+		} catch (final InterruptedException e) {
 		}
 	}
 
 	@OperationExecutionMonitoringProbe
 	private void work() {
 		int a = this.random.nextInt(6);
-		for (int i = 0; i < 2000000; i++) {
+		for (int i = 0; i < 2000000; i++) { // NOCS (MagicNumberCheck)
 			a += i / 1000;
 		}
 		if ((a % 10000) == 0) {

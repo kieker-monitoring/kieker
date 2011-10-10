@@ -114,7 +114,7 @@ public class NameIdMap {
 					final String name = st.nextToken();
 					inst.id2NameMap.put(id, name);
 					inst.name2IdMap.put(name, id);
-				} catch (final RuntimeException e) {
+				} catch (final RuntimeException e) { // NOCS
 					NameIdMap.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e);
 					break;
 				}
@@ -123,7 +123,7 @@ public class NameIdMap {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) {
+				} catch (final IOException e) {
 					NameIdMap.LOG.error("Exception", e);
 				}
 			}

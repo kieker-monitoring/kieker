@@ -51,7 +51,7 @@ public final class JavaDBInitializer {
 	public static void main(final String[] args) {
 		try {
 			Class.forName(JavaDBInitializer.dbDriverClassname).newInstance();
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS
 			ex.printStackTrace();
 		}
 		Connection dbConnection = null;

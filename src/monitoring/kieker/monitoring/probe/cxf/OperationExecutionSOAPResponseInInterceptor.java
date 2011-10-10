@@ -63,6 +63,8 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	private static final String COMPONENT_NAME = OperationExecutionSOAPResponseInInterceptor.class.getName();
 	private static final String OP_NAME = "handleMessage(SoapMessage msg)";
 
+	public OperationExecutionSOAPResponseInInterceptor() {}
+
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
 		if (msg instanceof SoapMessage) {

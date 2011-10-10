@@ -56,6 +56,8 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUT";
 
+	public OperationExecutionSOAPRequestOutInterceptor() {}
+
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
 		String sessionID = null;

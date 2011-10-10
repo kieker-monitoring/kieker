@@ -40,7 +40,7 @@ import kieker.test.monitoring.junit.util.NamedPipeFactory;
  * @author Andre van Hoorn
  * 
  */
-public class TestAutoSetLoggingTimestamp extends TestCase {
+public class TestAutoSetLoggingTimestamp extends TestCase { // NOCS
 
 	private void testSetLoggingTimestamp(final boolean setLoggingTimestampEnabled) {
 		final String pipeName = NamedPipeFactory.createPipeName();

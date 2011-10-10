@@ -37,6 +37,8 @@ public class OperationExecutionAspectFull extends AbstractOperationExecutionAspe
 
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectFull.class);
 
+	public OperationExecutionAspectFull() {}
+
 	@Pointcut("execution(* *.*(..))")
 	public void monitoredMethod() {}
 

@@ -20,6 +20,7 @@
 
 package kieker.analysis.reader.filesystem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -101,7 +102,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 
 	public boolean execute() throws MonitoringRecordConsumerException {
 		try {
-			{ // 1. init and start reader threads
+			{ // 1. init and start reader threads // NOCS
 				for (final String inputDir : this.inputDirs) {
 					final FSDirectoryReader directoryReader = new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType);
 					// consume records of any type and pass to this:
@@ -110,11 +111,13 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 						@Override
 						public void run() {
 							try {
-								directoryReader.read(); // throws an Exception
-														// on error
+								directoryReader.read(); // throws an Exception on error
 								// signal termination:
 								FSReaderCons.this.newMonitoringRecord(FSReaderCons.FS_READER_TERMINATION_MARKER);
-							} catch (final Exception ex) {
+							} catch (final IOException ex) {
+								FSReaderCons.LOG.error(directoryReader, ex);
+								FSReaderCons.this.reportReaderException(ex);
+							} catch (final MonitoringReaderException ex) {
 								FSReaderCons.LOG.error(directoryReader, ex);
 								FSReaderCons.this.reportReaderException(ex);
 							}

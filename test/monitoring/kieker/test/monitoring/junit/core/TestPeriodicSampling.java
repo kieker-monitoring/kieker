@@ -37,7 +37,7 @@ import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
  * @author Andre van Hoorn
  * 
  */
-public class TestPeriodicSampling extends TestCase {
+public class TestPeriodicSampling extends TestCase { // NOCS
 	public void testPeriodicSampler() throws InterruptedException {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);

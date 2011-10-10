@@ -117,7 +117,7 @@ class FSDirectoryReader {
 	 * Errors must be indicated by throwing an {@link Exception}.
 	 * 
 	 */
-	public void read() throws Exception {
+	public void read() throws IOException, MonitoringReaderException {
 		this.readMappingFile();
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
@@ -376,12 +376,14 @@ class FSDirectoryReader {
 	 * source:
 	 * http://weblog.janek.org/Archive/2005/01/16/HowtoSortFilesandDirector.html
 	 */
-	private static class FileComparator implements Comparator<File> {
+	private static final class FileComparator implements Comparator<File> {
 
 		private final Collator c = Collator.getInstance();
 
+		private FileComparator() {}
+
 		@Override
-		public int compare(final File f1, final File f2) {
+		public final int compare(final File f1, final File f2) {
 			if (f1 == f2) {
 				return 0;
 			}
