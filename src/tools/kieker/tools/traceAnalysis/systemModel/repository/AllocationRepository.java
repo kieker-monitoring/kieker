@@ -33,8 +33,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
-	public final AllocationComponent rootAllocationComponent;
-	
+	private final AllocationComponent rootAllocationComponent;
+
 	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>();
 	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>();
 
@@ -66,5 +66,9 @@ public class AllocationRepository extends AbstractSystemSubRepository {
 
 	public final Collection<AllocationComponent> getAllocationComponentInstances() {
 		return this.allocationComponentInstancesById.values();
+	}
+
+	public AllocationComponent getRootAllocationComponent() {
+		return this.rootAllocationComponent;
 	}
 }

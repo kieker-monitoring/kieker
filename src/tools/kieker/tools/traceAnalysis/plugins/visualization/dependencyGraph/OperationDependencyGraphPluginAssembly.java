@@ -64,8 +64,8 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	public OperationDependencyGraphPluginAssembly(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
 		super(name, systemEntityFactory, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory.getOperationFactory().rootOperation,
-						systemEntityFactory.getAssemblyFactory().rootAssemblyComponent)));
+				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory.getOperationFactory().getRootOperation(),
+						systemEntityFactory.getAssemblyFactory().getRootAssemblyComponent())));
 		this.pairFactory = new AssemblyComponentOperationPairFactory(systemEntityFactory);
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
@@ -110,7 +110,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 			containedPairs.add(pairNode);
 		}
 
-		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
+		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().getRootAssemblyComponent();
 		final int rootComponentId = rootComponent.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentOperationEntry : componentId2pairMapping.entrySet()) {
@@ -190,7 +190,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 				}
 				final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 				final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-				final int rootOperationId = OperationDependencyGraphPluginAssembly.this.getSystemEntityFactory().getOperationFactory().rootOperation.getId();
+				final int rootOperationId = OperationDependencyGraphPluginAssembly.this.getSystemEntityFactory().getOperationFactory().getRootOperation().getId();
 				final Operation senderOperation = m.getSendingExecution().getOperation();
 				final Operation receiverOperation = m.getReceivingExecution().getOperation();
 				/* The following two get-calls to the factory return s.th. in either case */

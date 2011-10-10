@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
 
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
-	
+
 	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
 
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
@@ -95,12 +95,12 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		}
 		final OperationExecutionRecord execRec = (OperationExecutionRecord) record;
 
-		final String executionContainerName = execRec.hostName;
-		final String componentTypeName = execRec.className;
+		final String executionContainerName = execRec.getHostName();
+		final String componentTypeName = execRec.getClassName();
 		final String assemblyComponentName = componentTypeName;
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
-		final String operationFactoryName = new StringBuilder(assemblyComponentName).append(".").append(execRec.operationName).toString();
-		final String operationSignatureStr = execRec.operationName;
+		final String operationFactoryName = new StringBuilder(assemblyComponentName).append(".").append(execRec.getOperationName()).toString();
+		final String operationSignatureStr = execRec.getOperationName();
 
 		AllocationComponent allocInst = this.getSystemEntityFactory().getAllocationFactory()
 				.lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
@@ -134,7 +134,8 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 			allocInst.getAssemblyComponent().getType().addOperation(op);
 		}
 
-		final Execution execution = new Execution(op, allocInst, execRec.traceId, execRec.sessionId, execRec.eoi, execRec.ess, execRec.tin, execRec.tout);
+		final Execution execution = new Execution(op, allocInst, execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(),
+				execRec.getTout());
 		this.executionOutputPort.deliver(execution);
 		return true;
 	}

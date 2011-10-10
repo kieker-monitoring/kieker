@@ -54,7 +54,6 @@ public class FSReader extends AbstractMonitoringReader {
 		this(inputDirs, null);
 	}
 
-
 	/**
 	 * 
 	 * @param inputDirs

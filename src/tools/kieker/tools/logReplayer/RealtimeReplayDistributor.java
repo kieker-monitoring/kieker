@@ -45,7 +45,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
-	public final int numWorkers;
+	private final int numWorkers;
 	private final IMonitoringRecordConsumerPlugin cons;
 	private volatile long startTime = -1;
 	private volatile long offset = -1;
@@ -160,5 +160,9 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	public synchronized void decreaseActive() {
 		this.active--;
 		this.notifyAll();
+	}
+
+	public int getNumWorkers() {
+		return this.numWorkers;
 	}
 }

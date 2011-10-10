@@ -33,28 +33,28 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	// Not 10 because className and operationName are serialized to a single field (separated by '.')
 	private static final int NUMRECORDFIELDS = 9;
 
-	public volatile int experimentId = -1;
-	public volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
-	public volatile String className = OperationExecutionRecord.DEFAULT_VALUE;
-	public volatile String operationName = OperationExecutionRecord.DEFAULT_VALUE;
-	public volatile String sessionId = OperationExecutionRecord.DEFAULT_VALUE;
-	public volatile long traceId = -1;
-	public volatile long tin = -1;
-	public volatile long tout = -1;
-	public volatile int eoi = -1;
-	public volatile int ess = -1;
+	private volatile int experimentId = -1;
+	private volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
+	private volatile String className = OperationExecutionRecord.DEFAULT_VALUE;
+	private volatile String operationName = OperationExecutionRecord.DEFAULT_VALUE;
+	private volatile String sessionId = OperationExecutionRecord.DEFAULT_VALUE;
+	private volatile long traceId = -1;
+	private volatile long tin = -1;
+	private volatile long tout = -1;
+	private volatile int eoi = -1;
+	private volatile int ess = -1;
 
 	/**
 	 * Used by probes to store the return value of executed operations.
 	 * The field is marked transient as it must not be serialized.
 	 */
-	public transient volatile Object retVal = null;
+	private transient volatile Object retVal = null;
 
 	/**
 	 * Used by probes to intermediate information.
 	 * The field is marked transient as it must not be serialized.
 	 */
-	public transient volatile boolean isEntryPoint = false;
+	private transient volatile boolean isEntryPoint = false;
 
 	/**
 	 * Returns an instance of OperationExecutionRecord.
@@ -384,5 +384,21 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	 */
 	public final void setEss(final int ess) {
 		this.ess = ess;
+	}
+
+	public Object getRetVal() {
+		return this.retVal;
+	}
+
+	public void setRetVal(final Object retVal) {
+		this.retVal = retVal;
+	}
+
+	public boolean isEntryPoint() {
+		return this.isEntryPoint;
+	}
+
+	public void setEntryPoint(final boolean isEntryPoint) {
+		this.isEntryPoint = isEntryPoint;
 	}
 }

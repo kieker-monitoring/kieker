@@ -33,15 +33,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Andre van Hoorn
  */
 public class AllocationComponentOperationPairFactory extends AbstractSystemSubRepository {
-	public final AllocationComponentOperationPair rootPair;
-	
+	private final AllocationComponentOperationPair rootPair;
+
 	private final Map<String, AllocationComponentOperationPair> pairsByName = new Hashtable<String, AllocationComponentOperationPair>();
 	private final Map<Integer, AllocationComponentOperationPair> pairsById = new Hashtable<Integer, AllocationComponentOperationPair>();
 
 	public AllocationComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);
-		final AllocationComponent rootAllocation = systemFactory.getAllocationFactory().rootAllocationComponent;
-		final Operation rootOperation = systemFactory.getOperationFactory().rootOperation;
+		final AllocationComponent rootAllocation = systemFactory.getAllocationFactory().getRootAllocationComponent();
+		final Operation rootOperation = systemFactory.getOperationFactory().getRootOperation();
 		this.rootPair = this.getPairInstanceByPair(rootAllocation, rootOperation);
 	}
 
@@ -89,5 +89,9 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	public final Collection<AllocationComponentOperationPair> getPairs() {
 		return this.pairsById.values();
+	}
+
+	public AllocationComponentOperationPair getRootPair() {
+		return this.rootPair;
 	}
 }

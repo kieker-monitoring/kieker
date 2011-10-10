@@ -55,8 +55,8 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	public ContainerDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
 		super(name, systemEntityFactory, new DependencyGraph<ExecutionContainer>(
-				systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer.getId(),
-				systemEntityFactory.getExecutionEnvironmentFactory().rootExecutionContainer));
+				systemEntityFactory.getExecutionEnvironmentFactory().getRootExecutionContainer().getId(),
+				systemEntityFactory.getExecutionEnvironmentFactory().getRootExecutionContainer()));
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
@@ -66,7 +66,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<ExecutionContainer>> nodes, final PrintStream ps, final boolean shortLabels) {
 
-		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getRootExecutionContainer();
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final DependencyGraphNode<ExecutionContainer> node : nodes) {

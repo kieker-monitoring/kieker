@@ -50,28 +50,29 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		final OperationExecutionRecord execData = new OperationExecutionRecord(thisJoinPoint.getSignature().getDeclaringTypeName() /* component */, methodname
 				+ paramList /* operation */, AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
 
-		execData.isEntryPoint = false;
+		execData.setEntryPoint(false);
 		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point
-		if (execData.traceId == -1) {
-			execData.traceId = AbstractOperationExecutionAspect.CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();
-			execData.isEntryPoint = true;
+		if (execData.getTraceId() == -1) {
+			execData.setTraceId(AbstractOperationExecutionAspect.CFREGISTRY.getAndStoreUniqueThreadLocalTraceId());
+			execData.setEntryPoint(true);
 		}
-		execData.hostName = AbstractOperationExecutionAspect.VMNAME;
-		execData.experimentId = AbstractOperationExecutionAspect.CTRLINST.getExperimentId();
+		execData.setHostName(AbstractOperationExecutionAspect.VMNAME);
+		execData.setExperimentId(AbstractOperationExecutionAspect.CTRLINST.getExperimentId());
 		return execData;
 	}
 
 	public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable; // NOPMD // NOCS (IllegalThrowsCheck)
 
-	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData) throws Throwable { // NOCS (IllegalThrowsCheck)
-		execData.tin = AbstractOperationExecutionAspect.TIMESOURCE.getTime(); // startint stopwatch
+	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData) throws Throwable { // NOCS
+																																			// (IllegalThrowsCheck)
+		execData.setTin(AbstractOperationExecutionAspect.TIMESOURCE.getTime()); // startint stopwatch
 		try {
-			execData.retVal = thisJoinPoint.proceed();
+			execData.setRetVal(thisJoinPoint.proceed());
 		} catch (final Exception e) { // NOPMD // NOCS (IllegalThrowsCheck)
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = AbstractOperationExecutionAspect.TIMESOURCE.getTime();
-			if (execData.isEntryPoint) {
+			execData.setTout(AbstractOperationExecutionAspect.TIMESOURCE.getTime());
+			if (execData.isEntryPoint()) {
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalTraceId();
 			}
 		}

@@ -28,8 +28,16 @@ import java.io.Serializable;
  */
 public class MonitoringRecordTypeClassnameMapping implements Serializable {
 	private static final long serialVersionUID = 5477L;
-	public final int typeId;
-	public final String classname;
+	private final int typeId;
+	private final String classname;
+
+	public int getTypeId() {
+		return this.typeId;
+	}
+
+	public String getClassname() {
+		return this.classname;
+	}
 
 	public MonitoringRecordTypeClassnameMapping(final int id, final String classname) {
 		this.typeId = id;

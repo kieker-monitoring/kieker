@@ -40,7 +40,7 @@ public class AggregatedAllocationComponentOperationCallTreePlugin extends Aggreg
 			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory, final SystemModelRepository systemEntityFactory,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
 		super(name, systemEntityFactory, new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory,
-				allocationComponentOperationPairFactory, allocationComponentOperationPairFactory.rootPair, true), // root node
+				allocationComponentOperationPairFactory, allocationComponentOperationPairFactory.getRootPair(), true), // root node
 				dotOutputFile, includeWeights, shortLabels);
 	}
 }

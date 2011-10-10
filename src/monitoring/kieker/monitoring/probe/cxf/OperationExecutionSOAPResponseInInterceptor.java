@@ -141,7 +141,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.COMPONENT_NAME,
 					OperationExecutionSOAPResponseInInterceptor.OP_NAME, mySessionId, myTraceId, myTin, myTout, OperationExecutionSOAPResponseInInterceptor.VM_NAME,
 					myEoi, myEss);
-			rec.experimentId = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getExperimentId();
+			rec.setExperimentId(OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getExperimentId());
 			OperationExecutionSOAPResponseInInterceptor.CTRL_INST.newMonitoringRecord(rec);
 
 			/*

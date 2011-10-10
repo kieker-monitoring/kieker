@@ -81,16 +81,16 @@ import org.apache.commons.logging.LogFactory;
 public class CPUMemUsageServletContextListener implements ServletContextListener {
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
 	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
-	
+
 	/** Parameter name for the sampling interval to be used in the web.xml file */
 	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX
-	+ ".samplingIntervalSeconds";
+			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file */
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX
-	+ ".initialSamplingDelaySeconds";
-	
+			+ ".initialSamplingDelaySeconds";
+
 	private static final Log LOG = LogFactory.getLog(CPUMemUsageServletContextListener.class);
-	
+
 	/** Prefix for parameters used in the web.xml file */
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 

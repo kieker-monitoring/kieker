@@ -89,10 +89,10 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 																																			 * entry
 																																			 * point
 																																			 */);
-		execData.isEntryPoint = false;
-		if (execData.traceId == -1) { // -1 if entry points
-			execData.traceId = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
-			execData.isEntryPoint = true;
+		execData.setEntryPoint(false);
+		if (execData.getTraceId() == -1) { // -1 if entry points
+			execData.setTraceId(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId());
+			execData.setEntryPoint(true);
 		}
 		// here we can collect the sessionid, which may for instance be
 		// registered before by
@@ -100,9 +100,9 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 		// threadid) from a method
 		// that knowns the request object (e.g. a servlet or a spring MVC
 		// controller).
-		execData.sessionId = AbstractOperationExecutionMethodInvocationInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId();
-		execData.experimentId = AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.getExperimentId();
-		execData.hostName = AbstractOperationExecutionMethodInvocationInterceptor.VM_NAME;
+		execData.setSessionId(AbstractOperationExecutionMethodInvocationInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId());
+		execData.setExperimentId(AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.getExperimentId());
+		execData.setHostName(AbstractOperationExecutionMethodInvocationInterceptor.VM_NAME);
 		return execData;
 	}
 
@@ -114,15 +114,15 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	public abstract Object invoke(MethodInvocation invocation) throws Throwable; // NOCS (IllegalThrowsCheck)
 
 	protected void proceedAndMeasure(final MethodInvocation invocation, final OperationExecutionRecord execData) throws Throwable { // NOCS (IllegalThrowsCheck)
-		execData.tin = AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
+		execData.setTin(AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime());
 		try {
 			// executing the intercepted method call
-			execData.retVal = invocation.proceed();
+			execData.setRetVal(invocation.proceed());
 		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
 			throw e; // exceptions are forwarded
 		} finally {
-			execData.tout = AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
-			if (execData.isEntryPoint) {
+			execData.setTout(AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime());
+			if (execData.isEntryPoint()) {
 				AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
 			}
 		}

@@ -48,7 +48,7 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
 		int eoi; // this is executionOrderIndex-th execution in this trace
 		int ess; // this is the height in the dynamic call tree of this execution
-		if (execData.isEntryPoint) {
+		if (execData.isEntryPoint()) {
 			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
 			eoi = 0;
 			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(1);
@@ -71,16 +71,16 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 			 * note that proceedAndMeasure(...) even sets the variable name in
 			 * case the execution of the joint point resulted in an exception!
 			 */
-			execData.eoi = eoi;
-			execData.ess = ess;
+			execData.setEoi(eoi);
+			execData.setEss(ess);
 			AbstractOperationExecutionAspect.CTRLINST.newMonitoringRecord(execData);
-			if (execData.isEntryPoint) {
+			if (execData.isEntryPoint()) {
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalEOI();
 				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalESS();
 			} else {
 				AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(ess);
 			}
 		}
-		return execData.retVal;
+		return execData.getRetVal();
 	}
 }

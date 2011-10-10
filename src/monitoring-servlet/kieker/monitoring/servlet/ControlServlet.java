@@ -49,7 +49,7 @@ import kieker.monitoring.timer.ITimeSource;
  *         2007/03/13: Initial Prototype
  */
 public class ControlServlet extends HttpServlet {
-	static String hostname = "unknown";
+	private static String hostname = "unknown";
 
 	private static final long serialVersionUID = 689701318L;
 
@@ -60,7 +60,7 @@ public class ControlServlet extends HttpServlet {
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 
 	private static boolean initialized = false;
-	
+
 	protected void dumpError(final PrintWriter out, final String msg) {
 		out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
 	}

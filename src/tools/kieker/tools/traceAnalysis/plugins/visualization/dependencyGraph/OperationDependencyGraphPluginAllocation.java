@@ -66,8 +66,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	public OperationDependencyGraphPluginAllocation(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
 		super(name, systemEntityFactory, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory.getOperationFactory().rootOperation,
-						systemEntityFactory.getAllocationFactory().rootAllocationComponent)));
+				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory.getOperationFactory().getRootOperation(),
+						systemEntityFactory.getAllocationFactory().getRootAllocationComponent())));
 		this.pairFactory = new AllocationComponentOperationPairFactory(systemEntityFactory);
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
@@ -125,7 +125,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 			containedPairs.add(pairNode);
 		}
 
-		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getRootExecutionContainer();
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<AllocationComponent>> containerComponentEntry : containerId2componentMapping.entrySet()) {
@@ -220,7 +220,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 				}
 				final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-				final int rootOperationId = OperationDependencyGraphPluginAllocation.this.getSystemEntityFactory().getOperationFactory().rootOperation.getId();
+				final int rootOperationId = OperationDependencyGraphPluginAllocation.this.getSystemEntityFactory().getOperationFactory().getRootOperation().getId();
 				final Operation senderOperation = m.getSendingExecution().getOperation();
 				final Operation receiverOperation = m.getReceivingExecution().getOperation();
 				/* The following two get-calls to the factory return s.th. in either case */

@@ -30,7 +30,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	private volatile long timestamp = -1;
 	private volatile int branchID = -1;
 	private volatile int branchingOutcome = -1;
-	
+
 	/**
 	 * @return the timestamp
 	 */

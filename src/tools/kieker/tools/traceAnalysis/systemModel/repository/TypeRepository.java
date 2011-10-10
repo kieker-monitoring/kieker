@@ -31,8 +31,8 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  * @author Andre van Hoorn
  */
 public class TypeRepository extends AbstractSystemSubRepository {
-	
-	public final ComponentType rootComponent;
+
+	private final ComponentType rootComponent;
 
 	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>();
 	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>();
@@ -79,5 +79,9 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	 */
 	public final synchronized Collection<ComponentType> getComponentTypes() {
 		return this.componentTypesById.values();
+	}
+
+	public ComponentType getRootComponent() {
+		return this.rootComponent;
 	}
 }

@@ -31,13 +31,13 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 
 	public static final double UNDEFINED_DOUBLE = -1;
 	public static final long UNDEFINED_LONG = -1;
-	
+
 	private static final String DEFAULT_VALUE = "N/A";
 
 	private static final long serialVersionUID = 1762476L;
 
 	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class, };
-	
+
 	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
 	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
 	private volatile long swapTotal = MemSwapUsageRecord.UNDEFINED_LONG;

@@ -30,14 +30,14 @@ package kieker.common.record;
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 
 	private static final String DEFAULT_VALUE = "N/A";
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 17676L;
 
 	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class };
-	
+
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
 	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.
@@ -58,7 +58,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	 * Value of utilization. The value should be in the range <code>[0,1]</code>
 	 */
 	private volatile double utilization = -1;
-
 
 	/*
 	 * {@inheritdoc}

@@ -31,8 +31,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
-	public final ExecutionContainer rootExecutionContainer;
-	
+	private final ExecutionContainer rootExecutionContainer;
+
 	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>();
 	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>();
 
@@ -71,5 +71,9 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 
 	public final Collection<ExecutionContainer> getExecutionContainers() {
 		return this.executionContainersById.values();
+	}
+
+	public ExecutionContainer getRootExecutionContainer() {
+		return this.rootExecutionContainer;
 	}
 }

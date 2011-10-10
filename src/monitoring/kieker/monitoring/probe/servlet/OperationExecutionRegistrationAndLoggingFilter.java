@@ -98,29 +98,29 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 			execData = new OperationExecutionRecord(OperationExecutionRegistrationAndLoggingFilter.COMPONENT_NAME,
 					OperationExecutionRegistrationAndLoggingFilter.OP_NAME,
 					OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point */);
-			execData.sessionId = this.getSessionId((HttpServletRequest) request);
-			if (execData.sessionId == null) {
-				execData.sessionId = OperationExecutionRegistrationAndLoggingFilter.NULL_SESSION_STR;
+			execData.setSessionId(this.getSessionId((HttpServletRequest) request));
+			if (execData.getSessionId() == null) {
+				execData.setSessionId(OperationExecutionRegistrationAndLoggingFilter.NULL_SESSION_STR);
 			}
-			OperationExecutionRegistrationAndLoggingFilter.SESSION_REGISTRY.storeThreadLocalSessionId(execData.sessionId);
-			execData.isEntryPoint = true; // of course (however, we never evaluate it here)!
+			OperationExecutionRegistrationAndLoggingFilter.SESSION_REGISTRY.storeThreadLocalSessionId(execData.getSessionId());
+			execData.setEntryPoint(true); // of course (however, we never evaluate it here)!
 			OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.storeThreadLocalEOI(0); // current execution's eoi is 0
 			OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.storeThreadLocalESS(1); // *current* execution's ess is 0
-			execData.hostName = OperationExecutionRegistrationAndLoggingFilter.VM_NAME;
-			execData.experimentId = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getExperimentId();
-			execData.tin = OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime();
+			execData.setHostName(OperationExecutionRegistrationAndLoggingFilter.VM_NAME);
+			execData.setExperimentId(OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getExperimentId());
+			execData.setTin(OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime());
 		}
 		try {
 			chain.doFilter(request, response);
 		} finally {
 			if (execData != null) {
-				execData.tout = OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime();
-				execData.eoi = eoi;
-				execData.ess = ess;
+				execData.setTout(OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime());
+				execData.setEoi(eoi);
+				execData.setEss(ess);
 				// if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)
-				if (execData.sessionId == null) {
+				if (execData.getSessionId() == null) {
 					// log.info("TraceID" + execData.traceId + "had no sessionId so far. Now?");
-					execData.sessionId = this.getSessionId((HttpServletRequest) request);
+					execData.setSessionId(this.getSessionId((HttpServletRequest) request));
 					// log.info("New sessionId? " + execData.sessionId);
 				}
 				// TOOD: ?only log record if cfRegistry.recallThreadLocalEOI > 0?

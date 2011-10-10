@@ -58,8 +58,8 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 
 	public ComponentDependencyGraphPluginAllocation(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<AllocationComponent>(systemEntityFactory.getAllocationFactory().rootAllocationComponent.getId(),
-				systemEntityFactory.getAllocationFactory().rootAllocationComponent));
+		super(name, systemEntityFactory, new DependencyGraph<AllocationComponent>(systemEntityFactory.getAllocationFactory().getRootAllocationComponent().getId(),
+				systemEntityFactory.getAllocationFactory().getRootAllocationComponent()));
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
@@ -68,7 +68,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 
 	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabels) {
 		final AllocationComponent component = node.getEntity();
-		if (component == super.getSystemEntityFactory().getAllocationFactory().rootAllocationComponent) {
+		if (component == super.getSystemEntityFactory().getAllocationFactory().getRootAllocationComponent()) {
 			return "$";
 		}
 
@@ -104,7 +104,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			containedComponents.add(node);
 		}
 
-		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().rootExecutionContainer;
+		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getRootExecutionContainer();
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<DependencyGraphNode<AllocationComponent>>> entry : component2containerMapping.entrySet()) {

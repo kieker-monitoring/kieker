@@ -58,7 +58,7 @@ public final class StorageOnly {
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid",
 						3333, 123123L, 123124L, StorageOnly.CTRL.getHostName(), i, i); // NOCS (MagicNumberCheck)
-				record.hostName = StorageOnly.VM_NAME;
+				record.setHostName(StorageOnly.VM_NAME);
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 8 seconds");
@@ -67,7 +67,7 @@ public final class StorageOnly {
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component", (i % 4) + "method", "sessionid",
 						3333, 123123L, 123124L, StorageOnly.CTRL.getHostName(), i + 10000, i); // NOCS (MagicNumberCheck)
-				record.hostName = StorageOnly.VM_NAME;
+				record.setHostName(StorageOnly.VM_NAME);
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
 			System.out.println("Sleeping for 60 seconds");

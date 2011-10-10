@@ -43,7 +43,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	public static final String STEREOTYPE_ALLOCATION_COMPONENT = "<<deployment component>>";
 
 	private static final String NODE_PREFIX = "depNode_";
-	
+
 	protected final DependencyGraph<T> dependencyGraph;
 
 	public AbstractDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final DependencyGraph<T> dependencyGraph) {

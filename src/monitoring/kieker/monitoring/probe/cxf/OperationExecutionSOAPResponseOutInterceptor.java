@@ -60,7 +60,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getTimeSource();
 
 	protected static final String VM_NAME = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getHostName();
-	
+
 	private static final String COMPONENT_NAME = OperationExecutionSOAPResponseOutInterceptor.class.getName();
 	private static final String OP_NAME = "handleMessage(SoapMessage msg)";
 
@@ -110,7 +110,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.COMPONENT_NAME,
 				OperationExecutionSOAPResponseOutInterceptor.OP_NAME, sessionID, traceId, tin, tout, OperationExecutionSOAPResponseOutInterceptor.VM_NAME, myEoi,
 				myEss);
-		rec.experimentId = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getExperimentId();
+		rec.setExperimentId(OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getExperimentId());
 		OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.newMonitoringRecord(rec);
 
 		/*

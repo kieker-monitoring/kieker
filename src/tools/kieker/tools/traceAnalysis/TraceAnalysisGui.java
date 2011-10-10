@@ -60,11 +60,11 @@ import javax.swing.border.TitledBorder;
  * @author Robert von Massow
  * 
  */
+// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/220
 public class TraceAnalysisGui extends JFrame implements ActionListener {
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/220
 	private static final long serialVersionUID = 11333L;
-	final JList l;
-	final DefaultListModel lm = new DefaultListModel();
+	private final JList l;
+	private final DefaultListModel lm = new DefaultListModel();
 	private final JTextField outdir;
 	private final JFrame frame;
 	private final JButton remB;

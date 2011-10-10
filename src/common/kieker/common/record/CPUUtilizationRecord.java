@@ -28,7 +28,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 
 	public static final double UNDEFINED_DOUBLE = -1;
 
-	private static final String DEFAULT_VALUE = "N/A";	
+	private static final String DEFAULT_VALUE = "N/A";
 
 	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
 		double.class, double.class, };
@@ -37,7 +37,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	 * 
 	 */
 	private static final long serialVersionUID = 17677676L;
-	
+
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
 	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.

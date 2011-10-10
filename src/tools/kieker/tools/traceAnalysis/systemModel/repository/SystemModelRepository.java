@@ -63,7 +63,7 @@ public class SystemModelRepository {
 		final Signature rootSignature = new Signature("$", "<>", new String[] {});
 		final Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
 		this.operationFactory = new OperationRepository(this, rootOperation);
-		this.rootExecution = new Execution(this.operationFactory.rootOperation, this.allocationFactory.rootAllocationComponent, -1, "-1", -1, -1, -1, -1);
+		this.rootExecution = new Execution(this.operationFactory.getRootOperation(), this.allocationFactory.getRootAllocationComponent(), -1, "-1", -1, -1, -1, -1);
 	}
 
 	public final AllocationRepository getAllocationFactory() {

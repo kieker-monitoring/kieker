@@ -69,8 +69,8 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		this.allocationComponentOperationPairFactory = allocationComponentOperationPairFactory;
 		this.systemEntityFactory = systemEntityFactory;
 		this.root = new CallTreeNode(null, // null: root node has no parent
-				new CallTreeOperationHashKey(this.systemEntityFactory.getAllocationFactory().rootAllocationComponent,
-						this.systemEntityFactory.getOperationFactory().rootOperation));
+				new CallTreeOperationHashKey(this.systemEntityFactory.getAllocationFactory().getRootAllocationComponent(),
+						this.systemEntityFactory.getOperationFactory().getRootOperation()));
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
 	}
@@ -199,8 +199,8 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 
 	public static void writeDotForMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace msgTrace, final String outputFilename,
 			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
-		final CallTreeNode root = new CallTreeNode(null, new CallTreeOperationHashKey(systemEntityFactory.getAllocationFactory().rootAllocationComponent,
-				systemEntityFactory.getOperationFactory().rootOperation));
+		final CallTreeNode root = new CallTreeNode(null, new CallTreeOperationHashKey(systemEntityFactory.getAllocationFactory().getRootAllocationComponent(),
+				systemEntityFactory.getOperationFactory().getRootOperation()));
 		TraceCallTreePlugin.addTraceToTree(root, msgTrace, false); // false: no aggregation
 		TraceCallTreePlugin.saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, shortLabels);
 	}
@@ -238,7 +238,8 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		public void newEvent(final MessageTrace mt) {
 			try {
 				final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TraceCallTreePlugin.this.systemEntityFactory,
-						TraceCallTreePlugin.this.allocationComponentOperationPairFactory, TraceCallTreePlugin.this.allocationComponentOperationPairFactory.rootPair,
+						TraceCallTreePlugin.this.allocationComponentOperationPairFactory,
+						TraceCallTreePlugin.this.allocationComponentOperationPairFactory.getRootPair(),
 						true); // rootNode
 				AbstractCallTreePlugin.writeDotForMessageTrace(TraceCallTreePlugin.this.systemEntityFactory, rootNode, mt, TraceCallTreePlugin.this.outputFnBase
 						+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights

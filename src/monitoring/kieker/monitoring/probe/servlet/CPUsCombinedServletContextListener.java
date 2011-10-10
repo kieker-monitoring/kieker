@@ -86,7 +86,7 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	/** Parameter name for the initial delay to be used in the web.xml file */
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_PREFIX
 			+ ".initialSamplingDelaySeconds";
-	
+
 	private static final Log LOG = LogFactory.getLog(CPUsCombinedServletContextListener.class);
 
 	/** Prefix for parameters used in the web.xml file */
@@ -99,7 +99,7 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new ArrayList<ScheduledSamplerJob>();
-	
+
 	private volatile long sensorIntervalSeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 

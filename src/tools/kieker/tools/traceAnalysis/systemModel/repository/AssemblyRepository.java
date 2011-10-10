@@ -32,7 +32,7 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  * @author Andre van Hoorn
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
-	public final AssemblyComponent rootAssemblyComponent;
+	private final AssemblyComponent rootAssemblyComponent;
 
 	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>();
 	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>();
@@ -72,5 +72,9 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 
 	public final Collection<AssemblyComponent> getAssemblyComponentInstances() {
 		return this.assemblyComponentInstancesById.values();
+	}
+
+	public AssemblyComponent getRootAssemblyComponent() {
+		return this.rootAssemblyComponent;
 	}
 }

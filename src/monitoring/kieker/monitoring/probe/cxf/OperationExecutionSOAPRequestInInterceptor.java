@@ -57,7 +57,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
-	
+
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
 

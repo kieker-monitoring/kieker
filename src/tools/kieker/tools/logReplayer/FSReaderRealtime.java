@@ -45,7 +45,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
 	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
-	
+
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
 	private RealtimeReplayDistributor rtDistributor = null;

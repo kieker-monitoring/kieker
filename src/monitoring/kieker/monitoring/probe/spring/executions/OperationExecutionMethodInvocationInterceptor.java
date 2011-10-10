@@ -56,20 +56,20 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 		}
 
 		final OperationExecutionRecord execData = this.initExecutionData(invocation);
-		execData.eoi = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI();
+		execData.setEoi(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI());
 		/*
 		 * this is executionOrderIndex-th execution in this trace
 		 */
-		execData.ess = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallAndIncrementThreadLocalESS();
+		execData.setEss(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallAndIncrementThreadLocalESS());
 		/*
 		 * this is the height in the dynamic call tree of this execution
 		 */
 
 		try {
 			this.proceedAndMeasure(invocation, execData);
-			if ((execData.eoi == -1) || (execData.ess == -1)) {
-				OperationExecutionMethodInvocationInterceptor.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + execData.eoi + " ess == "
-						+ execData.ess);
+			if ((execData.getEoi() == -1) || (execData.getEss() == -1)) {
+				OperationExecutionMethodInvocationInterceptor.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + execData.getEoi() +
+						" ess == " + execData.getEss());
 				OperationExecutionMethodInvocationInterceptor.LOG.fatal("Terminating Kieker.Monitoring!");
 				AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
 			}
@@ -81,8 +81,8 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 			 * case the execution of the joint point resulted in an exception!
 			 */
 			AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.newMonitoringRecord(execData);
-			AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.storeThreadLocalESS(execData.ess);
+			AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.storeThreadLocalESS(execData.getEss());
 		}
-		return execData.retVal;
+		return execData.getRetVal();
 	}
 }

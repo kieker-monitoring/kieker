@@ -35,10 +35,10 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  */
 public class Starter extends Thread {
-	
-	static volatile boolean boolvar = true;
 
-	Random random = new Random();
+	private static volatile boolean boolvar = true;
+
+	private final Random random = new Random();
 
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)

@@ -33,15 +33,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Andre van Hoorn
  */
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
-	public final AssemblyComponentOperationPair rootPair;
+	private final AssemblyComponentOperationPair rootPair;
 
 	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>();
 	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>();
 
 	public AssemblyComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);
-		final AssemblyComponent rootAssembly = systemFactory.getAssemblyFactory().rootAssemblyComponent;
-		final Operation rootOperation = systemFactory.getOperationFactory().rootOperation;
+		final AssemblyComponent rootAssembly = systemFactory.getAssemblyFactory().getRootAssemblyComponent();
+		final Operation rootOperation = systemFactory.getOperationFactory().getRootOperation();
 		this.rootPair = this.getPairInstanceByPair(rootAssembly, rootOperation);
 	}
 
@@ -88,5 +88,9 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 
 	public final Collection<AssemblyComponentOperationPair> getPairs() {
 		return this.pairsById.values();
+	}
+
+	public AssemblyComponentOperationPair getRootPair() {
+		return this.rootPair;
 	}
 }

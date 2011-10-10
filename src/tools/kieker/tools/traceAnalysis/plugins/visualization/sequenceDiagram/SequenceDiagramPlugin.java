@@ -54,14 +54,14 @@ import org.apache.commons.logging.LogFactory;
 public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(SequenceDiagramPlugin.class);
-	
+
 	/**
 	 * Path to the sequence.pic macros used to plot UML sequence diagrams. The
 	 * file must be in the classpath -- typically inside the jar.
 	 */
 	private static final String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
 	private static final String SEQUENCE_PIC_CONTENT;
-	
+
 	private final String outputFnBase;
 	private final boolean shortLabels;
 
@@ -125,7 +125,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
 				+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS (AvoidInlineConditionalsCheck)
 		System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-		System.out.println("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS (AvoidInlineConditionalsCheck)
+		System.out.println("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS
+																																		// (AvoidInlineConditionalsCheck)
 				+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
 	}
 
@@ -213,7 +214,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 		final Set<Integer> plottedComponentIds = new TreeSet<Integer>();
 
-		final AllocationComponent rootAllocationComponent = systemEntityFactory.getAllocationFactory().rootAllocationComponent;
+		final AllocationComponent rootAllocationComponent = systemEntityFactory.getAllocationFactory().getRootAllocationComponent();
 		final String rootDotId = "O" + rootAllocationComponent.getId();
 		ps.print("actor(O" + rootAllocationComponent.getId() + ",\"\");" + "\n");
 		plottedComponentIds.add(rootAllocationComponent.getId());

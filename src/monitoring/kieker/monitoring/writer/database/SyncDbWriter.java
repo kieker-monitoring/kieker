@@ -120,15 +120,15 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				return false;
 			}
 			final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-			this.psInsertMonitoringData.setInt(1, execRecord.experimentId); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setString(2, execRecord.className + "." + execRecord.operationName); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setString(3, execRecord.sessionId); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(4, execRecord.traceId); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(5, execRecord.tin); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(6, execRecord.tout); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setString(7, execRecord.hostName); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(8, execRecord.eoi); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(9, execRecord.ess); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setString(2, execRecord.getClassName() + "." + execRecord.getOperationName()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setString(3, execRecord.getSessionId()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(4, execRecord.getTraceId()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(5, execRecord.getTin()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(6, execRecord.getTout()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setString(7, execRecord.getHostName()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(8, execRecord.getEoi()); // NOCS (MagicNumberCheck)
+			this.psInsertMonitoringData.setLong(9, execRecord.getEss()); // NOCS (MagicNumberCheck)
 			this.psInsertMonitoringData.execute();
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
 			SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);

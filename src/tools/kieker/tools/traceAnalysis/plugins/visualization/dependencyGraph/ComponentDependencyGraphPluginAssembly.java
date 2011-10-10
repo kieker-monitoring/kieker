@@ -52,8 +52,8 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 
 	public ComponentDependencyGraphPluginAssembly(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<AssemblyComponent>(systemEntityFactory.getAssemblyFactory().rootAssemblyComponent.getId(),
-				systemEntityFactory.getAssemblyFactory().rootAssemblyComponent));
+		super(name, systemEntityFactory, new DependencyGraph<AssemblyComponent>(systemEntityFactory.getAssemblyFactory().getRootAssemblyComponent().getId(),
+				systemEntityFactory.getAssemblyFactory().getRootAssemblyComponent()));
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
@@ -72,7 +72,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes, final PrintStream ps, final boolean shortLabels) {
 
-		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().rootAssemblyComponent;
+		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().getRootAssemblyComponent();
 		final int rootComponentId = rootComponent.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		// dot code for contained components

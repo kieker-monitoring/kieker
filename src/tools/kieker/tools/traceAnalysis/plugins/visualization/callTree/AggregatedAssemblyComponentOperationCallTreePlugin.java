@@ -39,7 +39,7 @@ public class AggregatedAssemblyComponentOperationCallTreePlugin extends Aggregat
 	public AggregatedAssemblyComponentOperationCallTreePlugin(final String name, final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory,
 			final SystemModelRepository systemEntityFactory, final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
 		super(name, systemEntityFactory, new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory,
-				assemblyComponentOperationPairFactory, assemblyComponentOperationPairFactory.rootPair, true), // root node
+				assemblyComponentOperationPairFactory, assemblyComponentOperationPairFactory.getRootPair(), true), // root node
 				dotOutputFile, includeWeights, shortLabels);
 	}
 }
