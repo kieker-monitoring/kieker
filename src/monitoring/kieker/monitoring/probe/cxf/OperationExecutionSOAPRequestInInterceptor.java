@@ -61,7 +61,9 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
 
-	public OperationExecutionSOAPRequestInInterceptor() {}
+	public OperationExecutionSOAPRequestInInterceptor() {
+		// nothing to do
+	}
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {

@@ -36,6 +36,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
 
 /**
  * 
@@ -68,7 +69,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
 		numExecutions_l++;
-		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
+		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOPMD
 				2, 4, 1, 1); // NOCS (MagicNumberCheck)
 		numExecutions_l++;
 		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID,
@@ -98,6 +99,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * Tests whether the "well-known" Bookstore trace gets correctly
 	 * represented as an Execution Trace.
 	 */
+	@Test
 	public void testValidExecutionTrace() {
 		try {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
@@ -108,7 +110,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 			Assert.assertEquals("Invalid maximum tout timestamp", executionTrace.getMaxTout(), this.maxTout);
 
 		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
+			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex); // NOPMD (string literal)
 			Assert.fail(ex.getMessage());
 			return;
 		}
@@ -118,6 +120,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * Tests the equals method of the ExecutionTrace class with two equal
 	 * traces.
 	 */
+	@Test
 	public void testEqualMethodEqualTraces() {
 		try {
 			final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
@@ -134,6 +137,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * Tests the equals method of the ExecutionTrace class with two different
 	 * traces.
 	 */
+	@Test
 	public void testEqualMethodDifferentTraces() {
 		try {
 			final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
@@ -150,6 +154,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * Tests whether the "well-known" Bookstore trace can be correctly transformed
 	 * from an Execution Trace representation into a Message Trace representation.
 	 */
+	@Test
 	public void testMessageTraceTransformationValidTrace() {
 
 		ExecutionTrace executionTrace;
@@ -185,11 +190,11 @@ public class TestExecutionTraceBookstore extends TestCase {
 		int curIdx = 0;
 		{ /* 1.: [0,0].Call $->bookstore.searchBook(..) */// NOCS
 			final AbstractMessage call0_0___root__bookstore_searchBook = msgArray[curIdx++]; // NOCS
-			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
+			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage); // NOPMD (string literal)
 			Assert.assertEquals("Sending execution is not root execution", call0_0___root__bookstore_searchBook.getSendingExecution(),
 					this.systemEntityFactory.getRootExecution());
 			Assert.assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
-			Assert.assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), this.exec0_0__bookstore_searchBook.getTin());
+			Assert.assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), this.exec0_0__bookstore_searchBook.getTin()); // NOPMD
 		}
 		{ /* 2.: [1,1].Call bookstore.searchBook(..)->catalog.getBook(..) */// NOCS
 			final AbstractMessage call1_1___bookstore_searchBook_catalog_getBook = msgArray[curIdx++]; // NOCS
@@ -241,6 +246,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * Make sure that the transformation from an Execution Trace to a Message
 	 * Trace is performed only once.
 	 */
+	@Test
 	public void testMessageTraceTransformationOnlyOnce() {
 		try {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
@@ -262,6 +268,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * Make sure that the transformation from an Execution Trace to a Message
 	 * Trace is performed only once.
 	 */
+	@Test
 	public void testMessageTraceTransformationTwiceOnChange() {
 		try {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
@@ -316,6 +323,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
 	 * increment/decrement by 1, this test must lead to an exception.
 	 */
+	@Test
 	public void testMessageTraceTransformationBrokenTraceEssSkip() {
 		final ExecutionTrace executionTrace;
 		try {
@@ -334,7 +342,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 			TestExecutionTraceBookstore.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 			Assert.fail("An invalid execution has been transformed to a message trace");
-		} catch (final InvalidTraceException ex) {
+		} catch (final InvalidTraceException ex) { // NOPMD
 			/* we wanted this exception to happen */
 		}
 	}
@@ -376,6 +384,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * [3,2] are replaced by the eoi/ess values [4,2]. Since eoi values must only
 	 * increment by 1, this test must lead to an exception.
 	 */
+	@Test
 	public void testMessageTraceTransformationBrokenTraceEoiSkip() {
 		/*
 		 * Create an Execution Trace and add Executions in
@@ -397,7 +406,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 			/* The following call must throw an Exception in this test case */
 			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 			Assert.fail("An invalid execution has been transformed to a message trace");
-		} catch (final InvalidTraceException ex) {
+		} catch (final InvalidTraceException ex) { // NOPMD
 			/* we wanted this exception to happen */
 		}
 

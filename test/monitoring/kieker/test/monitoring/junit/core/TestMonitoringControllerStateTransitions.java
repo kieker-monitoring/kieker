@@ -27,17 +27,20 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
 
+import org.junit.Test;
+
 /**
  * @author Andre van Hoorn, Jan Waller
  */
 public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
+	@Test
 	public void testMonitoringEnabledToDisabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "true");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		{ /* Check values when enabled */// NOCS
-			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled());
-			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
+			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled()); // NOPMD
+			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated()); // NOPMD
 		}
 		{// NOCS
 			/* Change to disabled */
@@ -50,6 +53,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 		kieker.terminateMonitoring();
 	}
 
+	@Test
 	public void testMonitoringDisabledToEnabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "false");
@@ -69,6 +73,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 		kieker.terminateMonitoring();
 	}
 
+	@Test
 	public void testMonitoringEnabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "true");
@@ -82,6 +87,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 		kieker.terminateMonitoring();
 	}
 
+	@Test
 	public void testMonitoringDisabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(Configuration.MONITORING_ENABLED, "false");
@@ -95,6 +101,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 		kieker.terminateMonitoring();
 	}
 
+	@Test
 	public void testMonitoringTerminatedToEnabledMustFail() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
@@ -105,6 +112,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 		kieker.terminateMonitoring();
 	}
 
+	@Test
 	public void testMonitoringTerminatedToDisabledMustFail() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);

@@ -29,16 +29,20 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.DummyRecord;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
 
+import org.junit.Test;
+
 /**
  * @author Andre van Hoorn
  * 
  */
 public class TestPipeWriter extends TestCase { // NOCS
+
 	/**
 	 * Tests whether the {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter} correctly passes received {@link IMonitoringRecord}s to the
 	 * {@link kieker.common.namedRecordPipe.Broker} (which then passes these
 	 * to an {@link kieker.common.namedRecordPipe.IPipeReader}).
 	 */
+	@Test
 	public void testNamedPipeWriterPassesRecordsToPipe() {
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);
@@ -55,7 +59,7 @@ public class TestPipeWriter extends TestCase { // NOCS
 		 */
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
-			monitoringController.newMonitoringRecord(new DummyRecord());
+			monitoringController.newMonitoringRecord(new DummyRecord()); // NOPMD (new in loop)
 		}
 
 		/*

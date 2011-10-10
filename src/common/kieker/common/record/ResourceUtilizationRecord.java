@@ -62,7 +62,9 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 	/**
 	 * 
 	 */
-	public ResourceUtilizationRecord() {}
+	public ResourceUtilizationRecord() {
+		// nothing to do
+	}
 
 	/**
 	 * @param timestamp

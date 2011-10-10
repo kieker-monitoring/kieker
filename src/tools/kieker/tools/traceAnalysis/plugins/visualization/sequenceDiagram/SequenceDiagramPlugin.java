@@ -79,7 +79,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 			final InputStream is = SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(SequenceDiagramPlugin.SEQUENCE_PIC_PATH);
 			String line;
 			reader = new BufferedReader(new InputStreamReader(is));
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) { // NOPMD (assign)
 				sb.append(line).append("\n");
 			}
 			error = false;
@@ -224,8 +224,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
 				if (!plottedComponentIds.contains(senderComponent.getId())) {
-					ps.print("object(O" + senderComponent.getId() + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\""
-							+ SequenceDiagramPlugin.allocationComponentLabel(senderComponent, shortLabels) + "\");" + "\n");
+					ps.print("object(O" + senderComponent.getId() + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\"" // NOPMD
+							+ SequenceDiagramPlugin.allocationComponentLabel(senderComponent, shortLabels) + "\");" + "\n"); // NOPMD
 					plottedComponentIds.add(senderComponent.getId());
 				}
 				if (!plottedComponentIds.contains(receiverComponent.getId())) {
@@ -276,7 +276,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 			if (me instanceof SynchronousCallMessage) {
 				final Signature sig = me.getReceivingExecution().getOperation().getSignature();
-				final StringBuilder msgLabel = new StringBuilder(sig.getName());
+				final StringBuilder msgLabel = new StringBuilder(sig.getName()); // NOPMD (new in loop)
 				msgLabel.append("(");
 				final String[] paramList = sig.getParamTypeList();
 				if ((paramList != null) && (paramList.length > 0)) {

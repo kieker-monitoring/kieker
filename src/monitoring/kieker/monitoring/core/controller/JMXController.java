@@ -242,7 +242,9 @@ public final class JMXController extends AbstractController implements IJMXContr
 		/**
 		 * Constructs a {@link ServerNotificationListener}.
 		 */
-		public ServerNotificationListener() {}
+		public ServerNotificationListener() {
+			// nothing to do
+		}
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {

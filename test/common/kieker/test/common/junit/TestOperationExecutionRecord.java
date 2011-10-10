@@ -24,6 +24,8 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.record.OperationExecutionRecord;
 
+import org.junit.Test;
+
 /**
  * @author Andre van Hoorn
  */
@@ -38,20 +40,21 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	 * array a1 and using a1 to init r2.
 	 * 
 	 */
+	@Test
 	public void testSerializeDeserializeEquals() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setClassName("p1.p2.p3.componentname");
+		r1.setClassName("p1.p2.p3.componentname"); // NOPMD (string literal)
 		r1.setEoi(1); // NOCS (MagicNumberCheck)
 		r1.setEss(2); // NOCS (MagicNumberCheck)
 		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r1.setEntryPoint(true);
-		r1.setOperationName("operation(boolean arg1, int arg2)");
+		r1.setOperationName("operation(boolean arg1, int arg2)"); // NOPMD (string literal)
 		r1.setRetVal(new Object());
-		r1.setSessionId("XXLJHDJHDHF");
+		r1.setSessionId("XXLJHDJHDHF"); // NOPMD (string literal)
 		r1.setTin(5577376); // NOCS (MagicNumberCheck)
 		r1.setTout(7544522); // NOCS (MagicNumberCheck)
 		r1.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r1.setHostName("myVM");
+		r1.setHostName("myVM"); // NOPMD (string literal)
 
 		final Object[] r1Array = r1.toArray();
 
@@ -67,6 +70,7 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	 * Assert that two record instances with equal variables values
 	 * are equal.
 	 */
+	@Test
 	public void testEqualsEqualVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
 		r1.setClassName("p1.p2.p3.componentname");
@@ -105,6 +109,7 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	 * Assert that two record instances with null variables values
 	 * are not equal.
 	 */
+	@Test
 	public void testEqualsNullVariableValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
 		r1.setClassName("p1.p2.p3.componentname");
@@ -183,6 +188,7 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	 * Assert that two record instances with differing variables values
 	 * are not equal.
 	 */
+	@Test
 	public void testEqualsDifferentVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
 		r1.setClassName("p1.p2.p3.componentname");

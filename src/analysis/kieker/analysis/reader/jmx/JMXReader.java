@@ -81,7 +81,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 		try {
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "@");
 			final String server = propertyMap.getProperty("server", "localhost");
-			final int port = Integer.valueOf(propertyMap.getProperty("port", "0")).intValue();
+			final int port = Integer.parseInt(propertyMap.getProperty("port", "0"));
 			final String tmpServiceURL;
 			if (port > 0) {
 				tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
@@ -191,10 +191,10 @@ public final class JMXReader extends AbstractMonitoringReader {
 					Thread.sleep(10000); // NOCS
 					continue;
 				}
-				serverNotificationListener = new ServerNotificationListener();
+				serverNotificationListener = new ServerNotificationListener(); // NOPMD
 				jmx.addConnectionNotificationListener(serverNotificationListener, null, null);
 				mbServer = jmx.getMBeanServerConnection();
-				logNotificationListener = new LogNotificationListener();
+				logNotificationListener = new LogNotificationListener(); // NOPMD
 				mbServer.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
 				JMXReader.LOG.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
@@ -204,28 +204,28 @@ public final class JMXReader extends AbstractMonitoringReader {
 				// Shutdown
 				JMXReader.LOG.info("Shutting down JMXReader");
 
-			} catch (final InstanceNotFoundException e) { // ignore
-			} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+			} catch (final InstanceNotFoundException e) { // ignore // NOPMD
+			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 				JMXReader.LOG.error("Error in JMX connection!", e); // NOCS (MultipleStringLiteralsCheck)
 			} finally {
 				try {
 					if (logNotificationListener != null) {
 						mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 					}
-				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck)
+				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck) // NOPMD
 				}
 				try {
 					if (serverNotificationListener != null) {
 						jmx.removeConnectionNotificationListener(serverNotificationListener);
 					}
-				} catch (final ListenerNotFoundException e) { // ignore
+				} catch (final ListenerNotFoundException e) { // ignore // NOPMD
 				}
 				try {
 					if (jmx != null) {
 						jmx.close();
 					}
 					Thread.sleep(10000); // NOCS
-				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck)
+				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck) // NOPMD
 				}
 			}
 		}
@@ -250,7 +250,9 @@ public final class JMXReader extends AbstractMonitoringReader {
 
 	private final class LogNotificationListener implements NotificationListener {
 
-		public LogNotificationListener() {}
+		public LogNotificationListener() {
+			// nothing to do
+		}
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
@@ -263,7 +265,9 @@ public final class JMXReader extends AbstractMonitoringReader {
 		/**
 		 * Constructs a {@link ServerNotificationListener}.
 		 */
-		public ServerNotificationListener() {}
+		public ServerNotificationListener() {
+			// nothing to do
+		}
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {

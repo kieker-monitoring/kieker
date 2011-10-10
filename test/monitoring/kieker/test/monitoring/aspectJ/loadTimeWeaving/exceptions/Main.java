@@ -42,19 +42,19 @@ public final class Main {
 		for (int i = 0; i < 10; i++) { // NOCS (MagicNumber)
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) { // NOCS
+			} catch (final Exception e) { // NOCS // NOPMD
 			}
 		}
 
 		for (int i = 0; i < 10; i++) { // NOCS (MagicNumber)
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) { // NOCS
+			} catch (final Exception e) { // NOCS // NOPMD
 			}
 
 			try {
 				Main.helloKieker(false);
-			} catch (final Exception e) { // NOCS
+			} catch (final Exception e) { // NOCS // NOPMD
 			}
 		}
 

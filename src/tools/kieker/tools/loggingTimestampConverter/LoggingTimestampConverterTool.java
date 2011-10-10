@@ -20,9 +20,9 @@
 
 package kieker.tools.loggingTimestampConverter;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Vector;
 
 import kieker.tools.util.LoggingTimestampConverter;
 
@@ -47,7 +47,7 @@ public final class LoggingTimestampConverterTool {
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
-	private static final List<Option> OPTIONS = new Vector<Option>();
+	private static final List<Option> OPTIONS = new ArrayList<Option>();
 	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
 	private static CommandLine cmdl = null;
 	private static String[] timestampsStr;
@@ -70,7 +70,7 @@ public final class LoggingTimestampConverterTool {
 
 			@Override
 			public int compare(final Object o1, final Object o2) {
-				if (o1 == o2) {
+				if (o1 == o2) { // NOPMD
 					return 0;
 				}
 				final int posO1 = LoggingTimestampConverterTool.OPTIONS.indexOf(o1);
@@ -92,7 +92,7 @@ public final class LoggingTimestampConverterTool {
 		}
 
 		for (final long tstamp : LoggingTimestampConverterTool.timestampsLong) {
-			final StringBuilder strB = new StringBuilder();
+			final StringBuilder strB = new StringBuilder(); // NOPMD (new in loop)
 			strB.append(tstamp).append(": ").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(tstamp)).append(" (")
 					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp)).append(")");
 			System.out.println(strB.toString());

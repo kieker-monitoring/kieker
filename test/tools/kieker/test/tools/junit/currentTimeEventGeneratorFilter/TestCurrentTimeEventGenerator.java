@@ -30,49 +30,41 @@ import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
 
+import org.junit.Test;
+
 public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
-	/**
-	 * 
-	 */
-	public void testFirstRecordGeneratesEvent() {
+	@Test
+	public void testFirstRecordGeneratesEvent() { // NOPMD (assert in method)
 		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }); // NOCS (MagicNumberCheck)
 	}
 
-	/**
-	 * 
-	 */
-	public void testSecondWithinBoundNoEvent() {
+	@Test
+	public void testSecondWithinBoundNoEvent() { // NOPMD (assert in method)
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = (firstT + resolution) - 1;
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT });
 	}
 
-	/**
-	 * 
-	 */
-	public void testSecondOnBoundEvent() {
+	@Test
+	public void testSecondOnBoundEvent() { // NOPMD (assert in method)
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution;
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT });
 	}
 
-	/**
-	 * 
-	 */
-	public void testSecondBeyondBoundEvent() {
+	@Test
+	public void testSecondBeyondBoundEvent() { // NOPMD (assert in method)
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution + 1;
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution });
 	}
 
-	/**
-	 * 
-	 */
-	public void testTwoWithinBoundOnlyOneEvent() {
+	@Test
+	public void testTwoWithinBoundOnlyOneEvent() { // NOPMD (assert in method)
 		final long resolution = 10;
 		final long firstT = 5;
 		final long secondT = firstT + 1;
@@ -81,7 +73,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT });
 	}
 
-	public void testGapIntermediateEvents() {
+	@Test
+	public void testGapIntermediateEvents() { // NOPMD (assert in method)
 		final long resolution = 6;
 		final long firstT = 5;
 		final long secondT = firstT + (5 * resolution) + 1; // NOCS (MagicNumberCheck)

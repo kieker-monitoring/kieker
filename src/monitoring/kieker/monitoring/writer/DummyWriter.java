@@ -49,5 +49,7 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public void init() {}
+	public void init() {
+		// nothing to do
+	}
 }

@@ -30,6 +30,8 @@ import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import org.junit.Test;
+
 /**
  * 
  * @author Andre van Hoorn
@@ -49,6 +51,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * assert that a record <i>r</i> with <i>r.tin &lt; a</i> and <i>r.tout
 	 * &gt; a </i>, <i>r.tout &lt; b</i> does not pass the filter.
 	 */
+	@Test
 	public void testRecordTinBeforeToutWithinIgnored() {
 		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
@@ -60,16 +63,16 @@ public class TestTimestampFilter extends TestCase { // NOCS
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") { // NOPMD (string literal)
 
-			/**
-			 * In this test, this method should not be called.
-			 */
-			@Override
-			public void newEvent(final Execution event) {
-				filterPassedRecord.set(Boolean.TRUE);
-			}
-		});
+					/**
+					 * In this test, this method should not be called.
+					 */
+					@Override
+					public void newEvent(final Execution event) {
+						filterPassedRecord.set(Boolean.TRUE);
+					}
+				});
 		filter.getExecutionInputPort().newEvent(exec);
 		Assert.assertFalse("Filter passed execution " + exec + " although tin timestamp before" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				filterPassedRecord.get());
@@ -80,6 +83,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * assert that a record <i>r</i> with <i>r.tin &gt; a</i>, <i>r.tin
 	 * &lt; b</i> and <i>r.tout &gt; b </i> does not pass the filter.
 	 */
+	@Test
 	public void testRecordTinWithinToutAfterIgnored() {
 		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
@@ -111,6 +115,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * assert that a record <i>r</i> with <i>r.tin == a</i> and <i>r.tout == b </i>
 	 * does pass the filter.
 	 */
+	@Test
 	public void testRecordTinToutOnBordersPassed() {
 		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
@@ -143,6 +148,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * assert that a record <i>r</i> with <i>r.tin &gt; a</i>, <i>r.tin &lt; b</i>
 	 * and <i>r.tout &lt; b </i>, <i>r.tout &gt; a </i> does pass the filter.
 	 */
+	@Test
 	public void testRecordTinToutWithinRangePassed() {
 		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);

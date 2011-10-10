@@ -38,18 +38,6 @@ public class Execution implements IAnalysisEvent {
 	private final long tin;
 	private final long tout;
 
-	@SuppressWarnings("unused")
-	private Execution() {
-		this.operation = null;
-		this.allocationComponent = null;
-		this.traceId = -1;
-		this.sessionId = null;
-		this.eoi = -1;
-		this.ess = -1;
-		this.tin = -1;
-		this.tout = -1;
-	}
-
 	/**
 	 * Creates a new Execution instance.
 	 * 

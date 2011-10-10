@@ -50,12 +50,6 @@ public class FSReader extends AbstractMonitoringReader {
 
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 
-	/**
-	 * Acts as a consumer to the FSDirectoryReader and delegates incoming
-	 * records to the {@link #delegator}
-	 */
-	private FSReaderCons concurrentConsumer;
-
 	public FSReader(final String[] inputDirs) {
 		this(inputDirs, null);
 	}
@@ -73,11 +67,11 @@ public class FSReader extends AbstractMonitoringReader {
 
 	/** Default constructor used for construction by reflection. */
 	public FSReader() {
-		this.readOnlyRecordsOfType = null;
+		this.readOnlyRecordsOfType = null; // NOPMD
 	}
 
 	/**
-	 * Receives records from the {@link #concurrentConsumer} and delegates them
+	 * Receives records from the concurrentConsumer and delegates them
 	 * to the registered consumers via the {@link #deliverRecord(IMonitoringRecord)} method.
 	 */
 	private final IMonitoringRecordReceiver delegator = new IMonitoringRecordReceiver() {
@@ -90,10 +84,10 @@ public class FSReader extends AbstractMonitoringReader {
 
 	@Override
 	public boolean read() {
-		this.concurrentConsumer = new FSReaderCons(this.delegator, this.inputDirs, this.readOnlyRecordsOfType);
+		final FSReaderCons concurrentConsumer = new FSReaderCons(this.delegator, this.inputDirs, this.readOnlyRecordsOfType);
 		boolean success = false;
 		try {
-			success = this.concurrentConsumer.execute();
+			success = concurrentConsumer.execute();
 		} catch (final MonitoringRecordConsumerException ex) {
 			FSReader.LOG.error("RecordConsumerExecutionException occured", ex);
 			success = false;

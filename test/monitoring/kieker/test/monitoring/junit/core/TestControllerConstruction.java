@@ -27,14 +27,14 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
 
+import org.junit.Test;
+
 /**
  * @author Andre van Hoorn, Jan Waller
  */
 public class TestControllerConstruction extends TestCase { // NOCS
 
-	/**
-	 * 
-	 */
+	@Test
 	public void testConstructionFromConfig() {
 
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
@@ -56,6 +56,7 @@ public class TestControllerConstruction extends TestCase { // NOCS
 	/**
 	 * Make sure that {@link MonitoringController#getInstance()} always returns the same instance.
 	 */
+	@Test
 	public void testSingletonGetterOnlyOneInstance() {
 		Assert.assertSame("singleton getter returned different objects", MonitoringController.getInstance(), MonitoringController.getInstance());
 		Assert.assertEquals("monitoring should not be terminated", false, MonitoringController.getInstance().isMonitoringTerminated());

@@ -71,10 +71,14 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	/**
 	 * Constructs an {@link OperationExecutionRegistrationAndLoggingFilter}.
 	 */
-	public OperationExecutionRegistrationAndLoggingFilter() {}
+	public OperationExecutionRegistrationAndLoggingFilter() {
+		// nothing to do
+	}
 
 	@Override
-	public void init(final FilterConfig config) throws ServletException {}
+	public void init(final FilterConfig config) throws ServletException {
+		// nothing to do
+	}
 
 	/**
 	 * Returns the session ID from request @r or null if no session in @r.
@@ -135,5 +139,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	}
 
 	@Override
-	public void destroy() {}
+	public void destroy() {
+		// nothing to do
+	}
 }

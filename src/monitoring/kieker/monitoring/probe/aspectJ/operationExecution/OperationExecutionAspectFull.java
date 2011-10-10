@@ -37,10 +37,14 @@ public class OperationExecutionAspectFull extends AbstractOperationExecutionAspe
 
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectFull.class);
 
-	public OperationExecutionAspectFull() {}
+	public OperationExecutionAspectFull() {
+		// nothing to do
+	}
 
 	@Pointcut("execution(* *.*(..))")
-	public void monitoredMethod() {}
+	public void monitoredMethod() {
+		// Aspect Declaration (MUST be empty)
+	}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")

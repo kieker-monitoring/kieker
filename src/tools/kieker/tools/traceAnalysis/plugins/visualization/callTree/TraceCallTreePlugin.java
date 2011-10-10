@@ -126,7 +126,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 			final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
 		for (final CallTreeNode child : n.getChildren()) {
-			final StringBuilder strBuild = new StringBuilder();
+			final StringBuilder strBuild = new StringBuilder(); // NOPMD (new in loop)
 			final int childId = nodeIds.get(child);
 			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {

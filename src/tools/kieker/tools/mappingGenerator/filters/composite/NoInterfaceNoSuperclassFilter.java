@@ -37,7 +37,9 @@ public class NoInterfaceNoSuperclassFilter implements IMethodFilter {
 	private final IMethodFilter f1 = new NoInterfacesFilter();
 	private final IMethodFilter f2 = new NoSuperclassMethodsFilter();
 
-	public NoInterfaceNoSuperclassFilter() {}
+	public NoInterfaceNoSuperclassFilter() {
+		// nothing to do
+	}
 
 	@Override
 	public boolean accept(final Method m, final Class<?> c) {

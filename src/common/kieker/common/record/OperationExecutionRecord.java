@@ -54,14 +54,16 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	 * Used by probes to intermediate information.
 	 * The field is marked transient as it must not be serialized.
 	 */
-	private transient volatile boolean isEntryPoint = false;
+	private transient volatile boolean entryPoint = false;
 
 	/**
 	 * Returns an instance of OperationExecutionRecord.
 	 * The member variables are initialized that way that only actually
 	 * used variables must be updated.
 	 */
-	public OperationExecutionRecord() {}
+	public OperationExecutionRecord() {
+		// nothing to do
+	}
 
 	/**
 	 * 
@@ -393,10 +395,10 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 	}
 
 	public boolean isEntryPoint() {
-		return this.isEntryPoint;
+		return this.entryPoint;
 	}
 
 	public void setEntryPoint(final boolean entryPoint) {
-		this.isEntryPoint = entryPoint;
+		this.entryPoint = entryPoint;
 	}
 }

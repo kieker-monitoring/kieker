@@ -42,7 +42,9 @@ import org.apache.commons.logging.LogFactory;
 public class OperationExecutionMethodInvocationInterceptor extends AbstractOperationExecutionMethodInvocationInterceptor {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);
 
-	public OperationExecutionMethodInvocationInterceptor() {}
+	public OperationExecutionMethodInvocationInterceptor() {
+		// nothing to do
+	}
 
 	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
@@ -73,7 +75,7 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 				OperationExecutionMethodInvocationInterceptor.LOG.fatal("Terminating Kieker.Monitoring!");
 				AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
 			}
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)
 			throw e; // exceptions are forwarded
 		} finally {
 			/*

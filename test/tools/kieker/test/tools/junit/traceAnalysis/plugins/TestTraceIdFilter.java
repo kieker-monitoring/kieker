@@ -32,6 +32,8 @@ import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import org.junit.Test;
+
 /**
  * 
  * @author Andre van Hoorn
@@ -48,6 +50,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 * assert that an Execution object <i>exec</i> with traceId not element of
 	 * <i>idsToPass</i> is not passed through the filter.
 	 */
+	@Test
 	public void testAssertIgnoreTraceId() {
 		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)
@@ -82,6 +85,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 * assert that an Execution object <i>exec</i> with traceId element of
 	 * <i>idsToPass</i> is passed through the filter.
 	 */
+	@Test
 	public void testAssertPassTraceId() {
 		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)

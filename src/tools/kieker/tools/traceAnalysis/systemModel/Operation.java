@@ -32,13 +32,6 @@ public class Operation {
 	private final ComponentType componentType;
 	private final Signature signature;
 
-	@SuppressWarnings("unused")
-	private Operation() {
-		this.id = -1;
-		this.componentType = null;
-		this.signature = null;
-	}
-
 	public Operation(final int id, final ComponentType componentType, final Signature signature) {
 		this.id = id;
 		this.componentType = componentType;

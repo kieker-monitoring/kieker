@@ -39,10 +39,14 @@ import org.aspectj.lang.annotation.Pointcut;
 public class OperationExecutionAspectAnnotationServlet extends AbstractOperationExecutionAspectServlet {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectAnnotationServlet.class);
 
-	public OperationExecutionAspectAnnotationServlet() {}
+	public OperationExecutionAspectAnnotationServlet() {
+		// nothign to do
+	}
 
 	@Pointcut("execution(* *.do*(..)) && args(request,response)")
-	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {}
+	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {
+		// Aspect Declaration (MUST be empty)
+	}
 
 	@Override
 	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
@@ -51,7 +55,9 @@ public class OperationExecutionAspectAnnotationServlet extends AbstractOperation
 	}
 
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *.*(..))")
-	public void monitoredMethod() {}
+	public void monitoredMethod() {
+		// Aspect Declaration (MUST be empty)
+	}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")

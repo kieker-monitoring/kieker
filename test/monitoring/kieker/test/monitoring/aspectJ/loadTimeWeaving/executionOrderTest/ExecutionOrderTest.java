@@ -37,24 +37,24 @@ public final class ExecutionOrderTest {
 	private ExecutionOrderTest() {}
 
 	@OperationExecutionMonitoringProbe
-	private static void a(final boolean b) {
+	private static void methoda(final boolean b) {
 		if (b) {
-			ExecutionOrderTest.a2(b);
+			ExecutionOrderTest.methoda2(b);
 		} else {
-			ExecutionOrderTest.a2(b);
-			ExecutionOrderTest.b();
+			ExecutionOrderTest.methoda2(b);
+			ExecutionOrderTest.methodb();
 		}
 	}
 
 	@OperationExecutionMonitoringProbe
-	private static void a2(final boolean b) {
+	private static void methoda2(final boolean b) {
 		if (b) {
-			ExecutionOrderTest.b();
+			ExecutionOrderTest.methodb();
 		}
 	}
 
 	@OperationExecutionMonitoringProbe
-	private static void b() {
+	private static void methodb() {
 		double d = 12 + (System.currentTimeMillis() / 1000d); // NOCS (MagicNumberCheck)
 		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
 			d = d + 5 + i; // NOCS (MagicNumberCheck)
@@ -62,23 +62,23 @@ public final class ExecutionOrderTest {
 	}
 
 	public static void main(final String[] args) {
-		ExecutionOrderTest.a(true);
-		ExecutionOrderTest.a(false);
-		ExecutionOrderTest.d1();
+		ExecutionOrderTest.methoda(true);
+		ExecutionOrderTest.methoda(false);
+		ExecutionOrderTest.methodd1();
 	}
 
 	@OperationExecutionMonitoringProbe
-	public static void d1() {
-		ExecutionOrderTest.d2();
+	public static void methodd1() {
+		ExecutionOrderTest.methodd2();
 	}
 
 	@OperationExecutionMonitoringProbe
-	public static void d2() {
-		ExecutionOrderTest.d3();
+	public static void methodd2() {
+		ExecutionOrderTest.methodd3();
 	}
 
 	@OperationExecutionMonitoringProbe
-	public static void d3() {
+	public static void methodd3() {
 		System.out.println("d3()");
 	}
 

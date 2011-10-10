@@ -35,7 +35,9 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
 
-	public OperationExecutionWebRequestRegistrationInterceptor() {}
+	public OperationExecutionWebRequestRegistrationInterceptor() {
+		// nothing to do
+	}
 
 	@Override
 	public void preHandle(final WebRequest request) throws Exception {
@@ -54,5 +56,7 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 	}
 
 	@Override
-	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {}
+	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {
+		// nothing to do
+	}
 }

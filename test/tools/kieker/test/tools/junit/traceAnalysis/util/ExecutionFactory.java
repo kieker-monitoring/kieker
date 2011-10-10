@@ -38,11 +38,6 @@ public class ExecutionFactory {
 	private static final String DEFAULT_STRING = "N/A";
 	private final SystemModelRepository systemEntityFactory;
 
-	@SuppressWarnings("unused")
-	private ExecutionFactory() {
-		this.systemEntityFactory = null;
-	}
-
 	public ExecutionFactory(final SystemModelRepository systemEntityFactory) {
 		this.systemEntityFactory = systemEntityFactory;
 	}

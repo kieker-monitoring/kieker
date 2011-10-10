@@ -24,9 +24,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -119,9 +119,9 @@ public final class MethodExtractorTool {
 class MethodExtractor extends ClassLoader {
 
 	private static final Log LOG = LogFactory.getLog(MethodExtractor.class);
-	private String filtername = null;
-	private String cp = null;
-	private String mappingFile = null;
+	private final String filtername;
+	private final String cp;
+	private final String mappingFile;
 	private final NameIdMap map = new NameIdMap();
 
 	public MethodExtractor(final String cp, final String filtername, final String mappingFile) {
@@ -141,10 +141,10 @@ class MethodExtractor extends ClassLoader {
 			} catch (final ClassNotFoundException e) {
 				MethodExtractor.LOG.error("Unable to load filter or no filter provided (" + this.filtername + "), using default filter...", e);
 			}
-			final List<File> directories = new Vector<File>();
-			final List<File> jars = new Vector<File>();
+			final List<File> directories = new ArrayList<File>();
+			final List<File> jars = new ArrayList<File>();
 			for (final String string : elem) {
-				final File f = new File(string);
+				final File f = new File(string); // NOPMD (new in loop)
 				if (f.isDirectory()) {
 					directories.add(f);
 				} else if (f.getName().endsWith(".jar")) {
@@ -178,7 +178,7 @@ class MethodExtractor extends ClassLoader {
 		}
 		for (final File file : jars) {
 			try {
-				final JarFile jar = new JarFile(file.getAbsoluteFile().getName());
+				final JarFile jar = new JarFile(file.getAbsoluteFile().getName()); // NOPMD (new in loop)
 				this.analyseJarFile(jar, f);
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -354,7 +354,9 @@ class MethodExtractor extends ClassLoader {
 
 	private static class NullFilter implements IMethodFilter {
 
-		public NullFilter() {}
+		public NullFilter() {
+			// nothing to do
+		}
 
 		@Override
 		public boolean accept(final Method m, final Class<?> c) {

@@ -90,9 +90,7 @@ public final class NamedPipeFactory {
 				configuration.setProperty(key, value);
 			}
 		}
-
-		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
-		return monitoringController;
+		return MonitoringController.createInstance(configuration);
 	}
 
 	/**
@@ -112,7 +110,9 @@ public final class NamedPipeFactory {
 			}
 
 			@Override
-			public void notifyPipeClosed() {}
+			public void notifyPipeClosed() {
+				// nothign to do
+			}
 		});
 		return receivedRecords;
 	}

@@ -36,6 +36,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
 
 /**
  * 
@@ -102,6 +103,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 * Tests whether a valid trace is correctly reconstructed and passed to the
 	 * right output port.
 	 */
+	@Test
 	public void testValidBookstoreTracePassed() {
 		final AtomicReference<Boolean> receivedTheValidExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);
 		final AtomicReference<Boolean> receivedTheValidMessageTrace = new AtomicReference<Boolean>(Boolean.FALSE);
@@ -117,7 +119,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			validExecutionTrace = this.genValidBookstoreTrace();
 			validMessageTrace = validExecutionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
+			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex); // NOPMD (string literal)
 			Assert.fail("InvalidTraceException" + ex);
 			return;
 		}
@@ -230,6 +232,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 * Tests whether a broken trace is correctly detected and passed to the
 	 * right output port.
 	 */
+	@Test
 	public void testBrokenBookstoreTracePassed() {
 		final AtomicReference<Boolean> receivedValidExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);
 		final AtomicReference<Boolean> receivedValidMessageTrace = new AtomicReference<Boolean>(Boolean.FALSE);
@@ -348,6 +351,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 * Tests the timeout of pending (incomplete) traces.
 	 * A corresponding test for a valid trace is not required.
 	 */
+	@Test
 	public void testIncompleteTraceDueToTimeout() {
 
 		final AtomicReference<Boolean> receivedTheValidTriggerExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);

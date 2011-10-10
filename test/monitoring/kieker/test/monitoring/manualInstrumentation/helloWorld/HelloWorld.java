@@ -45,7 +45,7 @@ public final class HelloWorld {
 		monitoringController.newMonitoringRecord(new OperationExecutionRecord("kieker.component", "method", 1, startTime, endTime));
 	}
 
-	static void doSomething() {
+	private static void doSomething() {
 		System.out.println("doing something");
 		/* .. some application logic does something meaningful .. */
 	}

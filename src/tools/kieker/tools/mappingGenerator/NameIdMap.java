@@ -48,7 +48,9 @@ public class NameIdMap {
 	/**
 	 * Constructor for an empty map.
 	 */
-	public NameIdMap() {}
+	public NameIdMap() {
+		// nothing to do
+	}
 
 	/**
 	 * Adds the name and returns the id.
@@ -99,9 +101,9 @@ public class NameIdMap {
 			in = new BufferedReader(new FileReader(mappingFile));
 			String line;
 
-			while ((line = in.readLine()) != null) {
+			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				try {
-					st = new StringTokenizer(line, "=");
+					st = new StringTokenizer(line, "="); // NOPMD (new in loop)
 					final int numTokens = st.countTokens();
 					if (numTokens == 0) {
 						continue;
@@ -111,7 +113,7 @@ public class NameIdMap {
 					}
 					final String idStr = st.nextToken();
 					// the leading $ is optional
-					final Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr); // NOCS
+					final Integer id = Integer.valueOf((idStr.charAt(0) == '$') ? idStr.substring(1) : idStr); // NOCS
 					final String name = st.nextToken();
 					inst.id2NameMap.put(id, name);
 					inst.name2IdMap.put(name, id);

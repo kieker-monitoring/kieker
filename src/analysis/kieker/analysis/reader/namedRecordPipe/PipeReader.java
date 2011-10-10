@@ -43,7 +43,9 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	private volatile Pipe pipe;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
-	public PipeReader() {}
+	public PipeReader() {
+		// nothing to do
+	}
 
 	public PipeReader(final String pipeName) {
 		this.initPipe(pipeName);

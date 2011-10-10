@@ -29,11 +29,14 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.DummyRecord;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
 
+import org.junit.Test;
+
 /**
  * @author Andre van Hoorn, Jan Waller
  */
 public class TestMonitoringControllerRecordsPassedInMonitoringStates extends TestCase { // NOCS
 
+	@Test
 	public void testRecordsPassedToWriterWhenEnabled() {
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);
@@ -51,6 +54,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		monitoringController.terminateMonitoring();
 	}
 
+	@Test
 	public void testNoRecordsPassedToWriterWhenDisabled() {
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);
@@ -68,6 +72,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		monitoringController.terminateMonitoring();
 	}
 
+	@Test
 	public void testNoRecordsPassedToWriterWhenTerminated() {
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);

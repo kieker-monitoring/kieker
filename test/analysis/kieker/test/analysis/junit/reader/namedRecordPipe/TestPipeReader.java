@@ -36,6 +36,8 @@ import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
 
+import org.junit.Test;
+
 /**
  * 
  * @author Andre van Hoorn
@@ -44,9 +46,7 @@ import kieker.test.analysis.junit.util.NamedPipeFactory;
 public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
 
-	/**
-	 * 
-	 */
+	@Test
 	public void testNamedPipeReaderReceivesFromPipe() {
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final PipeReader pipeReader = new PipeReader(pipeName);
@@ -90,7 +90,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		 */
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
-			writer.newMonitoringRecord(new DummyRecord());
+			writer.newMonitoringRecord(new DummyRecord()); // NOPMD (new in loop)
 		}
 
 		analysisThread.terminate();

@@ -39,11 +39,13 @@ public class Starter extends Thread {
 	private static volatile boolean boolvar = true;
 	private final Random random = new Random();
 
-	public Starter() {}
+	public Starter() {
+		// nothing to do
+	}
 
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
-			new Starter().start();
+			new Starter().start(); // NOPMD (new in loop)
 			// wait between requests
 			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1)); // NOCS (MagicNumberCheck)
 		}
@@ -81,7 +83,7 @@ public class Starter extends Thread {
 			a += i / 1000; // NOCS (MagicNumberCheck)
 		}
 		if ((a % 10000) == 0) { // NOCS (MagicNumberCheck)
-			Starter.boolvar = !Starter.boolvar;
+			Starter.boolvar ^= Starter.boolvar;
 		}
 	}
 }

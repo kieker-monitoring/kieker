@@ -32,17 +32,19 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
 
 /**
  * 
  * @author Andre van Hoorn
  */
 public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { // NOCS
+	private static final Log LOG = LogFactory.getLog(TestTraceEquivalenceFilterAssemblyEquivalence.class);
 
-	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
+	@Test
 	public void testEqualTrace() {
 		final ExecutionTrace trace0;
 		final ExecutionTrace trace1;

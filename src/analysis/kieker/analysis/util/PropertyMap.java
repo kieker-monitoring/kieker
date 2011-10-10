@@ -104,7 +104,7 @@ public class PropertyMap {
 			final StringTokenizer keyValListTokens = new StringTokenizer(initString, pairDelimiter);
 			while (keyValListTokens.hasMoreTokens()) {
 				final String curKeyValToken = keyValListTokens.nextToken().trim();
-				final StringTokenizer keyValTokens = new StringTokenizer(curKeyValToken, keyValueDelimiter);
+				final StringTokenizer keyValTokens = new StringTokenizer(curKeyValToken, keyValueDelimiter); // NOPMD (new in loop)
 				if (keyValTokens.countTokens() != 2) {
 					throw new IllegalArgumentException("Expected key=value pair, found " + curKeyValToken);
 				}

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -104,25 +105,25 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 		try {
 			{ // 1. init and start reader threads // NOCS
 				for (final String inputDir : this.inputDirs) {
-					final FSDirectoryReader directoryReader = new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType);
+					final FSDirectoryReader directoryReader = new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType); // NOPMD
 					// consume records of any type and pass to this:
-					final Thread t = new Thread(new Runnable() {
+					final Thread t = new Thread(new Runnable() { // NOPMD
 
-						@Override
-						public void run() {
-							try {
-								directoryReader.read(); // throws an Exception on error
-								// signal termination:
-								FSReaderCons.this.newMonitoringRecord(FSReaderCons.FS_READER_TERMINATION_MARKER);
-							} catch (final IOException ex) {
-								FSReaderCons.LOG.error(directoryReader, ex);
-								FSReaderCons.this.reportReaderException(ex);
-							} catch (final MonitoringReaderException ex) {
-								FSReaderCons.LOG.error(directoryReader, ex);
-								FSReaderCons.this.reportReaderException(ex);
-							}
-						}
-					}, "Reader thread for " + inputDir);
+								@Override
+								public void run() {
+									try {
+										directoryReader.read(); // throws an Exception on error
+										// signal termination:
+										FSReaderCons.this.newMonitoringRecord(FSReaderCons.FS_READER_TERMINATION_MARKER);
+									} catch (final IOException ex) {
+										FSReaderCons.LOG.error(directoryReader, ex);
+										FSReaderCons.this.reportReaderException(ex);
+									} catch (final MonitoringReaderException ex) {
+										FSReaderCons.LOG.error(directoryReader, ex);
+										FSReaderCons.this.reportReaderException(ex);
+									}
+								}
+							}, "Reader thread for " + inputDir);
 					this.readerThreads.add(t);
 					t.start();
 				}
@@ -238,8 +239,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 	// }
 	// }
 
-	private final TreeMap<OrderRecordBufferElement, CountDownLatch> orderRecordBuffer = new TreeMap<OrderRecordBufferElement, CountDownLatch>( // NOCS
-																																				// (IllegalTypeCheck)
+	private final NavigableMap<OrderRecordBufferElement, CountDownLatch> orderRecordBuffer = new TreeMap<OrderRecordBufferElement, CountDownLatch>(
 			new Comparator<OrderRecordBufferElement>() {
 
 				@Override
@@ -257,7 +257,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 					 * Only return 0 (equal) iff the objects are identical,
 					 * i.e., the same
 					 */
-					if (t == t1) {
+					if (t == t1) { // NOPMD
 						return 0;
 					}
 
@@ -295,14 +295,6 @@ final class OrderRecordBufferElement {
 	 * Wrapped record
 	 */
 	private final IMonitoringRecord record;
-
-	/**
-	 * Must not be used for construction
-	 */
-	@SuppressWarnings("unused")
-	private OrderRecordBufferElement() {
-		this.record = null;
-	}
 
 	public OrderRecordBufferElement(final IMonitoringRecord record) {
 		this.record = record;

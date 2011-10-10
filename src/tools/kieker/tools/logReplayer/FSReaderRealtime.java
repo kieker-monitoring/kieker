@@ -57,7 +57,9 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	 * method in order to specify the input directory and number of workers
 	 * using the parameter @a inputDirName.
 	 */
-	public FSReaderRealtime() {}
+	public FSReaderRealtime() {
+		// nothing to do
+	}
 
 	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
 		this.initInstanceFromArgs(inputDirNames, numWorkers);
@@ -78,7 +80,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			}
 			try {
 				numWorkers = Integer.parseInt(numWorkersString);
-			} catch (final NumberFormatException ex) { // value of numWorkers remains -1
+			} catch (final NumberFormatException ex) { // NOPMD (value of numWorkers remains -1)
 			}
 
 			this.initInstanceFromArgs(this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
@@ -93,7 +95,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		String[] dirNameArray;
 
 		// parse inputDir property value
-		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) {
+		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) { // NOPMD (check empty string)
 			final String errorMsg = "Invalid argument value for inputDirNameList:" + inputDirNameList;
 			FSReaderRealtime.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
@@ -181,6 +183,8 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		}
 
 		@Override
-		public void terminate(final boolean error) {}
+		public void terminate(final boolean error) {
+			// nothing to do
+		}
 	}
 }

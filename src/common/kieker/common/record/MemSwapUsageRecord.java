@@ -60,7 +60,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	/**
 	 * 
 	 */
-	public MemSwapUsageRecord() {}
+	public MemSwapUsageRecord() {
+		// nothing to do
+	}
 
 	/**
 	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If

@@ -31,13 +31,12 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
  */
 class ExecutionTraceHashContainerAllocationEquivalence extends AbstractExecutionTraceHashContainer {
 
-	private final int hashCode;
+	private final int hashCode; // NOPMD
 
 	public ExecutionTraceHashContainerAllocationEquivalence(final ExecutionTrace t) {
 		super(t);
 		int h = 0;
-		// TODO: need a better hash function considering the order (e.g.,
-		// MD5)
+		// TODO: need a better hash function considering the order (e.g., MD5)
 		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/156
 		for (final Execution r : t.getTraceAsSortedExecutionSet()) {
 			h ^= r.getOperation().getId();
@@ -55,7 +54,7 @@ class ExecutionTraceHashContainerAllocationEquivalence extends AbstractExecution
 	}
 
 	private boolean executionsEqual(final Execution r1, final Execution r2) {
-		if (r1 == r2) {
+		if (r1 == r2) { // NOPMD
 			return true;
 		}
 		if ((r1 == null) || (r2 == null)) {

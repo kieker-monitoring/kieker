@@ -108,7 +108,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public final void init() throws Exception {}
+	public final void init() throws Exception {
+		// nothing to do
+	}
 
 	@Override
 	public final synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {

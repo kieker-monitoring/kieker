@@ -32,12 +32,16 @@ import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
 
+import org.junit.Test;
+
 /**
  * 
  * @author Andre van Hoorn
  * 
  */
 public class TestPeriodicSampling extends TestCase { // NOCS
+
+	@Test
 	public void testPeriodicSampler() throws InterruptedException {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);

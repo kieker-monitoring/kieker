@@ -31,7 +31,9 @@ public class WeightedBidirectionalDependencyGraphEdge<T> {
 	private int outgoingWeight = 0;
 	private int incomingWeight = 0;
 
-	public WeightedBidirectionalDependencyGraphEdge() {};
+	public WeightedBidirectionalDependencyGraphEdge() {
+		// nothing to do
+	};
 
 	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> destination) {
 		this.source = source;

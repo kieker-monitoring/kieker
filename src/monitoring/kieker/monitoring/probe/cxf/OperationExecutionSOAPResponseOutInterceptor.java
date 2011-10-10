@@ -68,7 +68,9 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
 
-	public OperationExecutionSOAPResponseOutInterceptor() {}
+	public OperationExecutionSOAPResponseOutInterceptor() {
+		// nothing to do
+	}
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {

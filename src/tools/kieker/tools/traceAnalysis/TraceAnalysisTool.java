@@ -37,7 +37,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.reader.filesystem.FSReader;
@@ -173,7 +172,7 @@ public final class TraceAnalysisTool {
 			return false;
 		}
 
-		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN); // NOCS
+		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN); // NOCS // NOPMD
 		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
@@ -201,7 +200,7 @@ public final class TraceAnalysisTool {
 	}
 
 	private static void dumpConfiguration() {
-		final List<Option> myOpts = new Vector<Option>(Constants.SORTED_OPTION_LIST);
+		final List<Option> myOpts = new ArrayList<Option>(Constants.SORTED_OPTION_LIST);
 
 		System.out.println("#");
 		System.out.println("# Configuration");
@@ -335,7 +334,7 @@ public final class TraceAnalysisTool {
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
 				numRequestedTasks++;
 				componentPrintMsgTrace = new MessageTraceWriterPlugin(Constants.PRINTMSGTRACE_COMPONENT_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY,
-						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt")
+						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt") // NOPMD
 								.getCanonicalPath());
 				mtReconstrFilter.getMessageTraceOutputPort().subscribe(componentPrintMsgTrace.getMessageTraceInputPort());
 				analysisInstance.registerPlugin(componentPrintMsgTrace);

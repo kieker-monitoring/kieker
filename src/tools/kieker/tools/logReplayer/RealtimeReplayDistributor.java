@@ -60,16 +60,6 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
 
-	/** Private constructor must not be used */
-	@SuppressWarnings("unused")
-	private RealtimeReplayDistributor() {
-		this.executor = null;
-		this.numWorkers = -1;
-		this.cons = null;
-		this.maxQueueSize = -1;
-		this.terminationLatch = null;
-	}
-
 	/**
 	 * Constructs a RealtimeReplayDistributor.
 	 * 
@@ -162,9 +152,11 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 		this.executor.shutdown();
 	}
 
-	public synchronized void decreaseActive() {
-		this.active--;
-		this.notifyAll();
+	public void decreaseActive() {
+		synchronized (this) {
+			this.active--;
+			this.notifyAll();
+		}
 	}
 
 	public int getNumWorkers() {

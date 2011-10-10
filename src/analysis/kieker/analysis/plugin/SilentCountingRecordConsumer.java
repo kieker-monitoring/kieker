@@ -36,7 +36,9 @@ public final class SilentCountingRecordConsumer implements IMonitoringRecordCons
 	/**
 	 * Constructs a {@link SilentCountingRecordConsumer}.
 	 */
-	public SilentCountingRecordConsumer() {}
+	public SilentCountingRecordConsumer() {
+		// nothing to do
+	}
 
 	@Override
 	public final Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
@@ -55,7 +57,9 @@ public final class SilentCountingRecordConsumer implements IMonitoringRecordCons
 	}
 
 	@Override
-	public final void terminate(final boolean error) {}
+	public final void terminate(final boolean error) {
+		// nothing to do
+	}
 
 	public final long getMessageCount() {
 		return this.counter.get();

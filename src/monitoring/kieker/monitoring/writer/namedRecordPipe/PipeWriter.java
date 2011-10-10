@@ -77,5 +77,7 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 	 * Nothing to do
 	 */
 	@Override
-	protected void init() {}
+	protected void init() {
+		// nothing to do
+	}
 }

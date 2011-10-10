@@ -37,11 +37,6 @@ public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
 	private final Collection<IInputPort<T>> subscribers = new ArrayList<IInputPort<T>>();
 	private final String description;
 
-	@SuppressWarnings("unused")
-	private OutputPort() {
-		this.description = null;
-	}
-
 	public OutputPort(final String description) {
 		this.description = description;
 	}

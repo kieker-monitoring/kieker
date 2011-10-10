@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.plugins.traceReconstruction;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -57,7 +58,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final Set<Long> invalidTraces = new TreeSet<Long>();
 	private volatile long minTin = -1;
 	private volatile long maxTout = -1;
-	private volatile boolean terminate = false;
+	private volatile boolean terminated = false;
 	private final boolean ignoreInvalidTraces;
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
@@ -67,28 +68,28 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort = new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
 
 	/** Pending traces sorted by tin timestamps */
-	private final TreeSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() { // NOCS (IllegalTypeCheck)
+	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
-				/** Order traces by tins */
-				@Override
-				public int compare(final ExecutionTrace t1, final ExecutionTrace t2) {
-					if (t1 == t2) {
-						return 0;
-					}
-					final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
-					final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
+		/** Order traces by tins */
+		@Override
+		public int compare(final ExecutionTrace t1, final ExecutionTrace t2) {
+			if (t1 == t2) { // NOPMD
+				return 0;
+			}
+			final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
+			final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
 
-					/**
-					 * Multiple traces may have an equal tin timestamp value.
-					 * In order to provide an absolute ordering of the keys,
-					 * we take the traceId as a second ordering key.
-					 */
-					if (t1LowestTin != t2LowestTin) {
-						return t1LowestTin < t2LowestTin ? -1 : 1; // NOCS
-					}
-					return t1.getTraceId() < t2.getTraceId() ? -1 : 1; // NOCS
-				}
-			});
+			/**
+			 * Multiple traces may have an equal tin timestamp value.
+			 * In order to provide an absolute ordering of the keys,
+			 * we take the traceId as a second ordering key.
+			 */
+			if (t1LowestTin != t2LowestTin) {
+				return t1LowestTin < t2LowestTin ? -1 : 1; // NOCS
+			}
+			return t1.getTraceId() < t2.getTraceId() ? -1 : 1; // NOCS
+		}
+	});
 
 	public TraceReconstructionFilter(final String name, final SystemModelRepository systemEntityFactory, final long maxTraceDurationMillis,
 			final boolean ignoreInvalidTraces) {
@@ -229,7 +230,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	 */
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
-			while (!this.timeoutMap.isEmpty() && (this.terminate || ((this.maxTout - this.timeoutMap.first().getMinTin()) > this.maxTraceDurationNanos))) {
+			while (!this.timeoutMap.isEmpty() && (this.terminated || ((this.maxTout - this.timeoutMap.first().getMinTin()) > this.maxTraceDurationNanos))) {
 				final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
@@ -256,7 +257,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		try {
-			this.terminate = true;
+			this.terminated = true;
 			if (!error) {
 				this.processTimeoutQueue();
 			} else {

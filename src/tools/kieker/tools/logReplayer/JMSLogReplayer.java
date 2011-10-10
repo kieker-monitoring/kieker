@@ -104,7 +104,7 @@ public class JMSLogReplayer {
  */
 class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 
-	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
+	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
 
 	private final IMonitoringRecordReceiver rec;
 
@@ -141,7 +141,9 @@ class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void terminate(final boolean error) {}
+	public void terminate(final boolean error) {
+		// nothing to do
+	}
 
 	/*
 	 * {@inheritdoc}

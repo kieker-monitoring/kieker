@@ -34,6 +34,8 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.DummyRecord;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
 
+import org.junit.Test;
+
 /**
  * Tests, whether the property <i>setLoggingTimestamp</i> works properly.
  * 
@@ -42,7 +44,7 @@ import kieker.test.monitoring.junit.util.NamedPipeFactory;
  */
 public class TestAutoSetLoggingTimestamp extends TestCase { // NOCS
 
-	private void testSetLoggingTimestamp(final boolean setLoggingTimestampEnabled) {
+	private void executeTestSetLoggingTimestamp(final boolean setLoggingTimestampEnabled) {
 		final String pipeName = NamedPipeFactory.createPipeName();
 
 		/*
@@ -88,11 +90,13 @@ public class TestAutoSetLoggingTimestamp extends TestCase { // NOCS
 		}
 	}
 
-	public void testSetLoggingTimestampEnabled() {
-		this.testSetLoggingTimestamp(true);
+	@Test
+	public void testSetLoggingTimestampEnabled() { // NOPMD (assert in method)
+		this.executeTestSetLoggingTimestamp(true);
 	}
 
-	public void testSetLoggingTimestampDisabled() {
-		this.testSetLoggingTimestamp(false);
+	@Test
+	public void testSetLoggingTimestampDisabled() { // NOPMD (assert in method)
+		this.executeTestSetLoggingTimestamp(false);
 	}
 }

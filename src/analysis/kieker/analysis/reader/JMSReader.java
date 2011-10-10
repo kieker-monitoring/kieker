@@ -77,7 +77,9 @@ public class JMSReader extends AbstractMonitoringReader {
 	/**
 	 * Constructor for JMSReader. Requires a subsequent call to the init method.
 	 */
-	public JMSReader() {}
+	public JMSReader() {
+		// nothing to do
+	}
 
 	/**
 	 * Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 | jmsFactoryLookupName=org.exolab.jms.jndi.InitialContextFactory
@@ -118,15 +120,16 @@ public class JMSReader extends AbstractMonitoringReader {
 	@Override
 	public boolean read() {
 		boolean retVal = false;
+		Connection connection = null;
 		try {
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOCS (InitialContext expects Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD // NOCS (InitialContext expects Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsFactoryLookupName);
 
 			// JMS initialization
 			properties.put(Context.PROVIDER_URL, this.jmsProviderUrl);
 			final Context context = new InitialContext(properties);
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
-			final Connection connection = factory.createConnection();
+			connection = factory.createConnection();
 			final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			Destination destination;
@@ -190,6 +193,14 @@ public class JMSReader extends AbstractMonitoringReader {
 		} catch (final Exception ex) { // FindBugs complains but wontfix // NOCS (IllegalCatchCheck)
 			JMSReader.LOG.fatal(ex.getMessage(), ex);
 			retVal = false;
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (final JMSException ex) {
+				JMSReader.LOG.error("Failed to close JMS", ex);
+			}
 		}
 		return retVal;
 	}

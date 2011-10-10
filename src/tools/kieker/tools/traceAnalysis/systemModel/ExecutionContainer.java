@@ -33,13 +33,6 @@ public class ExecutionContainer {
 	private final ExecutionContainer parent;
 	private final Collection<ExecutionContainer> childContainers = new ArrayList<ExecutionContainer>();
 
-	@SuppressWarnings("unused")
-	private ExecutionContainer() {
-		this.id = -1;
-		this.parent = null;
-		this.name = null;
-	}
-
 	public ExecutionContainer(final int id, final ExecutionContainer parent, final String name) {
 		this.id = id;
 		this.name = name;
