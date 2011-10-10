@@ -26,17 +26,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 
  * @author Andre van Hoorn
  */
-public abstract class AbstractSystemSubRepository {
+public abstract class AbstractSystemSubRepository { // NOPMD (abstract without abstract)
 	public static final int ROOT_ELEMENT_ID = 0;
 
 	private final AtomicInteger nextId = new AtomicInteger(AbstractSystemSubRepository.ROOT_ELEMENT_ID + 1);
 
 	private final SystemModelRepository systemFactory;
-
-	@SuppressWarnings("unused")
-	private AbstractSystemSubRepository() {
-		this.systemFactory = null;
-	}
 
 	public AbstractSystemSubRepository(final SystemModelRepository systemFactory) {
 		this.systemFactory = systemFactory;

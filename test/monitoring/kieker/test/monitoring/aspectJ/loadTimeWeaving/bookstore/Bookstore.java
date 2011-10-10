@@ -20,8 +20,8 @@
 
 package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstore;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
@@ -41,7 +41,9 @@ public class Bookstore extends Thread {
 	private static final int NUM_REQUESTS = 1000;
 	private static final int INTER_REQUEST_TIME = 5;
 
-	public Bookstore() {}
+	public Bookstore() {
+		// nothing to do
+	}
 
 	/**
 	 * 
@@ -61,11 +63,11 @@ public class Bookstore extends Thread {
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) {
 
-		final List<Bookstore> bookstoreScenarios = new Vector<Bookstore>();
+		final List<Bookstore> bookstoreScenarios = new ArrayList<Bookstore>();
 
 		for (int i = 0; i < Bookstore.NUM_REQUESTS; i++) {
 			System.out.println("Bookstore.main: Starting request " + i);
-			final Bookstore newBookstore = new Bookstore();
+			final Bookstore newBookstore = new Bookstore(); // NOPMD (new in loop)
 			bookstoreScenarios.add(newBookstore);
 			newBookstore.start();
 			Bookstore.waitabit(Bookstore.INTER_REQUEST_TIME);

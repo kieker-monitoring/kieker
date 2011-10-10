@@ -72,10 +72,10 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); // NOCS
+		final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); // NOCS //NOPMD
 		date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date_ISO8601UTC.format(new java.util.Date());
-		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
+		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar; // NOPMD (StringBuffer)
 		f = new File(path);
 		if (!f.mkdir()) {
 			final String errorMsg = "Failed to create directory '" + path + "'";
@@ -165,7 +165,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			}
 			this.entriesInCurrentFileCounter = 1;
 
-			final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); // NOCS
+			final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); // NOCS // NOPMD
 			dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = dateFormat_ISO8601UTC.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";

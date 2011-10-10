@@ -71,7 +71,7 @@ public final class DotFactory {
 		dot.append(fontname);
 		dot.append("\";\n fontsize=\"");
 		dot.append(Double.toString(fontsize));
-		dot.append("\";\n");
+		dot.append("\";\n"); // NOPMD (StringDuplicate)
 		return dot;
 	}
 

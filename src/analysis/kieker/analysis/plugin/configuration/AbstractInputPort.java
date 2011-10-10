@@ -32,11 +32,6 @@ public abstract class AbstractInputPort<T extends IAnalysisEvent> implements IIn
 
 	private final String description;
 
-	@SuppressWarnings("unused")
-	private AbstractInputPort() {
-		this.description = null;
-	}
-
 	public AbstractInputPort(final String description) {
 		this.description = description;
 	}

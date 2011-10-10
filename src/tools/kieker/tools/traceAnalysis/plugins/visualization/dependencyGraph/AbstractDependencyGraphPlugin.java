@@ -65,7 +65,7 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 				if ((curNode == destNode) && !plotSelfLoops) {
 					continue;
 				}
-				final StringBuilder strBuild = new StringBuilder();
+				final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
 				if (includeWeights) {
 					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode),
 							Integer.toString(outgoingDependency.getOutgoingWeight()), DotFactory.DOT_STYLE_DASHED, DotFactory.DOT_ARROWHEAD_OPEN));

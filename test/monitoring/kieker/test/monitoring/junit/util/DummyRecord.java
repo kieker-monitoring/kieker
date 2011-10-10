@@ -28,5 +28,7 @@ import kieker.common.record.DummyMonitoringRecord;
 public final class DummyRecord extends DummyMonitoringRecord {
 	private static final long serialVersionUID = 1L;
 
-	public DummyRecord() {}
+	public DummyRecord() {
+		// nothing to do
+	}
 }

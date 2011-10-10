@@ -20,10 +20,10 @@
 
 package kieker.analysis;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.IAnalysisPlugin;
@@ -59,12 +59,12 @@ public class AnalysisController {
 	 * this are the consumers for data that are coming into kieker by readers
 	 * (files or system under monitoring)
 	 */
-	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new Vector<IMonitoringRecordConsumerPlugin>();
+	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new ArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains all consumers which consume records of any type */
-	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new Vector<IMonitoringRecordConsumerPlugin>();
+	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new ArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains mapping of record types to subscribed consumers */
 	private final Map<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
-	private final Collection<IAnalysisPlugin> plugins = new Vector<IAnalysisPlugin>();
+	private final Collection<IAnalysisPlugin> plugins = new ArrayList<IAnalysisPlugin>();
 
 	/**
 	 * Will be count down after the analysis is set-up.
@@ -74,7 +74,9 @@ public class AnalysisController {
 	/**
 	 * Constructs an {@link AnalysisController} instance.
 	 */
-	public AnalysisController() {}
+	public AnalysisController() {
+		// do nothing
+	}
 
 	/**
 	 * Starts an {@link AnalysisController} instance and returns after the
@@ -196,7 +198,7 @@ public class AnalysisController {
 			for (final Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
 				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(recordType);
 				if (cList == null) {
-					cList = new Vector<IMonitoringRecordConsumerPlugin>(0);
+					cList = new ArrayList<IMonitoringRecordConsumerPlugin>(0); // NOPMD (new in loops)
 					this.specificTypeConsumers.put(recordType, cList);
 				}
 				cList.add(consumer);

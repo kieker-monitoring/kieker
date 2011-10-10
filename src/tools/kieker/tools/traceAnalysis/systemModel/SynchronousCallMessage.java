@@ -26,10 +26,6 @@ package kieker.tools.traceAnalysis.systemModel;
  */
 public class SynchronousCallMessage extends AbstractMessage {
 
-	public SynchronousCallMessage() {
-		super();
-	}
-
 	public SynchronousCallMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		super(timestamp, sendingExecution, receivingExecution);
 	}

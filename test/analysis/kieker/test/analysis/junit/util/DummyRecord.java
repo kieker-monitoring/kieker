@@ -32,5 +32,7 @@ public final class DummyRecord extends DummyMonitoringRecord {
 	/**
 	 * Constructs a {@link DummyRecord}.
 	 */
-	public DummyRecord() {}
+	public DummyRecord() {
+		// nothing to do
+	}
 }

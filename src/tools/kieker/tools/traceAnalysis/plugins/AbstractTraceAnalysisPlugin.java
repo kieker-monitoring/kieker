@@ -31,15 +31,6 @@ public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
 	private final String name;
 	private final SystemModelRepository systemEntityFactory;
 
-	/**
-	 * Must not be used for construction
-	 */
-	@SuppressWarnings("unused")
-	private AbstractTraceAnalysisPlugin() {
-		this.name = "no name";
-		this.systemEntityFactory = null;
-	}
-
 	public AbstractTraceAnalysisPlugin(final String name, final SystemModelRepository systemEntityFactory) {
 		this.systemEntityFactory = systemEntityFactory;
 		this.name = name;

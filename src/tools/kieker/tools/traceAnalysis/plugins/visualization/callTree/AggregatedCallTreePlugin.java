@@ -38,8 +38,8 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
+	private static final Log LOG = LogFactory.getLog(AggregatedCallTreePlugin.class);
 
-	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 	private final AbstractAggregatedCallTreeNode<T> root;
 	private final File dotOutputFile;
 	private final boolean includeWeights;

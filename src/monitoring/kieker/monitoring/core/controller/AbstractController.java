@@ -36,10 +36,12 @@ public abstract class AbstractController {
 	protected volatile MonitoringController monitoringController = null;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
-	protected final synchronized void setMonitoringController(final MonitoringController monitoringController) {
-		if (this.monitoringController == null) {
-			this.monitoringController = monitoringController;
-			this.init();
+	protected final void setMonitoringController(final MonitoringController monitoringController) {
+		synchronized (this) {
+			if (this.monitoringController == null) {
+				this.monitoringController = monitoringController;
+				this.init();
+			}
 		}
 	}
 

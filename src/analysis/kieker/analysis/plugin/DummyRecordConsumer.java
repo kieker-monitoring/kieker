@@ -33,7 +33,9 @@ public class DummyRecordConsumer implements IMonitoringRecordConsumerPlugin {
 	/**
 	 * Constructs a {@link DummyRecordConsumer}.
 	 */
-	public DummyRecordConsumer() {}
+	public DummyRecordConsumer() {
+		// nothing to do
+	}
 
 	@Override
 	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {

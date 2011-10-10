@@ -30,13 +30,6 @@ public class AllocationComponent {
 	private final AssemblyComponent assemblyComponent;
 	private final ExecutionContainer executionContainer;
 
-	@SuppressWarnings("unused")
-	private AllocationComponent() {
-		this.id = -1;
-		this.assemblyComponent = null;
-		this.executionContainer = null;
-	}
-
 	public AllocationComponent(final int id, final AssemblyComponent assemblyComponent, final ExecutionContainer executionContainer) {
 		this.id = id;
 		this.assemblyComponent = assemblyComponent;

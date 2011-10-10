@@ -26,10 +26,6 @@ package kieker.tools.traceAnalysis.systemModel;
  */
 public class SynchronousReplyMessage extends AbstractMessage {
 
-	public SynchronousReplyMessage() {
-		super();
-	}
-
 	public SynchronousReplyMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		super(timestamp, sendingExecution, receivingExecution);
 	}

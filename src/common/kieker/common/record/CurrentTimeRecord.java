@@ -36,7 +36,9 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
 	 * Constructs a new {@link CurrentTimeRecord} with the
 	 * without setting the current time value.
 	 */
-	public CurrentTimeRecord() {};
+	public CurrentTimeRecord() {
+		// nothing to do
+	};
 
 	public CurrentTimeRecord(final long timestamp) {
 		this.currentTime = timestamp;

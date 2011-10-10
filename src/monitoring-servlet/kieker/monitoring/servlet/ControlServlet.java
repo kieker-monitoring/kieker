@@ -64,7 +64,9 @@ public class ControlServlet extends HttpServlet {
 	/**
 	 * Constructs a {@link ControlServlet}.
 	 */
-	public ControlServlet() {}
+	public ControlServlet() {
+		// nothing to do
+	}
 
 	protected void dumpError(final PrintWriter out, final String msg) {
 		out.println("<div style=\"color:red\">ERROR: " + msg + "</div>");
@@ -129,7 +131,7 @@ public class ControlServlet extends HttpServlet {
 				if ((expimentIdString != null) && (expimentIdString.length() != 0)) { // NOCS (NestedIf)
 					try {
 						experimentID = Integer.parseInt(expimentIdString);
-						if (experimentID >= 0) { // NOCS (NestedIf)
+						if (experimentID >= 0) { // NOPMD // NOCS (NestedIf)
 							ControlServlet.CTRL_INST.setExperimentId(experimentID);
 						}
 					} catch (final NumberFormatException ne) {
@@ -139,31 +141,31 @@ public class ControlServlet extends HttpServlet {
 				/*
 				 * action = incExperimentId
 				 */
-			} else if (action.equals("incExperimentId")) { // NOCS (EqualsAvoidNullCheck)
+			} else if ("incExperimentId".equals(action)) {
 				ControlServlet.CTRL_INST.incExperimentId();
 				/*
 				 * action = enable
 				 */
-			} else if (action.equals("enable")) { // NOCS (EqualsAvoidNullCheck)
+			} else if ("enable".equals(action)) {
 				ControlServlet.CTRL_INST.enableMonitoring();
 				/*
 				 * action = disable
 				 */
-			} else if (action.equals("disable")) { // NOCS (EqualsAvoidNullCheck)
+			} else if ("disable".equals(action)) {
 				ControlServlet.CTRL_INST.disableMonitoring();
 				/*
 				 * action = terminate
 				 */
-			} else if (action.equals("terminate")) { // NOCS (EqualsAvoidNullCheck)
+			} else if ("terminate".equals(action)) {
 				ControlServlet.CTRL_INST.terminateMonitoring();
 				/*
 				 * action = ...
 				 */
-			} else if (action.equals("insertTestData")) { // NOCS (EqualsAvoidNullCheck)
+			} else if ("insertTestData".equals(action)) {
 				ControlServlet.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSession(true).getId());
 				ControlServlet.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) { // NOCS
-					ControlServlet.CTRL_INST.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet",
+					ControlServlet.CTRL_INST.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet", // NOPMD
 							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.SESSION_REGISTRY.recallThreadLocalSessionId(),
 							ControlServlet.CF_REGISTRY.recallThreadLocalTraceId(), ControlServlet.TIMESOURCE.getTime(), ControlServlet.TIMESOURCE.getTime(),
 							ControlServlet.CTRL_INST.getHostName(), i, i));
@@ -199,26 +201,33 @@ public class ControlServlet extends HttpServlet {
 			out.println("</table>");
 		}
 		final StringBuffer bu = new StringBuffer(2048);
-		bu.append("<br><h3>Options:</h3>");
-		bu.append(" enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> / <a href=\"index?action=terminate\"> terminate</a><br>");
-		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
-		bu.append(" experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>");
-		bu.append("<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">");
-		bu.append(" experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"" + ControlServlet.CTRL_INST.getExperimentId() + "\"/>");
-		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> ");
-		bu.append("</FORM> <br><br>");
-		bu.append(" <FORM ACTION=\"index\" METHOD=\"GET\"> ");
-		bu.append(" <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">");
-		bu.append(" vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"" + ControlServlet.CTRL_INST.getHostName() + "\"/>");
-		bu.append(" <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>");
-		bu.append(" Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>");
-		bu.append(" Kieker monitoring events since last execution environment restart = " + ControlServlet.CTRL_INST.getNumberOfInserts() + " <br>");
-		bu.append(" java.vm.name = " + System.getProperty("java.vm.name") + " <br>");
+		bu.append("<br><h3>Options:</h3>"
+				+ " enabled: <a href=\"index?action=enable\"> enable </a> / <a href=\"index?action=disable\"> disable </a> / <a href=\"index?action=terminate\"> terminate</a><br>"
+				+ " <FORM ACTION=\"index\" METHOD=\"GET\"> "
+				+ " experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>"
+				+ "<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">"
+				+ " experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"");
+		bu.append(ControlServlet.CTRL_INST.getExperimentId());
+		bu.append("\"/>"
+				+ " <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> "
+				+ "</FORM> <br><br>"
+				+ " <FORM ACTION=\"index\" METHOD=\"GET\"> "
+				+ " <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">"
+				+ " vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"");
+		bu.append(ControlServlet.CTRL_INST.getHostName());
+		bu.append("\"/>"
+				+ " <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>"
+				+ " Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>"
+				+ " Kieker monitoring events since last execution environment restart = ");
+		bu.append(ControlServlet.CTRL_INST.getNumberOfInserts());
+		bu.append(" <br> java.vm.name = ");
+		bu.append(System.getProperty("java.vm.name"));
+		bu.append(" <br>"); // NOPMD
 		try {
 			final String youngGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
 			final String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
 			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC + "<br>");
-		} catch (final RuntimeException e) { // ignore // NOCS (IllegalCatchCheck)
+		} catch (final RuntimeException e) { // ignore // NOPMD // NOCS (IllegalCatchCheck)
 		}
 		out.println(bu.toString());
 		this.printFooter(out);

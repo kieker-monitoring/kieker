@@ -103,7 +103,9 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	private volatile long sensorIntervalSeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 
-	public CPUsCombinedServletContextListener() {}
+	public CPUsCombinedServletContextListener() {
+		// nothing to do
+	}
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent sce) {

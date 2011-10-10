@@ -106,7 +106,7 @@ public class CurrentTimeEventGenerator {
 			 */
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
 					+ this.timerResolution) {
-				this.getCurrentTimeOutputPort().deliver(new TimestampEvent(nextTimerEventAt));
+				this.getCurrentTimeOutputPort().deliver(new TimestampEvent(nextTimerEventAt)); // NOPMD (new in loop)
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}

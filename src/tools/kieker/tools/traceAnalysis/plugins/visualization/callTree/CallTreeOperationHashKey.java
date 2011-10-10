@@ -31,7 +31,7 @@ public class CallTreeOperationHashKey {
 	private final AllocationComponent allocationComponent;
 	private final Operation operation;
 
-	private final int hashCode; // the final is computed once and never changes
+	private final int hashCode; // NOPMD (the final is computed once and never changes)
 
 	public CallTreeOperationHashKey(final AllocationComponent allocationComponent, final Operation operation) {
 		this.allocationComponent = allocationComponent;

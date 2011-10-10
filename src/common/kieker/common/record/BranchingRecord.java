@@ -31,7 +31,9 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	private volatile int branchID = -1;
 	private volatile int branchingOutcome = -1;
 
-	public BranchingRecord() {};
+	public BranchingRecord() {
+		// nothing to do
+	};
 
 	public BranchingRecord(final long timestamp, final int branchID, final int branchingOutcome) {
 		this.timestamp = timestamp;

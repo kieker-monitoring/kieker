@@ -20,9 +20,9 @@
 
 package kieker.monitoring.writer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,25 +44,24 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	// internal variables
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
-	private final String prefix;
-	private final List<AbstractAsyncThread> workers = new Vector<AbstractAsyncThread>();
+	private final List<AbstractAsyncThread> workers = new ArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
 	private final AtomicInteger missedRecords;
 
 	protected AbstractAsyncWriter(final Configuration configuration) {
 		super(configuration);
-		this.prefix = this.getClass().getName() + "."; // NOCS (MultipleStringLiteralsCheck)
+		final String prefix = this.getClass().getName() + "."; // NOCS (MultipleStringLiteralsCheck)
 
-		final int queueFullBehaviorTmp = this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.BEHAVIOR);
+		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + AbstractAsyncWriter.BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
-			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + this.prefix + AbstractAsyncWriter.BEHAVIOR
+			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + AbstractAsyncWriter.BEHAVIOR
 					+ "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehaviorTmp;
 		}
 		this.missedRecords = new AtomicInteger(0);
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(this.prefix + AbstractAsyncWriter.QUEUESIZE));
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + AbstractAsyncWriter.QUEUESIZE));
 	}
 
 	/**
@@ -71,9 +70,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties properties = new Properties(super.getDefaultProperties());
-		final String prefixTmp = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		properties.setProperty(prefixTmp + AbstractAsyncWriter.QUEUESIZE, "10000");
-		properties.setProperty(prefixTmp + AbstractAsyncWriter.BEHAVIOR, "0");
+		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
+		properties.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
+		properties.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
 		return properties;
 	}
 
@@ -118,11 +117,8 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				this.blockingQueue.put(monitoringRecord);
 				break;
 			case 2: // does nothing if queue is full
-				if (!this.blockingQueue.offer(monitoringRecord)) {
-					// warn on missed records
-					if ((this.missedRecords.getAndIncrement() % 1000) == 0) { // NOCS
-						AbstractAsyncWriter.LOG.warn("Queue is full, dropping records.");
-					}
+				if (!this.blockingQueue.offer(monitoringRecord) && ((this.missedRecords.getAndIncrement() % 1000) == 0)) { // NOCS
+					AbstractAsyncWriter.LOG.warn("Queue is full, dropping records.");
 				}
 				break;
 			default: // tries to add immediately (error if full)

@@ -81,9 +81,9 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 			final int curComponentId = node.getId();
 			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(curComponent), // NOCS
 					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, // NOCS
-					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS
+					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD
 					null, // framecolor
-					(curComponentId == rootComponentId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOCS
+					(curComponentId == rootComponentId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOCS //NOPMD
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename

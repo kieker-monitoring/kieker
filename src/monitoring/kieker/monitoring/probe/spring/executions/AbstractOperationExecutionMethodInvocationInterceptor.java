@@ -49,7 +49,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	 */
 	protected boolean useRuntimeClassname = true;
 
-	public boolean getUseRuntimeClassname() {
+	public boolean isUseRuntimeClassname() {
 		return this.useRuntimeClassname;
 	}
 
@@ -118,7 +118,7 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 		try {
 			// executing the intercepted method call
 			execData.setRetVal(invocation.proceed());
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)
 			throw e; // exceptions are forwarded
 		} finally {
 			execData.setTout(AbstractOperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime());

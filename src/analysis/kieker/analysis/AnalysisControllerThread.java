@@ -33,15 +33,9 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class AnalysisControllerThread extends Thread {
-	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
+	private static final Log LOG = LogFactory.getLog(AnalysisControllerThread.class);
 
 	private final AnalysisController analysisInstance;
-
-	@SuppressWarnings("unused")
-	/** Must not be used for construction. */
-	private AnalysisControllerThread() {
-		this.analysisInstance = null;
-	}
 
 	public AnalysisControllerThread(final AnalysisController analysisController) {
 		this.analysisInstance = analysisController;
@@ -55,13 +49,15 @@ public class AnalysisControllerThread extends Thread {
 	}
 
 	@Override
-	public synchronized void start() {
-		super.start();
-		try {
-			// wait until AnalysisController is initialized
-			this.analysisInstance.getInitializationLatch().await();
-		} catch (final InterruptedException e) {
-			AnalysisControllerThread.LOG.error("Interrupted while waiting for AnalysisController to be initialized: " + e.getMessage(), e);
+	public void start() {
+		synchronized (this) {
+			super.start();
+			try {
+				// wait until AnalysisController is initialized
+				this.analysisInstance.getInitializationLatch().await();
+			} catch (final InterruptedException e) {
+				AnalysisControllerThread.LOG.error("Interrupted while waiting for AnalysisController to be initialized: " + e.getMessage(), e);
+			}
 		}
 	}
 

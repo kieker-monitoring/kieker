@@ -29,13 +29,6 @@ public class AssemblyComponent {
 	private final String name;
 	private final ComponentType type;
 
-	@SuppressWarnings("unused")
-	private AssemblyComponent() {
-		this.id = -1;
-		this.name = null;
-		this.type = null;
-	}
-
 	public AssemblyComponent(final int id, final String name, final ComponentType type) {
 		this.id = id;
 		this.name = name;

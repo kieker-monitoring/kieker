@@ -33,13 +33,6 @@ public class AllocationComponentOperationPair {
 
 	private final AllocationComponent allocationComponent;
 
-	@SuppressWarnings("unused")
-	private AllocationComponentOperationPair() {
-		this.id = -1;
-		this.operation = null;
-		this.allocationComponent = null;
-	}
-
 	public AllocationComponentOperationPair(final int id, final Operation operation, final AllocationComponent allocationComponent) {
 		this.id = id;
 		this.operation = operation;

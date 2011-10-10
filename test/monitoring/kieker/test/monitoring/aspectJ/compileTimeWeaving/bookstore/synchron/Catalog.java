@@ -41,13 +41,15 @@ public final class Catalog {
 	private Catalog() {}
 
 	@OperationExecutionMonitoringProbe
-	public static synchronized void getBook(final boolean complexQuery) {
-		if (complexQuery) {
-			// complex query;
-			Bookstore.waitabit(20); // NOCS (MagicNumberCheck)
-		} else {
-			// simple query;
-			Bookstore.waitabit(2); // NOCS (MagicNumberCheck)
+	public static void getBook(final boolean complexQuery) {
+		synchronized (Catalog.class) {
+			if (complexQuery) {
+				// complex query;
+				Bookstore.waitabit(20); // NOCS (MagicNumberCheck)
+			} else {
+				// simple query;
+				Bookstore.waitabit(2); // NOCS (MagicNumberCheck)
+			}
 		}
 	}
 }

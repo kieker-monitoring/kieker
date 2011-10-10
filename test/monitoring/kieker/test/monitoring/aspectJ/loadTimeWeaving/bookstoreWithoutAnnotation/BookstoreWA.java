@@ -20,8 +20,8 @@
 
 package kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotation;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * A simple test and demonstration scenario for Kieker's
@@ -37,12 +37,14 @@ import java.util.Vector;
  */
 
 public class BookstoreWA extends Thread {
-	public static final List<BookstoreWA> BOOKSTORE_SCENARIOS = new Vector<BookstoreWA>();
+	public static final List<BookstoreWA> BOOKSTORE_SCENARIOS = new ArrayList<BookstoreWA>();
 
 	private static final int NUM_REQUESTS = 100;
 	private static final int INTER_REQUEST_TIME = 5;
 
-	public BookstoreWA() {}
+	public BookstoreWA() {
+		// nothing to do
+	}
 
 	/**
 	 * 
@@ -60,7 +62,7 @@ public class BookstoreWA extends Thread {
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < BookstoreWA.NUM_REQUESTS; i++) {
 			System.out.println("BookstoreWA.main: Starting request " + i);
-			final BookstoreWA newBookstore = new BookstoreWA();
+			final BookstoreWA newBookstore = new BookstoreWA(); // NOPMD (new in loop)
 			BookstoreWA.BOOKSTORE_SCENARIOS.add(newBookstore);
 			newBookstore.start();
 			BookstoreWA.waitabit(BookstoreWA.INTER_REQUEST_TIME);

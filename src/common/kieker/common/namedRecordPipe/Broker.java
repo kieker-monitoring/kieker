@@ -51,18 +51,20 @@ public final class Broker {
 	 * Returns a connection with name @a pipeName. If a connection with this
 	 * name does not exist prior to the call, it is created.
 	 */
-	public synchronized Pipe acquirePipe(final String pipeName) throws IllegalArgumentException {
-		if ((pipeName == null) || (pipeName.isEmpty())) {
-			final String errorMsg = "pipeName must not be null or empty!  (Found: " + pipeName + ")";
-			Broker.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
+	public Pipe acquirePipe(final String pipeName) throws IllegalArgumentException {
+		Pipe conn;
+		synchronized (this) {
+			if ((pipeName == null) || (pipeName.isEmpty())) {
+				final String errorMsg = "pipeName must not be null or empty!  (Found: " + pipeName + ")";
+				Broker.LOG.error(errorMsg);
+				throw new IllegalArgumentException(errorMsg);
+			}
+			conn = this.pipeMap.get(pipeName);
+			if (conn == null) {
+				conn = new Pipe(pipeName);
+				this.pipeMap.put(pipeName, conn);
+			}
 		}
-		Pipe conn = this.pipeMap.get(pipeName);
-		if (conn == null) {
-			conn = new Pipe(pipeName);
-			this.pipeMap.put(pipeName, conn);
-		}
-
 		return conn;
 	}
 

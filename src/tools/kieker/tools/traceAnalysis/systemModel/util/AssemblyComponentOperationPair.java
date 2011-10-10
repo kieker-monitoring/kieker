@@ -33,13 +33,6 @@ public class AssemblyComponentOperationPair {
 
 	private final AssemblyComponent assemblyComponent;
 
-	@SuppressWarnings("unused")
-	private AssemblyComponentOperationPair() {
-		this.id = -1;
-		this.operation = null;
-		this.assemblyComponent = null;
-	}
-
 	public AssemblyComponentOperationPair(final int id, final Operation operation, final AssemblyComponent assemblyComponent) {
 		this.id = id;
 		this.operation = operation;

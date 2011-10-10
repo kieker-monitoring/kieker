@@ -98,7 +98,9 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 	/**
 	 * 
 	 */
-	public CPUUtilizationRecord() {}
+	public CPUUtilizationRecord() {
+		// nothing to do
+	}
 
 	/**
 	 * Constructs a new {@link CPUUtilizationRecord} with the given values. If

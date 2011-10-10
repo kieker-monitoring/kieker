@@ -152,7 +152,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final PrintStream ps, final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
-			final StringBuilder strBuild = new StringBuilder();
+			final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
 			final int childId = nodeIds.get(child.getDestination());
 			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {
@@ -175,7 +175,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>();
 
 		AbstractCallTreePlugin.dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
-		AbstractCallTreePlugin.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights); // NOCS
+		AbstractCallTreePlugin.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights); // NOCS // NOPMD
 
 		ps.println(edgestringBuilder.toString());
 		ps.println("}");
