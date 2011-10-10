@@ -46,8 +46,10 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	 * Returns the instance for the passed namedIdentifier; null if no instance
 	 * with this namedIdentifier.
 	 */
-	public final synchronized ComponentType lookupComponentTypeByNamedIdentifier(final String namedIdentifier) {
-		return this.componentTypesByName.get(namedIdentifier);
+	public final ComponentType lookupComponentTypeByNamedIdentifier(final String namedIdentifier) {
+		synchronized (this) {
+			return this.componentTypesByName.get(namedIdentifier);
+		}
 	}
 
 	/**
@@ -60,15 +62,17 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	 *             if a component type with the given
 	 *             namedIdentifier has already been registered
 	 */
-	public final synchronized ComponentType createAndRegisterComponentType(final String namedIdentifier, final String fullqualifiedName) {
-		ComponentType newInst;
-		if (this.componentTypesByName.containsKey(namedIdentifier)) {
-			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
+	public final ComponentType createAndRegisterComponentType(final String namedIdentifier, final String fullqualifiedName) {
+		final ComponentType newInst;
+		synchronized (this) {
+			if (this.componentTypesByName.containsKey(namedIdentifier)) {
+				throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
+			}
+			final int id = this.getAndIncrementNextId();
+			newInst = new ComponentType(id, fullqualifiedName);
+			this.componentTypesById.put(id, newInst);
+			this.componentTypesByName.put(namedIdentifier, newInst);
 		}
-		final int id = this.getAndIncrementNextId();
-		newInst = new ComponentType(id, fullqualifiedName);
-		this.componentTypesById.put(id, newInst);
-		this.componentTypesByName.put(namedIdentifier, newInst);
 		return newInst;
 	}
 
@@ -77,8 +81,10 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	 * 
 	 * @return a collection of all registered component types.
 	 */
-	public final synchronized Collection<ComponentType> getComponentTypes() {
-		return this.componentTypesById.values();
+	public final Collection<ComponentType> getComponentTypes() {
+		synchronized (this) {
+			return this.componentTypesById.values();
+		}
 	}
 
 	public ComponentType getRootComponent() {

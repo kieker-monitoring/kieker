@@ -167,7 +167,6 @@ public class JMSReader extends AbstractMonitoringReader {
 							if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverRecord((IMonitoringRecord) omo))) {
 								final String errorMsg = "deliverRecord returned false";
 								JMSReader.LOG.error(errorMsg);
-								throw new MonitoringReaderException(errorMsg);
 							} else {
 								JMSReader.LOG.info("Unknown type of message " + om);
 							}
@@ -175,8 +174,6 @@ public class JMSReader extends AbstractMonitoringReader {
 							JMSReader.LOG.fatal("MessageFormatException:" + em.getMessage(), em);
 						} catch (final JMSException ex) {
 							JMSReader.LOG.fatal("JMSException: " + ex.getMessage(), ex);
-						} catch (final MonitoringReaderException ex) {
-							JMSReader.LOG.error("LogReaderExecutionException: " + ex.getMessage(), ex);
 						} catch (final Exception ex) { // NOCS
 							JMSReader.LOG.error("Exception", ex);
 						}

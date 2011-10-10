@@ -75,15 +75,6 @@ class FSDirectoryReader {
 	private final IMonitoringRecordReceiver recordReceiver;
 
 	/**
-	 * Must not be used for construction.
-	 */
-	@SuppressWarnings("unused")
-	private FSDirectoryReader() {
-		this.recordTypeSelector = null;
-		this.recordReceiver = null;
-	}
-
-	/**
 	 * 
 	 * @param inputDirName
 	 * @param readOnlyRecordsOfType
@@ -99,7 +90,7 @@ class FSDirectoryReader {
 				this.recordTypeSelector.add(recordType.getName());
 			}
 		} else {
-			this.recordTypeSelector = null; // ready records of any type
+			this.recordTypeSelector = null; // NOPMD (ready records of any type)
 		}
 	}
 
@@ -174,9 +165,9 @@ class FSDirectoryReader {
 			in = new BufferedReader(new FileReader(mappingFile));
 			String line;
 
-			while ((line = in.readLine()) != null) {
+			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				try {
-					st = new StringTokenizer(line, "=");
+					st = new StringTokenizer(line, "="); // NOPMD (new in loop)
 					final int numTokens = st.countTokens();
 					if (numTokens == 0) {
 						continue;
@@ -186,7 +177,7 @@ class FSDirectoryReader {
 					}
 					final String idStr = st.nextToken();
 					// the leading $ is optional
-					final Integer id = Integer.valueOf(idStr.startsWith("$") ? idStr.substring(1) : idStr); // NOCS
+					final Integer id = Integer.valueOf((idStr.charAt(0) == '$') ? idStr.substring(1) : idStr); // NOCS
 					final String classname = st.nextToken();
 
 					if ((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) {
@@ -200,11 +191,10 @@ class FSDirectoryReader {
 						FSDirectoryReader.LOG.info("Ignoring record type for mapping " + line);
 					}
 				} catch (final ClassNotFoundException e) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS // NOPMD
 					break;
-				} catch (final IllegalArgumentException e) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS (equal string as
-																																		// above)
+				} catch (final IllegalArgumentException e) { // NOPMD (flow control)
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS
 					break;
 				}
 			}
@@ -239,21 +229,21 @@ class FSDirectoryReader {
 			String line;
 
 			curRecord: // NOCS
-			while ((line = in.readLine()) != null) {
+			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				IMonitoringRecord rec = null;
 				try {
-					if (!this.recordTypeIdMapInitialized && line.startsWith("$")) {
+					if (!this.recordTypeIdMapInitialized && (line.charAt(0) == '$')) {
 						this.readMappingFile();
 						this.recordTypeIdMapInitialized = true;
 					}
-					st = new StringTokenizer(line, ";");
+					st = new StringTokenizer(line, ";"); // NOPMD (new in loop)
 					final int numTokens = st.countTokens();
 					String[] vec = null;
 					boolean haveTypeId = false;
 
 					for (int i = 0; st.hasMoreTokens(); i++) {
 						String token = st.nextToken();
-						if ((i == 0) && token.startsWith("$")) {
+						if ((i == 0) && (token.charAt(0) == '$')) {
 							/*
 							 * We found a record type ID and need to lookup the
 							 * class
@@ -277,19 +267,18 @@ class FSDirectoryReader {
 							rec = clazz.newInstance();
 							token = st.nextToken();
 							rec.setLoggingTimestamp(Long.valueOf(token));
-							vec = new String[numTokens - 2];
+							vec = new String[numTokens - 2]; // NOPMD (new in loop)
 							haveTypeId = true;
 						} else if (i == 0) { // for historic reasons, this is the default type
-							rec = new OperationExecutionRecord();
-							vec = new String[numTokens];
+							rec = new OperationExecutionRecord(); // NOPMD (new in loop)
+							vec = new String[numTokens]; // NOPMD (new in loop)
 						}
-						if (!haveTypeId || (i > 0)) { // only if current field
-														// is not the id
+						if (!haveTypeId || (i > 0)) { // only if current field is not the id
 							vec[haveTypeId ? i - 1 : i] = token; // NOCS
 						}
 					}
 					if (vec == null) {
-						vec = new String[0];
+						vec = new String[0]; // NOPMD (new in loop)
 					}
 
 					final Object[] typedArray = this.fromStringToTypedArray(vec, rec.getValueTypes());
@@ -305,7 +294,7 @@ class FSDirectoryReader {
 																																	// (MultipleStringLiteralsCheck)
 					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
 					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
-				} catch (final IllegalStateException e) {
+				} catch (final IllegalStateException e) { // NOPMD (flow control)
 					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS
 																																	// (MultipleStringLiteralsCheck)
 					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
@@ -384,7 +373,7 @@ class FSDirectoryReader {
 
 		@Override
 		public final int compare(final File f1, final File f2) {
-			if (f1 == f2) {
+			if (f1 == f2) { // NOPMD
 				return 0;
 			}
 

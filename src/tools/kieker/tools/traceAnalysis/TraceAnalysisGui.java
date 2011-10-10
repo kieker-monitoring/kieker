@@ -64,8 +64,8 @@ import javax.swing.border.TitledBorder;
 // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/220
 public class TraceAnalysisGui extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 11333L;
-	private final JList l;
-	private final DefaultListModel lm = new DefaultListModel();
+	private final JList<File> l;
+	private final DefaultListModel<File> lm = new DefaultListModel<File>();
 	private final JTextField outdir;
 	private final JFrame frame;
 	private final JButton remB;
@@ -124,7 +124,7 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 		final JPanel pa = new JPanel();
 
 		final JPanel p2 = new JPanel(new BorderLayout());
-		this.l = new JList(this.lm);
+		this.l = new JList<File>(this.lm);
 		this.l.setPreferredSize(new Dimension(300, 100)); // NOCS (MagicNumberCheck)
 		final JScrollPane sp = new JScrollPane(this.l);
 		sp.setPreferredSize(new Dimension(320, 100)); // NOCS (MagicNumberCheck)

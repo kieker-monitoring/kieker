@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 public final class SOAPTraceRegistry {
 	private static final Log LOG = LogFactory.getLog(SOAPTraceRegistry.class);
 
-	private static final SOAPTraceRegistry INSTACNE = new SOAPTraceRegistry();
+	private static final SOAPTraceRegistry INSTANCE = new SOAPTraceRegistry();
 
 	private final ThreadLocal<Long> threadLocalInRequestTin = new ThreadLocal<Long>();
 	private final ThreadLocal<Long> threadLocalOutRequestTin = new ThreadLocal<Long>();
@@ -45,8 +45,10 @@ public final class SOAPTraceRegistry {
 
 	private SOAPTraceRegistry() {}
 
-	public static final synchronized SOAPTraceRegistry getInstance() {
-		return SOAPTraceRegistry.INSTACNE;
+	public static final SOAPTraceRegistry getInstance() {
+		synchronized (SOAPTraceRegistry.class) {
+			return SOAPTraceRegistry.INSTANCE;
+		}
 	}
 
 	/**

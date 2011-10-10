@@ -49,7 +49,7 @@ public final class SamplingController extends AbstractController implements ISam
 	protected SamplingController(final Configuration configuration) {
 		final int threadPoolSize = configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize,
-				// Handler for failed sensor executions that simply logs notifications.
+		// Handler for failed sensor executions that simply logs notifications.
 				new RejectedExecutionHandler() {
 					@Override
 					public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
@@ -90,28 +90,33 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	@Override
-	public final synchronized ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
-		if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
-			SamplingController.LOG.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
-			return null;
+	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
+		final ScheduledSamplerJob job;
+		synchronized (this) {
+			if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
+				SamplingController.LOG.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
+				return null;
+			}
+			job = new ScheduledSamplerJob(super.monitoringController, sensor);
+			// we need to keep the future for later cancellation/removal
+			final ScheduledFuture<?> future = this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay, period, timeUnit);
+			job.setFuture(future);
 		}
-		final ScheduledSamplerJob job = new ScheduledSamplerJob(super.monitoringController, sensor);
-		// we need to keep the future for later cancellation/removal
-		final ScheduledFuture<?> future = this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay, period, timeUnit);
-		job.setFuture(future);
 		return job;
 	}
 
 	@Override
-	public final synchronized boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
-		final ScheduledFuture<?> future = sensorJob.getFuture();
-		if (future != null) {
-			future.cancel(false); // do not interrupt when running
-		} else {
-			SamplingController.LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
+	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
+		synchronized (this) {
+			final ScheduledFuture<?> future = sensorJob.getFuture();
+			if (future != null) {
+				future.cancel(false); // do not interrupt when running
+			} else {
+				SamplingController.LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
+			}
+			final boolean success = this.periodicSensorsPoolExecutor.remove(sensorJob);
+			this.periodicSensorsPoolExecutor.purge();
+			return success;
 		}
-		final boolean success = this.periodicSensorsPoolExecutor.remove(sensorJob);
-		this.periodicSensorsPoolExecutor.purge();
-		return success;
 	}
 }

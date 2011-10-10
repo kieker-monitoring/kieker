@@ -41,20 +41,26 @@ public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
 		this.description = description;
 	}
 
-	public synchronized void deliver(final T event) {
-		for (final IInputPort<T> l : this.subscribers) {
-			l.newEvent(event);
+	public void deliver(final T event) {
+		synchronized (this) {
+			for (final IInputPort<T> l : this.subscribers) {
+				l.newEvent(event);
+			}
 		}
 	}
 
 	@Override
-	public synchronized void subscribe(final IInputPort<T> subscriber) {
-		this.subscribers.add(subscriber);
+	public void subscribe(final IInputPort<T> subscriber) {
+		synchronized (this) {
+			this.subscribers.add(subscriber);
+		}
 	}
 
 	@Override
-	public synchronized void unsubscribe(final IInputPort<T> subscriber) {
-		this.subscribers.remove(subscriber);
+	public void unsubscribe(final IInputPort<T> subscriber) {
+		synchronized (this) {
+			this.subscribers.remove(subscriber);
+		}
 	}
 
 	@Override

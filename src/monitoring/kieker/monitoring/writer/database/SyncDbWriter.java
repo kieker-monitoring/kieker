@@ -113,34 +113,36 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public final synchronized boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		try {
-			// connector only supports execution records so far
-			if (!(monitoringRecord instanceof OperationExecutionRecord)) {
-				SyncDbWriter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
-						+ monitoringRecord.getClass().getName());
-				return false;
-			}
-			final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-			this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setString(2, execRecord.getClassName() + "." + execRecord.getOperationName()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setString(3, execRecord.getSessionId()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(4, execRecord.getTraceId()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(5, execRecord.getTin()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(6, execRecord.getTout()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setString(7, execRecord.getHostName()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(8, execRecord.getEoi()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.setLong(9, execRecord.getEss()); // NOCS (MagicNumberCheck)
-			this.psInsertMonitoringData.execute();
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
-			SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);
-			return false;
-		} finally {
+	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+		synchronized (this) {
 			try {
-				this.psInsertMonitoringData.clearParameters();
+				// connector only supports execution records so far
+				if (!(monitoringRecord instanceof OperationExecutionRecord)) {
+					SyncDbWriter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
+							+ monitoringRecord.getClass().getName());
+					return false;
+				}
+				final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
+				this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setString(2, execRecord.getClassName() + "." + execRecord.getOperationName()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setString(3, execRecord.getSessionId()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setLong(4, execRecord.getTraceId()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setLong(5, execRecord.getTin()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setLong(6, execRecord.getTout()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setString(7, execRecord.getHostName()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setLong(8, execRecord.getEoi()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setLong(9, execRecord.getEss()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.execute();
 			} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
-				SyncDbWriter.LOG.error(ex);
-				return false; // NOPMD
+				SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);
+				return false;
+			} finally {
+				try {
+					this.psInsertMonitoringData.clearParameters();
+				} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+					SyncDbWriter.LOG.error(ex);
+					return false; // NOPMD
+				}
 			}
 		}
 		return true;

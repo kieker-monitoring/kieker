@@ -58,8 +58,7 @@ public final class FilesystemLogReplayerStarter {
 	private static final String CMD_OPT_NAME_IGNORERECORDSBEFOREDATE = "ignore-records-before-date";
 	private static final String CMD_OPT_NAME_IGNORERECORDSAFTERDATE = "ignore-records-after-date";
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
-	private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage
-																																			// info
+	private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 
 	static {
 		FilesystemLogReplayerStarter.CMDL_OPTS.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs()
@@ -114,23 +113,23 @@ public final class FilesystemLogReplayerStarter {
 
 		/* 2.) init keepOriginalLoggingTimestamps */
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
-				FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
-		if (!(keepOriginalLoggingTimestampsOptValStr.equals("true") || keepOriginalLoggingTimestampsOptValStr.equals("false"))) { // NOCS (EqualsAvoidNullCheck)
+				FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true"); // NOPMD (string literals)
+		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) { // NOPMD (string literals)
 			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '"
 					+ keepOriginalLoggingTimestampsOptValStr + "'");
 			retVal = false;
 		}
-		FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestampsOptValStr.equals("true"); // NOCS (EqualsAvoidNullCheck)
+		FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps = "true".equals(keepOriginalLoggingTimestampsOptValStr);
 		FilesystemLogReplayerStarter.LOG.info("Keeping original logging timestamps: "
 				+ (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
 
 		/* 3.) init realtimeMode */
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME, "false");
-		if (!(realtimeOptValStr.equals("true") || realtimeOptValStr.equals("false"))) { // NOCS (EqualsAvoidNullCheck)
+		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
 			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
 			retVal = false;
 		}
-		FilesystemLogReplayerStarter.realtimeMode = realtimeOptValStr.equals("true"); // NOCS (EqualsAvoidNullCheck)
+		FilesystemLogReplayerStarter.realtimeMode = "true".equals(realtimeOptValStr);
 
 		/* 4.) init numRealtimeWorkerThreads */
 		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS,

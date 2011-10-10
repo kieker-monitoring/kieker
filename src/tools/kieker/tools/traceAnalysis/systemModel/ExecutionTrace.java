@@ -83,28 +83,30 @@ public class ExecutionTrace extends AbstractTrace {
 	 *             if the traceId of the passed Execution
 	 *             object is not the same as the traceId of this ExecutionTrace object.
 	 */
-	public synchronized void add(final Execution execution) throws InvalidTraceException {
-		if (this.getTraceId() != execution.getTraceId()) {
-			throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
+	public void add(final Execution execution) throws InvalidTraceException {
+		synchronized (this) {
+			if (this.getTraceId() != execution.getTraceId()) {
+				throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
+			}
+			if ((this.minTin < 0) || (execution.getTin() < this.minTin)) {
+				this.minTin = execution.getTin();
+			}
+			if ((this.maxTout < 0) || (execution.getTout() > this.maxTout)) {
+				this.maxTout = execution.getTout();
+			}
+			if ((this.minEoi < 0) || (execution.getEoi() < this.minEoi)) {
+				this.minEoi = execution.getEoi();
+			}
+			if ((this.maxEoi < 0) || (execution.getEoi() > this.maxEoi)) {
+				this.maxEoi = execution.getEoi();
+			}
+			if (execution.getEss() > this.maxEss) {
+				this.maxEss = execution.getEss();
+			}
+			this.set.add(execution);
+			/* Invalidate the current message trace representation */
+			this.messageTrace.set(null);
 		}
-		if ((this.minTin < 0) || (execution.getTin() < this.minTin)) {
-			this.minTin = execution.getTin();
-		}
-		if ((this.maxTout < 0) || (execution.getTout() > this.maxTout)) {
-			this.maxTout = execution.getTout();
-		}
-		if ((this.minEoi < 0) || (execution.getEoi() < this.minEoi)) {
-			this.minEoi = execution.getEoi();
-		}
-		if ((this.maxEoi < 0) || (execution.getEoi() > this.maxEoi)) {
-			this.maxEoi = execution.getEoi();
-		}
-		if (execution.getEss() > this.maxEss) {
-			this.maxEss = execution.getEss();
-		}
-		this.set.add(execution);
-		/* Invalidate the current message trace representation */
-		this.messageTrace.set(null);
 	}
 
 	/**
@@ -114,78 +116,80 @@ public class ExecutionTrace extends AbstractTrace {
 	 * first execution of this method. After this, the stored reference
 	 * is returned --- unless executions are added to the trace afterwards.
 	 */
-	public synchronized MessageTrace toMessageTrace(final Execution rootExecution) throws InvalidTraceException {
-		MessageTrace mt = this.messageTrace.get();
-		if (mt != null) {
+	public MessageTrace toMessageTrace(final Execution rootExecution) throws InvalidTraceException {
+		synchronized (this) {
+			MessageTrace mt = this.messageTrace.get();
+			if (mt != null) {
+				return mt;
+			}
+
+			final List<AbstractMessage> mSeq = new ArrayList<AbstractMessage>();
+			final Stack<AbstractMessage> curStack = new Stack<AbstractMessage>();
+			final Iterator<Execution> eSeqIt = this.set.iterator();
+
+			Execution prevE = rootExecution;
+			int prevEoi = -1;
+			for (int itNum = 0; eSeqIt.hasNext(); itNum++) {
+				final Execution curE = eSeqIt.next();
+				if ((itNum++ == 0) && (curE.getEss() != 0)) {
+					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss() // NOPMD (new in loop)
+							+ ")\n Causing execution: " + curE);
+					ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					throw ex;
+				}
+				if (prevEoi != (curE.getEoi() - 1)) {
+					final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi // NOPMD (new in
+																																				// loop)
+							+ "," + curE.getEoi() + ">" + "(Execution: " + curE + ")");
+					ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					throw ex;
+				}
+				prevEoi = curE.getEoi();
+
+				// First, we might need to clean up the stack for the next execution callMessage
+				if ((!prevE.equals(rootExecution)) && (prevE.getEss() >= curE.getEss())) {
+					Execution curReturnReceiver; // receiverComponentName of return message
+					while (curStack.size() > curE.getEss()) {
+						final AbstractMessage poppedCall = curStack.pop();
+						prevE = poppedCall.getReceivingExecution();
+						curReturnReceiver = poppedCall.getSendingExecution();
+						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver); // NOPMD (new in loop)
+						mSeq.add(m);
+						prevE = curReturnReceiver;
+					}
+				}
+				// Now, we handle the current execution callMessage
+				if (prevE.equals(rootExecution)) { // initial execution callMessage
+					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE); // NOPMD (new in loop)
+					mSeq.add(m);
+					curStack.push(m);
+				} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
+					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), prevE, curE); // NOPMD (new in loop)
+					mSeq.add(m);
+					curStack.push(m);
+				} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
+					final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --" // NOPMD (new in loop)
+							+ "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
+					ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					throw ex;
+				}
+				if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
+					Execution curReturnReceiver; // receiverComponentName of return message
+					while (!curStack.empty()) {
+						final AbstractMessage poppedCall = curStack.pop();
+						prevE = poppedCall.getReceivingExecution();
+						curReturnReceiver = poppedCall.getSendingExecution();
+						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver); // NOPMD (new in loop)
+						mSeq.add(m);
+						prevE = curReturnReceiver;
+					}
+				}
+				prevE = curE; // prepair next loop
+			}
+			mt = new MessageTrace(this.getTraceId(), mSeq);
+			this.messageTrace.set(mt);
 			return mt;
 		}
-
-		final List<AbstractMessage> mSeq = new ArrayList<AbstractMessage>();
-		final Stack<AbstractMessage> curStack = new Stack<AbstractMessage>();
-		final Iterator<Execution> eSeqIt = this.set.iterator();
-
-		Execution prevE = rootExecution;
-		int prevEoi = -1;
-		for (int itNum = 0; eSeqIt.hasNext(); itNum++) {
-			final Execution curE = eSeqIt.next();
-			if ((itNum++ == 0) && (curE.getEss() != 0)) {
-				final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss()
-						+ ")\n Causing execution: " + curE);
-				ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
-				throw ex;
-			}
-			if (prevEoi != (curE.getEoi() - 1)) {
-				final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi + "," + curE.getEoi()
-						+ ">" + "(Execution: " + curE + ")");
-				ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
-				throw ex;
-			}
-			prevEoi = curE.getEoi();
-
-			// First, we might need to clean up the stack for the next execution
-			// callMessage
-			if ((prevE != rootExecution) && (prevE.getEss() >= curE.getEss())) {
-				Execution curReturnReceiver; // receiverComponentName of return message
-				while (curStack.size() > curE.getEss()) {
-					final AbstractMessage poppedCall = curStack.pop();
-					prevE = poppedCall.getReceivingExecution();
-					curReturnReceiver = poppedCall.getSendingExecution();
-					final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
-					mSeq.add(m);
-					prevE = curReturnReceiver;
-				}
-			}
-			// Now, we handle the current execution callMessage
-			if (prevE == rootExecution) { // initial execution callMessage
-				final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
-				mSeq.add(m);
-				curStack.push(m);
-			} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
-				final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
-				mSeq.add(m);
-				curStack.push(m);
-			} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
-				final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --" + "but found sequence <" + prevE.getEss()
-						+ "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
-				ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
-				throw ex;
-			}
-			if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
-				Execution curReturnReceiver; // receiverComponentName of return message
-				while (!curStack.empty()) {
-					final AbstractMessage poppedCall = curStack.pop();
-					prevE = poppedCall.getReceivingExecution();
-					curReturnReceiver = poppedCall.getSendingExecution();
-					final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
-					mSeq.add(m);
-					prevE = curReturnReceiver;
-				}
-			}
-			prevE = curE; // prepair next loop
-		}
-		mt = new MessageTrace(this.getTraceId(), mSeq);
-		this.messageTrace.set(mt);
-		return mt;
 	}
 
 	/**
@@ -194,8 +198,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
-	public final synchronized SortedSet<Execution> getTraceAsSortedExecutionSet() {
-		return this.set;
+	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
+		synchronized (this) {
+			return this.set;
+		}
 	}
 
 	/**
@@ -204,22 +210,26 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the length of this trace.
 	 */
-	public final synchronized int getLength() {
-		return this.set.size();
+	public final int getLength() {
+		synchronized (this) {
+			return this.set.size();
+		}
 	}
 
 	@Override
-	public synchronized String toString() {
+	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append("TraceId ").append(this.getTraceId());
-		strBuild.append(" (minTin=").append(this.minTin);
-		strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")");
-		strBuild.append("; maxTout=").append(this.maxTout);
-		strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")");
-		strBuild.append("; maxEss=").append(this.maxEss).append("):\n");
-		for (final Execution e : this.set) {
-			strBuild.append("<");
-			strBuild.append(e.toString()).append(">\n");
+		synchronized (this) {
+			strBuild.append("TraceId ").append(this.getTraceId());
+			strBuild.append(" (minTin=").append(this.minTin);
+			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")");
+			strBuild.append("; maxTout=").append(this.maxTout);
+			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")");
+			strBuild.append("; maxEss=").append(this.maxEss).append("):\n");
+			for (final Execution e : this.set) {
+				strBuild.append("<");
+				strBuild.append(e.toString()).append(">\n");
+			}
 		}
 		return strBuild.toString();
 	}
@@ -230,8 +240,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the maximum ess; -1 if the trace contains no executions.
 	 */
-	public synchronized int getMaxEss() {
-		return this.maxEss;
+	public int getMaxEss() {
+		synchronized (this) {
+			return this.maxEss;
+		}
 	}
 
 	/**
@@ -239,8 +251,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the maximum eoi; -1 if the trace contains no executions.
 	 */
-	public synchronized int getMaxEoi() {
-		return this.maxEoi;
+	public int getMaxEoi() {
+		synchronized (this) {
+			return this.maxEoi;
+		}
 	}
 
 	/**
@@ -248,8 +262,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the minimum eoi; -1 if the trace contains no executions.
 	 */
-	public synchronized int getMinEoi() {
-		return this.minEoi;
+	public int getMinEoi() {
+		synchronized (this) {
+			return this.minEoi;
+		}
 	}
 
 	/**
@@ -259,8 +275,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the duration of this trace in nanoseconds.
 	 */
-	public synchronized long getDurationInNanos() {
-		return this.getMaxTout() - this.minTin;
+	public long getDurationInNanos() {
+		synchronized (this) {
+			return this.getMaxTout() - this.minTin;
+		}
 	}
 
 	/**
@@ -271,8 +289,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the maxmum timestamp value; -1 if the trace contains no executions.
 	 */
-	public synchronized long getMaxTout() {
-		return this.maxTout;
+	public long getMaxTout() {
+		synchronized (this) {
+			return this.maxTout;
+		}
 	}
 
 	/**
@@ -283,8 +303,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * 
 	 * @return the minimum timestamp value; -1 if the trace contains no executions.
 	 */
-	public synchronized long getMinTin() {
-		return this.minTin;
+	public long getMinTin() {
+		synchronized (this) {
+			return this.minTin;
+		}
 	}
 
 	// Explicit delegation to super method to make FindBugs happy
@@ -302,15 +324,16 @@ public class ExecutionTrace extends AbstractTrace {
 	 * @return true if the two objects are equal.
 	 */
 	@Override
-	public synchronized boolean equals(final Object obj) {
-		if (!(obj instanceof ExecutionTrace)) {
-			return false;
+	public boolean equals(final Object obj) {
+		synchronized (this) {
+			if (!(obj instanceof ExecutionTrace)) {
+				return false;
+			}
+			if (this == obj) {
+				return true;
+			}
+			final ExecutionTrace other = (ExecutionTrace) obj;
+			return this.set.equals(other.set);
 		}
-		if (this == obj) {
-			return true;
-		}
-		final ExecutionTrace other = (ExecutionTrace) obj;
-
-		return this.set.equals(other.set);
 	}
 }
