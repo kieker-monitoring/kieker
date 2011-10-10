@@ -44,7 +44,8 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase {
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	public void testEqualTrace() {
-		final ExecutionTrace trace0, trace1;
+		final ExecutionTrace trace0;
+		final ExecutionTrace trace1;
 
 		try {
 			trace0 = this.genValidBookstoreTrace(45653l, 17); // NOCS (MagicNumberCheck)

@@ -67,7 +67,9 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	final DefaultListModel lm = new DefaultListModel();
 	private final JTextField outdir;
 	private final JFrame frame;
-	private final JButton remB, addB, run;
+	private final JButton remB;
+	private final JButton addB;
+	private final JButton run;
 	private final JTextField prefix;
 	private final JCheckBox plotSq = new JCheckBox();
 	private final JCheckBox plotComp = new JCheckBox();
@@ -81,9 +83,13 @@ public class TraceAnalysisGui extends JFrame implements ActionListener {
 	private final JCheckBox printEquiv = new JCheckBox();
 	private GridBagLayout g;
 	private final JTextField traces = new JTextField(36);
-	private final JRadioButton disabled = new JRadioButton(), allocation = new JRadioButton(), assembly = new JRadioButton();
+	private final JRadioButton disabled = new JRadioButton();
+	private final JRadioButton allocation = new JRadioButton();
+	private final JRadioButton assembly = new JRadioButton();
 	private final ButtonGroup bg = new ButtonGroup();
-	private final JTextField from = new JTextField("-1", 8), to = new JTextField("-1", 8), duration = new JTextField("-1", 8);
+	private final JTextField from = new JTextField("-1", 8);
+	private final JTextField to = new JTextField("-1", 8);
+	private final JTextField duration = new JTextField("-1", 8);
 	private final JCheckBox shrtlbls = new JCheckBox();
 	private final JCheckBox ignInvalid = new JCheckBox();
 
