@@ -40,14 +40,14 @@ import org.apache.commons.logging.LogFactory;
  * @author Andre van Hoorn
  */
 public class FSReaderRealtime extends AbstractMonitoringReader {
-
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
+
+	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
+	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
 	private RealtimeReplayDistributor rtDistributor = null;
-	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
-	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
@@ -92,7 +92,13 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	 * method in order to specify the input directory and number of workers
 	 * using the parameter @a inputDirName.
 	 */
-	public FSReaderRealtime() {}
+	public FSReaderRealtime() {
+		// nothing to do
+	}
+
+	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
+		this.initInstanceFromArgs(inputDirNames, numWorkers);
+	}
 
 	/**
 	 * Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN |
@@ -120,10 +126,6 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		return true;
 	}
 
-	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		this.initInstanceFromArgs(inputDirNames, numWorkers);
-	}
-
 	private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
 		String[] dirNameArray;
 
@@ -147,11 +149,13 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS (MultipleStringLiteralsCheck)
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
+																																									// (MultipleStringLiteralsCheck)
 		}
 
 		if (numWorkers <= 0) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS (MultipleStringLiteralsCheck)
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS
+																																			// (MultipleStringLiteralsCheck)
 		}
 
 		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);
