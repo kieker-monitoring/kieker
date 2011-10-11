@@ -20,7 +20,7 @@ for I in `cat libraries-descriptions.txt | sort | grep -E '^\w.*\t.*$' | sed 's/
 	J=`echo $I | sed 's/%20/\ /g'`
 	LIBPATTERN=`echo $J | sed 's/^\(\w.*\)%18.*/\1/' | sed 's/\\$/\*/'`
 	LIBDESC=`echo $J | sed 's/^\w.*%18\(.*\)/\1/'`
-	LIBPATH=`find $LIBRARY_DIR -name "$LIBPATTERN" | head -1`
+	LIBPATH=`find $LIBRARY_DIR -maxdepth 1 -name "$LIBPATTERN" | head -1`
 	if [ "$LIBPATH" != "" ] ; then
 		LIBNAME=`basename "$LIBPATH"`
 		echo $LIBNAME
