@@ -4,7 +4,7 @@
 // Lines that start with double slash will be ignored.
 // The descriptions themself can contain tex-code but should be in one line.
 
-derby.jar	Apache Derby is a lightweight database written in Java which can also be used as an embedded database. This library contains the necessary drivers for the database as well as the database management system itself.
+derby-$.jar	Apache Derby is a lightweight database written in Java which can also be used as an embedded database. This library contains the necessary drivers for the database as well as the database management system itself.
 
 mysql-connector-java-$-bin.jar	This library contains the drivers to connect from a Java application to a MySQL database system.
 
@@ -23,10 +23,11 @@ aspectjweaver-$.jar	This jar contains the weaver-agent for the aspect-oriented-e
 aspectjrt-$.jar	This jar-file contains the runtime library for AspectJ programs.
 aspectjtools-$.jar	This package contains the tools (the AspectJ Compiler and Browser) for AspectJ.
 
-spring.jar	The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.
-spring-web.jar	This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.
+aopalliance-$.jar	Providedes a common API for aspect-oriented programming (AOP)
+springframework.context-$.jar	The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.
+springframework.web-$.jar	This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.
 
-servlet.jar	This package contains different classes for the work with servlets.
+javax.servlet-$.jar	This package contains different classes for the work with servlets.
 servlet-api.jar	The Java Servlet API supplies protocols to let applications respond for example to HTTP requests.
 
 jmc.jar	This library contains the Java Media Components which can be used for example for playing video content in Swing applications.
@@ -43,7 +44,7 @@ spice-jndikit-$.jar	The JNDI Kit is a toolkit for the easy use of the so called 
 cxf-api-$.jar	Apache CXF is an open source services framework.  
 cxf-rt-core-$.jar	This library contains the Apache CXF Runtime Core. 
 
-jms-$.jar	Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
+javax.jms-$.jar	Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
 
 cxf-common-utilities-$.jar	This package contains different classes for Apache CXF.
 cxf-rt-bindings-soap-$.jar	This package contains necessary files to use Apache CXF as well with the Simple Object Access Protocol (SOAP).
