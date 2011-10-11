@@ -25,6 +25,8 @@ import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.record.IMonitoringRecord;
@@ -41,6 +43,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	private static final String QUEUESIZE = "QueueSize";
 	private static final String BEHAVIOR = "QueueFullBehavior";
+	private static final String SHUTDOWNDELAY = "MaxShutdownDelay";
 
 	// internal variables
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
@@ -65,7 +68,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	}
 
 	/**
-	 * Make sure that the two required properties always have default values!
+	 * Make sure that the three required properties always have default values!
 	 */
 	@Override
 	protected Properties getDefaultProperties() {
@@ -73,6 +76,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
 		properties.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
 		properties.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
+		properties.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "-1");
 		return properties;
 	}
 
@@ -87,24 +91,34 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		worker.start();
 	}
 
+	/**
+	 * The framework ensures, that this method is called only once!
+	 */
 	@Override
 	public final void terminate() {
+		final CountDownLatch cdl = new CountDownLatch(this.workers.size());
 		// notify all workers
 		for (final AbstractAsyncThread worker : this.workers) {
-			worker.initShutdown();
+			worker.initShutdown(cdl);
 		}
-		// wait for all worker to finish
+		boolean finished = true;
 		for (final AbstractAsyncThread worker : this.workers) {
-			while (!worker.isFinished()) {
-				try {
-					Thread.sleep(500); // NOCS
-				} catch (final InterruptedException ex) {
-					// we should be able to ignore an interrupted wait
+			finished &= worker.isFinished();
+		}
+		while (!finished) {
+			try {
+				finished = cdl.await(500, TimeUnit.MILLISECONDS);
+			} catch (final InterruptedException ex) {
+				// we should be able to ignore an interrupted wait
+			}
+			if (!finished) {
+				finished = true;
+				for (final AbstractAsyncThread worker : this.workers) {
+					finished &= worker.isFinished();
 				}
 				AbstractAsyncWriter.LOG.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
-				// TODO: we should be able to abort this, perhaps a max time of repeats?
-				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/174
 			}
+
 		}
 		AbstractAsyncWriter.LOG.info("Writer shutdown complete");
 	}

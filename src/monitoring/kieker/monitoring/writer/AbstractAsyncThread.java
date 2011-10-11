@@ -21,6 +21,7 @@
 package kieker.monitoring.writer;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -37,6 +38,7 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 	private volatile boolean finished = false;
+	private volatile CountDownLatch countDownLatch = null;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
 	private final IMonitoringController monitoringController;
 
@@ -45,8 +47,9 @@ public abstract class AbstractAsyncThread extends Thread {
 		this.monitoringController = monitoringController;
 	}
 
-	public final void initShutdown() {
+	public final void initShutdown(final CountDownLatch cdl) {
 		try {
+			this.countDownLatch = cdl;
 			this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
 		} catch (final InterruptedException ex) {
 			AbstractAsyncThread.LOG.error("Error while trying to stop writer thread", ex);
@@ -76,6 +79,9 @@ public abstract class AbstractAsyncThread extends Thread {
 							monitoringRecord = writeQueue.poll();
 						}
 						this.finished = true;
+						if (this.countDownLatch != null) {
+							this.countDownLatch.countDown();
+						}
 						this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
 						this.cleanup();
 						break;
@@ -93,10 +99,16 @@ public abstract class AbstractAsyncThread extends Thread {
 			// e.g. Interrupted Exception or IOException
 			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);
 			this.finished = true;
+			if (this.countDownLatch != null) {
+				this.countDownLatch.countDown();
+			}
 			this.cleanup();
 			this.monitoringController.terminateMonitoring();
 		} finally {
 			this.finished = true;
+			if (this.countDownLatch != null) {
+				this.countDownLatch.countDown();
+			}
 		}
 	}
 
