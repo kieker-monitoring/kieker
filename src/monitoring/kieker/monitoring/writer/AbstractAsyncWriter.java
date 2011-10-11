@@ -111,7 +111,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		while (!finished) {
 			shutdowntries++;
 			try {
-				finished = cdl.await(500, TimeUnit.MILLISECONDS);
+				finished = cdl.await(500, TimeUnit.MILLISECONDS); // NOCS (MagicNumber)
 			} catch (final InterruptedException ex) {
 				// we should be able to ignore an interrupted wait
 			}
