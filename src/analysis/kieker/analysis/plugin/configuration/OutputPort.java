@@ -20,8 +20,8 @@
 
 package kieker.analysis.plugin.configuration;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.IAnalysisEvent;
 
@@ -30,11 +30,9 @@ import kieker.analysis.plugin.IAnalysisEvent;
  * @author Andre van Hoorn
  */
 public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
+	// private static final Log LOG = LogFactory.getLog(OutputPort.class);
 
-	// private static final Log log = LogFactory.getLog(OutputPort.class);
-
-	/** Should use "better" data structure from java.concurrent */
-	private final Collection<IInputPort<T>> subscribers = new ArrayList<IInputPort<T>>();
+	private final Collection<IInputPort<T>> subscribers = new CopyOnWriteArrayList<IInputPort<T>>();
 	private final String description;
 
 	public OutputPort(final String description) {
@@ -42,25 +40,19 @@ public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
 	}
 
 	public void deliver(final T event) {
-		synchronized (this) {
-			for (final IInputPort<T> l : this.subscribers) {
-				l.newEvent(event);
-			}
+		for (final IInputPort<T> l : this.subscribers) {
+			l.newEvent(event);
 		}
 	}
 
 	@Override
 	public void subscribe(final IInputPort<T> subscriber) {
-		synchronized (this) {
-			this.subscribers.add(subscriber);
-		}
+		this.subscribers.add(subscriber);
 	}
 
 	@Override
 	public void unsubscribe(final IInputPort<T> subscriber) {
-		synchronized (this) {
-			this.subscribers.remove(subscriber);
-		}
+		this.subscribers.remove(subscriber);
 	}
 
 	@Override

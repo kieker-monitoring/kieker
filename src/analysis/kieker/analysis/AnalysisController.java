@@ -20,10 +20,10 @@
 
 package kieker.analysis;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.IAnalysisPlugin;
@@ -56,15 +56,14 @@ public class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 	private IMonitoringReader logReader;
 	/**
-	 * this are the consumers for data that are coming into kieker by readers
-	 * (files or system under monitoring)
+	 * this are the consumers for data that are coming into Kieker by readers (files or system under monitoring)
 	 */
-	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new ArrayList<IMonitoringRecordConsumerPlugin>();
+	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains all consumers which consume records of any type */
-	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new ArrayList<IMonitoringRecordConsumerPlugin>();
+	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains mapping of record types to subscribed consumers */
 	private final Map<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new HashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
-	private final Collection<IAnalysisPlugin> plugins = new ArrayList<IAnalysisPlugin>();
+	private final Collection<IAnalysisPlugin> plugins = new CopyOnWriteArrayList<IAnalysisPlugin>();
 
 	/**
 	 * Will be count down after the analysis is set-up.
@@ -198,7 +197,7 @@ public class AnalysisController {
 			for (final Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
 				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(recordType);
 				if (cList == null) {
-					cList = new ArrayList<IMonitoringRecordConsumerPlugin>(0); // NOPMD (new in loops)
+					cList = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>(); // NOPMD (new in loops)
 					this.specificTypeConsumers.put(recordType, cList);
 				}
 				cList.add(consumer);

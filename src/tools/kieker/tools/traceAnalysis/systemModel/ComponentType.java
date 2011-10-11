@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * 
@@ -31,7 +32,7 @@ public class ComponentType {
 	private final int id;
 	private final String packageName;
 	private final String typeName;
-	private final Collection<Operation> operations = new ArrayList<Operation>();
+	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<Operation>());
 
 	public ComponentType(final int id, final String packageName, final String typeName) {
 		this.id = id;

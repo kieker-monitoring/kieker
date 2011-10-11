@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
@@ -39,7 +40,7 @@ public abstract class AbstractCallTreeNode<T> {
 
 	private final boolean rootNode;
 
-	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = new ArrayList<WeightedDirectedCallTreeEdge<T>>();
+	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<WeightedDirectedCallTreeEdge<T>>());
 
 	public AbstractCallTreeNode(final int id, final SystemModelRepository systemEntityFactory, final T entity, final boolean rootNode) {
 		this.id = id;

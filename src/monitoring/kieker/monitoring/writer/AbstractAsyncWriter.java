@@ -20,11 +20,11 @@
 
 package kieker.monitoring.writer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.record.IMonitoringRecord;
@@ -44,7 +44,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	// internal variables
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
-	private final List<AbstractAsyncThread> workers = new ArrayList<AbstractAsyncThread>();
+	private final List<AbstractAsyncThread> workers = new CopyOnWriteArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
 	private final AtomicInteger missedRecords;
 

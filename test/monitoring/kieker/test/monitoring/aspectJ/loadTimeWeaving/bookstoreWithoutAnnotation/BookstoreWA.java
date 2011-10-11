@@ -63,7 +63,9 @@ public class BookstoreWA extends Thread {
 		for (int i = 0; i < BookstoreWA.NUM_REQUESTS; i++) {
 			System.out.println("BookstoreWA.main: Starting request " + i);
 			final BookstoreWA newBookstore = new BookstoreWA(); // NOPMD (new in loop)
-			BookstoreWA.BOOKSTORE_SCENARIOS.add(newBookstore);
+			synchronized (BookstoreWA.BOOKSTORE_SCENARIOS) {
+				BookstoreWA.BOOKSTORE_SCENARIOS.add(newBookstore);
+			}
 			newBookstore.start();
 			BookstoreWA.waitabit(BookstoreWA.INTER_REQUEST_TIME);
 		}

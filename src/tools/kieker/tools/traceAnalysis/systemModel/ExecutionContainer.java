@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * 
@@ -31,7 +32,7 @@ public class ExecutionContainer {
 	private final int id;
 	private final String name;
 	private final ExecutionContainer parent;
-	private final Collection<ExecutionContainer> childContainers = new ArrayList<ExecutionContainer>();
+	private final Collection<ExecutionContainer> childContainers = Collections.synchronizedList(new ArrayList<ExecutionContainer>());
 
 	public ExecutionContainer(final int id, final ExecutionContainer parent, final String name) {
 		this.id = id;

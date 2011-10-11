@@ -20,8 +20,8 @@
 
 package kieker.analysis.reader;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -37,7 +37,7 @@ public abstract class AbstractMonitoringReader implements IMonitoringReader {
 
 	private static final Log LOG = LogFactory.getLog(AbstractMonitoringReader.class);
 
-	private final Collection<IMonitoringRecordReceiver> recordReceivers = new ArrayList<IMonitoringRecordReceiver>();
+	private final Collection<IMonitoringRecordReceiver> recordReceivers = new CopyOnWriteArrayList<IMonitoringRecordReceiver>();
 
 	@Override
 	public final void addRecordReceiver(final IMonitoringRecordReceiver receiver) {

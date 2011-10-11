@@ -21,12 +21,12 @@
 package kieker.analysis.reader.filesystem;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -57,7 +57,7 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 
 	private static final IMonitoringRecord FS_READER_TERMINATION_MARKER = new DummyMonitoringRecord();
 
-	private final Collection<Thread> readerThreads = new ArrayList<Thread>();
+	private final Collection<Thread> readerThreads = new CopyOnWriteArrayList<Thread>();
 	private final IMonitoringRecordReceiver master;
 	private final String[] inputDirs;
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;

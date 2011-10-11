@@ -37,6 +37,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.reader.filesystem.FSReader;
@@ -135,13 +136,7 @@ public final class TraceAnalysisTool {
 
 		TraceAnalysisTool.outputDir = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR) + File.separator;
 		TraceAnalysisTool.outputFnPrefix = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
-		if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { /*
-																					 * Parse
-																					 * list
-																					 * of
-																					 * trace
-																					 * Ids
-																					 */
+		if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { // Parse list of trace Ids
 			final String[] traceIdList = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_SELECTTRACES);
 			TraceAnalysisTool.selectedTraces = new TreeSet<Long>();
 			final int numSelectedTraces = traceIdList.length;
@@ -200,6 +195,7 @@ public final class TraceAnalysisTool {
 	}
 
 	private static void dumpConfiguration() {
+		// TODO: remove this line? unused?
 		final List<Option> myOpts = new ArrayList<Option>(Constants.SORTED_OPTION_LIST);
 
 		System.out.println("#");
@@ -278,7 +274,7 @@ public final class TraceAnalysisTool {
 				 * Register an FSReader which only reads records of type
 				 * OperationExecutionRecord
 				 */
-				final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet = new ArrayList<Class<? extends IMonitoringRecord>>();
+				final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
 				recordTypeSelectorSet.add(OperationExecutionRecord.class);
 				analysisInstance.setReader(new FSReader(TraceAnalysisTool.inputDirs, recordTypeSelectorSet));
 			}

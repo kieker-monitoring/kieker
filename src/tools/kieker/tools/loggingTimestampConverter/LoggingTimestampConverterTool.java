@@ -20,9 +20,9 @@
 
 package kieker.tools.loggingTimestampConverter;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.tools.util.LoggingTimestampConverter;
 
@@ -47,7 +47,7 @@ public final class LoggingTimestampConverterTool {
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
-	private static final List<Option> OPTIONS = new ArrayList<Option>();
+	private static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>();
 	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
 	private static CommandLine cmdl = null;
 	private static String[] timestampsStr;

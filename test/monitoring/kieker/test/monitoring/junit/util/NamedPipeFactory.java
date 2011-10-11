@@ -21,6 +21,7 @@
 package kieker.test.monitoring.junit.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -100,7 +101,7 @@ public final class NamedPipeFactory {
 	 * @return a list which contains the collected records
 	 */
 	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(final String pipeName) {
-		final List<IMonitoringRecord> receivedRecords = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 		final Pipe namedPipe = Broker.getInstance().acquirePipe(pipeName);
 		namedPipe.setPipeReader(new IPipeReader() {
 

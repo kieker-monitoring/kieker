@@ -20,9 +20,9 @@
 
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.configuration.IOutputPort;
@@ -51,7 +51,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new ArrayList<Class<? extends IMonitoringRecord>>();
+	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
 
 	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output stream");
 

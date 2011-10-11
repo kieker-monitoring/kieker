@@ -20,9 +20,9 @@
 
 package kieker.tools.traceAnalysis;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
@@ -97,7 +97,7 @@ final class Constants {
 	public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
 	public static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	public static final Options CMDL_OPTIONS = new Options();
-	public static final List<Option> SORTED_OPTION_LIST = new ArrayList<Option>();
+	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
 	static {
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(true)

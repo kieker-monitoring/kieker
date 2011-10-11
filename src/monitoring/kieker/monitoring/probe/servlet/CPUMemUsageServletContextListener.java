@@ -20,8 +20,8 @@
 
 package kieker.monitoring.probe.servlet;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContext;
@@ -100,7 +100,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in {@link #contextInitialized(ServletContextEvent)} and removed from the
 	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
 	 */
-	private final Collection<ScheduledSamplerJob> samplerJobs = new ArrayList<ScheduledSamplerJob>();
+	private final Collection<ScheduledSamplerJob> samplerJobs = new CopyOnWriteArrayList<ScheduledSamplerJob>();
 
 	private volatile long sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;

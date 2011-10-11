@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -30,7 +31,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 public class CallTreeNode {
 
 	private final CallTreeNode parent;
-	private final List<CallTreeNode> children = new ArrayList<CallTreeNode>();
+	private final List<CallTreeNode> children = Collections.synchronizedList(new ArrayList<CallTreeNode>());
 	private final CallTreeOperationHashKey opInfo;
 
 	public CallTreeNode(final CallTreeNode parent, final CallTreeOperationHashKey opInfo) {
