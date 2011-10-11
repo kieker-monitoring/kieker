@@ -72,9 +72,6 @@ public final class Broker {
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		static {
-			INSTANCE = new Broker();
-		}
-		private static final Broker INSTANCE;
+		private static final Broker INSTANCE = new Broker(); // NOPMD (AccessorClassGeneration)
 	}
 }

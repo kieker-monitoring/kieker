@@ -92,6 +92,6 @@ public final class SigarSamplerFactory implements ISigarSamplerFactory {
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final SigarSamplerFactory INSTANCE = new SigarSamplerFactory();
+		private static final SigarSamplerFactory INSTANCE = new SigarSamplerFactory(); // NOPMD (AccessorClassGeneration)
 	}
 }

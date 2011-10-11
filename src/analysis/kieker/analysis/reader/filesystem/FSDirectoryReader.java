@@ -369,7 +369,9 @@ class FSDirectoryReader {
 
 		private final Collator c = Collator.getInstance();
 
-		private FileComparator() {}
+		public FileComparator() {
+			// nothing to do
+		}
 
 		@Override
 		public final int compare(final File f1, final File f2) {

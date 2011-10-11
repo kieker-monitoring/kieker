@@ -241,6 +241,6 @@ public final class ControlFlowRegistry {
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final ControlFlowRegistry INSTANCE = new ControlFlowRegistry();
+		private static final ControlFlowRegistry INSTANCE = new ControlFlowRegistry(); // NOPMD (AccessorClassGeneration)
 	}
 }

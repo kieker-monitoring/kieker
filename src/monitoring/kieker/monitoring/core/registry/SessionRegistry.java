@@ -67,6 +67,6 @@ public final class SessionRegistry {
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final SessionRegistry INSTANCE = new SessionRegistry();
+		private static final SessionRegistry INSTANCE = new SessionRegistry(); // NOPMD (AccessorClassGeneration)
 	}
 }

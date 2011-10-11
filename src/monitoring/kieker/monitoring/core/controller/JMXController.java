@@ -106,7 +106,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 				try {
 					controllerObjectNameTmp = new ObjectName(this.domain, "type", // NOCS (MultipleStringLiteralsCheck)
 							configuration.getStringProperty(Configuration.ACTIVATE_JMX_CONTROLLER_NAME));
-				} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+				} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 					JMXController.LOG.warn("Failed to initialize MonitoringController MBean", e);
 				}
 			}
@@ -128,7 +128,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 				if (this.serverObjectName != null) {
 					try {
 						mbs.registerMBean(this.server, this.serverObjectName);
-					} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+					} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 						JMXController.LOG.warn("Unable to register JMXServer MBean", e);
 					}
 				}
