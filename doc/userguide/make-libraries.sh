@@ -16,7 +16,7 @@ EOF
 rm -f $LICENSE_LIST
 touch $LICENSE_LIST
 
-for I in `cat libraries-descriptions.txt | sort | grep -E '^\w.*\t.*$' | sed 's/\t/%18/' | sed s/\ /%20/g` ; do
+for I in `cat libraries-descriptions.txt | sort | grep -E '^\w.*' | sed 's/\t/%18/' | sed s/\ /%20/g` ; do
 	J=`echo $I | sed 's/%20/\ /g'`
 	LIBPATTERN=`echo $J | sed 's/^\(\w.*\)%18.*/\1/' | sed 's/\\$/\*/'`
 	LIBDESC=`echo $J | sed 's/^\w.*%18\(.*\)/\1/'`

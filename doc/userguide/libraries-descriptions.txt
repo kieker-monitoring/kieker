@@ -41,7 +41,7 @@ rabbitmq-client.jar	This library contains the client for the RabbitMQ messaging 
 jndi-$.jar	The Java Naming and Directory Interface is an API which provides methods for multiple naming and directory services. It can be used for example to register disposed files in a network and to allow other part of a Java program to use them for RMI calls.
 spice-jndikit-$.jar	The JNDI Kit is a toolkit for the easy use of the so called Java Naming and Directory Interface.
 
-cxf-api-$.jar	Apache CXF is an open source services framework.  
+cxf-api-$.jar	Apache CXF is an open source services framework. 
 cxf-rt-core-$.jar	This library contains the Apache CXF Runtime Core. 
 
 javax.jms-$.jar	Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
