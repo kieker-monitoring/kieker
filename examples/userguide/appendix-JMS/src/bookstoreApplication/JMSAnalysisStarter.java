@@ -24,8 +24,8 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.IMonitoringReader;
-import kieker.analysis.reader.JMSReader;
 import kieker.analysis.reader.MonitoringReaderException;
+import kieker.analysis.reader.jms.JMSReader;
 
 /**
  *
