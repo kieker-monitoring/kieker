@@ -29,19 +29,19 @@ import java.io.Serializable;
 public class MonitoringRecordTypeClassnameMapping implements Serializable {
 	private static final long serialVersionUID = 5477L;
 	private final int typeId;
-	private final String classname;
+	private final String className;
 
-	public MonitoringRecordTypeClassnameMapping(final int id, final String classname) {
+	public MonitoringRecordTypeClassnameMapping(final int id, final String className) {
 		this.typeId = id;
-		this.classname = classname;
+		this.className = className;
 	}
 
 	public int getTypeId() {
 		return this.typeId;
 	}
 
-	public String getClassname() {
-		return this.classname;
+	public String getClassName() {
+		return this.className;
 	}
 
 }
