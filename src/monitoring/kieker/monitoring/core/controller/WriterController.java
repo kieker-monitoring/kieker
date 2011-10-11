@@ -57,7 +57,7 @@ public final class WriterController extends AbstractController implements IWrite
 		if (this.monitoringWriter != null) {
 			try {
 				this.monitoringWriter.setController(super.monitoringController);
-			} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 				WriterController.LOG.error("Error initializing writer", e);
 				this.terminate();
 			}
@@ -107,7 +107,7 @@ public final class WriterController extends AbstractController implements IWrite
 				return false;
 			}
 			return true;
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			WriterController.LOG.fatal("Exception detected. Will terminate monitoring", ex);
 			this.terminate();
 			return false;

@@ -58,7 +58,7 @@ public class ScheduledSamplerJob implements Runnable {
 				return;
 			}
 			this.sampler.sample(this.monitoringController);
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			/* Re-throw exception because run must throw RuntimeException */
 			throw new RuntimeException(ex.getMessage(), ex); // NOPMD
 		}

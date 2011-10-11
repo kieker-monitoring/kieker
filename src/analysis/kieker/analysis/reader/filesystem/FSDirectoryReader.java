@@ -203,7 +203,7 @@ class FSDirectoryReader {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) { // NOCS
+				} catch (final Exception e) { // NOCS // NOPMD
 					FSDirectoryReader.LOG.error("Exception while closing input stream for mapping file", e);
 				}
 			}
@@ -312,7 +312,7 @@ class FSDirectoryReader {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+				} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", e);
 				}
 			}

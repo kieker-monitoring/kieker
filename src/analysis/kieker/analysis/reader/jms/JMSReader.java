@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.reader;
+package kieker.analysis.reader.jms;
 
 import java.io.Serializable;
 import java.util.Hashtable;
@@ -39,6 +39,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.record.IMonitoringRecord;
 
@@ -94,7 +95,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			final String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
 			final String jmsFactoryLookupNameP = propertyMap.getProperty("jmsFactoryLookupName", null);
 			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws IllegalArgumentException
-		} catch (final Exception exc) { // NOCS
+		} catch (final Exception exc) { // NOCS // NOPMD
 			JMSReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}
@@ -174,7 +175,7 @@ public class JMSReader extends AbstractMonitoringReader {
 							JMSReader.LOG.fatal("MessageFormatException:" + em.getMessage(), em);
 						} catch (final JMSException ex) {
 							JMSReader.LOG.fatal("JMSException: " + ex.getMessage(), ex);
-						} catch (final Exception ex) { // NOCS
+						} catch (final Exception ex) { // NOCS // NOPMD
 							JMSReader.LOG.error("Exception", ex);
 						}
 					}
@@ -187,7 +188,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			JMSReader.LOG.info("JMSReader started and waits for incomming monitoring events!");
 			this.block();
 			JMSReader.LOG.info("Woke up by shutdown");
-		} catch (final Exception ex) { // FindBugs complains but wontfix // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // FindBugs complains but wontfix // NOCS (IllegalCatchCheck) // NOPMD
 			JMSReader.LOG.fatal(ex.getMessage(), ex);
 			retVal = false;
 		} finally {

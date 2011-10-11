@@ -185,7 +185,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 			this.hostName = (String) values[6]; // NOCS
 			this.eoi = (Integer) values[7]; // NOCS
 			this.ess = (Integer) values[8]; // NOCS
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}
@@ -230,7 +230,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 					// not considering experimentId is this is seldomly used
 					&& this.operationName.equals(ro.operationName) && this.sessionId.equals(ro.sessionId) && (this.tin == ro.tin) && (this.tout == ro.tout)
 					&& (this.traceId == ro.traceId) && this.hostName.equals(ro.hostName);
-		} catch (final NullPointerException ex) {
+		} catch (final NullPointerException ex) { // NOPMD
 			// avoid logging!!!! Do something else instead! Records should not depend on logger!
 			return false;
 		}

@@ -187,7 +187,7 @@ public class ControlServlet extends HttpServlet {
 		String monitoringControllerStatus = "";
 		try {
 			monitoringControllerStatus = ControlServlet.CTRL_INST.toString();
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 			out.println(e.getMessage());
 		}
 

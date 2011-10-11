@@ -190,7 +190,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 			this.swapUsed = (Long) values[6]; // NOCS
 			this.swapFree = (Long) values[7]; // NOCS
 
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

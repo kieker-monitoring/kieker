@@ -75,7 +75,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date.format(new java.util.Date());
+		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
 		final StringBuffer sb = new StringBuffer(path);
 		sb.append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		path = sb.toString();
@@ -90,7 +90,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		final MappingFileWriter mappingFileWriter;
 		try {
 			mappingFileWriter = new MappingFileWriter(mappingFileFn); // NOPMD
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final IOException ex) {
 			final String errorMsg = "Failed to create mapping file '" + mappingFileFn + "'";
 			AsyncFsWriter.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg, ex);
@@ -169,7 +169,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 			this.entriesInCurrentFileCounter = 1;
 			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
 			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = dateFormat.format(new java.util.Date());
+			final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);

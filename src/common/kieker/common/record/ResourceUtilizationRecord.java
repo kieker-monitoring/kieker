@@ -94,7 +94,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 			this.resourceName = (String) values[2]; // NOCS
 			this.utilization = (Double) values[3]; // NOCS
 
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

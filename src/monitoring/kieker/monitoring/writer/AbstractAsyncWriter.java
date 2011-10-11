@@ -125,7 +125,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				this.blockingQueue.add(monitoringRecord);
 				break;
 			}
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			AbstractAsyncWriter.LOG.error("Failed to retrieve new monitoring record.", ex);
 			return false;
 		}

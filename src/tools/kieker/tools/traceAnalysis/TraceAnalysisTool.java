@@ -146,7 +146,7 @@ public final class TraceAnalysisTool {
 					TraceAnalysisTool.selectedTraces.add(Long.valueOf(idStr));
 				}
 				TraceAnalysisTool.LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
-			} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")");
 				TraceAnalysisTool.LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
 				return false;
@@ -466,7 +466,7 @@ public final class TraceAnalysisTool {
 			int numErrorCount = 0;
 			try {
 				analysisInstance.run();
-			} catch (final Exception exc) { // NOCS (FindBugs reports that Exception is never trown; but wontfix (#44)!)
+			} catch (final Exception exc) { // NOPMD // NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
 				TraceAnalysisTool.LOG.error("Error occured while running analysis", exc);
 				throw exc;
 			} finally {
@@ -504,7 +504,7 @@ public final class TraceAnalysisTool {
 			if (!retVal) {
 				System.err.println("A task failed");
 			}
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			System.err.println("An error occured: " + ex.getMessage());
 			System.err.println("");
 			TraceAnalysisTool.LOG.error("Exception", ex);
@@ -562,7 +562,7 @@ public final class TraceAnalysisTool {
 				System.exit(1);
 			}
 
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			System.err.println("An error occured. See 'kieker.log' for details");
 			TraceAnalysisTool.LOG.fatal(args, exc);
 		}

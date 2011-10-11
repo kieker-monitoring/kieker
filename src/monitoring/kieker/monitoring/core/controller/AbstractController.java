@@ -99,7 +99,7 @@ public abstract class AbstractController {
 		} catch (final NoSuchMethodException e) {
 			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname // NOCS (MultipleStringLiteralsCheck)
 					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
 			AbstractController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e); // NOCS (MultipleStringLiteralsCheck)
 		}

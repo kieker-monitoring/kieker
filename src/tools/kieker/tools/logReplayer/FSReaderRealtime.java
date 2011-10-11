@@ -105,7 +105,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
 				dirNameArray[i] = dirNameTokenizer.nextToken().trim();
 			}
-		} catch (final Exception exc) { // NOCS
+		} catch (final Exception exc) { // NOCS // NOPMD
 			throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
 		}
 		return dirNameArray;
@@ -139,7 +139,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		try {
 			this.analysis.run();
 			this.terminationLatch.await();
-		} catch (final Exception ex) { // NOCS (catch all)
+		} catch (final Exception ex) { // NOCS (catch all) // NOPMD
 			FSReaderRealtime.LOG.error("An error occured while reading", ex);
 			return false;
 		}

@@ -80,7 +80,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		try {
 			// register correct Driver
 			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			SyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
 			throw ex;
 		}
@@ -134,13 +134,13 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				this.psInsertMonitoringData.setLong(8, execRecord.getEoi()); // NOCS (MagicNumberCheck)
 				this.psInsertMonitoringData.setLong(9, execRecord.getEss()); // NOCS (MagicNumberCheck)
 				this.psInsertMonitoringData.execute();
-			} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+			} catch (final SQLException ex) {
 				SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);
 				return false;
 			} finally {
 				try {
 					this.psInsertMonitoringData.clearParameters();
-				} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+				} catch (final SQLException ex) {
 					SyncDbWriter.LOG.error(ex);
 					return false; // NOPMD
 				}

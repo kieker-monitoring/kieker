@@ -25,7 +25,7 @@ import java.util.Collection;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.IMonitoringReader;
-import kieker.analysis.reader.JMSReader;
+import kieker.analysis.reader.jms.JMSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 
@@ -86,7 +86,7 @@ public class JMSLogReplayer {
 		try {
 			tpanInstance.run();
 			success = true;
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			JMSLogReplayer.LOG.error("Exception", ex);
 			success = false;
 		}

@@ -113,7 +113,7 @@ public class PropertyMap {
 				PropertyMap.LOG.debug("Found key/value pair: " + key + "=" + val);
 				this.map.put(key, val);
 			}
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Error parsing init string '" + initString + "'", exc);
 		}
 

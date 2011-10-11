@@ -108,7 +108,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = dateFormat.format(new java.util.Date());
+		final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
 		final StringBuilder sb = new StringBuilder(pathTmp);
 		sb.append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		pathTmp = sb.toString();
@@ -123,7 +123,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		final String mappingFileFn = pathTmp + File.separatorChar + "kieker.map";
 		try {
 			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final IOException ex) {
 			final String errorMsg = "Failed to create mapping file '" + mappingFileFn + "'";
 			SyncFsWriter.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg, ex);
@@ -172,7 +172,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
 			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = dateFormat.format(new java.util.Date());
+			final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);

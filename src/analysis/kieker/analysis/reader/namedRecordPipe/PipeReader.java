@@ -82,11 +82,10 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	@Override
 	public boolean init(final String initString) {
 		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws
-			// IllegalArgumentException
+			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
 			this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
 			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;
 		}

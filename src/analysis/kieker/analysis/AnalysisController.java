@@ -135,7 +135,7 @@ public class AnalysisController {
 					success = false;
 				}
 			}
-		} catch (final Exception exc) { // NOCS
+		} catch (final Exception exc) { // NOCS // NOPMD
 			AnalysisController.LOG.fatal("Error occurred: " + exc.getMessage());
 			success = false;
 		} finally {
@@ -145,7 +145,7 @@ public class AnalysisController {
 				for (final IAnalysisPlugin c : this.plugins) {
 					c.terminate(!success); // normal termination (w/o error)
 				}
-			} catch (final Exception e) { // NOCS
+			} catch (final Exception e) { // NOCS // NOPMD
 				AnalysisController.LOG.error("Error during termination: " + e.getMessage(), e);
 			}
 		}

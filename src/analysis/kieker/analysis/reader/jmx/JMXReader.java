@@ -148,7 +148,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 		} catch (final InstanceNotFoundException e) {
 			JMXReader.LOG.error("No monitoring log found: " + this.monitoringLog.toString());
 			ret = false;
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 			JMXReader.LOG.error("Error in JMX connection!", e); // NOCS (MultipleStringLiteralsCheck)
 			ret = false;
 		} finally {
@@ -156,7 +156,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 				if (logNotificationListener != null) {
 					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 				}
-			} catch (final Exception e) { // NOCS
+			} catch (final Exception e) { // NOCS // NOPMD
 				JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
 			}
 			try {
@@ -170,7 +170,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 				if (jmx != null) {
 					jmx.close();
 				}
-			} catch (final Exception e) { // NOCS (IllegalCatchCheck)
+			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 				JMXReader.LOG.debug("Failed to close JMX connection!", e);
 			}
 		}

@@ -64,7 +64,7 @@ public abstract class AbstractMonitoringReader implements IMonitoringReader {
 					return false;
 				}
 			}
-		} catch (final Exception ex) { // NOCS
+		} catch (final Exception ex) { // NOCS // NOPMD
 			AbstractMonitoringReader.LOG.fatal("Caught Exception while delivering record", ex);
 			return false;
 		}

@@ -103,7 +103,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 			this.timestamp = (Long) values[0];
 			this.branchID = (Integer) values[1];
 			this.branchingOutcome = (Integer) values[2];
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

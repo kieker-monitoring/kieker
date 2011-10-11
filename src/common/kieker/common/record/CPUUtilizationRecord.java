@@ -152,7 +152,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 			this.totalUtilization = (Double) values[8]; // NOCS
 			this.idle = (Double) values[9]; // NOCS
 
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

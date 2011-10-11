@@ -122,7 +122,7 @@ public final class Configuration extends Properties implements Keys {
 			return properties;
 		} catch (final FileNotFoundException ex) {
 			Configuration.LOG.warn("File '" + propertiesFn + "' not found"); // NOCS (MultipleStringLiteralsCheck)
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 		} finally {
 			if (is != null) {
@@ -154,7 +154,7 @@ public final class Configuration extends Properties implements Keys {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
-			} catch (final Exception ex) { // NOCS (IllegalCatchCheck)
+			} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 				Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 			} finally {
 				try {
