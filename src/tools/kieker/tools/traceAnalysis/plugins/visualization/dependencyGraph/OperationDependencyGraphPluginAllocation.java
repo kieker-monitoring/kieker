@@ -102,7 +102,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 		/* Execution container ID x contained components */
 		final Map<Integer, Collection<AllocationComponent>> containerId2componentMapping = 
 			new Hashtable<Integer, Collection<AllocationComponent>>(); // NOPMD (UseConcurrentHashMap)
-		final Map<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping = 
+		final Map<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping = // NOPMD (see below)
 			new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>>(); // NOPMD (UseConcurrentHashMap)
 
 		// Derive container / component / operation hieraŕchy

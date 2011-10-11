@@ -34,7 +34,7 @@ public class DependencyGraphNode<T> {
 	private final int id;
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = 
 		new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD (UseConcurrentHashMap)
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = 
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = // NOPMD (see below)
 		new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD (UseConcurrentHashMap)
 
 	public DependencyGraphNode(final int id, final T entity) {
