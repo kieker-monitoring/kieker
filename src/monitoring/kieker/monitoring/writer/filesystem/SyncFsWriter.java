@@ -109,7 +109,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = dateFormat.format(new java.util.Date());
-		pathTmp = pathTmp + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
+		final StringBuilder sb = new StringBuilder(pathTmp);
+		sb.append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		pathTmp = sb.toString();
 		f = new File(pathTmp);
 		if (!f.mkdir()) {
 			final String errorMsg = "Failed to create directory '" + pathTmp + "'";

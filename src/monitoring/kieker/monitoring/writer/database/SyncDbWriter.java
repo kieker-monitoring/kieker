@@ -89,13 +89,14 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			final String tablename = this.configuration.getStringProperty(SyncDbWriter.CONFIG_TABLENAME);
 			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/169
 			/*
-			 * TODO: IS THIS STILL NEEDED? if
-			 * (this.configuration.getBooleanProperty(LOADID)) { final Statement
-			 * stm = this.conn.createStatement(); final ResultSet res =
-			 * stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
-			 * if (res.next()) { //this may not be fully constructed!!!!
-			 * But it should mostly work?!?
-			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } }
+			 * TODO: IS THIS STILL NEEDED?
+			 * if (this.configuration.getBooleanProperty(LOADID)) {
+			 * final Statement stm = this.conn.createStatement();
+			 * final ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
+			 * if (res.next()) { //this may not be fully constructed!!!! But it should mostly work?!?
+			 * this.ctrl.setExperimentId(res.getInt(1) + 1);
+			 * }
+			 * }
 			 */
 			this.psInsertMonitoringData = this.conn.prepareStatement("INSERT INTO " + tablename
 					+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)");

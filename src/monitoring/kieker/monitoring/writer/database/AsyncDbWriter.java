@@ -94,15 +94,16 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		try {
 			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/168
 			/*
-			 * TODO: IS THIS STILL NEEDED? if
-			 * (this.configuration.getBooleanProperty(LOADID)) { final
-			 * Connection conn = DriverManager.getConnection(connectionString);
-			 * final Statement stm = conn.createStatement(); final ResultSet res
-			 * = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
-			 * if (res.next()) { // this may not be fully constructed!!!!
-			 * But it should mostly work?!?
-			 * this.ctrl.setExperimentId(res.getInt(1) + 1); } conn.close(); }
-			 * /*
+			 * TODO: IS THIS STILL NEEDED?
+			 * if (this.configuration.getBooleanProperty(LOADID)) {
+			 * final Connection conn = DriverManager.getConnection(connectionString);
+			 * final Statement stm = conn.createStatement();
+			 * final ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
+			 * if (res.next()) { // this may not be fully constructed!!!! But it should mostly work?!?
+			 * this.ctrl.setExperimentId(res.getInt(1) + 1);
+			 * }
+			 * conn.close();
+			 * }
 			 */
 			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG_NRCONN); i++) {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery)); // NOPMD (new in loop)

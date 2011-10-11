@@ -76,7 +76,9 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date());
-		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
+		final StringBuffer sb = new StringBuffer(path);
+		sb.append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		path = sb.toString();
 		f = new File(path);
 		if (!f.mkdir()) {
 			final String errorMsg = "Failed to create directory '" + path + "'";

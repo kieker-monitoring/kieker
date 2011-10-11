@@ -174,7 +174,8 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createCluster(final String prefix, final String name, final String label, final String shape, final String style,
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String misc) {
-		final StringBuilder dot = new StringBuilder(prefix + "subgraph \"cluster_");
+		final StringBuilder dot = new StringBuilder(prefix);
+		dot.append("subgraph \"cluster_");
 		dot.append(name);
 		dot.append("\" {\n");
 		dot.append(prefix);
