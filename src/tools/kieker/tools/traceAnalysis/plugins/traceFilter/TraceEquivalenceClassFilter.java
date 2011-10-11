@@ -54,7 +54,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	private final Execution rootExecution;
 	private final TraceEquivalenceClassModes equivalenceMode;
 	/** Representative x # of equivalents */
-	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap =
+	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = // NOPMD (see below)
 		new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD (UseConcurrentHashMap)
 
 	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Message Traces");

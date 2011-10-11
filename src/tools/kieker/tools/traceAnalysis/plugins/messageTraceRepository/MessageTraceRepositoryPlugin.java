@@ -36,7 +36,7 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 
 	// private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
 
-	private final Map<Long, MessageTrace> repo = new ConcurrentHashMap<Long, MessageTrace>();
+	private final Map<Long, MessageTrace> repo = new ConcurrentHashMap<Long, MessageTrace>(); // NOPMD
 
 	// TODO: handle equivalence classes
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150
