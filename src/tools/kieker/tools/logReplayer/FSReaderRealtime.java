@@ -43,112 +43,13 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
-	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
-
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
 	private RealtimeReplayDistributor rtDistributor = null;
+	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
+	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
-
-	/**
-	 * Constructor for FSReaderRealtime. Requires a subsequent call to the init
-	 * method in order to specify the input directory and number of workers
-	 * using the parameter @a inputDirName.
-	 */
-	public FSReaderRealtime() {
-		// nothing to do
-	}
-
-	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		this.initInstanceFromArgs(inputDirNames, numWorkers);
-	}
-
-	/**
-	 * Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN |
-	 * numWorkers=XX
-	 */
-	@Override
-	public boolean init(final String initString) {
-		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-			final String numWorkersString = propertyMap.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
-			int numWorkers = -1;
-			if (numWorkersString == null) {
-				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
-			}
-			try {
-				numWorkers = Integer.parseInt(numWorkersString);
-			} catch (final NumberFormatException ex) { // NOPMD (value of numWorkers remains -1)
-			}
-
-			this.initInstanceFromArgs(this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
-		} catch (final IllegalArgumentException exc) {
-			FSReaderRealtime.LOG.error("Failed to initString '" + initString + "': " + exc.getMessage());
-			return false;
-		}
-		return true;
-	}
-
-	private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
-		String[] dirNameArray;
-
-		// parse inputDir property value
-		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) { // NOPMD (check empty string)
-			final String errorMsg = "Invalid argument value for inputDirNameList:" + inputDirNameList;
-			FSReaderRealtime.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
-		}
-		try {
-			final StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
-			dirNameArray = new String[dirNameTokenizer.countTokens()];
-			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
-				dirNameArray[i] = dirNameTokenizer.nextToken().trim();
-			}
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
-		}
-		return dirNameArray;
-	}
-
-	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
-		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames));
-		}
-
-		if (numWorkers <= 0) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers);
-		}
-
-		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);
-		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
-		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
-		this.analysis.setReader(fsReader);
-		this.analysis.registerPlugin(this.rtDistributor);
-	}
-
-	/**
-	 * Replays the monitoring log in real-time and returns after the complete
-	 * log was being replayed.
-	 */
-	@Override
-	public boolean read() {
-		final boolean success = true;
-		try {
-			this.analysis.run();
-			this.terminationLatch.await();
-		} catch (final Exception ex) { // NOCS (Catch everything!)
-			FSReaderRealtime.LOG.error("An error occured while reading", ex);
-			return false;
-		}
-		return success;
-	}
-
-	@Override
-	public void terminate() {
-		this.analysis.terminate();
-	}
 
 	/**
 	 * Acts as a consumer to the rtDistributor and delegates incoming records to
@@ -183,8 +84,102 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		}
 
 		@Override
-		public void terminate(final boolean error) {
-			// nothing to do
+		public void terminate(final boolean error) {}
+	}
+
+	/**
+	 * Constructor for FSReaderRealtime. Requires a subsequent call to the init
+	 * method in order to specify the input directory and number of workers
+	 * using the parameter @a inputDirName.
+	 */
+	public FSReaderRealtime() {}
+
+	/**
+	 * Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN |
+	 * numWorkers=XX
+	 */
+	@Override
+	public boolean init(final String initString) {
+		try {
+			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+			final String numWorkersString = propertyMap.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
+			int numWorkers = -1;
+			if (numWorkersString == null) {
+				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
+			}
+			try {
+				numWorkers = Integer.parseInt(numWorkersString);
+			} catch (final NumberFormatException ex) { // value of numWorkers remains -1
+			}
+
+			this.initInstanceFromArgs(this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
+		} catch (final IllegalArgumentException exc) {
+			FSReaderRealtime.LOG.error("Failed to initString '" + initString + "': " + exc.getMessage());
+			return false;
 		}
+		return true;
+	}
+
+	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
+		this.initInstanceFromArgs(inputDirNames, numWorkers);
+	}
+
+	private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
+		String[] dirNameArray;
+
+		// parse inputDir property value
+		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) {
+			final String errorMsg = "Invalid argument value for inputDirNameList:" + inputDirNameList;
+			FSReaderRealtime.LOG.error(errorMsg);
+			throw new IllegalArgumentException(errorMsg);
+		}
+		try {
+			final StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
+			dirNameArray = new String[dirNameTokenizer.countTokens()];
+			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
+				dirNameArray[i] = dirNameTokenizer.nextToken().trim();
+			}
+		} catch (final Exception exc) {
+			throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
+		}
+		return dirNameArray;
+	}
+
+	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
+		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS (MultipleStringLiteralsCheck)
+		}
+
+		if (numWorkers <= 0) {
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS (MultipleStringLiteralsCheck)
+		}
+
+		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);
+		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
+		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
+		this.analysis.setReader(fsReader);
+		this.analysis.registerPlugin(this.rtDistributor);
+	}
+
+	/**
+	 * Replays the monitoring log in real-time and returns after the complete
+	 * log was being replayed.
+	 */
+	@Override
+	public boolean read() {
+		final boolean success = true;
+		try {
+			this.analysis.run();
+			this.terminationLatch.await();
+		} catch (final Exception ex) {
+			FSReaderRealtime.LOG.error("An error occured while reading", ex);
+			return false;
+		}
+		return success;
+	}
+
+	@Override
+	public void terminate() {
+		this.analysis.terminate();
 	}
 }

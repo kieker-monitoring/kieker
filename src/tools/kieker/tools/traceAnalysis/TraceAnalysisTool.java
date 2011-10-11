@@ -196,24 +196,17 @@ public final class TraceAnalysisTool {
 	}
 
 	private static void dumpConfiguration() {
-		// TODO: remove this line? unused?
-		final List<Option> myOpts = new ArrayList<Option>(Constants.SORTED_OPTION_LIST);
-
 		System.out.println("#");
 		System.out.println("# Configuration");
 		for (final Option o : Constants.SORTED_OPTION_LIST) {
 			final String longOpt = o.getLongOpt();
 			String val = "<null>";
-			boolean dumpedOp = false;
 			if (longOpt.equals(Constants.CMD_OPT_NAME_INPUTDIRS)) {
 				val = Constants.stringArrToStringList(TraceAnalysisTool.inputDirs);
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTDIR)) {
 				val = TraceAnalysisTool.outputDir;
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
 				val = TraceAnalysisTool.outputFnPrefix;
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
@@ -225,7 +218,6 @@ public final class TraceAnalysisTool {
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
 				val = TraceAnalysisTool.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
 				if (TraceAnalysisTool.selectedTraces != null) {
 					val = TraceAnalysisTool.selectedTraces.toString();
@@ -233,32 +225,23 @@ public final class TraceAnalysisTool {
 					val = "<select all>";
 				}
 
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
 				val = TraceAnalysisTool.shortLabels ? "true" : "false"; // NOCS
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
 				val = TraceAnalysisTool.ignoreInvalidTraces ? "true" : "false"; // NOCS
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
 				val = TraceAnalysisTool.maxTraceDurationMillis + " ms";
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
 				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp) + " ("
 						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp) + ")";
-				dumpedOp = true;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
 				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + " ("
 						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + ")";
-				dumpedOp = true;
 			} else {
 				val = Arrays.toString(TraceAnalysisTool.cmdl.getOptionValues(longOpt));
 				TraceAnalysisTool.LOG.warn("Unformatted confguration output for option " + longOpt);
 			}
 			System.out.println("--" + longOpt + ": " + val);
-			if (dumpedOp) {
-				myOpts.remove(o);
-			}
 		}
 	}
 

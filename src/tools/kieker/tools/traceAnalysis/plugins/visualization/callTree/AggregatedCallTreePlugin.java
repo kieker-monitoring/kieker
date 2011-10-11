@@ -21,7 +21,6 @@
 package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -55,9 +54,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		this.shortLabels = shortLabels;
 	}
 
-	public void saveTreeToDotFile(final String outputFnBase, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException {
-		AbstractCallTreePlugin.saveTreeToDotFile(super.getSystemEntityFactory(), this.root, outputFnBase, includeWeights, false, // do not include EOIs
-				shortLabels);
+	public void saveTreeToDotFile() throws IOException {
+		final String outputFnBase = this.dotOutputFile.getCanonicalPath();
+		AbstractCallTreePlugin.saveTreeToDotFile(super.getSystemEntityFactory(), this.root, outputFnBase, this.includeWeights, false, // do not include EOIs
+				this.shortLabels);
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
 			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg", });
@@ -83,7 +83,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				this.saveTreeToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels);
+				this.saveTreeToDotFile();
 			} catch (final IOException ex) {
 				AggregatedCallTreePlugin.LOG.error("IOException", ex);
 			}
