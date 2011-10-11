@@ -79,7 +79,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 		return String.format("%s\\n%s", AbstractDependencyGraphPlugin.STEREOTYPE_EXECUTION_CONTAINER, container.getName());
 	}
 
-	private String componentNodeLabel(final AllocationComponent component, final boolean shortLabels) {
+	private String componentNodeLabel(final AllocationComponent component, final boolean shortLabelsL) {
 		final String assemblyComponentName = component.getAssemblyComponent().getName();
 		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
@@ -87,7 +87,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT);
 		strBuild.append("\\n");
 		strBuild.append(assemblyComponentName).append(":");
-		if (!shortLabels) {
+		if (!shortLabelsL) {
 			strBuild.append(componentTypePackagePrefx).append(".");
 		} else {
 			strBuild.append("..");
@@ -97,7 +97,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	}
 
 	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabels) {
+	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
 		/* Execution container ID x contained components */
 		final Map<Integer, Collection<AllocationComponent>> containerId2componentMapping = new Hashtable<Integer, Collection<AllocationComponent>>();
@@ -155,7 +155,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 				for (final AllocationComponent curComponent : containerComponentEntry.getValue()) {
 					final int curComponentId = curComponent.getId();
 					strBuild.append(DotFactory.createCluster("", OperationDependencyGraphPluginAllocation.COMPONENT_NODE_ID_PREFIX + curComponentId,
-							this.componentNodeLabel(curComponent, shortLabels), DotFactory.DOT_SHAPE_BOX, DotFactory.DOT_STYLE_FILLED, // style
+							this.componentNodeLabel(curComponent, shortLabelsL), DotFactory.DOT_SHAPE_BOX, DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
 							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 							null, // fontcolor

@@ -66,7 +66,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 		this.includeSelfLoops = includeSelfLoops;
 	}
 
-	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabels) {
+	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabelsL) {
 		final AllocationComponent component = node.getEntity();
 		if (component == super.getSystemEntityFactory().getAllocationFactory().getRootAllocationComponent()) {
 			return "$";
@@ -79,7 +79,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT);
 		strBuild.append("\\n");
 		strBuild.append(assemblyComponentName).append(":");
-		if (!shortLabels) {
+		if (!shortLabelsL) {
 			strBuild.append(componentTypePackagePrefx).append(".");
 		} else {
 			strBuild.append("..");
@@ -89,7 +89,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	}
 
 	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponent>> nodes, final PrintStream ps, final boolean shortLabels) {
+	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponent>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
 		/* Execution container ID x DependencyGraphNode */
 		final Map<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>>();
@@ -113,7 +113,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 					.lookupExecutionContainerByContainerId(curContainerId);
 			if (curContainerId == rootContainerId) {
 				strBuild.append(DotFactory.createNode("", this.getNodeId(this.dependencyGraph.getRootNode()),
-						this.componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabels), DotFactory.DOT_SHAPE_NONE, null, // style
+						this.componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabelsL), DotFactory.DOT_SHAPE_NONE, null, // style
 						null, // framecolor
 						null, // fillcolor
 						null, // fontcolor
@@ -132,7 +132,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 						null)); // misc
 				// dot code for contained components
 				for (final DependencyGraphNode<AllocationComponent> node : entry.getValue()) {
-					strBuild.append(DotFactory.createNode("", this.getNodeId(node), this.componentNodeLabel(node, shortLabels), DotFactory.DOT_SHAPE_BOX,
+					strBuild.append(DotFactory.createNode("", this.getNodeId(node), this.componentNodeLabel(node, shortLabelsL), DotFactory.DOT_SHAPE_BOX,
 							DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
 							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor

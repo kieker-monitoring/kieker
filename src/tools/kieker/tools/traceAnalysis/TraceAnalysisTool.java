@@ -568,9 +568,9 @@ public final class TraceAnalysisTool {
 		}
 	}
 
-	private static boolean writeTraceEquivalenceReport(final String outputFnPrefix, final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {
+	private static boolean writeTraceEquivalenceReport(final String outputFnPrefixL, final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {
 		boolean retVal = true;
-		final String outputFn = new File(outputFnPrefix).getCanonicalPath();
+		final String outputFn = new File(outputFnPrefixL).getCanonicalPath();
 		PrintStream ps = null;
 		try {
 			ps = new PrintStream(new FileOutputStream(outputFn));

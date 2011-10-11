@@ -70,7 +70,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	}
 
 	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes, final PrintStream ps, final boolean shortLabels) {
+	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
 		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().getRootAssemblyComponent();
 		final int rootComponentId = rootComponent.getId();
