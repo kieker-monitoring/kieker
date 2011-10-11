@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -167,22 +168,22 @@ public final class TraceAnalysisTool {
 			return false;
 		}
 
-		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN); // NOCS // NOPMD
-		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final DateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN, Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
 			final String ignoreRecordsBeforeTimestampString = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE, null);
 			final String ignoreRecordsAfterTimestampString = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
-				final Date ignoreBeforeDate = dateFormat_ISO8601UTC.parse(ignoreRecordsBeforeTimestampString);
+				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
 				TraceAnalysisTool.ignoreExecutionsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
-				TraceAnalysisTool.LOG.info("Ignoring records before " + dateFormat_ISO8601UTC.format(ignoreBeforeDate) + " ("
+				TraceAnalysisTool.LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
 						+ TraceAnalysisTool.ignoreExecutionsBeforeTimestamp + ")");
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
-				final Date ignoreAfterDate = dateFormat_ISO8601UTC.parse(ignoreRecordsAfterTimestampString);
+				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
 				TraceAnalysisTool.ignoreExecutionsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
-				TraceAnalysisTool.LOG.info("Ignoring records after " + dateFormat_ISO8601UTC.format(ignoreAfterDate) + " ("
+				TraceAnalysisTool.LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
 						+ TraceAnalysisTool.ignoreExecutionsAfterTimestamp + ")");
 			}
 		} catch (final java.text.ParseException ex) {

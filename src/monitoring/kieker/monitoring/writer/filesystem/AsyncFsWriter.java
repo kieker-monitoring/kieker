@@ -29,6 +29,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
@@ -72,10 +73,10 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat date_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); // NOCS //NOPMD
-		date_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date_ISO8601UTC.format(new java.util.Date());
-		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar; // NOPMD (StringBuffer)
+		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
+		date.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final String dateStr = date.format(new java.util.Date());
+		path = path + File.separatorChar + "kieker-" + dateStr + "-UTC-" + ctrlName + File.separatorChar;
 		f = new File(path);
 		if (!f.mkdir()) {
 			final String errorMsg = "Failed to create directory '" + path + "'";
@@ -164,10 +165,9 @@ final class FsWriterThread extends AbstractAsyncThread {
 				this.pos.close();
 			}
 			this.entriesInCurrentFileCounter = 1;
-
-			final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS"); // NOCS // NOPMD
-			dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = dateFormat_ISO8601UTC.format(new java.util.Date());
+			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
+			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			final String dateStr = dateFormat.format(new java.util.Date());
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
 			if (this.autoflush) {
 				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);

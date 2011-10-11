@@ -23,6 +23,7 @@ package kieker.tools.logReplayer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import kieker.monitoring.core.configuration.Configuration;
@@ -151,8 +152,8 @@ public final class FilesystemLogReplayerStarter {
 		}
 
 		/* 5.) init ignoreRecordsBefore/After */
-		final DateFormat dateFormat_ISO8601UTC = new SimpleDateFormat(FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN); // NOCS
-		dateFormat_ISO8601UTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final DateFormat dateFormat = new SimpleDateFormat(FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN, Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
 			final String ignoreRecordsBeforeTimestampString = FilesystemLogReplayerStarter.cmdl.getOptionValue(
@@ -160,15 +161,15 @@ public final class FilesystemLogReplayerStarter {
 			final String ignoreRecordsAfterTimestampString = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 					FilesystemLogReplayerStarter.CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
-				final Date ignoreBeforeDate = dateFormat_ISO8601UTC.parse(ignoreRecordsBeforeTimestampString);
+				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
 				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
-				FilesystemLogReplayerStarter.LOG.info("Ignoring records before " + dateFormat_ISO8601UTC.format(ignoreBeforeDate) + " ("
+				FilesystemLogReplayerStarter.LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp + ")");
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
-				final Date ignoreAfterDate = dateFormat_ISO8601UTC.parse(ignoreRecordsAfterTimestampString);
+				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
 				FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
-				FilesystemLogReplayerStarter.LOG.info("Ignoring records after " + dateFormat_ISO8601UTC.format(ignoreAfterDate) + " ("
+				FilesystemLogReplayerStarter.LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp + ")");
 			}
 		} catch (final java.text.ParseException ex) {
