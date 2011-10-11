@@ -109,6 +109,10 @@ kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=true
 ## /var/kieker or "C:\KiekerData" (ensure the folder exists).
 kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=.
 #
+## When flushing is disabled, it could require a lot of records before
+## finally any writing is done.
+kieker.monitoring.writer.filesystem.AsyncFsWriter.flush=true
+#
 ## Asynchronous writers need to store monitoring records in an internal buffer.
 ## This parameter defines its capacity in terms of the number of records. 
 kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=10000
@@ -121,9 +125,9 @@ kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=10000
 ##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior=0
 #
-## When flushing is disabled, it could require a lot of records before
-## finally any writing is done.
-kieker.monitoring.writer.filesystem.AsyncFsWriter.flush=true
+## Maximum time to wait for the writer threads to finish (in multiples
+## of 0.5 seconds). A MaxShutdownDelay of 0 means infinite waiting.
+kieker.monitoring.writer.filesystem.AsyncFsWriter.MaxShutdownDelay=0
 
 
 #####
@@ -169,6 +173,11 @@ kieker.monitoring.writer.jms.AsyncJMSWriter.QueueSize=10000
 ##  Be careful when using the value '1' since then, the asynchronous writer
 ##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.jms.AsyncJMSWriter.QueueFullBehavior=0
+#
+## Maximum time to wait for the writer threads to finish (in multiples
+## of 0.5 seconds). A MaxShutdownDelay of 0 means infinite waiting.
+kieker.monitoring.writer.jms.AsyncJMSWriter.MaxShutdownDelay=0
+
 
 #####
 #kieker.monitoring.writer=kieker.monitoring.writer.database.SyncDbWriter
@@ -212,6 +221,22 @@ kieker.monitoring.writer.database.AsyncDbWriter.numberOfConnections=4
 ## instead of using the value from the configuration.
 ## (Currently not implemented!) 
 kieker.monitoring.writer.database.AsyncDbWriter.loadInitialExperimentId=false
+#
+## Asynchronous writers need to store monitoring records in an internal buffer.
+## This parameter defines its capacity in terms of the number of records. 
+kieker.monitoring.writer.database.AsyncDbWriter.QueueSize=10000
+#
+## Behavior of the asynchronous writer when the internal queue is full:
+## 0: terminate Monitoring with an error (default)
+## 1: writer blocks until queue capacity is available
+## 2: writer discards new records until space is available
+##  Be careful when using the value '1' since then, the asynchronous writer
+##  is no longer decoupled from the monitored application.
+kieker.monitoring.writer.database.AsyncDbWriter.QueueFullBehavior=0
+#
+## Maximum time to wait for the writer threads to finish (in multiples
+## of 0.5 seconds). A MaxShutdownDelay of 0 means infinite waiting.
+kieker.monitoring.writer.database.AsyncDbWriter.MaxShutdownDelay=0
 
 
 #####

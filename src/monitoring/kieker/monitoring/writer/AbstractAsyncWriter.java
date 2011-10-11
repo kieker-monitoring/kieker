@@ -49,6 +49,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final List<AbstractAsyncThread> workers = new CopyOnWriteArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
+	private final int maxShutdownDelay;
 	private final AtomicInteger missedRecords;
 
 	protected AbstractAsyncWriter(final Configuration configuration) {
@@ -65,6 +66,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		}
 		this.missedRecords = new AtomicInteger(0);
 		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + AbstractAsyncWriter.QUEUESIZE));
+		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY);
 	}
 
 	/**
@@ -76,7 +78,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
 		properties.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
 		properties.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
-		properties.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "-1");
+		properties.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "0");
 		return properties;
 	}
 
@@ -105,7 +107,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		for (final AbstractAsyncThread worker : this.workers) {
 			finished &= worker.isFinished();
 		}
+		int shutdowntries = 0;
 		while (!finished) {
+			shutdowntries++;
 			try {
 				finished = cdl.await(500, TimeUnit.MILLISECONDS);
 			} catch (final InterruptedException ex) {
@@ -116,9 +120,13 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				for (final AbstractAsyncThread worker : this.workers) {
 					finished &= worker.isFinished();
 				}
-				AbstractAsyncWriter.LOG.info("shutdown delayed - Worker is busy ... waiting additional 0.5 seconds");
 			}
-
+			if ((!finished) && ((this.maxShutdownDelay == 0) || (shutdowntries < this.maxShutdownDelay))) {
+				AbstractAsyncWriter.LOG.info("shutdown delayed - Worker is busy ... waiting 0.5 seconds");
+			} else {
+				finished = true;
+				break;
+			}
 		}
 		AbstractAsyncWriter.LOG.info("Writer shutdown complete");
 	}
