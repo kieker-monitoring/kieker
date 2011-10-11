@@ -112,8 +112,8 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	private static void dotEdgesFromSubTree(final SystemModelRepository systemEntityFactory, final CallTreeNode n, final Map<CallTreeNode, Integer> nodeIds,
 			final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder();
-		nodeIds.put(n, nextNodeId.i);
-		strBuild.append(nextNodeId.i++).append("[label =\"").append(TraceCallTreePlugin.nodeLabel(n, shortLabels))
+		nodeIds.put(n, nextNodeId.getValue());
+		strBuild.append(nextNodeId.getAndIncValue()).append("[label =\"").append(TraceCallTreePlugin.nodeLabel(n, shortLabels))
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + ",style=" + DotFactory.DOT_STYLE_FILLED + ",fillcolor=" + DotFactory.DOT_FILLCOLOR_WHITE + "];");
 		ps.println(strBuild.toString());
 		for (final CallTreeNode child : n.getChildren()) {

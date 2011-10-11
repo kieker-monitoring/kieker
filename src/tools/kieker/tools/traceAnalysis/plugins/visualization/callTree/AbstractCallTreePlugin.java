@@ -138,8 +138,8 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 	private static void dotEdgesFromSubTree(final SystemModelRepository systemEntityFactory, final AbstractCallTreeNode<?> n,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder();
-		nodeIds.put(n, nextNodeId.i);
-		strBuild.append(nextNodeId.i++).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreePlugin.nodeLabel(n, shortLabels)) // NOCS
+		nodeIds.put(n, nextNodeId.getValue());
+		strBuild.append(nextNodeId.getAndIncValue()).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreePlugin.nodeLabel(n, shortLabels)) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
@@ -158,7 +158,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			if (includeWeights) {
 				strBuild.append(",label=\"").append(child.getOutgoingWeight()).append("\"");
 			} else if (eoiCounter != null) {
-				strBuild.append(",label=\"").append(eoiCounter.i++).append(".\"");
+				strBuild.append(",label=\"").append(eoiCounter.getAndIncValue()).append(".\"");
 			}
 			strBuild.append(" ]");
 			ps.println(strBuild.toString());

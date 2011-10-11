@@ -26,9 +26,27 @@ package kieker.tools.traceAnalysis.plugins.visualization.util;
  */
 public class IntContainer {
 
-	public int i = 0;
+	private int value = 0;
 
 	public IntContainer(final int initVal) {
-		this.i = initVal;
+		this.value = initVal;
+	}
+	
+	/**
+	 * @return the i
+	 */
+	public final int getValue() {
+		return this.value;
+	}
+
+	/**
+	 * @param value the i to set
+	 */
+	public final void setValue(final int value) {
+		this.value = value;
+	}
+	
+	public final int getAndIncValue() {
+		return this.value++;
 	}
 }
