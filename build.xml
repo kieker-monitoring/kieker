@@ -7,7 +7,7 @@
 
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
-		<property name="kieker.version" value="1.4-dev-SNAPSHOT" />
+		<property name="kieker.version" value="1.4-RC2" />
 		<property name="year" value="2011" />
 		<property name="copyright" value="the Kieker Project" />
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
@@ -319,11 +319,13 @@
 			<include name="${src.userguide.example.bookstore.dir}/build.properties" />
 			<include name="${src.userguide.example.bookstore.dir}/.project" />
 			<include name="${src.userguide.example.bookstore.dir}/.classpath" />
+			<include name="${src.userguide.example.bookstore.dir}/README.txt" />
 			<include name="${src.userguide.example.bookstore.dir}/src/**/*.java" />
 			<include name="${src.userguide.example.manual.dir}/build.xml" />
 			<include name="${src.userguide.example.manual.dir}/build.properties" />
 			<include name="${src.userguide.example.manual.dir}/.project" />
-			<include name="${src.userguide.example.manual.dir}/.classpath" />			
+			<include name="${src.userguide.example.manual.dir}/.classpath" />
+			<include name="${src.userguide.example.manual.dir}/README.txt" />
 			<include name="${src.userguide.example.manual.dir}/lib/" />
 			<exclude name="${src.userguide.example.manual.dir}/lib/*" />
 			<include name="${src.userguide.example.manual.dir}/src/**/*.java" />
@@ -331,6 +333,7 @@
 			<include name="${src.userguide.example.extended.dir}/build.properties" />
 			<include name="${src.userguide.example.extended.dir}/.project" />
 			<include name="${src.userguide.example.extended.dir}/.classpath" />
+			<include name="${src.userguide.example.extended.dir}/README.txt" />
 			<include name="${src.userguide.example.extended.dir}/lib/" />
 			<exclude name="${src.userguide.example.extended.dir}/lib/*" />
 			<include name="${src.userguide.example.extended.dir}/src/**/*.java" />
@@ -339,6 +342,7 @@
 			<include name="${src.userguide.example.aspectj.dir}/build.properties" />
 			<include name="${src.userguide.example.aspectj.dir}/.project" />
 			<include name="${src.userguide.example.aspectj.dir}/.classpath" />
+			<include name="${src.userguide.example.aspectj.dir}/README.txt" />
 			<include name="${src.userguide.example.aspectj.dir}/lib/" />
 			<exclude name="${src.userguide.example.aspectj.dir}/lib/*" />
 			<include name="${src.userguide.example.aspectj.dir}/testdata/**" />
@@ -531,12 +535,16 @@
 	</target>
 
 	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
-		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />		
-		<replaceregexp file="${src.userguide.example.manual.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
-		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
-		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
-		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
-		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" />
+		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.bookstore.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.manual.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.manual.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.extended.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 	</target>
 		
 	<target name="dist-examples" depends="-update-version.examples,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
