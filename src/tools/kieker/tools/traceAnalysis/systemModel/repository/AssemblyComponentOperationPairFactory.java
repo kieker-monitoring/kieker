@@ -35,8 +35,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
 	private final AssemblyComponentOperationPair rootPair;
 
-	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>();
-	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>();
+	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>(); // NOPMD (UseConcurrentHashMap)
 
 	public AssemblyComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);

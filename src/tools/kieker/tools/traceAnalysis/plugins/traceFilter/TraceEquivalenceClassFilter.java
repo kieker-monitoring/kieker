@@ -54,7 +54,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	private final Execution rootExecution;
 	private final TraceEquivalenceClassModes equivalenceMode;
 	/** Representative x # of equivalents */
-	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
+	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap =
+		new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD (UseConcurrentHashMap)
 
 	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Message Traces");
 	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Execution Traces");
@@ -131,7 +132,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	}
 
 	public Map<ExecutionTrace, Integer> getEquivalenceClassMap() {
-		final Map<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>();
+		final Map<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>(); // NOPMD (UseConcurrentHashMap)
 		for (final Entry<AbstractExecutionTraceHashContainer, AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()) {
 			map.put(entry.getKey().getExecutionTrace(), entry.getValue().intValue());
 		}

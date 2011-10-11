@@ -41,8 +41,8 @@ import org.apache.commons.logging.LogFactory;
 public class NameIdMap {
 
 	private static final Log LOG = LogFactory.getLog(NameIdMap.class);
-	private final Map<String, Integer> name2IdMap = new Hashtable<String, Integer>();
-	private final Map<Integer, String> id2NameMap = new TreeMap<Integer, String>();
+	private final Map<String, Integer> name2IdMap = new Hashtable<String, Integer>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, String> id2NameMap = new TreeMap<Integer, String>(); // NOPMD (UseConcurrentHashMap)
 	private final AtomicInteger nextId = new AtomicInteger(0);
 
 	/**

@@ -35,8 +35,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 public class AllocationRepository extends AbstractSystemSubRepository {
 	private final AllocationComponent rootAllocationComponent;
 
-	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>();
-	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>();
+	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 
 	public AllocationRepository(final SystemModelRepository systemFactory, final AllocationComponent rootAllocationComponent) {
 		super(systemFactory);

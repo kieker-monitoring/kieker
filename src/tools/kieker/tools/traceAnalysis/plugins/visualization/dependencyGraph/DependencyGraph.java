@@ -32,7 +32,7 @@ public class DependencyGraph<T> {
 
 	// private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
 
-	private final Map<Integer, DependencyGraphNode<T>> nodes = new TreeMap<Integer, DependencyGraphNode<T>>();
+	private final Map<Integer, DependencyGraphNode<T>> nodes = new TreeMap<Integer, DependencyGraphNode<T>>(); // NOPMD (UseConcurrentHashMap)
 	private final DependencyGraphNode<T> rootNode;
 
 	public DependencyGraph(final int rootNodeId, final T rootEntity) {

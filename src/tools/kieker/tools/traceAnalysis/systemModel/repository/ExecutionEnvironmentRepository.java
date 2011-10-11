@@ -33,8 +33,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
 	private final ExecutionContainer rootExecutionContainer;
 
-	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>();
-	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>();
+	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
 
 	public ExecutionEnvironmentRepository(final SystemModelRepository systemFactory, final ExecutionContainer rootExecutionContainer) {
 		super(systemFactory);

@@ -34,8 +34,8 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
 public class AssemblyRepository extends AbstractSystemSubRepository {
 	private final AssemblyComponent rootAssemblyComponent;
 
-	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>();
-	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>();
+	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
 
 	public AssemblyRepository(final SystemModelRepository systemFactory, final AssemblyComponent rootAssemblyComponent) {
 		super(systemFactory);

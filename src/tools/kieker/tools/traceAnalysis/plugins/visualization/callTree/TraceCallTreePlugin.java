@@ -144,7 +144,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		ps.println("digraph G {");
 		final StringBuilder edgestringBuilder = new StringBuilder();
 
-		final Map<CallTreeNode, Integer> nodeIds = new Hashtable<CallTreeNode, Integer>();
+		final Map<CallTreeNode, Integer> nodeIds = new Hashtable<CallTreeNode, Integer>(); // NOPMD (UseConcurrentHashMap)
 
 		TraceCallTreePlugin.dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
 		TraceCallTreePlugin.dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);

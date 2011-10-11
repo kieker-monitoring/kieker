@@ -53,7 +53,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 	/** TraceId x trace */
-	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>();
+	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>(); // NOPMD (UseConcurrentHashMap)
 	/** We need to keep track of invalid trace's IDs */
 	private final Set<Long> invalidTraces = new TreeSet<Long>();
 	private volatile long minTin = -1;

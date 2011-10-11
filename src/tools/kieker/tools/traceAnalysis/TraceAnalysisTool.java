@@ -575,7 +575,7 @@ public final class TraceAnalysisTool {
 		try {
 			ps = new PrintStream(new FileOutputStream(outputFn));
 			int numClasses = 0;
-			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap();
+			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap(); // NOPMD (UseConcurrentHashMap)
 			for (final Entry<ExecutionTrace, Integer> e : classMap.entrySet()) {
 				final ExecutionTrace t = e.getKey();
 				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()

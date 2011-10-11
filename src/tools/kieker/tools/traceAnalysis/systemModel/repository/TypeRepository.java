@@ -34,8 +34,8 @@ public class TypeRepository extends AbstractSystemSubRepository {
 
 	private final ComponentType rootComponent;
 
-	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>();
-	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>();
+	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>(); // NOPMD (UseConcurrentHashMap)
 
 	public TypeRepository(final SystemModelRepository systemFactory, final ComponentType rootComponent) {
 		super(systemFactory);

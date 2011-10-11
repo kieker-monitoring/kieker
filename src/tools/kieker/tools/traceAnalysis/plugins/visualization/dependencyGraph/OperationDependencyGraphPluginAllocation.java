@@ -100,8 +100,10 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
 		/* Execution container ID x contained components */
-		final Map<Integer, Collection<AllocationComponent>> containerId2componentMapping = new Hashtable<Integer, Collection<AllocationComponent>>();
-		final Map<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>>();
+		final Map<Integer, Collection<AllocationComponent>> containerId2componentMapping = 
+			new Hashtable<Integer, Collection<AllocationComponent>>(); // NOPMD (UseConcurrentHashMap)
+		final Map<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping = 
+			new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>>(); // NOPMD (UseConcurrentHashMap)
 
 		// Derive container / component / operation hieraŕchy
 		for (final DependencyGraphNode<AllocationComponentOperationPair> pairNode : nodes) {
