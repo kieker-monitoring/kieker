@@ -20,8 +20,8 @@
 
 package kieker.common.record;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +35,7 @@ public class MonitoringRecordTypeRegistry {
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeRegistry.class);
 	/** recordTypeId x class object */
-	private final Map<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
+	private final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordTypeMap = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
 
 	/**
 	 * If true, the classname ${@value #OLD_KIEKEREXECUTIONRECORD_CLASSNAME} is automatically mapped to the new classname of ${@link OperationExecutionRecord}.

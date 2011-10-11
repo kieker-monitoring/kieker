@@ -92,7 +92,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponent>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
 		/* Execution container ID x DependencyGraphNode */
-		final Map<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>>();
+		final Map<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>>(); // NOPMD
 
 		for (final DependencyGraphNode<AllocationComponent> node : nodes) {
 			final int containerId = node.getEntity().getExecutionContainer().getId();

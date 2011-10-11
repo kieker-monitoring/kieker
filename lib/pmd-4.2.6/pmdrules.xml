@@ -24,6 +24,7 @@
     <exclude name="AvoidLiteralsInIfCondition"/>
     <exclude name="AvoidUsingVolatile"/>
     <exclude name="CallSuperInConstructor"/>
+    <exclude name="DataflowAnomalyAnalysis"/>
     <exclude name="OnlyOneReturn"/>
     <exclude name="UnusedModifier"/>
     <exclude name="UnnecessaryConstructor"/>

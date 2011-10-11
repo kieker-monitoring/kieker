@@ -20,9 +20,10 @@
 
 package kieker.analysis.util;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
 public class PropertyMap {
 	private static final Log LOG = LogFactory.getLog(PropertyMap.class);
 
-	private final Map<String, String> map = new HashMap<String, String>();
+	private final ConcurrentMap<String, String> map = new ConcurrentHashMap<String, String>();
 
 	private boolean initStringProcessed = false;
 

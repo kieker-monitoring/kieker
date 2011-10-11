@@ -33,7 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTreeNode<T> {
 
 	/** For faster lookup of existing children */
-	protected final Map<Integer, WeightedDirectedCallTreeEdge<T>> childMap = new TreeMap<Integer, WeightedDirectedCallTreeEdge<T>>();
+	protected final Map<Integer, WeightedDirectedCallTreeEdge<T>> childMap = new TreeMap<Integer, WeightedDirectedCallTreeEdge<T>>(); // NOPMD (not synchronized)
 
 	public AbstractAggregatedCallTreeNode(final int id, final SystemModelRepository systemEntityFactory, final T entity, final boolean rootNode) {
 		super(id, systemEntityFactory, entity, rootNode);

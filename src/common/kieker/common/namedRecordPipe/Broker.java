@@ -20,8 +20,7 @@
 
 package kieker.common.namedRecordPipe;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,7 +35,7 @@ public final class Broker {
 	/**
 	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
 	 */
-	private final Map<String, Pipe> pipeMap = new HashMap<String, Pipe>();
+	private final ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
 
 	/**
 	 * Used for constructing the singleton instance {@link #getInstance()}.

@@ -172,7 +172,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 		ps.println("digraph G {");
 		final StringBuilder edgestringBuilder = new StringBuilder();
 
-		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>();
+		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>(); // NOPMD (not synchronized)
 
 		AbstractCallTreePlugin.dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
 		AbstractCallTreePlugin.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights); // NOCS // NOPMD

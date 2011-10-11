@@ -24,8 +24,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.record.IMonitoringRecord;
@@ -41,7 +41,7 @@ public final class MappingFileWriter {
 
 	private final File mappingFile;
 	private final AtomicInteger nextId = new AtomicInteger(1); // first ID is 1
-	private final Map<Class<? extends IMonitoringRecord>, Integer> class2idMap = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Integer>();
+	private final ConcurrentMap<Class<? extends IMonitoringRecord>, Integer> class2idMap = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Integer>();
 
 	public MappingFileWriter(final String mappingFileFn) throws IOException {
 		this.mappingFile = new File(mappingFileFn);
