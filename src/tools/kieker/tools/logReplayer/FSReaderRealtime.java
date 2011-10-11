@@ -52,42 +52,6 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	/**
-	 * Acts as a consumer to the rtDistributor and delegates incoming records to
-	 * the FSReaderRealtime instance.
-	 */
-	private static class FSReaderRealtimeCons implements IMonitoringRecordConsumerPlugin {
-
-		private final FSReaderRealtime master;
-
-		public FSReaderRealtimeCons(final FSReaderRealtime master) {
-			this.master = master;
-		}
-
-		@Override
-		public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-			return null;
-		}
-
-		@Override
-		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-			if (!this.master.deliverRecord(monitoringRecord)) {
-				FSReaderRealtime.LOG.error("LogReaderExecutionException");
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public boolean execute() {
-			/* do nothing */
-			return true;
-		}
-
-		@Override
-		public void terminate(final boolean error) {}
-	}
-
-	/**
 	 * Constructor for FSReaderRealtime. Requires a subsequent call to the init
 	 * method in order to specify the input directory and number of workers
 	 * using the parameter @a inputDirName.
@@ -141,7 +105,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
 				dirNameArray[i] = dirNameTokenizer.nextToken().trim();
 			}
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS
 			throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
 		}
 		return dirNameArray;
@@ -175,7 +139,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		try {
 			this.analysis.run();
 			this.terminationLatch.await();
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS (catch all)
 			FSReaderRealtime.LOG.error("An error occured while reading", ex);
 			return false;
 		}
@@ -185,5 +149,41 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	@Override
 	public void terminate() {
 		this.analysis.terminate();
+	}
+
+	/**
+	 * Acts as a consumer to the rtDistributor and delegates incoming records to
+	 * the FSReaderRealtime instance.
+	 */
+	private static class FSReaderRealtimeCons implements IMonitoringRecordConsumerPlugin {
+
+		private final FSReaderRealtime master;
+
+		public FSReaderRealtimeCons(final FSReaderRealtime master) {
+			this.master = master;
+		}
+
+		@Override
+		public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
+			return null;
+		}
+
+		@Override
+		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+			if (!this.master.deliverRecord(monitoringRecord)) {
+				FSReaderRealtime.LOG.error("LogReaderExecutionException");
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean execute() {
+			/* do nothing */
+			return true;
+		}
+
+		@Override
+		public void terminate(final boolean error) {}
 	}
 }
