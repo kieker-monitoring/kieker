@@ -23,6 +23,7 @@ package kieker.test.monitoring.junit.core.configuration;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
 
 import org.junit.Test;
@@ -109,13 +110,21 @@ public class TestConfigurationFactoryMethods extends TestCase { // NOCS
 		// check no config parameters are set
 		Assert.assertNull(System.getProperty(Configuration.CUSTOM_PROPERTIES_LOCATION_JVM));
 		Assert.assertNull(System.getProperty(Configuration.CONTROLLER_NAME));
+		Assert.assertNull(MonitoringController.class.getClassLoader().getResourceAsStream(Configuration.CUSTOM_PROPERTIES_LOCATION_CLASSPATH));
 		{ // NOCS (Block to check the default singleton configuration)
 			final Configuration configuration = Configuration.createSingletonConfiguration();
 			Assert.assertEquals("KIEKER-SINGLETON", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
 		}
 		/*
-		 * how to do this check? copy file to correct location?
 		 * { // NOCS (adding properties file in default location)
+		 * final String fn = "build/tests/" + Configuration.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+		 * try {
+		 * final PrintWriter pw = new PrintWriter(new FileOutputStream(fn, false));
+		 * pw.println(Configuration.CONTROLLER_NAME + "=KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT");
+		 * pw.close();
+		 * } catch (final FileNotFoundException e) {
+		 * Assert.fail("Failed to create file " + fn);
+		 * }
 		 * final Configuration configuration = Configuration.createSingletonConfiguration();
 		 * Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
 		 * }
