@@ -1,3 +1,7 @@
+BSB License - BSD - v2.0
+Project: http://jcp.org/en/jsr/detail?id=305
+License: http://www.opensource.org/licenses/bsd-license.php
+
 The JSR-305 reference implementation (lib/jsr305.jar) is
 distributed under the terms of the New BSD license:
 
@@ -6,3 +10,5 @@ distributed under the terms of the New BSD license:
 See the JSR-305 home page for more information:
 
   http://code.google.com/p/jsr-305/
+
+

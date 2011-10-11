@@ -1,4 +1,7 @@
-/*
+BSD style License - BSD - v1.0
+Project: http://jaxen.codehaus.org/
+License: 
+
  $Id: LICENSE-jaxen.txt,v 1.1 2008/06/18 18:54:23 wpugh Exp $
 
  Copyright 2003-2006 The Werken Company. All Rights Reserved.
@@ -30,4 +33,4 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
- */
+
