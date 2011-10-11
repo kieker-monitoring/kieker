@@ -35,8 +35,8 @@ for I in `cat libraries-descriptions.txt | sort | grep -E '^\w.*\t.*$' | sed 's/
 			fi
 			# LaTeXify
 			LICENSE_NAME=`echo "$LICENSE_NAME" | sed 's/\\\\/\\\\textbackslash\{\}/g' | sed 's/\_/\\\_/g'`
-			LICENSE_LONGNAME=`echo $LICENSE_NAME | sed 's/\\\\/\\\\textbackslash\{\}/g' | sed 's/\_/\\\_/g'`
-			LICENSE_VERSION=`echo $LICENSE_NAME | sed 's/\\\\/\\\\textbackslash\{\}/g' | sed 's/\_/\\\_/g'`
+			LICENSE_LONGNAME=`echo "$LICENSE_LONGNAME" | sed 's/\\\\/\\\\textbackslash\{\}/g' | sed 's/\_/\\\_/g'`
+			LICENSE_VERSION=`echo "$LICENSE_VERSION" | sed 's/\\\\/\\\\textbackslash\{\}/g' | sed 's/\_/\\\_/g'`
 			if [ "$LICENSE_VERSION" == "unknown" ] ; then
 				LICENSE="$LICENSE_NAME"
 			else
