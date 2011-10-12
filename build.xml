@@ -960,7 +960,7 @@
 				<classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
 				<classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
 				<classpathentry kind="src" path="${test.kieker.tools.dir}"/>
-				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 				<classpathentry kind="lib" path="${eclipse.entries}"/>
 				<classpathentry kind="output" path="build-eclipse"/>
 			</classpath>
