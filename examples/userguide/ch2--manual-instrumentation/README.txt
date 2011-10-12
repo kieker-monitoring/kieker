@@ -11,9 +11,9 @@ Monitoring:
 Analysis:
 
 -UNIX-like systems:
- $ java -cp BookstoreAnalysis.jar:lib/kieker-1.4-RC2.jar bookstoreApplication.BookstoreAnalysisStarter </path/to/monitoring-log/>
+ $ java -cp BookstoreAnalysis.jar:lib/commons-logging-1.1.1.jar:lib/kieker-1.4-RC2.jar bookstoreApplication.BookstoreAnalysisStarter </path/to/monitoring-log/>
 - Windows:
- $ java -cp BookstoreAnalysis.jar;lib\kieker-1.4-RC2.jar bookstoreApplication.BookstoreAnalysisStarter <path\to\monitoring-log\>
+ $ java -cp BookstoreAnalysis.jar;lib\commons-logging-1.1.1.jar;lib\kieker-1.4-RC2.jar bookstoreApplication.BookstoreAnalysisStarter <path\to\monitoring-log\>
 
 Alternatively, you can compile the sources and start the application using
 'ant' with the given 'build.xml' file:
