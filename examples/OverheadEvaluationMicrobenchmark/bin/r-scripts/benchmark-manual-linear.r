@@ -1,3 +1,4 @@
+#DO NOT REMOVE IN TRUNK
 output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-linear.pdf"
 
 configs.labels=c("Method Time (T)","Instrumentation (I)","Collecting (C)","Writing (W)")
