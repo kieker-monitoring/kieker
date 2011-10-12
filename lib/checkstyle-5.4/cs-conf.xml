@@ -1026,6 +1026,7 @@
         <!-- Checks for long anonymous inner classes. !-->
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
         <module name="AnonInnerLength">
+            <property name="severity" value="info"/>
             <property name="max" value="20"/>
         </module>
 
@@ -1033,6 +1034,7 @@
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
         <!-- KIEKER off
         <module name="ExecutableStatementCount">
+            <property name="severity" value="info"/>
             <property name="max"    value="30"/>
             <property name="tokens" value="CTOR_DEF, METHOD_DEF, INSTANCE_INIT, STATIC_INIT"/>
         </module>
@@ -1050,6 +1052,7 @@
         <!-- (private, package, protected and public) as well as an overall total. !-->
         <!-- See http://checkstyle.sourceforge.net/config_sizes.html#MethodCount !-->
         <module name="MethodCount">
+            <property name="severity" value="info"/>
             <property name="maxTotal"     value="100"/>
             <property name="maxPrivate"   value="100"/>
             <property name="maxPackage"   value="100"/>
@@ -1060,6 +1063,7 @@
         <!-- Checks for long methods and constructors. !-->
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
         <module name="MethodLength">
+            <property name="severity" value="info"/>
             <property name="max"        value="150"/>
             <property name="countEmpty" value="true"/>
             <property name="tokens"     value="METHOD_DEF, CTOR_DEF"/>
@@ -1076,6 +1080,7 @@
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
         <!-- KIEKER off
         <module name="ParameterNumber">
+            <property name="severity" value="info"/>
             <property name="max"    value="7"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
         </module>
