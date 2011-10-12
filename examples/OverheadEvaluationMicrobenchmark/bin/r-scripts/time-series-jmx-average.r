@@ -1,7 +1,7 @@
 data_fn="tmp/"
 folder_fn="results-benchmark-recursive"
 results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
-output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
+output_fn=paste(data_fn,folder_fn,"/results-timeseries-avg.pdf",sep="")
 
 configs.loop=10
 configs.recursion=10

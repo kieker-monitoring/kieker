@@ -40,9 +40,9 @@ title(xlab="Recursion Depth (Number of Executions)",ylab="Execution Time (µs)")
 for (cr in configs.recursion) {
   printvalues = matrix(nrow=5,ncol=4,dimnames=list(c("mean","ci95%","25%","50%","75%"),c(1:configs.count)))
   for (cc in (1:configs.count)) {
-    printvalues["mean",cc]=mean(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)])
-    printvalues["ci95%",cc]=qnorm(0.975)*sd(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)])/sqrt(length(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)]))
-    printvalues[c("25%","50%","75%"),cc]=quantile(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)],probs=c(0.25,0.5,0.75))
+    printvalues["mean",cc]=mean(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))])
+    printvalues["ci95%",cc]=qnorm(0.975)*sd(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))])/sqrt(length(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))]))
+    printvalues[c("25%","50%","75%"),cc]=quantile(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))],probs=c(0.25,0.5,0.75))
     #printvalues["mean",cc]=mean(meanvalues[cr,cc,,"mean"])
     #printvalues["ci95%",cc]=mean(meanvalues[cr,cc,,"ci95%"])
     #printvalues["50%",cc]=mean(medianvalues[cr,cc,,"25%"])
