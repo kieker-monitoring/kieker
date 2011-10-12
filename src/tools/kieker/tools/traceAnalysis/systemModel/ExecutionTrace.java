@@ -129,14 +129,16 @@ public class ExecutionTrace extends AbstractTrace {
 
 			Execution prevE = rootExecution;
 			int prevEoi = -1;
-			for (int itNum = 0; eSeqIt.hasNext(); itNum++) {
+			boolean expectingEntryCall = true; // used to make that entry call found in first iteration
+			while (eSeqIt.hasNext()) {
 				final Execution curE = eSeqIt.next();
-				if ((itNum++ == 0) && (curE.getEss() != 0)) {
+				if (expectingEntryCall && (curE.getEss() != 0)) {
 					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss() // NOPMD (new in loop)
 							+ ")\n Causing execution: " + curE);
 					ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
+				expectingEntryCall = false; // now we're happy
 				if (prevEoi != (curE.getEoi() - 1)) {
 					final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi // NOPMD (new in
 																																				// loop)
