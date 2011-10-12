@@ -7,7 +7,7 @@
 
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
-		<property name="kieker.version" value="1.4-dev-SNAPSHOT" />
+		<property name="kieker.version" value="1.5-SNAPSHOT" />
 		<property name="year" value="2011" />
 		<property name="copyright" value="the Kieker Project" />
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
