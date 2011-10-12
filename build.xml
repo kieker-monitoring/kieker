@@ -972,7 +972,7 @@
 		<echo file="${eclipse-project.sample}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 			<!-- Sample eclipse .project file. Copy this file to ".project". -->
 			<projectDescription>
-				<name>Kieker "{kieker.version}</name>
+				<name>Kieker ${kieker.version}</name>
 				<comment>
 				</comment>
 				<projects>
