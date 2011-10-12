@@ -306,6 +306,7 @@
 			<include name="META-INF/*" />
 			<!-- a file META-INF/kieker.monitoring.properties will added be during packaging the tar.gz|.zip archives below -->
 			<include name="lib/*" />
+			<include name="lib/sigar-native-libs/*" />
 			<exclude name="lib/checkstyle-*/" />	
 			<exclude name="lib/findbugs-*/" />			
 			<exclude name="lib/maven/" />
