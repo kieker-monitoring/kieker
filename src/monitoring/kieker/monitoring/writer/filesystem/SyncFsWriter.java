@@ -106,7 +106,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
 		final StringBuilder sb = new StringBuilder(pathTmp);
@@ -170,7 +170,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			}
 			this.entriesInCurrentFileCounter = 1;
 
-			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
+			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";

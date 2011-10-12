@@ -73,7 +73,7 @@ public final class AsyncFsWriter extends AbstractAsyncWriter {
 		}
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
 
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
+		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
 		final StringBuffer sb = new StringBuffer(path);
@@ -167,7 +167,7 @@ final class FsWriterThread extends AbstractAsyncThread {
 				this.pos.close();
 			}
 			this.entriesInCurrentFileCounter = 1;
-			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSS", Locale.US);
+			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 			final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
 			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC-" + this.getName() + ".dat";
