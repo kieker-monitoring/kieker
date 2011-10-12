@@ -1,6 +1,38 @@
 This document summarizes changes made in all releases starting with 0.90.
 
+Starting with version 1.4, the Kieker ticket system (accessible via 
+http://kieker.sourceforge.net) contains details on the changes.
+
 Please refer to the Kieker User Guide for details on using Kieker.
+
+* 1.4 (October 14, 2011)
+- Features:
+  - JMX monitoring reader and writer
+  - JMS support for ActiveMQ and HornetQ (in addition to OpenJMS)
+  - Enable/disable flushing of FS Writers
+  - Configurable shutdown delay for asynchronous writers
+  - Configurable Servlet parameters for periodic samplers
+  - Direct support for asynchronous analysis
+  - Java 5 no longer supported
+  - Refined Microbenchmark (+ SPEC macro-benchmark configuration)
+- Bug fixes/Improvements to sources and documentation
+  - Code quality
+    - Code cleanup
+    - Coding conventions
+    - Javadoc cleanup
+    - Static analysis tools Findbugs, Checkstyle, and PMD
+    - Code coverage tool
+    - Resolved Java warnings 
+  - Licensing
+    - Added license headers to source files
+    - Added licenses for third-party libs 
+  - Documentation
+    - Extended Java EE Servlet container example to windows
+    - Fixes in user guide (examples)
+    - Extended JMS example to ActiveMQ and HornetQ 
+  - Release archives
+    - Eclipse project files (Kieker project can be imported without copying the 
+      default files) 
 
 * 1.3 (May 19, 2011)
 - Added support for periodic samplers
@@ -8,7 +40,8 @@ Please refer to the Kieker User Guide for details on using Kieker.
 - MonitoringController no longer restricted to singleton instance
 - Added support for custom time sources
 - Improved configuration management
-- Added named pipe reader/writer (for passing monitoring records directly within same JVM)
+- Added named pipe reader/writer (for passing monitoring records directly within 
+  same JVM)
 - MonitoringController accessible as JMX MBean
 - API changes
   - The format of the kieker.monitoring.properties changed!
