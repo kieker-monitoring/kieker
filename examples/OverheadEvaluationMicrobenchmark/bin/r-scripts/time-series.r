@@ -1,8 +1,10 @@
-results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive-linear\\results.csv"
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive-linear\\results-ts-single.pdf"
+data_fn="tmp/"
+folder_fn="results-benchmark-recursive"
+results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
+output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
 
-configs.loop=3
-configs.recursion=7
+configs.loop=10
+configs.recursion=10
 configs.count=4
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writing Data")
 configs.colors=c("black","red","blue","green")

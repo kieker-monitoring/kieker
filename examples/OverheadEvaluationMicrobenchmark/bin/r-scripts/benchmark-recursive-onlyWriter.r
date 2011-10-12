@@ -1,6 +1,7 @@
-folder_fn="results-singlethread\\S2 writer only"
-results_fn=paste("C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\",folder_fn,"\\results.csv",sep="")
-output_fn=paste("C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\",folder_fn,"\\results-bars.pdf",sep="")
+data_fn="tmp/"
+folder_fn="results-benchmark-recursive"
+results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
+output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
 
 configs.loop=10
 configs.recursion=c(1)

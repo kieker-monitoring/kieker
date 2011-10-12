@@ -34,7 +34,7 @@ public final class MonitoredClass {
 	@OperationExecutionMonitoringProbe()
 	public final long monitoredMethod(final long methodTime, final int recDepth) {
 		if (recDepth > 1) {
-			return monitoredMethod(methodTime, recDepth - 1);
+			return this.monitoredMethod(methodTime, recDepth - 1);
 		} else {
 			final long exitTime = this.threadMXBean.getCurrentThreadUserTime() + methodTime;
 			long currentTime = this.threadMXBean.getCurrentThreadUserTime();

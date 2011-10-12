@@ -1,10 +1,11 @@
-folder_fn="results-benchmark-recursive-linear"
-results_fn=paste("C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\",folder_fn,"\\results.csv",sep="")
-output_fn=paste("C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\",folder_fn,"\\results-bars.pdf",sep="")
+data_fn="tmp/"
+folder_fn="results-benchmark-recursive"
+results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
+output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
 
 configs.threads=1
-configs.loop=3
-configs.recursion=c(1,2,4,8,16,32,64)
+configs.loop=10
+configs.recursion=c(1,2,3,4,5,6,7,8,9,10)
 configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")
 configs.count=length(configs.labels)
 results.count=2000000
