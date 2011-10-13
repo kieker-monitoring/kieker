@@ -181,32 +181,46 @@ public final class DotFactory {
 		dot.append(prefix);
 		dot.append(" label = \"");
 		dot.append(label);
-		dot.append(shape == null ? "" : "\";\n"); // NOCS
-		dot.append(prefix);
-		dot.append(" shape = \"");
-		dot.append(shape);
-		dot.append(style == null ? "" : "\";\n"); // NOCS
-		dot.append(prefix);
-		dot.append(" style = \"");
-		dot.append(style);
-		dot.append(framecolor == null ? "" : "\";\n"); // NOCS
-		dot.append(prefix);
-		dot.append(" pencolor = \"");
-		dot.append(framecolor);
-		dot.append(fillcolor == null ? "" : "\";\n"); // NOCS
-		dot.append(prefix);
-		dot.append(" fillcolor = \"");
-		dot.append(fillcolor);
-		dot.append(fontcolor == null ? "" : "\";\n"); // NOCS
-		dot.append(prefix);
-		dot.append(" fontcolor = \"");
-		dot.append(fontcolor);
-		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\";\n"); // NOCS
-		dot.append(prefix);
-		dot.append(" fontsize = \"");
-		dot.append(Double.toString(fontsize));
+		if (shape != null) {
+			dot.append("\";\n");
+			dot.append(prefix);
+			dot.append(" shape = \"");
+			dot.append(shape);
+		}
+		if (style != null) {
+			dot.append("\";\n");
+			dot.append(prefix);
+			dot.append(" style = \"");
+			dot.append(style);
+		}
+		if (framecolor != null) {
+			dot.append("\";\n");
+			dot.append(prefix);
+			dot.append(" pencolor = \"");
+			dot.append(framecolor);
+		}
+		if (fillcolor != null) {
+			dot.append("\";\n");
+			dot.append(prefix);
+			dot.append(" fillcolor = \"");
+			dot.append(fillcolor);
+		}
+		if (fontcolor != null) {
+			dot.append("\";\n");
+			dot.append(prefix);
+			dot.append(" fontcolor = \"");
+			dot.append(fontcolor);
+		}
+		if (fontsize != DotFactory.DOT_DEFAULT_FONTSIZE) {
+			dot.append("\";\n");
+			dot.append(prefix);
+			dot.append(" fontsize = \"");
+			dot.append(Double.toString(fontsize));
+		}
 		dot.append("\";");
-		dot.append(misc == null ? "" : misc); // NOCS
+		if (misc != null) {
+			dot.append(misc);
+		}
 		dot.append("\n");
 		// closing bracket "}" has to be added by calling method !
 		return dot;
@@ -267,8 +281,8 @@ public final class DotFactory {
 	 * @return graph connection as dot code
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final double taillabel, final double headlabel) {
-		return String.format("%s\"%s\" -> \"%s\" [label=\" \",taillabel=\"%1.1f%%\",headlabel=\"%1.1f%%\"];\n", prefix, from, to,
-				taillabel * 100.0, headlabel * 100.0); // NOCS (MagicNumber)
+		return String.format("%s\"%s\" -> \"%s\" [label=\" \",taillabel=\"%1.1f%%\",headlabel=\"%1.1f%%\"];\n", prefix, from, to, taillabel * 100.0,
+				headlabel * 100.0); // NOCS (MagicNumber)
 	}
 
 }
