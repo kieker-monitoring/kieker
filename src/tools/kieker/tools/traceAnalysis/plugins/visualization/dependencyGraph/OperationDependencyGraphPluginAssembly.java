@@ -94,8 +94,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabelsUNUSED) {
 
 		/* Component ID x contained operations */
-		final Map<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentId2pairMapping = // NOPMD (see below)
-			new Hashtable<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>>(); // NOPMD (UseConcurrentHashMap)
+		final Map<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentId2pairMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>>(); // NOPMD
 
 		// Derive component / operation hierarchy
 		for (final DependencyGraphNode<AssemblyComponentOperationPair> pairNode : nodes) {
