@@ -1,6 +1,8 @@
 #!/bin/bash
 
-#BINDJAVA="pfexec psrset -e 1"
+#SUDOCMD="pfexec"
+SUDOCMD=""
+#BINDJAVA="${SUDOCMD} psrset -e 1"
 BINDJAVA=""
 
 BINDIR=bin/
@@ -23,7 +25,7 @@ if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
 
 RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 echo "Removing and recreating '$RESULTSDIR'"
-(pfexec rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
+(${SUDOCMD} rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
 mkdir ${RESULTSDIR}stat/
 
 # Clear kieker.log and initialize logging
@@ -39,7 +41,7 @@ KIEKER_MONITORING_CONF="${BASEDIR}configuration/kieker.monitoring.properties"
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
 JAVAARGS="${JAVAARGS} -Xms1G -Xmx1G"
-#JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
+JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
 #JAVAARGS="${JAVAARGS} -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"

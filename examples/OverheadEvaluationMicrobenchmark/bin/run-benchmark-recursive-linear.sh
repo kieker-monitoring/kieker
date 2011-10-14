@@ -1,6 +1,8 @@
 #!/bin/bash
 
-#BINDJAVA="pfexec psrset -e 1"
+#SUDOCMD="pfexec"
+SUDOCMD=""
+#BINDJAVA="${SUDOCMD} psrset -e 1"
 BINDJAVA=""
 
 BINDIR=bin/
@@ -23,7 +25,7 @@ if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
 
 RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive-linear/"
 echo "Removing and recreating '$RESULTSDIR'"
-(pfexec rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
+(${SUDOCMD} rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
 mkdir ${RESULTSDIR}stat/
 
 # Clear kieker.log and initialize logging
@@ -162,7 +164,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
 done
 tar cf ${RESULTSDIR}kiekerlog.tar ${RESULTSDIR}kiekerlog
-pfexec rm -rf ${RESULTSDIR}kiekerlog/
+${SUDOCMD} rm -rf ${RESULTSDIR}kiekerlog/
 gzip -9 ${RESULTSDIR}kiekerlog.tar
 tar cf ${RESULTSDIR}stat.tar ${RESULTSDIR}stat
 rm -rf ${RESULTSDIR}stat/

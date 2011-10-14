@@ -1,10 +1,11 @@
-folder_fn="results-benchmark-recursive-linear"
-results_fn=paste("C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\",folder_fn,"\\results.csv",sep="")
-output_fn=paste("C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\",folder_fn,"\\results-bars.pdf",sep="")
+data_fn="tmp/"
+folder_fn="results-benchmark-recursive"
+results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
+output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
 
 configs.threads=1
-configs.loop=3
-configs.recursion=c(1,2,4,8,16,32,64)
+configs.loop=10
+configs.recursion=c(1,2,3,4,5,6,7,8,9,10)
 configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")
 configs.count=length(configs.labels)
 results.count=2000000
@@ -39,9 +40,9 @@ title(xlab="Recursion Depth (Number of Executions)",ylab="Execution Time (µs)")
 for (cr in configs.recursion) {
   printvalues = matrix(nrow=5,ncol=4,dimnames=list(c("mean","ci95%","25%","50%","75%"),c(1:configs.count)))
   for (cc in (1:configs.count)) {
-    printvalues["mean",cc]=mean(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)])
-    printvalues["ci95%",cc]=qnorm(0.975)*sd(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)])/sqrt(length(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)]))
-    printvalues[c("25%","50%","75%"),cc]=quantile(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:2000000)],probs=c(0.25,0.5,0.75))
+    printvalues["mean",cc]=mean(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))])
+    printvalues["ci95%",cc]=qnorm(0.975)*sd(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))])/sqrt(length(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))]))
+    printvalues[c("25%","50%","75%"),cc]=quantile(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))],probs=c(0.25,0.5,0.75))
     #printvalues["mean",cc]=mean(meanvalues[cr,cc,,"mean"])
     #printvalues["ci95%",cc]=mean(meanvalues[cr,cc,,"ci95%"])
     #printvalues["50%",cc]=mean(medianvalues[cr,cc,,"25%"])

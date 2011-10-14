@@ -1,5 +1,7 @@
-results_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results"
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-benchmark-recursive\\results-bars.pdf"
+data_fn="tmp/"
+folder_fn="results-benchmark-recursive"
+results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
+output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
 
 configs.loop=10
 configs.recursion=c(1,2,3,4,5,6,7,8,9,10)

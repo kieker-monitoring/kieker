@@ -125,9 +125,9 @@ kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=10000
 ##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior=0
 #
-## Maximum time to wait for the writer threads to finish (in multiples
-## of 0.5 seconds). A MaxShutdownDelay of 0 means infinite waiting.
-kieker.monitoring.writer.filesystem.AsyncFsWriter.MaxShutdownDelay=0
+## Maximum time to wait for the writer threads to finish (in milliseconds).
+## A MaxShutdownDelay of -1 means infinite waiting.
+kieker.monitoring.writer.filesystem.AsyncFsWriter.MaxShutdownDelay=-1
 
 
 #####
@@ -174,9 +174,9 @@ kieker.monitoring.writer.jms.AsyncJMSWriter.QueueSize=10000
 ##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.jms.AsyncJMSWriter.QueueFullBehavior=0
 #
-## Maximum time to wait for the writer threads to finish (in multiples
-## of 0.5 seconds). A MaxShutdownDelay of 0 means infinite waiting.
-kieker.monitoring.writer.jms.AsyncJMSWriter.MaxShutdownDelay=0
+## Maximum time to wait for the writer threads to finish (in milliseconds).
+## A MaxShutdownDelay of -1 means infinite waiting.
+kieker.monitoring.writer.jms.AsyncJMSWriter.MaxShutdownDelay=-1
 
 
 #####
@@ -234,9 +234,9 @@ kieker.monitoring.writer.database.AsyncDbWriter.QueueSize=10000
 ##  is no longer decoupled from the monitored application.
 kieker.monitoring.writer.database.AsyncDbWriter.QueueFullBehavior=0
 #
-## Maximum time to wait for the writer threads to finish (in multiples
-## of 0.5 seconds). A MaxShutdownDelay of 0 means infinite waiting.
-kieker.monitoring.writer.database.AsyncDbWriter.MaxShutdownDelay=0
+## Maximum time to wait for the writer threads to finish (in milliseconds).
+## A MaxShutdownDelay of -1 means infinite waiting.
+kieker.monitoring.writer.database.AsyncDbWriter.MaxShutdownDelay=-1
 
 
 #####

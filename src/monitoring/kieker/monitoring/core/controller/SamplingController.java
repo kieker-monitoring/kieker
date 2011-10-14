@@ -49,7 +49,7 @@ public final class SamplingController extends AbstractController implements ISam
 	protected SamplingController(final Configuration configuration) {
 		final int threadPoolSize = configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize,
-		// Handler for failed sensor executions that simply logs notifications.
+				// Handler for failed sensor executions that simply logs notifications.
 				new RejectedExecutionHandler() {
 					@Override
 					public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {

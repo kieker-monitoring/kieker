@@ -58,8 +58,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + AbstractAsyncWriter.BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
-			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + AbstractAsyncWriter.BEHAVIOR
-					+ "; using default value 0");
+			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehaviorTmp;
@@ -78,7 +77,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
 		properties.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
 		properties.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
-		properties.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "0");
+		properties.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "-1");
 		return properties;
 	}
 
@@ -99,36 +98,27 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	public final void terminate() {
 		final CountDownLatch cdl = new CountDownLatch(this.workers.size());
-		// notify all workers
 		for (final AbstractAsyncThread worker : this.workers) {
-			worker.initShutdown(cdl);
+			worker.initShutdown(cdl); // notify all workers
 		}
-		boolean finished = true;
-		for (final AbstractAsyncThread worker : this.workers) {
-			finished &= worker.isFinished();
-		}
-		int shutdowntries = 0;
-		while (!finished) {
-			shutdowntries++;
-			try {
-				finished = cdl.await(500, TimeUnit.MILLISECONDS); // NOCS (MagicNumber)
-			} catch (final InterruptedException ex) {
-				// we should be able to ignore an interrupted wait
-			}
-			if (!finished) {
-				finished = true;
-				for (final AbstractAsyncThread worker : this.workers) {
-					finished &= worker.isFinished();
-				}
-			}
-			if ((!finished) && ((this.maxShutdownDelay == 0) || (shutdowntries < this.maxShutdownDelay))) {
-				AbstractAsyncWriter.LOG.info("shutdown delayed - Worker is busy ... waiting 0.5 seconds");
+		boolean finished = false;
+		try {
+			if (this.maxShutdownDelay > -1) {
+				AbstractAsyncWriter.LOG.info("Shutting down writers, waiting at most " + this.maxShutdownDelay + " milliseconds.");
+				finished = cdl.await(this.maxShutdownDelay, TimeUnit.MILLISECONDS);
 			} else {
+				AbstractAsyncWriter.LOG.info("Shutting down writers.");
+				cdl.await();
 				finished = true;
-				break;
 			}
+		} catch (final InterruptedException ex) {
+			// we should be able to ignore an interrupted wait (finished is still false)
 		}
-		AbstractAsyncWriter.LOG.info("Writer shutdown complete");
+		if (finished) {
+			AbstractAsyncWriter.LOG.info("Writer shutdown complete.");
+		} else {
+			AbstractAsyncWriter.LOG.info("Writer shutdown incomplete, " + cdl.getCount() + " worker(s) halted.");
+		}
 	}
 
 	@Override

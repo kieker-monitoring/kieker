@@ -154,7 +154,8 @@ public class JMSReader extends AbstractMonitoringReader {
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
-
+				
+				
 				@Override
 				public void onMessage(final Message jmsMessage) {
 					if (jmsMessage instanceof TextMessage) {
@@ -168,8 +169,6 @@ public class JMSReader extends AbstractMonitoringReader {
 							if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverRecord((IMonitoringRecord) omo))) {
 								final String errorMsg = "deliverRecord returned false";
 								JMSReader.LOG.error(errorMsg);
-							} else {
-								JMSReader.LOG.info("Unknown type of message " + om);
 							}
 						} catch (final MessageFormatException em) {
 							JMSReader.LOG.fatal("MessageFormatException:" + em.getMessage(), em);

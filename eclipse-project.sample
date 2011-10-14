@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 			<!-- Sample eclipse .project file. Copy this file to ".project". -->
 			<projectDescription>
-				<name>Kieker</name>
+				<name>Kieker 1.5-SNAPSHOT</name>
 				<comment>
 				</comment>
 				<projects>

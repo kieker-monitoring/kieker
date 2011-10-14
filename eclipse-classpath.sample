@@ -10,17 +10,17 @@
 				<classpathentry kind="src" path="test//analysis/"/>
 				<classpathentry kind="src" path="test//monitoring/"/>
 				<classpathentry kind="src" path="test//tools/"/>
-				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 				<classpathentry kind="lib" path="lib/aopalliance-alpha1.jar"/>
 				<classpathentry kind="lib" path="lib/aspectjrt-1.6.11.jar"/>
 				<classpathentry kind="lib" path="lib/aspectjtools-1.6.11.jar"/>
 				<classpathentry kind="lib" path="lib/aspectjweaver-1.6.11.jar"/>
 				<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
 				<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
-				<classpathentry kind="lib" path="lib/cxf-api-2.4.2.jar"/>
-				<classpathentry kind="lib" path="lib/cxf-common-utilities-2.4.2.jar"/>
-				<classpathentry kind="lib" path="lib/cxf-rt-bindings-soap-2.4.2.jar"/>
-				<classpathentry kind="lib" path="lib/cxf-rt-core-2.4.2.jar"/>
+				<classpathentry kind="lib" path="lib/cxf-api-2.4.3.jar"/>
+				<classpathentry kind="lib" path="lib/cxf-common-utilities-2.4.3.jar"/>
+				<classpathentry kind="lib" path="lib/cxf-rt-bindings-soap-2.4.3.jar"/>
+				<classpathentry kind="lib" path="lib/cxf-rt-core-2.4.3.jar"/>
 				<classpathentry kind="lib" path="lib/derby-10.8.1.2.jar"/>
 				<classpathentry kind="lib" path="lib/javax.jms-1.1.jar"/>
 				<classpathentry kind="lib" path="lib/javax.servlet-3.0.jar"/>

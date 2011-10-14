@@ -21,7 +21,7 @@
       <fileset dir="lib/">
         <include name="commons-logging-*.jar"/>
         <include name="kieker-*.jar"/>
-      	<include name="servlet-api.jar"/>
+      	<include name="javax.servlet-*.jar"/>
       </fileset>
     </path>
     <javac source="1.6" target="1.6"
@@ -37,7 +37,7 @@
         <include name="aspectjrt-*.jar"/>
         <include name="commons-logging-*.jar"/>
         <include name="kieker-*.jar"/>
-      	<include name="servlet-api.jar"/>
+      	<include name="javax.servlet-*.jar"/>
       </fileset>
       <pathelement location="build"/>
     </path>

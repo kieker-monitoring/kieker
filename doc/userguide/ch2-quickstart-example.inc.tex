@@ -44,7 +44,7 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
 \label{fig:binary-layout}
 \end{figure}
 
-The Java sources presented in this user guide are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. A Servlet-based Web application, provided in \file{\servletWar}, can be used to control the status of \KiekerMonitoringPart{} in Java~EE environments. The sample \KiekerMonitoringPart{} 
+The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. A Servlet-based Web application, provided in \file{\servletWar}, can be used to control the status of \KiekerMonitoringPart{} in Java~EE environments. The sample \KiekerMonitoringPart{} 
 configuration file %
 \file{\kiekerMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} as a logging interface, the file \file{\commonsLoggingJar} is the only dependency to a third-party library which is needed to execute \Kieker{} in any case. 
 
@@ -92,7 +92,7 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 \label{fig:PlainBookstoreExample}
 \end{figure}
 
-\NOTIFYBOX{The Java sources of the uninstrumented Bookstore application can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
+\NOTIFYBOX{The Java sources and a pre-compiled binary of the uninstrumented Bookstore application can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
 
 \quad\
 
@@ -184,7 +184,7 @@ The file \file{\commonsLoggingJar} is located in the \dir{\KiekerDir/lib/} direc
 \label{fig:KiekerBookstoreExample}
 \end{figure}
 
-\NOTIFYBOX{The Java sources of the manually instrumented Bookstore application described in %
+\NOTIFYBOX{The Java sources and pre-compiled binaries of the manually instrumented Bookstore application described in %
 this section can be found in the \file{\manualInstrumentedBookstoreApplicationDirDistro{}/} directory.}
 
 \quad\

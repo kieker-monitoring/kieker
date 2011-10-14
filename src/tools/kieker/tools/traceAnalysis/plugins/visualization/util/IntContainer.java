@@ -31,7 +31,7 @@ public class IntContainer {
 	public IntContainer(final int initVal) {
 		this.value = initVal;
 	}
-	
+
 	/**
 	 * @return the i
 	 */
@@ -40,12 +40,13 @@ public class IntContainer {
 	}
 
 	/**
-	 * @param value the i to set
+	 * @param value
+	 *            the i to set
 	 */
 	public final void setValue(final int value) {
 		this.value = value;
 	}
-	
+
 	public final int getAndIncValue() {
 		return this.value++;
 	}

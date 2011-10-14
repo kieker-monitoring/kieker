@@ -37,10 +37,10 @@ public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
 
 	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
-	private volatile boolean finished = false;
-	private volatile CountDownLatch countDownLatch = null;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
 	private final IMonitoringController monitoringController;
+	private boolean finished = false; // only accessed in synchronized blocks
+	private CountDownLatch shutdownLatch = null; // only accessed in synchronized blocks
 
 	public AbstractAsyncThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;
@@ -48,8 +48,13 @@ public abstract class AbstractAsyncThread extends Thread {
 	}
 
 	public final void initShutdown(final CountDownLatch cdl) {
+		synchronized (this) {
+			this.shutdownLatch = cdl;
+			if (this.finished) {
+				cdl.countDown();
+			}
+		}
 		try {
-			this.countDownLatch = cdl;
 			this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
 		} catch (final InterruptedException ex) {
 			AbstractAsyncThread.LOG.error("Error while trying to stop writer thread", ex);
@@ -57,7 +62,9 @@ public abstract class AbstractAsyncThread extends Thread {
 	}
 
 	public final boolean isFinished() {
-		return this.finished;
+		synchronized (this) { // may not be necessary, but doesn't really hurt here
+			return this.finished;
+		}
 	}
 
 	@Override
@@ -66,7 +73,7 @@ public abstract class AbstractAsyncThread extends Thread {
 		try {
 			// making it a local variable for faster access
 			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue; // NOPMD // NOCS
-			while (!this.finished) {
+			while (true) {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();
 					if (monitoringRecord == AbstractAsyncThread.END_OF_MONITORING_MARKER) {
@@ -78,37 +85,36 @@ public abstract class AbstractAsyncThread extends Thread {
 							}
 							monitoringRecord = writeQueue.poll();
 						}
-						this.finished = true;
-						if (this.countDownLatch != null) {
-							this.countDownLatch.countDown();
-						}
 						this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
 						this.cleanup();
-						break;
+						synchronized (this) {
+							if (!this.finished && (this.shutdownLatch != null)) {
+								this.shutdownLatch.countDown();
+							}
+							this.finished = true;
+						}
+						break; // while
 					} else {
 						this.consume(monitoringRecord);
 					}
 				} catch (final InterruptedException ex) {
-					continue;
+					continue; // while
 					// would be another method to finish the execution
 					// but normally we should be able to continue
 				}
 			}
 			AbstractAsyncThread.LOG.debug("Writer thread finished");
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			// e.g. Interrupted Exception or IOException
+			// e.g. IOException
 			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);
-			this.finished = true;
-			if (this.countDownLatch != null) {
-				this.countDownLatch.countDown();
-			}
 			this.cleanup();
-			this.monitoringController.terminateMonitoring();
-		} finally {
-			this.finished = true;
-			if (this.countDownLatch != null) {
-				this.countDownLatch.countDown();
+			synchronized (this) {
+				if (!this.finished && (this.shutdownLatch != null)) {
+					this.shutdownLatch.countDown();
+				}
+				this.finished = true;
 			}
+			this.monitoringController.terminateMonitoring();
 		}
 	}
 
