@@ -64,11 +64,10 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable; // NOPMD // NOCS (IllegalThrowsCheck)
 
 	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData) throws Throwable { // NOCS
-																																			// (IllegalThrowsCheck)
 		execData.setTin(AbstractOperationExecutionAspect.TIMESOURCE.getTime()); // startint stopwatch
 		try {
 			execData.setRetVal(thisJoinPoint.proceed());
-		} catch (final Exception e) { // NOPMD // NOCS (IllegalThrowsCheck)
+		} catch (final Throwable e) { // NOPMD // NOCS (IllegalThrowsCheck)
 			throw e; // exceptions are forwarded
 		} finally {
 			execData.setTout(AbstractOperationExecutionAspect.TIMESOURCE.getTime());

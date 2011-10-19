@@ -73,7 +73,8 @@
 
 		<path id="kieker.monitoring-compile-classpath">
 			<fileset dir="${lib.dir}">
-        <include name="aopalliance-*.jar" />
+        		<include name="aopalliance-*.jar" />
+				<!--<include name="aspectjrt-*.jar" />-->
 				<include name="commons-logging-*.jar" />
 				<include name="cxf-api-*.jar" />
 				<include name="cxf-common-utilities-*.jar" />
@@ -120,6 +121,8 @@
 		<path id="eclipse-external-jars">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
+				<exclude name="aspectjtools-*.jar" />
+				<exclude name="aspectjweaver-*.jar" />
 				<exclude name="log4j-*.jar" />
 			</fileset>
 		</path>
@@ -138,10 +141,10 @@
 		<delete dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}/META-INF" />
-		<javac destDir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" srcdir="${src.kieker.monitoring.dir}" debug="true" excludes="kieker/monitoring/probe/aspectJ/" classpathref="kieker.monitoring-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" srcdir="${src.kieker.monitoring.dir}" excludes="kieker/monitoring/probe/aspectJ/" debug="true" classpathref="kieker.monitoring-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" /> <!-- ,-path -->
 		</javac>
-		<!-- WORKAROUND!!! -->
+		<!-- WORKAROUND!!! otherwise the include statement of the aop.xml HAS TO include the apsect.class files -->
 		<iajc destdir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" Xlint="ignore" debug="true" classpathref="kieker.monitoring-ajc-compile-classpath">
 			<sourceroots>
 				<pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/" />

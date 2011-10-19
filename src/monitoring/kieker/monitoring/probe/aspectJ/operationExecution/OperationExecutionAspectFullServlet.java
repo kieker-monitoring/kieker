@@ -37,7 +37,6 @@ import org.aspectj.lang.annotation.Pointcut;
  */
 @Aspect
 public class OperationExecutionAspectFullServlet extends AbstractOperationExecutionAspectServlet {
-
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectFullServlet.class);
 
 	public OperationExecutionAspectFullServlet() {
