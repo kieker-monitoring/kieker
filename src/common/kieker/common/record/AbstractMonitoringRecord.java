@@ -25,7 +25,6 @@ package kieker.common.record;
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
-	// private static final Log log = LogFactory.getLog(AbstractMonitoringRecord.class);
 
 	private volatile long loggingTimestamp = -1;
 
@@ -42,7 +41,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	/**
 	 * Creates a string representation of this record.
 	 * 
-	 * Matthias should not use this method for serialization purposes since this
+	 * This method should not be used for serialization purposes since this
 	 * is not the purpose of Object's toString method.
 	 */
 	@Override
