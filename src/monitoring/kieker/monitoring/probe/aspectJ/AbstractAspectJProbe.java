@@ -32,5 +32,15 @@ import org.aspectj.lang.annotation.Pointcut;
 public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
 	@Pointcut("!within(kieker.common..*) && !within(kieker.monitoring..*) && !within(kieker.analysis..*) && !within(kieker.tools..*)")
-	public void notWithinKieker() {} // NOPMD
+	public final void notWithinKieker() {} // NOPMD
+
+	@Pointcut("execution(void set*(..)) || call(void set*(..))")
+	public final void setter() {} // NOPMD
+
+	@Pointcut("execution(* get*(..)) || call(* get*(..)) || execution(boolean is*(..)) || call(boolean is*(..))")
+	public final void getter() {} // NOPMD
+
+	@Pointcut("!getter() && !setter()")
+	public final void noGetterAndSetter() {} // NOPMD
+
 }
