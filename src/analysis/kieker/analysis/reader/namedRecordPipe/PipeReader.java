@@ -58,7 +58,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 			PipeReader.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		} else {
-			PipeReader.LOG.debug("Connectod to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+			PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
 		}
 		this.pipe.setPipeReader(this);
 	}
