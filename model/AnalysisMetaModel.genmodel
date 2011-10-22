@@ -5,7 +5,7 @@
     editDirectory="/Kieker.edit/src/analysis" modelPluginID="Kieker" modelName="AnalysisMetaModel"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false">
   <foreignModel>AnalysisMetaModel.ecore</foreignModel>
-  <genPackages prefix="analysisMetaModel" basePackage="kieker.analysis.model" disposableProviderFactory="true"
+  <genPackages prefix="AnalysisMetaModel" basePackage="kieker.analysis.model" disposableProviderFactory="true"
       ecorePackage="AnalysisMetaModel.ecore#/">
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Project">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Project/configurables"/>

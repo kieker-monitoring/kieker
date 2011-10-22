@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="AnalysisMetaModel"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="analysisMetaModel"
     nsURI="platform:/resource/Kieker/model/AnalysisMetaModel.ecore" nsPrefix="">
   <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//Configurable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="configurables" upperBound="-1"
         eType="#//Configurable" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Plugin" eSuperTypes="#//Configurable">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inPorts" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
         eType="#//InputPort" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="outPorts" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
         eType="#//OutputPort" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connector">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1" eType="#//InputPort"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="out" lowerBound="1" eType="#//OutputPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dstInputPort" lowerBound="1"
+        eType="#//InputPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sicOutputPort" lowerBound="1"
+        eType="#//OutputPort"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Configurable">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -23,15 +25,16 @@
         eType="#//Property" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Port">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="supportedElements" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventTypes" lowerBound="1"
         upperBound="-1" eType="#//Class"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="in" upperBound="-1" eType="#//Connector"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inConnector" upperBound="-1"
+        eType="#//Connector"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="out" upperBound="-1" eType="#//Connector"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outConnector" upperBound="-1"
+        eType="#//Connector" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Class"/>
   <eClassifiers xsi:type="ecore:EClass" name="Property">

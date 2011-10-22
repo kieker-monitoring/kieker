@@ -20,31 +20,37 @@
 
 package kieker.analysis;
 
-import java.awt.List;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.model.AnalysisMetaModel.Configurable;
-import kieker.analysis.model.AnalysisMetaModel.Plugin;
-import kieker.analysis.model.AnalysisMetaModel.Project;
-import kieker.analysis.model.AnalysisMetaModel.analysisMetaModelFactory;
-import kieker.analysis.model.AnalysisMetaModel.analysisMetaModelPackage;
-import kieker.analysis.model.AnalysisMetaModel.impl.analysisMetaModelFactoryImpl;
-import kieker.analysis.model.AnalysisMetaModel.impl.analysisMetaModelPackageImpl;
-import kieker.analysis.model.AnalysisMetaModel.util.analysisMetaModelAdapterFactory;
+import kieker.analysis.model.analysisMetaModel.Configurable;
+import kieker.analysis.model.analysisMetaModel.Connector;
+import kieker.analysis.model.analysisMetaModel.InputPort;
+import kieker.analysis.model.analysisMetaModel.OutputPort;
+import kieker.analysis.model.analysisMetaModel.Plugin;
+import kieker.analysis.model.analysisMetaModel.Port;
+import kieker.analysis.model.analysisMetaModel.Project;
+import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackageImpl;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.IMonitoringReader;
+import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.common.record.OperationExecutionRecord;
+import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,7 +61,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -110,36 +115,87 @@ public class AnalysisController {
 	 * 
 	 * @param file
 	 *            The configuration file for the analysis.
-	 * @throws ClassNotFoundException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @throws Exception
 	 */
-	public AnalysisController(File file) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public AnalysisController(File file) throws Exception {
 		/* Try to load everything. */
 		EList<EObject> content = openModelFile(file);
 		if (!content.isEmpty()) {
 			/* The first (and only) element should be the "project" */
-			Project project = (Project)content.get(0);
-			
+			Project project = (Project) content.get(0);
+
 			System.out.println(project.getName());
-			/* Extract all plugins. */
+
+			/*
+			 * While we run through a project, we have to remember different
+			 * things:
+			 * 1) The connection between the ports and their "parent" plugins
+			 * (as a map).
+			 * 2) The connection between the plugins and their created
+			 * counterpart (as a map).
+			 * 3) The "real" connection within the model.
+			 */
 			EList<Configurable> configs = project.getConfigurables();
-			java.util.List<Plugin> plugins = new ArrayList<Plugin>();
+			List<Connector> connectors = new ArrayList<Connector>();
+			Map<Port, Plugin> portPluginMap = new HashMap<Port, Plugin>();
+			Map<Plugin, Object> pluginObjMap = new HashMap<Plugin, Object>();
+
+			/* Run through the "configurables" to extract all plugins. */
 			for (Configurable c : configs) {
+
 				if (c instanceof Plugin) {
-					plugins.add((Plugin) c);
+					/*
+					 * We found a plugin. Not we have to determine whether this
+					 * is a reader or a normal plugin.
+					 */
+					Plugin p = (Plugin) c;
+					if (p.getInputPorts().isEmpty()) {
+						System.out.println("Reader gefunden: " + p.getName());
+						IMonitoringReader reader = (IMonitoringReader)
+								Class.forName(p.getName()).newInstance();
+						this.setReader(reader);
+						pluginObjMap.put(p, reader);
+					} else {
+						System.out.println("Plugin gefunden: " + p.getName());
+						Object plugin = Class.forName(p.getName()).newInstance();
+						pluginObjMap.put(p, plugin);
+					}
+
+					/*
+					 * Now we run through all ports of the current plugin. We
+					 * remember them to have a connection between the ports and
+					 * their parent. We will also accumulate all Connectors.
+					 */
+
+					for (OutputPort oPort : p.getOutputPorts()) {
+						connectors.addAll(oPort.getOutConnector());
+
+						portPluginMap.put(oPort, p);
+					}
+
+					for (InputPort iPort : p.getInputPorts()) {
+						portPluginMap.put(iPort, p);
+					}
 				}
 			}
-			System.out.println(plugins.size() + " Plugins gefunden");
-			for (Plugin p : plugins) {
-				if (p.getInPorts().isEmpty()) {
-					/* Konstruktor?! */
-					System.out.println("Reader gefunden: " + p.getName());
-					IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getName()).newInstance();
-					this.setReader(reader);
-				} else {
-					System.out.println("Analyseplugin gefunden: " + p.getName());
-				}
+
+			/*
+			 * Now we should have initialized all plugins. We can start to
+			 * assemble the structure.
+			 */
+			for (Connector c : connectors) {
+				/* We can get the plugins via the map. */
+				Plugin in = portPluginMap.get(c.getDstInputPort());
+				Plugin out = portPluginMap.get(c.getSicOutputPort());
+				System.out.format("Connector gefunden. Verbinde Output von " +
+						"%s mit Input von %s\n", out.getName(), in.getName());
+
+				IMonitoringReader outObj = (IMonitoringReader)
+						pluginObjMap.get(out);
+				IMonitoringRecordReceiver inObj = (IMonitoringRecordReceiver)
+						pluginObjMap.get(in);
+				
+				outObj.addRecordReceiver(inObj);
 			}
 		}
 	}
@@ -157,7 +213,7 @@ public class AnalysisController {
 		ResourceSet resourceSet = new ResourceSetImpl();
 
 		/* Initialize the package information */
-		analysisMetaModelPackageImpl.init();
+		AnalysisMetaModelPackageImpl.init();
 
 		/* Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource. */
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
@@ -318,9 +374,9 @@ public class AnalysisController {
 						.get(recordType);
 				if (cList == null) {
 					cList = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>(); // NOPMD
-																							// (new
-																							// in
-																							// loops)
+					// (new
+					// in
+					// loops)
 					this.specificTypeConsumers.put(recordType, cList);
 				}
 				cList.add(consumer);
