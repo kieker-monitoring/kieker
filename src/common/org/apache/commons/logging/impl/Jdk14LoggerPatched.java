@@ -25,8 +25,6 @@ import java.util.logging.Logger;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.impl.Jdk14Logger;
-import org.apache.commons.logging.impl.LogFactoryImpl;
 
 /**
  * Based upon the Apache commons logging class Jdk14Logger
@@ -40,19 +38,22 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static final Log getLog(final String name) {
 		final LogFactory commonsFactory = LogFactory.getFactory();
-		if (commonsFactory instanceof LogFactoryImpl) {
-			final LogFactoryImpl commonsFactoryImpl = (LogFactoryImpl) commonsFactory;
-			if ("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName())) {
-				// commons using Jdk14Logger
-				Log instance = (Log) commonsFactoryImpl.instances.get(name);
-				if (instance == null) {
-					instance = new Jdk14LoggerPatched(name);
-					commonsFactoryImpl.instances.put(name, instance);
+		try {
+			if (commonsFactory instanceof LogFactoryImpl) {
+				final LogFactoryImpl commonsFactoryImpl = (LogFactoryImpl) commonsFactory;
+				if ("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName())) {
+					// commons using Jdk14Logger
+					Log instance = (Log) commonsFactoryImpl.instances.get(name);
+					if (instance == null) {
+						instance = new Jdk14LoggerPatched(name);
+						commonsFactoryImpl.instances.put(name, instance);
+					}
+					return instance;
 				}
-				return instance;
 			}
+		} catch (final Exception ex) {
+			// if anything goes wrong, use the default commons implementation
 		}
-		// if anything goes wrong, use the default commons implementation
 		return commonsFactory.getInstance(name);
 	}
 
@@ -129,13 +130,5 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 	@Override
 	public final void fatal(final Object message, final Throwable exception) {
 		this.log(Level.SEVERE, String.valueOf(message), exception);
-	}
-
-	@Override
-	public final Logger getLogger() {
-		if (this.logger == null) {
-			this.logger = Logger.getLogger(this.name);
-		}
-		return (this.logger);
 	}
 }
