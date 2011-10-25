@@ -22,15 +22,14 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.TimeUnit;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller
