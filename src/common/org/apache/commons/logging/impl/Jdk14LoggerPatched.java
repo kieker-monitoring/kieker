@@ -23,9 +23,6 @@ package org.apache.commons.logging.impl;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Based upon the Apache commons logging class Jdk14Logger
  * Used to determine the correct calling method
@@ -36,14 +33,14 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public static final Log getLog(final String name) {
-		final LogFactory commonsFactory = LogFactory.getFactory();
+	public static final org.apache.commons.logging.Log getLog(final String name) {
+		final org.apache.commons.logging.LogFactory commonsFactory = org.apache.commons.logging.LogFactory.getFactory();
 		try {
 			if (commonsFactory instanceof LogFactoryImpl) {
 				final LogFactoryImpl commonsFactoryImpl = (LogFactoryImpl) commonsFactory;
 				if ("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName())) {
 					// commons using Jdk14Logger
-					Log instance = (Log) commonsFactoryImpl.instances.get(name);
+					org.apache.commons.logging.Log instance = (org.apache.commons.logging.Log) commonsFactoryImpl.instances.get(name);
 					if (instance == null) {
 						instance = new Jdk14LoggerPatched(name);
 						commonsFactoryImpl.instances.put(name, instance);
@@ -64,15 +61,17 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 	private final void log(final Level level, final String msg, final Throwable ex) {
 		final Logger logger = this.getLogger();
 		if (logger.isLoggable(level)) {
-			final StackTraceElement[] stackArray = new Throwable().getStackTrace();
 			final String sourceClass;
 			final String sourceMethod;
-			if ((stackArray != null) && (stackArray.length > 3)) { // our stackDepth
-				sourceClass = stackArray[3].getClassName();
-				sourceMethod = stackArray[3].getMethodName();
-			} else {
-				sourceClass = this.name;
-				sourceMethod = "";
+			{ // detect calling class and method
+				final StackTraceElement[] stackArray = new Throwable().getStackTrace();
+				if ((stackArray != null) && (stackArray.length > 3)) { // our stackDepth
+					sourceClass = stackArray[3].getClassName();
+					sourceMethod = stackArray[3].getMethodName();
+				} else {
+					sourceClass = this.name;
+					sourceMethod = "";
+				}
 			}
 			if (ex == null) {
 				logger.logp(level, sourceClass, sourceMethod, msg);

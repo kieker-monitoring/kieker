@@ -20,7 +20,6 @@
 
 package kieker.common.logging;
 
-
 /**
  * 
  * @author Jan Waller

@@ -42,7 +42,7 @@ public final class LogImplJDK14 implements Log {
 			final String sourceMethod;
 			{ // detect calling class and method
 				final StackTraceElement[] stackArray = new Throwable().getStackTrace();
-				if ((stackArray != null) && (stackArray.length > 2)) { // our stackDepth is 2!
+				if ((stackArray != null) && (stackArray.length > 2)) { // our stackDepth
 					sourceClass = stackArray[2].getClassName();
 					sourceMethod = stackArray[2].getMethodName();
 				} else {
@@ -107,6 +107,5 @@ public final class LogImplJDK14 implements Log {
 	@Override
 	public final void fatal(final String message, final Throwable t) {
 		this.log(Level.SEVERE, message, t);
-
 	}
 }

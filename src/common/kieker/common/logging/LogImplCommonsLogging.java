@@ -20,8 +20,6 @@
 
 package kieker.common.logging;
 
-import org.apache.commons.logging.impl.Jdk14LoggerPatched;
-
 /**
  * 
  * @author Jan Waller
@@ -29,8 +27,8 @@ import org.apache.commons.logging.impl.Jdk14LoggerPatched;
 public final class LogImplCommonsLogging implements Log {
 	private final org.apache.commons.logging.Log log;
 
-	public LogImplCommonsLogging(final String name) {
-		this.log = Jdk14LoggerPatched.getLog(name);
+	protected LogImplCommonsLogging(final String name) {
+		this.log = org.apache.commons.logging.impl.Jdk14LoggerPatched.getLog(name);
 	}
 
 	@Override
