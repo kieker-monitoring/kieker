@@ -64,6 +64,7 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.osgi.internal.baseadaptor.ArrayMap;
 
 /**
  * 
@@ -109,94 +110,133 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Creates a new instance of the class {@link AnalysisController} but uses
-	 * the file determined by the given parameter to construct the analysis.
-	 * The file should be an instance of the analysis meta model.
+	 * This method loads the model from the given file and creates an instance
+	 * of this class for every single "Project" within this model. The file
+	 * should therefore be an instance of the analysis meta model.
 	 * 
 	 * @param file
 	 *            The configuration file for the analysis.
+	 * 
+	 * @return A map containing the sub projects. The key is the name of the
+	 *         project, the value is the instance of this class. If something
+	 *         went wrong, null will be returned.
+	 *         
 	 * @throws Exception
+	 *             If something went wrong.
 	 */
-	public AnalysisController(File file) throws Exception {
+	static public Map<String, AnalysisController> loadFromFile(File file)
+			throws Exception {
 		/* Try to load everything. */
 		EList<EObject> content = openModelFile(file);
 		if (!content.isEmpty()) {
-			/* The first (and only) element should be the "project" */
+			/* The first (and only) element should be the "parent project" */
 			Project project = (Project) content.get(0);
 
-			System.out.println(project.getName());
-
-			/*
-			 * While we run through a project, we have to remember different
-			 * things:
-			 * 1) The connection between the ports and their "parent" plugins
-			 * (as a map).
-			 * 2) The connection between the plugins and their created
-			 * counterpart (as a map).
-			 * 3) The "real" connection within the model.
-			 */
-			EList<Configurable> configs = project.getConfigurables();
-			List<Connector> connectors = new ArrayList<Connector>();
-			Map<Port, Plugin> portPluginMap = new HashMap<Port, Plugin>();
-			Map<Plugin, Object> pluginObjMap = new HashMap<Plugin, Object>();
-
-			/* Run through the "configurables" to extract all plugins. */
-			for (Configurable c : configs) {
-
-				if (c instanceof Plugin) {
-					/*
-					 * We found a plugin. Not we have to determine whether this
-					 * is a reader or a normal plugin.
-					 */
-					Plugin p = (Plugin) c;
-					if (p.getInputPorts().isEmpty()) {
-						System.out.println("Reader gefunden: " + p.getName());
-						IMonitoringReader reader = (IMonitoringReader)
-								Class.forName(p.getName()).newInstance();
-						this.setReader(reader);
-						pluginObjMap.put(p, reader);
-					} else {
-						System.out.println("Plugin gefunden: " + p.getName());
-						Object plugin = Class.forName(p.getName()).newInstance();
-						pluginObjMap.put(p, plugin);
-					}
-
-					/*
-					 * Now we run through all ports of the current plugin. We
-					 * remember them to have a connection between the ports and
-					 * their parent. We will also accumulate all Connectors.
-					 */
-
-					for (OutputPort oPort : p.getOutputPorts()) {
-						connectors.addAll(oPort.getOutConnector());
-
-						portPluginMap.put(oPort, p);
-					}
-
-					for (InputPort iPort : p.getInputPorts()) {
-						portPluginMap.put(iPort, p);
+			/* Now find all "sub projects" */
+			List<Project> projects = new ArrayList<Project>();
+			List<Project> toExpand = new ArrayList<Project>();
+			toExpand.add(project);
+			while (!toExpand.isEmpty()) {
+				Project currProj = toExpand.remove(0);
+				projects.add(currProj);
+				EList<Configurable> configs = currProj.getConfigurables();
+				for (Configurable c : configs) {
+					if (c instanceof Project) {
+						toExpand.add((Project) c);
 					}
 				}
 			}
 
-			/*
-			 * Now we should have initialized all plugins. We can start to
-			 * assemble the structure.
-			 */
-			for (Connector c : connectors) {
-				/* We can get the plugins via the map. */
-				Plugin in = portPluginMap.get(c.getDstInputPort());
-				Plugin out = portPluginMap.get(c.getSicOutputPort());
-				System.out.format("Connector gefunden. Verbinde Output von " +
-						"%s mit Input von %s\n", out.getName(), in.getName());
+			/* Configure all projects. */
+			Map<String, AnalysisController> map = new HashMap<String, AnalysisController>();
 
-				IMonitoringReader outObj = (IMonitoringReader)
-						pluginObjMap.get(out);
-				IMonitoringRecordReceiver inObj = (IMonitoringRecordReceiver)
-						pluginObjMap.get(in);
-				
-				outObj.addRecordReceiver(inObj);
+			for (Project currProject : projects) {
+				map.put(currProject.getName(), new AnalysisController(
+						currProject));
 			}
+			return map;
+		}
+		return null;
+	}
+
+	/**
+	 * Creates a new instance of the class {@link AnalysisController} but uses
+	 * the given instance of @link{Project} to construct the analysis.
+	 * 
+	 * @param project
+	 *            The project instance for the analysis.
+	 * @throws Exception
+	 */
+	private AnalysisController(Project project) throws Exception {
+		System.out.println(project.getName());
+
+		/*
+		 * While we run through a project, we have to remember different things:
+		 * 1) The connection between the ports and their "parent" plugins (as a
+		 * map). 2) The connection between the plugins and their created
+		 * counterpart (as a map). 3) The "real" connection within the model.
+		 */
+		EList<Configurable> configs = project.getConfigurables();
+		List<Connector> connectors = new ArrayList<Connector>();
+		Map<Port, Plugin> portPluginMap = new HashMap<Port, Plugin>();
+		Map<Plugin, Object> pluginObjMap = new HashMap<Plugin, Object>();
+
+		/* Run through the "configurables" to extract all plugins. */
+		for (Configurable c : configs) {
+
+			if (c instanceof Plugin) {
+				/*
+				 * We found a plugin. Not we have to determine whether this is a
+				 * reader or a normal plugin.
+				 */
+				Plugin p = (Plugin) c;
+				if (p.getInputPorts().isEmpty()) {
+					System.out.println("Reader gefunden: " + p.getName());
+					IMonitoringReader reader = (IMonitoringReader) Class
+							.forName(p.getName()).newInstance();
+					this.setReader(reader);
+					pluginObjMap.put(p, reader);
+				} else {
+					System.out.println("Plugin gefunden: " + p.getName());
+					Object plugin = Class.forName(p.getName()).newInstance();
+					pluginObjMap.put(p, plugin);
+				}
+
+				/*
+				 * Now we run through all ports of the current plugin. We
+				 * remember them to have a connection between the ports and
+				 * their parent. We will also accumulate all Connectors.
+				 */
+
+				for (OutputPort oPort : p.getOutputPorts()) {
+					connectors.addAll(oPort.getOutConnector());
+
+					portPluginMap.put(oPort, p);
+				}
+
+				for (InputPort iPort : p.getInputPorts()) {
+					portPluginMap.put(iPort, p);
+				}
+			}
+		}
+
+		/*
+		 * Now we should have initialized all plugins. We can start to assemble
+		 * the structure.
+		 */
+		for (Connector c : connectors) {
+			/* We can get the plugins via the map. */
+			Plugin in = portPluginMap.get(c.getDstInputPort());
+			Plugin out = portPluginMap.get(c.getSicOutputPort());
+			System.out.format("Connector gefunden. Verbinde Output von "
+					+ "%s mit Input von %s\n", out.getName(), in.getName());
+
+			IMonitoringReader outObj = (IMonitoringReader) pluginObjMap
+					.get(out);
+			IMonitoringRecordReceiver inObj = (IMonitoringRecordReceiver) pluginObjMap
+					.get(in);
+
+			outObj.addRecordReceiver(inObj);
 		}
 	}
 
@@ -208,7 +248,7 @@ public class AnalysisController {
 	 *            The file to be opened.
 	 * @return A list with the content of the file.
 	 */
-	EList<EObject> openModelFile(File file) {
+	static EList<EObject> openModelFile(File file) {
 		/* Create a resource set to work with. */
 		ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -339,7 +379,8 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Returns a {@link CountDownLatch} which has the value 0 after the {@link AnalysisController} is initialized and the reader is running.
+	 * Returns a {@link CountDownLatch} which has the value 0 after the
+	 * {@link AnalysisController} is initialized and the reader is running.
 	 * 
 	 * @return the initializationLatch
 	 */

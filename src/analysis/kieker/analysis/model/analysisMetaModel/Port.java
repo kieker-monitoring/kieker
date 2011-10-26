@@ -1,0 +1,46 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package kieker.analysis.model.analysisMetaModel;
+
+import org.eclipse.emf.common.util.EList;
+
+import org.eclipse.emf.ecore.EObject;
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Port</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ * <p>
+ * The following features are supported:
+ * <ul>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.Port#getEventTypes <em>Event Types</em>}</li>
+ * </ul>
+ * </p>
+ *
+ * @see kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage#getPort()
+ * @model
+ * @generated
+ */
+public interface Port extends EObject {
+	/**
+	 * Returns the value of the '<em><b>Event Types</b></em>' reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.Class}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Event Types</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Event Types</em>' reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage#getPort_EventTypes()
+	 * @model required="true"
+	 * @generated
+	 */
+	EList<kieker.analysis.model.analysisMetaModel.Class> getEventTypes();
+
+} // Port
