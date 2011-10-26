@@ -564,7 +564,7 @@ public final class TraceAnalysisTool {
 
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			System.err.println("An error occured. See 'kieker.log' for details");
-			TraceAnalysisTool.LOG.error(args.toString(), exc);
+			TraceAnalysisTool.LOG.error(Arrays.toString(args), exc);
 		}
 	}
 
