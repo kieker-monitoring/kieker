@@ -28,10 +28,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -50,6 +49,7 @@ public final class MappingFileWriter {
 		}
 	}
 
+	// TODO: this may register classes more than once!
 	public final int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
 		final Integer idObj = this.class2idMap.get(clazz);
 		if (idObj == null) {
@@ -68,7 +68,7 @@ public final class MappingFileWriter {
 			pw.println("$" + id + "=" + className);
 			pw.close();
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			MappingFileWriter.LOG.fatal("Failed to register record type", ex);
+			MappingFileWriter.LOG.error("Failed to register record type", ex);
 		}
 	}
 }

@@ -34,13 +34,12 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import kieker.analysis.reader.MonitoringReaderException;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.MonitoringRecordTypeRegistry;
 import kieker.common.record.OperationExecutionRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Reads the contents of a single file system log directory and passes the
@@ -261,7 +260,7 @@ class FSDirectoryReader {
 							final Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
 							if (clazz == null) {
 								final String errorMsg = "Missing classname mapping for record type id " + "'" + id + "'";
-								FSDirectoryReader.LOG.fatal(errorMsg);
+								FSDirectoryReader.LOG.error(errorMsg);
 								throw new IllegalStateException(errorMsg);
 							}
 							rec = clazz.newInstance();

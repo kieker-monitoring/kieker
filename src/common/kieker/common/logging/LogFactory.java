@@ -24,24 +24,28 @@ package kieker.common.logging;
  * 
  * @author Jan Waller
  */
-public abstract class LogFactory {
+public final class LogFactory {
 
 	private static enum Logger {
 		JDK, COMMONS,
 	}
 
-	static final Logger DETECTED_LOGGER;
+	private static final Logger DETECTED_LOGGER;
 
 	static {
-		Logger logselectiontemp = Logger.JDK; // default to JDK logging
+		Logger logselectiontemp = LogFactory.Logger.JDK; // default to JDK logging
 		try {
 			if (Class.forName("org.apache.commons.logging.Log") != null) {
-				logselectiontemp = Logger.COMMONS; // use commons logging
+				logselectiontemp = LogFactory.Logger.COMMONS; // use commons logging
 			}
 		} catch (final Exception ex) { // NOCS // NOPMD
 			// failed to find Apache commons logging
 		}
-		DETECTED_LOGGER = logselectiontemp;
+		DETECTED_LOGGER = logselectiontemp; // NOCS (missing this)
+	}
+
+	private LogFactory() {
+		// Nothing to do
 	}
 
 	public static final Log getLog(final Class<?> clazz) {
@@ -49,7 +53,7 @@ public abstract class LogFactory {
 	}
 
 	public static final Log getLog(final String name) {
-		switch (LogFactory.DETECTED_LOGGER) {
+		switch (LogFactory.DETECTED_LOGGER) { // NOPMD (no break needed)
 		case COMMONS:
 			return new LogImplCommonsLogging(name);
 		case JDK:

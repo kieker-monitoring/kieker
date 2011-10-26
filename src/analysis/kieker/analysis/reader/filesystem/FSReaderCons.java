@@ -33,12 +33,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.MonitoringReaderException;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -116,10 +115,10 @@ public class FSReaderCons implements IMonitoringRecordReceiver {
 										// signal termination:
 										FSReaderCons.this.newMonitoringRecord(FSReaderCons.FS_READER_TERMINATION_MARKER);
 									} catch (final IOException ex) {
-										FSReaderCons.LOG.error(directoryReader, ex);
+										FSReaderCons.LOG.error(directoryReader.toString(), ex);
 										FSReaderCons.this.reportReaderException(ex);
 									} catch (final MonitoringReaderException ex) {
-										FSReaderCons.LOG.error(directoryReader, ex);
+										FSReaderCons.LOG.error(directoryReader.toString(), ex);
 										FSReaderCons.this.reportReaderException(ex);
 									}
 								}

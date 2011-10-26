@@ -23,11 +23,10 @@ package kieker.monitoring.core.servlet;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IStateController;
 import kieker.monitoring.core.controller.MonitoringController;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Use this listener in webapps where ShutdownHook is not called.

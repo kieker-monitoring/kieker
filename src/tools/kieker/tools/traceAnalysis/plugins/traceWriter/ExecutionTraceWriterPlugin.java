@@ -26,12 +26,11 @@ import java.io.IOException;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -86,7 +85,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 				ExecutionTraceWriterPlugin.this.reportSuccess(et.getTraceId());
 			} catch (final IOException ex) {
 				ExecutionTraceWriterPlugin.this.reportError(et.getTraceId());
-				ExecutionTraceWriterPlugin.LOG.error(ex, ex);
+				ExecutionTraceWriterPlugin.LOG.error("", ex);
 			}
 		}
 	};

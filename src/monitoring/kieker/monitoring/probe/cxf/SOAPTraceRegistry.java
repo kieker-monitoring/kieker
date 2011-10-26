@@ -20,8 +20,8 @@
 
 package kieker.monitoring.probe.cxf;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * CXF does not provide an "around advice" for SOAP requests.
@@ -71,7 +71,7 @@ public final class SOAPTraceRegistry {
 	public final long recallThreadLocalInRequestTin() {
 		final Long curTin = this.threadLocalInRequestTin.get();
 		if (curTin == null) {
-			SOAPTraceRegistry.LOG.fatal("tin has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("tin has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return -1;
 		}
 		return curTin;
@@ -105,7 +105,7 @@ public final class SOAPTraceRegistry {
 	public final long recallThreadLocalOutRequestTin() {
 		final Long curTin = this.threadLocalOutRequestTin.get();
 		if (curTin == null) {
-			SOAPTraceRegistry.LOG.fatal("tin has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("tin has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return -1;
 		}
 		return curTin;
@@ -136,7 +136,7 @@ public final class SOAPTraceRegistry {
 	public final boolean recallThreadLocalInRequestIsEntryCall() {
 		final Boolean curIsEntryCall = this.threadLocalInRequestIsEntryCall.get();
 		if (curIsEntryCall == null) {
-			SOAPTraceRegistry.LOG.fatal("isEntryCall has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return true;
 		}
 		return curIsEntryCall;
@@ -167,7 +167,7 @@ public final class SOAPTraceRegistry {
 	public final boolean recallThreadLocalOutRequestIsEntryCall() {
 		final Boolean curIsEntryCall = this.threadLocalOutRequestIsEntryCall.get();
 		if (curIsEntryCall == null) {
-			SOAPTraceRegistry.LOG.fatal("isEntryCall has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return true;
 		}
 		return curIsEntryCall;
@@ -202,7 +202,7 @@ public final class SOAPTraceRegistry {
 	public final int recallThreadLocalInRequestEOI() {
 		final Integer curEoi = this.threadLocalInRequestEoi.get();
 		if (curEoi == null) {
-			SOAPTraceRegistry.LOG.fatal("eoi has not been registered before");
+			SOAPTraceRegistry.LOG.error("eoi has not been registered before");
 			return -1;
 		}
 		return curEoi;
@@ -237,7 +237,7 @@ public final class SOAPTraceRegistry {
 	public final int recallThreadLocalInRequestESS() {
 		final Integer curEss = this.threadLocalInRequestEss.get();
 		if (curEss == null) {
-			SOAPTraceRegistry.LOG.fatal("ess has not been registered before");
+			SOAPTraceRegistry.LOG.error("ess has not been registered before");
 			return -1;
 		}
 		return curEss;

@@ -29,11 +29,10 @@ import java.util.concurrent.CountDownLatch;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.IMonitoringReader;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -136,7 +135,7 @@ public class AnalysisController {
 				}
 			}
 		} catch (final Exception exc) { // NOCS // NOPMD
-			AnalysisController.LOG.fatal("Error occurred: " + exc.getMessage());
+			AnalysisController.LOG.error("Error occurred: " + exc.getMessage());
 			success = false;
 		} finally {
 			// to make sure that all waiting threads are released

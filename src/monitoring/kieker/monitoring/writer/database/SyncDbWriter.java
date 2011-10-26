@@ -25,13 +25,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Stores monitoring data into a database.
@@ -141,7 +140,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				try {
 					this.psInsertMonitoringData.clearParameters();
 				} catch (final SQLException ex) {
-					SyncDbWriter.LOG.error(ex);
+					SyncDbWriter.LOG.error("", ex);
 					return false; // NOPMD
 				}
 			}

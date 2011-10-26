@@ -23,12 +23,11 @@ package kieker.monitoring.writer;
 import java.util.Properties;
 import java.util.Set;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller, Robert von Massow

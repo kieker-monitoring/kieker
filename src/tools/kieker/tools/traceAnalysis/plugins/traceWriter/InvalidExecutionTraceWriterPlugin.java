@@ -26,12 +26,11 @@ import java.io.IOException;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -87,7 +86,7 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 				InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
 			} catch (final IOException ex) {
 				InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
-				InvalidExecutionTraceWriterPlugin.LOG.error(ex, ex);
+				InvalidExecutionTraceWriterPlugin.LOG.error("", ex);
 			}
 		}
 	};

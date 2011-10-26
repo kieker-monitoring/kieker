@@ -41,10 +41,9 @@ import javax.naming.NameNotFoundException;
 
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Reads monitoring records from a (remote or local) JMS queue.
@@ -154,8 +153,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
-				
-				
+
 				@Override
 				public void onMessage(final Message jmsMessage) {
 					if (jmsMessage instanceof TextMessage) {
@@ -171,9 +169,9 @@ public class JMSReader extends AbstractMonitoringReader {
 								JMSReader.LOG.error(errorMsg);
 							}
 						} catch (final MessageFormatException em) {
-							JMSReader.LOG.fatal("MessageFormatException:" + em.getMessage(), em);
+							JMSReader.LOG.error("MessageFormatException:" + em.getMessage(), em);
 						} catch (final JMSException ex) {
-							JMSReader.LOG.fatal("JMSException: " + ex.getMessage(), ex);
+							JMSReader.LOG.error("JMSException: " + ex.getMessage(), ex);
 						} catch (final Exception ex) { // NOCS // NOPMD
 							JMSReader.LOG.error("Exception", ex);
 						}
@@ -188,7 +186,7 @@ public class JMSReader extends AbstractMonitoringReader {
 			this.block();
 			JMSReader.LOG.info("Woke up by shutdown");
 		} catch (final Exception ex) { // FindBugs complains but wontfix // NOCS (IllegalCatchCheck) // NOPMD
-			JMSReader.LOG.fatal(ex.getMessage(), ex);
+			JMSReader.LOG.error(ex.getMessage(), ex);
 			retVal = false;
 		} finally {
 			try {

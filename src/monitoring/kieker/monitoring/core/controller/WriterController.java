@@ -22,12 +22,11 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.IMonitoringWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller, Robert von Massow
@@ -102,13 +101,13 @@ public final class WriterController extends AbstractController implements IWrite
 			this.numberOfInserts.incrementAndGet();
 			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
 			if (!successfulWriting) {
-				WriterController.LOG.fatal("Error writing the monitoring data. Will terminate monitoring!");
+				WriterController.LOG.error("Error writing the monitoring data. Will terminate monitoring!");
 				this.terminate();
 				return false;
 			}
 			return true;
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			WriterController.LOG.fatal("Exception detected. Will terminate monitoring", ex);
+			WriterController.LOG.error("Exception detected. Will terminate monitoring", ex);
 			this.terminate();
 			return false;
 		}

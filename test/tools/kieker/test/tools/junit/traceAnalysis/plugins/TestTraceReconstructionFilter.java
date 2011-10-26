@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter;
@@ -34,8 +36,6 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
 /**
@@ -91,7 +91,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			/* Make sure that trace is valid: */
 			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
 		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error(ex);
+			TestTraceReconstructionFilter.LOG.error("", ex);
 			Assert.fail("Test invalid since used trace invalid");
 			throw new InvalidTraceException("Test invalid since used trace invalid", ex);
 		}

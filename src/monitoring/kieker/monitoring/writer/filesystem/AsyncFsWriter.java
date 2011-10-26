@@ -33,14 +33,13 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller, Robert von Massow

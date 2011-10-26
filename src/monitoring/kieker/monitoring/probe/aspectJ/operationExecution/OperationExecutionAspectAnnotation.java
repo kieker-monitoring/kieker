@@ -20,10 +20,10 @@
 
 package kieker.monitoring.probe.aspectJ.operationExecution;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.OperationExecutionRecord;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -66,8 +66,8 @@ public class OperationExecutionAspectAnnotation extends AbstractOperationExecuti
 		try {
 			this.proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
-				OperationExecutionAspectAnnotation.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
-				OperationExecutionAspectAnnotation.LOG.fatal("Terminating!");
+				OperationExecutionAspectAnnotation.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				OperationExecutionAspectAnnotation.LOG.error("Terminating!");
 				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}
 		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)

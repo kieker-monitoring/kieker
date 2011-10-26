@@ -25,8 +25,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn
@@ -60,13 +60,13 @@ public final class JavaDBInitializer {
 			JavaDBInitializer.createTables(dbConnection);
 
 		} catch (final SQLException ex) {
-			JavaDBInitializer.LOG.error(ex);
+			JavaDBInitializer.LOG.error("", ex);
 			System.exit(1);
 		} finally {
 			try {
 				dbConnection.close();
 			} catch (final SQLException ex) {
-				JavaDBInitializer.LOG.error(ex);
+				JavaDBInitializer.LOG.error("", ex);
 				System.exit(1);
 			}
 		}

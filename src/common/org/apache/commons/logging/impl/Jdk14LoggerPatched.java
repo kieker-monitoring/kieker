@@ -32,30 +32,27 @@ import java.util.logging.Logger;
 public final class Jdk14LoggerPatched extends Jdk14Logger {
 	private static final long serialVersionUID = 1L;
 
+	public Jdk14LoggerPatched(final String name) {
+		super(name);
+	}
+
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static final org.apache.commons.logging.Log getLog(final String name) {
 		final org.apache.commons.logging.LogFactory commonsFactory = org.apache.commons.logging.LogFactory.getFactory();
 		try {
 			if (commonsFactory instanceof LogFactoryImpl) {
 				final LogFactoryImpl commonsFactoryImpl = (LogFactoryImpl) commonsFactory;
-				if ("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName())) {
-					// commons using Jdk14Logger
-					org.apache.commons.logging.Log instance = (org.apache.commons.logging.Log) commonsFactoryImpl.instances.get(name);
-					if (instance == null) {
-						instance = new Jdk14LoggerPatched(name);
-						commonsFactoryImpl.instances.put(name, instance);
-					}
+				if (("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName())) && (commonsFactoryImpl.instances.get(name) == null)) {
+					// commons using Jdk14Logger and not yet assigned
+					final org.apache.commons.logging.Log instance = new Jdk14LoggerPatched(name);
+					commonsFactoryImpl.instances.put(name, instance);
 					return instance;
 				}
 			}
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS // NOPMD
 			// if anything goes wrong, use the default commons implementation
 		}
 		return commonsFactory.getInstance(name);
-	}
-
-	public Jdk14LoggerPatched(final String name) {
-		super(name);
 	}
 
 	private final void log(final Level level, final String msg, final Throwable ex) {
@@ -63,11 +60,11 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 		if (logger.isLoggable(level)) {
 			final String sourceClass;
 			final String sourceMethod;
-			{ // detect calling class and method
-				final StackTraceElement[] stackArray = new Throwable().getStackTrace();
-				if ((stackArray != null) && (stackArray.length > 3)) { // our stackDepth
-					sourceClass = stackArray[3].getClassName();
-					sourceMethod = stackArray[3].getMethodName();
+			{ // NOCS detect calling class and method
+				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD
+				if ((stackArray != null) && (stackArray.length > 3)) { // NOCS (magic number)
+					sourceClass = stackArray[3].getClassName(); // NOCS (magic number)
+					sourceMethod = stackArray[3].getMethodName(); // NOCS (magic number)
 				} else {
 					sourceClass = this.name;
 					sourceMethod = "";

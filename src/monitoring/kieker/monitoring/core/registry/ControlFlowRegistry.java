@@ -23,8 +23,8 @@ package kieker.monitoring.core.registry;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -155,7 +155,7 @@ public final class ControlFlowRegistry {
 	public final int incrementAndRecallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.LOG.fatal("eoi has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("eoi has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return -1;
 		}
 		final int newEoi = curEoi + 1;
@@ -173,7 +173,7 @@ public final class ControlFlowRegistry {
 	public final int recallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.LOG.fatal("eoi has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("eoi has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return -1;
 		}
 		return curEoi;
@@ -206,7 +206,7 @@ public final class ControlFlowRegistry {
 	public final int recallAndIncrementThreadLocalESS() {
 		final Integer curEss = this.threadLocalEss.get();
 		if (curEss == null) {
-			ControlFlowRegistry.LOG.fatal("ess has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("ess has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return -1;
 		}
 		this.threadLocalEss.set(curEss + 1);
@@ -223,7 +223,7 @@ public final class ControlFlowRegistry {
 	public final int recallThreadLocalESS() {
 		final Integer ess = this.threadLocalEss.get();
 		if (ess == null) {
-			ControlFlowRegistry.LOG.fatal("ess has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("ess has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
 			return -1;
 		}
 		return ess;

@@ -27,11 +27,10 @@ import java.util.StringTokenizer;
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously

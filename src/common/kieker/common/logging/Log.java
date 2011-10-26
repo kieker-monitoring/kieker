@@ -37,7 +37,7 @@ package kieker.common.logging;
  * 
  * @author Jan Waller
  */
-public interface Log {
+public interface Log { // NOCS (Name of Interface)
 
 	/**
 	 * <p>

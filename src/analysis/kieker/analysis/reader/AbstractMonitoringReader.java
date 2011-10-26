@@ -23,11 +23,10 @@ package kieker.analysis.reader;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -65,7 +64,7 @@ public abstract class AbstractMonitoringReader implements IMonitoringReader {
 				}
 			}
 		} catch (final Exception ex) { // NOCS // NOPMD
-			AbstractMonitoringReader.LOG.fatal("Caught Exception while delivering record", ex);
+			AbstractMonitoringReader.LOG.error("Caught Exception while delivering record", ex);
 			return false;
 		}
 		return true;

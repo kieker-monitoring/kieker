@@ -25,12 +25,11 @@ import java.lang.management.ManagementFactory;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller

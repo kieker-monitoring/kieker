@@ -13,8 +13,20 @@
   </Match>
 
   <Match>
+    <Class name="kieker.common.logging.LogFactory" />
+    <Method name="()" params="" returns="" />
+    <Bug pattern="DE_MIGHT_IGNORE" />
+  </Match>
+
+  <Match>
+    <Class name="org.apache.commons.logging.impl.Jdk14LoggerPatched" />
+    <Method name="getLog" params="String" returns="void" />
+    <Bug pattern="REC_CATCH_EXCEPTION" />
+  </Match>
+  
+  <Match>
     <Class name="kieker.monitoring.core.controller.JMXController" />
-    <Method name="&lt;init&gt;" params="kieker.monitoring.core.configuration.Configuration" returns="void" />
+    <Method name="&lt;init&gt;" params="kieker.monitoring.core.configuration.Configuration" returns="org.apache.commons.logging.Log" />
     <Bug pattern="REC_CATCH_EXCEPTION" />
   </Match>
 
