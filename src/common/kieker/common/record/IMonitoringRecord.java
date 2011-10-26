@@ -23,9 +23,10 @@ package kieker.common.record;
 import java.io.Serializable;
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 public interface IMonitoringRecord extends Serializable {
+
 	public long getLoggingTimestamp();
 
 	public void setLoggingTimestamp(long timestamp);
@@ -35,4 +36,13 @@ public interface IMonitoringRecord extends Serializable {
 	public Object[] toArray();
 
 	public Class<?>[] getValueTypes();
+
+	/**
+	 * Creates a string representation of this record.
+	 * 
+	 * This method should not be used for serialization purposes since this
+	 * is not the purpose of Object's toString method.
+	 */
+	@Override
+	public String toString();
 }

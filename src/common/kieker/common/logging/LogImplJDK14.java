@@ -98,14 +98,4 @@ public final class LogImplJDK14 implements Log {
 	public final void error(final String message, final Throwable t) {
 		this.log(Level.SEVERE, message, t);
 	}
-
-	@Override
-	public final void fatal(final String message) {
-		this.log(Level.SEVERE, message, null);
-	}
-
-	@Override
-	public final void fatal(final String message, final Throwable t) {
-		this.log(Level.SEVERE, message, t);
-	}
 }

@@ -86,18 +86,4 @@ public final class LogImplCommonsLogging implements Log {
 			this.log.error(message, t);
 		}
 	}
-
-	@Override
-	public void fatal(final String message) {
-		if (this.log.isFatalEnabled()) {
-			this.log.fatal(message);
-		}
-	}
-
-	@Override
-	public void fatal(final String message, final Throwable t) {
-		if (this.log.isFatalEnabled()) {
-			this.log.fatal(message, t);
-		}
-	}
 }

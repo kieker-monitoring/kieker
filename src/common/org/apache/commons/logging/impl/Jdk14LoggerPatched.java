@@ -120,14 +120,4 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 	public final void error(final Object message, final Throwable exception) {
 		this.log(Level.SEVERE, String.valueOf(message), exception);
 	}
-
-	@Override
-	public final void fatal(final Object message) {
-		this.log(Level.SEVERE, String.valueOf(message), null);
-	}
-
-	@Override
-	public final void fatal(final Object message, final Throwable exception) {
-		this.log(Level.SEVERE, String.valueOf(message), exception);
-	}
 }

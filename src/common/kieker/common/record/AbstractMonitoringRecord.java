@@ -38,12 +38,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		this.loggingTimestamp = timestamp;
 	}
 
-	/**
-	 * Creates a string representation of this record.
-	 * 
-	 * This method should not be used for serialization purposes since this
-	 * is not the purpose of Object's toString method.
-	 */
 	@Override
 	public final String toString() {
 		final Object[] recordVector = this.toArray();

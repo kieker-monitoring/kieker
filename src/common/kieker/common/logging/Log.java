@@ -26,13 +26,12 @@ package kieker.common.logging;
  * </p>
  * 
  * <p>
- * The five logging levels used by <code>Log</code> are (in order):
+ * The four logging levels used by <code>Log</code> are (in order):
  * <ol>
  * <li>debug (the least serious)</li>
  * <li>info</li>
  * <li>warn</li>
- * <li>error</li>
- * <li>fatal (the most serious)</li>
+ * <li>error (the most serious)</li>
  * </ol>
  * </p>
  * 
@@ -127,26 +126,4 @@ public interface Log {
 	 *            log this cause
 	 */
 	public void error(String message, Throwable t);
-
-	/**
-	 * <p>
-	 * Log a message with fatal log level.
-	 * </p>
-	 * 
-	 * @param message
-	 *            log this message
-	 */
-	public void fatal(String message);
-
-	/**
-	 * <p>
-	 * Log an error with fatal log level.
-	 * </p>
-	 * 
-	 * @param message
-	 *            log this message
-	 * @param t
-	 *            log this cause
-	 */
-	public void fatal(String message, Throwable t);
 }
