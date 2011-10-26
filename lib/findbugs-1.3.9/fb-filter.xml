@@ -14,13 +14,12 @@
 
   <Match>
     <Class name="kieker.common.logging.LogFactory" />
-    <Method name="()" params="" returns="" />
     <Bug pattern="DE_MIGHT_IGNORE" />
   </Match>
 
   <Match>
     <Class name="org.apache.commons.logging.impl.Jdk14LoggerPatched" />
-    <Method name="getLog" params="String" returns="org.apache.commons.logging.Log" />
+    <Method name="getLog" params="java.lang.String" returns="org.apache.commons.logging.Log" />
     <Bug pattern="REC_CATCH_EXCEPTION" />
   </Match>
   
