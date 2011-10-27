@@ -8,6 +8,7 @@ package kieker.analysis.model.analysisMetaModel.impl;
 
 import kieker.analysis.model.analysisMetaModel.AnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.AnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.Configurable;
 import kieker.analysis.model.analysisMetaModel.Connector;
 import kieker.analysis.model.analysisMetaModel.InputPort;
@@ -17,6 +18,7 @@ import kieker.analysis.model.analysisMetaModel.Port;
 import kieker.analysis.model.analysisMetaModel.Project;
 import kieker.analysis.model.analysisMetaModel.Property;
 
+import kieker.analysis.model.analysisMetaModel.Reader;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -70,14 +72,14 @@ public class AnalysisMetaModelFactoryImpl extends EFactoryImpl implements Analys
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case AnalysisMetaModelPackage.PROJECT: return createProject();
-			case AnalysisMetaModelPackage.PLUGIN: return createPlugin();
 			case AnalysisMetaModelPackage.CONNECTOR: return createConnector();
 			case AnalysisMetaModelPackage.CONFIGURABLE: return createConfigurable();
-			case AnalysisMetaModelPackage.PORT: return createPort();
 			case AnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
 			case AnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
 			case AnalysisMetaModelPackage.CLASS: return createClass();
 			case AnalysisMetaModelPackage.PROPERTY: return createProperty();
+			case AnalysisMetaModelPackage.ANALYSIS_PLUGIN: return createAnalysisPlugin();
+			case AnalysisMetaModelPackage.READER: return createReader();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -98,16 +100,6 @@ public class AnalysisMetaModelFactoryImpl extends EFactoryImpl implements Analys
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Plugin createPlugin() {
-		PluginImpl plugin = new PluginImpl();
-		return plugin;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Connector createConnector() {
 		ConnectorImpl connector = new ConnectorImpl();
 		return connector;
@@ -121,16 +113,6 @@ public class AnalysisMetaModelFactoryImpl extends EFactoryImpl implements Analys
 	public Configurable createConfigurable() {
 		ConfigurableImpl configurable = new ConfigurableImpl();
 		return configurable;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port createPort() {
-		PortImpl port = new PortImpl();
-		return port;
 	}
 
 	/**
@@ -171,6 +153,26 @@ public class AnalysisMetaModelFactoryImpl extends EFactoryImpl implements Analys
 	public Property createProperty() {
 		PropertyImpl property = new PropertyImpl();
 		return property;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AnalysisPlugin createAnalysisPlugin() {
+		AnalysisPluginImpl analysisPlugin = new AnalysisPluginImpl();
+		return analysisPlugin;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Reader createReader() {
+		ReaderImpl reader = new ReaderImpl();
+		return reader;
 	}
 
 	/**

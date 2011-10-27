@@ -7,6 +7,7 @@
 package kieker.analysis.model.analysisMetaModel.util;
 
 import kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.AnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.Configurable;
 import kieker.analysis.model.analysisMetaModel.Connector;
 import kieker.analysis.model.analysisMetaModel.InputPort;
@@ -16,6 +17,7 @@ import kieker.analysis.model.analysisMetaModel.Port;
 import kieker.analysis.model.analysisMetaModel.Project;
 import kieker.analysis.model.analysisMetaModel.Property;
 
+import kieker.analysis.model.analysisMetaModel.Reader;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -114,6 +116,14 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseProperty(Property object) {
 				return createPropertyAdapter();
+			}
+			@Override
+			public Adapter caseAnalysisPlugin(AnalysisPlugin object) {
+				return createAnalysisPluginAdapter();
+			}
+			@Override
+			public Adapter caseReader(Reader object) {
+				return createReaderAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -258,6 +268,34 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.AnalysisPlugin <em>Analysis Plugin</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.analysis.model.analysisMetaModel.AnalysisPlugin
+	 * @generated
+	 */
+	public Adapter createAnalysisPluginAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.Reader <em>Reader</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.analysis.model.analysisMetaModel.Reader
+	 * @generated
+	 */
+	public Adapter createReaderAdapter() {
 		return null;
 	}
 

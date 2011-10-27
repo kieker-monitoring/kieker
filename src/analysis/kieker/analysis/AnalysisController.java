@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -45,12 +44,8 @@ import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackageImpl
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.IMonitoringReader;
-import kieker.analysis.reader.filesystem.FSReader;
-import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.common.record.OperationExecutionRecord;
-import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,11 +55,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.osgi.internal.baseadaptor.ArrayMap;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 /**
  * 
@@ -190,7 +184,7 @@ public class AnalysisController {
 				 * reader or a normal plugin.
 				 */
 				Plugin p = (Plugin) c;
-				if (p.getInputPorts().isEmpty()) {
+				/*if (p.getInputPorts().isEmpty()) {
 					System.out.println("Reader gefunden: " + p.getName());
 					IMonitoringReader reader = (IMonitoringReader) Class
 							.forName(p.getName()).newInstance();
@@ -200,7 +194,7 @@ public class AnalysisController {
 					System.out.println("Plugin gefunden: " + p.getName());
 					Object plugin = Class.forName(p.getName()).newInstance();
 					pluginObjMap.put(p, plugin);
-				}
+				}*/
 
 				/*
 				 * Now we run through all ports of the current plugin. We
@@ -214,9 +208,9 @@ public class AnalysisController {
 					portPluginMap.put(oPort, p);
 				}
 
-				for (InputPort iPort : p.getInputPorts()) {
+			/*	for (InputPort iPort : p.getInputPorts()) {
 					portPluginMap.put(iPort, p);
-				}
+				}*/
 			}
 		}
 

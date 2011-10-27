@@ -35,15 +35,6 @@ public interface AnalysisMetaModelFactory extends EFactory {
 	Project createProject();
 
 	/**
-	 * Returns a new object of class '<em>Plugin</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Plugin</em>'.
-	 * @generated
-	 */
-	Plugin createPlugin();
-
-	/**
 	 * Returns a new object of class '<em>Connector</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -60,15 +51,6 @@ public interface AnalysisMetaModelFactory extends EFactory {
 	 * @generated
 	 */
 	Configurable createConfigurable();
-
-	/**
-	 * Returns a new object of class '<em>Port</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Port</em>'.
-	 * @generated
-	 */
-	Port createPort();
 
 	/**
 	 * Returns a new object of class '<em>Input Port</em>'.
@@ -105,6 +87,24 @@ public interface AnalysisMetaModelFactory extends EFactory {
 	 * @generated
 	 */
 	Property createProperty();
+
+	/**
+	 * Returns a new object of class '<em>Analysis Plugin</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Analysis Plugin</em>'.
+	 * @generated
+	 */
+	AnalysisPlugin createAnalysisPlugin();
+
+	/**
+	 * Returns a new object of class '<em>Reader</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Reader</em>'.
+	 * @generated
+	 */
+	Reader createReader();
 
 	/**
 	 * Returns the package supported by this factory.

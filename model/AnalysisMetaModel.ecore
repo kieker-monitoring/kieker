@@ -7,9 +7,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="configurables" upperBound="-1"
         eType="#//Configurable" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Plugin" eSuperTypes="#//Configurable">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
-        eType="#//InputPort" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true" eSuperTypes="#//Configurable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
         eType="#//OutputPort" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="classname" lowerBound="1"
@@ -21,14 +19,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sicOutputPort" lowerBound="1"
         eType="#//OutputPort"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Configurable">
+  <eClassifiers xsi:type="ecore:EClass" name="Configurable" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
         eType="#//Property" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Port">
+  <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventTypes" lowerBound="1"
-        upperBound="-1" eType="#//Class"/>
+        upperBound="-1" eType="#//Class" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inConnector" upperBound="-1"
@@ -46,4 +45,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnalysisPlugin" eSuperTypes="#//Plugin">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
+        eType="#//InputPort" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reader" eSuperTypes="#//Plugin"/>
 </ecore:EPackage>

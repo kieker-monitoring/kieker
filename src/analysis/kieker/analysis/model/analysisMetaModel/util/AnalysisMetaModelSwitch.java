@@ -7,6 +7,7 @@
 package kieker.analysis.model.analysisMetaModel.util;
 
 import kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.AnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.Configurable;
 import kieker.analysis.model.analysisMetaModel.Connector;
 import kieker.analysis.model.analysisMetaModel.InputPort;
@@ -16,6 +17,7 @@ import kieker.analysis.model.analysisMetaModel.Port;
 import kieker.analysis.model.analysisMetaModel.Project;
 import kieker.analysis.model.analysisMetaModel.Property;
 
+import kieker.analysis.model.analysisMetaModel.Reader;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -133,6 +135,22 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 			case AnalysisMetaModelPackage.PROPERTY: {
 				Property property = (Property)theEObject;
 				T result = caseProperty(property);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalysisMetaModelPackage.ANALYSIS_PLUGIN: {
+				AnalysisPlugin analysisPlugin = (AnalysisPlugin)theEObject;
+				T result = caseAnalysisPlugin(analysisPlugin);
+				if (result == null) result = casePlugin(analysisPlugin);
+				if (result == null) result = caseConfigurable(analysisPlugin);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalysisMetaModelPackage.READER: {
+				Reader reader = (Reader)theEObject;
+				T result = caseReader(reader);
+				if (result == null) result = casePlugin(reader);
+				if (result == null) result = caseConfigurable(reader);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -272,6 +290,36 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseProperty(Property object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Analysis Plugin</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Analysis Plugin</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnalysisPlugin(AnalysisPlugin object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Reader</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Reader</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseReader(Reader object) {
 		return null;
 	}
 

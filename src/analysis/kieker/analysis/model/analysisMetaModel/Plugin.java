@@ -16,33 +16,16 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.Plugin#getInputPorts <em>Input Ports</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.Plugin#getOutputPorts <em>Output Ports</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.Plugin#getClassname <em>Classname</em>}</li>
  * </ul>
  * </p>
  *
  * @see kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage#getPlugin()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface Plugin extends Configurable {
-	/**
-	 * Returns the value of the '<em><b>Input Ports</b></em>' containment reference list.
-	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.InputPort}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Input Ports</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Input Ports</em>' containment reference list.
-	 * @see kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage#getPlugin_InputPorts()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<InputPort> getInputPorts();
-
 	/**
 	 * Returns the value of the '<em><b>Output Ports</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.OutputPort}.
