@@ -32,15 +32,15 @@ public final class HashRecord extends AbstractMonitoringRecord {
 	};
 
 	private int id;
-	private Object o;
+	private Object object;
 
 	public HashRecord() {
 		// do nothing
 	}
 
-	public HashRecord(final int id, final Object o) {
+	public HashRecord(final int id, final Object object) {
 		this.id = id;
-		this.o = o;
+		this.object = object;
 	}
 
 	/**
@@ -62,15 +62,15 @@ public final class HashRecord extends AbstractMonitoringRecord {
 	 * @return the object
 	 */
 	public Object getObject() {
-		return this.o;
+		return this.object;
 	}
 
 	/**
 	 * @param object
 	 *            the object to set
 	 */
-	public void setObject(final Object o) {
-		this.o = o;
+	public void setObject(final Object object) {
+		this.object = object;
 	}
 
 	@Override
@@ -93,6 +93,6 @@ public final class HashRecord extends AbstractMonitoringRecord {
 
 	@Override
 	public final Class<?>[] getValueTypes() {
-		return HashRecord.TYPES;
+		return HashRecord.TYPES.clone();
 	}
 }

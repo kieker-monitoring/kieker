@@ -42,14 +42,17 @@ public final class MonitoringController extends AbstractController implements IM
 	private final WriterController writerController;
 	private final SamplingController samplingController;
 	private final TimeSourceController timeSourceController;
+	private final RegistryController registryController;
 
 	// private Constructor
 	private MonitoringController(final Configuration configuration) {
+		super(configuration);
 		this.stateController = new StateController(configuration);
 		this.jmxController = new JMXController(configuration);
 		this.writerController = new WriterController(configuration);
 		this.samplingController = new SamplingController(configuration);
 		this.timeSourceController = new TimeSourceController(configuration);
+		this.registryController = new RegistryController(configuration);
 	}
 
 	// FACTORY
@@ -78,6 +81,11 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 		monitoringController.timeSourceController.setMonitoringController(monitoringController);
 		if (monitoringController.timeSourceController.isTerminated()) {
+			monitoringController.terminate();
+			return monitoringController;
+		}
+		monitoringController.registryController.setMonitoringController(monitoringController);
+		if (monitoringController.registryController.isTerminated()) {
 			monitoringController.terminate();
 			return monitoringController;
 		}
@@ -126,6 +134,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.timeSourceController.terminate();
 		this.samplingController.terminate();
 		this.writerController.terminate();
+		this.registryController.terminate();
 	}
 
 	@Override
@@ -220,8 +229,13 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public String getJMXDomain() {
+	public final String getJMXDomain() {
 		return this.jmxController.getJMXDomain();
+	}
+
+	@Override
+	public int getIdForString(final String string) {
+		return this.registryController.getIdForString(string);
 	}
 
 	// GET SINGLETON INSTANCE

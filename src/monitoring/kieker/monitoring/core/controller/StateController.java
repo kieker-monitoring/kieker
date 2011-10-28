@@ -39,6 +39,7 @@ public final class StateController extends AbstractController implements IStateC
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 
 	protected StateController(final Configuration configuration) {
+		super(configuration);
 		this.name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
 		this.experimentId.set(configuration.getIntProperty(Configuration.EXPERIMENT_ID));
 		this.monitoringEnabled = configuration.getBooleanProperty(Configuration.MONITORING_ENABLED);
@@ -55,7 +56,7 @@ public final class StateController extends AbstractController implements IStateC
 	}
 
 	@Override
-	protected void init() {
+	protected final void init() {
 		// do nothing
 	}
 

@@ -21,7 +21,7 @@
 package kieker.monitoring.core.registry;
 
 /**
- * A generic interface to assign unique IDs to Objects of type E.
+ * A generic interface to assign unique IDs to objects of type E.
  * 
  * @author Jan Waller
  */
@@ -46,4 +46,12 @@ public interface IRegistry<E> {
 	 *         the associated object
 	 */
 	public E get(int i);
+
+	/**
+	 * Return an array with all registered objects.
+	 * 
+	 * @return
+	 *         array of registered objects
+	 */
+	public E[] getAll();
 }

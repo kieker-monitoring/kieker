@@ -23,52 +23,46 @@ package kieker.monitoring.writer.filesystem;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.HashRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public final class MappingFileWriter {
-	private static final Log LOG = LogFactory.getLog(MappingFileWriter.class);
+public class MappingFileWriter {
 
 	private final File mappingFile;
-	private final AtomicInteger nextId = new AtomicInteger(1); // first ID is 1
-	private final ConcurrentMap<Class<? extends IMonitoringRecord>, Integer> class2idMap = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Integer>();
 
-	public MappingFileWriter(final String mappingFileFn) throws IOException {
+	public MappingFileWriter(final String path) throws IOException {
+		final StringBuffer sbm = new StringBuffer(path.length() + 11); // NOCS (MagicNumber)
+		sbm.append(path).append(File.separatorChar).append("kieker.map");
+		final String mappingFileFn = sbm.toString();
 		this.mappingFile = new File(mappingFileFn);
 		if (!this.mappingFile.createNewFile()) {
 			throw new IOException("Mapping File '" + mappingFileFn + "' already exists.");
 		}
 	}
 
-	// TODO: this may register classes more than once!
-	public final int idForRecordTypeClass(final Class<? extends IMonitoringRecord> clazz) {
-		final Integer idObj = this.class2idMap.get(clazz);
-		if (idObj == null) {
-			final int id = this.nextId.getAndIncrement();
-			this.class2idMap.put(clazz, id);
-			this.writeMapping(id, clazz.getName());
-			return id;
-		}
-		return idObj;
-	}
-
-	private final void writeMapping(final int id, final String className) {
-		MappingFileWriter.LOG.info("Registered monitoring record type with id '" + id + "':" + className);
-		try {
-			final PrintWriter pw = new PrintWriter(new FileOutputStream(this.mappingFile, true));
-			pw.println("$" + id + "=" + className);
-			pw.close();
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			MappingFileWriter.LOG.error("Failed to register record type", ex);
+	public final void write(final HashRecord hashRecord) throws IOException {
+		synchronized (this.mappingFile) {
+			PrintWriter pw = null;
+			try {
+				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true)));
+				pw.print('$');
+				pw.print(hashRecord.getId());
+				pw.print('=');
+				pw.print(hashRecord.getObject());
+				pw.println();
+				if (pw.checkError()) {
+					throw new IOException("Error writing to mappingFile " + this.mappingFile.toString());
+				}
+			} finally {
+				if (pw != null) {
+					pw.close();
+				}
+			}
 		}
 	}
 }

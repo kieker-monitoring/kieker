@@ -61,6 +61,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	// The error handling in this block is corrent, see ticket #293
 	protected JMXController(final Configuration configuration) {
+		super(configuration);
 		ObjectName controllerObjectNameTmp = null;
 		ObjectName serverObjectNameTmp = null;
 		JMXConnectorServer serverTmp = null;
@@ -120,7 +121,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	// The error handling in this block is corrent, see ticket #293
 	@Override
-	protected void init() {
+	protected final void init() {
 		synchronized (this) {
 			if (this.jmxEnabled && !this.isTerminated()) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); // NOPMD

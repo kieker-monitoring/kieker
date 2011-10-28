@@ -35,6 +35,10 @@ public abstract class AbstractController {
 	protected volatile MonitoringController monitoringController = null;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
+	protected AbstractController(final Configuration configuration) {
+		// do nothing but enforce constructor
+	}
+
 	protected final void setMonitoringController(final MonitoringController monitoringController) {
 		synchronized (this) {
 			if (this.monitoringController == null) {

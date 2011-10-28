@@ -46,6 +46,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 * @param configuration
 	 */
 	protected SamplingController(final Configuration configuration) {
+		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize,
 				// Handler for failed sensor executions that simply logs notifications.
@@ -60,7 +61,7 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	@Override
-	protected void init() {
+	protected final void init() {
 		// do nothing
 	}
 

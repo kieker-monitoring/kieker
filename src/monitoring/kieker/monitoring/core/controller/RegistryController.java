@@ -23,52 +23,40 @@ package kieker.monitoring.core.controller;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.timer.ITimeSource;
+import kieker.monitoring.core.registry.IRegistry;
+import kieker.monitoring.core.registry.Registry;
 
 /**
  * @author Jan Waller
  */
-public final class TimeSourceController extends AbstractController implements ITimeSourceController {
-	private static final Log LOG = LogFactory.getLog(TimeSourceController.class);
+public final class RegistryController extends AbstractController implements IRegistryController {
+	private static final Log LOG = LogFactory.getLog(RegistryController.class);
 
-	/** the ITimeSource used by this instance */
-	private final ITimeSource timeSource;
+	private IRegistry<String> stringRegistry;
 
-	protected TimeSourceController(final Configuration configuration) {
+	protected RegistryController(final Configuration configuration) {
 		super(configuration);
-		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
-		if (this.timeSource == null) {
-			this.terminate();
-		}
 	}
 
 	@Override
 	protected final void init() {
-		// do nothing
+		this.stringRegistry = new Registry<String>(this.monitoringController);
 	}
 
 	@Override
 	protected final void cleanup() {
-		TimeSourceController.LOG.debug("Shutting down TimeSource Controller");
-		// nothing to do
+		RegistryController.LOG.debug("Shutting down Registry Controller");
+		// TODO: check if this could lead to NullPointerExceptions
+		this.stringRegistry = null;
 	}
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("TimeSourceController: ");
-		if (this.timeSource != null) {
-			sb.append("TimeSource: '");
-			sb.append(this.getTimeSource().getClass().getName());
-			sb.append("'");
-		} else {
-			sb.append("No TimeSource available");
-		}
-		return sb.toString();
+		return null;
 	}
 
 	@Override
-	public final ITimeSource getTimeSource() {
-		return this.timeSource;
+	public final int getIdForString(final String string) {
+		return this.stringRegistry.get(string);
 	}
 }

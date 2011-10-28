@@ -25,7 +25,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import kieker.common.record.HashRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * Based upon ConcurrentHashMap.
@@ -40,8 +39,6 @@ public class Registry<E> implements IRegistry<E> {
 	private static final float LOAD_FACTOR = 0.75f;
 	private static final int CONCURRENCY_LEVEL = 16;
 	private static final int MAXIMUM_CAPACITY = 1 << 30;
-
-	private static final IMonitoringRecordReceiver CTRL = MonitoringController.getInstance();
 
 	/**
 	 * Mask value for indexing into segments. The upper bits of a key's hash code are used to choose the segment.
@@ -72,7 +69,7 @@ public class Registry<E> implements IRegistry<E> {
 	 * Creates a new, empty registry with a default initial capacity (32), load factor (0.75) and concurrencyLevel (8).
 	 */
 	@SuppressWarnings("unchecked")
-	public Registry(final boolean sendRecordOnNewEntry) {
+	public Registry(final IMonitoringRecordReceiver recordReceiver) {
 		// Find power-of-two sizes best matching arguments
 		int sshift = 0;
 		int ssize = 1;
@@ -92,7 +89,7 @@ public class Registry<E> implements IRegistry<E> {
 			cap <<= 1;
 		}
 		for (int i = 0; i < this.segments.length; ++i) {
-			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR, sendRecordOnNewEntry);
+			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR, recordReceiver);
 		}
 		this.eArrayCached = (E[]) new Object[0];
 	}
@@ -126,16 +123,12 @@ public class Registry<E> implements IRegistry<E> {
 		return this.getAll()[id];
 	}
 
-	/**
-	 * TODO: the table may miss values at the end!
-	 * 
-	 * @return
-	 */
+	@Override
 	public E[] getAll() {
 		final int capacity = this.nextId.get();
 		if (this.eArrayCached.length != capacity) {
 			@SuppressWarnings("unchecked")
-			final E[] eArray = ((E[]) new Object[capacity]);
+			final E[] eArray = (E[]) new Object[capacity];
 			for (final Segment<E> segment : this.segments) {
 				segment.insertIntoArray(eArray);
 			}
@@ -150,12 +143,12 @@ public class Registry<E> implements IRegistry<E> {
 	 * Registry entry.
 	 */
 	private static final class HashEntry<E> {
-		private final E value;
-		private final int hash;
-		private final int id;
-		private final HashEntry<E> next;
+		protected final E value;
+		protected final int hash;
+		protected final int id;
+		protected final Registry.HashEntry<E> next;
 
-		private HashEntry(final E value, final int hash, final int id, final HashEntry<E> next) {
+		protected HashEntry(final E value, final int hash, final int id, final Registry.HashEntry<E> next) {
 			this.value = value;
 			this.hash = hash;
 			this.id = id;
@@ -193,50 +186,55 @@ public class Registry<E> implements IRegistry<E> {
 		/**
 		 * The number of elements in this segment's region.
 		 */
-		private transient volatile int count;
+		private volatile int count;
 
 		/**
 		 * The table is rehashed when its size exceeds this threshold. (The value of this field is always <tt>(int)(capacity * loadFactor)</tt>.)
 		 */
-		private transient int threshold;
+		private int threshold;
 
 		/**
 		 * The per-segment table.
 		 */
-		private transient volatile HashEntry<E>[] table;
+		private volatile Registry.HashEntry<E>[] table;
 
-		private transient final boolean sendRecordOnNewEntry;
+		private final IMonitoringRecordReceiver recordReceiver;
 
 		@SuppressWarnings("unchecked")
-		private Segment(final int initialCapacity, final float lf, final boolean sendRecordOnNewEntry) {
+		protected Segment(final int initialCapacity, final float lf, final IMonitoringRecordReceiver recordReceiver) {
 			this.table = new HashEntry[initialCapacity];
 			this.threshold = (int) (initialCapacity * lf);
 			this.count = 0;
-			this.sendRecordOnNewEntry = sendRecordOnNewEntry;
+			this.recordReceiver = recordReceiver;
 		}
 
-		private void insertIntoArray(final E[] eArray) {
+		protected void insertIntoArray(final E[] eArray) {
 			if (this.count != 0) { // volatile read!
-				final int capacity = eArray.length;
-				final HashEntry<E>[] tab = this.table;
-				for (final HashEntry<E> hashEntry : tab) {
-					HashEntry<E> e = hashEntry;
-					while (e != null) {
-						if (e.id < capacity) {
-							eArray[e.id] = e.value;
+				this.lock(); // could be smaller area! it is only important to acquire the lock, not to hold it.
+				try {
+					final int capacity = eArray.length;
+					final Registry.HashEntry<E>[] tab = this.table;
+					for (final Registry.HashEntry<E> hashEntry : tab) {
+						Registry.HashEntry<E> e = hashEntry;
+						while (e != null) {
+							if (e.id < capacity) {
+								eArray[e.id] = e.value;
+							}
+							e = e.next;
 						}
-						e = e.next;
 					}
+				} finally {
+					this.unlock();
 				}
 			}
 		}
 
-		private int get(final E value, final int hash, final AtomicInteger nextId) {
-			HashEntry<E> e = null;
+		protected int get(final E value, final int hash, final AtomicInteger nextId) {
+			Registry.HashEntry<E> e = null;
 			if (this.count != 0) { // volatile read! search for entry without locking
-				final HashEntry<E>[] tab = this.table;
+				final Registry.HashEntry<E>[] tab = this.table;
 				final int index = hash & (tab.length - 1);
-				final HashEntry<E> first = tab[index];
+				final Registry.HashEntry<E> first = tab[index];
 				e = first;
 				while ((e != null) && ((e.hash != hash) || !value.equals(e.value))) {
 					e = e.next;
@@ -249,9 +247,9 @@ public class Registry<E> implements IRegistry<E> {
 					if (c++ > this.threshold) {
 						this.rehash();
 					}
-					final HashEntry<E>[] tab = this.table; // volatile read
+					final Registry.HashEntry<E>[] tab = this.table; // volatile read
 					final int index = hash & (tab.length - 1);
-					final HashEntry<E> first = tab[index]; // the bin the value may be inside
+					final Registry.HashEntry<E> first = tab[index]; // the bin the value may be inside
 					e = first;
 					while ((e != null) && ((e.hash != hash) || !value.equals(e.value))) {
 						e = e.next;
@@ -260,8 +258,8 @@ public class Registry<E> implements IRegistry<E> {
 						final int id = nextId.getAndIncrement();
 						tab[index] = new HashEntry<E>(value, hash, id, first);
 						this.count = c; // write-volatile
-						if (this.sendRecordOnNewEntry) {
-							Registry.CTRL.newMonitoringRecord(new HashRecord(id, value));
+						if (this.recordReceiver != null) {
+							this.recordReceiver.newMonitoringRecord(new HashRecord(id, value));
 						}
 						return id; // return new id
 					}
@@ -279,21 +277,21 @@ public class Registry<E> implements IRegistry<E> {
 		 * garbage collectable as soon as they are no longer referenced by any reader thread that may be in the midst of traversing table right now.
 		 */
 		private void rehash() {
-			final HashEntry<E>[] oldTable = this.table;
+			final Registry.HashEntry<E>[] oldTable = this.table;
 			final int oldCapacity = oldTable.length;
 			if (oldCapacity >= Registry.MAXIMUM_CAPACITY) {
 				return;
 			}
 			@SuppressWarnings("unchecked")
-			final HashEntry<E>[] newTable = new HashEntry[oldCapacity << 1];
+			final Registry.HashEntry<E>[] newTable = new HashEntry[oldCapacity << 1];
 			this.threshold = (int) (newTable.length * Registry.LOAD_FACTOR);
 			final int sizeMask = newTable.length - 1;
 			for (int i = 0; i < oldCapacity; i++) {
 				// We need to guarantee that any existing reads of old Map can proceed. So we cannot yet null out each bin.
-				final HashEntry<E> e = oldTable[i];
+				final Registry.HashEntry<E> e = oldTable[i];
 
 				if (e != null) {
-					final HashEntry<E> next = e.next;
+					final Registry.HashEntry<E> next = e.next;
 					final int idx = e.hash & sizeMask;
 
 					// Single node on list
@@ -301,9 +299,9 @@ public class Registry<E> implements IRegistry<E> {
 						newTable[idx] = e;
 					} else {
 						// Reuse trailing consecutive sequence at same slot
-						HashEntry<E> lastRun = e;
+						Registry.HashEntry<E> lastRun = e;
 						int lastIdx = idx;
-						for (HashEntry<E> last = next; last != null; last = last.next) { // find end of bin
+						for (Registry.HashEntry<E> last = next; last != null; last = last.next) { // find end of bin
 							final int k = last.hash & sizeMask;
 							if (k != lastIdx) {
 								lastIdx = k;
@@ -313,9 +311,9 @@ public class Registry<E> implements IRegistry<E> {
 						newTable[lastIdx] = lastRun;
 
 						// Clone all remaining nodes
-						for (HashEntry<E> p = e; p != lastRun; p = p.next) {
+						for (Registry.HashEntry<E> p = e; p != lastRun; p = p.next) {
 							final int k = p.hash & sizeMask;
-							final HashEntry<E> n = newTable[k];
+							final Registry.HashEntry<E> n = newTable[k];
 							newTable[k] = new HashEntry<E>(p.value, p.hash, p.id, n);
 						}
 					}

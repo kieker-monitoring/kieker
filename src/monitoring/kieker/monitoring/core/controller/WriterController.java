@@ -42,6 +42,7 @@ public final class WriterController extends AbstractController implements IWrite
 	private final boolean autoSetLoggingTimestamp;
 
 	public WriterController(final Configuration configuration) {
+		super(configuration);
 		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(Configuration.AUTO_SET_LOGGINGTSTAMP);
 		this.monitoringWriter = AbstractController.createAndInitialize(IMonitoringWriter.class, configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
 				configuration);
@@ -99,8 +100,7 @@ public final class WriterController extends AbstractController implements IWrite
 				record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
 			}
 			this.numberOfInserts.incrementAndGet();
-			final boolean successfulWriting = this.monitoringWriter.newMonitoringRecord(record);
-			if (!successfulWriting) {
+			if (!this.monitoringWriter.newMonitoringRecord(record)) {
 				WriterController.LOG.error("Error writing the monitoring data. Will terminate monitoring!");
 				this.terminate();
 				return false;

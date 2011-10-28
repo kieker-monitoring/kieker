@@ -18,38 +18,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core.registry;
+package kieker.monitoring.core.controller;
 
 /**
  * 
  * @author Jan Waller
  */
-public final class StringRegistry extends Registry<String> {
+public interface IRegistryController {
 
 	/**
-	 * private constructor
-	 */
-	private StringRegistry() {
-		super(true); // send records on new entries
-	}
-
-	/**
-	 * Get the singleton instance of the StringRegistry.
+	 * Gets a unique id for a string.
 	 * 
+	 * @param string
+	 *            the string
 	 * @return
-	 *         the singleton StringRegistry
+	 *         the unique id
 	 */
-	public static final StringRegistry getRegistry() {
-		return LazyStringHolder.INSTANCE;
-	}
+	public int getIdForString(final String string);
 
-	/**
-	 * SINGLETON StringRegistry
-	 */
-	private static final class LazyStringHolder { // NOCS
-		static {
-			INSTANCE = new StringRegistry();
-		}
-		private static final StringRegistry INSTANCE;
-	}
 }
