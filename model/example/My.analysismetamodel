@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="platform:/resource/Kieker/model/AnalysisMetaModel.ecore" name="Foo">
-  <configurables xsi:type="Reader" name="Mainreader" classname="kieker.analysis.reader.namedRecordPipe.PipeReader">
-    <outputPorts name="p1">
-      <outConnector dstInputPort="//@configurables.2/@inputPorts.0" sicOutputPort="//@configurables.0/@outputPorts.0"/>
+  <configurables xsi:type="Reader" name="The Reader" classname="kieker.analysis.reader.filesystem.FSReader" initString="inputDirs=C:\HiWi - Kieker\kieker working copy\kieker\branches\1.5-analysis\examples\userguide\ch5--trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC">
+    <outputPorts name="out">
+      <outConnector dstInputPort="//@configurables.1/@inputPorts.0"/>
     </outputPorts>
   </configurables>
-  <configurables xsi:type="AnalysisPlugin" name="Final Station" classname="kieker.analysis.plugin.DummyRecordConsumer">
-    <inputPorts name=""/>
-  </configurables>
-  <configurables xsi:type="AnalysisPlugin" name="Filter" classname="kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter">
-    <outputPorts name="op">
-      <outConnector sicOutputPort="//@configurables.2/@outputPorts.0"/>
-    </outputPorts>
-    <inputPorts name="ip"/>
+  <configurables xsi:type="AnalysisPlugin" name="Final Consumer" classname="kieker.analysis.plugin.DummyRecordConsumer">
+    <inputPorts name="in" inConnector="//@configurables.0/@outputPorts.0/@outConnector.0"/>
   </configurables>
 </Project>

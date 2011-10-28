@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import kieker.analysis.model.analysisMetaModel.AnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.Configurable;
 import kieker.analysis.model.analysisMetaModel.Connector;
 import kieker.analysis.model.analysisMetaModel.InputPort;
@@ -40,9 +41,15 @@ import kieker.analysis.model.analysisMetaModel.OutputPort;
 import kieker.analysis.model.analysisMetaModel.Plugin;
 import kieker.analysis.model.analysisMetaModel.Port;
 import kieker.analysis.model.analysisMetaModel.Project;
+import kieker.analysis.model.analysisMetaModel.Reader;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackageImpl;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractMonitoringReader;
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -114,7 +121,7 @@ public class AnalysisController {
 	 * @return A map containing the sub projects. The key is the name of the
 	 *         project, the value is the instance of this class. If something
 	 *         went wrong, null will be returned.
-	 *         
+	 * 
 	 * @throws Exception
 	 *             If something went wrong.
 	 */
@@ -184,17 +191,18 @@ public class AnalysisController {
 				 * reader or a normal plugin.
 				 */
 				Plugin p = (Plugin) c;
-				/*if (p.getInputPorts().isEmpty()) {
+				if (p instanceof Reader) {
 					System.out.println("Reader gefunden: " + p.getName());
 					IMonitoringReader reader = (IMonitoringReader) Class
-							.forName(p.getName()).newInstance();
+							.forName(p.getClassname()).newInstance();
+					reader.init(((Reader) p).getInitString());
 					this.setReader(reader);
 					pluginObjMap.put(p, reader);
 				} else {
 					System.out.println("Plugin gefunden: " + p.getName());
-					Object plugin = Class.forName(p.getName()).newInstance();
+					Object plugin = Class.forName(p.getClassname()).newInstance();
 					pluginObjMap.put(p, plugin);
-				}*/
+				}
 
 				/*
 				 * Now we run through all ports of the current plugin. We
@@ -208,9 +216,11 @@ public class AnalysisController {
 					portPluginMap.put(oPort, p);
 				}
 
-			/*	for (InputPort iPort : p.getInputPorts()) {
-					portPluginMap.put(iPort, p);
-				}*/
+				if (p instanceof AnalysisPlugin) {
+					for (InputPort iPort : ((AnalysisPlugin) p).getInputPorts()) {
+						portPluginMap.put(iPort, p);
+					}
+				}
 			}
 		}
 
@@ -225,12 +235,15 @@ public class AnalysisController {
 			System.out.format("Connector gefunden. Verbinde Output von "
 					+ "%s mit Input von %s\n", out.getName(), in.getName());
 
-			IMonitoringReader outObj = (IMonitoringReader) pluginObjMap
+			AbstractPlugin outObj = (AbstractPlugin) pluginObjMap
 					.get(out);
-			IMonitoringRecordReceiver inObj = (IMonitoringRecordReceiver) pluginObjMap
+			AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap
 					.get(in);
 
-			outObj.addRecordReceiver(inObj);
+			IOutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
+			IInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
+			
+			outPort.subscribe(inPort);
 		}
 	}
 
@@ -310,14 +323,14 @@ public class AnalysisController {
 			 * Add delegation receiver to reader.
 			 */
 			if (success) {
-				this.logReader
+			/*	this.logReader
 						.addRecordReceiver(new IMonitoringRecordReceiver() {
 
 							/**
 							 * Delegates the records provided by the reader to
 							 * the registered record consumers
 							 */
-							@Override
+							/*@Override
 							public boolean newMonitoringRecord(
 									final IMonitoringRecord monitoringRecord) {
 								// abort on consumer error
@@ -325,7 +338,7 @@ public class AnalysisController {
 										.deliverRecordToConsumers(
 												monitoringRecord, true);
 							}
-						});
+						});*/
 			}
 
 			/**
@@ -373,8 +386,7 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Returns a {@link CountDownLatch} which has the value 0 after the
-	 * {@link AnalysisController} is initialized and the reader is running.
+	 * Returns a {@link CountDownLatch} which has the value 0 after the {@link AnalysisController} is initialized and the reader is running.
 	 * 
 	 * @return the initializationLatch
 	 */

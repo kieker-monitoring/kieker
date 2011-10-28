@@ -42,15 +42,6 @@ public interface IMonitoringReader {
 	public boolean init(String initString);
 
 	/**
-	 * Adds the given record receiver. This method is only used by the framework
-	 * and should not be called manually to register a receiver. Use an {@link kieker.analysis.AnalysisController} instead.
-	 * 
-	 * @param receiver
-	 *            the receiver
-	 */
-	public void addRecordReceiver(IMonitoringRecordReceiver receiver);
-
-	/**
 	 * Starts the reader. This method is intended to be a blocking operation,
 	 * i.e., it is assumed that reading has finished before this method returns.
 	 * The method should indicate an error by the return value false.

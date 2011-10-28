@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  *
  * @see kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage#getConfigurable()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface Configurable extends EObject {

@@ -26,6 +26,6 @@ import kieker.analysis.plugin.IAnalysisEvent;
  * 
  * @author Andre van Hoorn
  */
-public interface IPort<T extends IAnalysisEvent> {
+public interface IPort<T extends Object> {
 	public String getDescription();
 }

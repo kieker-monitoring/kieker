@@ -12,10 +12,14 @@ import kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.Connector;
 import kieker.analysis.model.analysisMetaModel.InputPort;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
@@ -68,9 +72,38 @@ public class InputPortImpl extends PortImpl implements InputPort {
 	 */
 	public EList<Connector> getInConnector() {
 		if (inConnector == null) {
-			inConnector = new EObjectResolvingEList<Connector>(Connector.class, this, AnalysisMetaModelPackage.INPUT_PORT__IN_CONNECTOR);
+			inConnector = new EObjectWithInverseResolvingEList<Connector>(Connector.class, this, AnalysisMetaModelPackage.INPUT_PORT__IN_CONNECTOR, AnalysisMetaModelPackage.CONNECTOR__DST_INPUT_PORT);
 		}
 		return inConnector;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalysisMetaModelPackage.INPUT_PORT__IN_CONNECTOR:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInConnector()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalysisMetaModelPackage.INPUT_PORT__IN_CONNECTOR:
+				return ((InternalEList<?>)getInConnector()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

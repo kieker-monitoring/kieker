@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -72,9 +73,24 @@ public class OutputPortImpl extends PortImpl implements OutputPort {
 	 */
 	public EList<Connector> getOutConnector() {
 		if (outConnector == null) {
-			outConnector = new EObjectContainmentEList<Connector>(Connector.class, this, AnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR);
+			outConnector = new EObjectContainmentWithInverseEList<Connector>(Connector.class, this, AnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR, AnalysisMetaModelPackage.CONNECTOR__SIC_OUTPUT_PORT);
 		}
 		return outConnector;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutConnector()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

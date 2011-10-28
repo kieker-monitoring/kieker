@@ -73,7 +73,6 @@ public class AnalysisMetaModelFactoryImpl extends EFactoryImpl implements Analys
 		switch (eClass.getClassifierID()) {
 			case AnalysisMetaModelPackage.PROJECT: return createProject();
 			case AnalysisMetaModelPackage.CONNECTOR: return createConnector();
-			case AnalysisMetaModelPackage.CONFIGURABLE: return createConfigurable();
 			case AnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
 			case AnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
 			case AnalysisMetaModelPackage.CLASS: return createClass();
@@ -103,16 +102,6 @@ public class AnalysisMetaModelFactoryImpl extends EFactoryImpl implements Analys
 	public Connector createConnector() {
 		ConnectorImpl connector = new ConnectorImpl();
 		return connector;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Configurable createConfigurable() {
-		ConfigurableImpl configurable = new ConfigurableImpl();
-		return configurable;
 	}
 
 	/**

@@ -29,7 +29,7 @@ import kieker.analysis.plugin.IAnalysisEvent;
  * 
  * @author Andre van Hoorn
  */
-public class OutputPort<T extends IAnalysisEvent> implements IOutputPort<T> {
+public class OutputPort<T extends Object> implements IOutputPort<T> {
 	// private static final Log LOG = LogFactory.getLog(OutputPort.class);
 
 	private final Collection<IInputPort<T>> subscribers = new CopyOnWriteArrayList<IInputPort<T>>();

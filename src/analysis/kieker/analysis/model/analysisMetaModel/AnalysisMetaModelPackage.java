@@ -217,7 +217,7 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	int CONNECTOR__DST_INPUT_PORT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Sic Output Port</b></em>' reference.
+	 * The feature id for the '<em><b>Sic Output Port</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -245,7 +245,7 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	int PORT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' reference list.
+	 * The feature id for the '<em><b>Event Types</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -282,7 +282,7 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	int INPUT_PORT = 5;
 
 	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' reference list.
+	 * The feature id for the '<em><b>Event Types</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -328,7 +328,7 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	int OUTPUT_PORT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' reference list.
+	 * The feature id for the '<em><b>Event Types</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -540,13 +540,22 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	int READER__CLASSNAME = PLUGIN__CLASSNAME;
 
 	/**
+	 * The feature id for the '<em><b>Init String</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int READER__INIT_STRING = PLUGIN_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Reader</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int READER_FEATURE_COUNT = PLUGIN_FEATURE_COUNT + 0;
+	int READER_FEATURE_COUNT = PLUGIN_FEATURE_COUNT + 1;
 
 
 	/**
@@ -624,10 +633,10 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	EReference getConnector_DstInputPort();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysis.model.analysisMetaModel.Connector#getSicOutputPort <em>Sic Output Port</em>}'.
+	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.Connector#getSicOutputPort <em>Sic Output Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Sic Output Port</em>'.
+	 * @return the meta object for the container reference '<em>Sic Output Port</em>'.
 	 * @see kieker.analysis.model.analysisMetaModel.Connector#getSicOutputPort()
 	 * @see #getConnector()
 	 * @generated
@@ -677,10 +686,10 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.Port#getEventTypes <em>Event Types</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.Port#getEventTypes <em>Event Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Event Types</em>'.
+	 * @return the meta object for the containment reference list '<em>Event Types</em>'.
 	 * @see kieker.analysis.model.analysisMetaModel.Port#getEventTypes()
 	 * @see #getPort()
 	 * @generated
@@ -825,6 +834,17 @@ public interface AnalysisMetaModelPackage extends EPackage {
 	EClass getReader();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.Reader#getInitString <em>Init String</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Init String</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.Reader#getInitString()
+	 * @see #getReader()
+	 * @generated
+	 */
+	EAttribute getReader_InitString();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -909,7 +929,7 @@ public interface AnalysisMetaModelPackage extends EPackage {
 		EReference CONNECTOR__DST_INPUT_PORT = eINSTANCE.getConnector_DstInputPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Sic Output Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Sic Output Port</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -953,7 +973,7 @@ public interface AnalysisMetaModelPackage extends EPackage {
 		EClass PORT = eINSTANCE.getPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Event Types</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Event Types</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1075,6 +1095,14 @@ public interface AnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass READER = eINSTANCE.getReader();
+
+		/**
+		 * The meta object literal for the '<em><b>Init String</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute READER__INIT_STRING = eINSTANCE.getReader_InitString();
 
 	}
 

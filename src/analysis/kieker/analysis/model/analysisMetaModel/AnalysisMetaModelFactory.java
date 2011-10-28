@@ -44,15 +44,6 @@ public interface AnalysisMetaModelFactory extends EFactory {
 	Connector createConnector();
 
 	/**
-	 * Returns a new object of class '<em>Configurable</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Configurable</em>'.
-	 * @generated
-	 */
-	Configurable createConfigurable();
-
-	/**
 	 * Returns a new object of class '<em>Input Port</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

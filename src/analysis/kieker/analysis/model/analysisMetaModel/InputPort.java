@@ -28,6 +28,7 @@ public interface InputPort extends Port {
 	/**
 	 * Returns the value of the '<em><b>In Connector</b></em>' reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.Connector}.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.Connector#getDstInputPort <em>Dst Input Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>In Connector</em>' reference list isn't clear,
@@ -36,7 +37,8 @@ public interface InputPort extends Port {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>In Connector</em>' reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage#getInputPort_InConnector()
-	 * @model
+	 * @see kieker.analysis.model.analysisMetaModel.Connector#getDstInputPort
+	 * @model opposite="dstInputPort"
 	 * @generated
 	 */
 	EList<Connector> getInConnector();

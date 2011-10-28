@@ -40,7 +40,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ConfigurableImpl extends EObjectImpl implements Configurable {
+public abstract class ConfigurableImpl extends EObjectImpl implements Configurable {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->

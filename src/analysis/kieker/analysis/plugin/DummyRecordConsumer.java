@@ -22,27 +22,28 @@ package kieker.analysis.plugin;
 
 import java.util.Collection;
 
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.record.IMonitoringRecord;
 
 /**
  * 
  * @author matthias
  */
-public class DummyRecordConsumer implements IMonitoringRecordConsumerPlugin {
+public class DummyRecordConsumer extends AbstractAnalysisPlugin {
 
 	/**
 	 * Constructs a {@link DummyRecordConsumer}.
 	 */
 	public DummyRecordConsumer() {
-		// nothing to do
+		super.registerInputPort("in", new AbstractInputPort("in") {
+
+			@Override
+			public void newEvent(Object event) {
+				newMonitoringRecord((IMonitoringRecord) event);
+			}
+		});
 	}
 
-	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null; // receive records of any type
-	}
-
-	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		System.out.println("DummyRecordConsumer consumed " + monitoringRecord);
 		return true;

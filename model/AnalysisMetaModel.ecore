@@ -15,9 +15,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connector">
     <eStructuralFeatures xsi:type="ecore:EReference" name="dstInputPort" lowerBound="1"
-        eType="#//InputPort"/>
+        eType="#//InputPort" eOpposite="#//InputPort/inConnector"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sicOutputPort" lowerBound="1"
-        eType="#//OutputPort"/>
+        eType="#//OutputPort" eOpposite="#//OutputPort/outConnector"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Configurable" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -31,11 +31,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inConnector" upperBound="-1"
-        eType="#//Connector"/>
+        eType="#//Connector" eOpposite="#//Connector/dstInputPort"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="outConnector" upperBound="-1"
-        eType="#//Connector" containment="true"/>
+        eType="#//Connector" containment="true" eOpposite="#//Connector/sicOutputPort"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Class">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="classname" lowerBound="1"
@@ -49,5 +49,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
         eType="#//InputPort" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Reader" eSuperTypes="#//Plugin"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Reader" eSuperTypes="#//Plugin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
 </ecore:EPackage>

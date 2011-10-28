@@ -12,13 +12,17 @@ import kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.Port;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
@@ -37,7 +41,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  */
 public abstract class PortImpl extends EObjectImpl implements Port {
 	/**
-	 * The cached value of the '{@link #getEventTypes() <em>Event Types</em>}' reference list.
+	 * The cached value of the '{@link #getEventTypes() <em>Event Types</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getEventTypes()
@@ -91,7 +95,7 @@ public abstract class PortImpl extends EObjectImpl implements Port {
 	 */
 	public EList<kieker.analysis.model.analysisMetaModel.Class> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = new EObjectResolvingEList<kieker.analysis.model.analysisMetaModel.Class>(kieker.analysis.model.analysisMetaModel.Class.class, this, AnalysisMetaModelPackage.PORT__EVENT_TYPES);
+			eventTypes = new EObjectContainmentEList<kieker.analysis.model.analysisMetaModel.Class>(kieker.analysis.model.analysisMetaModel.Class.class, this, AnalysisMetaModelPackage.PORT__EVENT_TYPES);
 		}
 		return eventTypes;
 	}
@@ -115,6 +119,20 @@ public abstract class PortImpl extends EObjectImpl implements Port {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalysisMetaModelPackage.PORT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalysisMetaModelPackage.PORT__EVENT_TYPES:
+				return ((InternalEList<?>)getEventTypes()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

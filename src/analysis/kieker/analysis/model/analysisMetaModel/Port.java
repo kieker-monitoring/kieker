@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Port extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Event Types</b></em>' reference list.
+	 * Returns the value of the '<em><b>Event Types</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.Class}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -37,9 +37,9 @@ public interface Port extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Event Types</em>' reference list.
+	 * @return the value of the '<em>Event Types</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.AnalysisMetaModelPackage#getPort_EventTypes()
-	 * @model required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	EList<kieker.analysis.model.analysisMetaModel.Class> getEventTypes();

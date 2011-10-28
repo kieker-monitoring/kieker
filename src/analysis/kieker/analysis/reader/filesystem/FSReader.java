@@ -25,7 +25,8 @@ import java.util.Collection;
 import java.util.StringTokenizer;
 
 import kieker.analysis.plugin.MonitoringRecordConsumerException;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.plugin.AbstractMonitoringReader;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -47,7 +48,7 @@ public class FSReader extends AbstractMonitoringReader {
 	public static final String PROP_NAME_INPUTDIRS = "inputDirs";
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
 	private String[] inputDirs = null;
-
+	private OutputPort outputPort = new OutputPort("out");
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 
 	public FSReader(final String[] inputDirs) {
@@ -68,6 +69,7 @@ public class FSReader extends AbstractMonitoringReader {
 	/** Default constructor used for construction by reflection. */
 	public FSReader() {
 		this.readOnlyRecordsOfType = null; // NOPMD
+		super.registerOutputPort("out", outputPort);
 	}
 
 	/**
@@ -78,7 +80,8 @@ public class FSReader extends AbstractMonitoringReader {
 
 		@Override
 		public boolean newMonitoringRecord(final IMonitoringRecord record) {
-			return FSReader.this.deliverRecord(record);
+			outputPort.deliver(record);
+			return true;
 		}
 	};
 
