@@ -20,8 +20,7 @@
 
 package kieker.monitoring.core.controller;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.registry.IRegistry;
 import kieker.monitoring.core.registry.Registry;
@@ -30,24 +29,22 @@ import kieker.monitoring.core.registry.Registry;
  * @author Jan Waller
  */
 public final class RegistryController extends AbstractController implements IRegistryController {
-	private static final Log LOG = LogFactory.getLog(RegistryController.class);
 
-	private IRegistry<String> stringRegistry;
+	private final IRegistry<String> stringRegistry;
 
 	protected RegistryController(final Configuration configuration) {
 		super(configuration);
+		this.stringRegistry = new Registry<String>();
 	}
 
 	@Override
 	protected final void init() {
-		this.stringRegistry = new Registry<String>(this.monitoringController);
+		this.stringRegistry.setRecordReceiver((IMonitoringRecordReceiver) this.monitoringController);
 	}
 
 	@Override
 	protected final void cleanup() {
-		RegistryController.LOG.debug("Shutting down Registry Controller");
-		// TODO: check if this could lead to NullPointerExceptions
-		this.stringRegistry = null;
+		// RegistryController.LOG.debug("Shutting down Registry Controller");
 	}
 
 	@Override

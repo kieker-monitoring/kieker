@@ -20,6 +20,8 @@
 
 package kieker.monitoring.core.registry;
 
+import kieker.common.record.IMonitoringRecordReceiver;
+
 /**
  * A generic interface to assign unique IDs to objects of type E.
  * 
@@ -54,4 +56,12 @@ public interface IRegistry<E> {
 	 *         array of registered objects
 	 */
 	public E[] getAll();
+
+	/**
+	 * Enables logging of newly registered objects.
+	 * 
+	 * @param recordReceiver
+	 *            the IMonitoringRecordReceiver logged to
+	 */
+	public void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver);
 }

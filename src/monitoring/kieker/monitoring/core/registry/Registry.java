@@ -69,7 +69,7 @@ public class Registry<E> implements IRegistry<E> {
 	 * Creates a new, empty registry with a default initial capacity (32), load factor (0.75) and concurrencyLevel (8).
 	 */
 	@SuppressWarnings("unchecked")
-	public Registry(final IMonitoringRecordReceiver recordReceiver) {
+	public Registry() {
 		// Find power-of-two sizes best matching arguments
 		int sshift = 0;
 		int ssize = 1;
@@ -89,7 +89,7 @@ public class Registry<E> implements IRegistry<E> {
 			cap <<= 1;
 		}
 		for (int i = 0; i < this.segments.length; ++i) {
-			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR, recordReceiver);
+			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR);
 		}
 		this.eArrayCached = (E[]) new Object[0];
 	}
@@ -107,6 +107,12 @@ public class Registry<E> implements IRegistry<E> {
 		h ^= (h >>> 6);
 		h += (h << 2) + (h << 14);
 		return h ^ (h >>> 16);
+	}
+
+	public final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
+		for (final Segment<E> segment : this.segments) {
+			segment.setRecordReceiver(recordReceiver);
+		}
 	}
 
 	@Override
@@ -189,23 +195,34 @@ public class Registry<E> implements IRegistry<E> {
 		private volatile int count;
 
 		/**
+		 * The per-segment table.
+		 */
+		private volatile Registry.HashEntry<E>[] table;
+
+		/**
 		 * The table is rehashed when its size exceeds this threshold. (The value of this field is always <tt>(int)(capacity * loadFactor)</tt>.)
 		 */
 		private int threshold;
 
 		/**
-		 * The per-segment table.
+		 * Send messages on new entries to this.
 		 */
-		private volatile Registry.HashEntry<E>[] table;
-
-		private final IMonitoringRecordReceiver recordReceiver;
+		private IMonitoringRecordReceiver recordReceiver;
 
 		@SuppressWarnings("unchecked")
-		protected Segment(final int initialCapacity, final float lf, final IMonitoringRecordReceiver recordReceiver) {
+		protected Segment(final int initialCapacity, final float lf) {
 			this.table = new HashEntry[initialCapacity];
 			this.threshold = (int) (initialCapacity * lf);
 			this.count = 0;
-			this.recordReceiver = recordReceiver;
+		}
+
+		protected void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
+			this.lock();
+			try {
+				this.recordReceiver = recordReceiver;
+			} finally {
+				this.unlock();
+			}
 		}
 
 		protected void insertIntoArray(final E[] eArray) {
