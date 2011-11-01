@@ -20,7 +20,6 @@
 
 package kieker.monitoring.core.controller;
 
-import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.registry.IRegistry;
 import kieker.monitoring.core.registry.Registry;
@@ -39,7 +38,7 @@ public final class RegistryController extends AbstractController implements IReg
 
 	@Override
 	protected final void init() {
-		this.stringRegistry.setRecordReceiver((IMonitoringRecordReceiver) this.monitoringController);
+		this.stringRegistry.setRecordReceiver(this.monitoringController);
 	}
 
 	@Override
@@ -49,7 +48,11 @@ public final class RegistryController extends AbstractController implements IReg
 
 	@Override
 	public final String toString() {
-		return null;
+		final StringBuilder sb = new StringBuilder();
+		sb.append("RegistryController: ");
+		sb.append(this.stringRegistry.getSize());
+		sb.append(" strings registered.\n");
+		return sb.toString();
 	}
 
 	@Override

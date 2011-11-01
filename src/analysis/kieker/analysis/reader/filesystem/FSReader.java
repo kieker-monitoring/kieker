@@ -142,11 +142,11 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	 */
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		synchronized (this.recordQueue) { // with read()
-			this.recordQueue.add(record);
-			this.recordQueue.notifyAll();
-		}
 		synchronized (record) { // with read()
+			synchronized (this.recordQueue) { // with read()
+				this.recordQueue.add(record);
+				this.recordQueue.notifyAll();
+			}
 			try {
 				record.wait();
 			} catch (final InterruptedException ex) {

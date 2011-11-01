@@ -58,6 +58,14 @@ public interface IRegistry<E> {
 	public E[] getAll();
 
 	/**
+	 * Returns the number of registered objects.
+	 * 
+	 * @return
+	 *         number of registered objects
+	 */
+	public int getSize();
+
+	/**
 	 * Enables logging of newly registered objects.
 	 * 
 	 * @param recordReceiver

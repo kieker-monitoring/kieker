@@ -109,6 +109,7 @@ public class Registry<E> implements IRegistry<E> {
 		return h ^ (h >>> 16);
 	}
 
+	@Override
 	public final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
 		for (final Segment<E> segment : this.segments) {
 			segment.setRecordReceiver(recordReceiver);
@@ -143,16 +144,21 @@ public class Registry<E> implements IRegistry<E> {
 		return this.eArrayCached;
 	}
 
+	@Override
+	public int getSize() {
+		return this.nextId.get();
+	}
+
 	/* ---------------- Inner Classes -------------- */
 
 	/**
 	 * Registry entry.
 	 */
 	private static final class HashEntry<E> {
-		protected final E value;
-		protected final int hash;
-		protected final int id;
-		protected final Registry.HashEntry<E> next;
+		final E value;
+		final int hash;
+		final int id;
+		final Registry.HashEntry<E> next;
 
 		protected HashEntry(final E value, final int hash, final int id, final Registry.HashEntry<E> next) {
 			this.value = value;
@@ -192,22 +198,22 @@ public class Registry<E> implements IRegistry<E> {
 		/**
 		 * The number of elements in this segment's region.
 		 */
-		private volatile int count;
+		private transient volatile int count;
 
 		/**
 		 * The per-segment table.
 		 */
-		private volatile Registry.HashEntry<E>[] table;
+		private transient volatile Registry.HashEntry<E>[] table;
 
 		/**
 		 * The table is rehashed when its size exceeds this threshold. (The value of this field is always <tt>(int)(capacity * loadFactor)</tt>.)
 		 */
-		private int threshold;
+		private transient int threshold;
 
 		/**
 		 * Send messages on new entries to this.
 		 */
-		private IMonitoringRecordReceiver recordReceiver;
+		private transient IMonitoringRecordReceiver recordReceiver;
 
 		@SuppressWarnings("unchecked")
 		protected Segment(final int initialCapacity, final float lf) {

@@ -44,18 +44,4 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 */
 	@Override
 	public String toString();
-
-	/**
-	 * Compares a this IMonitoringRecord to another IMonitoringRecord.
-	 * The established ordering is based on loggingTimestamps.
-	 * 
-	 * @param IMonitoringRecord
-	 *            otherRecord
-	 * @return
-	 *         <0 iff otherRecord is later
-	 *         =0 iff otherRecord has equal timing
-	 *         >0 iff otherRecord is earlier
-	 */
-	@Override
-	public int compareTo(final IMonitoringRecord otherRecord);
 }

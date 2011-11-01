@@ -190,52 +190,6 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		}
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1; // NOPMD
-		result = (prime * result) + ((this.className == null) ? 0 : this.className.hashCode()); // NOCS
-		result = (prime * result) + this.eoi;
-		result = (prime * result) + this.ess;
-		result = (prime * result) + this.experimentId;
-		result = (prime * result) + ((this.hostName == null) ? 0 : this.hostName.hashCode()); // NOCS
-		result = (prime * result) + ((this.operationName == null) ? 0 : this.operationName.hashCode()); // NOCS
-		result = (prime * result) + ((this.sessionId == null) ? 0 : this.sessionId.hashCode()); // NOCS
-		result = (prime * result) + (int) (this.tin ^ (this.tin >>> 32)); // NOCS
-		result = (prime * result) + (int) (this.tout ^ (this.tout >>> 32)); // NOCS
-		result = (prime * result) + (int) (this.traceId ^ (this.traceId >>> 32)); // NOCS
-		return result;
-	}
-
-	/**
-	 * Compares two records.
-	 * 
-	 * If one of the records contains null values for its variables,
-	 * false is returned.
-	 * 
-	 * @param o
-	 * @return true iff the compared records are equal.
-	 */
-	@Override
-	public final boolean equals(final Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof OperationExecutionRecord)) {
-			return false;
-		}
-		final OperationExecutionRecord ro = (OperationExecutionRecord) o;
-		try {
-			return this.className.equals(ro.className) && (this.eoi == ro.eoi) && (this.ess == ro.ess)
-					// not considering experimentId is this is seldomly used
-					&& this.operationName.equals(ro.operationName) && this.sessionId.equals(ro.sessionId) && (this.tin == ro.tin) && (this.tout == ro.tout)
-					&& (this.traceId == ro.traceId) && this.hostName.equals(ro.hostName);
-		} catch (final NullPointerException ex) { // NOPMD
-			// avoid logging!!!! Do something else instead! Records should not depend on logger!
-			return false;
-		}
-	}
-
 	/**
 	 * @return the experimentId
 	 */

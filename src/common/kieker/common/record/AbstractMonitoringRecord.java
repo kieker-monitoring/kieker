@@ -20,6 +20,8 @@
 
 package kieker.common.record;
 
+import java.util.Arrays;
+
 /**
  * @author Andre van Hoorn, Jan Waller
  */
@@ -57,13 +59,36 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	@Override
 	public final int compareTo(final IMonitoringRecord otherRecord) {
 		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
-		if (timedifference < Integer.MIN_VALUE) {
-			return Integer.MIN_VALUE;
-		} else if (timedifference > Integer.MAX_VALUE) {
-			return Integer.MAX_VALUE;
-		} else {
-			return (int) timedifference;
+		if (timedifference < 0L) {
+			return -1;
+		} else if (timedifference > 0L) {
+			return 1;
+		} else { // same timing
+			// this should work except for rare hash collisions
+			return this.hashCode() - otherRecord.hashCode();
 		}
+	}
+
+	@Override
+	public final boolean equals(final Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+		if (this.loggingTimestamp != ((AbstractMonitoringRecord) obj).getLoggingTimestamp()) {
+			return false;
+		}
+		return Arrays.equals(((AbstractMonitoringRecord) obj).toArray(), this.toArray());
+	}
+
+	@Override
+	public final int hashCode() {
+		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32));
 	}
 
 	public static final Object[] fromStringArrayToTypedArray(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {

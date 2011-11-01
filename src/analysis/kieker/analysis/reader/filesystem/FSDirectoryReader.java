@@ -109,23 +109,24 @@ final class FSDirectoryReader implements Runnable {
 		} else if (inputFiles.length == 0) {
 			FSDirectoryReader.LOG.error("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
 					+ FSDirectoryReader.NORMAL_FILE_POSTFIX + "' or '" + FSDirectoryReader.BINARY_FILE_POSTFIX + "'.");
-		}
-		Arrays.sort(inputFiles, new Comparator<File>() {
-			@Override
-			public final int compare(final File f1, final File f2) {
-				return f1.compareTo(f2); // simplified (we expect no dirs!)
-			}
-		});
-		for (final File inputFile : inputFiles) {
-			if (this.terminated) {
-				FSDirectoryReader.LOG.info("Shutting down DirectoryReader.");
-				break;
-			}
-			FSDirectoryReader.LOG.info("< Loading " + inputFile.getAbsolutePath());
-			if (inputFile.getName().endsWith(FSDirectoryReader.NORMAL_FILE_POSTFIX)) {
-				this.processNormalInputFile(inputFile);
-			} else if (inputFile.getName().endsWith(FSDirectoryReader.BINARY_FILE_POSTFIX)) {
-				this.processBinaryInputFile(inputFile);
+		} else { // everything ok, we process the files
+			Arrays.sort(inputFiles, new Comparator<File>() {
+				@Override
+				public final int compare(final File f1, final File f2) {
+					return f1.compareTo(f2); // simplified (we expect no dirs!)
+				}
+			});
+			for (final File inputFile : inputFiles) {
+				if (this.terminated) {
+					FSDirectoryReader.LOG.info("Shutting down DirectoryReader.");
+					break;
+				}
+				FSDirectoryReader.LOG.info("< Loading " + inputFile.getAbsolutePath());
+				if (inputFile.getName().endsWith(FSDirectoryReader.NORMAL_FILE_POSTFIX)) {
+					this.processNormalInputFile(inputFile);
+				} else if (inputFile.getName().endsWith(FSDirectoryReader.BINARY_FILE_POSTFIX)) {
+					this.processBinaryInputFile(inputFile);
+				}
 			}
 		}
 		this.recordReceiver.newMonitoringRecord(FSReader.EOF);
