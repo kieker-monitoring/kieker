@@ -158,10 +158,10 @@ public class Registry<E> implements IRegistry<E> {
 	 */
 	private static final class HashEntry<E> implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private final E value;
-		private final int hash;
-		private final int id;
-		private final Registry.HashEntry<E> next;
+		private final E value; // NOPMD
+		private final int hash; // NOPMD
+		private final int id; // NOPMD
+		private final Registry.HashEntry<E> next; // NOPMD
 
 		protected HashEntry(final E value, final int hash, final int id, final Registry.HashEntry<E> next) {
 			this.value = value;

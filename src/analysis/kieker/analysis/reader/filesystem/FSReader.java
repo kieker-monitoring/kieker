@@ -59,13 +59,13 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	 * @param readOnlyRecordsOfType
 	 *            select only records of this type; null selects all
 	 */
-	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
+	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) { // NOPMD
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
 		if (inputDirs != null) {
 			this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 			this.recordQueue = new PriorityQueue<IMonitoringRecord>(inputDirs.length);
 		} else {
-			this.inputDirs = null;
+			this.inputDirs = null; // NOPMD
 			this.recordQueue = new PriorityQueue<IMonitoringRecord>();
 		}
 	}

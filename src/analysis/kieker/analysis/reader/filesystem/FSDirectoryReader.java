@@ -156,7 +156,8 @@ final class FSDirectoryReader implements Runnable {
 		try {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile)));
 			String line;
-			while ((line = in.readLine().trim()) != null) { // NOPMD (assign)
+			while ((line = in.readLine()) != null) { // NOPMD (assign)
+				line = line.trim();
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
@@ -202,7 +203,8 @@ final class FSDirectoryReader implements Runnable {
 		try {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
 			String line;
-			while ((line = in.readLine().trim()) != null) { // NOPMD (assign)
+			while ((line = in.readLine()) != null) { // NOPMD (assign)
+				line = line.trim();
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
