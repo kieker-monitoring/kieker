@@ -31,6 +31,12 @@
   </Match>
 
   <Match>
+    <Class name="kieker.monitoring.core.registry.Registry" />
+    <Field name="eArrayCached" />
+    <Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
+  </Match>
+
+  <Match>
     <Class name="org.apache.commons.logging.impl.Jdk14LoggerPatched" />
     <Method name="getLog" params="java.lang.String" returns="org.apache.commons.logging.Log" />
     <Bug pattern="REC_CATCH_EXCEPTION" />

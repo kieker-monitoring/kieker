@@ -20,6 +20,8 @@
 
 package kieker.monitoring.core.registry;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -133,15 +135,15 @@ public class Registry<E> implements IRegistry<E> {
 	@Override
 	public E[] getAll() {
 		final int capacity = this.nextId.get();
-		if (this.eArrayCached.length != capacity) {
+		if (this.eArrayCached.length != capacity) { // volatile read
 			@SuppressWarnings("unchecked")
 			final E[] eArray = (E[]) new Object[capacity];
 			for (final Segment<E> segment : this.segments) {
 				segment.insertIntoArray(eArray);
 			}
-			this.eArrayCached = eArray;
+			this.eArrayCached = eArray; // volatile write
 		}
-		return this.eArrayCached;
+		return Arrays.copyOf(this.eArrayCached, capacity);
 	}
 
 	@Override
@@ -154,7 +156,8 @@ public class Registry<E> implements IRegistry<E> {
 	/**
 	 * Registry entry.
 	 */
-	private static final class HashEntry<E> {
+	private static final class HashEntry<E> implements Serializable {
+		private static final long serialVersionUID = 1L;
 		final E value;
 		final int hash;
 		final int id;
@@ -203,7 +206,7 @@ public class Registry<E> implements IRegistry<E> {
 		/**
 		 * The per-segment table.
 		 */
-		private volatile Registry.HashEntry<E>[] table;
+		private Registry.HashEntry<E>[] table;
 
 		/**
 		 * The table is rehashed when its size exceeds this threshold. (The value of this field is always <tt>(int)(capacity * loadFactor)</tt>.)
@@ -269,8 +272,9 @@ public class Registry<E> implements IRegistry<E> {
 					int c = this.count;
 					if (c++ > this.threshold) {
 						this.rehash();
+						this.count = c; // write volatile
 					}
-					final Registry.HashEntry<E>[] tab = this.table; // volatile read
+					final Registry.HashEntry<E>[] tab = this.table;
 					final int index = hash & (tab.length - 1);
 					final Registry.HashEntry<E> first = tab[index]; // the bin the value may be inside
 					e = first;
@@ -342,7 +346,7 @@ public class Registry<E> implements IRegistry<E> {
 					}
 				}
 			}
-			this.table = newTable; // volatile write
+			this.table = newTable;
 		}
 	}
 }
