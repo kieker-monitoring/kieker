@@ -198,17 +198,17 @@ public class Registry<E> implements IRegistry<E> {
 		/**
 		 * The number of elements in this segment's region.
 		 */
-		private transient volatile int count;
+		private volatile int count;
 
 		/**
 		 * The per-segment table.
 		 */
-		private transient volatile Registry.HashEntry<E>[] table;
+		private volatile Registry.HashEntry<E>[] table;
 
 		/**
 		 * The table is rehashed when its size exceeds this threshold. (The value of this field is always <tt>(int)(capacity * loadFactor)</tt>.)
 		 */
-		private transient int threshold;
+		private int threshold;
 
 		/**
 		 * Send messages on new entries to this.
