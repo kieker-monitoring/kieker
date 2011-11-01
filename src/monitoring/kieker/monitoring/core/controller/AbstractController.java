@@ -35,7 +35,7 @@ public abstract class AbstractController {
 	protected volatile MonitoringController monitoringController = null;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
-	protected AbstractController(final Configuration configuration) {
+	protected AbstractController(final Configuration configuration) { // NOPMD
 		// do nothing but enforce constructor
 	}
 

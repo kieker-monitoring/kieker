@@ -36,10 +36,10 @@ public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
 	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
 
+	protected final IMonitoringController monitoringController;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
 	private boolean finished = false; // only accessed in synchronized blocks
 	private CountDownLatch shutdownLatch = null; // only accessed in synchronized blocks
-	protected final IMonitoringController monitoringController;
 
 	public AbstractAsyncThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;

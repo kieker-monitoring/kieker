@@ -40,7 +40,7 @@ public class Registry<E> implements IRegistry<E> {
 	private static final int INITIAL_CAPACITY = 16;
 	private static final float LOAD_FACTOR = 0.75f;
 	private static final int CONCURRENCY_LEVEL = 16;
-	private static final int MAXIMUM_CAPACITY = 1 << 30;
+	private static final int MAXIMUM_CAPACITY = 1 << 30; // NOCS (magic number)
 
 	/**
 	 * Mask value for indexing into segments. The upper bits of a key's hash code are used to choose the segment.
@@ -79,7 +79,7 @@ public class Registry<E> implements IRegistry<E> {
 			++sshift;
 			ssize <<= 1;
 		}
-		this.segmentShift = 32 - sshift;
+		this.segmentShift = 32 - sshift; // NOCS (magic number)
 		this.segmentMask = ssize - 1;
 		this.segments = new Segment[ssize];
 		int c = Registry.INITIAL_CAPACITY / ssize;
@@ -91,7 +91,7 @@ public class Registry<E> implements IRegistry<E> {
 			cap <<= 1;
 		}
 		for (int i = 0; i < this.segments.length; ++i) {
-			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR);
+			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR); // NOPMD (new in loop)
 		}
 		this.eArrayCached = (E[]) new Object[0];
 	}
@@ -103,12 +103,12 @@ public class Registry<E> implements IRegistry<E> {
 	private static final int hash(final Object value) {
 		// Spread bits to regularize both segment and index locations, using variant of single-word Wang/Jenkins hash.
 		int h = value.hashCode();
-		h += (h << 15) ^ 0xffffcd7d;
-		h ^= (h >>> 10);
-		h += (h << 3);
-		h ^= (h >>> 6);
-		h += (h << 2) + (h << 14);
-		return h ^ (h >>> 16);
+		h += (h << 15) ^ 0xffffcd7d; // NOCS (magic number)
+		h ^= h >>> 10; // NOCS (magic number)
+		h += h << 3; // NOCS (magic number)
+		h ^= h >>> 6; // NOCS (magic number)
+		h += (h << 2) + (h << 14); // NOCS (magic number)
+		return h ^ (h >>> 16); // NOCS (magic number)
 	}
 
 	@Override
@@ -158,10 +158,10 @@ public class Registry<E> implements IRegistry<E> {
 	 */
 	private static final class HashEntry<E> implements Serializable {
 		private static final long serialVersionUID = 1L;
-		final E value;
-		final int hash;
-		final int id;
-		final Registry.HashEntry<E> next;
+		private final E value;
+		private final int hash;
+		private final int id;
+		private final Registry.HashEntry<E> next;
 
 		protected HashEntry(final E value, final int hash, final int id, final Registry.HashEntry<E> next) {
 			this.value = value;
@@ -285,7 +285,7 @@ public class Registry<E> implements IRegistry<E> {
 						final int id = nextId.getAndIncrement();
 						tab[index] = new HashEntry<E>(value, hash, id, first);
 						this.count = c; // write-volatile
-						if (this.recordReceiver != null) {
+						if (this.recordReceiver != null) { // NOCS // NOPMD (nested if)
 							this.recordReceiver.newMonitoringRecord(new HashRecord(id, value));
 						}
 						return id; // return new id
@@ -330,7 +330,7 @@ public class Registry<E> implements IRegistry<E> {
 						int lastIdx = idx;
 						for (Registry.HashEntry<E> last = next; last != null; last = last.next) { // find end of bin
 							final int k = last.hash & sizeMask;
-							if (k != lastIdx) {
+							if (k != lastIdx) { // NOCS (nested if)
 								lastIdx = k;
 								lastRun = last;
 							}
@@ -338,10 +338,10 @@ public class Registry<E> implements IRegistry<E> {
 						newTable[lastIdx] = lastRun;
 
 						// Clone all remaining nodes
-						for (Registry.HashEntry<E> p = e; p != lastRun; p = p.next) {
+						for (Registry.HashEntry<E> p = e; p != lastRun; p = p.next) { // NOPMD (no equals meant here)
 							final int k = p.hash & sizeMask;
 							final Registry.HashEntry<E> n = newTable[k];
-							newTable[k] = new HashEntry<E>(p.value, p.hash, p.id, n);
+							newTable[k] = new HashEntry<E>(p.value, p.hash, p.id, n); // NOPMD (new in loop)
 						}
 					}
 				}

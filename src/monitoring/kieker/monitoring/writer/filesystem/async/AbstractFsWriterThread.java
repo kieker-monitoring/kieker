@@ -39,14 +39,14 @@ import kieker.monitoring.writer.filesystem.MappingFileWriter;
  */
 public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
+	protected String fileExtension = ".dat";
+
 	// internal variables
 	private final MappingFileWriter mappingFileWriter;
 	private final String filenamePrefix;
 	private final String path;
 	private final int maxEntriesInFile;
 	private int entriesInCurrentFileCounter;
-
-	protected String fileExtension = ".dat";
 
 	public AbstractFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) {

@@ -60,9 +60,14 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	 *            select only records of this type; null selects all
 	 */
 	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
-		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(inputDirs.length);
+		if (inputDirs != null) {
+			this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
+			this.recordQueue = new PriorityQueue<IMonitoringRecord>(inputDirs.length);
+		} else {
+			this.inputDirs = null;
+			this.recordQueue = new PriorityQueue<IMonitoringRecord>();
+		}
 	}
 
 	/**
@@ -77,9 +82,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	 * Default constructor used for construction by reflection.
 	 */
 	public FSReader() {
-		this.inputDirs = null;
-		this.readOnlyRecordsOfType = null;
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>();
+		this(null, null);
 	}
 
 	/**
@@ -110,7 +113,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	public boolean read() {
 		// start all reader
 		for (final String inputDir : this.inputDirs) {
-			new Thread(new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType)).start();
+			new Thread(new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType)).start(); // NOPMD (new in loop)
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length;

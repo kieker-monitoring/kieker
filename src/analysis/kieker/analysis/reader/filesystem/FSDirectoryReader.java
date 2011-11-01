@@ -156,8 +156,8 @@ final class FSDirectoryReader implements Runnable {
 		try {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile)));
 			String line;
-			while ((line = in.readLine()) != null) {
-				if (line.trim().length() == 0) {
+			while ((line = in.readLine().trim()) != null) { // NOPMD (assign)
+				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
 				final String[] assignment = line.split("=");
@@ -202,15 +202,15 @@ final class FSDirectoryReader implements Runnable {
 		try {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
 			String line;
-			while ((line = in.readLine()) != null) {
-				if (line.trim().length() == 0) {
+			while ((line = in.readLine().trim()) != null) { // NOPMD (assign)
+				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
 				IMonitoringRecord record = null;
 				String[] recordFields = line.split(";");
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
-						if (recordFields.length < 3) {
+						if (recordFields.length < 3) { // NOCS (magic number)
 							FSDirectoryReader.LOG.error("Illegal record format: " + line);
 							continue; // skip this record
 						}
@@ -232,11 +232,11 @@ final class FSDirectoryReader implements Runnable {
 						record.setLoggingTimestamp(Long.valueOf(recordFields[1]));
 						recordFields = Arrays.copyOfRange(recordFields, 2, recordFields.length);
 					} else { // legacy record
-						record = new OperationExecutionRecord();
+						record = new OperationExecutionRecord(); // NOPMD (new in loop)
 					}
 					final Object[] typedArray = AbstractMonitoringRecord.fromStringArrayToTypedArray(recordFields, record.getValueTypes());
 					record.initFromArray(typedArray);
-				} catch (final Exception ex) {
+				} catch (final Exception ex) { // NOCS // NOPMD
 					// ClassNotFoundException ClassCastException InstantiationException IllegalAccessException NumberFormatException IllegalArgumentException
 					FSDirectoryReader.LOG.error("Error loading record type", ex);
 					continue; // skip this record
@@ -286,7 +286,7 @@ final class FSDirectoryReader implements Runnable {
 				record.setLoggingTimestamp(in.readLong());
 				// read record
 				final Class<?>[] typeArray = record.getValueTypes();
-				final Object[] objectArray = new Object[typeArray.length];
+				final Object[] objectArray = new Object[typeArray.length]; // NOPMD (new in loop)
 				int idx = -1;
 				for (final Class<?> type : typeArray) {
 					idx++;
@@ -309,7 +309,7 @@ final class FSDirectoryReader implements Runnable {
 						objectArray[idx] = in.readDouble();
 					} else if ((type == byte.class) || (type == Byte.class)) {
 						objectArray[idx] = in.readByte();
-					} else if ((type == short.class) || (type == Short.class)) {
+					} else if ((type == short.class) || (type == Short.class)) { // NOPMD (short)
 						objectArray[idx] = in.readShort();
 					} else if ((type == boolean.class) || (type == Boolean.class)) {
 						objectArray[idx] = in.readBoolean();
@@ -323,14 +323,12 @@ final class FSDirectoryReader implements Runnable {
 					}
 				}
 				record.initFromArray(objectArray);
-				if ((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) {
-					if (!this.recordReceiver.newMonitoringRecord(record)) {
-						this.terminated = true;
-						break; // we got the signal to stop processing
-					}
+				if (((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) && !this.recordReceiver.newMonitoringRecord(record)) {
+					this.terminated = true;
+					break; // we got the signal to stop processing
 				}
 			}
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOCS // NOPMD
 			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {
