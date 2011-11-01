@@ -33,7 +33,6 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * @author Andre van Hoorn
  */
 public abstract class AbstractMonitoringReader implements IMonitoringReader {
-
 	private static final Log LOG = LogFactory.getLog(AbstractMonitoringReader.class);
 
 	private final Collection<IMonitoringRecordReceiver> recordReceivers = new CopyOnWriteArrayList<IMonitoringRecordReceiver>();

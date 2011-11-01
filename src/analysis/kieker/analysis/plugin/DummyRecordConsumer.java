@@ -44,7 +44,7 @@ public class DummyRecordConsumer implements IMonitoringRecordConsumerPlugin {
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		System.out.println("DummyRecordConsumer consumed " + monitoringRecord);
+		System.out.println("DummyRecordConsumer consumed (" + monitoringRecord.getClass().getSimpleName() + ") " + monitoringRecord);
 		return true;
 	}
 

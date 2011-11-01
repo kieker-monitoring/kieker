@@ -22,36 +22,36 @@ package kieker.analysis.reader.filesystem;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.StringTokenizer;
+import java.util.PriorityQueue;
 
-import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
- * Filesystem reader which reads from multiple directories simultaneously
- * ordered by the logging timestamp.
+ * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
+ * TODO: check correct handling of errors!
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
-public class FSReader extends AbstractMonitoringReader {
+public class FSReader extends AbstractMonitoringReader implements IMonitoringRecordReceiver {
 
-	/*
+	/**
 	 * Semicolon-separated list of directories
 	 */
 	public static final String PROP_NAME_INPUTDIRS = "inputDirs";
+	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
+
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
-	private String[] inputDirs = null;
 
+	private String[] inputDirs;
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
-
-	public FSReader(final String[] inputDirs) {
-		this(inputDirs, null);
-	}
+	private final PriorityQueue<IMonitoringRecord> recordQueue;
+	private volatile boolean running = true;
 
 	/**
 	 * 
@@ -62,74 +62,97 @@ public class FSReader extends AbstractMonitoringReader {
 	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
 		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
-	}
-
-	/** Default constructor used for construction by reflection. */
-	public FSReader() {
-		this.readOnlyRecordsOfType = null; // NOPMD
+		this.recordQueue = new PriorityQueue<IMonitoringRecord>(inputDirs.length);
 	}
 
 	/**
-	 * Receives records from the concurrentConsumer and delegates them
-	 * to the registered consumers via the {@link #deliverRecord(IMonitoringRecord)} method.
+	 * 
+	 * @param inputDirs
 	 */
-	private final IMonitoringRecordReceiver delegator = new IMonitoringRecordReceiver() {
-
-		@Override
-		public boolean newMonitoringRecord(final IMonitoringRecord record) {
-			return FSReader.this.deliverRecord(record);
-		}
-	};
-
-	@Override
-	public boolean read() {
-		final FSReaderCons concurrentConsumer = new FSReaderCons(this.delegator, this.inputDirs, this.readOnlyRecordsOfType);
-		boolean success = false;
-		try {
-			success = concurrentConsumer.execute();
-		} catch (final MonitoringRecordConsumerException ex) {
-			FSReader.LOG.error("RecordConsumerExecutionException occured", ex);
-			success = false;
-		}
-		return success;
+	public FSReader(final String[] inputDirs) {
+		this(inputDirs, null);
 	}
 
 	/**
-	 * Initializes the reader based on the given key/value pair initString. For
-	 * the key {@value #PROP_NAME_INPUTDIRS}, the method expects a list of input
-	 * directories separated by semicolon.
-	 * <p>
+	 * Default constructor used for construction by reflection.
+	 */
+	public FSReader() {
+		this.inputDirs = null;
+		this.readOnlyRecordsOfType = null;
+		this.recordQueue = new PriorityQueue<IMonitoringRecord>();
+	}
+
+	/**
+	 * Initializes the reader based on the given key/value pair initString. For the key {@value #PROP_NAME_INPUTDIRS}, the method expects a list of input directories
+	 * separated by semicolon.
 	 * 
 	 * Example: <code>inputDirs=dir0;...;dir1</code>
 	 */
 	@Override
 	public boolean init(final String initString) {
-		String dirList = null;
-		try {
-			/* throws IllegalArgumentException: */
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-			dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
-
-			if (dirList == null) {
-				FSReader.LOG.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
-				return false;
-			} // parse inputDir property value
-
-			final StringTokenizer dirNameTokenizer = new StringTokenizer(dirList, ";");
-			this.inputDirs = new String[dirNameTokenizer.countTokens()];
-			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
-				this.inputDirs[i] = dirNameTokenizer.nextToken().trim();
-			}
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
-			FSReader.LOG.error("Error parsing list of input directories'" + dirList + "':" + exc.getMessage(), exc);
+		final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
+		final String dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
+		if (dirList == null) {
+			FSReader.LOG.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
 			return false;
 		}
+		this.inputDirs = dirList.split(";");
 		return true;
 	}
 
 	@Override
 	public void terminate() {
-		// TODO: Provide meaningful termination routine (#117)
-		FSReader.LOG.warn("Explicit termination not supported, yet (see ticket #117)");
+		FSReader.LOG.info("Shutting down reader.");
+		this.running = false;
+	}
+
+	@Override
+	public boolean read() {
+		// start all reader
+		for (final String inputDir : this.inputDirs) {
+			new Thread(new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType)).start();
+		}
+		// consume incoming records
+		int readingReaders = this.inputDirs.length;
+		while (readingReaders > 0) {
+			synchronized (this.recordQueue) { // with newMonitoringRecord()
+				while (this.recordQueue.size() < readingReaders) {
+					try {
+						this.recordQueue.wait();
+					} catch (final InterruptedException ex) {
+						// ignore InterruptedException
+					}
+				}
+			}
+			final IMonitoringRecord record = this.recordQueue.remove();
+			synchronized (record) { // with newMonitoringRecord()
+				record.notifyAll();
+			}
+			if (record == FSReader.EOF) {
+				readingReaders--;
+			} else {
+				this.deliverRecord(record);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * This method is called for each new record by each ReaderThread.
+	 */
+	@Override
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+		synchronized (this.recordQueue) { // with read()
+			this.recordQueue.add(record);
+			this.recordQueue.notifyAll();
+		}
+		synchronized (record) { // with read()
+			try {
+				record.wait();
+			} catch (final InterruptedException ex) {
+				// ignore InterruptedException
+			}
+		}
+		return this.running;
 	}
 }
