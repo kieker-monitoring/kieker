@@ -53,4 +53,61 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 		return sb.toString();
 	}
+
+	@Override
+	public final int compareTo(final IMonitoringRecord otherRecord) {
+		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
+		if (timedifference < Integer.MIN_VALUE) {
+			return Integer.MIN_VALUE;
+		} else if (timedifference > Integer.MAX_VALUE) {
+			return Integer.MAX_VALUE;
+		} else {
+			return (int) timedifference;
+		}
+	}
+
+	public static final Object[] fromStringArrayToTypedArray(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {
+		if (recordFields.length != valueTypes.length) {
+			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);
+		}
+		final Object[] typedArray = new Object[recordFields.length];
+		int curIdx = -1;
+		for (final Class<?> clazz : valueTypes) {
+			curIdx++;
+			if (clazz == String.class) {
+				typedArray[curIdx] = recordFields[curIdx];
+				continue;
+			}
+			if ((clazz == int.class) || (clazz == Integer.class)) {
+				typedArray[curIdx] = Integer.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == long.class) || (clazz == Long.class)) {
+				typedArray[curIdx] = Long.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == float.class) || (clazz == Float.class)) {
+				typedArray[curIdx] = Float.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == double.class) || (clazz == Double.class)) {
+				typedArray[curIdx] = Double.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == byte.class) || (clazz == Byte.class)) {
+				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == short.class) || (clazz == Short.class)) { // NOPMD
+				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD
+				continue;
+			}
+			if ((clazz == boolean.class) || (clazz == Boolean.class)) {
+				typedArray[curIdx] = Boolean.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			throw new IllegalArgumentException("Unsupported type: " + clazz.getName());
+		}
+		return typedArray;
+	}
 }

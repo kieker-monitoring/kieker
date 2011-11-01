@@ -25,7 +25,7 @@ import java.io.Serializable;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public interface IMonitoringRecord extends Serializable {
+public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringRecord> {
 
 	public long getLoggingTimestamp();
 
@@ -40,9 +40,22 @@ public interface IMonitoringRecord extends Serializable {
 	/**
 	 * Creates a string representation of this record.
 	 * 
-	 * This method should not be used for serialization purposes since this
-	 * is not the purpose of Object's toString method.
+	 * This method should not be used for serialization purposes since this is not the purpose of Object's toString method.
 	 */
 	@Override
 	public String toString();
+
+	/**
+	 * Compares a this IMonitoringRecord to another IMonitoringRecord.
+	 * The established ordering is based on loggingTimestamps.
+	 * 
+	 * @param IMonitoringRecord
+	 *            otherRecord
+	 * @return
+	 *         <0 iff otherRecord is later
+	 *         =0 iff otherRecord has equal timing
+	 *         >0 iff otherRecord is earlier
+	 */
+	@Override
+	public int compareTo(final IMonitoringRecord otherRecord);
 }
