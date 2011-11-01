@@ -139,6 +139,39 @@ kieker.monitoring.writer.filesystem.AsyncFsWriter.MaxShutdownDelay=-1
 
 
 #####
+#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter
+#
+## In order to use the default temporary directory, set the property value of
+## storeInJavaIoTmpdir to true.
+kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.storeInJavaIoTmpdir=true
+#
+## In order to use a custom directory, set storeInJavaIoTmpdir=false
+## and set customStoragePath as desired. Examples:
+## /var/kieker or "C:\KiekerData" (ensure the folder exists).
+kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.customStoragePath=.
+#
+## The maximal number of entries (records) per created file.
+## Must be greater than zero.
+kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.maxEntriesInFile=25000
+#
+## Asynchronous writers need to store monitoring records in an internal buffer.
+## This parameter defines its capacity in terms of the number of records. 
+kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.QueueSize=10000
+#
+## Behavior of the asynchronous writer when the internal queue is full:
+## 0: terminate Monitoring with an error (default)
+## 1: writer blocks until queue capacity is available
+## 2: writer discards new records until space is available
+##  Be careful when using the value '1' since then, the asynchronous writer
+##  is no longer decoupled from the monitored application.
+kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.QueueFullBehavior=0
+#
+## Maximum time to wait for the writer threads to finish (in milliseconds).
+## A MaxShutdownDelay of -1 means infinite waiting.
+kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.MaxShutdownDelay=-1
+
+
+#####
 #kieker.monitoring.writer=kieker.monitoring.writer.namedRecordPipe.PipeWriter
 #
 ## The name of the pipe used (must not be empty).

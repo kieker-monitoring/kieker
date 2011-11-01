@@ -21,6 +21,8 @@
 package kieker.analysis.reader.filesystem;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -34,7 +36,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import kieker.analysis.reader.MonitoringReaderException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -191,11 +192,9 @@ final class FSDirectoryReader implements Runnable {
 	}
 
 	/**
-	 * Reads the records contained in the given file and passes them to the registered {@link #recordReceiver}.
+	 * Reads the records contained in the given normal file and passes them to the registered {@link #recordReceiver}.
 	 * 
 	 * @param inputFile
-	 * @throws IOException
-	 * @throws MonitoringReaderException
 	 */
 	private final void processNormalInputFile(final File inputFile) {
 		BufferedReader in = null;
@@ -223,7 +222,7 @@ final class FSDirectoryReader implements Runnable {
 						if (classname.equals(FSDirectoryReader.OLD_KIEKEREXECUTIONRECORD_CLASSNAME)) {
 							classname = OperationExecutionRecord.class.getName();
 						}
-						if ((this.recordTypeSelector != null) && this.recordTypeSelector.contains(classname)) {
+						if ((this.recordTypeSelector != null) && !this.recordTypeSelector.contains(classname)) {
 							continue; // skip this ignored record
 						}
 						Class<? extends IMonitoringRecord> clazz = null;
@@ -259,7 +258,87 @@ final class FSDirectoryReader implements Runnable {
 		}
 	}
 
+	/**
+	 * Reads the records contained in the given binary file and passes them to the registered {@link #recordReceiver}.
+	 * 
+	 * @param inputFile
+	 */
 	private final void processBinaryInputFile(final File inputFile) {
-		throw new UnsupportedOperationException();
+		DataInputStream in = null;
+		try {
+			in = new DataInputStream(new FileInputStream(inputFile));
+			while (true) {
+				final Integer id;
+				try {
+					id = in.readInt();
+				} catch (final EOFException eof) {
+					break; // we are finished
+				}
+				final String classname = this.stringRegistry.get(id);
+				if (classname == null) {
+					FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+					break; // we can't easily recover on errors
+				}
+				Class<? extends IMonitoringRecord> clazz = null;
+				clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
+				final IMonitoringRecord record = clazz.newInstance();
+				record.setLoggingTimestamp(in.readLong());
+				// read record
+				final Class<?>[] typeArray = record.getValueTypes();
+				final Object[] objectArray = new Object[typeArray.length];
+				int idx = -1;
+				for (final Class<?> type : typeArray) {
+					idx++;
+					if (type == String.class) {
+						final Integer strId = in.readInt();
+						final String str = this.stringRegistry.get(strId);
+						if (str == null) {
+							FSDirectoryReader.LOG.error("No String mapping found for id " + strId.toString());
+							objectArray[idx] = "";
+						} else {
+							objectArray[idx] = str;
+						}
+					} else if ((type == int.class) || (type == Integer.class)) {
+						objectArray[idx] = in.readInt();
+					} else if ((type == long.class) || (type == Long.class)) {
+						objectArray[idx] = in.readLong();
+					} else if ((type == float.class) || (type == Float.class)) {
+						objectArray[idx] = in.readFloat();
+					} else if ((type == double.class) || (type == Double.class)) {
+						objectArray[idx] = in.readDouble();
+					} else if ((type == byte.class) || (type == Byte.class)) {
+						objectArray[idx] = in.readByte();
+					} else if ((type == short.class) || (type == Short.class)) {
+						objectArray[idx] = in.readShort();
+					} else if ((type == boolean.class) || (type == Boolean.class)) {
+						objectArray[idx] = in.readBoolean();
+					} else {
+						if (in.readByte() != 0) {
+							FSDirectoryReader.LOG.error("Unexpected value for unsupported type: " + clazz.getName());
+							return; // breaking error (break would not terminate the correct loop)
+						}
+						FSDirectoryReader.LOG.warn("Unsupported type: " + clazz.getName());
+						objectArray[idx] = null;
+					}
+				}
+				record.initFromArray(objectArray);
+				if ((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) {
+					if (!this.recordReceiver.newMonitoringRecord(record)) {
+						this.terminated = true;
+						break; // we got the signal to stop processing
+					}
+				}
+			}
+		} catch (final Exception ex) {
+			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (final IOException ex) {
+					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", ex);
+				}
+			}
+		}
 	}
 }
