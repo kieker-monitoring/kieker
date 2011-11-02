@@ -56,8 +56,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return sb.toString();
 	}
 
+	/**
+	 * Provides an ordering of IMonitoringRecords by the loggingTimestamp.
+	 * Classes overriding the implementation should respect this ordering. (see #326)
+	 */
 	@Override
-	public final int compareTo(final IMonitoringRecord otherRecord) {
+	public int compareTo(final IMonitoringRecord otherRecord) {
 		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
 		if (timedifference < 0L) {
 			return -1;
