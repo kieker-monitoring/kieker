@@ -81,6 +81,16 @@ kieker.monitoring.writer.DummyWriter.key=value
 
 
 #####
+#kieker.monitoring.writer=kieker.monitoring.writer.PrintStreamWriter
+#
+## The PrintStream used to print the monitoring records.
+## Either STDOUT or STDERR.
+## Other values are used as a filenames for a target log file.
+## You should use AsyncFsWriter instead of this writer for logging to files!
+kieker.monitoring.writer.PrintStreamWriter.Stream=STDOUT
+
+
+#####
 #kieker.monitoring.writer=kieker.monitoring.writer.filesystem.SyncFsWriter
 #
 ## In order to use the default temporary directory, set the property value of
