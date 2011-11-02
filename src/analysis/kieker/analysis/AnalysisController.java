@@ -33,23 +33,20 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.model.analysisMetaModel.AnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.Configurable;
-import kieker.analysis.model.analysisMetaModel.Connector;
-import kieker.analysis.model.analysisMetaModel.InputPort;
-import kieker.analysis.model.analysisMetaModel.OutputPort;
-import kieker.analysis.model.analysisMetaModel.Plugin;
-import kieker.analysis.model.analysisMetaModel.Port;
-import kieker.analysis.model.analysisMetaModel.Project;
-import kieker.analysis.model.analysisMetaModel.Reader;
-import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackageImpl;
+import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.IConfigurable;
+import kieker.analysis.model.analysisMetaModel.IConnector;
+import kieker.analysis.model.analysisMetaModel.IInputPort;
+import kieker.analysis.model.analysisMetaModel.IOutputPort;
+import kieker.analysis.model.analysisMetaModel.IPlugin;
+import kieker.analysis.model.analysisMetaModel.IPort;
+import kieker.analysis.model.analysisMetaModel.IProject;
+import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.IAnalysisPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -96,7 +93,7 @@ public class AnalysisController {
 	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains mapping of record types to subscribed consumers */
 	private final ConcurrentMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
-	private final Collection<IAnalysisPlugin> plugins = new CopyOnWriteArrayList<IAnalysisPlugin>();
+	private final Collection<kieker.analysis.plugin.IAnalysisPlugin> plugins = new CopyOnWriteArrayList<kieker.analysis.plugin.IAnalysisPlugin>();
 
 	/**
 	 * Will be count down after the analysis is set-up.
@@ -131,19 +128,19 @@ public class AnalysisController {
 		EList<EObject> content = openModelFile(file);
 		if (!content.isEmpty()) {
 			/* The first (and only) element should be the "parent project" */
-			Project project = (Project) content.get(0);
+			IProject project = (IProject) content.get(0);
 
 			/* Now find all "sub projects" */
-			List<Project> projects = new ArrayList<Project>();
-			List<Project> toExpand = new ArrayList<Project>();
+			List<IProject> projects = new ArrayList<IProject>();
+			List<IProject> toExpand = new ArrayList<IProject>();
 			toExpand.add(project);
 			while (!toExpand.isEmpty()) {
-				Project currProj = toExpand.remove(0);
+				IProject currProj = toExpand.remove(0);
 				projects.add(currProj);
-				EList<Configurable> configs = currProj.getConfigurables();
-				for (Configurable c : configs) {
-					if (c instanceof Project) {
-						toExpand.add((Project) c);
+				EList<IConfigurable> configs = currProj.getConfigurables();
+				for (IConfigurable c : configs) {
+					if (c instanceof IProject) {
+						toExpand.add((IProject) c);
 					}
 				}
 			}
@@ -151,7 +148,7 @@ public class AnalysisController {
 			/* Configure all projects. */
 			Map<String, AnalysisController> map = new HashMap<String, AnalysisController>();
 
-			for (Project currProject : projects) {
+			for (IProject currProject : projects) {
 				map.put(currProject.getName(), new AnalysisController(
 						currProject));
 			}
@@ -168,7 +165,7 @@ public class AnalysisController {
 	 *            The project instance for the analysis.
 	 * @throws Exception
 	 */
-	private AnalysisController(Project project) throws Exception {
+	private AnalysisController(IProject project) throws Exception {
 		System.out.println(project.getName());
 
 		/*
@@ -177,25 +174,25 @@ public class AnalysisController {
 		 * map). 2) The connection between the plugins and their created
 		 * counterpart (as a map). 3) The "real" connection within the model.
 		 */
-		EList<Configurable> configs = project.getConfigurables();
-		List<Connector> connectors = new ArrayList<Connector>();
-		Map<Port, Plugin> portPluginMap = new HashMap<Port, Plugin>();
-		Map<Plugin, Object> pluginObjMap = new HashMap<Plugin, Object>();
+		EList<IConfigurable> configs = project.getConfigurables();
+		List<IConnector> connectors = new ArrayList<IConnector>();
+		Map<IPort, IPlugin> portPluginMap = new HashMap<IPort, IPlugin>();
+		Map<IPlugin, Object> pluginObjMap = new HashMap<IPlugin, Object>();
 
 		/* Run through the "configurables" to extract all plugins. */
-		for (Configurable c : configs) {
+		for (IConfigurable c : configs) {
 
-			if (c instanceof Plugin) {
+			if (c instanceof IPlugin) {
 				/*
 				 * We found a plugin. Not we have to determine whether this is a
 				 * reader or a normal plugin.
 				 */
-				Plugin p = (Plugin) c;
-				if (p instanceof Reader) {
+				IPlugin p = (IPlugin) c;
+				if (p instanceof IReader) {
 					System.out.println("Reader gefunden: " + p.getName());
 					IMonitoringReader reader = (IMonitoringReader) Class
 							.forName(p.getClassname()).newInstance();
-					reader.init(((Reader) p).getInitString());
+					reader.init(((IReader) p).getInitString());
 					this.setReader(reader);
 					pluginObjMap.put(p, reader);
 				} else {
@@ -210,14 +207,14 @@ public class AnalysisController {
 				 * their parent. We will also accumulate all Connectors.
 				 */
 
-				for (OutputPort oPort : p.getOutputPorts()) {
+				for (IOutputPort oPort : p.getOutputPorts()) {
 					connectors.addAll(oPort.getOutConnector());
 
 					portPluginMap.put(oPort, p);
 				}
 
-				if (p instanceof AnalysisPlugin) {
-					for (InputPort iPort : ((AnalysisPlugin) p).getInputPorts()) {
+				if (p instanceof IAnalysisPlugin) {
+					for (IInputPort iPort : ((IAnalysisPlugin) p).getInputPorts()) {
 						portPluginMap.put(iPort, p);
 					}
 				}
@@ -228,10 +225,10 @@ public class AnalysisController {
 		 * Now we should have initialized all plugins. We can start to assemble
 		 * the structure.
 		 */
-		for (Connector c : connectors) {
+		for (IConnector c : connectors) {
 			/* We can get the plugins via the map. */
-			Plugin in = portPluginMap.get(c.getDstInputPort());
-			Plugin out = portPluginMap.get(c.getSicOutputPort());
+			IPlugin in = portPluginMap.get(c.getDstInputPort());
+			IPlugin out = portPluginMap.get(c.getSicOutputPort());
 			System.out.format("Connector gefunden. Verbinde Output von "
 					+ "%s mit Input von %s\n", out.getName(), in.getName());
 
@@ -240,8 +237,8 @@ public class AnalysisController {
 			AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap
 					.get(in);
 
-			IOutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
-			IInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
+			kieker.analysis.plugin.configuration.IOutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
+			kieker.analysis.plugin.configuration.IInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
 			
 			outPort.subscribe(inPort);
 		}
@@ -260,7 +257,7 @@ public class AnalysisController {
 		ResourceSet resourceSet = new ResourceSetImpl();
 
 		/* Initialize the package information */
-		AnalysisMetaModelPackageImpl.init();
+		AnalysisMetaModelPackage.init();
 
 		/* Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource. */
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
@@ -303,7 +300,7 @@ public class AnalysisController {
 			/**
 			 * Call execute() method of all plug-ins.
 			 */
-			for (final IAnalysisPlugin c : this.plugins) {
+			for (final kieker.analysis.plugin.IAnalysisPlugin c : this.plugins) {
 				if (!c.execute()) {
 					AnalysisController.LOG
 							.error("A plug-in's execute message failed");
@@ -360,7 +357,7 @@ public class AnalysisController {
 			// to make sure that all waiting threads are released
 			this.initializationLatch.countDown();
 			try {
-				for (final IAnalysisPlugin c : this.plugins) {
+				for (final kieker.analysis.plugin.IAnalysisPlugin c : this.plugins) {
 					c.terminate(!success); // normal termination (w/o error)
 				}
 			} catch (final Exception e) { // NOCS // NOPMD
@@ -436,7 +433,7 @@ public class AnalysisController {
 	 * interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered as
 	 * a record consumer.
 	 */
-	public void registerPlugin(final IAnalysisPlugin plugin) {
+	public void registerPlugin(final kieker.analysis.plugin.IAnalysisPlugin plugin) {
 		this.plugins.add(plugin);
 		AnalysisController.LOG.debug("Registered plugin " + plugin);
 

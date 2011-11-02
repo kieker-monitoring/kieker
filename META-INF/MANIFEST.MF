@@ -22,5 +22,6 @@ Export-Package: kieker.analysis.model.analysisMetaModel;uses:="org.eclipse.emf.e
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.emf.ecore.xmi,
+Import-Package: kieker.analysis.model.analysisMetaModel,
+ org.eclipse.emf.ecore.xmi,
  org.eclipse.emf.ecore.xmi.impl
