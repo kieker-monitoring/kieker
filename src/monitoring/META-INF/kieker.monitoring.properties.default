@@ -52,11 +52,6 @@ com.sun.management.jmxremote.ssl=false
 # writers stop should stop writing existing data.
 kieker.monitoring.enabled=true
 
-# The Timer used by Kieker. You usually don't want to change the value.
-kieker.monitoring.timer=kieker.monitoring.timer.DefaultSystemTimer
-# You can specify additional parameters sent to the Timer, e.g.
-#kieker.monitoring.timer.DefaultSystemTimer.KEY=VALUE
-
 # The size of the thread pool used to execute registered periodic sensor jobs.
 kieker.monitoring.periodicSensorsExecutorPoolSize=1
 
@@ -64,12 +59,39 @@ kieker.monitoring.periodicSensorsExecutorPoolSize=1
 # (true|false; default: true) 
 kieker.monitoring.setLoggingTimestamp=true
 
+
+###########################
+#######    TIMER    #######
+###########################
+## Selection of the timer used by Kieker (classname)
+## The value must be a fully-qualified classname of a class implementing 
+## kieker.monitoring.timer.ITimeSource and providing a constructor that 
+## accepts a single Configuration. 
+kieker.monitoring.timer=kieker.monitoring.timer.SystemNanoTimer
+
+####
+#kieker.monitoring.timer=kieker.monitoring.timer.SystemMilliTimer
+#
+## The offset of the timer. The time returned is in milliseconds
+## since 1970-1-1 minus this offset. If the offset is empty it is 
+## set to the current time.
+kieker.monitoring.timer.SystemMilliTimer.offset=0
+
+####
+#kieker.monitoring.timer=kieker.monitoring.timer.SystemNanoTimer
+#
+## The offset of the timer. The time returned is in nanoseconds
+## since 1970-1-1 minus this offset. If the offset is empty it is 
+## set to the current time. The offset must be specified in milliseconds.
+kieker.monitoring.timer.SystemNanoTimer.offset=0
+
+
 ###########################
 #######    WRITER   #######
 ###########################
 ## Selection of monitoring data writer (classname)
 ## The value must be a fully-qualified classname of a class implementing 
-## kieker.monitoring.IMonitoringWriter and providing a constructor that 
+## kieker.monitoring.writer.IMonitoringWriter and providing a constructor that 
 ## accepts an IMonitoringController and a single Configuration. 
 kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter
 

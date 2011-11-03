@@ -146,6 +146,7 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append(this.stateController.toString());
 		sb.append(this.jmxController.toString());
 		sb.append(this.registryController.toString());
+		sb.append(this.timeSourceController.toString());
 		sb.append(this.writerController.toString());
 		sb.append(this.samplingController.toString());
 		return sb.toString();

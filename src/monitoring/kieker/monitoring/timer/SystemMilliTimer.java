@@ -20,20 +20,39 @@
 
 package kieker.monitoring.timer;
 
+import java.util.Date;
+
+import kieker.monitoring.core.configuration.Configuration;
+
 /**
+ * A timer implementation, counting in milliseconds since a specified offset.
+ * 
  * @author Jan Waller
  */
-public interface ITimeSource {
+public final class SystemMilliTimer extends AbstractTimeSource {
+	public static final String CONFIG_OFFSET = SystemMilliTimer.class.getName() + ".offset";
 
-	/**
-	 * Returns the timestamp for the current time.
-	 */
-	public long getTime();
+	private final long offset;
 
-	/**
-	 * Returns a String representation of the timesource.
-	 * E.g. the meaning of a timestamp from this source.
-	 */
+	public SystemMilliTimer(final Configuration configuration) {
+		super(configuration);
+		if (configuration.getStringProperty(SystemMilliTimer.CONFIG_OFFSET).isEmpty()) {
+			this.offset = System.currentTimeMillis();
+		} else {
+			this.offset = configuration.getLongProperty(SystemMilliTimer.CONFIG_OFFSET);
+		}
+	}
+
 	@Override
-	public String toString();
+	public final long getTime() {
+		return System.currentTimeMillis() - this.offset;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Time in milliseconds since ");
+		sb.append(new Date(this.offset));
+		return sb.toString();
+	}
 }
