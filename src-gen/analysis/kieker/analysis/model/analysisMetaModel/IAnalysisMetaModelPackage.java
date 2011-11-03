@@ -245,22 +245,22 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PORT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__EVENT_TYPES = 0;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__NAME = 1;
+	int PORT__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Event Types</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__EVENT_TYPES = 1;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -282,15 +282,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int INPUT_PORT = 5;
 
 	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -298,6 +289,15 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PORT__NAME = PORT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Event Types</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
 
 	/**
 	 * The feature id for the '<em><b>In Connector</b></em>' reference list.
@@ -328,15 +328,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int OUTPUT_PORT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -344,6 +335,15 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PORT__NAME = PORT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Event Types</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
 
 	/**
 	 * The feature id for the '<em><b>Out Connector</b></em>' containment reference list.
@@ -364,34 +364,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int OUTPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Class <em>Class</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Class
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getClass_()
-	 * @generated
-	 */
-	int CLASS = 7;
-
-	/**
-	 * The feature id for the '<em><b>Classname</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CLASS__CLASSNAME = 0;
-
-	/**
-	 * The number of structural features of the '<em>Class</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CLASS_FEATURE_COUNT = 1;
-
-	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Property <em>Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -399,7 +371,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 8;
+	int PROPERTY = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -436,7 +408,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getAnalysisPlugin()
 	 * @generated
 	 */
-	int ANALYSIS_PLUGIN = 9;
+	int ANALYSIS_PLUGIN = 8;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -500,7 +472,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getReader()
 	 * @generated
 	 */
-	int READER = 10;
+	int READER = 9;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -685,17 +657,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IPort#getEventTypes <em>Event Types</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Event Types</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPort#getEventTypes()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EReference getPort_EventTypes();
-
-	/**
 	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IPort#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -705,6 +666,17 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_Name();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link kieker.analysis.model.analysisMetaModel.IPort#getEventTypes <em>Event Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Event Types</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IPort#getEventTypes()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_EventTypes();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IInputPort <em>Input Port</em>}'.
@@ -747,27 +719,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getOutputPort_OutConnector();
-
-	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IClass <em>Class</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Class</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IClass
-	 * @generated
-	 */
-	EClass getClass_();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IClass#getClassname <em>Classname</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Classname</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IClass#getClassname()
-	 * @see #getClass_()
-	 * @generated
-	 */
-	EAttribute getClass_Classname();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IProperty <em>Property</em>}'.
@@ -972,20 +923,20 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EClass PORT = eINSTANCE.getPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Event Types</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT__EVENT_TYPES = eINSTANCE.getPort_EventTypes();
-
-		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute PORT__NAME = eINSTANCE.getPort_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Event Types</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__EVENT_TYPES = eINSTANCE.getPort_EventTypes();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.InputPort <em>Input Port</em>}' class.
@@ -1022,24 +973,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OUTPUT_PORT__OUT_CONNECTOR = eINSTANCE.getOutputPort_OutConnector();
-
-		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Class <em>Class</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Class
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getClass_()
-		 * @generated
-		 */
-		EClass CLASS = eINSTANCE.getClass_();
-
-		/**
-		 * The meta object literal for the '<em><b>Classname</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CLASS__CLASSNAME = eINSTANCE.getClass_Classname();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Property <em>Property</em>}' class.

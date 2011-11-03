@@ -6,18 +6,7 @@
  */
 package kieker.analysis.model.analysisMetaModel.util;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IClass;
-import kieker.analysis.model.analysisMetaModel.IConfigurable;
-import kieker.analysis.model.analysisMetaModel.IConnector;
-import kieker.analysis.model.analysisMetaModel.IInputPort;
-import kieker.analysis.model.analysisMetaModel.IOutputPort;
-import kieker.analysis.model.analysisMetaModel.IPlugin;
-import kieker.analysis.model.analysisMetaModel.IPort;
-import kieker.analysis.model.analysisMetaModel.IProject;
-import kieker.analysis.model.analysisMetaModel.IProperty;
-import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.*;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -109,10 +98,6 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseOutputPort(IOutputPort object) {
 				return createOutputPortAdapter();
-			}
-			@Override
-			public Adapter caseClass(IClass object) {
-				return createClassAdapter();
 			}
 			@Override
 			public Adapter caseProperty(IProperty object) {
@@ -241,20 +226,6 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOutputPortAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.IClass <em>Class</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.analysis.model.analysisMetaModel.IClass
-	 * @generated
-	 */
-	public Adapter createClassAdapter() {
 		return null;
 	}
 

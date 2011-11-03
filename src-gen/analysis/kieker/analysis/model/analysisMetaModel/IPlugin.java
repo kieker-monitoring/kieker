@@ -51,12 +51,12 @@ public interface IPlugin extends IConfigurable {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Classname</em>' attribute.
-	 * @see #setClassname(String)
+	 * @see #setClassname(Class)
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPlugin_Classname()
 	 * @model required="true"
 	 * @generated
 	 */
-	String getClassname();
+	Class getClassname();
 
 	/**
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getClassname <em>Classname</em>}' attribute.
@@ -66,6 +66,6 @@ public interface IPlugin extends IConfigurable {
 	 * @see #getClassname()
 	 * @generated
 	 */
-	void setClassname(String value);
+	void setClassname(Class value);
 
 } // IPlugin

@@ -190,14 +190,13 @@ public class AnalysisController {
 				IPlugin p = (IPlugin) c;
 				if (p instanceof IReader) {
 					System.out.println("Reader gefunden: " + p.getName());
-					IMonitoringReader reader = (IMonitoringReader) Class
-							.forName(p.getClassname()).newInstance();
+					IMonitoringReader reader = (IMonitoringReader) p.getClassname().newInstance();
 					reader.init(((IReader) p).getInitString());
 					this.setReader(reader);
 					pluginObjMap.put(p, reader);
 				} else {
 					System.out.println("Plugin gefunden: " + p.getName());
-					Object plugin = Class.forName(p.getClassname()).newInstance();
+					Object plugin = p.getClassname().newInstance();
 					pluginObjMap.put(p, plugin);
 				}
 
@@ -239,7 +238,7 @@ public class AnalysisController {
 
 			kieker.analysis.plugin.configuration.IOutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
 			kieker.analysis.plugin.configuration.IInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
-			
+
 			outPort.subscribe(inPort);
 		}
 	}
@@ -320,22 +319,25 @@ public class AnalysisController {
 			 * Add delegation receiver to reader.
 			 */
 			if (success) {
-			/*	this.logReader
-						.addRecordReceiver(new IMonitoringRecordReceiver() {
-
-							/**
-							 * Delegates the records provided by the reader to
-							 * the registered record consumers
-							 */
-							/*@Override
-							public boolean newMonitoringRecord(
-									final IMonitoringRecord monitoringRecord) {
-								// abort on consumer error
-								return AnalysisController.this
-										.deliverRecordToConsumers(
-												monitoringRecord, true);
-							}
-						});*/
+				/*
+				 * this.logReader
+				 * .addRecordReceiver(new IMonitoringRecordReceiver() {
+				 * 
+				 * /**
+				 * Delegates the records provided by the reader to
+				 * the registered record consumers
+				 */
+				/*
+				 * @Override
+				 * public boolean newMonitoringRecord(
+				 * final IMonitoringRecord monitoringRecord) {
+				 * // abort on consumer error
+				 * return AnalysisController.this
+				 * .deliverRecordToConsumers(
+				 * monitoringRecord, true);
+				 * }
+				 * });
+				 */
 			}
 
 			/**

@@ -9,22 +9,18 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import java.util.Collection;
 
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IClass;
 import kieker.analysis.model.analysisMetaModel.IPort;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,24 +29,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Port#getEventTypes <em>Event Types</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Port#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Port#getEventTypes <em>Event Types</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public abstract class Port extends EObjectImpl implements IPort {
-	/**
-	 * The cached value of the '{@link #getEventTypes() <em>Event Types</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEventTypes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<IClass> eventTypes;
-
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -72,6 +58,16 @@ public abstract class Port extends EObjectImpl implements IPort {
 	protected String name = NAME_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getEventTypes() <em>Event Types</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEventTypes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Class> eventTypes;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -88,18 +84,6 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	protected EClass eStaticClass() {
 		return IAnalysisMetaModelPackage.Literals.PORT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<IClass> getEventTypes() {
-		if (eventTypes == null) {
-			eventTypes = new EObjectContainmentEList<IClass>(IClass.class, this, IAnalysisMetaModelPackage.PORT__EVENT_TYPES);
-		}
-		return eventTypes;
 	}
 
 	/**
@@ -128,13 +112,11 @@ public abstract class Port extends EObjectImpl implements IPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				return ((InternalEList<?>)getEventTypes()).basicRemove(otherEnd, msgs);
+	public EList<Class> getEventTypes() {
+		if (eventTypes == null) {
+			eventTypes = new EDataTypeUniqueEList<Class>(Class.class, this, IAnalysisMetaModelPackage.PORT__EVENT_TYPES);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+		return eventTypes;
 	}
 
 	/**
@@ -145,10 +127,10 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				return getEventTypes();
 			case IAnalysisMetaModelPackage.PORT__NAME:
 				return getName();
+			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+				return getEventTypes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -162,12 +144,12 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				getEventTypes().clear();
-				getEventTypes().addAll((Collection<? extends IClass>)newValue);
-				return;
 			case IAnalysisMetaModelPackage.PORT__NAME:
 				setName((String)newValue);
+				return;
+			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+				getEventTypes().clear();
+				getEventTypes().addAll((Collection<? extends Class>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -181,11 +163,11 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				getEventTypes().clear();
-				return;
 			case IAnalysisMetaModelPackage.PORT__NAME:
 				setName(NAME_EDEFAULT);
+				return;
+			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+				getEventTypes().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -199,10 +181,10 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				return eventTypes != null && !eventTypes.isEmpty();
 			case IAnalysisMetaModelPackage.PORT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+				return eventTypes != null && !eventTypes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -219,6 +201,8 @@ public abstract class Port extends EObjectImpl implements IPort {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", eventTypes: ");
+		result.append(eventTypes);
 		result.append(')');
 		return result.toString();
 	}

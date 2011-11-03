@@ -6,18 +6,7 @@
  */
 package kieker.analysis.model.analysisMetaModel.util;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IClass;
-import kieker.analysis.model.analysisMetaModel.IConfigurable;
-import kieker.analysis.model.analysisMetaModel.IConnector;
-import kieker.analysis.model.analysisMetaModel.IInputPort;
-import kieker.analysis.model.analysisMetaModel.IOutputPort;
-import kieker.analysis.model.analysisMetaModel.IPlugin;
-import kieker.analysis.model.analysisMetaModel.IPort;
-import kieker.analysis.model.analysisMetaModel.IProject;
-import kieker.analysis.model.analysisMetaModel.IProperty;
-import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.*;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -124,12 +113,6 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 				IOutputPort outputPort = (IOutputPort)theEObject;
 				T result = caseOutputPort(outputPort);
 				if (result == null) result = casePort(outputPort);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case IAnalysisMetaModelPackage.CLASS: {
-				IClass class_ = (IClass)theEObject;
-				T result = caseClass(class_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -261,21 +244,6 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOutputPort(IOutputPort object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Class</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Class</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseClass(IClass object) {
 		return null;
 	}
 

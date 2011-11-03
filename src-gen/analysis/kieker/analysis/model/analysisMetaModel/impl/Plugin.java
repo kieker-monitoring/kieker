@@ -51,16 +51,6 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	protected EList<IOutputPort> outputPorts;
 
 	/**
-	 * The default value of the '{@link #getClassname() <em>Classname</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getClassname()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String CLASSNAME_EDEFAULT = null;
-
-	/**
 	 * The cached value of the '{@link #getClassname() <em>Classname</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -68,7 +58,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	 * @generated
 	 * @ordered
 	 */
-	protected String classname = CLASSNAME_EDEFAULT;
+	protected Class classname;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,7 +96,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getClassname() {
+	public Class getClassname() {
 		return classname;
 	}
 
@@ -115,8 +105,8 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setClassname(String newClassname) {
-		String oldClassname = classname;
+	public void setClassname(Class newClassname) {
+		Class oldClassname = classname;
 		classname = newClassname;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PLUGIN__CLASSNAME, oldClassname, classname));
@@ -166,7 +156,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 				getOutputPorts().addAll((Collection<? extends IOutputPort>)newValue);
 				return;
 			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
-				setClassname((String)newValue);
+				setClassname((Class)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -184,7 +174,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 				getOutputPorts().clear();
 				return;
 			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
-				setClassname(CLASSNAME_EDEFAULT);
+				setClassname((Class)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -201,7 +191,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return outputPorts != null && !outputPorts.isEmpty();
 			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
-				return CLASSNAME_EDEFAULT == null ? classname != null : !CLASSNAME_EDEFAULT.equals(classname);
+				return classname != null;
 		}
 		return super.eIsSet(featureID);
 	}

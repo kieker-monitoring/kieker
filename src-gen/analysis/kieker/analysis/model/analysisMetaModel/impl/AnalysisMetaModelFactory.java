@@ -6,16 +6,7 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelFactory;
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IClass;
-import kieker.analysis.model.analysisMetaModel.IConnector;
-import kieker.analysis.model.analysisMetaModel.IInputPort;
-import kieker.analysis.model.analysisMetaModel.IOutputPort;
-import kieker.analysis.model.analysisMetaModel.IProject;
-import kieker.analysis.model.analysisMetaModel.IProperty;
-import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -73,7 +64,6 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 			case IAnalysisMetaModelPackage.CONNECTOR: return createConnector();
 			case IAnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
 			case IAnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
-			case IAnalysisMetaModelPackage.CLASS: return createClass();
 			case IAnalysisMetaModelPackage.PROPERTY: return createProperty();
 			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN: return createAnalysisPlugin();
 			case IAnalysisMetaModelPackage.READER: return createReader();
@@ -120,16 +110,6 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	public IOutputPort createOutputPort() {
 		OutputPort outputPort = new OutputPort();
 		return outputPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public IClass createClass() {
-		Class class_ = new Class();
-		return class_;
 	}
 
 	/**
