@@ -95,7 +95,7 @@ public class TestConfigurationFactoryMethods extends TestCase { // NOCS
 		Assert.assertEquals(true, configuration.getBooleanProperty(Configuration.AUTO_SET_LOGGINGTSTAMP));
 		Assert.assertEquals("kieker.monitoring.writer.filesystem.AsyncFsWriter", configuration.getStringProperty(Configuration.WRITER_CLASSNAME));
 		// TimeSource controller
-		Assert.assertEquals("kieker.monitoring.timer.DefaultSystemTimer", configuration.getStringProperty(Configuration.TIMER_CLASSNAME));
+		Assert.assertEquals("kieker.monitoring.timer.SystemNanoTimer", configuration.getStringProperty(Configuration.TIMER_CLASSNAME));
 		// Sampling controller
 		Assert.assertEquals(1, configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 	}

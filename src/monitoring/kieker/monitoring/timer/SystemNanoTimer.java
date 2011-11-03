@@ -31,13 +31,14 @@ import kieker.monitoring.core.configuration.Configuration;
  */
 public final class SystemNanoTimer extends AbstractTimeSource {
 	public static final String CONFIG_OFFSET = SystemNanoTimer.class.getName() + ".offset";
+	private static final long NANO2MILLI = 1000L * 1000L;
 
 	private final long offset;
 	private final long clockdifference;
 
 	public SystemNanoTimer(final Configuration configuration) {
 		super(configuration);
-		this.clockdifference = System.nanoTime() - (System.currentTimeMillis() * 1000000);
+		this.clockdifference = System.nanoTime() - (System.currentTimeMillis() * SystemNanoTimer.NANO2MILLI);
 		if (configuration.getStringProperty(SystemNanoTimer.CONFIG_OFFSET).isEmpty()) {
 			this.offset = System.nanoTime();
 		} else {
@@ -54,7 +55,7 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Time in nanoseconds since ");
-		sb.append(new Date((this.offset - this.clockdifference) / 1000000));
+		sb.append(new Date((this.offset - this.clockdifference) / SystemNanoTimer.NANO2MILLI));
 		return sb.toString();
 	}
 }

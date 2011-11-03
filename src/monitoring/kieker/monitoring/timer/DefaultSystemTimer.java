@@ -34,6 +34,10 @@ public final class DefaultSystemTimer extends AbstractTimeSource {
 
 	private final ITimeSource timeSource;
 
+	/**
+	 * 
+	 * @deprecated replaced with SystemNanoTimer
+	 */
 	@Deprecated
 	public DefaultSystemTimer(final Configuration configuration) throws IllegalAccessException { // this error should never be thrown
 		super(configuration);
