@@ -10,6 +10,8 @@
 				<classpathentry kind="src" path="test//analysis/"/>
 				<classpathentry kind="src" path="test//monitoring/"/>
 				<classpathentry kind="src" path="test//tools/"/>
+				<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+				<classpathentry kind="src" path="src-gen//analysis/"/>
 				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 				<classpathentry kind="lib" path="lib/aopalliance-alpha1.jar"/>
 				<classpathentry kind="lib" path="lib/aspectjrt-1.6.11.jar"/>
