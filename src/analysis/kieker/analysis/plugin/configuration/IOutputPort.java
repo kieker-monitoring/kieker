@@ -25,8 +25,10 @@ package kieker.analysis.plugin.configuration;
  * 
  * @author Andre van Hoorn
  */
-public interface IOutputPort<T extends Object> extends IPort<T> {
-	public void subscribe(IInputPort<T> subscriber);
+interface IOutputPort extends IPort {
+	
+	public void subscribe(IInputPort subscriber);
 
-	public void unsubscribe(IInputPort<T> subscriber);
+	public void unsubscribe(IInputPort subscriber);
+	
 }

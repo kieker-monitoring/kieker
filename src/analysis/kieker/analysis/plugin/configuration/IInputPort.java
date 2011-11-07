@@ -25,6 +25,8 @@ package kieker.analysis.plugin.configuration;
  * 
  * @author Andre van Hoorn
  */
-public interface IInputPort<T extends Object> extends IPort<T> {
-	public void newEvent(T event);
+interface IInputPort {
+	
+	public void newEvent(Object event);
+	
 }

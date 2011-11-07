@@ -27,34 +27,59 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 
  * @author Andre van Hoorn
  */
-public class OutputPort<T extends Object> implements IOutputPort<T> {
-	// private static final Log LOG = LogFactory.getLog(OutputPort.class);
+public final class OutputPort extends AbstractPort implements IOutputPort {
 
-	private final Collection<IInputPort<T>> subscribers = new CopyOnWriteArrayList<IInputPort<T>>();
-	private final String description;
+	private final Collection<IInputPort> subscribers = new CopyOnWriteArrayList<IInputPort>();
 
-	public OutputPort(final String description) {
-		this.description = description;
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param description
+	 *            A human-readable string explaining what this port can
+	 *            be used for. This string will probably be used later for a
+	 *            GUI.
+	 * 
+	 * @param eventTypes
+	 *            A list containing the classes which are transfered by this
+	 *            port. If a component tries to use the port to send an object
+	 *            which is not from a (sub)class within this list, the request
+	 *            will be ignored.
+	 */
+	public OutputPort(final String description, final Collection<Class<?>> eventTypes) {
+		/* Call the inherited constructor to delegate the initializing. */
+		super(description, eventTypes);
 	}
 
-	public void deliver(final T event) {
-		for (final IInputPort<T> l : this.subscribers) {
+	/**
+	 * This method can be used to deliver a given event of any type to the
+	 * subscribers of this port. Keep in mind that not registered classes are
+	 * not treated.
+	 * 
+	 * @param event
+	 *            The event to be delivered to the subscribers.
+	 * 
+	 * @return true iff the event has been treated by this instance.
+	 */
+	public boolean deliver(final Object event) {
+		/* Check whether the class of the given event is registered. */
+		for (Class<?> c : eventTypes) {
+			if (!c.isInstance(event))
+				return false;
+		}
+		/* Seems like it's okay. Deliver it to the subscribers. */
+		for (final IInputPort l : this.subscribers) {
 			l.newEvent(event);
 		}
+		return true;
 	}
 
 	@Override
-	public void subscribe(final IInputPort<T> subscriber) {
+	public final void subscribe(final IInputPort subscriber) {
 		this.subscribers.add(subscriber);
 	}
 
 	@Override
-	public void unsubscribe(final IInputPort<T> subscriber) {
+	public final void unsubscribe(final IInputPort subscriber) {
 		this.subscribers.remove(subscriber);
-	}
-
-	@Override
-	public String getDescription() {
-		return this.description;
 	}
 }

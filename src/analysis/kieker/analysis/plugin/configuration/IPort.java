@@ -25,6 +25,8 @@ package kieker.analysis.plugin.configuration;
  * 
  * @author Andre van Hoorn
  */
-public interface IPort<T extends Object> {
+interface IPort {
+	
 	public String getDescription();
+	
 }

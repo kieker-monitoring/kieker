@@ -20,24 +20,29 @@
 
 package kieker.analysis.plugin.configuration;
 
-import kieker.analysis.plugin.IAnalysisEvent;
+import java.util.Collection;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public abstract class AbstractInputPort<T extends IAnalysisEvent> implements IInputPort<T> {
+public abstract class AbstractInputPort extends AbstractPort implements IInputPort {
 
-	// private static final Log log = LogFactory.getLog(AbstractInputPort.class);
-
-	private final String description;
-
-	public AbstractInputPort(final String description) {
-		this.description = description;
-	}
-
-	@Override
-	public String getDescription() {
-		return this.description;
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param description
+	 *            A human-readable string explaining what this port can
+	 *            be used for. This string will probably be used later for a
+	 *            GUI.
+	 * 
+	 * @param eventTypes
+	 *            A list containing the classes which are transfered by this
+	 *            port. If a component tries to use the port to send an object
+	 *            which is not from a (sub)class within this list, the request
+	 *            will be ignored.
+	 */
+	public AbstractInputPort(final String description, final Collection<Class<?>> eventTypes) {
+		super(description, eventTypes);
 	}
 }
