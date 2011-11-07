@@ -12,14 +12,14 @@ import org.eclipse.emf.common.util.EList;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Analysis Plugin</b></em>'.
  * <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.IAnalysisPlugin#getInputPorts <em>Input Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.IAnalysisPlugin#getInputPorts <em>Input Ports</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getAnalysisPlugin()
  * @model
  * @generated
@@ -30,10 +30,10 @@ public interface IAnalysisPlugin extends IPlugin {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.IInputPort}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Input Ports</em>' containment reference list isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Input Ports</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Input Ports</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getAnalysisPlugin_InputPorts()
 	 * @model containment="true"

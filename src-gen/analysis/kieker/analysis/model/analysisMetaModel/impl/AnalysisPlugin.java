@@ -13,9 +13,12 @@ import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -26,10 +29,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.impl.AnalysisPlugin#getInputPorts <em>Input Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.AnalysisPlugin#getInputPorts <em>Input Ports</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
@@ -37,7 +40,6 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	 * The cached value of the '{@link #getInputPorts() <em>Input Ports</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getInputPorts()
 	 * @generated
 	 * @ordered
@@ -47,7 +49,6 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected AnalysisPlugin() {
@@ -57,7 +58,6 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -68,28 +68,25 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EList<IInputPort> getInputPorts() {
-		if (this.inputPorts == null) {
-			this.inputPorts = new EObjectContainmentEList<IInputPort>(IInputPort.class, this, IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS);
+		if (inputPorts == null) {
+			inputPorts = new EObjectContainmentEList<IInputPort>(IInputPort.class, this, IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS);
 		}
-		return this.inputPorts;
+		return inputPorts;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
-			return ((InternalEList<?>) this.getInputPorts()).basicRemove(otherEnd, msgs);
+			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+				return ((InternalEList<?>)getInputPorts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -97,14 +94,13 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
-			return this.getInputPorts();
+			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+				return getInputPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -112,17 +108,16 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
-			this.getInputPorts().clear();
-			this.getInputPorts().addAll((Collection<? extends IInputPort>) newValue);
-			return;
+			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+				getInputPorts().clear();
+				getInputPorts().addAll((Collection<? extends IInputPort>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -130,15 +125,14 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
-			this.getInputPorts().clear();
-			return;
+			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+				getInputPorts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -146,16 +140,15 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
-			return (this.inputPorts != null) && !this.inputPorts.isEmpty();
+			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+				return inputPorts != null && !inputPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} // AnalysisPlugin
+} //AnalysisPlugin

@@ -12,15 +12,15 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Connector</b></em>'.
  * <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.IConnector#getDstInputPort <em>Dst Input Port</em>}</li>
- * <li>{@link kieker.analysis.model.analysisMetaModel.IConnector#getSicOutputPort <em>Sic Output Port</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.IConnector#getDstInputPort <em>Dst Input Port</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.IConnector#getSicOutputPort <em>Sic Output Port</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getConnector()
  * @model
  * @generated
@@ -31,10 +31,10 @@ public interface IConnector extends EObject {
 	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.IInputPort#getInConnector <em>In Connector</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Dst Input Port</em>' reference isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Dst Input Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Dst Input Port</em>' reference.
 	 * @see #setDstInputPort(IInputPort)
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getConnector_DstInputPort()
@@ -48,9 +48,7 @@ public interface IConnector extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IConnector#getDstInputPort <em>Dst Input Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Dst Input Port</em>' reference.
+	 * @param value the new value of the '<em>Dst Input Port</em>' reference.
 	 * @see #getDstInputPort()
 	 * @generated
 	 */
@@ -61,10 +59,10 @@ public interface IConnector extends EObject {
 	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.IOutputPort#getOutConnector <em>Out Connector</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Sic Output Port</em>' container reference isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Sic Output Port</em>' container reference isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Sic Output Port</em>' container reference.
 	 * @see #setSicOutputPort(IOutputPort)
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getConnector_SicOutputPort()
@@ -78,9 +76,7 @@ public interface IConnector extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IConnector#getSicOutputPort <em>Sic Output Port</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Sic Output Port</em>' container reference.
+	 * @param value the new value of the '<em>Sic Output Port</em>' container reference.
 	 * @see #getSicOutputPort()
 	 * @generated
 	 */

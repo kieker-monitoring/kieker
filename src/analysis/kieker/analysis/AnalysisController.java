@@ -34,7 +34,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IConfigurable;
 import kieker.analysis.model.analysisMetaModel.IConnector;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.model.analysisMetaModel.IOutputPort;
@@ -46,6 +45,8 @@ import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -106,53 +107,29 @@ public class AnalysisController {
 	}
 
 	/**
-	 * This method loads the model from the given file and creates an instance
-	 * of this class for every single "Project" within this model. The file
-	 * should therefore be an instance of the analysis meta model.
+	 * This constructors loads the model from the given file as a configuration
+	 * and creates an instance of this class. The file should therefore be an
+	 * instance of the analysis meta model.
 	 * 
 	 * @param file
 	 *            The configuration file for the analysis.
 	 * 
-	 * @return A map containing the sub projects. The key is the name of the
-	 *         project, the value is the instance of this class. If something
-	 *         went wrong, null will be returned.
+	 * @return A completely initialized instance of {@link AnalysisController}.
 	 * 
 	 * @throws Exception
 	 *             If something went wrong.
 	 */
-	static public Map<String, AnalysisController> loadFromFile(final File file)
-			throws Exception {
+	public AnalysisController(final File file) throws Exception {
 		/* Try to load everything. */
 		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if (!content.isEmpty()) {
-			/* The first (and only) element should be the "parent project" */
+			/*
+			 * The first (and only) element should be the project. Use it to
+			 * configure this instance.
+			 */
 			final IProject project = (IProject) content.get(0);
-
-			/* Now find all "sub projects" */
-			final List<IProject> projects = new ArrayList<IProject>();
-			final List<IProject> toExpand = new ArrayList<IProject>();
-			toExpand.add(project);
-			while (!toExpand.isEmpty()) {
-				final IProject currProj = toExpand.remove(0);
-				projects.add(currProj);
-				final EList<IConfigurable> configs = currProj.getConfigurables();
-				for (final IConfigurable c : configs) {
-					if (c instanceof IProject) {
-						toExpand.add((IProject) c);
-					}
-				}
-			}
-
-			/* Configure all projects. */
-			final Map<String, AnalysisController> map = new HashMap<String, AnalysisController>();
-
-			for (final IProject currProject : projects) {
-				map.put(currProject.getName(), new AnalysisController(
-						currProject));
-			}
-			return map;
+			loadFromModelProject(project);
 		}
-		return null;
 	}
 
 	/**
@@ -163,7 +140,11 @@ public class AnalysisController {
 	 *            The project instance for the analysis.
 	 * @throws Exception
 	 */
-	private AnalysisController(final IProject project) throws Exception {
+	public AnalysisController(final IProject project) throws Exception {
+		loadFromModelProject(project);
+	}
+
+	private final void loadFromModelProject(final IProject project) throws Exception {
 		System.out.println(project.getName());
 
 		/*
@@ -172,48 +153,44 @@ public class AnalysisController {
 		 * map). 2) The connection between the plugins and their created
 		 * counterpart (as a map). 3) The "real" connection within the model.
 		 */
-		final EList<IConfigurable> configs = project.getConfigurables();
+		final EList<IPlugin> plugins = project.getPlugins();
 		final List<IConnector> connectors = new ArrayList<IConnector>();
 		final Map<IPort, IPlugin> portPluginMap = new HashMap<IPort, IPlugin>();
 		final Map<IPlugin, Object> pluginObjMap = new HashMap<IPlugin, Object>();
 
 		/* Run through the "configurables" to extract all plugins. */
-		for (final IConfigurable c : configs) {
+		for (final IPlugin p : plugins) {
+			/*
+			 * We found a plugin. Not we have to determine whether this is a
+			 * reader or a normal plugin.
+			 */
+			// TODO: Initialize reader and plugin!
+			if (p instanceof IReader) {
+				System.out.println("Reader gefunden: " + p.getName());
+				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).newInstance();
+				this.setReader(reader);
+				pluginObjMap.put(p, reader);
+			} else {
+				System.out.println("Plugin gefunden: " + p.getName());
+				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname()).newInstance();
+				pluginObjMap.put(p, plugin);
+			}
 
-			if (c instanceof IPlugin) {
-				/*
-				 * We found a plugin. Not we have to determine whether this is a
-				 * reader or a normal plugin.
-				 */
-				final IPlugin p = (IPlugin) c;
-				if (p instanceof IReader) {
-					System.out.println("Reader gefunden: " + p.getName());
-					final IMonitoringReader reader = (IMonitoringReader) p.getClassname().newInstance();
-					reader.init(((IReader) p).getInitString());
-					this.setReader(reader);
-					pluginObjMap.put(p, reader);
-				} else {
-					System.out.println("Plugin gefunden: " + p.getName());
-					final Object plugin = p.getClassname().newInstance();
-					pluginObjMap.put(p, plugin);
-				}
+			/*
+			 * Now we run through all ports of the current plugin. We
+			 * remember them to have a connection between the ports and
+			 * their parent. We will also accumulate all Connectors.
+			 */
 
-				/*
-				 * Now we run through all ports of the current plugin. We
-				 * remember them to have a connection between the ports and
-				 * their parent. We will also accumulate all Connectors.
-				 */
+			for (final IOutputPort oPort : p.getOutputPorts()) {
+				connectors.addAll(oPort.getOutConnector());
 
-				for (final IOutputPort oPort : p.getOutputPorts()) {
-					connectors.addAll(oPort.getOutConnector());
+				portPluginMap.put(oPort, p);
+			}
 
-					portPluginMap.put(oPort, p);
-				}
-
-				if (p instanceof IAnalysisPlugin) {
-					for (final IInputPort iPort : ((IAnalysisPlugin) p).getInputPorts()) {
-						portPluginMap.put(iPort, p);
-					}
+			if (p instanceof IAnalysisPlugin) {
+				for (final IInputPort iPort : ((IAnalysisPlugin) p).getInputPorts()) {
+					portPluginMap.put(iPort, p);
 				}
 			}
 		}
@@ -234,8 +211,8 @@ public class AnalysisController {
 			final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap
 					.get(in);
 
-			final kieker.analysis.plugin.configuration.IOutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
-			final kieker.analysis.plugin.configuration.IInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
+			final OutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
+			final AbstractInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
 
 			outPort.subscribe(inPort);
 		}

@@ -9,7 +9,6 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IConfigurable;
 import kieker.analysis.model.analysisMetaModel.IConnector;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.model.analysisMetaModel.IOutputPort;
@@ -23,20 +22,19 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisMetaModelPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass projectEClass = null;
@@ -44,7 +42,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass pluginEClass = null;
@@ -52,7 +49,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass connectorEClass = null;
@@ -60,15 +56,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	private EClass configurableEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass portEClass = null;
@@ -76,7 +63,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass inputPortEClass = null;
@@ -84,7 +70,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass outputPortEClass = null;
@@ -92,7 +77,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass propertyEClass = null;
@@ -100,7 +84,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass analysisPluginEClass = null;
@@ -108,31 +91,32 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass readerEClass = null;
 
 	/**
-	 * Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * Creates an instance of the model <b>Package</b>, registered with
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
-	 * <p>
-	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also performs initialization of the package, or
-	 * returns the registered package, if one already exists. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * <p>Note: the correct way to create the package is via the static
+	 * factory method {@link #init init()}, which also performs
+	 * initialization of the package, or returns the registered package,
+	 * if one already exists.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
 	private AnalysisMetaModelPackage() {
-		super(IAnalysisMetaModelPackage.eNS_URI, IAnalysisMetaModelFactory.eINSTANCE);
+		super(eNS_URI, IAnalysisMetaModelFactory.eINSTANCE);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -140,25 +124,22 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>
-	 * This method is used to initialize {@link IAnalysisMetaModelPackage#eINSTANCE} when that field is accessed. Clients should not invoke it directly. Instead,
-	 * they should simply access that field to obtain the package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * <p>This method is used to initialize {@link IAnalysisMetaModelPackage#eINSTANCE} when that field is accessed.
+	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static IAnalysisMetaModelPackage init() {
-		if (AnalysisMetaModelPackage.isInited) {
-			return (IAnalysisMetaModelPackage) EPackage.Registry.INSTANCE.getEPackage(IAnalysisMetaModelPackage.eNS_URI);
-		}
+		if (isInited) return (IAnalysisMetaModelPackage)EPackage.Registry.INSTANCE.getEPackage(IAnalysisMetaModelPackage.eNS_URI);
 
 		// Obtain or create and register package
-		final AnalysisMetaModelPackage theAnalysisMetaModelPackage = (AnalysisMetaModelPackage) (EPackage.Registry.INSTANCE.get(IAnalysisMetaModelPackage.eNS_URI) instanceof AnalysisMetaModelPackage ? EPackage.Registry.INSTANCE
-				.get(IAnalysisMetaModelPackage.eNS_URI) : new AnalysisMetaModelPackage());
+		AnalysisMetaModelPackage theAnalysisMetaModelPackage = (AnalysisMetaModelPackage)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof AnalysisMetaModelPackage ? EPackage.Registry.INSTANCE.get(eNS_URI) : new AnalysisMetaModelPackage());
 
-		AnalysisMetaModelPackage.isInited = true;
+		isInited = true;
 
 		// Create package meta-data objects
 		theAnalysisMetaModelPackage.createPackageContents();
@@ -169,6 +150,7 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 		// Mark meta-data to indicate it can't be changed
 		theAnalysisMetaModelPackage.freeze();
 
+  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(IAnalysisMetaModelPackage.eNS_URI, theAnalysisMetaModelPackage);
 		return theAnalysisMetaModelPackage;
@@ -177,462 +159,350 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EClass getProject() {
-		return this.projectEClass;
+		return projectEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
-	public EReference getProject_Configurables() {
-		return (EReference) this.projectEClass.getEStructuralFeatures().get(0);
+	public EReference getProject_Plugins() {
+		return (EReference)projectEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
+	public EAttribute getProject_Name() {
+		return (EAttribute)projectEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPlugin() {
-		return this.pluginEClass;
+		return pluginEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EReference getPlugin_OutputPorts() {
-		return (EReference) this.pluginEClass.getEStructuralFeatures().get(0);
+		return (EReference)pluginEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
+	public EAttribute getPlugin_Name() {
+		return (EAttribute)pluginEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getPlugin_Classname() {
-		return (EAttribute) this.pluginEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)pluginEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
+	public EReference getPlugin_Properties() {
+		return (EReference)pluginEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getConnector() {
-		return this.connectorEClass;
+		return connectorEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EReference getConnector_DstInputPort() {
-		return (EReference) this.connectorEClass.getEStructuralFeatures().get(0);
+		return (EReference)connectorEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EReference getConnector_SicOutputPort() {
-		return (EReference) this.connectorEClass.getEStructuralFeatures().get(1);
+		return (EReference)connectorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
-	public EClass getConfigurable() {
-		return this.configurableEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public EAttribute getConfigurable_Name() {
-		return (EAttribute) this.configurableEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public EReference getConfigurable_Properties() {
-		return (EReference) this.configurableEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
 	public EClass getPort() {
-		return this.portEClass;
+		return portEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EAttribute getPort_Name() {
-		return (EAttribute) this.portEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EAttribute getPort_EventTypes() {
-		return (EAttribute) this.portEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EClass getInputPort() {
-		return this.inputPortEClass;
+		return inputPortEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EReference getInputPort_InConnector() {
-		return (EReference) this.inputPortEClass.getEStructuralFeatures().get(0);
+		return (EReference)inputPortEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EClass getOutputPort() {
-		return this.outputPortEClass;
+		return outputPortEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EReference getOutputPort_OutConnector() {
-		return (EReference) this.outputPortEClass.getEStructuralFeatures().get(0);
+		return (EReference)outputPortEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EClass getProperty() {
-		return this.propertyEClass;
+		return propertyEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EAttribute getProperty_Name() {
-		return (EAttribute) this.propertyEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EAttribute getProperty_Value() {
-		return (EAttribute) this.propertyEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EClass getAnalysisPlugin() {
-		return this.analysisPluginEClass;
+		return analysisPluginEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EReference getAnalysisPlugin_InputPorts() {
-		return (EReference) this.analysisPluginEClass.getEStructuralFeatures().get(0);
+		return (EReference)analysisPluginEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
 	public EClass getReader() {
-		return this.readerEClass;
+		return readerEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
-	public EAttribute getReader_InitString() {
-		return (EAttribute) this.readerEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
 	public IAnalysisMetaModelFactory getAnalysisMetaModelFactory() {
-		return (IAnalysisMetaModelFactory) this.getEFactoryInstance();
+		return (IAnalysisMetaModelFactory)getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package. This method is
+	 * Creates the meta-model objects for the package.  This method is
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (this.isCreated) {
-			return;
-		}
-		this.isCreated = true;
+		if (isCreated) return;
+		isCreated = true;
 
 		// Create classes and their features
-		this.projectEClass = this.createEClass(IAnalysisMetaModelPackage.PROJECT);
-		this.createEReference(this.projectEClass, IAnalysisMetaModelPackage.PROJECT__CONFIGURABLES);
+		projectEClass = createEClass(PROJECT);
+		createEReference(projectEClass, PROJECT__PLUGINS);
+		createEAttribute(projectEClass, PROJECT__NAME);
 
-		this.pluginEClass = this.createEClass(IAnalysisMetaModelPackage.PLUGIN);
-		this.createEReference(this.pluginEClass, IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS);
-		this.createEAttribute(this.pluginEClass, IAnalysisMetaModelPackage.PLUGIN__CLASSNAME);
+		pluginEClass = createEClass(PLUGIN);
+		createEReference(pluginEClass, PLUGIN__OUTPUT_PORTS);
+		createEAttribute(pluginEClass, PLUGIN__NAME);
+		createEAttribute(pluginEClass, PLUGIN__CLASSNAME);
+		createEReference(pluginEClass, PLUGIN__PROPERTIES);
 
-		this.connectorEClass = this.createEClass(IAnalysisMetaModelPackage.CONNECTOR);
-		this.createEReference(this.connectorEClass, IAnalysisMetaModelPackage.CONNECTOR__DST_INPUT_PORT);
-		this.createEReference(this.connectorEClass, IAnalysisMetaModelPackage.CONNECTOR__SIC_OUTPUT_PORT);
+		connectorEClass = createEClass(CONNECTOR);
+		createEReference(connectorEClass, CONNECTOR__DST_INPUT_PORT);
+		createEReference(connectorEClass, CONNECTOR__SIC_OUTPUT_PORT);
 
-		this.configurableEClass = this.createEClass(IAnalysisMetaModelPackage.CONFIGURABLE);
-		this.createEAttribute(this.configurableEClass, IAnalysisMetaModelPackage.CONFIGURABLE__NAME);
-		this.createEReference(this.configurableEClass, IAnalysisMetaModelPackage.CONFIGURABLE__PROPERTIES);
+		portEClass = createEClass(PORT);
+		createEAttribute(portEClass, PORT__NAME);
+		createEAttribute(portEClass, PORT__EVENT_TYPES);
 
-		this.portEClass = this.createEClass(IAnalysisMetaModelPackage.PORT);
-		this.createEAttribute(this.portEClass, IAnalysisMetaModelPackage.PORT__NAME);
-		this.createEAttribute(this.portEClass, IAnalysisMetaModelPackage.PORT__EVENT_TYPES);
+		inputPortEClass = createEClass(INPUT_PORT);
+		createEReference(inputPortEClass, INPUT_PORT__IN_CONNECTOR);
 
-		this.inputPortEClass = this.createEClass(IAnalysisMetaModelPackage.INPUT_PORT);
-		this.createEReference(this.inputPortEClass, IAnalysisMetaModelPackage.INPUT_PORT__IN_CONNECTOR);
+		outputPortEClass = createEClass(OUTPUT_PORT);
+		createEReference(outputPortEClass, OUTPUT_PORT__OUT_CONNECTOR);
 
-		this.outputPortEClass = this.createEClass(IAnalysisMetaModelPackage.OUTPUT_PORT);
-		this.createEReference(this.outputPortEClass, IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR);
+		propertyEClass = createEClass(PROPERTY);
+		createEAttribute(propertyEClass, PROPERTY__NAME);
+		createEAttribute(propertyEClass, PROPERTY__VALUE);
 
-		this.propertyEClass = this.createEClass(IAnalysisMetaModelPackage.PROPERTY);
-		this.createEAttribute(this.propertyEClass, IAnalysisMetaModelPackage.PROPERTY__NAME);
-		this.createEAttribute(this.propertyEClass, IAnalysisMetaModelPackage.PROPERTY__VALUE);
+		analysisPluginEClass = createEClass(ANALYSIS_PLUGIN);
+		createEReference(analysisPluginEClass, ANALYSIS_PLUGIN__INPUT_PORTS);
 
-		this.analysisPluginEClass = this.createEClass(IAnalysisMetaModelPackage.ANALYSIS_PLUGIN);
-		this.createEReference(this.analysisPluginEClass, IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS);
-
-		this.readerEClass = this.createEClass(IAnalysisMetaModelPackage.READER);
-		this.createEAttribute(this.readerEClass, IAnalysisMetaModelPackage.READER__INIT_STRING);
+		readerEClass = createEClass(READER);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model. This
+	 * Complete the initialization of the package and its meta-model.  This
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (this.isInitialized) {
-			return;
-		}
-		this.isInitialized = true;
+		if (isInitialized) return;
+		isInitialized = true;
 
 		// Initialize package
-		this.setName(IAnalysisMetaModelPackage.eNAME);
-		this.setNsPrefix(IAnalysisMetaModelPackage.eNS_PREFIX);
-		this.setNsURI(IAnalysisMetaModelPackage.eNS_URI);
+		setName(eNAME);
+		setNsPrefix(eNS_PREFIX);
+		setNsURI(eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		this.projectEClass.getESuperTypes().add(this.getConfigurable());
-		this.pluginEClass.getESuperTypes().add(this.getConfigurable());
-		this.inputPortEClass.getESuperTypes().add(this.getPort());
-		this.outputPortEClass.getESuperTypes().add(this.getPort());
-		this.analysisPluginEClass.getESuperTypes().add(this.getPlugin());
-		this.readerEClass.getESuperTypes().add(this.getPlugin());
+		inputPortEClass.getESuperTypes().add(this.getPort());
+		outputPortEClass.getESuperTypes().add(this.getPort());
+		analysisPluginEClass.getESuperTypes().add(this.getPlugin());
+		readerEClass.getESuperTypes().add(this.getPlugin());
 
 		// Initialize classes and features; add operations and parameters
-		this.initEClass(this.projectEClass, IProject.class, "Project", !EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE,
-				EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEReference(this.getProject_Configurables(), this.getConfigurable(), null, "configurables", null, 0, -1, IProject.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, EPackageImpl.IS_COMPOSITE, !EPackageImpl.IS_RESOLVE_PROXIES, !EPackageImpl.IS_UNSETTABLE,
-				EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(projectEClass, IProject.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProject_Plugins(), this.getPlugin(), null, "plugins", null, 0, -1, IProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProject_Name(), ecorePackage.getEString(), "name", null, 1, 1, IProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.pluginEClass, IPlugin.class, "Plugin", EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE, EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEReference(this.getPlugin_OutputPorts(), this.getOutputPort(), null, "outputPorts", null, 0, -1, IPlugin.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, EPackageImpl.IS_COMPOSITE, !EPackageImpl.IS_RESOLVE_PROXIES, !EPackageImpl.IS_UNSETTABLE,
-				EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
-		this.initEAttribute(this.getPlugin_Classname(), this.ecorePackage.getEJavaClass(), "classname", null, 1, 1, IPlugin.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_UNSETTABLE, !EPackageImpl.IS_ID, EPackageImpl.IS_UNIQUE,
-				!EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(pluginEClass, IPlugin.class, "Plugin", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPlugin_OutputPorts(), this.getOutputPort(), null, "outputPorts", null, 0, -1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPlugin_Name(), ecorePackage.getEString(), "name", null, 1, 1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPlugin_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPlugin_Properties(), this.getProperty(), null, "properties", null, 0, -1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.connectorEClass, IConnector.class, "Connector", !EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE,
-				EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEReference(this.getConnector_DstInputPort(), this.getInputPort(), this.getInputPort_InConnector(), "dstInputPort", null, 1, 1, IConnector.class,
-				!EPackageImpl.IS_TRANSIENT, !EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_COMPOSITE, EPackageImpl.IS_RESOLVE_PROXIES,
-				!EPackageImpl.IS_UNSETTABLE, EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
-		this.initEReference(this.getConnector_SicOutputPort(), this.getOutputPort(), this.getOutputPort_OutConnector(), "sicOutputPort", null, 1, 1,
-				IConnector.class, !EPackageImpl.IS_TRANSIENT, !EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_COMPOSITE,
-				!EPackageImpl.IS_RESOLVE_PROXIES, !EPackageImpl.IS_UNSETTABLE, EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(connectorEClass, IConnector.class, "Connector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getConnector_DstInputPort(), this.getInputPort(), this.getInputPort_InConnector(), "dstInputPort", null, 1, 1, IConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConnector_SicOutputPort(), this.getOutputPort(), this.getOutputPort_OutConnector(), "sicOutputPort", null, 1, 1, IConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.configurableEClass, IConfigurable.class, "Configurable", EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE,
-				EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEAttribute(this.getConfigurable_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, IConfigurable.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_UNSETTABLE, !EPackageImpl.IS_ID, EPackageImpl.IS_UNIQUE,
-				!EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
-		this.initEReference(this.getConfigurable_Properties(), this.getProperty(), null, "properties", null, 0, -1, IConfigurable.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, EPackageImpl.IS_COMPOSITE, !EPackageImpl.IS_RESOLVE_PROXIES, !EPackageImpl.IS_UNSETTABLE,
-				EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(portEClass, IPort.class, "Port", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 1, 1, IPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_EventTypes(), ecorePackage.getEString(), "eventTypes", null, 1, -1, IPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.portEClass, IPort.class, "Port", EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE, EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEAttribute(this.getPort_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, IPort.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_UNSETTABLE, !EPackageImpl.IS_ID, EPackageImpl.IS_UNIQUE,
-				!EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
-		this.initEAttribute(this.getPort_EventTypes(), this.ecorePackage.getEJavaClass(), "eventTypes", null, 1, -1, IPort.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_UNSETTABLE, !EPackageImpl.IS_ID, EPackageImpl.IS_UNIQUE,
-				!EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(inputPortEClass, IInputPort.class, "InputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getInputPort_InConnector(), this.getConnector(), this.getConnector_DstInputPort(), "inConnector", null, 0, -1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.inputPortEClass, IInputPort.class, "InputPort", !EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE,
-				EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEReference(this.getInputPort_InConnector(), this.getConnector(), this.getConnector_DstInputPort(), "inConnector", null, 0, -1, IInputPort.class,
-				!EPackageImpl.IS_TRANSIENT, !EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_COMPOSITE, EPackageImpl.IS_RESOLVE_PROXIES,
-				!EPackageImpl.IS_UNSETTABLE, EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(outputPortEClass, IOutputPort.class, "OutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getOutputPort_OutConnector(), this.getConnector(), this.getConnector_SicOutputPort(), "outConnector", null, 0, -1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.outputPortEClass, IOutputPort.class, "OutputPort", !EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE,
-				EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEReference(this.getOutputPort_OutConnector(), this.getConnector(), this.getConnector_SicOutputPort(), "outConnector", null, 0, -1,
-				IOutputPort.class, !EPackageImpl.IS_TRANSIENT, !EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, EPackageImpl.IS_COMPOSITE,
-				!EPackageImpl.IS_RESOLVE_PROXIES, !EPackageImpl.IS_UNSETTABLE, EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(propertyEClass, IProperty.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, IProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProperty_Value(), ecorePackage.getEString(), "value", null, 1, 1, IProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.propertyEClass, IProperty.class, "Property", !EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE,
-				EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEAttribute(this.getProperty_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, IProperty.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_UNSETTABLE, !EPackageImpl.IS_ID, EPackageImpl.IS_UNIQUE,
-				!EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
-		this.initEAttribute(this.getProperty_Value(), this.ecorePackage.getEString(), "value", null, 1, 1, IProperty.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_UNSETTABLE, !EPackageImpl.IS_ID, EPackageImpl.IS_UNIQUE,
-				!EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(analysisPluginEClass, IAnalysisPlugin.class, "AnalysisPlugin", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAnalysisPlugin_InputPorts(), this.getInputPort(), null, "inputPorts", null, 0, -1, IAnalysisPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		this.initEClass(this.analysisPluginEClass, IAnalysisPlugin.class, "AnalysisPlugin", !EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE,
-				EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEReference(this.getAnalysisPlugin_InputPorts(), this.getInputPort(), null, "inputPorts", null, 0, -1, IAnalysisPlugin.class,
-				!EPackageImpl.IS_TRANSIENT, !EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, EPackageImpl.IS_COMPOSITE, !EPackageImpl.IS_RESOLVE_PROXIES,
-				!EPackageImpl.IS_UNSETTABLE, EPackageImpl.IS_UNIQUE, !EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
-
-		this.initEClass(this.readerEClass, IReader.class, "Reader", !EPackageImpl.IS_ABSTRACT, !EPackageImpl.IS_INTERFACE, EPackageImpl.IS_GENERATED_INSTANCE_CLASS);
-		this.initEAttribute(this.getReader_InitString(), this.ecorePackage.getEString(), "initString", null, 0, 1, IReader.class, !EPackageImpl.IS_TRANSIENT,
-				!EPackageImpl.IS_VOLATILE, EPackageImpl.IS_CHANGEABLE, !EPackageImpl.IS_UNSETTABLE, !EPackageImpl.IS_ID, EPackageImpl.IS_UNIQUE,
-				!EPackageImpl.IS_DERIVED, EPackageImpl.IS_ORDERED);
+		initEClass(readerEClass, IReader.class, "Reader", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
-		this.createResource(IAnalysisMetaModelPackage.eNS_URI);
+		createResource(eNS_URI);
 	}
 
-} // AnalysisMetaModelPackage
+} //AnalysisMetaModelPackage

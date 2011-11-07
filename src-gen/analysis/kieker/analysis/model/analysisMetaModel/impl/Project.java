@@ -9,13 +9,20 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import java.util.Collection;
 
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IConfigurable;
+import kieker.analysis.model.analysisMetaModel.IPlugin;
 import kieker.analysis.model.analysisMetaModel.IProject;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -26,28 +33,47 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.impl.Project#getConfigurables <em>Configurables</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Project#getPlugins <em>Plugins</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Project#getName <em>Name</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
-public class Project extends Configurable implements IProject {
+public class Project extends EObjectImpl implements IProject {
 	/**
-	 * The cached value of the '{@link #getConfigurables() <em>Configurables</em>}' containment reference list.
+	 * The cached value of the '{@link #getPlugins() <em>Plugins</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @see #getConfigurables()
+	 * @see #getPlugins()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<IConfigurable> configurables;
+	protected EList<IPlugin> plugins;
+
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected Project() {
@@ -57,7 +83,6 @@ public class Project extends Configurable implements IProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -68,28 +93,46 @@ public class Project extends Configurable implements IProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	@Override
-	public EList<IConfigurable> getConfigurables() {
-		if (this.configurables == null) {
-			this.configurables = new EObjectContainmentEList<IConfigurable>(IConfigurable.class, this, IAnalysisMetaModelPackage.PROJECT__CONFIGURABLES);
+	public EList<IPlugin> getPlugins() {
+		if (plugins == null) {
+			plugins = new EObjectContainmentEList<IPlugin>(IPlugin.class, this, IAnalysisMetaModelPackage.PROJECT__PLUGINS);
 		}
-		return this.configurables;
+		return plugins;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 * @generated
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PROJECT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.PROJECT__CONFIGURABLES:
-			return ((InternalEList<?>) this.getConfigurables()).basicRemove(otherEnd, msgs);
+			case IAnalysisMetaModelPackage.PROJECT__PLUGINS:
+				return ((InternalEList<?>)getPlugins()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -97,14 +140,15 @@ public class Project extends Configurable implements IProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.PROJECT__CONFIGURABLES:
-			return this.getConfigurables();
+			case IAnalysisMetaModelPackage.PROJECT__PLUGINS:
+				return getPlugins();
+			case IAnalysisMetaModelPackage.PROJECT__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -112,17 +156,19 @@ public class Project extends Configurable implements IProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.PROJECT__CONFIGURABLES:
-			this.getConfigurables().clear();
-			this.getConfigurables().addAll((Collection<? extends IConfigurable>) newValue);
-			return;
+			case IAnalysisMetaModelPackage.PROJECT__PLUGINS:
+				getPlugins().clear();
+				getPlugins().addAll((Collection<? extends IPlugin>)newValue);
+				return;
+			case IAnalysisMetaModelPackage.PROJECT__NAME:
+				setName((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -130,15 +176,17 @@ public class Project extends Configurable implements IProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.PROJECT__CONFIGURABLES:
-			this.getConfigurables().clear();
-			return;
+			case IAnalysisMetaModelPackage.PROJECT__PLUGINS:
+				getPlugins().clear();
+				return;
+			case IAnalysisMetaModelPackage.PROJECT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -146,16 +194,33 @@ public class Project extends Configurable implements IProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case IAnalysisMetaModelPackage.PROJECT__CONFIGURABLES:
-			return (this.configurables != null) && !this.configurables.isEmpty();
+			case IAnalysisMetaModelPackage.PROJECT__PLUGINS:
+				return plugins != null && !plugins.isEmpty();
+			case IAnalysisMetaModelPackage.PROJECT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
 	}
 
-} // Project
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
+	}
+
+} //Project

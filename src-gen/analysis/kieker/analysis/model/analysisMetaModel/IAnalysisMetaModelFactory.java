@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
- * 
  * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage
  * @generated
  */
@@ -22,7 +21,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	IAnalysisMetaModelFactory eINSTANCE = kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelFactory.init();
@@ -31,7 +29,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns a new object of class '<em>Project</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return a new object of class '<em>Project</em>'.
 	 * @generated
 	 */
@@ -41,7 +38,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns a new object of class '<em>Connector</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return a new object of class '<em>Connector</em>'.
 	 * @generated
 	 */
@@ -51,7 +47,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns a new object of class '<em>Input Port</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return a new object of class '<em>Input Port</em>'.
 	 * @generated
 	 */
@@ -61,7 +56,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns a new object of class '<em>Output Port</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return a new object of class '<em>Output Port</em>'.
 	 * @generated
 	 */
@@ -71,7 +65,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns a new object of class '<em>Property</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return a new object of class '<em>Property</em>'.
 	 * @generated
 	 */
@@ -81,7 +74,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns a new object of class '<em>Analysis Plugin</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return a new object of class '<em>Analysis Plugin</em>'.
 	 * @generated
 	 */
@@ -91,7 +83,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns a new object of class '<em>Reader</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return a new object of class '<em>Reader</em>'.
 	 * @generated
 	 */
@@ -101,10 +92,9 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the package supported by this factory.
 	 * @generated
 	 */
 	IAnalysisMetaModelPackage getAnalysisMetaModelPackage();
 
-} // IAnalysisMetaModelFactory
+} //IAnalysisMetaModelFactory

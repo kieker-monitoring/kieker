@@ -20,6 +20,7 @@
 
 package kieker.analysis.reader.filesystem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.PriorityQueue;
@@ -73,7 +74,9 @@ public class FSReader extends AbstractMonitoringReader implements
 			this.inputDirs = null; // NOPMD
 			this.recordQueue = new PriorityQueue<IMonitoringRecord>();
 		}
-		this.outputPort = new OutputPort("out");
+		Collection<Class<?>> eventTypes = new ArrayList<Class<?>>();
+		eventTypes.add(IMonitoringRecord.class);
+		this.outputPort = new OutputPort("out", eventTypes);
 		super.registerOutputPort("out", this.outputPort);
 	}
 
