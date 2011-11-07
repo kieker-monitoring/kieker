@@ -24,13 +24,12 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -58,7 +57,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 			PipeReader.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		} else {
-			PipeReader.LOG.debug("Connectod to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+			PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
 		}
 		this.pipe.setPipeReader(this);
 	}

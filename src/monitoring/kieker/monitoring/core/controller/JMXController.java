@@ -35,10 +35,9 @@ import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller
@@ -62,6 +61,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	// The error handling in this block is corrent, see ticket #293
 	protected JMXController(final Configuration configuration) {
+		super(configuration);
 		ObjectName controllerObjectNameTmp = null;
 		ObjectName serverObjectNameTmp = null;
 		JMXConnectorServer serverTmp = null;
@@ -121,7 +121,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	// The error handling in this block is corrent, see ticket #293
 	@Override
-	protected void init() {
+	protected final void init() {
 		synchronized (this) {
 			if (this.jmxEnabled && !this.isTerminated()) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); // NOPMD

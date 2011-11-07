@@ -605,6 +605,7 @@
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="IllegalImport">
             <property name="illegalPkgs" value="sun"/>
+            <property name="illegalPkgs" value="org.apache.commons.logging"/>
         </module>
 
         <!-- Controls what can be imported in each package. Useful for ensuring that application layering rules !-->

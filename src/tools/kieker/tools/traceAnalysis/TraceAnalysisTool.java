@@ -42,6 +42,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
@@ -74,8 +76,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -564,7 +564,7 @@ public final class TraceAnalysisTool {
 
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			System.err.println("An error occured. See 'kieker.log' for details");
-			TraceAnalysisTool.LOG.fatal(args, exc);
+			TraceAnalysisTool.LOG.error(Arrays.toString(args), exc);
 		}
 	}
 

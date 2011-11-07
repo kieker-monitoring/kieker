@@ -40,7 +40,9 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectSPECjEnterprise2010Servlet.class);
 
 	@Pointcut("execution(* org.spec.jent.servlet.SpecAppServlet.do*(..)) && args(request,response)")
-	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {}
+	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {
+		// nothing here
+	}
 
 	@Override
 	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
@@ -48,8 +50,10 @@ public class OperationExecutionAspectSPECjEnterprise2010Servlet extends Abstract
 		return super.doServletEntryProfiling(thisJoinPoint);
 	}
 
-	@Pointcut("execution(* org.spec.jent..*(..)) && !execution(* _persistence*(..)) && !execution(void set*(..)) && !execution(* get*(..)) && !execution(boolean is*(..))")
-	public void monitoredMethod() {}
+	@Pointcut("execution(* org.spec.jent..*(..)) && !execution(* _persistence*(..)) && noGetterAndSetter())")
+	public void monitoredMethod() {
+		// nothing here
+	}
 
 	@Override
 	@Around("monitoredMethod() && notWithinKieker()")

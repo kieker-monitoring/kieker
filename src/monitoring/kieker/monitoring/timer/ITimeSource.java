@@ -20,10 +20,20 @@
 
 package kieker.monitoring.timer;
 
+/**
+ * @author Jan Waller
+ */
 public interface ITimeSource {
 
 	/**
 	 * Returns the timestamp for the current time.
 	 */
 	public long getTime();
+
+	/**
+	 * Returns a String representation of the timesource.
+	 * E.g. the meaning of a timestamp from this source.
+	 */
+	@Override
+	public String toString();
 }

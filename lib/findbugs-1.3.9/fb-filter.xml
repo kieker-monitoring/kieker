@@ -2,16 +2,58 @@
 <!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
   <Match>
-    <Class name="kieker.analysis.reader.filesystem.FSDirectoryReader$FileComparator" />
-    <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" />
-  </Match>
-
-  <Match>
     <Class name="kieker.analysis.reader.jmx.JMXReader" />
     <Method name="read2" params="" returns="boolean" />
     <Bug pattern="DE_MIGHT_IGNORE" />
   </Match>
 
+  <Match>
+    <Class name="kieker.common.logging.LogFactory" />
+    <Bug pattern="DE_MIGHT_IGNORE" />
+  </Match>
+
+  <Match>
+    <Class name="kieker.analysis.reader.filesystem.FSReader" />
+    <Method name="read" params="" returns="boolean" />
+    <Bug pattern="NN_NAKED_NOTIFY" />
+  </Match>
+  
+  <Match>
+    <Class name="kieker.analysis.reader.filesystem.FSReader" />
+    <Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
+    <Bug pattern="WA_NOT_IN_LOOP" />
+  </Match>
+
+  <Match>
+    <Class name="kieker.analysis.reader.filesystem.FSReader" />
+    <Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
+    <Bug pattern="UW_UNCOND_WAIT" />
+  </Match>
+
+  <Match>
+    <Class name="kieker.monitoring.core.registry.Registry" />
+    <Field name="eArrayCached" />
+    <Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
+  </Match>
+
+  <Match>
+    <Class name="org.apache.commons.logging.impl.Jdk14LoggerPatched" />
+    <Method name="getLog" params="java.lang.String" returns="org.apache.commons.logging.Log" />
+    <Bug pattern="REC_CATCH_EXCEPTION" />
+  </Match>
+  
+  <Match>
+    <Class name="kieker.analysis.reader.filesystem.FSDirectoryReader" />
+    <Method name="processNormalInputFile" params="java.io.File" returns="void" />
+    <Bug pattern="REC_CATCH_EXCEPTION" />
+  </Match>
+  
+  <Match>
+    <Class name="kieker.analysis.reader.filesystem.FSDirectoryReader" />
+    <Method name="processBinaryInputFile" params="java.io.File" returns="void" />
+    <Bug pattern="REC_CATCH_EXCEPTION" />
+  </Match>
+  
   <Match>
     <Class name="kieker.monitoring.core.controller.JMXController" />
     <Method name="&lt;init&gt;" params="kieker.monitoring.core.configuration.Configuration" returns="void" />

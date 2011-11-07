@@ -23,22 +23,21 @@ package kieker.monitoring.writer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
 public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
-
 	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new DummyMonitoringRecord();
+
+	protected final IMonitoringController monitoringController;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
-	private final IMonitoringController monitoringController;
 	private boolean finished = false; // only accessed in synchronized blocks
 	private CountDownLatch shutdownLatch = null; // only accessed in synchronized blocks
 

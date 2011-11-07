@@ -20,12 +20,13 @@
 
 package kieker.common.record;
 
+import java.util.Arrays;
+
 /**
  * @author Andre van Hoorn, Jan Waller
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
-	// private static final Log log = LogFactory.getLog(AbstractMonitoringRecord.class);
 
 	private volatile long loggingTimestamp = -1;
 
@@ -39,12 +40,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		this.loggingTimestamp = timestamp;
 	}
 
-	/**
-	 * Creates a string representation of this record.
-	 * 
-	 * Matthias should not use this method for serialization purposes since this
-	 * is not the purpose of Object's toString method.
-	 */
 	@Override
 	public final String toString() {
 		final Object[] recordVector = this.toArray();
@@ -59,5 +54,89 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Provides an ordering of IMonitoringRecords by the loggingTimestamp.
+	 * Classes overriding the implementation should respect this ordering. (see #326)
+	 */
+	@Override
+	public int compareTo(final IMonitoringRecord otherRecord) {
+		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
+		if (timedifference < 0L) {
+			return -1;
+		} else if (timedifference > 0L) {
+			return 1;
+		} else { // same timing
+			// this should work except for rare hash collisions
+			return this.hashCode() - otherRecord.hashCode();
+		}
+	}
+
+	@Override
+	public final boolean equals(final Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+		if (this.loggingTimestamp != ((AbstractMonitoringRecord) obj).getLoggingTimestamp()) {
+			return false;
+		}
+		return Arrays.equals(((AbstractMonitoringRecord) obj).toArray(), this.toArray());
+	}
+
+	@Override
+	public final int hashCode() {
+		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32)); // NOCS (magic number)
+	}
+
+	public static final Object[] fromStringArrayToTypedArray(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {
+		if (recordFields.length != valueTypes.length) {
+			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);
+		}
+		final Object[] typedArray = new Object[recordFields.length];
+		int curIdx = -1;
+		for (final Class<?> clazz : valueTypes) {
+			curIdx++;
+			if (clazz == String.class) {
+				typedArray[curIdx] = recordFields[curIdx];
+				continue;
+			}
+			if ((clazz == int.class) || (clazz == Integer.class)) {
+				typedArray[curIdx] = Integer.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == long.class) || (clazz == Long.class)) {
+				typedArray[curIdx] = Long.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == float.class) || (clazz == Float.class)) {
+				typedArray[curIdx] = Float.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == double.class) || (clazz == Double.class)) {
+				typedArray[curIdx] = Double.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == byte.class) || (clazz == Byte.class)) {
+				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			if ((clazz == short.class) || (clazz == Short.class)) { // NOPMD
+				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD
+				continue;
+			}
+			if ((clazz == boolean.class) || (clazz == Boolean.class)) {
+				typedArray[curIdx] = Boolean.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			throw new IllegalArgumentException("Unsupported type: " + clazz.getName());
+		}
+		return typedArray;
 	}
 }

@@ -32,12 +32,12 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+import kieker.common.record.HashRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Simple class to store monitoring data in the file system. Although a buffered
@@ -68,30 +68,35 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_PATH = SyncFsWriter.PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
 	public static final String CONFIG_TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXENTRIESINFILE = SyncFsWriter.PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = SyncFsWriter.PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
-	// configuration parameters
-	private static final int MAXENTRIESINFILE = 25000;
-
 	// internal variables
-	private String filenamePrefix;
-	private boolean autoflush;
+	private final boolean autoflush;
+	private final int maxEntriesInFile;
+	// only access within synchronized
+	private int entriesInCurrentFileCounter;
 	private MappingFileWriter mappingFileWriter;
-	private PrintWriter pos = null;
-	// Force to initialize first file!
-	private int entriesInCurrentFileCounter = SyncFsWriter.MAXENTRIESINFILE;
-	// only to get that information later
+	private String filenamePrefix;
 	private String path;
+	private PrintWriter pos = null;
 
-	public SyncFsWriter(final Configuration configuration) {
+	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
+		this.autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG_FLUSH);
+		// get number of entries per file
+		this.maxEntriesInFile = this.configuration.getIntProperty(SyncFsWriter.CONFIG_MAXENTRIESINFILE);
+		if (this.maxEntriesInFile < 1) {
+			throw new IllegalArgumentException(SyncFsWriter.CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
+		}
+		this.entriesInCurrentFileCounter = this.maxEntriesInFile;
 	}
 
 	@Override
-	protected void init() {
-		this.autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG_FLUSH);
+	protected void init() throws IllegalArgumentException, IOException {
+		// Determine path
 		String pathTmp;
 		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG_TEMP)) {
 			pathTmp = System.getProperty("java.io.tmpdir");
@@ -100,62 +105,57 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		File f = new File(pathTmp);
 		if (!f.isDirectory()) {
-			final String errorMsg = "'" + pathTmp + "' is not a directory.";
-			SyncFsWriter.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
+			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
 		}
+		// Determine directory for files
 		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
-
-		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuilder sb = new StringBuilder(pathTmp);
-		sb.append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		date.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
+		final StringBuffer sb = new StringBuffer(pathTmp.length() + ctrlName.length() + 32); // NOCS (MagicNumber)
+		sb.append(pathTmp).append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		pathTmp = sb.toString();
 		f = new File(pathTmp);
 		if (!f.mkdir()) {
-			final String errorMsg = "Failed to create directory '" + pathTmp + "'";
-			SyncFsWriter.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
+			throw new IllegalArgumentException("Failed to create directory '" + pathTmp + "'");
 		}
-		this.filenamePrefix = pathTmp + File.separatorChar + "kieker";
-		this.path = f.getAbsolutePath();
-		final String mappingFileFn = pathTmp + File.separatorChar + "kieker.map";
-		try {
-			this.mappingFileWriter = new MappingFileWriter(mappingFileFn);
-		} catch (final IOException ex) {
-			final String errorMsg = "Failed to create mapping file '" + mappingFileFn + "'";
-			SyncFsWriter.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg, ex);
+		synchronized (this) { // visibility
+			this.path = f.getAbsolutePath();
+			this.filenamePrefix = this.path + File.separatorChar + "kieker";
+			this.mappingFileWriter = new MappingFileWriter(this.path);
 		}
 	}
 
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		final Object[] recordFields = monitoringRecord.toArray();
-		final int lastFieldIndex = recordFields.length - 1;
-		final StringBuilder sb = new StringBuilder(256);
-		sb.append('$');
-		sb.append(this.mappingFileWriter.idForRecordTypeClass(monitoringRecord.getClass()));
-		sb.append(';');
-		sb.append(monitoringRecord.getLoggingTimestamp());
-		if (lastFieldIndex > 0) {
+		if (monitoringRecord instanceof HashRecord) {
+			try {
+				this.mappingFileWriter.write((HashRecord) monitoringRecord);
+			} catch (final IOException ex) {
+				SyncFsWriter.LOG.error("Failed to write monitoring record", ex);
+				return false;
+			}
+		} else {
+
+			final Object[] recordFields = monitoringRecord.toArray();
+			final StringBuilder sb = new StringBuilder(256);
+			sb.append('$');
+			sb.append(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
 			sb.append(';');
-		}
-		for (int i = 0; i <= lastFieldIndex; i++) {
-			sb.append(recordFields[i]);
-			if (i < lastFieldIndex) {
+			sb.append(monitoringRecord.getLoggingTimestamp());
+			for (final Object recordField : recordFields) {
 				sb.append(';');
+				sb.append(recordField);
 			}
-		}
-		try {
-			synchronized (this) { // we must not synch on pos, it changes within!
-				this.prepareFile(); // may throw FileNotFoundException
-				this.pos.println(sb);
+			try {
+				synchronized (this) { // we must not synch on pos, it changes within!
+					this.prepareFile(); // may throw FileNotFoundException
+					this.pos.println(sb);
+				}
+			} catch (final IOException ex) {
+				SyncFsWriter.LOG.error("Failed to write monitoring record", ex);
+				return false;
 			}
-		} catch (final IOException ex) {
-			SyncFsWriter.LOG.error("Failed to write monitoring record", ex);
-			return false;
 		}
 		return true;
 	}
@@ -164,23 +164,26 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 * Determines and sets a new filename
 	 */
 	private final void prepareFile() throws FileNotFoundException {
-		if (++this.entriesInCurrentFileCounter > SyncFsWriter.MAXENTRIESINFILE) {
+		if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) {
+			this.entriesInCurrentFileCounter = 1;
 			if (this.pos != null) {
 				this.pos.close();
 			}
-			this.entriesInCurrentFileCounter = 1;
-
-			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-			final String dateStr = dateFormat.format(new java.util.Date()); // NOPMD (Date)
-			final String filename = this.filenamePrefix + "-" + dateStr + "-UTC.dat";
 			if (this.autoflush) {
-				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename)), true);
+				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename())), true);
 			} else {
-				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename))), false);
+				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()))), false);
 			}
 			this.pos.flush();
 		}
+	}
+
+	private final String getFilename() {
+		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 27); // NOCS (MagicNumber)
+		sb.append(this.filenamePrefix).append('-').append(dateFormat.format(new java.util.Date())).append("-UTC.dat"); // NOPMD (Date)
+		return sb.toString();
 	}
 
 	@Override
@@ -199,7 +202,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		sb.append(super.toString());
 		sb.append("\n\tWriting to Directory: '");
 		sb.append(this.path);
-		sb.append("'");
+		sb.append('\'');
 		return sb.toString();
 	}
 }

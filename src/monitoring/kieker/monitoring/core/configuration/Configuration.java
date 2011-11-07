@@ -26,10 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller

@@ -33,4 +33,14 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
 	@Pointcut("!within(kieker.common..*) && !within(kieker.monitoring..*) && !within(kieker.analysis..*) && !within(kieker.tools..*)")
 	public void notWithinKieker() {} // NOPMD
+
+	@Pointcut("execution(void set*(..)) || call(void set*(..))")
+	public void setter() {} // NOPMD
+
+	@Pointcut("execution(* get*(..)) || call(* get*(..)) || execution(boolean is*(..)) || call(boolean is*(..))")
+	public void getter() {} // NOPMD
+
+	@Pointcut("!getter() && !setter()")
+	public void noGetterAndSetter() {} // NOPMD
+
 }

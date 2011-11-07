@@ -48,21 +48,10 @@ import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.IMonitoringReader;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMIResource;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 /**
  * 
@@ -353,7 +342,7 @@ public class AnalysisController {
 				}
 			}
 		} catch (final Exception exc) { // NOCS // NOPMD
-			AnalysisController.LOG.fatal("Error occurred: " + exc.getMessage());
+			AnalysisController.LOG.error("Error occurred: " + exc.getMessage());
 			success = false;
 		} finally {
 			// to make sure that all waiting threads are released

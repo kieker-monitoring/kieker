@@ -21,58 +21,49 @@
 package kieker.analysis.reader.filesystem;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.Collator;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
-import kieker.analysis.reader.MonitoringReaderException;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.common.record.MonitoringRecordTypeRegistry;
 import kieker.common.record.OperationExecutionRecord;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
- * Reads the contents of a single file system log directory and passes the
- * records to the registered receiver of type {@link IMonitoringRecordReceiver}.
+ * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  * 
- * @author Matthias Rohr, Andre van Hoorn
+ * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-class FSDirectoryReader {
-
+final class FSDirectoryReader implements Runnable {
 	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
 
-	private static final boolean OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE = true;
-	private static final String LEGAY_FILE_PREFIX = "tpmon";
-	private static final String FILE_POSTFIX = ".dat";
+	private static final String OLD_KIEKEREXECUTIONRECORD_CLASSNAME = "kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord";
+	private static final String LEGACY_FILE_PREFIX = "tpmon";
+	private static final String NORMAL_FILE_PREFIX = "kieker";
+	private static final String NORMAL_FILE_POSTFIX = ".dat";
+	private static final String BINARY_FILE_POSTFIX = ".bin";
 
-	private final MonitoringRecordTypeRegistry typeRegistry = new MonitoringRecordTypeRegistry(FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE);
-	private volatile boolean recordTypeIdMapInitialized = false; // will read it "on-demand"
-	private File inputDir = null;
-	private String filePrefix = "kieker";
-
-	/**
-	 * Together with the member recordTypeIdIgnoreList, used to filter only
-	 * records of a specific type. The value null means all record types are
-	 * read.
-	 * 
-	 * @see #recordTypeIdIgnoreList
-	 */
-	private final Set<String> recordTypeSelector; // Set of classnames
-	/** Records whose ID is in this list are simply skipped by the reader */
-	private final Set<Integer> recordTypeIdIgnoreList = new HashSet<Integer>();
-
+	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>();
+	// This set of classnames is used to filter only records of a specific type. The value null means all record types are read.
+	private final Set<String> recordTypeSelector;
 	private final IMonitoringRecordReceiver recordReceiver;
+	private final File inputDir;
+	private String filePrefix = FSDirectoryReader.NORMAL_FILE_PREFIX;
+	private boolean terminated = false;
 
 	/**
 	 * 
@@ -82,7 +73,10 @@ class FSDirectoryReader {
 	 */
 	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
 			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
-		this.initInputDir(inputDirName); // throws IllegalArgumentException
+		if ((inputDirName == null) || inputDirName.isEmpty()) {
+			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
+		}
+		this.inputDir = new File(inputDirName);
 		this.recordReceiver = recordReceiver;
 		if (readOnlyRecordsOfType != null) {
 			this.recordTypeSelector = new HashSet<String>();
@@ -90,303 +84,262 @@ class FSDirectoryReader {
 				this.recordTypeSelector.add(recordType.getName());
 			}
 		} else {
-			this.recordTypeSelector = null; // NOPMD (ready records of any type)
+			this.recordTypeSelector = null; // NOPMD (read records of any type)
 		}
-	}
-
-	private void initInputDir(final String inputDirName) throws IllegalArgumentException {
-		if ((inputDirName == null) || inputDirName.isEmpty()) {
-			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
-		}
-		this.inputDir = new File(inputDirName);
 	}
 
 	/**
-	 * Starts reading and returns after each record has been passed to the
-	 * registered {@link #recordReceiver}.
+	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
 	 * 
-	 * Errors must be indicated by throwing an {@link Exception}.
-	 * 
+	 * Errors must be indicated by throwing an {@link RuntimeException}.
 	 */
-	public void read() throws IOException, MonitoringReaderException {
-		this.readMappingFile();
+	@Override
+	public final void run() {
+		this.readMappingFile(); // must be the first line to set filePrefix!
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
-
 			@Override
 			public boolean accept(final File pathname) {
-				return pathname.isFile() && pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
-						&& pathname.getName().endsWith(FSDirectoryReader.FILE_POSTFIX);
+				return pathname.isFile()
+						&& pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
+						&& (pathname.getName().endsWith(FSDirectoryReader.NORMAL_FILE_POSTFIX) || pathname.getName().endsWith(FSDirectoryReader.BINARY_FILE_POSTFIX));
 			}
 		});
-
 		if (inputFiles == null) {
-			throw new MonitoringReaderException("Directory '" + this.inputDir + "' does not exist or an I/O error occured."); // NOCS (MultipleStringLiteralsCheck)
+			FSDirectoryReader.LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
+		} else if (inputFiles.length == 0) {
+			FSDirectoryReader.LOG.error("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
+					+ FSDirectoryReader.NORMAL_FILE_POSTFIX + "' or '" + FSDirectoryReader.BINARY_FILE_POSTFIX + "'.");
+		} else { // everything ok, we process the files
+			Arrays.sort(inputFiles, new Comparator<File>() {
+				@Override
+				public final int compare(final File f1, final File f2) {
+					return f1.compareTo(f2); // simplified (we expect no dirs!)
+				}
+			});
+			for (final File inputFile : inputFiles) {
+				if (this.terminated) {
+					FSDirectoryReader.LOG.info("Shutting down DirectoryReader.");
+					break;
+				}
+				FSDirectoryReader.LOG.info("< Loading " + inputFile.getAbsolutePath());
+				if (inputFile.getName().endsWith(FSDirectoryReader.NORMAL_FILE_POSTFIX)) {
+					this.processNormalInputFile(inputFile);
+				} else if (inputFile.getName().endsWith(FSDirectoryReader.BINARY_FILE_POSTFIX)) {
+					this.processBinaryInputFile(inputFile);
+				}
+			}
 		}
-
-		if (inputFiles.length == 0) {
-			throw new MonitoringReaderException("Directory '" + this.inputDir + "' contains no files starting with '" // NOCS (MultipleStringLiteralsCheck)
-					+ this.filePrefix + "' and ending with '" + FSDirectoryReader.FILE_POSTFIX + "' could be found.");
-		}
-
-		Arrays.sort(inputFiles, new FileComparator()); // sort alphabetically
-		for (final File inputFile : inputFiles) {
-			this.processInputFile(inputFile);
-		}
+		this.recordReceiver.newMonitoringRecord(FSReader.EOF);
 	}
 
 	/**
-	 * Reads the mapping file located in the directory and loads the required {@link IMonitoringRecord} types (i.e., classes).
+	 * Reads the mapping file located in the directory.
 	 * 
 	 * @throws IOException
 	 */
-	private void readMappingFile() throws IOException {
+	private final void readMappingFile() {
 		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "kieker.map");
-
 		if (!mappingFile.exists()) {
-			/*
-			 * No mapping file found. Check whether we find a legacy tpmon.map
-			 * file
-			 */
+			// No mapping file found. Check whether we find a legacy tpmon.map file!
 			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
 			if (mappingFile.exists()) {
-				FSDirectoryReader.LOG.warn("directory '" + this.inputDir + "' contains no file 'kieker.map'");
-				FSDirectoryReader.LOG.info("Found 'tpmon.map' ... switching to legacy mode");
-				this.filePrefix = FSDirectoryReader.LEGAY_FILE_PREFIX;
+				FSDirectoryReader.LOG.info("Directory '" + this.inputDir + "' contains no file 'kieker.map'. Found 'tpmon.map' ... switching to legacy mode");
+				this.filePrefix = FSDirectoryReader.LEGACY_FILE_PREFIX;
 			} else {
-				// no {kieker|tpmon}.map exists. This is valid for very old
-				// monitoring logs. Hence, only dump a log.warn
+				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
 				FSDirectoryReader.LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'"); // NOCS (MultipleStringLiteralsCheck)
+				return;
 			}
 		}
-
+		// found any kind of mapping file
 		BufferedReader in = null;
-		StringTokenizer st = null;
 		try {
-			in = new BufferedReader(new FileReader(mappingFile));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile)));
 			String line;
-
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
+				line = line.trim();
+				if (line.length() == 0) {
+					continue; // ignore empty lines
+				}
+				final String[] assignment = line.split("=");
+				if (assignment.length != 2) {
+					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
+							+ ". Each line must contain ID=VALUE pairs.");
+					continue; // continue on errors
+				}
+				// the leading $ is optional
+				final Integer id;
 				try {
-					st = new StringTokenizer(line, "="); // NOPMD (new in loop)
-					final int numTokens = st.countTokens();
-					if (numTokens == 0) {
-						continue;
-					}
-					if (numTokens != 2) {
-						throw new IllegalArgumentException("Invalid number of tokens (" + numTokens + ") Expecting 2");
-					}
-					final String idStr = st.nextToken();
-					// the leading $ is optional
-					final Integer id = Integer.valueOf((idStr.charAt(0) == '$') ? idStr.substring(1) : idStr); // NOCS
-					final String classname = st.nextToken();
-
-					if ((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) {
-						this.typeRegistry.registerRecordTypeIdMapping(id, classname);
-					} else if (FSDirectoryReader.OLD_KIEKER_EXECUTION_RECORD_COMPATIBILITY_MODE
-							&& classname.equals(MonitoringRecordTypeRegistry.OLD_KIEKEREXECUTIONRECORD_CLASSNAME)) {
-						FSDirectoryReader.LOG.info("Using compatibility mode for mapping " + classname);
-						this.typeRegistry.registerRecordTypeIdMapping(id, classname);
-					} else {
-						this.recordTypeIdIgnoreList.add(id);
-						FSDirectoryReader.LOG.info("Ignoring record type for mapping " + line);
-					}
-				} catch (final ClassNotFoundException e) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS // NOPMD
-					break;
-				} catch (final IllegalArgumentException e) { // NOPMD (flow control)
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath(), e); // NOCS
-					break;
+					id = Integer.valueOf((assignment[0].charAt(0) == '$') ? assignment[0].substring(1) : assignment[0]); // NOCS
+				} catch (final NumberFormatException ex) {
+					FSDirectoryReader.LOG.error("Error reading mapping file, id must be integer", ex);
+					continue;
+				}
+				final String prevVal = this.stringRegistry.put(id, assignment[1]);
+				if (prevVal != null) {
+					FSDirectoryReader.LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + assignment[1] + "'");
 				}
 			}
-			this.recordTypeIdMapInitialized = true;
+		} catch (final IOException ex) {
+			FSDirectoryReader.LOG.error("Error reading mapping file", ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) { // NOCS // NOPMD
-					FSDirectoryReader.LOG.error("Exception while closing input stream for mapping file", e);
+				} catch (final IOException ex) {
+					FSDirectoryReader.LOG.error("Exception while closing input stream for mapping file", ex);
 				}
 			}
 		}
 	}
 
 	/**
-	 * Reads the records contained in the given file and passes them to the
-	 * registered {@link #recordReceiver}.
+	 * Reads the records contained in the given normal file and passes them to the registered {@link #recordReceiver}.
 	 * 
-	 * @param input
-	 * @throws IOException
-	 * @throws MonitoringReaderException
+	 * @param inputFile
 	 */
-	private void processInputFile(final File input) throws IOException, MonitoringReaderException {
-		FSDirectoryReader.LOG.info("< Loading " + input.getAbsolutePath());
-
+	private final void processNormalInputFile(final File inputFile) {
 		BufferedReader in = null;
-		StringTokenizer st = null;
-
 		try {
-			in = new BufferedReader(new FileReader(input));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
 			String line;
-
-			curRecord: // NOCS
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				IMonitoringRecord rec = null;
-				try {
-					if (!this.recordTypeIdMapInitialized && (line.charAt(0) == '$')) {
-						this.readMappingFile();
-						this.recordTypeIdMapInitialized = true;
-					}
-					st = new StringTokenizer(line, ";"); // NOPMD (new in loop)
-					final int numTokens = st.countTokens();
-					String[] vec = null;
-					boolean haveTypeId = false;
-
-					for (int i = 0; st.hasMoreTokens(); i++) {
-						String token = st.nextToken();
-						if ((i == 0) && (token.charAt(0) == '$')) {
-							/*
-							 * We found a record type ID and need to lookup the
-							 * class
-							 */
-							final Integer id = Integer.valueOf(token.substring(1));
-
-							if (this.recordTypeIdIgnoreList.contains(id)) {
-								/*
-								 * skip this record since records of this type
-								 * are being ignored
-								 */
-								continue curRecord;
-							}
-
-							final Class<? extends IMonitoringRecord> clazz = this.typeRegistry.fetchClassForRecordTypeId(id);
-							if (clazz == null) {
-								final String errorMsg = "Missing classname mapping for record type id " + "'" + id + "'";
-								FSDirectoryReader.LOG.fatal(errorMsg);
-								throw new IllegalStateException(errorMsg);
-							}
-							rec = clazz.newInstance();
-							token = st.nextToken();
-							rec.setLoggingTimestamp(Long.valueOf(token));
-							vec = new String[numTokens - 2]; // NOPMD (new in loop)
-							haveTypeId = true;
-						} else if (i == 0) { // for historic reasons, this is the default type
-							rec = new OperationExecutionRecord(); // NOPMD (new in loop)
-							vec = new String[numTokens]; // NOPMD (new in loop)
-						}
-						if (!haveTypeId || (i > 0)) { // only if current field is not the id
-							vec[haveTypeId ? i - 1 : i] = token; // NOCS
-						}
-					}
-					if (vec == null) {
-						vec = new String[0]; // NOPMD (new in loop)
-					}
-
-					final Object[] typedArray = this.fromStringToTypedArray(vec, rec.getValueTypes());
-					rec.initFromArray(typedArray);
-
-				} catch (final InstantiationException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS
-																																	// (MultipleStringLiteralsCheck)
-					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
-					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
-				} catch (final IllegalAccessException e) {
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS
-																																	// (MultipleStringLiteralsCheck)
-					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
-					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
-				} catch (final IllegalStateException e) { // NOPMD (flow control)
-					FSDirectoryReader.LOG.error("Failed to process line: {" + line + "} from file " + input.getAbsolutePath(), e); // NOCS
-																																	// (MultipleStringLiteralsCheck)
-					FSDirectoryReader.LOG.error("Abort reading"); // NOCS (MultipleStringLiteralsCheck)
-					throw new MonitoringReaderException("LogReaderExecutionException ", e); // NOCS (MultipleStringLiteralsCheck)
+				line = line.trim();
+				if (line.length() == 0) {
+					continue; // ignore empty lines
 				}
-
-				/* Deliver record */
-				if (!this.recordReceiver.newMonitoringRecord(rec)) {
-					final String errorMsg = "failed to deliver record. Will terminate";
-					FSDirectoryReader.LOG.error(errorMsg);
-					throw new MonitoringReaderException(errorMsg);
+				IMonitoringRecord record = null;
+				String[] recordFields = line.split(";");
+				try {
+					if (recordFields[0].charAt(0) == '$') { // modern record
+						if (recordFields.length < 3) { // NOCS (magic number)
+							FSDirectoryReader.LOG.error("Illegal record format: " + line);
+							continue; // skip this record
+						}
+						final Integer id = Integer.valueOf(recordFields[0].substring(1));
+						String classname = this.stringRegistry.get(id);
+						if (classname == null) {
+							FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+							continue; // skip this record
+						}
+						if (classname.equals(FSDirectoryReader.OLD_KIEKEREXECUTIONRECORD_CLASSNAME)) {
+							classname = OperationExecutionRecord.class.getName();
+						}
+						if ((this.recordTypeSelector != null) && !this.recordTypeSelector.contains(classname)) {
+							continue; // skip this ignored record
+						}
+						Class<? extends IMonitoringRecord> clazz = null;
+						clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
+						record = clazz.newInstance();
+						record.setLoggingTimestamp(Long.valueOf(recordFields[1]));
+						recordFields = Arrays.copyOfRange(recordFields, 2, recordFields.length);
+					} else { // legacy record
+						record = new OperationExecutionRecord(); // NOPMD (new in loop)
+					}
+					final Object[] typedArray = AbstractMonitoringRecord.fromStringArrayToTypedArray(recordFields, record.getValueTypes());
+					record.initFromArray(typedArray);
+				} catch (final Exception ex) { // NOCS // NOPMD
+					// ClassNotFoundException ClassCastException InstantiationException IllegalAccessException NumberFormatException IllegalArgumentException
+					FSDirectoryReader.LOG.error("Error loading record type", ex);
+					continue; // skip this record
+				}
+				if (!this.recordReceiver.newMonitoringRecord(record)) {
+					this.terminated = true;
+					break; // we got the signal to stop processing
 				}
 			}
+		} catch (final IOException ex) {
+			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
-					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", e);
+				} catch (final IOException ex) {
+					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", ex);
 				}
 			}
 		}
 	}
 
-	private Object[] fromStringToTypedArray(final String[] vec, final Class<?>[] valueTypes) throws IllegalArgumentException {
-		final Object[] typedArray = new Object[vec.length];
-		int curIdx = -1;
-		for (final Class<?> clazz : valueTypes) {
-			curIdx++;
-			if (clazz == String.class) {
-				typedArray[curIdx] = vec[curIdx];
-				continue;
-			}
-			if ((clazz == int.class) || (clazz == Integer.class)) {
-				typedArray[curIdx] = Integer.valueOf(vec[curIdx]);
-				continue;
-			}
-			if ((clazz == long.class) || (clazz == Long.class)) {
-				typedArray[curIdx] = Long.valueOf(vec[curIdx]);
-				continue;
-			}
-			if ((clazz == float.class) || (clazz == Float.class)) {
-				typedArray[curIdx] = Float.valueOf(vec[curIdx]);
-				continue;
-			}
-			if ((clazz == double.class) || (clazz == Double.class)) {
-				typedArray[curIdx] = Double.valueOf(vec[curIdx]);
-				continue;
-			}
-			if ((clazz == byte.class) || (clazz == Byte.class)) {
-				typedArray[curIdx] = Byte.valueOf(vec[curIdx]);
-				continue;
-			}
-			if ((clazz == short.class) || (clazz == Short.class)) { // NOPMD
-				typedArray[curIdx] = Short.valueOf(vec[curIdx]); // NOPMD
-				continue;
-			}
-			if ((clazz == boolean.class) || (clazz == Boolean.class)) {
-				typedArray[curIdx] = Boolean.valueOf(vec[curIdx]);
-				continue;
-			}
-			throw new IllegalArgumentException("Unsupported type: " + clazz.getName());
-		}
-		return typedArray;
-	}
-
 	/**
-	 * source:
-	 * http://weblog.janek.org/Archive/2005/01/16/HowtoSortFilesandDirector.html
+	 * Reads the records contained in the given binary file and passes them to the registered {@link #recordReceiver}.
+	 * 
+	 * @param inputFile
 	 */
-	private static final class FileComparator implements Comparator<File> {
-
-		private final Collator c = Collator.getInstance();
-
-		public FileComparator() {
-			// nothing to do
-		}
-
-		@Override
-		public final int compare(final File f1, final File f2) {
-			if (f1 == f2) { // NOPMD
-				return 0;
+	private final void processBinaryInputFile(final File inputFile) {
+		DataInputStream in = null;
+		try {
+			in = new DataInputStream(new FileInputStream(inputFile));
+			while (true) {
+				final Integer id;
+				try {
+					id = in.readInt();
+				} catch (final EOFException eof) {
+					break; // we are finished
+				}
+				final String classname = this.stringRegistry.get(id);
+				if (classname == null) {
+					FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+					break; // we can't easily recover on errors
+				}
+				Class<? extends IMonitoringRecord> clazz = null;
+				clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
+				final IMonitoringRecord record = clazz.newInstance();
+				record.setLoggingTimestamp(in.readLong());
+				// read record
+				final Class<?>[] typeArray = record.getValueTypes();
+				final Object[] objectArray = new Object[typeArray.length]; // NOPMD (new in loop)
+				int idx = -1;
+				for (final Class<?> type : typeArray) {
+					idx++;
+					if (type == String.class) {
+						final Integer strId = in.readInt();
+						final String str = this.stringRegistry.get(strId);
+						if (str == null) {
+							FSDirectoryReader.LOG.error("No String mapping found for id " + strId.toString());
+							objectArray[idx] = "";
+						} else {
+							objectArray[idx] = str;
+						}
+					} else if ((type == int.class) || (type == Integer.class)) {
+						objectArray[idx] = in.readInt();
+					} else if ((type == long.class) || (type == Long.class)) {
+						objectArray[idx] = in.readLong();
+					} else if ((type == float.class) || (type == Float.class)) {
+						objectArray[idx] = in.readFloat();
+					} else if ((type == double.class) || (type == Double.class)) {
+						objectArray[idx] = in.readDouble();
+					} else if ((type == byte.class) || (type == Byte.class)) {
+						objectArray[idx] = in.readByte();
+					} else if ((type == short.class) || (type == Short.class)) { // NOPMD (short)
+						objectArray[idx] = in.readShort();
+					} else if ((type == boolean.class) || (type == Boolean.class)) {
+						objectArray[idx] = in.readBoolean();
+					} else {
+						if (in.readByte() != 0) {
+							FSDirectoryReader.LOG.error("Unexpected value for unsupported type: " + clazz.getName());
+							return; // breaking error (break would not terminate the correct loop)
+						}
+						FSDirectoryReader.LOG.warn("Unsupported type: " + clazz.getName());
+						objectArray[idx] = null;
+					}
+				}
+				record.initFromArray(objectArray);
+				if (((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) && !this.recordReceiver.newMonitoringRecord(record)) {
+					this.terminated = true;
+					break; // we got the signal to stop processing
+				}
 			}
-
-			if (f1.isDirectory() && f2.isFile()) {
-				return -1;
+		} catch (final Exception ex) { // NOCS // NOPMD
+			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (final IOException ex) {
+					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", ex);
+				}
 			}
-			if (f1.isFile() && f2.isDirectory()) {
-				return 1;
-			}
-
-			return this.c.compare(f1.getName(), f2.getName());
 		}
 	}
 }

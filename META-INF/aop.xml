@@ -26,6 +26,8 @@
         
         <!-- Instrumentation of the dacapo eclipse benchmark -->
         <!-- <include within="org.eclipse..*"/> -->
+        
+        <!--<include within="kieker.monitoring.probe.aspectJ..*"/>-->
     </weaver>
     
     <aspects>

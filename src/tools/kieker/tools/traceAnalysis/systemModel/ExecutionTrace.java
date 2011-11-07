@@ -29,11 +29,10 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.util.LoggingTimestampConverter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn
@@ -135,7 +134,7 @@ public class ExecutionTrace extends AbstractTrace {
 				if (expectingEntryCall && (curE.getEss() != 0)) {
 					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss() // NOPMD (new in loop)
 							+ ")\n Causing execution: " + curE);
-					ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
 				expectingEntryCall = false; // now we're happy
@@ -143,7 +142,7 @@ public class ExecutionTrace extends AbstractTrace {
 					final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi // NOPMD (new in
 																																				// loop)
 							+ "," + curE.getEoi() + ">" + "(Execution: " + curE + ")");
-					ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
 				prevEoi = curE.getEoi();
@@ -172,7 +171,7 @@ public class ExecutionTrace extends AbstractTrace {
 				} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
 					final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --" // NOPMD (new in loop)
 							+ "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
-					ExecutionTrace.LOG.fatal("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
 				if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions

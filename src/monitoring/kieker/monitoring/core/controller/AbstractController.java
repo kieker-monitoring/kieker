@@ -22,10 +22,9 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller
@@ -35,6 +34,10 @@ public abstract class AbstractController {
 
 	protected volatile MonitoringController monitoringController = null;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
+
+	protected AbstractController(final Configuration configuration) { // NOPMD
+		// do nothing but enforce constructor
+	}
 
 	protected final void setMonitoringController(final MonitoringController monitoringController) {
 		synchronized (this) {

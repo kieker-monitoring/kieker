@@ -28,6 +28,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
@@ -35,9 +37,6 @@ import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
 import kieker.monitoring.probe.sigar.SigarSamplerFactory;
 import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>

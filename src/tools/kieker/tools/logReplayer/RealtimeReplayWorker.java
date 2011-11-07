@@ -21,10 +21,9 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A Runnable to be scheduled via the RealtimeReplayDistributor

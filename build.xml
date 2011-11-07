@@ -64,7 +64,6 @@
 
 		<path id="kieker.monitoring-servlet-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
 				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
@@ -73,8 +72,8 @@
 
 		<path id="kieker.monitoring-compile-classpath">
 			<fileset dir="${lib.dir}">
-        <include name="aopalliance-*.jar" />
-				<include name="commons-logging-*.jar" />
+        		<include name="aopalliance-*.jar" />
+				<!--<include name="aspectjrt-*.jar" />-->
 				<include name="cxf-api-*.jar" />
 				<include name="cxf-common-utilities-*.jar" />
 				<include name="cxf-rt-core-*.jar" />
@@ -91,7 +90,6 @@
 		<path id="kieker.monitoring-ajc-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjrt-*.jar" />
-				<include name="commons-logging-*.jar" />
 				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
@@ -100,7 +98,6 @@
 
 		<path id="kieker.analysis-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
 				<include name="rabbitmq-client.jar" />
 				<include name="javax.jms-*.jar" />
 			</fileset>
@@ -110,7 +107,6 @@
 		<path id="kieker.tools-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
-				<include name="commons-logging-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
@@ -120,6 +116,8 @@
 		<path id="eclipse-external-jars">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
+				<exclude name="aspectjtools-*.jar" />
+				<exclude name="aspectjweaver-*.jar" />
 				<exclude name="log4j-*.jar" />
 			</fileset>
 		</path>
@@ -138,10 +136,10 @@
 		<delete dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}/META-INF" />
-		<javac destDir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" srcdir="${src.kieker.monitoring.dir}" debug="true" excludes="kieker/monitoring/probe/aspectJ/" classpathref="kieker.monitoring-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" srcdir="${src.kieker.monitoring.dir}" excludes="kieker/monitoring/probe/aspectJ/" debug="true" classpathref="kieker.monitoring-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" /> <!-- ,-path -->
 		</javac>
-		<!-- WORKAROUND!!! -->
+		<!-- WORKAROUND!!! otherwise the include statement of the aop.xml HAS TO include the apsect.class files -->
 		<iajc destdir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" Xlint="ignore" debug="true" classpathref="kieker.monitoring-ajc-compile-classpath">
 			<sourceroots>
 				<pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/" />
@@ -590,9 +588,6 @@
         </echo>
 
 		<path id="kieker.test-storage-run-classpath">
-			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
-			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -610,7 +605,6 @@
 	<target name="-compile-tests-common" depends="build-kieker.main" description="Compiles the tests for common classes">
 		<path id="common-test-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
@@ -624,7 +618,6 @@
 	<target name="-compile-tests-monitoring" depends="build-kieker.main" description="Compiles the tests for the Kieker.Monitoring component">
 		<path id="monitoring-test-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
@@ -638,7 +631,6 @@
 	<target name="-compile-tests-analysis" depends="build-kieker.main" description="Compiles the tests for the Kieker.Analysis component">
 		<path id="analysis-test-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
@@ -652,7 +644,6 @@
 	<target name="-compile-tests-tools" depends="build-kieker.main" description="Compiles the tests for the Kieker tools">
 		<path id="tools-test-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
@@ -665,9 +656,6 @@
 
 	<target name="run-test-loadTimeWeaving-bookstoreDifferentRecordTypes" depends="-compile-tests-monitoring" description="Runs a load-time weaving test with different record types">
 		<path id="kieker.test-loadTimeWeaving-run-classpath">
-			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
-			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -690,9 +678,6 @@
 
 	<target name="run-test-loadTimeWeaving-bookstoreFullInstrumentation" depends="-compile-tests-monitoring" description="Runs a load-time-weaving tests with full instrumentation">
 		<path id="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
-			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
-			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -714,9 +699,6 @@
 
 	<target name="run-test-loadTimeWeaving-executionOrderTest" depends="-compile-tests-monitoring" description="Runs a load-time-weaving tests for eoi/ess information">
 		<path id="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
-			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
-			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -740,7 +722,6 @@
 		<path id="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjrt-*.jar" />
-				<include name="commons-logging-*.jar" />
 				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
@@ -767,7 +748,6 @@
 		<path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjrt-*.jar" />
-				<include name="commons-logging-*.jar" />
 				<include name="javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
@@ -794,7 +774,6 @@
 		<path id="kieker.test-compileTimeWeaving-bookstore-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjweaver-*.jar" />
-				<include name="commons-logging-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -816,8 +795,6 @@
 				<include name="aspectjweaver-*.jar" />
 				<include name="derby-*.jar" />
 				<include name="mysql-connector-java-*-bin.jar" />
-				<!--needed for some reason ...-->
-				<include name="commons-logging-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -845,7 +822,6 @@
 		<path id="kieker.test-compileTimeWeaving-bookstore-synchronized-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjweaver-*.jar" />
-				<include name="commons-logging-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -865,7 +841,6 @@
 		<path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjweaver-*.jar" />
-				<include name="commons-logging-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -893,7 +868,6 @@
 	<target name="run-tests-junit" depends="compile-tests,kieker-src-jar" description="Runs the JUnit tests">
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="commons-logging-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />

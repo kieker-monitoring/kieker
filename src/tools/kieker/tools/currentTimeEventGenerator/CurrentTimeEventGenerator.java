@@ -21,9 +21,8 @@
 package kieker.tools.currentTimeEventGenerator;
 
 import kieker.analysis.plugin.configuration.OutputPort;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * Generates time events with a given resolution based on the timestamps of

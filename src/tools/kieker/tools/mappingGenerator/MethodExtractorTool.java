@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.mappingGenerator.filters.composite.NoInterfaceNoSuperclassFilter;
 
 import org.apache.commons.cli.BasicParser;
@@ -39,8 +41,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 // TODO: This tool should be (re-)activated
 // See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/247

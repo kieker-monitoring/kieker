@@ -20,11 +20,11 @@
 
 package kieker.monitoring.probe.spring.executions;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.OperationExecutionRecord;
 
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * This annotation marks methods that are exit points for remote calls
@@ -70,9 +70,9 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 		try {
 			this.proceedAndMeasure(invocation, execData);
 			if ((execData.getEoi() == -1) || (execData.getEss() == -1)) {
-				OperationExecutionMethodInvocationInterceptor.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + execData.getEoi()
+				OperationExecutionMethodInvocationInterceptor.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + execData.getEoi()
 						+ " ess == " + execData.getEss());
-				OperationExecutionMethodInvocationInterceptor.LOG.fatal("Terminating Kieker.Monitoring!");
+				OperationExecutionMethodInvocationInterceptor.LOG.error("Terminating Kieker.Monitoring!");
 				AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
 			}
 		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)

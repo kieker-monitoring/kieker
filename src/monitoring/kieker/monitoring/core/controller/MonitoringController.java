@@ -22,15 +22,14 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.TimeUnit;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller
@@ -43,14 +42,17 @@ public final class MonitoringController extends AbstractController implements IM
 	private final WriterController writerController;
 	private final SamplingController samplingController;
 	private final TimeSourceController timeSourceController;
+	private final RegistryController registryController;
 
 	// private Constructor
 	private MonitoringController(final Configuration configuration) {
+		super(configuration);
 		this.stateController = new StateController(configuration);
 		this.jmxController = new JMXController(configuration);
 		this.writerController = new WriterController(configuration);
 		this.samplingController = new SamplingController(configuration);
 		this.timeSourceController = new TimeSourceController(configuration);
+		this.registryController = new RegistryController(configuration);
 	}
 
 	// FACTORY
@@ -79,6 +81,11 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 		monitoringController.timeSourceController.setMonitoringController(monitoringController);
 		if (monitoringController.timeSourceController.isTerminated()) {
+			monitoringController.terminate();
+			return monitoringController;
+		}
+		monitoringController.registryController.setMonitoringController(monitoringController);
+		if (monitoringController.registryController.isTerminated()) {
 			monitoringController.terminate();
 			return monitoringController;
 		}
@@ -127,6 +134,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.timeSourceController.terminate();
 		this.samplingController.terminate();
 		this.writerController.terminate();
+		this.registryController.terminate();
 	}
 
 	@Override
@@ -137,6 +145,8 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append(") ");
 		sb.append(this.stateController.toString());
 		sb.append(this.jmxController.toString());
+		sb.append(this.registryController.toString());
+		sb.append(this.timeSourceController.toString());
 		sb.append(this.writerController.toString());
 		sb.append(this.samplingController.toString());
 		return sb.toString();
@@ -221,8 +231,13 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public String getJMXDomain() {
+	public final String getJMXDomain() {
 		return this.jmxController.getJMXDomain();
+	}
+
+	@Override
+	public int getIdForString(final String string) {
+		return this.registryController.getIdForString(string);
 	}
 
 	// GET SINGLETON INSTANCE

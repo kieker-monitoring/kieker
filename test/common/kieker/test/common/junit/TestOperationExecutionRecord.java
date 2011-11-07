@@ -32,13 +32,10 @@ import org.junit.Test;
 public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCtorCheck)
 
 	/**
-	 * Tests the toArray(..) and initFromArray(..) methods of
-	 * OperationExecutionRecord.
+	 * Tests the toArray(..) and initFromArray(..) methods of OperationExecutionRecord.
 	 * 
-	 * Assert that a record instance r1 equals an
-	 * instance r2 created by serializing r1 to an
-	 * array a1 and using a1 to init r2.
-	 * 
+	 * Assert that a record instance r1 equals an instance r2 created by serializing r1 to an array a1 and using a1 to init r2.
+	 * This ignores a set loggingTimestamp!
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
@@ -67,8 +64,7 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	/**
 	 * Tests the equals(..) method of OperationExecutionRecord.
 	 * 
-	 * Assert that two record instances with equal variables values
-	 * are equal.
+	 * Assert that two record instances with equal variables values are equal.
 	 */
 	@Test
 	public void testEqualsEqualVariablesValues() {
@@ -106,8 +102,7 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	/**
 	 * Tests the equals(..) method of OperationExecutionRecord.
 	 * 
-	 * Assert that two record instances with null variables values
-	 * are not equal.
+	 * Assert that two record instances with null variables values are not equal.
 	 */
 	@Test
 	public void testEqualsNullVariableValues() {
@@ -141,52 +136,33 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 
 		Assert.assertEquals(r1, r2);
 
-		/* Modification of className */
+		/* Modification in r1 */
 		final String oldComponentName1 = r1.getClassName();
-		final String oldComponentName2 = r2.getClassName();
 		r1.setClassName(null);
-		r2.setClassName(null);
 		Assert.assertFalse(r1.equals(r2));
 		r1.setClassName(oldComponentName1);
+		Assert.assertEquals(r1, r2);
+
+		/* Modification in r2 */
+		final String oldComponentName2 = r2.getClassName();
+		r2.setClassName(null);
+		Assert.assertFalse(r1.equals(r2));
 		r2.setClassName(oldComponentName2);
 		Assert.assertEquals(r1, r2);
 
-		/* Modification of operationName */
-		final String oldOpname1 = r1.getOperationName();
-		final String oldOpname2 = r2.getOperationName();
-		r1.setOperationName(null);
-		r2.setOperationName(null);
-		Assert.assertFalse(r1.equals(r2));
-		r1.setOperationName(oldOpname1);
-		r2.setOperationName(oldOpname2);
+		/* Modification in both */
+		r1.setClassName(null);
+		r2.setClassName(null);
 		Assert.assertEquals(r1, r2);
-
-		/* Modification of sessionId */
-		final String oldSessionId1 = r1.getSessionId();
-		final String oldSessionId2 = r2.getSessionId();
-		r1.setSessionId(null);
-		r2.setSessionId(null);
-		Assert.assertFalse(r1.equals(r2));
-		r1.setSessionId(oldSessionId1);
-		r2.setSessionId(oldSessionId2);
-		Assert.assertEquals(r1, r2);
-
-		/* Modification of hostName */
-		final String oldVmName1 = r1.getHostName();
-		final String oldVmName2 = r2.getHostName();
-		r1.setHostName(null);
-		r2.setHostName(null);
-		Assert.assertFalse(r1.equals(r2));
-		r1.setHostName(oldVmName1);
-		r2.setHostName(oldVmName2);
+		r1.setClassName(oldComponentName1);
+		r2.setClassName(oldComponentName2);
 		Assert.assertEquals(r1, r2);
 	}
 
 	/**
 	 * Tests the equals(..) method of OperationExecutionRecord.
 	 * 
-	 * Assert that two record instances with differing variables values
-	 * are not equal.
+	 * Assert that two record instances with differing variables values are not equal.
 	 */
 	@Test
 	public void testEqualsDifferentVariablesValues() {

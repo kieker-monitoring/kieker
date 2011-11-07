@@ -23,10 +23,9 @@ package kieker.monitoring.core.controller;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -40,6 +39,7 @@ public final class StateController extends AbstractController implements IStateC
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 
 	protected StateController(final Configuration configuration) {
+		super(configuration);
 		this.name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
 		this.experimentId.set(configuration.getIntProperty(Configuration.EXPERIMENT_ID));
 		this.monitoringEnabled = configuration.getBooleanProperty(Configuration.MONITORING_ENABLED);
@@ -56,7 +56,7 @@ public final class StateController extends AbstractController implements IStateC
 	}
 
 	@Override
-	protected void init() {
+	protected final void init() {
 		// do nothing
 	}
 

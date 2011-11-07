@@ -20,22 +20,22 @@
 
 package kieker.monitoring.core.controller;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jan Waller
  */
-public class TimeSourceController extends AbstractController implements ITimeSourceController {
+public final class TimeSourceController extends AbstractController implements ITimeSourceController {
 	private static final Log LOG = LogFactory.getLog(TimeSourceController.class);
 
 	/** the ITimeSource used by this instance */
 	private final ITimeSource timeSource;
 
 	protected TimeSourceController(final Configuration configuration) {
+		super(configuration);
 		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
 		if (this.timeSource == null) {
 			this.terminate();
@@ -43,7 +43,7 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 	}
 
 	@Override
-	protected void init() {
+	protected final void init() {
 		// do nothing
 	}
 
@@ -56,13 +56,15 @@ public class TimeSourceController extends AbstractController implements ITimeSou
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("TimeSourceController: ");
+		sb.append("TimeSource: ");
 		if (this.timeSource != null) {
-			sb.append("TimeSource: '");
-			sb.append(this.getTimeSource().getClass().getName());
 			sb.append("'");
+			sb.append(this.getTimeSource().getClass().getName());
+			sb.append("'\n\t");
+			sb.append(this.getTimeSource().toString());
+			sb.append("'\n");
 		} else {
-			sb.append("No TimeSource available");
+			sb.append("No TimeSource available\n");
 		}
 		return sb.toString();
 	}

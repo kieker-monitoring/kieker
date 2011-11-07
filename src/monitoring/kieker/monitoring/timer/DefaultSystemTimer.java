@@ -20,37 +20,56 @@
 
 package kieker.monitoring.timer;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
 
-public class DefaultSystemTimer extends AbstractTimeSource {
-	/**
-	 * Offset used to determine the number of nanoseconds since 1970-1-1. This
-	 * is necessary since System.nanoTime() returns the elapsed nanoseconds
-	 * since *some* fixed but arbitrary time.)
-	 */
-	private static final long OFFSET = (System.currentTimeMillis() * 1000000) - System.nanoTime(); // NOCS
+/**
+ * A timer implementation, counting in nanoseconds since 1970-1-1.
+ * 
+ * @author Jan Waller
+ */
+public final class DefaultSystemTimer extends AbstractTimeSource {
+	private static final Log LOG = LogFactory.getLog(DefaultSystemTimer.class);
 
-	public DefaultSystemTimer(final Configuration configuration) {
+	private final ITimeSource timeSource;
+
+	/**
+	 * 
+	 * @deprecated replaced with SystemNanoTimer
+	 */
+	@Deprecated
+	public DefaultSystemTimer(final Configuration configuration) throws IllegalAccessException { // this error should never be thrown
 		super(configuration);
+		DefaultSystemTimer.LOG.warn("This logger is deprecated, use 'kieker.monitoring.timer.SystemNanoTimer' instead.");
+		final Configuration nanoConfiguration = configuration.getPropertiesStartingWith(SystemNanoTimer.class.getName());
+		nanoConfiguration.setDefaultProperties(Configuration.createDefaultConfiguration());
+		nanoConfiguration.setProperty(SystemNanoTimer.CONFIG_OFFSET, "0");
+		this.timeSource = new SystemNanoTimer(nanoConfiguration.getPropertiesStartingWith(SystemNanoTimer.class.getName()));
 	}
 
 	/**
-	 * @return the singleton instance of DefaultSystemTimer
+	 * @return a singleton instance of SystemNanoTimer
 	 */
-	public static final DefaultSystemTimer getInstance() {
+	public static final ITimeSource getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
 	@Override
-	public long getTime() {
-		return System.nanoTime() + DefaultSystemTimer.OFFSET;
+	public final long getTime() {
+		return this.timeSource.getTime();
+	}
+
+	@Override
+	public final String toString() {
+		return this.timeSource.toString();
 	}
 
 	/**
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final DefaultSystemTimer INSTANCE = new DefaultSystemTimer(Configuration.createDefaultConfiguration().getPropertiesStartingWith(
-				DefaultSystemTimer.class.getName()));
+		private static final ITimeSource INSTANCE = new SystemNanoTimer(Configuration.createDefaultConfiguration().getPropertiesStartingWith(
+				SystemNanoTimer.class.getName()));
 	}
 }

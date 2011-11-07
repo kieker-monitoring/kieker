@@ -30,6 +30,8 @@ import java.util.Stack;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.plugins.visualization.util.IntContainer;
@@ -44,9 +46,6 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Plugin providing the creation of calling trees both for individual traces
@@ -192,7 +191,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		}
 		if (curStack.pop() != root) {
 			final String errorMsg = "Stack not empty after processing trace";
-			TraceCallTreePlugin.LOG.fatal(errorMsg);
+			TraceCallTreePlugin.LOG.error(errorMsg);
 			throw new TraceProcessingException(errorMsg);
 		}
 	}

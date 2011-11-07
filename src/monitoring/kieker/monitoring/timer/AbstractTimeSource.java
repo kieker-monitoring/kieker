@@ -22,11 +22,13 @@ package kieker.monitoring.timer;
 
 import java.util.Properties;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+/**
+ * @author Jan Waller
+ */
 public abstract class AbstractTimeSource implements ITimeSource {
 	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);
 
@@ -57,4 +59,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 
 	@Override
 	public abstract long getTime();
+
+	@Override
+	public abstract String toString();
 }
