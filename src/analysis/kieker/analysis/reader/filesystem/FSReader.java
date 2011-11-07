@@ -34,12 +34,13 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
- * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
- * TODO: check correct handling of errors!
+ * Filesystem reader which reads from multiple directories simultaneously
+ * ordered by the logging timestamp. TODO: check correct handling of errors!
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public class FSReader extends AbstractMonitoringReader implements IMonitoringRecordReceiver {
+public class FSReader extends AbstractMonitoringReader implements
+		IMonitoringRecordReceiver {
 
 	/**
 	 * Semicolon-separated list of directories
@@ -48,8 +49,8 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
-	private OutputPort outputPort = new OutputPort("out");
 	private String[] inputDirs;
+	private final OutputPort outputPort;
 	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
 	private volatile boolean running = true;
@@ -60,15 +61,20 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	 * @param readOnlyRecordsOfType
 	 *            select only records of this type; null selects all
 	 */
-	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) { // NOPMD
+	public FSReader(
+			final String[] inputDirs,
+			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) { // NOPMD
 		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
 		if (inputDirs != null) {
 			this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
-			this.recordQueue = new PriorityQueue<IMonitoringRecord>(inputDirs.length);
+			this.recordQueue = new PriorityQueue<IMonitoringRecord>(
+					inputDirs.length);
 		} else {
 			this.inputDirs = null; // NOPMD
 			this.recordQueue = new PriorityQueue<IMonitoringRecord>();
 		}
+		this.outputPort = new OutputPort("out");
+		super.registerOutputPort("out", outputPort);
 	}
 
 	/**
@@ -77,7 +83,6 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	 */
 	public FSReader(final String[] inputDirs) {
 		this(inputDirs, null);
-		super.registerOutputPort("out", outputPort);
 	}
 
 	/**
@@ -88,17 +93,20 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	}
 
 	/**
-	 * Initializes the reader based on the given key/value pair initString. For the key {@value #PROP_NAME_INPUTDIRS}, the method expects a list of input directories
-	 * separated by semicolon.
+	 * Initializes the reader based on the given key/value pair initString. For
+	 * the key {@value #PROP_NAME_INPUTDIRS}, the method expects a list of input
+	 * directories separated by semicolon.
 	 * 
 	 * Example: <code>inputDirs=dir0;...;dir1</code>
 	 */
 	@Override
 	public boolean init(final String initString) {
 		final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-		final String dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
+		final String dirList = propertyMap
+				.getProperty(FSReader.PROP_NAME_INPUTDIRS);
 		if (dirList == null) {
-			FSReader.LOG.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
+			FSReader.LOG.error("Missing value for property "
+					+ FSReader.PROP_NAME_INPUTDIRS);
 			return false;
 		}
 		this.inputDirs = dirList.split(";");
@@ -115,7 +123,8 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	public boolean read() {
 		// start all reader
 		for (final String inputDir : this.inputDirs) {
-			new Thread(new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType)).start(); // NOPMD (new in loop)
+			new Thread(new FSDirectoryReader(inputDir, this,
+					this.readOnlyRecordsOfType)).start(); // NOPMD (new in loop)
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length;
@@ -136,7 +145,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 			if (record == FSReader.EOF) {
 				readingReaders--;
 			} else {
-				this.deliverRecord(record);
+				this.outputPort.deliver(record);
 			}
 		}
 		return true;
