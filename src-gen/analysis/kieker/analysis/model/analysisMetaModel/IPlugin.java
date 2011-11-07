@@ -12,15 +12,15 @@ import org.eclipse.emf.common.util.EList;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Plugin</b></em>'.
  * <!-- end-user-doc -->
- *
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts <em>Output Ports</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getClassname <em>Classname</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts <em>Output Ports</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getClassname <em>Classname</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPlugin()
  * @model abstract="true"
  * @generated
@@ -31,10 +31,10 @@ public interface IPlugin extends IConfigurable {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.IOutputPort}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Output Ports</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Output Ports</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Output Ports</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPlugin_OutputPorts()
 	 * @model containment="true"
@@ -46,10 +46,10 @@ public interface IPlugin extends IConfigurable {
 	 * Returns the value of the '<em><b>Classname</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Classname</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Classname</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Classname</em>' attribute.
 	 * @see #setClassname(Class)
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPlugin_Classname()
@@ -62,7 +62,9 @@ public interface IPlugin extends IConfigurable {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getClassname <em>Classname</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Classname</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Classname</em>' attribute.
 	 * @see #getClassname()
 	 * @generated
 	 */

@@ -14,14 +14,10 @@ import kieker.analysis.model.analysisMetaModel.IPlugin;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -32,11 +28,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getOutputPorts <em>Output Ports</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getClassname <em>Classname</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getOutputPorts <em>Output Ports</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getClassname <em>Classname</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public abstract class Plugin extends Configurable implements IPlugin {
@@ -44,6 +40,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	 * The cached value of the '{@link #getOutputPorts() <em>Output Ports</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getOutputPorts()
 	 * @generated
 	 * @ordered
@@ -54,6 +51,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	 * The cached value of the '{@link #getClassname() <em>Classname</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getClassname()
 	 * @generated
 	 * @ordered
@@ -63,6 +61,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Plugin() {
@@ -72,6 +71,7 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -82,46 +82,54 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<IOutputPort> getOutputPorts() {
-		if (outputPorts == null) {
-			outputPorts = new EObjectContainmentEList<IOutputPort>(IOutputPort.class, this, IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS);
-		}
-		return outputPorts;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Class getClassname() {
-		return classname;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setClassname(Class newClassname) {
-		Class oldClassname = classname;
-		classname = newClassname;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PLUGIN__CLASSNAME, oldClassname, classname));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public EList<IOutputPort> getOutputPorts() {
+		if (this.outputPorts == null) {
+			this.outputPorts = new EObjectContainmentEList<IOutputPort>(IOutputPort.class, this, IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS);
+		}
+		return this.outputPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Class getClassname() {
+		return this.classname;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public void setClassname(final Class newClassname) {
+		final Class oldClassname = this.classname;
+		this.classname = newClassname;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PLUGIN__CLASSNAME, oldClassname, this.classname));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-				return ((InternalEList<?>)getOutputPorts()).basicRemove(otherEnd, msgs);
+		case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			return ((InternalEList<?>) this.getOutputPorts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -129,15 +137,16 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-				return getOutputPorts();
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
-				return getClassname();
+		case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			return this.getOutputPorts();
+		case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			return this.getClassname();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -145,19 +154,20 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-				getOutputPorts().clear();
-				getOutputPorts().addAll((Collection<? extends IOutputPort>)newValue);
-				return;
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
-				setClassname((Class)newValue);
-				return;
+		case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			this.getOutputPorts().clear();
+			this.getOutputPorts().addAll((Collection<? extends IOutputPort>) newValue);
+			return;
+		case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			this.setClassname((Class) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -165,17 +175,18 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-				getOutputPorts().clear();
-				return;
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
-				setClassname((Class)null);
-				return;
+		case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			this.getOutputPorts().clear();
+			return;
+		case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			this.setClassname((Class) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -183,15 +194,16 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-				return outputPorts != null && !outputPorts.isEmpty();
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
-				return classname != null;
+		case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			return (this.outputPorts != null) && !this.outputPorts.isEmpty();
+		case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			return this.classname != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -199,17 +211,20 @@ public abstract class Plugin extends Configurable implements IPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (classname: ");
-		result.append(classname);
+		result.append(this.classname);
 		result.append(')');
 		return result.toString();
 	}
 
-} //Plugin
+} // Plugin

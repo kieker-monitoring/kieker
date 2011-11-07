@@ -120,23 +120,23 @@ public class AnalysisController {
 	 * @throws Exception
 	 *             If something went wrong.
 	 */
-	static public Map<String, AnalysisController> loadFromFile(File file)
+	static public Map<String, AnalysisController> loadFromFile(final File file)
 			throws Exception {
 		/* Try to load everything. */
-		EList<EObject> content = openModelFile(file);
+		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if (!content.isEmpty()) {
 			/* The first (and only) element should be the "parent project" */
-			IProject project = (IProject) content.get(0);
+			final IProject project = (IProject) content.get(0);
 
 			/* Now find all "sub projects" */
-			List<IProject> projects = new ArrayList<IProject>();
-			List<IProject> toExpand = new ArrayList<IProject>();
+			final List<IProject> projects = new ArrayList<IProject>();
+			final List<IProject> toExpand = new ArrayList<IProject>();
 			toExpand.add(project);
 			while (!toExpand.isEmpty()) {
-				IProject currProj = toExpand.remove(0);
+				final IProject currProj = toExpand.remove(0);
 				projects.add(currProj);
-				EList<IConfigurable> configs = currProj.getConfigurables();
-				for (IConfigurable c : configs) {
+				final EList<IConfigurable> configs = currProj.getConfigurables();
+				for (final IConfigurable c : configs) {
 					if (c instanceof IProject) {
 						toExpand.add((IProject) c);
 					}
@@ -144,9 +144,9 @@ public class AnalysisController {
 			}
 
 			/* Configure all projects. */
-			Map<String, AnalysisController> map = new HashMap<String, AnalysisController>();
+			final Map<String, AnalysisController> map = new HashMap<String, AnalysisController>();
 
-			for (IProject currProject : projects) {
+			for (final IProject currProject : projects) {
 				map.put(currProject.getName(), new AnalysisController(
 						currProject));
 			}
@@ -163,7 +163,7 @@ public class AnalysisController {
 	 *            The project instance for the analysis.
 	 * @throws Exception
 	 */
-	private AnalysisController(IProject project) throws Exception {
+	private AnalysisController(final IProject project) throws Exception {
 		System.out.println(project.getName());
 
 		/*
@@ -172,29 +172,29 @@ public class AnalysisController {
 		 * map). 2) The connection between the plugins and their created
 		 * counterpart (as a map). 3) The "real" connection within the model.
 		 */
-		EList<IConfigurable> configs = project.getConfigurables();
-		List<IConnector> connectors = new ArrayList<IConnector>();
-		Map<IPort, IPlugin> portPluginMap = new HashMap<IPort, IPlugin>();
-		Map<IPlugin, Object> pluginObjMap = new HashMap<IPlugin, Object>();
+		final EList<IConfigurable> configs = project.getConfigurables();
+		final List<IConnector> connectors = new ArrayList<IConnector>();
+		final Map<IPort, IPlugin> portPluginMap = new HashMap<IPort, IPlugin>();
+		final Map<IPlugin, Object> pluginObjMap = new HashMap<IPlugin, Object>();
 
 		/* Run through the "configurables" to extract all plugins. */
-		for (IConfigurable c : configs) {
+		for (final IConfigurable c : configs) {
 
 			if (c instanceof IPlugin) {
 				/*
 				 * We found a plugin. Not we have to determine whether this is a
 				 * reader or a normal plugin.
 				 */
-				IPlugin p = (IPlugin) c;
+				final IPlugin p = (IPlugin) c;
 				if (p instanceof IReader) {
 					System.out.println("Reader gefunden: " + p.getName());
-					IMonitoringReader reader = (IMonitoringReader) p.getClassname().newInstance();
+					final IMonitoringReader reader = (IMonitoringReader) p.getClassname().newInstance();
 					reader.init(((IReader) p).getInitString());
 					this.setReader(reader);
 					pluginObjMap.put(p, reader);
 				} else {
 					System.out.println("Plugin gefunden: " + p.getName());
-					Object plugin = p.getClassname().newInstance();
+					final Object plugin = p.getClassname().newInstance();
 					pluginObjMap.put(p, plugin);
 				}
 
@@ -204,14 +204,14 @@ public class AnalysisController {
 				 * their parent. We will also accumulate all Connectors.
 				 */
 
-				for (IOutputPort oPort : p.getOutputPorts()) {
+				for (final IOutputPort oPort : p.getOutputPorts()) {
 					connectors.addAll(oPort.getOutConnector());
 
 					portPluginMap.put(oPort, p);
 				}
 
 				if (p instanceof IAnalysisPlugin) {
-					for (IInputPort iPort : ((IAnalysisPlugin) p).getInputPorts()) {
+					for (final IInputPort iPort : ((IAnalysisPlugin) p).getInputPorts()) {
 						portPluginMap.put(iPort, p);
 					}
 				}
@@ -222,20 +222,20 @@ public class AnalysisController {
 		 * Now we should have initialized all plugins. We can start to assemble
 		 * the structure.
 		 */
-		for (IConnector c : connectors) {
+		for (final IConnector c : connectors) {
 			/* We can get the plugins via the map. */
-			IPlugin in = portPluginMap.get(c.getDstInputPort());
-			IPlugin out = portPluginMap.get(c.getSicOutputPort());
+			final IPlugin in = portPluginMap.get(c.getDstInputPort());
+			final IPlugin out = portPluginMap.get(c.getSicOutputPort());
 			System.out.format("Connector gefunden. Verbinde Output von "
 					+ "%s mit Input von %s\n", out.getName(), in.getName());
 
-			AbstractPlugin outObj = (AbstractPlugin) pluginObjMap
+			final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap
 					.get(out);
-			AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap
+			final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap
 					.get(in);
 
-			kieker.analysis.plugin.configuration.IOutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
-			kieker.analysis.plugin.configuration.IInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
+			final kieker.analysis.plugin.configuration.IOutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
+			final kieker.analysis.plugin.configuration.IInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
 
 			outPort.subscribe(inPort);
 		}
@@ -249,9 +249,9 @@ public class AnalysisController {
 	 *            The file to be opened.
 	 * @return A list with the content of the file.
 	 */
-	static EList<EObject> openModelFile(File file) {
+	static EList<EObject> openModelFile(final File file) {
 		/* Create a resource set to work with. */
-		ResourceSet resourceSet = new ResourceSetImpl();
+		final ResourceSet resourceSet = new ResourceSetImpl();
 
 		/* Initialize the package information */
 		AnalysisMetaModelPackage.init();
@@ -260,8 +260,8 @@ public class AnalysisController {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
 				new EcoreResourceFactoryImpl() {
 					@Override
-					public Resource createResource(URI uri) {
-						XMIResourceImpl resource = (XMIResourceImpl) super
+					public Resource createResource(final URI uri) {
+						final XMIResourceImpl resource = (XMIResourceImpl) super
 								.createResource(uri);
 						resource.getDefaultLoadOptions().put(
 								XMLResource.OPTION_RECORD_UNKNOWN_FEATURE,
@@ -271,12 +271,12 @@ public class AnalysisController {
 				});
 
 		/* Try to load the ressource. */
-		XMIResource resource = (XMIResource) resourceSet.getResource(
+		final XMIResource resource = (XMIResource) resourceSet.getResource(
 				URI.createFileURI(file.toString()), true);
 
 		try {
 			resource.load(Collections.EMPTY_MAP);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			AnalysisController.LOG.error("Could not open the given file.");
 		}
 

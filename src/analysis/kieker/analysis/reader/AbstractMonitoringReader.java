@@ -37,7 +37,7 @@ public abstract class AbstractMonitoringReader implements IMonitoringReader {
 
 	private final Collection<IMonitoringRecordReceiver> recordReceivers = new CopyOnWriteArrayList<IMonitoringRecordReceiver>();
 
-	//@Override
+	// @Override
 	public final void addRecordReceiver(final IMonitoringRecordReceiver receiver) {
 		this.recordReceivers.add(receiver);
 	}

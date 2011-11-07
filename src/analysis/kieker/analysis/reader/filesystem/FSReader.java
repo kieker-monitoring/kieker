@@ -74,7 +74,7 @@ public class FSReader extends AbstractMonitoringReader implements
 			this.recordQueue = new PriorityQueue<IMonitoringRecord>();
 		}
 		this.outputPort = new OutputPort("out");
-		super.registerOutputPort("out", outputPort);
+		super.registerOutputPort("out", this.outputPort);
 	}
 
 	/**

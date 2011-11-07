@@ -6,13 +6,21 @@
  */
 package kieker.analysis.model.analysisMetaModel.util;
 
-import kieker.analysis.model.analysisMetaModel.*;
+import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.IConfigurable;
+import kieker.analysis.model.analysisMetaModel.IConnector;
+import kieker.analysis.model.analysisMetaModel.IInputPort;
+import kieker.analysis.model.analysisMetaModel.IOutputPort;
+import kieker.analysis.model.analysisMetaModel.IPlugin;
+import kieker.analysis.model.analysisMetaModel.IPort;
+import kieker.analysis.model.analysisMetaModel.IProject;
+import kieker.analysis.model.analysisMetaModel.IProperty;
+import kieker.analysis.model.analysisMetaModel.IReader;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -20,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
+ * 
  * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage
  * @generated
  */
@@ -28,6 +37,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected static IAnalysisMetaModelPackage modelPackage;
@@ -36,11 +46,12 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * Creates an instance of the adapter factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AnalysisMetaModelAdapterFactory() {
-		if (modelPackage == null) {
-			modelPackage = IAnalysisMetaModelPackage.eINSTANCE;
+		if (AnalysisMetaModelAdapterFactory.modelPackage == null) {
+			AnalysisMetaModelAdapterFactory.modelPackage = IAnalysisMetaModelPackage.eINSTANCE;
 		}
 	}
 
@@ -49,16 +60,17 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return whether this factory is applicable for the type of the object.
 	 * @generated
 	 */
 	@Override
-	public boolean isFactoryForType(Object object) {
-		if (object == modelPackage) {
+	public boolean isFactoryForType(final Object object) {
+		if (object == AnalysisMetaModelAdapterFactory.modelPackage) {
 			return true;
 		}
 		if (object instanceof EObject) {
-			return ((EObject)object).eClass().getEPackage() == modelPackage;
+			return ((EObject) object).eClass().getEPackage() == AnalysisMetaModelAdapterFactory.modelPackage;
 		}
 		return false;
 	}
@@ -67,69 +79,81 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * The switch that delegates to the <code>createXXX</code> methods.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AnalysisMetaModelSwitch<Adapter> modelSwitch =
-		new AnalysisMetaModelSwitch<Adapter>() {
-			@Override
-			public Adapter caseProject(IProject object) {
-				return createProjectAdapter();
-			}
-			@Override
-			public Adapter casePlugin(IPlugin object) {
-				return createPluginAdapter();
-			}
-			@Override
-			public Adapter caseConnector(IConnector object) {
-				return createConnectorAdapter();
-			}
-			@Override
-			public Adapter caseConfigurable(IConfigurable object) {
-				return createConfigurableAdapter();
-			}
-			@Override
-			public Adapter casePort(IPort object) {
-				return createPortAdapter();
-			}
-			@Override
-			public Adapter caseInputPort(IInputPort object) {
-				return createInputPortAdapter();
-			}
-			@Override
-			public Adapter caseOutputPort(IOutputPort object) {
-				return createOutputPortAdapter();
-			}
-			@Override
-			public Adapter caseProperty(IProperty object) {
-				return createPropertyAdapter();
-			}
-			@Override
-			public Adapter caseAnalysisPlugin(IAnalysisPlugin object) {
-				return createAnalysisPluginAdapter();
-			}
-			@Override
-			public Adapter caseReader(IReader object) {
-				return createReaderAdapter();
-			}
-			@Override
-			public Adapter defaultCase(EObject object) {
-				return createEObjectAdapter();
-			}
-		};
+			new AnalysisMetaModelSwitch<Adapter>() {
+				@Override
+				public Adapter caseProject(final IProject object) {
+					return AnalysisMetaModelAdapterFactory.this.createProjectAdapter();
+				}
+
+				@Override
+				public Adapter casePlugin(final IPlugin object) {
+					return AnalysisMetaModelAdapterFactory.this.createPluginAdapter();
+				}
+
+				@Override
+				public Adapter caseConnector(final IConnector object) {
+					return AnalysisMetaModelAdapterFactory.this.createConnectorAdapter();
+				}
+
+				@Override
+				public Adapter caseConfigurable(final IConfigurable object) {
+					return AnalysisMetaModelAdapterFactory.this.createConfigurableAdapter();
+				}
+
+				@Override
+				public Adapter casePort(final IPort object) {
+					return AnalysisMetaModelAdapterFactory.this.createPortAdapter();
+				}
+
+				@Override
+				public Adapter caseInputPort(final IInputPort object) {
+					return AnalysisMetaModelAdapterFactory.this.createInputPortAdapter();
+				}
+
+				@Override
+				public Adapter caseOutputPort(final IOutputPort object) {
+					return AnalysisMetaModelAdapterFactory.this.createOutputPortAdapter();
+				}
+
+				@Override
+				public Adapter caseProperty(final IProperty object) {
+					return AnalysisMetaModelAdapterFactory.this.createPropertyAdapter();
+				}
+
+				@Override
+				public Adapter caseAnalysisPlugin(final IAnalysisPlugin object) {
+					return AnalysisMetaModelAdapterFactory.this.createAnalysisPluginAdapter();
+				}
+
+				@Override
+				public Adapter caseReader(final IReader object) {
+					return AnalysisMetaModelAdapterFactory.this.createReaderAdapter();
+				}
+
+				@Override
+				public Adapter defaultCase(final EObject object) {
+					return AnalysisMetaModelAdapterFactory.this.createEObjectAdapter();
+				}
+			};
 
 	/**
 	 * Creates an adapter for the <code>target</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param target the object to adapt.
+	 * 
+	 * @param target
+	 *            the object to adapt.
 	 * @return the adapter for the <code>target</code>.
 	 * @generated
 	 */
 	@Override
-	public Adapter createAdapter(Notifier target) {
-		return modelSwitch.doSwitch((EObject)target);
+	public Adapter createAdapter(final Notifier target) {
+		return this.modelSwitch.doSwitch((EObject) target);
 	}
-
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.IProject <em>Project</em>}'.
@@ -137,6 +161,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IProject
 	 * @generated
@@ -151,6 +176,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IPlugin
 	 * @generated
@@ -165,6 +191,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IConnector
 	 * @generated
@@ -179,6 +206,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IConfigurable
 	 * @generated
@@ -193,6 +221,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IPort
 	 * @generated
@@ -207,6 +236,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IInputPort
 	 * @generated
@@ -221,6 +251,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort
 	 * @generated
@@ -235,6 +266,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IProperty
 	 * @generated
@@ -249,6 +281,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisPlugin
 	 * @generated
@@ -263,6 +296,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see kieker.analysis.model.analysisMetaModel.IReader
 	 * @generated
@@ -276,6 +310,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null.
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @generated
 	 */
@@ -283,4 +318,4 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //AnalysisMetaModelAdapterFactory
+} // AnalysisMetaModelAdapterFactory

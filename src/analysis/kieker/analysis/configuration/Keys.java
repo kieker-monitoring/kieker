@@ -18,13 +18,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.configuration;
-
+package kieker.analysis.configuration;
 
 /**
- * 
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-public interface IInputPort<T extends Object> extends IPort<T> {
-	public void newEvent(T event);
+interface Keys { // NOPMD NOCS
+	/** prefix used for all kieker.monitoring components */
+	public static final String PREFIX = "kieker.analysis.";
+
+	/** Location of the custom properties file (in classpath) */
+	public static final String CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + Keys.PREFIX + "properties";
+	/** Location of the default properties file (in classpath) */
+	public static final String DEFAULT_PROPERTIES_LOCATION_CLASSPATH = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH + ".default";
+
+	/** JVM-parameter to specify a custom properties file */
+	public static final String CUSTOM_PROPERTIES_LOCATION_JVM = Keys.PREFIX + "configuration";
+
+	// these MUST be declared in the file DEFAULT_PROPERTIES_LOCATION_CLASSPATH
+	// TODO: add keys (see kieker.monitoring.core.configuration.Keys for examples)
 }

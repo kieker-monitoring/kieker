@@ -20,8 +20,6 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Collection;
-
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.record.IMonitoringRecord;
 
@@ -38,8 +36,8 @@ public class DummyRecordConsumer extends AbstractAnalysisPlugin {
 		super.registerInputPort("in", new AbstractInputPort("in") {
 
 			@Override
-			public void newEvent(Object event) {
-				newMonitoringRecord((IMonitoringRecord) event);
+			public void newEvent(final Object event) {
+				DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
 			}
 		});
 	}

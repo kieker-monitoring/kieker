@@ -20,7 +20,6 @@
 
 package kieker.analysis.reader;
 
-import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * TODO: refactor analysis readers similar to monitoring writers!

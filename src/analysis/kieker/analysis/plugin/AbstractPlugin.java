@@ -16,20 +16,20 @@ public abstract class AbstractPlugin {
 	}
 
 	final public IInputPort getInputPort(final String name) {
-		return inputPorts.get(name);
+		return this.inputPorts.get(name);
 	}
 
 	final public IOutputPort getOutputPort(final String name) {
-		return outputPorts.get(name);
+		return this.outputPorts.get(name);
 	}
 
-	protected void registerInputPort(final String name, 
+	protected void registerInputPort(final String name,
 			final IInputPort port) {
-		inputPorts.put(name, port);
+		this.inputPorts.put(name, port);
 	}
 
-	protected void registerOutputPort(final String name, 
+	protected void registerOutputPort(final String name,
 			final IOutputPort port) {
-		outputPorts.put(name, port);
+		this.outputPorts.put(name, port);
 	}
 }

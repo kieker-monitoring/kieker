@@ -20,7 +20,6 @@
 
 package kieker.analysis.plugin.configuration;
 
-import kieker.analysis.plugin.IAnalysisEvent;
 
 /**
  * 

@@ -8,12 +8,12 @@ public abstract class AbstractMonitoringReader extends AbstractPlugin
 		implements IMonitoringReader {
 
 	@Override
-	final protected void registerInputPort(String name, IInputPort port) {
+	final protected void registerInputPort(final String name, final IInputPort port) {
 		return;
 	}
 
 	@Override
-	final protected void registerOutputPort(String name, IOutputPort port) {
+	final protected void registerOutputPort(final String name, final IOutputPort port) {
 		super.registerOutputPort(name, port);
 	}
 }

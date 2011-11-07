@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -33,11 +34,11 @@ import kieker.monitoring.core.controller.MonitoringController;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public final class Configuration extends Properties implements Keys {
+public final class Configuration extends AbstractConfiguration implements Keys {
 	private static final long serialVersionUID = 1L;
 	private static final Log LOG = LogFactory.getLog(Configuration.class);
 
-	private Configuration(final Configuration defaultValues) {
+	private Configuration(final Properties defaultValues) {
 		super(defaultValues);
 	}
 
@@ -184,61 +185,8 @@ public final class Configuration extends Properties implements Keys {
 		return configuration;
 	}
 
-	/*
-	 * member methods
-	 */
-
-	/**
-	 * You should know what you do if you use this method!
-	 * Currently it is used for a (dirty) hack to implement writers.
-	 * 
-	 * @param defaultProperties
-	 * @throws IllegalAccessException
-	 */
-	public final void setDefaultProperties(final Properties defaultProperties) throws IllegalAccessException {
-		if (this.defaults == null) {
-			this.defaults = defaultProperties;
-		} else if (defaultProperties != null) {
-			throw new IllegalAccessException();
-		}
-	}
-
+	@Override
 	public final Configuration getPropertiesStartingWith(final String prefix) {
-		final Configuration configuration = new Configuration(null);
-		for (final String property : this.stringPropertyNames()) {
-			if (property.startsWith(prefix)) {
-				configuration.setProperty(property, this.getProperty(property));
-			}
-		}
-		return configuration;
-	}
-
-	public final String getStringProperty(final String key) {
-		final String s = this.getProperty(key);
-		return (s == null) ? "" : s; // NOCS
-	}
-
-	public final boolean getBooleanProperty(final String key) {
-		return Boolean.parseBoolean(this.getStringProperty(key));
-	}
-
-	public final int getIntProperty(final String key) {
-		final String s = this.getStringProperty(key);
-		try {
-			return Integer.parseInt(s);
-		} catch (final NumberFormatException ex) {
-			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
-			return 0;
-		}
-	}
-
-	public final long getLongProperty(final String key) {
-		final String s = this.getStringProperty(key);
-		try {
-			return Long.parseLong(s);
-		} catch (final NumberFormatException ex) {
-			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
-			return 0;
-		}
+		return (Configuration) this.getPropertiesStartingWith(new Configuration(null), prefix);
 	}
 }

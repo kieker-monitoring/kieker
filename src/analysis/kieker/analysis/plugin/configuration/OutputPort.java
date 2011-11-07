@@ -23,8 +23,6 @@ package kieker.analysis.plugin.configuration;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IAnalysisEvent;
-
 /**
  * 
  * @author Andre van Hoorn

@@ -7,12 +7,12 @@ public abstract class AbstractAnalysisPlugin extends AbstractPlugin
 		implements IAnalysisPlugin {
 
 	@Override
-	final protected void registerInputPort(String name, IInputPort port) {
+	final protected void registerInputPort(final String name, final IInputPort port) {
 		super.registerInputPort(name, port);
 	}
 
 	@Override
-	final protected void registerOutputPort(String name, IOutputPort port) {
+	final protected void registerOutputPort(final String name, final IOutputPort port) {
 		super.registerOutputPort(name, port);
 	}
 }

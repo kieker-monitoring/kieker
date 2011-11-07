@@ -18,13 +18,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.configuration;
+package kieker.analysis.configuration;
 
+import java.util.Properties;
+
+import kieker.common.configuration.AbstractConfiguration;
 
 /**
- * 
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-public interface IInputPort<T extends Object> extends IPort<T> {
-	public void newEvent(T event);
+public class Configuration extends AbstractConfiguration implements Keys {
+	private static final long serialVersionUID = 1L;
+
+	public Configuration(final Properties defaultValues) {
+		super(defaultValues);
+	}
+
+	@Override
+	public final Configuration getPropertiesStartingWith(final String prefix) {
+		return (Configuration) this.getPropertiesStartingWith(new Configuration(null), prefix);
+	}
 }

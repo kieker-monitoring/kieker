@@ -10,9 +10,7 @@ import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.IProperty;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -23,11 +21,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Property#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Property#getValue <em>Value</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.Property#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.Property#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class Property extends EObjectImpl implements IProperty {
@@ -35,6 +33,7 @@ public class Property extends EObjectImpl implements IProperty {
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -45,16 +44,18 @@ public class Property extends EObjectImpl implements IProperty {
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected String name = NAME_EDEFAULT;
+	protected String name = Property.NAME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -65,15 +66,17 @@ public class Property extends EObjectImpl implements IProperty {
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected String value = VALUE_EDEFAULT;
+	protected String value = Property.VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Property() {
@@ -83,6 +86,7 @@ public class Property extends EObjectImpl implements IProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -93,57 +97,68 @@ public class Property extends EObjectImpl implements IProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PROPERTY__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getValue() {
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setValue(String newValue) {
-		String oldValue = value;
-		value = newValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PROPERTY__VALUE, oldValue, value));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public String getName() {
+		return this.name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PROPERTY__NAME, oldName, this.name));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public String getValue() {
+		return this.value;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public void setValue(final String newValue) {
+		final String oldValue = this.value;
+		this.value = newValue;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PROPERTY__VALUE, oldValue, this.value));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
-				return getName();
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
-				return getValue();
+		case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			return this.getName();
+		case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			return this.getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -151,17 +166,18 @@ public class Property extends EObjectImpl implements IProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
-				setName((String)newValue);
-				return;
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
-				setValue((String)newValue);
-				return;
+		case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			this.setName((String) newValue);
+			return;
+		case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			this.setValue((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -169,17 +185,18 @@ public class Property extends EObjectImpl implements IProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
+		case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			this.setName(Property.NAME_EDEFAULT);
+			return;
+		case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			this.setValue(Property.VALUE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -187,15 +204,16 @@ public class Property extends EObjectImpl implements IProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+		case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			return Property.NAME_EDEFAULT == null ? this.name != null : !Property.NAME_EDEFAULT.equals(this.name);
+		case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			return Property.VALUE_EDEFAULT == null ? this.value != null : !Property.VALUE_EDEFAULT.equals(this.value);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -203,19 +221,22 @@ public class Property extends EObjectImpl implements IProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(", value: ");
-		result.append(value);
+		result.append(this.value);
 		result.append(')');
 		return result.toString();
 	}
 
-} //Property
+} // Property
