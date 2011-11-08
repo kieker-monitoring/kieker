@@ -29,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,20 +70,15 @@ final class FSDirectoryReader implements Runnable {
 	 * @param readOnlyRecordsOfType
 	 *            select only records of this type; null selects all
 	 */
-	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
-			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
+	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver, final String[] readOnlyRecordsOfType) {
 		if ((inputDirName == null) || inputDirName.isEmpty()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
 		}
 		this.inputDir = new File(inputDirName);
 		this.recordReceiver = recordReceiver;
-		if (readOnlyRecordsOfType != null) {
-			this.recordTypeSelector = new HashSet<String>();
-			for (final Class<? extends IMonitoringRecord> recordType : readOnlyRecordsOfType) {
-				this.recordTypeSelector.add(recordType.getName());
-			}
-		} else {
-			this.recordTypeSelector = null; // NOPMD (read records of any type)
+		this.recordTypeSelector = new HashSet<String>(readOnlyRecordsOfType.length);
+		for (final String recordType : readOnlyRecordsOfType) {
+			this.recordTypeSelector.add(recordType);
 		}
 	}
 

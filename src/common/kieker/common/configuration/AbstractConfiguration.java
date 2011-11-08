@@ -67,6 +67,39 @@ public abstract class AbstractConfiguration extends Properties {
 	}
 
 	/**
+	 * Property values have to be split by '|'.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public final String[] getStringArrayProperty(final String key) {
+		final String s = this.getStringProperty(key);
+		if (s.isEmpty()) {
+			return new String[0];
+		}
+		else {
+			return s.split("|");
+		}
+	}
+
+	/**
+	 * Converts the String[] to a String split by '|'.
+	 * 
+	 * @param values
+	 * @return
+	 */
+	public static final String toProperty(final String[] values) {
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < values.length; i++) {
+			sb.append(values[i]);
+			if (i < (values.length - 1)) {
+				sb.append('|');
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
 	 * Flattens the Properties hierarchies and returns an Configuration object containing only keys starting with the prefix.
 	 * 
 	 * <p>

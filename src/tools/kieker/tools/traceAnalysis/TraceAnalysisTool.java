@@ -255,8 +255,7 @@ public final class TraceAnalysisTool {
 
 			{ // NOCS (NestedBlock)
 				/*
-				 * Register an FSReader which only reads records of type
-				 * OperationExecutionRecord
+				 * Register an FSReader which only reads records of type OperationExecutionRecord
 				 */
 				final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
 				recordTypeSelectorSet.add(OperationExecutionRecord.class);

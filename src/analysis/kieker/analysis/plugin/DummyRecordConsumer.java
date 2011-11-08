@@ -21,10 +21,9 @@
 package kieker.analysis.plugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.record.IMonitoringRecord;
 
@@ -37,8 +36,9 @@ public class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	/**
 	 * Constructs a {@link DummyRecordConsumer}.
 	 */
-	public DummyRecordConsumer() {
-		Collection<Class<?>> eventTypes = new ArrayList<Class<?>>();
+	public DummyRecordConsumer(final Configuration configuration) {
+		super(configuration);
+		final Collection<Class<?>> eventTypes = new ArrayList<Class<?>>();
 		eventTypes.add(IMonitoringRecord.class);
 		super.registerInputPort("in", new AbstractInputPort("in", eventTypes) {
 

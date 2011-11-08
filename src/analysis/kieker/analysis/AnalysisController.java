@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.IConnector;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
@@ -72,22 +73,17 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  * @author Andre van Hoorn, Matthias Rohr
  */
 public class AnalysisController {
-
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
+
 	private IMonitoringReader logReader;
-	/**
-	 * this are the consumers for data that are coming into Kieker by readers (files or system under monitoring)
-	 */
+	/** This are the consumers for data that are coming into Kieker by readers (files or system under monitoring) */
 	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains all consumers which consume records of any type */
 	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains mapping of record types to subscribed consumers */
 	private final ConcurrentMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
 	private final Collection<kieker.analysis.plugin.IAnalysisPlugin> plugins = new CopyOnWriteArrayList<kieker.analysis.plugin.IAnalysisPlugin>();
-
-	/**
-	 * Will be count down after the analysis is set-up.
-	 */
+	/** Will be count down after the analysis is set-up. */
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
 	/**
@@ -95,6 +91,17 @@ public class AnalysisController {
 	 */
 	public AnalysisController() {
 		// do nothing
+	}
+
+	/**
+	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of @link{Project} to construct the analysis.
+	 * 
+	 * @param project
+	 *            The project instance for the analysis.
+	 * @throws Exception
+	 */
+	public AnalysisController(final IProject project) throws Exception {
+		this.loadFromModelProject(project);
 	}
 
 	/**
@@ -113,24 +120,10 @@ public class AnalysisController {
 		/* Try to load everything. */
 		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if (!content.isEmpty()) {
-			/*
-			 * The first (and only) element should be the project. Use it to
-			 * configure this instance.
-			 */
+			// The first (and only) element should be the project. Use it to configure this instance.
 			final IProject project = (IProject) content.get(0);
 			this.loadFromModelProject(project);
 		}
-	}
-
-	/**
-	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of @link{Project} to construct the analysis.
-	 * 
-	 * @param project
-	 *            The project instance for the analysis.
-	 * @throws Exception
-	 */
-	public AnalysisController(final IProject project) throws Exception {
-		this.loadFromModelProject(project);
 	}
 
 	private final void loadFromModelProject(final IProject project) throws Exception {
@@ -147,21 +140,22 @@ public class AnalysisController {
 		final Map<IPort, IPlugin> portPluginMap = new HashMap<IPort, IPlugin>();
 		final Map<IPlugin, Object> pluginObjMap = new HashMap<IPlugin, Object>();
 
-		/* Run through the "configurables" to extract all plugins. */
+		// Run through the "configurables" to extract all plugins.
 		for (final IPlugin p : plugins) {
-			/*
-			 * We found a plugin. Not we have to determine whether this is a
-			 * reader or a normal plugin.
-			 */
-			// TODO: Initialize reader and plugin!
+			// We found a plugin. Not we have to determine whether this is a reader or a normal plugin.
 			if (p instanceof IReader) {
 				System.out.println("Reader gefunden: " + p.getName());
-				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).newInstance();
+				// TODO: Initialize Configuration!
+				final Configuration configuration = new Configuration(null);
+				final IMonitoringReader reader = AnalysisController.createAndInitialize(IMonitoringReader.class, p.getClassname(), configuration);
 				this.setReader(reader);
 				pluginObjMap.put(p, reader);
 			} else {
 				System.out.println("Plugin gefunden: " + p.getName());
-				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname()).newInstance();
+				// TODO: Initialize Configuration!
+				final Configuration configuration = new Configuration(null);
+				final kieker.analysis.plugin.IAnalysisPlugin plugin = AnalysisController.createAndInitialize(kieker.analysis.plugin.IAnalysisPlugin.class,
+						p.getClassname(), configuration);
 				pluginObjMap.put(p, plugin);
 			}
 
@@ -333,12 +327,17 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Returns a {@link CountDownLatch} which has the value 0 after the {@link AnalysisController} is initialized and the reader is running.
+	 * Awaits until the controller finishes its initialization.
 	 * 
 	 * @return the initializationLatch
 	 */
-	protected final CountDownLatch getInitializationLatch() {
-		return this.initializationLatch;
+	protected final boolean awaitInitialization() {
+		try {
+			this.initializationLatch.await();
+		} catch (final InterruptedException ex) {
+			AnalysisController.LOG.error("Interrupted while waiting for AnalysisController to be initialized.", ex);
+		}
+		return true;
 	}
 
 	/**
@@ -424,5 +423,27 @@ public class AnalysisController {
 		}
 
 		return success;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
+		C createdClass = null; // NOPMD
+		try {
+			final Class<?> clazz = Class.forName(classname);
+			if (c.isAssignableFrom(clazz)) {
+				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
+			} else {
+				AnalysisController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+			}
+		} catch (final ClassNotFoundException e) {
+			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e); // NOCS (MultipleStringLiteralsCheck)
+		} catch (final NoSuchMethodException e) {
+			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname // NOCS (MultipleStringLiteralsCheck)
+					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
+		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
+			AnalysisController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e); // NOCS (MultipleStringLiteralsCheck)
+		}
+		return createdClass;
 	}
 }

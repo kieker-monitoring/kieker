@@ -25,6 +25,8 @@ import java.util.Properties;
 import kieker.common.configuration.AbstractConfiguration;
 
 /**
+ * A Configuration for kieker.analysis
+ * 
  * @author Jan Waller
  */
 public class Configuration extends AbstractConfiguration implements Keys {

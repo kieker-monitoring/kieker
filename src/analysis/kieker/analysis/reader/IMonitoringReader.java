@@ -20,7 +20,6 @@
 
 package kieker.analysis.reader;
 
-
 /**
  * TODO: refactor analysis readers similar to monitoring writers!
  * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/161
@@ -28,17 +27,6 @@ package kieker.analysis.reader;
  * @author Andre van Hoorn
  */
 public interface IMonitoringReader {
-
-	/**
-	 * Initialize instance from passed initialization string which is typically
-	 * a list of separated parameter/values pairs. The implementing class {@link AbstractMonitoringReader} includes convenient methods to extract
-	 * configuration values from an initString.
-	 * 
-	 * @param initString
-	 *            the initialization string
-	 * @return true if the initialization was successful; false if an error occurred
-	 */
-	public boolean init(String initString);
 
 	/**
 	 * Starts the reader. This method is intended to be a blocking operation,

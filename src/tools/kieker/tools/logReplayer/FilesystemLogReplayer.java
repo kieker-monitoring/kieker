@@ -24,9 +24,11 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -105,7 +107,9 @@ public class FilesystemLogReplayer {
 		if (this.realtimeMode) {
 			fsReader = new FSReaderRealtime(this.inputDirs, this.numRealtimeWorkerThreads);
 		} else {
-			fsReader = new FSReader(this.inputDirs);
+			final Configuration configuration = new Configuration(null);
+			configuration.setProperty(FSReader.CONFIG_INPUTDIRS, AbstractConfiguration.toProperty(this.inputDirs));
+			fsReader = new FSReader(configuration);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(fsReader);

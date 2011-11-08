@@ -20,14 +20,14 @@
 
 package kieker.analysis.reader.filesystem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.PriorityQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.util.PropertyMap;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.DummyMonitoringRecord;
@@ -42,73 +42,37 @@ import kieker.common.record.IMonitoringRecordReceiver;
  */
 public class FSReader extends AbstractMonitoringReader implements IMonitoringRecordReceiver {
 
-	/**
-	 * Semicolon-separated list of directories
-	 */
-	public static final String PROP_NAME_INPUTDIRS = "inputDirs";
+	private static final String PREFIX = AbstractMonitoringReader.class.getName() + ".";
+	public static final String CONFIG_INPUTDIRS = FSReader.PREFIX + "inputDirs";
+	public static final String CONFIG_ONLYRECORDS = FSReader.PREFIX + "readOnlyRecordsOfType";
+
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
-	private String[] inputDirs;
-	private final OutputPort outputPort;
-	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
+
+	private static final Collection<Class<?>> OUT_CLASSES = Collections
+			.unmodifiableCollection(new CopyOnWriteArrayList<>(new Class<?>[] { IMonitoringRecord.class }));
+
+	private final String[] readOnlyRecordsOfType;
+	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
+	private final OutputPort outputPort;
+
 	private volatile boolean running = true;
 
-	/**
-	 * 
-	 * @param inputDirs
-	 * @param readOnlyRecordsOfType
-	 *            select only records of this type; null selects all
-	 */
-	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) { // NOPMD
-		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
-		if (inputDirs != null) {
-			this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
-			this.recordQueue = new PriorityQueue<IMonitoringRecord>(
-					inputDirs.length);
+	public FSReader(final Configuration configuration) {
+		super(configuration);
+		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
+		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
+		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
+		if (onlyrecords.length == 0) {
+			this.readOnlyRecordsOfType = null;
 		} else {
-			this.inputDirs = null; // NOPMD
-			this.recordQueue = new PriorityQueue<IMonitoringRecord>();
+			this.readOnlyRecordsOfType = onlyrecords;
 		}
-		final Collection<Class<?>> eventTypes = new ArrayList<Class<?>>();
-		eventTypes.add(IMonitoringRecord.class);
-		this.outputPort = new OutputPort("out", eventTypes);
+		// TODO: improve description string
+		this.outputPort = new OutputPort("Output Port of the FSReader", FSReader.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
-	}
-
-	/**
-	 * 
-	 * @param inputDirs
-	 */
-	public FSReader(final String[] inputDirs) {
-		this(inputDirs, null);
-	}
-
-	/**
-	 * Default constructor used for construction by reflection.
-	 */
-	public FSReader() {
-		this(null, null);
-	}
-
-	/**
-	 * Initializes the reader based on the given key/value pair initString. For
-	 * the key {@value #PROP_NAME_INPUTDIRS}, the method expects a list of input
-	 * directories separated by semicolon.
-	 * 
-	 * Example: <code>inputDirs=dir0;...;dir1</code>
-	 */
-	@Override
-	public boolean init(final String initString) {
-		final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-		final String dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
-		if (dirList == null) {
-			FSReader.LOG.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
-			return false;
-		}
-		this.inputDirs = dirList.split(";");
-		return true;
 	}
 
 	@Override

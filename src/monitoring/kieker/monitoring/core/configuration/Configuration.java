@@ -32,6 +32,8 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
+ * A Configuration for kieker.monitoring
+ * 
  * @author Andre van Hoorn, Jan Waller
  */
 public final class Configuration extends AbstractConfiguration implements Keys {
