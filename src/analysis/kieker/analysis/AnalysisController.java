@@ -65,17 +65,9 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 /**
  * 
- * 2010-03-06 Matthias: Added exception handling for the case that the log
- * reader is missing. (I had lot of pain because of this).
- * 
- * 2010-03-04 Andre: Release of Kieker 1.1
- * 
- * 
- * TODOs: - In the context of realizing a event driven architecture for the
- * model synthesis layer, it makes sense to refactor the KiekerRecordConsumers
- * to KiekerRecordFilters. Consumers are only about how data goes in - but we
- * also have now a concept what should happen if the data goes out: its again a
- * publisher, to which other filters or plugins can subscribe to.
+ * TODOs: - In the context of realizing a event driven architecture for the model synthesis layer, it makes sense to refactor the KiekerRecordConsumers to
+ * KiekerRecordFilters. Consumers are only about how data goes in - but we also have now a concept what should happen if the data goes out: its again a publisher, to
+ * which other filters or plugins can subscribe to.
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
@@ -84,8 +76,7 @@ public class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 	private IMonitoringReader logReader;
 	/**
-	 * this are the consumers for data that are coming into Kieker by readers
-	 * (files or system under monitoring)
+	 * this are the consumers for data that are coming into Kieker by readers (files or system under monitoring)
 	 */
 	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
 	/** Contains all consumers which consume records of any type */
@@ -107,9 +98,8 @@ public class AnalysisController {
 	}
 
 	/**
-	 * This constructors loads the model from the given file as a configuration
-	 * and creates an instance of this class. The file should therefore be an
-	 * instance of the analysis meta model.
+	 * This constructors loads the model from the given file as a configuration and creates an instance of this class. The file should therefore be an instance of
+	 * the analysis meta model.
 	 * 
 	 * @param file
 	 *            The configuration file for the analysis.
@@ -128,20 +118,19 @@ public class AnalysisController {
 			 * configure this instance.
 			 */
 			final IProject project = (IProject) content.get(0);
-			loadFromModelProject(project);
+			this.loadFromModelProject(project);
 		}
 	}
 
 	/**
-	 * Creates a new instance of the class {@link AnalysisController} but uses
-	 * the given instance of @link{Project} to construct the analysis.
+	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of @link{Project} to construct the analysis.
 	 * 
 	 * @param project
 	 *            The project instance for the analysis.
 	 * @throws Exception
 	 */
 	public AnalysisController(final IProject project) throws Exception {
-		loadFromModelProject(project);
+		this.loadFromModelProject(project);
 	}
 
 	private final void loadFromModelProject(final IProject project) throws Exception {
@@ -149,9 +138,9 @@ public class AnalysisController {
 
 		/*
 		 * While we run through a project, we have to remember different things:
-		 * 1) The connection between the ports and their "parent" plugins (as a
-		 * map). 2) The connection between the plugins and their created
-		 * counterpart (as a map). 3) The "real" connection within the model.
+		 * 1) The connection between the ports and their "parent" plugins (as a map).
+		 * 2) The connection between the plugins and their created counterpart (as a map).
+		 * 3) The "real" connection within the model.
 		 */
 		final EList<IPlugin> plugins = project.getPlugins();
 		final List<IConnector> connectors = new ArrayList<IConnector>();
@@ -177,9 +166,8 @@ public class AnalysisController {
 			}
 
 			/*
-			 * Now we run through all ports of the current plugin. We
-			 * remember them to have a connection between the ports and
-			 * their parent. We will also accumulate all Connectors.
+			 * Now we run through all ports of the current plugin. We remember them to have a connection between the ports and their parent. We will also accumulate
+			 * all Connectors.
 			 */
 
 			for (final IOutputPort oPort : p.getOutputPorts()) {
@@ -196,20 +184,16 @@ public class AnalysisController {
 		}
 
 		/*
-		 * Now we should have initialized all plugins. We can start to assemble
-		 * the structure.
+		 * Now we should have initialized all plugins. We can start to assemble the structure.
 		 */
 		for (final IConnector c : connectors) {
 			/* We can get the plugins via the map. */
 			final IPlugin in = portPluginMap.get(c.getDstInputPort());
 			final IPlugin out = portPluginMap.get(c.getSicOutputPort());
-			System.out.format("Connector gefunden. Verbinde Output von "
-					+ "%s mit Input von %s\n", out.getName(), in.getName());
+			System.out.format("Connector gefunden. Verbinde Output von " + "%s mit Input von %s\n", out.getName(), in.getName());
 
-			final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap
-					.get(out);
-			final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap
-					.get(in);
+			final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap.get(out);
+			final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap.get(in);
 
 			final OutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
 			final AbstractInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
@@ -219,8 +203,7 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Opens a given file which should contain an instance of the analysis meta
-	 * modell and delivers a list with the whole content.
+	 * Opens a given file which should contain an instance of the analysis meta modell and delivers a list with the whole content.
 	 * 
 	 * @param file
 	 *            The file to be opened.
@@ -238,18 +221,14 @@ public class AnalysisController {
 				new EcoreResourceFactoryImpl() {
 					@Override
 					public Resource createResource(final URI uri) {
-						final XMIResourceImpl resource = (XMIResourceImpl) super
-								.createResource(uri);
-						resource.getDefaultLoadOptions().put(
-								XMLResource.OPTION_RECORD_UNKNOWN_FEATURE,
-								Boolean.TRUE);
+						final XMIResourceImpl resource = (XMIResourceImpl) super.createResource(uri);
+						resource.getDefaultLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 						return resource;
 					}
 				});
 
 		/* Try to load the ressource. */
-		final XMIResource resource = (XMIResource) resourceSet.getResource(
-				URI.createFileURI(file.toString()), true);
+		final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
 
 		try {
 			resource.load(Collections.EMPTY_MAP);
@@ -261,9 +240,8 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Starts an {@link AnalysisController} instance and returns after the
-	 * configured reader finished reading and all analysis plug-ins terminated;
-	 * or immediately, if an error occurs.
+	 * Starts an {@link AnalysisController} instance and returns after the configured reader finished reading and all analysis plug-ins terminated; or immediately,
+	 * if an error occurs.
 	 * 
 	 * @return true on success; false if an error occurred
 	 */
@@ -276,8 +254,7 @@ public class AnalysisController {
 			 */
 			for (final kieker.analysis.plugin.IAnalysisPlugin c : this.plugins) {
 				if (!c.execute()) {
-					AnalysisController.LOG
-							.error("A plug-in's execute message failed");
+					AnalysisController.LOG.error("A plug-in's execute message failed");
 					success = false;
 				}
 			}
@@ -322,8 +299,7 @@ public class AnalysisController {
 				// notify threads waiting for the initialization to be done
 				this.initializationLatch.countDown();
 				if (!this.logReader.read()) {
-					AnalysisController.LOG
-							.error("Calling execute() on logReader returned false");
+					AnalysisController.LOG.error("Calling execute() on logReader returned false");
 					success = false;
 				}
 			}
@@ -338,8 +314,7 @@ public class AnalysisController {
 					c.terminate(!success); // normal termination (w/o error)
 				}
 			} catch (final Exception e) { // NOCS // NOPMD
-				AnalysisController.LOG.error(
-						"Error during termination: " + e.getMessage(), e);
+				AnalysisController.LOG.error("Error during termination: " + e.getMessage(), e);
 			}
 		}
 
@@ -351,11 +326,9 @@ public class AnalysisController {
 	 */
 	public void terminate() {
 		/*
-		 * terminate the reader. After the reader has terminated, the run
-		 * method() will terminate all plugins
+		 * terminate the reader. After the reader has terminated, the run method() will terminate all plugins
 		 */
-		AnalysisController.LOG
-				.info("Explicit termination of the analysis. Terminating the reader ...");
+		AnalysisController.LOG.info("Explicit termination of the analysis. Terminating the reader ...");
 		this.logReader.terminate();
 	}
 
@@ -382,22 +355,16 @@ public class AnalysisController {
 	 * 
 	 * @param consumer
 	 */
-	private void addRecordConsumer(
-			final IMonitoringRecordConsumerPlugin consumer) {
+	private void addRecordConsumer(final IMonitoringRecordConsumerPlugin consumer) {
 		this.consumers.add(consumer);
-		final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer
-				.getRecordTypeSubscriptionList();
+		final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
 		if (recordTypeSubscriptionList == null) {
 			this.anyTypeConsumers.add(consumer);
 		} else {
 			for (final Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
-				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers
-						.get(recordType);
+				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(recordType);
 				if (cList == null) {
-					cList = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>(); // NOPMD
-					// (new
-					// in
-					// loops)
+					cList = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>(); // NOPMD (new in loops)
 					this.specificTypeConsumers.put(recordType, cList);
 				}
 				cList.add(consumer);
@@ -406,37 +373,30 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Registers the passed plug-in <i>c<i>. If <i>c</i> is an instance of the
-	 * interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered as
-	 * a record consumer.
+	 * Registers the passed plug-in <i>c<i>. If <i>c</i> is an instance of the interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered as a record
+	 * consumer.
 	 */
 	public void registerPlugin(final kieker.analysis.plugin.IAnalysisPlugin plugin) {
 		this.plugins.add(plugin);
 		AnalysisController.LOG.debug("Registered plugin " + plugin);
 
 		if (plugin instanceof IMonitoringRecordConsumerPlugin) {
-			AnalysisController.LOG.debug("Plugin " + plugin
-					+ " also registered as record consumer");
+			AnalysisController.LOG.debug("Plugin " + plugin + " also registered as record consumer");
 			this.addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
 		}
 	}
 
 	/**
-	 * Delivers the given record to the consumers that are registered for this
-	 * type of records.
+	 * Delivers the given record to the consumers that are registered for this type of records.
 	 * 
 	 * @param monitoringRecord
 	 * @param abortOnConsumerError
-	 *            if true, the method returns immediately when a consumer
-	 *            reports an error
+	 *            if true, the method returns immediately when a consumer reports an error
 	 * @return
 	 * @throws kieker.common.record.MonitoringRecordReceiverException
-	 *             true if no consumer reported an error; false if at least one
-	 *             consumer reported an error
+	 *             true if no consumer reported an error; false if at least one consumer reported an error
 	 */
-	private final boolean deliverRecordToConsumers(
-			final IMonitoringRecord monitoringRecord,
-			final boolean abortOnConsumerError) {
+	private final boolean deliverRecordToConsumers(final IMonitoringRecord monitoringRecord, final boolean abortOnConsumerError) {
 		final String consumerErrorMsg = "Consumer returned false. Aborting delivery of record. ";
 
 		boolean success = true;
@@ -450,8 +410,7 @@ public class AnalysisController {
 				}
 			}
 		}
-		final Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers
-				.get(monitoringRecord.getClass());
+		final Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(monitoringRecord.getClass());
 		if (cList != null) {
 			for (final IMonitoringRecordConsumerPlugin c : cList) {
 				if (!c.newMonitoringRecord(monitoringRecord)) {
