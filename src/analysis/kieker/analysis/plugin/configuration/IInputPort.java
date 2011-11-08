@@ -20,13 +20,12 @@
 
 package kieker.analysis.plugin.configuration;
 
-
 /**
  * 
  * @author Andre van Hoorn
  */
 interface IInputPort {
-	
+
 	public void newEvent(Object event);
-	
+
 }
