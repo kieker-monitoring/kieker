@@ -32,11 +32,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
+import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -140,20 +140,21 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
+	public AbstractInputPort getMessageTraceInputPort() {
 		return this.messageTraceInputPort;
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
 
 		@Override
-		public void newEvent(final MessageTrace mt) {
+		public void newEvent(final Object mt) {
 			try {
-				SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), mt, SequenceDiagramPlugin.this.sdmode,
-						SequenceDiagramPlugin.this.outputFnBase + "-" + mt.getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
-				SequenceDiagramPlugin.this.reportSuccess(mt.getTraceId());
+				SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), (MessageTrace) mt,
+						SequenceDiagramPlugin.this.sdmode,
+						SequenceDiagramPlugin.this.outputFnBase + "-" + ((AbstractTrace) mt).getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
+				SequenceDiagramPlugin.this.reportSuccess(((AbstractTrace) mt).getTraceId());
 			} catch (final FileNotFoundException ex) {
-				SequenceDiagramPlugin.this.reportError(mt.getTraceId());
+				SequenceDiagramPlugin.this.reportError(((AbstractTrace) mt).getTraceId());
 				SequenceDiagramPlugin.LOG.error("File not found", ex);
 			}
 		}

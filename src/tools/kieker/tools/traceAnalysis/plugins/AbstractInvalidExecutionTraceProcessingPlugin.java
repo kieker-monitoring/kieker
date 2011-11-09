@@ -20,8 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -33,5 +32,5 @@ public abstract class AbstractInvalidExecutionTraceProcessingPlugin extends Abst
 		super(name, systemEntityFactory);
 	}
 
-	public abstract IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort();
+	public abstract AbstractInputPort getInvalidExecutionTraceInputPort();
 }

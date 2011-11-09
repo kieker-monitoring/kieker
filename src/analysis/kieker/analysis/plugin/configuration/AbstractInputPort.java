@@ -41,6 +41,7 @@ public abstract class AbstractInputPort extends AbstractPort implements IInputPo
 	 *            port. If a component tries to use the port to send an object
 	 *            which is not from a (sub)class within this list, the request
 	 *            will be ignored.
+	 *            If this list is null, no objects will be filtered.
 	 */
 	public AbstractInputPort(final String description, final Collection<Class<?>> eventTypes) {
 		super(description, eventTypes);

@@ -21,7 +21,10 @@
 package kieker.analysis.reader.jms;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import javax.jms.Connection;
@@ -39,8 +42,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.analysis.reader.AbstractMonitoringReader;
-import kieker.analysis.util.PropertyMap;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.AbstractMonitoringReader;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -57,8 +61,11 @@ public class JMSReader extends AbstractMonitoringReader {
 	private String jmsProviderUrl = null;
 	private String jmsDestination = null;
 	private String jmsFactoryLookupName = null;
-
+	private final OutputPort outputPort;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
+
+	private static final Collection<Class<?>> OUT_CLASSES = Collections
+			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	/**
 	 * @param jmsProviderUrl
@@ -71,34 +78,27 @@ public class JMSReader extends AbstractMonitoringReader {
 	 *             if passed parameters are null or empty.
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+		super(new Configuration(null));
 		this.initInstanceFromArgs(jmsProviderUrl, jmsDestination, jmsFactoryLookupName); // throws IllegalArgumentException
-	}
-
-	/**
-	 * Constructor for JMSReader. Requires a subsequent call to the init method.
-	 */
-	public JMSReader() {
-		// nothing to do
+		this.outputPort = new OutputPort("Output Port of the JMSReader", JMSReader.OUT_CLASSES);
+		super.registerOutputPort("out", this.outputPort);
 	}
 
 	/**
 	 * Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 | jmsFactoryLookupName=org.exolab.jms.jndi.InitialContextFactory
 	 */
+	public JMSReader(final Configuration configuration) {
+		super(configuration);
 
-	@Override
-	public boolean init(final String initString) {
-		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
+		final String jmsProviderUrlP = configuration.getProperty("jmsProviderUrl", null);
+		final String jmsDestinationP = configuration.getProperty("jmsDestination", null);
+		final String jmsFactoryLookupNameP = configuration.getProperty("jmsFactoryLookupName", null);
 
-			final String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
-			final String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
-			final String jmsFactoryLookupNameP = propertyMap.getProperty("jmsFactoryLookupName", null);
-			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws IllegalArgumentException
-		} catch (final Exception exc) { // NOCS // NOPMD
-			JMSReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
-			return false;
-		}
-		return true;
+		this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws IllegalArgumentException
+
+		// TODO: improve description string
+		this.outputPort = new OutputPort("Output Port of the JMSReader", JMSReader.OUT_CLASSES);
+		super.registerOutputPort("out", this.outputPort);
 	}
 
 	private void initInstanceFromArgs(final String tmpJmsProviderUrl, final String tmpJmsDestination, final String factoryLookupName)
@@ -164,7 +164,7 @@ public class JMSReader extends AbstractMonitoringReader {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverRecord((IMonitoringRecord) omo))) {
+							if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.outputPort.deliver((IMonitoringRecord) omo))) {
 								final String errorMsg = "deliverRecord returned false";
 								JMSReader.LOG.error(errorMsg);
 							}

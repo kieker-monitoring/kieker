@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
@@ -169,14 +168,15 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
+	public AbstractInputPort getMessageTraceInputPort() {
 		return this.messageTraceInputPort;
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
 
 		@Override
-		public void newEvent(final MessageTrace t) {
+		public void newEvent(final Object obj) {
+			final MessageTrace t = (MessageTrace) obj;
 			for (final AbstractMessage m : t.getSequenceAsVector()) {
 				if (m instanceof SynchronousReplyMessage) {
 					continue;

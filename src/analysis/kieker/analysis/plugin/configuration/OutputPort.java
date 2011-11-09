@@ -62,9 +62,11 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 	 */
 	public boolean deliver(final Object event) {
 		/* Check whether the class of the given event is registered. */
-		for (Class<?> c : eventTypes) {
-			if (!c.isInstance(event))
-				return false;
+		if (eventTypes != null) {
+			for (Class<?> c : eventTypes) {
+				if (!c.isInstance(event))
+					return false;
+			}
 		}
 		/* Seems like it's okay. Deliver it to the subscribers. */
 		for (final IInputPort l : this.subscribers) {
