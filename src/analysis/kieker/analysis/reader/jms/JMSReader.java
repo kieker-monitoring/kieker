@@ -43,8 +43,8 @@ import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -63,40 +63,42 @@ public class JMSReader extends AbstractMonitoringReader {
 	private String jmsFactoryLookupName = null;
 	private final OutputPort outputPort;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
-
-	private static final Collection<Class<?>> OUT_CLASSES = Collections
-			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
-
 	/**
-	 * @param jmsProviderUrl
-	 *            = for instance "tcp://127.0.0.1:3035/"
-	 * @param jmsDestination
-	 *            = for instance "queue1"
-	 * @param jmsFactoryLookupName
-	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
-	 * @throws IllegalArgumentException
-	 *             if passed parameters are null or empty.
+	 * This field determines which classes are transported through the output port.
 	 */
-	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		super(new Configuration(null));
-		this.initInstanceFromArgs(jmsProviderUrl, jmsDestination, jmsFactoryLookupName); // throws IllegalArgumentException
-		this.outputPort = new OutputPort("Output Port of the JMSReader", JMSReader.OUT_CLASSES);
-		super.registerOutputPort("out", this.outputPort);
-	}
+	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
 
 	/**
-	 * Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 | jmsFactoryLookupName=org.exolab.jms.jndi.InitialContextFactory
+	 * Creates a new instance of this class using the given parameters to
+	 * configure the reader.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize the whole reader. Keep in
+	 *            mind that the configuration should contain the following
+	 *            properties:
+	 *            <ul>
+	 *            <li>The property {@code jmsProviderUrl}, e.g. {@code tcp://localhost:3035/}
+	 *            <li>The property {@code jmsDestination}, e.g. {@code queue1}
+	 *            <li>The property {@code jmsFactoryLookupName}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
+	 *            </ul>
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If one of the properties is null.
 	 */
 	public JMSReader(final Configuration configuration) {
+		/* Call the inherited constructor. */
 		super(configuration);
 
+		/* Initialize the reader bases on the given configuration. */
 		final String jmsProviderUrlP = configuration.getProperty("jmsProviderUrl", null);
 		final String jmsDestinationP = configuration.getProperty("jmsDestination", null);
 		final String jmsFactoryLookupNameP = configuration.getProperty("jmsFactoryLookupName", null);
 
-		this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws IllegalArgumentException
+		/* This method throws the exception if something goes wrong. */
+		this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP);
 
-		// TODO: improve description string
+		/* Register the one and only output port. */
 		this.outputPort = new OutputPort("Output Port of the JMSReader", JMSReader.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
 	}

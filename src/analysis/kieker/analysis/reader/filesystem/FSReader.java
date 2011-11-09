@@ -20,15 +20,14 @@
 
 package kieker.analysis.reader.filesystem;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.DummyMonitoringRecord;

@@ -40,10 +40,8 @@ import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.jms.JMSReader;
-import kieker.analysis.util.PropertyMap;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -61,34 +59,25 @@ public final class JMXReader extends AbstractMonitoringReader {
 	private final boolean silentreconnect;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 	private final OutputPort outputPort;
+	/**
+	 * This field determines which classes are transported through the output port.
+	 */
 	private static final Collection<Class<?>> OUT_CLASSES = Collections
 			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	public JMXReader(final Configuration configuation) {
-		// TODO: Load from configuration.
-		super(configuation);
-		silentreconnect = false;
+		this(configuation, false);
+	}
 
-		this.outputPort = new OutputPort("Output Port of the JMSReader", JMXReader.OUT_CLASSES);
+	public JMXReader(final Configuration configuation, final boolean silentreconnect) {
+		super(configuation);
+		this.silentreconnect = silentreconnect;
+
+		/* Register the output port. */
+		this.outputPort = new OutputPort("Output Port of the JMXReader", JMXReader.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
 
 		init(configuation);
-	}
-
-	/**
-	 * Constructor for JMXReader. Requires a subsequent call to the init method
-	 * in order to specify the input directory using the parameters
-	 */
-	public JMXReader() {
-		this(false);
-	}
-
-	public JMXReader(final boolean silentreconnect) {
-		super(new Configuration(null));
-		this.silentreconnect = silentreconnect;
-
-		this.outputPort = new OutputPort("Output Port of the JMSReader", JMXReader.OUT_CLASSES);
-		super.registerOutputPort("out", this.outputPort);
 	}
 
 	/**

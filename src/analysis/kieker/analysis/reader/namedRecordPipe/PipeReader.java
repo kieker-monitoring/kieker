@@ -20,10 +20,14 @@
 
 package kieker.analysis.reader.namedRecordPipe;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.plugin.AbstractMonitoringReader;
-import kieker.analysis.util.PropertyMap;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
@@ -41,13 +45,30 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 
 	private volatile Pipe pipe;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
+	private final OutputPort outputPort;
+	/**
+	 * This field determines which classes are transported through the output port.
+	 */
+	private static final Collection<Class<?>> OUT_CLASSES = Collections
+			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
-	public PipeReader() {
-		// nothing to do
-	}
+	/**
+	 * Creates a new instance of this class using the given parameter.
+	 * 
+	 * @param configuration
+	 *            The configuration used to load the pipe name. It
+	 *            <b>must</b> contain the property {@code pipeName}.
+	 * @throws IllegalArgumentException
+	 *             If the pipe name was invalid.
+	 */
+	public PipeReader(final Configuration configuration) throws IllegalArgumentException {
+		super(configuration);
 
-	public PipeReader(final String pipeName) {
-		this.initPipe(pipeName);
+		/* Register the output port. */
+		this.outputPort = new OutputPort("Output Port of the PipeReader", PipeReader.OUT_CLASSES);
+		super.registerOutputPort("out", this.outputPort);
+
+		init(configuration);
 	}
 
 	private void initPipe(final String pipeName) throws IllegalArgumentException {
@@ -78,22 +99,14 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 		return true;
 	}
 
-	@Override
-	public boolean init(final String initString) {
-		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-			this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
-			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
-			return false;
-		}
-		return true;
+	public void init(final Configuration configuration) throws IllegalArgumentException {
+		this.initPipe(configuration.getProperty(PipeReader.PROPERTY_PIPE_NAME));
+		PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
 	}
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
-		return super.deliverRecord(rec);
+		return outputPort.deliver(rec);
 	}
 
 	@Override

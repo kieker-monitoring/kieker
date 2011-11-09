@@ -27,8 +27,8 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.logging.Log;

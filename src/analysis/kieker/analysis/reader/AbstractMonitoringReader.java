@@ -1,9 +1,9 @@
-package kieker.analysis.plugin;
+package kieker.analysis.reader;
 
 import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.IMonitoringReader;
 
 // TODO rename to AbstractReaderPlugin ?
 public abstract class AbstractMonitoringReader extends AbstractPlugin implements IMonitoringReader {

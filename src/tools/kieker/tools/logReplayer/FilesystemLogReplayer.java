@@ -26,7 +26,7 @@ import java.util.Collection;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.AbstractMonitoringReader;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.logging.Log;
