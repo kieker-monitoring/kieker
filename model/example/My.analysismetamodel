@@ -4,7 +4,7 @@
     <outputPorts name="out">
       <outConnector dstInputPort="//@plugins.1/@inputPorts.0"/>
     </outputPorts>
-    <properties name="kieker.analysis.plugin.AbstractMonitoringReader.inputDirs" value="C:/HiWi - Kieker/kieker working copy/kieker/branches/1.5-analysis/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC"/>
+    <properties name="kieker.analysis.reader.AbstractMonitoringReader.inputDirs" value="C:/HiWi - Kieker/kieker working copy/kieker/branches/1.5-analysis/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC"/>
   </plugins>
   <plugins xsi:type="AnalysisPlugin" name="Final Consumer" classname="kieker.analysis.plugin.DummyRecordConsumer">
     <inputPorts name="in" inConnector="//@plugins.0/@outputPorts.0/@outConnector.0"/>

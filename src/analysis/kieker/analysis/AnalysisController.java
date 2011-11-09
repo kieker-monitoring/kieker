@@ -387,46 +387,6 @@ public class AnalysisController {
 		}
 	}
 
-	/**
-	 * Delivers the given record to the consumers that are registered for this type of records.
-	 * 
-	 * @param monitoringRecord
-	 * @param abortOnConsumerError
-	 *            if true, the method returns immediately when a consumer reports an error
-	 * @return
-	 * @throws kieker.common.record.MonitoringRecordReceiverException
-	 *             true if no consumer reported an error; false if at least one consumer reported an error
-	 */
-	private final boolean deliverRecordToConsumers(final IMonitoringRecord monitoringRecord, final boolean abortOnConsumerError) {
-		final String consumerErrorMsg = "Consumer returned false. Aborting delivery of record. ";
-
-		boolean success = true;
-
-		for (final IMonitoringRecordConsumerPlugin c : this.anyTypeConsumers) {
-			if (!c.newMonitoringRecord(monitoringRecord)) {
-				success = false;
-				if (abortOnConsumerError) {
-					AnalysisController.LOG.warn(consumerErrorMsg);
-					return false;
-				}
-			}
-		}
-		final Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(monitoringRecord.getClass());
-		if (cList != null) {
-			for (final IMonitoringRecordConsumerPlugin c : cList) {
-				if (!c.newMonitoringRecord(monitoringRecord)) {
-					success = false;
-					if (abortOnConsumerError) { // NOCS (NestedIf)
-						AnalysisController.LOG.warn(consumerErrorMsg);
-						return false;
-					}
-				}
-			}
-		}
-
-		return success;
-	}
-
 	@SuppressWarnings("unchecked")
 	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
 		C createdClass = null; // NOPMD
