@@ -63,13 +63,13 @@ public class TestTimestampFilter extends TestCase { // NOCS
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") { // NOPMD (string literal)
+		filter.getExecutionOutputPort().subscribe(new AbstractInputPort("Execution input", null) { // NOPMD (string literal)
 
 					/**
 					 * In this test, this method should not be called.
 					 */
 					@Override
-					public void newEvent(final Execution event) {
+					public void newEvent(final Object event) {
 						filterPassedRecord.set(Boolean.TRUE);
 					}
 				});
@@ -95,13 +95,13 @@ public class TestTimestampFilter extends TestCase { // NOCS
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+		filter.getExecutionOutputPort().subscribe(new AbstractInputPort("Execution input", null) {
 
 			/**
 			 * In this test, this method should not be called.
 			 */
 			@Override
-			public void newEvent(final Execution event) {
+			public void newEvent(final Object event) {
 				filterPassedRecord.set(Boolean.TRUE);
 			}
 		});
@@ -127,13 +127,13 @@ public class TestTimestampFilter extends TestCase { // NOCS
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+		filter.getExecutionOutputPort().subscribe(new AbstractInputPort("Execution input", null) {
 
 			/**
 			 * In this test, this method MUST be called exactly once.
 			 */
 			@Override
-			public void newEvent(final Execution event) {
+			public void newEvent(final Object event) {
 				filterPassedRecord.set(Boolean.TRUE);
 				Assert.assertSame(event, exec);
 			}
@@ -160,13 +160,13 @@ public class TestTimestampFilter extends TestCase { // NOCS
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+		filter.getExecutionOutputPort().subscribe(new AbstractInputPort("Execution input", null) {
 
 			/**
 			 * In this test, this method MUST be called exactly once.
 			 */
 			@Override
-			public void newEvent(final Execution event) {
+			public void newEvent(final Object event) {
 				filterPassedRecord.set(Boolean.TRUE);
 				Assert.assertSame(event, exec);
 			}

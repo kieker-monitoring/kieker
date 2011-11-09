@@ -86,7 +86,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 	 * 
 	 * either port or serviceURL are mandatory
 	 */
-	private final boolean init(Configuration configuration) {
+	private final boolean init(final Configuration configuration) {
 		try {
 			final String server = configuration.getProperty("server", "localhost");
 			final int port = Integer.parseInt(configuration.getProperty("port", "0"));

@@ -20,7 +20,6 @@
 
 package kieker.common.configuration;
 
-import java.util.Arrays;
 import java.util.Properties;
 
 import kieker.common.logging.Log;

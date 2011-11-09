@@ -22,15 +22,17 @@ package kieker.tools.logReplayer;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.StringTokenizer;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.analysis.util.PropertyMap;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -50,19 +52,34 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	private RealtimeReplayDistributor rtDistributor = null;
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
-
-	public FSReaderRealtime(Configuration configuration) {
-		super(configuration);
-		// TODO: Load from configuration.
-	}
+	private final OutputPort outputPort;
+	/**
+	 * This field determines which classes are transported through the output port.
+	 */
+	private static final Collection<Class<?>> OUT_CLASSES = Collections
+			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	/**
-	 * Constructor for FSReaderRealtime. Requires a subsequent call to the init
-	 * method in order to specify the input directory and number of workers
-	 * using the parameter @a inputDirName.
+	 * Creates a new instance of this class using the given parameters to
+	 * configure the reader.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize the whole reader. Keep in
+	 *            mind that the configuration should contain the following
+	 *            properties:
+	 *            <ul>
+	 *            <li>The property {@code inputDirNames}, e.g. {@code INPUTDIRECTORY1;...;INPUTDIRECTORYN }
+	 *            <li>The property {@code numWorkers}
+	 *            </ul>
 	 */
-	public FSReaderRealtime() {
-		this(new Configuration(null));
+	public FSReaderRealtime(Configuration configuration) {
+		super(configuration);
+
+		/* Register the output port. */
+		this.outputPort = new OutputPort("Output Port of the JMXReader", FSReaderRealtime.OUT_CLASSES);
+		super.registerOutputPort("out", this.outputPort);
+
+		init(configuration);
 	}
 
 	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
@@ -70,15 +87,9 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		this.initInstanceFromArgs(inputDirNames, numWorkers);
 	}
 
-	/**
-	 * Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN |
-	 * numWorkers=XX
-	 */
-	@Override
-	public boolean init(final String initString) {
+	public boolean init(final Configuration configuration) {
 		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-			final String numWorkersString = propertyMap.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
+			final String numWorkersString = configuration.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
 			int numWorkers = -1;
 			if (numWorkersString == null) {
 				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
@@ -88,9 +99,9 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			} catch (final NumberFormatException ex) { // NOPMD (value of numWorkers remains -1)
 			}
 
-			this.initInstanceFromArgs(this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
+			this.initInstanceFromArgs(this.inputDirNameListToArray(configuration.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
 		} catch (final IllegalArgumentException exc) {
-			FSReaderRealtime.LOG.error("Failed to initString '" + initString + "': " + exc.getMessage());
+			FSReaderRealtime.LOG.error("Failed to load configuration: " + exc.getMessage());
 			return false;
 		}
 		return true;
@@ -128,7 +139,10 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 																																			// (MultipleStringLiteralsCheck)
 		}
 
-		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS,
+				Configuration.toProperty(inputDirNames));
+		final AbstractMonitoringReader fsReader = new FSReader(configuration);
 		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
 		this.analysis.setReader(fsReader);
@@ -176,7 +190,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 		@Override
 		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-			if (!this.master.deliverRecord(monitoringRecord)) {
+			if (!this.master.outputPort.deliver(monitoringRecord)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
 				return false;
 			}

@@ -134,10 +134,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort<ExecutionTrace>("Execution traces") {
+		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 
 			@Override
-			public void newEvent(final ExecutionTrace event) {
+			public void newEvent(final Object event) {
 				if (event.equals(validExecutionTrace)) {
 					receivedTheValidExecutionTrace.set(Boolean.TRUE);
 				}
@@ -149,10 +149,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort<MessageTrace>("Message traces") {
+		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort("Message traces", null) {
 
 			@Override
-			public void newEvent(final MessageTrace event) {
+			public void newEvent(final Object event) {
 				if (event.equals(validMessageTrace)) {
 					receivedTheValidMessageTrace.set(Boolean.TRUE);
 				}
@@ -164,10 +164,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort<InvalidExecutionTrace>("Invalid execution trace") {
+		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort("Invalid execution trace", null) {
 
 			@Override
-			public void newEvent(final InvalidExecutionTrace event) {
+			public void newEvent(final Object event) {
 				receivedAnInvalidExecutionTrace.set(Boolean.TRUE);
 				Assert.fail("Received an invalid execution trace" + event);
 			}
@@ -261,10 +261,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort<ExecutionTrace>("Execution traces") {
+		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 
 			@Override
-			public void newEvent(final ExecutionTrace event) {
+			public void newEvent(final Object event) {
 				receivedValidExecutionTrace.set(Boolean.TRUE);
 				Assert.fail("Received a valid execution trace" + event);
 			}
@@ -274,10 +274,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort<MessageTrace>("Message traces") {
+		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort("Message traces", null) {
 
 			@Override
-			public void newEvent(final MessageTrace event) {
+			public void newEvent(final Object event) {
 				receivedValidMessageTrace.set(Boolean.TRUE);
 				Assert.fail("Received a valid message trace" + event);
 			}
@@ -287,14 +287,14 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort<InvalidExecutionTrace>("Invalid execution trace") {
+		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort("Invalid execution trace", null) {
 
 			@Override
-			public void newEvent(final InvalidExecutionTrace event) {
-				if (event.getInvalidExecutionTraceArtifacts().equals(invalidExecutionTrace)) {
+			public void newEvent(final Object event) {
+				if (((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts().equals(invalidExecutionTrace)) {
 					receivedTheInvalidExecutionTrace.set(Boolean.TRUE);
 				}
-				Assert.assertEquals("Unexpected invalid execution trace", invalidExecutionTrace, event.getInvalidExecutionTraceArtifacts());
+				Assert.assertEquals("Unexpected invalid execution trace", invalidExecutionTrace, ((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts());
 			}
 		});
 
@@ -421,10 +421,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort<ExecutionTrace>("Execution traces") {
+		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 
 			@Override
-			public void newEvent(final ExecutionTrace event) {
+			public void newEvent(final Object event) {
 				if (event.equals(triggerExecutionTrace)) {
 					receivedTheValidTriggerExecutionTrace.set(Boolean.TRUE);
 				} else {
@@ -439,10 +439,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort<MessageTrace>("Message traces") {
+		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort("Message traces", null) {
 
 			@Override
-			public void newEvent(final MessageTrace event) {
+			public void newEvent(final Object event) {
 				if (event.equals(triggerMessageTrace)) {
 					receivedTheValidTriggerMessageTrace.set(Boolean.TRUE);
 				} else {
@@ -457,13 +457,13 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort<InvalidExecutionTrace>("Invalid execution trace") {
+		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort("Invalid execution trace", null) {
 
 			@Override
-			public void newEvent(final InvalidExecutionTrace event) {
-				if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) {
+			public void newEvent(final Object event) {
+				if (((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) {
 					receivedTheIncompleteExecutionTraceArtifact.set(Boolean.TRUE);
-				} else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) {
+				} else if (((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) {
 					receivedTheCompletingExecutionTraceArtifact.set(Boolean.TRUE);
 				} else {
 					Assert.fail("Received an unexpected invalid execution trace: " + event);

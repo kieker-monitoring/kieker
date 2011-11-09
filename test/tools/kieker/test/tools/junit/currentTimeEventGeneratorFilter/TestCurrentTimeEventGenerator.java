@@ -97,10 +97,10 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 		final List<Long> receivedTimestamps = new ArrayList<Long>();
 
-		filter.getCurrentTimeOutputPort().subscribe(new AbstractInputPort<TimestampEvent>("") {
+		filter.getCurrentTimeOutputPort().subscribe(new AbstractInputPort("", null) {
 			@Override
-			public void newEvent(final TimestampEvent event) {
-				receivedTimestamps.add(event.getTimestamp());
+			public void newEvent(final Object event) {
+				receivedTimestamps.add(((TimestampEvent) event).getTimestamp());
 			}
 		});
 

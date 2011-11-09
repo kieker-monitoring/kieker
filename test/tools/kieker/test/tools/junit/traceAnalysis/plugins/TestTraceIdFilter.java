@@ -66,13 +66,13 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+		filter.getExecutionOutputPort().subscribe(new AbstractInputPort("Execution input", null) {
 
 			/**
 			 * In this test, this method should not be called.
 			 */
 			@Override
-			public void newEvent(final Execution event) {
+			public void newEvent(final Object event) {
 				filterPassedRecord.set(Boolean.TRUE);
 			}
 		});
@@ -101,13 +101,13 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
+		filter.getExecutionOutputPort().subscribe(new AbstractInputPort("Execution input", null) {
 
 			/**
 			 * In this test, this method must be called.
 			 */
 			@Override
-			public void newEvent(final Execution event) {
+			public void newEvent(final Object event) {
 				filterPassedRecord.set(Boolean.TRUE);
 				Assert.assertSame(exec, event);
 			}

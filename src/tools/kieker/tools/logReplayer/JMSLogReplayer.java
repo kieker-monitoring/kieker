@@ -23,6 +23,7 @@ package kieker.tools.logReplayer;
 import java.util.Collection;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
@@ -78,7 +79,11 @@ public class JMSLogReplayer {
 	public boolean replay() {
 		boolean success = true;
 
-		final IMonitoringReader logReader = new JMSReader(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
+		configuration.setProperty("jmsDestination", this.jmsDestination);
+		configuration.setProperty("jmsFactoryLookupName", this.jmsFactoryLookupName);
+		final IMonitoringReader logReader = new JMSReader(configuration);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(logReader);
 		tpanInstance.registerPlugin(new RecordDelegationPlugin2(this.recordReceiver));

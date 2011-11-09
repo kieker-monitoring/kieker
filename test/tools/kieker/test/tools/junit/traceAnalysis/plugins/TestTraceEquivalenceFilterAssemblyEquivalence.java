@@ -65,10 +65,10 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		/*
 		 * Register a handler for equivalence class representatives.
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort<ExecutionTrace>("Execution traces") {
+		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 
 			@Override
-			public void newEvent(final ExecutionTrace event) {
+			public void newEvent(final Object event) {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		});

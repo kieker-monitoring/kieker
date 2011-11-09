@@ -25,7 +25,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
  * Generates time events with a given resolution based on the timestamps of

@@ -29,6 +29,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.record.IMonitoringRecord;
@@ -49,7 +50,9 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() {
 		final String pipeName = NamedPipeFactory.createPipeName();
-		final PipeReader pipeReader = new PipeReader(pipeName);
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty(PipeReader.PROPERTY_PIPE_NAME, pipeName);
+		final PipeReader pipeReader = new PipeReader(configuration);
 
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 
