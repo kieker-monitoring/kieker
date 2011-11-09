@@ -24,11 +24,11 @@ public abstract class AbstractPlugin {
 		this.configuration = configuration;
 	}
 
-	final public AbstractInputPort getInputPort(final String name) {
+	public final AbstractInputPort getInputPort(final String name) {
 		return this.inputPorts.get(name);
 	}
 
-	final public OutputPort getOutputPort(final String name) {
+	public final OutputPort getOutputPort(final String name) {
 		return this.outputPorts.get(name);
 	}
 
@@ -38,5 +38,13 @@ public abstract class AbstractPlugin {
 
 	protected void registerOutputPort(final String name, final OutputPort port) {
 		this.outputPorts.put(name, port);
+	}
+
+	public final AbstractInputPort[] getAllInputPorts() {
+		return inputPorts.values().toArray(new AbstractInputPort[0]);
+	}
+
+	public final OutputPort[] getAllOutputPorts() {
+		return outputPorts.values().toArray(new OutputPort[0]);
 	}
 }
