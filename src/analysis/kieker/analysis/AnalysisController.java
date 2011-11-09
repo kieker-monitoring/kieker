@@ -149,7 +149,7 @@ public class AnalysisController {
 			for (IProperty prop : properties) {
 				configuration.setProperty(prop.getName(), prop.getValue());
 			}
-			
+
 			if (p instanceof IReader) {
 				System.out.println("Reader gefunden: " + p.getName());
 				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).getConstructor(Configuration.class).newInstance(configuration);
@@ -157,7 +157,8 @@ public class AnalysisController {
 				pluginObjMap.put(p, reader);
 			} else {
 				System.out.println("Plugin gefunden: " + p.getName());
-				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname()).getConstructor(Configuration.class).newInstance(configuration);
+				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname())
+						.getConstructor(Configuration.class).newInstance(configuration);
 				pluginObjMap.put(p, plugin);
 			}
 
